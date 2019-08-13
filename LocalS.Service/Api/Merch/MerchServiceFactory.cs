@@ -24,11 +24,11 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static MallProductSkuService MallProductSku
+        public static ProductSkuService ProductSku
         {
             get
             {
-                return new MallProductSkuService();
+                return new ProductSkuService();
             }
         }
     }

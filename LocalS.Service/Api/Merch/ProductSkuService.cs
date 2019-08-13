@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class MallProductSkuService : BaseDbContext
+    public class ProductSkuService : BaseDbContext
     {
-        public CustomJsonResult GetList(string operater, string merchId, RupMallProductSkuGetList rup)
+        public CustomJsonResult GetList(string operater, string merchId, RupProductSkuGetList rup)
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.MallProductSku
+            var query = (from u in CurrentDb.ProductSku
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId

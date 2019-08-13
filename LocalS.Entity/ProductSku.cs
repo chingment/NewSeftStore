@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("MallProductSku")]
-    public class MallProductSku
+    [Table("ProductSku")]
+    public class ProductSku
     {
         [Key]
         public string Id { get; set; }

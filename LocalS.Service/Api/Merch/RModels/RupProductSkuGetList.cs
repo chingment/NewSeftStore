@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupMallProductSkuGetList : RupBaseGetList
+    public class RupProductSkuGetList : RupBaseGetList
     {
         public string Name { get; set; }
     }

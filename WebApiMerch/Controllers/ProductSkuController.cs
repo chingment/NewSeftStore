@@ -9,12 +9,12 @@ using System.Web.Http;
 
 namespace WebApiMerch.Controllers
 {
-    public class MallProductSkuController : OwnApiBaseController
+    public class ProductSkuController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse GetList([FromUri]RupMallProductSkuGetList rup)
+        public OwnApiHttpResponse GetList([FromUri]RupProductSkuGetList rup)
         {
-            IResult result = MerchServiceFactory.MallProductSku.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.ProductSku.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

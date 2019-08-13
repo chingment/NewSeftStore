@@ -49,7 +49,7 @@
     <Compile Include="Ins\InsCarPlateNoInfo.cs" />
     <Compile Include="Ins\InsCarPlateNoSearchHis.cs" />
     <Compile Include="Agent.cs" />
-    <Compile Include="Mall\MallProductSku.cs" />
+    <Compile Include="ProductSku.cs" />
     <Compile Include="Merch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
