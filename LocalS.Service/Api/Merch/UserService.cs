@@ -44,15 +44,15 @@ namespace LocalS.Service.Api.Merch
             return text;
         }
 
-        public CustomJsonResult GetList(string operater, string agentId, RupUserGetList rup)
+        public CustomJsonResult GetList(string operater, string merchId, RupUserGetList rup)
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.SysAgentUser
+            var query = (from u in CurrentDb.SysMerchUser
                          where (rup.UserName == null || u.UserName.Contains(rup.UserName)) &&
                          (rup.FullName == null || u.FullName.Contains(rup.FullName)) &&
                          u.IsDelete == false &&
-                         u.AgentId == agentId &&
+                         u.MerchId == merchId &&
                          u.IsMaster == false
                          select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete, u.IsDisable });
 
@@ -110,9 +110,9 @@ namespace LocalS.Service.Api.Merch
             return treeNodes;
         }
 
-        public List<TreeNode> GetOrgTree()
+        public List<TreeNode> GetOrgTree(string merchId)
         {
-            var sysOrgs = CurrentDb.SysOrg.OrderBy(m => m.Priority).ToList();
+            var sysOrgs = CurrentDb.SysOrg.Where(m => m.ReferenceId == merchId && m.BelongSite == Enumeration.BelongSite.Merch).OrderBy(m => m.Priority).ToList();
             return GetOrgTree(GuidUtil.Empty(), sysOrgs);
         }
 
@@ -120,7 +120,7 @@ namespace LocalS.Service.Api.Merch
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
-            var sysRoles = CurrentDb.SysRole.Where(m => m.BelongSite == Enumeration.BelongSite.Agent && m.IsSuper == false).OrderBy(m => m.Priority).ToList();
+            var sysRoles = CurrentDb.SysRole.Where(m => m.BelongSite == Enumeration.BelongSite.Merch && m.IsSuper == false).OrderBy(m => m.Priority).ToList();
 
             foreach (var sysRole in sysRoles)
             {
@@ -131,7 +131,7 @@ namespace LocalS.Service.Api.Merch
         }
 
 
-        public CustomJsonResult InitAdd(string operater, string agentId)
+        public CustomJsonResult InitAdd(string operater, string merchId)
         {
             var result = new CustomJsonResult();
             var ret = new RetUserInitAdd();
@@ -145,7 +145,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Add(string operater, string agentId, RopUserAdd rop)
+        public CustomJsonResult Add(string operater, string merchId, RopUserAdd rop)
         {
             var result = new CustomJsonResult();
 
@@ -167,23 +167,23 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var agentUser = new SysAgentUser();
-                agentUser.Id = GuidUtil.New();
-                agentUser.UserName = rop.UserName;
-                agentUser.FullName = rop.FullName;
-                agentUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
-                agentUser.Email = rop.Email;
-                agentUser.PhoneNumber = rop.PhoneNumber;
-                agentUser.BelongSite = Enumeration.BelongSite.Agent;
-                agentUser.IsDelete = false;
-                agentUser.IsDisable = false;
-                agentUser.IsMaster = false;
-                agentUser.AgentId = agentId;
-                agentUser.Creator = operater;
-                agentUser.CreateTime = DateTime.Now;
-                agentUser.RegisterTime = DateTime.Now;
-                agentUser.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
-                CurrentDb.SysAgentUser.Add(agentUser);
+                var merchUser = new SysMerchUser();
+                merchUser.Id = GuidUtil.New();
+                merchUser.UserName = rop.UserName;
+                merchUser.FullName = rop.FullName;
+                merchUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
+                merchUser.Email = rop.Email;
+                merchUser.PhoneNumber = rop.PhoneNumber;
+                merchUser.BelongSite = Enumeration.BelongSite.Agent;
+                merchUser.IsDelete = false;
+                merchUser.IsDisable = false;
+                merchUser.IsMaster = false;
+                merchUser.MerchId = merchId;
+                merchUser.Creator = operater;
+                merchUser.CreateTime = DateTime.Now;
+                merchUser.RegisterTime = DateTime.Now;
+                merchUser.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
+                CurrentDb.SysMerchUser.Add(merchUser);
 
                 if (rop.RoleIds != null)
                 {
@@ -191,7 +191,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = agentUser.Id, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = merchUser.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }
@@ -206,30 +206,30 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult InitEdit(string operater, string agentId, string userId)
+        public CustomJsonResult InitEdit(string operater, string merchId, string userId)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetUserInitEdit();
 
-            var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == userId).FirstOrDefault();
+            var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            ret.UserId = agentUser.Id;
-            ret.UserName = agentUser.UserName;
-            ret.PhoneNumber = agentUser.PhoneNumber;
-            ret.Email = agentUser.Email;
-            ret.FullName = agentUser.FullName;
-            ret.IsDisable = agentUser.IsDisable;
+            ret.UserId = merchUser.Id;
+            ret.UserName = merchUser.UserName;
+            ret.PhoneNumber = merchUser.PhoneNumber;
+            ret.Email = merchUser.Email;
+            ret.FullName = merchUser.FullName;
+            ret.IsDisable = merchUser.IsDisable;
 
             ret.Roles = GetRoleTree();
-            ret.RoleIds = (from m in CurrentDb.SysUserRole where m.UserId == agentUser.Id select m.RoleId).ToList();
+            ret.RoleIds = (from m in CurrentDb.SysUserRole where m.UserId == merchUser.Id select m.RoleId).ToList();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
 
             return result;
         }
 
-        public CustomJsonResult Edit(string operater, string agentId, RopUserEdit rop)
+        public CustomJsonResult Edit(string operater, string merchId, RopUserEdit rop)
         {
 
             CustomJsonResult result = new CustomJsonResult();
@@ -237,19 +237,19 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var agentUser = CurrentDb.SysAgentUser.Where(m => m.AgentId == agentId && m.Id == rop.UserId).FirstOrDefault();
+                var merchUser = CurrentDb.SysMerchUser.Where(m => m.MerchId == merchId && m.Id == rop.UserId).FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(rop.Password))
                 {
-                    agentUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
+                    merchUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 }
 
-                agentUser.FullName = rop.FullName;
-                agentUser.Email = rop.Email;
-                agentUser.PhoneNumber = rop.PhoneNumber;
-                agentUser.IsDisable = rop.IsDisable;
-                agentUser.MendTime = DateTime.Now;
-                agentUser.Mender = operater;
+                merchUser.FullName = rop.FullName;
+                merchUser.Email = rop.Email;
+                merchUser.PhoneNumber = rop.PhoneNumber;
+                merchUser.IsDisable = rop.IsDisable;
+                merchUser.MendTime = DateTime.Now;
+                merchUser.Mender = operater;
 
 
                 var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.UserId).ToList();

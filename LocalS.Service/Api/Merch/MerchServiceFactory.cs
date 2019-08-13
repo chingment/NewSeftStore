@@ -23,5 +23,13 @@ namespace LocalS.Service.Api.Merch
                 return new UserService();
             }
         }
+
+        public static MallProductSkuService MallProductSku
+        {
+            get
+            {
+                return new MallProductSkuService();
+            }
+        }
     }
 }

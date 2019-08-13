@@ -8,5 +8,7 @@ namespace Lumos.Session
         public string UserId { get; set; }
 
         public string AgentId { get; set; }
+
+        public string MerchId { get; set; }
     }
 }

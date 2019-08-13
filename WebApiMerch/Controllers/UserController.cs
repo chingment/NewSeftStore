@@ -14,34 +14,34 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupUserGetList rup)
         {
-            IResult result = MerchServiceFactory.User.GetList(this.CurrentUserId, this.CurrentAgentId, rup);
+            IResult result = MerchServiceFactory.User.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
         public OwnApiHttpResponse InitAdd()
         {
-            IResult result = MerchServiceFactory.User.InitAdd(this.CurrentUserId, this.CurrentAgentId);
+            IResult result = MerchServiceFactory.User.InitAdd(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Add([FromBody]RopUserAdd rop)
         {
-            IResult result = MerchServiceFactory.User.Add(this.CurrentUserId, this.CurrentAgentId, rop);
+            IResult result = MerchServiceFactory.User.Add(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse InitEdit([FromUri]string userId)
         {
-            IResult result = MerchServiceFactory.User.InitEdit(this.CurrentUserId, this.CurrentAgentId, userId);
+            IResult result = MerchServiceFactory.User.InitEdit(this.CurrentUserId, this.CurrentMerchId, userId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopUserEdit rop)
         {
-            IResult result = MerchServiceFactory.User.Edit(this.CurrentUserId, this.CurrentAgentId, rop);
+            IResult result = MerchServiceFactory.User.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }
