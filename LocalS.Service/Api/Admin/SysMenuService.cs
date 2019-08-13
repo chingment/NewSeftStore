@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class SysMenuService : BaseDbContext
     {
-        private List<TreeNode> GetOrgTree(string id, List<SysMenu> sysMenus)
+        private List<TreeNode> GetMenuTree(string id, List<SysMenu> sysMenus)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
@@ -35,7 +35,16 @@ namespace LocalS.Service.Api.Admin
                     treeNode.ExtAttr = new { CanDelete = true };
                 }
 
-                treeNode.Children.AddRange(GetOrgTree(p_sysMenu.Id, sysMenus));
+                var children = GetMenuTree(p_sysMenu.Id, sysMenus);
+                if (children != null)
+                {
+                    if (children.Count > 0)
+                    {
+                        treeNode.Children = new List<TreeNode>();
+                        treeNode.Children.AddRange(children);
+                    }
+                }
+
                 treeNodes.Add(treeNode);
             }
 
@@ -50,7 +59,7 @@ namespace LocalS.Service.Api.Admin
 
             var topMenu = sysMenus.Where(m => m.Depth == 0).FirstOrDefault();
 
-            var menuTree = GetOrgTree(topMenu.PId, sysMenus);
+            var menuTree = GetMenuTree(topMenu.PId, sysMenus);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", menuTree);
 

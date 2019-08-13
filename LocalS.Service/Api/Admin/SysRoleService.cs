@@ -66,7 +66,19 @@ namespace LocalS.Service.Api.Admin
                 treeNode.Id = p_sysMenu.Id;
                 treeNode.PId = p_sysMenu.PId;
                 treeNode.Label = p_sysMenu.Title;
-                treeNode.Children.AddRange(GetMenuTree(treeNode.Id, sysMenus));
+
+
+                var children = GetMenuTree(treeNode.Id, sysMenus);
+                if (children != null)
+                {
+                    if (children.Count > 0)
+                    {
+                        treeNode.Children = new List<TreeNode>();
+                        treeNode.Children.AddRange(children);
+                    }
+                }
+
+
                 treeNodes.Add(treeNode);
             }
 

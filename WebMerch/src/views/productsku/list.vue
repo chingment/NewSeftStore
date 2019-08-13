@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.userName" placeholder="用户名" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -23,34 +23,34 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" prop="userName" align="left" min-width="20%">
+      <el-table-column label="图片" prop="imgUrl" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.userName }}</span>
+          <span>{{ scope.row.imgUrl }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="fullName" align="left" min-width="20%">
+      <el-table-column label="名称" prop="name" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.fullName }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="手机号码" prop="phoneNumber" align="left" min-width="10%">
+      <el-table-column label="分类" prop="kindNames" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.phoneNumber }}</span>
+          <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="邮箱" prop="email" align="left" min-width="20%">
+      <el-table-column label="栏目" prop="subjectNames" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.email }}</span>
+          <span>{{ scope.row.subjectNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" align="left" min-width="15%">
+      <el-table-column label="销售价" prop="salePrice" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span :class="'enable-status enable-status-'+scope.row.status.value">{{ scope.row.status.text }}</span>
+          <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="创建时间" prop="createTime" align="left" min-width="15%">
+      <el-table-column label="展示价" prop="showPrice" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.showPrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
@@ -82,7 +82,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        userName: undefined
+        name: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }

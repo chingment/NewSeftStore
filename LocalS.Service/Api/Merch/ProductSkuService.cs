@@ -38,7 +38,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    MainImg = ImgSet.GetMain(item.DispalyImgUrls),
+                    ImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
                     KindNames = "",
                     SubjectNames = "",
                     SalePrice = item.SalePrice.ToF2Price(),

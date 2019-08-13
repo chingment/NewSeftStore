@@ -35,7 +35,16 @@ namespace LocalS.Service.Api.Admin
                     treeNode.ExtAttr = new { CanDelete = true };
                 }
 
-                treeNode.Children.AddRange(GetOrgTree(p_sysOrg.Id, sysOrgs));
+                var children = GetOrgTree(p_sysOrg.Id, sysOrgs);
+                if (children != null)
+                {
+                    if (children.Count > 0)
+                    {
+                        treeNode.Children = new List<TreeNode>();
+                        treeNode.Children.AddRange(children);
+                    }
+                }
+
                 treeNodes.Add(treeNode);
             }
 

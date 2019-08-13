@@ -71,6 +71,13 @@ namespace LocalS.Service.Api.Account
                         tokenInfo.AgentId = agent.Id;
                     }
                     break;
+                case Enumeration.BelongSite.Merch:
+                    var merch = CurrentDb.Merch.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                    if (merch != null)
+                    {
+                        tokenInfo.MerchId = merch.Id;
+                    }
+                    break;
             }
 
 
