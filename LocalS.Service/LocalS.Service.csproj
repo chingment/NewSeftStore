@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6EFDE80B-7C86-483A-A7B2-73DBA84D28CD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LocalS.Service</RootNamespace>
+    <AssemblyName>LocalS.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Api\Account\AccountServiceFactory.cs" />
+    <Compile Include="Api\Account\HomeService.cs" />
+    <Compile Include="Api\Account\LoginLogService.cs" />
+    <Compile Include="Api\Account\OwnService.cs" />
+    <Compile Include="Api\Account\RModels\RetHomeGetIndexPageData.cs" />
+    <Compile Include="Api\Account\RModels\RetOwnGetInfo.cs" />
+    <Compile Include="Api\Account\RModels\RetOwnLoginByAccount.cs" />
+    <Compile Include="Api\Account\RModels\RopUserInfoSave.cs" />
+    <Compile Include="Api\Account\RModels\RupOwnCheckPermission.cs" />
+    <Compile Include="Api\Account\RModels\RopOwnLoginByAccount.cs" />
+    <Compile Include="Api\Account\RModels\RupBaseGetList.cs" />
+    <Compile Include="Api\Account\RModels\RupLoginLogGetList.cs" />
+    <Compile Include="Api\Account\RModels\RupOwnGetInfo.cs" />
+    <Compile Include="Api\Account\UserInfoService.cs" />
+    <Compile Include="Api\Admin\AdminOrgService.cs" />
+    <Compile Include="Api\Admin\RModels\RetSysMenuInitAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RetSysMenuInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopSysMenuAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RopSysMenuEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RupSysMenuGetList.cs" />
+    <Compile Include="Api\Admin\SysMenuService.cs" />
+    <Compile Include="Api\Admin\SysRoleService.cs" />
+    <Compile Include="Api\Admin\AdminServiceFactory.cs" />
+    <Compile Include="Api\Admin\AdminUserService.cs" />
+    <Compile Include="Api\Admin\AgentMasterService.cs" />
+    <Compile Include="Api\Admin\MerchMasterService.cs" />
+    <Compile Include="Api\Admin\RModels\RetAdminOrgInitAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RetAdminOrgInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RetSysRoleInitAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RetSysRoleInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RetAdminUserInitAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RetAdminUserInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RetAgentMasterInitAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RetAgentMasterInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RetMerchMasterInitAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RetMerchMasterInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopAdminOrgAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RopAdminOrgEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopSysRoleAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RopSysRoleEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopAdminUserAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RopAdminUserEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopAgentMasterAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RopAgentMasterEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopMerchMasterAdd.cs" />
+    <Compile Include="Api\Admin\RModels\RopMerchMasterEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RupAdminOrgGetList.cs" />
+    <Compile Include="Api\Admin\RModels\RupSysRoleGetList.cs" />
+    <Compile Include="Api\Admin\RModels\RupAgentMasterGetList.cs" />
+    <Compile Include="Api\Admin\RModels\RupBaseGetList.cs" />
+    <Compile Include="Api\Admin\RModels\RupAdminUserGetList.cs" />
+    <Compile Include="Api\Admin\RModels\RupMerchMasterGetList.cs" />
+    <Compile Include="Api\Agent\RModels\RetUserInitAdd.cs" />
+    <Compile Include="Api\InsApp\HomeService.cs" />
+    <Compile Include="Api\InsApp\InsAppServiceFactory.cs" />
+    <Compile Include="Api\InsApp\InsCarService.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarInfoModel.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarInsureCityModel.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarModelInfoModel.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarOrderModel.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarSearchPlateNoRecordModel.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarCompanyRuleModel.cs" />
+    <Compile Include="Api\InsApp\Models\InsCarCustomerModel.cs" />
+    <Compile Include="Api\InsApp\Models\UI\ImgModel.cs" />
+    <Compile Include="Api\InsApp\Models\UI\LNavGridItemModel.cs" />
+    <Compile Include="Api\InsApp\Models\UI\LNavGridModel.cs" />
+    <Compile Include="Api\InsApp\Models\UI\SwiperModel.cs" />
+    <Compile Include="Api\InsApp\RModels\RetHomeGetIndexPageData.cs" />
+    <Compile Include="Api\InsApp\RModels\RetOwnLoginByAccount.cs" />
+    <Compile Include="Api\InsApp\RModels\RetOwnLoginByUrlParams.cs" />
+    <Compile Include="Api\InsApp\RModels\RetInsCarGetIndexPageData.cs" />
+    <Compile Include="Api\InsApp\RModels\RetInsCarSearchModelInfo.cs" />
+    <Compile Include="Api\InsApp\RModels\RetInsCarSearchPlateNoInfo.cs" />
+    <Compile Include="Api\InsApp\RModels\RopOwnLoginByAccount.cs" />
+    <Compile Include="Api\InsApp\RModels\RupInsCarSearchPlateNoInfo.cs" />
+    <Compile Include="Api\InsApp\RModels\RupInsCarSearchModelInfo.cs" />
+    <Compile Include="Api\InsApp\OwnService.cs" />
+    <Compile Include="Api\Agent\HomeService.cs" />
+    <Compile Include="Api\Agent\AgentServiceFactory.cs" />
+    <Compile Include="Api\Agent\RModels\RetUserInitEdit.cs" />
+    <Compile Include="Api\Agent\RModels\RopUserAdd.cs" />
+    <Compile Include="Api\Agent\RModels\RopUserEdit.cs" />
+    <Compile Include="Api\Agent\UserService.cs" />
+    <Compile Include="Api\Agent\RModels\RupBaseGetList.cs" />
+    <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
+    <Compile Include="Api\Merch\MerchServiceFactory.cs" />
+    <Compile Include="Api\Merch\HomeService.cs" />
+    <Compile Include="Api\Merch\RModels\RetUserInitAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RetUserInitEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopUserAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RopUserEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupUserGetList.cs" />
+    <Compile Include="Api\Merch\UserService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\MenuNode.cs" />
+    <Compile Include="UI\MenuMeta.cs" />
+    <Compile Include="UI\TreeNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Api\Account\Models\" />
+    <Folder Include="Api\Admin\Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LocalS.BLL\LocalS.BLL.csproj">
+      <Project>{15d7ce8c-a100-4d87-a1c2-d76339e78ad6}</Project>
+      <Name>LocalS.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LocalS.DAL\LocalS.DAL.csproj">
+      <Project>{22abb57b-64ed-42fc-a64d-d603a90cb81b}</Project>
+      <Name>LocalS.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LocalS.Entity\LocalS.Entity.csproj">
+      <Project>{85e1b9cd-3435-4591-bc66-29fbec2c67a3}</Project>
+      <Name>LocalS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.DAL\Lumos.DbRelay.csproj">
+      <Project>{0e039414-2a2e-48b4-8db7-c4346106fa68}</Project>
+      <Name>Lumos.DbRelay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
+      <Project>{c165e6a0-dd43-4aa1-94b1-d4bf5420a80d}</Project>
+      <Name>Lumos.Redis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.Session\Lumos.Session.csproj">
+      <Project>{d2f78ae2-3125-44b8-8629-ec3c5bc6c46b}</Project>
+      <Name>Lumos.Session</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos\Lumos.csproj">
+      <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
+      <Name>Lumos</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

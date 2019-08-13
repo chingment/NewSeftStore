@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    margin: 0;
+    font-size: 14px;
+    background-color: #f8f8f8;
+}
+
+ul{
+    list-style: none;
+}
+
+li{
+list-style-type:none;
+}
+
+a,label {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+img{
+    width: 100%;
+    height: 100%;
+}
+
+.space{
+    height: 1.2rem;
+    background-color: #f8f8f8;
+}
+
+.pdt0{
+    padding-top: 0;
+}
+
+.bdb0 {
+ border-bottom-width: 0px;
+}
+
+.mb5{
+    margin-bottom: 5rem;
+}
+
+.lumos-hid{
+    display: none;
+}
+
+.lumos-page{
+  
+}
+
+
+.lumos-tabbody{
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 100px;
+}
+
+.lumos-lnav >.item{
+    border-bottom: 1px solid #f8f8f8;
+    padding: .5rem 0rem;
+    display: flex;
+}
+
+.lumos-lnav > .item:last-child {
+    border-bottom-width: 0px;
+}
+
+  .lumos-lnav .item-lefticon{
+      flex: 1;
+  }
+
+.lumos-lnav  .item-content{
+    display: flex;
+    flex: 1;
+}
+
+.lumos-lnav  .item-content .title{
+    flex: 1;
+    display: flex;
+    justify-content:  flex-start;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #3d3d3d
+}
+
+.lumos-lnav  .item-content .note{
+    flex: 1;
+    display: flex;
+    justify-content:  flex-end;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #3d3d3d;
+}
+
+.lumos-lnav .item-righticon{
+    padding-left: .6rem;
+    justify-content: right;
+    align-items: center;
+    display: flex;
+}
+.lumos-lnav .item-righticon img{
+   width: .4rem;
+  height: .7rem;
+}
+
+
+.lumos-button{
+        border: 1px solid transparent;
+        border-color: transparent;
+        background-color: #006dee;
+        color: #fff;
+        position: relative;
+        display: inline-block;
+        margin: 0;
+        padding: 0 12px;
+        min-width: 52px;
+        border-radius: 4px;
+        vertical-align: top;
+        text-align: center;
+        text-overflow: ellipsis;
+        font-size: 16px;
+        cursor: pointer;
+}
+
+.lumos-button.lumos-button-bottom{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    clear: both;
+    display: block;
+    border-radius: 0;
+    height: 46px;
+    line-height: 46px;
+}
+
+.lumos-button.lumos-button-full{
+    height: 46px;
+    line-height: 46px;
+    width: 100%;
+}
+
+.lumos-button.lumos-button-private{
+   height: 28px;
+   font-size: .8rem;
+}

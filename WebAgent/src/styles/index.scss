@@ -1,0 +1,110 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+// main-container global css
+.app-container {
+  padding: 20px;
+}
+
+.filter-container{
+  padding-bottom: 10px;
+}
+
+.pagination-container{
+  padding: 10px 0px !important;
+}
+
+.el-pagination{
+ padding: 0px !important;
+}
+
+.enable-status{
+  background-color: rgba(24,144,255,.1);
+  display: inline-block;
+  padding: 0 10px;
+  height: 32px;
+  line-height: 30px;
+  font-size: 12px;
+  color: #1890ff;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid rgba(24,144,255,.2);
+  white-space: nowrap;
+}
+
+.enable-status-0{
+  background-color: rgba(144,147,153,.1);
+  border-color: rgba(144,147,153,.2);
+  color: #909399;
+}
+
+.enable-status-1{
+  background-color: rgba(19,206,102,.1);
+  border-color: rgba(19,206,102,.2);
+  color: #13ce66;
+}
+
+.enable-status-2{
+  background-color: rgba(255,73,73,.1);
+  border-color: rgba(255,73,73,.2);
+  color: #ff4949;
+}
