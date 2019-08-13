@@ -39,12 +39,13 @@
       </el-form-item>
       <el-form-item label="图片" prop="dispalyImgUrls">
         <el-upload
+          v-model="form.dispalyImgUrls"
           action="http://upload.17fanju.com/Api/ElementUploadImage"
           list-type="picture-card"
           :on-success="handleSuccess"
           :on-remove="handleRemove"
           :on-error="handleError"
-          :file-list="fileList"
+          :file-list="form.dispalyImgUrls"
           :limit="4"
         >
           <i class="el-icon-plus" />
@@ -142,13 +143,13 @@ export default {
       })
     },
     handleRemove(file, fileList) {
-      this.fileList = fileList
+      this.form.dispalyImgUrls = fileList
     },
     handleSuccess(response, file, fileList) {
-      this.fileList = fileList
+      this.form.dispalyImgUrls = fileList
     },
     handleError(errs, file, fileList) {
-      this.fileList = fileList
+      this.form.dispalyImgUrls = fileList
     }
   }
 }

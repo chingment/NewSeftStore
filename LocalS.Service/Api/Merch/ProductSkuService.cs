@@ -187,33 +187,40 @@ namespace LocalS.Service.Api.Merch
                 productSku.Creator = operater;
                 productSku.CreateTime = DateTime.Now;
 
-                productSku.KindIds = string.Join(",", rop.KindIds.ToArray());
-
-                foreach (var kindId in rop.KindIds)
+                if (rop.KindIds != null)
                 {
-                    var productSkuKind = new ProductSkuKind();
-                    productSkuKind.Id = GuidUtil.New();
-                    productSkuKind.ProductKindId = kindId;
-                    productSkuKind.ProductSkuId = productSku.Id;
-                    productSkuKind.Creator = operater;
-                    productSkuKind.CreateTime = DateTime.Now;
-                    CurrentDb.ProductSkuKind.Add(productSkuKind);
+                    productSku.KindIds = string.Join(",", rop.KindIds.ToArray());
+
+                    foreach (var kindId in rop.KindIds)
+                    {
+                        var productSkuKind = new ProductSkuKind();
+                        productSkuKind.Id = GuidUtil.New();
+                        productSkuKind.ProductKindId = kindId;
+                        productSkuKind.ProductSkuId = productSku.Id;
+                        productSkuKind.Creator = operater;
+                        productSkuKind.CreateTime = DateTime.Now;
+                        CurrentDb.ProductSkuKind.Add(productSkuKind);
+                    }
                 }
 
-                productSku.SubjectIds = string.Join(",", rop.SubjectIds.ToArray());
-
-                foreach (var subjectId in rop.SubjectIds)
+                if (rop.SubjectIds != null)
                 {
-                    var productSkuSubject = new ProductSkuSubject();
-                    productSkuSubject.Id = GuidUtil.New();
-                    productSkuSubject.ProductSubjectId = subjectId;
-                    productSkuSubject.ProductSkuId = productSku.Id;
-                    productSkuSubject.Creator = operater;
-                    productSkuSubject.CreateTime = DateTime.Now;
-                    CurrentDb.ProductSkuSubject.Add(productSkuSubject);
+                    productSku.SubjectIds = string.Join(",", rop.SubjectIds.ToArray());
+
+                    foreach (var subjectId in rop.SubjectIds)
+                    {
+                        var productSkuSubject = new ProductSkuSubject();
+                        productSkuSubject.Id = GuidUtil.New();
+                        productSkuSubject.ProductSubjectId = subjectId;
+                        productSkuSubject.ProductSkuId = productSku.Id;
+                        productSkuSubject.Creator = operater;
+                        productSkuSubject.CreateTime = DateTime.Now;
+                        CurrentDb.ProductSkuSubject.Add(productSkuSubject);
+                    }
                 }
 
                 CurrentDb.ProductSku.Add(productSku);
+                CurrentDb.SaveChanges();
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");

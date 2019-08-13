@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NPinyin">
+      <HintPath>D:\github\InsCenter\packages\NPinyin-0.2.4588.20158-bin\NPinyin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Transactions" />
