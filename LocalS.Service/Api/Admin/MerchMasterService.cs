@@ -200,6 +200,33 @@ namespace LocalS.Service.Api.Admin
                 sysUserOrg.Creator = operater;
                 CurrentDb.SysUserOrg.Add(sysUserOrg);
 
+
+
+                var productKind = new ProductKind();
+                productKind.Id = GuidUtil.New();
+                productKind.MerchId = merchId;
+                productKind.Name = "我的品类";
+                productKind.PId = GuidUtil.Empty();
+                productKind.Depth = 0;
+                productKind.Priority = 0;
+                productKind.IsDelete = false;
+                productKind.CreateTime = DateTime.Now;
+                productKind.Creator = operater;
+                CurrentDb.ProductKind.Add(productKind);
+
+
+                var productSubject = new ProductSubject();
+                productSubject.Id = GuidUtil.New();
+                productSubject.PId = GuidUtil.Empty();
+                productSubject.MerchId = merchId;
+                productSubject.Name = "我的栏目";
+
+                productSubject.Priority = 0;
+                productSubject.IsDelete = false;
+                productSubject.CreateTime = DateTime.Now;
+                productSubject.Creator = operater;
+                CurrentDb.ProductSubject.Add(productSubject);
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -254,26 +281,6 @@ namespace LocalS.Service.Api.Admin
                 user.IsDisable = rop.IsDisable;
                 user.MendTime = DateTime.Now;
                 user.Mender = operater;
-
-
-                var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.UserId).ToList();
-
-                foreach (var sysUserRole in sysUserRoles)
-                {
-                    CurrentDb.SysUserRole.Remove(sysUserRole);
-                }
-
-
-                if (rop.RoleIds != null)
-                {
-                    foreach (var roleId in rop.RoleIds)
-                    {
-                        if (!string.IsNullOrEmpty(roleId))
-                        {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.UserId, Creator = operater, CreateTime = DateTime.Now });
-                        }
-                    }
-                }
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
