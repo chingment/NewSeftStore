@@ -8,7 +8,7 @@ namespace Lumos
 {
     public class ImgSet
     {
-        public string ImgUrl { get; set; }
+        public string Url { get; set; }
         public bool IsMain { get; set; }
         public string Name { get; set; }
         public int Priority { set; get; }
@@ -24,7 +24,7 @@ namespace Lumos
                     var d1 = d.Where(m => m.IsMain == true).FirstOrDefault();
                     if (d1 != null)
                     {
-                        imgUrl = d1.ImgUrl;
+                        imgUrl = d1.Url;
                     }
                 }
 
@@ -57,7 +57,7 @@ namespace Lumos
                 var d1 = imgs.Where(m => m.IsMain == true).FirstOrDefault();
                 if (d1 != null)
                 {
-                    imgUrl = d1.ImgUrl;
+                    imgUrl = d1.Url;
                 }
 
 

@@ -101,7 +101,6 @@ namespace LocalS.Service.Api.Admin
                 treeNode.PId = p_sysOrg.PId;
                 treeNode.Value = p_sysOrg.Id;
                 treeNode.Label = p_sysOrg.Name;
-                treeNode.CustomLabel = p_sysOrg.FullName;
                 var children = GetOrgTree(treeNode.Id, sysOrgs);
                 if (children != null)
                 {

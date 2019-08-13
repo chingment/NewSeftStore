@@ -17,7 +17,7 @@ namespace LocalS.Entity
         public string Name { get; set; }
         public string BarCode { get; set; }
         public string SimpleCode { get; set; }
-        public string ImgUrl { get; set; }
+        public string MainImgUrl { get; set; }
         public string DispalyImgUrls { get; set; }
         public decimal ShowPrice { get; set; }
         public decimal SalePrice { get; set; }

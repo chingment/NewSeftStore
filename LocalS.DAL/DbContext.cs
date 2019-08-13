@@ -27,6 +27,12 @@ namespace LocalS.DAL
         public IDbSet<Merch>  Merch { get; set; }
 
         public IDbSet<ProductSku> ProductSku { get; set; }
+        public IDbSet<ProductKind> ProductKind { get; set; }
+        public IDbSet<ProductSubject> ProductSubject { get; set; }
+
+        public IDbSet<ProductSkuKind> ProductSkuKind { get; set; }
+
+        public IDbSet<ProductSkuSubject> ProductSkuSubject { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

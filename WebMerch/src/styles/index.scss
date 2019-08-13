@@ -108,3 +108,26 @@ div:focus {
   border-color: rgba(255,73,73,.2);
   color: #ff4949;
 }
+
+.el-cascader-node__postfix{
+  top: 10px;
+}
+
+.vue-treeselect__placeholder,.vue-treeselect__multi-value{
+  line-height: 38px !important;
+}
+.vue-treeselect__multi-value-label,{
+  line-height: 24px !important;
+}
+
+.vue-treeselect__multi-value{
+  line-height: 24px !important;
+}
+
+.el-upload--picture-card,.el-upload-list--picture-card .el-upload-list__item{
+  width: 100px !important;
+  height: 100px !important;
+}
+.el-upload--picture-card{
+line-height: 110px;
+}

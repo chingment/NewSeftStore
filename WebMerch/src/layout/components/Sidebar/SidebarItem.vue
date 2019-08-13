@@ -14,7 +14,7 @@
       </template>
       <sidebar-item
         v-for="child in item.children"
-        :key="child.path"
+        :key="child.name"
         :is-nest="true"
         :collapse="true"
         :item="resolveChild(child)"

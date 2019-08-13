@@ -1,26 +1,60 @@
 <template>
-  <div id="useradd_container" class="app-container">
+  <div id="productsku_container" class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName" />
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" />
+      <el-form-item label="所属模块" prop="kindIds">
+        <treeselect
+          v-model="form.kindIds"
+          :multiple="true"
+          :options="treeselect_kind_options"
+          :normalizer="treeselect_kind_normalizer"
+          :flat="true"
+          sort-value-by="INDEX"
+          :default-expand-level="99"
+          placeholder="选择"
+          no-children-text=""
+        />
+
       </el-form-item>
-      <el-form-item label="姓名" prop="fullName">
-        <el-input v-model="form.fullName" />
+      <el-form-item label="所属栏目" prop="subjectIds">
+        <treeselect
+          v-model="form.subjectIds"
+          :multiple="true"
+          :options="treeselect_subject_options"
+          :normalizer="treeselect_subject_normalizer"
+          :flat="true"
+          sort-value-by="INDEX"
+          :default-expand-level="99"
+          placeholder="选择"
+          no-children-text=""
+        />
       </el-form-item>
-      <el-form-item label="手机号码" prop="phoneNumber">
-        <el-input v-model="form.phoneNumber" />
+      <el-form-item label="销售价" prop="salePrice">
+        <el-input v-model="form.salePrice" />
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" />
+      <el-form-item label="展示价" prop="showPrice">
+        <el-input v-model="form.showPrice" />
       </el-form-item>
-      <el-form-item label="角色">
-        <el-checkbox-group v-model="form.roleIds">
-          <el-checkbox v-for="option in checkbox_group_role_options" :key="option.id" style="display:block" :label="option.id">{{ option.label }}</el-checkbox>
-        </el-checkbox-group>
+      <el-form-item label="图片" prop="dispalyImgUrls">
+        <el-upload
+          action="http://upload.17fanju.com/Api/ElementUploadImage"
+          list-type="picture-card"
+          :on-success="handleSuccess"
+          :on-remove="handleRemove"
+          :on-error="handleError"
+          :file-list="fileList"
+          :limit="4"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+
       </el-form-item>
+      <el-form-item label="简短描述">
+        <el-input v-model="form.briefInfo" />
+      </el-form-item>
+      <el-form-item label="商品详情" />
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
@@ -29,59 +63,67 @@
 </template>
 
 <script>
-// https://element.eleme.cn/#/zh-CN/component/cascader
+
 import { MessageBox } from 'element-ui'
-import { addUser, initAddUser } from '@/api/user'
+import { addProductSku, initAddProductSku } from '@/api/productsku'
 import fromReg from '@/utils/formReg'
-import { goBack } from '@/utils/commonUtil'
+import { goBack, treeselectNormalizer } from '@/utils/commonUtil'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 export default {
+  components: { Treeselect },
   data() {
     return {
+      headers: { 'Content-Type': 'multipart/form-data' },
       form: {
-        userName: '',
-        password: '',
-        fullName: '',
-        phoneNumber: '',
-        email: '',
-        orgIds: [],
-        roleIds: []
+        name: '',
+        kindIds: [],
+        subjectIds: [],
+        showPrice: '',
+        salePrice: '',
+        detailsDes: '',
+        specDes: '',
+        briefDes: '',
+        dispalyImgUrls: []
       },
+      fileList: [],
       rules: {
-        userName: [{ required: true, message: '必填,且由3到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.userName }],
-        password: [{ required: true, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
-        fullName: [{ required: true, message: '必填', trigger: 'change' }],
-        orgIds: [{ required: true, message: '必选' }],
-        phoneNumber: [{ required: false, message: '格式错误,eg:13800138000', trigger: 'change', pattern: fromReg.phoneNumber }],
-        email: [{ required: false, message: '格式错误,eg:xxxx@xxx.xxx', trigger: 'change', pattern: fromReg.email }]
+        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
+        showPrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
+        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
-      cascader_org_props: { multiple: true, checkStrictly: true, emitPath: false },
-      cascader_org_options: [],
-      checkbox_group_role_options: []
+      treeselect_kind_normalizer: treeselectNormalizer,
+      treeselect_kind_options: [],
+      treeselect_subject_normalizer: treeselectNormalizer,
+      treeselect_subject_options: []
     }
+  },
+  mounted() {
+
   },
   created() {
     this.init()
   },
   methods: {
     init() {
-      initAddUser().then(res => {
+      initAddProductSku().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.cascader_org_options = d.orgs
-          this.checkbox_group_role_options = d.roles
+          this.treeselect_subject_options = d.subjects
+          this.treeselect_kind_options = d.kinds
         }
       })
     },
     resetForm() {
-      this.form = {
-        userName: '',
-        password: '',
-        fullName: '',
-        phoneNumber: '',
-        email: ''
-      }
+
     },
     onSubmit() {
+      console.log(JSON.stringify(this.form))
       this.$refs['form'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
@@ -89,7 +131,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            addUser(this.form).then(res => {
+            addProductSku(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
@@ -98,22 +140,24 @@ export default {
           })
         }
       })
+    },
+    handleRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    handleSuccess(response, file, fileList) {
+      this.fileList = fileList
+    },
+    handleError(errs, file, fileList) {
+      this.fileList = fileList
     }
   }
 }
 </script>
 
 <style scoped>
-.line {
-  text-align: center;
-}
-#useradd_container {
+#productsku_container {
   max-width: 600px;
 }
 
-.is-leaf{
-  display: none !important;
-  width: 0px !important;
-}
 </style>
 
