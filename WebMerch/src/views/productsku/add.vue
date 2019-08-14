@@ -31,10 +31,10 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="销售价" prop="salePrice">
+      <el-form-item label="销售价" prop="salePrice" style="width:200px">
         <el-input v-model="form.salePrice" />
       </el-form-item>
-      <el-form-item label="展示价" prop="showPrice">
+      <el-form-item label="展示价" prop="showPrice" style="width:200px">
         <el-input v-model="form.showPrice" />
       </el-form-item>
       <el-form-item label="图片" prop="dispalyImgUrls">
@@ -45,17 +45,22 @@
           :on-success="handleSuccess"
           :on-remove="handleRemove"
           :on-error="handleError"
-          :file-list="form.dispalyImgUrls"
+          :on-preview="handlePreview"
+          :file-list="uploadImglist"
           :limit="4"
         >
           <i class="el-icon-plus" />
         </el-upload>
-
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
+          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        </el-dialog>
       </el-form-item>
-      <el-form-item label="简短描述">
-        <el-input v-model="form.briefInfo" />
+      <el-form-item label="简短描述" style="max-width:1000px">
+        <el-input v-model="form.briefDes" />
       </el-form-item>
-      <el-form-item label="商品详情" />
+      <el-form-item label="商品详情" style="max-width:1000px">
+        <Editor id="tinymce" v-model="form.detailsDes" :init="tinymce_init" />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
@@ -72,8 +77,41 @@ import { goBack, treeselectNormalizer } from '@/utils/commonUtil'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
+import tinymce from 'tinymce/tinymce'
+import Editor from '@tinymce/tinymce-vue'
+import 'tinymce/themes/silver/theme'
+
+import 'tinymce/plugins/image'// 插入上传图片插件
+import 'tinymce/plugins/media'// 插入视频插件
+import 'tinymce/plugins/table'// 插入表格插件
+import 'tinymce/plugins/link' // 超链接插件
+import 'tinymce/plugins/code' // 代码块插件
+import 'tinymce/plugins/lists'// 列表插件
+import 'tinymce/plugins/contextmenu' // 右键菜单插件
+import 'tinymce/plugins/wordcount' // 字数统计插件
+import 'tinymce/plugins/colorpicker' // 选择颜色插件
+import 'tinymce/plugins/textcolor' // 文本颜色插件
+import 'tinymce/plugins/fullscreen' // 全屏
+import 'tinymce/plugins/help'
+import 'tinymce/plugins/charmap'
+import 'tinymce/plugins/paste'
+import 'tinymce/plugins/print'
+import 'tinymce/plugins/preview'
+import 'tinymce/plugins/hr'
+import 'tinymce/plugins/anchor'
+import 'tinymce/plugins/pagebreak'
+import 'tinymce/plugins/spellchecker'
+import 'tinymce/plugins/searchreplace'
+import 'tinymce/plugins/visualblocks'
+import 'tinymce/plugins/visualchars'
+import 'tinymce/plugins/insertdatetime'
+import 'tinymce/plugins/nonbreaking'
+import 'tinymce/plugins/autosave'
+import 'tinymce/plugins/fullpage'
+import 'tinymce/plugins/toc'
+
 export default {
-  components: { Treeselect },
+  components: { Treeselect, Editor },
   data() {
     return {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -88,24 +126,50 @@ export default {
         briefDes: '',
         dispalyImgUrls: []
       },
-      fileList: [],
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['blur', 'change'], max: 3 }],
         subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         showPrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
+      uploadImglist: [],
+      uploadImgPreImgDialogUrl: '',
+      uploadImgPreImgDialogVisible: false,
       treeselect_kind_normalizer: treeselectNormalizer,
       treeselect_kind_options: [],
       treeselect_subject_normalizer: treeselectNormalizer,
-      treeselect_subject_options: []
+      treeselect_subject_options: [],
+      tinymce_init: {
+        language_url: '/tinymce/langs/zh_CN.js', // 语言包的路径
+        language: 'zh_CN', // 语言
+        height: 430,
+        skin_url: '/tinymce/skins/ui/oxide',
+        images_upload_url: 'http://upload.17fanju.com/Api/ElementUploadImage',
+        menubar: false, // 隐藏最上方menu菜单
+        browser_spellcheck: true, // 拼写检查
+        branding: false, // 去水印
+        statusbar: false, // 隐藏编辑器底部的状态栏
+        elementpath: false, // 禁用下角的当前标签路径
+        paste_data_images: true, // 允许粘贴图像
+        plugins: 'lists image media table wordcount code fullscreen help  toc fullpage autosave nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak link charmap paste print preview hr anchor',
+        toolbar: [
+          'newdocument undo redo | formatselect visualaid|cut copy paste selectall| bold italic underline strikethrough |codeformat blockformats| superscript subscript  | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent |  removeformat ',
+          'code  bullist numlist | lists image media table link |fullscreen help toc fullpage restoredraft nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak anchor charmap  pastetext print preview hr'
+        ],
+        images_upload_handler: (blobInfo, success, failure) => {
+          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
+          success(img)
+        }
+
+      }
+
     }
   },
   mounted() {
-
+    tinymce.init()
   },
   created() {
     this.init()
@@ -142,21 +206,38 @@ export default {
         }
       })
     },
+    getDispalyImgUrls(fileList) {
+      var _dispalyImgUrls = []
+      for (var i = 0; i < fileList.length; i++) {
+        if (fileList[i].status === 'success') {
+          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+        }
+      }
+      return _dispalyImgUrls
+    },
     handleRemove(file, fileList) {
-      this.form.dispalyImgUrls = fileList
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
-      this.form.dispalyImgUrls = fileList
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
     },
     handleError(errs, file, fileList) {
-      this.form.dispalyImgUrls = fileList
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+    },
+    handlePreview(file) {
+      this.uploadImgPreImgDialogUrl = file.url
+      this.uploadImgPreImgDialogVisible = true
     }
   }
 }
 </script>
 
 <style scoped>
-#productsku_container {
+
+.el-form .el-form-item{
   max-width: 600px;
 }
 
