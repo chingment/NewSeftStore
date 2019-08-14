@@ -228,5 +228,128 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+        public CustomJsonResult InitEdit(string operater, string merchId, string productSkuId)
+        {
+            var ret = new RetProductSkuInitEdit();
+            var productSku = CurrentDb.ProductSku.Where(m => m.MerchId == merchId && m.Id == productSkuId).FirstOrDefault();
+            if (productSku != null)
+            {
+                ret.ProductSkuId = productSku.Id;
+                ret.Name = productSku.Name;
+                ret.SalePrice = productSku.SalePrice;
+                ret.ShowPrice = productSku.ShowPrice;
+                ret.DetailsDes = productSku.DetailsDes;
+                ret.BriefDes = productSku.BriefDes;
+                ret.KindIds = CurrentDb.ProductSkuKind.Where(m => m.ProductSkuId == productSkuId).Select(m => m.ProductKindId).ToList();
+                ret.SubjectIds = CurrentDb.ProductSkuSubject.Where(m => m.ProductSkuId == productSkuId).Select(m => m.ProductSubjectId).ToList();
+                ret.DispalyImgUrls = productSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                ret.Kinds = GetKindTree(merchId);
+                ret.Subjects = GetSubjectTree(merchId);
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+        }
+
+        public CustomJsonResult Edit(string operater, string merchId, RopProductSkuEdit rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.ProductSkuId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品Id不能为空");
+            }
+
+            if (string.IsNullOrEmpty(rop.Name))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品名称不能为空");
+            }
+
+            if (rop.KindIds == null || rop.KindIds.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
+            }
+
+            if (rop.DispalyImgUrls == null || rop.DispalyImgUrls.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
+            }
+
+            if (rop.ShowPrice < rop.SalePrice)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "展示价格不能小于销售价");
+            }
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var productSku = CurrentDb.ProductSku.Where(m => m.Id == rop.ProductSkuId).FirstOrDefault();
+
+                productSku.Name = rop.Name;
+
+                Encoding gb2312 = Encoding.GetEncoding("GB2312");
+                string s = Pinyin.ConvertEncoding(productSku.Name, Encoding.UTF8, gb2312);
+                string simpleCode = Pinyin.GetInitials(s, gb2312);
+                productSku.SimpleCode = simpleCode;
+                productSku.ShowPrice = rop.ShowPrice;
+                productSku.SalePrice = rop.SalePrice;
+                productSku.BriefDes = rop.BriefDes;
+                productSku.DetailsDes = rop.DetailsDes;
+                productSku.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                productSku.Mender = operater;
+                productSku.MendTime = DateTime.Now;
+
+
+                var productSkuKinds = CurrentDb.ProductSkuKind.Where(m => m.ProductSkuId == productSku.Id).ToList();
+
+                foreach (var productSkuKind in productSkuKinds)
+                {
+                    CurrentDb.ProductSkuKind.Remove(productSkuKind);
+                }
+
+                if (rop.KindIds != null)
+                {
+                    foreach (var kindId in rop.KindIds)
+                    {
+                        var productKindSku = new ProductSkuKind();
+                        productKindSku.Id = GuidUtil.New();
+                        productKindSku.ProductKindId = kindId;
+                        productKindSku.ProductSkuId = productSku.Id;
+                        productKindSku.Creator = operater;
+                        productKindSku.CreateTime = DateTime.Now;
+                        CurrentDb.ProductSkuKind.Add(productKindSku);
+                    }
+                }
+
+                var productSkuSubjects = CurrentDb.ProductSkuSubject.Where(m => m.ProductSkuId == productSku.Id).ToList();
+
+                foreach (var productSkuSubject in productSkuSubjects)
+                {
+                    CurrentDb.ProductSkuSubject.Remove(productSkuSubject);
+                }
+
+
+                if (rop.SubjectIds != null)
+                {
+                    foreach (var subjectId in rop.SubjectIds)
+                    {
+                        var productSkuSubject = new ProductSkuSubject();
+                        productSkuSubject.Id = GuidUtil.New();
+                        productSkuSubject.ProductSubjectId = subjectId;
+                        productSkuSubject.ProductSkuId = productSku.Id;
+                        productSkuSubject.Creator = operater;
+                        productSkuSubject.CreateTime = DateTime.Now;
+                        CurrentDb.ProductSkuSubject.Add(productSkuSubject);
+                    }
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+            }
+
+            return result;
+        }
+
     }
 }

@@ -5,6 +5,7 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="所属模块" prop="kindIds">
+        <el-input v-model="form.kindIds" style="display:none" />
         <treeselect
           v-model="form.kindIds"
           :multiple="true"
@@ -16,9 +17,9 @@
           placeholder="选择"
           no-children-text=""
         />
-
       </el-form-item>
       <el-form-item label="所属栏目" prop="subjectIds">
+        <el-input v-model="form.subjectIds" style="display:none" />
         <treeselect
           v-model="form.subjectIds"
           :multiple="true"
@@ -38,9 +39,10 @@
         <el-input v-model="form.showPrice" />
       </el-form-item>
       <el-form-item label="图片" prop="dispalyImgUrls">
+        <el-input v-model="form.dispalyImgUrls" style="display:none" />
         <el-upload
           v-model="form.dispalyImgUrls"
-          action="http://upload.17fanju.com/Api/ElementUploadImage"
+          :action="uploadImgServiceUrl"
           list-type="picture-card"
           :on-success="handleSuccess"
           :on-remove="handleRemove"
@@ -128,7 +130,7 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['blur', 'change'], max: 3 }],
+        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['click', 'change'], max: 3 }],
         subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         showPrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
@@ -138,6 +140,7 @@ export default {
       uploadImglist: [],
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
+      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
       treeselect_kind_normalizer: treeselectNormalizer,
       treeselect_kind_options: [],
       treeselect_subject_normalizer: treeselectNormalizer,
@@ -147,7 +150,7 @@ export default {
         language: 'zh_CN', // 语言
         height: 430,
         skin_url: '/tinymce/skins/ui/oxide',
-        images_upload_url: 'http://upload.17fanju.com/Api/ElementUploadImage',
+        images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
         menubar: false, // 隐藏最上方menu菜单
         browser_spellcheck: true, // 拼写检查
         branding: false, // 去水印
@@ -163,13 +166,11 @@ export default {
           const img = 'data:image/jpeg;base64,' + blobInfo.base64()
           success(img)
         }
-
       }
-
     }
   },
   mounted() {
-    tinymce.init()
+
   },
   created() {
     this.init()
