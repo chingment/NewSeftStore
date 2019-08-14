@@ -23,9 +23,9 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" prop="mianImgUrl" align="center" width="110">
+      <el-table-column label="图片" prop="mainImgUrl" align="center" width="110">
         <template slot-scope="scope">
-          <img :src="scope.row.mianImgUrl" style="width:80px;height:80px;">
+          <img :src="scope.row.mainImgUrl" style="width:80px;height:80px;">
         </template>
       </el-table-column>
       <el-table-column label="名称" prop="name" align="left" min-width="20%">
@@ -33,22 +33,22 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="分类" prop="kindNames" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="分类" prop="kindNames" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="栏目" prop="subjectNames" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="栏目" prop="subjectNames" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.subjectNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="销售价" prop="salePrice" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="销售价" prop="salePrice" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="展示价" prop="showPrice" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="展示价" prop="showPrice" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.showPrice }}</span>
         </template>
@@ -60,7 +60,7 @@
           </el-button>
         </template>
       </el-table-column>
-    </el-table>
+      </el-table-columnv-if="isdesktop"></el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
   </div>

@@ -5,7 +5,7 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="所属模块" prop="kindIds">
-        <el-input v-model="form.kindIds" style="display:none" />
+        <el-input :value="form.kindIds.toString()" style="display:none" />
         <treeselect
           v-model="form.kindIds"
           :multiple="true"
@@ -19,7 +19,7 @@
         />
       </el-form-item>
       <el-form-item label="所属栏目" prop="subjectIds">
-        <el-input v-model="form.subjectIds" style="display:none" />
+        <el-input :value="form.subjectIds.toString()" style="display:none" />
         <treeselect
           v-model="form.subjectIds"
           :multiple="true"
@@ -39,7 +39,7 @@
         <el-input v-model="form.showPrice" />
       </el-form-item>
       <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input v-model="form.dispalyImgUrls" style="display:none" />
+        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
         <el-upload
           v-model="form.dispalyImgUrls"
           :action="uploadImgServiceUrl"
@@ -146,10 +146,10 @@ export default {
       treeselect_subject_normalizer: treeselectNormalizer,
       treeselect_subject_options: [],
       tinymce_init: {
-        language_url: '/tinymce/langs/zh_CN.js', // 语言包的路径
+        language_url: '/static/tinymce/langs/zh_CN.js', // 语言包的路径
         language: 'zh_CN', // 语言
         height: 430,
-        skin_url: '/tinymce/skins/ui/oxide',
+        skin_url: '/static/tinymce/skins/ui/oxide',
         images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
         menubar: false, // 隐藏最上方menu菜单
         browser_spellcheck: true, // 拼写检查
@@ -170,7 +170,7 @@ export default {
     }
   },
   mounted() {
-
+    tinymce.init({})
   },
   created() {
     this.init()
