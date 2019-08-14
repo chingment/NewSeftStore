@@ -1,39 +1,67 @@
 <template>
-  <div id="useradd_container" class="app-container">
+  <div id="productsku_container" class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="用户名" prop="userName">
-        {{ form.userName }}
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item v-show="!isOpenEditPassword" label="密码">
-        <span>********</span>
-        <span @click="openEditPassword()">修改</span>
+      <el-form-item label="所属模块" prop="kindIds">
+        <el-input v-model="form.kindIds" style="display:none" />
+        <treeselect
+          v-model="form.kindIds"
+          :multiple="true"
+          :options="treeselect_kind_options"
+          :normalizer="treeselect_kind_normalizer"
+          :flat="true"
+          sort-value-by="INDEX"
+          :default-expand-level="99"
+          placeholder="选择"
+          no-children-text=""
+        />
       </el-form-item>
-      <el-form-item v-show="isOpenEditPassword" label="密码" prop="password">
-        <div style="display:flex">
-          <div style="flex:1">
-            <el-input v-model="form.password" type="password" />
-          </div>
-          <div style="width:50px;text-align: center;">
-            <span @click="openEditPassword()">取消</span>
-          </div>
-        </div>
+      <el-form-item label="所属栏目" prop="subjectIds">
+        <el-input v-model="form.subjectIds" style="display:none" />
+        <treeselect
+          v-model="form.subjectIds"
+          :multiple="true"
+          :options="treeselect_subject_options"
+          :normalizer="treeselect_subject_normalizer"
+          :flat="true"
+          sort-value-by="INDEX"
+          :default-expand-level="99"
+          placeholder="选择"
+          no-children-text=""
+        />
       </el-form-item>
-      <el-form-item label="姓名" prop="fullName">
-        <el-input v-model="form.fullName" />
+      <el-form-item label="销售价" prop="salePrice" style="width:200px">
+        <el-input v-model="form.salePrice" />
       </el-form-item>
-      <el-form-item label="手机号码" prop="phoneNumber">
-        <el-input v-model="form.phoneNumber" />
+      <el-form-item label="展示价" prop="showPrice" style="width:200px">
+        <el-input v-model="form.showPrice" />
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" />
+      <el-form-item label="图片" prop="dispalyImgUrls">
+        <el-input v-model="form.dispalyImgUrls" style="display:none" />
+        <el-upload
+          v-model="form.dispalyImgUrls"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :on-success="handleSuccess"
+          :on-remove="handleRemove"
+          :on-error="handleError"
+          :on-preview="handlePreview"
+          :file-list="uploadImglist"
+          :limit="4"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
+          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        </el-dialog>
       </el-form-item>
-      <el-form-item label="禁用">
-        <el-switch v-model="form.isDisable" />
+      <el-form-item label="简短描述" style="max-width:1000px">
+        <el-input v-model="form.briefDes" />
       </el-form-item>
-      <el-form-item label="角色">
-        <el-checkbox-group v-model="form.roleIds">
-          <el-checkbox v-for="option in checkbox_group_role_options" :key="option.id" style="display:block" :label="option.id">{{ option.label }}</el-checkbox>
-        </el-checkbox-group>
+      <el-form-item label="商品详情" style="max-width:1000px">
+        <Editor id="tinymce" v-model="form.detailsDes" :init="tinymce_init" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -43,58 +71,138 @@
 </template>
 
 <script>
+
 import { MessageBox } from 'element-ui'
-import { editUser, initEditUser } from '@/api/user'
+import { editProductSku, initEditProductSku } from '@/api/productsku'
 import fromReg from '@/utils/formReg'
-import { getUrlParam, goBack } from '@/utils/commonUtil'
+import { goBack, getUrlParam, treeselectNormalizer } from '@/utils/commonUtil'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
+import tinymce from 'tinymce/tinymce'
+import Editor from '@tinymce/tinymce-vue'
+import 'tinymce/themes/silver/theme'
+
+import 'tinymce/plugins/image'// 插入上传图片插件
+import 'tinymce/plugins/media'// 插入视频插件
+import 'tinymce/plugins/table'// 插入表格插件
+import 'tinymce/plugins/link' // 超链接插件
+import 'tinymce/plugins/code' // 代码块插件
+import 'tinymce/plugins/lists'// 列表插件
+import 'tinymce/plugins/contextmenu' // 右键菜单插件
+import 'tinymce/plugins/wordcount' // 字数统计插件
+import 'tinymce/plugins/colorpicker' // 选择颜色插件
+import 'tinymce/plugins/textcolor' // 文本颜色插件
+import 'tinymce/plugins/fullscreen' // 全屏
+import 'tinymce/plugins/help'
+import 'tinymce/plugins/charmap'
+import 'tinymce/plugins/paste'
+import 'tinymce/plugins/print'
+import 'tinymce/plugins/preview'
+import 'tinymce/plugins/hr'
+import 'tinymce/plugins/anchor'
+import 'tinymce/plugins/pagebreak'
+import 'tinymce/plugins/spellchecker'
+import 'tinymce/plugins/searchreplace'
+import 'tinymce/plugins/visualblocks'
+import 'tinymce/plugins/visualchars'
+import 'tinymce/plugins/insertdatetime'
+import 'tinymce/plugins/nonbreaking'
+import 'tinymce/plugins/autosave'
+import 'tinymce/plugins/fullpage'
+import 'tinymce/plugins/toc'
+
 export default {
+  components: { Treeselect, Editor },
   data() {
     return {
-      isOpenEditPassword: false,
+      headers: { 'Content-Type': 'multipart/form-data' },
       form: {
-        userId: '',
-        userName: '',
-        password: '',
-        fullName: '',
-        phoneNumber: '',
-        email: '',
-        orgIds: [],
-        roleIds: []
+        name: '',
+        kindIds: [],
+        subjectIds: [],
+        showPrice: '',
+        salePrice: '',
+        detailsDes: '',
+        specDes: '',
+        briefDes: '',
+        dispalyImgUrls: []
       },
       rules: {
-        password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
-        fullName: [{ required: true, message: '必填', trigger: 'change' }],
-        orgIds: [{ required: true, message: '必选' }],
-        phoneNumber: [{ required: false, message: '格式错误,eg:13800138000', trigger: 'change', pattern: fromReg.phoneNumber }],
-        email: [{ required: false, message: '格式错误,eg:xxxx@xxx.xxx', trigger: 'change', pattern: fromReg.email }]
+        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['click', 'change'], max: 3 }],
+        subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
+        showPrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
+        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
-      cascader_org_props: { multiple: true, checkStrictly: true, emitPath: false },
-      cascader_org_options: [],
-      checkbox_group_role_options: []
+      uploadImglist: [],
+      uploadImgPreImgDialogUrl: '',
+      uploadImgPreImgDialogVisible: false,
+      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+      treeselect_kind_normalizer: treeselectNormalizer,
+      treeselect_kind_options: [],
+      treeselect_subject_normalizer: treeselectNormalizer,
+      treeselect_subject_options: [],
+      tinymce_init: {
+        language_url: '/tinymce/langs/zh_CN.js', // 语言包的路径
+        language: 'zh_CN', // 语言
+        height: 430,
+        skin_url: '/tinymce/skins/ui/oxide',
+        images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+        menubar: false, // 隐藏最上方menu菜单
+        browser_spellcheck: true, // 拼写检查
+        branding: false, // 去水印
+        statusbar: false, // 隐藏编辑器底部的状态栏
+        elementpath: false, // 禁用下角的当前标签路径
+        paste_data_images: true, // 允许粘贴图像
+        plugins: 'lists image media table wordcount code fullscreen help  toc fullpage autosave nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak link charmap paste print preview hr anchor',
+        toolbar: [
+          'newdocument undo redo | formatselect visualaid|cut copy paste selectall| bold italic underline strikethrough |codeformat blockformats| superscript subscript  | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent |  removeformat ',
+          'code  bullist numlist | lists image media table link |fullscreen help toc fullpage restoredraft nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak anchor charmap  pastetext print preview hr'
+        ],
+        images_upload_handler: (blobInfo, success, failure) => {
+          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
+          success(img)
+        }
+      }
     }
+  },
+  mounted() {
+
   },
   created() {
     this.init()
   },
   methods: {
     init() {
-      var userId = getUrlParam('userId')
-      initEditUser({ userId: userId }).then(res => {
+      var productSkuId = getUrlParam('productSkuId')
+      initEditProductSku({ productSkuId: productSkuId }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.userId = d.userId
-          this.form.userName = d.userName
-          this.form.fullName = d.fullName
-          this.form.phoneNumber = d.phoneNumber
-          this.form.email = d.email
-          this.form.orgIds = d.orgIds
-          this.form.roleIds = d.roleIds
-          this.cascader_org_options = d.orgs
-          this.checkbox_group_role_options = d.roles
+
+          this.form.productSkuId = d.productSkuId
+          this.form.name = d.name
+          this.form.kindIds = d.kindIds
+          this.form.subjectIds = d.subjectIds
+          this.form.showPrice = d.showPrice
+          this.form.salePrice = d.salePrice
+          this.form.detailsDes = d.detailsDes
+          this.form.specDes = d.specDes
+          this.form.briefDes = d.briefDes
+          this.form.dispalyImgUrls = d.dispalyImgUrls
+          this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+          this.treeselect_subject_options = d.subjects
+          this.treeselect_kind_options = d.kinds
         }
       })
     },
+    resetForm() {
+
+    },
     onSubmit() {
+      console.log(JSON.stringify(this.form))
       this.$refs['form'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
@@ -102,7 +210,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            editUser(this.form).then(res => {
+            editProductSku(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
@@ -112,33 +220,48 @@ export default {
         }
       })
     },
-    openEditPassword() {
-      if (this.isOpenEditPassword) {
-        this.isOpenEditPassword = false
-        this.form.password = ''
-        this.rules.password[0].required = false
-      } else {
-        this.isOpenEditPassword = true
-        this.rules.password[0].required = true
+    getUploadImglist(dispalyImgUrls) {
+      var _uploadImglist = []
+      for (var i = 0; i < dispalyImgUrls.length; i++) {
+        _uploadImglist.push({ status: 'success', url: dispalyImgUrls[i].url, response: { data: { name: dispalyImgUrls[i].name, url: dispalyImgUrls[i].url }}})
       }
+
+      return _uploadImglist
     },
-    cascader_org_change() {
-      console.log('dasd')
+    getDispalyImgUrls(fileList) {
+      var _dispalyImgUrls = []
+      for (var i = 0; i < fileList.length; i++) {
+        if (fileList[i].status === 'success') {
+          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+        }
+      }
+      return _dispalyImgUrls
+    },
+    handleRemove(file, fileList) {
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+    },
+    handleSuccess(response, file, fileList) {
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+    },
+    handleError(errs, file, fileList) {
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+    },
+    handlePreview(file) {
+      this.uploadImgPreImgDialogUrl = file.url
+      this.uploadImgPreImgDialogVisible = true
     }
   }
 }
 </script>
 
 <style scoped>
-.line {
-  text-align: center;
-}
-#useradd_container {
+
+.el-form .el-form-item{
   max-width: 600px;
 }
 
-.el-tree-node__expand-icon.is-leaf{
-  display: none;
-}
 </style>
 

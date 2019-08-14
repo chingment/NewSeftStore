@@ -21,45 +21,19 @@ namespace Lumos
 
                 if (d != null)
                 {
-                    var d1 = d.Where(m => m.IsMain == true).FirstOrDefault();
-                    if (d1 != null)
+                    if (d.Count > 0)
                     {
-                        imgUrl = d1.Url;
+                        var d1 = d.Where(m => m.IsMain == true).FirstOrDefault();
+                        if (d1 == null)
+                        {
+                            imgUrl = d[0].Url;
+                        }
+                        else
+                        {
+                            imgUrl = d1.Url;
+                        }
                     }
                 }
-
-            }
-            catch (Exception ex)
-            {
-                LogUtil.Error("解释ImgSet Json 错误", ex);
-            }
-
-            return imgUrl;
-        }
-
-        public static string GetMain_S(string jsonStr)
-        {
-            string imgUrl = GetMain(jsonStr);
-
-
-            imgUrl = imgUrl.Replace("_O", "_S");
-
-
-            return imgUrl;
-        }
-
-        public static string GetMain(List<ImgSet> imgs)
-        {
-            string imgUrl = "";
-            try
-            {
-
-                var d1 = imgs.Where(m => m.IsMain == true).FirstOrDefault();
-                if (d1 != null)
-                {
-                    imgUrl = d1.Url;
-                }
-
 
             }
             catch (Exception ex)

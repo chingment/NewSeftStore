@@ -23,9 +23,9 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" prop="imgUrl" align="center" width="110">
+      <el-table-column label="图片" prop="mianImgUrl" align="center" width="110">
         <template slot-scope="scope">
-          <img :src="scope.row.imgUrl" style="width:80px;height:80px;">
+          <img :src="scope.row.mianImgUrl" style="width:80px;height:80px;">
         </template>
       </el-table-column>
       <el-table-column label="名称" prop="name" align="left" min-width="20%">
