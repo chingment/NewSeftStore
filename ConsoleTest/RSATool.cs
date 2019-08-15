@@ -84,57 +84,14 @@ namespace ConsoleTest
             };
             return item;
         }
-
-        public RSAKEY GetKey(string publicKey1,string privateKey2)
-        {
-
-            //获取公钥和密钥  
-            AsymmetricKeyParameter publicKey = GetPublicKeyParameter(publicKey1);
-            AsymmetricKeyParameter privateKey = GetPrivateKeyParameter(privateKey2);
-
-            SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
-            PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
-
-
-            Asn1Object asn1ObjectPublic = subjectPublicKeyInfo.ToAsn1Object();
-
-            byte[] publicInfoByte = asn1ObjectPublic.GetEncoded("UTF-8");
-            Asn1Object asn1ObjectPrivate = privateKeyInfo.ToAsn1Object();
-            byte[] privateInfoByte = asn1ObjectPrivate.GetEncoded("UTF-8");
-
-            RSAKEY item = new RSAKEY()
-            {
-                PublicKey = Convert.ToBase64String(publicInfoByte),
-                PrivateKey = Convert.ToBase64String(privateInfoByte)
-            };
-            return item;
-        }
-
         private AsymmetricKeyParameter GetPublicKeyParameter(string s)
         {
-          
             s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
             byte[] publicInfoByte = Convert.FromBase64String(s);
             Asn1Object pubKeyObj = Asn1Object.FromByteArray(publicInfoByte);//这里也可以从流中读取，从本地导入   
             AsymmetricKeyParameter pubKey = PublicKeyFactory.CreateKey(publicInfoByte);
             return pubKey;
         }
-
-        private AsymmetricKeyParameter GetPublicKeyParameter2(string s)
-        {
-            s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
-            byte[] publicInfoByte = Convert.FromBase64String(s);
-          
-
-            X509CertificateParser certParser = new X509CertificateParser();
-            X509Certificate privateCertBouncy = certParser.ReadCertificate(publicInfoByte);
-            AsymmetricKeyParameter pubKey = privateCertBouncy.GetPublicKey();
-
-            return pubKey;
-
-        }
-
-
         private AsymmetricKeyParameter GetPrivateKeyParameter(string s)
         {
             s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
@@ -193,7 +150,7 @@ namespace ConsoleTest
         /// <param name="key"></param>
         /// <param name="isPublic"></param>
         /// <returns></returns>
-        public string DecryptByKey(string s, string key, bool isPublic)
+        public string DecryptByPublicKey(string s, string key, bool isPublic)
         {
             s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
             //非对称加密算法，加解密用  
@@ -250,7 +207,7 @@ namespace ConsoleTest
             AsymmetricKeyParameter priKey = GetPrivateKeyParameter(key);
             byte[] byteData = System.Text.Encoding.UTF8.GetBytes(data);
 
-            ISigner normalSig = SignerUtilities.GetSigner("MD5withRSA");
+            ISigner normalSig = SignerUtilities.GetSigner("SHA1WithRSA");
             normalSig.Init(true, priKey);
             normalSig.BlockUpdate(byteData, 0, data.Length);
             byte[] normalResult = normalSig.GenerateSignature(); //签名结果
@@ -273,7 +230,7 @@ namespace ConsoleTest
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainData);
 
 
-            ISigner verifier = SignerUtilities.GetSigner("MD5withRSA");
+            ISigner verifier = SignerUtilities.GetSigner("SHA1WithRSA");
             verifier.Init(false, priKey);
             verifier.BlockUpdate(plainBytes, 0, plainBytes.Length);
 

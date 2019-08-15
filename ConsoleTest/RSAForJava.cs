@@ -15,6 +15,7 @@ using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Crypto.Encodings;
+using System.IO;
 
 namespace ConsoleTest
 {
@@ -84,24 +85,13 @@ namespace ConsoleTest
             return item;
         }
 
-        public RSAKEY GetKey(string publicKey1,string privateKey2)
-        {
-            //RSA密钥对的构造器  
-            RsaKeyPairGenerator keyGenerator = new RsaKeyPairGenerator();
 
-            //RSA密钥构造器的参数  
-            RsaKeyGenerationParameters param = new RsaKeyGenerationParameters(
-                Org.BouncyCastle.Math.BigInteger.ValueOf(3),
-                new Org.BouncyCastle.Security.SecureRandom(),
-                1024,   //密钥长度  
-                25);
-            //用参数初始化密钥构造器  
-            keyGenerator.Init(param);
-            //产生密钥对  
-           //  AsymmetricCipherKeyPair keyPair = keyGenerator.GenerateKeyPair();
+        public RSAKEY GetKey(string s1,string s2)
+        {
+
             //获取公钥和密钥  
-            AsymmetricKeyParameter publicKey = GetPublicKeyParameter(publicKey1);
-            AsymmetricKeyParameter privateKey = GetPrivateKeyParameter(privateKey2);
+            AsymmetricKeyParameter publicKey = GetPublicKeyParameter(s1);
+            AsymmetricKeyParameter privateKey= GetPrivateKeyParameter(s2);
 
             SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
             PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
@@ -120,8 +110,6 @@ namespace ConsoleTest
             };
             return item;
         }
-
-
         private AsymmetricKeyParameter GetPublicKeyParameter(string s)
         {
             s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
@@ -139,43 +127,40 @@ namespace ConsoleTest
             AsymmetricKeyParameter priKey = PrivateKeyFactory.CreateKey(privateInfoByte);
             return priKey;
         }
-        public string EncryptByPrivateKey(string s, string key)
-        {
-            //非对称加密算法，加解密用  
-            IAsymmetricBlockCipher engine = new Pkcs1Encoding(new RsaEngine());
-
-
-            //加密  
-
-            try
-            {
-                engine.Init(true, GetPrivateKeyParameter(key));
-                byte[] byteData = System.Text.Encoding.UTF8.GetBytes(s);
-                var ResultData = engine.ProcessBlock(byteData, 0, byteData.Length);
-                return Convert.ToBase64String(ResultData);
-                //Console.WriteLine("密文（base64编码）:" + Convert.ToBase64String(testData) + Environment.NewLine);
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-
-            }
-        }
-
         public string EncryptByPublicKey(string s, string key)
         {
             //非对称加密算法，加解密用  
             IAsymmetricBlockCipher engine = new Pkcs1Encoding(new RsaEngine());
-
-
             //加密  
-
             try
             {
-                engine.Init(true, GetPublicKeyParameter(key));
+                engine.Init(true,GetPublicKeyParameter(key));
                 byte[] byteData = System.Text.Encoding.UTF8.GetBytes(s);
-                var ResultData = engine.ProcessBlock(byteData, 0, byteData.Length);
-                return Convert.ToBase64String(ResultData);
+
+                int inputLen = byteData.Length;
+                MemoryStream ms = new MemoryStream();
+                int offSet = 0;
+                byte[] cache;
+                int i = 0;
+                // 对数据分段加密
+                while (inputLen - offSet > 0)
+                {
+                    if (inputLen - offSet > 117)
+                    {
+                        cache = engine.ProcessBlock(byteData, offSet, 117);
+                    }
+                    else
+                    {
+                        cache = engine.ProcessBlock(byteData, offSet, inputLen - offSet);
+                    }
+                    ms.Write(cache, 0, cache.Length);
+                    i++;
+                    offSet = i * 117;
+                }
+                byte[] encryptedData = ms.ToArray();
+
+                //var ResultData = engine.ProcessBlock(byteData, 0, byteData.Length);
+                return Convert.ToBase64String(encryptedData);
                 //Console.WriteLine("密文（base64编码）:" + Convert.ToBase64String(testData) + Environment.NewLine);
             }
             catch (Exception ex)
@@ -184,31 +169,6 @@ namespace ConsoleTest
 
             }
         }
-
-        public string DecryptByPublicKey(string s, string key)
-        {
-            s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
-            //非对称加密算法，加解密用  
-            IAsymmetricBlockCipher engine = new Pkcs1Encoding(new RsaEngine());
-
-
-            //解密  
-
-            try
-            {
-                engine.Init(false, GetPublicKeyParameter(key));
-                byte[] byteData = Convert.FromBase64String(s);
-                var ResultData = engine.ProcessBlock(byteData, 0, byteData.Length);
-                return System.Text.Encoding.UTF8.GetString(ResultData);
-
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-
-            }
-        }
-
         public string DecryptByPrivateKey(string s, string key)
         {
             s = s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
@@ -216,15 +176,38 @@ namespace ConsoleTest
             IAsymmetricBlockCipher engine = new Pkcs1Encoding(new RsaEngine());
 
 
-            //解密  
+            //加密  
 
             try
             {
                 engine.Init(false, GetPrivateKeyParameter(key));
                 byte[] byteData = Convert.FromBase64String(s);
-                var ResultData = engine.ProcessBlock(byteData, 0, byteData.Length);
-                return System.Text.Encoding.UTF8.GetString(ResultData);
 
+                int inputLen = byteData.Length;
+                MemoryStream ms = new MemoryStream();
+                int offSet = 0;
+                byte[] cache;
+                int i = 0;
+                // 对数据分段加密
+                while (inputLen - offSet > 0)
+                {
+                    if (inputLen - offSet > 128)
+                    {
+                        cache = engine.ProcessBlock(byteData, offSet, 128);
+                    }
+                    else
+                    {
+                        cache = engine.ProcessBlock(byteData, offSet, inputLen - offSet);
+                    }
+                    ms.Write(cache, 0, cache.Length);
+                    i++;
+                    offSet = i * 128;
+                }
+                byte[] encryptedData = ms.ToArray();
+
+                //var ResultData = engine.ProcessBlock(byteData, 0, byteData.Length);
+                return Encoding.UTF8.GetString(ms.ToArray());
+                //Console.WriteLine("密文（base64编码）:" + Convert.ToBase64String(testData) + Environment.NewLine);
             }
             catch (Exception ex)
             {
