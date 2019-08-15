@@ -32,15 +32,20 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="销售价" prop="salePrice" style="width:200px">
-        <el-input v-model="form.salePrice" />
+      <el-form-item label="销售价" prop="salePrice" style="width:220px">
+        <el-input v-model="form.salePrice">
+          <template slot="prepend">￥</template>
+        </el-input>
       </el-form-item>
-      <el-form-item label="展示价" prop="showPrice" style="width:200px">
-        <el-input v-model="form.showPrice" />
+      <el-form-item label="展示价" prop="showPrice" style="width:220px">
+        <el-input v-model="form.showPrice">
+          <template slot="prepend">￥</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="图片" prop="dispalyImgUrls">
         <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
         <el-upload
+          ref="uploadImg"
           v-model="form.dispalyImgUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
@@ -58,7 +63,7 @@
         </el-dialog>
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
-        <el-input v-model="form.briefDes" />
+        <el-input v-model="form.briefDes" maxlength="200" />
       </el-form-item>
       <el-form-item label="商品详情" style="max-width:1000px">
         <Editor id="tinymce" v-model="form.detailsDes" :init="tinymce_init" />
@@ -111,7 +116,7 @@ import 'tinymce/plugins/nonbreaking'
 import 'tinymce/plugins/autosave'
 import 'tinymce/plugins/fullpage'
 import 'tinymce/plugins/toc'
-
+import Sortable from 'sortablejs'
 export default {
   components: { Treeselect, Editor },
   data() {
@@ -171,6 +176,7 @@ export default {
   },
   mounted() {
     tinymce.init({})
+    this.setUploadImgSort()
   },
   created() {
     this.init()
@@ -252,6 +258,34 @@ export default {
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url
       this.uploadImgPreImgDialogVisible = true
+    },
+    setUploadImgSort() {
+      var _this = this
+      const $ul = _this.$refs.uploadImg.$el.querySelectorAll('.el-upload-list')[0]
+      new Sortable($ul, {
+        onUpdate: function(event) {
+        // 修改items数据顺序
+          var newIndex = event.newIndex
+          var oldIndex = event.oldIndex
+          var $li = $ul.children[newIndex]
+          var $oldLi = $ul.children[oldIndex]
+          // 先删除移动的节点
+          $ul.removeChild($li)
+          // 再插入移动的节点到原有节点，还原了移动的操作
+          if (newIndex > oldIndex) {
+            $ul.insertBefore($li, $oldLi)
+          } else {
+            $ul.insertBefore($li, $oldLi.nextSibling)
+          }
+          // 更新items数组
+          var item = _this.uploadImglist.splice(oldIndex, 1)
+          _this.uploadImglist.splice(newIndex, 0, item[0])
+
+          _this.form.dispalyImgUrls = _this.getDispalyImgUrls(_this.uploadImglist)
+        // 下一个tick就会走patch更新
+        },
+        animation: 150
+      })
     }
   }
 }
@@ -261,6 +295,16 @@ export default {
 
 .el-form .el-form-item{
   max-width: 600px;
+}
+
+.el-upload-list >>> .sortable-ghost {
+  opacity: .8;
+  color: #fff!important;
+  background: #42b983!important;
+}
+
+.el-upload-list >>> .el-tag {
+  cursor: pointer;
 }
 
 </style>
