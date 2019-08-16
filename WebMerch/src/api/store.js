@@ -7,3 +7,35 @@ export function fetchList(params) {
     params
   })
 }
+
+export function initAddStore(params) {
+  return request({
+    url: '/store/initAdd',
+    method: 'get',
+    params
+  })
+}
+
+export function addStore(data) {
+  return request({
+    url: '/store/add',
+    method: 'post',
+    data
+  })
+}
+
+export function initStore(params) {
+  return request({
+    url: '/store/initEdit',
+    method: 'get',
+    params
+  })
+}
+
+export function editStore(data) {
+  return request({
+    url: '/store/edit',
+    method: 'post',
+    data
+  })
+}

@@ -9,13 +9,13 @@
         新建
       </el-button>
     </div>
-    <el-row :gutter="20">
+    <el-row v-loading="listLoading" :gutter="20">
 
       <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="header-item clearfix">
             <span>{{ item.name }}</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="goAppcaltion(item)">管理</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="handleUpdate(item)">管理</el-button>
           </div>
           <div class="component-item">
             <div class="it-img"> <img :src="item.mainImgUrl" alt=""> </div>
@@ -40,7 +40,8 @@ export default {
         limit: 10,
         name: undefined
       },
-      listData: []
+      listData: [],
+      listLoading: true
     }
   },
   created() {
@@ -62,6 +63,16 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getListData()
+    },
+    handleCreate() {
+      this.$router.push({
+        path: '/store/add'
+      })
+    },
+    handleUpdate(row) {
+      this.$router.push({
+        path: '/store/edit?storeId=' + row.id
+      })
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div id="productsku_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
@@ -123,7 +123,7 @@ export default {
   components: { Treeselect, Editor },
   data() {
     return {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      loading: true,
       form: {
         name: '',
         kindIds: [],
@@ -190,6 +190,8 @@ export default {
           var d = res.data
           this.treeselect_subject_options = d.subjects
           this.treeselect_kind_options = d.kinds
+
+          this.loading = false
         }
       })
     },
