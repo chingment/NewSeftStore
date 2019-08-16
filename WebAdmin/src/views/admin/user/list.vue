@@ -98,9 +98,11 @@ export default {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       fetchList(this.listQuery).then(res => {
-        var d = res.data
-        this.listData = d.items
-        this.listTotal = d.total
+        if (res.result === 1) {
+          var d = res.data
+          this.listData = d.items
+          this.listTotal = d.total
+        }
         this.loading = false
       })
     },

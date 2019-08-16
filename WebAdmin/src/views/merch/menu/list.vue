@@ -50,9 +50,12 @@ export default {
     getListData() {
       this.loading = true
       fetchList().then(res => {
-        this.listData = res.data
+        if (res.result === 1) {
+          this.listData = res.data
+
+          this.expandAll()
+        }
         this.loading = false
-        this.expandAll()
       })
     },
     expandAll() {

@@ -90,7 +90,6 @@ export default {
           this.treeselect_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
         }
-
         this.loading = false
       })
     },
