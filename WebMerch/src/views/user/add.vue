@@ -37,7 +37,7 @@ import { goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
-      loading: true,
+      loading: false,
       form: {
         userName: '',
         password: '',
@@ -65,13 +65,14 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       initAddUser().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
-          this.loading = false
         }
+        this.loading = false
       })
     },
     resetForm() {

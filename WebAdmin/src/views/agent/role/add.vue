@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="角色名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
@@ -32,6 +32,7 @@ import { getCheckedKeys, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       form: {
         name: '',
         description: '',
@@ -54,10 +55,13 @@ export default {
   methods: {
     init() {
       initAddRole().then(res => {
+        this.loading = true
         if (res.result === 1) {
           var d = res.data
           this.tree_menu_options = d.menus
         }
+
+        this.loading = false
       })
     },
     resetForm() {

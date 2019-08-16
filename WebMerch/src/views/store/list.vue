@@ -9,7 +9,7 @@
         新建
       </el-button>
     </div>
-    <el-row v-loading="listLoading" :gutter="20">
+    <el-row v-loading="loading" :gutter="20">
 
       <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
@@ -35,13 +35,14 @@ export default {
   name: 'StoreList',
   data() {
     return {
+      loading: true,
       listQuery: {
         page: 1,
         limit: 10,
         name: undefined
       },
-      listData: [],
-      listLoading: true
+      listData: []
+
     }
   },
   created() {
@@ -52,12 +53,12 @@ export default {
   },
   methods: {
     getListData() {
-      this.listLoading = true
+      this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       fetchList(this.listQuery).then(res => {
         var d = res.data
         this.listData = d
-        this.listLoading = false
+        this.loading = false
       })
     },
     handleFilter() {

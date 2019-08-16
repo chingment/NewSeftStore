@@ -50,7 +50,7 @@ import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
-      loading: true,
+      loading: false,
       isOpenEditPassword: false,
       form: {
         userId: '',
@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var userId = getUrlParam('userId')
       initEditUser({ userId: userId }).then(res => {
         if (res.result === 1) {
@@ -92,8 +93,8 @@ export default {
           this.form.roleIds = d.roleIds
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
-          this.loading = false
         }
+        this.loading = false
       })
     },
     onSubmit() {

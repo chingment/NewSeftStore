@@ -11,7 +11,7 @@
     </div>
     <el-table
       :key="listKey"
-      v-loading="listLoading"
+      v-loading="loading"
       :data="listData"
       border
       fit
@@ -75,10 +75,10 @@ export default {
   components: { Pagination },
   data() {
     return {
+      loading: false,
       listKey: 0,
       listData: null,
       listTotal: 0,
-      listLoading: true,
       listQuery: {
         page: 1,
         limit: 10,
@@ -95,13 +95,13 @@ export default {
   },
   methods: {
     getListData() {
-      this.listLoading = true
+      this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       fetchList(this.listQuery).then(res => {
         var d = res.data
         this.listData = d.items
         this.listTotal = d.total
-        this.listLoading = false
+        this.loading = false
       })
     },
     handleFilter() {

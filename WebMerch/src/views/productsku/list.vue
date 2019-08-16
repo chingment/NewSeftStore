@@ -75,7 +75,7 @@ export default {
   components: { Pagination },
   data() {
     return {
-      loading: true,
+      loading: false,
       listKey: 0,
       listData: null,
       listTotal: 0,
@@ -95,6 +95,7 @@ export default {
   },
   methods: {
     getListData() {
+      this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       fetchList(this.listQuery).then(res => {
         var d = res.data

@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         {{ form.userName }}
       </el-form-item>
@@ -67,6 +67,7 @@ export default {
   components: { Treeselect },
   data() {
     return {
+      loading: false,
       isOpenEditPassword: false,
       form: {
         userId: '',
@@ -95,6 +96,7 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var userId = getUrlParam('userId')
       initEditUser({ userId: userId }).then(res => {
         if (res.result === 1) {
@@ -109,6 +111,8 @@ export default {
           this.treeselect_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
         }
+
+        this.loading = false
       })
     },
     onSubmit() {

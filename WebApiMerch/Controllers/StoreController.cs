@@ -18,6 +18,13 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse InitAdd()
+        {
+            IResult result = MerchServiceFactory.Store.InitAdd(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpPost]
         public OwnApiHttpResponse Add([FromBody]RopStoreAdd rop)
         {

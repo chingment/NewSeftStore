@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="75px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
       <el-form-item label="上级名称">
         {{ form.pMenuName }}
       </el-form-item>
@@ -46,6 +46,7 @@ import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       form: {
         pMenuId: '',
         pMenuName: '',
@@ -72,6 +73,7 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var pMenuId = getUrlParam('pMenuId')
       initAddMenu({ pMenuId: pMenuId }).then(res => {
         if (res.result === 1) {
@@ -80,6 +82,7 @@ export default {
           this.form.pMenuName = d.pMenuName
           this.form.pMenuTitle = d.pMenuTitle
         }
+        this.loading = false
       })
     },
     resetForm() {

@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName" />
       </el-form-item>
@@ -32,6 +32,7 @@ import { goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       form: {
         userName: '',
         password: '',
@@ -55,10 +56,12 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       initAddUser().then(res => {
         if (res.result === 1) {
 
         }
+        this.loading = false
       })
     },
     resetForm() {

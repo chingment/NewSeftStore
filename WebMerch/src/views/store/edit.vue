@@ -121,7 +121,7 @@ export default {
   components: { Treeselect, Editor },
   data() {
     return {
-      loading: true,
+      loading: false,
       form: {
         name: '',
         kindIds: [],
@@ -183,6 +183,7 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var productSkuId = getUrlParam('productSkuId')
       initEditProductSku({ productSkuId: productSkuId }).then(res => {
         if (res.result === 1) {
@@ -201,9 +202,8 @@ export default {
           this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
           this.treeselect_subject_options = d.subjects
           this.treeselect_kind_options = d.kinds
-
-          this.loading = false
         }
+        this.loading = false
       })
     },
     resetForm() {

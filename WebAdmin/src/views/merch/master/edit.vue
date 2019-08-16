@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         {{ form.userName }}
       </el-form-item>
@@ -45,6 +45,7 @@ import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       isOpenEditPassword: false,
       form: {
         userId: '',
@@ -67,6 +68,7 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var userId = getUrlParam('userId')
       initEditUser({ userId: userId }).then(res => {
         if (res.result === 1) {
@@ -77,6 +79,7 @@ export default {
           this.form.phoneNumber = d.phoneNumber
           this.form.email = d.email
         }
+        this.loading = false
       })
     },
     onSubmit() {

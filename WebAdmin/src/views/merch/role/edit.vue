@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="角色名称" prop="userName">
         {{ form.name }}
       </el-form-item>
@@ -34,6 +34,7 @@ import { getUrlParam, getCheckedKeys, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       form: {
         roleId: '',
         name: '',
@@ -55,6 +56,7 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var roleId = getUrlParam('roleId')
       initEditRole({ roleId: roleId }).then(res => {
         if (res.result === 1) {
@@ -65,6 +67,7 @@ export default {
           this.form.menuIds = d.menuIds
           this.tree_menu_options = d.menus
         }
+        this.loading = false
       })
     },
     onSubmit() {

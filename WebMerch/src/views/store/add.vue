@@ -48,7 +48,7 @@ import Sortable from 'sortablejs'
 export default {
   data() {
     return {
-      loading: true,
+      loading: false,
       form: {
         name: '',
         address: '',
@@ -75,11 +75,12 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       initAddStore().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.loading = false
         }
+        this.loading = false
       })
     },
     resetForm() {

@@ -32,6 +32,7 @@ import { goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       form: {
         userName: '',
         password: '',
@@ -55,10 +56,13 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       initAddUser().then(res => {
         if (res.result === 1) {
 
         }
+
+        this.loading = false
       })
     },
     resetForm() {

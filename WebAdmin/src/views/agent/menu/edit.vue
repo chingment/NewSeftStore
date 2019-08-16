@@ -1,6 +1,6 @@
 <template>
   <div id="useradd_container" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="75px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
       <el-form-item label="上构名称">
         {{ form.pMenuName }}
       </el-form-item>
@@ -46,6 +46,7 @@ import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      loading: false,
       isOpenEditPassword: false,
       form: {
         pMenuName: '',
@@ -72,11 +73,13 @@ export default {
   },
   methods: {
     init() {
+      this.loading = true
       var menuId = getUrlParam('menuId')
       initEditMenu({ menuId: menuId }).then(res => {
         if (res.result === 1) {
           this.form = res.data
         }
+        this.loading = false
       })
     },
     onSubmit() {

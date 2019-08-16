@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-table
-      v-loading="listLoading"
+      v-loading="loading"
       :data="listData"
       style="width: 100%;margin-bottom: 20px;"
       row-key="id"
@@ -46,7 +46,7 @@ import { fetchList } from '@/api/adminorg'
 export default {
   data() {
     return {
-      listLoading: true,
+      loading: true,
       listData: [],
       isDesktop: this.$store.getters.isDesktop
     }
@@ -56,9 +56,10 @@ export default {
   },
   methods: {
     getListData() {
+      this.loading = true
       fetchList().then(res => {
-        this.listLoading = false
         this.listData = res.data
+        this.loading = false
         this.expandAll()
       })
     },
