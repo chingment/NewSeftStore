@@ -145,10 +145,14 @@
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\RModels\RetProductSkuInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetProductSkuInitEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RetStoreInitAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RetStoreInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetUserInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetUserInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopProductSkuAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopProductSkuEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopStoreAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RopStoreEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopUserEdit.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />

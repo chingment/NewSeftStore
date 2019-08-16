@@ -77,5 +77,38 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+        public CustomJsonResult InitAdd(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+            var ret = new RetStoreInitAdd();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+
+            return result;
+        }
+
+        public CustomJsonResult Add(string operater, string merchId, RopStoreAdd rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+
+            return result;
+        }
+
+        public CustomJsonResult InitEdit(string operater, string merchId, string storeId)
+        {
+            var ret = new RetStoreInitEdit();
+        
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+        }
+
+        public CustomJsonResult Edit(string operater, string merchId, RopStoreEdit rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            return result;
+        }
     }
 }
