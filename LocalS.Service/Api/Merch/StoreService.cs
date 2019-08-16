@@ -1,10 +1,12 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
@@ -48,7 +50,7 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.MainImgUrl, u.IsClose, u.Description, u.Address, u.CreateTime });
+                         select new { u.Id, u.Name, u.MainImgUrl, u.IsClose, u.BriefDes, u.Address, u.CreateTime });
 
 
             query = query.OrderByDescending(r => r.CreateTime);
@@ -92,6 +94,32 @@ namespace LocalS.Service.Api.Merch
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var isExistStore = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Name == rop.Name).FirstOrDefault();
+                if (isExistStore != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                }
+
+                var store = new Store();
+                store.Id = GuidUtil.New();
+                store.MerchId = merchId;
+                store.Name = rop.Name;
+                store.Address = rop.Address;
+                store.BriefDes = rop.BriefDes;
+                store.IsClose = true;
+                store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                store.MainImgUrl = ImgSet.GetMain(store.DispalyImgUrls);
+                store.CreateTime = DateTime.Now;
+                store.Creator = operater;
+                CurrentDb.Store.Add(store);
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+
+            }
 
             return result;
         }
@@ -99,7 +127,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult InitEdit(string operater, string merchId, string storeId)
         {
             var ret = new RetStoreInitEdit();
-        
+
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
