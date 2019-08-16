@@ -153,7 +153,9 @@
     <Compile Include="Api\Merch\RModels\RopUserEdit.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupProductSkuGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupUserGetList.cs" />
+    <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\MenuNode.cs" />

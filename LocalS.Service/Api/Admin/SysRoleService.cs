@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class SysRoleService : BaseDbContext
     {
-        public CustomJsonResult GetList(string operater,Enumeration.BelongSite belongSite, RupSysRoleGetList rup)
+        public CustomJsonResult GetList(string operater, Enumeration.BelongSite belongSite, RupSysRoleGetList rup)
         {
             var result = new CustomJsonResult();
 
@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.Admin
 
         private List<TreeNode> GetMenuTree(Enumeration.BelongSite belongSite)
         {
-            var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite).ToList();
+            var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite).OrderBy(m => m.Priority).ToList();
 
             var topMenu = sysMenus.Where(m => m.Depth == 0).FirstOrDefault();
 

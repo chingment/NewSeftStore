@@ -31,5 +31,13 @@ namespace LocalS.Service.Api.Merch
                 return new ProductSkuService();
             }
         }
+
+        public static StoreService Store
+        {
+            get
+            {
+                return new StoreService();
+            }
+        }
     }
 }
