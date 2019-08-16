@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_container" class="app-container">
+  <div id="store_container" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />

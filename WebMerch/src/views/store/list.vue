@@ -74,7 +74,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/store/edit?storeId=' + row.id
+        path: '/store/manage?storeId=' + row.id
       })
     }
   }
