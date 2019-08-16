@@ -24,8 +24,6 @@ namespace LocalS.BLL
         {
             string publicKey = ConfigurationManager.AppSettings["custom:YbPublicKey"];
             RSAForJava rsa = new RSAForJava();
-            var key = rsa.GetKey(publicKey, "");
-
 
             userInfo u = new userInfo();
 
@@ -39,7 +37,7 @@ namespace LocalS.BLL
             string input = Newtonsoft.Json.JsonConvert.SerializeObject(u);
 
 
-            String encry = rsa.EncryptByPublicKey(input, key.PublicKey);
+            String encry = rsa.EncryptByPublicKey(input, publicKey);
 
 
             return encry;
