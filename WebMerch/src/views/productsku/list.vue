@@ -60,7 +60,7 @@
           </el-button>
         </template>
       </el-table-column>
-      </el-table-columnv-if="isdesktop"></el-table>
+    </el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
   </div>

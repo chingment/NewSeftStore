@@ -1,21 +1,21 @@
 <template>
   <div class="home-container">
     <el-row :gutter="20">
-     
-      <el-col :span="6" :xs="24" style="margin-bottom:20px" v-for="appcaltion in appcaltions"  :key="appcaltion.url" >
-         <el-card class="box-card">
-          <div class="header-item clearfix" slot="header">
+
+      <el-col v-for="appcaltion in appcaltions" :key="appcaltion.url" :span="6" :xs="24" style="margin-bottom:20px">
+        <el-card class="box-card">
+          <div slot="header" class="header-item clearfix">
             <span>{{ appcaltion.name }}</span>
-            <span @click="goAppcaltion(appcaltion)" class="it-login" >进入</span>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="goAppcaltion(appcaltion)">进入</el-button>
           </div>
           <div class="component-item">
-             <div class="it-img"> <img :src="appcaltion.imgUrl" alt=""/> </div>
-             <div class="it-describe"> {{ appcaltion.describe }} </div>
+            <div class="it-img"> <img :src="appcaltion.imgUrl" alt=""> </div>
+            <div class="it-describe"> {{ appcaltion.describe }} </div>
           </div>
         </el-card>
       </el-col>
 
-    </el-row>   
+    </el-row>
   </div>
 </template>
 
@@ -39,13 +39,13 @@ export default {
     this.getPageData()
   },
   methods: {
-    getPageData () {
+    getPageData() {
       getIndexPageData().then(response => {
         this.appcaltions = response.data.appcaltions
       })
     },
-    goAppcaltion (appcaltion){
-      window.location.href=appcaltion.url + '?token='+this.$store.getters.token
+    goAppcaltion(appcaltion) {
+      window.location.href = appcaltion.url + '?token=' + this.$store.getters.token
     }
   }
 }
@@ -76,7 +76,7 @@ export default {
     .it-img{
       width: 120px;
       height: 120px;
-     
+
       img{
         width: 100%;
         height: 100%;

@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />
+    <Compile Include="YbInsUntil.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LocalS.DAL\LocalS.DAL.csproj">

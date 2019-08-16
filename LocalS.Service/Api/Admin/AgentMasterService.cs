@@ -141,6 +141,8 @@ namespace LocalS.Service.Api.Admin
                 user.CreateTime = DateTime.Now;
                 user.RegisterTime = DateTime.Now;
                 user.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
+                user.YbInsureSign = YbInsUntil.GetSign(user.Id, user.Id, user.PhoneNumber, user.FullName);
+
                 CurrentDb.SysAgentUser.Add(user);
 
                 var agent = new LocalS.Entity.Agent();
@@ -204,6 +206,11 @@ namespace LocalS.Service.Api.Admin
                 user.IsDisable = rop.IsDisable;
                 user.MendTime = DateTime.Now;
                 user.Mender = operater;
+
+                if (string.IsNullOrEmpty(user.YbInsureSign))
+                {
+                    user.YbInsureSign = YbInsUntil.GetSign(user.Id, user.Id, user.PhoneNumber, user.FullName);
+                }
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

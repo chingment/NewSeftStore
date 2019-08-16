@@ -10,5 +10,7 @@ namespace Lumos.DbRelay
     {
         public string MerchId { get; set; }
         public bool IsMaster { get; set; }
+
+        public string YbInsureSign { get; set; }
     }
 }

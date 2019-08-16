@@ -140,6 +140,7 @@ namespace LocalS.Service.Api.Admin
             using (TransactionScope ts = new TransactionScope())
             {
 
+
                 string merchId = GuidUtil.New();
 
                 var user = new SysMerchUser();
@@ -159,6 +160,8 @@ namespace LocalS.Service.Api.Admin
                 user.CreateTime = DateTime.Now;
                 user.RegisterTime = DateTime.Now;
                 user.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
+              
+
                 CurrentDb.SysMerchUser.Add(user);
 
                 var merch = new LocalS.Entity.Merch();
