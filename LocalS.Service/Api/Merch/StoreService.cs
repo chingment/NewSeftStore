@@ -144,14 +144,13 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetStoreInitGetProductSkuList();
 
+            var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId).OrderBy(m => m.RefType).ToList();
 
 
-            var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId).ToList();
+            ret.SellChannels.Add(new StoreSellChannelModel { Name = "全部", RefType = E_StoreSellChannelRefType.Unknow, RefId = GuidUtil.Empty() });
 
             foreach (var storeSellChannel in storeSellChannels)
             {
-
-
                 ret.SellChannels.Add(new StoreSellChannelModel { Name = storeSellChannel.Name, RefType = storeSellChannel.RefType, RefId = storeSellChannel.RefId });
             }
 

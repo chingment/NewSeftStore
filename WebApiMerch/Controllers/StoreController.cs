@@ -49,7 +49,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse InitGetProductSkuList([FromUri]string storeId)
         {
-            IResult result = MerchServiceFactory.Store.InitEdit(this.CurrentUserId, this.CurrentMerchId, storeId);
+            IResult result = MerchServiceFactory.Store.InitGetProductSkuList(this.CurrentUserId, this.CurrentMerchId, storeId);
             return new OwnApiHttpResponse(result);
         }
 

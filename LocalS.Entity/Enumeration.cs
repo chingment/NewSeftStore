@@ -18,8 +18,8 @@ namespace LocalS.Entity
     public enum E_StoreSellChannelRefType
     {
         Unknow = 0,
-        Machine = 1,
-        Express = 2
+        Express = 1,
+        Machine = 2
     }
 
 }

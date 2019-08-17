@@ -39,3 +39,11 @@ export function editStore(data) {
     data
   })
 }
+
+export function initGetProductSkuList(params) {
+  return request({
+    url: '/store/initGetProductSkuList',
+    method: 'get',
+    params
+  })
+}
