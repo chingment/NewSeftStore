@@ -45,5 +45,14 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Store.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse InitGetProductSkuList([FromUri]string storeId)
+        {
+            IResult result = MerchServiceFactory.Store.InitEdit(this.CurrentUserId, this.CurrentMerchId, storeId);
+            return new OwnApiHttpResponse(result);
+        }
+
+
     }
 }

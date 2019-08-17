@@ -15,4 +15,11 @@ namespace LocalS.Entity
         Invalid = 2
     }
 
+    public enum E_StoreSellChannelRefType
+    {
+        Unknow = 0,
+        Machine = 1,
+        Express = 2
+    }
+
 }

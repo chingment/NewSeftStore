@@ -138,5 +138,24 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+
+        public CustomJsonResult InitGetProductSkuList(string operater, string merchId, string storeId)
+        {
+            var ret = new RetStoreInitGetProductSkuList();
+
+
+
+            var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId).ToList();
+
+            foreach (var storeSellChannel in storeSellChannels)
+            {
+
+
+                ret.SellChannels.Add(new StoreSellChannelModel { Name = storeSellChannel.Name, RefType = storeSellChannel.RefType, RefId = storeSellChannel.RefId });
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+        }
     }
 }

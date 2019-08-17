@@ -35,7 +35,7 @@ namespace LocalS.DAL
         public IDbSet<ProductSkuSubject> ProductSkuSubject { get; set; }
 
         public IDbSet<Store> Store { get; set; }
-
+        public IDbSet<StoreSellChannel> StoreSellChannel { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
