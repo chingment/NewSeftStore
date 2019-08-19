@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(params) {
+export function getProductSkuList(params) {
   return request({
     url: '/productsku/getlist',
     method: 'get',

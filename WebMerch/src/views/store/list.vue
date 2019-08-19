@@ -11,25 +11,34 @@
     </div>
     <el-row v-loading="loading" :gutter="20">
 
-      <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
-        <el-card class="box-card">
-          <div slot="header" class="header-item clearfix">
-            <span>{{ item.name }}</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="handleUpdate(item)">管理</el-button>
-          </div>
-          <div class="component-item">
-            <div class="it-img"> <img :src="item.mainImgUrl" alt=""> </div>
-            <div class="it-describe" />
-          </div>
-        </el-card>
-      </el-col>
-
+      <div v-if="listData.length>0">
+        <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
+          <el-card class="box-card">
+            <div slot="header" class="header-item clearfix">
+              <span>{{ item.name }}</span>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="handleUpdate(item)">管理</el-button>
+            </div>
+            <div class="component-item">
+              <div class="it-img"> <img :src="item.mainImgUrl" alt=""> </div>
+              <div class="it-describe" />
+            </div>
+          </el-card>
+        </el-col>
+      </div>
+      <div v-else>
+        <el-alert
+          title="数据为空"
+          type="info"
+          center
+          close-text="知道了"
+          :closable="false"
+        /></div>
     </el-row>
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/store'
+import { getStoreList } from '@/api/store'
 
 export default {
   name: 'StoreList',
@@ -37,7 +46,7 @@ export default {
     return {
       loading: true,
       listQuery: {
-        page: 1,
+        page: 0,
         limit: 10,
         name: undefined
       },
@@ -55,16 +64,16 @@ export default {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      fetchList(this.listQuery).then(res => {
+      getStoreList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.listData = d
+          this.listData = d.items
         }
         this.loading = false
       })
     },
     handleFilter() {
-      this.listQuery.page = 1
+      this.listQuery.page = 0
       this.getListData()
     },
     handleCreate() {

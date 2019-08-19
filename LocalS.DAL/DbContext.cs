@@ -36,6 +36,7 @@ namespace LocalS.DAL
 
         public IDbSet<Store> Store { get; set; }
         public IDbSet<StoreSellChannel> StoreSellChannel { get; set; }
+        public IDbSet<StoreSellChannelStock> StoreSellChannelStock { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

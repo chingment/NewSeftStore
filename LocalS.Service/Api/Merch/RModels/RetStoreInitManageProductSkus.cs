@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace LocalS.Service.Api.Merch
 {
 
-    public class RetStoreInitGetProductSkuList
+    public class RetStoreInitManageProductSkus
     {
-        public RetStoreInitGetProductSkuList()
+        public RetStoreInitManageProductSkus()
         {
             this.SellChannels = new List<StoreSellChannelModel>();
         }

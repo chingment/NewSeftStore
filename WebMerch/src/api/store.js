@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(params) {
+export function getStoreList(params) {
   return request({
     url: '/store/getlist',
     method: 'get',
@@ -40,9 +40,17 @@ export function editStore(data) {
   })
 }
 
-export function initGetProductSkuList(params) {
+export function initManageProductSkus(params) {
   return request({
-    url: '/store/initGetProductSkuList',
+    url: '/store/initManageProductSkus',
+    method: 'get',
+    params
+  })
+}
+
+export function getStoreProductSkuList(params) {
+  return request({
+    url: '/store/GetProductSkuList',
     method: 'get',
     params
   })

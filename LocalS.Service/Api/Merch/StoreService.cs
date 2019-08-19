@@ -53,7 +53,12 @@ namespace LocalS.Service.Api.Merch
                          select new { u.Id, u.Name, u.MainImgUrl, u.IsClose, u.BriefDes, u.Address, u.CreateTime });
 
 
-            query = query.OrderByDescending(r => r.CreateTime);
+            int total = query.Count();
+
+            int pageIndex = rup.Page;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -74,8 +79,11 @@ namespace LocalS.Service.Api.Merch
             }
 
 
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
 
             return result;
         }
@@ -140,9 +148,9 @@ namespace LocalS.Service.Api.Merch
         }
 
 
-        public CustomJsonResult InitGetProductSkuList(string operater, string merchId, string storeId)
+        public CustomJsonResult InitManageProductSkus(string operater, string merchId, string storeId)
         {
-            var ret = new RetStoreInitGetProductSkuList();
+            var ret = new RetStoreInitManageProductSkus();
 
             var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId).OrderBy(m => m.RefType).ToList();
 
@@ -156,5 +164,66 @@ namespace LocalS.Service.Api.Merch
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
+
+        public CustomJsonResult GetProductSkuList(string operater, string merchId, RupStoreGetProductSkuList rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            var query = (from u in CurrentDb.StoreSellChannelStock
+                         where
+                         u.MerchId == merchId && u.StoreId == rup.StoreId
+                         select new { u.Id, u.ProductSkuId, u.MerchId, u.StoreId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
+
+            if (rup.RefType != E_StoreSellChannelRefType.Unknow)
+            {
+                query = query.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.RefType == rup.RefType && m.RefId == rup.RefId);
+            }
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.ProductSkuId).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            List<object> olist = new List<object>();
+
+            var list = query.ToList();
+            foreach (var item in list)
+            {
+
+                var productSku = CurrentDb.ProductSku.Where(m => m.Id == item.ProductSkuId).FirstOrDefault();
+                if (productSku != null)
+                {
+                    var productSkuModel = new ProductSkuModel();
+                    productSkuModel.Id = productSku.Id;
+                    productSkuModel.Name = productSku.Name;
+                    productSkuModel.DispalyImgUrls = productSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                    productSkuModel.MainImgUrl = ImgSet.GetMain(productSku.DispalyImgUrls);
+                    productSkuModel.BriefDes = productSku.BriefDes;
+                    productSkuModel.DetailsDes = productSku.DetailsDes;
+                    productSkuModel.SpecDes = productSku.SpecDes;
+
+                    productSkuModel.SumQuantity = item.SumQuantity;
+                    productSkuModel.LockQuantity = item.LockQuantity;
+                    productSkuModel.SellQuantity = item.SellQuantity;
+                    productSkuModel.SalePrice = item.SalePrice;
+                    productSkuModel.IsOffSell = item.IsOffSell;
+
+
+                    olist.Add(productSkuModel);
+                }
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
     }
 }
+
