@@ -80,7 +80,7 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        page: 1,
+        page: 0,
         limit: 10,
         userName: undefined
       },

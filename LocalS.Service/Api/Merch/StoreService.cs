@@ -122,8 +122,21 @@ namespace LocalS.Service.Api.Merch
                 store.CreateTime = DateTime.Now;
                 store.Creator = operater;
                 CurrentDb.Store.Add(store);
-                CurrentDb.SaveChanges();
 
+
+                //默认 快递商品库存
+                var storeSellChannel = new StoreSellChannel();
+                storeSellChannel.Id = GuidUtil.New();
+                storeSellChannel.Name = "快递商品";
+                storeSellChannel.MerchId = merchId;
+                storeSellChannel.StoreId = store.Id;
+                storeSellChannel.RefType = E_StoreSellChannelRefType.Express;
+                storeSellChannel.RefId = GuidUtil.Empty();
+                storeSellChannel.CreateTime = DateTime.Now;
+                store.Creator = operater;
+
+
+                CurrentDb.SaveChanges();
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -183,7 +196,7 @@ namespace LocalS.Service.Api.Merch
             int total = query.Count();
 
             int pageIndex = rup.Page;
-            int pageSize = int.MaxValue;
+            int pageSize = rup.Limit;
 
             query = query.OrderByDescending(r => r.ProductSkuId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
