@@ -184,9 +184,10 @@ namespace LocalS.Service.Api.Merch
                 store.Address = rop.Address;
                 store.BriefDes = rop.BriefDes;
                 store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                store.MainImgUrl = ImgSet.GetMain(store.DispalyImgUrls);
+                store.IsClose = rop.IsClose;
                 store.MendTime = DateTime.Now;
                 store.Mender = operater;
-                store.IsClose = rop.IsClose;
                 CurrentDb.SaveChanges();
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");

@@ -15,8 +15,8 @@
         <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
           <el-card class="box-card">
             <div slot="header" class="header-item clearfix">
-              <span>{{ item.name }}</span>
-              <el-button style="float: right; padding: 3px 0" type="text" @click="handleUpdate(item)">管理</el-button>
+              <span :class="'circle-status circle-status-'+item.status.value" />   <span class="it-name">{{ item.name }}</span>
+              <el-button style="padding: 0px 0px; position: absolute;right: 0px" type="text" @click="handleUpdate(item)">管理</el-button>
             </div>
             <div class="component-item">
               <div class="it-img"> <img :src="item.mainImgUrl" alt=""> </div>
@@ -96,8 +96,13 @@ export default {
   padding: 20px;
 
   .header-item{
-    .it-login{
-      float: right;
+             display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+
+    .it-name{
+    padding: 0px 5px;
     }
   }
   .component-item{

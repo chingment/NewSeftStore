@@ -20,7 +20,7 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         {{ temp.briefDes }}
       </el-form-item>
-      <el-form-item label="营业状态">
+      <el-form-item label="状态">
         {{ temp.status.text }}
       </el-form-item>
       <el-form-item>
@@ -59,7 +59,7 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
       </el-form-item>
-      <el-form-item label="营业状态">
+      <el-form-item label="停业？">
         <el-switch v-model="form.isClose" />
       </el-form-item>
       <el-form-item>

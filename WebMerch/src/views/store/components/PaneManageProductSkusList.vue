@@ -1,5 +1,14 @@
 <template>
   <div id="store_skus">
+    <div class="filter-container">
+      <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
+        查询
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        添加
+      </el-button>
+    </div>
     <el-row v-loading="loading" :gutter="20">
       <el-col v-for="productSku in listData" :key="productSku.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
@@ -51,11 +60,12 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       listTotal: 0,
       listQuery: {
         page: 1,
         limit: 10,
+        name: undefined,
         refType: undefined,
         refId: undefined,
         storeId: undefined
@@ -92,6 +102,10 @@ export default {
         }
         this.loading = false
       })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getListData()
     }
   }
 }
@@ -156,12 +170,12 @@ color: #e6a23c;
   flex: 1;
   text-align: right;
        }
-  }
 
-   .el-button{
+          .el-button{
      font-size: 12px ;
      padding: 6px 12px;
    }
+  }
 
 }
 </style>
