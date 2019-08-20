@@ -151,7 +151,7 @@ namespace LocalS.Service.Api.Admin
             var ret = new RetSysRoleInitEdit();
             var role = CurrentDb.SysRole.Where(m => m.Id == roleId).FirstOrDefault();
 
-            ret.RoleId = role.Id;
+            ret.Id = role.Id;
             ret.Name = role.Name;
             ret.Description = role.Description;
             ret.Menus = GetMenuTree(belongSite);
@@ -178,7 +178,7 @@ namespace LocalS.Service.Api.Admin
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var sysRole = CurrentDb.SysRole.Where(m => m.Id == rop.RoleId).FirstOrDefault();
+                var sysRole = CurrentDb.SysRole.Where(m => m.Id == rop.Id).FirstOrDefault();
                 if (sysRole == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
@@ -188,7 +188,7 @@ namespace LocalS.Service.Api.Admin
                 sysRole.MendTime = DateTime.Now;
                 sysRole.Mender = operater;
 
-                var roleMenus = CurrentDb.SysRoleMenu.Where(r => r.RoleId == rop.RoleId).ToList();
+                var roleMenus = CurrentDb.SysRoleMenu.Where(r => r.RoleId == rop.Id).ToList();
 
                 foreach (var roleMenu in roleMenus)
                 {
@@ -200,7 +200,7 @@ namespace LocalS.Service.Api.Admin
                 {
                     foreach (var menuId in rop.MenuIds)
                     {
-                        CurrentDb.SysRoleMenu.Add(new SysRoleMenu { Id = GuidUtil.New(), RoleId = rop.RoleId, MenuId = menuId, Creator = operater, CreateTime = DateTime.Now });
+                        CurrentDb.SysRoleMenu.Add(new SysRoleMenu { Id = GuidUtil.New(), RoleId = rop.Id, MenuId = menuId, Creator = operater, CreateTime = DateTime.Now });
                     }
                 }
 

@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class RopAdminOrgEdit
     {
-        public string OrgId { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 

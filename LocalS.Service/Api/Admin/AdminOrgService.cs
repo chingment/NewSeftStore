@@ -77,8 +77,8 @@ namespace LocalS.Service.Api.Admin
 
             if (sysOrg != null)
             {
-                ret.POrgId = sysOrg.Id;
-                ret.POrgName = sysOrg.Name;
+                ret.PId = sysOrg.Id;
+                ret.PName = sysOrg.Name;
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
@@ -102,7 +102,7 @@ namespace LocalS.Service.Api.Admin
                 sysOrg.Id = GuidUtil.New();
                 sysOrg.Name = rop.Name;
                 sysOrg.Description = rop.Description;
-                sysOrg.PId = rop.POrgId;
+                sysOrg.PId = rop.PId;
                 sysOrg.BelongSite = Enumeration.BelongSite.Admin;
                 sysOrg.ReferenceId = GuidUtil.Empty();
                 sysOrg.Depth = 0;
@@ -130,7 +130,7 @@ namespace LocalS.Service.Api.Admin
 
             if (sysOrg != null)
             {
-                ret.OrgId = sysOrg.Id;
+                ret.Id = sysOrg.Id;
                 ret.Name = sysOrg.Name;
                 ret.Description = sysOrg.Description;
 
@@ -138,12 +138,12 @@ namespace LocalS.Service.Api.Admin
 
                 if (p_sysOrg != null)
                 {
-                    ret.POrgId = p_sysOrg.Id;
-                    ret.POrgName = p_sysOrg.Name;
+                    ret.PId = p_sysOrg.Id;
+                    ret.PName = p_sysOrg.Name;
                 }
                 else
                 {
-                    ret.POrgName = "/";
+                    ret.PName = "/";
                 }
             }
 
@@ -162,7 +162,7 @@ namespace LocalS.Service.Api.Admin
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var sysOrg = CurrentDb.SysOrg.Where(m => m.Id == rop.OrgId).FirstOrDefault();
+                var sysOrg = CurrentDb.SysOrg.Where(m => m.Id == rop.Id).FirstOrDefault();
                 if (sysOrg == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");

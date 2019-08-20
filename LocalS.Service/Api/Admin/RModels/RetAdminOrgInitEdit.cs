@@ -8,11 +8,11 @@ namespace LocalS.Service.Api.Admin
 {
     public class RetAdminOrgInitEdit
     {
-        public string POrgId { get; set; }
+        public string PId { get; set; }
 
-        public string POrgName { get; set; }
+        public string PName { get; set; }
 
-        public string OrgId { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set;}
 

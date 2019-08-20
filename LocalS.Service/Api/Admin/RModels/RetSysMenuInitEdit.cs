@@ -8,10 +8,10 @@ namespace LocalS.Service.Api.Admin
 {
     public class RetSysMenuInitEdit
     {
-        public string PMenuId { get; set; }
-        public string PMenuTitle { get; set; }
-        public string PMenuName { get; set; }
-        public string MenuId { get; set; }
+        public string PId { get; set; }
+        public string PTitle { get; set; }
+        public string PName { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Path { get; set; }

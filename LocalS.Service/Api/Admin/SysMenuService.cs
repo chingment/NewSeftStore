@@ -77,9 +77,9 @@ namespace LocalS.Service.Api.Admin
 
             if (sysMenu != null)
             {
-                ret.PMenuId = sysMenu.Id;
-                ret.PMenuName = sysMenu.Name;
-                ret.PMenuTitle = sysMenu.Title;
+                ret.PId = sysMenu.Id;
+                ret.PName = sysMenu.Name;
+                ret.PTitle = sysMenu.Title;
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
@@ -99,7 +99,7 @@ namespace LocalS.Service.Api.Admin
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
                 }
 
-                var pSysMenu = CurrentDb.SysMenu.Where(m => m.Id == rop.PMenuId).FirstOrDefault();
+                var pSysMenu = CurrentDb.SysMenu.Where(m => m.Id == rop.PId).FirstOrDefault();
                 if (pSysMenu == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
@@ -113,7 +113,7 @@ namespace LocalS.Service.Api.Admin
                 sysMenu.Path = rop.Path;
                 sysMenu.Component = rop.Path;
                 sysMenu.Description = rop.Description;
-                sysMenu.PId = rop.PMenuId;
+                sysMenu.PId = rop.PId;
                 sysMenu.BelongSite = belongSite;
                 sysMenu.Depth = pSysMenu.Depth + 1;
                 sysMenu.IsNavbar = rop.IsNavbar;
@@ -143,7 +143,7 @@ namespace LocalS.Service.Api.Admin
 
             if (sysMenu != null)
             {
-                ret.MenuId = sysMenu.Id;
+                ret.Id = sysMenu.Id;
                 ret.Name = sysMenu.Name;
                 ret.Title = sysMenu.Title;
                 ret.Icon = sysMenu.Icon;
@@ -157,14 +157,14 @@ namespace LocalS.Service.Api.Admin
 
                 if (p_sysMenu != null)
                 {
-                    ret.PMenuId = p_sysMenu.Id;
-                    ret.PMenuName = p_sysMenu.Name;
-                    ret.PMenuTitle = p_sysMenu.Title;
+                    ret.PId = p_sysMenu.Id;
+                    ret.PName = p_sysMenu.Name;
+                    ret.PTitle = p_sysMenu.Title;
                 }
                 else
                 {
-                    ret.PMenuName = "/";
-                    ret.PMenuTitle = "/";
+                    ret.PName = "/";
+                    ret.PTitle = "/";
                 }
             }
 
@@ -183,7 +183,7 @@ namespace LocalS.Service.Api.Admin
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var sysMenu = CurrentDb.SysMenu.Where(m => m.Id == rop.MenuId).FirstOrDefault();
+                var sysMenu = CurrentDb.SysMenu.Where(m => m.Id == rop.Id).FirstOrDefault();
                 if (sysMenu == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");

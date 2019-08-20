@@ -8,9 +8,9 @@ namespace LocalS.Service.Api.Admin
 {
     public class RetAdminOrgInitAdd
     {
-        public string POrgId { get; set; }
+        public string PId { get; set; }
 
-        public string POrgName { get; set; }
+        public string PName { get; set; }
 
     }
 }

@@ -9,9 +9,8 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupStoreGetProductSkuList : RupBaseGetList
     {
-        public string Name { get; set; }
         public string StoreId { get; set; }
-
+        public string ProductSkuName { get; set; }
         public E_StoreSellChannelRefType RefType { get; set; }
         public string RefId { get; set; }
     }

@@ -80,7 +80,7 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        page: 0,
+        page: 1,
         limit: 10,
         userName: undefined
       },
@@ -117,7 +117,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/user/edit?userId=' + row.id
+        path: '/user/edit?id=' + row.id
       })
     }
   }

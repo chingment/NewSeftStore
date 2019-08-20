@@ -117,7 +117,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/productsku/edit?productSkuId=' + row.id
+        path: '/productsku/edit?id=' + row.id
       })
     }
   }

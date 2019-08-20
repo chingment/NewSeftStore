@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopUserEdit
     {
-        public string UserId{ get; set; }
+        public string Id{ get; set; }
         public string Password { get; set; }
 
         public string PhoneNumber { get; set; }

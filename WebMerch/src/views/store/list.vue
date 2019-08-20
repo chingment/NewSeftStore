@@ -83,7 +83,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/store/manage?storeId=' + row.id
+        path: '/store/manage?id=' + row.id
       })
     }
   }

@@ -225,7 +225,7 @@ namespace LocalS.Service.Api.Admin
 
             var user = CurrentDb.SysAdminUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            ret.UserId = user.Id;
+            ret.Id = user.Id;
             ret.UserName = user.UserName;
             ret.PhoneNumber = user.PhoneNumber;
             ret.Email = user.Email;
@@ -251,7 +251,7 @@ namespace LocalS.Service.Api.Admin
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var user = CurrentDb.SysAdminUser.Where(m => m.Id == rop.UserId).FirstOrDefault();
+                var user = CurrentDb.SysAdminUser.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(rop.Password))
                 {
@@ -266,7 +266,7 @@ namespace LocalS.Service.Api.Admin
                 user.Mender = operater;
 
 
-                var sysUserOrgs = CurrentDb.SysUserOrg.Where(r => r.UserId == rop.UserId).ToList();
+                var sysUserOrgs = CurrentDb.SysUserOrg.Where(r => r.UserId == rop.Id).ToList();
 
                 foreach (var sysUserOrg in sysUserOrgs)
                 {
@@ -278,12 +278,12 @@ namespace LocalS.Service.Api.Admin
                 {
                     foreach (var orgId in rop.OrgIds)
                     {
-                        CurrentDb.SysUserOrg.Add(new SysUserOrg { Id = GuidUtil.New(), OrgId = orgId, UserId = rop.UserId, Creator = operater, CreateTime = DateTime.Now });
+                        CurrentDb.SysUserOrg.Add(new SysUserOrg { Id = GuidUtil.New(), OrgId = orgId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
                     }
                 }
 
 
-                var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.UserId).ToList();
+                var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.Id).ToList();
 
                 foreach (var sysUserRole in sysUserRoles)
                 {
@@ -297,7 +297,7 @@ namespace LocalS.Service.Api.Admin
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.UserId, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }

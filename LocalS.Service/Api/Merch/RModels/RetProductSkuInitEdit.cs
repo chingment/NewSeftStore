@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.Merch
             this.Subjects = new List<TreeNode>();
         }
 
-        public string ProductSkuId { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 

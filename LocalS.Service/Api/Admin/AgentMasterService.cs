@@ -172,7 +172,7 @@ namespace LocalS.Service.Api.Admin
 
             var user = CurrentDb.SysAgentUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            ret.UserId = user.Id;
+            ret.Id = user.Id;
             ret.UserName = user.UserName;
             ret.PhoneNumber = user.PhoneNumber;
             ret.Email = user.Email;
@@ -193,7 +193,7 @@ namespace LocalS.Service.Api.Admin
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var user = CurrentDb.SysAgentUser.Where(m => m.Id == rop.UserId).FirstOrDefault();
+                var user = CurrentDb.SysAgentUser.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(rop.Password))
                 {

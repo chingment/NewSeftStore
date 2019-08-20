@@ -24,7 +24,7 @@ export function addStore(data) {
   })
 }
 
-export function initStore(params) {
+export function initEditStore(params) {
   return request({
     url: '/store/initEdit',
     method: 'get',

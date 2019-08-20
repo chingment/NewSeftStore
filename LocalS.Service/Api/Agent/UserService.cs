@@ -187,7 +187,7 @@ namespace LocalS.Service.Api.Agent
 
             var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            ret.UserId = agentUser.Id;
+            ret.Id = agentUser.Id;
             ret.UserName = agentUser.UserName;
             ret.PhoneNumber = agentUser.PhoneNumber;
             ret.Email = agentUser.Email;
@@ -208,7 +208,7 @@ namespace LocalS.Service.Api.Agent
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == rop.UserId).FirstOrDefault();
+                var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(rop.Password))
                 {

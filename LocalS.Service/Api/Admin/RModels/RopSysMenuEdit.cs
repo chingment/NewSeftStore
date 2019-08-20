@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class RopSysMenuEdit
     {
-        public string MenuId { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
         public string Title { get; set; }

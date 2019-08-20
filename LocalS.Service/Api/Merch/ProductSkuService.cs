@@ -235,7 +235,7 @@ namespace LocalS.Service.Api.Merch
             var productSku = CurrentDb.ProductSku.Where(m => m.MerchId == merchId && m.Id == productSkuId).FirstOrDefault();
             if (productSku != null)
             {
-                ret.ProductSkuId = productSku.Id;
+                ret.Id = productSku.Id;
                 ret.Name = productSku.Name;
                 ret.SalePrice = productSku.SalePrice;
                 ret.ShowPrice = productSku.ShowPrice;
@@ -255,7 +255,7 @@ namespace LocalS.Service.Api.Merch
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            if (string.IsNullOrEmpty(rop.ProductSkuId))
+            if (string.IsNullOrEmpty(rop.Id))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品Id不能为空");
             }
@@ -282,7 +282,7 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var productSku = CurrentDb.ProductSku.Where(m => m.Id == rop.ProductSkuId).FirstOrDefault();
+                var productSku = CurrentDb.ProductSku.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 productSku.Name = rop.Name;
 

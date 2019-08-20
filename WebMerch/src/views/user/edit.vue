@@ -53,7 +53,7 @@ export default {
       loading: false,
       isOpenEditPassword: false,
       form: {
-        userId: '',
+        id: '',
         userName: '',
         password: '',
         fullName: '',
@@ -80,11 +80,11 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var userId = getUrlParam('userId')
-      initEditUser({ userId: userId }).then(res => {
+      var id = getUrlParam('id')
+      initEditUser({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.userId = d.userId
+          this.form.id = d.id
           this.form.userName = d.userName
           this.form.fullName = d.fullName
           this.form.phoneNumber = d.phoneNumber

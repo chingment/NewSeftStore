@@ -214,7 +214,7 @@ namespace LocalS.Service.Api.Merch
 
             var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            ret.UserId = merchUser.Id;
+            ret.Id = merchUser.Id;
             ret.UserName = merchUser.UserName;
             ret.PhoneNumber = merchUser.PhoneNumber;
             ret.Email = merchUser.Email;
@@ -237,7 +237,7 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var merchUser = CurrentDb.SysMerchUser.Where(m => m.MerchId == merchId && m.Id == rop.UserId).FirstOrDefault();
+                var merchUser = CurrentDb.SysMerchUser.Where(m => m.MerchId == merchId && m.Id == rop.Id).FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(rop.Password))
                 {
@@ -252,7 +252,7 @@ namespace LocalS.Service.Api.Merch
                 merchUser.Mender = operater;
 
 
-                var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.UserId).ToList();
+                var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.Id).ToList();
 
                 foreach (var sysUserRole in sysUserRoles)
                 {
@@ -265,7 +265,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.UserId, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }

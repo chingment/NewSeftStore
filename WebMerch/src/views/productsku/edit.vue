@@ -123,6 +123,7 @@ export default {
     return {
       loading: false,
       form: {
+        id: '',
         name: '',
         kindIds: [],
         subjectIds: [],
@@ -184,12 +185,12 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var productSkuId = getUrlParam('productSkuId')
-      initEditProductSku({ productSkuId: productSkuId }).then(res => {
+      var id = getUrlParam('id')
+      initEditProductSku({ productSkuId: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
 
-          this.form.productSkuId = d.productSkuId
+          this.form.id = d.id
           this.form.name = d.name
           this.form.kindIds = d.kindIds
           this.form.subjectIds = d.subjectIds
