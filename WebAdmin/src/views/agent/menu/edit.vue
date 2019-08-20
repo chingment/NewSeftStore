@@ -2,10 +2,10 @@
   <div id="useradd_container" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
       <el-form-item label="上构名称">
-        {{ form.pMenuName }}
+        {{ form.pName }}
       </el-form-item>
       <el-form-item label="上级标题">
-        {{ form.pMenuTitle }}
+        {{ form.pTitle }}
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
@@ -49,9 +49,9 @@ export default {
       loading: false,
       isOpenEditPassword: false,
       form: {
-        pMenuName: '',
-        pMenuTitle: '',
-        menuId: '',
+        pName: '',
+        pTitle: '',
+        id: '',
         name: '',
         title: '',
         icon: '',
@@ -74,8 +74,8 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var menuId = getUrlParam('menuId')
-      initEditMenu({ menuId: menuId }).then(res => {
+      var id = getUrlParam('id')
+      initEditMenu({ id: id }).then(res => {
         if (res.result === 1) {
           this.form = res.data
         }

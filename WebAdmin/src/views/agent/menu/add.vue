@@ -2,10 +2,10 @@
   <div id="useradd_container" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
       <el-form-item label="上级名称">
-        {{ form.pMenuName }}
+        {{ form.pName }}
       </el-form-item>
       <el-form-item label="上级标题">
-        {{ form.pMenuTitle }}
+        {{ form.pTitle }}
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
@@ -48,10 +48,10 @@ export default {
     return {
       loading: false,
       form: {
-        pMenuId: '',
-        pMenuName: '',
-        pMenuTitle: '',
-        menuId: '',
+        pId: '',
+        pName: '',
+        pTitle: '',
+        id: '',
         name: '',
         title: '',
         icon: '',
@@ -74,13 +74,13 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var pMenuId = getUrlParam('pMenuId')
-      initAddMenu({ pMenuId: pMenuId }).then(res => {
+      var pId = getUrlParam('pId')
+      initAddMenu({ pId: pId }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.pMenuId = d.pMenuId
-          this.form.pMenuName = d.pMenuName
-          this.form.pMenuTitle = d.pMenuTitle
+          this.form.pId = d.pId
+          this.form.pName = d.pName
+          this.form.pTitle = d.pTitle
         }
         this.loading = false
       })

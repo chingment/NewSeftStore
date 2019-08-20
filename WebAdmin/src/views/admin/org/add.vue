@@ -2,7 +2,7 @@
   <div id="useradd_container" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
       <el-form-item label="上级名称">
-        {{ form.pOrgName }}
+        {{ form.pName }}
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
@@ -27,8 +27,8 @@ export default {
     return {
       loading: false,
       form: {
-        pOrgId: '',
-        pOrgName: '',
+        pId: '',
+        pName: '',
         name: '',
         description: ''
       },
@@ -44,12 +44,12 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var pOrgId = getUrlParam('pOrgId')
-      initAddOrg({ pOrgId: pOrgId }).then(res => {
+      var pId = getUrlParam('pId')
+      initAddOrg({ pId: pId }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.pOrgId = d.pOrgId
-          this.form.pOrgName = d.pOrgName
+          this.form.pId = d.pId
+          this.form.pName = d.pName
         }
         this.loading = false
       })

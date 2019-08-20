@@ -85,6 +85,7 @@ export default {
       isEdit: false,
       loading: false,
       form: {
+        id: '',
         name: '',
         address: '',
         briefDes: '',
@@ -111,7 +112,7 @@ export default {
       initEditStore({ id: this.storeId }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.storeId = d.storeId
+          this.form.id = d.id
           this.form.name = d.name
           this.form.address = d.address
           this.form.briefDes = d.briefDes
@@ -213,9 +214,6 @@ export default {
 </script>
 <style scoped>
 
-.noeditform .el-upload {
-  display: none  !important;
-}
 .el-form .el-form-item{
   max-width: 600px;
 }

@@ -49,9 +49,9 @@ export default {
       loading: false,
       isOpenEditPassword: false,
       form: {
-        pMenuName: '',
-        pMenuTitle: '',
-        menuId: '',
+        pName: '',
+        pTitle: '',
+        id: '',
         name: '',
         title: '',
         icon: '',
@@ -74,8 +74,8 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var menuId = getUrlParam('menuId')
-      initEditMenu({ menuId: menuId }).then(res => {
+      var id = getUrlParam('id')
+      initEditMenu({ id: id }).then(res => {
         if (res.result === 1) {
           this.form = res.data
         }

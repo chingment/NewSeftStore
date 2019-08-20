@@ -117,7 +117,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/merch/master/edit?userId=' + row.id
+        path: '/merch/master/edit?id=' + row.id
       })
     }
   }

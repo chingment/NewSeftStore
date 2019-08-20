@@ -68,12 +68,12 @@ export default {
     },
     handleCreate(row) {
       this.$router.push({
-        path: '/merch/menu/add?pMenuId=' + row.id
+        path: '/merch/menu/add?pId=' + row.id
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/merch/menu/edit?menuId=' + row.id
+        path: '/merch/menu/edit?id=' + row.id
       })
     }
   }

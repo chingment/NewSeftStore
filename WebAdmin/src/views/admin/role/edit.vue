@@ -37,7 +37,7 @@ export default {
     return {
       loading: false,
       form: {
-        roleId: '',
+        id: '',
         name: '',
         description: '',
         menuIds: []
@@ -58,11 +58,11 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var roleId = getUrlParam('roleId')
-      initEditRole({ roleId: roleId }).then(res => {
+      var id = getUrlParam('id')
+      initEditRole({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.roleId = d.roleId
+          this.form.id = d.id
           this.form.name = d.name
           this.form.description = d.description
           this.form.menuIds = d.menuIds

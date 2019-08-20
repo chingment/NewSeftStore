@@ -103,7 +103,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/agent/role/edit?roleId=' + row.id
+        path: '/agent/role/edit?id=' + row.id
       })
     }
   }

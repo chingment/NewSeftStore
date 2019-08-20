@@ -117,7 +117,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/admin/user/edit?userId=' + row.id
+        path: '/admin/user/edit?id=' + row.id
       })
     }
   }

@@ -128,8 +128,13 @@ div:focus {
   width: 100px !important;
   height: 100px !important;
 }
+
 .el-upload--picture-card{
 line-height: 110px;
+}
+
+.noeditform .el-upload--picture-card{
+  display: none  !important;
 }
 
 .remark-tip{

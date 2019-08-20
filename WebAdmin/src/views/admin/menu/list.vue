@@ -68,12 +68,12 @@ export default {
     },
     handleCreate(row) {
       this.$router.push({
-        path: '/admin/menu/add?pMenuId=' + row.id
+        path: '/admin/menu/add?pId=' + row.id
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/admin/menu/edit?menuId=' + row.id
+        path: '/admin/menu/edit?id=' + row.id
       })
     }
   }
