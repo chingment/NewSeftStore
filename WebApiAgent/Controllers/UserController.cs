@@ -32,9 +32,9 @@ namespace WebApiAgent.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitEdit([FromUri]string userId)
+        public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AgentServiceFactory.User.InitEdit(this.CurrentUserId, this.CurrentAgentId, userId);
+            IResult result = AgentServiceFactory.User.InitEdit(this.CurrentUserId, this.CurrentAgentId, id);
             return new OwnApiHttpResponse(result);
         }
 

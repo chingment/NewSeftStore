@@ -20,9 +20,9 @@ namespace WebApiAdmin.Controllers
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
-        public OwnApiHttpResponse InitAdd([FromUri]string pMenuId)
+        public OwnApiHttpResponse InitAdd([FromUri]string pId)
         {
-            IResult result = AdminServiceFactory.SysMenu.InitAdd(this.CurrentUserId, Enumeration.BelongSite.Admin, pMenuId);
+            IResult result = AdminServiceFactory.SysMenu.InitAdd(this.CurrentUserId, Enumeration.BelongSite.Admin, pId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -34,7 +34,7 @@ namespace WebApiAdmin.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitEdit([FromUri]string menuId)
+        public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
             IResult result = AdminServiceFactory.SysMenu.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Admin, menuId);
             return new OwnApiHttpResponse(result);

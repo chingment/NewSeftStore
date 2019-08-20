@@ -18,9 +18,9 @@ namespace WebApiAdmin.Controllers
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
-        public OwnApiHttpResponse InitAdd([FromUri]string pOrgId)
+        public OwnApiHttpResponse InitAdd([FromUri]string pId)
         {
-            IResult result = AdminServiceFactory.AdminOrg.InitAdd(this.CurrentUserId, pOrgId);
+            IResult result = AdminServiceFactory.AdminOrg.InitAdd(this.CurrentUserId, pId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -32,9 +32,9 @@ namespace WebApiAdmin.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitEdit([FromUri]string orgId)
+        public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AdminServiceFactory.AdminOrg.InitEdit(this.CurrentUserId, orgId);
+            IResult result = AdminServiceFactory.AdminOrg.InitEdit(this.CurrentUserId, id);
             return new OwnApiHttpResponse(result);
         }
 

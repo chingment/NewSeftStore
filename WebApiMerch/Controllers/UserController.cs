@@ -32,9 +32,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitEdit([FromUri]string userId)
+        public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.User.InitEdit(this.CurrentUserId, this.CurrentMerchId, userId);
+            IResult result = MerchServiceFactory.User.InitEdit(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
