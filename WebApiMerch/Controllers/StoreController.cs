@@ -47,6 +47,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse InitManage([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.Store.InitManage(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse InitManageProductSkus([FromUri]string id)
         {
             IResult result = MerchServiceFactory.Store.InitManageProductSkus(this.CurrentUserId, this.CurrentMerchId, id);

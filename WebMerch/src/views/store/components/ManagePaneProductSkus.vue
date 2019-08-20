@@ -20,20 +20,22 @@
 <script>
 import { initManageProductSkus } from '@/api/store'
 import paneManageProductSkusList from './PaneManageProductSkusList'
+import { getUrlParam } from '@/utils/commonUtil'
+
 export default {
   name: 'PaneManageProductSkus',
   components: { paneManageProductSkusList },
-  props: {
-    storeId: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
+      storeId: '',
       loading: false,
       activeName: '全部',
       sellChannels: []
+    }
+  },
+  watch: {
+    '$route'(to, from) {
+      this.init()
     }
   },
   created() {
@@ -42,7 +44,9 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initManageProductSkus({ id: this.storeId }).then(res => {
+      var id = getUrlParam('id')
+      this.storeId = id
+      initManageProductSkus({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.sellChannels = d.sellChannels

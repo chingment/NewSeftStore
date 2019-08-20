@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.Merch
             string text = "";
             if (isClose)
             {
-                text = "关闭";
+                text = "";
             }
             else
             {
@@ -158,6 +158,8 @@ namespace LocalS.Service.Api.Merch
             ret.Address = store.Address;
             ret.BriefDes = store.BriefDes;
             ret.DispalyImgUrls = store.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+            ret.IsClose = store.IsClose;
+            ret.Status = new { text = GetStatusText(store.IsClose), value = GetStatusValue(store.IsClose) };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
 
@@ -184,6 +186,7 @@ namespace LocalS.Service.Api.Merch
                 store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
                 store.MendTime = DateTime.Now;
                 store.Mender = operater;
+                store.IsClose = rop.IsClose;
                 CurrentDb.SaveChanges();
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
@@ -191,6 +194,26 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult InitManage(string operater, string merchId, string storeId)
+        {
+            var ret = new RetStoreInitManage();
+
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+
+
+            foreach (var store in stores)
+            {
+                if (store.Id == storeId)
+                {
+                    ret.CurStore.Id = store.Id;
+                    ret.CurStore.Name = store.Name;
+                }
+
+                ret.Stores.Add(new StoreModel { Id = store.Id, Name = store.Name });
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+        }
 
         public CustomJsonResult InitManageProductSkus(string operater, string merchId, string storeId)
         {

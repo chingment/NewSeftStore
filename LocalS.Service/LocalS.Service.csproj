@@ -142,6 +142,7 @@
     <Compile Include="Api\Agent\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
     <Compile Include="Api\Merch\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\ProductSkuService.cs" />
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Api\Merch\RModels\RetProductSkuInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreInitEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RetStoreInitManage.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreInitManageProductSkus.cs" />
     <Compile Include="Api\Merch\RModels\RetUserInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetUserInitEdit.cs" />

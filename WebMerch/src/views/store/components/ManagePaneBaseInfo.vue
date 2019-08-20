@@ -20,6 +20,9 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         {{ temp.briefDes }}
       </el-form-item>
+      <el-form-item label="营业状态">
+        {{ temp.status.text }}
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="openEdit">编辑</el-button>
       </el-form-item>
@@ -56,6 +59,9 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
       </el-form-item>
+      <el-form-item label="营业状态">
+        <el-switch v-model="form.isClose" />
+      </el-form-item>
       <el-form-item>
         <el-button type="info" @click="cancleEdit">取消</el-button>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -68,18 +74,11 @@
 
 import { MessageBox } from 'element-ui'
 import { editStore, initEditStore } from '@/api/store'
-import { goBack } from '@/utils/commonUtil'
+import { getUrlParam } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
-import { types } from 'util'
 
 export default {
   name: 'ManagePaneBaseInfo',
-  props: {
-    storeId: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       isEdit: false,
@@ -88,14 +87,19 @@ export default {
         name: '',
         address: '',
         briefDes: '',
-        uploadImglist: []
+        uploadImglist: [],
+        status: {
+          text: '',
+          value: ''
+        }
       },
       form: {
         id: '',
         name: '',
         address: '',
         briefDes: '',
-        dispalyImgUrls: []
+        dispalyImgUrls: [],
+        isClose: ''
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -109,6 +113,11 @@ export default {
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
+  watch: {
+    '$route'(to, from) {
+      this.init()
+    }
+  },
   mounted() {
     this.setUploadImgSort()
   },
@@ -118,7 +127,8 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initEditStore({ id: this.storeId }).then(res => {
+      var id = getUrlParam('id')
+      initEditStore({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.form.id = d.id
@@ -126,12 +136,14 @@ export default {
           this.form.address = d.address
           this.form.briefDes = d.briefDes
           this.form.dispalyImgUrls = d.dispalyImgUrls
+          this.form.isClose = d.isClose
           this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
 
           this.temp.name = d.name
           this.temp.address = d.address
           this.temp.briefDes = d.briefDes
           this.temp.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+          this.temp.status = d.status
         }
         this.loading = false
       })

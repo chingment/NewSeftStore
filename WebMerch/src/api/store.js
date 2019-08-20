@@ -24,6 +24,14 @@ export function addStore(data) {
   })
 }
 
+export function initManageStore(params) {
+  return request({
+    url: '/store/initManage',
+    method: 'get',
+    params
+  })
+}
+
 export function initEditStore(params) {
   return request({
     url: '/store/initEdit',

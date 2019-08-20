@@ -64,14 +64,22 @@ export default {
       activeNames: ''
     }
   },
+  watch: {
+    '$route'(to, from) {
+      this.init()
+    }
+  },
   created() {
-    this.listQuery.storeId = this.storeId
-    this.listQuery.refId = this.sellchannel.refId
-    this.listQuery.refType = this.sellchannel.refType
-    console.log(JSON.stringify(this.sellchannel))
-    this.getListData(this.listQuery)
+    this.init()
   },
   methods: {
+    init() {
+      this.listQuery.storeId = this.storeId
+      this.listQuery.refId = this.sellchannel.refId
+      this.listQuery.refType = this.sellchannel.refType
+      console.log(JSON.stringify(this.sellchannel))
+      this.getListData(this.listQuery)
+    },
     getListData(listQuery) {
       console.log('getListData')
       this.loading = true
