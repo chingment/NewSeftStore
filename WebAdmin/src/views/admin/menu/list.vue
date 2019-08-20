@@ -53,17 +53,8 @@ export default {
       fetchList().then(res => {
         if (res.result === 1) {
           this.listData = res.data
-          this.expandAll()
         }
         this.loading = false
-      })
-    },
-    expandAll() {
-      this.$nextTick(() => {
-        var els = document.getElementsByClassName('el-table__row') // 获取点击的箭头元素
-        for (let i = 0; i < els.length; i++) {
-          els[i].style.display = 'table-row'
-        }
       })
     },
     handleCreate(row) {

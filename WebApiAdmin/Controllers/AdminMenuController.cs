@@ -36,7 +36,7 @@ namespace WebApiAdmin.Controllers
         [HttpGet]
         public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AdminServiceFactory.SysMenu.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Admin, menuId);
+            IResult result = AdminServiceFactory.SysMenu.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Admin, id);
             return new OwnApiHttpResponse(result);
         }
 
