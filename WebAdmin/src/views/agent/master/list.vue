@@ -75,7 +75,7 @@ export default {
   components: { Pagination },
   data() {
     return {
-      loading: true,
+      loading: false,
       listKey: 0,
       listData: null,
       listTotal: 0,
