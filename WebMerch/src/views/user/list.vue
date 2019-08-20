@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div id="user_list" class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.userName" placeholder="用户名" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">

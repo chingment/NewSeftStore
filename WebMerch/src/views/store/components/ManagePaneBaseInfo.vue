@@ -1,24 +1,24 @@
 <template>
-  <div id="store_baseinfo_container" v-loading="loading" class="app-container">
+  <div id="store_baseinfo" v-loading="loading" class="app-container">
 
     <el-form v-show="!isEdit" class="noeditform" label-width="80px">
       <el-form-item label="名称">
-        {{ form.name }}
+        {{ temp.name }}
       </el-form-item>
       <el-form-item label="地址">
-        {{ form.address }}
+        {{ temp.address }}
       </el-form-item>
       <el-form-item label="图片">
         <el-upload
           action=""
           list-type="picture-card"
           disabled
-          :file-list="uploadImglist"
+          :file-list="temp.uploadImglist"
         />
 
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
-        {{ form.briefDes }}
+        {{ temp.briefDes }}
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="openEdit">编辑</el-button>
@@ -84,6 +84,12 @@ export default {
     return {
       isEdit: false,
       loading: false,
+      temp: {
+        name: '',
+        address: '',
+        briefDes: '',
+        uploadImglist: []
+      },
       form: {
         id: '',
         name: '',
@@ -103,6 +109,9 @@ export default {
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
+  mounted() {
+    this.setUploadImgSort()
+  },
   created() {
     this.init()
   },
@@ -118,6 +127,11 @@ export default {
           this.form.briefDes = d.briefDes
           this.form.dispalyImgUrls = d.dispalyImgUrls
           this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+
+          this.temp.name = d.name
+          this.temp.address = d.address
+          this.temp.briefDes = d.briefDes
+          this.temp.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
         }
         this.loading = false
       })
@@ -134,6 +148,7 @@ export default {
               this.$message(res.message)
               if (res.result === 1) {
                 this.isEdit = false
+                this.init()
               }
             })
           })
@@ -212,8 +227,9 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 
+#store_baseinfo{
 .el-form .el-form-item{
   max-width: 600px;
 }
@@ -226,6 +242,7 @@ export default {
 
 .el-upload-list >>> .el-tag {
   cursor: pointer;
+}
 }
 
 </style>

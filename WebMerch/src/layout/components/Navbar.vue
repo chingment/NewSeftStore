@@ -7,7 +7,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="userInfo.avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="getAvatar(userInfo.avatar)" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -61,6 +61,11 @@ export default {
       removeToken()
       var path = encodeURIComponent(window.location.href)
       window.location.href = `${process.env.VUE_APP_LOGIN_URL}?logout=1&redirect=${path}`
+    },
+    getAvatar(avatar) {
+      if (avatar == null) { return 'http://file.17fanju.com/Upload/Avatar_default.png' }
+
+      return avatar
     }
   }
 }

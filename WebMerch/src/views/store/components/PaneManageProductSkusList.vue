@@ -1,5 +1,5 @@
 <template>
-  <div class="skus-container">
+  <div id="store_skus">
     <el-row v-loading="loading" :gutter="20">
       <el-col v-for="productSku in listData" :key="productSku.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
@@ -91,7 +91,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.skus-container{
+#store_skus{
   padding: 20px;
 
   .above{

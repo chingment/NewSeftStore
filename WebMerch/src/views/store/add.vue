@@ -1,5 +1,5 @@
 <template>
-  <div id="store_container" class="app-container">
+  <div id="store_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
@@ -161,8 +161,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
+#store_add{
 .el-form .el-form-item{
   max-width: 600px;
 }
@@ -174,6 +175,7 @@ export default {
 
 .el-upload-list >>> .el-tag {
   cursor: pointer;
+}
 }
 </style>
 

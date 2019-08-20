@@ -1,5 +1,5 @@
 <template>
-  <div class="store-container">
+  <div id="store_list" class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -92,7 +92,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.store-container{
+#store_list{
   padding: 20px;
 
   .header-item{

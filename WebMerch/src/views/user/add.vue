@@ -1,5 +1,5 @@
 <template>
-  <div id="useradd_container" class="app-container">
+  <div id="user_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName" />
@@ -106,17 +106,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style  lang="scss"  scoped>
+
+#user_add{
+   max-width: 600px;
 .line {
   text-align: center;
-}
-#useradd_container {
-  max-width: 600px;
 }
 
 .is-leaf{
   display: none !important;
   width: 0px !important;
+}
 }
 </style>
 
