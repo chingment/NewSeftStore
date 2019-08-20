@@ -115,7 +115,7 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initEditStore({ storeId: this.storeId }).then(res => {
+      initEditStore({ id: this.storeId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.form.storeId = d.storeId

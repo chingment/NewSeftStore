@@ -147,11 +147,21 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult InitEdit(string operater, string merchId, string storeId)
         {
+            var result = new CustomJsonResult();
+
             var ret = new RetStoreInitEdit();
 
+            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
+            ret.Id = store.Id;
+            ret.Name = store.Name;
+            ret.Address = store.Address;
+            ret.BriefDes = store.BriefDes;
+            ret.DispalyImgUrls = store.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+
+            return result;
         }
 
         public CustomJsonResult Edit(string operater, string merchId, RopStoreEdit rop)
