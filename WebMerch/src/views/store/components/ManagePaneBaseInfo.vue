@@ -18,7 +18,7 @@ export default {
       loading: false,
       sellChannels: [],
       listQuery: {
-        page: 0,
+        page: 1,
         limit: 10,
         name: undefined
       }

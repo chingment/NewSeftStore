@@ -54,7 +54,7 @@ export default {
       loading: true,
       listTotal: 0,
       listQuery: {
-        page: 0,
+        page: 1,
         limit: 10,
         refType: undefined,
         refId: undefined,

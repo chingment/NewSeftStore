@@ -46,7 +46,7 @@ export default {
     return {
       loading: true,
       listQuery: {
-        page: 0,
+        page: 1,
         limit: 10,
         name: undefined
       },
@@ -73,7 +73,7 @@ export default {
       })
     },
     handleFilter() {
-      this.listQuery.page = 0
+      this.listQuery.page = 1
       this.getListData()
     },
     handleCreate() {
