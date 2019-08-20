@@ -167,7 +167,27 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult Edit(string operater, string merchId, RopStoreEdit rop)
         {
             CustomJsonResult result = new CustomJsonResult();
+            using (TransactionScope ts = new TransactionScope())
+            {
 
+                var isExistStore = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.Id && m.Name == rop.Name).FirstOrDefault();
+                if (isExistStore != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                }
+
+                var store = CurrentDb.Store.Where(m => m.Id == rop.Id).FirstOrDefault();
+
+                store.Name = rop.Name;
+                store.Address = rop.Address;
+                store.BriefDes = rop.BriefDes;
+                store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                store.MendTime = DateTime.Now;
+                store.Mender = operater;
+                CurrentDb.SaveChanges();
+                ts.Complete();
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+            }
             return result;
         }
 

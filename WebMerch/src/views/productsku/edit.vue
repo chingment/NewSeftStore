@@ -186,7 +186,7 @@ export default {
     init() {
       this.loading = true
       var id = getUrlParam('id')
-      initEditProductSku({ productSkuId: id }).then(res => {
+      initEditProductSku({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
 

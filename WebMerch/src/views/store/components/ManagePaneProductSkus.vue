@@ -42,7 +42,7 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initManageProductSkus({ storeId: this.storeId }).then(res => {
+      initManageProductSkus({ id: this.storeId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.sellChannels = d.sellChannels
