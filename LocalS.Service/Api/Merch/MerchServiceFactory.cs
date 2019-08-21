@@ -39,5 +39,21 @@ namespace LocalS.Service.Api.Merch
                 return new StoreService();
             }
         }
+
+        public static ProductKindService ProductKind
+        {
+            get
+            {
+                return new ProductKindService();
+            }
+        }
+
+        public static ProductSubjectService ProductSubject
+        {
+            get
+            {
+                return new ProductSubjectService();
+            }
+        }
     }
 }
