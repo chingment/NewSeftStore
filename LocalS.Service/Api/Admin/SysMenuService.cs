@@ -30,17 +30,17 @@ namespace LocalS.Service.Api.Admin
 
                 if (p_sysMenu.Depth == 0)
                 {
-                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
+                    treeNode.ExtAttr = new { CanDelete = false, CanEdit = false, CanAdd = true };
                 }
                 else
                 {
                     if (p_sysMenu.Depth >= 3)
                     {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
+                        treeNode.ExtAttr = new { CanDelete = true, CanEdit = true, CanAdd = false };
                     }
                     else
                     {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true };
+                        treeNode.ExtAttr = new { CanDelete = true, CanEdit = true, CanAdd = true };
                     }
                 }
 

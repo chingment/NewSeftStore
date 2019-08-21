@@ -28,11 +28,11 @@ namespace LocalS.Service.Api.Admin
                 treeNode.Description = p_sysOrg.Description;
                 if (p_sysOrg.Depth == 0)
                 {
-                    treeNode.ExtAttr = new { CanDelete = false };
+                    treeNode.ExtAttr = new { CanDelete = false, CanEdit = false, CanAdd = true };
                 }
                 else
                 {
-                    treeNode.ExtAttr = new { CanDelete = true };
+                    treeNode.ExtAttr = new { CanDelete = true, CanEdit = true, CanAdd = true };
                 }
 
                 var children = GetOrgTree(p_sysOrg.Id, sysOrgs);

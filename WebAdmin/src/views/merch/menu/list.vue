@@ -24,6 +24,7 @@
             添加子节点
           </el-button>
           <el-button
+            v-if="data.extAttr.canEdit"
             type="text"
             size="mini"
             @click="() => handleUpdate(data)"

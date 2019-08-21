@@ -39,3 +39,12 @@ export function editOrg(data) {
     data
   })
 }
+
+export function sortOrg(data) {
+  return request({
+    url: '/adminorg/sort',
+    method: 'post',
+    data
+  })
+}
+

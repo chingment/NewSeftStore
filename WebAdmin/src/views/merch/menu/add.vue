@@ -74,8 +74,8 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var pMenuId = getUrlParam('pMenuId')
-      initAddMenu({ pMenuId: pMenuId }).then(res => {
+      var pId = getUrlParam('pId')
+      initAddMenu({ pId: pId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.form.pId = d.pId
