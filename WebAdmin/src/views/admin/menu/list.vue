@@ -6,16 +6,17 @@
       :data="listData"
       :draggable="tree_setting.draggable"
       node-key="id"
-      default-expand-all
       :expand-on-click-node="false"
       :allow-drop="onDrop"
       class="table-tree"
+      :default-expanded-keys="tree_setting.expandedIds"
       @node-drop="sort"
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
         <span>{{ node.label }}</span>
         <span>
           <el-button
+            v-if="data.extAttr.canAdd"
             type="text"
             size="mini"
             @click="() => handleCreate(data)"
@@ -25,7 +26,7 @@
           <el-button
             type="text"
             size="mini"
-            @click="() => handleUpdate(node, data)"
+            @click="() => handleUpdate(data)"
           >
             编辑
           </el-button>
@@ -36,11 +37,13 @@
 </template>
 <script>
 import { fetchList, sortMenu } from '@/api/adminmenu'
+import { treeGetNodesByDepth } from '@/utils/commonUtil'
 export default {
   data() {
     return {
       tree_setting: {
-        draggable: true
+        draggable: true,
+        expandedIds: []
       },
       loading: false,
       listData: [],
@@ -56,6 +59,8 @@ export default {
       fetchList().then(res => {
         if (res.result === 1) {
           this.listData = res.data
+          const nodes = treeGetNodesByDepth(res.data, 1)
+          this.tree_setting.expandedIds = nodes.map(item => item.id)
         }
         this.loading = false
       })
@@ -76,25 +81,16 @@ export default {
       }
     },
     sort(draggingNode, dropNode, type, event) {
-      console.log(draggingNode)
-      console.log(dropNode)
-      if (draggingNode.data.aboveId === dropNode.data.aboveId) {
-        const obj = {
-          aboveId: '',
-          arr: []
-        }
-        obj.aboveId = dropNode.data.aboveId
-        for (const item of dropNode.parent.childNodes) {
-          obj.arr.push(item.data.id)
-        }
+      const ids = []
 
-        sortMenu({ ids: obj.arr }).then(res => {
-        })
-
-        // console.log(JSON.stringify(obj))
-        // this.updateOrderMe(obj)
+      for (const item of dropNode.parent.childNodes) {
+        ids.push(item.data.id)
       }
+
+      sortMenu({ ids: ids }).then(res => {
+      })
     }
+
   }
 }
 </script>

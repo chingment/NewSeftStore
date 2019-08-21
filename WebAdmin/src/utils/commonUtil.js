@@ -56,3 +56,21 @@ export function treeselectNormalizer(node) {
   }
 }
 
+export function treeGetNodesByDepth(tree, depth) {
+  const nodes = []
+  treeGetNodeByDepth(tree, depth, nodes)
+  return nodes
+}
+
+function treeGetNodeByDepth(tree, depth, nodes) {
+  for (let i = 0; i < tree.length; i++) {
+    const item = tree[i]
+
+    if (item.depth <= depth) {
+      nodes.push(item)
+    }
+    if (item.children && item.children.length > 0) {
+      treeGetNodeByDepth(item.children, depth, nodes)
+    }
+  }
+}

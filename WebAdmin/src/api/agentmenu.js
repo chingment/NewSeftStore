@@ -39,3 +39,11 @@ export function editMenu(data) {
     data
   })
 }
+
+export function sortMenu(data) {
+  return request({
+    url: '/adminmenu/sort',
+    method: 'post',
+    data
+  })
+}

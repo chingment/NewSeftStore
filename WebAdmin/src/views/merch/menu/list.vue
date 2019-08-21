@@ -1,43 +1,50 @@
 <template>
   <div class="app-container">
-    <el-table
+
+    <el-tree
       v-loading="loading"
       :data="listData"
-      style="width: 100%;margin-bottom: 20px;"
-      row-key="id"
-      border
-      :default-expand-all="true"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      :draggable="tree_setting.draggable"
+      node-key="id"
+      :expand-on-click-node="false"
+      :allow-drop="onDrop"
+      class="table-tree"
+      :default-expanded-keys="tree_setting.expandedIds"
+      @node-drop="sort"
     >
-      <el-table-column
-        prop="label"
-        label="机构名称"
-        min-width="50"
-      />
-      <el-table-column
-        v-if="isDesktop"
-        prop="description"
-        label="描述"
-        min-width="50"
-      />
-      <el-table-column label="操作" align="center" width="280">
-        <template slot-scope="{row}">
-          <button type="button" class="el-button el-button--success el-button--small" @click="handleCreate(row)">
-            添加子菜单
-          </button>
-          <button type="button" class="el-button el-button--default el-button--small" @click="handleUpdate(row)">
+      <span slot-scope="{ node, data }" class="custom-tree-node">
+        <span>{{ node.label }}</span>
+        <span>
+          <el-button
+            v-if="data.extAttr.canAdd"
+            type="text"
+            size="mini"
+            @click="() => handleCreate(data)"
+          >
+            添加子节点
+          </el-button>
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => handleUpdate(data)"
+          >
             编辑
-          </button>
-        </template>
-      </el-table-column>
-    </el-table>
+          </el-button>
+        </span>
+      </span>
+    </el-tree>
   </div>
 </template>
 <script>
-import { fetchList } from '@/api/merchmenu'
+import { fetchList, sortMenu } from '@/api/merchmenu'
+import { treeGetNodesByDepth } from '@/utils/commonUtil'
 export default {
   data() {
     return {
+      tree_setting: {
+        draggable: true,
+        expandedIds: []
+      },
       loading: false,
       listData: [],
       isDesktop: this.$store.getters.isDesktop
@@ -52,6 +59,8 @@ export default {
       fetchList().then(res => {
         if (res.result === 1) {
           this.listData = res.data
+          const nodes = treeGetNodesByDepth(res.data, 1)
+          this.tree_setting.expandedIds = nodes.map(item => item.id)
         }
         this.loading = false
       })
@@ -65,7 +74,23 @@ export default {
       this.$router.push({
         path: '/merch/menu/edit?id=' + row.id
       })
+    },
+    onDrop(moveNode, inNode, type) {
+      if (moveNode.level === inNode.level && moveNode.parent.id === inNode.parent.id) {
+        return type === 'prev' || type === 'next'
+      }
+    },
+    sort(draggingNode, dropNode, type, event) {
+      const ids = []
+
+      for (const item of dropNode.parent.childNodes) {
+        ids.push(item.data.id)
+      }
+
+      sortMenu({ ids: ids }).then(res => {
+      })
     }
+
   }
 }
 </script>

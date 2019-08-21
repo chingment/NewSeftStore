@@ -26,6 +26,8 @@ namespace LocalS.Service.Api.Admin
                 treeNode.PId = p_sysMenu.PId;
                 treeNode.Label = p_sysMenu.Title;
                 treeNode.Description = p_sysMenu.Description;
+                treeNode.Depth = p_sysMenu.Depth;
+
                 if (p_sysMenu.Depth == 0)
                 {
                     treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
@@ -222,17 +224,22 @@ namespace LocalS.Service.Api.Admin
 
             CustomJsonResult result = new CustomJsonResult();
 
-
-            var sysMenus = CurrentDb.SysMenu.Where(m => rop.Ids.Contains(m.Id)).ToList();
-
-            for (int i = 0; i < sysMenus.Count; i++)
+            using (TransactionScope ts = new TransactionScope())
             {
-                sysMenus[i].Priority = i;
+                var sysMenus = CurrentDb.SysMenu.Where(m => rop.Ids.Contains(m.Id)).ToList();
+
+                for (int i = 0; i < sysMenus.Count; i++)
+                {
+                    int priority = rop.Ids.IndexOf(sysMenus[i].Id);
+                    LogUtil.Info("id:" + sysMenus[i].Id + "," + priority.ToString());
+                    sysMenus[i].Priority = priority;
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
-
-            CurrentDb.SaveChanges();
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
 

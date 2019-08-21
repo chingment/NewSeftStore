@@ -18,6 +18,7 @@ namespace LocalS.Service.UI
         public string Value { get; set; }
         public string Label { get; set; }
         public string Description { get; set; }
+        public int Depth { get; set; }
         public object ExtAttr { get; set; }
         public bool IsDisabled { get; set; }
         public List<TreeNode> Children { get; set; }
