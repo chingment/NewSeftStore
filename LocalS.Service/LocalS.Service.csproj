@@ -75,6 +75,7 @@
     <Compile Include="Api\Admin\RModels\RetSysMenuInitEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuAdd.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopSysMenuSort.cs" />
     <Compile Include="Api\Admin\RModels\RupSysMenuGetList.cs" />
     <Compile Include="Api\Admin\SysMenuService.cs" />
     <Compile Include="Api\Admin\SysRoleService.cs" />
@@ -171,7 +172,6 @@
     <Compile Include="Api\Merch\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\MenuNode.cs" />
-    <Compile Include="UI\MenuMeta.cs" />
     <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>

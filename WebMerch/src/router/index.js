@@ -42,12 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/errorpage/401'),
     hidden: true,
     meta: { title: '页面权限', icon: 'table', auth: false }
-  },
-  {
-    path: '/test',
-    component: () => import('@/views/test/index'),
-    hidden: true,
-    meta: { title: '页面权限', icon: 'table', auth: false }
   }
 ]
 

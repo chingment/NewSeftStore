@@ -149,7 +149,9 @@ line-height: 110px;
 
 .circle-status{
   border-radius: 50%;
-  padding: 10px;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
   }
 
 .circle-status-0{

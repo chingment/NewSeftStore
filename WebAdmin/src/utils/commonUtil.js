@@ -55,3 +55,4 @@ export function treeselectNormalizer(node) {
     children: node.children
   }
 }
+

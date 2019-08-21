@@ -1,44 +1,47 @@
 <template>
   <div class="app-container">
-    <el-table
-      ref="dragTable"
+
+    <el-tree
       v-loading="loading"
       :data="listData"
-      style="width: 100%;margin-bottom: 20px;"
-      row-key="id"
-      border
-      :default-expand-all="true"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      :draggable="tree_setting.draggable"
+      node-key="id"
+      default-expand-all
+      :expand-on-click-node="false"
+      :allow-drop="onDrop"
+      class="table-tree"
+      @node-drop="sort"
     >
-      <el-table-column
-        prop="label"
-        label="机构名称"
-        min-width="50"
-      />
-      <el-table-column
-        v-if="isDesktop"
-        prop="description"
-        label="描述"
-        min-width="50"
-      />
-      <el-table-column label="操作" align="center" width="280">
-        <template slot-scope="{row}">
-          <button type="button" class="el-button el-button--success el-button--small" @click="handleCreate(row)">
-            添加子菜单
-          </button>
-          <button type="button" class="el-button el-button--default el-button--small" @click="handleUpdate(row)">
+      <span slot-scope="{ node, data }" class="custom-tree-node">
+        <span>{{ node.label }}</span>
+        <span>
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => handleCreate(data)"
+          >
+            添加子节点
+          </el-button>
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => handleUpdate(node, data)"
+          >
             编辑
-          </button>
-        </template>
-      </el-table-column>
-    </el-table>
+          </el-button>
+        </span>
+      </span>
+    </el-tree>
   </div>
 </template>
 <script>
-import { fetchList } from '@/api/adminmenu'
+import { fetchList, sortMenu } from '@/api/adminmenu'
 export default {
   data() {
     return {
+      tree_setting: {
+        draggable: true
+      },
       loading: false,
       listData: [],
       isDesktop: this.$store.getters.isDesktop
@@ -66,6 +69,31 @@ export default {
       this.$router.push({
         path: '/admin/menu/edit?id=' + row.id
       })
+    },
+    onDrop(moveNode, inNode, type) {
+      if (moveNode.level === inNode.level && moveNode.parent.id === inNode.parent.id) {
+        return type === 'prev' || type === 'next'
+      }
+    },
+    sort(draggingNode, dropNode, type, event) {
+      console.log(draggingNode)
+      console.log(dropNode)
+      if (draggingNode.data.aboveId === dropNode.data.aboveId) {
+        const obj = {
+          aboveId: '',
+          arr: []
+        }
+        obj.aboveId = dropNode.data.aboveId
+        for (const item of dropNode.parent.childNodes) {
+          obj.arr.push(item.data.id)
+        }
+
+        sortMenu({ ids: obj.arr }).then(res => {
+        })
+
+        // console.log(JSON.stringify(obj))
+        // this.updateOrderMe(obj)
+      }
     }
   }
 }

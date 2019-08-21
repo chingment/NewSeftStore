@@ -46,5 +46,12 @@ namespace WebApiAdmin.Controllers
             IResult result = AdminServiceFactory.SysMenu.Edit(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse Sort([FromBody]RopSysMenuSort rop)
+        {
+            IResult result = AdminServiceFactory.SysMenu.Sort(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

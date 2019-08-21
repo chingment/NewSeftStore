@@ -28,11 +28,18 @@ namespace LocalS.Service.Api.Admin
                 treeNode.Description = p_sysMenu.Description;
                 if (p_sysMenu.Depth == 0)
                 {
-                    treeNode.ExtAttr = new { CanDelete = false };
+                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
                 }
                 else
                 {
-                    treeNode.ExtAttr = new { CanDelete = true };
+                    if (p_sysMenu.Depth >= 3)
+                    {
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
+                    }
+                    else
+                    {
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true };
+                    }
                 }
 
                 var children = GetMenuTree(p_sysMenu.Id, sysMenus);
@@ -205,6 +212,27 @@ namespace LocalS.Service.Api.Admin
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
+
+            return result;
+
+        }
+
+        public CustomJsonResult Sort(string operater, Enumeration.BelongSite belongSite, RopSysMenuSort rop)
+        {
+
+            CustomJsonResult result = new CustomJsonResult();
+
+
+            var sysMenus = CurrentDb.SysMenu.Where(m => rop.Ids.Contains(m.Id)).ToList();
+
+            for (int i = 0; i < sysMenus.Count; i++)
+            {
+                sysMenus[i].Priority = i;
+            }
+
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
 

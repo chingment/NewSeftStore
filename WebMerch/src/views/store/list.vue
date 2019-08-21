@@ -14,13 +14,17 @@
       <div v-if="listData.length>0">
         <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
           <el-card class="box-card">
-            <div slot="header" class="header-item clearfix">
-              <span :class="'circle-status circle-status-'+item.status.value" />   <span class="it-name">{{ item.name }}</span>
-              <el-button style="padding: 0px 0px; position: absolute;right: 0px" type="text" @click="handleUpdate(item)">管理</el-button>
+            <div slot="header" class="it-header clearfix">
+              <div class="left">
+                <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
+              </div>
+              <div class="right">
+                <el-button type="text" @click="handleUpdate(item)">管理</el-button>
+              </div>
             </div>
-            <div class="component-item">
-              <div class="it-img"> <img :src="item.mainImgUrl" alt=""> </div>
-              <div class="it-describe" />
+            <div class="it-component">
+              <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
+              <div class="describe" />
             </div>
           </el-card>
         </el-col>
@@ -95,20 +99,37 @@ export default {
 #store_list{
   padding: 20px;
 
-  .header-item{
-             display: flex;
+  .it-header{
+    display: flex;
     justify-content: flex-start;
     align-items: center;
     position: relative;
-
-    .it-name{
+    height:20px ;
+    .left{
+      flex: 1;
+      justify-content: flex-start;
+      align-items: center;
+      display: block;
+      height: 100%;
+    overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+    .name{
     padding: 0px 5px;
     }
+    }
+    .right{
+      width: 100px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
   }
-  .component-item{
+  .it-component{
     min-height: 100px;
     display: flex;
-    .it-img{
+    .img{
       width: 120px;
       height: 120px;
 
@@ -118,7 +139,7 @@ export default {
       }
     }
 
-    .it-describe{
+    .describe{
       flex: 1;
       padding: 5px;
       font-size: 12px;

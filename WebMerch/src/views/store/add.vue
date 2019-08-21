@@ -1,10 +1,10 @@
 <template>
   <div id="store_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="店铺名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="地址" prop="name">
+      <el-form-item label="联系地址" prop="name">
         <el-input v-model="form.address" />
       </el-form-item>
       <el-form-item label="图片" prop="dispalyImgUrls">
