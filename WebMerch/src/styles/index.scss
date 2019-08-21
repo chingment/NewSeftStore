@@ -168,3 +168,23 @@ border-color: #67c23a;
     background-color: #67c23a;
     border-color: #67c23a;
     }
+
+    .table-tree{
+      border-top: 1px solid  #EBEEF5;
+      border-left: 1px solid  #EBEEF5;
+      border-right: 1px solid  #EBEEF5;
+      .el-tree-node__content {
+        border-bottom: 1px solid  #EBEEF5;
+        line-height: 48px;
+        height: 48px;
+      }
+    
+      .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+      }
+    }

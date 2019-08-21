@@ -76,6 +76,7 @@
     <Compile Include="Api\Admin\RModels\RopSysMenuAdd.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuSort.cs" />
+    <Compile Include="Api\Admin\RModels\RopAdminOrgSort.cs" />
     <Compile Include="Api\Admin\RModels\RupSysMenuGetList.cs" />
     <Compile Include="Api\Admin\SysMenuService.cs" />
     <Compile Include="Api\Admin\SysRoleService.cs" />

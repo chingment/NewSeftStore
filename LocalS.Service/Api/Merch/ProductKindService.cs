@@ -44,7 +44,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
-                var children = GetTree(p_productKind.Id, p_productKinds);
+                var children = GetTree(p_productKind.Id, productKinds);
                 if (children != null)
                 {
                     if (children.Count > 0)

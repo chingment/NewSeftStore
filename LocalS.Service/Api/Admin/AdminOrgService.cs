@@ -182,5 +182,30 @@ namespace LocalS.Service.Api.Admin
             return result;
 
         }
+
+        public CustomJsonResult Sort(string operater, RopAdminOrgSort rop)
+        {
+
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var sysOrgs = CurrentDb.SysOrg.Where(m => rop.Ids.Contains(m.Id)).ToList();
+
+                for (int i = 0; i < sysOrgs.Count; i++)
+                {
+                    int priority = rop.Ids.IndexOf(sysOrgs[i].Id);
+                    sysOrgs[i].Priority = priority;
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+
+            return result;
+
+        }
     }
 }

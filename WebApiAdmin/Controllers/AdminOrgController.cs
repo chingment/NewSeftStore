@@ -44,5 +44,12 @@ namespace WebApiAdmin.Controllers
             IResult result = AdminServiceFactory.AdminOrg.Edit(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse Sort([FromBody]RopAdminOrgSort rop)
+        {
+            IResult result = AdminServiceFactory.AdminOrg.Sort(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
