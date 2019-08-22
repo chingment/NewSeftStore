@@ -1,5 +1,4 @@
-﻿using Lumos.BLL.Biz;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +25,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
             public string Id { get; set; }
-            public string ImgUrl { get; set; }
+            public string MainImgUrl { get; set; }
             public string Name { get; set; }
             public List<SkuModel> List { get; set; }
         }

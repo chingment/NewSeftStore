@@ -87,13 +87,6 @@ namespace LocalS.Service.Api.StoreApp
                 return new OperateService();
             }
         }
-
-        public static MachineService Machine
-        {
-            get
-            {
-                return new MachineService();
-            }
-        }
+  
     }
 }

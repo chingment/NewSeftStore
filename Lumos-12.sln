@@ -61,8 +61,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiMerch", "WebApiMerch\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{1317C932-E16C-47E8-A2E3-2A0F881AE42D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiStoreApp", "WebApiStoreApp\WebApiStoreApp.csproj", "{35113A75-CF4B-4EF7-8444-1E3C6F9D61C9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,10 +139,6 @@ Global
 		{1317C932-E16C-47E8-A2E3-2A0F881AE42D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1317C932-E16C-47E8-A2E3-2A0F881AE42D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1317C932-E16C-47E8-A2E3-2A0F881AE42D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35113A75-CF4B-4EF7-8444-1E3C6F9D61C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35113A75-CF4B-4EF7-8444-1E3C6F9D61C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35113A75-CF4B-4EF7-8444-1E3C6F9D61C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35113A75-CF4B-4EF7-8444-1E3C6F9D61C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,7 +165,6 @@ Global
 		{267D89D9-E18D-401E-885C-27DB42D257F3} = {C047BCCF-A7DF-4681-BF16-2906BE120657}
 		{5634EE61-8DA3-4345-A3EB-FBF5EC89E913} = {C047BCCF-A7DF-4681-BF16-2906BE120657}
 		{1317C932-E16C-47E8-A2E3-2A0F881AE42D} = {6521CF52-B160-45A7-A185-FB3BCE4A34D2}
-		{35113A75-CF4B-4EF7-8444-1E3C6F9D61C9} = {C047BCCF-A7DF-4681-BF16-2906BE120657}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7679AC8E-76C6-48FD-923B-B6DD2F49F3B2}

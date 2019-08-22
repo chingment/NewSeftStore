@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from o in CurrentDb.ProductSku
 
-                         select new { o.Id, o.Name, o.KindIds, o.KindNames, o.DispalyImgUrls, o.BriefInfo, o.SalePrice, o.ShowPrice, o.ImgUrl, o.CreateTime }
+                         select new { o.Id, o.Name, o.KindIds, o.DispalyImgUrls, o.BriefDes, o.SalePrice, o.ShowPrice, o.MainImgUrl, o.CreateTime }
              );
 
             if (rup.Name != null && rup.Name.Length > 0)
@@ -36,14 +37,14 @@ namespace LocalS.Service.Api.StoreApp
 
             if (!string.IsNullOrEmpty(rup.KindId))
             {
-                query = query.Where(p => (from d in CurrentDb.ProductKindSku
+                query = query.Where(p => (from d in CurrentDb.ProductSkuKind
                                           where d.ProductKindId == rup.KindId
                                           select d.ProductSkuId).Contains(p.Id));
             }
 
             if (!string.IsNullOrEmpty(rup.SubjectId))
             {
-                query = query.Where(p => (from d in CurrentDb.ProductSubjectSku
+                query = query.Where(p => (from d in CurrentDb.ProductSkuSubject
                                           where d.ProductSubjectId == rup.SubjectId
                                           select d.ProductSkuId).Contains(p.Id));
             }
@@ -61,10 +62,10 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    ImgUrl = Entity.ImgSet.GetMain(item.DispalyImgUrls),
+                    MainImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
                     SalePrice = item.SalePrice,
                     ShowPrice = item.ShowPrice,
-                    BriefInfo = item.BriefInfo
+                    BriefDes = item.BriefDes
                 });
             }
 
@@ -75,8 +76,10 @@ namespace LocalS.Service.Api.StoreApp
 
         public SkuModel Details(string skuId)
         {
-            var skuModel = BizFactory.ProductSku.GetModel(skuId);
-            return skuModel;
+            //var skuModel = BizFactory.ProductSku.GetModel(skuId);
+            //return skuModel;
+
+            return null;
         }
     }
 }

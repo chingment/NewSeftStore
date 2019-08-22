@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.StoreApp
                 userInfo.UserId = user.Id;
                 userInfo.NickName = user.Nickname;
                 userInfo.PhoneNumber = user.PhoneNumber;
-                userInfo.HeadImgUrl = user.HeadImgUrl;
+                userInfo.Avatar = user.Avatar;
                 userInfo.IsVip = user.IsVip;
                 pageModel.UserInfo = userInfo;
             }

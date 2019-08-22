@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace LocalS.Service.Api.StoreApp
         public string CartId { get; set; }
         public int Quantity { get; set; }
         public decimal SalePriceByVip { get; set; }
-        public Enumeration.ReceptionMode ReceptionMode { get; set; }
+        public E_ReceptionMode ReceptionMode { get; set; }
     }
 }

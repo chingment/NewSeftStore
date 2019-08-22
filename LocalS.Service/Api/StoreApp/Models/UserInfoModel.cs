@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public string PhoneNumber { get; set; }
 
-        public string HeadImgUrl { get; set; }
+        public string Avatar { get; set; }
 
         public bool IsVip { get; set; }
     }

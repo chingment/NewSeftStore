@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace LocalS.Service.Api.StoreApp
 
             pageModel.Store = storeModel;
 
-            var storeBanners = CurrentDb.AdRelease.Where(m => m.AdSpaceId== Enumeration.AdSpaceId.AppHomeTop).ToList();
+            var storeBanners = CurrentDb.AdRelease.Where(m => m.AdSpaceId== E_AdSpaceId.AppHomeTop).ToList();
 
             BannerModel bannerModel = new BannerModel();
             bannerModel.Autoplay = true;
@@ -44,12 +45,12 @@ namespace LocalS.Service.Api.StoreApp
 
             var pdAreaModel = new PdAreaModel();
 
-            var productSubjects = CurrentDb.ProductSubject.Where(m => m.MerchantId == store.MerchantId & m.IsDelete == false && m.Dept == 1).OrderBy(m => m.Priority).ToList();
+            var productSubjects = CurrentDb.ProductSubject.Where(m => m.MerchId == store.MerchId & m.IsDelete == false && m.Depth == 1).OrderBy(m => m.Priority).ToList();
 
             foreach (var productSubject in productSubjects)
             {
 
-                var query = (from o in CurrentDb.ProductSubjectSku where o.ProductSubjectId == productSubject.Id select new { o.Id, o.ProductSkuId, o.ProductSubjectId, o.CreateTime });
+                var query = (from o in CurrentDb.ProductSkuSubject where o.ProductSubjectId == productSubject.Id select new { o.Id, o.ProductSkuId, o.ProductSubjectId, o.CreateTime });
 
                 query = query.OrderByDescending(r => r.CreateTime).Take(6);
 
@@ -60,12 +61,12 @@ namespace LocalS.Service.Api.StoreApp
                     var tab = new PdAreaModel.Tab();
                     tab.Id = productSubject.Id;
                     tab.Name = productSubject.Name;
-                    tab.ImgUrl = productSubject.MainImg;
+                    tab.MainImgUrl = productSubject.MainImgUrl;
 
                     foreach (var i in list)
                     {
-                        var model = BizFactory.ProductSku.GetModel(i.ProductSkuId);
-                        tab.List.Add(model);
+                        //var model = BizFactory.ProductSku.GetModel(i.ProductSkuId);
+                        //tab.List.Add(model);
                     }
 
                     pdAreaModel.Tabs.Add(tab);

@@ -17,15 +17,15 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
-            var productKinds = CurrentDb.ProductKind.Where(m => m.MerchantId == store.MerchantId && m.Status == Entity.Enumeration.ProductKindStatus.Valid && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
-            var top = productKinds.Where(m => m.Dept == 0).FirstOrDefault();
+            var productKinds = CurrentDb.ProductKind.Where(m => m.MerchId == store.MerchId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var top = productKinds.Where(m => m.Depth == 0).FirstOrDefault();
             var productParentKinds = productKinds.Where(m => m.PId == top.Id).ToList();
             foreach (var item in productParentKinds)
             {
                 var productParentKindModel = new ProductParentKindModel();
                 productParentKindModel.Id = item.Id;
                 productParentKindModel.Name = item.Name;
-                productParentKindModel.ImgUrl = item.MainImg;
+                productParentKindModel.MainImgUrl = item.MainImgUrl;
                 productParentKindModel.Selected = false;
                 var productChildKinds = productKinds.Where(m => m.PId == item.Id).ToList();
 
@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     productChildKindModel.Id = item2.Id;
                     productChildKindModel.Name = item2.Name;
-                    productChildKindModel.ImgUrl = item2.MainImg;
+                    productChildKindModel.MainImgUrl = item2.MainImgUrl;
                     productParentKindModel.Selected = false;
 
                     productParentKindModel.Child.Add(productChildKindModel);

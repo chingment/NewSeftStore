@@ -197,6 +197,7 @@
     <Compile Include="Api\StoreApp\Models\ProductChildKindModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductKindPageModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductParentKindModel.cs" />
+    <Compile Include="Api\StoreApp\Models\SkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\SpecModel.cs" />
     <Compile Include="Api\StoreApp\Models\SpecValueModel.cs" />
     <Compile Include="Api\StoreApp\Models\StoreModel.cs" />
@@ -207,7 +208,6 @@
     <Compile Include="Api\StoreApp\CartService.cs" />
     <Compile Include="Api\StoreApp\CouponService.cs" />
     <Compile Include="Api\StoreApp\IndexService.cs" />
-    <Compile Include="Api\StoreApp\MachineService.cs" />
     <Compile Include="Api\StoreApp\OperateService.cs" />
     <Compile Include="Api\StoreApp\OrderService.cs" />
     <Compile Include="Api\StoreApp\PersonalService.cs" />
@@ -240,6 +240,13 @@
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\UserDeliveryAddressService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\FsBlock.cs" />
+    <Compile Include="UI\FsBlockByField.cs" />
+    <Compile Include="UI\FsButton.cs" />
+    <Compile Include="UI\FsField.cs" />
+    <Compile Include="UI\FsTag.cs" />
+    <Compile Include="UI\FsTemplateData.cs" />
+    <Compile Include="UI\FsText.cs" />
     <Compile Include="UI\MenuNode.cs" />
     <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>

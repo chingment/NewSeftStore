@@ -1,4 +1,4 @@
-﻿using Lumos.Entity;
+﻿using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,8 @@ namespace LocalS.Service.Api.StoreApp
         public string StoreId { get; set; }
         public int PageIndex { get; set; }
 
-        public Enumeration.OrderStatus Status { get; set; }
+        public E_OrderStatus Status { get; set; }
 
-        public AppCaller Caller { get; set; }
+        public E_AppCaller Caller { get; set; }
     }
 }

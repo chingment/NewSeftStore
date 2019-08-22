@@ -1,4 +1,4 @@
-﻿using Lumos.Entity;
+﻿using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.StoreApp
             public string Id { get; set; }
             public string CartId { get; set; }
             public int Quantity { get; set; }
-            public Enumeration.ReceptionMode ReceptionMode { get; set; }
+            public E_ReceptionMode ReceptionMode { get; set; }
         }
     }
 }

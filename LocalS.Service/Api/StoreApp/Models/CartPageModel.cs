@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public List<CartSkuModel> Skus { get; set; }
 
-        public Entity.Enumeration.ReceptionMode ReceptionMode { get; set; }
+        public E_ReceptionMode ReceptionMode { get; set; }
 
 
 

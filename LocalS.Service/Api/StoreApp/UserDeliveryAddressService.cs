@@ -1,4 +1,6 @@
-﻿using Lumos.Entity;
+﻿using LocalS.BLL;
+using LocalS.Entity;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class UserDeliveryAddressService : BaseProvider
+    public class UserDeliveryAddressService : BaseDbContext
     {
 
         public List<UserDeliveryAddressModel> My(string operater, string clientUserId)
@@ -63,7 +65,7 @@ namespace LocalS.Service.Api.StoreApp
                 l_userDeliveryAddress.AreaCode = rop.AreaCode;
                 l_userDeliveryAddress.Address = rop.Address;
                 l_userDeliveryAddress.IsDefault = rop.IsDefault;
-                l_userDeliveryAddress.CreateTime = this.DateTime;
+                l_userDeliveryAddress.CreateTime = DateTime.Now;
                 l_userDeliveryAddress.Creator = operater;
                 CurrentDb.ClientDeliveryAddress.Add(l_userDeliveryAddress);
                 CurrentDb.SaveChanges();
@@ -76,7 +78,7 @@ namespace LocalS.Service.Api.StoreApp
                 l_userDeliveryAddress.AreaName = rop.AreaName;
                 l_userDeliveryAddress.Address = rop.Address;
                 l_userDeliveryAddress.IsDefault = rop.IsDefault;
-                l_userDeliveryAddress.MendTime = this.DateTime;
+                l_userDeliveryAddress.MendTime = DateTime.Now;
                 l_userDeliveryAddress.Creator = operater;
                 CurrentDb.SaveChanges();
             }

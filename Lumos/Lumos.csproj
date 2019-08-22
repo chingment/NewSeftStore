@@ -61,6 +61,7 @@
     <Compile Include="RSAForJava.cs" />
     <Compile Include="Utils\CommonUtil.cs" />
     <Compile Include="CustomJsonResult\CustomJsonResult.cs" />
+    <Compile Include="Utils\DistanceUtil.cs" />
     <Compile Include="Utils\GuidUtil.cs" />
     <Compile Include="ImgSet.cs" />
     <Compile Include="CustomJsonResult\IResult.cs" />

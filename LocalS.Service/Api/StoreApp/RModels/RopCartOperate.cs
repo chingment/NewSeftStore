@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace LocalS.Service.Api.StoreApp
     public class RopCartOperate
     {
         public string StoreId { get; set; }
-        public Lumos.Entity.Enumeration.CartOperateType Operate { get; set; }
+        public E_CartOperateType Operate { get; set; }
         public List<SkuModel> Skus { get; set; }
 
 
@@ -18,7 +19,7 @@ namespace LocalS.Service.Api.StoreApp
             public string SkuId { get; set; }
             public int Quantity { get; set; }
             public bool Selected { get; set; }
-            public Entity.Enumeration.ReceptionMode ReceptionMode { get; set; }
+            public E_ReceptionMode ReceptionMode { get; set; }
         }
     }
 }

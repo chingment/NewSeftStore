@@ -1,4 +1,4 @@
-﻿using Lumos.Entity;
+﻿using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,6 @@ namespace LocalS.Service.Api.StoreApp
         public List<OrderConfirmSkuModel> Skus { get; set; }
         public List<string> CouponId { get; set; }
 
-        public AppCaller Caller { get; set; }
+        public E_AppCaller Caller { get; set; }
     }
 }

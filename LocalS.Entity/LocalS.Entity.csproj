@@ -44,7 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdRelease.cs" />
+    <Compile Include="AdSpace.cs" />
     <Compile Include="ClientCart.cs" />
+    <Compile Include="ClientCoupon.cs" />
+    <Compile Include="ClientDeliveryAddress.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Ins\InsCarCompanyRule.cs" />
     <Compile Include="Ins\InsCarModelInfo.cs" />

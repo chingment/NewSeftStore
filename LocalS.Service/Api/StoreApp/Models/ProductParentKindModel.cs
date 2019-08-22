@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public string Name { get; set; }
 
-        public string ImgUrl { get; set; }
+        public string MainImgUrl { get; set; }
 
         public bool Selected { get; set; }
 

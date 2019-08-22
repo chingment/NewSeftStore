@@ -41,6 +41,13 @@ namespace LocalS.DAL
         public IDbSet<ClientCart> ClientCart { get; set; }
 
         public IDbSet<ClientCoupon> ClientCoupon { get; set; }
+
+        public IDbSet<AdRelease> AdRelease { get; set; }
+
+        public IDbSet<AdSpace> AdSpace { get; set; }
+
+        public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
