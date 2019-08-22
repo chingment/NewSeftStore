@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeiXinSdk;
 
 namespace LocalS.Service.Api.Account
 {
@@ -93,46 +94,76 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult LoginByMinProgram(RopOwnLoginByMinProgram rop)
         {
-            //OwnApiHttpResult result;
+            var result = new CustomJsonResult();
+            var ret = new RetOwnLoginByMinProgram();
 
-            //var userInfo = SdkFactory.Wx.GetUserInfoByMinProramJsCode(this.CurrentWxMpAppInfo, rop.EncryptedData, rop.Iv, rop.Code);
+            var wxAppInfoConfig = new WxAppInfoConfig();
 
-            //if (userInfo == null)
-            //{
-            //    result = new OwnApiHttpResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "获取用户信息失败" };
-            //    return new OwnApiHttpResponse(result);
-            //}
+            var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
 
-            //RopWxUserCheckedUser ropWxCheckedUser = new RopWxUserCheckedUser();
-            //ropWxCheckedUser.OpenId = userInfo.openId;
-            //ropWxCheckedUser.Nickname = userInfo.nickName;
-            //ropWxCheckedUser.Sex = userInfo.gender;
-            //ropWxCheckedUser.Province = userInfo.province;
-            //ropWxCheckedUser.City = userInfo.city;
-            //ropWxCheckedUser.Country = userInfo.country;
-            //ropWxCheckedUser.HeadImgUrl = userInfo.avatarUrl;
+            if (wxUserInfoByMinProram == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
+            }
 
+            var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == wxUserInfoByMinProram.openId).FirstOrDefault();
+            if (wxUserInfo == null)
+            {
+                string sysClientUserId = GuidUtil.New();
 
-            //var retWxCheckedUser = BizFactory.WxUser.CheckedUser(GuidUtil.Empty(), ropWxCheckedUser);
+                var sysClientUser = new SysClientUser();
 
+                sysClientUser.Id = sysClientUserId;
+                sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
+                sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+                sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
+                sysClientUser.RegisterTime = DateTime.Now;
+                sysClientUser.Nickname = wxUserInfoByMinProram.nickName;
+                sysClientUser.Sex = wxUserInfoByMinProram.gender;
+                sysClientUser.Province = wxUserInfoByMinProram.province;
+                sysClientUser.City = wxUserInfoByMinProram.city;
+                sysClientUser.Country = wxUserInfoByMinProram.country;
+                sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                sysClientUser.CreateTime = DateTime.Now;
+                sysClientUser.Creator = sysClientUserId;
+                sysClientUser.BelongSite = Enumeration.BelongSite.Client;
+                CurrentDb.SysClientUser.Add(sysClientUser);
+                CurrentDb.SaveChanges();
 
-            //if (retWxCheckedUser == null)
-            //{
-            //    result = new OwnApiHttpResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "保存用户失败" };
-            //    return new OwnApiHttpResponse(result);
-            //}
+                wxUserInfo = new WxUserInfo();
+                wxUserInfo.Id = GuidUtil.New();
+                wxUserInfo.AppId = rop.AppId;
+                wxUserInfo.ClientUserId = sysClientUser.Id;
+                wxUserInfo.OpenId = wxUserInfoByMinProram.openId;
+                wxUserInfo.CreateTime = DateTime.Now;
+                wxUserInfo.Creator = sysClientUserId;
+                CurrentDb.WxUserInfo.Add(wxUserInfo);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+                var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
+                if (sysClientUser != null)
+                {
+                    sysClientUser.Nickname = wxUserInfoByMinProram.nickName;
+                    sysClientUser.Sex = wxUserInfoByMinProram.gender;
+                    sysClientUser.Province = wxUserInfoByMinProram.province;
+                    sysClientUser.City = wxUserInfoByMinProram.city;
+                    sysClientUser.Country = wxUserInfoByMinProram.country;
+                    sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                }
+                CurrentDb.SaveChanges();
+            }
 
-            //var ret = new RetLoginByMinProgram();
+            var tokenInfo = new TokenInfo();
 
-            //ret.AccessToken = GuidUtil.New();
+            tokenInfo.UserId = wxUserInfo.ClientUserId;
 
-            //SSOUtil.SetUserInfo(ret.AccessToken, new UserInfo { UserId = retWxCheckedUser.ClientUserId, UserName = retWxCheckedUser.Nickname, WxOpenId = retWxCheckedUser.OpenId }, new TimeSpan(30, 0, 0, 0, 0));
+            SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            //result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "登录成功", Data = ret };
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
-            //return new OwnApiHttpResponse(result);
-
-            return null;
+            return result;
         }
 
         public List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)

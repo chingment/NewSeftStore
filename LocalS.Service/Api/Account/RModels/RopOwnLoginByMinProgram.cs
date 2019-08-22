@@ -8,8 +8,8 @@ namespace LocalS.Service.Api.Account
 {
     public class RopOwnLoginByMinProgram
     {
+        public string AppId { get; set; }
         public string Code { get; set; }
-
         public string Iv { get; set; }
         public string EncryptedData { get; set; }
     }
