@@ -22,6 +22,7 @@ namespace LocalS.Service.Api.StoreApp
             var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == storeId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
 
 
+            //构建购物车商品信息
             var cartProductSkuModels = new List<CartProductSkuModel>();
 
             foreach (var clientCart in clientCarts)
@@ -43,16 +44,17 @@ namespace LocalS.Service.Api.StoreApp
                 }
             }
 
-            var receptionModes = (from c in clientCarts select new { c.ReceptionMode }).Distinct();
+            //分类块，自取或快递 各构建
+            var receptionModes = (from c in clientCarts select c.ReceptionMode ).Distinct().ToList();
 
             foreach (var receptionMode in receptionModes)
             {
-
+               
                 var carBlock = new CartBlockModel();
-                carBlock.ReceptionMode = receptionMode.ReceptionMode;
-                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode.ReceptionMode).ToList();
+                carBlock.ReceptionMode = receptionMode;
+                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
 
-                switch (receptionMode.ReceptionMode)
+                switch (receptionMode)
                 {
                     case E_ReceptionMode.Machine:
                         carBlock.TagName = "自提商品";

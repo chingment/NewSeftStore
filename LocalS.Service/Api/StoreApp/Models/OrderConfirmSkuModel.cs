@@ -18,9 +18,9 @@ namespace LocalS.Service.Api.StoreApp
         public List<Lumos.ImgSet> DispalyImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string SpecDes { get; set; }
-
         public string CartId { get; set; }
         public int Quantity { get; set; }
-        public decimal SalePriceByVip { get; set; }
+
+        public E_ReceptionMode ReceptionMode { get; set; }
     }
 }

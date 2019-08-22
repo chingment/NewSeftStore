@@ -31,6 +31,10 @@ namespace LocalS.Entity
         public string Title { get; set; }
         public string Url { get; set; }
         public int Priority { get; set; }
+
+        public E_AdSpaceContentBelongType BelongType { get; set; }
+
+        public string BelongId { get; set; }
         public E_AdSpaceContentStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

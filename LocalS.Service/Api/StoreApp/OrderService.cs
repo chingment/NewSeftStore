@@ -22,29 +22,29 @@ namespace LocalS.Service.Api.StoreApp
             CustomJsonResult result = new CustomJsonResult();
 
             Lumos.BLL.Biz.RopOrderReserve bizRop = new Lumos.BLL.Biz.RopOrderReserve();
-            bizRop.Source = E_OrderSource.Machine;
+            bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ReserveMode = E_ReserveMode.Online;
             bizRop.ClientUserId = clientUserId;
 
-            foreach (var item in rop.Skus)
+            foreach (var item in rop.ProductSkus)
             {
-                //bizRop.Skus.Add(new Lumos.Biz.RopOrderReserve.Sku() { CartId = item.CartId, Id = item.Id, Quantity = item.Quantity, ReceptionMode = item.ReceptionMode });
+                bizRop.ProductSkus.Add(new Lumos.BLL.Biz.RopOrderReserve.ProductSku() { CartId = item.CartId, Id = item.Id, Quantity = item.Quantity, ReceptionMode = item.ReceptionMode });
             }
 
-            //var bizResult = BizFactory.Order.Reserve(operater, bizRop);
+            var bizResult = BizFactory.Order.Reserve(operater, bizRop);
 
-            //if (bizResult.Result == ResultType.Success)
-            //{
-            //    RetOrderReserve ret = new RetOrderReserve();
-            //    ret.OrderId = bizResult.Data.OrderId;
-            //    ret.OrderSn = bizResult.Data.OrderSn;
-            //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
-            //}
-            //else
-            //{
-            //    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, bizResult.Message);
-            //}
+            if (bizResult.Result == ResultType.Success)
+            {
+                RetOrderReserve ret = new RetOrderReserve();
+                ret.OrderId = bizResult.Data.OrderId;
+                ret.OrderSn = bizResult.Data.OrderSn;
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            }
+            else
+            {
+                result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, bizResult.Message);
+            }
 
 
             return result;
@@ -61,8 +61,7 @@ namespace LocalS.Service.Api.StoreApp
             decimal skuAmountByActual = 0;//实际总价
             decimal skuAmountByOriginal = 0;//原总价
             decimal skuAmountByMemebr = 0;//普通用户总价
-            decimal skuAmountByVip = 0;//会员用户总价
-
+            decimal skuAmountByVip = 0;//会员总价
             Store store;
 
             if (string.IsNullOrEmpty(rop.OrderId))
@@ -82,12 +81,10 @@ namespace LocalS.Service.Api.StoreApp
                             item.MainImgUrl = productSkuByCache.MainImgUrl;
                             item.Name = productSkuByCache.Name;
                             item.SalePrice = storeSellChannelStock.SalePrice;
-                            //item.SalePriceByVip = storeSellChannelStock.SalePriceByVip;
 
                             skuAmountByOriginal += (storeSellChannelStock.SalePrice * item.Quantity);
                             skuAmountByMemebr += (storeSellChannelStock.SalePrice * item.Quantity);
-                            //skuAmountByVip += (storeSellChannelStock.SalePriceByVip * item.Quantity);
-
+                            skuAmountByVip += (storeSellChannelStock.SalePriceByVip * item.Quantity);
                             skus.Add(item);
                         }
                     }
@@ -122,10 +119,8 @@ namespace LocalS.Service.Api.StoreApp
                     orderConfirmSkuModel.Name = item.ProductSkuName;
                     orderConfirmSkuModel.Quantity = item.Quantity;
                     orderConfirmSkuModel.SalePrice = item.SalePrice;
-                    orderConfirmSkuModel.SalePriceByVip = item.SalePriceByVip;
                     skuAmountByOriginal += (item.SalePrice * item.Quantity);
                     skuAmountByMemebr += (item.SalePrice * item.Quantity);
-                    skuAmountByVip += (item.SalePriceByVip * item.Quantity);
                     skus.Add(orderConfirmSkuModel);
                 }
             }
@@ -488,7 +483,7 @@ namespace LocalS.Service.Api.StoreApp
                     order.PayWay = E_OrderPayWay.Wechat;
 
 
-                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(appInfo, wxUserInfo.OpenId, order.Sn, 0.01m, "",Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(appInfo, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                     if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
                     {

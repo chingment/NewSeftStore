@@ -41,11 +41,11 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
-        public static UserDeliveryAddressService UserDeliveryAddress
+        public static DeliveryAddressService UserDeliveryAddress
         {
             get
             {
-                return new UserDeliveryAddressService();
+                return new DeliveryAddressService();
             }
         }
 

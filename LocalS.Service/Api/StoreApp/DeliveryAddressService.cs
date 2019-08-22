@@ -10,7 +10,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class UserDeliveryAddressService : BaseDbContext
+    public class DeliveryAddressService : BaseDbContext
     {
 
         public CustomJsonResult My(string operater, string clientUserId)

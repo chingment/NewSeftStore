@@ -11,7 +11,7 @@ namespace Lumos.BLL.Biz
     {
         public RopOrderReserve()
         {
-            this.Skus = new List<Sku>();
+            this.ProductSkus = new List<ProductSku>();
         }
 
         public string StoreId { get; set; }
@@ -23,12 +23,14 @@ namespace Lumos.BLL.Biz
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }
-        public List<Sku> Skus { get; set; }
-        public class Sku
+        public List<ProductSku> ProductSkus { get; set; }
+        public class ProductSku
         {
             public string CartId { get; set; }
             public string Id { get; set; }
             public int Quantity { get; set; }
+
+            public E_ReceptionMode ReceptionMode { get; set; }
         }
     }
 }

@@ -12,17 +12,17 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class OperateService : BaseDbContext
     {
-        public CustomJsonResult GetResult(string operater, string client, RupOperateGetResult rup)
+        public CustomJsonResult GetResult(string operater, string clientUserId, RupOperateGetResult rup)
         {
             var result = new CustomJsonResult();
 
             switch (rup.Type)
             {
                 case E_OperateType.SendPaySuccessCheck:
-                    result = SendPaySuccessResult(operater, rup);
+                    result = SendPaySuccessResult(operater, clientUserId, rup);
                     break;
                 case E_OperateType.SendPayCancleCheck:
-                    result = SendPayCancleResult(operater, rup);
+                    result = SendPayCancleResult(operater, clientUserId, rup);
                     break;
             }
 
@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.StoreApp
         }
 
 
-        private CustomJsonResult SendPaySuccessResult(string operater, RupOperateGetResult rup)
+        private CustomJsonResult SendPaySuccessResult(string operater, string clientUserId, RupOperateGetResult rup)
         {
             var result = new CustomJsonResult();
 
@@ -116,7 +116,7 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        private CustomJsonResult SendPayCancleResult(string operater, RupOperateGetResult rup)
+        private CustomJsonResult SendPayCancleResult(string operater, string clientUserId, RupOperateGetResult rup)
         {
             var result = new CustomJsonResult();
 

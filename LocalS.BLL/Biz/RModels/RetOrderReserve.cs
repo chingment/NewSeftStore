@@ -34,7 +34,7 @@ namespace Lumos.BLL.Biz
         public decimal ChargeAmount { get; set; }
         public List<DetailChild> Details { get; set; }
 
-
+        public E_ReceptionMode ReceptionMode { get; set; }
         public class DetailChild
         {
             public DetailChild()
@@ -74,6 +74,8 @@ namespace Lumos.BLL.Biz
             public decimal OriginalAmount { get; set; }
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
+
+            public E_ReceptionMode ReceptionMode { get; set; }
         }
 
         public class SlotStock

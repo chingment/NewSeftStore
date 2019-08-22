@@ -33,7 +33,7 @@ namespace Lumos.BLL.Biz
             {
                 RetOrderReserve ret = new RetOrderReserve();
 
-                var skuIds = rop.Skus.Select(m => m.Id).ToArray();
+                var skuIds = rop.ProductSkus.Select(m => m.Id).ToArray();
 
                 //检查是否有可买的商品
 
@@ -50,7 +50,7 @@ namespace Lumos.BLL.Biz
 
                 List<string> warn_tips = new List<string>();
 
-                foreach (var sku in rop.Skus)
+                foreach (var sku in rop.ProductSkus)
                 {
                     var skuModel = CacheServiceFactory.ProductSku.GetModelById(sku.Id);
 
@@ -105,7 +105,7 @@ namespace Lumos.BLL.Biz
                 order.StoreId = rop.StoreId;
                 order.StoreName = store.Name;
                 order.ClientUserId = rop.ClientUserId;
-                order.Quantity = rop.Skus.Sum(m => m.Quantity);
+                order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                 order.Status = E_OrderStatus.WaitPay;
                 order.Source = rop.Source;
                 order.SubmitTime = DateTime.Now;
@@ -122,7 +122,7 @@ namespace Lumos.BLL.Biz
 
                 if (!string.IsNullOrEmpty(rop.ClientUserId))
                 {
-                    var cartsIds = rop.Skus.Select(m => m.CartId).Distinct().ToArray();
+                    var cartsIds = rop.ProductSkus.Select(m => m.CartId).Distinct().ToArray();
                     if (cartsIds != null)
                     {
                         var clientCarts = CurrentDb.ClientCart.Where(m => cartsIds.Contains(m.Id) && m.ClientUserId == rop.ClientUserId).ToList();
@@ -140,7 +140,7 @@ namespace Lumos.BLL.Biz
                 }
                 #endregion 
 
-                var reserveDetails = GetReserveDetail(rop.Skus, skusByStock);
+                var reserveDetails = GetReserveDetail(rop.ProductSkus, skusByStock);
 
                 order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
                 order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
@@ -310,7 +310,7 @@ namespace Lumos.BLL.Biz
 
         }
 
-        private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.Sku> reserveDetails, List<StoreSellChannelStock> storeSellStocks)
+        private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<StoreSellChannelStock> storeSellStocks)
         {
             List<OrderReserveDetail> details = new List<OrderReserveDetail>();
 

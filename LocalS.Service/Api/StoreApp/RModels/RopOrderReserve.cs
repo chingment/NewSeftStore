@@ -10,11 +10,16 @@ namespace LocalS.Service.Api.StoreApp
     public class RopOrderReserve
     {
         public string StoreId { get; set; }
-        public List<Sku> Skus { get; set; }
-        public class Sku
+        public List<ProductSku> ProductSkus { get; set; }
+
+        public E_OrderSource Source { get; set; }
+        public class ProductSku
         {
             public string Id { get; set; }
             public string CartId { get; set; }
-            public int Quantity { get; set; }        }
+            public int Quantity { get; set; }
+
+            public E_ReceptionMode ReceptionMode { get; set; }
+        }
     }
 }

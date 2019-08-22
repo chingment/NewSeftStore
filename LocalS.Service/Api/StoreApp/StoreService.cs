@@ -10,7 +10,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class StoreService : BaseDbContext
     {
-        public CustomJsonResult List(string operater, string clientId, RupStoreList rup)
+        public CustomJsonResult List(string operater, string clientUserId, RupStoreList rup)
         {
             var result = new CustomJsonResult();
 
