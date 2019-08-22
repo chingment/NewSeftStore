@@ -166,7 +166,7 @@ namespace LocalS.Service.Api.Admin
 
                 var merch = new LocalS.Entity.Merch();
                 merch.Id = merchId;
-                merch.UserId = user.Id;
+                merch.MerchUserId = user.Id;
                 merch.Name = rop.FullName;
                 merch.CreateTime = DateTime.Now;
                 merch.Creator = operater;
