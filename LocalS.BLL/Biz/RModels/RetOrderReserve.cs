@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace Lumos.BLL.Biz
+namespace LocalS.BLL.Biz
 {
 
 

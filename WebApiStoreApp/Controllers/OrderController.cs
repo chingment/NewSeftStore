@@ -59,42 +59,42 @@ namespace WebApiStoreApp.Controllers
 
 
         [AllowAnonymous]
-        public HttpResponseMessage PayResult()
+        public HttpResponseMessage PayResultNotify()
         {
-            //var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-            //Stream stream = myRequest.InputStream;
-            //stream.Seek(0, SeekOrigin.Begin);
-            //string xml = new StreamReader(stream).ReadToEnd();
+            var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+            Stream stream = myRequest.InputStream;
+            stream.Seek(0, SeekOrigin.Begin);
+            string xml = new StreamReader(stream).ReadToEnd();
 
-            //if (string.IsNullOrEmpty(xml))
-            //{
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            //}
+            if (string.IsNullOrEmpty(xml))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+            }
 
-            //LogUtil.Info("接收支付结果:" + xml);
+            LogUtil.Info("接收支付结果:" + xml);
 
-            //var dic2 = WeiXinSdk.CommonUtil.ToDictionary(xml);
-            //if (!dic2.ContainsKey("appid"))
-            //{
-            //    LogUtil.Warn("查找不到appid");
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            //}
+            var dicXml = WeiXinSdk.CommonUtil.ToDictionary(xml);
+            if (!dicXml.ContainsKey("appid"))
+            {
+                LogUtil.Warn("查找不到appid");
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+            }
 
-            //string appId = dic2["appid"].ToString();
+            //string appId = dicXml["appid"].ToString();
 
-            //var appInfo = BizFactory.Merchant.GetWxPaAppInfoConfig("");
+            ////var appInfo = BizFactory.Merchant.GetWxPaAppInfoConfig("");
 
-            //if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
-            //{
-            //    LogUtil.Warn("支付通知结果签名验证失败");
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            //}
+            ////if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
+            ////{
+            ////    LogUtil.Warn("支付通知结果签名验证失败");
+            ////    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+            ////}
 
             //string orderSn = "";
 
-            //if (dic2.ContainsKey("out_trade_no") && dic2.ContainsKey("result_code"))
+            //if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
             //{
-            //    orderSn = dic2["out_trade_no"].ToString();
+            //    orderSn = dicXml["out_trade_no"].ToString();
             //}
 
             //bool isPaySuccessed = false;

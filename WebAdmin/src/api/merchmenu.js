@@ -42,7 +42,7 @@ export function editMenu(data) {
 
 export function sortMenu(data) {
   return request({
-    url: '/adminmenu/sort',
+    url: '/merchmenu/sort',
     method: 'post',
     data
   })

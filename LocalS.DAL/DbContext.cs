@@ -54,6 +54,8 @@ namespace LocalS.DAL
         public IDbSet<OrderDetails> OrderDetails { get; set; }
         public IDbSet<OrderDetailsChild> OrderDetailsChild { get; set; }
         public IDbSet<OrderDetailsChildSon> OrderDetailsChildSon { get; set; }
+
+        public IDbSet<Machine> Machine { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

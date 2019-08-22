@@ -219,7 +219,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Lumos.DAL\Lumos.DbRelay.csproj">
       <Project>{0e039414-2a2e-48b4-8db7-c4346106fa68}</Project>
-      <Name>Lumos.DAL</Name>
+      <Name>Lumos.DbRelay</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
       <Project>{c165e6a0-dd43-4aa1-94b1-d4bf5420a80d}</Project>

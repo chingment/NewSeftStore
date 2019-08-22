@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            Lumos.BLL.Biz.RopOrderReserve bizRop = new Lumos.BLL.Biz.RopOrderReserve();
+            LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ReserveMode = E_ReserveMode.Online;
@@ -29,7 +29,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in rop.ProductSkus)
             {
-                bizRop.ProductSkus.Add(new Lumos.BLL.Biz.RopOrderReserve.ProductSku() { CartId = item.CartId, Id = item.Id, Quantity = item.Quantity, ReceptionMode = item.ReceptionMode });
+                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = item.CartId, Id = item.Id, Quantity = item.Quantity, ReceptionMode = item.ReceptionMode });
             }
 
             var bizResult = BizFactory.Order.Reserve(operater, bizRop);

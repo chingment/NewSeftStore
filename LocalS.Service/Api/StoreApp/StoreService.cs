@@ -14,13 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-
-            var stores = CurrentDb.Store.Where(m => m.IsClose == false).ToList();
-
-            if (!string.IsNullOrEmpty(rup.MerchId))
-            {
-                stores = stores.Where(m => m.MerchId == rup.MerchId).ToList();
-            }
+            var stores = CurrentDb.Store.Where(m => m.MerchId == rup.MerchId && m.IsClose == false).ToList();
 
             var storeModels = new List<StoreModel>();
             foreach (var m in stores)

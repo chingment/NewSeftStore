@@ -55,6 +55,7 @@
     <Compile Include="Ins\InsCarPlateNoInfo.cs" />
     <Compile Include="Ins\InsCarPlateNoSearchHis.cs" />
     <Compile Include="Agent.cs" />
+    <Compile Include="Machine.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderDetails.cs" />
     <Compile Include="OrderDetailsChild.cs" />

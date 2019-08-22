@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="BaseDbContext.cs" />
     <Compile Include="Biz\BizFactory.cs" />
+    <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />

@@ -1,5 +1,4 @@
-﻿using Lumos.BLL.Biz;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +13,14 @@ namespace LocalS.BLL.Biz
             get
             {
                 return new OrderService();
+            }
+        }
+
+        public static MerchService Merch
+        {
+            get
+            {
+                return new MerchService();
             }
         }
     }

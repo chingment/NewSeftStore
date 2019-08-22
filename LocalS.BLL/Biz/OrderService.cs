@@ -1,6 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
-using Lumos.BLL.Biz;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Lumos.BLL.Biz
+namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseDbContext
     {
