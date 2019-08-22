@@ -45,7 +45,6 @@ namespace Lumos.DbRelay
         public IDbSet<SysPageAccessHis> SysPageAccessHis { get; set; }
         public IDbSet<SysSmsSendHis> SysSmsSendHis { get; set; }
         public IDbSet<SysAgentUser> SysAgentUser { get; set; }
-
         public IDbSet<WxMsgPushLog> WxMsgPushLog { get; set; }
         public IDbSet<WxUserInfo> WxUserInfo { get; set; }
 
