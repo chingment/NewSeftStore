@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Lumos;
-using Lumos.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +9,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using WebAppApi.Controllers;
 
-namespace WebAppApi
+
+namespace WebApiStoreApp
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

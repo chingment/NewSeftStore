@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 
 
-namespace WebAppApi
+namespace WebApiStoreApp
 {
     public class OwnApiHttpResponse : HttpResponseMessage
     {

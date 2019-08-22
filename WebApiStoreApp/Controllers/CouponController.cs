@@ -1,9 +1,9 @@
-﻿using Lumos;
-using Lumos.BLL.Service.ApiApp;
+﻿using LocalS.Service.Api.StoreApp;
+using Lumos;
 using System.Web.Http;
 
 
-namespace WebAppApi.Controllers
+namespace WebApiStoreApp.Controllers
 {
 
     public class CouponController : OwnApiBaseController
@@ -11,10 +11,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public OwnApiHttpResponse My([FromBody]RupCouponMy rup)
         {
-            var model = AppServiceFactory.Coupon.My(this.CurrentUserId,this.CurrentUserId, rup);
-
-            OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
-
+            IResult result = StoreAppServiceFactory.Coupon.My(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

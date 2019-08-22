@@ -1,8 +1,8 @@
-﻿using Lumos;
-using Lumos.BLL.Service.ApiApp;
+﻿using LocalS.Service.Api.StoreApp;
+using Lumos;
 using System.Web.Http;
 
-namespace WebAppApi.Controllers
+namespace WebApiStoreApp.Controllers
 {
     public class ProductSkuController : OwnApiBaseController
     {
@@ -10,9 +10,7 @@ namespace WebAppApi.Controllers
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupProductSkuList rup)
         {
-            var model = AppServiceFactory.ProductSku.List(this.CurrentUserId, this.CurrentUserId, rup);
-
-            OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
+            var result = StoreAppServiceFactory.ProductSku.List(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
 
@@ -22,9 +20,7 @@ namespace WebAppApi.Controllers
         [HttpGet]
         public OwnApiHttpResponse Details([FromUri]RupProductSkuDetails rup)
         {
-            var model = AppServiceFactory.ProductSku.Details(rup.SkuId);
-
-            OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
+            var result = StoreAppServiceFactory.ProductSku.Details(rup.SkuId);
 
             return new OwnApiHttpResponse(result);
         }

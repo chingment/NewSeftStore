@@ -1,14 +1,10 @@
-﻿using Lumos.Web.Http;
-using Lumos;
-using Lumos.Entity;
-using Lumos.WeiXinSdk;
-using Lumos.BLL;
+﻿using Lumos;
 using System.Web;
-using Lumos.BLL.Service.Admin;
-using Lumos.BLL.Biz;
 using System.Configuration;
+using Lumos.Web.Http;
+using Lumos.Session;
 
-namespace WebAppApi
+namespace WebApiStoreApp
 {
     [OwnApiAuthorize]
     public class OwnApiBaseController : BaseController
@@ -37,7 +33,7 @@ namespace WebAppApi
             return new OwnApiHttpResponse(result);
         }
 
-        public OwnApiHttpResponse ResponseResult(ResultType resultType, ResultCode resultCode, string message = null, object data = null)
+        public OwnApiHttpResponse ResponseResult(ResultType resultType, string resultCode, string message = null, object data = null)
         {
             _result.Result = resultType;
             _result.Code = resultCode;
@@ -46,29 +42,43 @@ namespace WebAppApi
             return new OwnApiHttpResponse(_result);
         }
 
+        public string Token
+        {
+            get
+            {
+                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                var token = request.QueryString["token"];
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = request.Headers["X-Token"];
+                    if (token != null)
+                    {
+                        token = request.Headers["X-Token"].ToString();
+                    }
+                }
+
+                return token;
+            }
+        }
+        private TokenInfo TokenInfo
+        {
+            get
+            {
+                var tokenInfo = SSOUtil.GetTokenInfo(this.Token);
+                if (tokenInfo == null)
+                {
+                    tokenInfo = new TokenInfo();
+                    tokenInfo.UserId = "";
+                }
+                return tokenInfo;
+            }
+        }
+
         public string CurrentUserId
         {
             get
             {
-                return OwnApiRequest.GetCurrentUserId();
-            }
-        }
-
-        public WxAppInfoConfig CurrentWxMpAppInfo
-        {
-            get
-            {
-                var appInfo = BizFactory.Merchant.GetWxMpAppInfoConfig(this.MerchantId);
-                return appInfo;
-            }
-        }
-
-        public string MerchantId
-        {
-            get
-            {
-                var merchantId = ConfigurationManager.AppSettings["custom:MerchantId"];
-                return merchantId;
+                return this.TokenInfo.UserId;
             }
         }
     }

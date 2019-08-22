@@ -63,6 +63,7 @@
     <Compile Include="Api\Account\RModels\RetHomeGetIndexPageData.cs" />
     <Compile Include="Api\Account\RModels\RetOwnGetInfo.cs" />
     <Compile Include="Api\Account\RModels\RetOwnLoginByAccount.cs" />
+    <Compile Include="Api\Account\RModels\RopOwnLoginByMinProgram.cs" />
     <Compile Include="Api\Account\RModels\RopUserInfoSave.cs" />
     <Compile Include="Api\Account\RModels\RupOwnCheckPermission.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByAccount.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Api\StoreApp\RModels\RetCartGetPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexGetPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOperateGetResult.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />
@@ -231,7 +233,7 @@
     <Compile Include="Api\StoreApp\RModels\RopOrderConfirm.cs" />
     <Compile Include="Api\StoreApp\RModels\RopOrderReserve.cs" />
     <Compile Include="Api\StoreApp\RModels\RopReplenishStaffBindMobile.cs" />
-    <Compile Include="Api\StoreApp\RModels\RopUserDeliveryAddressEdit.cs" />
+    <Compile Include="Api\StoreApp\RModels\RopDeliveryAddressEdit.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalAccessToken.cs" />

@@ -1,8 +1,8 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using WebAppApi.Controllers;
+using WebApiStoreApp.Controllers;
 
-namespace WebAppApi
+namespace WebApiStoreApp
 {
     public class FilterConfig
     {

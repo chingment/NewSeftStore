@@ -41,7 +41,7 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
-        public static DeliveryAddressService UserDeliveryAddress
+        public static DeliveryAddressService DeliveryAddress
         {
             get
             {

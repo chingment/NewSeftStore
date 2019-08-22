@@ -13,9 +13,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Web.Http;
-using WebAppApi.Controllers;
 
-namespace WebAppApi
+namespace WebApiStoreApp
 {
     public class UploadMultipartMediaTypeFormatter : MediaTypeFormatter
     {

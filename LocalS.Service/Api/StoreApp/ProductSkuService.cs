@@ -75,5 +75,21 @@ namespace LocalS.Service.Api.StoreApp
 
             return result;
         }
+
+
+        public CustomJsonResult Details(string id)
+        {
+           
+
+            var result = new CustomJsonResult();
+
+
+            var productSkuModel = CacheServiceFactory.ProductSku.GetModelById(id);
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", productSkuModel);
+
+            return result;
+        }
     }
 }

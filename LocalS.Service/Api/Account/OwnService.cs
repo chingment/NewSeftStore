@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.Service.UI;
 using Lumos;
+using Lumos.BLL;
 using Lumos.DbRelay;
 using Lumos.Session;
 using System;
@@ -88,6 +89,50 @@ namespace LocalS.Service.Api.Account
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
             return result;
+        }
+
+        public CustomJsonResult LoginByMinProgram(RopOwnLoginByMinProgram rop)
+        {
+            //OwnApiHttpResult result;
+
+            //var userInfo = SdkFactory.Wx.GetUserInfoByMinProramJsCode(this.CurrentWxMpAppInfo, rop.EncryptedData, rop.Iv, rop.Code);
+
+            //if (userInfo == null)
+            //{
+            //    result = new OwnApiHttpResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "获取用户信息失败" };
+            //    return new OwnApiHttpResponse(result);
+            //}
+
+            //RopWxUserCheckedUser ropWxCheckedUser = new RopWxUserCheckedUser();
+            //ropWxCheckedUser.OpenId = userInfo.openId;
+            //ropWxCheckedUser.Nickname = userInfo.nickName;
+            //ropWxCheckedUser.Sex = userInfo.gender;
+            //ropWxCheckedUser.Province = userInfo.province;
+            //ropWxCheckedUser.City = userInfo.city;
+            //ropWxCheckedUser.Country = userInfo.country;
+            //ropWxCheckedUser.HeadImgUrl = userInfo.avatarUrl;
+
+
+            //var retWxCheckedUser = BizFactory.WxUser.CheckedUser(GuidUtil.Empty(), ropWxCheckedUser);
+
+
+            //if (retWxCheckedUser == null)
+            //{
+            //    result = new OwnApiHttpResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "保存用户失败" };
+            //    return new OwnApiHttpResponse(result);
+            //}
+
+            //var ret = new RetLoginByMinProgram();
+
+            //ret.AccessToken = GuidUtil.New();
+
+            //SSOUtil.SetUserInfo(ret.AccessToken, new UserInfo { UserId = retWxCheckedUser.ClientUserId, UserName = retWxCheckedUser.Nickname, WxOpenId = retWxCheckedUser.OpenId }, new TimeSpan(30, 0, 0, 0, 0));
+
+            //result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "登录成功", Data = ret };
+
+            //return new OwnApiHttpResponse(result);
+
+            return null;
         }
 
         public List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)

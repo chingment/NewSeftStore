@@ -1,9 +1,9 @@
-﻿using Lumos;
-using Lumos.BLL.Service.ApiApp;
+﻿using LocalS.Service.Api.StoreApp;
+using Lumos;
 using System.Web.Http;
 
 
-namespace WebAppApi.Controllers
+namespace WebApiStoreApp.Controllers
 {
 
     public class GlobalController : OwnApiBaseController
@@ -11,13 +11,15 @@ namespace WebAppApi.Controllers
         [HttpGet]
         public OwnApiHttpResponse DataSet([FromUri]RupGlobalDataSet rup)
         {
-            var ret = new RetGobalDataSet();
-            ret.Index = AppServiceFactory.Index.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
-            ret.ProductKind = AppServiceFactory.ProductKind.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
-            ret.Cart = AppServiceFactory.Cart.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
-            ret.Personal = AppServiceFactory.Personal.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
-            OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "操作成功", Data = ret };
-            return new OwnApiHttpResponse(result);
+            //var ret = new RetGobalDataSet();
+            //ret.Index = AppServiceFactory.Index.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
+            //ret.ProductKind = AppServiceFactory.ProductKind.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
+            //ret.Cart = AppServiceFactory.Cart.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
+            //ret.Personal = AppServiceFactory.Personal.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
+            //OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "操作成功", Data = ret };
+            //return new OwnApiHttpResponse(result);
+
+            return null;
         }
 
         [HttpGet]

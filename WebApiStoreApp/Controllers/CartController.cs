@@ -3,7 +3,7 @@ using Lumos;
 using System.Web.Http;
 
 
-namespace WebAppApi.Controllers
+namespace WebApiStoreApp.Controllers
 {
 
     public class CartController : OwnApiBaseController
@@ -19,9 +19,9 @@ namespace WebAppApi.Controllers
 
         public OwnApiHttpResponse GetPageData([FromUri]RupCartPageData rup)
         {
-            var data = StoreAppServiceFactory.Cart.GetPageData(this.CurrentUserId, this.CurrentUserId, rup.StoreId);
+            IResult result = StoreAppServiceFactory.Cart.GetPageData(this.CurrentUserId, this.CurrentUserId, rup);
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "操作成功", data);
+            return new OwnApiHttpResponse(result);
         }
     }
 }

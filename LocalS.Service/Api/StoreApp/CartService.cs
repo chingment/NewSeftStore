@@ -12,14 +12,14 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class CartService : BaseDbContext
     {
-        public CustomJsonResult GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult GetPageData(string operater, string clientUserId, RupCartPageData rup)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetCartGetPageData();
 
 
-            var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == storeId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
+            var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
 
 
             //构建购物车商品信息

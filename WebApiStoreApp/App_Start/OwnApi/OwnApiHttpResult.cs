@@ -4,13 +4,13 @@ using Newtonsoft.Json.Serialization;
 using System.Text;
 
 
-namespace WebAppApi
+namespace WebApiStoreApp
 {
 
     public class OwnApiHttpResult : IResult
     {
         private ResultType _result = ResultType.Unknown;
-        private ResultCode _code = ResultCode.Unknown;
+        private string _code = "";
         private string _message = "";
         private object _data = null;
 
@@ -19,7 +19,7 @@ namespace WebAppApi
 
         }
 
-        public OwnApiHttpResult(ResultType result, ResultCode code, string message, object data = null)
+        public OwnApiHttpResult(ResultType result, string code, string message, object data = null)
         {
             _result = result;
             _code = code;
@@ -41,7 +41,7 @@ namespace WebAppApi
         }
 
 
-        public ResultCode Code
+        public string Code
         {
             get
             {
@@ -82,7 +82,7 @@ namespace WebAppApi
             StringBuilder json = new StringBuilder();
             json.Append("{");
             json.Append("\"result\":" + (int)_result + ",");
-            json.Append("\"code\":" + (int)_code +",");
+            json.Append("\"code\":" + _code +",");
             json.Append("\"message\":" + JsonConvert.SerializeObject(_message) + "");
 
             if (_data != null)

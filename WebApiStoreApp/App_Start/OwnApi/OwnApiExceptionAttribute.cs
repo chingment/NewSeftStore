@@ -4,10 +4,8 @@ using System;
 using System.Reflection;
 using System.Web.Http.Filters;
 
-namespace WebAppApi
+namespace WebApiStoreApp
 {
-
-
     public class OwnApiExceptionAttribute : ExceptionFilterAttribute, IExceptionFilter
     {
         private static ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

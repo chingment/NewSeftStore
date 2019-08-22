@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RopUserDeliveryAddressEdit
+    public class RopDeliveryAddressEdit
     {
         public string Id { get; set; }
         public string Consignee { get; set; }

@@ -1,10 +1,6 @@
 ﻿
 using log4net;
 using Lumos.BLL;
-using Lumos.BLL.Service.ApiApp;
-using Lumos.Common;
-using Lumos.DAL;
-using Lumos.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -19,7 +15,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebAppApi.Controllers
+namespace WebApiStoreApp.Controllers
 {
     public class HomeController : Controller
     {
@@ -84,73 +80,71 @@ namespace WebAppApi.Controllers
             return str;
         }
 
-        public string GlobalDataSet(string userId, string storeId, DateTime datetime)
-        {
-            Dictionary<string, string> parames = new Dictionary<string, string>();
-            parames.Add("userId", userId);
-            parames.Add("storeId", storeId.ToString());
-            parames.Add("datetime", datetime.ToUnifiedFormatDateTime());
-            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+        //public string GlobalDataSet(string userId, string storeId, DateTime datetime)
+        //{
+        //    Dictionary<string, string> parames = new Dictionary<string, string>();
+        //    parames.Add("userId", userId);
+        //    parames.Add("storeId", storeId.ToString());
+        //    parames.Add("datetime", datetime.ToUnifiedFormatDateTime());
+        //    string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpGet("" + host + "/api/Global/DataSet?userId=" + userId + "&storeId=" + storeId + "&datetime=" + HttpUtility.UrlEncode(datetime.ToUnifiedFormatDateTime(), UTF8Encoding.UTF8).ToUpper(), headers);
+        //    Dictionary<string, string> headers = new Dictionary<string, string>();
+        //    headers.Add("key", key);
+        //    headers.Add("timestamp", timespan.ToString());
+        //    headers.Add("sign", signStr);
+        //    HttpUtil http = new HttpUtil();
+        //    string result = http.HttpGet("" + host + "/api/Global/DataSet?userId=" + userId + "&storeId=" + storeId + "&datetime=" + HttpUtility.UrlEncode(datetime.ToUnifiedFormatDateTime(), UTF8Encoding.UTF8).ToUpper(), headers);
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
-        public string LoginByMinProgram(string encryptedDataStr, string code, string iv)
-        {
-            RopLoginByMinProgram model = new RopLoginByMinProgram();
+        //public string LoginByMinProgram(string encryptedDataStr, string code, string iv)
+        //{
+        //    RopLoginByMinProgram model = new RopLoginByMinProgram();
 
-            model.EncryptedData = encryptedDataStr;
-            model.Code = code;
-            model.Iv = iv;
+        //    model.EncryptedData = encryptedDataStr;
+        //    model.Code = code;
+        //    model.Iv = iv;
 
-            string a1 = JsonConvert.SerializeObject(model);
+        //    string a1 = JsonConvert.SerializeObject(model);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
-
-
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            headers.Add("version", "1.3.0.7");
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/User/LoginByMinProgram", a1, headers);
-
-            return result;
-
-        }
+        //    string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-        public string OrderConfirm(string accessToken, string orderId)
-        {
-            RopOrderConfirm model = new RopOrderConfirm();
+        //    Dictionary<string, string> headers = new Dictionary<string, string>();
+        //    headers.Add("key", key);
+        //    headers.Add("timestamp", timespan.ToString());
+        //    headers.Add("sign", signStr);
+        //    headers.Add("version", "1.3.0.7");
+        //    HttpUtil http = new HttpUtil();
+        //    string result = http.HttpPostJson("" + host + "/api/User/LoginByMinProgram", a1, headers);
 
-            model.OrderId = orderId;
+        //    return result;
 
-            string a1 = JsonConvert.SerializeObject(model);
+        //}
+        //public string OrderConfirm(string accessToken, string orderId)
+        //{
+        //    RopOrderConfirm model = new RopOrderConfirm();
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+        //    model.OrderId = orderId;
+
+        //    string a1 = JsonConvert.SerializeObject(model);
+
+        //    string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            headers.Add("version", "1.3.0.7");
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/Order/Confirm?accessToken=" + accessToken, a1, headers);
+        //    Dictionary<string, string> headers = new Dictionary<string, string>();
+        //    headers.Add("key", key);
+        //    headers.Add("timestamp", timespan.ToString());
+        //    headers.Add("sign", signStr);
+        //    headers.Add("version", "1.3.0.7");
+        //    HttpUtil http = new HttpUtil();
+        //    string result = http.HttpPostJson("" + host + "/api/Order/Confirm?accessToken=" + accessToken, a1, headers);
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
         //public string ShippingAddress(string userId, string storeId)
         //{

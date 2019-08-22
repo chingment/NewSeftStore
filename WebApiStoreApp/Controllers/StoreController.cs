@@ -1,20 +1,16 @@
-﻿using Lumos;
-using Lumos.BLL.Service.ApiApp;
+﻿using LocalS.Service.Api.StoreApp;
+using Lumos;
 using System.Web.Http;
 
-namespace WebAppApi.Controllers
+namespace WebApiStoreApp.Controllers
 {
     public class StoreController : OwnApiBaseController
     {
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupStoreList rup)
         {
-            var model = AppServiceFactory.Store.List(this.CurrentUserId, this.CurrentUserId, rup);
-
-            OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
-
+            var result = StoreAppServiceFactory.Store.List(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
-
         }
     }
 }

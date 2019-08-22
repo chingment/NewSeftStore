@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.StoreApp
     public class DeliveryAddressService : BaseDbContext
     {
 
-        public CustomJsonResult My(string operater, string clientUserId)
+        public CustomJsonResult My(string operater, string clientUserId, RupDeliveryAddressMy rup)
         {
             var result = new CustomJsonResult();
 
@@ -54,7 +54,7 @@ namespace LocalS.Service.Api.StoreApp
         }
 
 
-        public CustomJsonResult Edit(string operater, string clientUserId, RopUserDeliveryAddressEdit rop)
+        public CustomJsonResult Edit(string operater, string clientUserId, RopDeliveryAddressEdit rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
