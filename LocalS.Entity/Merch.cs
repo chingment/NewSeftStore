@@ -15,6 +15,17 @@ namespace LocalS.Entity
         public string ContactName { get; set; }
         public string ContactPhone { get; set; }
         public string ContactAddress { get; set; }
+
+        public string WxPayMchId { get; set; }
+        public string WxPayKey { get; set; }
+        public string WxPayResultNotifyUrl { get; set; }
+        public string WxPaNotifyEventUrlToken { get; set; }
+        public string WxPaOauth2RedirectUrl { get; set; }
+        public string WxPaAppId { get; set; }
+        public string WxPaAppSecret { get; set; }
+        public string WxMpAppId { get; set; }
+        public string WxMpAppSecret { get; set; }
+
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

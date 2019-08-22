@@ -57,6 +57,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Lumos\Lumos.csproj">
+      <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
+      <Name>Lumos</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YsyInscarSdk\YsyInscarSdk.csproj">
       <Project>{91995d89-4f55-4a39-b9bb-290d2331bbbb}</Project>
       <Name>YsyInscarSdk</Name>

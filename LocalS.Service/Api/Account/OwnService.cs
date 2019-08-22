@@ -97,7 +97,22 @@ namespace LocalS.Service.Api.Account
             var result = new CustomJsonResult();
             var ret = new RetOwnLoginByMinProgram();
 
+            var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+
+            if (merch == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+            }
+
             var wxAppInfoConfig = new WxAppInfoConfig();
+
+            wxAppInfoConfig.AppId = merch.WxMpAppId;
+            wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+            wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+            wxAppInfoConfig.PayKey = merch.WxPayKey;
+            wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+            wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+
 
             var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
 
@@ -156,7 +171,7 @@ namespace LocalS.Service.Api.Account
             }
 
             var tokenInfo = new TokenInfo();
-
+            ret.Token = GuidUtil.New();
             tokenInfo.UserId = wxUserInfo.ClientUserId;
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
