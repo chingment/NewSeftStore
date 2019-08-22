@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RetOrderModel
+    public class OrderModel
     {
-        public RetOrderModel()
+        public OrderModel()
         {
             this.Tag = new FsTag();
             this.Tip = new FsText();

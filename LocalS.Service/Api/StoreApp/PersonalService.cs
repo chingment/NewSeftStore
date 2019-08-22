@@ -10,9 +10,9 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class PersonalService : BaseDbContext
     {
-        public CustomJsonResult GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetPersonalGetPageData> GetPageData(string operater, string clientUserId, string storeId)
         {
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<RetPersonalGetPageData>();
 
             var ret = new RetPersonalGetPageData();
 
@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetPersonalGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
             return result;
         }

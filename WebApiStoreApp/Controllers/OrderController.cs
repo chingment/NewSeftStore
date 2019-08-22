@@ -31,12 +31,8 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupOrderList rup)
         {
-            var model = StoreAppServiceFactory.Order.List(this.CurrentUserId, this.CurrentUserId, rup);
-
-            OwnApiHttpResult result = new OwnApiHttpResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
-
+            IResult result = StoreAppServiceFactory.Order.List(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
-
         }
 
         [HttpGet]

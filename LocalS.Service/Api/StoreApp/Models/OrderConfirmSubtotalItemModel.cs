@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         }
 
         public string TagName { get; set; }
-        public UserDeliveryAddressModel DeliveryAddress { get; set; }
+        public DeliveryAddressModel DeliveryAddress { get; set; }
 
         public List<OrderConfirmSkuModel> Skus { get; set; }
     }

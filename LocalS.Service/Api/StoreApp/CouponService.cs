@@ -38,7 +38,7 @@ namespace LocalS.Service.Api.StoreApp
                     CurrentDb.SaveChanges();
                 }
 
-                var couponModel = new UserCouponModel();
+                var couponModel = new CouponModel();
 
                 couponModel.Id = item.Id;
                 couponModel.Name = item.Name;

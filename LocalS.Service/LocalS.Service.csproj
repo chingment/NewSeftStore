@@ -48,6 +48,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -186,10 +190,10 @@
     <Compile Include="Api\Merch\RModels\RupUserGetList.cs" />
     <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\UserService.cs" />
+    <Compile Include="Api\StoreApp\GlobalService.cs" />
     <Compile Include="Api\StoreApp\Models\BannerModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
-    <Compile Include="Api\StoreApp\Models\IndexPageModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmCouponModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmSubtotalItemModel.cs" />
@@ -203,8 +207,8 @@
     <Compile Include="Api\StoreApp\Models\SpecModel.cs" />
     <Compile Include="Api\StoreApp\Models\SpecValueModel.cs" />
     <Compile Include="Api\StoreApp\Models\StoreModel.cs" />
-    <Compile Include="Api\StoreApp\Models\UserCouponModel.cs" />
-    <Compile Include="Api\StoreApp\Models\UserDeliveryAddressModel.cs" />
+    <Compile Include="Api\StoreApp\Models\CouponModel.cs" />
+    <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
     <Compile Include="Api\StoreApp\Models\UserInfoModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCartGetPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
@@ -221,24 +225,19 @@
     <Compile Include="Api\StoreApp\ProductKindService.cs" />
     <Compile Include="Api\StoreApp\ProductSkuService.cs" />
     <Compile Include="Api\StoreApp\RModels\RetGobalDataSet.cs" />
-    <Compile Include="Api\StoreApp\RModels\RetLoginByMinProgram.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderConfirm.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderDetails.cs" />
-    <Compile Include="Api\StoreApp\RModels\RetOrderModel.cs" />
+    <Compile Include="Api\StoreApp\Models\OrderModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderReserve.cs" />
     <Compile Include="Api\StoreApp\RModels\RopCartOperate.cs" />
-    <Compile Include="Api\StoreApp\RModels\RopLoginByMinProgram.cs" />
-    <Compile Include="Api\StoreApp\RModels\RopMachineLoginByQrCode.cs" />
     <Compile Include="Api\StoreApp\RModels\RopOrderCancle.cs" />
     <Compile Include="Api\StoreApp\RModels\RopOrderConfirm.cs" />
     <Compile Include="Api\StoreApp\RModels\RopOrderReserve.cs" />
-    <Compile Include="Api\StoreApp\RModels\RopReplenishStaffBindMobile.cs" />
     <Compile Include="Api\StoreApp\RModels\RopDeliveryAddressEdit.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalAccessToken.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalDataSet.cs" />
-    <Compile Include="Api\StoreApp\RModels\RupMachineGetLoginConfirmInfo.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderGetJsApiPaymentPms.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductSkuDetails.cs" />

@@ -12,9 +12,9 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class CartService : BaseDbContext
     {
-        public CustomJsonResult GetPageData(string operater, string clientUserId, RupCartPageData rup)
+        public CustomJsonResult<RetCartGetPageData> GetPageData(string operater, string clientUserId, RupCartPageData rup)
         {
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<RetCartGetPageData>();
 
             var ret = new RetCartGetPageData();
 
@@ -72,7 +72,7 @@ namespace LocalS.Service.Api.StoreApp
             ret.SumPriceBySelected = cartProductSkuModels.Where(m => m.Selected == true).Sum(m => m.SumPrice);
             ret.CountBySelected = cartProductSkuModels.Where(m => m.Selected == true).Count();
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetCartGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
             return result;
         }

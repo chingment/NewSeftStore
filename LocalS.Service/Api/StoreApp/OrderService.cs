@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.StoreApp
                 var orderBlock_Express = new OrderBlockModel();
                 orderBlock_Express.TagName = "快递商品";
                 orderBlock_Express.Skus = skus_SelfExpress;
-                var shippingAddressModel = new UserDeliveryAddressModel();
+                var shippingAddressModel = new DeliveryAddressModel();
                 var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
                 if (shippingAddress != null)
                 {
@@ -178,7 +178,7 @@ namespace LocalS.Service.Api.StoreApp
                 var orderBlock_SelfPick = new OrderBlockModel();
                 orderBlock_SelfPick.TagName = "自提商品";
                 orderBlock_SelfPick.Skus = skus_SelfPick;
-                var shippingAddressModel2 = new UserDeliveryAddressModel();
+                var shippingAddressModel2 = new DeliveryAddressModel();
                 shippingAddressModel2.Id = null;
                 shippingAddressModel2.Consignee = "店铺名称";
                 shippingAddressModel2.PhoneNumber = store.Name;
@@ -262,8 +262,10 @@ namespace LocalS.Service.Api.StoreApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public List<RetOrderModel> List(string operater, string clientUserId, RupOrderList rup)
+        public CustomJsonResult  List(string operater, string clientUserId, RupOrderList rup)
         {
+            var result = new CustomJsonResult();
+
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
                          select new { o.Id, o.Sn, o.StoreId, o.PickCode, o.StoreName, o.Status, o.SubmitTime, o.CompletedTime, o.ChargeAmount, o.CancledTime }
@@ -281,11 +283,11 @@ namespace LocalS.Service.Api.StoreApp
 
             var list = query.ToList();
 
-            List<RetOrderModel> models = new List<RetOrderModel>();
+            List<OrderModel> models = new List<OrderModel>();
 
             foreach (var item in list)
             {
-                var model = new RetOrderModel();
+                var model = new OrderModel();
 
                 model.Id = item.Id;
                 model.Sn = item.Sn;
@@ -361,7 +363,9 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            return models;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", models);
+
+            return result;
         }
 
         public CustomJsonResult Details(string operater, string clientUserId, string orderId)

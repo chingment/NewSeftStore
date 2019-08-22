@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetCouponMy()
         {
-            this.Coupons = new List<UserCouponModel>();
+            this.Coupons = new List<CouponModel>();
         }
 
-        public List<UserCouponModel> Coupons { get; set; }
+        public List<CouponModel> Coupons { get; set; }
     }
 }

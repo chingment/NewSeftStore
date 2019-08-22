@@ -11,10 +11,10 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class IndexService : BaseDbContext
     {
-        public CustomJsonResult GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetIndexGetPageData> GetPageData(string operater, string clientUserId, string storeId)
         {
 
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<RetIndexGetPageData>();
 
             var ret = new RetIndexGetPageData();
 
@@ -96,7 +96,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.PdArea = pdAreaModel;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetIndexGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
             return result;
         }

@@ -17,11 +17,11 @@ namespace WebApiStoreApp.Controllers
 
         }
 
-        public OwnApiHttpResponse GetPageData([FromUri]RupCartPageData rup)
+        public OwnApiHttpResponse<RetCartGetPageData> GetPageData([FromUri]RupCartPageData rup)
         {
-            IResult result = StoreAppServiceFactory.Cart.GetPageData(this.CurrentUserId, this.CurrentUserId, rup);
+            IResult<RetCartGetPageData> result = StoreAppServiceFactory.Cart.GetPageData(this.CurrentUserId, this.CurrentUserId, rup);
 
-            return new OwnApiHttpResponse(result);
+            return new OwnApiHttpResponse<RetCartGetPageData>(result);
         }
     }
 }

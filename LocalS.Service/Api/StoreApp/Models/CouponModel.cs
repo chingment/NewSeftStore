@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class UserCouponModel
+    public class CouponModel
     {
         public string Id { get; set; }
 

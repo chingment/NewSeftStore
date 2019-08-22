@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class UserDeliveryAddressModel
+    public class DeliveryAddressModel
     {
-        public UserDeliveryAddressModel()
+        public DeliveryAddressModel()
         {
 
         }

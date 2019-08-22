@@ -10,10 +10,10 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductKindService : BaseDbContext
     {
-        public CustomJsonResult GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetProductKindGetPageData> GetPageData(string operater, string clientUserId, string storeId)
         {
 
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<RetProductKindGetPageData>();
 
             var ret = new RetProductKindGetPageData();
 
@@ -61,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.List = productParentKindModels;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetProductKindGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
             return result;
         }

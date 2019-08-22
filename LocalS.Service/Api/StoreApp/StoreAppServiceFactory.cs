@@ -9,6 +9,14 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class StoreAppServiceFactory : BaseDbContext
     {
+        public static GlobalService Global
+        {
+            get
+            {
+                return new GlobalService();
+            }
+        }
+
         public static IndexService Index
         {
             get

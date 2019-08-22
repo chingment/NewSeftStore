@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var model = new List<UserDeliveryAddressModel>();
+            var model = new List<DeliveryAddressModel>();
 
             var query = (from o in CurrentDb.ClientDeliveryAddress
                          where
@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreApp
             foreach (var m in list)
             {
 
-                model.Add(new UserDeliveryAddressModel
+                model.Add(new DeliveryAddressModel
                 {
                     Id = m.Id,
                     Consignee = m.Consignee,
