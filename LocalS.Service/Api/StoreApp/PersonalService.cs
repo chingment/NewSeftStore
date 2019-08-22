@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class PersonalService : BaseDbContext
     {
-        public PersonalPageModel GetPageData(string operater, string clientId, string storeId)
+        public CustomJsonResult GetPageData(string operater, string clientUserId, string storeId)
         {
-            var pageModel = new PersonalPageModel();
+            var result = new CustomJsonResult();
 
-            var user = CurrentDb.SysClientUser.Where(m => m.Id == clientId).FirstOrDefault();
+            var ret = new RetPersonalGetPageData();
+
+            var user = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
             if (user != null)
             {
                 var userInfo = new UserInfoModel();
@@ -22,11 +25,14 @@ namespace LocalS.Service.Api.StoreApp
                 userInfo.PhoneNumber = user.PhoneNumber;
                 userInfo.Avatar = user.Avatar;
                 userInfo.IsVip = user.IsVip;
-                pageModel.UserInfo = userInfo;
+
+                ret.UserInfo = userInfo;
             }
 
 
-            return pageModel;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+            return result;
         }
     }
 }

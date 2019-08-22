@@ -5,6 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_ClientCartStatus
+    {
+
+        Unknow = 0,
+        WaitSettle = 1,
+        Settling = 2,
+        SettleCompleted = 3,
+        Deleted = 4
+    }
+
     [Table("ClientCart")]
     public class ClientCart
     {
@@ -24,7 +34,7 @@ namespace LocalS.Entity
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
         public bool Selected { get; set; }
-        public E_CartStatus Status { get; set; }
-        public E_ReceptionMode ReceptionMode { get; set; }
+        public E_ClientCartStatus Status { get; set; }
+        public E_StoreSellChannelRefType SellChannelRefType { get; set; }
     }
 }

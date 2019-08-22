@@ -57,10 +57,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDbContext.cs" />
+    <Compile Include="Biz\BizFactory.cs" />
+    <Compile Include="Biz\OrderService.cs" />
+    <Compile Include="Biz\RModels\RetOrderReserve.cs" />
+    <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
+    <Compile Include="Biz\RModels\RopOrderReserve.cs" />
+    <Compile Include="Cache\CacheServiceFactory.cs" />
+    <Compile Include="Cache\Model\ProductSkuModel.cs" />
+    <Compile Include="Cache\ProductSkuCacheService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />
-    <Compile Include="YbInsUntil.cs" />
+    <Compile Include="YbInsUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LocalS.DAL\LocalS.DAL.csproj">
@@ -91,6 +99,9 @@
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>
       <Name>WeiXinSdk</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Biz\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

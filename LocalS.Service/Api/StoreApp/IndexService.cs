@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,13 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class IndexService : BaseDbContext
     {
-        public IndexPageModel GetPageData(string operater, string clientId, string storeId)
+        public CustomJsonResult GetPageData(string operater, string clientUserId, string storeId)
         {
-            var pageModel = new IndexPageModel();
+
+            var result = new CustomJsonResult();
+
+            var ret = new RetIndexGetPageData();
+
 
             var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
@@ -22,15 +27,15 @@ namespace LocalS.Service.Api.StoreApp
             storeModel.Address = store.Address;
 
 
-            pageModel.Store = storeModel;
+            ret.Store = storeModel;
 
-            var storeBanners = CurrentDb.AdRelease.Where(m => m.AdSpaceId== E_AdSpaceId.AppHomeTop).ToList();
+            var adSpaceContents = CurrentDb.AdSpaceContent.Where(m => m.AdSpaceId == E_AdSpaceId.AppHomeTop && m.StoreId == store.Id).ToList();
 
             BannerModel bannerModel = new BannerModel();
             bannerModel.Autoplay = true;
             bannerModel.CurrentSwiper = 0;
 
-            foreach (var item in storeBanners)
+            foreach (var item in adSpaceContents)
             {
                 var imgModel = new BannerModel.ImgModel();
                 imgModel.Id = item.Id;
@@ -40,7 +45,7 @@ namespace LocalS.Service.Api.StoreApp
                 bannerModel.Imgs.Add(imgModel);
             }
 
-            pageModel.Banner = bannerModel;
+            ret.Banner = bannerModel;
 
 
             var pdAreaModel = new PdAreaModel();
@@ -65,18 +70,35 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var i in list)
                     {
-                        //var model = BizFactory.ProductSku.GetModel(i.ProductSkuId);
-                        //tab.List.Add(model);
+                        var productSkuByCache = CacheServiceFactory.ProductSku.GetModelById(i.ProductSkuId);
+
+                        if (productSkuByCache != null)
+                        {
+                            var procudtSkuModel = new ProductSkuModel();
+                            procudtSkuModel.Id = productSkuByCache.Id;
+                            procudtSkuModel.Name = productSkuByCache.Name;
+                            procudtSkuModel.DispalyImgUrls = productSkuByCache.DispalyImgUrls;
+                            procudtSkuModel.MainImgUrl = productSkuByCache.MainImgUrl;
+                            procudtSkuModel.SalePrice = productSkuByCache.SalePrice;
+                            procudtSkuModel.ShowPrice = productSkuByCache.ShowPrice;
+                            procudtSkuModel.BriefDes = productSkuByCache.BriefDes;
+                            procudtSkuModel.DetailsDes = productSkuByCache.DetailsDes;
+
+                            tab.List.Add(procudtSkuModel);
+                        }
+
                     }
 
                     pdAreaModel.Tabs.Add(tab);
                 }
-
             }
 
-            pageModel.PdArea = pdAreaModel;
 
-            return pageModel;
+            ret.PdArea = pdAreaModel;
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+            return result;
         }
     }
 }

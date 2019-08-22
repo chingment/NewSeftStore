@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class CartSkuModel 
+    public class CartProductSkuModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -22,6 +22,5 @@ namespace LocalS.Service.Api.StoreApp
         public int Quantity { get; set; }
         public bool Selected { get; set; }
         public decimal SumPrice { get; set; }
-        public E_ReceptionMode ReceptionMode { get; set; }
     }
 }

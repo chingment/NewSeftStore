@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,13 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductKindService : BaseDbContext
     {
-        public ProductKindPageModel GetPageData(string operater, string clientId, string storeId)
+        public CustomJsonResult GetPageData(string operater, string clientId, string storeId)
         {
-            var pageModel = new ProductKindPageModel();
+
+            var result = new CustomJsonResult();
+
+            var ret = new RetProductKindGetPageData();
+
 
             var productParentKindModels = new List<ProductParentKindModel>();
 
@@ -54,9 +59,11 @@ namespace LocalS.Service.Api.StoreApp
                 }
             }
 
-            pageModel.List = productParentKindModels;
+            ret.List = productParentKindModels;
 
-            return pageModel;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+            return result;
         }
     }
 }

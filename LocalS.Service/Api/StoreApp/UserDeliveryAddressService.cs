@@ -13,8 +13,10 @@ namespace LocalS.Service.Api.StoreApp
     public class UserDeliveryAddressService : BaseDbContext
     {
 
-        public List<UserDeliveryAddressModel> My(string operater, string clientUserId)
+        public CustomJsonResult My(string operater, string clientUserId)
         {
+            var result = new CustomJsonResult();
+
             var model = new List<UserDeliveryAddressModel>();
 
             var query = (from o in CurrentDb.ClientDeliveryAddress
@@ -45,7 +47,10 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            return model;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", model);
+
+            return result;
+
         }
 
 

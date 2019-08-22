@@ -4,6 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_StoreStatus
+    {
+
+        Unknow = 0,
+        Valid = 1,
+        Invalid = 2
+    }
+
     [Table("Store")]
     public class Store
     {

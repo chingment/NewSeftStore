@@ -21,13 +21,13 @@ namespace LocalS.Service.Api.StoreApp
         {
             public Tab()
             {
-                this.List = new List<SkuModel>();
+                this.List = new List<ProductSkuModel>();
             }
 
             public string Id { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
-            public List<SkuModel> List { get; set; }
+            public List<ProductSkuModel> List { get; set; }
         }
     }
 }

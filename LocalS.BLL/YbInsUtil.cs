@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class YbInsUntil
+    public class YbInsUtil
     {
         public class userInfo
         {

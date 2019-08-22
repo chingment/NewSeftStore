@@ -10,9 +10,11 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductSkuService : BaseDbContext
     {
-        public List<SkuModel> List(string operater, string clientId, RupProductSkuList rup)
+        public CustomJsonResult List(string operater, string clientId, RupProductSkuList rup)
         {
-            var olist = new List<SkuModel>();
+            var result = new CustomJsonResult();
+
+            var olist = new List<ProductSkuModel>();
 
             var query = (from o in CurrentDb.ProductSku
 
@@ -58,7 +60,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                olist.Add(new SkuModel
+                olist.Add(new ProductSkuModel
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -69,17 +71,9 @@ namespace LocalS.Service.Api.StoreApp
                 });
             }
 
-            return olist;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", olist);
 
-
-        }
-
-        public SkuModel Details(string skuId)
-        {
-            //var skuModel = BizFactory.ProductSku.GetModel(skuId);
-            //return skuModel;
-
-            return null;
+            return result;
         }
     }
 }

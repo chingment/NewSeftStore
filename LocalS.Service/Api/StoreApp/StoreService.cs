@@ -10,8 +10,10 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class StoreService : BaseDbContext
     {
-        public List<StoreModel> List(string operater, string clientId, RupStoreList rup)
+        public CustomJsonResult List(string operater, string clientId, RupStoreList rup)
         {
+            var result = new CustomJsonResult();
+
 
             var stores = CurrentDb.Store.Where(m => m.IsClose == false).ToList();
 
@@ -33,7 +35,10 @@ namespace LocalS.Service.Api.StoreApp
                 storeModels.Add(new StoreModel { Id = m.Id, Name = m.Name, Address = m.Address, DistanceMsg = distanceMsg });
             }
 
-            return storeModels;
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", storeModels);
+
+            return result;
         }
     }
 }

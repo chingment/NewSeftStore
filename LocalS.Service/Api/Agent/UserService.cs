@@ -167,7 +167,7 @@ namespace LocalS.Service.Api.Agent
                 agentUser.CreateTime = DateTime.Now;
                 agentUser.RegisterTime = DateTime.Now;
                 agentUser.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
-                agentUser.YbInsureSign = YbInsUntil.GetSign(agentUser.Id, agentUser.Id, agentUser.PhoneNumber, agentUser.FullName);
+                agentUser.YbInsureSign = YbInsUtil.GetSign(agentUser.Id, agentUser.Id, agentUser.PhoneNumber, agentUser.FullName);
                 CurrentDb.SysAgentUser.Add(agentUser);
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -224,7 +224,7 @@ namespace LocalS.Service.Api.Agent
 
                 if (string.IsNullOrEmpty(agentUser.YbInsureSign))
                 {
-                    agentUser.YbInsureSign = YbInsUntil.GetSign(agentUser.Id, agentUser.Id, agentUser.PhoneNumber, agentUser.FullName);
+                    agentUser.YbInsureSign = YbInsUtil.GetSign(agentUser.Id, agentUser.Id, agentUser.PhoneNumber, agentUser.FullName);
                 }
 
                 CurrentDb.SaveChanges();

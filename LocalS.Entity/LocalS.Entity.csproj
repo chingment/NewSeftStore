@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdRelease.cs" />
+    <Compile Include="AdSpaceContent.cs" />
     <Compile Include="AdSpace.cs" />
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
@@ -55,6 +55,11 @@
     <Compile Include="Ins\InsCarPlateNoInfo.cs" />
     <Compile Include="Ins\InsCarPlateNoSearchHis.cs" />
     <Compile Include="Agent.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="OrderDetails.cs" />
+    <Compile Include="OrderDetailsChild.cs" />
+    <Compile Include="OrderDetailsChildSon.cs" />
+    <Compile Include="OrderNotifyLog.cs" />
     <Compile Include="ProductKind.cs" />
     <Compile Include="ProductSku.cs" />
     <Compile Include="Merch.cs" />
@@ -65,6 +70,7 @@
     <Compile Include="Store.cs" />
     <Compile Include="StoreSellChannel.cs" />
     <Compile Include="StoreSellChannelStock.cs" />
+    <Compile Include="StoreSellChannelStockLog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

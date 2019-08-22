@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,26 +13,28 @@ namespace LocalS.Service.Api.StoreApp
 
     public class CouponService : BaseDbContext
     {
-        public List<UserCouponModel> My(string operater, string clientUserId, RupCouponMy rup)
+        public CustomJsonResult My(string operater, string clientUserId, RupCouponMy rup)
         {
+            var result = new CustomJsonResult();
+
+            var ret = new RetCouponMy();
+
 
             List<ClientCoupon> coupons;
             if (!rup.IsGetHis)
             {
-                coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.Status == E_CouponStatus.WaitUse && m.EndTime > DateTime.Now).ToList();
+                coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.Status == E_ClientCouponStatus.WaitUse && m.EndTime > DateTime.Now).ToList();
             }
             else
             {
-                coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && (m.Status == E_CouponStatus.Used || m.Status == E_CouponStatus.Expired) && m.EndTime < DateTime.Now).ToList();
+                coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && (m.Status == E_ClientCouponStatus.Used || m.Status == E_ClientCouponStatus.Expired) && m.EndTime < DateTime.Now).ToList();
             }
-
-            var couponsModel = new List<UserCouponModel>();
 
             foreach (var item in coupons)
             {
                 if (item.EndTime < DateTime.Now)
                 {
-                    item.Status = E_CouponStatus.Expired;
+                    item.Status = E_ClientCouponStatus.Expired;
                     CurrentDb.SaveChanges();
                 }
 
@@ -41,13 +44,13 @@ namespace LocalS.Service.Api.StoreApp
                 couponModel.Name = item.Name;
                 switch (item.Type)
                 {
-                    case E_CouponType.FullCut:
-                    case E_CouponType.UnLimitedCut:
+                    case E_ClientCouponType.FullCut:
+                    case E_ClientCouponType.UnLimitedCut:
                         couponModel.Discount = item.Discount.ToF2Price();
                         couponModel.DiscountUnit = "元";
                         couponModel.DiscountTip = "满减卷";
                         break;
-                    case E_CouponType.Discount:
+                    case E_ClientCouponType.Discount:
                         couponModel.Discount = item.Discount.ToF2Price();
                         couponModel.DiscountUnit = "折";
                         couponModel.DiscountTip = "折扣卷";
@@ -65,10 +68,12 @@ namespace LocalS.Service.Api.StoreApp
                     }
                 }
 
-                couponsModel.Add(couponModel);
+                ret.Coupons.Add(couponModel);
             }
 
-            return couponsModel;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+            return result;
         }
     }
 }

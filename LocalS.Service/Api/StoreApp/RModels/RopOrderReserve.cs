@@ -15,8 +15,6 @@ namespace LocalS.Service.Api.StoreApp
         {
             public string Id { get; set; }
             public string CartId { get; set; }
-            public int Quantity { get; set; }
-            public E_ReceptionMode ReceptionMode { get; set; }
-        }
+            public int Quantity { get; set; }        }
     }
 }

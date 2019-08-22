@@ -11,15 +11,14 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string StoreId { get; set; }
         public E_CartOperateType Operate { get; set; }
-        public List<SkuModel> Skus { get; set; }
+        public List<ProductSkuModel> ProductSkus { get; set; }
 
 
-        public class SkuModel
+        public class ProductSkuModel
         {
-            public string SkuId { get; set; }
+            public string Id { get; set; }
             public int Quantity { get; set; }
             public bool Selected { get; set; }
-            public E_ReceptionMode ReceptionMode { get; set; }
         }
     }
 }

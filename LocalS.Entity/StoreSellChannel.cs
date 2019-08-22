@@ -5,6 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_StoreSellChannelRefType
+    {
+        Unknow = 0,
+        Express = 1,
+        Machine = 2
+    }
+
     [Table("StoreSellChannel")]
     public class StoreSellChannel
     {

@@ -10,10 +10,10 @@ namespace LocalS.Service.Api.StoreApp
     {
         public IndexPageModel Index { get; set; }
 
-        public ProductKindPageModel ProductKind { get; set; }
+        public RetProductKindGetPageData ProductKind { get; set; }
 
-        public CartPageModel Cart { get;set;}
+        public RetCartGetPageData Cart { get;set;}
 
-        public PersonalPageModel Personal { get; set; }
+        public RetPersonalGetPageData Personal { get; set; }
     }
 }

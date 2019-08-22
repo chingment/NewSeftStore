@@ -37,17 +37,23 @@ namespace LocalS.DAL
         public IDbSet<Store> Store { get; set; }
         public IDbSet<StoreSellChannel> StoreSellChannel { get; set; }
         public IDbSet<StoreSellChannelStock> StoreSellChannelStock { get; set; }
+        public IDbSet<StoreSellChannelStockLog> StoreSellChannelStockLog { get; set; }
 
+        
         public IDbSet<ClientCart> ClientCart { get; set; }
 
         public IDbSet<ClientCoupon> ClientCoupon { get; set; }
 
-        public IDbSet<AdRelease> AdRelease { get; set; }
+        public IDbSet<AdSpaceContent> AdSpaceContent { get; set; }
 
         public IDbSet<AdSpace> AdSpace { get; set; }
 
         public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }
 
+        public IDbSet<Order> Order { get; set; }
+        public IDbSet<OrderDetails> OrderDetails { get; set; }
+        public IDbSet<OrderDetailsChild> OrderDetailsChild { get; set; }
+        public IDbSet<OrderDetailsChildSon> OrderDetailsChildSon { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

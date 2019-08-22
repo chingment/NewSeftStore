@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class SkuModel
+    public class ProductSkuModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
