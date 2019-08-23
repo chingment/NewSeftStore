@@ -135,7 +135,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
                     orderConfirmSkuModel.Id = item.ProductSkuId;
-                    orderConfirmSkuModel.MainImgUrl = item.ProductSkuImgUrl;
+                    orderConfirmSkuModel.MainImgUrl = item.ProductSkuMainImgUrl;
                     orderConfirmSkuModel.Name = item.ProductSkuName;
                     orderConfirmSkuModel.Quantity = item.Quantity;
                     orderConfirmSkuModel.SalePrice = item.SalePrice;
@@ -183,7 +183,6 @@ namespace LocalS.Service.Api.StoreApp
                 var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
                 if (shippingAddress == null)
                 {
-                    shippingAddress = new ClientDeliveryAddress();
                     shippingAddressModel.Id = "";
                     shippingAddressModel.Consignee = "快寄地址";
                     shippingAddressModel.PhoneNumber = "选择";
@@ -387,7 +386,7 @@ namespace LocalS.Service.Api.StoreApp
 
                         sku.Id = orderDetailsChild.Id;
                         sku.Name = orderDetailsChild.ProductSkuName;
-                        sku.ImgUrl = orderDetailsChild.ProductSkuImgUrl;
+                        sku.MainImgUrl = orderDetailsChild.ProductSkuMainImgUrl;
                         sku.Quantity = orderDetailsChild.Quantity.ToString();
                         sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
 
@@ -489,7 +488,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     sku.Id = orderDetailsChild.Id;
                     sku.Name = orderDetailsChild.ProductSkuName;
-                    sku.ImgUrl = orderDetailsChild.ProductSkuImgUrl;
+                    sku.MainImgUrl = orderDetailsChild.ProductSkuMainImgUrl;
                     sku.Quantity = orderDetailsChild.Quantity.ToString();
                     sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
 
@@ -515,7 +514,7 @@ namespace LocalS.Service.Api.StoreApp
             return BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
         }
 
-        public CustomJsonResult GetJsApiPaymentPms(string operater, string clientUserId, WxAppInfoConfig appInfo, RupOrderGetJsApiPaymentPms rup)
+        public CustomJsonResult GetJsApiPaymentPms(string operater, string clientUserId,RupOrderGetJsApiPaymentPms rup)
         {
             var result = new CustomJsonResult();
 
@@ -533,7 +532,24 @@ namespace LocalS.Service.Api.StoreApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
             }
 
-            order.AppId = appInfo.AppId;
+            var merch = CurrentDb.Merch.Where(m => m.Id == order.MerchId && m.WxMpAppId == rup.AppId).FirstOrDefault();
+
+            if (merch == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+            }
+
+            var wxAppInfoConfig = new WxAppInfoConfig();
+
+            wxAppInfoConfig.AppId = merch.WxMpAppId;
+            wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+            wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+            wxAppInfoConfig.PayKey = merch.WxPayKey;
+            wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+            wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+
+
+            order.AppId = merch.WxMpAppId;
             order.ClientUserId = wxUserInfo.ClientUserId;
             order.PayExpireTime = DateTime.Now.AddMinutes(5);
 
@@ -546,7 +562,7 @@ namespace LocalS.Service.Api.StoreApp
                     order.PayWay = E_OrderPayWay.Wechat;
 
 
-                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(appInfo, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wxAppInfoConfig, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                     if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
                     {
@@ -558,7 +574,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     //Task4Factory.Global.Enter(TimerTaskType.CheckOrderPay, order.PayExpireTime.Value, order);
 
-                    var pms = SdkFactory.Wx.GetJsApiPayParams(appInfo, order.Id, order.Sn, ret_UnifiedOrder.PrepayId);
+                    var pms = SdkFactory.Wx.GetJsApiPayParams(wxAppInfoConfig, order.Id, order.Sn, ret_UnifiedOrder.PrepayId);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
                     break;

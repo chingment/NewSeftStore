@@ -222,7 +222,7 @@ namespace LocalS.BLL.Biz
                         orderDetailsChild.OrderDetailsSn = orderDetails.Sn;
                         orderDetailsChild.ProductSkuId = detailsChild.SkuId;
                         orderDetailsChild.ProductSkuName = detailsChild.SkuName;
-                        orderDetailsChild.ProductSkuImgUrl = detailsChild.SkuImgUrl;
+                        orderDetailsChild.ProductSkuMainImgUrl = detailsChild.SkuImgUrl;
                         orderDetailsChild.SalePrice = detailsChild.SalePrice;
                         orderDetailsChild.SalePriceByVip = detailsChild.SalePriceByVip;
                         orderDetailsChild.Quantity = detailsChild.Quantity;
@@ -255,7 +255,7 @@ namespace LocalS.BLL.Biz
                             orderDetailsChildSon.SlotId = detailsChildSon.SlotId;
                             orderDetailsChildSon.ProductSkuId = detailsChildSon.SkuId;
                             orderDetailsChildSon.ProductSkuName = detailsChildSon.SkuName;
-                            orderDetailsChildSon.ProductSkuImgUrl = detailsChildSon.SkuImgUrl;
+                            orderDetailsChildSon.ProductSkuMainImgUrl = detailsChildSon.SkuImgUrl;
                             orderDetailsChildSon.SalePrice = detailsChildSon.SalePrice;
                             orderDetailsChildSon.SalePriceByVip = detailsChildSon.SalePriceByVip;
                             orderDetailsChildSon.Quantity = detailsChildSon.Quantity;
@@ -303,6 +303,8 @@ namespace LocalS.BLL.Biz
                 }
 
                 CurrentDb.Order.Add(order);
+
+                CurrentDb.SaveChanges();
 
                 ts.Complete();
 

@@ -9,8 +9,8 @@ namespace LocalS.Service.Api.StoreApp
     public enum Caller
     {
         Unknow = 0,
-        NativeWebMoblie = 1,
-        NativeMiniProgram = 2
+        WxPa = 1,
+        WxMp = 2
     }
 
     public enum PayWay
@@ -22,9 +22,11 @@ namespace LocalS.Service.Api.StoreApp
 
     public class RupOrderGetJsApiPaymentPms
     {
+        public string MerchId { get; set; }
+        public string AppId { get; set; }
         public string OrderId { get; set; }
-
         public PayWay PayWay { get; set; }
+        public Caller Caller { get; set; }
 
     }
 }

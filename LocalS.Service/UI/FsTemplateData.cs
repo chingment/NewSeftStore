@@ -17,7 +17,7 @@ namespace LocalS.Service.UI
         {
             public string Id { get; set; }
             public string Name { get; set; }
-            public string ImgUrl { get; set; }
+            public string MainImgUrl { get; set; }
             public string Quantity { get; set; }
             public string ChargeAmount { get; set; }
             public bool IsGift { get; set; }

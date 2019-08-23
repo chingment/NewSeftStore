@@ -18,6 +18,6 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string Id { get; set; }
         public E_OperateType Type { get; set; }
-        public E_AppCaller AppCaller { get;set;}
+        public E_AppCaller Caller { get;set;}
     }
 }

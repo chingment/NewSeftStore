@@ -21,7 +21,7 @@ namespace LocalS.Entity
         public string OrderDetailsSn { get; set; }
         public string ProductSkuId { get; set; }
         public string ProductSkuName { get; set; }
-        public string ProductSkuImgUrl { get; set; }
+        public string ProductSkuMainImgUrl { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }

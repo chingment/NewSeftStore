@@ -143,7 +143,7 @@ namespace LocalS.Service.Api.StoreTerm
                 var sku = new RetOrderDetails.Sku();
                 sku.Id = orderDetailsChild.ProductSkuId;
                 sku.Name = orderDetailsChild.ProductSkuName;
-                sku.ImgUrl = orderDetailsChild.ProductSkuImgUrl;
+                sku.ImgUrl = orderDetailsChild.ProductSkuMainImgUrl;
                 sku.Quantity = orderDetailsChild.Quantity;
 
 
