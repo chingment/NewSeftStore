@@ -10,6 +10,7 @@ namespace Lumos.DbRelay
     {
         [Key]
         public string Id { get; set; }
+        public string MerchId { get; set; }
         public string ClientUserId { get; set; }
         [MaxLength(128)]
         public string AppId { get; set; }

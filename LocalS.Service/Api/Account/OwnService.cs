@@ -139,6 +139,7 @@ namespace LocalS.Service.Api.Account
                 sysClientUser.City = wxUserInfoByMinProram.city;
                 sysClientUser.Country = wxUserInfoByMinProram.country;
                 sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                sysClientUser.IsVip = false;
                 sysClientUser.CreateTime = DateTime.Now;
                 sysClientUser.Creator = sysClientUserId;
                 sysClientUser.BelongSite = Enumeration.BelongSite.Client;
@@ -147,6 +148,7 @@ namespace LocalS.Service.Api.Account
 
                 wxUserInfo = new WxUserInfo();
                 wxUserInfo.Id = GuidUtil.New();
+                wxUserInfo.MerchId = rop.MerchId;
                 wxUserInfo.AppId = rop.AppId;
                 wxUserInfo.ClientUserId = sysClientUser.Id;
                 wxUserInfo.OpenId = wxUserInfoByMinProram.openId;
