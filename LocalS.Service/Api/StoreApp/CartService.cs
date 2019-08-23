@@ -45,22 +45,25 @@ namespace LocalS.Service.Api.StoreApp
             }
 
             //分类块，自取或快递 各构建
-            var receptionModes = (from c in clientCarts select c.ReceptionMode ).Distinct().ToList();
+            var receptionModes = (from c in clientCarts select c.ReceptionMode).Distinct().ToList();
 
             foreach (var receptionMode in receptionModes)
             {
-               
+
                 var carBlock = new CartBlockModel();
                 carBlock.ReceptionMode = receptionMode;
                 carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
 
                 switch (receptionMode)
                 {
-                    case E_ReceptionMode.Machine:
-                        carBlock.TagName = "自提商品";
-                        break;
                     case E_ReceptionMode.Express:
-                        carBlock.TagName = "快递商品";
+                        carBlock.TagName = "快递外送";
+                        break;
+                    case E_ReceptionMode.SelfTake:
+                        carBlock.TagName = "店内自取";
+                        break;
+                    case E_ReceptionMode.Machine:
+                        carBlock.TagName = "机器自提";
                         break;
                 }
 
@@ -83,6 +86,11 @@ namespace LocalS.Service.Api.StoreApp
         public CustomJsonResult Operate(string operater, string clientUserId, RopCartOperate rop)
         {
             var result = new CustomJsonResult();
+
+            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
+            }
 
             lock (lock_Operate)
             {
