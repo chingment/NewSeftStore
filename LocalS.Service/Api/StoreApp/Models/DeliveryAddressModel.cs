@@ -22,5 +22,7 @@ namespace LocalS.Service.Api.StoreApp
         public bool CanSelectElse { get; set; }
 
         public bool IsDefault { get; set; }
+
+        public string DefaultText { get; set; }
     }
 }

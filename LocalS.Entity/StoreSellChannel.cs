@@ -9,7 +9,8 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Express = 1,
-        Machine = 2
+        SelfTake = 2,
+        Machine = 3
     }
 
     [Table("StoreSellChannel")]

@@ -13,6 +13,7 @@ namespace LocalS.Service.Api.StoreApp
         public List<ProductSku> ProductSkus { get; set; }
 
         public E_OrderSource Source { get; set; }
+
         public class ProductSku
         {
             public string Id { get; set; }

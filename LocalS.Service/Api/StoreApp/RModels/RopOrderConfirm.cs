@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string OrderId { get; set; }
         public string StoreId { get; set; }
-        public List<OrderConfirmSkuModel> Skus { get; set; }
+        public List<OrderConfirmProductSkuModel> ProductSkus { get; set; }
         public List<string> CouponId { get; set; }
 
         public E_AppCaller Caller { get; set; }

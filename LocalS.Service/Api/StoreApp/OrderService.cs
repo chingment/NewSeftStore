@@ -21,6 +21,11 @@ namespace LocalS.Service.Api.StoreApp
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
+            }
+
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
@@ -54,9 +59,16 @@ namespace LocalS.Service.Api.StoreApp
         public CustomJsonResult Confrim(string operater, string clientUserId, RopOrderConfirm rop)
         {
             var result = new CustomJsonResult();
+
+
+            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
+            }
+
             var ret = new RetOrderConfirm();
             var subtotalItem = new List<OrderConfirmSubtotalItemModel>();
-            var skus = new List<OrderConfirmSkuModel>();
+            var skus = new List<OrderConfirmProductSkuModel>();
 
             decimal skuAmountByActual = 0;//实际总价
             decimal skuAmountByOriginal = 0;//原总价
@@ -68,18 +80,17 @@ namespace LocalS.Service.Api.StoreApp
             {
                 store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
 
-                if (rop.Skus != null)
+                foreach (var item in rop.ProductSkus)
                 {
-                    foreach (var item in rop.Skus)
+                    var storeSellChannelStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.ProductSkuId == item.Id).FirstOrDefault();
+
+                    if (storeSellChannelStock != null)
                     {
                         var productSkuByCache = CacheServiceFactory.ProductSku.GetModelById(item.Id);
-
-                        var storeSellChannelStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.ProductSkuId == item.Id).FirstOrDefault();
-
                         if (productSkuByCache != null)
                         {
-                            item.MainImgUrl = productSkuByCache.MainImgUrl;
                             item.Name = productSkuByCache.Name;
+                            item.MainImgUrl = productSkuByCache.MainImgUrl;
                             item.SalePrice = storeSellChannelStock.SalePrice;
 
                             skuAmountByOriginal += (storeSellChannelStock.SalePrice * item.Quantity);
@@ -87,8 +98,17 @@ namespace LocalS.Service.Api.StoreApp
                             skuAmountByVip += (storeSellChannelStock.SalePriceByVip * item.Quantity);
                             skus.Add(item);
                         }
+                        else
+                        {
+                            LogUtil.Info("商品Id ：" + item.Id + ",信息为空");
+                        }
+                    }
+                    else
+                    {
+                        LogUtil.Info("商品Id：" + item.Id + ",库存为空");
                     }
                 }
+
             }
             else
             {
@@ -113,7 +133,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in orderDetailsChilds)
                 {
-                    var orderConfirmSkuModel = new OrderConfirmSkuModel();
+                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
                     orderConfirmSkuModel.Id = item.ProductSkuId;
                     orderConfirmSkuModel.MainImgUrl = item.ProductSkuImgUrl;
                     orderConfirmSkuModel.Name = item.ProductSkuName;
@@ -151,44 +171,82 @@ namespace LocalS.Service.Api.StoreApp
 
             var orderBlock = new List<OrderBlockModel>();
 
-            var skus_SelfExpress = skus.Where(m => m.ReceptionMode == E_ReceptionMode.Express).ToList();
-            if (skus_SelfExpress.Count > 0)
+            var skus_Express = skus.Where(m => m.ReceptionMode == E_ReceptionMode.Express).ToList();
+            if (skus_Express.Count > 0)
             {
                 var orderBlock_Express = new OrderBlockModel();
                 orderBlock_Express.TagName = "快递商品";
-                orderBlock_Express.Skus = skus_SelfExpress;
+                orderBlock_Express.Skus = skus_Express;
+                orderBlock_Express.ReceptionMode = E_ReceptionMode.Express;
                 var shippingAddressModel = new DeliveryAddressModel();
+                shippingAddressModel.CanSelectElse = true;
                 var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
-                if (shippingAddress != null)
+                if (shippingAddress == null)
+                {
+                    shippingAddress = new ClientDeliveryAddress();
+                    shippingAddressModel.Id = "";
+                    shippingAddressModel.Consignee = "快寄地址";
+                    shippingAddressModel.PhoneNumber = "选择";
+                    shippingAddressModel.AreaName = "";
+                    shippingAddressModel.Address = "";
+                    shippingAddressModel.IsDefault = false;
+                    shippingAddressModel.DefaultText = "";
+                }
+                else
                 {
                     shippingAddressModel.Id = shippingAddress.Id;
                     shippingAddressModel.Consignee = shippingAddress.Consignee;
                     shippingAddressModel.PhoneNumber = shippingAddress.PhoneNumber;
                     shippingAddressModel.AreaName = shippingAddress.AreaName;
                     shippingAddressModel.Address = shippingAddress.Address;
-                    shippingAddressModel.CanSelectElse = true;
+                    shippingAddressModel.IsDefault = shippingAddress.IsDefault;
+                    shippingAddressModel.DefaultText = shippingAddress.IsDefault == true ? "默认" : "";
                 }
                 orderBlock_Express.DeliveryAddress = shippingAddressModel;
                 orderBlock.Add(orderBlock_Express);
             }
 
-            var skus_SelfPick = skus.Where(m => m.ReceptionMode == E_ReceptionMode.Machine).ToList();
-            if (skus_SelfPick.Count > 0)
+            var skus_SelfTake = skus.Where(m => m.ReceptionMode == E_ReceptionMode.SelfTake).ToList();
+            if (skus_SelfTake.Count > 0)
             {
-                var orderBlock_SelfPick = new OrderBlockModel();
-                orderBlock_SelfPick.TagName = "自提商品";
-                orderBlock_SelfPick.Skus = skus_SelfPick;
-                var shippingAddressModel2 = new DeliveryAddressModel();
-                shippingAddressModel2.Id = null;
-                shippingAddressModel2.Consignee = "店铺名称";
-                shippingAddressModel2.PhoneNumber = store.Name;
-                shippingAddressModel2.AreaName = "";
-                shippingAddressModel2.Address = store.Address;
-                shippingAddressModel2.CanSelectElse = false;
+                var orderBlock_SelfTake = new OrderBlockModel();
+                orderBlock_SelfTake.TagName = "店内自取";
+                orderBlock_SelfTake.Skus = skus_SelfTake;
+                orderBlock_SelfTake.ReceptionMode = E_ReceptionMode.SelfTake;
+                var shippingAddressModel = new DeliveryAddressModel();
+                shippingAddressModel.Id = null;
+                shippingAddressModel.Consignee = "店铺名称";
+                shippingAddressModel.IsDefault = true;
+                shippingAddressModel.DefaultText = "店内自取";
+                shippingAddressModel.PhoneNumber = store.Name;
+                shippingAddressModel.AreaName = "";
+                shippingAddressModel.Address = store.Address;
+                shippingAddressModel.CanSelectElse = false;
 
-                orderBlock_SelfPick.DeliveryAddress = shippingAddressModel2;
+                orderBlock_SelfTake.DeliveryAddress = shippingAddressModel;
+                orderBlock.Add(orderBlock_SelfTake);
+            }
 
-                orderBlock.Add(orderBlock_SelfPick);
+            var skus_Machine = skus.Where(m => m.ReceptionMode == E_ReceptionMode.Machine).ToList();
+            if (skus_Machine.Count > 0)
+            {
+                var orderBlock_Machine = new OrderBlockModel();
+                orderBlock_Machine.TagName = "自提商品";
+                orderBlock_Machine.Skus = skus_Machine;
+                orderBlock_Machine.ReceptionMode = E_ReceptionMode.Machine;
+                var shippingAddressModel = new DeliveryAddressModel();
+                shippingAddressModel.Id = null;
+                shippingAddressModel.Consignee = "店铺名称";
+                shippingAddressModel.IsDefault = true;
+                shippingAddressModel.DefaultText = "机器自取";
+                shippingAddressModel.PhoneNumber = store.Name;
+                shippingAddressModel.AreaName = "";
+                shippingAddressModel.Address = store.Address;
+                shippingAddressModel.CanSelectElse = false;
+
+                orderBlock_Machine.DeliveryAddress = shippingAddressModel;
+
+                orderBlock.Add(orderBlock_Machine);
             }
 
             ret.Block = orderBlock;
@@ -262,7 +320,8 @@ namespace LocalS.Service.Api.StoreApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult  List(string operater, string clientUserId, RupOrderList rup)
+
+        public CustomJsonResult List(string operater, string clientUserId, RupOrderList rup)
         {
             var result = new CustomJsonResult();
 

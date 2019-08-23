@@ -196,7 +196,7 @@
     <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmCouponModel.cs" />
-    <Compile Include="Api\StoreApp\Models\OrderConfirmSkuModel.cs" />
+    <Compile Include="Api\StoreApp\Models\OrderConfirmProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmSubtotalItemModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />

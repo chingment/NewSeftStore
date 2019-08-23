@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,10 @@ namespace LocalS.BLL.Biz
                         {
                             sellQuantity = skusByStock.Where(m => m.ProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Express).Sum(m => m.SellQuantity);
                         }
+                        else if (sku.ReceptionMode == E_ReceptionMode.SelfTake)
+                        {
+                            sellQuantity = skusByStock.Where(m => m.ProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
+                        }
                     }
 
                     var hasOffSell = skusByStock.Where(m => m.ProductSkuId == sku.Id).Where(m => m.IsOffSell == true).FirstOrDefault();
@@ -100,7 +105,7 @@ namespace LocalS.BLL.Biz
 
                 var order = new Order();
                 order.Id = GuidUtil.New();
-                //order.Sn = SnUtil.Build(Enumeration.BizSnType.Order, store.MerchId);
+                order.Sn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);
                 order.MerchId = store.MerchId;
                 order.StoreId = rop.StoreId;
                 order.StoreName = store.Name;
@@ -158,12 +163,33 @@ namespace LocalS.BLL.Biz
                     orderDetails.SellChannelRefId = detail.SellChannelRefId;
                     switch (detail.SellChannelRefType)
                     {
-                        case E_StoreSellChannelRefType.Machine:
-                            //var machine = CurrentDb.Machine.Where(m => m.Id == detail.ChannelId).FirstOrDefault();
-                            //orderDetails.ChannelName = "【自提】 " + machine.Name;//todo 若 ChannelType 为1 则机器昵称，2为自取
-                            break;
                         case E_StoreSellChannelRefType.Express:
                             orderDetails.SellChannelRefName = "【快递】";
+                            orderDetails.Receiver = rop.Receiver;
+                            orderDetails.ReceiverPhone = rop.ReceiverPhone;
+                            orderDetails.ReceptionAddress = rop.ReceptionAddress;
+                            orderDetails.SellChannelRefType = E_StoreSellChannelRefType.Express;
+                            orderDetails.SellChannelRefId = GuidUtil.Empty();
+                            break;
+                        case E_StoreSellChannelRefType.SelfTake:
+                            orderDetails.SellChannelRefName = "【店内自取】";
+                            orderDetails.Receiver = rop.Receiver;
+                            orderDetails.ReceiverPhone = rop.ReceiverPhone;
+                            orderDetails.ReceptionAddress = rop.ReceptionAddress;
+                            orderDetails.SellChannelRefType = E_StoreSellChannelRefType.SelfTake;
+                            orderDetails.SellChannelRefId = GuidUtil.Empty();
+                            break;
+                        case E_StoreSellChannelRefType.Machine:
+                            var machine = CurrentDb.Machine.Where(m => m.Id == detail.SellChannelRefId).FirstOrDefault();
+
+                            orderDetails.SellChannelRefName = "【机器自提】 " + machine.Name;//todo 若 ChannelType 为1 则机器昵称，2为自取
+                            orderDetails.SellChannelRefType = E_StoreSellChannelRefType.Machine;
+                            orderDetails.SellChannelRefId = detail.SellChannelRefId;
+                            orderDetails.Receiver = null;
+                            orderDetails.ReceiverPhone = null;
+                            orderDetails.ReceptionAddress = store.Address;
+
+
                             break;
                     }
                     orderDetails.OrderId = order.Id;
@@ -176,24 +202,7 @@ namespace LocalS.BLL.Biz
                     orderDetails.Creator = operater;
                     orderDetails.CreateTime = DateTime.Now;
 
-                    //detail.MachineId为空 则为快递商品
-                    if (detail.SellChannelRefId == GuidUtil.Empty())
-                    {
-                        orderDetails.Receiver = rop.Receiver;
-                        orderDetails.ReceiverPhone = rop.ReceiverPhone;
-                        orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                        orderDetails.SellChannelRefType = E_StoreSellChannelRefType.Express;
-                        orderDetails.SellChannelRefId = GuidUtil.Empty();
-                    }
-                    else
-                    {
-                        orderDetails.Receiver = null;
-                        orderDetails.ReceiverPhone = null;
-                        orderDetails.ReceptionAddress = store.Address;
-                        orderDetails.SellChannelRefType = E_StoreSellChannelRefType.Machine;
-                        orderDetails.SellChannelRefId = detail.SellChannelRefId;
-                    }
-
+  
                     CurrentDb.OrderDetails.Add(orderDetails);
 
                     foreach (var detailsChild in detail.Details)
@@ -280,10 +289,10 @@ namespace LocalS.BLL.Biz
                             storeSellStockLog.RefId = slotStock.SellChannelRefId;
                             storeSellStockLog.SlotId = slotStock.SlotId;
                             storeSellStockLog.ProductSkuId = slotStock.SkuId;
-                           // storeSellStockLog.Quantity = machineStock.Quantity;
+                            storeSellStockLog.SumQuantity = machineStock.SumQuantity;
                             storeSellStockLog.LockQuantity = machineStock.LockQuantity;
                             storeSellStockLog.SellQuantity = machineStock.SellQuantity;
-                            //  storeSellStockLog.ChangeType = Enumeration.MachineStockLogChangeTpye.Lock;
+                            storeSellStockLog.ChangeType = E_StoreSellChannelStockLogChangeTpye.Lock;
                             storeSellStockLog.ChangeQuantity = slotStock.Quantity;
                             storeSellStockLog.Creator = operater;
                             storeSellStockLog.CreateTime = DateTime.Now;
@@ -324,7 +333,21 @@ namespace LocalS.BLL.Biz
 
                 foreach (var reserveDetail in l_reserveDetails)
                 {
-                    E_StoreSellChannelRefType channelType = receptionMode == E_ReceptionMode.Express ? E_StoreSellChannelRefType.Express : E_StoreSellChannelRefType.Machine;
+                    E_StoreSellChannelRefType channelType = E_StoreSellChannelRefType.Unknow;
+                    switch (receptionMode)
+                    {
+                        case E_ReceptionMode.Express:
+                            channelType = E_StoreSellChannelRefType.Express;
+                            break;
+                        case E_ReceptionMode.SelfTake:
+                            channelType = E_StoreSellChannelRefType.SelfTake;
+                            break;
+                        case E_ReceptionMode.Machine:
+                            channelType = E_StoreSellChannelRefType.Machine;
+                            break;
+
+                    }
+
                     var l_storeSellStocks = storeSellStocks.Where(m => m.ProductSkuId == reserveDetail.Id && m.RefType == channelType).ToList();
 
                     foreach (var item in l_storeSellStocks)
@@ -349,7 +372,7 @@ namespace LocalS.BLL.Biz
                                 detailChildSon.SlotId = item.SlotId;
                                 detailChildSon.Quantity = 1;
                                 detailChildSon.SalePrice = item.SalePrice;
-                               // detailChildSon.SalePriceByVip = item.SalePriceByVip;
+                                detailChildSon.SalePriceByVip = item.SalePriceByVip;
                                 detailChildSon.OriginalAmount = detailChildSon.Quantity * item.SalePrice;
                                 detailChildSons.Add(detailChildSon);
                             }
@@ -698,7 +721,7 @@ namespace LocalS.BLL.Biz
                         item.Mender = GuidUtil.Empty();
                         //item.MendTime = this.DateTime;
 
-                        var machineStock = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == order.MerchId && m.StoreId == order.StoreId && m.ProductSkuId == item.ProductSkuId && m.SlotId == item.SlotId && m.RefId == item.SellChannelRefId && m.RefType ==  item.SellChannelRefType).FirstOrDefault();
+                        var machineStock = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == order.MerchId && m.StoreId == order.StoreId && m.ProductSkuId == item.ProductSkuId && m.SlotId == item.SlotId && m.RefId == item.SellChannelRefId && m.RefType == item.SellChannelRefType).FirstOrDefault();
 
                         machineStock.LockQuantity -= item.Quantity;
                         machineStock.SellQuantity += item.Quantity;
