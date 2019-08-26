@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopProductSubjectEdit
+    public class RetPrdKindInitEdit
     {
+
+        public string PId { get; set; }
+        public string PName { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         public string IconImgUrl { get; set; }

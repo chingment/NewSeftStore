@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetProductSkuInitAdd
+    public class RetPrdProductInitAdd
     {
-        public RetProductSkuInitAdd()
+        public RetPrdProductInitAdd()
         {
             this.Kinds = new List<TreeNode>();
             this.Subjects = new List<TreeNode>();

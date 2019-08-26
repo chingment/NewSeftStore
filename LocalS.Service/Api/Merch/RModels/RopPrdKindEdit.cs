@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopProductKindAdd
+    public class RopPrdKindEdit
     {
-        public string PId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string IconImgUrl { get; set; }
         public string MainImgUrl { get; set; }

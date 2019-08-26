@@ -11,9 +11,9 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-   public class ProductSubjectService : BaseDbContext
+   public class PrdSubjectService : BaseDbContext
     {
-        private List<TreeNode> GetTree(string id, List<ProductSubject> productSubjects)
+        private List<TreeNode> GetTree(string id, List<PrdSubject> productSubjects)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
@@ -60,15 +60,15 @@ namespace LocalS.Service.Api.Merch
             return treeNodes;
         }
 
-        public CustomJsonResult GetList(string operater, string merchId, RupProductSubjectGetList rup)
+        public CustomJsonResult GetList(string operater, string merchId, RupPrdSubjectGetList rup)
         {
             var result = new CustomJsonResult();
 
-            var productSubjects = CurrentDb.ProductSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
+            var prdSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
 
-            var topProductSubject = productSubjects.Where(m => m.Depth == 0).FirstOrDefault();
+            var topPrdSubject = prdSubjects.Where(m => m.Depth == 0).FirstOrDefault();
 
-            var tree = GetTree(topProductSubject.PId, productSubjects);
+            var tree = GetTree(topPrdSubject.PId, prdSubjects);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", tree);
 
@@ -80,14 +80,14 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetProductSubjectInitAdd();
+            var ret = new RetPrdSubjectInitAdd();
 
-            var productSubject = CurrentDb.ProductSubject.Where(m => m.Id == pSubjectId).FirstOrDefault();
+            var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == pSubjectId).FirstOrDefault();
 
-            if (productSubject != null)
+            if (prdSubject != null)
             {
-                ret.PId = productSubject.Id;
-                ret.PName = productSubject.Name;
+                ret.PId = prdSubject.Id;
+                ret.PName = prdSubject.Name;
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
@@ -95,36 +95,36 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Add(string operater, string merchId, RopProductSubjectAdd rop)
+        public CustomJsonResult Add(string operater, string merchId, RopPrdSubjectAdd rop)
         {
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var isExists = CurrentDb.ProductSubject.Where(m => m.Name == rop.Name).FirstOrDefault();
+                var isExists = CurrentDb.PrdSubject.Where(m => m.Name == rop.Name).FirstOrDefault();
                 if (isExists != null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
                 }
 
-                var pProductSubject = CurrentDb.ProductSubject.Where(m => m.Id == rop.PId).FirstOrDefault();
-                if (pProductSubject == null)
+                var pPrdSubject = CurrentDb.PrdSubject.Where(m => m.Id == rop.PId).FirstOrDefault();
+                if (pPrdSubject == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
                 }
 
-                var productSubject = new ProductSubject();
-                productSubject.Id = GuidUtil.New();
-                productSubject.PId = rop.PId;
-                productSubject.Name = rop.Name;
-                productSubject.IconImgUrl = rop.IconImgUrl;
-                productSubject.MainImgUrl = rop.MainImgUrl;
-                productSubject.MerchId = merchId;
-                productSubject.Description = rop.Description;
-                productSubject.Depth = pProductSubject.Depth + 1;
-                productSubject.CreateTime = DateTime.Now;
-                productSubject.Creator = operater;
-                CurrentDb.ProductSubject.Add(productSubject);
+                var prdSubject = new PrdSubject();
+                prdSubject.Id = GuidUtil.New();
+                prdSubject.PId = rop.PId;
+                prdSubject.Name = rop.Name;
+                prdSubject.IconImgUrl = rop.IconImgUrl;
+                prdSubject.MainImgUrl = rop.MainImgUrl;
+                prdSubject.MerchId = merchId;
+                prdSubject.Description = rop.Description;
+                prdSubject.Depth = pPrdSubject.Depth + 1;
+                prdSubject.CreateTime = DateTime.Now;
+                prdSubject.Creator = operater;
+                CurrentDb.PrdSubject.Add(prdSubject);
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -142,24 +142,24 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetProductSubjectInitEdit();
 
-            var productSubject = CurrentDb.ProductSubject.Where(m => m.Id == orgId).FirstOrDefault();
+            var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == orgId).FirstOrDefault();
 
-            if (productSubject != null)
+            if (prdSubject != null)
             {
-                ret.Id = productSubject.Id;
-                ret.Name = productSubject.Name;
-                ret.IconImgUrl = productSubject.IconImgUrl;
-                ret.MainImgUrl = productSubject.MainImgUrl;
+                ret.Id = prdSubject.Id;
+                ret.Name = prdSubject.Name;
+                ret.IconImgUrl = prdSubject.IconImgUrl;
+                ret.MainImgUrl = prdSubject.MainImgUrl;
 
 
-                ret.Description = productSubject.Description;
+                ret.Description = prdSubject.Description;
 
-                var p_ProductSubject = CurrentDb.ProductSubject.Where(m => m.Id == productSubject.PId).FirstOrDefault();
+                var p_PrdSubject = CurrentDb.PrdSubject.Where(m => m.Id == prdSubject.PId).FirstOrDefault();
 
-                if (p_ProductSubject != null)
+                if (p_PrdSubject != null)
                 {
-                    ret.PId = p_ProductSubject.Id;
-                    ret.PName = p_ProductSubject.Name;
+                    ret.PId = p_PrdSubject.Id;
+                    ret.PName = p_PrdSubject.Name;
                 }
                 else
                 {
@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopProductSubjectEdit rop)
+        public CustomJsonResult Edit(string operater, string merchId, RopPrdSubjectEdit rop)
         {
 
             CustomJsonResult result = new CustomJsonResult();
@@ -182,17 +182,17 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var productSubject = CurrentDb.ProductSubject.Where(m => m.Id == rop.Id).FirstOrDefault();
-                if (productSubject == null)
+                var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == rop.Id).FirstOrDefault();
+                if (prdSubject == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
                 }
-                productSubject.Name = rop.Name;
-                productSubject.IconImgUrl = rop.IconImgUrl;
-                productSubject.MainImgUrl = rop.MainImgUrl;
-                productSubject.Description = rop.Description;
-                productSubject.MendTime = DateTime.Now;
-                productSubject.Mender = operater;
+                prdSubject.Name = rop.Name;
+                prdSubject.IconImgUrl = rop.IconImgUrl;
+                prdSubject.MainImgUrl = rop.MainImgUrl;
+                prdSubject.Description = rop.Description;
+                prdSubject.MendTime = DateTime.Now;
+                prdSubject.Mender = operater;
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -204,14 +204,14 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult Sort(string operater, string merchId, RopProductSubjectSort rop)
+        public CustomJsonResult Sort(string operater, string merchId, RopPrdSubjectSort rop)
         {
 
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var productSubjects = CurrentDb.ProductSubject.Where(m => rop.Ids.Contains(m.Id)).ToList();
+                var productSubjects = CurrentDb.PrdSubject.Where(m => rop.Ids.Contains(m.Id)).ToList();
 
                 for (int i = 0; i < productSubjects.Count; i++)
                 {

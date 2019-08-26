@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopProductSubjectSort
+    public class RopPrdKindSort
     {
         public List<string> Ids { get; set; }
     }

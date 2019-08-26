@@ -12,12 +12,12 @@ namespace WebApiMerch.Controllers
         public OwnApiHttpResponse Test()
         {
 
-            RopProductSkuAdd rop  = new RopProductSkuAdd();
+            RopPrdProductAdd rop  = new RopPrdProductAdd();
             rop.Name = "dasddd";
             rop.DetailsDes = "Das";
             rop.BarCode = "Dadsad";
             
-            MerchServiceFactory.ProductSku.Add("das", "2", rop);
+            MerchServiceFactory.PrdProduct.Add("das", "2", rop);
             IResult result = new CustomJsonResult { Result = ResultType.Success, Code = ResultCode.Success, Data = { } };
 
             return new OwnApiHttpResponse(result);

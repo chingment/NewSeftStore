@@ -8,11 +8,11 @@ namespace LocalS.BLL
 {
     public static class CacheServiceFactory
     {
-        public static ProductSkuCacheService ProductSku
+        public static PrdProductCacheService PrdProduct
         {
             get
             {
-                return new ProductSkuCacheService();
+                return new PrdProductCacheService();
             }
         }
     }

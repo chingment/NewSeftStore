@@ -86,7 +86,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     if (storeSellChannelStock != null)
                     {
-                        var productSkuByCache = CacheServiceFactory.ProductSku.GetModelById(item.Id);
+                        var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(item.Id);
                         if (productSkuByCache != null)
                         {
                             item.Name = productSkuByCache.Name;

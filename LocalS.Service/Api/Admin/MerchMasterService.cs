@@ -205,30 +205,30 @@ namespace LocalS.Service.Api.Admin
 
 
 
-                var productKind = new ProductKind();
-                productKind.Id = GuidUtil.New();
-                productKind.MerchId = merchId;
-                productKind.Name = "我的品类";
-                productKind.PId = GuidUtil.Empty();
-                productKind.Depth = 0;
-                productKind.Priority = 0;
-                productKind.IsDelete = false;
-                productKind.CreateTime = DateTime.Now;
-                productKind.Creator = operater;
-                CurrentDb.ProductKind.Add(productKind);
+                var prdKind = new PrdKind();
+                prdKind.Id = GuidUtil.New();
+                prdKind.MerchId = merchId;
+                prdKind.Name = "我的品类";
+                prdKind.PId = GuidUtil.Empty();
+                prdKind.Depth = 0;
+                prdKind.Priority = 0;
+                prdKind.IsDelete = false;
+                prdKind.CreateTime = DateTime.Now;
+                prdKind.Creator = operater;
+                CurrentDb.PrdKind.Add(prdKind);
 
 
-                var productSubject = new ProductSubject();
-                productSubject.Id = GuidUtil.New();
-                productSubject.PId = GuidUtil.Empty();
-                productSubject.MerchId = merchId;
-                productSubject.Name = "我的栏目";
+                var prdSubject = new PrdSubject();
+                prdSubject.Id = GuidUtil.New();
+                prdSubject.PId = GuidUtil.Empty();
+                prdSubject.MerchId = merchId;
+                prdSubject.Name = "我的栏目";
 
-                productSubject.Priority = 0;
-                productSubject.IsDelete = false;
-                productSubject.CreateTime = DateTime.Now;
-                productSubject.Creator = operater;
-                CurrentDb.ProductSubject.Add(productSubject);
+                prdSubject.Priority = 0;
+                prdSubject.IsDelete = false;
+                prdSubject.CreateTime = DateTime.Now;
+                prdSubject.Creator = operater;
+                CurrentDb.PrdSubject.Add(prdSubject);
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

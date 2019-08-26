@@ -4,14 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("ProductSkuKind")]
-    public class ProductSkuKind
+    [Table("ProductSkuSubject")]
+    public class PrdProductSubject
     {
         [Key]
         public string Id { get; set; }
-
-        public string ProductKindId { get; set; }
-        public string ProductSkuId { get; set; }
+        public string PrdSubjectId { get; set; }
+        public string PrdProductId { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

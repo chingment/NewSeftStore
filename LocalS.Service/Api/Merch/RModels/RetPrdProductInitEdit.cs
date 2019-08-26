@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.Service.UI;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopProductSkuAdd
+    public class RetPrdProductInitEdit
     {
+        public RetPrdProductInitEdit()
+        {
+            this.Kinds = new List<TreeNode>();
+            this.Subjects = new List<TreeNode>();
+        }
+
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public string BarCode { get; set; }
@@ -33,5 +42,8 @@ namespace LocalS.Service.Api.Merch
         {
             get; set;
         }
+
+        public List<TreeNode> Kinds { get; set; }
+        public List<TreeNode> Subjects { get; set; }
     }
 }

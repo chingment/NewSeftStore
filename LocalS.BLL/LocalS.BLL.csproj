@@ -64,8 +64,8 @@
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
     <Compile Include="Cache\CacheServiceFactory.cs" />
-    <Compile Include="Cache\Model\ProductSkuModel.cs" />
-    <Compile Include="Cache\ProductSkuCacheService.cs" />
+    <Compile Include="Cache\Model\PrdProductModel.cs" />
+    <Compile Include="Cache\PrdProductCacheService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />

@@ -11,9 +11,9 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class ProductKindService : BaseDbContext
+    public class PrdKindService : BaseDbContext
     {
-        private List<TreeNode> GetTree(string id, List<ProductKind> productKinds)
+        private List<TreeNode> GetTree(string id, List<PrdKind> productKinds)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
@@ -60,15 +60,15 @@ namespace LocalS.Service.Api.Merch
             return treeNodes;
         }
 
-        public CustomJsonResult GetList(string operater, string merchId, RupProductKindGetList rup)
+        public CustomJsonResult GetList(string operater, string merchId, RupPrdKindGetList rup)
         {
             var result = new CustomJsonResult();
 
-            var productKinds = CurrentDb.ProductKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
+            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
 
-            var topProductKind = productKinds.Where(m => m.Depth == 0).FirstOrDefault();
+            var toPrdKind = prdKinds.Where(m => m.Depth == 0).FirstOrDefault();
 
-            var tree = GetTree(topProductKind.PId, productKinds);
+            var tree = GetTree(toPrdKind.PId, prdKinds);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", tree);
 
@@ -80,14 +80,14 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetProductKindInitAdd();
+            var ret = new RetPrdKindInitAdd();
 
-            var productKind = CurrentDb.ProductKind.Where(m => m.Id == pKindId).FirstOrDefault();
+            var prdKind = CurrentDb.PrdKind.Where(m => m.Id == pKindId).FirstOrDefault();
 
-            if (productKind != null)
+            if (prdKind != null)
             {
-                ret.PId = productKind.Id;
-                ret.PName = productKind.Name;
+                ret.PId = prdKind.Id;
+                ret.PName = prdKind.Name;
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
@@ -95,25 +95,25 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Add(string operater, string merchId, RopProductKindAdd rop)
+        public CustomJsonResult Add(string operater, string merchId, RopPrdKindAdd rop)
         {
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var isExists = CurrentDb.ProductKind.Where(m => m.Name == rop.Name).FirstOrDefault();
+                var isExists = CurrentDb.PrdKind.Where(m => m.Name == rop.Name).FirstOrDefault();
                 if (isExists != null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
                 }
 
-                var pProductKind = CurrentDb.ProductKind.Where(m => m.Id == rop.PId).FirstOrDefault();
-                if (pProductKind == null)
+                var pPrdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.PId).FirstOrDefault();
+                if (pPrdKind == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
                 }
 
-                var productKind = new ProductKind();
+                var productKind = new PrdKind();
                 productKind.Id = GuidUtil.New();
                 productKind.PId = rop.PId;
                 productKind.Name = rop.Name;
@@ -121,10 +121,10 @@ namespace LocalS.Service.Api.Merch
                 productKind.MainImgUrl = rop.MainImgUrl;
                 productKind.MerchId = merchId;
                 productKind.Description = rop.Description;
-                productKind.Depth = pProductKind.Depth + 1;
+                productKind.Depth = pPrdKind.Depth + 1;
                 productKind.CreateTime = DateTime.Now;
                 productKind.Creator = operater;
-                CurrentDb.ProductKind.Add(productKind);
+                CurrentDb.PrdKind.Add(productKind);
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -140,21 +140,21 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetProductKindInitEdit();
+            var ret = new RetPrdKindInitEdit();
 
-            var productKind = CurrentDb.ProductKind.Where(m => m.Id == orgId).FirstOrDefault();
+            var prdKind = CurrentDb.PrdKind.Where(m => m.Id == orgId).FirstOrDefault();
 
-            if (productKind != null)
+            if (prdKind != null)
             {
-                ret.Id = productKind.Id;
-                ret.Name = productKind.Name;
-                ret.IconImgUrl = productKind.IconImgUrl;
-                ret.MainImgUrl = productKind.MainImgUrl;
+                ret.Id = prdKind.Id;
+                ret.Name = prdKind.Name;
+                ret.IconImgUrl = prdKind.IconImgUrl;
+                ret.MainImgUrl = prdKind.MainImgUrl;
 
  
-                ret.Description = productKind.Description;
+                ret.Description = prdKind.Description;
 
-                var p_ProductKind = CurrentDb.ProductKind.Where(m => m.Id == productKind.PId).FirstOrDefault();
+                var p_ProductKind = CurrentDb.PrdKind.Where(m => m.Id == prdKind.PId).FirstOrDefault();
 
                 if (p_ProductKind != null)
                 {
@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopProductKindEdit rop)
+        public CustomJsonResult Edit(string operater, string merchId, RopPrdKindEdit rop)
         {
 
             CustomJsonResult result = new CustomJsonResult();
@@ -182,17 +182,17 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var productKind = CurrentDb.ProductKind.Where(m => m.Id == rop.Id).FirstOrDefault();
-                if (productKind == null)
+                var prdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.Id).FirstOrDefault();
+                if (prdKind == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
                 }
-                productKind.Name = rop.Name;
-                productKind.IconImgUrl = rop.IconImgUrl;
-                productKind.MainImgUrl = rop.MainImgUrl;
-                productKind.Description = rop.Description;
-                productKind.MendTime = DateTime.Now;
-                productKind.Mender = operater;
+                prdKind.Name = rop.Name;
+                prdKind.IconImgUrl = rop.IconImgUrl;
+                prdKind.MainImgUrl = rop.MainImgUrl;
+                prdKind.Description = rop.Description;
+                prdKind.MendTime = DateTime.Now;
+                prdKind.Mender = operater;
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -204,19 +204,19 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult Sort(string operater, string merchId, RopProductKindSort rop)
+        public CustomJsonResult Sort(string operater, string merchId, RopPrdKindSort rop)
         {
 
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var productKinds = CurrentDb.ProductKind.Where(m => rop.Ids.Contains(m.Id)).ToList();
+                var prdKinds = CurrentDb.PrdKind.Where(m => rop.Ids.Contains(m.Id)).ToList();
 
-                for (int i = 0; i < productKinds.Count; i++)
+                for (int i = 0; i < prdKinds.Count; i++)
                 {
-                    int priority = rop.Ids.IndexOf(productKinds[i].Id);
-                    productKinds[i].Priority = priority;
+                    int priority = rop.Ids.IndexOf(prdKinds[i].Id);
+                    prdKinds[i].Priority = priority;
                 }
 
                 CurrentDb.SaveChanges();

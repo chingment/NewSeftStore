@@ -22,7 +22,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
-            var productKinds = CurrentDb.ProductKind.Where(m => m.MerchId == store.MerchId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var productKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
             var top = productKinds.Where(m => m.Depth == 0).FirstOrDefault();
             var productParentKinds = productKinds.Where(m => m.PId == top.Id).ToList();
             foreach (var item in productParentKinds)

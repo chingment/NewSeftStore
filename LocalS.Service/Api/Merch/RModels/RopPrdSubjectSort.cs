@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupProductKindGetList : RupBaseGetList
+    public class RopPrdSubjectSort
     {
-
+        public List<string> Ids { get; set; }
     }
 }

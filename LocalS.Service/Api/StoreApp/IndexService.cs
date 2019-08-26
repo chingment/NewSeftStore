@@ -50,12 +50,12 @@ namespace LocalS.Service.Api.StoreApp
 
             var pdAreaModel = new PdAreaModel();
 
-            var productSubjects = CurrentDb.ProductSubject.Where(m => m.MerchId == store.MerchId & m.IsDelete == false && m.Depth == 1).OrderBy(m => m.Priority).ToList();
+            var productSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == store.MerchId & m.IsDelete == false && m.Depth == 1).OrderBy(m => m.Priority).ToList();
 
             foreach (var productSubject in productSubjects)
             {
 
-                var query = (from o in CurrentDb.ProductSkuSubject where o.ProductSubjectId == productSubject.Id select new { o.Id, o.ProductSkuId, o.ProductSubjectId, o.CreateTime });
+                var query = (from o in CurrentDb.PrdProductSubject where o.PrdSubjectId == productSubject.Id select new { o.Id, o.PrdProductId, o.PrdSubjectId, o.CreateTime });
 
                 query = query.OrderByDescending(r => r.CreateTime).Take(6);
 
@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var i in list)
                     {
-                        var productSkuByCache = CacheServiceFactory.ProductSku.GetModelById(i.ProductSkuId);
+                        var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(i.PrdProductId);
 
                         if (productSkuByCache != null)
                         {

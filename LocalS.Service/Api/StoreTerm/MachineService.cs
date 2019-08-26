@@ -79,7 +79,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productSkuIds = machineStocks.Select(m => m.ProductSkuId).Distinct();
             foreach (var productSkuId in productSkuIds)
             {
-                var productSku = CacheServiceFactory.ProductSku.GetModelById(productSkuId);
+                var productSku = CacheServiceFactory.PrdProduct.GetModelById(productSkuId);
                 if (productSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
@@ -120,9 +120,9 @@ namespace LocalS.Service.Api.StoreTerm
 
             var productKindModels = new List<ProductKindModel>();
 
-            var productKinds = CurrentDb.ProductKind.Where(m => m.MerchId == merchId && m.IsDelete == false).ToList();
+            var productKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.IsDelete == false).ToList();
             var productSkuIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.RefId == machineId && m.RefType == E_StoreSellChannelRefType.Machine && m.IsOffSell == false).Select(m => m.ProductSkuId).ToArray();
-            var productSkus = CurrentDb.ProductSku.Where(m => productSkuIds.Contains(m.Id)).ToList();
+            var productSkus = CurrentDb.PrdProduct.Where(m => productSkuIds.Contains(m.Id)).ToList();
 
             if (productKinds.Count > 0)
             {
@@ -145,7 +145,7 @@ namespace LocalS.Service.Api.StoreTerm
                         {
                             foreach (var productChildKind in productChildKinds)
                             {
-                                var l_productSkuIds = CurrentDb.ProductSkuKind.Where(m => m.ProductKindId == productChildKind.Id).Select(m => m.ProductSkuId).ToList();
+                                var l_productSkuIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == productChildKind.Id).Select(m => m.PrdProductId).ToList();
                                 if (l_productSkuIds.Count > 0)
                                 {
                                     foreach (var l_productSkuId in l_productSkuIds)
@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var machineStocks = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
 
-            var productSkus = CurrentDb.ProductSku.Where(m => m.MerchId == merchId).ToList();
+            var productSkus = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId).ToList();
 
             foreach (var item in machineStocks)
             {

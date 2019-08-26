@@ -7,7 +7,7 @@ using Lumos;
 
 namespace LocalS.BLL
 {
-    public class ProductSkuModel
+    public class PrdProductModel
     {
         public string Id { get; set; }
         public string Name { get; set; }

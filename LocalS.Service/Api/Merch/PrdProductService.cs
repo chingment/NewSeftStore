@@ -12,16 +12,16 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class ProductSkuService : BaseDbContext
+    public class PrdProductService : BaseDbContext
     {
 
-        private List<TreeNode> GetKindTree(string id, List<ProductKind> productKinds)
+        private List<TreeNode> GetKindTree(string id, List<PrdKind> prdKinds)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
-            var p_productKinds = productKinds.Where(t => t.PId == id).ToList();
+            var p_PrdKinds = prdKinds.Where(t => t.PId == id).ToList();
 
-            foreach (var p_productKind in p_productKinds)
+            foreach (var p_productKind in p_PrdKinds)
             {
                 TreeNode treeNode = new TreeNode();
                 treeNode.Id = p_productKind.Id;
@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.Merch
                 treeNode.Label = p_productKind.Name;
                 treeNode.IsDisabled = p_productKind.Depth <= 1 ? true : false;
 
-                var children = GetKindTree(treeNode.Id, productKinds);
+                var children = GetKindTree(treeNode.Id, prdKinds);
                 if (children != null)
                 {
                     if (children.Count > 0)
@@ -47,11 +47,11 @@ namespace LocalS.Service.Api.Merch
 
         public List<TreeNode> GetKindTree(string merchId)
         {
-            var productKinds = CurrentDb.ProductKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
-            return GetKindTree(GuidUtil.Empty(), productKinds);
+            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
+            return GetKindTree(GuidUtil.Empty(), prdKinds);
         }
 
-        private List<TreeNode> GetSubjectTree(string id, List<ProductSubject> productSubjects)
+        private List<TreeNode> GetSubjectTree(string id, List<PrdSubject> productSubjects)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
@@ -76,19 +76,19 @@ namespace LocalS.Service.Api.Merch
 
         public List<TreeNode> GetSubjectTree(string merchId)
         {
-            var productSubjects = CurrentDb.ProductSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
-            return GetSubjectTree(GuidUtil.Empty(), productSubjects);
+            var prdSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
+            return GetSubjectTree(GuidUtil.Empty(), prdSubjects);
         }
 
-        public CustomJsonResult GetList(string operater, string merchId, RupProductSkuGetList rup)
+        public CustomJsonResult GetList(string operater, string merchId, RupPrdProductGetList rup)
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.ProductSku
+            var query = (from u in CurrentDb.PrdProduct
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.CreateTime, u.SalePrice, u.ShowPrice, u.DispalyImgUrls });
+                         select new { u.Id, u.Name, u.CreateTime, u.DispalyImgUrls });
 
 
             int total = query.Count();
@@ -111,8 +111,8 @@ namespace LocalS.Service.Api.Merch
                     MainImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
                     KindNames = "",
                     SubjectNames = "",
-                    SalePrice = item.SalePrice.ToF2Price(),
-                    ShowPrice = item.ShowPrice.ToF2Price(),
+                    SalePrice = 0,
+                    ShowPrice = 0,
                     CreateTime = item.CreateTime,
                 });
             }
@@ -129,7 +129,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult InitAdd(string operater, string merchId)
         {
             var result = new CustomJsonResult();
-            var ret = new RetProductSkuInitAdd();
+            var ret = new RetPrdProductInitAdd();
 
 
             ret.Kinds = GetKindTree(merchId);
@@ -140,7 +140,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Add(string operater, string merchId, RopProductSkuAdd rop)
+        public CustomJsonResult Add(string operater, string merchId, RopPrdProductAdd rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -168,58 +168,58 @@ namespace LocalS.Service.Api.Merch
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var productSku = new ProductSku();
-                productSku.Id = GuidUtil.New();
-                productSku.MerchId = merchId;
-                productSku.Name = rop.Name;
-                productSku.BarCode = rop.BarCode;
+                var prdProduct = new PrdProduct();
+                prdProduct.Id = GuidUtil.New();
+                prdProduct.MerchId = merchId;
+                prdProduct.Name = rop.Name;
+                prdProduct.BarCode = rop.BarCode;
                 Encoding gb2312 = Encoding.GetEncoding("GB2312");
-                string pinyinName = Pinyin.ConvertEncoding(productSku.Name, Encoding.UTF8, gb2312);
+                string pinyinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, gb2312);
                 string simpleCode = Pinyin.GetInitials(pinyinName, gb2312);
-                productSku.SimpleCode = simpleCode;
-                productSku.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                productSku.MainImgUrl = ImgSet.GetMain(productSku.DispalyImgUrls);
-                productSku.ShowPrice = rop.ShowPrice;
-                productSku.SalePrice = rop.SalePrice;
-                productSku.DetailsDes = rop.DetailsDes;
-                productSku.SpecDes = rop.SpecDes;
-                productSku.BriefDes = rop.BriefDes;
-                productSku.Creator = operater;
-                productSku.CreateTime = DateTime.Now;
+                prdProduct.SimpleCode = simpleCode;
+                prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                prdProduct.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
+                //prdProduct.ShowPrice = rop.ShowPrice;
+                //prdProduct.SalePrice = rop.SalePrice;
+                prdProduct.DetailsDes = rop.DetailsDes;
+                prdProduct.SpecDes = rop.SpecDes;
+                prdProduct.BriefDes = rop.BriefDes;
+                prdProduct.Creator = operater;
+                prdProduct.CreateTime = DateTime.Now;
 
                 if (rop.KindIds != null)
                 {
-                    productSku.KindIds = string.Join(",", rop.KindIds.ToArray());
+                    prdProduct.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
 
                     foreach (var kindId in rop.KindIds)
                     {
-                        var productSkuKind = new ProductSkuKind();
+                        var productSkuKind = new PrdProductKind();
                         productSkuKind.Id = GuidUtil.New();
-                        productSkuKind.ProductKindId = kindId;
-                        productSkuKind.ProductSkuId = productSku.Id;
+                        productSkuKind.PrdKindId = kindId;
+                        productSkuKind.PrdProductId = prdProduct.Id;
                         productSkuKind.Creator = operater;
                         productSkuKind.CreateTime = DateTime.Now;
-                        CurrentDb.ProductSkuKind.Add(productSkuKind);
+                        CurrentDb.PrdProductKind.Add(productSkuKind);
                     }
                 }
 
                 if (rop.SubjectIds != null)
                 {
-                    productSku.SubjectIds = string.Join(",", rop.SubjectIds.ToArray());
+                    prdProduct.PrdSubjectIds = string.Join(",", rop.SubjectIds.ToArray());
 
                     foreach (var subjectId in rop.SubjectIds)
                     {
-                        var productSkuSubject = new ProductSkuSubject();
+                        var productSkuSubject = new PrdProductSubject();
                         productSkuSubject.Id = GuidUtil.New();
-                        productSkuSubject.ProductSubjectId = subjectId;
-                        productSkuSubject.ProductSkuId = productSku.Id;
+                        productSkuSubject.PrdSubjectId = subjectId;
+                        productSkuSubject.PrdProductId = prdProduct.Id;
                         productSkuSubject.Creator = operater;
                         productSkuSubject.CreateTime = DateTime.Now;
-                        CurrentDb.ProductSkuSubject.Add(productSkuSubject);
+                        CurrentDb.PrdProductSubject.Add(productSkuSubject);
                     }
                 }
 
-                CurrentDb.ProductSku.Add(productSku);
+                CurrentDb.PrdProduct.Add(prdProduct);
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -229,21 +229,21 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult InitEdit(string operater, string merchId, string productSkuId)
+        public CustomJsonResult InitEdit(string operater, string merchId, string prdProductId)
         {
-            var ret = new RetProductSkuInitEdit();
-            var productSku = CurrentDb.ProductSku.Where(m => m.MerchId == merchId && m.Id == productSkuId).FirstOrDefault();
-            if (productSku != null)
+            var ret = new RetPrdProductInitEdit();
+            var prdProduct = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == prdProductId).FirstOrDefault();
+            if (prdProduct != null)
             {
-                ret.Id = productSku.Id;
-                ret.Name = productSku.Name;
-                ret.SalePrice = productSku.SalePrice;
-                ret.ShowPrice = productSku.ShowPrice;
-                ret.DetailsDes = productSku.DetailsDes;
-                ret.BriefDes = productSku.BriefDes;
-                ret.KindIds = CurrentDb.ProductSkuKind.Where(m => m.ProductSkuId == productSkuId).Select(m => m.ProductKindId).ToList();
-                ret.SubjectIds = CurrentDb.ProductSkuSubject.Where(m => m.ProductSkuId == productSkuId).Select(m => m.ProductSubjectId).ToList();
-                ret.DispalyImgUrls = productSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                ret.Id = prdProduct.Id;
+                ret.Name = prdProduct.Name;
+                //ret.SalePrice = prdProduct.SalePrice;
+                //ret.ShowPrice = prdProduct.ShowPrice;
+                ret.DetailsDes = prdProduct.DetailsDes;
+                ret.BriefDes = prdProduct.BriefDes;
+                ret.KindIds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdKindId).ToList();
+                ret.SubjectIds = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdSubjectId).ToList();
+                ret.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
                 ret.Kinds = GetKindTree(merchId);
                 ret.Subjects = GetSubjectTree(merchId);
             }
@@ -251,7 +251,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopProductSkuEdit rop)
+        public CustomJsonResult Edit(string operater, string merchId, RopPrdProductEdit rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -282,49 +282,49 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var productSku = CurrentDb.ProductSku.Where(m => m.Id == rop.Id).FirstOrDefault();
+                var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
 
-                productSku.Name = rop.Name;
+                prdProduct.Name = rop.Name;
 
                 Encoding gb2312 = Encoding.GetEncoding("GB2312");
-                string s = Pinyin.ConvertEncoding(productSku.Name, Encoding.UTF8, gb2312);
+                string s = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, gb2312);
                 string simpleCode = Pinyin.GetInitials(s, gb2312);
-                productSku.SimpleCode = simpleCode;
-                productSku.ShowPrice = rop.ShowPrice;
-                productSku.SalePrice = rop.SalePrice;
-                productSku.BriefDes = rop.BriefDes;
-                productSku.DetailsDes = rop.DetailsDes;
-                productSku.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                productSku.Mender = operater;
-                productSku.MendTime = DateTime.Now;
+                prdProduct.SimpleCode = simpleCode;
+                //prdProduct.ShowPrice = rop.ShowPrice;
+                //prdProduct.SalePrice = rop.SalePrice;
+                prdProduct.BriefDes = rop.BriefDes;
+                prdProduct.DetailsDes = rop.DetailsDes;
+                prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                prdProduct.Mender = operater;
+                prdProduct.MendTime = DateTime.Now;
 
 
-                var productSkuKinds = CurrentDb.ProductSkuKind.Where(m => m.ProductSkuId == productSku.Id).ToList();
+                var prdProductKinds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProduct.Id).ToList();
 
-                foreach (var productSkuKind in productSkuKinds)
+                foreach (var prdProductKind in prdProductKinds)
                 {
-                    CurrentDb.ProductSkuKind.Remove(productSkuKind);
+                    CurrentDb.PrdProductKind.Remove(prdProductKind);
                 }
 
                 if (rop.KindIds != null)
                 {
                     foreach (var kindId in rop.KindIds)
                     {
-                        var productKindSku = new ProductSkuKind();
-                        productKindSku.Id = GuidUtil.New();
-                        productKindSku.ProductKindId = kindId;
-                        productKindSku.ProductSkuId = productSku.Id;
-                        productKindSku.Creator = operater;
-                        productKindSku.CreateTime = DateTime.Now;
-                        CurrentDb.ProductSkuKind.Add(productKindSku);
+                        var prdProductKind = new PrdProductKind();
+                        prdProductKind.Id = GuidUtil.New();
+                        prdProductKind.PrdKindId = kindId;
+                        prdProductKind.PrdProductId = prdProduct.Id;
+                        prdProductKind.Creator = operater;
+                        prdProductKind.CreateTime = DateTime.Now;
+                        CurrentDb.PrdProductKind.Add(prdProductKind);
                     }
                 }
 
-                var productSkuSubjects = CurrentDb.ProductSkuSubject.Where(m => m.ProductSkuId == productSku.Id).ToList();
+                var prdProductSubjects = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProduct.Id).ToList();
 
-                foreach (var productSkuSubject in productSkuSubjects)
+                foreach (var prdProductSubject in prdProductSubjects)
                 {
-                    CurrentDb.ProductSkuSubject.Remove(productSkuSubject);
+                    CurrentDb.PrdProductSubject.Remove(prdProductSubject);
                 }
 
 
@@ -332,13 +332,13 @@ namespace LocalS.Service.Api.Merch
                 {
                     foreach (var subjectId in rop.SubjectIds)
                     {
-                        var productSkuSubject = new ProductSkuSubject();
-                        productSkuSubject.Id = GuidUtil.New();
-                        productSkuSubject.ProductSubjectId = subjectId;
-                        productSkuSubject.ProductSkuId = productSku.Id;
-                        productSkuSubject.Creator = operater;
-                        productSkuSubject.CreateTime = DateTime.Now;
-                        CurrentDb.ProductSkuSubject.Add(productSkuSubject);
+                        var prdProductSubject = new PrdProductSubject();
+                        prdProductSubject.Id = GuidUtil.New();
+                        prdProductSubject.PrdSubjectId = subjectId;
+                        prdProductSubject.PrdProductId = prdProduct.Id;
+                        prdProductSubject.Creator = operater;
+                        prdProductSubject.CreateTime = DateTime.Now;
+                        CurrentDb.PrdProductSubject.Add(prdProductSubject);
                     }
                 }
 

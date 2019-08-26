@@ -24,11 +24,11 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static ProductSkuService ProductSku
+        public static PrdProductService PrdProduct
         {
             get
             {
-                return new ProductSkuService();
+                return new PrdProductService();
             }
         }
 
@@ -40,19 +40,19 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static ProductKindService ProductKind
+        public static PrdKindService PrdKind
         {
             get
             {
-                return new ProductKindService();
+                return new PrdKindService();
             }
         }
 
-        public static ProductSubjectService ProductSubject
+        public static PrdSubjectService PrdSubject
         {
             get
             {
-                return new ProductSubjectService();
+                return new PrdSubjectService();
             }
         }
     }

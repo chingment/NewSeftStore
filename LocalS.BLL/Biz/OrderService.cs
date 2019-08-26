@@ -53,7 +53,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var sku in rop.ProductSkus)
                 {
-                    var skuModel = CacheServiceFactory.ProductSku.GetModelById(sku.Id);
+                    var skuModel = CacheServiceFactory.PrdProduct.GetModelById(sku.Id);
 
                     var sellQuantity = 0;
 
@@ -361,7 +361,7 @@ namespace LocalS.BLL.Biz
                             if (reservedQuantity != needReserveQuantity)
                             {
 
-                                var product = CacheServiceFactory.ProductSku.GetModelById(item.ProductSkuId);
+                                var product = CacheServiceFactory.PrdProduct.GetModelById(item.ProductSkuId);
 
                                 var detailChildSon = new OrderReserveDetail.DetailChildSon();
                                 detailChildSon.Id = GuidUtil.New();

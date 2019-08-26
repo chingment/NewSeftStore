@@ -261,17 +261,17 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
 
-                var productSku = CurrentDb.ProductSku.Where(m => m.Id == item.ProductSkuId).FirstOrDefault();
-                if (productSku != null)
+                var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == item.ProductSkuId).FirstOrDefault();
+                if (prdProduct != null)
                 {
                     var productSkuModel = new ProductSkuModel();
-                    productSkuModel.Id = productSku.Id;
-                    productSkuModel.Name = productSku.Name;
-                    productSkuModel.DispalyImgUrls = productSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
-                    productSkuModel.MainImgUrl = ImgSet.GetMain(productSku.DispalyImgUrls);
-                    productSkuModel.BriefDes = productSku.BriefDes;
-                    productSkuModel.DetailsDes = productSku.DetailsDes;
-                    productSkuModel.SpecDes = productSku.SpecDes;
+                    productSkuModel.Id = prdProduct.Id;
+                    productSkuModel.Name = prdProduct.Name;
+                    productSkuModel.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                    productSkuModel.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
+                    productSkuModel.BriefDes = prdProduct.BriefDes;
+                    productSkuModel.DetailsDes = prdProduct.DetailsDes;
+                    productSkuModel.SpecDes = prdProduct.SpecDes;
 
                     productSkuModel.SumQuantity = item.SumQuantity;
                     productSkuModel.LockQuantity = item.LockQuantity;

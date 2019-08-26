@@ -16,9 +16,9 @@ namespace LocalS.Service.Api.StoreApp
 
             var olist = new List<ProductSkuModel>();
 
-            var query = (from o in CurrentDb.ProductSku
+            var query = (from o in CurrentDb.PrdProduct
 
-                         select new { o.Id, o.Name, o.KindIds, o.DispalyImgUrls, o.BriefDes, o.SalePrice, o.ShowPrice, o.MainImgUrl, o.CreateTime }
+                         select new { o.Id, o.Name, o.PrdKindIds, o.DispalyImgUrls, o.BriefDes, o.MainImgUrl, o.CreateTime }
              );
 
             if (rup.Name != null && rup.Name.Length > 0)
@@ -39,16 +39,16 @@ namespace LocalS.Service.Api.StoreApp
 
             if (!string.IsNullOrEmpty(rup.KindId))
             {
-                query = query.Where(p => (from d in CurrentDb.ProductSkuKind
-                                          where d.ProductKindId == rup.KindId
-                                          select d.ProductSkuId).Contains(p.Id));
+                query = query.Where(p => (from d in CurrentDb.PrdProductKind
+                                          where d.PrdKindId == rup.KindId
+                                          select d.PrdProductId).Contains(p.Id));
             }
 
             if (!string.IsNullOrEmpty(rup.SubjectId))
             {
-                query = query.Where(p => (from d in CurrentDb.ProductSkuSubject
-                                          where d.ProductSubjectId == rup.SubjectId
-                                          select d.ProductSkuId).Contains(p.Id));
+                query = query.Where(p => (from d in CurrentDb.PrdProductSubject
+                                          where d.PrdSubjectId == rup.SubjectId
+                                          select d.PrdProductId).Contains(p.Id));
             }
 
             int pageSize = 10;
@@ -65,8 +65,8 @@ namespace LocalS.Service.Api.StoreApp
                     Id = item.Id,
                     Name = item.Name,
                     MainImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
-                    SalePrice = item.SalePrice,
-                    ShowPrice = item.ShowPrice,
+                    //SalePrice = item.SalePrice,
+                    //ShowPrice = item.ShowPrice,
                     BriefDes = item.BriefDes
                 });
             }
@@ -84,7 +84,7 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
 
-            var productSkuModel = CacheServiceFactory.ProductSku.GetModelById(id);
+            var productSkuModel = CacheServiceFactory.PrdProduct.GetModelById(id);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", productSkuModel);

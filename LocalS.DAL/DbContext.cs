@@ -26,13 +26,14 @@ namespace LocalS.DAL
 
         public IDbSet<Merch>  Merch { get; set; }
 
-        public IDbSet<ProductSku> ProductSku { get; set; }
-        public IDbSet<ProductKind> ProductKind { get; set; }
-        public IDbSet<ProductSubject> ProductSubject { get; set; }
+        public IDbSet<PrdKind> PrdKind { get; set; }
+        public IDbSet<PrdSubject> PrdSubject { get; set; }
+        public IDbSet<PrdProduct> PrdProduct { get; set; }
+        public IDbSet<PrdProductSku> PrdProductSku { get; set; }
+        public IDbSet<PrdProductKind> PrdProductKind { get; set; }
+        public IDbSet<PrdProductSubject> PrdProductSubject { get; set; }
 
-        public IDbSet<ProductSkuKind> ProductSkuKind { get; set; }
 
-        public IDbSet<ProductSkuSubject> ProductSkuSubject { get; set; }
 
         public IDbSet<Store> Store { get; set; }
         public IDbSet<StoreSellChannel> StoreSellChannel { get; set; }

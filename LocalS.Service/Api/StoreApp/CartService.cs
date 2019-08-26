@@ -27,7 +27,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var clientCart in clientCarts)
             {
-                var productSkuByCache = CacheServiceFactory.ProductSku.GetModelById(clientCart.ProductSkuId);
+                var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(clientCart.ProductSkuId);
                 if (productSkuByCache != null)
                 {
                     var cartProcudtSkuModel = new CartProductSkuModel();
@@ -116,7 +116,7 @@ namespace LocalS.Service.Api.StoreApp
                                 }
                                 break;
                             case E_CartOperateType.Increase:
-                                var productSkuModel = CacheServiceFactory.ProductSku.GetModelById(item.Id);
+                                var productSkuModel = CacheServiceFactory.PrdProduct.GetModelById(item.Id);
 
                                 if (clientCart == null)
                                 {
