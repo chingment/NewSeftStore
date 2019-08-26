@@ -23,14 +23,14 @@ namespace LocalS.Service.Api.StoreApp
 
 
             //构建购物车商品信息
-            var cartProductSkuModels = new List<CartProductSkuModel>();
+            var cartProductSkuModels = new List<CartProductModel>();
 
             foreach (var clientCart in clientCarts)
             {
-                var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(clientCart.ProductSkuId);
+                var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(clientCart.ProductId);
                 if (productSkuByCache != null)
                 {
-                    var cartProcudtSkuModel = new CartProductSkuModel();
+                    var cartProcudtSkuModel = new CartProductModel();
                     cartProcudtSkuModel.CartId = clientCart.Id;
                     cartProcudtSkuModel.Id = productSkuByCache.Id;
                     cartProcudtSkuModel.Name = productSkuByCache.Name;
@@ -52,7 +52,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 var carBlock = new CartBlockModel();
                 carBlock.ReceptionMode = receptionMode;
-                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
+                carBlock.Products = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
 
                 switch (receptionMode)
                 {
@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            if (rop.Products == null || rop.Products.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
@@ -96,11 +96,11 @@ namespace LocalS.Service.Api.StoreApp
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    foreach (var item in rop.ProductSkus)
+                    foreach (var item in rop.Products)
                     {
                         var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
 
-                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.ProductSkuId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
+                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.ProductId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
 
                         switch (rop.Operate)
                         {
@@ -125,9 +125,7 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.ClientUserId = clientUserId;
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
-                                    clientCart.ProductSkuId = productSkuModel.Id;
-                                    clientCart.ProductSkuName = productSkuModel.Name;
-                                    clientCart.ProductSkuMainImgUrl = productSkuModel.MainImgUrl;
+                                    clientCart.ProductId = productSkuModel.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;
                                     clientCart.Creator = operater;

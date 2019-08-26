@@ -70,21 +70,21 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var i in list)
                     {
-                        var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(i.PrdProductId);
+                        var productByCache = CacheServiceFactory.PrdProduct.GetModelById(i.PrdProductId);
 
-                        if (productSkuByCache != null)
+                        if (productByCache != null)
                         {
-                            var procudtSkuModel = new ProductSkuModel();
-                            procudtSkuModel.Id = productSkuByCache.Id;
-                            procudtSkuModel.Name = productSkuByCache.Name;
-                            procudtSkuModel.DispalyImgUrls = productSkuByCache.DispalyImgUrls;
-                            procudtSkuModel.MainImgUrl = productSkuByCache.MainImgUrl;
-                            procudtSkuModel.SalePrice = productSkuByCache.SalePrice;
-                            procudtSkuModel.ShowPrice = productSkuByCache.ShowPrice;
-                            procudtSkuModel.BriefDes = productSkuByCache.BriefDes;
-                            procudtSkuModel.DetailsDes = productSkuByCache.DetailsDes;
+                            var procudtModel = new ProductModel();
+                            procudtModel.Id = productByCache.Id;
+                            procudtModel.Name = productByCache.Name;
+                            procudtModel.DispalyImgUrls = productByCache.DispalyImgUrls;
+                            procudtModel.MainImgUrl = productByCache.MainImgUrl;
+                            procudtModel.SalePrice = productByCache.SalePrice;
+                            procudtModel.ShowPrice = productByCache.ShowPrice;
+                            procudtModel.BriefDes = productByCache.BriefDes;
+                            procudtModel.DetailsDes = productByCache.DetailsDes;
 
-                            tab.List.Add(procudtSkuModel);
+                            tab.List.Add(procudtModel);
                         }
 
                     }

@@ -9,7 +9,7 @@ namespace LocalS.Service.Api.StoreApp
     public class RupCouponMy
     {
         public bool IsGetHis { get; set; }
-        public List<OrderConfirmProductSkuModel> Skus { get; set; }
+        public List<OrderConfirmProductModel> Products { get; set; }
         public List<string> CouponId { get; set; }
     }
 }

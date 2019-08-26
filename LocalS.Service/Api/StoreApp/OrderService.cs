@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            if (rop.Products == null || rop.Products.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
@@ -32,7 +32,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.ReserveMode = E_ReserveMode.Online;
             bizRop.ClientUserId = clientUserId;
 
-            foreach (var item in rop.ProductSkus)
+            foreach (var item in rop.Products)
             {
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = item.CartId, Id = item.Id, Quantity = item.Quantity, ReceptionMode = item.ReceptionMode });
             }
@@ -61,14 +61,14 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
 
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            if (rop.Products == null || rop.Products.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
 
             var ret = new RetOrderConfirm();
             var subtotalItem = new List<OrderConfirmSubtotalItemModel>();
-            var skus = new List<OrderConfirmProductSkuModel>();
+            var skus = new List<OrderConfirmProductModel>();
 
             decimal skuAmountByActual = 0;//实际总价
             decimal skuAmountByOriginal = 0;//原总价
@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
 
-                foreach (var item in rop.ProductSkus)
+                foreach (var item in rop.Products)
                 {
                     var storeSellChannelStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id).FirstOrDefault();
 
@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in orderDetailsChilds)
                 {
-                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
+                    var orderConfirmSkuModel = new OrderConfirmProductModel();
                     orderConfirmSkuModel.Id = item.PrdProductSkuId;
                     orderConfirmSkuModel.Name = item.PrdProductSkuName;
                     orderConfirmSkuModel.MainImgUrl = item.PrdProductSkuMainImgUrl;

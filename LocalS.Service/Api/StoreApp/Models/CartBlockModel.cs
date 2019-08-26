@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public string TagName { get; set; }
 
-        public List<CartProductSkuModel> ProductSkus { get; set; }
+        public List<CartProductModel> Products { get; set; }
 
         public E_ReceptionMode ReceptionMode { get; set; }
 
