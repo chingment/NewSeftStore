@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/user'
+import { getList } from '@/api/user'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -97,7 +97,7 @@ export default {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getUserList(this.listQuery).then(res => {
+      getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

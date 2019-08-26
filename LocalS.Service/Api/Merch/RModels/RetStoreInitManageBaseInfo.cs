@@ -17,6 +17,6 @@ namespace LocalS.Service.Api.Merch
 
         public object Status { get; set; }
 
-        public bool IsClose { get; set; }
+        public bool IsOpen { get; set; }
     }
 }

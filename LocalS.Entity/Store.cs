@@ -28,7 +28,8 @@ namespace LocalS.Entity
         public string Address { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
-        public bool IsClose { get; set; }
+        public bool IsOpen { get; set; }
+        public bool IsDelete { get; set; }
         public string BriefDes { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

@@ -31,7 +31,7 @@
 <script>
 // https://element.eleme.cn/#/zh-CN/component/cascader
 import { MessageBox } from 'element-ui'
-import { addUser, initAddUser } from '@/api/user'
+import { add, initAdd } from '@/api/user'
 import fromReg from '@/utils/formReg'
 import { goBack } from '@/utils/commonUtil'
 export default {
@@ -66,7 +66,7 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initAddUser().then(res => {
+      initAdd().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.cascader_org_options = d.orgs
@@ -92,7 +92,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            addUser(this.form).then(res => {
+            add(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)

@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import { initManageProductSkus } from '@/api/store'
+import { initManageProduct } from '@/api/store'
 import managePaneProductList from './ManagePaneProductList'
 import { getUrlParam } from '@/utils/commonUtil'
 
@@ -46,7 +46,7 @@ export default {
       this.loading = true
       var id = getUrlParam('id')
       this.storeId = id
-      initManageProductSkus({ id: id }).then(res => {
+      initManageProduct({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.sellChannels = d.sellChannels

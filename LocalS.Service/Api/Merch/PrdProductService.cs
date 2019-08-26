@@ -279,11 +279,6 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
-            if (rop.ShowPrice < rop.SalePrice)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "展示价格不能小于销售价");
-            }
-
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();

@@ -44,7 +44,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { editUser, initEditUser } from '@/api/user'
+import { edit, initEdit } from '@/api/user'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
@@ -81,7 +81,7 @@ export default {
     init() {
       this.loading = true
       var id = getUrlParam('id')
-      initEditUser({ id: id }).then(res => {
+      initEdit({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.form.id = d.id
@@ -105,7 +105,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            editUser(this.form).then(res => {
+            edit(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)

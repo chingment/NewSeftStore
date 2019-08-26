@@ -15,6 +15,6 @@ namespace LocalS.Service.Api.Merch
         public string BriefDes { get; set; }
         public List<ImgSet> DispalyImgUrls { get; set; }
 
-        public bool IsClose { get; set; }
+        public bool IsOpen { get; set; }
     }
 }

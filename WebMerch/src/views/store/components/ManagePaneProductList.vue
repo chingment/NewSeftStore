@@ -5,7 +5,7 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">
         添加
       </el-button>
     </div>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getStoreProductSkuList } from '@/api/store'
+import { getProductList } from '@/api/store'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
   name: 'StoreList',
@@ -94,7 +94,7 @@ export default {
       console.log('getListData')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
-      getStoreProductSkuList(this.listQuery).then(res => {
+      getProductList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

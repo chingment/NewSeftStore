@@ -59,8 +59,8 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
       </el-form-item>
-      <el-form-item label="停业？">
-        <el-switch v-model="form.isClose" />
+      <el-form-item label="开启营业">
+        <el-switch v-model="form.isOpen" />
       </el-form-item>
       <el-form-item>
         <el-button type="info" @click="cancleEdit">取消</el-button>
@@ -99,7 +99,7 @@ export default {
         address: '',
         briefDes: '',
         dispalyImgUrls: [],
-        isClose: ''
+        isOpen: false
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -136,7 +136,7 @@ export default {
           this.form.address = d.address
           this.form.briefDes = d.briefDes
           this.form.dispalyImgUrls = d.dispalyImgUrls
-          this.form.isClose = d.isClose
+          this.form.isOpen = d.isOpen
           this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
 
           this.temp.name = d.name

@@ -32,9 +32,9 @@ export function initManage(params) {
   })
 }
 
-export function initEdit(params) {
+export function initManageBaseInfo(params) {
   return request({
-    url: '/store/initEdit',
+    url: '/store/initManageBaseInfo',
     method: 'get',
     params
   })
@@ -68,7 +68,7 @@ export default {
   getList: getList,
   initAdd: initAdd,
   add: add,
-  initEdit: initEdit,
+  initManageBaseInfo: initManageBaseInfo,
   edit: edit,
   initManage: initManage,
   initManageProduct: initManageProduct,

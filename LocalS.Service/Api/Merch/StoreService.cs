@@ -12,25 +12,25 @@ namespace LocalS.Service.Api.Merch
 {
     public class StoreService : BaseDbContext
     {
-        public string GetStatusText(bool isClose)
+        public string GetStatusText(bool isOpen)
         {
             string text = "";
-            if (isClose)
+            if (isOpen)
             {
-                text = "";
+                text = "营业中";
             }
             else
             {
-                text = "正常";
+                text = "已关闭";
             }
 
             return text;
         }
 
-        public int GetStatusValue(bool isClose)
+        public int GetStatusValue(bool isOpen)
         {
             int text = 0;
-            if (isClose)
+            if (isOpen)
             {
                 text = 2;
             }
@@ -50,7 +50,7 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.MainImgUrl, u.IsClose, u.BriefDes, u.Address, u.CreateTime });
+                         select new { u.Id, u.Name, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
 
 
             int total = query.Count();
@@ -73,7 +73,7 @@ namespace LocalS.Service.Api.Merch
                     Name = item.Name,
                     MainImgUrl = item.MainImgUrl,
                     Address = item.Address,
-                    Status = new { text = GetStatusText(item.IsClose), value = GetStatusValue(item.IsClose) },
+                    Status = new { text = GetStatusText(item.IsOpen), value = GetStatusValue(item.IsOpen) },
                     CreateTime = item.CreateTime,
                 });
             }
@@ -116,7 +116,7 @@ namespace LocalS.Service.Api.Merch
                 store.Name = rop.Name;
                 store.Address = rop.Address;
                 store.BriefDes = rop.BriefDes;
-                store.IsClose = true;
+                store.IsOpen = false;
                 store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
                 store.MainImgUrl = ImgSet.GetMain(store.DispalyImgUrls);
                 store.CreateTime = DateTime.Now;
@@ -158,8 +158,8 @@ namespace LocalS.Service.Api.Merch
             ret.Address = store.Address;
             ret.BriefDes = store.BriefDes;
             ret.DispalyImgUrls = store.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
-            ret.IsClose = store.IsClose;
-            ret.Status = new { text = GetStatusText(store.IsClose), value = GetStatusValue(store.IsClose) };
+            ret.IsOpen = store.IsOpen;
+            ret.Status = new { text = GetStatusText(store.IsOpen), value = GetStatusValue(store.IsOpen) };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
 
@@ -185,7 +185,7 @@ namespace LocalS.Service.Api.Merch
                 store.BriefDes = rop.BriefDes;
                 store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
                 store.MainImgUrl = ImgSet.GetMain(store.DispalyImgUrls);
-                store.IsClose = rop.IsClose;
+                store.IsOpen = rop.IsOpen;
                 store.MendTime = DateTime.Now;
                 store.Mender = operater;
                 CurrentDb.SaveChanges();

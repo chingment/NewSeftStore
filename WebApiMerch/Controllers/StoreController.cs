@@ -32,13 +32,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse InitManageBaseInfo([FromUri]string id)
-        {
-            IResult result = MerchServiceFactory.Store.InitEdit(this.CurrentUserId, this.CurrentMerchId, id);
-            return new OwnApiHttpResponse(result);
-        }
-
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopStoreEdit rop)
         {
@@ -50,6 +43,13 @@ namespace WebApiMerch.Controllers
         public OwnApiHttpResponse InitManage([FromUri]string id)
         {
             IResult result = MerchServiceFactory.Store.InitManage(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse InitManageBaseInfo([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.Store.InitEdit(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
