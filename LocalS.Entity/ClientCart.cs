@@ -33,7 +33,6 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }
         public string ProductId { get; set; }
-        [MaxLength(128)]
         public int Quantity { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

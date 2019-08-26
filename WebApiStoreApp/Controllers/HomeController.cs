@@ -1,4 +1,5 @@
 ﻿
+using LocalS.DAL;
 using log4net;
 using Lumos.BLL;
 using Newtonsoft.Json;
@@ -28,6 +29,15 @@ namespace WebApiStoreApp.Controllers
 
         public ActionResult Index()
         {
+            try
+            {
+                DbContext db = new DbContext();
+                var s = db.Store.Where(m=>m.IsDelete==false).ToList();
+            }
+            catch(Exception ex)
+            {
+                var a = "ad";
+            }
             //object isTest = ConfigurationManager.AppSettings["custom:IsTest"];
             //if (isTest == null)
             //{
