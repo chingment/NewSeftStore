@@ -15,3 +15,8 @@ export function checkPermission(tpye, content) {
     params: { tpye, content }
   })
 }
+
+export default {
+  getInfo: getInfo,
+  checkPermission: checkPermission
+}

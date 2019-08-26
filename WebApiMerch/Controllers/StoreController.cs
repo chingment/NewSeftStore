@@ -33,7 +33,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitEdit([FromUri]string id)
+        public OwnApiHttpResponse InitManageBaseInfo([FromUri]string id)
         {
             IResult result = MerchServiceFactory.Store.InitEdit(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
@@ -54,19 +54,18 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitManageProductSkus([FromUri]string id)
+        public OwnApiHttpResponse InitManageProduct([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Store.InitManageProductSkus(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Store.InitManageProduct(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetProductSkuList([FromUri]RupStoreGetProductSkuList rup)
+        public OwnApiHttpResponse GetProductList([FromUri]RupStoreGetProductSkuList rup)
         {
-            IResult result = MerchServiceFactory.Store.GetProductSkuList(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Store.GetProductList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
-
 
     }
 }

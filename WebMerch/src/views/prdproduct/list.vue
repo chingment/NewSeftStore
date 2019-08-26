@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getProductSkuList } from '@/api/productsku'
+import { getList } from '@/api/prdproduct'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -97,7 +97,7 @@ export default {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getProductSkuList(this.listQuery).then(res => {
+      getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -112,12 +112,12 @@ export default {
     },
     handleCreate() {
       this.$router.push({
-        path: '/productsku/add'
+        path: '/prdproduct/add'
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/productsku/edit?id=' + row.id
+        path: '/prdproduct/edit?id=' + row.id
       })
     }
   }

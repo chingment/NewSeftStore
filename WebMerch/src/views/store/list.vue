@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getStoreList } from '@/api/store'
+import { getList } from '@/api/store'
 
 export default {
   name: 'StoreList',
@@ -68,7 +68,7 @@ export default {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getStoreList(this.listQuery).then(res => {
+      getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

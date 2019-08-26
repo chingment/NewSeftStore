@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function getStoreList(params) {
+export function getList(params) {
   return request({
     url: '/store/getlist',
     method: 'get',
@@ -8,7 +8,7 @@ export function getStoreList(params) {
   })
 }
 
-export function initAddStore(params) {
+export function initAdd(params) {
   return request({
     url: '/store/initAdd',
     method: 'get',
@@ -16,7 +16,7 @@ export function initAddStore(params) {
   })
 }
 
-export function addStore(data) {
+export function add(data) {
   return request({
     url: '/store/add',
     method: 'post',
@@ -24,7 +24,7 @@ export function addStore(data) {
   })
 }
 
-export function initManageStore(params) {
+export function initManage(params) {
   return request({
     url: '/store/initManage',
     method: 'get',
@@ -32,7 +32,7 @@ export function initManageStore(params) {
   })
 }
 
-export function initEditStore(params) {
+export function initEdit(params) {
   return request({
     url: '/store/initEdit',
     method: 'get',
@@ -40,7 +40,7 @@ export function initEditStore(params) {
   })
 }
 
-export function editStore(data) {
+export function edit(data) {
   return request({
     url: '/store/edit',
     method: 'post',
@@ -48,18 +48,29 @@ export function editStore(data) {
   })
 }
 
-export function initManageProductSkus(params) {
+export function initManageProduct(params) {
   return request({
-    url: '/store/initManageProductSkus',
+    url: '/store/initManageProduct',
     method: 'get',
     params
   })
 }
 
-export function getStoreProductSkuList(params) {
+export function getProductList(params) {
   return request({
-    url: '/store/GetProductSkuList',
+    url: '/store/getProductList',
     method: 'get',
     params
   })
+}
+
+export default {
+  getList: getList,
+  initAdd: initAdd,
+  add: add,
+  initEdit: initEdit,
+  edit: edit,
+  initManage: initManage,
+  initManageProduct: initManageProduct,
+  getProductList: getProductList
 }

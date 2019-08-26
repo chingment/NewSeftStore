@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: '/user/getlist',
+    url: '/prdproduct/getlist',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getList(params) {
 
 export function initAdd(params) {
   return request({
-    url: '/user/initAdd',
+    url: '/prdproduct/initAdd',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function initAdd(params) {
 
 export function add(data) {
   return request({
-    url: '/user/add',
+    url: '/prdproduct/add',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function add(data) {
 
 export function initEdit(params) {
   return request({
-    url: '/user/initEdit',
+    url: '/prdproduct/initEdit',
     method: 'get',
     params
   })
@@ -34,7 +34,7 @@ export function initEdit(params) {
 
 export function edit(data) {
   return request({
-    url: '/user/edit',
+    url: '/prdproduct/edit',
     method: 'post',
     data
   })

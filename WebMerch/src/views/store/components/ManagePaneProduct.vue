@@ -5,7 +5,7 @@
 
       <el-tab-pane v-for="item in sellChannels" :key="item.name" :label="item.name" :name="item.name">
         <keep-alive>
-          <pane-manage-product-skus-list v-if="activeName==item.name" :store-id="storeId" :sellchannel="item" />
+          <manage-pane-product-list v-if="activeName==item.name" :store-id="storeId" :sellchannel="item" />
         </keep-alive>
       </el-tab-pane>
 
@@ -19,12 +19,12 @@
 </template>
 <script>
 import { initManageProductSkus } from '@/api/store'
-import paneManageProductSkusList from './PaneManageProductSkusList'
+import managePaneProductList from './ManagePaneProductList'
 import { getUrlParam } from '@/utils/commonUtil'
 
 export default {
-  name: 'PaneManageProductSkus',
-  components: { paneManageProductSkusList },
+  name: 'ManagePaneProductList',
+  components: { managePaneProductList },
   data() {
     return {
       storeId: '',

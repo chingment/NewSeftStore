@@ -73,7 +73,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { editStore, initEditStore } from '@/api/store'
+import { edit, initManageBaseInfo } from '@/api/store'
 import { getUrlParam } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 
@@ -128,7 +128,7 @@ export default {
     init() {
       this.loading = true
       var id = getUrlParam('id')
-      initEditStore({ id: id }).then(res => {
+      initManageBaseInfo({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.form.id = d.id
@@ -156,7 +156,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            editStore(this.form).then(res => {
+            edit(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 this.isEdit = false

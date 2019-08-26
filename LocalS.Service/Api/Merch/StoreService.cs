@@ -149,7 +149,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetStoreInitEdit();
+            var ret = new RetStoreInitManageBaseInfo();
 
             var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
@@ -216,9 +216,9 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult InitManageProductSkus(string operater, string merchId, string storeId)
+        public CustomJsonResult InitManageProduct(string operater, string merchId, string storeId)
         {
-            var ret = new RetStoreInitManageProductSkus();
+            var ret = new RetStoreInitManageProduct();
 
             var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId).OrderBy(m => m.RefType).ToList();
 
@@ -233,7 +233,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult GetProductSkuList(string operater, string merchId, RupStoreGetProductSkuList rup)
+        public CustomJsonResult GetProductList(string operater, string merchId, RupStoreGetProductSkuList rup)
         {
             var result = new CustomJsonResult();
 

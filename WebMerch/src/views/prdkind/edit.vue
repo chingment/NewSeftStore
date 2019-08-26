@@ -40,7 +40,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { editProductKind, initEditProductKind } from '@/api/productkind'
+import { editProductKind, initEditProductKind } from '@/api/prdkind'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {

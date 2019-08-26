@@ -1,8 +1,29 @@
 <template>
-  <div id="productsku_edit" class="app-container">
+  <div id="productsku_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
+      </el-form-item>
+      <el-form-item label="图片" prop="dispalyImgUrls">
+        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
+        <el-upload
+          ref="uploadImg"
+          v-model="form.dispalyImgUrls"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :on-success="handleSuccess"
+          :on-remove="handleRemove"
+          :on-error="handleError"
+          :on-preview="handlePreview"
+          :file-list="uploadImglist"
+          :limit="4"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
+          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        </el-dialog>
+        <div class="remark-tip"><span class="sign">*注</span>：第一张默认为主图，可拖动改变图片顺便</div>
       </el-form-item>
       <el-form-item label="所属模块" prop="kindIds">
         <el-input :value="form.kindIds.toString()" style="display:none" />
@@ -32,38 +53,14 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="销售价" prop="salePrice" style="width:220px">
-        <el-input v-model="form.salePrice">
+      <el-form-item label="销售价" prop="salePrice">
+        <el-input v-model="form.salePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
-      </el-form-item>
-      <el-form-item label="展示价" prop="showPrice" style="width:220px">
-        <el-input v-model="form.showPrice">
-          <template slot="prepend">￥</template>
-        </el-input>
-      </el-form-item>
-      <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
-        <el-upload
-          ref="uploadImg"
-          v-model="form.dispalyImgUrls"
-          :action="uploadImgServiceUrl"
-          list-type="picture-card"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :on-preview="handlePreview"
-          :file-list="uploadImglist"
-          :limit="4"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
-        </el-dialog>
+        <el-checkbox>启用多规格？</el-checkbox>
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
-        <el-input v-model="form.briefDes" maxlength="200" />
+        <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
       </el-form-item>
       <el-form-item label="商品详情" style="max-width:1000px">
         <Editor id="tinymce" v-model="form.detailsDes" :init="tinymce_init" />
@@ -78,9 +75,9 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { editProductSku, initEditProductSku } from '@/api/productsku'
+import { add, initAdd } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
-import { goBack, getUrlParam, treeselectNormalizer } from '@/utils/commonUtil'
+import { goBack, treeselectNormalizer } from '@/utils/commonUtil'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -117,17 +114,16 @@ import 'tinymce/plugins/autosave'
 import 'tinymce/plugins/fullpage'
 import 'tinymce/plugins/toc'
 import Sortable from 'sortablejs'
+
 export default {
   components: { Treeselect, Editor },
   data() {
     return {
       loading: false,
       form: {
-        id: '',
         name: '',
         kindIds: [],
         subjectIds: [],
-        showPrice: '',
         salePrice: '',
         detailsDes: '',
         specDes: '',
@@ -139,7 +135,6 @@ export default {
         kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['click', 'change'], max: 3 }],
         subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
-        showPrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
@@ -185,22 +180,9 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var id = getUrlParam('id')
-      initEditProductSku({ id: id }).then(res => {
+      initAdd().then(res => {
         if (res.result === 1) {
           var d = res.data
-
-          this.form.id = d.id
-          this.form.name = d.name
-          this.form.kindIds = d.kindIds
-          this.form.subjectIds = d.subjectIds
-          this.form.showPrice = d.showPrice
-          this.form.salePrice = d.salePrice
-          this.form.detailsDes = d.detailsDes
-          this.form.specDes = d.specDes
-          this.form.briefDes = d.briefDes
-          this.form.dispalyImgUrls = d.dispalyImgUrls
-          this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
           this.treeselect_subject_options = d.subjects
           this.treeselect_kind_options = d.kinds
         }
@@ -219,7 +201,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            editProductSku(this.form).then(res => {
+            add(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
@@ -228,14 +210,6 @@ export default {
           })
         }
       })
-    },
-    getUploadImglist(dispalyImgUrls) {
-      var _uploadImglist = []
-      for (var i = 0; i < dispalyImgUrls.length; i++) {
-        _uploadImglist.push({ status: 'success', url: dispalyImgUrls[i].url, response: { data: { name: dispalyImgUrls[i].name, url: dispalyImgUrls[i].url }}})
-      }
-
-      return _uploadImglist
     },
     getDispalyImgUrls(fileList) {
       var _dispalyImgUrls = []
@@ -296,11 +270,11 @@ export default {
 
 <style lang="scss" scoped>
 
-#productsku_edit{
+#productsku_add {
+
 .el-form .el-form-item{
   max-width: 600px;
 }
-
 .el-upload-list >>> .sortable-ghost {
   opacity: .8;
   color: #fff!important;
@@ -311,6 +285,5 @@ export default {
   cursor: pointer;
 }
 }
-
 </style>
 

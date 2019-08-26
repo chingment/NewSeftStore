@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { getProductKindList, sortProductKind } from '@/api/productkind'
+import { getProductKindList, sortProductKind } from '@/api/prdkind'
 import { treeGetNodesByDepth } from '@/utils/commonUtil'
 export default {
   data() {

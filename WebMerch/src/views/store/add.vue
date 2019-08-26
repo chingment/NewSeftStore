@@ -41,7 +41,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { addStore, initAddStore } from '@/api/store'
+import { add, initAdd } from '@/api/store'
 import { goBack } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 
@@ -76,7 +76,7 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initAddStore().then(res => {
+      initAdd().then(res => {
         if (res.result === 1) {
           var d = res.data
         }
@@ -94,7 +94,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            addStore(this.form).then(res => {
+            add(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
