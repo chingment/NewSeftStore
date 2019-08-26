@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RupProductSkuList
+    public class RupProductList
     {
         public string StoreId { get; set; }
         public int PageIndex { get; set; }

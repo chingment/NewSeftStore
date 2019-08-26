@@ -25,11 +25,11 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
-        public static ProductSkuService ProductSku
+        public static ProductService Product
         {
             get
             {
-                return new ProductSkuService();
+                return new ProductService();
             }
         }
 

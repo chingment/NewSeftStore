@@ -13,28 +13,28 @@ namespace LocalS.Service.Api.Merch
 {
     public class PrdKindService : BaseDbContext
     {
-        private List<TreeNode> GetTree(string id, List<PrdKind> productKinds)
+        private List<TreeNode> GetTree(string id, List<PrdKind> prdKinds)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
-            var p_productKinds = productKinds.Where(t => t.PId == id).ToList();
+            var p_prdKinds = prdKinds.Where(t => t.PId == id).ToList();
 
-            foreach (var p_productKind in p_productKinds)
+            foreach (var p_prdKind in p_prdKinds)
             {
                 TreeNode treeNode = new TreeNode();
-                treeNode.Id = p_productKind.Id;
-                treeNode.PId = p_productKind.PId;
-                treeNode.Label = p_productKind.Name;
-                treeNode.Description = p_productKind.Description;
-                treeNode.Depth = p_productKind.Depth;
+                treeNode.Id = p_prdKind.Id;
+                treeNode.PId = p_prdKind.PId;
+                treeNode.Label = p_prdKind.Name;
+                treeNode.Description = p_prdKind.Description;
+                treeNode.Depth = p_prdKind.Depth;
 
-                if (p_productKind.Depth == 0)
+                if (p_prdKind.Depth == 0)
                 {
                     treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
                 }
                 else
                 {
-                    if (p_productKind.Depth >= 3)
+                    if (p_prdKind.Depth >= 3)
                     {
                         treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
                     }
@@ -44,7 +44,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
-                var children = GetTree(p_productKind.Id, productKinds);
+                var children = GetTree(p_prdKind.Id, prdKinds);
                 if (children != null)
                 {
                     if (children.Count > 0)

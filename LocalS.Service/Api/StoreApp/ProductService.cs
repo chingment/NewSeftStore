@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class ProductSkuService : BaseDbContext
+    public class ProductService : BaseDbContext
     {
-        public CustomJsonResult List(string operater, string clientUserId, RupProductSkuList rup)
+        public CustomJsonResult List(string operater, string clientUserId, RupProductList rup)
         {
             var result = new CustomJsonResult();
 
-            var olist = new List<ProductSkuModel>();
+            var olist = new List<ProductModel>();
 
             var query = (from o in CurrentDb.PrdProduct
 
@@ -60,7 +60,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                olist.Add(new ProductSkuModel
+                olist.Add(new ProductModel
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -77,7 +77,7 @@ namespace LocalS.Service.Api.StoreApp
         }
 
 
-        public CustomJsonResult Details(string id)
+        public CustomJsonResult Details(string operater, string clientUserId, string id)
         {
            
 

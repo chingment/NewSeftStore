@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RupGlobalAccessToken
+    public class RupProductDetails
     {
-
+        public string Id { get; set; }
     }
 }
