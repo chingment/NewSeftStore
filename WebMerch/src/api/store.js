@@ -48,17 +48,17 @@ export function edit(data) {
   })
 }
 
-export function initManageProduct(params) {
+export function initManageMachineProduct(params) {
   return request({
-    url: '/store/initManageProduct',
+    url: '/store/initManageMachineProduct',
     method: 'get',
     params
   })
 }
 
-export function getProductList(params) {
+export function manageMachineProductGetProductList(params) {
   return request({
-    url: '/store/getProductList',
+    url: '/store/manageMachineProductGetProductList',
     method: 'get',
     params
   })
@@ -71,6 +71,6 @@ export default {
   initManageBaseInfo: initManageBaseInfo,
   edit: edit,
   initManage: initManage,
-  initManageProduct: initManageProduct,
-  getProductList: getProductList
+  initManageMachineProduct: initManageMachineProduct,
+  manageMachineProductGetProductList: manageMachineProductGetProductList
 }

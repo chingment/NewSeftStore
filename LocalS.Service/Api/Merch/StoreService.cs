@@ -216,14 +216,11 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult InitManageProduct(string operater, string merchId, string storeId)
+        public CustomJsonResult InitManageMachineProduct(string operater, string merchId, string storeId)
         {
-            var ret = new RetStoreInitManageProduct();
+            var ret = new RetStoreInitManageMachineProduct();
 
-            var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId).OrderBy(m => m.RefType).ToList();
-
-
-            ret.SellChannels.Add(new StoreSellChannelModel { Name = "全部", RefType = E_StoreSellChannelRefType.Unknow, RefId = GuidUtil.Empty() });
+            var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_StoreSellChannelRefType.Machine).OrderBy(m => m.RefType).ToList();
 
             foreach (var storeSellChannel in storeSellChannels)
             {
@@ -233,7 +230,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult GetProductList(string operater, string merchId, RupStoreGetProductSkuList rup)
+        public CustomJsonResult ManageMachineProductGetProductList(string operater, string merchId, RupStoreGetProductSkuList rup)
         {
             var result = new CustomJsonResult();
 
@@ -243,9 +240,13 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId && u.StoreId == rup.StoreId
                          select new { u.Id, u.PrdProductSkuId, u.MerchId, u.StoreId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
 
-            if (rup.RefType != E_StoreSellChannelRefType.Unknow)
+            if (!string.IsNullOrEmpty(rup.SellChannelRefId))
             {
-                query = query.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.RefType == rup.RefType && m.RefId == rup.RefId);
+                query = query.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rup.SellChannelRefId);
+            }
+            else
+            {
+                query = query.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.RefType == E_StoreSellChannelRefType.Machine);
             }
 
             int total = query.Count();

@@ -167,7 +167,7 @@
     <Compile Include="Api\Merch\RModels\RetStoreInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreInitManageBaseInfo.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreInitManage.cs" />
-    <Compile Include="Api\Merch\RModels\RetStoreInitManageProduct.cs" />
+    <Compile Include="Api\Merch\RModels\RetStoreInitManageMachineProduct.cs" />
     <Compile Include="Api\Merch\RModels\RetUserInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetUserInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindAdd.cs" />
