@@ -42,11 +42,11 @@ namespace LocalS.BLL.Biz
 
                 if (rop.ReserveMode == E_ReserveMode.OffLine)
                 {
-                    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId && skuIds.Contains(m.ProductSkuId)).ToList();
+                    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId && skuIds.Contains(m.PrdProductSkuId)).ToList();
                 }
                 else if (rop.ReserveMode == E_ReserveMode.Online)
                 {
-                    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && skuIds.Contains(m.ProductSkuId)).ToList();
+                    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && skuIds.Contains(m.PrdProductSkuId)).ToList();
                 }
 
                 List<string> warn_tips = new List<string>();
@@ -59,25 +59,25 @@ namespace LocalS.BLL.Biz
 
                     if (rop.ReserveMode == E_ReserveMode.OffLine)
                     {
-                        sellQuantity = skusByStock.Where(m => m.ProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
+                        sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
                     }
                     else if (rop.ReserveMode == E_ReserveMode.Online)
                     {
                         if (sku.ReceptionMode == E_ReceptionMode.Machine)
                         {
-                            sellQuantity = skusByStock.Where(m => m.ProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
+                            sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
                         }
                         else if (sku.ReceptionMode == E_ReceptionMode.Express)
                         {
-                            sellQuantity = skusByStock.Where(m => m.ProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Express).Sum(m => m.SellQuantity);
+                            sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Express).Sum(m => m.SellQuantity);
                         }
                         else if (sku.ReceptionMode == E_ReceptionMode.SelfTake)
                         {
-                            sellQuantity = skusByStock.Where(m => m.ProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
+                            sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
                         }
                     }
 
-                    var hasOffSell = skusByStock.Where(m => m.ProductSkuId == sku.Id).Where(m => m.IsOffSell == true).FirstOrDefault();
+                    var hasOffSell = skusByStock.Where(m => m.PrdProductSkuId == sku.Id).Where(m => m.IsOffSell == true).FirstOrDefault();
 
                     if (hasOffSell == null)
                     {
@@ -220,9 +220,9 @@ namespace LocalS.BLL.Biz
                         orderDetailsChild.OrderSn = order.Sn;
                         orderDetailsChild.OrderDetailsId = orderDetails.Id;
                         orderDetailsChild.OrderDetailsSn = orderDetails.Sn;
-                        orderDetailsChild.ProductSkuId = detailsChild.SkuId;
-                        orderDetailsChild.ProductSkuName = detailsChild.SkuName;
-                        orderDetailsChild.ProductSkuMainImgUrl = detailsChild.SkuImgUrl;
+                        orderDetailsChild.PrdProductMainImgUrl = detailsChild.SkuImgUrl;
+                        orderDetailsChild.PrdProductSkuId = detailsChild.SkuId;
+                        orderDetailsChild.PrdProductSkuName = detailsChild.SkuName;
                         orderDetailsChild.SalePrice = detailsChild.SalePrice;
                         orderDetailsChild.SalePriceByVip = detailsChild.SalePriceByVip;
                         orderDetailsChild.Quantity = detailsChild.Quantity;
@@ -253,9 +253,9 @@ namespace LocalS.BLL.Biz
                             orderDetailsChildSon.OrderDetailsChildId = orderDetailsChild.Id;
                             orderDetailsChildSon.OrderDetailsChildSn = orderDetailsChild.Sn;
                             orderDetailsChildSon.SlotId = detailsChildSon.SlotId;
-                            orderDetailsChildSon.ProductSkuId = detailsChildSon.SkuId;
-                            orderDetailsChildSon.ProductSkuName = detailsChildSon.SkuName;
-                            orderDetailsChildSon.ProductSkuMainImgUrl = detailsChildSon.SkuImgUrl;
+                            orderDetailsChildSon.PrdProductSkuId = detailsChildSon.SkuId;
+                            orderDetailsChildSon.PrdProductSkuName = detailsChildSon.SkuName;
+                            orderDetailsChildSon.PrdProductMainImgUrl = detailsChildSon.SkuImgUrl;
                             orderDetailsChildSon.SalePrice = detailsChildSon.SalePrice;
                             orderDetailsChildSon.SalePriceByVip = detailsChildSon.SalePriceByVip;
                             orderDetailsChildSon.Quantity = detailsChildSon.Quantity;
@@ -273,7 +273,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var slotStock in detailsChild.SlotStock)
                         {
-                            var machineStock = skusByStock.Where(m => m.ProductSkuId == slotStock.SkuId && m.SlotId == slotStock.SlotId && m.RefId == slotStock.SellChannelRefId).FirstOrDefault();
+                            var machineStock = skusByStock.Where(m => m.PrdProductSkuId == slotStock.SkuId && m.SlotId == slotStock.SlotId && m.RefId == slotStock.SellChannelRefId).FirstOrDefault();
 
                             machineStock.LockQuantity += slotStock.Quantity;
                             machineStock.SellQuantity -= slotStock.Quantity;
@@ -288,7 +288,7 @@ namespace LocalS.BLL.Biz
                             storeSellStockLog.RefType = slotStock.SellChannelRefType;
                             storeSellStockLog.RefId = slotStock.SellChannelRefId;
                             storeSellStockLog.SlotId = slotStock.SlotId;
-                            storeSellStockLog.ProductSkuId = slotStock.SkuId;
+                            storeSellStockLog.PrdProductSkuId = slotStock.SkuId;
                             storeSellStockLog.SumQuantity = machineStock.SumQuantity;
                             storeSellStockLog.LockQuantity = machineStock.LockQuantity;
                             storeSellStockLog.SellQuantity = machineStock.SellQuantity;
@@ -350,7 +350,7 @@ namespace LocalS.BLL.Biz
 
                     }
 
-                    var l_storeSellStocks = storeSellStocks.Where(m => m.ProductSkuId == reserveDetail.Id && m.RefType == channelType).ToList();
+                    var l_storeSellStocks = storeSellStocks.Where(m => m.PrdProductSkuId == reserveDetail.Id && m.RefType == channelType).ToList();
 
                     foreach (var item in l_storeSellStocks)
                     {
@@ -361,14 +361,14 @@ namespace LocalS.BLL.Biz
                             if (reservedQuantity != needReserveQuantity)
                             {
 
-                                var product = CacheServiceFactory.PrdProduct.GetModelById(item.ProductSkuId);
+                                var product = CacheServiceFactory.PrdProduct.GetModelById(item.PrdProductSkuId);
 
                                 var detailChildSon = new OrderReserveDetail.DetailChildSon();
                                 detailChildSon.Id = GuidUtil.New();
                                 detailChildSon.SellChannelRefType = item.RefType;
                                 detailChildSon.SellChannelRefId = item.RefId;
                                 detailChildSon.ReceptionMode = receptionMode;
-                                detailChildSon.SkuId = item.ProductSkuId;
+                                detailChildSon.SkuId = item.PrdProductSkuId;
                                 detailChildSon.SkuName = product.Name;
                                 detailChildSon.SkuImgUrl = product.MainImgUrl;
                                 detailChildSon.SlotId = item.SlotId;
@@ -723,7 +723,7 @@ namespace LocalS.BLL.Biz
                         item.Mender = GuidUtil.Empty();
                         //item.MendTime = this.DateTime;
 
-                        var machineStock = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == order.MerchId && m.StoreId == order.StoreId && m.ProductSkuId == item.ProductSkuId && m.SlotId == item.SlotId && m.RefId == item.SellChannelRefId && m.RefType == item.SellChannelRefType).FirstOrDefault();
+                        var machineStock = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == order.MerchId && m.StoreId == order.StoreId && m.PrdProductSkuId == item.PrdProductSkuId && m.SlotId == item.SlotId && m.RefId == item.SellChannelRefId && m.RefType == item.SellChannelRefType).FirstOrDefault();
 
                         machineStock.LockQuantity -= item.Quantity;
                         machineStock.SellQuantity += item.Quantity;
@@ -737,7 +737,7 @@ namespace LocalS.BLL.Biz
                         //storeSellStockLog.ChannelType = item.ChannelType;
                         //storeSellStockLog.ChannelId = item.ChannelId;
                         storeSellStockLog.SlotId = item.SlotId;
-                        storeSellStockLog.ProductSkuId = item.ProductSkuId;
+                        storeSellStockLog.PrdProductSkuId = item.PrdProductSkuId;
                         //storeSellStockLog.Quantity = machineStock.Quantity;
                         storeSellStockLog.LockQuantity = machineStock.LockQuantity;
                         storeSellStockLog.SellQuantity = machineStock.SellQuantity;

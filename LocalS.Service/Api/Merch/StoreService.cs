@@ -241,7 +241,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.StoreSellChannelStock
                          where
                          u.MerchId == merchId && u.StoreId == rup.StoreId
-                         select new { u.Id, u.ProductSkuId, u.MerchId, u.StoreId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
+                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.StoreId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
 
             if (rup.RefType != E_StoreSellChannelRefType.Unknow)
             {
@@ -253,7 +253,7 @@ namespace LocalS.Service.Api.Merch
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
 
-            query = query.OrderByDescending(r => r.ProductSkuId).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.PrdProductSkuId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             List<object> olist = new List<object>();
 
@@ -261,7 +261,7 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
 
-                var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == item.ProductSkuId).FirstOrDefault();
+                var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == item.PrdProductSkuId).FirstOrDefault();
                 if (prdProduct != null)
                 {
                     var productSkuModel = new ProductSkuModel();

@@ -82,7 +82,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var storeSellChannelStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.ProductSkuId == item.Id).FirstOrDefault();
+                    var storeSellChannelStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id).FirstOrDefault();
 
                     if (storeSellChannelStock != null)
                     {
@@ -134,9 +134,9 @@ namespace LocalS.Service.Api.StoreApp
                 foreach (var item in orderDetailsChilds)
                 {
                     var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
-                    orderConfirmSkuModel.Id = item.ProductSkuId;
-                    orderConfirmSkuModel.MainImgUrl = item.ProductSkuMainImgUrl;
-                    orderConfirmSkuModel.Name = item.ProductSkuName;
+                    orderConfirmSkuModel.Id = item.PrdProductSkuId;
+                    orderConfirmSkuModel.MainImgUrl = item.PrdProductMainImgUrl;
+                    orderConfirmSkuModel.Name = item.PrdProductSkuName;
                     orderConfirmSkuModel.Quantity = item.Quantity;
                     orderConfirmSkuModel.SalePrice = item.SalePrice;
                     skuAmountByOriginal += (item.SalePrice * item.Quantity);
@@ -385,8 +385,8 @@ namespace LocalS.Service.Api.StoreApp
                         var sku = new FsTemplateData.TmplOrderSku();
 
                         sku.Id = orderDetailsChild.Id;
-                        sku.Name = orderDetailsChild.ProductSkuName;
-                        sku.MainImgUrl = orderDetailsChild.ProductSkuMainImgUrl;
+                        sku.Name = orderDetailsChild.PrdProductSkuName;
+                        sku.MainImgUrl = orderDetailsChild.PrdProductMainImgUrl;
                         sku.Quantity = orderDetailsChild.Quantity.ToString();
                         sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
 
@@ -487,8 +487,8 @@ namespace LocalS.Service.Api.StoreApp
                     var sku = new FsTemplateData.TmplOrderSku();
 
                     sku.Id = orderDetailsChild.Id;
-                    sku.Name = orderDetailsChild.ProductSkuName;
-                    sku.MainImgUrl = orderDetailsChild.ProductSkuMainImgUrl;
+                    sku.Name = orderDetailsChild.PrdProductSkuName;
+                    sku.MainImgUrl = orderDetailsChild.PrdProductMainImgUrl;
                     sku.Quantity = orderDetailsChild.Quantity.ToString();
                     sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
 

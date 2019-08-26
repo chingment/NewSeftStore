@@ -21,7 +21,8 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string SlotId { get; set; }
-        public string ProductSkuId { get; set; }
+        public string PrdProductId { get; set; }
+        public string PrdProductSkuId { get; set; }
         public E_StoreSellChannelRefType RefType { get; set; }
         public string RefId { get; set; }
         public E_StoreSellChannelStockLogChangeTpye ChangeType { get; set; }

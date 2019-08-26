@@ -19,9 +19,10 @@ namespace LocalS.Entity
         public string OrderSn { get; set; }
         public string OrderDetailsId { get; set; }
         public string OrderDetailsSn { get; set; }
-        public string ProductSkuId { get; set; }
-        public string ProductSkuName { get; set; }
-        public string ProductSkuMainImgUrl { get; set; }
+        public string PrdProductId { get; set; }
+        public string PrdProductMainImgUrl { get; set; }
+        public string PrdProductSkuId { get; set; }
+        public string PrdProductSkuName { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }

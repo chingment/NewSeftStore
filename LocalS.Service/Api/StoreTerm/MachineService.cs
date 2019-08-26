@@ -76,7 +76,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productSkuModels = new Dictionary<string, ProductSkuModel>();
 
             var machineStocks = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
-            var productSkuIds = machineStocks.Select(m => m.ProductSkuId).Distinct();
+            var productSkuIds = machineStocks.Select(m => m.PrdProductSkuId).Distinct();
             foreach (var productSkuId in productSkuIds)
             {
                 var productSku = CacheServiceFactory.PrdProduct.GetModelById(productSkuId);
@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productKindModels = new List<ProductKindModel>();
 
             var productKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.IsDelete == false).ToList();
-            var productSkuIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.RefId == machineId && m.RefType == E_StoreSellChannelRefType.Machine && m.IsOffSell == false).Select(m => m.ProductSkuId).ToArray();
+            var productSkuIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.RefId == machineId && m.RefType == E_StoreSellChannelRefType.Machine && m.IsOffSell == false).Select(m => m.PrdProductSkuId).ToArray();
             var productSkus = CurrentDb.PrdProduct.Where(m => productSkuIds.Contains(m.Id)).ToList();
 
             if (productKinds.Count > 0)
@@ -178,7 +178,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var productSku = productSkus.Where(m => m.Id == item.ProductSkuId).FirstOrDefault();
+                var productSku = productSkus.Where(m => m.Id == item.PrdProductSkuId).FirstOrDefault();
                 if (productSku != null)
                 {
                     var slotProductSkuModel = new SlotProductSkuModel();

@@ -141,13 +141,13 @@ namespace LocalS.Service.Api.StoreTerm
             foreach (var orderDetailsChild in orderDetailsChilds)
             {
                 var sku = new RetOrderDetails.Sku();
-                sku.Id = orderDetailsChild.ProductSkuId;
-                sku.Name = orderDetailsChild.ProductSkuName;
-                sku.ImgUrl = orderDetailsChild.ProductSkuMainImgUrl;
+                sku.Id = orderDetailsChild.PrdProductSkuId;
+                sku.Name = orderDetailsChild.PrdProductSkuName;
+                sku.ImgUrl = orderDetailsChild.PrdProductMainImgUrl;
                 sku.Quantity = orderDetailsChild.Quantity;
 
 
-                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.ProductSkuId == orderDetailsChild.ProductSkuId).ToList();
+                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
 
                 sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
 
@@ -180,7 +180,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetOrderSkuPickupStatusQuery();
 
-            var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rup.UniqueId && m.OrderId == rup.OrderId && m.ProductSkuId == rup.SkuId && m.SlotId == rup.SlotId).FirstOrDefault();
+            var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rup.UniqueId && m.OrderId == rup.OrderId && m.PrdProductSkuId == rup.SkuId && m.SlotId == rup.SlotId).FirstOrDefault();
 
             ret.Status = orderDetailsChildSon.Status;
             ret.Tips = orderDetailsChildSon.Status.ToString();
