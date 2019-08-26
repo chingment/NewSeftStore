@@ -1,7 +1,0 @@
-{
-    "navigationBarTitleText": "编辑地址",
-    "usingComponents": {
-      "dialog": "/components/Dialog/dialog",
-      "ownradio": "/components/Ownradio/ownradio"
-    }
-}
