@@ -13,7 +13,6 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string PrdProductId { get; set; }
         public string Name { get; set; }
-        public decimal ShowPrice { get; set; }
         public decimal SalePrice { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

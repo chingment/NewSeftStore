@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             public string Id { get; set; }
-            public string ImgUrl { get; set; }
+            public string MainImgUrl { get; set; }
             public string Name { get; set; }
             public int Quantity { get; set; }
             public int QuantityBySuccess { get; set; }

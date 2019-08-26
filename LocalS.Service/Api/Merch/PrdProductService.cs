@@ -160,11 +160,6 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
-            if (rop.ShowPrice < rop.SalePrice)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "展示价格不能小于销售价");
-            }
-
             using (TransactionScope ts = new TransactionScope())
             {
 
@@ -173,19 +168,28 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name;
                 prdProduct.BarCode = rop.BarCode;
-                Encoding gb2312 = Encoding.GetEncoding("GB2312");
-                string pinyinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, gb2312);
-                string simpleCode = Pinyin.GetInitials(pinyinName, gb2312);
-                prdProduct.SimpleCode = simpleCode;
+                prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
+                prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
                 prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
-                //prdProduct.ShowPrice = rop.ShowPrice;
-                //prdProduct.SalePrice = rop.SalePrice;
                 prdProduct.DetailsDes = rop.DetailsDes;
                 prdProduct.SpecDes = rop.SpecDes;
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
+
+                foreach(var spec in rop.Specs)
+                {
+                    var prdProductSku = new PrdProductSku();
+                    prdProductSku.Id = GuidUtil.New();
+                    prdProductSku.MerchId = prdProduct.MerchId;
+                    prdProductSku.PrdProductId = prdProduct.Id;
+                    prdProductSku.Name = prdProduct.Name;
+                    prdProductSku.SalePrice = spec.SalePrice;
+                    prdProductSku.Creator = operater;
+                    prdProductSku.CreateTime = DateTime.Now;
+                    CurrentDb.PrdProductSku.Add(prdProductSku);
+                }
 
                 if (rop.KindIds != null)
                 {
@@ -285,13 +289,8 @@ namespace LocalS.Service.Api.Merch
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 prdProduct.Name = rop.Name;
-
-                Encoding gb2312 = Encoding.GetEncoding("GB2312");
-                string s = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, gb2312);
-                string simpleCode = Pinyin.GetInitials(s, gb2312);
-                prdProduct.SimpleCode = simpleCode;
-                //prdProduct.ShowPrice = rop.ShowPrice;
-                //prdProduct.SalePrice = rop.SalePrice;
+                prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
+                prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.DetailsDes = rop.DetailsDes;
                 prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();

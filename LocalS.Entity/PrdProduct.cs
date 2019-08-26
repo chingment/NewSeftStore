@@ -14,7 +14,8 @@ namespace LocalS.Entity
         public string PrdSubjectIds { get; set; }
         public string Name { get; set; }
         public string BarCode { get; set; }
-        public string SimpleCode { get; set; }
+        public string PinYinName{ get; set; }
+        public string PinYinIndex { get; set; }
         public string MainImgUrl { get; set; }
         public string DispalyImgUrls { get; set; }
         public string DetailsDes { get; set; }

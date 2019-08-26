@@ -135,8 +135,8 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
                     orderConfirmSkuModel.Id = item.PrdProductSkuId;
-                    orderConfirmSkuModel.MainImgUrl = item.PrdProductMainImgUrl;
                     orderConfirmSkuModel.Name = item.PrdProductSkuName;
+                    orderConfirmSkuModel.MainImgUrl = item.PrdProductSkuMainImgUrl;
                     orderConfirmSkuModel.Quantity = item.Quantity;
                     orderConfirmSkuModel.SalePrice = item.SalePrice;
                     skuAmountByOriginal += (item.SalePrice * item.Quantity);
@@ -386,7 +386,7 @@ namespace LocalS.Service.Api.StoreApp
 
                         sku.Id = orderDetailsChild.Id;
                         sku.Name = orderDetailsChild.PrdProductSkuName;
-                        sku.MainImgUrl = orderDetailsChild.PrdProductMainImgUrl;
+                        sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
                         sku.Quantity = orderDetailsChild.Quantity.ToString();
                         sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
 
@@ -488,7 +488,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     sku.Id = orderDetailsChild.Id;
                     sku.Name = orderDetailsChild.PrdProductSkuName;
-                    sku.MainImgUrl = orderDetailsChild.PrdProductMainImgUrl;
+                    sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
                     sku.Quantity = orderDetailsChild.Quantity.ToString();
                     sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
 

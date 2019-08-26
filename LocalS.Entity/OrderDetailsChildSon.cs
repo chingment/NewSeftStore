@@ -38,7 +38,7 @@ namespace LocalS.Entity
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string PrdProductSkuName { get; set; }
-        public string PrdProductMainImgUrl { get; set; }
+        public string PrdProductSkuMainImgUrl { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }

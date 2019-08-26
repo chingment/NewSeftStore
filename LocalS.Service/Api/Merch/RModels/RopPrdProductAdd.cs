@@ -17,8 +17,6 @@ namespace LocalS.Service.Api.Merch
 
         public List<ImgSet> DispalyImgUrls { get; set; }
 
-        public decimal ShowPrice { get; set; }
-
         public decimal SalePrice { get; set; }
 
         public string DetailsDes { get; set; }
@@ -32,6 +30,17 @@ namespace LocalS.Service.Api.Merch
         public List<string> SubjectIds
         {
             get; set;
+        }
+
+        public List<Spec> Specs { get; set; }
+
+        public class Spec
+        {
+            public string Key { get; set; }
+
+            public string Name { get; set; }
+
+            public decimal SalePrice { get; set; }
         }
     }
 }
