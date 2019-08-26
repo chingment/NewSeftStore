@@ -1,0 +1,118 @@
+<template name="index">
+  <view class="st-index">
+    <navigator class="store" url="/pages/store/store" hover-class="none">
+      <view class="icon">
+        <image class="img" src="/content/default/images/store_address.png"></image>
+      </view>
+      <view class="title">
+        <text class="txt">{{currentStore.name}}</text>
+      </view>
+      <view class="more">
+        <image class="img" src="/content/default/images/arro_down.png"></image>
+      </view>
+    </navigator>
+    <view class="banner">
+      <view class="ct">
+        <block wx:if="{{banner.imgs.length>0}}">
+          <swiper class="its-swiper" autoplay="{{banner.autoplay}}" current="{{banner.currentSwiper}}" bindchange="indexBarBannerSwiperChange">
+            <block wx:for="{{banner.imgs}}" wx:key="item" >
+              <swiper-item class="it">
+                <image class="img" src="{{item.url}}"></image>
+              </swiper-item>
+            </block>
+          </swiper>
+          <view class="its-dot">
+            <block wx:for="{{banner.imgs}}" wx:key="item">
+              <view class="it{{index == banner.currentSwiper ? ' it-active' : ''}}"></view>
+            </block>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="fc">
+      <view class="ct">
+        <view class='its-fc'>
+          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+            <view class="icon">
+              <image class='img' src='/content/default/images/index-fc-newuser.png'></image>
+            </view>
+            <view class="title">
+              <text class='txt'> 新人专享</text>
+            </view>
+          </navigator>
+          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+            <view class="icon">
+              <image class='img' src='/content/default/images/index-fc-seckill.png'></image>
+            </view>
+            <view class="title">
+              <text class='txt'>限时秒杀</text>
+            </view>
+          </navigator>
+          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+            <view class="icon">
+              <image class='img' src='/content/default/images/index-fc-member.png'></image>
+            </view>
+            <view class="title">
+              <text class='txt'>会员专区</text>
+            </view>
+          </navigator>
+          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+            <view class="icon">
+              <image class='img' src='/content/default/images/index-fc-coupon.png'></image>
+            </view>
+            <view class="title">
+              <text class='txt'>优惠券</text>
+            </view>
+          </navigator>
+        </view>
+      </view>
+    </view>
+    <view class="pdArea">
+      <view class="ct">
+        <view class="its-pdArea">
+          <block wx:for-items="{{pdArea.tabs}}" wx:for-item="item" wx:key="{{index}}">
+            <view class="it">
+              <view class="it-a1">
+                <view class="title">
+                  <text class='txt'>{{item.name}}</text>
+                </view>
+                <navigator class='more' url="/pages/productlist/productlist?subjectId={{item.id}}&navName={{item.name}}" hover-class="none">
+                  <view class="title">
+                    <text class="txt">更多优选</text>
+                  </view>
+                  <view class="icon">
+                    <image class='img' src='/content/default/images/col_nav_right.png'></image>
+                  </view>
+                </navigator>
+              </view>
+              <view class='it-a2'>
+                <image class="img" src="{{item.mainImgUrl}}"></image>
+              </view>
+              <view class="it-a3 prd-list-1">
+                <block wx:for="{{item.list}}" wx:for-index="index" wx:for-item="item2" wx:key="list">
+                  <view class='it it-{{index%2}}'>
+                    <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item2.id}}">
+                      <image class="img" src="{{item2.mainImgUrl}}"></image>
+                    </navigator>
+                    <text class="name font-gray">{{item2.name}}</text>
+                    <text class="briefInfo font-gray">{{item2.briefDes}}</text>
+                    <view class="area2">
+                      <view class="price">
+                        <text class="saleprice font-black">{{item2.salePrice}}</text>
+                        <text class="showprice font-gray">{{item2.showPrice}}</text>
+                      </view>
+                      <view class="operate">
+                        <image bindtap="addToCart" data-reply-skuid="{{item2.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                      </view>
+                    </view>
+                  </view>
+                </block>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

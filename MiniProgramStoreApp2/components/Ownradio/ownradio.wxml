@@ -1,0 +1,7 @@
+<view class="ownradio-box" >
+  <label class="radio"  catchtap='_radioCheckEvent' >
+    <image src='../../images/{{isSelected==false?"checkedoff":"checkedon"}}.png'></image>
+    <text>默认地址</text>
+    <input name="hidden" name="{{name}}" value="{{isSelected}}" />
+  </label>
+</view>

@@ -1,0 +1,52 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.3.0",
+	"appid": "wx969a817779af7b53",
+	"projectname": "Lumos.MiniProgram",
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 1,
+			"list": [
+				{
+					"id": -1,
+					"name": "带参数页面测试",
+					"pathName": "pages/test/test",
+					"query": "id=1001&name=chingment"
+				},
+				{
+					"id": 1,
+					"name": "操作结果",
+					"pathName": "pages/operate/operate",
+					"query": "id=ce9834e30971490ba7984e89f7e4b582&type=1"
+				}
+			]
+		}
+	}
+}
