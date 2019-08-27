@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class OrderConfirmProductModel
+    public class OrderConfirmProductSkuModel
     {
         public string Id { get; set; }
         public string Name { get; set; }

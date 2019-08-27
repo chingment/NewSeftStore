@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var olist = new List<ProductModel>();
+            var olist = new List<object>();
 
             var query = (from o in CurrentDb.PrdProduct
 
@@ -60,15 +60,11 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                olist.Add(new ProductModel
+                var productModel = CacheServiceFactory.PrdProduct.GetModelById(item.Id);
+                if (productModel != null)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    MainImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
-                    //SalePrice = item.SalePrice,
-                    //ShowPrice = item.ShowPrice,
-                    BriefDes = item.BriefDes
-                });
+                    olist.Add(productModel);
+                }
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
@@ -84,10 +80,10 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
 
-            var productSkuModel = CacheServiceFactory.PrdProduct.GetModelById(id);
+            var productModel = CacheServiceFactory.PrdProduct.GetModelById(id);
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuModel);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);
 
             return result;
         }

@@ -23,21 +23,25 @@ namespace LocalS.Service.Api.StoreApp
 
 
             //构建购物车商品信息
-            var cartProductSkuModels = new List<CartProductModel>();
+            var cartProductSkuModels = new List<CartProductSkuModel>();
 
             foreach (var clientCart in clientCarts)
             {
-                var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(clientCart.ProductId);
-                if (productSkuByCache != null)
+                var productModel = CacheServiceFactory.PrdProduct.GetModelById(clientCart.PrdProductId);
+                if (productModel != null)
                 {
-                    var cartProcudtSkuModel = new CartProductModel();
+                    var cartProcudtSkuModel = new CartProductSkuModel();
                     cartProcudtSkuModel.CartId = clientCart.Id;
-                    cartProcudtSkuModel.Id = productSkuByCache.Id;
-                    cartProcudtSkuModel.Name = productSkuByCache.Name;
-                    cartProcudtSkuModel.MainImgUrl = productSkuByCache.MainImgUrl;
-                    cartProcudtSkuModel.SalePrice = productSkuByCache.SalePrice;
+                    cartProcudtSkuModel.Id = clientCart.PrdProductSkuId;
+                    cartProcudtSkuModel.ProductId = clientCart.PrdProductId;
+                    cartProcudtSkuModel.Name = productModel.Name;
+                    cartProcudtSkuModel.MainImgUrl = productModel.MainImgUrl;
+
+                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == clientCart.PrdProductSkuId).FirstOrDefault();
+
+                    cartProcudtSkuModel.SalePrice = productSku.SalePrice;
                     cartProcudtSkuModel.Quantity = clientCart.Quantity;
-                    cartProcudtSkuModel.SumPrice = clientCart.Quantity * productSkuByCache.SalePrice;
+                    cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
                     cartProcudtSkuModel.Selected = clientCart.Selected;
                     cartProcudtSkuModel.ReceptionMode = clientCart.ReceptionMode;
                     cartProductSkuModels.Add(cartProcudtSkuModel);
@@ -52,7 +56,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 var carBlock = new CartBlockModel();
                 carBlock.ReceptionMode = receptionMode;
-                carBlock.Products = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
+                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
 
                 switch (receptionMode)
                 {
@@ -87,7 +91,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            if (rop.Products == null || rop.Products.Count == 0)
+            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
@@ -96,11 +100,9 @@ namespace LocalS.Service.Api.StoreApp
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    foreach (var item in rop.Products)
+                    foreach (var item in rop.ProductSkus)
                     {
-                        var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-
-                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.ProductId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
+                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
 
                         switch (rop.Operate)
                         {
@@ -116,16 +118,18 @@ namespace LocalS.Service.Api.StoreApp
                                 }
                                 break;
                             case E_CartOperateType.Increase:
-                                var productSkuModel = CacheServiceFactory.PrdProduct.GetModelById(item.Id);
-
                                 if (clientCart == null)
                                 {
+                                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == item.Id).FirstOrDefault();
+                                    var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+
                                     clientCart = new ClientCart();
                                     clientCart.Id = GuidUtil.New();
                                     clientCart.ClientUserId = clientUserId;
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
-                                    clientCart.ProductId = productSkuModel.Id;
+                                    clientCart.PrdProductId = productSku.PrdProductId;
+                                    clientCart.PrdProductSkuId = item.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;
                                     clientCart.Creator = operater;

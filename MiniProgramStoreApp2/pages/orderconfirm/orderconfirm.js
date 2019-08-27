@@ -6,7 +6,7 @@ const cart = require('../../pages/cart/cart.js')
 const lumos = require('../../utils/lumos.minprogram.js')
 const app = getApp()
 
-var products = null
+var productSkus = null
 var orderId = null
 var getData = function(_this) {
 
@@ -17,7 +17,7 @@ var getData = function(_this) {
     dataParams: {
       orderId: orderId,
       storeId: ownRequest.getCurrentStoreId(),
-      products: products,
+      productSkus: productSkus,
       couponId: couponId
     },
     success: function(res) {
@@ -51,9 +51,9 @@ Page({
   onLoad: function(options) {
     var _this = this
     console.log("orderconfirm.orderid->>>>" + options.orderId)
-    console.log("orderconfirm.products->>>>" + JSON.stringify(options.products))
+    console.log("orderconfirm.productSkus->>>>" + JSON.stringify(options.productSkus))
     orderId = options.orderId == undefined ? null : options.orderId;
-    products = JSON.parse(options.products);
+    productSkus = JSON.parse(options.productSkus);
   },
 
   /**
@@ -122,7 +122,7 @@ Page({
     var couponId = _this.data.couponId
 
     wx.navigateTo({
-      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&products=" + JSON.stringify(products) + "&couponId=" + JSON.stringify(couponId),
+      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponId=" + JSON.stringify(couponId),
       success: function(res) {
         // success
       },
@@ -149,7 +149,7 @@ Page({
         dataParams: {
           storeId: ownRequest.getCurrentStoreId(),
           payTimeout: 120,
-          products: products,
+          productSkus: productSkus,
           source:3,
         },
         success: function(res) {

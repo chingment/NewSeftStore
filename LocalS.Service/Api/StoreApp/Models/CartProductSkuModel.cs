@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 namespace LocalS.Service.Api.StoreApp
 {
 
-    public class CartProductModel
+    public class CartProductSkuModel
     {
         public string Id { get; set; }
+
+        public string ProductId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public decimal SalePrice { get; set; }

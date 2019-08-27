@@ -99,11 +99,11 @@
                     <text class="briefInfo font-gray">{{item2.briefDes}}</text>
                     <view class="area2">
                       <view class="price">
-                        <text class="saleprice font-black">{{item2.salePrice}}</text>
-                        <text  wx:if="{{item2.salePrice!=item2.showPrice&&item2.showPrice!=0}}" class="showprice font-gray">{{item2.showPrice}}</text>
+                        <text class="saleprice font-black">{{item2.skus[item2.refSkuIndex].salePrice}}</text>
+                        <text  wx:if="{{item2.skus[item2.refSkuIndex].salePrice!=item2.skus[item2.refSkuIndex].showPrice&&item2.skus[item2.refSkuIndex].showPrice!=0}}" class="showprice font-gray">{{item2.skus[item2.refSkuIndex].showPrice}}</text>
                       </view>
                       <view class="operate">
-                        <image bindtap="addToCart" data-reply-id="{{item2.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                        <image bindtap="addToCart" data-reply-skuid="{{item2.skus[item2.refSkuIndex].id}}" class="increase" src='/content/default/images/increase.png'></image>
                       </view>
                     </view>
                   </view>

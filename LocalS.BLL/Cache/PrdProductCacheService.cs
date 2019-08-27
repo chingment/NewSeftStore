@@ -24,18 +24,28 @@ namespace LocalS.BLL
                 if (prdProduct == null)
                     return null;
 
+                var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).ToList();
+                if (prdProductSkus == null)
+                    return null;
+
 
                 model = new PrdProductModel();
 
                 model.Id = prdProduct.Id;
                 model.Name = prdProduct.Name;
-                //model.SalePrice = prdProduct.SalePrice;
-                //model.ShowPrice = prdProduct.ShowPrice;
                 model.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
                 model.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
                 model.DetailsDes = prdProduct.DetailsDes;
                 model.BriefDes = prdProduct.BriefDes;
-               // model.SpecDes = prdProduct.SpecDes;
+
+                for (var i = 0; i < prdProductSkus.Count; i++)
+                {
+                    if (prdProductSkus[i].IsRef)
+                    {
+                        model.RefSkuIndex = i;
+                    }
+                    model.Skus.Add(new PrdProductModel.Sku { Id = prdProductSkus[i].Id, SalePrice = prdProductSkus[i].SalePrice, SpecDes = prdProductSkus[i].SpecDes });
+                }
 
                 RedisManager.Db.HashSetAsync(redis_key_productsku_list, model.Id, Newtonsoft.Json.JsonConvert.SerializeObject(model), StackExchange.Redis.When.Always);
 

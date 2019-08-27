@@ -234,11 +234,11 @@ Page({
   addToCart: function(e) {
 
     var _self = this
-    var id = e.currentTarget.dataset.replyId //对应页面data-reply-index
-    console.log("id:" + id)
-    var products = new Array();
-    products.push({
-      id: id,
+    var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
+    console.log("skuId:" + skuId)
+    var productSkus = new Array();
+    productSkus.push({
+      id: skuId,
       quantity: 1,
       selected: true,
       receptionMode: 3
@@ -247,7 +247,7 @@ Page({
     cart.operate({
       storeId: ownRequest.getCurrentStoreId(),
       operate: 2,
-      products: products
+      productSkus: productSkus
     }, {
       success: function(res) {
 

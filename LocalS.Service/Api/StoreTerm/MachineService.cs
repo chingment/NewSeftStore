@@ -85,12 +85,12 @@ namespace LocalS.Service.Api.StoreTerm
                     var productSkuModel = new ProductSkuModel();
                     productSkuModel.Id = productSku.Id;
                     productSkuModel.Name = productSku.Name;
-                    productSkuModel.SpecDes = productSku.SpecDes;
+                    //productSkuModel.SpecDes = productSku.SpecDes;
                     productSkuModel.DetailsDes = productSku.DetailsDes;
                     productSkuModel.BriefDes = productSku.BriefDes;
-                    productSkuModel.ShowPirce = productSku.ShowPrice.ToF2Price();
-                    productSkuModel.SalePrice = productSku.SalePrice.ToF2Price();
-                    productSkuModel.DisplayImgUrls = productSku.DispalyImgUrls;
+                    //productSkuModel.ShowPirce = productSku.ShowPrice.ToF2Price();
+                    //productSkuModel.SalePrice = productSku.SalePrice.ToF2Price();
+                    //productSkuModel.DisplayImgUrls = productSku.DispalyImgUrls;
                     productSkuModel.MainImgUrl = productSku.MainImgUrl;
 
                     productSkuModels.Add(productSku.Id, productSkuModel);

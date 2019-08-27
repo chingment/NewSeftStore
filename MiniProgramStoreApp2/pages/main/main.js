@@ -264,24 +264,24 @@ Page({
     console.log('cartBarListItemCheck.cIndex:' + cIndex)
     console.log('cartBarListItemCheck.operate' + operate)
 
-    var product = _self.data.cart.blocks[pIndex].products[cIndex];
+    var productSku = _self.data.cart.blocks[pIndex].productSkus[cIndex];
 
     switch (operate) {
       case "1":
-        if (product.selected) {
-          product.selected = false
+        if (productSku.selected) {
+          productSku.selected = false
         } else {
-          product.selected = true
+          productSku.selected = true
         }
         break;
     }
 
-    var operateProducts = new Array();
-    operateProducts.push({
-      id: product.id,
+    var operateProductSkus = new Array();
+    operateProductSkus.push({
+      id: productSku.id,
       quantity: 1,
-      selected: product.selected,
-      receptionMode: product.receptionMode
+      selected: productSku.selected,
+      receptionMode: productSku.receptionMode
     });
 
     console.log('ownRequest.getCurrentStoreId():' + ownRequest.getCurrentStoreId())
@@ -291,7 +291,7 @@ Page({
       cart.operate({
         storeId: ownRequest.getCurrentStoreId(),
         operate: operate,
-        products: operateProducts
+        productSkus: operateProductSkus
       }, {
         success: function(res) {
           
@@ -324,22 +324,22 @@ Page({
 
     var blocks = _this.data.cart.blocks
 
-    var products = []
+    var productSkus = []
 
     for (var i = 0; i < blocks.length; i++) {
-      for (var j = 0; j < blocks[i].products.length; j++) {
-        if (blocks[i].products[j].selected) {
-          products.push({
-            cartId: blocks[i].products[j].cartId,
-            id: blocks[i].products[j].id,
-            quantity: blocks[i].products[j].quantity,
-            receptionMode: blocks[i].products[j].receptionMode
+      for (var j = 0; j < blocks[i].productSkus.length; j++) {
+        if (blocks[i].productSkus[j].selected) {
+          productSkus.push({
+            cartId: blocks[i].productSkus[j].cartId,
+            id: blocks[i].productSkus[j].id,
+            quantity: blocks[i].productSkus[j].quantity,
+            receptionMode: blocks[i].productSkus[j].receptionMode
           })
         }
       }
     }
 
-    if (products.length == 0) {
+    if (productSkus.length == 0) {
       toastUtil.showToast({
         title: '至少选择一件商品'
       })
@@ -347,7 +347,7 @@ Page({
     }
 
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?products=' + JSON.stringify(products),
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
       success: function(res) {
         // success
       },
@@ -355,10 +355,11 @@ Page({
   },
   addToCart: function(e) {
     var _self = this
-    var id = e.currentTarget.dataset.replyId //对应页面data-reply-index
-    var products = new Array();
-    products.push({
-      id:id,
+    var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
+    console.log('skuId：' + skuId)
+    var productSkus = new Array();
+    productSkus.push({
+      id: skuId,
       quantity: 1,
       selected: true,
       receptionMode: 3
@@ -367,7 +368,7 @@ Page({
     cart.operate({
       storeId: ownRequest.getCurrentStoreId(),
       operate: 2,
-      products: products
+      productSkus: productSkus
     }, {
       success: function(res) {},
       fail: function() {}
@@ -382,9 +383,9 @@ Page({
     var _this = this
 
     for (var i = 0; i < _this.data.cart.blocks.length; i++) {
-      for (var j = 0; j < _this.data.cart.blocks[i].products.length; j++) {
-        if (_this.data.cart.blocks[i].products[j].isTouchMove) {
-          _this.data.cart.blocks[i].products[j].isTouchMove = false;
+      for (var j = 0; j < _this.data.cart.blocks[i].productSkus.length; j++) {
+        if (_this.data.cart.blocks[i].productSkus[j].isTouchMove) {
+          _this.data.cart.blocks[i].productSkus[j].isTouchMove = false;
         }
       }
     }
@@ -427,23 +428,23 @@ Page({
 
 
     for (var i = 0; i < _this.data.cart.blocks.length; i++) {
-      for (var j = 0; j < _this.data.cart.blocks[i].products.length; j++) {
+      for (var j = 0; j < _this.data.cart.blocks[i].productSkus.length; j++) {
 
-        _this.data.cart.blocks[i].products[j].isTouchMove = false
+        _this.data.cart.blocks[i].productSkus[j].isTouchMove = false
 
         //滑动超过30度角 return
 
         if (Math.abs(angle) > 30) return;
 
-        if (cartId == _this.data.cart.blocks[i].products[j].cartId) {
+        if (cartId == _this.data.cart.blocks[i].productSkus[j].cartId) {
 
           if (touchMoveX > startX) //右滑
 
-            _this.data.cart.blocks[i].products[j].isTouchMove = false
+            _this.data.cart.blocks[i].productSkus[j].isTouchMove = false
 
           else //左滑
 
-            _this.data.cart.blocks[i].products[j].isTouchMove = true
+            _this.data.cart.blocks[i].productSkus[j].isTouchMove = true
 
         }
       }

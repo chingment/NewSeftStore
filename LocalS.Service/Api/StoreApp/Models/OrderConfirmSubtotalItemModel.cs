@@ -11,13 +11,13 @@ namespace LocalS.Service.Api.StoreApp
     {
         public OrderBlockModel()
         {
-            this.Skus = new List<OrderConfirmProductModel>();
+            this.Skus = new List<OrderConfirmProductSkuModel>();
         }
 
         public string TagName { get; set; }
         public E_ReceptionMode ReceptionMode { get; set; }
         public DeliveryAddressModel DeliveryAddress { get; set; }
-        public List<OrderConfirmProductModel> Skus { get; set; }
+        public List<OrderConfirmProductSkuModel> Skus { get; set; }
     }
 
     public class OrderConfirmSubtotalItemModel

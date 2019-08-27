@@ -53,8 +53,16 @@ namespace LocalS.BLL.Biz
 
                 foreach (var sku in rop.ProductSkus)
                 {
-                    var skuModel = CacheServiceFactory.PrdProduct.GetModelById(sku.Id);
-
+                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
+                    if (productSku == null)
+                    {
+                        LogUtil.Info("productSku:为空");
+                    }
+                    var productModel = CacheServiceFactory.PrdProduct.GetModelById(productSku.PrdProductId);
+                    if (productModel == null)
+                    {
+                        LogUtil.Info("productModel:为空");
+                    }
                     var sellQuantity = 0;
 
                     if (rop.ReserveMode == E_ReserveMode.OffLine)
@@ -83,12 +91,12 @@ namespace LocalS.BLL.Biz
                     {
                         if (sellQuantity < sku.Quantity)
                         {
-                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", skuModel.Name, sellQuantity));
+                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", productModel.Name, sellQuantity));
                         }
                     }
                     else
                     {
-                        warn_tips.Add(string.Format("{0}已经下架", skuModel.Name));
+                        warn_tips.Add(string.Format("{0}已经下架", productModel.Name));
                     }
                 }
 
@@ -181,7 +189,10 @@ namespace LocalS.BLL.Biz
                             break;
                         case E_StoreSellChannelRefType.Machine:
                             var machine = CurrentDb.Machine.Where(m => m.Id == detail.SellChannelRefId).FirstOrDefault();
-
+                            if(machine==null)
+                            {
+                                LogUtil.Info("machine:为空");
+                            }
                             orderDetails.SellChannelRefName = "【机器自提】 " + machine.Name;//todo 若 ChannelType 为1 则机器昵称，2为自取
                             orderDetails.SellChannelRefType = E_StoreSellChannelRefType.Machine;
                             orderDetails.SellChannelRefId = detail.SellChannelRefId;
@@ -202,7 +213,7 @@ namespace LocalS.BLL.Biz
                     orderDetails.Creator = operater;
                     orderDetails.CreateTime = DateTime.Now;
 
-  
+
                     CurrentDb.OrderDetails.Add(orderDetails);
 
                     foreach (var detailsChild in detail.Details)
@@ -361,7 +372,7 @@ namespace LocalS.BLL.Biz
                             if (reservedQuantity != needReserveQuantity)
                             {
 
-                                var product = CacheServiceFactory.PrdProduct.GetModelById(item.PrdProductSkuId);
+                                var product = CacheServiceFactory.PrdProduct.GetModelById(item.PrdProductId);
 
                                 var detailChildSon = new OrderReserveDetail.DetailChildSon();
                                 detailChildSon.Id = GuidUtil.New();

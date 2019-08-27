@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,13 +22,13 @@ namespace LocalS.Service.Api.StoreApp
         {
             public Tab()
             {
-                this.List = new List<ProductModel>();
+                this.List = new List<PrdProductModel>();
             }
 
             public string Id { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
-            public List<ProductModel> List { get; set; }
+            public List<PrdProductModel> List { get; set; }
         }
     }
 }

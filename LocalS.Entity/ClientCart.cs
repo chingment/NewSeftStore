@@ -32,7 +32,8 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }
-        public string ProductId { get; set; }
+        public string PrdProductId { get; set; }
+        public string PrdProductSkuId { get; set; }
         public int Quantity { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

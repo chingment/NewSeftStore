@@ -70,23 +70,12 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var i in list)
                     {
-                        var productByCache = CacheServiceFactory.PrdProduct.GetModelById(i.PrdProductId);
+                        var productModel = CacheServiceFactory.PrdProduct.GetModelById(i.PrdProductId);
 
-                        if (productByCache != null)
+                        if (productModel != null)
                         {
-                            var procudtModel = new ProductModel();
-                            procudtModel.Id = productByCache.Id;
-                            procudtModel.Name = productByCache.Name;
-                            procudtModel.DispalyImgUrls = productByCache.DispalyImgUrls;
-                            procudtModel.MainImgUrl = productByCache.MainImgUrl;
-                            procudtModel.SalePrice = productByCache.SalePrice;
-                            procudtModel.ShowPrice = productByCache.ShowPrice;
-                            procudtModel.BriefDes = productByCache.BriefDes;
-                            procudtModel.DetailsDes = productByCache.DetailsDes;
-
-                            tab.List.Add(procudtModel);
+                            tab.List.Add(productModel);
                         }
-
                     }
 
                     pdAreaModel.Tabs.Add(tab);

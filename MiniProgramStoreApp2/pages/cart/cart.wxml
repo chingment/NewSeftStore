@@ -14,7 +14,7 @@
                 <image class="more img" src='/content/default/images/col_nav_right.png'></image>
               </view>
               <view class="it-skus">
-                <block wx:for="{{item.products}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
+                <block wx:for="{{item.productSkus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
                   <view class="it touch-item {{itemsku.isTouchMove ? 'touch-move-active' : ''}}" data-cartid="{{itemsku.cartId}}" bindtouchstart="cartBarTouchstart" bindtouchmove="cartBarTouchmove">
                     <view class="it-content">
                       <view class="it-l" bindtap="cartBarListItemOperate" data-reply-operate="1" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">
@@ -22,7 +22,7 @@
                       </view>
                       <view class="it-m">
                         <view class="it-ml">
-                          <navigator url="/pages/productdetails/productdetails?id={{itemsku.id}}" style='height:100%;width:100%'>
+                          <navigator url="/pages/productdetails/productdetails?id={{itemsku.productId}}" style='height:100%;width:100%'>
                             <image class='img' src="{{itemsku.mainImgUrl}}" />
                           </navigator>
                         </view>
