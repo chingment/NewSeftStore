@@ -1,5 +1,5 @@
-<template name="personal">
-  <view class='st-personal'>
+
+<view class='st-personal'>
     <view class="container">
       <view class='personal-userinfo'>
         <view class='item-left'>
@@ -96,5 +96,4 @@
 
     </view>
   </view>
-
-</template>
+  

@@ -1,3 +1,8 @@
 {
-  "usingComponents":{}
+  "usingComponents":{
+    "page-index": "/pages/index/index",
+    "page-productkind": "/pages/productkind/productkind",
+    "page-cart":"/pages/cart/cart",
+    "page-personal": "/pages/personal/personal"
+  }
 }

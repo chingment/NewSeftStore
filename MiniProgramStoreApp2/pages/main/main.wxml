@@ -1,7 +1,3 @@
-<import src="/pages/index/index.wxml" />
-<import src="/pages/cart/cart.wxml" />
-<import src="/pages/productkind/productkind.wxml" />
-<import src="/pages/personal/personal.wxml" />
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
@@ -14,17 +10,17 @@
 
         <block wx:if="{{isLogin}}">
 
-          <scroll-view class='it {{tabBar[0].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" bindscrolltoupper="refresh" bindscrolltolower="loadMore" data-reply-index="{{0}}" data-reply-name="{{tabBar[0].name}}">
-            <template is="{{tabBar[0].name}}" data="{{...index}}" />
+          <scroll-view class='it {{tabBar[0].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" data-reply-index="{{0}}" data-reply-name="{{tabBar[0].name}}">
+            <page-index initdata="{{index}}"></page-index>
           </scroll-view>
-          <scroll-view class='it {{tabBar[1].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" bindscrolltoupper="refresh" bindscrolltolower="loadMore" data-reply-index="{{1}}" data-reply-name="{{tabBar[1].name}}">
-            <template is="{{tabBar[1].name}}" data="{{...productKind}}" />
+          <scroll-view class='it {{tabBar[1].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" data-reply-index="{{1}}" data-reply-name="{{tabBar[1].name}}">
+            <page-productkind initdata="{{productKind}}"></page-productkind>
           </scroll-view>
-          <scroll-view class='it {{tabBar[2].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" bindscrolltoupper="refresh" bindscrolltolower="loadMore" data-reply-index="{{2}}" data-reply-name="{{tabBar[2].name}}">
-            <template is="{{tabBar[2].name}}" data="{{...cart}}" />
+          <scroll-view class='it {{tabBar[2].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" data-reply-index="{{2}}" data-reply-name="{{tabBar[2].name}}">
+            <page-cart initdata="{{cart}}"></page-cart>
           </scroll-view>
-          <scroll-view class='it {{tabBar[3].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" bindscrolltoupper="refresh" bindscrolltolower="loadMore" data-reply-index="{{3}}" data-reply-name="{{tabBar[3].name}}">
-            <template is="{{tabBar[3].name}}" data="{{...personal}}" />
+          <scroll-view class='it {{tabBar[3].selected==false?"hidden":""}}' style="height:{{tabBarContentHeight}}px" scroll-y="true" data-reply-index="{{3}}" data-reply-name="{{tabBar[3].name}}">
+            <page-personal initdata="{{personal}}"></page-personal>
           </scroll-view>
         </block>
         <block wx:else>

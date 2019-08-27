@@ -1,8 +1,7 @@
-<template name="productkind">
-  <view class='st-kind'>
+<view class='st-kind'>
     <scroll-view class='kind-left-navbar' scroll-y="true">
       <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-        <view class="it {{ item.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{index}}" bindtap="kindBarItemClick">{{item.name}}
+        <view class="it {{ item.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{index}}" bindtap="itemClick">{{item.name}}
         </view>
       </block>
     </scroll-view>
@@ -27,4 +26,3 @@
       </scroll-view>
     </block>
   </view>
-</template>

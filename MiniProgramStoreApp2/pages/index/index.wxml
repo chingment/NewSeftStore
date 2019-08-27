@@ -1,4 +1,4 @@
-<template name="index">
+
   <view class="st-index">
     <navigator class="store" url="/pages/store/store" hover-class="none">
       <view class="icon">
@@ -14,7 +14,7 @@
     <view class="banner">
       <view class="ct">
         <block wx:if="{{banner.imgs.length>0}}">
-          <swiper class="its-swiper" autoplay="{{banner.autoplay}}" current="{{banner.currentSwiper}}" bindchange="indexBarBannerSwiperChange">
+          <swiper class="its-swiper" autoplay="{{banner.autoplay}}" current="{{banner.currentSwiper}}" bindchange="topBannerSwiperChange">
             <block wx:for="{{banner.imgs}}" wx:key="item" >
               <swiper-item class="it">
                 <image class="img" src="{{item.url}}"></image>
@@ -115,4 +115,3 @@
       </view>
     </view>
   </view>
-</template>

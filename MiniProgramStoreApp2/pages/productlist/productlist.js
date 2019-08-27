@@ -1,6 +1,6 @@
 const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
-const cart = require('../../pages/cart/cart.js')
+const cart = require('../../api/cart.js')
 const ownRequest = require('../../own/ownRequest.js')
 const lumos = require('../../utils/lumos.minprogram.js')
 const app = getApp()

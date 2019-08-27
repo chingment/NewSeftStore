@@ -2,13 +2,12 @@
 //获取应用实例
 const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
-const cart = require('../../pages/cart/cart.js')
-const index = require('../../pages/index/index.js')
-const productkind = require('../../pages/productkind/productkind.js')
-const personal = require('../../pages/personal/personal.js')
 const toastUtil = require('../../utils/showtoastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const lumos = require('../../utils/lumos.minprogram.js')
+const global = require('../../api/global.js')
+
+
 var app = getApp()
 
 Page({
@@ -90,7 +89,7 @@ Page({
       list: []
     }
   },
-  bindgetuserinfo: function(e) {
+  bindgetuserinfo: function (e) {
 
 
 
@@ -111,7 +110,7 @@ Page({
           iv: params.iv,
           encryptedData: params.encryptedData
         },
-        success: function(res) {
+        success: function (res) {
           if (res.result == 1) {
             storeage.setAccessToken(res.data.token);
             console.log("token:" + storeage.getAccessToken())
@@ -129,41 +128,23 @@ Page({
     })
     //}
   },
-  loadMore: function(e) {
-    console.log("main.loadMore")
-    var _self = this
-    var _dataset = e.currentTarget.dataset
-    var index = _dataset.replyIndex //对应页面data-reply-index
-    var name = _dataset.replyName //对应页面data-reply-name
-    console.log("main.loadMore.index:" + index)
-    console.log("main.loadMore.name:" + name)
-  },
-  refresh: function(e) {
-    console.log("main.refresh")
-    var _self = this
-    var _dataset = e.currentTarget.dataset
-    var index = _dataset.replyIndex //对应页面data-reply-index
-    var name = _dataset.replyName //对应页面data-reply-name
-    console.log("main.loadMore.index:" + index)
-    console.log("main.loadMore.name:" + name)
-  },
-  changeData: function(data) {
+  changeData: function (data) {
     console.log("main.changeData")
     var _self = this;
     _self.setData(data)
   },
-  onLoad: function() {
+  onLoad: function () {
     console.log("main.onLoad")
     var _self = this;
 
     var isLogin = ownRequest.isLogin();
-    
+
     if (!isLogin) {
       return;
     }
 
     _self.setData({ isLogin: isLogin })
-    
+
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
@@ -177,35 +158,33 @@ Page({
       title: _self.data.tabBar[0].navTitle
     })
 
-    lumos.getJson({
-      url: config.apiUrl.globalDataSet,
-      urlParams: {
-        storeId: ownRequest.getCurrentStoreId(),
-        datetime: '2018-03-30'
-      },
-      success: function(d) {
-        if (d.result == 1) {
+    global.getDataSet({
+      storeId: ownRequest.getCurrentStoreId(),
+      datetime: '2018-03-30'
+    }, {
+        success: function (d) {
+          if (d.result == 1) {
+            var index = d.data.index
+            var productKind = d.data.productKind
+            var cart = d.data.cart
+            var personal = d.data.personal
 
-          var index = d.data.index
-          var productKind = d.data.productKind
-          var cart = d.data.cart
-          var personal = d.data.personal
+            index["currentStore"] = currentStore
 
-          index["currentStore"] = currentStore
+            _self.setData({
+              isLogin: isLogin,
+              index: index,
+              productKind: productKind,
+              cart: cart,
+              personal: personal
+            })
 
-          _self.setData({
-            isLogin: isLogin,
-            index: index,
-            productKind: productKind,
-            cart: cart,
-            personal: personal
-          })
-
-          storeage.setProductKind(productKind)
-          storeage.setCart(cart)
-        }
-      }
-    })
+            storeage.setProductKind(productKind)
+            storeage.setCart(cart)
+          }
+        },
+        fail: function () { }
+      })
 
   },
   mainTabBarItemClick(e) {
@@ -228,255 +207,5 @@ Page({
     this.setData({
       tabBar: tabBar
     })
-  },
-  indexBarBannerSwiperChange: function(e) {
-    var _index = this.data.index;
-    _index.banner.currentSwiper = e.detail.current;
-    this.setData({
-      index: _index
-    })
-  },
-  kindBarItemClick(e) {
-    console.log('kindBarItemClick');
-    var _self = this
-    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
-    console.log('kindBarItemClick.index' + index)
-    var list = _self.data.productKind.list;
-    for (var i = 0; i < list.length; i++) {
-      if (i == index) {
-        list[i].selected = true
-      } else {
-        list[i].selected = false
-      }
-    }
-    _self.data.productKind.list = list
-    this.setData({
-      productKind: _self.data.productKind
-    })
-  },
-  cartBarListItemOperate(e) {
-    console.log('cartBarListItemCheck');
-    var _self = this
-    var pIndex = e.currentTarget.dataset.replyPindex
-    var cIndex = e.currentTarget.dataset.replyCindex
-    var operate = e.currentTarget.dataset.replyOperate
-    console.log('cartBarListItemCheck.pIndex:' + pIndex)
-    console.log('cartBarListItemCheck.cIndex:' + cIndex)
-    console.log('cartBarListItemCheck.operate' + operate)
-
-    var productSku = _self.data.cart.blocks[pIndex].productSkus[cIndex];
-
-    switch (operate) {
-      case "1":
-        if (productSku.selected) {
-          productSku.selected = false
-        } else {
-          productSku.selected = true
-        }
-        break;
-    }
-
-    var operateProductSkus = new Array();
-    operateProductSkus.push({
-      id: productSku.id,
-      quantity: 1,
-      selected: productSku.selected,
-      receptionMode: productSku.receptionMode
-    });
-
-    console.log('ownRequest.getCurrentStoreId():' + ownRequest.getCurrentStoreId())
-
-    function _operate() {
-
-      cart.operate({
-        storeId: ownRequest.getCurrentStoreId(),
-        operate: operate,
-        productSkus: operateProductSkus
-      }, {
-        success: function(res) {
-          
-        },
-        fail: function() {}
-      })
-    }
-
-    if (operate == 4) {
-      wx.showModal({
-        title: '提示',
-        content: '确定要删除吗？',
-        success: function(sm) {
-          if (sm.confirm) {
-            _operate()
-          } else if (sm.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
-
-    } else {
-      _operate()
-    }
-
-
-  },
-  cartBarImmeBuy: function(e) {
-    var _this = this
-
-    var blocks = _this.data.cart.blocks
-
-    var productSkus = []
-
-    for (var i = 0; i < blocks.length; i++) {
-      for (var j = 0; j < blocks[i].productSkus.length; j++) {
-        if (blocks[i].productSkus[j].selected) {
-          productSkus.push({
-            cartId: blocks[i].productSkus[j].cartId,
-            id: blocks[i].productSkus[j].id,
-            quantity: blocks[i].productSkus[j].quantity,
-            receptionMode: blocks[i].productSkus[j].receptionMode
-          })
-        }
-      }
-    }
-
-    if (productSkus.length == 0) {
-      toastUtil.showToast({
-        title: '至少选择一件商品'
-      })
-      return
-    }
-
-    wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
-      success: function(res) {
-        // success
-      },
-    })
-  },
-  addToCart: function(e) {
-    var _self = this
-    var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-    console.log('skuId：' + skuId)
-    var productSkus = new Array();
-    productSkus.push({
-      id: skuId,
-      quantity: 1,
-      selected: true,
-      receptionMode: 3
-    });
-    console.log('ownRequest.getCurrentStoreId():' + ownRequest.getCurrentStoreId())
-    cart.operate({
-      storeId: ownRequest.getCurrentStoreId(),
-      operate: 2,
-      productSkus: productSkus
-    }, {
-      success: function(res) {},
-      fail: function() {}
-    })
-  },
-
-
-  //手指触摸动作开始 记录起点X坐标
-  cartBarTouchstart: function(e) {
-
-    //开始触摸时 重置所有删除
-    var _this = this
-
-    for (var i = 0; i < _this.data.cart.blocks.length; i++) {
-      for (var j = 0; j < _this.data.cart.blocks[i].productSkus.length; j++) {
-        if (_this.data.cart.blocks[i].productSkus[j].isTouchMove) {
-          _this.data.cart.blocks[i].productSkus[j].isTouchMove = false;
-        }
-      }
-    }
-
-    this.setData({
-      startX: e.changedTouches[0].clientX,
-      startY: e.changedTouches[0].clientY,
-      cart: _this.data.cart
-    })
-
-  },
-
-  //滑动事件处理
-
-  cartBarTouchmove: function(e) {
-
-    var _this = this,
-
-      cartId = e.currentTarget.dataset.cartid, //当前索引
-
-      startX = _this.data.startX, //开始X坐标
-
-      startY = _this.data.startY, //开始Y坐标
-
-      touchMoveX = e.changedTouches[0].clientX, //滑动变化坐标
-
-      touchMoveY = e.changedTouches[0].clientY, //滑动变化坐标
-
-      //获取滑动角度
-
-      angle = _this.angle({
-        X: startX,
-        Y: startY
-      }, {
-        X: touchMoveX,
-        Y: touchMoveY
-      });
-
-    console.log("cartId:" + cartId);
-
-
-    for (var i = 0; i < _this.data.cart.blocks.length; i++) {
-      for (var j = 0; j < _this.data.cart.blocks[i].productSkus.length; j++) {
-
-        _this.data.cart.blocks[i].productSkus[j].isTouchMove = false
-
-        //滑动超过30度角 return
-
-        if (Math.abs(angle) > 30) return;
-
-        if (cartId == _this.data.cart.blocks[i].productSkus[j].cartId) {
-
-          if (touchMoveX > startX) //右滑
-
-            _this.data.cart.blocks[i].productSkus[j].isTouchMove = false
-
-          else //左滑
-
-            _this.data.cart.blocks[i].productSkus[j].isTouchMove = true
-
-        }
-      }
-    }
-
-    //更新数据
-    console.log(JSON.stringify(_this.data.cart))
-    _this.setData({
-      cart: _this.data.cart
-    })
-
-  },
-
-  /**
-  
-  * 计算滑动角度
-  
-  * @param {Object} start 起点坐标
-  
-  * @param {Object} end 终点坐标
-  
-  */
-
-  angle: function(start, end) {
-
-    var _X = end.X - start.X,
-
-      _Y = end.Y - start.Y
-
-    //返回角度 /Math.atan()返回数字的反正切值
-
-    return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
-
   }
 })
