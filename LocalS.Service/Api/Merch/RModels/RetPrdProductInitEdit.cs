@@ -12,6 +12,7 @@ namespace LocalS.Service.Api.Merch
     {
         public RetPrdProductInitEdit()
         {
+            this.Skus = new List<Sku>();
             this.Kinds = new List<TreeNode>();
             this.Subjects = new List<TreeNode>();
         }
@@ -22,17 +23,9 @@ namespace LocalS.Service.Api.Merch
 
         public string BarCode { get; set; }
 
-        public string SimpleCode { get; set; }
-
         public List<ImgSet> DispalyImgUrls { get; set; }
 
-        public decimal ShowPrice { get; set; }
-
-        public decimal SalePrice { get; set; }
-
         public string DetailsDes { get; set; }
-
-        public string SpecDes { get; set; }
 
         public string BriefDes { get; set; }
 
@@ -41,6 +34,15 @@ namespace LocalS.Service.Api.Merch
         public List<string> SubjectIds
         {
             get; set;
+        }
+
+        public List<Sku> Skus { get; set; }
+        public class Sku
+        {
+            public string Id { get; set; }
+            public string SpecDes { get; set; }
+
+            public decimal SalePrice { get; set; }
         }
 
         public List<TreeNode> Kinds { get; set; }

@@ -35,7 +35,7 @@ namespace LocalS.BLL
                 model.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
                 model.DetailsDes = prdProduct.DetailsDes;
                 model.BriefDes = prdProduct.BriefDes;
-                model.SpecDes = prdProduct.SpecDes;
+               // model.SpecDes = prdProduct.SpecDes;
 
                 RedisManager.Db.HashSetAsync(redis_key_productsku_list, model.Id, Newtonsoft.Json.JsonConvert.SerializeObject(model), StackExchange.Redis.When.Always);
 

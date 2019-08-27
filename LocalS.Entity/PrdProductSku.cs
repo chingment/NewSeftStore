@@ -14,6 +14,7 @@ namespace LocalS.Entity
         public string PrdProductId { get; set; }
         public string Name { get; set; }
         public decimal SalePrice { get; set; }
+        public string SpecDes { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime? MendTime { get; set; }

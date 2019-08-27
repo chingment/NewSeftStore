@@ -24,8 +24,6 @@ namespace LocalS.Service.Api.Merch
 
         public string DetailsDes { get; set; }
 
-        public string SpecDes { get; set; }
-
         public string BriefDes { get; set; }
 
         public List<string> KindIds { get; set; }
@@ -33,6 +31,15 @@ namespace LocalS.Service.Api.Merch
         public List<string> SubjectIds
         {
             get; set;
+        }
+
+        public List<Sku> Skus { get; set; }
+        public class Sku
+        {
+            public string Id { get; set; }
+            public string SpecDes { get; set; }
+
+            public decimal SalePrice { get; set; }
         }
     }
 }

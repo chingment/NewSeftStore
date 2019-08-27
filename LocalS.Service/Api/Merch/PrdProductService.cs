@@ -152,17 +152,21 @@ namespace LocalS.Service.Api.Merch
 
             if (rop.KindIds == null || rop.KindIds.Count == 0)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品模块");
+            }
+
+            if (rop.SubjectIds == null || rop.SubjectIds.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品栏目");
             }
 
             if (rop.DispalyImgUrls == null || rop.DispalyImgUrls.Count == 0)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少上传一张商品图片");
             }
 
             using (TransactionScope ts = new TransactionScope())
             {
-
                 var prdProduct = new PrdProduct();
                 prdProduct.Id = GuidUtil.New();
                 prdProduct.MerchId = merchId;
@@ -173,19 +177,19 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes;
-                prdProduct.SpecDes = rop.SpecDes;
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
 
-                foreach(var spec in rop.Specs)
+                foreach (var sku in rop.Skus)
                 {
                     var prdProductSku = new PrdProductSku();
                     prdProductSku.Id = GuidUtil.New();
                     prdProductSku.MerchId = prdProduct.MerchId;
                     prdProductSku.PrdProductId = prdProduct.Id;
                     prdProductSku.Name = prdProduct.Name;
-                    prdProductSku.SalePrice = spec.SalePrice;
+                    prdProductSku.SpecDes = sku.SpecDes;
+                    prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;
                     CurrentDb.PrdProductSku.Add(prdProductSku);
@@ -241,8 +245,6 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.Id = prdProduct.Id;
                 ret.Name = prdProduct.Name;
-                //ret.SalePrice = prdProduct.SalePrice;
-                //ret.ShowPrice = prdProduct.ShowPrice;
                 ret.DetailsDes = prdProduct.DetailsDes;
                 ret.BriefDes = prdProduct.BriefDes;
                 ret.KindIds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdKindId).ToList();
@@ -250,6 +252,13 @@ namespace LocalS.Service.Api.Merch
                 ret.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
                 ret.Kinds = GetKindTree(merchId);
                 ret.Subjects = GetSubjectTree(merchId);
+
+                var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).ToList();
+
+                foreach (var prdProductSku in prdProductSkus)
+                {
+                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, SpecDes = prdProductSku.SpecDes });
+                }
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
@@ -292,6 +301,16 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.Mender = operater;
                 prdProduct.MendTime = DateTime.Now;
 
+                foreach (var sku in rop.Skus)
+                {
+                    var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
+                    if (prdProductSku != null)
+                    {
+                        prdProductSku.SalePrice = sku.SalePrice;
+                        prdProductSku.Mender = operater;
+                        prdProductSku.MendTime = DateTime.Now;
+                    }
+                }
 
                 var prdProductKinds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProduct.Id).ToList();
 

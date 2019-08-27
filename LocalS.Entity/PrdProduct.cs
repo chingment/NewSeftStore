@@ -19,7 +19,6 @@ namespace LocalS.Entity
         public string MainImgUrl { get; set; }
         public string DispalyImgUrls { get; set; }
         public string DetailsDes { get; set; }
-        public string SpecDes { get; set; }
         public string BriefDes { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

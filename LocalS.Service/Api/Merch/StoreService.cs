@@ -272,7 +272,7 @@ namespace LocalS.Service.Api.Merch
                     productSkuModel.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
                     productSkuModel.BriefDes = prdProduct.BriefDes;
                     productSkuModel.DetailsDes = prdProduct.DetailsDes;
-                    productSkuModel.SpecDes = prdProduct.SpecDes;
+                    //productSkuModel.SpecDes = prdProduct.SpecDes;
 
                     productSkuModel.SumQuantity = item.SumQuantity;
                     productSkuModel.LockQuantity = item.LockQuantity;

@@ -54,10 +54,12 @@
         />
       </el-form-item>
       <el-form-item label="销售价" prop="salePrice">
-        <el-input v-model="form.salePrice" style="width:160px">
+        <el-input v-model="form.skus[0].salePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
-        <el-checkbox>启用多规格？</el-checkbox>
+      </el-form-item>
+      <el-form-item label="规格" prop="salePrice">
+        <el-input v-model="form.skus[0].specDes" />
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
@@ -126,9 +128,12 @@ export default {
         subjectIds: [],
         salePrice: '',
         detailsDes: '',
-        specDes: '',
         briefDes: '',
-        dispalyImgUrls: []
+        dispalyImgUrls: [],
+        skus: [{
+          specDes: '',
+          salePrice: 0
+        }]
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],

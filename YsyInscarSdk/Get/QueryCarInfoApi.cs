@@ -12,7 +12,6 @@ namespace YsyInscarSdk
         private string _license_plate = "";
         private string _vehicle_frame_no = "";
         private string _engine_number = "";
-        private string _transaction_id = "";
         public string ApiName
         {
             get
