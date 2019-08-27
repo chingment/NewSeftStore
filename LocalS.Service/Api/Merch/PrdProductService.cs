@@ -237,6 +237,29 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult InitEdit(string operater, string merchId, string prdProductId)
         {
+
+            //var _prdProducts = CurrentDb.PrdProduct.ToList();
+
+            //foreach (var _prdProduct in _prdProducts)
+            //{
+            //    var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == _prdProduct.Id).FirstOrDefault();
+            //    if (prdProductSku == null)
+            //    {
+            //        prdProductSku = new PrdProductSku();
+
+            //        prdProductSku.Id = GuidUtil.New();
+            //        prdProductSku.MerchId = _prdProduct.MerchId;
+            //        prdProductSku.PrdProductId = _prdProduct.Id;
+            //        prdProductSku.Name = _prdProduct.Name;
+            //        prdProductSku.SpecDes = "规格";
+            //        prdProductSku.SalePrice = 10;
+            //        prdProductSku.CreateTime = DateTime.Now;
+            //        prdProductSku.Creator = operater;
+            //        CurrentDb.PrdProductSku.Add(prdProductSku);
+            //        CurrentDb.SaveChanges();
+            //    }
+            //}
+
             var ret = new RetPrdProductInitEdit();
             var prdProduct = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == prdProductId).FirstOrDefault();
             if (prdProduct != null)
