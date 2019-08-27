@@ -14,7 +14,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class PrdProductService : BaseDbContext
     {
-
         private List<TreeNode> GetKindTree(string id, List<PrdKind> prdKinds)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
@@ -124,7 +123,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult InitAdd(string operater, string merchId)
         {
