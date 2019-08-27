@@ -17,6 +17,33 @@ namespace LocalS.Service.Api.StoreApp
 
     public class OrderService : BaseDbContext
     {
+        public string GetOrderStatus(E_OrderStatus status)
+        {
+            string text = "";
+            switch (status)
+            {
+                case E_OrderStatus.Submitted:
+                    text = "已提交";
+                    break;
+                case E_OrderStatus.WaitPay:
+                    text = "待支付";
+                    break;
+                case E_OrderStatus.Payed:
+                    text = "已支付";
+                    break;
+                case E_OrderStatus.Completed:
+                    text = "已完成";
+                    break;
+                case E_OrderStatus.Cancled:
+                    text = "已取消";
+                    break;
+                default:
+                    text = "";
+                    break;
+            }
+
+            return text;
+        }
         public CustomJsonResult Reserve(string operater, string clientUserId, RopOrderReserve rop)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -439,7 +466,7 @@ namespace LocalS.Service.Api.StoreApp
 
 
             ret.Tag.Name = new FsText(order.StoreName, "");
-            ret.Tag.Desc = new FsField("状态", "", order.Status.ToString(), "");
+            ret.Tag.Desc = new FsField("状态", "", GetOrderStatus(order.Status), "");
 
             var fsBlockByField = new FsBlockByField();
 
@@ -514,7 +541,7 @@ namespace LocalS.Service.Api.StoreApp
             return BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
         }
 
-        public CustomJsonResult GetJsApiPaymentPms(string operater, string clientUserId,RupOrderGetJsApiPaymentPms rup)
+        public CustomJsonResult GetJsApiPaymentPms(string operater, string clientUserId, RupOrderGetJsApiPaymentPms rup)
         {
             var result = new CustomJsonResult();
 

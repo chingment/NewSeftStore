@@ -201,7 +201,7 @@ Page({
           case "cancleOrder":
             wx.showModal({
               title: '提示',
-              content: '确定要删除吗？',
+              content: '确定要取消吗？',
               success: function(sm) {
                 if (sm.confirm) {
 

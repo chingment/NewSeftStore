@@ -22,9 +22,16 @@ namespace LocalS.Service.Api.StoreApp
                 double distance = 0;
                 string distanceMsg = "";
 
-                distance = DistanceUtil.GetDistance(m.Lat, m.Lng, rup.Lat, rup.Lng);
+                if (rup.Lat == 0 || rup.Lng == 0)
+                {
+                    distanceMsg = "";
+                }
+                else
+                {
+                    distance = DistanceUtil.GetDistance(m.Lat, m.Lng, rup.Lat, rup.Lng);
 
-                distanceMsg = string.Format("{0}km", distance.ToString("f2"));
+                    distanceMsg = string.Format("{0}km", distance.ToString("f2"));
+                }
 
                 storeModels.Add(new StoreModel { Id = m.Id, Name = m.Name, Address = m.Address, DistanceMsg = distanceMsg });
             }

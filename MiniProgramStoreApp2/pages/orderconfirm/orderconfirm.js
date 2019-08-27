@@ -17,7 +17,7 @@ var getData = function(_this) {
     dataParams: {
       orderId: orderId,
       storeId: ownRequest.getCurrentStoreId(),
-      productSkus: products,
+      products: products,
       couponId: couponId
     },
     success: function(res) {
@@ -149,7 +149,7 @@ Page({
         dataParams: {
           storeId: ownRequest.getCurrentStoreId(),
           payTimeout: 120,
-          productSkus: products,
+          products: products,
           source:3,
         },
         success: function(res) {

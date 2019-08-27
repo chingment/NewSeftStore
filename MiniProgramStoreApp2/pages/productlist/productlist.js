@@ -241,7 +241,7 @@ Page({
       id: id,
       quantity: 1,
       selected: true,
-      receptionMode: 1
+      receptionMode: 3
     });
 
     cart.operate({

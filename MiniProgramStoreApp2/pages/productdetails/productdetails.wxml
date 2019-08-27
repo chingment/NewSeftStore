@@ -19,7 +19,7 @@
           </view>
           <view class="item-price">
             <text class="unitPrice">{{product.salePrice}}</text>
-            <text class="showPrice">{{product.showPrice}}</text>
+            <text wx:if="{{product.salePrice!=product.showPrice&&product.showPrice!=0}}" class="showPrice">{{product.showPrice}}</text>
           </view>
         </view>
       </view>

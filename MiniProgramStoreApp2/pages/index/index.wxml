@@ -100,7 +100,7 @@
                     <view class="area2">
                       <view class="price">
                         <text class="saleprice font-black">{{item2.salePrice}}</text>
-                        <text class="showprice font-gray">{{item2.showPrice}}</text>
+                        <text  wx:if="{{item2.salePrice!=item2.showPrice&&item2.showPrice!=0}}" class="showprice font-gray">{{item2.showPrice}}</text>
                       </view>
                       <view class="operate">
                         <image bindtap="addToCart" data-reply-id="{{item2.id}}" class="increase" src='/content/default/images/increase.png'></image>
