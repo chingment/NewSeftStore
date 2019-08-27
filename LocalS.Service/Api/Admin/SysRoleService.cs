@@ -99,7 +99,7 @@ namespace LocalS.Service.Api.Admin
             var result = new CustomJsonResult();
             var ret = new RetSysRoleInitAdd();
             ret.Menus = GetMenuTree(belongSite);
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
         }
 
@@ -165,7 +165,7 @@ namespace LocalS.Service.Api.Admin
             ret.MenuIds = (from p in roleMenus select p.Id).ToList();
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

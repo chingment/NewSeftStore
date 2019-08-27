@@ -103,7 +103,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/merch/role/edit?roleId=' + row.id
+        path: '/merch/role/edit?id=' + row.id
       })
     }
   }

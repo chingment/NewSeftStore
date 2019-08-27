@@ -76,7 +76,7 @@ namespace WebApiStoreTerm.Controllers
             string path = filePath + fileName + fileExtension;//获取存储的目标地址
             file.SaveAs(path);
 
-            IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+            IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             return new OwnApiHttpResponse(result);
         }
     }

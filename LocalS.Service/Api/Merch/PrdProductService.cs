@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.Merch
             ret.Kinds = GetKindTree(merchId);
             ret.Subjects = GetSubjectTree(merchId);
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -229,7 +229,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
             return result;
@@ -282,7 +282,7 @@ namespace LocalS.Service.Api.Merch
                 }
             }
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public CustomJsonResult Edit(string operater, string merchId, RopPrdProductEdit rop)
@@ -380,7 +380,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
             return result;

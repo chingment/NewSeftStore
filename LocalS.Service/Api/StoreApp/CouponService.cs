@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreApp
                 ret.Coupons.Add(couponModel);
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

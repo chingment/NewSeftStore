@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.Merch
                 }
                 else
                 {
-                    if (p_productSubject.Depth >= 3)
+                    if (p_productSubject.Depth >= 1)
                     {
                         treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
                     }
@@ -44,7 +44,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
-                var children = GetTree(p_productSubject.Id, p_productSubjects);
+                var children = GetTree(p_productSubject.Id, productSubjects);
                 if (children != null)
                 {
                     if (children.Count > 0)
@@ -90,7 +90,7 @@ namespace LocalS.Service.Api.Merch
                 ret.PName = prdSubject.Name;
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -117,8 +117,8 @@ namespace LocalS.Service.Api.Merch
                 prdSubject.Id = GuidUtil.New();
                 prdSubject.PId = rop.PId;
                 prdSubject.Name = rop.Name;
-                prdSubject.IconImgUrl = rop.IconImgUrl;
-                prdSubject.MainImgUrl = rop.MainImgUrl;
+                prdSubject.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                prdSubject.MainImgUrl = ImgSet.GetMain(prdSubject.DispalyImgUrls);
                 prdSubject.MerchId = merchId;
                 prdSubject.Description = rop.Description;
                 prdSubject.Depth = pPrdSubject.Depth + 1;
@@ -148,8 +148,7 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.Id = prdSubject.Id;
                 ret.Name = prdSubject.Name;
-                ret.IconImgUrl = prdSubject.IconImgUrl;
-                ret.MainImgUrl = prdSubject.MainImgUrl;
+                ret.DispalyImgUrls = prdSubject.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
 
 
                 ret.Description = prdSubject.Description;
@@ -169,7 +168,7 @@ namespace LocalS.Service.Api.Merch
 
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -188,8 +187,8 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
                 }
                 prdSubject.Name = rop.Name;
-                prdSubject.IconImgUrl = rop.IconImgUrl;
-                prdSubject.MainImgUrl = rop.MainImgUrl;
+                prdSubject.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                prdSubject.MainImgUrl = ImgSet.GetMain(prdSubject.DispalyImgUrls);
                 prdSubject.Description = rop.Description;
                 prdSubject.MendTime = DateTime.Now;
                 prdSubject.Mender = operater;

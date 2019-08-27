@@ -96,7 +96,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.PdArea = pdAreaModel;
 
-            result = new CustomJsonResult<RetIndexGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetIndexGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

@@ -91,7 +91,7 @@ namespace LocalS.Service.Api.Admin
                 ret.PTitle = sysMenu.Title;
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -179,7 +179,7 @@ namespace LocalS.Service.Api.Admin
 
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

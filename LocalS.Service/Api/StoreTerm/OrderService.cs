@@ -170,7 +170,7 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult Details(RupOrderDetails rup)
         {
             CustomJsonResult result = new CustomJsonResult();
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", GetOrderDetails(rup.MachineId, rup.OrderId));
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", GetOrderDetails(rup.MachineId, rup.OrderId));
             return result;
         }
 
@@ -186,7 +186,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Tips = orderDetailsChildSon.Status.ToString();
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

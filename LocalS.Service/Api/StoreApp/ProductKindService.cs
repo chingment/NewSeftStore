@@ -61,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.List = productParentKindModels;
 
-            result = new CustomJsonResult<RetProductKindGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetProductKindGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

@@ -75,7 +75,7 @@ namespace LocalS.Service.Api.StoreApp
                     ret.Fields.Add(new FsField("提交时间", "", order.SubmitTime.ToUnifiedFormatDateTime(), ""));
                     ret.Fields.Add(new FsField("支付时间", "", order.PayTime.ToUnifiedFormatDateTime(), ""));
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "支付成功", ret);
                     break;
                 case E_OrderStatus.Completed:
                     ret.Result = RetOperateResult.ResultType.Success;

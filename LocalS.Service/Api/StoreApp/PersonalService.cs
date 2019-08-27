@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            result = new CustomJsonResult<RetPersonalGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetPersonalGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

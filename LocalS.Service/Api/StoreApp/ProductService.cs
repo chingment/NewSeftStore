@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreApp
                 });
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", olist);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
 
             return result;
         }
@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.StoreApp
             var productSkuModel = CacheServiceFactory.PrdProduct.GetModelById(id);
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", productSkuModel);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuModel);
 
             return result;
         }

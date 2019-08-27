@@ -93,7 +93,7 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
             var ret = new RetStoreInitAdd();
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -138,7 +138,7 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             }
 
@@ -161,7 +161,7 @@ namespace LocalS.Service.Api.Merch
             ret.IsOpen = store.IsOpen;
             ret.Status = new { text = GetStatusText(store.IsOpen), value = GetStatusValue(store.IsOpen) };
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -190,7 +190,7 @@ namespace LocalS.Service.Api.Merch
                 store.Mender = operater;
                 CurrentDb.SaveChanges();
                 ts.Complete();
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
             return result;
         }
@@ -213,7 +213,7 @@ namespace LocalS.Service.Api.Merch
                 ret.Stores.Add(new StoreModel { Id = store.Id, Name = store.Name });
             }
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public CustomJsonResult InitManageMachineProduct(string operater, string merchId, string storeId)
@@ -227,7 +227,7 @@ namespace LocalS.Service.Api.Merch
                 ret.SellChannels.Add(new StoreSellChannelModel { Name = storeSellChannel.Name, RefType = storeSellChannel.RefType, RefId = storeSellChannel.RefId });
             }
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public CustomJsonResult ManageMachineProductGetProductList(string operater, string merchId, RupStoreGetProductSkuList rup)

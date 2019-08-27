@@ -37,7 +37,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", storeModels);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", storeModels);
 
             return result;
         }

@@ -653,7 +653,7 @@ namespace LocalS.BLL.Biz
             ret.OrderSn = order.Sn;
             ret.Status = order.Status;
 
-            result = new CustomJsonResult<RetPayResultQuery>(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult<RetPayResultQuery>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -752,7 +752,7 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
             }
 

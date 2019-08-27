@@ -57,7 +57,7 @@ namespace LocalS.Service.Api.InsApp
             ret.MId = agentUser.AgentId;
             ret.UId = agentUser.Id;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.InsApp
             ret.MId = agentUser.AgentId;
             ret.UId = agentUser.Id;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

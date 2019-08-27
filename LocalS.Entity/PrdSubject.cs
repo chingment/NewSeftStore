@@ -17,6 +17,7 @@ namespace LocalS.Entity
 
         public string PId { get; set; }
         public string IconImgUrl { get; set; }
+        public string DispalyImgUrls { get; set; }
         public string MainImgUrl { get; set; }
         [MaxLength(512)]
         public string Description { get; set; }

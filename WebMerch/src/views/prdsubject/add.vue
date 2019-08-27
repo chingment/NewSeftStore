@@ -1,7 +1,7 @@
 <template>
   <div id="useradd_container" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
-      <el-form-item label="上构名称">
+      <el-form-item label="上级名称">
         {{ form.pName }}
       </el-form-item>
       <el-form-item label="名称" prop="name">
@@ -19,7 +19,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { edit, initEdit } from '@/api/prdkind'
+import { add, initAdd } from '@/api/prdsubject'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
@@ -27,8 +27,8 @@ export default {
     return {
       loading: false,
       form: {
+        pId: '',
         pName: '',
-        id: '',
         name: '',
         description: ''
       },
@@ -44,13 +44,21 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var id = getUrlParam('id')
-      initEdit({ id: id }).then(res => {
+      var pId = getUrlParam('pId')
+      initAdd({ pId: pId }).then(res => {
         if (res.result === 1) {
-          this.form = res.data
+          var d = res.data
+          this.form.pId = d.pId
+          this.form.pName = d.pName
         }
         this.loading = false
       })
+    },
+    resetForm() {
+      this.form = {
+        name: '',
+        description: ''
+      }
     },
     onSubmit() {
       this.$refs['form'].validate((valid) => {
@@ -60,7 +68,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            edit(this.form).then(res => {
+            add(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)

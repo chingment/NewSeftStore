@@ -532,7 +532,7 @@ namespace LocalS.Service.Api.StoreApp
 
 
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
         }
 
@@ -615,7 +615,7 @@ namespace LocalS.Service.Api.StoreApp
 
             //JsApiPayParams parms = new JsApiPayParams("wxb01e0e16d57bd762", "37b016a9569e4f519702696e1274d63a", ret_UnifiedOrder.PrepayId, order.Id, order.Sn);
 
-            //return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret.Data);
+            //return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret.Data);
 
             return result;
         }

@@ -75,7 +75,7 @@ namespace LocalS.Service.Api.StoreApp
             ret.SumPriceBySelected = cartProductSkuModels.Where(m => m.Selected == true).Sum(m => m.SumPrice);
             ret.CountBySelected = cartProductSkuModels.Where(m => m.Selected == true).Count();
 
-            result = new CustomJsonResult<RetCartGetPageData>(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult<RetCartGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

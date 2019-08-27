@@ -93,7 +93,7 @@ namespace LocalS.Service.Api.Admin
             var result = new CustomJsonResult();
             var ret = new RetAgentMasterInitAdd();
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.Admin
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "新建成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             }
 
@@ -180,7 +180,7 @@ namespace LocalS.Service.Api.Admin
             ret.IsDisable = user.IsDisable;
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

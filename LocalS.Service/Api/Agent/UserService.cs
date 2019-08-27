@@ -118,7 +118,7 @@ namespace LocalS.Service.Api.Agent
             var result = new CustomJsonResult();
             var ret = new RetUserInitAdd();
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.Agent
             ret.IsDisable = agentUser.IsDisable;
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

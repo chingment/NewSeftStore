@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { getList, sort } from '@/api/prdkind'
+import { getList, sort } from '@/api/prdsubject'
 import { treeGetNodesByDepth } from '@/utils/commonUtil'
 export default {
   data() {
@@ -67,12 +67,12 @@ export default {
     },
     handleCreate(row) {
       this.$router.push({
-        path: '/prdkind/add?pId=' + row.id
+        path: '/prdsubject/add?pId=' + row.id
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/prdkind/edit?id=' + row.id
+        path: '/prdsubject/edit?id=' + row.id
       })
     },
     onDrop(moveNode, inNode, type) {

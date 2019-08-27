@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
             ret.Cart = StoreAppServiceFactory.Cart.GetPageData(operater, clientUserId, new RupCartPageData { StoreId= rup.StoreId }).Data;
             ret.Personal = StoreAppServiceFactory.Personal.GetPageData(operater, clientUserId, rup.StoreId).Data;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
 
             return result;

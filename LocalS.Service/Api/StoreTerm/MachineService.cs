@@ -66,7 +66,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.ProductSkus = TermServiceFactory.Machine.GetProductSkus(machine.MerchId, machine.StoreId, machine.Id);
 
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
 
@@ -196,7 +196,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slotProductSkuModels);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", slotProductSkuModels);
         }
 
         public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)
