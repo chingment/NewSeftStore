@@ -1,0 +1,2 @@
+@import 'content/default/base.wxss';
+@import "wxParse/wxParse.wxss";

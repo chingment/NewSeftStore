@@ -1,0 +1,46 @@
+
+
+<view id="block_area">
+
+  <block wx:if="{{!result.isComplete}}">
+    <view class="operate-check">
+      <canvas class="it-countdown" style="width: 180px; height: 180px;margin:auto" canvas-id="secondCanvas"></canvas>
+      <view class="it-message">
+        <text>正在处理，请耐心等候</text>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="operate-result">
+      <view class="it-result">
+        <view class="imgbox">
+          <image class="img" src="/content/default/images/operate_result_ic_{{result.result}}.png"></image>
+        </view>
+      </view>
+      <view class="it-message">
+        <text>{{result.message}}</text>
+      </view>
+      <view class="it-btns">
+        <block wx:for="{{result.buttons}}" wx:key="item">
+          <view class="btnbox">
+            <view class="btn" bindtap="operate" data-reply-opval="{{item.opVal}}" data-reply-optype="{{item.opType}}" style="color:{{item.name.color}}; border:1px solid {{item.name.color}};"  >{{item.name.content}}</view>
+          </view>
+        </block>
+      </view>
+      <view class="its-a">
+        <block wx:for="{{result.fields}}" wx:key="item">
+          <view class="it">
+            <view class="it-m">
+              <view class="it-ml w100">
+                <text class="txt">{{item.title.content}}</text>
+              </view>
+              <view class="it-mr flex1">
+                <text class="txt">{{item.value.content}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+</view>

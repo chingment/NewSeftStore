@@ -1,0 +1,4 @@
+.ownradio-box image {
+  width: 26px;
+  height: 26px;
+}

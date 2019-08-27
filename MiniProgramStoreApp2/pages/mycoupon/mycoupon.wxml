@@ -1,0 +1,47 @@
+<view>
+  <view class="coupon">
+
+    <view class='list-data its-couponlist' wx:if="{{coupon.length>0}}">
+      <block wx:for="{{coupon}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+        <view class="item">
+          <view class="item-top">
+            <view class="item-left">
+              <view class="amount">
+                <text class="discount">{{item.discount}}</text>
+                <text class="discountunit">{{item.discountUnit}}</text>
+              </view>
+              <view class="discounttip">{{item.discountTip}}</view>
+            </view>
+            <view class="item-middle">
+              <view class="name">{{item.name}}</view>
+              <view class="validdate">{{item.validDate}}</view>
+            </view>
+            <view class="item-right" bindtap="goSelect" data-reply-index="{{index}}" data-reply-operate="{{operate}}">
+              <text wx:if="{{operate==1}}" class="btn">立即使用</text>
+              <label wx:elif="{{operate==2}}" class="radio">
+                <image src='/content/default/images/{{item.isSelected==false?"checkedoff":"checkedon"}}.png'></image>
+              </label>
+            </view>
+          </view>
+          <view class="item-bottom">
+            <view class="item-left">
+              <view class="description">{{item.description}}</view>
+            </view>
+            <view class="item-right" bindtap="goSelect" data-reply-index="{{index}}">
+            </view>
+          </view>
+        </view>
+
+      </block>
+    </view>
+    <view class="list-emptytips" wx:else>
+      <view class="icon">
+        <image class="img" src='/content/default/images/list_emptytips_img.png'></image>
+      </view>
+      <view class="msg">
+        <text>~暂无数据~</text>
+      </view>
+    </view>
+  </view>
+
+</view>
