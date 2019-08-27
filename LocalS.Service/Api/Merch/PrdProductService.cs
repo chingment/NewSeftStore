@@ -304,6 +304,7 @@ namespace LocalS.Service.Api.Merch
                     var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (prdProductSku != null)
                     {
+                        prdProductSku.SpecDes = sku.SpecDes;
                         prdProductSku.SalePrice = sku.SalePrice;
                         prdProductSku.Mender = operater;
                         prdProductSku.MendTime = DateTime.Now;

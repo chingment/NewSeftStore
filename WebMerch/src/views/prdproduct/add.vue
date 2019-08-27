@@ -53,13 +53,13 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="销售价" prop="salePrice">
-        <el-input v-model="form.skus[0].salePrice" style="width:160px">
+      <el-form-item label="销售价" prop="singleSkuSalePrice">
+        <el-input v-model="form.singleSkuSalePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="规格" prop="salePrice">
-        <el-input v-model="form.skus[0].specDes" />
+      <el-form-item label="规格" prop="singleSkuSpecDes">
+        <el-input v-model="form.singleSkuSpecDes" />
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
@@ -126,21 +126,19 @@ export default {
         name: '',
         kindIds: [],
         subjectIds: [],
-        salePrice: '',
         detailsDes: '',
         briefDes: '',
         dispalyImgUrls: [],
-        skus: [{
-          specDes: '',
-          salePrice: 0
-        }]
+        singleSkuSalePrice: 0,
+        singleSkuSpecDes: ''
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['click', 'change'], max: 3 }],
         subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
-        salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
+        singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
       uploadImglist: [],
@@ -201,12 +199,23 @@ export default {
       console.log(JSON.stringify(this.form))
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          var skus = []
+          skus.push({ specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice })
+          var _form = {}
+          _form.name = this.form.name
+          _form.kindIds = this.form.kindIds
+          _form.subjectIds = this.form.subjectIds
+          _form.detailsDes = this.form.detailsDes
+          _form.briefDes = this.form.briefDes
+          _form.dispalyImgUrls = this.form.dispalyImgUrls
+          _form.skus = skus
+
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            add(this.form).then(res => {
+            add(_form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)

@@ -4,6 +4,26 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
+      <el-form-item label="图片" prop="dispalyImgUrls">
+        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
+        <el-upload
+          ref="uploadImg"
+          v-model="form.dispalyImgUrls"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :on-success="handleSuccess"
+          :on-remove="handleRemove"
+          :on-error="handleError"
+          :on-preview="handlePreview"
+          :file-list="uploadImglist"
+          :limit="4"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
+          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        </el-dialog>
+      </el-form-item>
       <el-form-item label="所属模块" prop="kindIds">
         <el-input :value="form.kindIds.toString()" style="display:none" />
         <treeselect
@@ -32,30 +52,13 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="销售价" prop="salePrice" style="width:220px">
-        <el-input v-model="form.salePrice">
+      <el-form-item label="销售价" prop="singleSkuSalePrice">
+        <el-input v-model="form.singleSkuSalePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
-        <el-upload
-          ref="uploadImg"
-          v-model="form.dispalyImgUrls"
-          :action="uploadImgServiceUrl"
-          list-type="picture-card"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :on-preview="handlePreview"
-          :file-list="uploadImglist"
-          :limit="4"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
-        </el-dialog>
+      <el-form-item label="规格" prop="singleSkuSpecDes">
+        <el-input v-model="form.singleSkuSpecDes" />
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" maxlength="200" />
@@ -122,18 +125,19 @@ export default {
         name: '',
         kindIds: [],
         subjectIds: [],
-        salePrice: '',
         detailsDes: '',
-        specDes: '',
         briefDes: '',
-        dispalyImgUrls: []
+        dispalyImgUrls: [],
+        singleSkuSalePrice: 0,
+        singleSkuSpecDes: ''
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['click', 'change'], max: 3 }],
         subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
-        salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
+        singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
       uploadImglist: [],
@@ -187,11 +191,13 @@ export default {
           this.form.name = d.name
           this.form.kindIds = d.kindIds
           this.form.subjectIds = d.subjectIds
-          this.form.salePrice = d.salePrice
           this.form.detailsDes = d.detailsDes
-          this.form.specDes = d.specDes
           this.form.briefDes = d.briefDes
           this.form.dispalyImgUrls = d.dispalyImgUrls
+          this.form.singleSkuId = d.skus[0].id
+          this.form.singleSkuSalePrice = d.skus[0].salePrice
+          this.form.singleSkuSpecDes = d.skus[0].specDes
+
           this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
           this.treeselect_subject_options = d.subjects
           this.treeselect_kind_options = d.kinds
@@ -206,12 +212,24 @@ export default {
       console.log(JSON.stringify(this.form))
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          var skus = []
+          skus.push({ id: this.form.singleSkuId, specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice })
+          var _form = {}
+          _form.id = this.form.id
+          _form.name = this.form.name
+          _form.kindIds = this.form.kindIds
+          _form.subjectIds = this.form.subjectIds
+          _form.detailsDes = this.form.detailsDes
+          _form.briefDes = this.form.briefDes
+          _form.dispalyImgUrls = this.form.dispalyImgUrls
+          _form.skus = skus
+
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            edit(this.form).then(res => {
+            edit(_form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
