@@ -56,8 +56,8 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 20, message: '必填,且不能超过20个字符', trigger: 'change' }],
-        description: [{ required: false, min: 0, max: 500, message: '不能超过500个字符', trigger: 'change' }],
-        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }]
+        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        description: [{ required: false, min: 0, max: 500, message: '不能超过500个字符', trigger: 'change' }]
       },
       uploadImglist: [],
       uploadImgPreImgDialogUrl: '',
