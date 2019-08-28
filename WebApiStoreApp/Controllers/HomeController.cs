@@ -1,4 +1,5 @@
 ﻿
+using LocalS.BLL;
 using LocalS.DAL;
 using LocalS.Service.Api.StoreApp;
 using log4net;
@@ -32,11 +33,13 @@ namespace WebApiStoreApp.Controllers
         {
             try
             {
-                RopOrderReserve rop = new RopOrderReserve();
-                rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
-                rop.Source = LocalS.Entity.E_OrderSource.MiniProgram;
-                rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "833448c77b8b4563b3682e1113907fba", CartId = "b25ead6767a6436f9375176cef4004e5", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
-                StoreAppServiceFactory.Order.Reserve("e170b69479c14804a38b089dac040740", "e170b69479c14804a38b089dac040740", rop);
+                CacheServiceFactory.StoreSellChannelStock.ReSet();
+
+                //RopOrderReserve rop = new RopOrderReserve();
+                //rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
+                //rop.Source = LocalS.Entity.E_OrderSource.MiniProgram;
+                //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "833448c77b8b4563b3682e1113907fba", CartId = "b25ead6767a6436f9375176cef4004e5", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
+                //StoreAppServiceFactory.Order.Reserve("e170b69479c14804a38b089dac040740", "e170b69479c14804a38b089dac040740", rop);
                 //DbContext db = new DbContext();
                 //var s = db.Store.Where(m=>m.IsDelete==false).ToList();
 
