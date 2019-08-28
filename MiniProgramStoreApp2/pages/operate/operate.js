@@ -20,12 +20,14 @@ Page({
       caller: caller
     }, {
         success: function (res) {
-          if (res.data.isComplete) {
-            clearInterval(_this.countDown);
+          if (res.result == 1) {
+            if (res.data.isComplete) {
+              clearInterval(_this.countDown);
+            }
+            _this.setData({
+              result: res.data
+            })
           }
-          _this.setData({
-            result: res.data
-          })
         },
         fail: function () { }
       })

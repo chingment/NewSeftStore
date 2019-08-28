@@ -11,6 +11,9 @@ Component({
         var _self = this
         _self.setData(newVal)
       }
+    },
+    height: {
+      type: Number
     }
   },
   data: {},

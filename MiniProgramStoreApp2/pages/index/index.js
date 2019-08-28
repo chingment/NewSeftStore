@@ -19,6 +19,9 @@ Component({
           pdArea: newVal.pdArea
         })
       }
+    },
+    height:{
+      type:Number
     }
   },
   data: {},

@@ -1,3 +1,4 @@
+<scroll-view  scroll-y="true" style="height:{{height}}px;" >
 <view class='st-kind'>
     <scroll-view class='kind-left-navbar' scroll-y="true">
       <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
@@ -26,3 +27,4 @@
       </scroll-view>
     </block>
   </view>
+  </scroll-view>

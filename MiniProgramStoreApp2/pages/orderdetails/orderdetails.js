@@ -30,7 +30,9 @@ Page({
       id: orderId
     }, {
         success: function (res) {
-          _this.setData(res.data)
+          if (res.result == 1) {
+            _this.setData(res.data)
+          }
         },
         fail: function () { }
       })
@@ -46,7 +48,7 @@ Page({
       caller: 2
     }, {
         success: function (res) {
-          if (res.result == lumos.resultType.success) {
+          if (res.result == 1) {
 
             var data = res.data;
             wx.requestPayment({

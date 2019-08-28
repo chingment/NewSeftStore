@@ -1,6 +1,6 @@
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const deliveryaddress = require('../../api/deliveryaddress.js')
+const apiDeliveryaddress = require('../../api/deliveryaddress.js')
 const cityList = require('./cityList').cityList;
 const toast = require('../../utils/showtoastutil');//引入消息提醒暴露的接口
 
@@ -235,7 +235,7 @@ Page({
     }
 
 
-    deliveryaddress.edit({
+    apiDeliveryaddress.edit({
       id: id,
       consignee: consignee,
       phoneNumber: phoneNumber,
@@ -244,7 +244,9 @@ Page({
       isDefault: isDefault
     }, {
         success: function (res) {
+          if (res.result == 1) {
           wx.navigateBack()
+          }
         },
         fail: function () { }
       })

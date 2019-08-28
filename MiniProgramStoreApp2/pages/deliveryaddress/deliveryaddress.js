@@ -1,6 +1,6 @@
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const deliveryaddress = require('../../api/deliveryaddress.js')
+const apiDeliveryaddress = require('../../api/deliveryaddress.js')
 const app = getApp()
 
 Page({
@@ -51,11 +51,13 @@ Page({
    */
   onShow: function () {
     var _this = this
-    deliveryaddress.my({}, {
+    apiDeliveryaddress.my({}, {
       success: function (res) {
+        if (res.result == 1) {
         _this.setData({
           list: res.data
         })
+        }
       },
       fail: function () { }
     })

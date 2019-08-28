@@ -1,4 +1,4 @@
-
+<scroll-view  scroll-y="true" style="height:{{height}}px;" >
 <block wx:if="{{blocks.length>0}}">
     <view class="st-cart">
       <view class="ct">
@@ -74,3 +74,4 @@
       <image src='/content/default/images/cart_empty.png'></image>
     </view>
   </block>
+    </scroll-view>
