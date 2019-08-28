@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var productModel = CacheServiceFactory.PrdProduct.GetModelById(item.Id);
+                var productModel = BizFactory.PrdProduct.GetModelById(rup.StoreId, item.Id);
                 if (productModel != null)
                 {
                     olist.Add(productModel);
@@ -73,14 +74,14 @@ namespace LocalS.Service.Api.StoreApp
         }
 
 
-        public CustomJsonResult Details(string operater, string clientUserId, string id)
+        public CustomJsonResult Details(string operater, string clientUserId, RupProductDetails rup)
         {
            
 
             var result = new CustomJsonResult();
 
 
-            var productModel = CacheServiceFactory.PrdProduct.GetModelById(id);
+            var productModel = BizFactory.PrdProduct.GetModelById(rup.StoreId, rup.Id);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);

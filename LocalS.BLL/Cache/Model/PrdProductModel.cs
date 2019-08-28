@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lumos;
+using LocalS.Entity;
 
 namespace LocalS.BLL
 {
@@ -11,7 +12,7 @@ namespace LocalS.BLL
     {
         public PrdProductModel()
         {
-            this.AllSkus = new List<Sku>();
+
         }
         public string Id { get; set; }
         public string Name { get; set; }
@@ -19,19 +20,21 @@ namespace LocalS.BLL
         public List<ImgSet> DispalyImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string BriefDes { get; set; }
-        public Sku RefSku { get; set; }
-        public List<Sku> AllSkus { get; set; }
-        public class Sku
+        public RefSkuModel RefSku { get; set; }
+        public class RefSkuModel
         {
             public string Id { get; set; }
-
+            public E_ReceptionMode ReceptionMode { get; set; }
+            public int SumQuantity { get; set; }
+            public int LockQuantity { get; set; }
+            public int SellQuantity { get; set; }
+            public bool IsOffSell { get; set; }
             public decimal SalePrice { get; set; }
 
+            public decimal SalePriceByVip { get; set; }
             public decimal ShowPrice { get; set; }
-
-            public bool IsShowPrice { get; set; }
-
             public string SpecDes { get; set; }
+            public bool IsShowPrice { get; set; }
         }
     }
 }

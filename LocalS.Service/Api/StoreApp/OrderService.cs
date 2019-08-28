@@ -109,30 +109,22 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var storeSellChannelStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id).FirstOrDefault();
-
-                    if (storeSellChannelStock != null)
+                    var productSku = BizFactory.PrdProduct.GetSkuModelById(rop.StoreId, item.Id);
+                    if (productSku != null)
                     {
-                        var productSkuByCache = CacheServiceFactory.PrdProduct.GetModelById(storeSellChannelStock.PrdProductId);
-                        if (productSkuByCache != null)
-                        {
-                            item.Name = productSkuByCache.Name;
-                            item.MainImgUrl = productSkuByCache.MainImgUrl;
-                            item.SalePrice = storeSellChannelStock.SalePrice;
+                        item.Name = productSku.Name;
+                        item.MainImgUrl = productSku.MainImgUrl;
+                        item.SalePrice = productSku.SalePrice;
 
-                            skuAmountByOriginal += (storeSellChannelStock.SalePrice * item.Quantity);
-                            skuAmountByMemebr += (storeSellChannelStock.SalePrice * item.Quantity);
-                            skuAmountByVip += (storeSellChannelStock.SalePriceByVip * item.Quantity);
-                            skus.Add(item);
-                        }
-                        else
-                        {
-                            LogUtil.Info("商品Id ：" + item.Id + ",信息为空");
-                        }
+                        skuAmountByOriginal += (productSku.SalePrice * item.Quantity);
+                        skuAmountByMemebr += (productSku.SalePrice * item.Quantity);
+                        skuAmountByVip += (productSku.SalePriceByVip * item.Quantity);
+
+                        skus.Add(item);
                     }
                     else
                     {
-                        LogUtil.Info("商品Id：" + item.Id + ",库存为空");
+                        LogUtil.Info("商品Id ：" + item.Id + ",信息为空");
                     }
                 }
 

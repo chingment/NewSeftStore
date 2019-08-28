@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -27,7 +28,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var clientCart in clientCarts)
             {
-                var productModel = CacheServiceFactory.PrdProduct.GetModelById(clientCart.PrdProductId);
+                var productModel = BizFactory.PrdProduct.GetModelById(rup.StoreId,clientCart.PrdProductId);
                 if (productModel != null)
                 {
                     var cartProcudtSkuModel = new CartProductSkuModel();

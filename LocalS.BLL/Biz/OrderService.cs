@@ -38,65 +38,64 @@ namespace LocalS.BLL.Biz
 
                 //检查是否有可买的商品
 
-                List<StoreSellChannelStock> skusByStock = new List<StoreSellChannelStock>();
+                //List<StoreSellChannelStock> skusByStock = new List<StoreSellChannelStock>();
 
-                if (rop.ReserveMode == E_ReserveMode.OffLine)
-                {
-                    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId && skuIds.Contains(m.PrdProductSkuId)).ToList();
-                }
-                else if (rop.ReserveMode == E_ReserveMode.Online)
-                {
-                    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && skuIds.Contains(m.PrdProductSkuId)).ToList();
-                }
+                //if (rop.ReserveMode == E_ReserveMode.OffLine)
+                //{
+                //    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId && skuIds.Contains(m.PrdProductSkuId)).ToList();
+                //}
+                //else if (rop.ReserveMode == E_ReserveMode.Online)
+                //{
+                //    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && skuIds.Contains(m.PrdProductSkuId)).ToList();
+                //}
 
                 List<string> warn_tips = new List<string>();
 
+                List<PrdProductSkuModel> productSkus = new List<BLL.PrdProductSkuModel>();
+
                 foreach (var sku in rop.ProductSkus)
                 {
-                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
+                    var productSku = BizFactory.PrdProduct.GetSkuModelById(rop.StoreId, sku.Id);
+
                     if (productSku == null)
-                    {
-                        LogUtil.Info("productSku:为空");
-                    }
-                    var productModel = CacheServiceFactory.PrdProduct.GetModelById(productSku.PrdProductId);
-                    if (productModel == null)
                     {
                         LogUtil.Info("productModel:为空");
                     }
+
+                    productSkus.Add(productSku);
+
                     var sellQuantity = 0;
 
                     if (rop.ReserveMode == E_ReserveMode.OffLine)
                     {
-                        sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
+                        sellQuantity = productSku.Stocks.Where(m =>m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
                     }
                     else if (rop.ReserveMode == E_ReserveMode.Online)
                     {
                         if (sku.ReceptionMode == E_ReceptionMode.Machine)
                         {
-                            sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
+                            sellQuantity = productSku.Stocks.Where(m => m.RefType == E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
                         }
                         else if (sku.ReceptionMode == E_ReceptionMode.Express)
                         {
-                            sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.Express).Sum(m => m.SellQuantity);
+                            sellQuantity = productSku.Stocks.Where(m => m.RefType == E_StoreSellChannelRefType.Express).Sum(m => m.SellQuantity);
                         }
                         else if (sku.ReceptionMode == E_ReceptionMode.SelfTake)
                         {
-                            sellQuantity = skusByStock.Where(m => m.PrdProductSkuId == sku.Id && m.RefType == E_StoreSellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
+                            sellQuantity = productSku.Stocks.Where(m => m.RefType == E_StoreSellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
                         }
                     }
 
-                    var hasOffSell = skusByStock.Where(m => m.PrdProductSkuId == sku.Id).Where(m => m.IsOffSell == true).FirstOrDefault();
-
-                    if (hasOffSell == null)
+                    if (productSku.IsOffSell)
                     {
-                        if (sellQuantity < sku.Quantity)
-                        {
-                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", productModel.Name, sellQuantity));
-                        }
+                        warn_tips.Add(string.Format("{0}已经下架", productSku.Name));
                     }
                     else
                     {
-                        warn_tips.Add(string.Format("{0}已经下架", productModel.Name));
+                        if (sellQuantity < sku.Quantity)
+                        {
+                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", productSku.Name, sellQuantity));
+                        }
                     }
                 }
 
@@ -153,7 +152,7 @@ namespace LocalS.BLL.Biz
                 }
                 #endregion 
 
-                var reserveDetails = GetReserveDetail(rop.ProductSkus, skusByStock);
+                var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkus);
 
                 order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
                 order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
@@ -189,7 +188,7 @@ namespace LocalS.BLL.Biz
                             break;
                         case E_StoreSellChannelRefType.Machine:
                             var machine = CurrentDb.Machine.Where(m => m.Id == detail.SellChannelRefId).FirstOrDefault();
-                            if(machine==null)
+                            if (machine == null)
                             {
                                 LogUtil.Info("machine:为空");
                             }
@@ -284,7 +283,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var slotStock in detailsChild.SlotStock)
                         {
-                            var machineStock = skusByStock.Where(m => m.PrdProductSkuId == slotStock.SkuId && m.SlotId == slotStock.SlotId && m.RefId == slotStock.SellChannelRefId).FirstOrDefault();
+                            var machineStock =CurrentDb.StoreSellChannelStock.Where(m => m.PrdProductSkuId == slotStock.SkuId && m.SlotId == slotStock.SlotId && m.RefId == slotStock.SellChannelRefId).FirstOrDefault();
 
                             machineStock.LockQuantity += slotStock.Quantity;
                             machineStock.SellQuantity -= slotStock.Quantity;
@@ -332,7 +331,7 @@ namespace LocalS.BLL.Biz
 
         }
 
-        private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<StoreSellChannelStock> storeSellStocks)
+        private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<PrdProductSkuModel> productSkus)
         {
             List<OrderReserveDetail> details = new List<OrderReserveDetail>();
 
@@ -360,10 +359,11 @@ namespace LocalS.BLL.Biz
                             break;
 
                     }
+                    var productSku = productSkus.Where(m => m.Id == reserveDetail.Id).FirstOrDefault();
+              
+                    var productSku_Stocks = productSku.Stocks.Where(m =>m.RefType == channelType).ToList();
 
-                    var l_storeSellStocks = storeSellStocks.Where(m => m.PrdProductSkuId == reserveDetail.Id && m.RefType == channelType).ToList();
-
-                    foreach (var item in l_storeSellStocks)
+                    foreach (var item in productSku_Stocks)
                     {
                         for (var i = 0; i < item.SellQuantity; i++)
                         {
@@ -371,22 +371,19 @@ namespace LocalS.BLL.Biz
                             int needReserveQuantity = reserveDetail.Quantity;//需要订的数量
                             if (reservedQuantity != needReserveQuantity)
                             {
-
-                                var product = CacheServiceFactory.PrdProduct.GetModelById(item.PrdProductId);
-
                                 var detailChildSon = new OrderReserveDetail.DetailChildSon();
                                 detailChildSon.Id = GuidUtil.New();
                                 detailChildSon.SellChannelRefType = item.RefType;
                                 detailChildSon.SellChannelRefId = item.RefId;
                                 detailChildSon.ReceptionMode = receptionMode;
-                                detailChildSon.SkuId = item.PrdProductSkuId;
-                                detailChildSon.SkuName = product.Name;
-                                detailChildSon.SkuImgUrl = product.MainImgUrl;
+                                detailChildSon.SkuId = productSku.Id;
+                                detailChildSon.SkuName = productSku.Name;
+                                detailChildSon.SkuImgUrl = productSku.MainImgUrl;
                                 detailChildSon.SlotId = item.SlotId;
                                 detailChildSon.Quantity = 1;
-                                detailChildSon.SalePrice = item.SalePrice;
-                                detailChildSon.SalePriceByVip = item.SalePriceByVip;
-                                detailChildSon.OriginalAmount = detailChildSon.Quantity * item.SalePrice;
+                                detailChildSon.SalePrice = productSku.SalePrice;
+                                detailChildSon.SalePriceByVip = productSku.SalePriceByVip;
+                                detailChildSon.OriginalAmount = detailChildSon.Quantity * productSku.SalePrice;
                                 detailChildSons.Add(detailChildSon);
                             }
                         }

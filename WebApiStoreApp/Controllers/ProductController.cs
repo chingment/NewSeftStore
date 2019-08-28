@@ -20,7 +20,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse Details([FromUri]RupProductDetails rup)
         {
-            var result = StoreAppServiceFactory.Product.Details(this.CurrentUserId, this.CurrentUserId, rup.Id);
+            var result = StoreAppServiceFactory.Product.Details(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

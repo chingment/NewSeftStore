@@ -9,5 +9,7 @@ namespace LocalS.Service.Api.StoreApp
     public class RupProductDetails
     {
         public string Id { get; set; }
+
+        public string StoreId { get; set; }
     }
 }

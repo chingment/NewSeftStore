@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -70,7 +71,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var i in list)
                     {
-                        var productModel = CacheServiceFactory.PrdProduct.GetModelById(i.PrdProductId);
+                        var productModel = BizFactory.PrdProduct.GetModelById(storeId, i.PrdProductId);
 
                         if (productModel != null)
                         {
@@ -78,7 +79,10 @@ namespace LocalS.Service.Api.StoreApp
                         }
                     }
 
-                    pdAreaModel.Tabs.Add(tab);
+                    if (tab.List.Count > 0)
+                    {
+                        pdAreaModel.Tabs.Add(tab);
+                    }
                 }
             }
 

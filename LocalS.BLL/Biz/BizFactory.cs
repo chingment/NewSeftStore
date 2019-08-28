@@ -23,5 +23,13 @@ namespace LocalS.BLL.Biz
                 return new MerchService();
             }
         }
+
+        public static PrdProductService PrdProduct
+        {
+            get
+            {
+                return new PrdProductService();
+            }
+        }
     }
 }

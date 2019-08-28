@@ -10,66 +10,117 @@ namespace LocalS.BLL
 {
     public class PrdProductCacheService : BaseDbContext
     {
-        private static readonly string redis_key_productsku_list = "entity:LocalS.Entity.ProductSku";
+        private static readonly string redis_key_product_info = "entity:LocalS.Entity.ProductInfo";
+        private static readonly string redis_key_product_stock = "entity:LocalS.Entity.ProductStock:{0}_{1}";
 
-        public PrdProductModel GetModelById(string id)
+        public PrdProductModel GetModelById(string storeId, string productId)
         {
-            var model = new PrdProductModel();
+            //先从缓存信息读取商品信息
+            PrdProductModel prdProductByCache = RedisHashUtil.Get<PrdProductModel>(redis_key_product_info, productId);
 
-            model = RedisHashUtil.Get<PrdProductModel>(redis_key_productsku_list, id);
-
-            if (model == null)
+            //如商品信息从缓存取不到，读取数据库信息加载
+            if (prdProductByCache == null)
             {
-                var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == id).FirstOrDefault();
-                if (prdProduct == null)
+                var prdProductByDb = CurrentDb.PrdProduct.Where(m => m.Id == productId).FirstOrDefault();
+                if (prdProductByDb == null)
                     return null;
 
-                var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).ToList();
-                if (prdProductSkus == null)
+                var prdProductRefSkuByDb = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProductByDb.Id && m.IsRef == true).FirstOrDefault();
+                if (prdProductRefSkuByDb == null)
                     return null;
 
+                prdProductByCache = new PrdProductModel();
 
-                model = new PrdProductModel();
+                prdProductByCache.Id = prdProductByDb.Id;
+                prdProductByCache.Name = prdProductByDb.Name;
+                prdProductByCache.DispalyImgUrls = prdProductByDb.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                prdProductByCache.MainImgUrl = ImgSet.GetMain(prdProductByDb.DispalyImgUrls);
+                prdProductByCache.DetailsDes = prdProductByDb.DetailsDes;
+                prdProductByCache.BriefDes = prdProductByDb.BriefDes;
 
-                model.Id = prdProduct.Id;
-                model.Name = prdProduct.Name;
-                model.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
-                model.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
-                model.DetailsDes = prdProduct.DetailsDes;
-                model.BriefDes = prdProduct.BriefDes;
 
-                for (var i = 0; i < prdProductSkus.Count; i++)
-                {
-                    if (prdProductSkus[i].IsRef)
-                    {
-                        model.RefSku = new PrdProductModel.Sku { Id = prdProductSkus[i].Id, SalePrice = prdProductSkus[i].SalePrice, SpecDes = prdProductSkus[i].SpecDes };
-                    }
+                prdProductByCache.RefSku = new PrdProductModel.RefSkuModel { Id = prdProductRefSkuByDb.Id, SalePrice = prdProductRefSkuByDb.SalePrice, SpecDes = prdProductRefSkuByDb.SpecDes };
 
-                    model.AllSkus.Add(new PrdProductModel.Sku { Id = prdProductSkus[i].Id, SalePrice = prdProductSkus[i].SalePrice, SpecDes = prdProductSkus[i].SpecDes });
-                }
 
-                if (model.RefSku == null)
-                {
-                    model.RefSku = model.AllSkus[0];
-                }
-
-                RedisManager.Db.HashSetAsync(redis_key_productsku_list, model.Id, Newtonsoft.Json.JsonConvert.SerializeObject(model), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(redis_key_product_info, prdProductByCache.Id, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductByCache), StackExchange.Redis.When.Always);
             }
 
-            if (model != null)
+            if (prdProductByCache.RefSku == null)
+                return null;
+
+            //从缓存中取店铺的商品库存信息
+
+            var storeSellChannelStocks = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == storeId && m.PrdProductId == productId && m.PrdProductSkuId == prdProductByCache.RefSku.Id).ToList();
+
+            var prdProductSkuStocksByCache = new List<PrdProductSkuStockModel>();
+
+            foreach (var storeSellChannelStock in storeSellChannelStocks)
             {
-                if (model.RefSku.SalePrice == model.RefSku.ShowPrice)
-                {
-                    model.RefSku.IsShowPrice = false;
-                }
-
-                if (model.RefSku.ShowPrice <= 0)
-                {
-                    model.RefSku.IsShowPrice = false;
-                }
+                var prdProductSkuStockByCache = new PrdProductSkuStockModel();
+                prdProductSkuStockByCache.PrdProductId = storeSellChannelStock.PrdProductId;
+                prdProductSkuStockByCache.PrdProductSkuId = storeSellChannelStock.PrdProductSkuId;
+                prdProductSkuStockByCache.RefId = storeSellChannelStock.RefId;
+                prdProductSkuStockByCache.RefType = storeSellChannelStock.RefType;
+                prdProductSkuStockByCache.SalePrice = storeSellChannelStock.SalePrice;
+                prdProductSkuStockByCache.SalePriceByVip = storeSellChannelStock.SalePriceByVip;
+                prdProductSkuStockByCache.SellQuantity = storeSellChannelStock.SellQuantity;
+                prdProductSkuStockByCache.LockQuantity = storeSellChannelStock.LockQuantity;
+                prdProductSkuStockByCache.SumQuantity = storeSellChannelStock.SumQuantity;
+                prdProductSkuStockByCache.IsOffSell = storeSellChannelStock.IsOffSell;
+                prdProductSkuStocksByCache.Add(prdProductSkuStockByCache);
             }
 
-            return model;
+            var refSkus = prdProductSkuStocksByCache.Where(m => m.PrdProductSkuId == prdProductByCache.RefSku.Id).ToList();
+
+            if (refSkus.Count == 0)
+                return null;
+
+
+            prdProductByCache.RefSku.SumQuantity = refSkus.Sum(m => m.SumQuantity);
+            prdProductByCache.RefSku.LockQuantity = refSkus.Sum(m => m.LockQuantity);
+            prdProductByCache.RefSku.SellQuantity = refSkus.Sum(m => m.SellQuantity);
+            prdProductByCache.RefSku.SalePrice = refSkus[0].SalePrice;
+            prdProductByCache.RefSku.SalePriceByVip = refSkus[0].SalePriceByVip;
+            prdProductByCache.RefSku.IsOffSell = refSkus[0].IsOffSell;
+
+
+            // prdProductByCache.RefSku.
+
+            //for (var i = 0; i < prdProductByCache.AllSkus.Count; i++)
+            //{
+            //    string skuId = prdProductByCache.AllSkus[i].Id;
+            //    var stockSku = prdProductSkuStocksByCache.Where(m => m.PrdProductSkuId == skuId).FirstOrDefault();
+            //    if (stockSku != null)
+            //    {
+            //        prdProductByCache.AllSkus[i].SalePrice = stockSku.SalePrice;
+
+            //        if (prdProductByCache.RefSku.Id == skuId)
+            //        {
+            //            prdProductByCache.RefSku.ShowPrice = stockSku.SalePrice;
+            //        }
+            //    }
+            //}
+
+
+            //if (prdProductByCache != null)
+            //{
+            //    if (prdProductByCache.RefSku.SalePrice == prdProductByCache.RefSku.ShowPrice)
+            //    {
+            //        prdProductByCache.RefSku.IsShowPrice = false;
+            //    }
+
+            //    if (prdProductByCache.RefSku.ShowPrice <= 0)
+            //    {
+            //        prdProductByCache.RefSku.IsShowPrice = false;
+            //    }
+            //}
+
+            return prdProductByCache;
+        }
+
+        public PrdProductSkuModel GetSkuModelById(string storeId, string productSkuId)
+        {
+            return null;
         }
     }
 }

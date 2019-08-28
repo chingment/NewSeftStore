@@ -60,11 +60,14 @@
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\OrderService.cs" />
+    <Compile Include="Biz\PrdProductService.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
     <Compile Include="Cache\CacheServiceFactory.cs" />
     <Compile Include="Cache\Model\PrdProductModel.cs" />
+    <Compile Include="Cache\Model\PrdProductSkuModel.cs" />
+    <Compile Include="Cache\Model\PrdProductSkuStockModel.cs" />
     <Compile Include="Cache\PrdProductCacheService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />

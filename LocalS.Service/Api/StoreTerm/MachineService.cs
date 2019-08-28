@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
@@ -79,7 +80,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productSkuIds = machineStocks.Select(m => m.PrdProductSkuId).Distinct();
             foreach (var productSkuId in productSkuIds)
             {
-                var productSku = CacheServiceFactory.PrdProduct.GetModelById(productSkuId);
+                var productSku = BizFactory.PrdProduct.GetModelById(storeId,productSkuId);
                 if (productSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();

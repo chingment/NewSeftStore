@@ -36,6 +36,11 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item2 in productChildKinds)
                 {
+
+                    ///var prdProduct = (from o in CurrentDb.PrdProductKind where o.PrdKindId == item2.Id select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).FirstOrDefault();
+
+
+
                     var productChildKindModel = new ProductChildKindModel();
 
                     productChildKindModel.Id = item2.Id;
@@ -44,6 +49,9 @@ namespace LocalS.Service.Api.StoreApp
                     productParentKindModel.Selected = false;
 
                     productParentKindModel.Child.Add(productChildKindModel);
+
+
+
                 }
 
                 productParentKindModels.Add(productParentKindModel);
