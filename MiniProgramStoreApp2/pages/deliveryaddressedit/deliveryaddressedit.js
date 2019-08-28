@@ -1,8 +1,8 @@
+const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiDeliveryaddress = require('../../api/deliveryaddress.js')
-const cityList = require('./cityList').cityList;
-const toast = require('../../utils/showtoastutil');//引入消息提醒暴露的接口
+const cityList = require('./cityList').cityList
 
 const app = getApp()
 

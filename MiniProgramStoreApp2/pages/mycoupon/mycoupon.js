@@ -1,6 +1,6 @@
 const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const apiCoupon = require('../../api/coupon.js')
 const app = getApp()
 
 Page({
@@ -20,7 +20,7 @@ Page({
     var operate = parseInt(options.operate)
 
     var operateIndex = parseInt(options.operateIndex)
-    var products = options.products == undefined ? [] : JSON.parse(options.products)
+    var productSkus = options.productSkus == undefined ? [] : JSON.parse(options.productSkus)
     var isGetHis = options.isGetHis
     var couponId = options.couponId == undefined ? [] : JSON.parse(options.couponId)
     var title = ""
@@ -40,20 +40,22 @@ Page({
     })
 
     var isGetHis = false
-    lumos.postJson({
-      url: config.apiUrl.couponMy,
-      dataParams: {
-        isGetHis: isGetHis,
-        couponId: couponId,
-        products: products
-      },
-      success: function(res) {
-        _this.setData({
-          coupon: res.data,
-          operate: operate
-        })
-      }
-    })
+
+    apiCoupon.my({
+      isGetHis: isGetHis,
+      couponId: couponId,
+      productSkus: productSkus
+    }, {
+        success: function (res) {
+          if (res.result == 1) {
+            _this.setData({
+              coupon: res.data,
+              operate: operate
+            })
+          }
+        },
+        fail: function () { }
+      })
 
   },
   goSelect: function(e) {

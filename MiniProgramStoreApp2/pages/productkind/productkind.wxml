@@ -1,14 +1,18 @@
-<scroll-view  scroll-y="true" style="height:{{height}}px;" >
-<view class='st-kind'>
+
+<view class='st-kind' id="dasa" style="height:{{height}}px;">
     <scroll-view class='kind-left-navbar' scroll-y="true">
       <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-        <view class="it {{ item.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{index}}" bindtap="itemClick">{{item.name}}
+        <view class="it {{ index === navActive ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{index}}" bindtap="itemClick">{{item.name}}
         </view>
       </block>
     </scroll-view>
-
+  <view class="content content-class" style="width:100%" >
+      <scroll-view class='kind-right-content' scroll-y="true" 
+      scroll-into-view="{{contentActive}}" scroll-with-animation="true"
+       bindscroll="onScroll"
+       >
     <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-      <scroll-view class='kind-right-content {{item.selected==true ? "":"hidden" }}' scroll-y="true" >
+ <view class="pesticide" id="tty{{item.id}}">
         <view class='kind-lv1-imgbox'>
           <image class="kind-lv1-imgurl" src="{{item.mainImgUrl}}"></image>
         </view>
@@ -24,7 +28,10 @@
             </navigator>
           </block>
         </view>
-      </scroll-view>
+        </view>
+
     </block>
+
+     </scroll-view>
+         </view>
   </view>
-  </scroll-view>

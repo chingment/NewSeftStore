@@ -1,7 +1,7 @@
 const storeage = require('../../utils/storeageutil.js')
+const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
-const ownRequest = require('../../own/ownRequest.js')
 const app = getApp()
 
 var getList = function (_this) {

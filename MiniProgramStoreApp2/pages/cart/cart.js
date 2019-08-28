@@ -1,6 +1,6 @@
+const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
-const toast = require('../../utils/showtoastutil')
 
 Component({
   options: {

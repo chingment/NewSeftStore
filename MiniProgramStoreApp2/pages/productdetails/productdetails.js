@@ -1,8 +1,8 @@
 const storeage = require('../../utils/storeageutil.js')
+const ownRequest = require('../../own/ownRequest.js')
 const wxparse = require("../../wxParse/wxParse.js")
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
-const ownRequest = require('../../own/ownRequest.js')
 const app = getApp()
 
 Page({

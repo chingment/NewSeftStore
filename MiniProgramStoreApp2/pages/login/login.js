@@ -1,8 +1,8 @@
 const config = require('../../config')
-const ownRequest = require('../../own/ownRequest.js')
+const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
+const ownRequest = require('../../own/ownRequest.js')
 const apiOwn = require('../../api/own.js')
-const toast = require('../../utils/showtoastutil')
 
 // pages/login/login.js
 Page({
