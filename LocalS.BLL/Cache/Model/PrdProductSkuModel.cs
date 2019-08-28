@@ -21,9 +21,7 @@ namespace LocalS.BLL
         public decimal ShowPrice { get; set; }
         public bool IsShowPrice { get; set; }
         public string SpecDes { get; set; }
-
         public bool IsOffSell { get; set; }
-
         public List<Stock> Stocks { get; set; }
         public class Stock
         {
@@ -34,6 +32,5 @@ namespace LocalS.BLL
             public int LockQuantity { get; set; }
             public int SellQuantity { get; set; }
         }
-
     }
 }

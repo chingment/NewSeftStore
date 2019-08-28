@@ -50,70 +50,17 @@ namespace LocalS.BLL
 
             //从缓存中取店铺的商品库存信息
 
-            var storeSellChannelStocks = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == storeId && m.PrdProductId == productId && m.PrdProductSkuId == prdProductByCache.RefSku.Id).ToList();
+            var refSkuStocks = CacheServiceFactory.StoreSellChannelStock.GetStock(storeId, prdProductByCache.RefSku.Id);
 
-            var prdProductSkuStocksByCache = new List<PrdProductSkuStockModel>();
-
-            foreach (var storeSellChannelStock in storeSellChannelStocks)
-            {
-                var prdProductSkuStockByCache = new PrdProductSkuStockModel();
-                prdProductSkuStockByCache.PrdProductId = storeSellChannelStock.PrdProductId;
-                prdProductSkuStockByCache.PrdProductSkuId = storeSellChannelStock.PrdProductSkuId;
-                prdProductSkuStockByCache.RefId = storeSellChannelStock.RefId;
-                prdProductSkuStockByCache.RefType = storeSellChannelStock.RefType;
-                prdProductSkuStockByCache.SalePrice = storeSellChannelStock.SalePrice;
-                prdProductSkuStockByCache.SalePriceByVip = storeSellChannelStock.SalePriceByVip;
-                prdProductSkuStockByCache.SellQuantity = storeSellChannelStock.SellQuantity;
-                prdProductSkuStockByCache.LockQuantity = storeSellChannelStock.LockQuantity;
-                prdProductSkuStockByCache.SumQuantity = storeSellChannelStock.SumQuantity;
-                prdProductSkuStockByCache.IsOffSell = storeSellChannelStock.IsOffSell;
-                prdProductSkuStocksByCache.Add(prdProductSkuStockByCache);
-            }
-
-            var refSkus = prdProductSkuStocksByCache.Where(m => m.PrdProductSkuId == prdProductByCache.RefSku.Id).ToList();
-
-            if (refSkus.Count == 0)
+            if (refSkuStocks.Count == 0)
                 return null;
 
-
-            prdProductByCache.RefSku.SumQuantity = refSkus.Sum(m => m.SumQuantity);
-            prdProductByCache.RefSku.LockQuantity = refSkus.Sum(m => m.LockQuantity);
-            prdProductByCache.RefSku.SellQuantity = refSkus.Sum(m => m.SellQuantity);
-            prdProductByCache.RefSku.SalePrice = refSkus[0].SalePrice;
-            prdProductByCache.RefSku.SalePriceByVip = refSkus[0].SalePriceByVip;
-            prdProductByCache.RefSku.IsOffSell = refSkus[0].IsOffSell;
-
-
-            // prdProductByCache.RefSku.
-
-            //for (var i = 0; i < prdProductByCache.AllSkus.Count; i++)
-            //{
-            //    string skuId = prdProductByCache.AllSkus[i].Id;
-            //    var stockSku = prdProductSkuStocksByCache.Where(m => m.PrdProductSkuId == skuId).FirstOrDefault();
-            //    if (stockSku != null)
-            //    {
-            //        prdProductByCache.AllSkus[i].SalePrice = stockSku.SalePrice;
-
-            //        if (prdProductByCache.RefSku.Id == skuId)
-            //        {
-            //            prdProductByCache.RefSku.ShowPrice = stockSku.SalePrice;
-            //        }
-            //    }
-            //}
-
-
-            //if (prdProductByCache != null)
-            //{
-            //    if (prdProductByCache.RefSku.SalePrice == prdProductByCache.RefSku.ShowPrice)
-            //    {
-            //        prdProductByCache.RefSku.IsShowPrice = false;
-            //    }
-
-            //    if (prdProductByCache.RefSku.ShowPrice <= 0)
-            //    {
-            //        prdProductByCache.RefSku.IsShowPrice = false;
-            //    }
-            //}
+            prdProductByCache.RefSku.SumQuantity = refSkuStocks.Sum(m => m.SumQuantity);
+            prdProductByCache.RefSku.LockQuantity = refSkuStocks.Sum(m => m.LockQuantity);
+            prdProductByCache.RefSku.SellQuantity = refSkuStocks.Sum(m => m.SellQuantity);
+            prdProductByCache.RefSku.SalePrice = refSkuStocks[0].SalePrice;
+            prdProductByCache.RefSku.SalePriceByVip = refSkuStocks[0].SalePriceByVip;
+            prdProductByCache.RefSku.IsOffSell = refSkuStocks[0].IsOffSell;
 
             return prdProductByCache;
         }
@@ -122,5 +69,6 @@ namespace LocalS.BLL
         {
             return null;
         }
+
     }
 }

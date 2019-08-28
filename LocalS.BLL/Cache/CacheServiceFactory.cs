@@ -15,5 +15,13 @@ namespace LocalS.BLL
                 return new PrdProductCacheService();
             }
         }
+
+        public static StoreSellChannelStockCacheService StoreSellChannelStock
+        {
+            get
+            {
+                return new StoreSellChannelStockCacheService();
+            }
+        }
     }
 }
