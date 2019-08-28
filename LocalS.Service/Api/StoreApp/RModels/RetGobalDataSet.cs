@@ -8,12 +8,12 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RetGobalDataSet
     {
-        public RetIndexGetPageData Index { get; set; }
+        public RetIndexPageData Index { get; set; }
 
-        public RetProductKindGetPageData ProductKind { get; set; }
+        public RetProductKindPageData ProductKind { get; set; }
 
-        public RetCartGetPageData Cart { get;set;}
+        public RetCartPageData Cart { get;set;}
 
-        public RetPersonalGetPageData Personal { get; set; }
+        public RetPersonalPageData Personal { get; set; }
     }
 }

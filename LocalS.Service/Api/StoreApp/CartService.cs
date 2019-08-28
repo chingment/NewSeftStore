@@ -12,11 +12,11 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class CartService : BaseDbContext
     {
-        public CustomJsonResult<RetCartGetPageData> GetPageData(string operater, string clientUserId, RupCartPageData rup)
+        public CustomJsonResult<RetCartPageData> PageData(string operater, string clientUserId, RupCartPageData rup)
         {
-            var result = new CustomJsonResult<RetCartGetPageData>();
+            var result = new CustomJsonResult<RetCartPageData>();
 
-            var ret = new RetCartGetPageData();
+            var ret = new RetCartPageData();
 
 
             var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
@@ -79,7 +79,7 @@ namespace LocalS.Service.Api.StoreApp
             ret.SumPriceBySelected = cartProductSkuModels.Where(m => m.Selected == true).Sum(m => m.SumPrice);
             ret.CountBySelected = cartProductSkuModels.Where(m => m.Selected == true).Count();
 
-            result = new CustomJsonResult<RetCartGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult<RetCartPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

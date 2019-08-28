@@ -1,7 +1,6 @@
-const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const deliveryaddress = require('../../api/deliveryaddress.js')
 const cityList = require('./cityList').cityList;
 const toastUtil = require('../../utils/showtoastutil');//引入消息提醒暴露的接口
 
@@ -235,12 +234,20 @@ Page({
       return
     }
 
-    lumos.postJson({
-      url: config.apiUrl.deliveryAddressEdit, dataParams: { id: id, consignee: consignee, phoneNumber: phoneNumber, areaName: areaName, address: address, isDefault: isDefault },
-      success: function (res) {
-        wx.navigateBack()
-      }
-    })
+
+    deliveryaddress.edit({
+      id: id,
+      consignee: consignee,
+      phoneNumber: phoneNumber,
+      areaName: areaName,
+      address: address,
+      isDefault: isDefault
+    }, {
+        success: function (res) {
+          wx.navigateBack()
+        },
+        fail: function () { }
+      })
 
   }
 

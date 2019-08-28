@@ -11,12 +11,12 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class IndexService : BaseDbContext
     {
-        public CustomJsonResult<RetIndexGetPageData> GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetIndexPageData> PageData(string operater, string clientUserId, string storeId)
         {
 
-            var result = new CustomJsonResult<RetIndexGetPageData>();
+            var result = new CustomJsonResult<RetIndexPageData>();
 
-            var ret = new RetIndexGetPageData();
+            var ret = new RetIndexPageData();
 
 
             var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.PdArea = pdAreaModel;
 
-            result = new CustomJsonResult<RetIndexGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult<RetIndexPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

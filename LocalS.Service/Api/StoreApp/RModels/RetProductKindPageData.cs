@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RetProductKindGetPageData
+    public class RetProductKindPageData
     {
         public List<ProductParentKindModel> List { get; set; }
  

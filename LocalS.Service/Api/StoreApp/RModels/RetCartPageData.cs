@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RetCartGetPageData
+    public class RetCartPageData
     {
-        public RetCartGetPageData()
+        public RetCartPageData()
         {
             this.Blocks = new List<CartBlockModel>();
         }

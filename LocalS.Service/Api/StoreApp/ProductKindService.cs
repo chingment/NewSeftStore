@@ -10,12 +10,12 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductKindService : BaseDbContext
     {
-        public CustomJsonResult<RetProductKindGetPageData> GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetProductKindPageData> PageData(string operater, string clientUserId, string storeId)
         {
 
-            var result = new CustomJsonResult<RetProductKindGetPageData>();
+            var result = new CustomJsonResult<RetProductKindPageData>();
 
-            var ret = new RetProductKindGetPageData();
+            var ret = new RetProductKindPageData();
 
 
             var productParentKindModels = new List<ProductParentKindModel>();
@@ -61,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.List = productParentKindModels;
 
-            result = new CustomJsonResult<RetProductKindGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult<RetProductKindPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

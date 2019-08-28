@@ -1,22 +1,7 @@
-const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const deliveryaddress = require('../../api/deliveryaddress.js')
 const app = getApp()
-
-var getList = function (_this) {
-
-  lumos.getJson({
-    url: config.apiUrl.deliveryAddressMy,
-    success: function (res) {
-      _this.setData({
-        list: res.data
-      })
-    }
-  })
-}
-
-
 
 Page({
 
@@ -51,7 +36,7 @@ Page({
     })
 
     _this.setData({ operate: operate, operateIndex: operateIndex })
-    getList(_this)
+
   },
 
   /**
@@ -66,7 +51,14 @@ Page({
    */
   onShow: function () {
     var _this = this
-    getList(_this)
+    deliveryaddress.my({}, {
+      success: function (res) {
+        _this.setData({
+          list: res.data
+        })
+      },
+      fail: function () { }
+    })
   },
 
   /**

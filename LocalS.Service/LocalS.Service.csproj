@@ -200,9 +200,9 @@
     <Compile Include="Api\StoreApp\Models\OrderConfirmSubtotalItemModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
-    <Compile Include="Api\StoreApp\RModels\RetPersonalGetPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetPersonalPageData.cs" />
     <Compile Include="Api\StoreApp\Models\ProductChildKindModel.cs" />
-    <Compile Include="Api\StoreApp\RModels\RetProductKindGetPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetProductKindPageData.cs" />
     <Compile Include="Api\StoreApp\Models\ProductParentKindModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductModel.cs" />
     <Compile Include="Api\StoreApp\Models\SpecModel.cs" />
@@ -211,11 +211,11 @@
     <Compile Include="Api\StoreApp\Models\CouponModel.cs" />
     <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
     <Compile Include="Api\StoreApp\Models\UserInfoModel.cs" />
-    <Compile Include="Api\StoreApp\RModels\RetCartGetPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
-    <Compile Include="Api\StoreApp\RModels\RetIndexGetPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
-    <Compile Include="Api\StoreApp\RModels\RupOperateGetResult.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />
     <Compile Include="Api\StoreApp\CouponService.cs" />
@@ -238,7 +238,7 @@
     <Compile Include="Api\StoreApp\RModels\RupCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalDataSet.cs" />
-    <Compile Include="Api\StoreApp\RModels\RupOrderGetJsApiPaymentPms.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupOrderJsApiPaymentPms.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductDetails.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductList.cs" />

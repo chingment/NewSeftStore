@@ -1,9 +1,8 @@
-const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const wxparse = require("../../wxParse/wxParse.js")
 const cart = require('../../api/cart.js')
+const product = require('../../api/product.js')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
 const app = getApp()
 
 Page({
@@ -24,19 +23,18 @@ Page({
 
     //app.changeData("main", { cart: cart })
 
-    lumos.getJson({
-      url: config.apiUrl.productGetDetails,
-      urlParams: {
-        id: id
-      },
-      success: function(res) {
-        _this.setData({
-          product: res.data,
-          cart: storeage.getCart()
-        })
-        wxparse.wxParse('dkcontent', 'html', res.data.detailsDes, _this, 0);
-      }
-    })
+    product.details({
+      id: id
+    }, {
+        success: function (res) {
+          _this.setData({
+            product: res.data,
+            cart: storeage.getCart()
+          })
+          wxparse.wxParse('dkcontent', 'html', res.data.detailsDes, _this, 0);
+        },
+        fail: function () { }
+      })
   },
   goHome: function(e) {
     app.mainTabBarSwitch(0)

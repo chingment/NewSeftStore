@@ -1,8 +1,7 @@
-const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const cart = require('../../api/cart.js')
+const product = require('../../api/product.js')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
 const app = getApp()
 
 var getList = function(_this) {
@@ -28,15 +27,15 @@ var getList = function(_this) {
   var pageIndex = currentTab.pageIndex
   var kindId = currentTab.kindId == undefined ? "" : currentTab.kindId
   var subjectId = currentTab.subjectId == undefined ? "" : currentTab.subjectId
-  lumos.getJson({
-    url: config.apiUrl.productGetList,
-    urlParams: {
-      storeId: ownRequest.getCurrentStoreId(),
-      pageIndex: pageIndex,
-      kindId: kindId,
-      subjectId: subjectId,
-      name: ""
-    },
+
+
+  product.list({
+    storeId: ownRequest.getCurrentStoreId(),
+    pageIndex: pageIndex,
+    kindId: kindId,
+    subjectId: subjectId,
+    name: ""
+  }, {
     success: function(res) {
       console.log("config.apiUrl.productList->success")
 
@@ -52,8 +51,10 @@ var getList = function(_this) {
       _this.setData({
         tabs: _this.data.tabs
       })
-    }
+    },
+    fail: function() {}
   })
+
 }
 
 Page({

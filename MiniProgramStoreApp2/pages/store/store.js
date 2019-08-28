@@ -1,6 +1,6 @@
-const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const store = require('../../api/store.js')
+
 const app = getApp()
 
 Page({
@@ -10,20 +10,20 @@ Page({
 
 
     function getStores(lat, lng) {
-      lumos.getJson({
-        url: config.apiUrl.storeList,
-        urlParams: {
-          merchId: config.merchId,
-          lat: lat,
-          lng: lng
-        },
-        success: function (res) {
+
+      store.list({
+        lat: lat,
+        lng: lng
+      },{
+        success: function(res) {
           _this.setData({
             list: res.data,
             currentStore: ownRequest.getCurrentStore()
           })
-        }
+        },
+        fail: function() {}
       })
+
     }
 
     wx.getLocation({
@@ -32,7 +32,6 @@ Page({
         // console.log(res);
         var latitude = res.latitude
         var longitude = res.longitude
-
 
         getStores(latitude, longitude)
 
@@ -45,7 +44,7 @@ Page({
     })
 
 
-    getStores(0,0)
+    getStores(0, 0)
   },
   selectStore: function(e) {
     var store = e.currentTarget.dataset.replyStore

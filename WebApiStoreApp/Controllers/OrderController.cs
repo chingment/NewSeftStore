@@ -49,9 +49,9 @@ namespace WebApiStoreApp.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetJsApiPaymentPms([FromUri]RupOrderGetJsApiPaymentPms rop)
+        public OwnApiHttpResponse JsApiPaymentPms([FromUri]RupOrderJsApiPaymentPms rop)
         {
-            IResult result = StoreAppServiceFactory.Order.GetJsApiPaymentPms(this.CurrentUserId, this.CurrentUserId,rop);
+            IResult result = StoreAppServiceFactory.Order.JsApiPaymentPms(this.CurrentUserId, this.CurrentUserId,rop);
             return new OwnApiHttpResponse(result);
         }
 

@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         SendPayCancleCheck = 2
     }
 
-    public class RupOperateGetResult
+    public class RupOperateResult
     {
         public string Id { get; set; }
         public E_OperateType Type { get; set; }

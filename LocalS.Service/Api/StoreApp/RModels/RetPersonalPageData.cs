@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RetPersonalGetPageData
+    public class RetPersonalPageData
     {
          public UserInfoModel UserInfo { get; set; }
     }

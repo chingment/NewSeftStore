@@ -8,9 +8,9 @@ namespace WebApiStoreApp.Controllers
     public class OperateController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse GetResult([FromUri]RupOperateGetResult rup)
+        public OwnApiHttpResponse Result([FromUri]RupOperateResult rup)
         {
-            IResult result = StoreAppServiceFactory.Operate.GetResult(this.CurrentUserId, this.CurrentUserId, rup);
+            IResult result = StoreAppServiceFactory.Operate.Result(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RetIndexGetPageData
+    public class RetIndexPageData
     {
-        public RetIndexGetPageData()
+        public RetIndexPageData()
         {
             this.Store = new StoreModel();
             this.Banner = new BannerModel();

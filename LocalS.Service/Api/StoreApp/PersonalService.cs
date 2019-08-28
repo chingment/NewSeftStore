@@ -10,11 +10,11 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class PersonalService : BaseDbContext
     {
-        public CustomJsonResult<RetPersonalGetPageData> GetPageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetPersonalPageData> PageData(string operater, string clientUserId, string storeId)
         {
-            var result = new CustomJsonResult<RetPersonalGetPageData>();
+            var result = new CustomJsonResult<RetPersonalPageData>();
 
-            var ret = new RetPersonalGetPageData();
+            var ret = new RetPersonalPageData();
 
             var user = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
             if (user != null)
@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            result = new CustomJsonResult<RetPersonalGetPageData>(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

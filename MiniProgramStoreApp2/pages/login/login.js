@@ -1,7 +1,7 @@
 const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
 const storeage = require('../../utils/storeageutil.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const own = require('../../api/own.js')
 const toastUtil = require('../../utils/showtoastutil')
 
 // pages/login/login.js
@@ -17,21 +17,21 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
 
   },
@@ -40,40 +40,40 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
 
 
-  bindgetuserinfo: function (e) {
+  bindgetuserinfo: function(e) {
 
     var pages = getCurrentPages() //获取加载的页面
 
@@ -90,32 +90,29 @@ Page({
       //   url: '../main/main',
       // })
 
-
-      lumos.postJson({
-        url: config.apiUrl.ownLoginByMinProgram,
-        dataParams: {
-          merchId: config.merchId,
-          appId: config.appId,
-          code: params.code,
-          iv: params.iv,
-          encryptedData: params.encryptedData
-        },
-        success: function (res) {
-
+      own.loginByMinProgram({
+        merchId: config.merchId,
+        appId: config.appId,
+        code: params.code,
+        iv: params.iv,
+        encryptedData: params.encryptedData
+      }, {
+        success: function(res) {
           if (res.result == 1) {
             storeage.setAccessToken(res.data.token);
             console.log("token:" + storeage.getAccessToken())
             wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
               url: ownRequest.getReturnUrl()
             })
-          }
-          else{
+          } else {
             toastUtil.showToast({
               title: res.message
             })
           }
-        }
+        },
+        fail: function() {}
       })
+
 
     })
     //}

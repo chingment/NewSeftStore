@@ -541,7 +541,7 @@ namespace LocalS.Service.Api.StoreApp
             return BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
         }
 
-        public CustomJsonResult GetJsApiPaymentPms(string operater, string clientUserId, RupOrderGetJsApiPaymentPms rup)
+        public CustomJsonResult JsApiPaymentPms(string operater, string clientUserId, RupOrderJsApiPaymentPms rup)
         {
             var result = new CustomJsonResult();
 

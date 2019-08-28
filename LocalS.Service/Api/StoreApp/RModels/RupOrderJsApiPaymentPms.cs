@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.StoreApp
         AliPay = 2
     }
 
-    public class RupOrderGetJsApiPaymentPms
+    public class RupOrderJsApiPaymentPms
     {
         public string MerchId { get; set; }
         public string AppId { get; set; }
