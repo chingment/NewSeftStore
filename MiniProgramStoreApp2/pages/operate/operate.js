@@ -1,7 +1,6 @@
-const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const apiOperate = require('../../api/operate.js')
 const app = getApp()
 
 Page({
@@ -14,23 +13,22 @@ Page({
   getResult: function (id, tp, caller) {
 
     var _this = this;
-    lumos.getJson({
-      url: config.apiUrl.operateGetResult,
-      urlParams: {
-        id: id,
-        type: tp,
-        caller: caller
-      },
-      isShowLoading: false,
-      success: function (res) {
-        if (res.data.isComplete) {
-          clearInterval(_this.countDown);
-        }
-        _this.setData({
-          result: res.data
-        })
-      }
-    })
+
+    apiOperate.result({
+      id: id,
+      type: tp,
+      caller: caller
+    }, {
+        success: function (res) {
+          if (res.data.isComplete) {
+            clearInterval(_this.countDown);
+          }
+          _this.setData({
+            result: res.data
+          })
+        },
+        fail: function () { }
+      })
   },
 
   onLoad: function (options) {

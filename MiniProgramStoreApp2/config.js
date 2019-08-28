@@ -16,20 +16,20 @@ var config = {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     globalDataSet: `${host}/Global/DataSet`,
     cartOperate: `${host}/Cart/Operate`,
-    cartGetPageData: `${host}/Cart/GetPageData`,
-    productGetList: `${host}/Product/List`,
-    productGetDetails: `${host}/Product/Details`,
+    cartPageData: `${host}/Cart/PageData`,
+    productList: `${host}/Product/List`,
+    productDetails: `${host}/Product/Details`,
     deliveryAddressEdit: `${host}/DeliveryAddress/Edit`,
     deliveryAddressMy: `${host}/DeliveryAddress/My`,
-    orderConfirm: `${host}/Order/Confirm`,
     couponMy: `${host}/Coupon/My`,
     storeList: `${host}/Store/List`,
-    operateGetResult: `${host}/Operate/GetResult`,
+    operateResult: `${host}/Operate/Result`,
+    orderConfirm: `${host}/Order/Confirm`,
     orderReserve: `${host}/Order/Reserve`,
-    orderGetJsApiPaymentPms: `${host}/Order/GetJsApiPaymentPms`,
-    orderGetList: `${host}/Order/List`,
+    orderJsApiPaymentPms: `${host}/Order/JsApiPaymentPms`,
+    orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
-    orderGetDetails: `${host}/Order/Details`
+    orderDetails: `${host}/Order/Details`
   }
 
 };

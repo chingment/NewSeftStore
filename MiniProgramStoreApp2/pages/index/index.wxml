@@ -71,13 +71,13 @@
     <view class="pdArea">
       <view class="ct">
         <view class="its-pdArea">
-          <block wx:for-items="{{pdArea.tabs}}" wx:for-item="item" wx:key="{{index}}">
+          <block wx:for-items="{{pdArea.tabs}}" wx:for-item="tab" wx:key="{{index}}">
             <view class="it">
               <view class="it-a1">
                 <view class="title">
-                  <text class='txt'>{{item.name}}</text>
+                  <text class='txt'>{{tab.name}}</text>
                 </view>
-                <navigator class='more' url="/pages/productlist/productlist?subjectId={{item.id}}&navName={{item.name}}" hover-class="none">
+                <navigator class='more' url="/pages/productlist/productlist?subjectId={{tab.id}}&navName={{tab.name}}" hover-class="none">
                   <view class="title">
                     <text class="txt">更多优选</text>
                   </view>
@@ -87,23 +87,23 @@
                 </navigator>
               </view>
               <view class='it-a2'>
-                <image class="img" src="{{item.mainImgUrl}}"></image>
+                <image class="img" src="{{tab.mainImgUrl}}"></image>
               </view>
               <view class="it-a3 prd-list-1">
-                <block wx:for="{{item.list}}" wx:for-index="index" wx:for-item="item2" wx:key="list">
+                <block wx:for="{{tab.list}}" wx:for-index="index" wx:for-item="product" wx:key="list">
                   <view class='it it-{{index%2}}'>
-                    <navigator class='imgurl' url="/pages/productdetails/productdetails?id={{item2.id}}">
-                      <image class="img" src="{{item2.mainImgUrl}}"></image>
+                    <navigator class='imgurl' url="/pages/productdetails/productdetails?id={{product.id}}">
+                      <image class="img" src="{{product.mainImgUrl}}"></image>
                     </navigator>
-                    <text class="name font-gray">{{item2.name}}</text>
-                    <text class="briefInfo font-gray">{{item2.briefDes}}</text>
+                    <text class="name font-gray">{{product.name}}</text>
+                    <text class="briefInfo font-gray">{{product.briefDes}}</text>
                     <view class="area2">
                       <view class="price">
-                        <text class="saleprice font-black">{{item2.skus[item2.refSkuIndex].salePrice}}</text>
-                        <text  wx:if="{{item2.skus[item2.refSkuIndex].salePrice!=item2.skus[item2.refSkuIndex].showPrice&&item2.skus[item2.refSkuIndex].showPrice!=0}}" class="showprice font-gray">{{item2.skus[item2.refSkuIndex].showPrice}}</text>
+                        <text class="saleprice font-black">{{product.refSku.salePrice}}</text>
+                        <text  wx:if="{{product.refSku.isShowPrice}}" class="showprice font-gray">{{product.refSku.showPrice}}</text>
                       </view>
                       <view class="operate">
-                        <image bindtap="addToCart" data-reply-skuid="{{item2.skus[item2.refSkuIndex].id}}" class="increase" src='/content/default/images/increase.png'></image>
+                        <image bindtap="addToCart" data-reply-skuid="{{product.refSku.id}}" class="increase" src='/content/default/images/increase.png'></image>
                       </view>
                     </view>
                   </view>

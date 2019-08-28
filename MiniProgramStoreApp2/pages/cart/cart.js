@@ -1,5 +1,5 @@
 const ownRequest = require('../../own/ownRequest.js')
-const cart = require('../../api/cart.js')
+const apiCart = require('../../api/cart.js')
 
 Component({
   options: {
@@ -54,7 +54,7 @@ Component({
 
       function _operate() {
 
-        cart.operate({
+        apiCart.operate({
           storeId: ownRequest.getCurrentStoreId(),
           operate: operate,
           productSkus: operateProductSkus
@@ -106,7 +106,7 @@ Component({
       }
 
       if (productSkus.length == 0) {
-        toastUtil.showToast({
+        toast.show({
           title: '至少选择一件商品'
         })
         return

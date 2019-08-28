@@ -267,7 +267,7 @@ function wxRequest(opts) {
     method: _method,
     dataType: "json",
     success: function(res) {
-      // console.log("wxRequest.success->>>>" + JSON.stringify(res));
+      console.log("wxRequest.success->>>>" + JSON.stringify(res));
       if (typeof res.data == "undefined" || res.data == null) {
         console.log("wxRequest.success->>>>data is undefined or null");
       } else if (typeof res.data.result == "undefined" || res.data.result == null) {

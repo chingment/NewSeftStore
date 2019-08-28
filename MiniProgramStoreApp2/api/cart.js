@@ -10,16 +10,16 @@ function operate(params, requestHandler) {
     success: function (res) {
       if (res.result == 1) {
         requestHandler.success(res)
-        getPageData(requestHandler)
+        pageData(requestHandler)
       }
     }
   })
 }
 
-function getPageData(requestHandler) {
+function pageData(requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.cartGetPageData,
+    url: config.apiUrl.cartPageData,
     urlParams: {
       storeId: ownRequest.getCurrentStoreId()
     },
@@ -34,5 +34,5 @@ function getPageData(requestHandler) {
 
 module.exports = {
   operate: operate,
-  getPageData: getPageData
+  pageData: pageData
 }

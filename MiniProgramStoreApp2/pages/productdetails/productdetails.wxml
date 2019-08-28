@@ -18,8 +18,8 @@
             <text class="briefIntro">{{product.briefDes}}</text>
           </view>
           <view class="item-price">
-            <text class="unitPrice">{{product.skus[product.refSkuIndex].salePrice}}</text>
-            <text wx:if="{{product.skus[product.refSkuIndex].salePrice!=product.skus[product.refSkuIndex].showPrice&&product.skus[product.refSkuIndex].showPrice!=0}}" class="showPrice">{{product.skus[product.refSkuIndex].showPrice}}</text>
+            <text class="unitPrice">{{product.refSku.salePrice}}</text>
+            <text wx:if="{{product.refSku.isShowPrice}}" class="showPrice">{{product.refSku.showPrice}}</text>
           </view>
         </view>
       </view>
@@ -42,10 +42,10 @@
     <view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
     <image src="/content/default/images/cart.png" />
   </view>
-  <view bindtap="addToCart" class='item-increase bg-blue' data-reply-skuid="{{product.skus[product.refSkuIndex].id}}">
+  <view bindtap="addToCart" class='item-increase bg-blue' data-reply-skuid="{{product.refSku.id}}">
     <text>加入购物车</text>
   </view>
-  <view bindtap="immeBuy" class="item-buy bg-main" data-reply-skuid="{{product.skus[product.refSkuIndex].id}}" >
+  <view bindtap="immeBuy" class="item-buy bg-main" data-reply-skuid="{{product.refSku.id}}" >
     <text>立即购买</text>
   </view>
 </view>

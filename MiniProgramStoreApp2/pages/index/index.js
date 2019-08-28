@@ -1,5 +1,5 @@
 const ownRequest = require('../../own/ownRequest.js')
-const cart = require('../../api/cart.js')
+const apiCart = require('../../api/cart.js')
 
 Component({
   options: {
@@ -9,7 +9,7 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function(newVal, oldVal, changedPath) {
+      observer: function (newVal, oldVal, changedPath) {
 
         var _self = this
         var currentStore = ownRequest.getCurrentStore()
@@ -30,7 +30,7 @@ Component({
         banner: _self.data.banner
       })
     },
-    addToCart: function(e) {
+    addToCart: function (e) {
       var _self = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
       console.log('skuId：' + skuId)
@@ -42,12 +42,14 @@ Component({
         receptionMode: 3
       });
       console.log('ownRequest.getCurrentStoreId():' + ownRequest.getCurrentStoreId())
-      cart.operate({
+      apiCart.operate({
         storeId: ownRequest.getCurrentStoreId(),
         operate: 2,
         productSkus: productSkus
       }, {
-          success: function (res) { },
+          success: function (res) {
+
+          },
           fail: function () { }
         })
     }

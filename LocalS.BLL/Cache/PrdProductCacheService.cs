@@ -42,13 +42,31 @@ namespace LocalS.BLL
                 {
                     if (prdProductSkus[i].IsRef)
                     {
-                        model.RefSkuIndex = i;
+                        model.RefSku = new PrdProductModel.Sku { Id = prdProductSkus[i].Id, SalePrice = prdProductSkus[i].SalePrice, SpecDes = prdProductSkus[i].SpecDes };
                     }
-                    model.Skus.Add(new PrdProductModel.Sku { Id = prdProductSkus[i].Id, SalePrice = prdProductSkus[i].SalePrice, SpecDes = prdProductSkus[i].SpecDes });
+
+                    model.AllSkus.Add(new PrdProductModel.Sku { Id = prdProductSkus[i].Id, SalePrice = prdProductSkus[i].SalePrice, SpecDes = prdProductSkus[i].SpecDes });
+                }
+
+                if (model.RefSku == null)
+                {
+                    model.RefSku = model.AllSkus[0];
                 }
 
                 RedisManager.Db.HashSetAsync(redis_key_productsku_list, model.Id, Newtonsoft.Json.JsonConvert.SerializeObject(model), StackExchange.Redis.When.Always);
+            }
 
+            if (model != null)
+            {
+                if (model.RefSku.SalePrice == model.RefSku.ShowPrice)
+                {
+                    model.RefSku.IsShowPrice = false;
+                }
+
+                if (model.RefSku.ShowPrice <= 0)
+                {
+                    model.RefSku.IsShowPrice = false;
+                }
             }
 
             return model;

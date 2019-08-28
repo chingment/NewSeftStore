@@ -1,12 +1,9 @@
-//index.js
-//获取应用实例
 const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
-const toastUtil = require('../../utils/showtoastutil')
+const toast = require('../../utils/showtoastutil')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
-const global = require('../../api/global.js')
-
+const apiGlobal = require('../../api/global.js')
+const apiOwn = require('../../api/own.js')
 
 var app = getApp()
 
@@ -89,51 +86,40 @@ Page({
       list: []
     }
   },
-  bindgetuserinfo: function (e) {
+  bindgetuserinfo: function(e) {
 
-
-
-
-    // if (e.target.userInfo) {
     ownRequest.login((params) => {
-      // 登录成功后，返回
-      // wx.redirectTo({
-      //   url: '../main/main',
-      // })
-
-
-      lumos.postJson({
-        dataParams: {
-          merchId: config.merchId,
-          appId: config.appId,
-          code: params.code,
-          iv: params.iv,
-          encryptedData: params.encryptedData
-        },
-        success: function (res) {
+      apiOwn.loginByMinProgram({
+        merchId: config.merchId,
+        appId: config.appId,
+        code: params.code,
+        iv: params.iv,
+        encryptedData: params.encryptedData
+      }, {
+        success: function(res) {
           if (res.result == 1) {
             storeage.setAccessToken(res.data.token);
             console.log("token:" + storeage.getAccessToken())
-            wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
+            wx.reLaunch({
               url: ownRequest.getReturnUrl()
             })
           } else {
-            toastUtil.showToast({
+            toast.showToast({
               title: res.message
             })
           }
-        }
+        },
+        fail: function() {}
       })
-
     })
-    //}
+
   },
-  changeData: function (data) {
+  changeData: function(data) {
     console.log("main.changeData")
     var _self = this;
     _self.setData(data)
   },
-  onLoad: function () {
+  onLoad: function() {
     console.log("main.onLoad")
     var _self = this;
 
@@ -143,7 +129,9 @@ Page({
       return;
     }
 
-    _self.setData({ isLogin: isLogin })
+    _self.setData({
+      isLogin: isLogin
+    })
 
     if (!ownRequest.isSelectedStore(true)) {
       return
@@ -158,33 +146,33 @@ Page({
       title: _self.data.tabBar[0].navTitle
     })
 
-    global.getDataSet({
+    apiGlobal.dataSet({
       storeId: ownRequest.getCurrentStoreId(),
       datetime: '2018-03-30'
     }, {
-        success: function (d) {
-          if (d.result == 1) {
-            var index = d.data.index
-            var productKind = d.data.productKind
-            var cart = d.data.cart
-            var personal = d.data.personal
+      success: function(res) {
+        if (res.result == 1) {
+          var index = res.data.index
+          var productKind = res.data.productKind
+          var cart = res.data.cart
+          var personal = res.data.personal
 
-            index["currentStore"] = currentStore
+          index["currentStore"] = currentStore
 
-            _self.setData({
-              isLogin: isLogin,
-              index: index,
-              productKind: productKind,
-              cart: cart,
-              personal: personal
-            })
+          _self.setData({
+            isLogin: isLogin,
+            index: index,
+            productKind: productKind,
+            cart: cart,
+            personal: personal
+          })
 
-            storeage.setProductKind(productKind)
-            storeage.setCart(cart)
-          }
-        },
-        fail: function () { }
-      })
+          storeage.setProductKind(productKind)
+          storeage.setCart(cart)
+        }
+      },
+      fail: function() {}
+    })
 
   },
   mainTabBarItemClick(e) {

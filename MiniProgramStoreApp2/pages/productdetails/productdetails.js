@@ -1,7 +1,7 @@
 const storeage = require('../../utils/storeageutil.js')
 const wxparse = require("../../wxParse/wxParse.js")
-const cart = require('../../api/cart.js')
-const product = require('../../api/product.js')
+const apiCart = require('../../api/cart.js')
+const apiProduct = require('../../api/product.js')
 const ownRequest = require('../../own/ownRequest.js')
 const app = getApp()
 
@@ -17,32 +17,34 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     var _this = this
     var id = options.id == undefined ? "0" : options.id
 
     //app.changeData("main", { cart: cart })
 
-    product.details({
+    apiProduct.details({
       id: id
     }, {
         success: function (res) {
-          _this.setData({
-            product: res.data,
-            cart: storeage.getCart()
-          })
-          wxparse.wxParse('dkcontent', 'html', res.data.detailsDes, _this, 0);
+          if (res.result == 1) {
+            _this.setData({
+              product: res.data,
+              cart: storeage.getCart()
+            })
+            wxparse.wxParse('dkcontent', 'html', res.data.detailsDes, _this, 0);
+          }
         },
         fail: function () { }
       })
   },
-  goHome: function(e) {
+  goHome: function (e) {
     app.mainTabBarSwitch(0)
   },
-  goCart: function(e) {
+  goCart: function (e) {
     app.mainTabBarSwitch(2)
   },
-  addToCart: function(e) {
+  addToCart: function (e) {
 
     var _self = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
@@ -55,22 +57,22 @@ Page({
       receptionMode: 3
     });
 
-    cart.operate({
+    apiCart.operate({
       storeId: ownRequest.getCurrentStoreId(),
       operate: 2,
       productSkus: productSkus
     }, {
-      success: function(res) {
+        success: function (res) {
 
-      },
-      fail: function() {
+        },
+        fail: function () {
 
-      }
-    })
+        }
+      })
 
   },
 
-  immeBuy: function(e) {
+  immeBuy: function (e) {
     var _this = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
     var productSkus = []
@@ -82,7 +84,7 @@ Page({
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
-      success: function(res) {
+      success: function (res) {
         // success
       },
     })

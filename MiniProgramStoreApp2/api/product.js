@@ -6,7 +6,7 @@ const lumos = require('../utils/lumos.minprogram.js')
 function list(urlParams, requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.productGetList,
+    url: config.apiUrl.productList,
     urlParams: urlParams,
     success: function (res) {
       requestHandler.success(res)
@@ -17,7 +17,7 @@ function list(urlParams, requestHandler) {
 function details(urlParams, requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.productGetDetails,
+    url: config.apiUrl.productDetails,
     urlParams: urlParams,
     success: function (res) {
       requestHandler.success(res)

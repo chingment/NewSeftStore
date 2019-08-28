@@ -5,7 +5,7 @@ const lumos = require('../utils/lumos.minprogram.js')
 
 function confirm(params, requestHandler) {
   lumos.postJson({
-    url: config.apiUrl.cartOperate,
+    url: config.apiUrl.orderConfirm,
     dataParams: params,
     success: function (res) {
         requestHandler.success(res)
@@ -15,7 +15,7 @@ function confirm(params, requestHandler) {
 
 function reserve(params, requestHandler) {
   lumos.postJson({
-    url: config.apiUrl.cartOperate,
+    url: config.apiUrl.orderReserve,
     dataParams: params,
     success: function (res) {
       requestHandler.success(res)
@@ -27,7 +27,7 @@ function reserve(params, requestHandler) {
 function list(urlParams, requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.productGetList,
+    url: config.apiUrl.orderList,
     urlParams: urlParams,
     success: function (res) {
       requestHandler.success(res)
@@ -38,7 +38,7 @@ function list(urlParams, requestHandler) {
 function details(urlParams, requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.productGetDetails,
+    url: config.apiUrl.orderDetails,
     urlParams: urlParams,
     success: function (res) {
       requestHandler.success(res)
@@ -48,7 +48,7 @@ function details(urlParams, requestHandler) {
 
 function cancle(params, requestHandler) {
   lumos.postJson({
-    url: config.apiUrl.cartOperate,
+    url: config.apiUrl.orderCancle,
     dataParams: params,
     success: function (res) {
       requestHandler.success(res)
@@ -56,10 +56,10 @@ function cancle(params, requestHandler) {
   })
 }
 
-function getJsApiPaymentPms(urlParams, requestHandler) {
+function jsApiPaymentPms(urlParams, requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.productGetDetails,
+    url: config.apiUrl.orderJsApiPaymentPms,
     urlParams: urlParams,
     success: function (res) {
       requestHandler.success(res)
@@ -73,5 +73,5 @@ module.exports = {
   list: list,
   details: details,
   cancle: cancle,
-  getJsApiPaymentPms: getJsApiPaymentPms
+  jsApiPaymentPms: jsApiPaymentPms
 }

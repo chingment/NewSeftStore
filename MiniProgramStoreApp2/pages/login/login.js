@@ -1,8 +1,8 @@
 const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
 const storeage = require('../../utils/storeageutil.js')
-const own = require('../../api/own.js')
-const toastUtil = require('../../utils/showtoastutil')
+const apiOwn = require('../../api/own.js')
+const toast = require('../../utils/showtoastutil')
 
 // pages/login/login.js
 Page({
@@ -74,23 +74,13 @@ Page({
 
 
   bindgetuserinfo: function(e) {
-
     var pages = getCurrentPages() //获取加载的页面
-
     var currentPage = pages[pages.length - 2] //获取当前页面的对象
-
     var url = currentPage.route //当前页面ur
-
-
     console.log("url:" + url)
-    // if (e.target.userInfo) {
-    ownRequest.login((params) => {
-      // 登录成功后，返回
-      // wx.redirectTo({
-      //   url: '../main/main',
-      // })
 
-      own.loginByMinProgram({
+    ownRequest.login((params) => {
+      apiOwn.loginByMinProgram({
         merchId: config.merchId,
         appId: config.appId,
         code: params.code,
@@ -105,16 +95,13 @@ Page({
               url: ownRequest.getReturnUrl()
             })
           } else {
-            toastUtil.showToast({
+            toast.show({
               title: res.message
             })
           }
         },
         fail: function() {}
       })
-
-
     })
-    //}
   }
 })

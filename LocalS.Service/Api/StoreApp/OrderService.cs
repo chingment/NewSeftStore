@@ -559,6 +559,8 @@ namespace LocalS.Service.Api.StoreApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
             }
 
+            LogUtil.Info("MerchId:" + order.MerchId);
+            LogUtil.Info("WxMpAppId:" + rup.AppId);
             var merch = CurrentDb.Merch.Where(m => m.Id == order.MerchId && m.WxMpAppId == rup.AppId).FirstOrDefault();
 
             if (merch == null)

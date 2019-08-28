@@ -11,7 +11,7 @@ namespace LocalS.BLL
     {
         public PrdProductModel()
         {
-            this.Skus = new List<Sku>();
+            this.AllSkus = new List<Sku>();
         }
         public string Id { get; set; }
         public string Name { get; set; }
@@ -19,8 +19,8 @@ namespace LocalS.BLL
         public List<ImgSet> DispalyImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string BriefDes { get; set; }
-        public int RefSkuIndex { get; set; }
-        public List<Sku> Skus { get; set; }
+        public Sku RefSku { get; set; }
+        public List<Sku> AllSkus { get; set; }
         public class Sku
         {
             public string Id { get; set; }
@@ -28,6 +28,8 @@ namespace LocalS.BLL
             public decimal SalePrice { get; set; }
 
             public decimal ShowPrice { get; set; }
+
+            public bool IsShowPrice { get; set; }
 
             public string SpecDes { get; set; }
         }

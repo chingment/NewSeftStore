@@ -2,7 +2,7 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const deliveryaddress = require('../../api/deliveryaddress.js')
 const cityList = require('./cityList').cityList;
-const toastUtil = require('../../utils/showtoastutil');//引入消息提醒暴露的接口
+const toast = require('../../utils/showtoastutil');//引入消息提醒暴露的接口
 
 const app = getApp()
 
@@ -218,19 +218,19 @@ Page({
     var isDefault = e.detail.value.deliveryAddress_isDefault
 
     if (consignee.length == 0) {
-      toastUtil.showToast({ title: '请输入姓名' })
+      toast.show({ title: '请输入姓名' })
       return
     }
     if (phoneNumber.length == 0) {
-      toastUtil.showToast({ title: '请输入手机号码' })
+      toast.show({ title: '请输入手机号码' })
       return
     }
     if (areaName.length == 0) {
-      toastUtil.showToast({ title: '请选择身份，城市，区县' })
+      toast.show({ title: '请选择身份，城市，区县' })
       return
     }
     if (address.length == 0) {
-      toastUtil.showToast({ title: '请输入详细地址' })
+      toast.show({ title: '请输入详细地址' })
       return
     }
 

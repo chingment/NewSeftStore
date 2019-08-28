@@ -17,6 +17,7 @@ namespace WebApiStoreApp.Controllers
 
         }
 
+        [HttpGet]
         public OwnApiHttpResponse<RetCartPageData> PageData([FromUri]RupCartPageData rup)
         {
             IResult<RetCartPageData> result = StoreAppServiceFactory.Cart.PageData(this.CurrentUserId, this.CurrentUserId, rup);

@@ -1,7 +1,6 @@
-const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const lumos = require('../../utils/lumos.minprogram.js')
+const apiOrder = require('../../api/order.js')
 const app = getApp()
 
 var getList = function(_this) {
@@ -25,30 +24,30 @@ var getList = function(_this) {
   var pageIndex = currentTab.pageIndex
   var status = currentTab.status == undefined ? "" : currentTab.status
 
-  lumos.getJson({
-    url: config.apiUrl.orderGetList,
-    urlParams: {
-      storeId: ownRequest.getCurrentStoreId(),
-      pageIndex: pageIndex,
-      status: status,
-      caller: 1
-    },
+
+  apiOrder.list({
+    storeId: ownRequest.getCurrentStoreId(),
+    pageIndex: pageIndex,
+    status: status,
+    caller: 1
+  }, {
     success: function(res) {
-      console.log("config.apiUrl.productList->success")
+      if (res.result == 1) {
+        var list
+        if (currentTab.pageIndex == 0) {
+          list = res.data
+        } else {
+          list = _this.data.tabs[currentTabIndex].list.concat(res.data)
+        }
 
-      var list
-      if (currentTab.pageIndex == 0) {
-        list = res.data
-      } else {
-        list = _this.data.tabs[currentTabIndex].list.concat(res.data)
+        _this.data.tabs[currentTabIndex].list = list;
+
+        _this.setData({
+          tabs: _this.data.tabs
+        })
       }
-
-      _this.data.tabs[currentTabIndex].list = list;
-
-      _this.setData({
-        tabs: _this.data.tabs
-      })
-    }
+    },
+    fail: function() {}
   })
 }
 
@@ -204,17 +203,14 @@ Page({
               content: '确定要取消吗？',
               success: function(sm) {
                 if (sm.confirm) {
-
-                  lumos.postJson({
-                    url: config.apiUrl.orderCancle,
-                    dataParams: {
-                      id: id
-                    },
-                    success: function(d) {
+                  apiOrder.cancle({
+                    id: id
+                  }, {
+                    success: function(res) {
                       getList(_this)
-                    }
+                    },
+                    fail: function() {}
                   })
-
                 }
               }
             })
@@ -229,7 +225,7 @@ Page({
         break;
     }
   },
-  stopTouchMove: function () {
+  stopTouchMove: function() {
     return false;
   }
 })
