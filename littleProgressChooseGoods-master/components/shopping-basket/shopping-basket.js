@@ -29,21 +29,21 @@ Component({
     },
     methods: {
         showListHandle(e) {
-            let that = this;
-            this.setData({
-                showBack: !this.data.showBack
-            });
-            if (this.data.showList) {
-                this.setData({
-                    showList: false
-                })
-            } else {
-                setTimeout(() => {
-                    that.setData({
-                        showList: true
-                    })
-                }, 100)
-            }
+            // let that = this;
+            // this.setData({
+            //     showBack: !this.data.showBack
+            // });
+            // if (this.data.showList) {
+            //     this.setData({
+            //         showList: false
+            //     })
+            // } else {
+            //     setTimeout(() => {
+            //         that.setData({
+            //             showList: true
+            //         })
+            //     }, 100)
+            // }
         },
         hideList(e) {
             this.setData({
