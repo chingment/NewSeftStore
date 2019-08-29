@@ -68,8 +68,6 @@
     <Compile Include="Cache\Model\PrdProductModel.cs" />
     <Compile Include="Cache\Model\PrdProductSkuModel.cs" />
     <Compile Include="Cache\Model\PrdProductSkuStockModel.cs" />
-    <Compile Include="Cache\Model\ProductSkuStockModel.cs" />
-    <Compile Include="Cache\Model\StoreSellChannelStockModel.cs" />
     <Compile Include="Cache\PrdProductCacheService.cs" />
     <Compile Include="Cache\StoreSellChannelStockCacheService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

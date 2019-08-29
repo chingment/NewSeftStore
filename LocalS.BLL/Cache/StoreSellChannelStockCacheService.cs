@@ -13,7 +13,7 @@ namespace LocalS.BLL
 
         public void ReSet()
         {
-            var redis = new RedisClient<ProductSkuStockModel>();
+            var redis = new RedisClient<PrdProductSkuStockModel>();
 
             var storeSellChannelStocks = CurrentDb.StoreSellChannelStock.ToList();
 
@@ -25,10 +25,10 @@ namespace LocalS.BLL
                 var sellStock = redis.KGet(string.Format(key_Format_SellStock, storeSellChannelStock.StoreId, storeSellChannelStock.PrdProductSkuId));
                 if (sellStock == null)
                 {
-                    sellStock = new ProductSkuStockModel();
+                    sellStock = new PrdProductSkuStockModel();
                     sellStock.Id = storeSellChannelStock.PrdProductSkuId;
 
-                    var stock = new ProductSkuStockModel.Stock();
+                    var stock = new PrdProductSkuStockModel.Stock();
                     stock.RefType = storeSellChannelStock.RefType;
                     stock.RefId = storeSellChannelStock.RefId;
                     stock.SlotId = storeSellChannelStock.SlotId;
@@ -48,7 +48,7 @@ namespace LocalS.BLL
                     var stock = sellStock.Stocks.Where(m => m.RefType == storeSellChannelStock.RefType && m.RefId == storeSellChannelStock.RefId && m.SlotId == storeSellChannelStock.SlotId).FirstOrDefault();
                     if (stock == null)
                     {
-                        stock = new ProductSkuStockModel.Stock();
+                        stock = new PrdProductSkuStockModel.Stock();
                         stock.RefType = storeSellChannelStock.RefType;
                         stock.RefId = storeSellChannelStock.RefId;
                         stock.SlotId = storeSellChannelStock.SlotId;
@@ -65,22 +65,22 @@ namespace LocalS.BLL
             }
         }
 
-        public ProductSkuStockModel GetStock(string storeId, string productSkuId)
+        public PrdProductSkuStockModel GetStock(string storeId, string productSkuId)
         {
-            var redis = new RedisClient<ProductSkuStockModel>();
+            var redis = new RedisClient<PrdProductSkuStockModel>();
 
             var sellStock = redis.KGet(string.Format(key_Format_SellStock, storeId, productSkuId));
 
             if (sellStock == null)
             {
-                sellStock = new ProductSkuStockModel();
+                sellStock = new PrdProductSkuStockModel();
                 sellStock.Id = productSkuId;
 
                 var storeSellChannelStocks = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == storeId && m.PrdProductId == productSkuId).ToList();
 
                 foreach (var storeSellChannelStock in storeSellChannelStocks)
                 {
-                    var stock = new ProductSkuStockModel.Stock();
+                    var stock = new PrdProductSkuStockModel.Stock();
                     stock.RefType = storeSellChannelStock.RefType;
                     stock.RefId = storeSellChannelStock.RefId;
                     stock.SlotId = storeSellChannelStock.SlotId;

@@ -9,16 +9,24 @@ namespace LocalS.BLL
 {
     public class PrdProductSkuStockModel
     {
-        public string PrdProductId { get; set; }
-        public string PrdProductSkuId { get; set; }
-        public E_StoreSellChannelRefType RefType { get; set; }
-        public string RefId { get; set; }
-        public string SlotId { get; set; }
-        public int SumQuantity { get; set; }
-        public int LockQuantity { get; set; }
-        public int SellQuantity { get; set; }
-        public bool IsOffSell { get; set; }
-        public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
+        public PrdProductSkuStockModel()
+        {
+            this.Stocks = new List<Stock>();
+        }
+
+        public string Id { get; set; }
+        public List<Stock> Stocks { get; set; }
+        public class Stock
+        {
+            public E_StoreSellChannelRefType RefType { get; set; }
+            public string RefId { get; set; }
+            public string SlotId { get; set; }
+            public int SumQuantity { get; set; }
+            public int LockQuantity { get; set; }
+            public int SellQuantity { get; set; }
+            public bool IsOffSell { get; set; }
+            public decimal SalePrice { get; set; }
+            public decimal SalePriceByVip { get; set; }
+        }
     }
 }
