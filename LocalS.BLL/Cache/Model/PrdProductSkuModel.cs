@@ -10,6 +10,11 @@ namespace LocalS.BLL
 {
     public class PrdProductSkuModel
     {
+        public PrdProductSkuModel()
+        {
+            this.Stocks = new List<Stock>();
+        }
+
         public string Id { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }

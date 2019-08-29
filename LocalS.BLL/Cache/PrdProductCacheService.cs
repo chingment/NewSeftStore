@@ -53,16 +53,26 @@ namespace LocalS.BLL
             var refSkuStock = CacheServiceFactory.StoreSellChannelStock.GetStock(storeId, prdProductByCache.RefSku.Id);
 
             if (refSkuStock == null)
-                return null;
-
-            prdProductByCache.RefSku.ReceptionMode = Entity.E_ReceptionMode.Machine;
-
-            prdProductByCache.RefSku.SumQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.SumQuantity);
-            prdProductByCache.RefSku.LockQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.LockQuantity);
-            prdProductByCache.RefSku.SellQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
-            prdProductByCache.RefSku.SalePrice = refSkuStock.Stocks[0].SalePrice;
-            prdProductByCache.RefSku.SalePriceByVip = refSkuStock.Stocks[0].SalePriceByVip;
-            prdProductByCache.RefSku.IsOffSell = refSkuStock.Stocks[0].IsOffSell;
+            {
+                LogUtil.Info(string.Format("库存,Product,StoreId：{0},SkuId:{1},数据为NULL", storeId, prdProductByCache.RefSku.Id));
+            }
+            else
+            {
+                if (refSkuStock.Stocks == null || refSkuStock.Stocks.Count == 0)
+                {
+                    LogUtil.Info(string.Format("库存,Product,StoreId：{0},SkuId:{1},Stocks为NULL", storeId, prdProductByCache.RefSku.Id));
+                }
+                else
+                {
+                    prdProductByCache.RefSku.ReceptionMode = Entity.E_ReceptionMode.Machine;
+                    prdProductByCache.RefSku.SumQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.SumQuantity);
+                    prdProductByCache.RefSku.LockQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.LockQuantity);
+                    prdProductByCache.RefSku.SellQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
+                    prdProductByCache.RefSku.SalePrice = refSkuStock.Stocks[0].SalePrice;
+                    prdProductByCache.RefSku.SalePriceByVip = refSkuStock.Stocks[0].SalePriceByVip;
+                    prdProductByCache.RefSku.IsOffSell = refSkuStock.Stocks[0].IsOffSell;
+                }
+            }
 
             return prdProductByCache;
         }
@@ -75,7 +85,7 @@ namespace LocalS.BLL
             //如商品信息从缓存取不到，读取数据库信息加载
             if (prdProductSkuByCache == null)
             {
-                var prdProductRefSkuByDb = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == productSkuId).FirstOrDefault();
+                var prdProductRefSkuByDb = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
                 if (prdProductRefSkuByDb == null)
                     return null;
 
@@ -85,9 +95,9 @@ namespace LocalS.BLL
 
                 prdProductSkuByCache = new PrdProductSkuModel();
                 prdProductSkuByCache.Id = prdProductRefSkuByDb.Id;
-                prdProductSkuByCache.Name = prdProductRefSkuByDb.Id;
-                prdProductSkuByCache.MainImgUrl = prdProduct.Id;
+                prdProductSkuByCache.Name = prdProductRefSkuByDb.Name;
                 prdProductSkuByCache.DispalyImgUrls = prdProduct.DispalyImgUrls;
+                prdProductSkuByCache.MainImgUrl = prdProduct.MainImgUrl;
                 prdProductSkuByCache.DetailsDes = prdProduct.DetailsDes;
                 prdProductSkuByCache.BriefDes = prdProduct.BriefDes;
                 prdProductSkuByCache.SpecDes = prdProductRefSkuByDb.SpecDes;
@@ -97,22 +107,40 @@ namespace LocalS.BLL
 
             var skuStock = CacheServiceFactory.StoreSellChannelStock.GetStock(storeId, productSkuId);
             if (skuStock == null)
-                return null;
-
-            prdProductSkuByCache.SalePrice = skuStock.Stocks[0].SalePrice;
-            prdProductSkuByCache.SalePriceByVip = skuStock.Stocks[0].SalePriceByVip;
-            prdProductSkuByCache.IsOffSell = skuStock.Stocks[0].IsOffSell;
-
-            foreach (var stock in skuStock.Stocks)
             {
-                var l_stock = new PrdProductSkuModel.Stock();
-                l_stock.RefId = stock.RefId;
-                l_stock.RefType = stock.RefType;
-                l_stock.SlotId = stock.SlotId;
-                l_stock.SumQuantity = stock.SumQuantity;
-                l_stock.SellQuantity = stock.SellQuantity;
-                l_stock.LockQuantity = stock.LockQuantity;
-                prdProductSkuByCache.Stocks.Add(l_stock);
+                LogUtil.Info(string.Format("库存,ProductSku,StoreId：{0},SkuId:{1},数据为NULL", storeId, productSkuId));
+            }
+            else
+            {
+                if (skuStock.Stocks == null || skuStock.Stocks.Count == 0)
+                {
+                    LogUtil.Info(string.Format("库存,ProductSku,StoreId：{0},SkuId:{1},Stocks为NULL", storeId, productSkuId));
+                }
+                else
+                {
+
+                    prdProductSkuByCache.SalePrice = skuStock.Stocks[0].SalePrice;
+                    prdProductSkuByCache.SalePriceByVip = skuStock.Stocks[0].SalePriceByVip;
+                    prdProductSkuByCache.IsOffSell = skuStock.Stocks[0].IsOffSell;
+
+                    foreach (var stock in skuStock.Stocks)
+                    {
+                        var l_stock = new PrdProductSkuModel.Stock();
+                        l_stock.RefId = stock.RefId;
+                        l_stock.RefType = stock.RefType;
+                        l_stock.SlotId = stock.SlotId;
+                        l_stock.SumQuantity = stock.SumQuantity;
+                        l_stock.SellQuantity = stock.SellQuantity;
+                        l_stock.LockQuantity = stock.LockQuantity;
+
+                        if (prdProductSkuByCache.Stocks == null)
+                        {
+                            prdProductSkuByCache.Stocks = new List<PrdProductSkuModel.Stock>();
+                        }
+
+                        prdProductSkuByCache.Stocks.Add(l_stock);
+                    }
+                }
             }
 
             return prdProductSkuByCache;

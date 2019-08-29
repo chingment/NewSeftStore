@@ -76,7 +76,7 @@ namespace LocalS.BLL
                 sellStock = new PrdProductSkuStockModel();
                 sellStock.Id = productSkuId;
 
-                var storeSellChannelStocks = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == storeId && m.PrdProductId == productSkuId).ToList();
+                var storeSellChannelStocks = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == storeId && m.PrdProductSkuId == productSkuId).ToList();
 
                 foreach (var storeSellChannelStock in storeSellChannelStocks)
                 {

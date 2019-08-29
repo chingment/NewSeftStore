@@ -32,7 +32,12 @@ Page({
               product: res.data,
               cart: storeage.getCart()
             })
-            wxparse.wxParse('dkcontent', 'html', res.data.detailsDes, _this, 0);
+
+            var detailsDes = res.data.detailsDes
+            if (detailsDes==null){
+              detailsDes=""
+            }
+            wxparse.wxParse('dkcontent', 'html', detailsDes, _this, 0);
           }
         },
         fail: function () { }
