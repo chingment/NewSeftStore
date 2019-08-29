@@ -3,11 +3,11 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function my(urlParams, requestHandler) {
+function my(params, requestHandler) {
 
   lumos.postJson({
     url: config.apiUrl.couponMy,
-    urlParams: urlParams,
+    dataParams: params,
     success: function (res) {
       requestHandler.success(res)
     }

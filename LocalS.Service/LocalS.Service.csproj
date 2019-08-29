@@ -204,7 +204,6 @@
     <Compile Include="Api\StoreApp\Models\ProductChildKindModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetProductKindPageData.cs" />
     <Compile Include="Api\StoreApp\Models\ProductParentKindModel.cs" />
-    <Compile Include="Api\StoreApp\Models\ProductModel.cs" />
     <Compile Include="Api\StoreApp\Models\SpecModel.cs" />
     <Compile Include="Api\StoreApp\Models\SpecValueModel.cs" />
     <Compile Include="Api\StoreApp\Models\StoreModel.cs" />

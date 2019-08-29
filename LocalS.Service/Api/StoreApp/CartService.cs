@@ -28,19 +28,16 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var clientCart in clientCarts)
             {
-                var productModel = BizFactory.PrdProduct.GetModelById(rup.StoreId,clientCart.PrdProductId);
-                if (productModel != null)
+                var productSkuModel = BizFactory.PrdProduct.GetProductSku(rup.StoreId,clientCart.PrdProductSkuId);
+                if (productSkuModel != null)
                 {
                     var cartProcudtSkuModel = new CartProductSkuModel();
                     cartProcudtSkuModel.CartId = clientCart.Id;
                     cartProcudtSkuModel.Id = clientCart.PrdProductSkuId;
                     cartProcudtSkuModel.ProductId = clientCart.PrdProductId;
-                    cartProcudtSkuModel.Name = productModel.Name;
-                    cartProcudtSkuModel.MainImgUrl = productModel.MainImgUrl;
-
-                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == clientCart.PrdProductSkuId).FirstOrDefault();
-
-                    cartProcudtSkuModel.SalePrice = productSku.SalePrice;
+                    cartProcudtSkuModel.Name = productSkuModel.Name;
+                    cartProcudtSkuModel.MainImgUrl = productSkuModel.MainImgUrl;
+                    cartProcudtSkuModel.SalePrice = productSkuModel.SalePrice;
                     cartProcudtSkuModel.Quantity = clientCart.Quantity;
                     cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
                     cartProcudtSkuModel.Selected = clientCart.Selected;

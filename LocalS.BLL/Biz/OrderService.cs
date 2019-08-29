@@ -43,7 +43,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var sku in rop.ProductSkus)
                 {
-                    var productSku = BizFactory.PrdProduct.GetSkuModelById(rop.StoreId, sku.Id);
+                    var productSku = BizFactory.PrdProduct.GetProductSku(rop.StoreId, sku.Id);
 
                     productSkus.Add(productSku);
 

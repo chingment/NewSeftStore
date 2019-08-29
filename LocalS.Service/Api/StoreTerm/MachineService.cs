@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productSkuIds = machineStocks.Select(m => m.PrdProductSkuId).Distinct();
             foreach (var productSkuId in productSkuIds)
             {
-                var productSku = BizFactory.PrdProduct.GetModelById(storeId,productSkuId);
+                var productSku = BizFactory.PrdProduct.GetProductSku(storeId,productSkuId);
                 if (productSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();

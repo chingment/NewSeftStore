@@ -61,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var productModel = BizFactory.PrdProduct.GetModelById(rup.StoreId, item.Id);
+                var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, item.Id);
                 if (productModel != null)
                 {
                     olist.Add(productModel);
@@ -76,12 +76,12 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Details(string operater, string clientUserId, RupProductDetails rup)
         {
-           
+
 
             var result = new CustomJsonResult();
 
 
-            var productModel = BizFactory.PrdProduct.GetModelById(rup.StoreId, rup.Id);
+            var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, rup.Id);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);

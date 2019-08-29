@@ -13,7 +13,18 @@ namespace LocalS.BLL
         private static readonly string redis_key_product_info = "info:Product";
         private static readonly string redis_key_productSku_info = "info:ProductSku";
 
-        public PrdProductModel GetModelById(string storeId, string productId)
+
+        public void RemoveProduct(string productId)
+        {
+            RedisHashUtil.Remove(redis_key_product_info, productId);
+        }
+
+        public void RemoveProductSku(string productSkuId)
+        {
+            RedisHashUtil.Remove(redis_key_productSku_info, productSkuId);
+        }
+
+        public PrdProductModel GetProduct(string storeId, string productId)
         {
             //先从缓存信息读取商品信息
             PrdProductModel prdProductByCache = RedisHashUtil.Get<PrdProductModel>(redis_key_product_info, productId);
@@ -77,7 +88,7 @@ namespace LocalS.BLL
             return prdProductByCache;
         }
 
-        public PrdProductSkuModel GetSkuModelById(string storeId, string productSkuId)
+        public PrdProductSkuModel GetProductSku(string storeId, string productSkuId)
         {
 
             var prdProductSkuByCache = RedisHashUtil.Get<PrdProductSkuModel>(redis_key_productSku_info, productSkuId);
@@ -89,7 +100,7 @@ namespace LocalS.BLL
                 if (prdProductRefSkuByDb == null)
                     return null;
 
-                var prdProduct = GetModelById(storeId, prdProductRefSkuByDb.PrdProductId);
+                var prdProduct = GetProduct(storeId, prdProductRefSkuByDb.PrdProductId);
                 if (prdProduct == null)
                     return null;
 
@@ -145,6 +156,8 @@ namespace LocalS.BLL
 
             return prdProductSkuByCache;
         }
+
+
 
     }
 }

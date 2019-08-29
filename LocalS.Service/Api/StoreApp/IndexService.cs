@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var i in list)
                     {
-                        var productModel = BizFactory.PrdProduct.GetModelById(storeId, i.PrdProductId);
+                        var productModel = BizFactory.PrdProduct.GetProduct(storeId, i.PrdProductId);
 
                         if (productModel != null)
                         {
