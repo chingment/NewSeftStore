@@ -17,8 +17,8 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetGobalDataSet();
 
             ret.Index = StoreAppServiceFactory.Index.PageData(operater, clientUserId, rup.StoreId).Data;
-            ret.ProductKind = StoreAppServiceFactory.ProductKind.PageData(operater, clientUserId, rup.StoreId).Data;
-            ret.Cart = StoreAppServiceFactory.Cart.PageData(operater, clientUserId, new RupCartPageData { StoreId= rup.StoreId }).Data;
+            ret.ProductKind = StoreAppServiceFactory.ProductKind.PageData(operater, clientUserId, new RupProductKindPageData { StoreId = rup.StoreId }).Data;
+            ret.Cart = StoreAppServiceFactory.Cart.PageData(operater, clientUserId, new RupCartPageData { StoreId = rup.StoreId }).Data;
             ret.Personal = StoreAppServiceFactory.Personal.PageData(operater, clientUserId, rup.StoreId).Data;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);

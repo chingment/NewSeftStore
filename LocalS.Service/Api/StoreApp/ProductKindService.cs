@@ -10,7 +10,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductKindService : BaseDbContext
     {
-        public CustomJsonResult<RetProductKindPageData> PageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetProductKindPageData> PageData(string operater, string clientUserId, RupProductKindPageData rup)
         {
 
             var result = new CustomJsonResult<RetProductKindPageData>();
@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var productParentKindModels = new List<ProductParentKindModel>();
 
-            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
             var productKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
             var top = productKinds.Where(m => m.Depth == 0).FirstOrDefault();

@@ -216,6 +216,7 @@
     <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupProductKindPageData.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />
     <Compile Include="Api\StoreApp\CouponService.cs" />

@@ -29,7 +29,8 @@ var config = {
     orderJsApiPaymentPms: `${host}/Order/JsApiPaymentPms`,
     orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
-    orderDetails: `${host}/Order/Details`
+    orderDetails: `${host}/Order/Details`,
+    productKindPageData: `${host}/ProductKind/PageData`,
   }
 
 };

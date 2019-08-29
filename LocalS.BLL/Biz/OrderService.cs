@@ -37,18 +37,6 @@ namespace LocalS.BLL.Biz
                 var skuIds = rop.ProductSkus.Select(m => m.Id).ToArray();
 
                 //检查是否有可买的商品
-
-                //List<StoreSellChannelStock> skusByStock = new List<StoreSellChannelStock>();
-
-                //if (rop.ReserveMode == E_ReserveMode.OffLine)
-                //{
-                //    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.SellChannelRefId && skuIds.Contains(m.PrdProductSkuId)).ToList();
-                //}
-                //else if (rop.ReserveMode == E_ReserveMode.Online)
-                //{
-                //    skusByStock = CurrentDb.StoreSellChannelStock.Where(m => m.StoreId == rop.StoreId && skuIds.Contains(m.PrdProductSkuId)).ToList();
-                //}
-
                 List<string> warn_tips = new List<string>();
 
                 List<PrdProductSkuModel> productSkus = new List<BLL.PrdProductSkuModel>();
@@ -56,11 +44,6 @@ namespace LocalS.BLL.Biz
                 foreach (var sku in rop.ProductSkus)
                 {
                     var productSku = BizFactory.PrdProduct.GetSkuModelById(rop.StoreId, sku.Id);
-
-                    if (productSku == null)
-                    {
-                        LogUtil.Info("productModel:为空");
-                    }
 
                     productSkus.Add(productSku);
 
