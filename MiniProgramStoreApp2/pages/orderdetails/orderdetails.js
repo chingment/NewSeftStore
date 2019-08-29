@@ -1,9 +1,9 @@
 const config = require('../../config')
+const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const wxparse = require("../../wxParse/wxParse.js")
 const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
-const toast = require('../../utils/showtoastutil')
 const app = getApp()
 
 var orderId = null
