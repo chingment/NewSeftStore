@@ -1,19 +1,14 @@
-<view style='background:red;height:60px;justify-content:center;align-items:center;display:flex;'>
-
- <image style='width:24px;height:24px' class="img" src='/content/default/images/checkedon.png' ></image>
-
-</view>
-
-
-
-<view class="container">
-
-<view class="touch-item {{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{items}}" wx:key="">
-
-<view class="content">{{item.content}}</view>
-
-<view class="del" catchtap="del" data-index="{{index}}">删除</view>
-
-</view>
-
+<view>
+  <view class='openCar' bindtap='openCar'>点击打开购物车</view>
+  <!--隐藏区域  -->
+  <view class='centData' wx:if="{{boolHidden}}" animation='{{animationData}}'>
+    <view>
+      <view class='cent'>
+        这里面是内容
+      </view>
+      <view class='close' wx:if="{{boolHidden}}" bindtap='closeHide'>
+        x
+      </view>
+    </view>
+  </view>
 </view>
