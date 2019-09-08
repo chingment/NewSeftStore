@@ -49,3 +49,4 @@
     <text>立即购买</text>
   </view>
 </view>
+  <cart id="cart" ></cart>

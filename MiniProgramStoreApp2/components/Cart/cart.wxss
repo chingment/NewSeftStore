@@ -1,0 +1,50 @@
+.centData {
+  width: 100%;
+  height: 300px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.centData>view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.cent {
+  line-height: 300px;
+  text-align: center;
+  color: #fff;
+}
+
+.close {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  border-radius: 60rpx;
+  background-color: #ededed;
+  color: #000;
+  text-align: center;
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+  z-index: 99;
+}
+
+
+.box-cart .cart-bottom{
+  bottom: 0;
+}
+
+.box-top{
+height: 2rem;
+padding: 0 .3rem;
+line-height: 2rem;
+display: flex;
+justify-content: space-between;
+background: #ececec
+}

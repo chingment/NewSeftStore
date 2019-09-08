@@ -12,6 +12,7 @@ Page({
    */
   data: {
     tag: "productdetails",
+    isShowCart:false
   },
 
   /**
@@ -47,7 +48,9 @@ Page({
     app.mainTabBarSwitch(0)
   },
   goCart: function (e) {
-    app.mainTabBarSwitch(2)
+    //app.mainTabBarSwitch(2)
+
+    this.selectComponent("#cart").open()
   },
   addToCart: function (e) {
 

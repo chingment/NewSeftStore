@@ -29,6 +29,7 @@
 
 .its-blocks >.it>.it-tag .name {
   font-size: 0.9rem;
+  color: #000;
 }
 
 .its-blocks >.it>.it-tag .more {
@@ -175,6 +176,7 @@
   justify-content: space-between;
   width: 100%;
   overflow: hidden;
+  height: 4.8rem;
 }
 
 .it-content {

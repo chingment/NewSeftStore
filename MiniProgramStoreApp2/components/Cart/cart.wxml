@@ -1,0 +1,10 @@
+<view class='centData' wx:if="{{show}}" animation='{{animationData}}' >
+    <view>
+      <view class='cent'>
+        <view class="box-top">
+        <view class='close'  bindtap='_close'>x </view>
+        </view>
+        <page-cart  class="box-cart" id="page_cart" height="300"  ></page-cart>
+      </view>
+    </view>
+</view>
