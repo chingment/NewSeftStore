@@ -31,7 +31,7 @@ z-index: 999;
 
 .slide-cart .toparea{
 height: 2rem;
-padding: 0 .3rem;
+padding: 0 .5rem;
 line-height: 2rem;
 display: flex;
 justify-content: space-between;

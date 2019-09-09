@@ -29,9 +29,7 @@
                       </view>
                       <view class="it-m">
                         <view class="it-ml">
-                          <navigator url="/pages/productdetails/productdetails?id={{itemsku.productId}}" style='height:100%;width:100%'>
                             <image class='img' src="{{itemsku.mainImgUrl}}" />
-                          </navigator>
                         </view>
                         <view class="it-mr">
                           <text class='skuname font-black'>{{itemsku.name}}</text>

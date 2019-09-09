@@ -1,3 +1,6 @@
+<import src="/template/showToast.wxml" />
+<template is="showToast" data="{{showToast: showToast}}" />
+
 <block wx:if="{{tabs.length>1}}">
   <scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{100*tabsSliderIndex}}">
     <view style="width:{{tabs.length*100}}px;" class="tabbar-items">
