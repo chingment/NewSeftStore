@@ -24,15 +24,9 @@ z-index: 999;
 .close {
   width: 2rem;
   height: 2rem;
-  line-height: 2rem;
-  border-radius: 2rem;
-  background-color: #ededed;
-  color: #313131;
   text-align: right;
-  position: absolute;
-  right: .3rem;
-  top: 0;
-  z-index: 99;
+  font-size: .8rem;
+  color: #313131;
 }
 
 .slide-cart .toparea{

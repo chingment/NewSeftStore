@@ -1,7 +1,3 @@
-@import '../index/index.wxss';
-@import '../productkind/productkind.wxss';
-@import '../cart/cart.wxss';
-@import '../personal/personal.wxss';
 page{
   overflow: hidden;
 }

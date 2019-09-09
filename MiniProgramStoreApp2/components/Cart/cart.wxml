@@ -4,7 +4,7 @@
   <view class='content' animation='{{animationData}}'>
       <view class="toparea">
         <view class="title">购物车</view>
-        <view class='close' bindtap='_close'>x </view>
+        <view class='close' bindtap='_close'>关闭</view>
       </view>
      
   <view class="st-cart" style="height:500px;">
