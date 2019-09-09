@@ -142,8 +142,8 @@
 
 .cart-bottom {
   width: 100%;
-  position: fixed;
-  bottom: 3.044rem;
+  position: absolute;
+  bottom: 0rem;
   background: #fff;
   display: flex;
   border-top: 1px solid #f8f8f8;

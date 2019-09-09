@@ -56,3 +56,5 @@
   <view class="number">{{cart.count}}</view>
   <image class="img" src="/content/default/images/cart.png"></image>
 </view>
+
+<cart id="cart"></cart>
