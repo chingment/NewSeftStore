@@ -307,8 +307,7 @@ module.exports = {
     unknown: 0,
     success: 1,
     failure: 2,
-    exception: 3,
-    nologin: 4
+    exception: 3
   },
   postJson: postJson,
   getJson: getJson
