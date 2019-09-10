@@ -1,13 +1,9 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
-
-<!-- style="height:{{tabBarContentHeight}}px" -->
-
-<view class='main-tabbar' style="height: 100%;overflow: hidden;">
-  <view class="content" style="height: 100%;overflow: hidden;">
-    <view class="ct" style="height: 100%;overflow: hidden;" >
-      <view class="its" style="height: 100%;overflow: hidden;" >
-
+<view class='main-tabbar'>
+  <view class="content" style="height:{{tabBarContentHeight}}px;overflow: hidden;">
+    <view class="ct">
+      <view class="its">
         <block wx:if="{{isLogin}}">
 
           <page-index initdata="{{index}}" height="{{tabBarContentHeight}}" class='it {{tabBar[0].selected==false?"hidden":""}}' data-reply-index="{{0}}" data-reply-name="{{tabBar[0].name}}"></page-index>
