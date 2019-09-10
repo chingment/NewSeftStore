@@ -169,25 +169,7 @@ function showToast(content = '登录失败，请稍后再试') {
   })
 }
 
-function rem2px(rem) {
-  var size = 0;
 
-  var wHidth = wx.getSystemInfoSync().windowWidth;
-  console.log("rem2px->>>wHidth:" + wHidth)
-
-  if (wHidth >= 360 & wHidth < 414) {
-    size = wHidth / 23 * rem
-  }
-  else if (wHidth >= 414) {
-    size = wHidth / 26 * rem
-  }
-  else {
-    size = wHidth / 26 * rem
-  }
-
-  console.log("rem2px->>>size:" + rem + "," + size)
-  return size
-}
 
 module.exports = {
   goLogin: goLogin,
@@ -197,6 +179,5 @@ module.exports = {
   isSelectedStore: isSelectedStore,
   isLogin: isLogin,
   login: login,
-  getReturnUrl: getReturnUrl,
-  rem2px: rem2px
+  getReturnUrl: getReturnUrl
 }

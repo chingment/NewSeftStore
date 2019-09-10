@@ -1,6 +1,7 @@
 const config = require('../../config')
 const storeage = require('../../utils/storeageutil.js')
 const toast = require('../../utils/toastutil')
+const util = require('../../utils/util')
 const ownRequest = require('../../own/ownRequest.js')
 const apiGlobal = require('../../api/global.js')
 const apiOwn = require('../../api/own.js')
@@ -140,7 +141,7 @@ Page({
     var currentStore = ownRequest.getCurrentStore()
     var wHeight = wx.getSystemInfoSync().windowHeight;
     _self.setData({
-      tabBarContentHeight: wHeight - ownRequest.rem2px(3.044)
+      tabBarContentHeight: wHeight - util.rem2px(3.044)
     });
     wx.setNavigationBarTitle({
       title: _self.data.tabBar[0].navTitle

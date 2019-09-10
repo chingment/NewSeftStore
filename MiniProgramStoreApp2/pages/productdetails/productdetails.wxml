@@ -27,7 +27,7 @@
         </view>
       </view>
       <view class="details-info2">
-        <import src="../../wxParse/wxParse.wxml" />
+        <import src="../../components/wxParse/wxParse.wxml" />
         <view style='height:100vh'>
           <template is="wxParse" data="{{wxParseData:dkcontent.nodes}}" />
         </view>

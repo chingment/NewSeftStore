@@ -1,2 +1,2 @@
 @import 'content/default/base.wxss';
-@import "wxParse/wxParse.wxss";
+@import "components/wxParse/wxParse.wxss";
