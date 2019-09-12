@@ -39,9 +39,6 @@ Page({
     var _type = options.type == undefined ? "" : options.type
     var _caller = options.caller == undefined ? "" : options.caller
 
-    console.log("operate.load()->>>id:" + _id + ",type:" + _type)
-
-
     var step = 1, //计数动画次数
       num = 0, //计数倒计时秒数（n - num）
       start = 1.5 * Math.PI, // 开始的弧度

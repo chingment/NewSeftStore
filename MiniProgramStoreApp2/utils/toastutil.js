@@ -26,7 +26,7 @@ function show(obj) {
       showToast: obj
     });
   } else {
-    console.log('showToast fail:请确保传入的是对象并且title必填');
+   
   }
 }
 /**

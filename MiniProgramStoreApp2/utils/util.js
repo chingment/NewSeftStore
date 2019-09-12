@@ -36,7 +36,7 @@ function rem2px(rem) {
   var size = 0;
 
   var wHidth = wx.getSystemInfoSync().windowWidth;
-  console.log("rem2px->>>wHidth:" + wHidth)
+ 
 
   if (wHidth >= 360 & wHidth < 414) {
     size = wHidth / 23 * rem
@@ -48,7 +48,7 @@ function rem2px(rem) {
     size = wHidth / 26 * rem
   }
 
-  console.log("rem2px->>>size:" + rem + "," + size)
+
   return size
 }
 

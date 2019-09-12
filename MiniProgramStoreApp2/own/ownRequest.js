@@ -21,13 +21,11 @@ function getCurrentStore() {
   } else {
     store = storeage.getCurrentStore()
   }
-  console.log("ownRequest.getCurrentStore->>>" + JSON.stringify(store))
   return store
 }
 
 function setCurrentStore(store) {
   storeage.setCurrentStore(store)
-  console.log("ownRequest.setCurrentStore->>>" + JSON.stringify(store))
 }
 
 function isLogin() {
@@ -58,7 +56,7 @@ function getReturnUrl() {
     }
     url = url.substring(0, url.length - 1)
   }
-  console.log("ownRequest.getReturnUrl->>>" + url)
+  // console.log("ownRequest.getReturnUrl->>>" + url)
   return url;
 }
 
@@ -66,7 +64,7 @@ function getReturnUrl() {
 function isSelectedStore(isGoSelect) {
   var store = getCurrentStore()
   if (store.id == "") {
-    console.log("ownRequest.isSelectedStore->>>当前店铺id为空，未选择店铺")
+//    console.log("ownRequest.isSelectedStore->>>当前店铺id为空，未选择店铺")
     isGoSelect = isGoSelect == undefined ? false : isGoSelect
     if (isGoSelect) {
       wx.navigateTo({ //保留当前页面，跳转到应用内的某个页面（最多打开5个页面，之后按钮就没有响应的）
@@ -105,7 +103,7 @@ function getUserInfo(code, callback) {
       //console.log("code:" + code)
       //console.log("iv:" + res.iv)
       //console.log("encryptedData:" + res.encryptedData)
-      console.log("userInfo:" + JSON.stringify(res))
+      // console.log("userInfo:" + JSON.stringify(res))
       // 全局存储用户信息
       //store.commit('storeUpdateWxUser', res.userInfo)
       // postLogin(code, res.iv, res.encryptedData, callback)

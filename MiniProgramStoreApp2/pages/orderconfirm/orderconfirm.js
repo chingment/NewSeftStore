@@ -52,8 +52,6 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
-    console.log("orderconfirm.orderid->>>>" + options.orderId)
-    console.log("orderconfirm.productSkus->>>>" + JSON.stringify(options.productSkus))
     orderId = options.orderId == undefined ? null : options.orderId;
     productSkus = JSON.parse(options.productSkus);
   },
@@ -132,8 +130,6 @@ Page({
   },
   unifiedOrder: function (e) {
     var _this = this
-    console.log("orderconfirm.unifiedOrder->>>");
-
     for (var i = 0; i < _this.data.block.length; i++) {
       if (_this.data.block[i].receptionMode == 1) {
         if (_this.data.block[i].deliveryAddress.id == "") {
@@ -175,9 +171,6 @@ Page({
     }
   },
   goPay: function () {
-    console.log("orderconfirm.goPay->>>orderId:" + orderId);
-
-
     apiOrder.jsApiPaymentPms({
       merchId: config.merchId,
       orderId: orderId,

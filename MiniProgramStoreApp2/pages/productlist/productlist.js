@@ -6,9 +6,6 @@ const apiProduct = require('../../api/product.js')
 const app = getApp()
 
 var getList = function (_this) {
-  console.log("getList")
-  //console.log("getList.pageIndex:" + _this.data.pageIndex)
-
   var currentTab;
   var currentTabIndex = -1;
   for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -22,8 +19,6 @@ var getList = function (_this) {
     currentTabIndex = 0;
     currentTab = _this.data.tabs[currentTabIndex];
   }
-
-  console.log("getList.currentTabIndex:" + currentTabIndex)
 
   var pageIndex = currentTab.pageIndex
   var kindId = currentTab.kindId == undefined ? "" : currentTab.kindId
@@ -80,7 +75,7 @@ Page({
 
     var tabs = new Array()
     var tabsSliderIndex = -1 //默认未选择tab
-    console.log("productKinds.length.length " + productKinds.length)
+
 
     var deHeight = 2;
     if (kindId != "") {
@@ -126,7 +121,6 @@ Page({
 
 
     var wHeight = wx.getSystemInfoSync().windowHeight;
-    console.log("screen size->>>wHeight:" + wHeight)
     _this.setData({
       scrollHeight: wHeight - util.rem2px(deHeight)
     });
@@ -143,7 +137,7 @@ Page({
   //加载更多
   loadMore: function (e) {
     var _this = this
-    console.log("loadMore");
+
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     _this.data.tabs[index].pageIndex += 1
     _this.setData({
@@ -154,7 +148,7 @@ Page({
   //刷新处理
   refesh: function (e) {
     var _this = this
-    console.log("refesh")
+ 
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var scrollTop = e.detail.scrollTop
     _this.data.tabs[index].pageIndex = 0
@@ -167,11 +161,9 @@ Page({
 
   scroll: function (e) {
     var _this = this
-    console.log("scroll")
+  
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var scrollTop = e.detail.scrollTop
-
-    console.log("scrollTop:" + scrollTop)
 
     _this.data.tabs[index].scrollTop = scrollTop
     _this.setData({
@@ -182,7 +174,7 @@ Page({
 
   //tab点击
   tabBarClick: function (e) {
-    console.log("tabBarClick");
+
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var kindId = e.currentTarget.dataset.replykindId //对应页面data-reply-index
     var _this = this
@@ -230,7 +222,7 @@ Page({
 
     var _self = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-    console.log("skuId:" + skuId)
+
     var productSkus = new Array();
     productSkus.push({
       id: skuId,

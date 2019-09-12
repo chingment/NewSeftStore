@@ -38,8 +38,6 @@ Page({
 
   },
   goPay: function () {
-    console.log("orderconfirm.goPay->>>orderId:" + orderId);
-
 
     apiOrder.jsApiPaymentPms({
       orderId: orderId,

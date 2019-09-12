@@ -47,9 +47,7 @@ App({
   changeData: function(tag, data) {
     var pages = getCurrentPages();
     for (var i = 0; i < pages.length; i++) {
-      console.log("page:" + JSON.stringify(pages[i].data))
       if (pages[i].data.tag == tag) {
-        console.log("page->find:" + JSON.stringify(pages[i].data))
         pages[i].changeData(data)
       }
     }

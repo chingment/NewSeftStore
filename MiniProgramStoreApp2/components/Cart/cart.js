@@ -80,15 +80,10 @@ Component({
       }, 500)
     },
     _itemOperate(e) {
-      console.log('cartBarListItemCheck');
       var _self = this
       var pIndex = e.currentTarget.dataset.replyPindex
       var cIndex = e.currentTarget.dataset.replyCindex
       var operate = e.currentTarget.dataset.replyOperate
-      console.log('cartBarListItemCheck.pIndex:' + pIndex)
-      console.log('cartBarListItemCheck.cIndex:' + cIndex)
-      console.log('cartBarListItemCheck.operate' + operate)
-
       var productSku = _self.data.cart.blocks[pIndex].productSkus[cIndex];
 
       switch (operate) {
@@ -108,8 +103,6 @@ Component({
         selected: productSku.selected,
         receptionMode: productSku.receptionMode
       });
-
-      console.log('ownRequest.getCurrentStoreId():' + ownRequest.getCurrentStoreId())
 
       function _operate() {
 
@@ -134,7 +127,6 @@ Component({
             if (sm.confirm) {
               _operate()
             } else if (sm.cancel) {
-              console.log('用户点击取消')
             }
           }
         })
@@ -164,7 +156,6 @@ Component({
       }
 
       if (productSkus.length == 0) {
-        console.log("至少选择一件商品")
         toast.show({
           title: '至少选择一件商品'
         })
@@ -221,8 +212,6 @@ Component({
             X: touchMoveX,
             Y: touchMoveY
           });
-
-      console.log("cartId:" + cartId);
 
 
       for (var i = 0; i < _this.data.cart.blocks.length; i++) {

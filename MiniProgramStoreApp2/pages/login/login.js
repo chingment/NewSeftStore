@@ -77,7 +77,7 @@ Page({
     var pages = getCurrentPages() //获取加载的页面
     var currentPage = pages[pages.length - 2] //获取当前页面的对象
     var url = currentPage.route //当前页面ur
-    console.log("url:" + url)
+
 
     ownRequest.login((params) => {
       apiOwn.loginByMinProgram({
@@ -90,7 +90,6 @@ Page({
         success: function(res) {
           if (res.result == 1) {
             storeage.setAccessToken(res.data.token);
-            console.log("token:" + storeage.getAccessToken())
             wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
               url: ownRequest.getReturnUrl()
             })

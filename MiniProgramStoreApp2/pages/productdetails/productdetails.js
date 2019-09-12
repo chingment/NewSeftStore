@@ -56,7 +56,7 @@ Page({
 
     var _self = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-    console.log("skuId:" + skuId)
+
     var productSkus = new Array();
     productSkus.push({
       id: skuId,

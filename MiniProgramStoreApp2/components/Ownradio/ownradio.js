@@ -11,8 +11,7 @@ Component({
   },
   methods: {
     _radioCheckEvent() {
-      console.log("_radioCheckEvent")
-    
+
       this.setData({
         isSelected: !this.data.isSelected
       })

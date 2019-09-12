@@ -116,12 +116,10 @@ Page({
 
   },
   changeData: function(data) {
-    console.log("main.changeData")
     var _self = this;
     _self.setData(data)
   },
   onLoad: function() {
-    console.log("main.onLoad")
     var _self = this;
 
     var isLogin = ownRequest.isLogin();
@@ -177,7 +175,6 @@ Page({
 
   },
   mainTabBarItemClick(e) {
-    console.log('tabbar.tabBarItemClick')
     var _self = this
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var tabBar = _self.data.tabBar;

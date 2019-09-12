@@ -36,7 +36,7 @@ Component({
     addToCart: function (e) {
       var _self = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-      console.log('skuId：' + skuId)
+
       var productSkus = new Array();
       productSkus.push({
         id: skuId,
@@ -44,7 +44,7 @@ Component({
         selected: true,
         receptionMode: 3
       });
-      console.log('ownRequest.getCurrentStoreId():' + ownRequest.getCurrentStoreId())
+
       apiCart.operate({
         storeId: ownRequest.getCurrentStoreId(),
         operate: 2,

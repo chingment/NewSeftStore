@@ -21,7 +21,7 @@ Page({
     var _this = this
     var operate = parseInt(options.operate)
     var operateIndex = parseInt(options.operateIndex)
-    console.log("operateIndex:" + operateIndex)
+
     var title = ""
     switch (operate) {
       case 1:
@@ -114,7 +114,6 @@ Page({
     var deliveryAddress = _this.data.list[index]
 
     if (_this.data.operate == 2) {
-      console.log('deliveryAddress:' + JSON.stringify(deliveryAddress))
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
       prevPage.data.block[_this.data.operateIndex].deliveryAddress.id = deliveryAddress.id

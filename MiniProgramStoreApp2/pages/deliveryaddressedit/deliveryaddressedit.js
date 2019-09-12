@@ -192,7 +192,7 @@ Page({
     var _this = this
 
     if (typeof options.deliveryAddress != 'undefined') {
-      console.log(options.deliveryAddress)
+
       var deliveryAddress = JSON.parse(options.deliveryAddress)
 
       _this.data.address.area = deliveryAddress.areaName

@@ -19,10 +19,9 @@ Component({
   data: {},
   methods: {
     itemClick(e) {
-      console.log('kindBarItemClick');
+  
       var _self = this
       var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
-      console.log('kindBarItemClick.index' + index)
       var list = _self.data.list;
       for (var i = 0; i < list.length; i++) {
         if (i == index) {

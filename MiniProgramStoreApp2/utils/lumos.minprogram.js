@@ -8,10 +8,10 @@ var hasOwn = class2type.hasOwnProperty
 var support = {}
 
 var requestHandler = {
-  success: function(res) {
+  success: function (res) {
     // success  
   },
-  fail: function() {
+  fail: function () {
     // fail  
   }
 }
@@ -113,7 +113,7 @@ function isPlainObject(obj) {
 
   // Own properties are enumerated firstly, so to speed up,
   // if last one is own, then all properties are own.
-  for (key in obj) {}
+  for (key in obj) { }
 
   return key === undefined || hasOwn.call(obj, key);
 }
@@ -163,13 +163,13 @@ function postJson(opts) {
     dataParams: null,
     async: true,
     timeout: 0,
-    beforeSend: function(res) {
+    beforeSend: function (res) {
 
     },
-    complete: function(res, status) {
+    complete: function (res, status) {
 
     },
-    suceess: function() {
+    suceess: function () {
 
     }
   }, opts)
@@ -186,13 +186,13 @@ function getJson(opts) {
     urlParams: null,
     async: true,
     timeout: 0,
-    beforeSend: function(res) {
+    beforeSend: function (res) {
 
     },
-    complete: function(res, status) {
+    complete: function (res, status) {
 
     },
-    suceess: function() {
+    suceess: function () {
 
     }
   }, opts)
@@ -210,13 +210,13 @@ function wxRequest(opts) {
     dataParams: null,
     async: true,
     timeout: 0,
-    beforeSend: function(res) {
+    beforeSend: function (res) {
 
     },
-    complete: function(res, status) {
+    complete: function (res, status) {
 
     },
-    suceess: function() {
+    suceess: function () {
 
     }
   }, opts)
@@ -259,24 +259,31 @@ function wxRequest(opts) {
 
   console.log("wxRequest.url and urlParams ->>>" + _url)
   console.log("wxRequest.method->>>" + _method)
-  console.log("wxRequest.data->>>" + JSON.stringify(_dataParams))
+
+  if (_method == "POST") {
+    console.log("wxRequest.dataParams->>>" + JSON.stringify(_dataParams))
+  }
 
   wx.request({
     url: _url,
     data: _dataParams,
     method: _method,
     dataType: "json",
-    success: function(res) {
-      console.log("wxRequest.success->>>>" + JSON.stringify(res));
+    success: function (res) {
+      if (res.statusCode != 200) {
+        console.log("wxRequest.success->>>" + JSON.stringify(res));
+      }
+
       if (typeof res.data == "undefined" || res.data == null) {
-        console.log("wxRequest.success->>>>data is undefined or null");
+        console.log("wxRequest.success->>>ata is undefined or null");
       } else if (typeof res.data.result == "undefined" || res.data.result == null) {
-        console.log("wxRequest.success->>>>data.result is undefined or null");
+        console.log("wxRequest.success->>>data.result is undefined or null");
       } else {
+        console.log("wxRequest.success->>>" + JSON.stringify(res.data));
         if (res.data.result == 3) {
-          console.log("wxRequest.success->>>>data.result is exception");
+          console.log("wxRequest.success->>>data.result is exception");
           wx.showModal({
-            showCancel:false,
+            showCancel: false,
             title: '提示',
             content: res.data.message
           })
@@ -289,8 +296,8 @@ function wxRequest(opts) {
         }
       }
     },
-    fail: function(res) {},
-    complete: function() {
+    fail: function (res) { },
+    complete: function () {
 
       if (_isShowLoading) {
         wx.hideLoading()

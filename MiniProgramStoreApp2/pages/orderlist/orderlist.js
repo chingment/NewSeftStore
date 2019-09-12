@@ -5,7 +5,6 @@ const apiOrder = require('../../api/order.js')
 const app = getApp()
 
 var getList = function(_this) {
-  console.log("getList")
   var currentTab;
   var currentTabIndex = -1;
   for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -19,8 +18,6 @@ var getList = function(_this) {
     currentTabIndex = 0;
     currentTab = _this.data.tabs[currentTabIndex];
   }
-
-  console.log("getList.currentTabIndex:" + currentTabIndex)
 
   var pageIndex = currentTab.pageIndex
   var status = currentTab.status == undefined ? "" : currentTab.status
@@ -95,7 +92,7 @@ Page({
     var _this = this
     var wHeight = wx.getSystemInfoSync().windowHeight;
     var status = options.status == undefined ? "" : options.status
-    console.log("status=>" + status)
+
 
     var _tabsSliderIndex = -1
     for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -167,7 +164,7 @@ Page({
   },
   //tab点击
   tabBarClick: function(e) {
-    console.log("tabBarClick");
+
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var _this = this
 
