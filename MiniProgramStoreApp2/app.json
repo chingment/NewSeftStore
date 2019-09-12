@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/orderlist/orderlist",
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",
@@ -10,7 +11,6 @@
     "pages/orderconfirm/orderconfirm",
     "pages/mycoupon/mycoupon",
     "pages/personalinfo/personalinfo",
-    "pages/orderlist/orderlist",
     "pages/logs/logs",
     "pages/operate/operate",
     "pages/notopen/notopen",

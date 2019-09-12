@@ -1,4 +1,5 @@
 const storeage = require('../../utils/storeageutil.js')
+const util = require('../../utils/util.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()
@@ -109,7 +110,7 @@ Page({
     _this.setData({
       tabsSliderIndex: _tabsSliderIndex,
       tabs: _this.data.tabs,
-      scrollHeight: wHeight - ownRequest.rem2px(2)
+      scrollHeight: wHeight - util.rem2px(2)
     })
 
     getList(_this)

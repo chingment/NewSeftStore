@@ -3,6 +3,9 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
+axios.defaults.retry = 4;
+axios.defaults.retryDelay = 1000;
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -73,13 +76,37 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
+    // console.log('err' + error) // for debug
+    // Message({
+    //   message: error.message,
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
+    // return Promise.reject(error)
+
+    var config = error.config;
+
+    // 如果config不存在或未设置重试选项，请拒绝
+    if(!config || !config.retry) return Promise.reject(err);
+    // 设置变量跟踪重试次数
+    config.__retryCount = config.__retryCount || 0;
+    // 检查是否已经达到最大重试总次数
+    if(config.__retryCount >= config.retry) {
+     // 抛出错误信息
+     return Promise.reject(error);
+    }
+    // 增加请求重试次数
+    config.__retryCount += 1;
+    // 创建新的异步请求
+    var backoff = new Promise(function(resolve) {
+     setTimeout(function() {
+      resolve();
+     }, config.retryDelay || 1);
+    });
+    // 返回axios信息，重新请求
+    return backoff.then(function() {
+     return axios(config);
+    });
   }
 )
 

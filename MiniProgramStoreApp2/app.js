@@ -67,8 +67,10 @@ App({
   },
   mainTabBarSwitch: function(index) {
     var pages = getCurrentPages();
+    var isHasMain=false;
     for (var i = 0; i < pages.length; i++) {
       if (pages[i].data.tag == "main") {
+        isHasMain=true
         wx.navigateBack({
           delta: pages.length
         })
@@ -90,6 +92,12 @@ App({
           tabBar: tabBar
         })
       }
+    }
+
+    if (!isHasMain){
+      wx.redirectTo({
+        url: '/pages/main/main'
+      })
     }
   }
 })
