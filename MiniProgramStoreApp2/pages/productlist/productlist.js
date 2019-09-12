@@ -1,3 +1,4 @@
+const util = require('../../utils/util.js')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
@@ -127,7 +128,7 @@ Page({
     var wHeight = wx.getSystemInfoSync().windowHeight;
     console.log("screen size->>>wHeight:" + wHeight)
     _this.setData({
-      scrollHeight: wHeight - ownRequest.rem2px(deHeight)
+      scrollHeight: wHeight - util.rem2px(deHeight)
     });
 
     _this.setData({

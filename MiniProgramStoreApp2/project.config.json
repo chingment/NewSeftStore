@@ -32,13 +32,14 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 0,
 			"list": [
 				{
-					"id": -1,
+					"id": 0,
 					"name": "带参数页面测试",
-					"pathName": "pages/test/test",
-					"query": "id=1001&name=chingment"
+					"pathName": "pages/productdetails/productdetails",
+					"query": "id=7dff37f2387e4aa384151632b763a14d",
+					"scene": null
 				},
 				{
 					"id": 1,

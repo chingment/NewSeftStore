@@ -95,7 +95,7 @@ App({
     }
 
     if (!isHasMain){
-      wx.redirectTo({
+      wx.reLaunch({
         url: '/pages/main/main'
       })
     }

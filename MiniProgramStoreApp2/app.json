@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/orderlist/orderlist",
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",
@@ -9,6 +8,7 @@
     "pages/deliveryaddress/deliveryaddress",
     "pages/deliveryaddressedit/deliveryaddressedit",
     "pages/orderconfirm/orderconfirm",
+    "pages/orderlist/orderlist",
     "pages/mycoupon/mycoupon",
     "pages/personalinfo/personalinfo",
     "pages/logs/logs",
