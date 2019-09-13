@@ -1,27 +1,5 @@
 ﻿<Properties StartupConfiguration="{88868FE1-D3D6-4EA1-BD97-27CB5859C00A}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Lumos.Redis/RedisClient.cs">
-    <Files>
-      <File FileName="LocalS.Service/Api/Agent/AgentServiceFactory.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/Agent/UserService.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/Agent/HomeService.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/StoreApp/ProductKindService.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/StoreApp/StoreAppServiceFactory.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/StoreApp/ProductService.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/StoreApp/StoreService.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/Admin/AdminServiceFactory.cs" Line="1" Column="1" />
-      <File FileName="LocalS.Service/Api/Admin/AgentMasterService.cs" Line="105" Column="50" />
-      <File FileName="WebApiMerch/Controllers/StoreController.cs" Line="66" Column="68" />
-      <File FileName="LocalS.Service/Api/Merch/StoreService.cs" Line="233" Column="33" />
-      <File FileName="Lumos.Redis/Lock.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/Redlock.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/RedisSnUtil.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/RedisMqObject.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/RedisMqBaseObject.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/RedisManager.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/RedisHashUtil.cs" Line="1" Column="1" />
-      <File FileName="Lumos.Redis/RedisClient.cs" Line="1" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.UI.Console.Test PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
