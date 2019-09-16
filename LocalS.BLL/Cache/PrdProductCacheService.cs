@@ -154,6 +154,11 @@ namespace LocalS.BLL
                 }
             }
 
+
+            prdProductSkuByCache.BriefDes = prdProductSkuByCache.BriefDes.NullToEmpty();
+
+
+
             return prdProductSkuByCache;
         }
 
