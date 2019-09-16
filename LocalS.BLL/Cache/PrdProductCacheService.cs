@@ -85,6 +85,8 @@ namespace LocalS.BLL
                 }
             }
 
+            prdProductByCache.BriefDes = prdProductByCache.BriefDes.NullToEmpty();
+
             return prdProductByCache;
         }
 
