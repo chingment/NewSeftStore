@@ -8,6 +8,7 @@ namespace WebApiStoreApp.Controllers
 
     public class GlobalController : OwnApiBaseController
     {
+        [AllowAnonymous]
         [HttpGet]
         public OwnApiHttpResponse DataSet([FromUri]RupGlobalDataSet rup)
         {

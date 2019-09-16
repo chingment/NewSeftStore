@@ -15,6 +15,7 @@ var config = {
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     globalDataSet: `${host}/Global/DataSet`,
+    indexPageData: `${host}/Index/PageData`,
     cartOperate: `${host}/Cart/Operate`,
     cartPageData: `${host}/Cart/PageData`,
     productList: `${host}/Product/List`,
@@ -30,7 +31,8 @@ var config = {
     orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
     orderDetails: `${host}/Order/Details`,
-    productKindPageData: `${host}/ProductKind/PageData`,
+    kindPageData: `${host}/Kind/PageData`,
+    personalPageData: `${host}/Personal/PageData`
   }
 
 };

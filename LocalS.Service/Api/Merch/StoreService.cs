@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -261,30 +262,24 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-
-                var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == item.PrdProductSkuId).FirstOrDefault();
-                if (prdProduct != null)
+                var prdProductSku = BizFactory.PrdProduct.GetProductSku(item.StoreId, item.PrdProductSkuId);
+                if (prdProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
-                    productSkuModel.Id = prdProduct.Id;
-                    productSkuModel.Name = prdProduct.Name;
-                    productSkuModel.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
-                    productSkuModel.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
-                    productSkuModel.BriefDes = prdProduct.BriefDes;
-                    productSkuModel.DetailsDes = prdProduct.DetailsDes;
-                    //productSkuModel.SpecDes = prdProduct.SpecDes;
-
+                    productSkuModel.Id = prdProductSku.Id;
+                    productSkuModel.Name = prdProductSku.Name;
+                    productSkuModel.DispalyImgUrls = prdProductSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                    productSkuModel.MainImgUrl = prdProductSku.MainImgUrl;
+                    productSkuModel.BriefDes = prdProductSku.BriefDes;
+                    productSkuModel.DetailsDes = prdProductSku.DetailsDes;
                     productSkuModel.SumQuantity = item.SumQuantity;
                     productSkuModel.LockQuantity = item.LockQuantity;
                     productSkuModel.SellQuantity = item.SellQuantity;
                     productSkuModel.SalePrice = item.SalePrice;
                     productSkuModel.IsOffSell = item.IsOffSell;
-
-
                     olist.Add(productSkuModel);
                 }
             }
-
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 

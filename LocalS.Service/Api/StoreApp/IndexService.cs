@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class IndexService : BaseDbContext
     {
-        public CustomJsonResult<RetIndexPageData> PageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetIndexPageData> PageData(string operater, string clientUserId, RupIndexPageData rup)
         {
 
             var result = new CustomJsonResult<RetIndexPageData>();
@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetIndexPageData();
 
 
-            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
             var storeModel = new StoreModel();
             storeModel.Id = store.Id;
@@ -51,12 +51,12 @@ namespace LocalS.Service.Api.StoreApp
 
             var pdAreaModel = new PdAreaModel();
 
-            var productSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == store.MerchId & m.IsDelete == false && m.Depth == 1).OrderBy(m => m.Priority).ToList();
+            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId & m.IsDelete == false && m.Depth == 1).OrderBy(m => m.Priority).ToList();
 
-            foreach (var productSubject in productSubjects)
+            foreach (var prdKind in prdKinds)
             {
 
-                var query = (from o in CurrentDb.PrdProductSubject where o.PrdSubjectId == productSubject.Id select new { o.Id, o.PrdProductId, o.PrdSubjectId, o.CreateTime });
+                var query = (from o in CurrentDb.PrdProductKind where o.PrdKindId == prdKind.Id select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime });
 
                 query = query.OrderByDescending(r => r.CreateTime).Take(6);
 
@@ -65,13 +65,13 @@ namespace LocalS.Service.Api.StoreApp
                 if (list.Count > 0)
                 {
                     var tab = new PdAreaModel.Tab();
-                    tab.Id = productSubject.Id;
-                    tab.Name = productSubject.Name;
-                    tab.MainImgUrl = productSubject.MainImgUrl;
+                    tab.Id = prdKind.Id;
+                    tab.Name = prdKind.Name;
+                    tab.MainImgUrl = prdKind.MainImgUrl;
 
                     foreach (var i in list)
                     {
-                        var productModel = BizFactory.PrdProduct.GetProduct(storeId, i.PrdProductId);
+                        var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, i.PrdProductId);
 
                         if (productModel != null)
                         {

@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.Merch
                 }
                 else
                 {
-                    if (p_prdKind.Depth >= 2)
+                    if (p_prdKind.Depth >= 1)
                     {
                         treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
                     }

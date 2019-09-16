@@ -11,6 +11,7 @@ namespace WebApiStoreApp.Controllers
 {
     public class ProductKindController : OwnApiBaseController
     {
+        [AllowAnonymous]
         [HttpGet]
         public OwnApiHttpResponse<RetProductKindPageData> PageData([FromUri]RupProductKindPageData rup)
         {

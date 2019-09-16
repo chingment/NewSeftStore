@@ -124,9 +124,9 @@ Page({
 
     var isLogin = ownRequest.isLogin();
 
-    if (!isLogin) {
-      return;
-    }
+    // if (!isLogin) {
+    //   return;
+    // }
 
     _self.setData({
       isLogin: isLogin

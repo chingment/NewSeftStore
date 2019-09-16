@@ -1,5 +1,5 @@
 const ownRequest = require('../../own/ownRequest.js')
-const apiCart = require('../../api/cart.js')
+const apiIndex = require('../../api/index.js')
 
 Component({
   options: {
@@ -25,6 +25,9 @@ Component({
     }
   },
   data: {},
+  ready:function(){
+    this.getPageData()
+  },
   methods: {
     topBannerSwiperChange: function (e) {
       var _self = this
@@ -55,6 +58,17 @@ Component({
           },
           fail: function () { }
         })
+    },
+    getPageData:function(){
+      
+      var self = this
+      apiIndex.pageData({ storeId: ownRequest.getCurrentStoreId() },{
+        success: function (res) {
+
+          self.setData({ initdata: res.data })
+        }
+      })
+
     }
   }
 })

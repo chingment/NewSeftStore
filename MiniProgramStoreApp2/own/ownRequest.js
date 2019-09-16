@@ -32,7 +32,7 @@ function isLogin() {
 
   var acctoken = storeage.getAccessToken()
   if (acctoken == "") {
-    showLoginModal()
+    // showLoginModal()
     return false
   } else {
     return true

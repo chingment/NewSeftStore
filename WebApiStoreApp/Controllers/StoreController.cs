@@ -6,6 +6,7 @@ namespace WebApiStoreApp.Controllers
 {
     public class StoreController : OwnApiBaseController
     {
+        [AllowAnonymous]
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupStoreList rup)
         {

@@ -24,27 +24,13 @@
           <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
         </el-dialog>
       </el-form-item>
-      <el-form-item label="所属模块" prop="kindIds">
+      <el-form-item label="所属分类" prop="kindIds">
         <el-input :value="form.kindIds.toString()" style="display:none" />
         <treeselect
           v-model="form.kindIds"
           :multiple="true"
           :options="treeselect_kind_options"
           :normalizer="treeselect_kind_normalizer"
-          :flat="true"
-          sort-value-by="INDEX"
-          :default-expand-level="99"
-          placeholder="选择"
-          no-children-text=""
-        />
-      </el-form-item>
-      <el-form-item label="所属栏目" prop="subjectIds">
-        <el-input :value="form.subjectIds.toString()" style="display:none" />
-        <treeselect
-          v-model="form.subjectIds"
-          :multiple="true"
-          :options="treeselect_subject_options"
-          :normalizer="treeselect_subject_normalizer"
           :flat="true"
           sort-value-by="INDEX"
           :default-expand-level="99"
@@ -133,8 +119,7 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', trigger: ['click', 'change'], max: 3 }],
-        subjectIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -190,7 +175,6 @@ export default {
           this.form.id = d.id
           this.form.name = d.name
           this.form.kindIds = d.kindIds
-          this.form.subjectIds = d.subjectIds
           this.form.detailsDes = d.detailsDes
           this.form.briefDes = d.briefDes
           this.form.dispalyImgUrls = d.dispalyImgUrls
@@ -218,7 +202,6 @@ export default {
           _form.id = this.form.id
           _form.name = this.form.name
           _form.kindIds = this.form.kindIds
-          _form.subjectIds = this.form.subjectIds
           _form.detailsDes = this.form.detailsDes
           _form.briefDes = this.form.briefDes
           _form.dispalyImgUrls = this.form.dispalyImgUrls

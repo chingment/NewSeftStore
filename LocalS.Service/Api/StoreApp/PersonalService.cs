@@ -10,7 +10,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class PersonalService : BaseDbContext
     {
-        public CustomJsonResult<RetPersonalPageData> PageData(string operater, string clientUserId, string storeId)
+        public CustomJsonResult<RetPersonalPageData> PageData(string operater, string clientUserId, RupPersonalPageData rup)
         {
             var result = new CustomJsonResult<RetPersonalPageData>();
 
