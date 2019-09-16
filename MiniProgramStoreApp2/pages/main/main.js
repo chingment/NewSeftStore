@@ -84,7 +84,11 @@ Page({
       list: []
     },
     cart: {
-      list: []
+      blocks: [],
+      count:0,
+      sumPrice:0,
+      countBySelected:0,
+      sumPriceBySelected:0
     }
   },
   changeData: function(data) {

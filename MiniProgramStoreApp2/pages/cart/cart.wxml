@@ -1,7 +1,7 @@
-  <view class="st-cart" style="height:{{height}}px;">
-    <view class="ct" style="height:100%;position:relative">
+<view class="st-cart" style="height:{{height}}px;">
+  <view class="ct" style="height:100%;position:relative">
 
-      <block wx:if="{{blocks.length>0}}">
+    <block wx:if="{{blocks.length>0}}">
       <scroll-view scroll-y="true" style="height:{{height}}px;">
         <view class="cart-blocks its-blocks">
           <block wx:for="{{blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
@@ -44,34 +44,38 @@
                     <view class="it-del" bindtap="itemOperate" data-reply-operate="4" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">删除</view>
 
                   </view>
-
-
-
                 </block>
               </view>
             </view>
             <view class="line-space"></view>
           </block>
         </view>
-        </scroll-view>
-        <view class="cart-bottom">
-          <view class="it-l">
-            <text class='font-gray'>已选({{countBySelected}})</text>
-          </view>
-          <view class="it-m">
-            <text class="font-main" value="249" decimal="2">{{sumPriceBySelected}}</text>
-          </view>
-          <view bindtap="immeBuy" class="bg-main it-r">
-            <text>下单</text>
-          </view>
+      </scroll-view>
+      <view class="cart-bottom">
+        <view class="it-l">
+          <text class='font-gray'>已选({{countBySelected}})</text>
         </view>
-      </block>
-      <block wx:else>
-
-        <view style='height:100%;display:flex;justify-content:center;align-items:center'>
-          <image src='/content/default/images/cart_empty.png'></image>
+        <view class="it-m">
+          <text class="font-main" value="249" decimal="2">{{sumPriceBySelected}}</text>
         </view>
-      </block>
+        <view bindtap="immeBuy" class="bg-main it-r">
+          <text>下单</text>
+        </view>
+      </view>
+    </block>
+    <block wx:if="{{blocks.length==0}}">
 
-    </view>
+      <view style='height:60%;display:flex;justify-content:center;align-items:center'>
+        <image src='/content/default/images/cart_empty.png'></image>
+      </view>
+
+      <block wx:if="{{!isLogin}}">
+        <button style="width:80%" class="btn bg-main btn-login" bindtap="goLogin">登录</button>
+      </block>
+    </block>
+
+
+
+
   </view>
+</view>

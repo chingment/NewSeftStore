@@ -13,9 +13,14 @@ Component({
       type: Object,
       observer: function (newVal, oldVal, changedPath) {
         var _self = this
-        _self.setData(
-          newVal
-        )
+        _self.setData({
+          isLogin: ownRequest.isLogin(),
+          blocks: newVal.blocks,
+          count: newVal.count,
+          sumPrice: newVal.sumPrice,
+          countBySelected: newVal.countBySelected,
+          sumPriceBySelected: newVal.sumPriceBySelected
+        })
       }
     },
     height: {
@@ -209,6 +214,9 @@ Component({
           self.setData({initdata:res.data})
         }
       })
+    },
+    goLogin: function (e) {
+      ownRequest.goLogin()
     }
   }
 })
