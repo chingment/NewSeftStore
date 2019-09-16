@@ -62,7 +62,6 @@ Page({
     var _this = this
 
     var kindId = options.kindId == undefined ? "" : options.kindId
-    var pKindId = options.pKindId == undefined ? "" : options.pKindId
     var subjectId = options.subjectId == undefined ? "" : options.subjectId
     var navName = options.navName == undefined ? "" : options.navName
 
@@ -81,25 +80,22 @@ Page({
     if (kindId != "") {
       if (productKinds.length > 0) {
         for (var i = 0; i < productKinds.length; i++) {
-          if (productKinds[i].id == pKindId) {
-            for (var j = 0; j < productKinds[i].child.length; j++) {
-              var selected = false
-              if (productKinds[i].child[j].id == kindId) {
-                selected = true
-                tabsSliderIndex = j
-              }
-              var tab = {
-                kindId: productKinds[i].child[j].id,
-                subjectId: "",
-                name: productKinds[i].child[j].name,
-                pageIndex: 0,
-                selected: selected,
-                list: null,
-                scrollTop: 0
-              }
-              tabs.push(tab)
+            var selected = false
+            if (productKinds[i].id  == kindId) {
+              selected = true
+              tabsSliderIndex = i
             }
-          }
+            var tab = {
+              kindId: productKinds[i].id,
+              subjectId: "",
+              name: productKinds[i].name,
+              pageIndex: 0,
+              selected: selected,
+              list: null,
+              scrollTop: 0
+            }
+            tabs.push(tab)
+          
         }
       }
     }

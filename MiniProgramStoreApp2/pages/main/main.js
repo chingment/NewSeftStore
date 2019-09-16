@@ -87,34 +87,6 @@ Page({
       list: []
     }
   },
-  bindgetuserinfo: function(e) {
-
-    ownRequest.login((params) => {
-      apiOwn.loginByMinProgram({
-        merchId: config.merchId,
-        appId: config.appId,
-        code: params.code,
-        iv: params.iv,
-        encryptedData: params.encryptedData
-      }, {
-        success: function(res) {
-          if (res.result == 1) {
-            storeage.setAccessToken(res.data.token);
-            console.log("token:" + storeage.getAccessToken())
-            wx.reLaunch({
-              url: ownRequest.getReturnUrl()
-            })
-          } else {
-            toast.showToast({
-              title: res.message
-            })
-          }
-        },
-        fail: function() {}
-      })
-    })
-
-  },
   changeData: function(data) {
     var _self = this;
     _self.setData(data)
@@ -173,6 +145,11 @@ Page({
       fail: function() {}
     })
 
+  },
+  onShow:function(){
+    if (!ownRequest.isSelectedStore(true)) {
+      return
+    }
   },
   mainTabBarItemClick(e) {
     var _self = this

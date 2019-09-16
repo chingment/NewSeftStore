@@ -7,15 +7,15 @@
 
 .kind-left-navbar {
 
-  width: 5rem;
+  width: 6rem;
   height: 100%;
   font-size: .8rem;
   border-right: 1px #dbdbdb solid;
 }
 
 .kind-left-navbar .it {
-  height: 2rem;
-  line-height: 2rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
   text-align: center;
 }
 

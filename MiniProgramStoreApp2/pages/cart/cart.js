@@ -1,3 +1,4 @@
+const util = require('../../utils/util')
 const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
@@ -23,7 +24,7 @@ Component({
   },
   data: {},
   methods: {
-    itemOperate(e) {
+    itemOperate: util.throttle(function (e) {
 
       var _self = this
       var pIndex = e.currentTarget.dataset.replyPindex
@@ -80,7 +81,7 @@ Component({
       } else {
         _operate()
       }
-    },
+    },1000),
     immeBuy: function (e) {
       var _this = this
 
