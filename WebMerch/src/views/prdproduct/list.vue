@@ -33,17 +33,12 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="分类" prop="kindNames" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="分类" prop="kindNames" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="栏目" prop="subjectNames" align="left" min-width="20%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.subjectNames }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="销售价" prop="salePrice" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="销售价" prop="salePrice" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.salePrice }}</span>
         </template>

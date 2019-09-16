@@ -1,3 +1,5 @@
+const ownRequest = require('../../own/ownRequest.js')
+
 Component({
   options: {
     addGlobalClass: true,
@@ -7,9 +9,8 @@ Component({
     initdata: {
       type: Object,
       observer: function (newVal, oldVal, changedPath) {
-
-        var _self = this
-        _self.setData(newVal)
+        var _self=this
+        _self.setData({ isLogin: ownRequest.isLogin(), userInfo: newVal.userInfo})
       }
     },
     height: {
@@ -18,6 +19,8 @@ Component({
   },
   data: {},
   methods: {
-
+    goLogin: function (e) {
+      ownRequest.goLogin()
+    }
   }
 })

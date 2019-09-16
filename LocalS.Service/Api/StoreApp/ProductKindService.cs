@@ -18,7 +18,7 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetProductKindPageData();
 
 
-            var productParentKindModels = new List<ProductParentKindModel>();
+            var productParentKindModels = new List<PrdKindModel>();
 
             var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
@@ -27,28 +27,26 @@ namespace LocalS.Service.Api.StoreApp
             var productParentKinds = productKinds.Where(m => m.PId == top.Id).ToList();
             foreach (var item in productParentKinds)
             {
-                var productParentKindModel = new ProductParentKindModel();
+                var productParentKindModel = new PrdKindModel();
                 productParentKindModel.Id = item.Id;
                 productParentKindModel.Name = item.Name;
                 productParentKindModel.MainImgUrl = item.MainImgUrl;
                 productParentKindModel.Selected = false;
+
+
                 var productChildKinds = productKinds.Where(m => m.PId == item.Id).ToList();
 
                 foreach (var item2 in productChildKinds)
                 {
 
-                    ///var prdProduct = (from o in CurrentDb.PrdProductKind where o.PrdKindId == item2.Id select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).FirstOrDefault();
+                    //var productChildKindModel = new ProductChildKindModel();
 
+                    //productChildKindModel.Id = item2.Id;
+                    //productChildKindModel.Name = item2.Name;
+                    //productChildKindModel.MainImgUrl = item2.MainImgUrl;
+                    //productParentKindModel.Selected = false;
 
-
-                    var productChildKindModel = new ProductChildKindModel();
-
-                    productChildKindModel.Id = item2.Id;
-                    productChildKindModel.Name = item2.Name;
-                    productChildKindModel.MainImgUrl = item2.MainImgUrl;
-                    productParentKindModel.Selected = false;
-
-                    productParentKindModel.Child.Add(productChildKindModel);
+                    //productParentKindModel.Child.Add(productChildKindModel);
 
 
 

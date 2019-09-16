@@ -4,6 +4,8 @@
       <view class='personal-userinfo'>
         <view class='item-left'>
           <view class="container">
+
+           <block wx:if="{{isLogin}}">
             <view class='item-nickname'>
               <text>{{userInfo.nickName}}</text>
             </view>
@@ -17,10 +19,25 @@
               <image src='/content/default/images/icon_phone.png'></image>
               <text>{{userInfo.phoneNumber}}</text>
             </view>
+            </block>
+           <block wx:else>
+            <view class='item-logintip' bindtap="goLogin"  >
+              <text>未登陆</text>
+            </view>
+            <view  class='item-logingo' bindtap="goLogin" >
+              <text class='txt' >点击登录账号</text>
+            </view>
+           </block>
           </view>
         </view>
         <view class='item-right'>
+ <block wx:if="{{isLogin}}">
           <image src='{{userInfo.avatar}}'></image>
+               </block>
+    <block wx:else>
+           <image src='/content/default/images/avaner_default.png'></image>
+           </block>
+
         </view>
       </view>
       <view class='personal-orderstatus'>

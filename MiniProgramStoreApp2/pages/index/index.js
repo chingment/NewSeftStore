@@ -1,5 +1,6 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
+const apiCart = require('../../api/cart.js')
 
 Component({
   options: {
@@ -9,7 +10,7 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function (newVal, oldVal, changedPath) {
+      observer: function(newVal, oldVal, changedPath) {
 
         var _self = this
         var currentStore = ownRequest.getCurrentStore()
@@ -20,23 +21,23 @@ Component({
         })
       }
     },
-    height:{
-      type:Number
+    height: {
+      type: Number
     }
   },
   data: {},
-  ready:function(){
+  ready: function() {
     this.getPageData()
   },
   methods: {
-    topBannerSwiperChange: function (e) {
+    topBannerSwiperChange: function(e) {
       var _self = this
       _self.data.banner.currentSwiper = e.detail.current;
       this.setData({
         banner: _self.data.banner
       })
     },
-    addToCart: function (e) {
+    addToCart: function(e) {
       var _self = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
 
@@ -53,21 +54,26 @@ Component({
         operate: 2,
         productSkus: productSkus
       }, {
-          success: function (res) {
+        success: function(res) {
 
-          },
-          fail: function () { }
-        })
-    },
-    getPageData:function(){
-      
-      var self = this
-      apiIndex.pageData({ storeId: ownRequest.getCurrentStoreId() },{
-        success: function (res) {
-
-          self.setData({ initdata: res.data })
-        }
+        },
+        fail: function() {}
       })
+    },
+    getPageData: function() {
+      if (ownRequest.getCurrentStoreId() != undefined) {
+        var self = this
+        apiIndex.pageData({
+          storeId: ownRequest.getCurrentStoreId()
+        }, {
+          success: function(res) {
+
+            self.setData({
+              initdata: res.data
+            })
+          }
+        })
+      }
 
     }
   }

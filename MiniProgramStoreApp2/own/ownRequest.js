@@ -40,7 +40,9 @@ function isLogin() {
 }
 
 function goLogin() {
-  showLoginModal()
+  wx.navigateTo({
+    url: loginPage,
+  })
 }
 
 function getReturnUrl() {

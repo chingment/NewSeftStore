@@ -27,7 +27,7 @@ namespace LocalS.Service.Api.Merch
                 treeNode.PId = p_productKind.PId;
                 treeNode.Value = p_productKind.Id;
                 treeNode.Label = p_productKind.Name;
-                treeNode.IsDisabled = p_productKind.Depth <= 1 ? true : false;
+                treeNode.IsDisabled = p_productKind.Depth <= 0 ? true : false;
 
                 var children = GetKindTree(treeNode.Id, prdKinds);
                 if (children != null)

@@ -289,7 +289,7 @@ function wxRequest(opts) {
           })
         } else {
           if (res.data.code == "2501") {
-            // ownRequest.goLogin()
+            ownRequest.goLogin()
           } else {
             opts.success(res.data)
           }

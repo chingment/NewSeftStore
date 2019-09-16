@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class ProductParentKindModel
+    public class PrdKindModel
     {
-        public ProductParentKindModel()
+        public PrdKindModel()
         {
-            this.Child = new List<ProductChildKindModel>();
+            this.Child = new List<PrdProductModel>();
         }
 
         public string Id { get; set; }
@@ -21,6 +22,6 @@ namespace LocalS.Service.Api.StoreApp
 
         public bool Selected { get; set; }
 
-        public List<ProductChildKindModel> Child { get; set; }
+        public List<PrdProductModel> Child { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RetProductKindPageData
     {
-        public List<ProductParentKindModel> List { get; set; }
+        public List<PrdKindModel> List { get; set; }
  
     }
 }

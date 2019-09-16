@@ -78,7 +78,7 @@
                 <view class="title">
                   <text class='txt'>{{tab.name}}</text>
                 </view>
-                <navigator class='more' url="/pages/productlist/productlist?subjectId={{tab.id}}&navName={{tab.name}}" hover-class="none">
+                <navigator class='more' url="/pages/productlist/productlist?kindId={{tab.id}}" hover-class="none">
                   <view class="title">
                     <text class="txt">更多优选</text>
                   </view>
