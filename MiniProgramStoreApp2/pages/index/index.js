@@ -27,7 +27,7 @@ Component({
   },
   data: {},
   ready: function() {
-    this.getPageData()
+    
   },
   methods: {
     topBannerSwiperChange: function(e) {
@@ -40,7 +40,6 @@ Component({
     addToCart: function(e) {
       var _self = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-
       var productSkus = new Array();
       productSkus.push({
         id: skuId,

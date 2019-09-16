@@ -53,30 +53,13 @@ Page({
       number: 0
     }],
     index: {
-
       banner: {
         imgs: [],
         currentSwiper: 0,
         autoplay: true
       },
       pdArea: {
-        tabs: [{
-          name: "热门推荐",
-          selected: true,
-          list: []
-        }, {
-          name: "休闲零食",
-          selected: false,
-          list: []
-        }, {
-          name: "营养食品",
-          selected: false,
-          list: []
-        }, {
-          name: "百货用品",
-          selected: false,
-          list: []
-        }],
+        tabs: [],
         tabsSliderIndex: 0
       }
     },
@@ -99,11 +82,7 @@ Page({
     var _self = this;
 
     var isLogin = ownRequest.isLogin();
-
-    // if (!isLogin) {
-    //   return;
-    // }
-
+    
     _self.setData({
       isLogin: isLogin
     })
@@ -123,7 +102,7 @@ Page({
 
     apiGlobal.dataSet({
       storeId: ownRequest.getCurrentStoreId(),
-      datetime: '2018-03-30'
+      datetime: util.formatTime(new Date())
     }, {
       success: function(res) {
         if (res.result == 1) {
@@ -131,8 +110,6 @@ Page({
           var productKind = res.data.productKind
           var cart = res.data.cart
           var personal = res.data.personal
-
-          index["currentStore"] = currentStore
 
           _self.setData({
             isLogin: isLogin,
@@ -166,7 +143,6 @@ Page({
         wx.setNavigationBarTitle({
           title: tabBar[i].navTitle
         })
-
       } else {
         tabBar[i].selected = false
       }

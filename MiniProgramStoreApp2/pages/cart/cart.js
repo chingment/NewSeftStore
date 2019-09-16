@@ -206,11 +206,10 @@ Component({
       return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
 
     },
-    loadData:function(e){
+    getPageData:function(e){
       var self=this
       apiCart.pageData({
         success: function (res) { 
-
           self.setData({initdata:res.data})
         }
       })

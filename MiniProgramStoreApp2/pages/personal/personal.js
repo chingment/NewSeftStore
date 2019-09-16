@@ -8,9 +8,12 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function (newVal, oldVal, changedPath) {
-        var _self=this
-        _self.setData({ isLogin: ownRequest.isLogin(), userInfo: newVal.userInfo})
+      observer: function(newVal, oldVal, changedPath) {
+        var _self = this
+        _self.setData({
+          isLogin: ownRequest.isLogin(),
+          userInfo: newVal.userInfo
+        })
       }
     },
     height: {
@@ -19,8 +22,30 @@ Component({
   },
   data: {},
   methods: {
-    goLogin: function (e) {
+    goLogin: function(e) {
       ownRequest.goLogin()
-    }
+    },
+    orderStatuItemClick: function(e) {
+
+      if (ownRequest.isLogin()) {
+        var url = e.currentTarget.dataset.url
+        wx.navigateTo({
+          url: url
+        })
+      } else {
+        ownRequest.goLogin()
+      }
+    },
+    navItemClick: function(e) {
+
+      if (ownRequest.isLogin()) {
+        var url = e.currentTarget.dataset.url
+        wx.navigateTo({
+          url: url
+        })
+      } else {
+        ownRequest.goLogin()
+      }
+    },
   }
 })

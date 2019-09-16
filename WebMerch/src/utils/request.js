@@ -96,7 +96,7 @@ service.interceptors.response.use(
      return Promise.reject(error);
     }
     // 增加请求重试次数
-    config.__retryCount += 1;
+    config.__retryCount += 1; 
     // 创建新的异步请求
     var backoff = new Promise(function(resolve) {
      setTimeout(function() {
