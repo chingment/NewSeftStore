@@ -43,11 +43,6 @@
           <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="展示价" prop="showPrice" align="left" min-width="20%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.showPrice }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
