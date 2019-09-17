@@ -42,7 +42,7 @@
       </view>
       <view class="col-nav" style="padding:0px 2px">
         <view class="container">
-          <view bindtap="navItemClick" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
+          <view class="col-nav-item" hover-class="none">
             <view class="item-left">
               <image src='/content/default/images/col_nav_icon_order.png'></image>
             </view>
