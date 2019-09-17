@@ -70,7 +70,7 @@
       </view>
 
       <block wx:if="{{!isLogin}}">
-        <button style="width:80%" class="btn bg-main btn-login" bindtap="goLogin">登录</button>
+        <button style="width:80%;color: #fff;" class="btn bg-main btn-login" bindtap="goLogin">登录</button>
       </block>
     </block>
 

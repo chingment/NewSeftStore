@@ -6,6 +6,13 @@ Page({
   data: {},
   onLoad: function (options) {
     var _this = this
+
+    var isClearCache = options.isClearCache
+
+    if (isClearCache != undefined) {
+      wx.clearStorage()
+    }
+    
     function getStoreList(lat, lng) {
       apiStore.list({
         lat: lat,

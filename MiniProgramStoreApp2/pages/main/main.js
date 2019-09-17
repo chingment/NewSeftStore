@@ -78,9 +78,8 @@ Page({
     var _self = this;
     _self.setData(data)
   },
-  onLoad: function() {
+  onLoad: function (options) {
     var _self = this;
-
     var isLogin = ownRequest.isLogin();
     
     _self.setData({

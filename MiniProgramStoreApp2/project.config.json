@@ -33,20 +33,34 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 3,
 			"list": [
-				{
-					"id": 0,
-					"name": "带参数页面测试",
-					"pathName": "pages/productdetails/productdetails",
-					"query": "id=7dff37f2387e4aa384151632b763a14d",
-					"scene": null
-				},
 				{
 					"id": 1,
 					"name": "操作结果",
 					"pathName": "pages/operate/operate",
 					"query": "id=ce9834e30971490ba7984e89f7e4b582&type=1"
+				},
+				{
+					"id": 1,
+					"name": "启动清理缓存",
+					"pathName": "pages/store/store",
+					"query": "isClearCache=true",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "商品详情",
+					"pathName": "pages/productdetails/productdetails",
+					"query": "id=420",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "订单列表",
+					"pathName": "pages/orderlist/orderlist",
+					"query": "status=2000",
+					"scene": null
 				}
 			]
 		}
