@@ -38,9 +38,9 @@
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="销售价" prop="salePrice" align="left" min-width="30%">
+      <el-table-column v-if="isDesktop" label="销售价" prop="skus" align="left" min-width="30%">
         <template slot-scope="scope">
-          <span>{{ scope.row.salePrice }}</span>
+          <span>{{ scope.row.skus[0].salePrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">

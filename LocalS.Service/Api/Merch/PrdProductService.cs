@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.CreateTime, u.DispalyImgUrls });
+                         select new { u.Id, u.Name, u.BriefDes, u.CreateTime, u.DispalyImgUrls });
 
 
             int total = query.Count();
@@ -102,16 +102,28 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                var prdKindNames = CurrentDb.PrdKind.Where(p => (from d in CurrentDb.PrdProductKind
+                                                                 where d.PrdProductId == item.Id
+                                                                 select d.PrdKindId).Contains(p.Id)).Select(m => m.Name).ToArray();
+                string str_prdKindNames = prdKindNames.Length != 0 ? string.Join(",", prdKindNames) : "";
+
+                var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == item.Id).ToList();
+
+                var list_Sku = new List<object>();
+
+                foreach (var prdProductSku in prdProductSkus)
+                {
+                    list_Sku.Add(new { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, SpecDes = prdProductSku.SpecDes });
+                }
 
                 olist.Add(new
                 {
                     Id = item.Id,
                     Name = item.Name,
+                    BriefDes = item.BriefDes,
                     MainImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
-                    KindNames = "",
-                    SubjectNames = "",
-                    SalePrice = 0,
-                    ShowPrice = 0,
+                    KindNames = str_prdKindNames,
+                    Skus = list_Sku,
                     CreateTime = item.CreateTime,
                 });
             }
@@ -237,29 +249,6 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult InitEdit(string operater, string merchId, string prdProductId)
         {
-
-            //var _prdProducts = CurrentDb.PrdProduct.ToList();
-
-            //foreach (var _prdProduct in _prdProducts)
-            //{
-            //    var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == _prdProduct.Id).FirstOrDefault();
-            //    if (prdProductSku == null)
-            //    {
-            //        prdProductSku = new PrdProductSku();
-
-            //        prdProductSku.Id = GuidUtil.New();
-            //        prdProductSku.MerchId = _prdProduct.MerchId;
-            //        prdProductSku.PrdProductId = _prdProduct.Id;
-            //        prdProductSku.Name = _prdProduct.Name;
-            //        prdProductSku.SpecDes = "规格";
-            //        prdProductSku.SalePrice = 10;
-            //        prdProductSku.CreateTime = DateTime.Now;
-            //        prdProductSku.Creator = operater;
-            //        CurrentDb.PrdProductSku.Add(prdProductSku);
-            //        CurrentDb.SaveChanges();
-            //    }
-            //}
-
             var ret = new RetPrdProductInitEdit();
             var prdProduct = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == prdProductId).FirstOrDefault();
             if (prdProduct != null)

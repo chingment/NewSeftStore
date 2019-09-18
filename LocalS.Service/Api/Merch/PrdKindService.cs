@@ -30,17 +30,17 @@ namespace LocalS.Service.Api.Merch
 
                 if (p_prdKind.Depth == 0)
                 {
-                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
+                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false };
                 }
                 else
                 {
                     if (p_prdKind.Depth >= 1)
                     {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true };
                     }
                     else
                     {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true };
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true };
                     }
                 }
 

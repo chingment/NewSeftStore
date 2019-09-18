@@ -23,7 +23,5 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string LogoImgUrl { get; set; }
-        public string BtnBuyImgUrl { get; set; }
-        public string BtnPickImgUrl { get; set; }
     }
 }

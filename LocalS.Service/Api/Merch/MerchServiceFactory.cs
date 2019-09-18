@@ -55,5 +55,13 @@ namespace LocalS.Service.Api.Merch
                 return new PrdSubjectService();
             }
         }
+
+        public static MachineService Machine
+        {
+            get
+            {
+                return new MachineService();
+            }
+        }
     }
 }
