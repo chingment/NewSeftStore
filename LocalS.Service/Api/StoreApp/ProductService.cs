@@ -24,9 +24,9 @@ namespace LocalS.Service.Api.StoreApp
         }
 
 
-        public PageEntity<PrdProductModel> GetPageList(int pageIndex, int pageSize, string storeId, string kindId)
+        public PageEntity<PrdProductModel2> GetPageList(int pageIndex, int pageSize, string storeId, string kindId)
         {
-            var pageEntiy = new PageEntity<PrdProductModel>();
+            var pageEntiy = new PageEntity<PrdProductModel2>();
 
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
@@ -56,7 +56,24 @@ namespace LocalS.Service.Api.StoreApp
                 var productModel = BizFactory.PrdProduct.GetProduct(storeId, item.PrdProductId);
                 if (productModel != null)
                 {
-                    pageEntiy.Items.Add(productModel);
+                    var prdProductModel2 = new PrdProductModel2();
+
+                    prdProductModel2.Id = productModel.Id;
+                    prdProductModel2.Name = productModel.Name;
+                    prdProductModel2.MainImgUrl = productModel.MainImgUrl;
+                    prdProductModel2.BriefDes = productModel.BriefDes;
+                    prdProductModel2.RefSku.Id = productModel.RefSku.Id;
+                    prdProductModel2.RefSku.ReceptionMode = productModel.RefSku.ReceptionMode;
+                    prdProductModel2.RefSku.SumQuantity = productModel.RefSku.SumQuantity;
+                    prdProductModel2.RefSku.LockQuantity = productModel.RefSku.LockQuantity;
+                    prdProductModel2.RefSku.SellQuantity = productModel.RefSku.SellQuantity;
+                    prdProductModel2.RefSku.IsOffSell = productModel.RefSku.IsOffSell;
+                    prdProductModel2.RefSku.SalePrice = productModel.RefSku.SalePrice;
+                    prdProductModel2.RefSku.SalePriceByVip = productModel.RefSku.SalePriceByVip;
+                    prdProductModel2.RefSku.ShowPrice = productModel.RefSku.ShowPrice;
+                    prdProductModel2.RefSku.SpecDes = productModel.RefSku.SpecDes;
+                    prdProductModel2.RefSku.IsShowPrice = productModel.RefSku.IsShowPrice;
+                    pageEntiy.Items.Add(prdProductModel2);
                 }
             }
 

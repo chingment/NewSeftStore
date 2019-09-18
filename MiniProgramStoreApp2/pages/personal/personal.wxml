@@ -49,8 +49,8 @@
             <view class="item-middle">
               <text class="title">我的订单</text>
             </view>
-            <view class='item-right' style="width:6rem" >
-              <text>查看全部订单</text>
+            <view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=0000" class='item-right' style="width:6rem" >
+              <text style="color:#c3c3c3">查看全部订单</text>
               <image src='/content/default/images/col_nav_right.png'></image>
             </view>
           </view>

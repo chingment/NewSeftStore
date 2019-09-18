@@ -4,7 +4,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()
 
-var getList = function(_this) {
+var getList = function (_this) {
   var currentTab;
   var currentTabIndex = -1;
   for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -29,24 +29,24 @@ var getList = function(_this) {
     status: status,
     caller: 1
   }, {
-    success: function(res) {
-      if (res.result == 1) {
-        var list
-        if (currentTab.pageIndex == 0) {
-          list = res.data
-        } else {
-          list = _this.data.tabs[currentTabIndex].list.concat(res.data)
+      success: function (res) {
+        if (res.result == 1) {
+          var list
+          if (currentTab.pageIndex == 0) {
+            list = res.data
+          } else {
+            list = _this.data.tabs[currentTabIndex].list.concat(res.data)
+          }
+
+          _this.data.tabs[currentTabIndex].list = list;
+
+          _this.setData({
+            tabs: _this.data.tabs
+          })
         }
-
-        _this.data.tabs[currentTabIndex].list = list;
-
-        _this.setData({
-          tabs: _this.data.tabs
-        })
-      }
-    },
-    fail: function() {}
-  })
+      },
+      fail: function () { }
+    })
 }
 
 Page({
@@ -58,37 +58,45 @@ Page({
     tag: "orderlist",
     scrollHeight: 0,
     tabsSliderIndex: -1,
-    tabs: [{
-      name: "待支付",
-      selected: false,
-      status: 2000,
-      pageIndex: 0,
-      list: null
-    }, {
-      name: "待取货",
-      selected: false,
-      status: 3000,
-      pageIndex: 0,
-      list: null
-    }, {
-      name: "已完成",
-      selected: false,
-      status: 4000,
-      pageIndex: 0,
-      list: null
-    }, {
-      name: "已失效",
-      selected: false,
-      status: 5000,
-      pageIndex: 0,
-      list: null
-    }]
+    tabs: [
+      {
+        name: "全部",
+        selected: false,
+        status: "0000",
+        pageIndex: 0,
+        list: null
+      },
+      {
+        name: "待支付",
+        selected: false,
+        status: 2000,
+        pageIndex: 0,
+        list: null
+      }, {
+        name: "待取货",
+        selected: false,
+        status: 3000,
+        pageIndex: 0,
+        list: null
+      }, {
+        name: "已完成",
+        selected: false,
+        status: 4000,
+        pageIndex: 0,
+        list: null
+      }, {
+        name: "已失效",
+        selected: false,
+        status: 5000,
+        pageIndex: 0,
+        list: null
+      }]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     var _this = this
     var wHeight = wx.getSystemInfoSync().windowHeight;
     var status = options.status == undefined ? "" : options.status
@@ -117,53 +125,53 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
+  onUnload: function () {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   },
   //tab点击
-  tabBarClick: function(e) {
+  tabBarClick: function (e) {
 
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var _this = this
@@ -182,7 +190,7 @@ Page({
 
     getList(_this)
   },
-  operate: function(e) {
+  operate: function (e) {
     var _this = this
 
     var opType = e.currentTarget.dataset.replyOptype
@@ -199,16 +207,16 @@ Page({
             wx.showModal({
               title: '提示',
               content: '确定要取消吗？',
-              success: function(sm) {
+              success: function (sm) {
                 if (sm.confirm) {
                   apiOrder.cancle({
                     id: id
                   }, {
-                    success: function(res) {
-                      getList(_this)
-                    },
-                    fail: function() {}
-                  })
+                      success: function (res) {
+                        getList(_this)
+                      },
+                      fail: function () { }
+                    })
                 }
               }
             })
@@ -218,12 +226,12 @@ Page({
         break;
       case "URL":
         wx.navigateTo({
-          url: opVal　　
+          url: opVal
         })
         break;
     }
   },
-  stopTouchMove: function() {
+  stopTouchMove: function () {
     return false;
   }
 })
