@@ -6,7 +6,7 @@ namespace WebApiStoreApp.Controllers
 {
     public class ProductController : OwnApiBaseController
     {
-
+        [AllowAnonymous]
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupProductList rup)
         {
@@ -16,7 +16,7 @@ namespace WebApiStoreApp.Controllers
 
         }
 
-
+        [AllowAnonymous]
         [HttpGet]
         public OwnApiHttpResponse Details([FromUri]RupProductDetails rup)
         {

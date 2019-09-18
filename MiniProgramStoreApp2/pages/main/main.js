@@ -68,23 +68,18 @@ Page({
     },
     cart: {
       blocks: [],
-      count:0,
-      sumPrice:0,
-      countBySelected:0,
-      sumPriceBySelected:0
+      count: 0,
+      sumPrice: 0,
+      countBySelected: 0,
+      sumPriceBySelected: 0
     }
   },
-  changeData: function(data) {
+  changeData: function (data) {
     var _self = this;
     _self.setData(data)
   },
   onLoad: function (options) {
     var _self = this;
-    var isLogin = ownRequest.isLogin();
-    
-    _self.setData({
-      isLogin: isLogin
-    })
 
     if (!ownRequest.isSelectedStore(true)) {
       return
@@ -103,30 +98,34 @@ Page({
       storeId: ownRequest.getCurrentStoreId(),
       datetime: util.formatTime(new Date())
     }, {
-      success: function(res) {
-        if (res.result == 1) {
-          var index = res.data.index
-          var productKind = res.data.productKind
-          var cart = res.data.cart
-          var personal = res.data.personal
+        success: function (res) {
+          if (res.result == 1) {
+            var index = res.data.index
+            var productKind = res.data.productKind
+            var cart = res.data.cart
+            var personal = res.data.personal
 
-          _self.setData({
-            isLogin: isLogin,
-            index: index,
-            productKind: productKind,
-            cart: cart,
-            personal: personal
-          })
+            if (personal.userInfo== null) {
+              storeage.setAccessToken(null)
+            }
 
-          storeage.setProductKind(productKind)
-          storeage.setCart(cart)
-        }
-      },
-      fail: function() {}
-    })
+            _self.setData({
+              isLogin: ownRequest.isLogin(),
+              index: index,
+              productKind: productKind,
+              cart: cart,
+              personal: personal
+            })
+
+            storeage.setProductKind(productKind)
+            storeage.setCart(cart)
+          }
+        },
+        fail: function () { }
+      })
 
   },
-  onShow:function(){
+  onShow: function () {
     if (!ownRequest.isSelectedStore(true)) {
       return
     }

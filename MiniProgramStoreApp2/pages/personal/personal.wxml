@@ -49,8 +49,9 @@
             <view class="item-middle">
               <text class="title">我的订单</text>
             </view>
-            <view class='item-right'>
-            
+            <view class='item-right' style="width:6rem" >
+              <text>查看全部订单</text>
+              <image src='/content/default/images/col_nav_right.png'></image>
             </view>
           </view>
         </view>

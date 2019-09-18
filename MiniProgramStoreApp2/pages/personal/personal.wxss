@@ -20,7 +20,7 @@
   flex: 1;
   height: 180rpx;
   width: 70%;
-  padding: 20rpx 0rpx 0rpx 70rpx;
+  padding: 20rpx 0rpx 0rpx 60rpx;
 }
 
 .personal-userinfo .item-right {
@@ -112,4 +112,5 @@
 .item-logingo{
  height:1rem;
   line-height:1rem;
+  font-size: .8rem;
 }
