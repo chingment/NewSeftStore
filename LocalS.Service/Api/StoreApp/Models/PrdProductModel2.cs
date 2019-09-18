@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.StoreApp
+namespace LocalS.Service.Api.StoreApp.Models
 {
-    public class RetProductKindPageData
+    public class PrdProductModel2
     {
-        public List<PrdKindModel> Tabs { get; set; }
- 
+
     }
 }

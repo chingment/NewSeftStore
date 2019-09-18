@@ -11,6 +11,8 @@ namespace LocalS.Service.Api.StoreApp
         public string Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+
+        public double Distance { get; set; }
         public string DistanceMsg { get; set; }
     }
 }

@@ -33,8 +33,10 @@ namespace LocalS.Service.Api.StoreApp
                     distanceMsg = string.Format("{0}km", distance.ToString("f2"));
                 }
 
-                storeModels.Add(new StoreModel { Id = m.Id, Name = m.Name, Address = m.Address, DistanceMsg = distanceMsg });
+                storeModels.Add(new StoreModel { Id = m.Id, Name = m.Name, Address = m.Address, Distance= distance, DistanceMsg = distanceMsg });
             }
+
+            storeModels = storeModels.OrderBy(m => m.Distance).ToList();
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", storeModels);

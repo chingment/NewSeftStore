@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreApp
     {
         public PrdKindModel()
         {
-            this.Child = new List<PrdProductModel>();
+            this.List = new List<PrdProductModel>();
         }
 
         public string Id { get; set; }
@@ -22,6 +22,10 @@ namespace LocalS.Service.Api.StoreApp
 
         public bool Selected { get; set; }
 
-        public List<PrdProductModel> Child { get; set; }
+        public List<PrdProductModel> List { get; set; }
+
+        public int PageIndex { get; set; }
+
+        public int Total { get; set; }
     }
 }
