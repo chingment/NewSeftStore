@@ -25,7 +25,7 @@ namespace LocalS.DAL
         public IDbSet<Agent> Agent { get; set; }
 
         public IDbSet<Merch>  Merch { get; set; }
-
+        public IDbSet<MerchMachine> MerchMachine { get; set; }
         public IDbSet<PrdKind> PrdKind { get; set; }
         public IDbSet<PrdSubject> PrdSubject { get; set; }
         public IDbSet<PrdProduct> PrdProduct { get; set; }

@@ -16,11 +16,11 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.Store
+            var query = (from u in CurrentDb.MerchMachine
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
+                         select new { u.Id, u.MachineId, u.Name, u.StoreId, u.CreateTime });
 
 
             int total = query.Count();
@@ -36,14 +36,13 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                var machine = CurrentDb.Machine.Where(m => m.Id == item.MachineId).FirstOrDefault();
 
                 olist.Add(new
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    MainImgUrl = item.MainImgUrl,
-                    Address = item.Address,
-                    Status = new { text = GetStatusText(item.IsOpen), value = GetStatusValue(item.IsOpen) },
+                    MainImgUrl = machine.MainImgUrl,
                     CreateTime = item.CreateTime,
                 });
             }

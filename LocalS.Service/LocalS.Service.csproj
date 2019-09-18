@@ -149,6 +149,7 @@
     <Compile Include="Api\Agent\UserService.cs" />
     <Compile Include="Api\Agent\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
+    <Compile Include="Api\Merch\MachineService.cs" />
     <Compile Include="Api\Merch\Models\ProductSkuModel.cs" />
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Api\Merch\RModels\RopUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopUserEdit.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupMachineGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdKindGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdSubjectGetList.cs" />
