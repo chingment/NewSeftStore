@@ -1,6 +1,6 @@
 <template>
   <div id="store_list" class="app-container">
-    <div class="filter-container">
+    <!-- <div class="filter-container">
       <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
@@ -8,35 +8,39 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         新建
       </el-button>
-    </div>
+    </div> -->
     <el-row v-loading="loading" :gutter="20">
 
-      <div v-if="listData.length>0">
-        <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
-          <el-card class="box-card">
-            <div slot="header" class="it-header clearfix">
-              <div class="left">
-                <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
-              </div>
-              <div class="right">
-                <el-button type="text" @click="handleUpdate(item)">管理</el-button>
-              </div>
+      <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
+        <el-card class="box-card">
+          <div slot="header" class="it-header clearfix">
+            <div class="left">
+              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
             </div>
-            <div class="it-component">
-              <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-              <div class="describe" />
+            <div class="right">
+              <el-button type="text" @click="handleUpdate(item)">管理</el-button>
             </div>
-          </el-card>
-        </el-col>
-      </div>
-      <div v-else>
-        <el-alert
-          title="数据为空"
-          type="info"
-          center
-          close-text="知道了"
-          :closable="false"
-        /></div>
+          </div>
+          <div class="it-component">
+            <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
+            <div class="describe" />
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-card class="box-card">
+          <div slot="header" class="it-header clearfix">
+            <div class="left" />
+            <el-button type="text" @click="handleCreate">新建</el-button>
+          </div>
+          <div class="it-component">
+
+            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card" @click="handleCreate"><i data-v-62e19c49="" class="el-icon-plus" /></div>
+
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
