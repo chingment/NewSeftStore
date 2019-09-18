@@ -10,10 +10,9 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string StoreId { get; set; }
         public int PageIndex { get; set; }
+        public int PageSize { get; set; }
         public string KindId { get; set; }
-
         public string SubjectId { get; set; }
-
         public string Name { get; set; }
     }
 }

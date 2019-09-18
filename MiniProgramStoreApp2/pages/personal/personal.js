@@ -25,27 +25,19 @@ Component({
     goLogin: function(e) {
       ownRequest.goLogin()
     },
-    orderStatuItemClick: function(e) {
-
-      if (ownRequest.isLogin()) {
-        var url = e.currentTarget.dataset.url
-        wx.navigateTo({
-          url: url
-        })
-      } else {
-        ownRequest.goLogin()
+    navigateToClick: function(e) {
+      var ischecklogin = e.currentTarget.dataset.ischecklogin
+      if (ischecklogin == "true") {
+        if (!ownRequest.isLogin()) {
+          ownRequest.goLogin()
+          return
+        }
       }
-    },
-    navItemClick: function(e) {
 
-      if (ownRequest.isLogin()) {
-        var url = e.currentTarget.dataset.url
-        wx.navigateTo({
-          url: url
-        })
-      } else {
-        ownRequest.goLogin()
-      }
-    },
+      var url = e.currentTarget.dataset.url
+      wx.navigateTo({
+        url: url
+      })
+    }
   }
 })

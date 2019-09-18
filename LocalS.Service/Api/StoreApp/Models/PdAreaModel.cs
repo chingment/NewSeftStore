@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,13 @@ namespace LocalS.Service.Api.StoreApp
         {
             public Tab()
             {
-                this.List = new List<PrdProductModel>();
+                this.List = new PageEntity<PrdProductModel>();
             }
 
             public string Id { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
-            public List<PrdProductModel> List { get; set; }
+            public PageEntity<PrdProductModel> List { get; set; }
         }
     }
 }

@@ -53,33 +53,14 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var prdKind in prdKinds)
             {
-
-                var prdProdcutIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == store.MerchId && m.StoreId == rup.StoreId).Select(m => m.PrdProductId).Distinct<string>().ToArray();
-                var prdProdcutKinds_query = (from o in CurrentDb.PrdProductKind where o.PrdKindId == prdKind.Id && prdProdcutIds.Contains(o.PrdProductId) select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).OrderByDescending(r => r.CreateTime);
-
-                var list = prdProdcutKinds_query.OrderByDescending(r => r.CreateTime).Take(6).ToList();
-
-                if (list.Count > 0)
+                var tab = new PdAreaModel.Tab();
+                tab.Id = prdKind.Id;
+                tab.Name = prdKind.Name;
+                tab.MainImgUrl = prdKind.MainImgUrl;
+                tab.List = StoreAppServiceFactory.Product.GetPageList(0, 6, rup.StoreId, prdKind.Id);
+                if (tab.List.Items.Count > 0)
                 {
-                    var tab = new PdAreaModel.Tab();
-                    tab.Id = prdKind.Id;
-                    tab.Name = prdKind.Name;
-                    tab.MainImgUrl = prdKind.MainImgUrl;
-
-                    foreach (var i in list)
-                    {
-                        var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, i.PrdProductId);
-
-                        if (productModel != null)
-                        {
-                            tab.List.Add(productModel);
-                        }
-                    }
-
-                    if (tab.List.Count > 0)
-                    {
-                        pdAreaModel.Tabs.Add(tab);
-                    }
+                    pdAreaModel.Tabs.Add(tab);
                 }
             }
 

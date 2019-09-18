@@ -1,7 +1,8 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiProduct = require('../../api/product.js')
+const apiCart = require('../../api/cart.js')
 
-var getList = function (_this) {
+var getList = function(_this) {
   var currentTab;
   var currentTabIndex = -1;
   for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -16,33 +17,40 @@ var getList = function (_this) {
     currentTab = _this.data.tabs[currentTabIndex];
   }
 
-  var pageIndex = currentTab.pageIndex
+  var pageIndex = currentTab.list.pageIndex
+  var pageSize = currentTab.list.pageSize
   var kindId = currentTab.id == undefined ? "" : currentTab.id
 
   apiProduct.list({
     storeId: ownRequest.getCurrentStoreId(),
     pageIndex: pageIndex,
+    pageSize: pageSize,
     kindId: kindId,
     name: ""
   }, {
-      success: function (res) {
-        if (res.result == 1) {
-          var list
-          if (currentTab.pageIndex == 0) {
-            list = res.data
-          } else {
-            list = _this.data.tabs[currentTabIndex].list.concat(res.data)
-          }
-
-          _this.data.tabs[currentTabIndex].list = list;
-
-          _this.setData({
-            tabs: _this.data.tabs
-          })
+    success: function(res) {
+      if (res.result == 1) {
+        var d = res.data
+        var items
+        if (currentTab.list.pageIndex == 0) {
+          items = d.items
+        } else {
+          items = _this.data.tabs[currentTabIndex].list.items.concat(d.items)
         }
-      },
-      fail: function () { }
-    })
+
+        _this.data.tabs[currentTabIndex].list.total = d.total
+        _this.data.tabs[currentTabIndex].list.pageSize = d.pageSize
+        _this.data.tabs[currentTabIndex].list.pageCount = d.pageCount
+        _this.data.tabs[currentTabIndex].list.pageIndex = d.pageIndex
+        _this.data.tabs[currentTabIndex].list.items = items;
+
+        _this.setData({
+          tabs: _this.data.tabs
+        })
+      }
+    },
+    fail: function() {}
+  })
 
 }
 
@@ -54,7 +62,7 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function (newVal, oldVal, changedPath) {
+      observer: function(newVal, oldVal, changedPath) {
 
         var _self = this
         _self.setData(newVal)
@@ -67,7 +75,7 @@ Component({
   data: {},
   methods: {
     itemClick(e) {
-  
+
       var _self = this
       var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
       var tabs = _self.data.tabs;
@@ -81,23 +89,48 @@ Component({
       _self.data.tabs = tabs
       this.setData(_self.data)
     },
-     productLoadMore: function (e) {
-      var _this = this
-      var index = e.currentTarget.dataset.replyIndex
-       console.log("productLoadMore.index:" + index)
+    addToCart: function (e) {
+      var _self = this
+      var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
+      var productSkus = new Array();
+      productSkus.push({
+        id: skuId,
+        quantity: 1,
+        selected: true,
+        receptionMode: 3
+      });
 
-       _this.data.tabs[index].pageIndex += 1
-       _this.setData({
-         tabs: _this.data.tabs
-       })
+      apiCart.operate({
+        storeId: ownRequest.getCurrentStoreId(),
+        operate: 2,
+        productSkus: productSkus
+      }, {
+          success: function (res) {
 
-       getList(_this)
+          },
+          fail: function () { }
+        })
     },
-    productRefesh: function (e) {
+    productLoadMore: function(e) {
+      var _this = this
+      var index = e.currentTarget.dataset.replyIndex
+      console.log("productLoadMore.index:" + index)
+      console.log("_this.data.tabs[index].pageIndex:" + _this.data.tabs[index].list.pageIndex)
+      console.log("_this.data.tabs[index].pageCount:" + _this.data.tabs[index].list.pageCountt - 1)
+      if (_this.data.tabs[index].list.pageIndex != _this.data.tabs[index].list.pageCount - 1) {
+        _this.data.tabs[index].list.pageIndex += 1
+        _this.setData({
+          tabs: _this.data.tabs
+        })
+
+        getList(_this)
+      }
+    },
+    productRefesh: function(e) {
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
 
-      _this.data.tabs[index].pageIndex = 0
+      _this.data.tabs[index].list.pageIndex = 0
 
       console.log("productLoadMore.index:" + index)
       getList(_this)

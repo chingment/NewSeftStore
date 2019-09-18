@@ -11,7 +11,7 @@
       <scroll-view class='kind-right-content {{tab.selected==true ? "":"hidden" }}' data-reply-index="{{tabIndex}}" scroll-y="true" bindscrolltolower="productLoadMore" bindscrolltoupper="productRefesh">
 
         <view class="prd-list-2">
-          <block wx:for="{{tab.list}}" wx:for-index="listIndex" wx:for-item="product" wx:key="listIndex">
+          <block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="product" wx:key="listIndex">
             <view class='it'>
               <view class="it-left">
                 <navigator class='imgurl' url="/pages/productdetails/productdetails?id={{product.id}}">
@@ -35,8 +35,8 @@
           </block>
         </view>
 
-
-        <view> 没有更多商品了哟......</view>
+        
+        <view class="nomore-tip" wx:if="{{tab.list.pageCount-1==tab.list.pageIndex}}" > 没有更多商品了哟......</view>
 
       </scroll-view>
     </block>

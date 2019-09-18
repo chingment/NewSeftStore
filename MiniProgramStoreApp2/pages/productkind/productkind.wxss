@@ -85,3 +85,7 @@
 
 
 
+.nomore-tip{
+  text-align: center;
+  color: #dbdbdb;
+}

@@ -82,6 +82,12 @@ Page({
 
   immeBuy: function (e) {
     var _this = this
+
+    if (!ownRequest.isLogin()) {
+      ownRequest.goLogin()
+      return
+    }
+    
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
     var productSkus = []
     productSkus.push({

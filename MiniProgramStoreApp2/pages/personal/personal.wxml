@@ -57,19 +57,19 @@
         </view>
       </view>
       <view class='personal-orderstatus'>
-        <div bindtap="orderStatuItemClick" data-url="/pages/orderlist/orderlist?status=2000" class="item" hover-class="none">
+        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000" class="item" hover-class="none">
           <image class='item-img' src='/content/default/images/order_status_waitpay.png'></image>
           <text class='item-title'>待支付</text>
         </div>
-        <div bindtap="orderStatuItemClick" data-url="/pages/orderlist/orderlist?status=3000" class="item" hover-class="none">
+        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000" class="item" hover-class="none">
           <image class='item-img' src='/content/default/images/order_status_pickup.png'></image>
           <text class='item-title'>待取货</text>
         </div>
-        <div bindtap="orderStatuItemClick" data-url="/pages/orderlist/orderlist?status=4000" class="item" hover-class="none">
+        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000" class="item" hover-class="none">
           <image class='item-img' src='/content/default/images/order_status_complete.png'></image>
           <text class='item-title'>已完成</text>
         </div>
-        <div bindtap="orderStatuItemClick" data-url="/pages/orderlist/orderlist?status=5000" class="item" hover-class="none">
+        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000" class="item" hover-class="none">
           <image class='item-img' src='/content/default/images/order_status_cancel.png'></image>
           <text class='item-title'>已失效</text>
         </div>
@@ -79,7 +79,7 @@
 
   <view class="col-nav">
     <view class="container">
-      <div bindtap="navItemClick" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
+      <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
         <view class="item-left">
           <image src='/content/default/images/col_nav_icon_coupon.png'></image>
         </view>
@@ -91,7 +91,7 @@
         </view>
       </div>
 
-      <div bindtap="navItemClick" data-url="/pages/notopen/notopen" class="col-nav-item" hover-class="none">
+      <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item" hover-class="none">
         <view class="item-left">
           <image src='/content/default/images/col_nav_icon_personalinfo.png'></image>
         </view>
@@ -103,7 +103,7 @@
         </view>
       </div>
 
-      <div bindtap="navItemClick" data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
+      <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
         <view class="item-left">
           <image src='/content/default/images/col_nav_icon_address.png'></image>
         </view>

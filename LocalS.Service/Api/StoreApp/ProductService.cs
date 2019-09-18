@@ -15,62 +15,53 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var olist = new List<object>();
-
-            var query = (from o in CurrentDb.PrdProduct
-
-                         select new { o.Id, o.Name, o.PrdKindIds, o.DispalyImgUrls, o.BriefDes, o.MainImgUrl, o.CreateTime }
-             );
-
-            if (rup.Name != null && rup.Name.Length > 0)
-            {
-                query = query.Where(p => p.Name.Contains(rup.Name));
-            }
-
-            //if (type != Enumeration.ProductType.Unknow)
-            //{
-            //    //query = query.Where(p => p.ProductCategoryId.ToString().StartsWith(categoryId.ToString()));
-            //}
-
-            //if (categoryId != 0)
-            //{
-            //    query = query.Where(p => p.ProductCategoryId.ToString().StartsWith(categoryId.ToString()));
-            //}
+            var pageEntiy = GetPageList(rup.PageIndex, rup.PageSize, rup.StoreId, rup.KindId);
 
 
-            if (!string.IsNullOrEmpty(rup.KindId))
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntiy);
+
+            return result;
+        }
+
+
+        public PageEntity<PrdProductModel> GetPageList(int pageIndex, int pageSize, string storeId, string kindId)
+        {
+            var pageEntiy = new PageEntity<PrdProductModel>();
+
+            pageEntiy.PageIndex = pageIndex;
+            pageEntiy.PageSize = pageSize;
+
+            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+
+            var query = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == store.MerchId && m.StoreId == storeId);
+
+
+            if (!string.IsNullOrEmpty(kindId))
             {
                 query = query.Where(p => (from d in CurrentDb.PrdProductKind
-                                          where d.PrdKindId == rup.KindId
-                                          select d.PrdProductId).Contains(p.Id));
+                                          where d.PrdKindId == kindId
+                                          select d.PrdProductId).Contains(p.PrdProductId));
             }
 
-            if (!string.IsNullOrEmpty(rup.SubjectId))
-            {
-                query = query.Where(p => (from d in CurrentDb.PrdProductSubject
-                                          where d.PrdSubjectId == rup.SubjectId
-                                          select d.PrdProductId).Contains(p.Id));
-            }
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            int pageSize = 10;
-
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * pageIndex).Take(pageSize);
 
             var list = query.ToList();
 
 
             foreach (var item in list)
             {
-                var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, item.Id);
+                var productModel = BizFactory.PrdProduct.GetProduct(storeId, item.PrdProductId);
                 if (productModel != null)
                 {
-                    olist.Add(productModel);
+                    pageEntiy.Items.Add(productModel);
                 }
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+            return pageEntiy;
 
-            return result;
         }
 
 

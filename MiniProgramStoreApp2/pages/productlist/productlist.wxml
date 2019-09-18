@@ -22,8 +22,8 @@
     <swiper-item class="item">
       <scroll-view scroll-top="{{tab.scrollTop}}" scroll-y="true" data-reply-index="{{index}}" style="height:{{scrollHeight}}px" bindscrolltolower="loadMore" bindscrolltoupper="refesh" bindscroll="scroll">
 
-        <view class='list-data prd-list-1' wx:if="{{tab.list.length>0}}">
-          <block wx:for="{{tab.list}}" wx:for-index="index" wx:for-item="product" wx:key="list">
+        <view class='list-data prd-list-1' wx:if="{{tab.list.items.length>0}}">
+          <block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="product" wx:key="list">
             <view class='it it-{{index%2}}'>
               <navigator class='imgurl' url="/pages/productdetails/productdetails?id={{product.id}}">
                 <image class="img" src="{{product.mainImgUrl}}"></image>
@@ -42,14 +42,9 @@
             </view>
           </block>
         </view>
-        <view class="list-emptytips" wx:else>
-          <view class="icon">
-            <image class="img" src='/content/default/images/list_emptytips_img.png'></image>
-          </view>
-          <view class="msg">
-            <text>~暂无数据~</text>
-          </view>
-        </view>
+
+        <view class="nomore-tip" wx:if="{{tab.list.pageCount-1==tab.list.pageIndex}}" > 没有更多商品了哟......</view>
+
       </scroll-view>
     </swiper-item>
   </block>
