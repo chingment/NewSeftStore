@@ -32,20 +32,23 @@ namespace LocalS.Service.Api.StoreApp
                 prdKindModel.Name = prdKind.Name;
                 prdKindModel.MainImgUrl = prdKind.MainImgUrl;
                 prdKindModel.Selected = false;
-                prdKindModel.PageIndex = 0;
 
-                var prdProdcutKinds_query = (from o in CurrentDb.PrdProductKind where o.PrdKindId == prdKind.Id select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).OrderByDescending(r => r.CreateTime);
+                var prdProdcutIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == store.MerchId && m.StoreId == rup.StoreId).Select(m => m.PrdProductId).Distinct<string>().ToArray();
+                var prdProdcutKinds_query = (from o in CurrentDb.PrdProductKind where o.PrdKindId == prdKind.Id && prdProdcutIds.Contains(o.PrdProductId) select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).OrderByDescending(r => r.CreateTime);
 
-                prdKindModel.Total = prdProdcutKinds_query.Count();
-
-                var prdProdcutKinds = prdProdcutKinds_query.Take(10).ToList();
+                prdKindModel.List.PageIndex = 0;
+                prdKindModel.List.PageSize = 10;
+                prdKindModel.List.Total = prdProdcutKinds_query.Count();
+                prdKindModel.List.PageCount = (prdKindModel.List.Total + prdKindModel.List.PageSize - 1) / prdKindModel.List.PageSize;
+    
+                var prdProdcutKinds = prdProdcutKinds_query.Take(prdKindModel.List.PageSize).ToList();
 
                 foreach (var prdProdcutKind in prdProdcutKinds)
                 {
                     var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, prdProdcutKind.PrdProductId);
                     if (productModel != null)
                     {
-                        prdKindModel.List.Add(productModel);
+                        prdKindModel.List.Items.Add(productModel);
                     }
                 }
 

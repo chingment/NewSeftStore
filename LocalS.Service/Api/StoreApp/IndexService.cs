@@ -54,7 +54,10 @@ namespace LocalS.Service.Api.StoreApp
             foreach (var prdKind in prdKinds)
             {
 
-                var list = (from o in CurrentDb.PrdProductKind where o.PrdKindId == prdKind.Id select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).OrderByDescending(r => r.CreateTime).Take(6).ToList();
+                var prdProdcutIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == store.MerchId && m.StoreId == rup.StoreId).Select(m => m.PrdProductId).Distinct<string>().ToArray();
+                var prdProdcutKinds_query = (from o in CurrentDb.PrdProductKind where o.PrdKindId == prdKind.Id && prdProdcutIds.Contains(o.PrdProductId) select new { o.Id, o.PrdProductId, o.PrdKindId, o.CreateTime }).OrderByDescending(r => r.CreateTime);
+
+                var list = prdProdcutKinds_query.OrderByDescending(r => r.CreateTime).Take(6).ToList();
 
                 if (list.Count > 0)
                 {
