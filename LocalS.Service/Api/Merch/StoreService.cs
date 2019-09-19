@@ -320,7 +320,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.MerchMachine
                          where
                          u.MerchId == merchId && u.StoreId == rup.StoreId
-                         select new { u.Id, u.MerchId, u.MachineId, u.Name, u.StoreId, u.CreateTime });
+                         select new { u.MerchId, u.MachineId, u.Name, u.StoreId, u.CreateTime });
 
             int total = query.Count();
 
@@ -338,7 +338,7 @@ namespace LocalS.Service.Api.Merch
 
                 olist.Add(new
                 {
-                    Id = item.Id,
+                    Id = item.MachineId,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
                     Status = MerchServiceFactory.Machine.GetStatus(),
@@ -360,7 +360,7 @@ namespace LocalS.Service.Api.Merch
             using (TransactionScope ts = new TransactionScope())
             {
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.MachineId).FirstOrDefault();
-                if (merchMachine != null)
+                if (merchMachine == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到商户的机器");
                 }
@@ -391,7 +391,7 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
             }
             return result;
         }
@@ -402,7 +402,7 @@ namespace LocalS.Service.Api.Merch
             using (TransactionScope ts = new TransactionScope())
             {
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.MachineId).FirstOrDefault();
-                if (merchMachine != null)
+                if (merchMachine == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到商户的机器");
                 }
@@ -418,7 +418,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
             }
             return result;
         }

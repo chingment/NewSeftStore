@@ -80,6 +80,22 @@ export function manageMachineGetMachineList(params) {
   })
 }
 
+export function addMachine(data) {
+  return request({
+    url: '/store/addMachine',
+    method: 'post',
+    data
+  })
+}
+
+export function removeMachine(data) {
+  return request({
+    url: '/store/removeMachine',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -90,5 +106,7 @@ export default {
   initManageProduct: initManageProduct,
   manageProductGetProductList: manageProductGetProductList,
   initManageMachine: initManageMachine,
-  manageMachineGetMachineList: manageMachineGetMachineList
+  manageMachineGetMachineList: manageMachineGetMachineList,
+  removeMachine: removeMachine,
+  addMachine: addMachine
 }

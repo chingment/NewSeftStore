@@ -8,7 +8,7 @@
               <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
             </div>
             <div class="right">
-              <el-button type="text" @click="handleUpdate(item)">管理</el-button>
+              <el-button type="text" @click="handleRemoveMachine(item)">移除</el-button>
             </div>
           </div>
           <div class="it-component">
@@ -33,7 +33,7 @@
     </el-row>
 
     <el-dialog title="添加机器" :visible.sync="dialogAddMachineIsVisible" width="800px">
-      <el-form ref="formByAddMachine" :rules="rulesByAddMachine" label-position="left" label-width="50px">
+      <el-form ref="formByAddMachine" :model="formByAddMachine" :rules="rulesByAddMachine" label-position="left" label-width="50px">
         <el-form-item label="店铺">
           <span>{{ storeName }}</span>
         </el-form-item>
@@ -57,7 +57,8 @@
 </template>
 
 <script>
-import { initManageMachine, manageMachineGetMachineList } from '@/api/store'
+import { MessageBox } from 'element-ui'
+import { initManageMachine, manageMachineGetMachineList, removeMachine, addMachine } from '@/api/store'
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneMachine',
@@ -76,8 +77,11 @@ export default {
         machineId: ''
       },
       rulesByAddMachine: {
-
+        machineId: [
+          { required: true, message: '请选择机器', trigger: 'change' }
+        ]
       },
+      storeId: '',
       storeName: '',
       formSelectMachines: [
       ]
@@ -95,6 +99,7 @@ export default {
     init() {
       var id = getUrlParam('id')
       this.loading = true
+      this.storeId = id
       this.listQuery.storeId = id
 
       initManageMachine({ id: id }).then(res => {
@@ -123,7 +128,38 @@ export default {
       this.dialogAddMachineIsVisible = true
     },
     handleAddMachine() {
-      this.dialogAddMachineIsVisible = false
+      this.$refs['formByAddMachine'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要添加该机器，慎重操作', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.formByAddMachine.storeId = this.storeId
+            addMachine(this.formByAddMachine).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.dialogAddMachineIsVisible = false
+                this.init()
+              }
+            })
+          })
+        }
+      })
+    },
+    handleRemoveMachine(item) {
+      MessageBox.confirm('确定要移除该机器，慎重操作', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeMachine({ storeId: this.storeId, machineId: item.id }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.init()
+          }
+        })
+      })
     }
   }
 }
