@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.StoreId = machine.StoreId;
             bizRop.ReserveMode = E_ReserveMode.OffLine;
             bizRop.SellChannelRefId = machine.Id;
-            bizRop.SellChannelRefType = E_StoreSellChannelRefType.Machine;
+            bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
 
             foreach (var item in rop.Skus)
             {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum E_StoreSellChannelRefType
+    public enum E_SellChannelRefType
     {
         Unknow = 0,
         Express = 1,
@@ -13,15 +13,14 @@ namespace LocalS.Entity
         Machine = 3
     }
 
-    [Table("StoreSellChannel")]
-    public class StoreSellChannel
+    [Table("SellChannel")]
+    public class SellChannel
     {
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        public string StoreId { get; set; }
-        public string Name { get; set; }
-        public E_StoreSellChannelRefType RefType { get; set; }
+        public string RefName { get; set; }
+        public E_SellChannelRefType RefType { get; set; }
         public string RefId { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

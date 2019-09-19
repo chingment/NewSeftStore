@@ -36,9 +36,9 @@ namespace LocalS.DAL
 
 
         public IDbSet<Store> Store { get; set; }
-        public IDbSet<StoreSellChannel> StoreSellChannel { get; set; }
-        public IDbSet<StoreSellChannelStock> StoreSellChannelStock { get; set; }
-        public IDbSet<StoreSellChannelStockLog> StoreSellChannelStockLog { get; set; }
+        public IDbSet<SellChannel> SellChannel { get; set; }
+        public IDbSet<SellChannelStock> SellChannelStock { get; set; }
+        public IDbSet<SellChannelStockLog> SellChannelStockLog { get; set; }
 
         
         public IDbSet<ClientCart> ClientCart { get; set; }

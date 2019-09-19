@@ -109,7 +109,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var productSku = BizFactory.PrdProduct.GetProductSku(rop.StoreId, item.Id);
+                    var productSku = BizFactory.PrdProduct.GetProductSku(item.Id);
                     if (productSku != null)
                     {
                         item.Name = productSku.Name;
@@ -386,7 +386,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     if (item.Status == E_OrderStatus.Payed)
                     {
-                        if (orderDetail.SellChannelRefType == E_StoreSellChannelRefType.Machine)
+                        if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
                             block.Tag.Desc = new FsField("取货码", "", item.PickCode, "#f18d00");
                         }

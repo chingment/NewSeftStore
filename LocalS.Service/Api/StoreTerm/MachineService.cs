@@ -76,11 +76,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             var productSkuModels = new Dictionary<string, ProductSkuModel>();
 
-            var machineStocks = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
             var productSkuIds = machineStocks.Select(m => m.PrdProductSkuId).Distinct();
             foreach (var productSkuId in productSkuIds)
             {
-                var productSku = BizFactory.PrdProduct.GetProductSku(storeId,productSkuId);
+                var productSku = BizFactory.PrdProduct.GetProductSku(productSkuId);
                 if (productSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
@@ -122,7 +122,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productKindModels = new List<ProductKindModel>();
 
             var productKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.IsDelete == false).ToList();
-            var productSkuIds = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.RefId == machineId && m.RefType == E_StoreSellChannelRefType.Machine && m.IsOffSell == false).Select(m => m.PrdProductSkuId).ToArray();
+            var productSkuIds = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefId == machineId && m.RefType == E_SellChannelRefType.Machine && m.IsOffSell == false).Select(m => m.PrdProductSkuId).ToArray();
             var productSkus = CurrentDb.PrdProduct.Where(m => productSkuIds.Contains(m.Id)).ToList();
 
             if (productKinds.Count > 0)
@@ -173,7 +173,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var slotProductSkuModels = new List<SlotProductSkuModel>();
 
-            var machineStocks = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
 
             var productSkus = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId).ToList();
 

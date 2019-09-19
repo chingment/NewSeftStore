@@ -19,7 +19,7 @@ namespace LocalS.BLL.Biz
         public E_OrderSource Source { get; set; }
         public E_ReserveMode ReserveMode { get; set; }
         public string SellChannelRefId { get; set; }
-        public E_StoreSellChannelRefType SellChannelRefType { get; set; }
+        public E_SellChannelRefType SellChannelRefType { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }

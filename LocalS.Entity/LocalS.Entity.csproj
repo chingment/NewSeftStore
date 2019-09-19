@@ -72,9 +72,9 @@
     <Compile Include="PrdSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Store.cs" />
-    <Compile Include="StoreSellChannel.cs" />
-    <Compile Include="StoreSellChannelStock.cs" />
-    <Compile Include="StoreSellChannelStockLog.cs" />
+    <Compile Include="SellChannel.cs" />
+    <Compile Include="SellChannelStock.cs" />
+    <Compile Include="SellChannelStockLog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

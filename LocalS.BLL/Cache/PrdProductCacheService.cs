@@ -24,7 +24,7 @@ namespace LocalS.BLL
             RedisHashUtil.Remove(redis_key_productSku_info, productSkuId);
         }
 
-        public PrdProductModel GetProduct(string storeId, string productId)
+        public PrdProductModel GetProduct(string productId)
         {
             //先从缓存信息读取商品信息
             PrdProductModel prdProductByCache = RedisHashUtil.Get<PrdProductModel>(redis_key_product_info, productId);
@@ -61,24 +61,24 @@ namespace LocalS.BLL
 
             //从缓存中取店铺的商品库存信息
 
-            var refSkuStock = CacheServiceFactory.StoreSellChannelStock.GetStock(storeId, prdProductByCache.RefSku.Id);
+            var refSkuStock = CacheServiceFactory.SellChannelStock.GetStock(prdProductByCache.RefSku.Id);
 
             if (refSkuStock == null)
             {
-                LogUtil.Info(string.Format("库存,Product,StoreId：{0},SkuId:{1},数据为NULL", storeId, prdProductByCache.RefSku.Id));
+                LogUtil.Info(string.Format("库存,Product,SkuId:{0},数据为NULL", prdProductByCache.RefSku.Id));
             }
             else
             {
                 if (refSkuStock.Stocks == null || refSkuStock.Stocks.Count == 0)
                 {
-                    LogUtil.Info(string.Format("库存,Product,StoreId：{0},SkuId:{1},Stocks为NULL", storeId, prdProductByCache.RefSku.Id));
+                    LogUtil.Info(string.Format("库存,Product,SkuId:{0},Stocks为NULL", prdProductByCache.RefSku.Id));
                 }
                 else
                 {
                     prdProductByCache.RefSku.ReceptionMode = Entity.E_ReceptionMode.Machine;
-                    prdProductByCache.RefSku.SumQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.SumQuantity);
-                    prdProductByCache.RefSku.LockQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.LockQuantity);
-                    prdProductByCache.RefSku.SellQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_StoreSellChannelRefType.Machine).Sum(m => m.SellQuantity);
+                    prdProductByCache.RefSku.SumQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.SumQuantity);
+                    prdProductByCache.RefSku.LockQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.LockQuantity);
+                    prdProductByCache.RefSku.SellQuantity = refSkuStock.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.SellQuantity);
                     prdProductByCache.RefSku.SalePrice = refSkuStock.Stocks[0].SalePrice;
                     prdProductByCache.RefSku.SalePriceByVip = refSkuStock.Stocks[0].SalePriceByVip;
                     prdProductByCache.RefSku.IsOffSell = refSkuStock.Stocks[0].IsOffSell;
@@ -90,7 +90,7 @@ namespace LocalS.BLL
             return prdProductByCache;
         }
 
-        public PrdProductSkuModel GetProductSku(string storeId, string productSkuId)
+        public PrdProductSkuModel GetProductSku(string productSkuId)
         {
 
             var prdProductSkuByCache = RedisHashUtil.Get<PrdProductSkuModel>(redis_key_productSku_info, productSkuId);
@@ -102,7 +102,7 @@ namespace LocalS.BLL
                 if (prdProductRefSkuByDb == null)
                     return null;
 
-                var prdProduct = GetProduct(storeId, prdProductRefSkuByDb.PrdProductId);
+                var prdProduct = GetProduct(prdProductRefSkuByDb.PrdProductId);
                 if (prdProduct == null)
                     return null;
 
@@ -118,16 +118,16 @@ namespace LocalS.BLL
                 RedisManager.Db.HashSetAsync(redis_key_productSku_info, productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuByCache), StackExchange.Redis.When.Always);
             }
 
-            var skuStock = CacheServiceFactory.StoreSellChannelStock.GetStock(storeId, productSkuId);
+            var skuStock = CacheServiceFactory.SellChannelStock.GetStock(productSkuId);
             if (skuStock == null)
             {
-                LogUtil.Info(string.Format("库存,ProductSku,StoreId：{0},SkuId:{1},数据为NULL", storeId, productSkuId));
+                LogUtil.Info(string.Format("库存,ProductSku,SkuId:{0},数据为NULL",  productSkuId));
             }
             else
             {
                 if (skuStock.Stocks == null || skuStock.Stocks.Count == 0)
                 {
-                    LogUtil.Info(string.Format("库存,ProductSku,StoreId：{0},SkuId:{1},Stocks为NULL", storeId, productSkuId));
+                    LogUtil.Info(string.Format("库存,ProductSku,SkuId:{0},Stocks为NULL", productSkuId));
                 }
                 else
                 {

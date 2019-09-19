@@ -115,12 +115,12 @@ namespace LocalS.Service.Api.Merch
 
 
                 //默认 快递商品库存
-                var storeSellChannel = new StoreSellChannel();
+                var storeSellChannel = new SellChannel();
                 storeSellChannel.Id = GuidUtil.New();
-                storeSellChannel.Name = "快递商品";
+                //storeSellChannel.Name = "快递商品";
                 storeSellChannel.MerchId = merchId;
-                storeSellChannel.StoreId = store.Id;
-                storeSellChannel.RefType = E_StoreSellChannelRefType.Express;
+                //storeSellChannel.StoreId = store.Id;
+                storeSellChannel.RefType = E_SellChannelRefType.Express;
                 storeSellChannel.RefId = GuidUtil.Empty();
                 storeSellChannel.CreateTime = DateTime.Now;
                 store.Creator = operater;
@@ -210,12 +210,12 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetStoreInitManageProduct();
 
-            var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_StoreSellChannelRefType.Machine).OrderBy(m => m.RefType).ToList();
+            //var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_StoreSellChannelRefType.Machine).OrderBy(m => m.RefType).ToList();
 
-            foreach (var storeSellChannel in storeSellChannels)
-            {
-                ret.SellChannels.Add(new StoreSellChannelModel { Name = storeSellChannel.Name, RefType = storeSellChannel.RefType, RefId = storeSellChannel.RefId });
-            }
+            //foreach (var storeSellChannel in storeSellChannels)
+            //{
+            //    ret.SellChannels.Add(new StoreSellChannelModel { Name = storeSellChannel.Name, RefType = storeSellChannel.RefType, RefId = storeSellChannel.RefId });
+            //}
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
@@ -225,18 +225,18 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
 
-            var query = (from u in CurrentDb.StoreSellChannelStock
+            var query = (from u in CurrentDb.SellChannelStock
                          where
-                         u.MerchId == merchId && u.StoreId == rup.StoreId
-                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.StoreId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
+                         u.MerchId == merchId 
+                         select new { u.Id, u.PrdProductSkuId, u.MerchId,  u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
 
             if (!string.IsNullOrEmpty(rup.SellChannelRefId))
             {
-                query = query.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rup.SellChannelRefId);
+                query = query.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rup.SellChannelRefId);
             }
             else
             {
-                query = query.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.RefType == E_StoreSellChannelRefType.Machine);
+                query = query.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine);
             }
 
             int total = query.Count();
@@ -251,7 +251,7 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-                var prdProductSku = BizFactory.PrdProduct.GetProductSku(item.StoreId, item.PrdProductSkuId);
+                var prdProductSku = BizFactory.PrdProduct.GetProductSku(item.PrdProductSkuId);
                 if (prdProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
@@ -374,19 +374,19 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.Mender = operater;
                 merchMachine.MendTime = DateTime.Now;
 
-                var storeSellChannel = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.MachineId).FirstOrDefault();
+                var storeSellChannel = CurrentDb.SellChannel.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId).FirstOrDefault();
                 if (storeSellChannel == null)
                 {
-                    storeSellChannel = new StoreSellChannel();
+                    storeSellChannel = new SellChannel();
                     storeSellChannel.Id = GuidUtil.New();
                     storeSellChannel.MerchId = merchId;
-                    storeSellChannel.StoreId = rop.StoreId;
-                    storeSellChannel.Name = merchMachine.Name;
-                    storeSellChannel.RefType = E_StoreSellChannelRefType.Machine;
+                    //storeSellChannel.StoreId = rop.StoreId;
+                    storeSellChannel.RefName = merchMachine.Name;
+                    storeSellChannel.RefType = E_SellChannelRefType.Machine;
                     storeSellChannel.RefId = rop.MachineId;
                     storeSellChannel.Creator = operater;
                     storeSellChannel.CreateTime = DateTime.Now;
-                    CurrentDb.StoreSellChannel.Add(storeSellChannel);
+                    CurrentDb.SellChannel.Add(storeSellChannel);
                 }
 
                 CurrentDb.SaveChanges();

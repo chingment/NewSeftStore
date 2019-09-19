@@ -18,7 +18,7 @@ namespace LocalS.BLL
         public List<Stock> Stocks { get; set; }
         public class Stock
         {
-            public E_StoreSellChannelRefType RefType { get; set; }
+            public E_SellChannelRefType RefType { get; set; }
             public string RefId { get; set; }
             public string SlotId { get; set; }
             public int SumQuantity { get; set; }

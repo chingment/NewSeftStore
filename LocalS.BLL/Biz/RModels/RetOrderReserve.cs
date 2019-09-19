@@ -26,7 +26,7 @@ namespace LocalS.BLL.Biz
         {
             this.Details = new List<DetailChild>();
         }
-        public E_StoreSellChannelRefType SellChannelRefType { get; set; }
+        public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public int Quantity { get; set; }
         public decimal OriginalAmount { get; set; }
@@ -42,7 +42,7 @@ namespace LocalS.BLL.Biz
                 this.Details = new List<DetailChildSon>();
                 this.SlotStock = new List<SlotStock>();
             }
-            public E_StoreSellChannelRefType SellChannelRefType { get; set; }
+            public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
             public string SkuId { get; set; }
             public string SkuName { get; set; }
@@ -62,7 +62,7 @@ namespace LocalS.BLL.Biz
         public class DetailChildSon
         {
             public string Id { get; set; }
-            public E_StoreSellChannelRefType SellChannelRefType { get; set; }
+            public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
             public string SkuId { get; set; }
@@ -80,7 +80,7 @@ namespace LocalS.BLL.Biz
 
         public class SlotStock
         {
-            public E_StoreSellChannelRefType SellChannelRefType { get; set; }
+            public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
             public string SkuId { get; set; }

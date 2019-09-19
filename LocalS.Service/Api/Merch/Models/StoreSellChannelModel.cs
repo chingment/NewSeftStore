@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Merch
         }
 
         public string Name { get; set; }
-        public E_StoreSellChannelRefType RefType { get; set; }
+        public E_SellChannelRefType RefType { get; set; }
         public string RefId { get; set; }
         public List<ProductSkuModel> ProductSkus { get; set; }
     }

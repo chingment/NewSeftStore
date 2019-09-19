@@ -33,7 +33,14 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
-            var query = CurrentDb.StoreSellChannelStock.Where(m => m.MerchId == store.MerchId && m.StoreId == storeId);
+            var machineIds = CurrentDb.MerchMachine.Where(m => m.StoreId == storeId).Select(m => m.MachineId).ToArray();
+
+            var query = CurrentDb.SellChannelStock.Where(m =>
+            m.MerchId == store.MerchId
+            && (
+            machineIds.Contains(m.RefId) && m.RefType == Entity.E_SellChannelRefType.Machine
+            )
+            );
 
 
             if (!string.IsNullOrEmpty(kindId))
@@ -53,7 +60,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var productModel = BizFactory.PrdProduct.GetProduct(storeId, item.PrdProductId);
+                var productModel = BizFactory.PrdProduct.GetProduct(item.PrdProductId);
                 if (productModel != null)
                 {
                     var prdProductModel2 = new PrdProductModel2();
@@ -84,14 +91,8 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Details(string operater, string clientUserId, RupProductDetails rup)
         {
-
-
             var result = new CustomJsonResult();
-
-
-            var productModel = BizFactory.PrdProduct.GetProduct(rup.StoreId, rup.Id);
-
-
+            var productModel = BizFactory.PrdProduct.GetProduct(rup.Id);
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);
 
             return result;
