@@ -2,7 +2,7 @@
   <div id="store_skus">
     <div class="filter-container">
       <el-select v-model="listQuery.sellChannelRefId" placeholder="全部机器" clearable style="width: 200px" class="filter-item">
-        <el-option v-for="item in sellChannels" :key="item" :label="item.name" :value="item.refId" />
+        <el-option v-for="(item,index) in sellChannels" :key="index" :label="item.name" :value="item.refId" />
       </el-select>
       <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -10,7 +10,7 @@
       </el-button>
     </div>
     <el-row v-loading="loading" :gutter="20">
-      <el-col v-for="productSku in listData" :key="productSku.id" :span="6" :xs="24" style="margin-bottom:20px">
+      <el-col v-for="(productSku,index) in listData" :key="index" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div class="above">
             <div class="above-des">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { initManageMachineProduct, manageMachineProductGetProductList } from '@/api/store'
+import { initManageProduct, manageProductGetProductList } from '@/api/store'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -78,7 +78,7 @@ export default {
       var id = getUrlParam('id')
       this.loading = true
       this.listQuery.storeId = id
-      initManageMachineProduct({ id: id }).then(res => {
+      initManageProduct({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.sellChannels = d.sellChannels
@@ -92,7 +92,7 @@ export default {
       console.log('getListData')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
-      manageMachineProductGetProductList(this.listQuery).then(res => {
+      manageProductGetProductList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

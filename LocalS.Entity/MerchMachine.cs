@@ -18,5 +18,7 @@ namespace LocalS.Entity
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string LogoImgUrl { get; set; }
+        public string Mender { get; set; }
+        public DateTime? MendTime { get; set; }
     }
 }

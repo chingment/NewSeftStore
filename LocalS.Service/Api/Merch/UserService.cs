@@ -14,34 +14,22 @@ namespace LocalS.Service.Api.Merch
 {
     public class UserService : BaseDbContext
     {
-        public string GetStatusText(bool isDisable)
+        public StatusModel GetStatus(bool isDisable)
         {
-            string text = "";
+            var status = new StatusModel();
+
             if (isDisable)
             {
-                text = "禁用";
+                status.Value = 2;
+                status.Text = "禁用";
             }
             else
             {
-                text = "正常";
+                status.Value = 1;
+                status.Text = "正常";
             }
 
-            return text;
-        }
-
-        public int GetStatusValue(bool isDisable)
-        {
-            int text = 0;
-            if (isDisable)
-            {
-                text = 2;
-            }
-            else
-            {
-                text = 1;
-            }
-
-            return text;
+            return status;
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupUserGetList rup)
@@ -77,7 +65,7 @@ namespace LocalS.Service.Api.Merch
                     FullName = item.FullName,
                     Email = item.Email,
                     PhoneNumber = item.PhoneNumber,
-                    Status = new { text = GetStatusText(item.IsDisable), value = GetStatusValue(item.IsDisable) },
+                    Status = GetStatus(item.IsDisable),
                     CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
                 });
             }

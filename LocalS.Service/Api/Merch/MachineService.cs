@@ -12,6 +12,13 @@ namespace LocalS.Service.Api.Merch
 {
     public class MachineService : BaseDbContext
     {
+
+        public StatusModel GetStatus()
+        {
+            var status = new StatusModel();
+            return status;
+        }
+
         public CustomJsonResult GetList(string operater, string merchId, RupMachineGetList rup)
         {
             var result = new CustomJsonResult();
@@ -43,6 +50,7 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
+                    Status = GetStatus(),
                     CreateTime = item.CreateTime,
                 });
             }

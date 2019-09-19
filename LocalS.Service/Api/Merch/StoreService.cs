@@ -13,34 +13,23 @@ namespace LocalS.Service.Api.Merch
 {
     public class StoreService : BaseDbContext
     {
-        public string GetStatusText(bool isOpen)
+
+        public StatusModel GetStatus(bool isOpen)
         {
-            string text = "";
+            var status = new StatusModel();
+
             if (isOpen)
             {
-                text = "营业中";
+                status.Value = 2;
+                status.Text = "营业中";
             }
             else
             {
-                text = "已关闭";
+                status.Value = 1;
+                status.Text = "已关闭";
             }
 
-            return text;
-        }
-
-        public int GetStatusValue(bool isOpen)
-        {
-            int text = 0;
-            if (isOpen)
-            {
-                text = 2;
-            }
-            else
-            {
-                text = 1;
-            }
-
-            return text;
+            return status;
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupStoreGetList rup)
@@ -74,7 +63,7 @@ namespace LocalS.Service.Api.Merch
                     Name = item.Name,
                     MainImgUrl = item.MainImgUrl,
                     Address = item.Address,
-                    Status = new { text = GetStatusText(item.IsOpen), value = GetStatusValue(item.IsOpen) },
+                    Status = GetStatus(item.IsOpen),
                     CreateTime = item.CreateTime,
                 });
             }
@@ -160,7 +149,7 @@ namespace LocalS.Service.Api.Merch
             ret.BriefDes = store.BriefDes;
             ret.DispalyImgUrls = store.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
             ret.IsOpen = store.IsOpen;
-            ret.Status = new { text = GetStatusText(store.IsOpen), value = GetStatusValue(store.IsOpen) };
+            ret.Status = GetStatus(store.IsOpen);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -217,9 +206,9 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult InitManageMachineProduct(string operater, string merchId, string storeId)
+        public CustomJsonResult InitManageProduct(string operater, string merchId, string storeId)
         {
-            var ret = new RetStoreInitManageMachineProduct();
+            var ret = new RetStoreInitManageProduct();
 
             var storeSellChannels = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_StoreSellChannelRefType.Machine).OrderBy(m => m.RefType).ToList();
 
@@ -231,7 +220,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult ManageMachineProductGetProductList(string operater, string merchId, RupStoreGetProductSkuList rup)
+        public CustomJsonResult ManageProductGetProductList(string operater, string merchId, RupStoreManageProductGetProductList rup)
         {
             var result = new CustomJsonResult();
 
@@ -286,6 +275,151 @@ namespace LocalS.Service.Api.Merch
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
 
+            return result;
+        }
+
+
+        public CustomJsonResult InitManageMachine(string operater, string merchId, string storeId)
+        {
+            var ret = new RetStoreInitManageMachine();
+
+            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+
+            ret.StoreName = store.Name;
+
+            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
+
+            foreach (var merchMachine in merchMachines)
+            {
+                bool disabled = false;
+                string value = merchMachine.MachineId;
+                string label = "";
+                if (string.IsNullOrEmpty(merchMachine.StoreId))
+                {
+                    label = string.Format("{0}(未使用)", merchMachine.Name);
+                    disabled = false;
+                }
+                else
+                {
+                    var l_store = CurrentDb.Store.Where(m => m.Id == merchMachine.StoreId).FirstOrDefault();
+                    label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.Name, l_store.Name);
+                    disabled = true;
+                }
+
+                ret.FormSelectMachines.Add(new { value = value, label = label, disabled = disabled });
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public CustomJsonResult ManageMachineGetMachineList(string operater, string merchId, RupStoreManageMachineGetMachineList rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            var query = (from u in CurrentDb.MerchMachine
+                         where
+                         u.MerchId == merchId && u.StoreId == rup.StoreId
+                         select new { u.Id, u.MerchId, u.MachineId, u.Name, u.StoreId, u.CreateTime });
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                var machine = CurrentDb.Machine.Where(m => m.Id == item.MachineId).FirstOrDefault();
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    MainImgUrl = machine.MainImgUrl,
+                    Status = MerchServiceFactory.Machine.GetStatus(),
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult AddMachine(string operater, string merchId, RopStoreAddMachine rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.MachineId).FirstOrDefault();
+                if (merchMachine != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到商户的机器");
+                }
+
+                if (!string.IsNullOrEmpty(merchMachine.StoreId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被使用");
+                }
+
+                merchMachine.StoreId = rop.StoreId;
+                merchMachine.Mender = operater;
+                merchMachine.MendTime = DateTime.Now;
+
+                var storeSellChannel = CurrentDb.StoreSellChannel.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.RefType == E_StoreSellChannelRefType.Machine && m.RefId == rop.MachineId).FirstOrDefault();
+                if (storeSellChannel == null)
+                {
+                    storeSellChannel = new StoreSellChannel();
+                    storeSellChannel.Id = GuidUtil.New();
+                    storeSellChannel.MerchId = merchId;
+                    storeSellChannel.StoreId = rop.StoreId;
+                    storeSellChannel.Name = merchMachine.Name;
+                    storeSellChannel.RefType = E_StoreSellChannelRefType.Machine;
+                    storeSellChannel.RefId = rop.MachineId;
+                    storeSellChannel.Creator = operater;
+                    storeSellChannel.CreateTime = DateTime.Now;
+                    CurrentDb.StoreSellChannel.Add(storeSellChannel);
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+            return result;
+        }
+
+        public CustomJsonResult RemoveMachine(string operater, string merchId, RopStoreRemoveMachine rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.MachineId).FirstOrDefault();
+                if (merchMachine != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到商户的机器");
+                }
+
+                if (string.IsNullOrEmpty(merchMachine.StoreId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被移除");
+                }
+
+                merchMachine.StoreId = null;
+                merchMachine.Mender = operater;
+                merchMachine.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
             return result;
         }
     }

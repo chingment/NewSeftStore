@@ -5,9 +5,6 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新建
-      </el-button>
     </div>
     <el-row v-loading="loading" :gutter="20">
 
@@ -19,7 +16,7 @@
                 <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
               </div>
               <div class="right">
-                <el-button type="text" @click="handleUpdate(item)">管理</el-button>
+                <el-button type="text" @click="handleUpdate(item)">设置</el-button>
               </div>
             </div>
             <div class="it-component">

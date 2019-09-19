@@ -14,6 +14,7 @@
     </div>
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="id" /></el-tab-pane>
+      <el-tab-pane label="机器信息" name="tabMachineMachine"><manage-pane-machine :store-id="id" /></el-tab-pane>
       <el-tab-pane label="机器商品" name="tabMachineProduct"><manage-pane-product :store-id="id" /></el-tab-pane>
     </el-tabs>
   </div>
@@ -22,9 +23,10 @@
 import { initManage } from '@/api/store'
 import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
+import managePaneMachine from './components/ManagePaneMachine'
 import managePaneProduct from './components/ManagePaneProduct'
 export default {
-  components: { managePaneBaseInfo, managePaneProduct },
+  components: { managePaneBaseInfo, managePaneMachine, managePaneProduct },
   data() {
     return {
       activeName: 'tabBaseInfo',

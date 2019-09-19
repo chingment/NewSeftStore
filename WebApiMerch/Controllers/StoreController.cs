@@ -54,16 +54,44 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitManageMachineProduct([FromUri]string id)
+        public OwnApiHttpResponse InitManageProduct([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Store.InitManageMachineProduct(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Store.InitManageProduct(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse ManageMachineProductGetProductList([FromUri]RupStoreGetProductSkuList rup)
+        public OwnApiHttpResponse ManageProductGetProductList([FromUri]RupStoreManageProductGetProductList rup)
         {
-            IResult result = MerchServiceFactory.Store.ManageMachineProductGetProductList(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Store.ManageProductGetProductList(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse InitManageMachine([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse ManageMachineGetMachineList([FromUri]RupStoreManageMachineGetMachineList rup)
+        {
+            IResult result = MerchServiceFactory.Store.ManageMachineGetMachineList(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse AddMachine([FromBody]RopStoreAddMachine rop)
+        {
+            IResult result = MerchServiceFactory.Store.AddMachine(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse RemoveMachine([FromBody]RopStoreRemoveMachine rop)
+        {
+            IResult result = MerchServiceFactory.Store.RemoveMachine(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

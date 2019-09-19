@@ -57,6 +57,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="Machine.cs" />
     <Compile Include="MerchMachine.cs" />
+    <Compile Include="MerchMachineBindLog.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderDetails.cs" />
     <Compile Include="OrderDetailsChild.cs" />
