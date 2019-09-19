@@ -155,6 +155,7 @@
     <Compile Include="Api\Merch\Models\StatusModel.cs" />
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
+    <Compile Include="Api\Merch\OrderService.cs" />
     <Compile Include="Api\Merch\PrdKindService.cs" />
     <Compile Include="Api\Merch\PrdProductService.cs" />
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupMachineGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupMachineGetStockList.cs" />
+    <Compile Include="Api\Merch\RModels\RupOrderGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdKindGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdSubjectGetList.cs" />

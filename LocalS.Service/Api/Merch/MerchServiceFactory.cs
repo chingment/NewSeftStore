@@ -63,5 +63,13 @@ namespace LocalS.Service.Api.Merch
                 return new MachineService();
             }
         }
+
+        public static OrderService Order
+        {
+            get
+            {
+                return new OrderService();
+            }
+        }
     }
 }
