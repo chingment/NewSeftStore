@@ -8,6 +8,24 @@ export function getList(params) {
   })
 }
 
+export function initStock(params) {
+  return request({
+    url: '/machine/initStock',
+    method: 'get',
+    params
+  })
+}
+
+export function getStockList(params) {
+  return request({
+    url: '/machine/getStockList',
+    method: 'get',
+    params
+  })
+}
+
 export default {
-  getList: getList
+  getList: getList,
+  initStock: initStock,
+  getStockList: getStockList
 }

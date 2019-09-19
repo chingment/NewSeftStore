@@ -13,7 +13,12 @@
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-            <div class="describe" />
+            <div class="describe">
+              <ul>
+                <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
+                <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li>
+              </ul>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -160,6 +165,11 @@ export default {
           }
         })
       })
+    },
+    handleViewStock(row) {
+      this.$router.push({
+        path: '/machine/stock?id=' + row.id
+      })
     }
   }
 }
@@ -214,6 +224,15 @@ white-space: nowrap;
       flex: 1;
       padding: 5px;
       font-size: 12px;
+
+      ul{
+        padding: 0px;
+        margin: 0px;
+         li{
+        height: 26px;
+        line-height: 26px;
+      }
+      }
     }
   }
 }

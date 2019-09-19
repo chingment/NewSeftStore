@@ -1,5 +1,5 @@
 <template>
-  <div id="store_list" class="app-container">
+  <div id="machine_list" class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -21,7 +21,12 @@
             </div>
             <div class="it-component">
               <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-              <div class="describe" />
+              <div class="describe">
+                <ul>
+                  <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
+                  <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li>
+                </ul>
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -77,23 +82,24 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleCreate() {
-      this.$router.push({
-        path: '/store/add'
-      })
-    },
     handleUpdate(row) {
       this.$router.push({
         path: '/store/manage?id=' + row.id
       })
+    },
+    handleViewStock(row) {
+      this.$router.push({
+        path: '/machine/stock?id=' + row.id
+      })
     }
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
 
-#store_list{
+#machine_list{
   padding: 20px;
 
   .it-header{
@@ -140,7 +146,17 @@ white-space: nowrap;
       flex: 1;
       padding: 5px;
       font-size: 12px;
+
+      ul{
+        padding: 0px;
+        margin: 0px;
+         li{
+        height: 26px;
+        line-height: 26px;
+      }
+      }
     }
+
   }
 }
 </style>

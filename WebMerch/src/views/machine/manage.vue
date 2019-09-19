@@ -22,9 +22,8 @@
 import { initManage } from '@/api/store'
 import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
-import managePaneProduct from './components/ManagePaneProduct'
 export default {
-  components: { managePaneBaseInfo, managePaneProduct },
+  components: { managePaneBaseInfo },
   data() {
     return {
       activeName: 'tabBaseInfo',

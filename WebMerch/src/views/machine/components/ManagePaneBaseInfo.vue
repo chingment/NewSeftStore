@@ -1,5 +1,5 @@
 <template>
-  <div id="store_baseinfo" v-loading="loading" class="app-container">
+  <div id="machine_baseinfo" v-loading="loading" class="app-container">
 
     <el-form v-show="!isEdit" class="noeditform" label-width="80px">
       <el-form-item label="名称">
@@ -241,7 +241,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-#store_baseinfo{
+#machine_baseinfo{
 .el-form .el-form-item{
   max-width: 600px;
 }
