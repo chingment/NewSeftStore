@@ -171,5 +171,28 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult Edit(string operater, string merchId, RopMachineEdit rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var isExist = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId != rop.Id && m.Name == rop.Name).FirstOrDefault();
+                if (isExist != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                }
+
+                var merchMachine = CurrentDb.MerchMachine.Where(m => m.Id == rop.Id).FirstOrDefault();
+                merchMachine.Name = rop.Name;
+                merchMachine.MendTime = DateTime.Now;
+                merchMachine.Mender = operater;
+                CurrentDb.SaveChanges();
+                ts.Complete();
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+            return result;
+        }
+
     }
 }
