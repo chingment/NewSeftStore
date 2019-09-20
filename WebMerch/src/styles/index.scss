@@ -191,3 +191,32 @@ border-color: #97a8be;
     .svg-icon{
     vertical-align: -.26em  !important;
     }
+
+
+    .row-title {
+      padding: 8px 0px;
+      border-bottom: 1px solid #DDD;
+      margin-bottom: 5px;
+      height: 35px;
+  }
+  
+  .row-title .pull-left {
+      float: left !important;
+  }
+  
+  .row-title h5 {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      display: inline-block;
+      text-indent: 8px;
+      border-left: 2px solid #88B7E0;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      margin-right: 8px;
+      font-size: 14px;
+  }
+
+  .el-dialog__body{
+    padding-top: 0px;
+  }
+  

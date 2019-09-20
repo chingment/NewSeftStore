@@ -13,7 +13,8 @@ namespace LocalS.Entity
         WaitPick = 3010,
         Picking = 3011,
         Completed = 4000,
-        Cancled = 5000
+        Cancled = 5000,
+        Exception = 6000
     }
 
     [Table("OrderDetailsChildSon")]
@@ -26,7 +27,7 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
-        public string SellChannelRefId{ get; set; }
+        public string SellChannelRefId { get; set; }
         public string OrderId { get; set; }
         public string OrderSn { get; set; }
         public string OrderDetailsId { get; set; }

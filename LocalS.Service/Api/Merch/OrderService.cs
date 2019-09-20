@@ -41,6 +41,49 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
+        public StatusModel GetSonStatus(E_OrderDetailsChildSonStatus orderStatus)
+        {
+            var status = new StatusModel();
+
+            switch (orderStatus)
+            {
+                case E_OrderDetailsChildSonStatus.Submitted:
+                    status.Value = 1000;
+                    status.Text = "已提交";
+                    break;
+                case E_OrderDetailsChildSonStatus.WaitPay:
+                    status.Value = 2000;
+                    status.Text = "待支付";
+                    break;
+                case E_OrderDetailsChildSonStatus.Payed:
+                    status.Value = 3000;
+                    status.Text = "已支付";
+                    break;
+                case E_OrderDetailsChildSonStatus.WaitPick:
+                    status.Value = 3010;
+                    status.Text = "待取货";
+                    break;
+                case E_OrderDetailsChildSonStatus.Picking:
+                    status.Value = 3011;
+                    status.Text = "取货中";
+                    break;
+                case E_OrderDetailsChildSonStatus.Completed:
+                    status.Value = 4000;
+                    status.Text = "已完成";
+                    break;
+                case E_OrderDetailsChildSonStatus.Cancled:
+                    status.Value = 5000;
+                    status.Text = "已取消";
+                    break;
+                case E_OrderDetailsChildSonStatus.Exception:
+                    status.Value = 6000;
+                    status.Text = "异常";
+                    break;
+            }
+            return status;
+        }
+
+
         public string GetSourceName(E_OrderSource orderSource)
         {
             string name = "";
@@ -68,14 +111,19 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderSn == null || o.Sn.Contains(rup.OrderSn)) &&
                          o.MerchId == merchId
-                         select new { o.Sn, o.Id, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmitTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
-
-            int total = query.Count();
+                         select new { o.Sn, o.Id, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmitTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
             {
                 query = query.Where(m => m.Status == rup.OrderStauts);
             }
+
+            if (!string.IsNullOrEmpty(rup.StoreId))
+            {
+                query = query.Where(m => m.StoreId == rup.StoreId);
+            }
+
+            int total = query.Count();
 
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
@@ -87,6 +135,40 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == item.Id).ToList();
+
+                List<object> olist_Details = new List<object>();
+                foreach (var orderDetail in orderDetails)
+                {
+                    List<object> sub_Skus = new List<object>();
+                    switch (orderDetail.SellChannelRefType)
+                    {
+                        case E_SellChannelRefType.Machine:
+
+                            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == item.Id).ToList();
+
+                            foreach (var orderDetailsChildSon in orderDetailsChildSons)
+                            {
+
+                                sub_Skus.Add(new
+                                {
+                                    PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId,
+                                    PrdProductSkuMainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
+                                    PrdProductSkuName = orderDetailsChildSon.PrdProductSkuName,
+                                    Quantity = orderDetailsChildSon.Quantity,
+                                    Status = GetSonStatus(orderDetailsChildSon.Status)
+                                });
+                            }
+
+                            break;
+                    }
+                    olist_Details.Add(new
+                    {
+                        SellChannelRefName = orderDetail.SellChannelRefName,
+                        SellChannelRefType = orderDetail.SellChannelRefType,
+                        Detials = sub_Skus
+                    });
+                }
 
                 olist.Add(new
                 {
@@ -102,7 +184,8 @@ namespace LocalS.Service.Api.Merch
                     Quantity = item.Quantity,
                     CreateTime = item.CreateTime,
                     Status = GetStatus(item.Status),
-                    SourceName = GetSourceName(item.Source)
+                    SourceName = GetSourceName(item.Source),
+                    Details = olist_Details
                 });
             }
 

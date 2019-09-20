@@ -101,6 +101,16 @@ namespace LocalS.BLL.Biz
                 order.StoreId = rop.StoreId;
                 order.StoreName = store.Name;
                 order.ClientUserId = rop.ClientUserId;
+
+                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
+                string clientUserName = "匿名";
+                if (clientUser != null)
+                {
+                    clientUserName = clientUser.Nickname;
+                }
+
+                order.ClientUserName = clientUserName;
+
                 order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                 order.Status = E_OrderStatus.WaitPay;
                 order.Source = rop.Source;

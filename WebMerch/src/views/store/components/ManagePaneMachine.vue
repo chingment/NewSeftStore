@@ -104,14 +104,13 @@ export default {
     init() {
       var id = getUrlParam('id')
       this.loading = true
+      console.log('this.storeId' + id)
       this.storeId = id
       this.listQuery.storeId = id
 
       initManageMachine({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.storeName = d.storeName
-          this.formSelectMachines = d.formSelectMachines
         }
         this.loading = false
       })
@@ -120,8 +119,8 @@ export default {
     },
     getListData(listQuery) {
       this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      manageMachineGetMachineList(this.listQuery).then(res => {
+      // this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
+      manageMachineGetMachineList(listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

@@ -13,8 +13,9 @@
       </el-dropdown>
     </div>
     <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="id" /></el-tab-pane>
-      <el-tab-pane label="机器信息" name="tabMachineMachine"><manage-pane-machine :store-id="id" /></el-tab-pane>
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="id" /></el-tab-pane>
+      <el-tab-pane label="机器信息" name="tabMachine"><manage-pane-machine :storeid="id" /></el-tab-pane>
+      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order :storeid="id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -23,8 +24,9 @@ import { initManage } from '@/api/store'
 import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneMachine from './components/ManagePaneMachine'
+import managePaneOrder from '@/views/order/list'
 export default {
-  components: { managePaneBaseInfo, managePaneMachine },
+  components: { managePaneBaseInfo, managePaneMachine, managePaneOrder },
   data() {
     return {
       activeName: 'tabBaseInfo',
@@ -37,15 +39,16 @@ export default {
   },
   watch: {
     '$route'(to, from) {
+      this.id = to.query.id
       this.init()
     }
   },
   created() {
+    this.id = getUrlParam('id')
     this.init()
   },
   methods: {
     init() {
-      this.id = getUrlParam('id')
       this.loading = true
       initManage({ id: this.id }).then(res => {
         if (res.result === 1) {

@@ -16,7 +16,31 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="订单号" fixed prop="sn" align="left" width="220">
+      <el-table-column type="expand">
+        <template slot-scope="scope">
+          <div v-for="(detail,index) in scope.row.details" :key="index">
+            <div><span>+ {{ detail.sellChannelRefName }} -> </span></div>
+            <table class="table-skus" style="width:600px">
+              <tr v-for="(sub_detail,sub_index) in detail.detials" :key="sub_index">
+                <td style="20%">
+                  <img :src="sub_detail.prdProductSkuMainImgUrl" style="width:50px;height:50px;">
+                </td>
+                <td style="20%">
+                  {{ sub_detail.prdProductSkuName }}
+                </td>
+                <td style="30%">
+                  x {{ sub_detail.quantity }}
+                </td>
+                <td style="30%">
+                  {{ sub_detail.status.text }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="订单号" prop="sn" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.sn }}</span>
         </template>
@@ -58,7 +82,7 @@
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="primary" size="mini" @click="dialogDetailsOpen(row)">
             查看
           </el-button>
         </template>
@@ -66,6 +90,111 @@
     </el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+
+    <el-dialog title="订单详情" :visible.sync="dialogDetailsIsVisible" width="800px">
+      <div>
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>基本信息</h5>
+          </div>
+        </div>
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label-width="80px" label="订单编号:" class="postInfo-container-item">
+                    {{ details.sn }}
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label-width="80px" label="店铺名称:" class="postInfo-container-item">
+                    {{ details.storeName }}
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="下单用户:" class="postInfo-container-item">
+                    {{ details.clientUserName }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="下单方式:" class="postInfo-container-item">
+                    {{ details.sourceName }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="下单时间:" class="postInfo-container-item">
+                    {{ details.submitTime }}
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="原金额:" class="postInfo-container-item">
+                    {{ details.originalAmount }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="优惠金额:" class="postInfo-container-item">
+                    {{ details.discountAmount }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="支付金额:" class="postInfo-container-item">
+                    {{ details.chargeAmount }}
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="状态:" class="postInfo-container-item">
+                    {{ details.status.text }}
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" />
+                <el-col :span="8" />
+              </el-row>
+            </div>
+          </el-col>
+        </el-form>
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>商品信息</h5>
+          </div>
+        </div>
+        <div v-for="(detail,index) in details.details" :key="index">
+          <div><span>+ {{ detail.sellChannelRefName }} -> </span></div>
+          <table class="table-skus" style="width:600px">
+            <tr v-for="(sub_detail,sub_index) in detail.detials" :key="sub_index">
+              <td style="20%">
+                <img :src="sub_detail.prdProductSkuMainImgUrl" style="width:50px;height:50px;">
+              </td>
+              <td style="20%">
+                {{ sub_detail.prdProductSkuName }}
+              </td>
+              <td style="30%">
+                x {{ sub_detail.quantity }}
+              </td>
+              <td style="30%">
+                {{ sub_detail.status.text }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogDetailsIsVisible = false">
+          关闭
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -76,6 +205,13 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 export default {
   name: 'OrderList',
   components: { Pagination },
+  props: {
+    storeid: {
+      type: String,
+      require: true,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: false,
@@ -86,18 +222,47 @@ export default {
         page: 1,
         limit: 10,
         clientName: undefined,
-        orderSn: undefined
+        orderSn: undefined,
+        storeId: undefined
       },
-      isDesktop: this.$store.getters.isDesktop
+      isDesktop: this.$store.getters.isDesktop,
+      dialogDetailsIsVisible: false,
+      details: {
+        sn: '',
+        storeName: '',
+        clientUserName: '',
+        sourceName: '',
+        quantity: '',
+        originalAmount: '',
+        discountAmount: '',
+        chargeAmount: '',
+        submitTime: '',
+        status: { text: '' },
+        details: undefined
+      }
+    }
+  },
+  watch: {
+    storeid: function(value) {
+      this.listQuery.storeId = value
+      console.log('this.listQuery.storeId 2 :' + this.listQuery.storeId)
+      this.init()
     }
   },
   created() {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+
+    this.listQuery.storeId = this.storeid
+    console.log('this.listQuery.storeId 1 :' + this.listQuery.storeId)
+
+    this.init()
   },
   methods: {
+    init() {
+      this.getListData()
+    },
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
@@ -114,16 +279,19 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleCreate() {
-      this.$router.push({
-        path: '/prdproduct/add'
-      })
-    },
-    handleUpdate(row) {
-      this.$router.push({
-        path: '/prdproduct/edit?id=' + row.id
-      })
+    dialogDetailsOpen(row) {
+      this.details = row
+      this.dialogDetailsIsVisible = true
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.table-skus{
+  margin-left: 20px;
+  td{
+    border: 0px  !important;
+  }
+}
+</style>
