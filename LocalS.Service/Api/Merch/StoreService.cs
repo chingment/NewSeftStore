@@ -135,7 +135,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult InitEdit(string operater, string merchId, string storeId)
+        public CustomJsonResult InitManageBaseInfo(string operater, string merchId, string storeId)
         {
             var result = new CustomJsonResult();
 

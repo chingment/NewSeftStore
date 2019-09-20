@@ -15,12 +15,48 @@ namespace LocalS.Service.Api.Merch
         {
             var status = new StatusModel();
 
+            switch (orderStatus)
+            {
+                case E_OrderStatus.Submitted:
+                    status.Value = 1000;
+                    status.Text = "已提交";
+                    break;
+                case E_OrderStatus.WaitPay:
+                    status.Value = 2000;
+                    status.Text = "待支付";
+                    break;
+                case E_OrderStatus.Payed:
+                    status.Value = 3000;
+                    status.Text = "已支付";
+                    break;
+                case E_OrderStatus.Completed:
+                    status.Value = 4000;
+                    status.Text = "已完成";
+                    break;
+                case E_OrderStatus.Cancled:
+                    status.Value = 5000;
+                    status.Text = "已取消";
+                    break;
+            }
             return status;
         }
 
         public string GetSourceName(E_OrderSource orderSource)
         {
-            return "";
+            string name = "";
+            switch (orderSource)
+            {
+                case E_OrderSource.Api:
+                    name = "开放接口";
+                    break;
+                case E_OrderSource.WechatMiniProgram:
+                    name = "微信小程序";
+                    break;
+                case E_OrderSource.Machine:
+                    name = "终端机器";
+                    break;
+            }
+            return name;
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupOrderGetList rup)

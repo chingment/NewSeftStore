@@ -1,37 +1,40 @@
 <template>
-  <div id="store_manage" class="app-container">
-    <div class="cur-store">
-      <span class="title">当前店铺:</span><span class="name">{{ curStore.name }}</span>
+  <div id="machine_manage" class="app-container">
+    <div class="cur-machine">
+      <span class="title">当前机器:</span><span class="name">{{ curMachine.name }}</span>
 
-      <el-dropdown trigger="click" @command="handleChangeStore">
+      <el-dropdown trigger="click" @command="handleChangeMachine">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="store in stores" :key="store.id" :command="store.id"> {{ store.name }}</el-dropdown-item>
+          <el-dropdown-item v-for="machine in machines" :key="machine.id" :command="machine.id"> {{ machine.name }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="id" /></el-tab-pane>
-      <el-tab-pane label="机器商品" name="tabMachineProduct"><manage-pane-product :store-id="id" /></el-tab-pane>
+      <el-tab-pane label="库存信息" name="tabStock"><manage-pane-stock :store-id="id" /></el-tab-pane>
+      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order :store-id="id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import { initManage } from '@/api/store'
+import { initManage } from '@/api/machine'
 import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
+import managePaneStock from './components/ManagePaneStock'
+import managePaneOrder from './components/ManagePaneOrder'
 export default {
-  components: { managePaneBaseInfo },
+  components: { managePaneBaseInfo, managePaneStock, managePaneOrder },
   data() {
     return {
       activeName: 'tabBaseInfo',
-      curStore: {
+      curMachine: {
         id: '',
         name: ''
       },
-      stores: []
+      machines: []
     }
   },
   watch: {
@@ -45,19 +48,20 @@ export default {
   methods: {
     init() {
       this.id = getUrlParam('id')
+      this.activeName = getUrlParam('tab')
       this.loading = true
       initManage({ id: this.id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.curStore = d.curStore
-          this.stores = d.stores
+          this.curMachine = d.curMachine
+          this.machines = d.machines
         }
         this.loading = false
       })
     },
-    handleChangeStore(command) {
+    handleChangeMachine(command) {
       this.$router.push({
-        path: '/store/manage?id=' + command
+        path: '/machine/manage?id=' + command + '&tab=' + this.activeName
       })
     },
     handleClick(tab, event) {
@@ -68,9 +72,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-#store_manage{
+#machine_manage{
   padding-top: 0px;
-  .cur-store{
+  .cur-machine{
   font-size: 14px;
   line-height: 60px;
    .title{

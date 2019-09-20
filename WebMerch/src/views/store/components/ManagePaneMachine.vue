@@ -168,7 +168,12 @@ export default {
     },
     handleViewStock(row) {
       this.$router.push({
-        path: '/machine/stock?id=' + row.id
+        path: '/machine/manage?id=' + row.id + '&tab=tabStock'
+      })
+    },
+    handleViewOrder(row) {
+      this.$router.push({
+        path: '/machine/manage?id=' + row.id + '&tab=tabOrder'
       })
     }
   }
@@ -228,6 +233,7 @@ white-space: nowrap;
       ul{
         padding: 0px;
         margin: 0px;
+        list-style: none;
          li{
         height: 26px;
         line-height: 26px;

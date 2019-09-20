@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetMachineInitStock
+    public class RetMachineInitManage
     {
-        public RetMachineInitStock()
+        public RetMachineInitManage()
         {
             this.CurMachine = new MachineModel();
             this.Machines = new List<MachineModel>();

@@ -1,18 +1,5 @@
 <template>
   <div id="machine_stock">
-    <div class="cur-machine">
-      <span class="title">当前机器:</span><span class="name">{{ curMachine.name }}</span>
-
-      <el-dropdown trigger="click" @command="handleChangeMachine">
-        <span class="el-dropdown-link">
-          切换<i class="el-icon-arrow-down el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="machine in machines" :key="machine.id" :command="machine.id"> {{ machine.name }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
-
     <div class="filter-container">
       <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -53,16 +40,14 @@
 </template>
 
 <script>
-import { initStock, getStockList } from '@/api/machine'
+import { initManageStock, manageStockGetStockList } from '@/api/machine'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
-  name: 'StoreList',
+  name: 'ManagePaneStock',
   components: { Pagination },
   data() {
     return {
-      curMachine: undefined,
-      machines: [],
       loading: false,
       listTotal: 0,
       listQuery: {
@@ -71,8 +56,7 @@ export default {
         name: undefined,
         machineId: undefined
       },
-      listData: [],
-      activeNames: ''
+      listData: []
     }
   },
   watch: {
@@ -88,11 +72,9 @@ export default {
       var id = getUrlParam('id')
       this.loading = true
       this.listQuery.machineId = id
-      initStock({ id: id }).then(res => {
+      initManageStock({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.curMachine = d.curMachine
-          this.machines = d.machines
         }
         this.loading = false
       })
@@ -103,7 +85,7 @@ export default {
       console.log('getListData')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
-      getStockList(this.listQuery).then(res => {
+      manageStockGetStockList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -115,11 +97,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getListData()
-    },
-    handleChangeMachine(command) {
-      this.$router.push({
-        path: '/machine/stock?id=' + command
-      })
     }
   }
 }
@@ -188,17 +165,6 @@ color: #e6a23c;
           .el-button{
      font-size: 12px ;
      padding: 6px 12px;
-   }
-  }
-
-  .cur-machine{
-  font-size: 14px;
-  line-height: 60px;
-   .title{
-    color: #5e6d82;
-   }
-   .name{
-    padding: 0 10px;
    }
   }
 }

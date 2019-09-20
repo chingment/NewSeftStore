@@ -8,17 +8,33 @@ export function getList(params) {
   })
 }
 
-export function initStock(params) {
+export function initManage(params) {
   return request({
-    url: '/machine/initStock',
+    url: '/machine/initManage',
     method: 'get',
     params
   })
 }
 
-export function getStockList(params) {
+export function initManageBaseInfo(params) {
   return request({
-    url: '/machine/getStockList',
+    url: '/machine/initManageBaseInfo',
+    method: 'get',
+    params
+  })
+}
+
+export function initManageStock(params) {
+  return request({
+    url: '/machine/initManageStock',
+    method: 'get',
+    params
+  })
+}
+
+export function manageStockGetStockList(params) {
+  return request({
+    url: '/machine/manageStockGetStockList',
     method: 'get',
     params
   })
@@ -26,6 +42,8 @@ export function getStockList(params) {
 
 export default {
   getList: getList,
-  initStock: initStock,
-  getStockList: getStockList
+  initManage: initManage,
+  initManageBaseInfo: initManageBaseInfo,
+  initManageStock: initManageStock,
+  manageStockGetStockList: manageStockGetStockList
 }

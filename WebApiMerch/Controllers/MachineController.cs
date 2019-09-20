@@ -19,16 +19,30 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitStock([FromUri]string id)
+        public OwnApiHttpResponse InitManage([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Machine.InitStock(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Machine.InitManage(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetStockList([FromUri]RupMachineGetStockList rup)
+        public OwnApiHttpResponse InitManageBaseInfo([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Machine.GetStockList(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Machine.InitManageBaseInfo(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse InitManageStock([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.Machine.InitManageStock(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse ManageStockGetStockList([FromUri]RupMachineGetStockList rup)
+        {
+            IResult result = MerchServiceFactory.Machine.ManageStockGetStockList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

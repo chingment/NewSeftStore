@@ -24,7 +24,7 @@
               <div class="describe">
                 <ul>
                   <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
-                  <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li>
+                  <li><el-button type="text" style="color:#67c23a" @click="handleViewOrder(item)">订单信息</el-button></li>
                 </ul>
               </div>
             </div>
@@ -84,12 +84,17 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/store/manage?id=' + row.id
+        path: '/machine/manage?id=' + row.id + '&tab=tabBaseInfo'
       })
     },
     handleViewStock(row) {
       this.$router.push({
-        path: '/machine/stock?id=' + row.id
+        path: '/machine/manage?id=' + row.id + '&tab=tabStock'
+      })
+    },
+    handleViewOrder(row) {
+      this.$router.push({
+        path: '/machine/manage?id=' + row.id + '&tab=tabOrder'
       })
     }
 
@@ -150,6 +155,7 @@ white-space: nowrap;
       ul{
         padding: 0px;
         margin: 0px;
+        list-style: none;
          li{
         height: 26px;
         line-height: 26px;

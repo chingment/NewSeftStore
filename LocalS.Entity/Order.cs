@@ -19,7 +19,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Machine = 1,
         Api = 2,
-        MiniProgram = 3
+        WechatMiniProgram = 3
 
     }
 

@@ -49,7 +49,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse InitManageBaseInfo([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Store.InitEdit(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Store.InitManageBaseInfo(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 

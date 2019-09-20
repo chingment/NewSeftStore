@@ -161,7 +161,9 @@
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\PrdSubjectService.cs" />
-    <Compile Include="Api\Merch\RModels\RetMachineInitStock.cs" />
+    <Compile Include="Api\Merch\RModels\RetMachineInitManage.cs" />
+    <Compile Include="Api\Merch\RModels\RetMachineInitManageBaseInfo.cs" />
+    <Compile Include="Api\Merch\RModels\RetMachineInitManageStock.cs" />
     <Compile Include="Api\Merch\RModels\RetPrdKindInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetPrdKindInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetPrdSubjectInitAdd.cs" />

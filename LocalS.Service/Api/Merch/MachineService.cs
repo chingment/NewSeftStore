@@ -67,9 +67,9 @@ namespace LocalS.Service.Api.Merch
         }
 
 
-        public CustomJsonResult InitStock(string operater, string merchId, string machineId)
+        public CustomJsonResult InitManage(string operater, string merchId, string machineId)
         {
-            var ret = new RetMachineInitStock();
+            var ret = new RetMachineInitManage();
 
             var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
 
@@ -89,8 +89,39 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
+        public CustomJsonResult InitManageBaseInfo(string operater, string merchId, string machineId)
+        {
+            var result = new CustomJsonResult();
 
-        public CustomJsonResult GetStockList(string operater, string merchId, RupMachineGetStockList rup)
+            var ret = new RetMachineInitManageBaseInfo();
+
+            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
+
+            ret.Id = merchMachine.MachineId;
+            ret.Name = merchMachine.Name;
+            ret.Status = GetStatus();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+
+        }
+
+
+        public CustomJsonResult InitManageStock(string operater, string merchId, string machineId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetMachineInitManageStock();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+
+        }
+
+
+        public CustomJsonResult ManageStockGetStockList(string operater, string merchId, RupMachineGetStockList rup)
         {
             var result = new CustomJsonResult();
 
