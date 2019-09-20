@@ -13,9 +13,33 @@ namespace WebApiMerch.Controllers
     {
 
         [HttpGet]
-        public OwnApiHttpResponse GetIndexPageData([FromUri]string mId, [FromUri]string uId)
+        public OwnApiHttpResponse GetIndexPageData()
         {
-            IResult result = MerchServiceFactory.Home.GetIndexPageData(this.CurrentUserId, mId, uId);
+            IResult result = MerchServiceFactory.Home.GetIndexPageData(this.CurrentUserId, this.CurrentMerchId);
+
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetTodaySummary()
+        {
+            IResult result = MerchServiceFactory.Home.GetTodaySummary(this.CurrentUserId, this.CurrentMerchId);
+
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetStoreGmvRl()
+        {
+            IResult result = MerchServiceFactory.Home.GetStoreGmvRl(this.CurrentUserId, this.CurrentMerchId);
+
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetProductSkuSaleRl()
+        {
+            IResult result = MerchServiceFactory.Home.GetProductSkuSaleRl(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }

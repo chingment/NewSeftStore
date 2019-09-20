@@ -8,6 +8,14 @@ export function getList(params) {
   })
 }
 
+export function edit(data) {
+  return request({
+    url: '/machine/edit',
+    method: 'post',
+    data
+  })
+}
+
 export function initManage(params) {
   return request({
     url: '/machine/initManage',
@@ -42,6 +50,7 @@ export function manageStockGetStockList(params) {
 
 export default {
   getList: getList,
+  edit: edit,
   initManage: initManage,
   initManageBaseInfo: initManageBaseInfo,
   initManageStock: initManageStock,

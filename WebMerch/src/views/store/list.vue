@@ -9,6 +9,11 @@
         新建
       </el-button>
     </div> -->
+
+    <div class="circle-status-bar">
+      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
+      <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
+    </div>
     <el-row v-loading="loading" :gutter="20">
 
       <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">

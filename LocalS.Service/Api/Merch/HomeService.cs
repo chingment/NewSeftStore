@@ -13,7 +13,28 @@ namespace LocalS.Service.Api.Merch
 {
     public class HomeService
     {
-        public CustomJsonResult GetIndexPageData(string operater, string mId, string uId)
+        public CustomJsonResult GetIndexPageData(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            return result;
+        }
+
+        public CustomJsonResult GetTodaySummary(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            return result;
+        }
+
+        public CustomJsonResult GetStoreGmvRl(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            return result;
+        }
+
+        public CustomJsonResult GetProductSkuSaleRl(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 

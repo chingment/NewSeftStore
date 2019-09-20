@@ -183,7 +183,7 @@ namespace LocalS.BLL.Biz
                             orderDetails.SellChannelRefId = GuidUtil.Empty();
                             break;
                         case E_SellChannelRefType.Machine:
-                            var machine = CurrentDb.MerchMachine.Where(m => m.MerchId == order.MerchId && m.MerchId == detail.SellChannelRefId).FirstOrDefault();
+                            var machine = CurrentDb.MerchMachine.Where(m => m.MerchId == order.MerchId && m.MachineId == detail.SellChannelRefId).FirstOrDefault();
                             if (machine == null)
                             {
                                 LogUtil.Info("machine:为空");

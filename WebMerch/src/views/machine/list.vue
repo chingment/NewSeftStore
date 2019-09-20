@@ -1,45 +1,45 @@
 <template>
   <div id="machine_list" class="app-container">
+
+    <div class="circle-status-bar">
+      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
+      <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
+      <span class="circle-status circle-status-3" /> <span class="name">异常</span>
+    </div>
     <div class="filter-container">
-      <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.name" placeholder="机器名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
     </div>
     <el-row v-loading="loading" :gutter="20">
 
-      <div v-if="listData.length>0">
-        <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
-          <el-card class="box-card">
-            <div slot="header" class="it-header clearfix">
-              <div class="left">
-                <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
-              </div>
-              <div class="right">
-                <el-button type="text" @click="handleUpdate(item)">设置</el-button>
-              </div>
+      <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
+        <el-card class="box-card">
+          <div slot="header" class="it-header clearfix">
+            <div class="left">
+              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
             </div>
-            <div class="it-component">
-              <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-              <div class="describe">
-                <ul>
-                  <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
-                  <li><el-button type="text" style="color:#67c23a" @click="handleViewOrder(item)">订单信息</el-button></li>
-                </ul>
-              </div>
+            <div class="right">
+              <el-button type="text" @click="handleUpdate(item)">设置</el-button>
             </div>
-          </el-card>
-        </el-col>
-      </div>
-      <div v-else>
-        <el-alert
-          title="数据为空"
-          type="info"
-          center
-          close-text="知道了"
-          :closable="false"
-        /></div>
+          </div>
+          <div class="it-component">
+            <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
+            <div class="describe">
+              <ul>
+                <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
+                <li><el-button type="text" style="color:#67c23a" @click="handleViewOrder(item)">订单信息</el-button></li>
+              </ul>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
+
+    <div v-show="listData.length<=0" class="list-empty">
+      <span>暂无数据</span>
+    </div>
   </div>
 </template>
 

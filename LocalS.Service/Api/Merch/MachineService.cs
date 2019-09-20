@@ -125,6 +125,13 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            string[] productSkuIds = new string[] { };
+            if (!string.IsNullOrEmpty(rup.ProductSkuName))
+            {
+                productSkuIds = CurrentDb.PrdProductSku.Where(m => m.Name.Contains(rup.ProductSkuName)).Select(m => m.Id).ToArray();
+            }
+
+
             var query = (from u in CurrentDb.SellChannelStock
                          where
                          u.MerchId == merchId &&
@@ -136,6 +143,11 @@ namespace LocalS.Service.Api.Merch
 
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
+
+            if (productSkuIds.Length > 0)
+            {
+                query = query.Where(m => productSkuIds.Contains(m.PrdProductSkuId));
+            }
 
             query = query.OrderByDescending(r => r.PrdProductSkuId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
@@ -183,7 +195,7 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
                 }
 
-                var merchMachine = CurrentDb.MerchMachine.Where(m => m.Id == rop.Id).FirstOrDefault();
+                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.Id).FirstOrDefault();
                 merchMachine.Name = rop.Name;
                 merchMachine.MendTime = DateTime.Now;
                 merchMachine.Mender = operater;
