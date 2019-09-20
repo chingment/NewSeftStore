@@ -51,7 +51,6 @@ namespace LocalS.Entity
         public DateTime? PayTime { get; set; }
         public DateTime? CompletedTime { get; set; }
         public DateTime? CancledTime { get; set; }
-
         public E_OrderSource Source { get; set; }
         public E_OrderStatus Status { get; set; }
         public string CancelReason { get; set; }
@@ -59,13 +58,13 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
         public E_OrderPayWay PayWay { get; set; }
         public string PayPrepayId { get; set; }
         public DateTime? PayExpireTime { get; set; }
         public string PayQrCodeUrl { get; set; }
         public string PickCode { get; set; }
         public DateTime? PickCodeExpireTime { get; set; }
+        public string SellChannelRefIds { get; set; }
 
     }
 }

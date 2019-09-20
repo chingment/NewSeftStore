@@ -112,20 +112,6 @@ namespace LocalS.Service.Api.Merch
                 store.CreateTime = DateTime.Now;
                 store.Creator = operater;
                 CurrentDb.Store.Add(store);
-
-
-                //默认 快递商品库存
-                var storeSellChannel = new SellChannel();
-                storeSellChannel.Id = GuidUtil.New();
-                //storeSellChannel.Name = "快递商品";
-                storeSellChannel.MerchId = merchId;
-                //storeSellChannel.StoreId = store.Id;
-                storeSellChannel.RefType = E_SellChannelRefType.Express;
-                storeSellChannel.RefId = GuidUtil.Empty();
-                storeSellChannel.CreateTime = DateTime.Now;
-                store.Creator = operater;
-
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
@@ -373,21 +359,6 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.StoreId = rop.StoreId;
                 merchMachine.Mender = operater;
                 merchMachine.MendTime = DateTime.Now;
-
-                var storeSellChannel = CurrentDb.SellChannel.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId).FirstOrDefault();
-                if (storeSellChannel == null)
-                {
-                    storeSellChannel = new SellChannel();
-                    storeSellChannel.Id = GuidUtil.New();
-                    storeSellChannel.MerchId = merchId;
-                    //storeSellChannel.StoreId = rop.StoreId;
-                    storeSellChannel.RefName = merchMachine.Name;
-                    storeSellChannel.RefType = E_SellChannelRefType.Machine;
-                    storeSellChannel.RefId = rop.MachineId;
-                    storeSellChannel.Creator = operater;
-                    storeSellChannel.CreateTime = DateTime.Now;
-                    CurrentDb.SellChannel.Add(storeSellChannel);
-                }
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

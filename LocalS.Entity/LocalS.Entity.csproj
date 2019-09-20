@@ -71,8 +71,8 @@
     <Compile Include="PrdProductSubject.cs" />
     <Compile Include="PrdSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Store.cs" />
     <Compile Include="SellChannel.cs" />
+    <Compile Include="Store.cs" />
     <Compile Include="SellChannelStock.cs" />
     <Compile Include="SellChannelStockLog.cs" />
   </ItemGroup>

@@ -111,7 +111,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderSn == null || o.Sn.Contains(rup.OrderSn)) &&
                          o.MerchId == merchId
-                         select new { o.Sn, o.Id, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmitTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Sn, o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmitTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
             {
@@ -121,6 +121,11 @@ namespace LocalS.Service.Api.Merch
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
                 query = query.Where(m => m.StoreId == rup.StoreId);
+            }
+
+            if (!string.IsNullOrEmpty(rup.MachineId))
+            {
+                query = query.Where(m => m.SellChannelRefIds.Contains(rup.MachineId));
             }
 
             int total = query.Count();

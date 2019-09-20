@@ -152,6 +152,8 @@ namespace LocalS.BLL.Biz
                 order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
                 order.ChargeAmount = reserveDetails.Sum(m => m.ChargeAmount);
 
+                order.SellChannelRefIds = string.Join(",", reserveDetails.Select(m => m.SellChannelRefId).ToArray());
+
                 foreach (var detail in reserveDetails)
                 {
                     var orderDetails = new OrderDetails();
@@ -181,12 +183,12 @@ namespace LocalS.BLL.Biz
                             orderDetails.SellChannelRefId = GuidUtil.Empty();
                             break;
                         case E_SellChannelRefType.Machine:
-                            var machine = CurrentDb.Machine.Where(m => m.Id == detail.SellChannelRefId).FirstOrDefault();
+                            var machine = CurrentDb.MerchMachine.Where(m => m.MerchId == order.MerchId && m.MerchId == detail.SellChannelRefId).FirstOrDefault();
                             if (machine == null)
                             {
                                 LogUtil.Info("machine:为空");
                             }
-                            orderDetails.SellChannelRefName = "【机器自提】 " + machine.Name;//todo 若 ChannelType 为1 则机器昵称，2为自取
+                            orderDetails.SellChannelRefName = "【机器自提】 " + machine.Name;
                             orderDetails.SellChannelRefType = E_SellChannelRefType.Machine;
                             orderDetails.SellChannelRefId = detail.SellChannelRefId;
                             orderDetails.Receiver = null;

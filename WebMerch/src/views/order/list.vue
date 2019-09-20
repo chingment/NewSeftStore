@@ -208,7 +208,12 @@ export default {
   props: {
     storeid: {
       type: String,
-      require: true,
+      require: false,
+      default: ''
+    },
+    machineid: {
+      type: String,
+      require: false,
       default: ''
     }
   },
@@ -223,7 +228,8 @@ export default {
         limit: 10,
         clientName: undefined,
         orderSn: undefined,
-        storeId: undefined
+        storeId: undefined,
+        machineId: undefined
       },
       isDesktop: this.$store.getters.isDesktop,
       dialogDetailsIsVisible: false,
@@ -247,6 +253,11 @@ export default {
       this.listQuery.storeId = value
       console.log('this.listQuery.storeId 2 :' + this.listQuery.storeId)
       this.init()
+    },
+    machineid: function(value) {
+      this.listQuery.machineId = value
+      console.log('this.listQuery.machineId 2 :' + this.listQuery.machineId)
+      this.init()
     }
   },
   created() {
@@ -255,8 +266,9 @@ export default {
     }
 
     this.listQuery.storeId = this.storeid
+    this.listQuery.machineId = this.machineid
     console.log('this.listQuery.storeId 1 :' + this.listQuery.storeId)
-
+    console.log('this.listQuery.machineid 1 :' + this.listQuery.machineid)
     this.init()
   },
   methods: {
