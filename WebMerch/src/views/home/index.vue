@@ -24,7 +24,7 @@
           <div slot="header" class="clearfix">
             <span>最近7天销售额</span>
 
-            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+            <el-button style="float: right; padding: 0px 0" type="text">更多</el-button>
           </div>
           <div style="height:200px;" />
         </el-card>
@@ -59,7 +59,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>热销商品排行榜</span>
-            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+            <el-button style="float: right; padding: 0px 0" type="text">更多</el-button>
           </div>
           <div style="min-height:300px;">
             <span>暂无销售数据</span>
