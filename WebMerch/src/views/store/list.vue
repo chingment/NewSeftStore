@@ -11,8 +11,8 @@
     </div> -->
 
     <div class="circle-status-bar">
-      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
       <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
+      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
     </div>
     <el-row v-loading="loading" :gutter="20">
 

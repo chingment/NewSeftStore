@@ -1,8 +1,8 @@
 <template>
   <div id="store_list" class="app-container">
     <div class="circle-status-bar">
-      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
       <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
+      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
       <span class="circle-status circle-status-3" /> <span class="name">异常</span>
     </div>
     <el-row v-loading="loading" :gutter="20">
@@ -116,6 +116,8 @@ export default {
       initManageMachine({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
+          this.storeName = d.storeName
+          this.formSelectMachines = d.formSelectMachines
         }
         this.loading = false
       })

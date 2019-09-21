@@ -18,8 +18,28 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;" />
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;" />
+      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
+
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>最近7天销售额</span>
+
+            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+          </div>
+          <div style="height:200px;" />
+        </el-card>
+
+      </el-col>
+      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
+
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>今日店铺销售额</span>
+          </div>
+          <div style="height:200px;" />
+        </el-card>
+
+      </el-col>
     </el-row>
 
     <el-row :gutter="8">
@@ -27,7 +47,7 @@
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>店铺排行榜</span>
+            <span>店铺销售排行榜</span>
           </div>
           <div style="min-height:300px;">
             <el-button type="text" @click="goNewStore(item)">暂无店铺，马上新建，GO GO GO</el-button>
@@ -38,7 +58,8 @@
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>商品排行榜</span>
+            <span>热销商品排行榜</span>
+            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
           </div>
           <div style="min-height:300px;">
             <span>暂无销售数据</span>
