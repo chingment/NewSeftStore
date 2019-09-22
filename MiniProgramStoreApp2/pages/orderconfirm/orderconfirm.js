@@ -198,8 +198,6 @@ Page({
                 })
               }
             })
-
-
           } else {
             toast.show({
               title: res.message
