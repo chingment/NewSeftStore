@@ -577,10 +577,7 @@ namespace LocalS.Service.Api.StoreApp
 
             switch (rup.PayWay)
             {
-                case PayWay.AliPay:
-                    order.PayWay = E_OrderPayWay.AliPay;
-                    break;
-                case PayWay.Wechat:
+                case 1:
                     order.PayWay = E_OrderPayWay.Wechat;
 
                     var orderAttach = new OrderAttachModel();
@@ -603,6 +600,9 @@ namespace LocalS.Service.Api.StoreApp
                     var pms = SdkFactory.Wx.GetJsApiPayParams(wxAppInfoConfig, order.Id, order.Sn, ret_UnifiedOrder.PrepayId);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
+                    break;
+                case 2:
+                    order.PayWay = E_OrderPayWay.AliPay;
                     break;
             }
 

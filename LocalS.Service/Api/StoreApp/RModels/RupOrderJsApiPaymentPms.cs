@@ -7,20 +7,16 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public enum PayWay
-    {
-        Unknow = 0,
-        Wechat = 1,
-        AliPay = 2
-    }
-
     public class RupOrderJsApiPaymentPms
     {
         public string MerchId { get; set; }
         public string AppId { get; set; }
         public string OrderId { get; set; }
-        public PayWay PayWay { get; set; }
-        public Caller Caller { get; set; }
+        /// <summary>
+        /// 1: Wechat,  2 AliPay
+        /// </summary>
+        public int PayWay { get; set; }
+        public int Caller { get; set; }
 
     }
 }
