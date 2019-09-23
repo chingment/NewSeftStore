@@ -296,7 +296,14 @@ function wxRequest(opts) {
         }
       }
     },
-    fail: function (res) { },
+    fail: function (res) {
+      console.log("fail:" + JSON.stringify(res))
+      wx.showModal({
+        showCancel: false,
+        title: '提示',
+        content: res.errMsg
+      })
+     },
     complete: function () {
 
       if (_isShowLoading) {
