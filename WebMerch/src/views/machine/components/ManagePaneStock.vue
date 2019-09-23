@@ -37,7 +37,7 @@
               <el-button type="warning">沽清</el-button>
             </div>
             <div class="below-right">
-              <el-button type="primary">编辑</el-button>
+              <el-button type="primary" @click="dialogEditOpen(productSku)">编辑</el-button>
             </div>
           </div>
         </el-card>
@@ -49,6 +49,19 @@
     <div v-show="listTotal<=0" class="list-empty">
       <span>暂无数据</span>
     </div>
+
+    <el-dialog title="商品编辑" :visible.sync="dialogEditIsVisible" width="500px">
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogEditIsVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="handleEdit">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -69,7 +82,8 @@ export default {
         productSkuName: undefined,
         machineId: undefined
       },
-      listData: []
+      listData: [],
+      dialogEditIsVisible: false
     }
   },
   watch: {
@@ -110,6 +124,12 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getListData()
+    },
+    dialogEditOpen(productSku) {
+      this.dialogEditIsVisible = true
+    },
+    handleEdit() {
+
     }
   }
 }
@@ -131,8 +151,11 @@ export default {
 
         .name{
           line-height: 21px;
+          max-height: 42px;
           font-size: 16px;
           color: #909399;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .saleprice{
@@ -146,8 +169,8 @@ export default {
      }
     .above-img{
      img{
-      width: 110px;
-      height: 110px;
+      width: 80px;
+      height: 80px;
     }
      }
   }

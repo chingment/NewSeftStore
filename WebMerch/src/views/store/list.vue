@@ -1,18 +1,15 @@
 <template>
   <div id="store_list" class="app-container">
-    <!-- <div class="filter-container">
-      <el-input v-model="listQuery.name" placeholder="名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+
+    <div class="circle-status-bar">
+      <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
+      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
+    </div>
+    <div class="filter-container">
+      <el-input v-model="listQuery.name" placeholder="店铺名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新建
-      </el-button>
-    </div> -->
-
-    <div class="circle-status-bar">
-      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
-      <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
     </div>
     <el-row v-loading="loading" :gutter="20">
 
