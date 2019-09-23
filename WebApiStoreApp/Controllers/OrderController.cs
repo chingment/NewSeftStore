@@ -100,7 +100,7 @@ namespace WebApiStoreApp.Controllers
                 case 1:
                     break;
                 case 2:
-                    appInfo = StoreAppServiceFactory.Order.GetWxMpAppInfoConfig(obj_attach.MerchId, appId);
+                    appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(obj_attach.MerchId, appId);
                     break;
             }
 

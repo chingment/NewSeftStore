@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public static class TermServiceFactory
+    public static class StoreTermServiceFactory
     {
         public static OrderService Order
         {
@@ -21,6 +21,14 @@ namespace LocalS.Service.Api.StoreTerm
             get
             {
                 return new MachineService();
+            }
+        }
+
+        public static ProductService Product
+        {
+            get
+            {
+                return new ProductService();
             }
         }
 

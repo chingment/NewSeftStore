@@ -118,7 +118,7 @@ namespace Lumos.BLL
 
         }
 
-        public UnifiedOrderResult UnifiedOrderByNative(WxAppInfoConfig config, string merchantId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, DateTime time_expire)
+        public UnifiedOrderResult UnifiedOrderByNative(WxAppInfoConfig config, string merchantId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
         {
 
             var ret = new UnifiedOrderResult();

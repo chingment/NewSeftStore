@@ -24,82 +24,66 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (machine == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未入库登记");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未绑定商户");
-            }
+            var merch = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
 
-            var merchant = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
-
-            if (merchant == null)
+            if (merch == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户不存在");
-            }
-
-            if (string.IsNullOrEmpty(machine.StoreId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未绑定店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
 
             var store = CurrentDb.Store.Where(m => m.Id == machine.StoreId).FirstOrDefault();
 
             if (store == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "店铺不存在");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
             ret.Machine.Id = machine.Id;
             ret.Machine.Name = machine.Name;
-            ret.Machine.MerchantName = merchant.Name;
-            ret.Machine.StoreName = store.Name;
             ret.Machine.LogoImgUrl = machine.LogoImgUrl;
-            //ret.Machine.PayTimeout = merchant.PayTimeout;
-            //ret.Machine.Currency = merchant.Currency;
-            //ret.Machine.CurrencySymbol = merchant.CurrencySymbol;
+            ret.Machine.MerchName = merch.Name;
+            ret.Machine.StoreName = store.Name;
 
-            ret.Banners = TermServiceFactory.Machine.GetBanners(machine.MerchId, machine.StoreId, machine.Id);
 
-            ret.ProductKinds = TermServiceFactory.Machine.GetProductKinds(machine.MerchId, machine.StoreId, machine.Id);
+            ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machine.MerchId, machine.StoreId, machine.Id);
 
-            ret.ProductSkus = TermServiceFactory.Machine.GetProductSkus(machine.MerchId, machine.StoreId, machine.Id);
+            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machine.MerchId, machine.StoreId, machine.Id);
 
+            ret.Products = StoreTermServiceFactory.Machine.GetProducts(machine.MerchId, machine.StoreId, machine.Id);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-
-        public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string machineId)
+        public Dictionary<string, PrdProductModel2> GetProducts(string merchId, string storeId, string machineId)
         {
+            var products = StoreTermServiceFactory.Product.GetPageList(0, int.MaxValue, merchId, storeId, machineId, "");
 
-            var productSkuModels = new Dictionary<string, ProductSkuModel>();
+            var dics = new Dictionary<string, PrdProductModel2>();
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
-            var productSkuIds = machineStocks.Select(m => m.PrdProductSkuId).Distinct();
-            foreach (var productSkuId in productSkuIds)
+            if (products == null)
             {
-                var productSku = BizFactory.PrdProduct.GetProductSku(productSkuId);
-                if (productSku != null)
-                {
-                    var productSkuModel = new ProductSkuModel();
-                    productSkuModel.Id = productSku.Id;
-                    productSkuModel.Name = productSku.Name;
-                    //productSkuModel.SpecDes = productSku.SpecDes;
-                    productSkuModel.DetailsDes = productSku.DetailsDes;
-                    productSkuModel.BriefDes = productSku.BriefDes;
-                    //productSkuModel.ShowPirce = productSku.ShowPrice.ToF2Price();
-                    //productSkuModel.SalePrice = productSku.SalePrice.ToF2Price();
-                    //productSkuModel.DisplayImgUrls = productSku.DispalyImgUrls;
-                    productSkuModel.MainImgUrl = productSku.MainImgUrl;
-
-                    productSkuModels.Add(productSku.Id, productSkuModel);
-                }
+                return dics;
             }
 
+            if (products.Items == null)
+            {
+                return dics;
+            }
 
-            return productSkuModels;
+            if (products.Items.Count == 0)
+            {
+                return dics;
+            }
+
+            foreach (var item in products.Items)
+            {
+                dics.Add(item.Id, item);
+            }
+
+            return dics;
         }
 
         public List<BannerModel> GetBanners(string merchId, string storeId, string machineId)
@@ -118,52 +102,29 @@ namespace LocalS.Service.Api.StoreTerm
 
         public List<ProductKindModel> GetProductKinds(string merchId, string storeId, string machineId)
         {
-
             var productKindModels = new List<ProductKindModel>();
 
-            var productKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.IsDelete == false).ToList();
-            var productSkuIds = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefId == machineId && m.RefType == E_SellChannelRefType.Machine && m.IsOffSell == false).Select(m => m.PrdProductSkuId).ToArray();
-            var productSkus = CurrentDb.PrdProduct.Where(m => productSkuIds.Contains(m.Id)).ToList();
+            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            if (productKinds.Count > 0)
+            foreach (var prdKind in prdKinds)
             {
-                var productTopKind = productKinds.Where(m => m.Depth == 0).FirstOrDefault();
+                var prdKindModel = new ProductKindModel();
+                prdKindModel.Id = prdKind.Id;
+                prdKindModel.Name = prdKind.Name;
 
-                if (productTopKind != null)
+                var products = StoreTermServiceFactory.Product.GetPageList(0, 10, merchId, storeId, machineId, prdKind.Id);
+
+                if (products != null)
                 {
-
-                    var productParentKinds = productKinds.Where(m => m.PId == productTopKind.Id).ToList();
-
-                    foreach (var productParentKind in productParentKinds)
+                    if (products.Items != null)
                     {
-                        var productParentKindModel = new ProductKindModel();
-                        productParentKindModel.Id = productParentKind.Id;
-                        productParentKindModel.Name = productParentKind.Name;
-
-                        var productChildKinds = productKinds.Where(m => m.PId == productParentKind.Id).ToList();
-
-                        if (productChildKinds.Count > 0)
+                        if (products.Items.Count > 0)
                         {
-                            foreach (var productChildKind in productChildKinds)
-                            {
-                                var l_productSkuIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == productChildKind.Id).Select(m => m.PrdProductId).ToList();
-                                if (l_productSkuIds.Count > 0)
-                                {
-                                    foreach (var l_productSkuId in l_productSkuIds)
-                                    {
-                                        if (!productParentKindModel.Childs.Contains(l_productSkuId))
-                                        {
-                                            productParentKindModel.Childs.Add(l_productSkuId);
-                                        }
-                                    }
-                                }
-                            }
+                            prdKindModel.Childs = products.Items.Select(m => m.Id).ToList();
                         }
-
-                        productKindModels.Add(productParentKindModel);
-
                     }
                 }
+
             }
 
             return productKindModels;
@@ -175,19 +136,18 @@ namespace LocalS.Service.Api.StoreTerm
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
 
-            var productSkus = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId).ToList();
-
             foreach (var item in machineStocks)
             {
-                var productSku = productSkus.Where(m => m.Id == item.PrdProductSkuId).FirstOrDefault();
-                if (productSku != null)
+                var productSkuModel = BizFactory.PrdProduct.GetProductSku(item.PrdProductSkuId);
+
+                if (productSkuModel != null)
                 {
                     var slotProductSkuModel = new SlotProductSkuModel();
 
-                    slotProductSkuModel.Id = productSku.Id;
+                    slotProductSkuModel.Id = productSkuModel.Id;
                     slotProductSkuModel.SlotId = item.SlotId;
-                    slotProductSkuModel.Name = productSku.Name;
-                    slotProductSkuModel.ImgUrl = "";
+                    slotProductSkuModel.Name = productSkuModel.Name;
+                    slotProductSkuModel.MainImgUrl = productSkuModel.MainImgUrl;
                     slotProductSkuModel.SumQuantity = item.SumQuantity;
                     slotProductSkuModel.LockQuantity = item.LockQuantity;
                     slotProductSkuModel.SellQuantity = item.SellQuantity;
@@ -246,14 +206,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (sysMerchantUser == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户名或密码错误");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户名不存在");
             }
 
             var isPasswordCorrect = PassWordHelper.VerifyHashedPassword(sysMerchantUser.PasswordHash, rop.Password);
 
             if (!isPasswordCorrect)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户名或密码错误");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户密码错误");
             }
 
             if (sysMerchantUser.MerchId != machine.MerchId)

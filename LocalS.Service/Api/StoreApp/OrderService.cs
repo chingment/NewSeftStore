@@ -624,24 +624,5 @@ namespace LocalS.Service.Api.StoreApp
         {
             return BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);
         }
-
-        public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId, string appId)
-        {
-
-            var config = new WxAppInfoConfig();
-
-            var merchant = CurrentDb.Merch.Where(m => m.Id == merchId && m.WxMpAppId == appId).FirstOrDefault();
-            if (merchant == null)
-                return null;
-
-
-            config.AppId = merchant.WxMpAppId;
-            config.AppSecret = merchant.WxMpAppSecret;
-            config.PayMchId = merchant.WxPayMchId;
-            config.PayKey = merchant.WxPayKey;
-            config.PayResultNotifyUrl = merchant.WxPayResultNotifyUrl;
-
-            return config;
-        }
     }
 }

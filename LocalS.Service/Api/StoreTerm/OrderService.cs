@@ -71,21 +71,26 @@ namespace LocalS.Service.Api.StoreTerm
                 case PayWay.Wechat:
                     order.PayWay = E_OrderPayWay.Wechat;
 
-                    //var wxPaAppInfoConfig = BizFactory.Merchant.GetWxPaAppInfoConfig(order.MerchantId);
+                    var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId, order.AppId);
 
-                    //var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wxPaAppInfoConfig, order.MerchantId, order.Sn, 0.01m, "", Common.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                    var orderAttach = new LocalS.BLL.Biz.OrderAttachModel();
+                    orderAttach.MerchId = order.MerchId;
+                    orderAttach.StoreId = order.StoreId;
+                    orderAttach.Caller = 1;
 
-                    //if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
-                    //{
-                    //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                    //}
+                    var ret_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wxPaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
 
-                    //order.PayPrepayId = ret_UnifiedOrder.PrepayId;
-                    //order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
+                    if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                    }
+
+                    order.PayPrepayId = ret_UnifiedOrder.PrepayId;
+                    order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
                     CurrentDb.SaveChanges();
 
                     ret.OrderId = order.Id;
-                    //ret.PayUrl = ret_UnifiedOrder.CodeUrl;
+                    ret.PayUrl = ret_UnifiedOrder.CodeUrl;
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
                     break;
