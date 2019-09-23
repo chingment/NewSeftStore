@@ -8,6 +8,24 @@ Page({
   data: {
   },
   onLoad: function(options) {
+    var that = this;
+    // 查看是否授权
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          wx.getUserInfo({
+            success: function (res) {
+              //"errMsg":"getUserInfo:ok"
+              console.log( JSON.stringify(res))
+              wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
+                url: ownRequest.getReturnUrl()
+              })
+            }
+          })
+        }
+      }
+    })
   },
   onReady: function() {
   },

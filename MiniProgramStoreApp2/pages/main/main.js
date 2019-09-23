@@ -80,7 +80,7 @@ Page({
   },
   onLoad: function (options) {
     var _self = this;
-
+    console.log("getMainTabbarIndex():" +storeage.getMainTabbarIndex())
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
@@ -93,6 +93,8 @@ Page({
     wx.setNavigationBarTitle({
       title: _self.data.tabBar[0].navTitle
     })
+
+    // this.setMainTabBar(storeage.getMainTabbarIndex())
 
     apiGlobal.dataSet({
       storeId: ownRequest.getCurrentStoreId(),
@@ -124,15 +126,15 @@ Page({
         fail: function () { }
       })
 
+
   },
   onShow: function () {
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
   },
-  mainTabBarItemClick(e) {
+  setMainTabBar:function(index){
     var _self = this
-    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var tabBar = _self.data.tabBar;
     for (var i = 0; i < tabBar.length; i++) {
       if (i == index) {
@@ -141,6 +143,8 @@ Page({
         wx.setNavigationBarTitle({
           title: tabBar[i].navTitle
         })
+
+        storeage.setMainTabbarIndex(index)
       } else {
         tabBar[i].selected = false
       }
@@ -148,5 +152,10 @@ Page({
     this.setData({
       tabBar: tabBar
     })
+  },
+  mainTabBarItemClick(e) {
+    var _self = this
+    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
+    this.setMainTabBar(index)
   }
 })
