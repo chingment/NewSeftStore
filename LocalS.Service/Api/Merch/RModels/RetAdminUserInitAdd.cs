@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetUserInitAdd
+    public class RetAdminUserInitAdd
     {
-        public RetUserInitAdd()
+        public RetAdminUserInitAdd()
         {
             this.Orgs = new List<TreeNode>();
             this.Roles = new List<TreeNode>();

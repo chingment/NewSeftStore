@@ -30,7 +30,7 @@
       <el-form-item label="禁用">
         <el-switch v-model="form.isDisable" />
       </el-form-item>
-      <el-form-item label="角色">
+      <el-form-item v-show="checkbox_group_role_options.length>0" label="角色">
         <el-checkbox-group v-model="form.roleIds">
           <el-checkbox v-for="option in checkbox_group_role_options" :key="option.id" style="display:block" :label="option.id">{{ option.label }}</el-checkbox>
         </el-checkbox-group>

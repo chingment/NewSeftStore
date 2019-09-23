@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class UserService : BaseDbContext
+    public class AdminUserService : BaseDbContext
     {
         public StatusModel GetStatus(bool isDisable)
         {
@@ -32,7 +32,7 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
-        public CustomJsonResult GetList(string operater, string merchId, RupUserGetList rup)
+        public CustomJsonResult GetList(string operater, string merchId, RupAdminUserGetList rup)
         {
             var result = new CustomJsonResult();
 
@@ -122,7 +122,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult InitAdd(string operater, string merchId)
         {
             var result = new CustomJsonResult();
-            var ret = new RetUserInitAdd();
+            var ret = new RetAdminUserInitAdd();
 
             // ret.Orgs = GetOrgTree();
             ret.Roles = GetRoleTree();
@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Add(string operater, string merchId, RopUserAdd rop)
+        public CustomJsonResult Add(string operater, string merchId, RopAdminUserAdd rop)
         {
             var result = new CustomJsonResult();
 
@@ -198,7 +198,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetUserInitEdit();
+            var ret = new RetAdminUserInitEdit();
 
             var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
 
@@ -217,7 +217,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopUserEdit rop)
+        public CustomJsonResult Edit(string operater, string merchId, RopAdminUserEdit rop)
         {
 
             CustomJsonResult result = new CustomJsonResult();

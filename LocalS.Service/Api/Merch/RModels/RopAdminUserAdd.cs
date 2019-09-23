@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopUserEdit
+    public class RopAdminUserAdd
     {
-        public string Id{ get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
 
         public string PhoneNumber { get; set; }
@@ -16,8 +16,6 @@ namespace LocalS.Service.Api.Merch
         public string FullName { get; set; }
 
         public string Email { get; set; }
-
-        public bool IsDisable { get; set; }
 
         public List<string> RoleIds { get; set; }
     }

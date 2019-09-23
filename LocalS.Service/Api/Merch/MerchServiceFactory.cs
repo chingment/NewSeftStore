@@ -16,11 +16,19 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static UserService User
+        public static AdminUserService AdminUser
         {
             get
             {
-                return new UserService();
+                return new AdminUserService();
+            }
+        }
+
+        public static ClientUserService ClientUser
+        {
+            get
+            {
+                return new ClientUserService();
             }
         }
 

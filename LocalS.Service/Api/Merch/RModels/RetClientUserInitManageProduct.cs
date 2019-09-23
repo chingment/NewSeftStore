@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupUserGetList: RupBaseGetList
+    public class RetClientUserInitManageProduct
     {
-
-        public string UserName { get; set; }
-
-        public string FullName { get; set; }
     }
 }

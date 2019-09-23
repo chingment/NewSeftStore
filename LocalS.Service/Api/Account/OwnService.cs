@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.Account
                 sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
                 sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
                 sysClientUser.RegisterTime = DateTime.Now;
-                sysClientUser.Nickname = wxUserInfoByMinProram.nickName;
+                sysClientUser.NickName = wxUserInfoByMinProram.nickName;
                 sysClientUser.Sex = wxUserInfoByMinProram.gender;
                 sysClientUser.Province = wxUserInfoByMinProram.province;
                 sysClientUser.City = wxUserInfoByMinProram.city;
@@ -143,6 +143,7 @@ namespace LocalS.Service.Api.Account
                 sysClientUser.CreateTime = DateTime.Now;
                 sysClientUser.Creator = sysClientUserId;
                 sysClientUser.BelongSite = Enumeration.BelongSite.Client;
+                sysClientUser.MerchId = rop.MerchId;
                 CurrentDb.SysClientUser.Add(sysClientUser);
                 CurrentDb.SaveChanges();
 
@@ -162,7 +163,7 @@ namespace LocalS.Service.Api.Account
                 var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
                 if (sysClientUser != null)
                 {
-                    sysClientUser.Nickname = wxUserInfoByMinProram.nickName;
+                    sysClientUser.NickName = wxUserInfoByMinProram.nickName;
                     sysClientUser.Sex = wxUserInfoByMinProram.gender;
                     sysClientUser.Province = wxUserInfoByMinProram.province;
                     sysClientUser.City = wxUserInfoByMinProram.city;

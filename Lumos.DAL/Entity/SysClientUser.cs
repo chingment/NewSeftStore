@@ -8,5 +8,7 @@ namespace Lumos.DbRelay
     public class SysClientUser : SysUser
     {
         public bool IsVip { get; set; }
+
+        public string MerchId { get; set; }
     }
 }

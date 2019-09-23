@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 var userInfo = new UserInfoModel();
                 userInfo.UserId = user.Id;
-                userInfo.NickName = user.Nickname;
+                userInfo.NickName = user.NickName;
                 userInfo.PhoneNumber = user.PhoneNumber;
                 userInfo.Avatar = user.Avatar;
                 userInfo.IsVip = user.IsVip;

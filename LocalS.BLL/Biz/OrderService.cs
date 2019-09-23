@@ -106,7 +106,7 @@ namespace LocalS.BLL.Biz
                 string clientUserName = "匿名";
                 if (clientUser != null)
                 {
-                    clientUserName = clientUser.Nickname;
+                    clientUserName = clientUser.NickName;
                 }
 
                 order.ClientUserName = clientUserName;

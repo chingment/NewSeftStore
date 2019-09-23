@@ -18,5 +18,7 @@ namespace LocalS.Service.Api.Merch
         public E_OrderStatus OrderStauts { get; set; }
 
         public string MachineId { get; set; }
+
+        public string ClientUserId { get; set; }
     }
 }
