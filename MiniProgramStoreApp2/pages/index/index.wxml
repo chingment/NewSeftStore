@@ -15,18 +15,21 @@
     <view class="banner">
       <view class="ct">
         <block wx:if="{{banner.imgs.length>0}}">
-          <swiper class="its-swiper" autoplay="{{banner.autoplay}}" current="{{banner.currentSwiper}}" bindchange="topBannerSwiperChange">
+          <swiper class="its-swiper" autoplay="true"
+          interval="2000" duration="500" circular="true"
+          indicator-dots="true"
+           >
             <block wx:for="{{banner.imgs}}" wx:key="item" >
               <swiper-item class="it">
                 <image class="img" src="{{item.url}}"></image>
               </swiper-item>
             </block>
           </swiper>
-          <view class="its-dot">
+          <!-- <view class="its-dot">
             <block wx:for="{{banner.imgs}}" wx:key="item">
               <view class="it{{index == banner.currentSwiper ? ' it-active' : ''}}"></view>
             </block>
-          </view>
+          </view> -->
         </block>
       </view>
     </view>
