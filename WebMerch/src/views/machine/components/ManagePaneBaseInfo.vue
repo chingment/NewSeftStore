@@ -11,6 +11,26 @@
       <el-form-item label="状态">
         {{ temp.status.text }}
       </el-form-item>
+      <el-form-item label="图片">
+        <el-upload
+          ref="uploadImg"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :on-success="handleSuccess"
+          :on-remove="handleRemove"
+          :on-error="handleError"
+          :on-preview="handlePreview"
+          :show-file-list="false"
+        >
+
+          <img v-if="form.logoImgUrl" :src="form.logoImgUrl">
+
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
+          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        </el-dialog>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="openEdit">编辑</el-button>
       </el-form-item>
@@ -31,7 +51,6 @@
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 <script>
@@ -56,11 +75,17 @@ export default {
       },
       form: {
         id: '',
-        name: ''
+        name: '',
+        logoImgUrl: ''
       },
       rules: {
-        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }]
-      }
+        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }]
+      },
+      uploadImglist: [],
+      uploadImgPreImgDialogUrl: '',
+      uploadImgPreImgDialogVisible: false,
+      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
   watch: {
@@ -115,6 +140,30 @@ export default {
     },
     cancleEdit() {
       this.isEdit = false
+    },
+    getDispalyImgUrls(fileList) {
+      var _dispalyImgUrls = []
+      for (var i = 0; i < fileList.length; i++) {
+        if (fileList[i].status === 'success') {
+          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+        }
+      }
+      return _dispalyImgUrls
+    },
+    handleRemove(file, fileList) {
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+    },
+    handleSuccess(response, file, fileList) {
+      this.form.logoImgUrl = URL.createObjectURL(file.raw)
+    },
+    handleError(errs, file, fileList) {
+      this.uploadImglist = fileList
+      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+    },
+    handlePreview(file) {
+      this.uploadImgPreImgDialogUrl = file.url
+      this.uploadImgPreImgDialogVisible = true
     }
   }
 }
