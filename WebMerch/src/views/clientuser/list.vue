@@ -5,9 +5,6 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新建
-      </el-button>
     </div>
     <el-table
       :key="listKey"
@@ -32,19 +29,14 @@
           <span>{{ scope.row.fullName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="昵称" prop="fullName" align="left" min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.nickName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column v-if="isDesktop" label="手机号码" prop="phoneNumber" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.phoneNumber }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="邮箱" prop="email" align="left" min-width="20%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.email }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" prop="status" align="left" min-width="15%">
-        <template slot-scope="scope">
-          <span :class="'enable-status enable-status-'+scope.row.status.value">{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="创建时间" prop="createTime" align="left" min-width="15%">
@@ -54,8 +46,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
+          <el-button type="primary" size="mini" @click="handleDetails(row)">
+            查看
           </el-button>
         </template>
       </el-table-column>
@@ -66,7 +58,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/user'
+import { getList } from '@/api/clientuser'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -109,14 +101,9 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleCreate() {
+    handleDetails(row) {
       this.$router.push({
-        path: '/user/add'
-      })
-    },
-    handleUpdate(row) {
-      this.$router.push({
-        path: '/user/edit?id=' + row.id
+        path: '/clientuser/details?id=' + row.id
       })
     }
   }

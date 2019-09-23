@@ -214,6 +214,11 @@ export default {
       type: String,
       require: false,
       default: ''
+    },
+    clientuserid: {
+      type: String,
+      require: false,
+      default: ''
     }
   },
   data() {
@@ -266,8 +271,11 @@ export default {
 
     this.listQuery.storeId = this.storeid
     this.listQuery.machineId = this.machineid
+    this.listQuery.clientUserId = this.clientuserid
+
     console.log('this.listQuery.storeId 1 :' + this.listQuery.storeId)
     console.log('this.listQuery.machineid 1 :' + this.listQuery.machineid)
+    console.log('this.listQuery.clientUserId 1 :' + this.listQuery.clientUserId)
     this.init()
   },
   methods: {

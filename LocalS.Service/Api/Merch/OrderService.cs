@@ -128,6 +128,11 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.SellChannelRefIds.Contains(rup.MachineId));
             }
 
+            if (!string.IsNullOrEmpty(rup.ClientUserId))
+            {
+                query = query.Where(m => m.ClientUserId == rup.ClientUserId);
+            }
+
             int total = query.Count();
 
             int pageIndex = rup.Page - 1;

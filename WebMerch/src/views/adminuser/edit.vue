@@ -1,11 +1,22 @@
 <template>
-  <div id="user_add" class="app-container">
+  <div id="user_edit" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName" />
+        {{ form.userName }}
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" />
+      <el-form-item v-show="!isOpenEditPassword" label="密码">
+        <span>********</span>
+        <span @click="openEditPassword()">修改</span>
+      </el-form-item>
+      <el-form-item v-show="isOpenEditPassword" label="密码" prop="password">
+        <div style="display:flex">
+          <div style="flex:1">
+            <el-input v-model="form.password" type="password" />
+          </div>
+          <div style="width:50px;text-align: center;">
+            <span @click="openEditPassword()">取消</span>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="姓名" prop="fullName">
         <el-input v-model="form.fullName" />
@@ -15,6 +26,9 @@
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" />
+      </el-form-item>
+      <el-form-item label="禁用">
+        <el-switch v-model="form.isDisable" />
       </el-form-item>
       <el-form-item v-show="checkbox_group_role_options.length>0" label="角色">
         <el-checkbox-group v-model="form.roleIds">
@@ -29,16 +43,17 @@
 </template>
 
 <script>
-// https://element.eleme.cn/#/zh-CN/component/cascader
 import { MessageBox } from 'element-ui'
-import { add, initAdd } from '@/api/user'
+import { edit, initEdit } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
-import { goBack } from '@/utils/commonUtil'
+import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
       loading: false,
+      isOpenEditPassword: false,
       form: {
+        id: '',
         userName: '',
         password: '',
         fullName: '',
@@ -48,8 +63,7 @@ export default {
         roleIds: []
       },
       rules: {
-        userName: [{ required: true, message: '必填,且由3到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.userName }],
-        password: [{ required: true, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
+        password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
         fullName: [{ required: true, message: '必填', trigger: 'change' }],
         orgIds: [{ required: true, message: '必选' }],
         phoneNumber: [{ required: false, message: '格式错误,eg:13800138000', trigger: 'change', pattern: fromReg.phoneNumber }],
@@ -66,23 +80,22 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initAdd().then(res => {
+      var id = getUrlParam('id')
+      initEdit({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
+          this.form.id = d.id
+          this.form.userName = d.userName
+          this.form.fullName = d.fullName
+          this.form.phoneNumber = d.phoneNumber
+          this.form.email = d.email
+          this.form.orgIds = d.orgIds
+          this.form.roleIds = d.roleIds
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
         }
         this.loading = false
       })
-    },
-    resetForm() {
-      this.form = {
-        userName: '',
-        password: '',
-        fullName: '',
-        phoneNumber: '',
-        email: ''
-      }
     },
     onSubmit() {
       this.$refs['form'].validate((valid) => {
@@ -92,7 +105,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            add(this.form).then(res => {
+            edit(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
@@ -101,22 +114,35 @@ export default {
           })
         }
       })
+    },
+    openEditPassword() {
+      if (this.isOpenEditPassword) {
+        this.isOpenEditPassword = false
+        this.form.password = ''
+        this.rules.password[0].required = false
+      } else {
+        this.isOpenEditPassword = true
+        this.rules.password[0].required = true
+      }
+    },
+    cascader_org_change() {
+      console.log('dasd')
     }
   }
 }
 </script>
 
-<style  lang="scss"  scoped>
+<style lang="scss" scoped>
 
-#user_add{
+#user_edit
+{
    max-width: 600px;
+
 .line {
   text-align: center;
 }
-
-.is-leaf{
-  display: none !important;
-  width: 0px !important;
+.el-tree-node__expand-icon.is-leaf{
+  display: none;
 }
 }
 </style>

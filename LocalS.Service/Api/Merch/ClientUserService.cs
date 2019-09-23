@@ -62,14 +62,14 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetClientUserInitManageBaseInfo();
 
-            //var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
 
-            //ret.Id = store.Id;
-            //ret.Name = store.Name;
-            //ret.Address = store.Address;
-            //ret.BriefDes = store.BriefDes;
-            //ret.DispalyImgUrls = store.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
-            //ret.IsOpen = store.IsOpen;
+            ret.Id = clientUser.Id;
+            ret.UserName = clientUser.UserName;
+            ret.PhoneNumber = clientUser.PhoneNumber;
+            ret.FullName = clientUser.FullName;
+            ret.NickName = clientUser.NickName;
+            ret.Avatar = clientUser.Avatar;
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -79,7 +79,16 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult InitDetailsBaseInfo(string operater, string merchId, string clientUserId)
         {
-            var ret = new RetClientUserInitManageProduct();
+            var ret = new RetClientUserInitManageBaseInfo();
+
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+
+            ret.Id = clientUser.Id;
+            ret.UserName = clientUser.UserName;
+            ret.PhoneNumber = clientUser.PhoneNumber;
+            ret.FullName = clientUser.FullName;
+            ret.NickName = clientUser.NickName;
+            ret.Avatar = clientUser.Avatar;
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
