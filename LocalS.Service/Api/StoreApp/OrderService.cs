@@ -625,12 +625,12 @@ namespace LocalS.Service.Api.StoreApp
             return BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);
         }
 
-        public WxAppInfoConfig GetWxMpAppInfoConfig(string id)
+        public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId, string appId)
         {
 
             var config = new WxAppInfoConfig();
 
-            var merchant = CurrentDb.Merch.Where(m => m.WxMpAppId == id).FirstOrDefault();
+            var merchant = CurrentDb.Merch.Where(m => m.Id == merchId && m.WxMpAppId == appId).FirstOrDefault();
             if (merchant == null)
                 return null;
 

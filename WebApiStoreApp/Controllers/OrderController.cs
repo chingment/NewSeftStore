@@ -98,7 +98,7 @@ namespace WebApiStoreApp.Controllers
             switch (obj_attach.Caller)
             {
                 case LocalS.BLL.Biz.Caller.WxMp:
-                    appInfo = StoreAppServiceFactory.Order.GetWxMpAppInfoConfig(appId);
+                    appInfo = StoreAppServiceFactory.Order.GetWxMpAppInfoConfig(obj_attach.MerchId, appId);
                     break;
                 case LocalS.BLL.Biz.Caller.WxPa:
                     break;
