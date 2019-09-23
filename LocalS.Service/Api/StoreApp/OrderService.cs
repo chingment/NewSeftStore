@@ -44,6 +44,7 @@ namespace LocalS.Service.Api.StoreApp
 
             return text;
         }
+
         public CustomJsonResult Reserve(string operater, string clientUserId, RopOrderReserve rop)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -338,7 +339,6 @@ namespace LocalS.Service.Api.StoreApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-
         public CustomJsonResult List(string operater, string clientUserId, RupOrderList rup)
         {
             var result = new CustomJsonResult();
@@ -562,6 +562,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var wxAppInfoConfig = new WxAppInfoConfig();
 
+
             wxAppInfoConfig.AppId = merch.WxMpAppId;
             wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
             wxAppInfoConfig.PayMchId = merch.WxPayMchId;
@@ -582,8 +583,12 @@ namespace LocalS.Service.Api.StoreApp
                 case PayWay.Wechat:
                     order.PayWay = E_OrderPayWay.Wechat;
 
+                    var orderAttach = new OrderAttachModel();
+                    orderAttach.MerchId = order.MerchId;
+                    orderAttach.StoreId = order.StoreId;
+                    orderAttach.Caller = rup.Caller;
 
-                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wxAppInfoConfig, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wxAppInfoConfig, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
 
                     if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
                     {
@@ -614,5 +619,29 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+
+        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, string orderSn, out bool isPaySuccessed)
+        {
+            return BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);
+        }
+
+        public WxAppInfoConfig GetWxMpAppInfoConfig(string id)
+        {
+
+            var config = new WxAppInfoConfig();
+
+            var merchant = CurrentDb.Merch.Where(m => m.WxMpAppId == id).FirstOrDefault();
+            if (merchant == null)
+                return null;
+
+
+            config.AppId = merchant.WxMpAppId;
+            config.AppSecret = merchant.WxMpAppSecret;
+            config.PayMchId = merchant.WxPayMchId;
+            config.PayKey = merchant.WxPayKey;
+            config.PayResultNotifyUrl = merchant.WxPayResultNotifyUrl;
+
+            return config;
+        }
     }
 }

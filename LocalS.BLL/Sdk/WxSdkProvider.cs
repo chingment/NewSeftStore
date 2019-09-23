@@ -10,6 +10,7 @@ using WeiXinSdk;
 using WeiXinSdk.Tenpay;
 using System.Security.Cryptography;
 using LocalS.BLL;
+using LocalS.BLL.Biz;
 
 namespace Lumos.BLL
 {
@@ -86,7 +87,7 @@ namespace Lumos.BLL
 
         }
 
-        public UnifiedOrderResult UnifiedOrderByJsApi(WxAppInfoConfig config, string openId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, DateTime? time_expire = null)
+        public UnifiedOrderResult UnifiedOrderByJsApi(WxAppInfoConfig config, string openId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime? time_expire = null)
         {
 
             var ret = new UnifiedOrderResult();
@@ -100,6 +101,7 @@ namespace Lumos.BLL
             unifiedOrder.total_fee = Convert.ToInt32(orderAmount * 100);//标价金额
             unifiedOrder.body = body;//商品描述  
             unifiedOrder.trade_type = "JSAPI";
+            unifiedOrder.attach = attach.ToJsonString();
             if (time_expire != null)
             {
                 unifiedOrder.time_expire = time_expire.Value.ToString("yyyyMMddHHmmss");

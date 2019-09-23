@@ -8,6 +8,8 @@ using System.Net;
 using System.Text;
 using System.Web;
 using LocalS.Service.Api.StoreApp;
+using LocalS.Entity;
+using WeiXinSdk;
 
 namespace WebApiStoreApp.Controllers
 {
@@ -51,12 +53,13 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse JsApiPaymentPms([FromUri]RupOrderJsApiPaymentPms rop)
         {
-            IResult result = StoreAppServiceFactory.Order.JsApiPaymentPms(this.CurrentUserId, this.CurrentUserId,rop);
+            IResult result = StoreAppServiceFactory.Order.JsApiPaymentPms(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
 
         [AllowAnonymous]
+        [HttpPost]
         public HttpResponseMessage PayResultNotify()
         {
             var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
@@ -78,31 +81,51 @@ namespace WebApiStoreApp.Controllers
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
             }
 
-            //string appId = dicXml["appid"].ToString();
+            string str_attach = dicXml["attach"].ToString();
 
-            ////var appInfo = BizFactory.Merchant.GetWxPaAppInfoConfig("");
+            if (!string.IsNullOrEmpty(str_attach))
+            {
+                LogUtil.Warn("attach 不符合格式");
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+            }
 
-            ////if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
-            ////{
-            ////    LogUtil.Warn("支付通知结果签名验证失败");
-            ////    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            ////}
+            var obj_attach = Newtonsoft.Json.JsonConvert.DeserializeObject< LocalS.BLL.Biz.OrderAttachModel >(str_attach);
 
-            //string orderSn = "";
+            string appId = dicXml["appid"].ToString();
 
-            //if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
-            //{
-            //    orderSn = dicXml["out_trade_no"].ToString();
-            //}
+            WxAppInfoConfig appInfo = null;
 
-            //bool isPaySuccessed = false;
-            //var result = BizFactory.Order.PayResultNotify(GuidUtil.Empty(), Enumeration.OrderNotifyLogNotifyFrom.NotifyUrl, xml, orderSn, out isPaySuccessed);
+            switch (obj_attach.Caller)
+            {
+                case LocalS.BLL.Biz.Caller.WxMp:
+                    appInfo = StoreAppServiceFactory.Order.GetWxMpAppInfoConfig(appId);
+                    break;
+                case LocalS.BLL.Biz.Caller.WxPa:
+                    break;
+            }
 
-            //if (result.Result == ResultType.Success)
-            //{
-            //    string sb = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(sb, Encoding.UTF8, "text/plain") };
-            //}
+            if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
+            {
+                LogUtil.Warn("支付通知结果签名验证失败");
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+            }
+
+            string orderSn = "";
+
+            if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
+            {
+                orderSn = dicXml["out_trade_no"].ToString();
+            }
+
+            bool isPaySuccessed = false;
+
+            var result = StoreAppServiceFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.NotifyUrl, xml, orderSn, out isPaySuccessed);
+
+            if (result.Result == ResultType.Success)
+            {
+                string sb = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(sb, Encoding.UTF8, "text/plain") };
+            }
 
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.BLL.Biz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,6 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public enum Caller
-    {
-        Unknow = 0,
-        WxPa = 1,
-        WxMp = 2
-    }
-
     public enum PayWay
     {
         Unknow = 0,

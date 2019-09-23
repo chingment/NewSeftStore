@@ -59,6 +59,7 @@
     <Compile Include="BaseDbContext.cs" />
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\MerchService.cs" />
+    <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\PrdProductService.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
@@ -105,9 +106,7 @@
       <Name>WeiXinSdk</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Biz\Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
