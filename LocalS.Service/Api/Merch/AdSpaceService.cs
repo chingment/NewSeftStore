@@ -124,14 +124,8 @@ namespace LocalS.Service.Api.Merch
                     var adSpaceContentBelong = new AdSpaceContentBelong();
                     adSpaceContentBelong.Id = GuidUtil.New();
                     adSpaceContentBelong.AdSpaceContentId = adSpaceContent.Id;
-                    adSpaceContentBelong.AdSpaceId = rop.AdSpaceId;
-                    adSpaceContentBelong.MerchId = merchId;
-                    adSpaceContentBelong.Priority = 0;
-                    adSpaceContentBelong.Title = rop.Title;
-                    adSpaceContentBelong.Url = rop.DispalyImgUrls[0].Url;
                     adSpaceContentBelong.BelongType = adSpace.BelongType;
                     adSpaceContentBelong.BelongId = belongId;
-                    adSpaceContentBelong.Status = E_AdSpaceContentBelongStatus.Normal;
                     adSpaceContentBelong.Creator = operater;
                     adSpaceContentBelong.CreateTime = DateTime.Now;
 
