@@ -53,6 +53,49 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult GetReleaseList(string operater, string merchId, RupAdSpaceGetReleaseList rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.AdSpaceContent
+                         where u.AdSpaceId == rup.AdSpaceId
+                         select new { u.Id, u.Title, u.Url, u.Status, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    Url = item.Url,
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+        }
+
+
         public CustomJsonResult InitRelease(string operater, string merchId, E_AdSpaceId adSpaceId)
         {
             var result = new CustomJsonResult();
@@ -106,7 +149,7 @@ namespace LocalS.Service.Api.Merch
             {
                 var adSpace = CurrentDb.AdSpace.Where(m => m.Id == rop.AdSpaceId).FirstOrDefault();
 
-                var adSpaceContent = new AdSpaceContent();
+                var adSpaceContent = new AdContent();
 
                 adSpaceContent.Id = GuidUtil.New();
                 adSpaceContent.AdSpaceId = rop.AdSpaceId;
@@ -114,16 +157,17 @@ namespace LocalS.Service.Api.Merch
                 adSpaceContent.Priority = 0;
                 adSpaceContent.Title = rop.Title;
                 adSpaceContent.Url = rop.DispalyImgUrls[0].Url;
-                adSpaceContent.Status = E_AdSpaceContentStatus.Normal;
+                adSpaceContent.Status = E_AdContentStatus.Normal;
                 adSpaceContent.Creator = operater;
                 adSpaceContent.CreateTime = DateTime.Now;
                 CurrentDb.AdSpaceContent.Add(adSpaceContent);
 
                 foreach (var belongId in rop.BelongIds)
                 {
-                    var adSpaceContentBelong = new AdSpaceContentBelong();
+                    var adSpaceContentBelong = new AdContentBelong();
                     adSpaceContentBelong.Id = GuidUtil.New();
-                    adSpaceContentBelong.AdSpaceContentId = adSpaceContent.Id;
+                    adSpaceContentBelong.MerchId = adSpaceContent.MerchId;
+                    adSpaceContentBelong.AdContentId = adSpaceContent.Id;
                     adSpaceContentBelong.BelongType = adSpace.BelongType;
                     adSpaceContentBelong.BelongId = belongId;
                     adSpaceContentBelong.Creator = operater;

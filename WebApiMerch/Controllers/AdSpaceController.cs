@@ -20,6 +20,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetReleaseList([FromUri]RupAdSpaceGetReleaseList rup)
+        {
+            IResult result = MerchServiceFactory.AdSpace.GetReleaseList(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse InitRelease([FromUri]E_AdSpaceId id)
         {
             IResult result = MerchServiceFactory.AdSpace.InitRelease(this.CurrentUserId, this.CurrentMerchId, id);

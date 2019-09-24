@@ -13,23 +13,25 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="版位名称" prop="userName" align="left" min-width="30%">
+      <el-table-column label="图片" prop="imgUrl" align="left" min-width="30%">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <img :src="scope.row.imgUrl" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column label="描述" prop="fullName" align="left" min-width="70%">
+      <el-table-column label="标题" prop="title" align="left" min-width="70%">
         <template slot-scope="scope">
-          <span>{{ scope.row.description }}</span>
+          <span>{{ scope.row.title }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="发布时间" prop="createTime" align="left" min-width="70%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleRelease(row)">
-            发布
-          </el-button>
-          <el-button type="primary" size="mini" @click="handleReleaseList(row)">
-            发布记录
+          <el-button type="primary" size="mini" @click="handleDelete(row)">
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -39,8 +41,8 @@
 </template>
 
 <script>
-import { getList } from '@/api/adspace'
-
+import { getReleaseList } from '@/api/adspace'
+import { getUrlParam } from '@/utils/commonUtil'
 export default {
   name: 'AdminUserList',
   data() {
@@ -51,7 +53,8 @@ export default {
       listTotal: 0,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        adSpaceId: 0
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -60,13 +63,15 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
+
+    this.listQuery.adSpaceId = getUrlParam('id')
     this.getListData()
   },
   methods: {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getList(this.listQuery).then(res => {
+      getReleaseList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -79,14 +84,9 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleRelease(row) {
+    handleDelete(row) {
       this.$router.push({
         path: '/adspace/release?id=' + row.id
-      })
-    },
-    handleReleaseList(row) {
-      this.$router.push({
-        path: '/adspace/releaselist?id=' + row.id
       })
     }
   }

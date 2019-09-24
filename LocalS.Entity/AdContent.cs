@@ -5,15 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum E_AdSpaceContentStatus
+    public enum E_AdContentStatus
     {
         Unknow = 0,
         Normal = 1,
         Deleted = 2
     }
 
-    [Table("AdSpaceContent")]
-    public class AdSpaceContent
+    [Table("AdContent")]
+    public class AdContent
     {
         [Key]
         public string Id { get; set; }
@@ -22,7 +22,7 @@ namespace LocalS.Entity
         public string Title { get; set; }
         public string Url { get; set; }
         public int Priority { get; set; }
-        public E_AdSpaceContentStatus Status { get; set; }
+        public E_AdContentStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

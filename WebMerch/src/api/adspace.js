@@ -8,6 +8,14 @@ export function getList(params) {
   })
 }
 
+export function getReleaseList(params) {
+  return request({
+    url: '/adspace/getReleaselist',
+    method: 'get',
+    params
+  })
+}
+
 export function initRelease(params) {
   return request({
     url: '/adspace/initRelease',
@@ -16,7 +24,16 @@ export function initRelease(params) {
   })
 }
 
+export function release(data) {
+  return request({
+    url: '/adspace/release',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
-  initRelease: initRelease
+  release: release,
+  getReleaseList: getReleaseList
 }

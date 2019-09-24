@@ -201,6 +201,7 @@
     <Compile Include="Api\Merch\RModels\RopAdminUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserEdit.cs" />
     <Compile Include="Api\Merch\RModels\RupAdSpaceGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupAdSpaceGetReleaseList.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientDetailsOrdersGetOrderList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetList.cs" />

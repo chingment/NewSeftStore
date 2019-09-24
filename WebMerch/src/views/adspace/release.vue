@@ -83,9 +83,11 @@ export default {
     init() {
       this.loading = true
       var id = getUrlParam('id')
+
       initRelease({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
+          this.form.adSpaceId = d.adSpaceId
           this.temp.adSpaceName = d.adSpaceName
           this.temp.adSpaceDescription = d.adSpaceDescription
           this.temp.belongs = d.belongs

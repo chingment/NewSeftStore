@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdSpaceContent.cs" />
+    <Compile Include="AdContent.cs" />
     <Compile Include="AdSpace.cs" />
-    <Compile Include="AdSpaceContentBelong.cs" />
+    <Compile Include="AdContentBelong.cs" />
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />
