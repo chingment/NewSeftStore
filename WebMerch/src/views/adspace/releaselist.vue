@@ -13,17 +13,22 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" prop="imgUrl" align="left" min-width="30%">
+      <el-table-column label="图片" prop="imgUrl" align="left" width="100">
         <template slot-scope="scope">
           <img :src="scope.row.url" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column label="标题" prop="title" align="left" min-width="70%">
+      <el-table-column label="标题" prop="title" align="left" min-width="75%">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布时间" prop="createTime" align="left" min-width="70%">
+      <el-table-column label="状态" prop="status" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span :class="'enable-status enable-status-'+scope.row.status.value">{{ scope.row.status.text }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="发布时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>
@@ -86,7 +91,7 @@ export default {
       this.getListData()
     },
     handleDelete(row) {
-      MessageBox.confirm('确定要保存', '提示', {
+      MessageBox.confirm('确定要删除', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

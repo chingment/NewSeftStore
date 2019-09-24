@@ -13,6 +13,7 @@ namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseDbContext
     {
+     
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
             CustomJsonResult<RetOrderReserve> result = new CustomJsonResult<RetOrderReserve>();
@@ -194,8 +195,6 @@ namespace LocalS.BLL.Biz
                             orderDetails.Receiver = null;
                             orderDetails.ReceiverPhone = null;
                             orderDetails.ReceptionAddress = store.Address;
-
-
                             break;
                     }
                     orderDetails.OrderId = order.Id;
@@ -314,7 +313,7 @@ namespace LocalS.BLL.Biz
 
                 ts.Complete();
 
-                //Task4Factory.Global.Enter(TimerTaskType.CheckOrderPay, order.PayExpireTime.Value, order);
+                Task4Factory.Global.Enter(TimerTaskType.CheckOrderPay, order.PayExpireTime.Value, order);
 
                 ret.OrderId = order.Id;
                 ret.OrderSn = order.Sn;
