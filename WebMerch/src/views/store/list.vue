@@ -25,7 +25,12 @@
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-            <div class="describe" />
+            <div class="describe">
+              <ul>
+                <li><el-button type="text" @click="handleViewMachine(item)">机器管理</el-button></li>
+                <li><el-button type="text" style="color:#67c23a" @click="handleViewOrder(item)">订单信息</el-button></li>
+              </ul>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -93,7 +98,17 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/store/manage?id=' + row.id
+        path: '/store/manage?id=' + row.id + '&tab=tabBaseInfo'
+      })
+    },
+    handleViewMachine(row) {
+      this.$router.push({
+        path: '/store/manage?id=' + row.id + '&tab=tabMachine'
+      })
+    },
+    handleViewOrder(row) {
+      this.$router.push({
+        path: '/store/manage?id=' + row.id + '&tab=tabOrder'
       })
     }
   }
@@ -147,9 +162,22 @@ white-space: nowrap;
 
     .describe{
       flex: 1;
-      padding: 5px;
+      padding: 0px;
       font-size: 12px;
+
+      ul{
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+         li{
+           width: 100%;
+           text-align: right;
+        height: 26px;
+        line-height: 26px;
+      }
+      }
     }
+
   }
 }
 </style>

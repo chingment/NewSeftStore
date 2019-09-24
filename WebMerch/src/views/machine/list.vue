@@ -149,7 +149,7 @@ white-space: nowrap;
 
     .describe{
       flex: 1;
-      padding: 5px;
+      padding: 0px;
       font-size: 12px;
 
       ul{
@@ -157,6 +157,8 @@ white-space: nowrap;
         margin: 0px;
         list-style: none;
          li{
+           width: 100%;
+           text-align: right;
         height: 26px;
         line-height: 26px;
       }

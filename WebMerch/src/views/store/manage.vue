@@ -49,6 +49,7 @@ export default {
   },
   methods: {
     init() {
+      this.activeName = getUrlParam('tab')
       this.loading = true
       initManage({ id: this.id }).then(res => {
         if (res.result === 1) {
