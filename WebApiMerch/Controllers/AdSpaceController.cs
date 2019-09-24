@@ -34,9 +34,16 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Release([FromBody]RopAdSpaceRelease id)
+        public OwnApiHttpResponse Release([FromBody]RopAdSpaceRelease rop)
         {
-            IResult result = MerchServiceFactory.AdSpace.Release(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.AdSpace.Release(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse DeleteAdContent([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.AdSpace.DeleteAdContent(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
     }

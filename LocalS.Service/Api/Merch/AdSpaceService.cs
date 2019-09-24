@@ -12,6 +12,27 @@ namespace LocalS.Service.Api.Merch
 {
     public class AdSpaceService : BaseDbContext
     {
+        public StatusModel GetReleaseStatus(E_AdContentStatus status)
+        {
+            var statusModel = new StatusModel();
+
+            switch (status)
+            {
+                case E_AdContentStatus.Normal:
+                    statusModel.Value = 1;
+                    statusModel.Text = "正常";
+                    break;
+                case E_AdContentStatus.Deleted:
+                    statusModel.Value = 2;
+                    statusModel.Text = "已删除";
+                    break;
+            }
+
+
+            return statusModel;
+        }
+
+
         public CustomJsonResult GetList(string operater, string merchId, RupAdSpaceGetList rup)
         {
             var result = new CustomJsonResult();
@@ -57,7 +78,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.AdSpaceContent
+            var query = (from u in CurrentDb.AdContent
                          where u.AdSpaceId == rup.AdSpaceId
                          select new { u.Id, u.Title, u.Url, u.Status, u.CreateTime });
 
@@ -81,6 +102,7 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Title = item.Title,
                     Url = item.Url,
+                    Status = GetReleaseStatus(item.Status),
                     CreateTime = item.CreateTime,
                 });
             }
@@ -160,7 +182,7 @@ namespace LocalS.Service.Api.Merch
                 adSpaceContent.Status = E_AdContentStatus.Normal;
                 adSpaceContent.Creator = operater;
                 adSpaceContent.CreateTime = DateTime.Now;
-                CurrentDb.AdSpaceContent.Add(adSpaceContent);
+                CurrentDb.AdContent.Add(adSpaceContent);
 
                 foreach (var belongId in rop.BelongIds)
                 {
@@ -173,7 +195,7 @@ namespace LocalS.Service.Api.Merch
                     adSpaceContentBelong.Creator = operater;
                     adSpaceContentBelong.CreateTime = DateTime.Now;
 
-                    CurrentDb.AdSpaceContentBelong.Add(adSpaceContentBelong);
+                    CurrentDb.AdContentBelong.Add(adSpaceContentBelong);
                 }
 
                 CurrentDb.SaveChanges();
@@ -181,6 +203,25 @@ namespace LocalS.Service.Api.Merch
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
+            return result;
+        }
+
+
+        public CustomJsonResult DeleteAdContent(string operater, string merchId, string adContentId)
+        {
+            var result = new CustomJsonResult();
+
+            var adContent = CurrentDb.AdContent.Where(m => m.Id == adContentId).FirstOrDefault();
+            if (adContent != null)
+            {
+                adContent.Status = E_AdContentStatus.Deleted;
+                adContent.Mender = operater;
+                adContent.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
+
             return result;
         }
     }

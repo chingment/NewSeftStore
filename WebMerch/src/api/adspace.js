@@ -32,8 +32,17 @@ export function release(data) {
   })
 }
 
+export function deleteAdContent(params) {
+  return request({
+    url: '/adspace/deleteAdContent',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getList: getList,
   release: release,
-  getReleaseList: getReleaseList
+  getReleaseList: getReleaseList,
+  deleteAdContent: deleteAdContent
 }

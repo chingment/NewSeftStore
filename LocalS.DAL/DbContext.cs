@@ -39,8 +39,8 @@ namespace LocalS.DAL
         public IDbSet<ClientCart> ClientCart { get; set; }
         public IDbSet<ClientCoupon> ClientCoupon { get; set; }
 
-        public IDbSet<AdContent> AdSpaceContent { get; set; }
-        public IDbSet<AdContentBelong> AdSpaceContentBelong { get; set; }
+        public IDbSet<AdContent> AdContent { get; set; }
+        public IDbSet<AdContentBelong> AdContentBelong { get; set; }
         public IDbSet<AdSpace> AdSpace { get; set; }
 
         public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }

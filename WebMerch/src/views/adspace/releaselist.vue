@@ -15,7 +15,7 @@
       </el-table-column>
       <el-table-column label="图片" prop="imgUrl" align="left" min-width="30%">
         <template slot-scope="scope">
-          <img :src="scope.row.imgUrl" style="width:80px;height:80px;">
+          <img :src="scope.row.url" style="width:80px;height:80px;">
         </template>
       </el-table-column>
       <el-table-column label="标题" prop="title" align="left" min-width="70%">
@@ -41,7 +41,8 @@
 </template>
 
 <script>
-import { getReleaseList } from '@/api/adspace'
+import { MessageBox } from 'element-ui'
+import { getReleaseList, deleteAdContent } from '@/api/adspace'
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
   name: 'AdminUserList',
@@ -85,8 +86,17 @@ export default {
       this.getListData()
     },
     handleDelete(row) {
-      this.$router.push({
-        path: '/adspace/release?id=' + row.id
+      MessageBox.confirm('确定要保存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteAdContent({ id: row.id }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.getListData()
+          }
+        })
       })
     }
   }
