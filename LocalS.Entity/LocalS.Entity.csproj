@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="AdSpaceContent.cs" />
     <Compile Include="AdSpace.cs" />
+    <Compile Include="AdSpaceContentBelong.cs" />
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />

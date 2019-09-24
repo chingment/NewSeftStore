@@ -40,7 +40,7 @@ namespace LocalS.DAL
         public IDbSet<ClientCoupon> ClientCoupon { get; set; }
 
         public IDbSet<AdSpaceContent> AdSpaceContent { get; set; }
-
+        public IDbSet<AdSpaceContentBelong> AdSpaceContentBelong { get; set; }
         public IDbSet<AdSpace> AdSpace { get; set; }
 
         public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }

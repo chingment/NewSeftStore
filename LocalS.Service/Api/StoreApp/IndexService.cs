@@ -28,7 +28,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.Store = storeModel;
 
-            var adSpaceContents = CurrentDb.AdSpaceContent.Where(m => m.AdSpaceId == E_AdSpaceId.AppHomeTop && m.StoreId == store.Id && m.BelongType == E_AdSpaceContentBelongType.App && m.BelongId == store.Id).ToList();
+            var adSpaceContents = CurrentDb.AdSpaceContentBelong.Where(m => m.MerchId == store.MerchId && m.AdSpaceId == E_AdSpaceId.AppHomeTop && m.BelongType == E_AdSpaceBelongType.App && m.BelongId == store.Id && m.Status == E_AdSpaceContentBelongStatus.Normal).ToList();
 
             BannerModel bannerModel = new BannerModel();
             bannerModel.Autoplay = true;

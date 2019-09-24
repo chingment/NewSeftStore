@@ -90,7 +90,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var bannerModels = new List<BannerModel>();
 
-            var banners = CurrentDb.AdSpaceContent.Where(m => m.MerchId == merchId && m.Status == E_AdSpaceContentStatus.Normal && m.BelongId == machineId && m.BelongType == E_AdSpaceContentBelongType.Machine).OrderByDescending(m => m.Priority).ToList();
+            var banners = CurrentDb.AdSpaceContentBelong.Where(m => m.MerchId == merchId && m.Status == E_AdSpaceContentBelongStatus.Normal && m.BelongId == machineId && m.BelongType == E_AdSpaceBelongType.Machine && m.AdSpaceId == E_AdSpaceId.MachineHome).OrderByDescending(m => m.Priority).ToList();
 
             foreach (var item in banners)
             {

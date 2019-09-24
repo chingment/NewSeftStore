@@ -11,6 +11,13 @@ namespace LocalS.Entity
         MachineHome = 1,
         AppHomeTop = 2
     }
+    public enum E_AdSpaceBelongType
+    {
+
+        Unknow = 0,
+        App = 1,
+        Machine = 2
+    }
 
     [Table("AdSpace")]
     public class AdSpace
@@ -20,6 +27,7 @@ namespace LocalS.Entity
         public string Name { get; set; }
         public string Description { get; set; }
         public string Creator { get; set; }
+        public E_AdSpaceBelongType BelongType { get; set; }
         public DateTime CreateTime { get; set; }
     }
 }

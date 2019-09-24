@@ -149,6 +149,7 @@
     <Compile Include="Api\Agent\UserService.cs" />
     <Compile Include="Api\Agent\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
+    <Compile Include="Api\Merch\AdSpaceService.cs" />
     <Compile Include="Api\Merch\ClientUserService.cs" />
     <Compile Include="Api\Merch\MachineService.cs" />
     <Compile Include="Api\Merch\Models\MachineModel.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\PrdSubjectService.cs" />
+    <Compile Include="Api\Merch\RModels\RetAdSpaceInitRelease.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitDetailsOrders.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitManageBaseInfo.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitManageProduct.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Api\Merch\RModels\RetStoreInitManageProduct.cs" />
     <Compile Include="Api\Merch\RModels\RetAdminUserInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetAdminUserInitEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopAdSpaceRelease.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindEdit.cs" />
@@ -197,6 +200,7 @@
     <Compile Include="Api\Merch\RModels\RopStoreRemoveMachine.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RupAdSpaceGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientDetailsOrdersGetOrderList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetList.cs" />
