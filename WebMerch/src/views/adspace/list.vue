@@ -1,5 +1,5 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="adspace_list" class="app-container">
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -92,3 +92,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+
+#machine_list{
+  padding: 20px;
+}
+</style>
