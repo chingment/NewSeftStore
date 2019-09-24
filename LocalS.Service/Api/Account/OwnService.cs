@@ -97,84 +97,95 @@ namespace LocalS.Service.Api.Account
             var result = new CustomJsonResult();
             var ret = new RetOwnLoginByMinProgram();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+            WxUserInfo wxUserInfo = null;
 
-            if (merch == null)
+            if (string.IsNullOrEmpty(rop.OpenId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
-            }
+                var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
 
-            var wxAppInfoConfig = new WxAppInfoConfig();
-
-            wxAppInfoConfig.AppId = merch.WxMpAppId;
-            wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
-            wxAppInfoConfig.PayMchId = merch.WxPayMchId;
-            wxAppInfoConfig.PayKey = merch.WxPayKey;
-            wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-            wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
-
-
-            var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
-
-            if (wxUserInfoByMinProram == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
-            }
-
-            var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == wxUserInfoByMinProram.openId).FirstOrDefault();
-            if (wxUserInfo == null)
-            {
-                string sysClientUserId = GuidUtil.New();
-
-                var sysClientUser = new SysClientUser();
-
-                sysClientUser.Id = sysClientUserId;
-                sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
-                sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
-                sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
-                sysClientUser.RegisterTime = DateTime.Now;
-                sysClientUser.NickName = wxUserInfoByMinProram.nickName;
-                sysClientUser.Sex = wxUserInfoByMinProram.gender;
-                sysClientUser.Province = wxUserInfoByMinProram.province;
-                sysClientUser.City = wxUserInfoByMinProram.city;
-                sysClientUser.Country = wxUserInfoByMinProram.country;
-                sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
-                sysClientUser.IsVip = false;
-                sysClientUser.CreateTime = DateTime.Now;
-                sysClientUser.Creator = sysClientUserId;
-                sysClientUser.BelongSite = Enumeration.BelongSite.Client;
-                sysClientUser.MerchId = rop.MerchId;
-                CurrentDb.SysClientUser.Add(sysClientUser);
-                CurrentDb.SaveChanges();
-
-                wxUserInfo = new WxUserInfo();
-                wxUserInfo.Id = GuidUtil.New();
-                wxUserInfo.MerchId = rop.MerchId;
-                wxUserInfo.AppId = rop.AppId;
-                wxUserInfo.ClientUserId = sysClientUser.Id;
-                wxUserInfo.OpenId = wxUserInfoByMinProram.openId;
-                wxUserInfo.CreateTime = DateTime.Now;
-                wxUserInfo.Creator = sysClientUserId;
-                CurrentDb.WxUserInfo.Add(wxUserInfo);
-                CurrentDb.SaveChanges();
-            }
-            else
-            {
-                var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
-                if (sysClientUser != null)
+                if (merch == null)
                 {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+                }
+
+                var wxAppInfoConfig = new WxAppInfoConfig();
+
+                wxAppInfoConfig.AppId = merch.WxMpAppId;
+                wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+                wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+                wxAppInfoConfig.PayKey = merch.WxPayKey;
+                wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+                wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+
+
+                var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
+
+                if (wxUserInfoByMinProram == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
+                }
+
+                wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == wxUserInfoByMinProram.openId).FirstOrDefault();
+                if (wxUserInfo == null)
+                {
+                    string sysClientUserId = GuidUtil.New();
+
+                    var sysClientUser = new SysClientUser();
+
+                    sysClientUser.Id = sysClientUserId;
+                    sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
+                    sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+                    sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
+                    sysClientUser.RegisterTime = DateTime.Now;
                     sysClientUser.NickName = wxUserInfoByMinProram.nickName;
                     sysClientUser.Sex = wxUserInfoByMinProram.gender;
                     sysClientUser.Province = wxUserInfoByMinProram.province;
                     sysClientUser.City = wxUserInfoByMinProram.city;
                     sysClientUser.Country = wxUserInfoByMinProram.country;
                     sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                    sysClientUser.IsVip = false;
+                    sysClientUser.CreateTime = DateTime.Now;
+                    sysClientUser.Creator = sysClientUserId;
+                    sysClientUser.BelongSite = Enumeration.BelongSite.Client;
+                    sysClientUser.MerchId = rop.MerchId;
+                    CurrentDb.SysClientUser.Add(sysClientUser);
+                    CurrentDb.SaveChanges();
+
+                    wxUserInfo = new WxUserInfo();
+                    wxUserInfo.Id = GuidUtil.New();
+                    wxUserInfo.MerchId = rop.MerchId;
+                    wxUserInfo.AppId = rop.AppId;
+                    wxUserInfo.ClientUserId = sysClientUser.Id;
+                    wxUserInfo.OpenId = wxUserInfoByMinProram.openId;
+                    wxUserInfo.CreateTime = DateTime.Now;
+                    wxUserInfo.Creator = sysClientUserId;
+                    CurrentDb.WxUserInfo.Add(wxUserInfo);
+                    CurrentDb.SaveChanges();
                 }
-                CurrentDb.SaveChanges();
+                else
+                {
+                    var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
+                    if (sysClientUser != null)
+                    {
+                        sysClientUser.NickName = wxUserInfoByMinProram.nickName;
+                        sysClientUser.Sex = wxUserInfoByMinProram.gender;
+                        sysClientUser.Province = wxUserInfoByMinProram.province;
+                        sysClientUser.City = wxUserInfoByMinProram.city;
+                        sysClientUser.Country = wxUserInfoByMinProram.country;
+                        sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                    }
+                    CurrentDb.SaveChanges();
+                }
+            }
+            else
+            {
+                wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == rop.OpenId).FirstOrDefault();
             }
 
             var tokenInfo = new TokenInfo();
             ret.Token = GuidUtil.New();
+            ret.OpenId = wxUserInfo.OpenId;
+
             tokenInfo.UserId = wxUserInfo.ClientUserId;
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));

@@ -3,6 +3,7 @@ const key_cart = "key_cart"
 const key_accesstoken = "key_accesstoken"
 const key_store = "key_store"
 const key_maintabbarindex = "main_tabbar_index"
+const key_openid = "openid"
 
 function getProductKind() {
   return wx.getStorageSync(key_productkind) || []
@@ -62,6 +63,14 @@ function getMainTabbarIndex() {
   return wx.setStorageSync(key_maintabbarindex)
 }
 
+function getOpenId() {
+  return wx.getStorageSync(key_openid) || undefined
+}
+
+function setOpenId(openid) {
+  wx.setStorageSync(key_openid, openid)
+}
+
 module.exports = {
   getProductKind: getProductKind,
   setProductKind: setProductKind,
@@ -72,5 +81,7 @@ module.exports = {
   getCurrentStore: getCurrentStore,
   setCurrentStore: setCurrentStore,
   setMainTabbarIndex: setMainTabbarIndex,
-  getMainTabbarIndex: getMainTabbarIndex
+  getMainTabbarIndex: getMainTabbarIndex,
+  getOpenId: getOpenId,
+  setOpenId: setOpenId
 }

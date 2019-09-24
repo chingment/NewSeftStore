@@ -13,14 +13,17 @@ Page({
     wx.getSetting({
       success(res) {
         if (res.authSetting['scope.userInfo']) {
+          console.log("res:"+JSON.stringify(res))
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称
           wx.getUserInfo({
             success: function (res) {
+              console.log(JSON.stringify(res))
               //"errMsg":"getUserInfo:ok"
-              console.log( JSON.stringify(res))
-              wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
-                url: ownRequest.getReturnUrl()
-              })
+              that.login(storeage.getOpenId(), '', res.iv, res.encryptedData)
+              // console.log( JSON.stringify(res))
+              // wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
+              //   url: ownRequest.getReturnUrl()
+              // })
             }
           })
         }
@@ -31,34 +34,40 @@ Page({
   },
   onShow: function() {
   },
+  login: function (openid, code, iv, encryptedData){
+
+    apiOwn.loginByMinProgram({
+      merchId: config.merchId,
+      appId: config.appId,
+      openId: openid,
+      code: code,
+      iv: iv,
+      encryptedData: encryptedData
+    }, {
+        success: function (res) {
+          if (res.result == 1) {
+            storeage.setOpenId(res.data.openId);
+            storeage.setAccessToken(res.data.token);
+            wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
+              url: ownRequest.getReturnUrl()
+            })
+          } else {
+            toast.show({
+              title: res.message
+            })
+          }
+        },
+        fail: function () { }
+      })
+
+  },
   bindgetuserinfo: function(e) {
+    var  _this=this
     if (e.detail.userInfo) {
       wx.login({
         success(res) {
           if (res.code) {
-
-            apiOwn.loginByMinProgram({
-              merchId: config.merchId,
-              appId: config.appId,
-              code: res.code,
-              iv: e.detail.iv,
-              encryptedData: e.detail.encryptedData
-            }, {
-                success: function (res) {
-                  if (res.result == 1) {
-                    storeage.setAccessToken(res.data.token);
-                    wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
-                      url: ownRequest.getReturnUrl()
-                    })
-                  } else {
-                    toast.show({
-                      title: res.message
-                    })
-                  }
-                },
-                fail: function () { }
-              })
-        
+            _this.login('', res.code, e.detail.iv, e.detail.encryptedData)
           } else {
             
           }

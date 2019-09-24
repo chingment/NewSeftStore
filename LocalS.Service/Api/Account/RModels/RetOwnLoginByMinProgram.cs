@@ -9,5 +9,7 @@ namespace LocalS.Service.Api.Account
     public class RetOwnLoginByMinProgram
     {
         public string Token { get; set; }
+
+        public string OpenId { get; set; }
     }
 }
