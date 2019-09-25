@@ -83,6 +83,7 @@ export default {
    }
    .name{
     padding: 0 10px;
+    color:#2ac06d;
    }
   }
 }
