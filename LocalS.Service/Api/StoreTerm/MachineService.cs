@@ -41,9 +41,16 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
+            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.MachineId == machine.Id).FirstOrDefault();
+
+            if (merchMachine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器对应商户信息不存在");
+            }
+
             ret.Machine.Id = machine.Id;
-            ret.Machine.Name = machine.Name;
-            ret.Machine.LogoImgUrl = machine.LogoImgUrl;
+            ret.Machine.Name = merchMachine.Name;
+            ret.Machine.LogoImgUrl = merchMachine.LogoImgUrl;
             ret.Machine.MerchName = merch.Name;
             ret.Machine.StoreName = store.Name;
 
@@ -94,7 +101,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
 
- 
+
             foreach (var item in adContents)
             {
                 bannerModels.Add(new BannerModel { ImgUrl = item.Url });

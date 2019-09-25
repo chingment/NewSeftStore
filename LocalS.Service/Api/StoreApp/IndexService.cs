@@ -33,9 +33,7 @@ namespace LocalS.Service.Api.StoreApp
             var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
 
             BannerModel bannerModel = new BannerModel();
-            bannerModel.Autoplay = true;
-            bannerModel.CurrentSwiper = 0;
-
+   
             foreach (var item in adContents)
             {
                 var imgModel = new BannerModel.ImgModel();

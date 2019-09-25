@@ -8,8 +8,6 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class BannerModel
     {
-        public bool Autoplay { get; set; }
-        public int CurrentSwiper { get; set; }
         public BannerModel()
         {
             this.Imgs = new List<ImgModel>();
