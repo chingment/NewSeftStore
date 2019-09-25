@@ -30,11 +30,21 @@ namespace LocalS.Service.Api.StoreTerm
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
 
-            var query = CurrentDb.SellChannelStock.Where(m =>
-            m.MerchId == merchId &&
-            m.RefId == machineId &&
-            m.RefType == Entity.E_SellChannelRefType.Machine
-            );
+            var query = (from m in CurrentDb.SellChannelStock
+
+                         where (m.MerchId == merchId &&
+             m.RefId == machineId &&
+             m.RefType == Entity.E_SellChannelRefType.Machine)
+
+                         orderby m.CreateTime //默认升序ascending,降序descending
+
+                         select new { m.PrdProductId }).Distinct();
+
+            //var query = CurrentDb.SellChannelStock.Where(m =>
+            //m.MerchId == merchId &&
+            //m.RefId == machineId &&
+            //m.RefType == Entity.E_SellChannelRefType.Machine
+            //);
 
             if (!string.IsNullOrEmpty(kindId))
             {
@@ -46,9 +56,9 @@ namespace LocalS.Service.Api.StoreTerm
             pageEntiy.Total = query.Count();
             pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * pageIndex).Take(pageSize);
+            query = query.OrderBy(m => m.PrdProductId).Skip(pageSize * pageIndex).Take(pageSize);
 
-            var list = query.ToList();
+            var list = query.Distinct().ToList();
 
 
             foreach (var item in list)
@@ -61,6 +71,7 @@ namespace LocalS.Service.Api.StoreTerm
                     prdProductModel2.Id = productModel.Id;
                     prdProductModel2.Name = productModel.Name;
                     prdProductModel2.MainImgUrl = productModel.MainImgUrl;
+                    prdProductModel2.DetailsDes = productModel.DetailsDes;
                     prdProductModel2.BriefDes = productModel.BriefDes;
                     prdProductModel2.RefSku.Id = productModel.RefSku.Id;
                     prdProductModel2.RefSku.ReceptionMode = productModel.RefSku.ReceptionMode;

@@ -189,6 +189,7 @@ namespace LocalS.Service.Api.Merch
                     var adSpaceContentBelong = new AdContentBelong();
                     adSpaceContentBelong.Id = GuidUtil.New();
                     adSpaceContentBelong.MerchId = adSpaceContent.MerchId;
+                    adSpaceContentBelong.AdSpaceId = adSpaceContent.AdSpaceId;
                     adSpaceContentBelong.AdContentId = adSpaceContent.Id;
                     adSpaceContentBelong.BelongType = adSpace.BelongType;
                     adSpaceContentBelong.BelongId = belongId;

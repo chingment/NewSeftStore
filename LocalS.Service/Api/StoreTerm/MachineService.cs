@@ -131,6 +131,8 @@ namespace LocalS.Service.Api.StoreTerm
                         if (products.Items.Count > 0)
                         {
                             prdKindModel.Childs = products.Items.Select(m => m.Id).ToList();
+
+                            productKindModels.Add(prdKindModel);
                         }
                     }
                 }

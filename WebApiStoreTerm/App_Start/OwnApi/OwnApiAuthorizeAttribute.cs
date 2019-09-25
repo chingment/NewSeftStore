@@ -11,7 +11,7 @@ using Lumos;
 using Lumos.BLL;
 using System.Web.Http;
 using System.Linq;
-using LocalS.BLL.Biz;
+using LocalS.Service.Api.StoreTerm;
 
 namespace WebApiStoreTerm
 {
@@ -132,7 +132,7 @@ namespace WebApiStoreTerm
                 }
 
                 //检查key是否在数据库中存在
-                string app_secret = BizFactory.Merch.GetTermApiSecret(app_key);
+                string app_secret = StoreTermServiceFactory.Term.GetAppSecretByAppKey(app_key);
 
                 if (app_secret == null)
                 {

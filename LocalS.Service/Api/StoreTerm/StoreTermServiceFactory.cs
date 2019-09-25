@@ -32,5 +32,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
+        public static TermService Term
+        {
+            get
+            {
+                return new TermService();
+            }
+        }
+
     }
 }

@@ -76,6 +76,7 @@
     <Compile Include="Store.cs" />
     <Compile Include="SellChannelStock.cs" />
     <Compile Include="SellChannelStockLog.cs" />
+    <Compile Include="Term.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

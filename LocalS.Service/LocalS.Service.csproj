@@ -302,6 +302,7 @@
     <Compile Include="Api\StoreTerm\RModels\RupOrderSkuPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupProductList.cs" />
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
+    <Compile Include="Api\StoreTerm\TermService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\FsBlock.cs" />
     <Compile Include="UI\FsBlockByField.cs" />

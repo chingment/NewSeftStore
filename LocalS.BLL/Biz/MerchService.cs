@@ -9,14 +9,6 @@ namespace LocalS.BLL.Biz
 {
     public class MerchService : BaseDbContext
     {
-        public string GetTermApiSecret(string appId)
-        {
-            var merch = CurrentDb.Merch.Where(m => m.TermApiKey == appId).FirstOrDefault();
-            if (merch == null)
-                return null;
-
-            return merch.TermApiSecret;
-        }
         public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId, string appId)
         {
 

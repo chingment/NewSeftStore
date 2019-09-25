@@ -15,9 +15,6 @@ namespace LocalS.Entity
         public string ContactName { get; set; }
         public string ContactPhone { get; set; }
         public string ContactAddress { get; set; }
-
-        public string TermApiKey { get; set; }
-        public string TermApiSecret { get; set; }
         public string WxPayMchId { get; set; }
         public string WxPayKey { get; set; }
         public string WxPayResultNotifyUrl { get; set; }
