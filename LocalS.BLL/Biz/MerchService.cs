@@ -9,12 +9,12 @@ namespace LocalS.BLL.Biz
 {
     public class MerchService : BaseDbContext
     {
-        public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId, string appId)
+        public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId)
         {
 
             var config = new WxAppInfoConfig();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId && m.WxMpAppId == appId).FirstOrDefault();
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
             if (merch == null)
                 return null;
 
@@ -28,12 +28,12 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
-        public WxAppInfoConfig GetWxPaAppInfoConfig(string merchId, string appId)
+        public WxAppInfoConfig GetWxPaAppInfoConfig(string merchId)
         {
 
             var config = new WxAppInfoConfig();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId && m.WxPaAppId == appId).FirstOrDefault();
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
             if (merch == null)
                 return null;
 

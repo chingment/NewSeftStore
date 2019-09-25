@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreTerm
                 case PayWay.Wechat:
                     order.PayWay = E_OrderPayWay.Wechat;
 
-                    var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId, order.AppId);
+                    var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
 
                     var orderAttach = new LocalS.BLL.Biz.OrderAttachModel();
                     orderAttach.MerchId = order.MerchId;
