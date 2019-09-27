@@ -16,6 +16,7 @@ namespace LocalS.BLL
         }
 
         public string Id { get; set; }
+        public string PrdProductId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DispalyImgUrls { get; set; }

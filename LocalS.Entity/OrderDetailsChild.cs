@@ -15,6 +15,7 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
+        public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
         public string OrderSn { get; set; }
         public string OrderDetailsId { get; set; }

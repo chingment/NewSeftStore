@@ -108,6 +108,7 @@ namespace LocalS.BLL
 
                 prdProductSkuByCache = new PrdProductSkuModel();
                 prdProductSkuByCache.Id = prdProductRefSkuByDb.Id;
+                prdProductSkuByCache.PrdProductId = prdProductRefSkuByDb.PrdProductId;
                 prdProductSkuByCache.Name = prdProductRefSkuByDb.Name;
                 prdProductSkuByCache.DispalyImgUrls = prdProduct.DispalyImgUrls;
                 prdProductSkuByCache.MainImgUrl = prdProduct.MainImgUrl;

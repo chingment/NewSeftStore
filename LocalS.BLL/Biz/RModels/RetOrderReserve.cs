@@ -46,6 +46,8 @@ namespace LocalS.BLL.Biz
             }
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
+
+            public string PrdProductId { get; set; }
             public string PrdProductSkuId { get; set; }
             public string PrdProductSkuName { get; set; }
             public string PrdProductSkuMainImgUrl { get; set; }
@@ -68,6 +70,7 @@ namespace LocalS.BLL.Biz
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
             public int Quantity { get; set; }
+            public string PrdProductId { get; set; }
             public string PrdProductSkuId { get; set; }
             public string PrdProductSkuName { get; set; }
             public string PrdProductSkuMainImgUrl { get; set; }

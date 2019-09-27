@@ -52,7 +52,7 @@ namespace LocalS.BLL.Biz
         {
             string machineName = "";
             var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
-            if (merchMachine == null)
+            if (merchMachine != null)
             {
                 machineName = merchMachine.Name;
             }
