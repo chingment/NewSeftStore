@@ -9,7 +9,7 @@ namespace LocalS.BLL
 {
     public class SellChannelStockCacheService : BaseDbContext
     {
-        private static readonly string key_Format_SellStock = "SellStock:{0}";
+        private static readonly string key_Format_SellStock = "SellStock:{1}:{0}";
 
         public void ReSet()
         {
@@ -64,38 +64,6 @@ namespace LocalS.BLL
             }
         }
 
-        public PrdProductSkuStockModel GetStock(string productSkuId)
-        {
-            var redis = new RedisClient<PrdProductSkuStockModel>();
-
-            var sellStock = redis.KGet(string.Format(key_Format_SellStock, productSkuId));
-
-            if (sellStock == null)
-            {
-                sellStock = new PrdProductSkuStockModel();
-                sellStock.Id = productSkuId;
-
-                var merchSellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
-
-                foreach (var merchSellChannelStock in merchSellChannelStocks)
-                {
-                    var stock = new PrdProductSkuStockModel.Stock();
-                    stock.RefType = merchSellChannelStock.RefType;
-                    stock.RefId = merchSellChannelStock.RefId;
-                    stock.SlotId = merchSellChannelStock.SlotId;
-                    stock.SumQuantity = merchSellChannelStock.SumQuantity;
-                    stock.LockQuantity = merchSellChannelStock.LockQuantity;
-                    stock.SellQuantity = merchSellChannelStock.SellQuantity;
-                    stock.IsOffSell = merchSellChannelStock.IsOffSell;
-                    stock.SalePrice = merchSellChannelStock.SalePrice;
-                    stock.SalePriceByVip = merchSellChannelStock.SalePriceByVip;
-                    sellStock.Stocks.Add(stock);
-                }
-
-                redis.KSet(string.Format(key_Format_SellStock, productSkuId), sellStock, new TimeSpan(100, 0, 0));
-            }
-
-            return sellStock;
-        }
+      
     }
 }

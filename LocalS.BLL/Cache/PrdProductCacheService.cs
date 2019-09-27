@@ -12,19 +12,19 @@ namespace LocalS.BLL
     {
         private static readonly string redis_key_product_info = "info:Product";
         private static readonly string redis_key_productSku_info = "info:ProductSku";
+        private static readonly string redis_key_productSku_stock = "stock:ProductSku:{0}";
 
-
-        public void RemoveProduct(string productId)
+        public void RemoveProductInfo(string productId)
         {
             RedisHashUtil.Remove(redis_key_product_info, productId);
         }
 
-        public void RemoveProductSku(string productSkuId)
+        public void RemoveProductSkuInfo(string productSkuId)
         {
             RedisHashUtil.Remove(redis_key_productSku_info, productSkuId);
         }
 
-        public PrdProductModel GetProduct(string productId)
+        public PrdProductModel GetProductInfo(string productId)
         {
             //先从缓存信息读取商品信息
             PrdProductModel prdProductByCache = RedisHashUtil.Get<PrdProductModel>(redis_key_product_info, productId);
@@ -61,7 +61,7 @@ namespace LocalS.BLL
 
             //从缓存中取店铺的商品库存信息
 
-            var refSkuStock = CacheServiceFactory.SellChannelStock.GetStock(prdProductByCache.RefSku.Id);
+            var refSkuStock = GetProductSkuStock(prdProductByCache.RefSku.Id);
 
             if (refSkuStock == null)
             {
@@ -90,7 +90,7 @@ namespace LocalS.BLL
             return prdProductByCache;
         }
 
-        public PrdProductSkuModel GetProductSku(string productSkuId)
+        public PrdProductSkuModel GetProductSkuInfo(string productSkuId)
         {
 
             var prdProductSkuByCache = RedisHashUtil.Get<PrdProductSkuModel>(redis_key_productSku_info, productSkuId);
@@ -102,7 +102,7 @@ namespace LocalS.BLL
                 if (prdProductRefSkuByDb == null)
                     return null;
 
-                var prdProduct = GetProduct(prdProductRefSkuByDb.PrdProductId);
+                var prdProduct = GetProductInfo(prdProductRefSkuByDb.PrdProductId);
                 if (prdProduct == null)
                     return null;
 
@@ -118,10 +118,10 @@ namespace LocalS.BLL
                 RedisManager.Db.HashSetAsync(redis_key_productSku_info, productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuByCache), StackExchange.Redis.When.Always);
             }
 
-            var skuStock = CacheServiceFactory.SellChannelStock.GetStock(productSkuId);
+            var skuStock = GetProductSkuStock(productSkuId);
             if (skuStock == null)
             {
-                LogUtil.Info(string.Format("库存,ProductSku,SkuId:{0},数据为NULL",  productSkuId));
+                LogUtil.Info(string.Format("库存,ProductSku,SkuId:{0},数据为NULL", productSkuId));
             }
             else
             {
@@ -165,6 +165,38 @@ namespace LocalS.BLL
         }
 
 
+        public PrdProductSkuStockModel GetProductSkuStock(string productSkuId)
+        {
+            var redis = new RedisClient<PrdProductSkuStockModel>();
 
+            var sellStock = redis.KGet(string.Format(redis_key_productSku_stock, productSkuId));
+
+            if (sellStock == null)
+            {
+                sellStock = new PrdProductSkuStockModel();
+                sellStock.Id = productSkuId;
+
+                var merchSellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+
+                foreach (var merchSellChannelStock in merchSellChannelStocks)
+                {
+                    var stock = new PrdProductSkuStockModel.Stock();
+                    stock.RefType = merchSellChannelStock.RefType;
+                    stock.RefId = merchSellChannelStock.RefId;
+                    stock.SlotId = merchSellChannelStock.SlotId;
+                    stock.SumQuantity = merchSellChannelStock.SumQuantity;
+                    stock.LockQuantity = merchSellChannelStock.LockQuantity;
+                    stock.SellQuantity = merchSellChannelStock.SellQuantity;
+                    stock.IsOffSell = merchSellChannelStock.IsOffSell;
+                    stock.SalePrice = merchSellChannelStock.SalePrice;
+                    stock.SalePriceByVip = merchSellChannelStock.SalePriceByVip;
+                    sellStock.Stocks.Add(stock);
+                }
+
+                redis.KSet(string.Format(redis_key_productSku_stock, productSkuId), sellStock, new TimeSpan(100, 0, 0));
+            }
+
+            return sellStock;
+        }
     }
 }

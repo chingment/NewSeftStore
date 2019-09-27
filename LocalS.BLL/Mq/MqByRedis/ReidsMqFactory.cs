@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL
+namespace LocalS.Mq.MqByRedis
 {
-    public static class CacheServiceFactory
+    public static class ReidsMqFactory
     {
-        public static PrdProductCacheService PrdProduct
+        public static RedisMq4GlobalProvider Global
         {
             get
             {
-                return new PrdProductCacheService();
+                return new RedisMq4GlobalProvider();
             }
         }
     }

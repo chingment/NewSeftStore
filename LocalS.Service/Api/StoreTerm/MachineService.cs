@@ -150,7 +150,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var productSkuModel = BizFactory.PrdProduct.GetProductSku(item.PrdProductSkuId);
+                var productSkuModel = BizFactory.PrdProduct.GetProductSkuInfo(item.PrdProductSkuId);
 
                 if (productSkuModel != null)
                 {

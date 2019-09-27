@@ -57,6 +57,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LocalS.BLL\LocalS.BLL.csproj">
+      <Project>{15d7ce8c-a100-4d87-a1c2-d76339e78ad6}</Project>
+      <Name>LocalS.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LocalS.DAL\LocalS.DAL.csproj">
+      <Project>{22abb57b-64ed-42fc-a64d-d603a90cb81b}</Project>
+      <Name>LocalS.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LocalS.Entity\LocalS.Entity.csproj">
+      <Project>{85e1b9cd-3435-4591-bc66-29fbec2c67a3}</Project>
+      <Name>LocalS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LocalS.Service\LocalS.Service.csproj">
+      <Project>{6efde80b-7c86-483a-a7b2-73dba84d28cd}</Project>
+      <Name>LocalS.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
+      <Project>{c165e6a0-dd43-4aa1-94b1-d4bf5420a80d}</Project>
+      <Name>Lumos.Redis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lumos\Lumos.csproj">
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>

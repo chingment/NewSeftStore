@@ -8,14 +8,14 @@ namespace LocalS.BLL.Biz
 {
     public class PrdProductService : BaseDbContext
     {
-        public PrdProductModel GetProduct(string productId)
+        public PrdProductModel GetProductInfo(string productId)
         {
-            return CacheServiceFactory.PrdProduct.GetProduct(productId);
+            return CacheServiceFactory.PrdProduct.GetProductInfo(productId);
         }
 
-        public PrdProductSkuModel GetProductSku(string productSkuId)
+        public PrdProductSkuModel GetProductSkuInfo(string productSkuId)
         {
-            return CacheServiceFactory.PrdProduct.GetProductSku(productSkuId);
+            return CacheServiceFactory.PrdProduct.GetProductSkuInfo(productSkuId);
         }
     }
 }

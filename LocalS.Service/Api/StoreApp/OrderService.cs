@@ -106,7 +106,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var productSku = BLL.Biz.BizFactory.PrdProduct.GetProductSku(item.Id);
+                    var productSku = BLL.Biz.BizFactory.PrdProduct.GetProductSkuInfo(item.Id);
                     if (productSku != null)
                     {
                         item.Name = productSku.Name;

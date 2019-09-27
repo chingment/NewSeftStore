@@ -33,7 +33,7 @@ namespace WebApiStoreApp.Controllers
         {
             try
             {
-                CacheServiceFactory.SellChannelStock.ReSet();
+                //CacheServiceFactory.SellChannelStock.ReSet();
 
                 //RopOrderReserve rop = new RopOrderReserve();
                 //rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";

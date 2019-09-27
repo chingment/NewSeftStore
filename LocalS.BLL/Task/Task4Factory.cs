@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL
+namespace LocalS.BLL.Task
 {
-    public static class CacheServiceFactory
+    public static class Task4Factory
     {
-        public static PrdProductCacheService PrdProduct
+        public static Launcher Launcher
         {
             get
             {
-                return new PrdProductCacheService();
+                return new Launcher();
             }
         }
     }
