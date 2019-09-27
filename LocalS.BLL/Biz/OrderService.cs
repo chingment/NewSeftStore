@@ -753,30 +753,38 @@ namespace LocalS.BLL.Biz
                         item.Status = E_OrderDetailsChildSonStatus.Cancled;
                         item.Mender = GuidUtil.Empty();
                         item.MendTime = DateTime.Now;
+                    }
 
-                        //var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == item.PrdProductSkuId && m.SlotId == item.SlotId && m.RefId == item.SellChannelRefId && m.RefType == item.SellChannelRefType).FirstOrDefault();
+                    var childSons = (
+                        from q in orderDetailsChildSons
+                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
+                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
-                        //sellChannelStock.LockQuantity -= item.Quantity;
-                        //sellChannelStock.SellQuantity += item.Quantity;
-                        //sellChannelStock.Mender = operater;
-                        //sellChannelStock.MendTime = DateTime.Now;
+                    foreach (var childSon in childSons)
+                    {
+                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == childSon.PrdProductSkuId && m.SlotId == childSon.SlotId && m.RefId == childSon.SellChannelRefId && m.RefType == childSon.SellChannelRefType).FirstOrDefault();
 
-                        //var sellChannelStockLog = new SellChannelStockLog();
-                        //sellChannelStockLog.Id = GuidUtil.New();
-                        //sellChannelStockLog.MerchId = item.MerchId;
-                        //sellChannelStockLog.RefId = item.SellChannelRefId;
-                        //sellChannelStockLog.RefType = item.SellChannelRefType;
-                        //sellChannelStockLog.SlotId = item.SlotId;
-                        //sellChannelStockLog.PrdProductSkuId = item.PrdProductSkuId;
-                        //sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        //sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
-                        //sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                        //sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Lock;
-                        //sellChannelStockLog.ChangeQuantity = item.Quantity;
-                        //sellChannelStockLog.Creator = operater;
-                        //sellChannelStockLog.CreateTime = DateTime.Now;
-                        //sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复库存：{0}", item.Quantity);
-                        //CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                        sellChannelStock.LockQuantity -= childSon.Quantity;
+                        sellChannelStock.SellQuantity += childSon.Quantity;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+                        var sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = order.MerchId;
+                        sellChannelStockLog.RefId = childSon.SellChannelRefId;
+                        sellChannelStockLog.RefType = childSon.SellChannelRefType;
+                        sellChannelStockLog.SlotId = childSon.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = childSon.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Lock;
+                        sellChannelStockLog.ChangeQuantity = childSon.Quantity;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复库存：{0}", childSon.Quantity);
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                     }
 
                     CurrentDb.SaveChanges();
