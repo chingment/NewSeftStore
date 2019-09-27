@@ -95,6 +95,15 @@ namespace WebApiStoreApp.Controllers
             LogUtil.Info("接收支付结果 appId:" + appId);
             WxAppInfoConfig appInfo = null;
 
+            if (obj_attach == null)
+            {
+                LogUtil.Info("obj_attach: null");
+            }
+            else
+            {
+                LogUtil.Info("obj_attach:"+ obj_attach.PayCaller);
+            }
+
             switch (obj_attach.PayCaller)
             {
                 case E_OrderPayCaller.WechatByMp:
@@ -106,11 +115,20 @@ namespace WebApiStoreApp.Controllers
                     break;
             }
 
-            if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
+            if (appInfo == null)
             {
-                LogUtil.Warn("支付通知结果签名验证失败");
-                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+                LogUtil.Info("appInfo: null");
             }
+            else
+            {
+                LogUtil.Info("appInfo:" + appInfo.AppId);
+            }
+
+            //if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
+            //{
+            //    LogUtil.Warn("支付通知结果签名验证失败");
+            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
+            //}
 
             string orderSn = "";
 
@@ -121,7 +139,7 @@ namespace WebApiStoreApp.Controllers
 
             bool isPaySuccessed = false;
 
-            LogUtil.Warn("支付通知结果:"+ orderSn);
+            LogUtil.Info("支付通知结果orderSn:" + orderSn);
 
             var result = StoreAppServiceFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.NotifyUrl, xml, orderSn, out isPaySuccessed);
 

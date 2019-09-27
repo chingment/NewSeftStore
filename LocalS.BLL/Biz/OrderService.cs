@@ -615,11 +615,11 @@ namespace LocalS.BLL.Biz
                 }
                 mod_OrderNotifyLog.Id = GuidUtil.New();
                 mod_OrderNotifyLog.NotifyContent = content;
-                //mod_OrderNotifyLog.NotifyFrom = from;
-                //mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
+                mod_OrderNotifyLog.NotifyFrom = from;
+                mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
                 mod_OrderNotifyLog.CreateTime = DateTime.Now;
                 mod_OrderNotifyLog.Creator = operater;
-                //CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
+                CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
                 CurrentDb.SaveChanges();
 
                 isPaySuccessed = m_isPaySuccessed;
@@ -634,6 +634,8 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
+                LogUtil.Info("orderSn:" + orderSn);
+
                 var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
                 if (order == null)
@@ -650,6 +652,8 @@ namespace LocalS.BLL.Biz
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderSn));
                 }
+
+                LogUtil.Info("orderSn2:" + orderSn);
 
                 order.Status = E_OrderStatus.Payed;
                 order.PayTime = DateTime.Now;

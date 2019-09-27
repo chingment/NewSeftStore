@@ -68,10 +68,10 @@ namespace LocalS.Service.Api.StoreTerm
             if (ret_Biz.Data != null)
             {
                 ret.Data = new RetOrderPayStatusQuery();
-                ret.Data.Id = ret_Biz.Data.OrderId;
-                ret.Data.Sn = ret_Biz.Data.OrderSn;
+                ret.Data.OrderId = ret_Biz.Data.OrderId;
+                ret.Data.OrderSn = ret_Biz.Data.OrderSn;
                 ret.Data.Status = ret_Biz.Data.Status;
-                ret.Data.Details = GetOrderDetails(rup.MachineId, rup.OrderId);
+                ret.Data.OrderDetails = GetOrderDetails(rup.MachineId, rup.OrderId);
             }
 
             return ret;
