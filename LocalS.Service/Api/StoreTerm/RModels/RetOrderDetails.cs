@@ -13,11 +13,9 @@ namespace LocalS.Service.Api.StoreTerm
         {
             this.Skus = new List<Sku>();
         }
-
+        public string CsrQrCode { get; set; }
         public string Sn { get; set; }
-
         public List<Sku> Skus { get; set; }
-
         public class Sku
         {
             public Sku()
@@ -33,7 +31,6 @@ namespace LocalS.Service.Api.StoreTerm
 
             public List<Slot> Slots { get; set; }
         }
-
         public class Slot
         {
             public string UniqueId { get; set; }
