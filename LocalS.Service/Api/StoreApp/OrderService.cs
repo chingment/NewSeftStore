@@ -553,25 +553,16 @@ namespace LocalS.Service.Api.StoreApp
 
             LogUtil.Info("MerchId:" + order.MerchId);
             LogUtil.Info("WxMpAppId:" + rup.AppId);
-            var merch = CurrentDb.Merch.Where(m => m.Id == order.MerchId && m.WxMpAppId == rup.AppId).FirstOrDefault();
 
-            if (merch == null)
+            var wxAppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+
+            if (wxAppInfoConfig == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
             }
 
-            var wxAppInfoConfig = new WxAppInfoConfig();
 
-
-            wxAppInfoConfig.AppId = merch.WxMpAppId;
-            wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
-            wxAppInfoConfig.PayMchId = merch.WxPayMchId;
-            wxAppInfoConfig.PayKey = merch.WxPayKey;
-            wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-            wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
-
-
-            order.AppId = merch.WxMpAppId;
+            order.AppId = wxAppInfoConfig.AppId;
             order.ClientUserId = wxUserInfo.ClientUserId;
             order.PayExpireTime = DateTime.Now.AddMinutes(5);
 
