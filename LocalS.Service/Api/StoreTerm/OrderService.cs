@@ -38,8 +38,8 @@ namespace LocalS.Service.Api.StoreTerm
             if (bizResult.Result == ResultType.Success)
             {
                 RetOrderReserve ret = new RetOrderReserve();
-                ret.OrderId = bizResult.Data.OrderId;
-                ret.OrderSn = bizResult.Data.OrderSn;
+                ret.Id = bizResult.Data.Id;
+                ret.Sn = bizResult.Data.Sn;
                 ret.PayUrl = bizResult.Data.PayUrl;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
@@ -68,10 +68,10 @@ namespace LocalS.Service.Api.StoreTerm
             if (ret_Biz.Data != null)
             {
                 ret.Data = new RetOrderPayStatusQuery();
-                ret.Data.OrderId = ret_Biz.Data.OrderId;
-                ret.Data.OrderSn = ret_Biz.Data.OrderSn;
+                ret.Data.Id = ret_Biz.Data.OrderId;
+                ret.Data.Sn = ret_Biz.Data.OrderSn;
                 ret.Data.Status = ret_Biz.Data.Status;
-                ret.Data.OrderDetails = GetOrderDetails(rup.MachineId, rup.OrderId);
+                ret.Data.Details = GetOrderDetails(rup.MachineId, rup.OrderId);
             }
 
             return ret;

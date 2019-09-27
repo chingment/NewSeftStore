@@ -14,8 +14,8 @@ namespace LocalS.BLL.Biz
         {
 
         }
-        public string OrderId { get; set; }
-        public string OrderSn { get; set; }
+        public string Id { get; set; }
+        public string Sn { get; set; }
         public string PayUrl { get; set; }
         public string ChargeAmount { get; set; }
     }
@@ -46,9 +46,9 @@ namespace LocalS.BLL.Biz
             }
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
-            public string SkuId { get; set; }
-            public string SkuName { get; set; }
-            public string SkuImgUrl { get; set; }
+            public string PrdProductSkuId { get; set; }
+            public string PrdProductSkuName { get; set; }
+            public string PrdProductSkuMainImgUrl { get; set; }
             public decimal SalePrice { get; set; }
 
             public decimal SalePriceByVip { get; set; }
@@ -67,10 +67,10 @@ namespace LocalS.BLL.Biz
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
-            public string SkuId { get; set; }
             public int Quantity { get; set; }
-            public string SkuName { get; set; }
-            public string SkuImgUrl { get; set; }
+            public string PrdProductSkuId { get; set; }
+            public string PrdProductSkuName { get; set; }
+            public string PrdProductSkuMainImgUrl { get; set; }
             public decimal SalePrice { get; set; }
             public decimal SalePriceByVip { get; set; }
             public decimal OriginalAmount { get; set; }
@@ -85,7 +85,7 @@ namespace LocalS.BLL.Biz
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
-            public string SkuId { get; set; }
+            public string PrdProductSkuId { get; set; }
             public int Quantity { get; set; }
         }
     }

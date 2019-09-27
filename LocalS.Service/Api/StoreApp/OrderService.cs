@@ -1,5 +1,4 @@
 ﻿using LocalS.BLL;
-using LocalS.BLL.Biz;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -48,12 +47,6 @@ namespace LocalS.Service.Api.StoreApp
         public CustomJsonResult Reserve(string operater, string clientUserId, RopOrderReserve rop)
         {
             CustomJsonResult result = new CustomJsonResult();
-
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
-            }
-
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
@@ -66,14 +59,14 @@ namespace LocalS.Service.Api.StoreApp
             {
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = productSku.ReceptionMode });
             }
-
-            var bizResult = BizFactory.Order.Reserve(operater, bizRop);
+    
+            var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(operater, bizRop);
 
             if (bizResult.Result == ResultType.Success)
             {
                 RetOrderReserve ret = new RetOrderReserve();
-                ret.OrderId = bizResult.Data.OrderId;
-                ret.OrderSn = bizResult.Data.OrderSn;
+                ret.Id = bizResult.Data.Id;
+                ret.Sn = bizResult.Data.Sn;
                 ret.PayUrl = bizResult.Data.PayUrl;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
 
@@ -84,9 +77,7 @@ namespace LocalS.Service.Api.StoreApp
                 result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, bizResult.Message);
             }
 
-
             return result;
-
         }
 
         public CustomJsonResult Confrim(string operater, string clientUserId, RopOrderConfirm rop)
@@ -115,7 +106,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var productSku = BizFactory.PrdProduct.GetProductSku(item.Id);
+                    var productSku = BLL.Biz.BizFactory.PrdProduct.GetProductSku(item.Id);
                     if (productSku != null)
                     {
                         item.Name = productSku.Name;
@@ -535,7 +526,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Cancle(string operater, string clientUserId, RopOrderCancle rop)
         {
-            return BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
+            return BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
         }
 
         public CustomJsonResult JsApiPaymentPms(string operater, string clientUserId, RupOrderJsApiPaymentPms rup)
@@ -559,7 +550,7 @@ namespace LocalS.Service.Api.StoreApp
             LogUtil.Info("MerchId:" + order.MerchId);
             LogUtil.Info("WxMpAppId:" + rup.AppId);
 
-            var wxAppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+            var wxAppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
 
             if (wxAppInfoConfig == null)
             {
@@ -576,7 +567,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 case  E_OrderPayCaller.WechatByMp:
 
-                    var orderAttach = new OrderAttachModel();
+                    var orderAttach = new BLL.Biz.OrderAttachModel();
                     orderAttach.MerchId = order.MerchId;
                     orderAttach.StoreId = order.StoreId;
     
@@ -614,7 +605,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, string orderSn, out bool isPaySuccessed)
         {
-            return BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);
+            return BLL.Biz.BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);
         }
     }
 }

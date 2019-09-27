@@ -24,7 +24,6 @@ namespace LocalS.Service.Api.StoreTerm
         {
             public string Id { get; set; }
             public int Quantity { get; set; }
-            //public Enumeration.ReceptionMode ReceptionMode { get; set; }
         }
     }
 }

@@ -46,5 +46,29 @@ namespace LocalS.BLL.Biz
 
             return config;
         }
+
+
+        public string GetMachineName(string merchId, string machineId)
+        {
+            string machineName = "";
+            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
+            if (merchMachine == null)
+            {
+                machineName = merchMachine.Name;
+            }
+            return machineName;
+        }
+
+        public string GetClientName(string merchId, string clientUserId)
+        {
+            string clientUserName = "匿名";
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            if (clientUser != null)
+            {
+                clientUserName = clientUser.NickName;
+            }
+
+            return clientUserName;
+        }
     }
 }
