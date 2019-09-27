@@ -13,8 +13,8 @@ namespace LocalS.Service.Api.StoreTerm
 
         }
 
-        public string Id { get; set; }
-        public string Sn { get; set; }
+        public string OrderId { get; set; }
+        public string OrderSn { get; set; }
         public string PayUrl { get; set; }
         public string ChargeAmount { get; set; }
     }

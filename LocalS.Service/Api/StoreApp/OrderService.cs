@@ -65,8 +65,8 @@ namespace LocalS.Service.Api.StoreApp
             if (bizResult.Result == ResultType.Success)
             {
                 RetOrderReserve ret = new RetOrderReserve();
-                ret.Id = bizResult.Data.Id;
-                ret.Sn = bizResult.Data.Sn;
+                ret.OrderId = bizResult.Data.OrderId;
+                ret.OrderSn = bizResult.Data.OrderSn;
                 ret.PayUrl = bizResult.Data.PayUrl;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
 

@@ -316,8 +316,8 @@ namespace LocalS.BLL.Biz
                 orderAttach.StoreId = order.StoreId;
                 orderAttach.PayCaller = rop.PayCaller;
 
-                ret.Id = order.Id;
-                ret.Sn = order.Sn;
+                ret.OrderId = order.Id;
+                ret.OrderSn = order.Sn;
 
                 switch (rop.PayCaller)
                 {
@@ -655,6 +655,67 @@ namespace LocalS.BLL.Biz
                 order.PayTime = DateTime.Now;
                 order.MendTime = DateTime.Now;
                 order.Mender = operater;
+
+                var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == order.Id).ToList();
+
+                foreach (var item in orderDetails)
+                {
+                    item.Status = E_OrderStatus.Payed;
+                    item.Mender = GuidUtil.Empty();
+                    item.MendTime = DateTime.Now;
+                }
+
+
+                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == order.Id).ToList();
+
+                foreach (var item in orderDetailsChilds)
+                {
+                    item.Status = E_OrderStatus.Payed;
+                    item.Mender = GuidUtil.Empty();
+                    item.MendTime = DateTime.Now;
+                }
+
+                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == order.Id).ToList();
+
+                foreach (var item in orderDetailsChildSons)
+                {
+                    item.Status = E_OrderDetailsChildSonStatus.Payed;
+                    item.Mender = GuidUtil.Empty();
+                    item.MendTime = DateTime.Now;
+                }
+
+                var childSons = (
+                    from q in orderDetailsChildSons
+                    group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
+                    select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
+
+                foreach (var childSon in childSons)
+                {
+                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == childSon.PrdProductSkuId && m.SlotId == childSon.SlotId && m.RefId == childSon.SellChannelRefId && m.RefType == childSon.SellChannelRefType).FirstOrDefault();
+
+                    sellChannelStock.LockQuantity -= childSon.Quantity;
+                    sellChannelStock.SumQuantity -= childSon.Quantity;
+                    sellChannelStock.Mender = operater;
+                    sellChannelStock.MendTime = DateTime.Now;
+
+                    var sellChannelStockLog = new SellChannelStockLog();
+                    sellChannelStockLog.Id = GuidUtil.New();
+                    sellChannelStockLog.MerchId = order.MerchId;
+                    sellChannelStockLog.RefId = childSon.SellChannelRefId;
+                    sellChannelStockLog.RefType = childSon.SellChannelRefType;
+                    sellChannelStockLog.SlotId = childSon.SlotId;
+                    sellChannelStockLog.PrdProductSkuId = childSon.PrdProductSkuId;
+                    sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                    sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                    sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                    sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Sales;
+                    sellChannelStockLog.ChangeQuantity = childSon.Quantity;
+                    sellChannelStockLog.Creator = operater;
+                    sellChannelStockLog.CreateTime = DateTime.Now;
+                    sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复库存：{0}", childSon.Quantity);
+                    CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                }
+
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

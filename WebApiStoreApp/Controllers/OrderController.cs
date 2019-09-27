@@ -121,6 +121,8 @@ namespace WebApiStoreApp.Controllers
 
             bool isPaySuccessed = false;
 
+            LogUtil.Warn("支付通知结果:"+ orderSn);
+
             var result = StoreAppServiceFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.NotifyUrl, xml, orderSn, out isPaySuccessed);
 
             if (result.Result == ResultType.Success)
