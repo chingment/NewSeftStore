@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace LocalS.Service.Api.StoreApp
         /// <summary>
         /// 1: Wechat,  2 AliPay
         /// </summary>
-        public int PayWay { get; set; }
-        public int Caller { get; set; }
+        public E_OrderPayWay PayWay { get; set; }
+        public E_OrderPayCaller PayCaller { get; set; }
 
     }
 }

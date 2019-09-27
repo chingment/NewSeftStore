@@ -74,6 +74,9 @@ namespace LocalS.Service.Api.StoreApp
                 RetOrderReserve ret = new RetOrderReserve();
                 ret.OrderId = bizResult.Data.OrderId;
                 ret.OrderSn = bizResult.Data.OrderSn;
+                ret.PayUrl = bizResult.Data.PayUrl;
+                ret.ChargeAmount = bizResult.Data.ChargeAmount;
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
             }
             else
@@ -567,17 +570,16 @@ namespace LocalS.Service.Api.StoreApp
             order.AppId = wxAppInfoConfig.AppId;
             order.ClientUserId = wxUserInfo.ClientUserId;
             order.PayExpireTime = DateTime.Now.AddMinutes(5);
-
-            switch (rup.PayWay)
+            order.PayCaller = rup.PayCaller;
+            order.PayWay = rup.PayWay;
+            switch (rup.PayCaller)
             {
-                case 1:
-                    order.PayWay = E_OrderPayWay.Wechat;
+                case  E_OrderPayCaller.WechatByMp:
 
                     var orderAttach = new OrderAttachModel();
                     orderAttach.MerchId = order.MerchId;
                     orderAttach.StoreId = order.StoreId;
-                    orderAttach.Caller = rup.Caller;
-
+    
                     var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wxAppInfoConfig, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
 
                     if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
@@ -593,9 +595,6 @@ namespace LocalS.Service.Api.StoreApp
                     var pms = SdkFactory.Wx.GetJsApiPayParams(wxAppInfoConfig, order.Id, order.Sn, ret_UnifiedOrder.PrepayId);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
-                    break;
-                case 2:
-                    order.PayWay = E_OrderPayWay.AliPay;
                     break;
             }
 

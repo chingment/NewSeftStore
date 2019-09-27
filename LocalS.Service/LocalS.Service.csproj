@@ -285,13 +285,11 @@
     <Compile Include="Api\StoreTerm\RModels\RetMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPayStatusQuery.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetOrderPayUrlBuild.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderSkuPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUpdateInfo.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderCancle.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopOrderPayUrlBuild.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderSkuPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupBaseGetList.cs" />

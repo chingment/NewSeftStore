@@ -40,6 +40,8 @@ namespace LocalS.Service.Api.StoreTerm
                 RetOrderReserve ret = new RetOrderReserve();
                 ret.OrderId = bizResult.Data.OrderId;
                 ret.OrderSn = bizResult.Data.OrderSn;
+                ret.PayUrl = bizResult.Data.PayUrl;
+                ret.ChargeAmount = bizResult.Data.ChargeAmount;
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
             }
             else
@@ -50,56 +52,6 @@ namespace LocalS.Service.Api.StoreTerm
 
             return result;
 
-        }
-
-        public CustomJsonResult PayUrlBuild(RopOrderPayUrlBuild rop)
-        {
-            var result = new CustomJsonResult();
-
-            var ret = new RetOrderPayUrlBuild();
-
-            var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
-
-            if (order == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
-            }
-
-            switch (rop.PayWay)
-            {
-                case PayWay.AliPay:
-                    order.PayWay = E_OrderPayWay.AliPay;
-                    break;
-                case PayWay.Wechat:
-                    order.PayWay = E_OrderPayWay.Wechat;
-
-                    var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
-
-                    var orderAttach = new LocalS.BLL.Biz.OrderAttachModel();
-                    orderAttach.MerchId = order.MerchId;
-                    orderAttach.StoreId = order.StoreId;
-                    orderAttach.Caller = 1;
-
-                    var ret_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wxPaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-
-                    if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                    }
-
-                    order.PayPrepayId = ret_UnifiedOrder.PrepayId;
-                    order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
-                    CurrentDb.SaveChanges();
-
-                    ret.OrderId = order.Id;
-                    ret.PayUrl = ret_UnifiedOrder.CodeUrl;
-
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
-                    break;
-            }
-
-
-            return result;
         }
 
         public CustomJsonResult<RetOrderPayStatusQuery> PayStatusQuery(RupOrderPayStatusQuery rup)

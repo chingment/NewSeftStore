@@ -317,8 +317,14 @@ namespace LocalS.BLL.Biz
                 orderAttach.StoreId = order.StoreId;
                 orderAttach.PayCaller = rop.PayCaller;
 
+                ret.OrderId = order.Id;
+                ret.OrderSn = order.Sn;
+
                 switch (rop.PayCaller)
                 {
+                    case E_OrderPayCaller.WechatByMp:
+
+                        break;
                     case E_OrderPayCaller.WechatByNative:
                         var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
                         var ret_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wxPaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
@@ -331,8 +337,6 @@ namespace LocalS.BLL.Biz
                         order.PayPrepayId = ret_UnifiedOrder.PrepayId;
                         order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
 
-                        ret.OrderId = order.Id;
-                        ret.OrderSn = order.Sn;
                         ret.PayUrl = order.PayQrCodeUrl;
                         ret.ChargeAmount = order.ChargeAmount.ToF2Price();
 

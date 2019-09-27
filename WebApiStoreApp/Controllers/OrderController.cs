@@ -82,25 +82,27 @@ namespace WebApiStoreApp.Controllers
             }
 
             string str_attach = dicXml["attach"].ToString();
-
-            if (!string.IsNullOrEmpty(str_attach))
+            LogUtil.Info("接收支付结果 attach:" + str_attach);
+            if (string.IsNullOrEmpty(str_attach))
             {
                 LogUtil.Warn("attach 不符合格式");
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
             }
 
-            var obj_attach = Newtonsoft.Json.JsonConvert.DeserializeObject< LocalS.BLL.Biz.OrderAttachModel >(str_attach);
+            var obj_attach = Newtonsoft.Json.JsonConvert.DeserializeObject<LocalS.BLL.Biz.OrderAttachModel>(str_attach);
 
             string appId = dicXml["appid"].ToString();
-
+            LogUtil.Info("接收支付结果 appId:" + appId);
             WxAppInfoConfig appInfo = null;
 
-            switch (obj_attach.Caller)
+            switch (obj_attach.PayCaller)
             {
-                case 1:
+                case E_OrderPayCaller.WechatByMp:
                     break;
-                case 2:
-                    appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(obj_attach.MerchId);
+                case E_OrderPayCaller.WechatByPa:
+                    break;
+                case E_OrderPayCaller.WechatByNative:
+                    appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(obj_attach.MerchId);
                     break;
             }
 

@@ -16,13 +16,6 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse PayUrlBuild([FromBody]RopOrderPayUrlBuild rop)
-        {
-            IResult result = StoreTermServiceFactory.Order.PayUrlBuild(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
         [HttpGet]
         public OwnApiHttpResponse<RetOrderPayStatusQuery> PayStatusQuery([FromUri]RupOrderPayStatusQuery rup)
         {

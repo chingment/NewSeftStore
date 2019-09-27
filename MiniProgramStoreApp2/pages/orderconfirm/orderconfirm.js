@@ -146,7 +146,6 @@ Page({
 
       apiOrder.reserve({
         storeId: ownRequest.getCurrentStoreId(),
-        payTimeout: 120,
         productSkus: productSkus,
         source: 3,
         payWay:1,
@@ -177,7 +176,7 @@ Page({
       merchId: config.merchId,
       orderId: orderId,
       payWay: 1,
-      caller: 2
+      payCaller: 12,
     }, {
         success: function (res) {
           if (res.result == 1) {
