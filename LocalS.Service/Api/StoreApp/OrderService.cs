@@ -59,10 +59,12 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.StoreId = rop.StoreId;
             bizRop.ReserveMode = E_ReserveMode.Online;
             bizRop.ClientUserId = clientUserId;
+            bizRop.PayWay = rop.PayWay;
+            bizRop.PayCaller = rop.PayCaller;
 
-            foreach (var item in rop.ProductSkus)
+            foreach (var productSku in rop.ProductSkus)
             {
-                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = item.CartId, Id = item.Id, Quantity = item.Quantity, ReceptionMode = item.ReceptionMode });
+                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = productSku.ReceptionMode });
             }
 
             var bizResult = BizFactory.Order.Reserve(operater, bizRop);

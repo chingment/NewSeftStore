@@ -149,6 +149,8 @@ Page({
         payTimeout: 120,
         productSkus: productSkus,
         source: 3,
+        payWay:1,
+        payCaller:12,
       }, {
           success: function (res) {
             if (res.result == 1) {

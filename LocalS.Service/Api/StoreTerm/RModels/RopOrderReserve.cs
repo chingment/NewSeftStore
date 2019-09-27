@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,13 +13,14 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public RopOrderReserve()
         {
-            this.Skus = new List<Sku>();
+            this.ProductSkus = new List<ProductSku>();
         }
 
         public string MachineId { get; set; }
-        public List<Sku> Skus { get; set; }
-
-        public class Sku
+        public List<ProductSku> ProductSkus { get; set; }
+        public E_OrderPayWay PayWay { get; set; }
+        public E_OrderPayCaller PayCaller { get; set; }
+        public class ProductSku
         {
             public string Id { get; set; }
             public int Quantity { get; set; }

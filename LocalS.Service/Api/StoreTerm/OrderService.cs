@@ -25,10 +25,12 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.ReserveMode = E_ReserveMode.OffLine;
             bizRop.SellChannelRefId = machine.Id;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
+            bizRop.PayWay = rop.PayWay;
+            bizRop.PayCaller = rop.PayCaller;
 
-            foreach (var item in rop.Skus)
+            foreach (var productSku in rop.ProductSkus)
             {
-                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = item.Id, Quantity = item.Quantity, ReceptionMode = E_ReceptionMode.Machine });
+                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = E_ReceptionMode.Machine });
             }
 
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(machine.MerchId, bizRop);

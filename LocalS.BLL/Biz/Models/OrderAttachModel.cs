@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,6 @@ namespace LocalS.BLL.Biz
 
         public string StoreId { get; set; }
 
-        public int Caller { get; set; }
+        public E_OrderPayCaller PayCaller { get; set; }
     }
 }

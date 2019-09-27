@@ -115,6 +115,8 @@ namespace LocalS.BLL.Biz
                 order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                 order.Status = E_OrderStatus.WaitPay;
                 order.Source = rop.Source;
+                order.PayWay = order.PayWay;
+                order.PayCaller = order.PayCaller;
                 order.SubmitTime = DateTime.Now;
                 order.PayExpireTime = DateTime.Now.AddSeconds(300);
                 order.Creator = operater;
@@ -307,6 +309,37 @@ namespace LocalS.BLL.Biz
                     }
                 }
 
+
+                //生产支付信息
+
+                var orderAttach = new LocalS.BLL.Biz.OrderAttachModel();
+                orderAttach.MerchId = order.MerchId;
+                orderAttach.StoreId = order.StoreId;
+                orderAttach.PayCaller = rop.PayCaller;
+
+                switch (rop.PayCaller)
+                {
+                    case E_OrderPayCaller.WechatByNative:
+                        var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
+                        var ret_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wxPaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+
+                        if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
+                        {
+                            return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败", null);
+                        }
+
+                        order.PayPrepayId = ret_UnifiedOrder.PrepayId;
+                        order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
+
+                        ret.OrderId = order.Id;
+                        ret.OrderSn = order.Sn;
+                        ret.PayUrl = order.PayQrCodeUrl;
+                        ret.ChargeAmount = order.ChargeAmount.ToF2Price();
+
+                        break;
+                }
+
+
                 CurrentDb.Order.Add(order);
 
                 CurrentDb.SaveChanges();
@@ -315,8 +348,6 @@ namespace LocalS.BLL.Biz
 
                 //Task4Factory.Global.Enter(TimerTaskType.CheckOrderPay, order.PayExpireTime.Value, order);
 
-                ret.OrderId = order.Id;
-                ret.OrderSn = order.Sn;
 
                 result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
 

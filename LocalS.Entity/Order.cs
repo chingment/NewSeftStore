@@ -26,8 +26,16 @@ namespace LocalS.Entity
     public enum E_OrderPayWay
     {
         Unknow = 0,
-        Wechat = 1,
-        AliPay = 2
+        Wechat = 1,//微信支付
+        AliPay = 2 //支付宝支付
+    }
+
+    public enum E_OrderPayCaller
+    {
+        Unknow = 0,
+        WechatByNative = 10, //微信Native发起支付
+        WechatByPa = 11, //微信公众号发起支付
+        WechatByMp = 12 //微信小程序发起支付
     }
 
     [Table("Order")]
@@ -59,6 +67,7 @@ namespace LocalS.Entity
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
         public E_OrderPayWay PayWay { get; set; }
+        public E_OrderPayCaller PayCaller { get; set; }
         public string PayPrepayId { get; set; }
         public DateTime? PayExpireTime { get; set; }
         public string PayQrCodeUrl { get; set; }
