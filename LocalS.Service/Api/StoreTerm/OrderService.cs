@@ -95,11 +95,11 @@ namespace LocalS.Service.Api.StoreTerm
             var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId).ToList();
             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
 
-            ret.Sn = order.Sn;
+            ret.OrderSn = order.Sn;
 
             foreach (var orderDetailsChild in orderDetailsChilds)
             {
-                var sku = new RetOrderDetails.Sku();
+                var sku = new RetOrderDetails.ProductSku();
                 sku.Id = orderDetailsChild.PrdProductSkuId;
                 sku.Name = orderDetailsChild.PrdProductSkuName;
                 sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
@@ -120,7 +120,7 @@ namespace LocalS.Service.Api.StoreTerm
                     sku.Slots.Add(slot);
                 }
 
-                ret.Skus.Add(sku);
+                ret.ProductSkus.Add(sku);
             }
 
             return ret;
@@ -133,28 +133,52 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        public CustomJsonResult SkuPickupStatusQuery(RupOrderSkuPickupStatusQuery rup)
+        public CustomJsonResult PickupStatusQuery(RupOrderPickupStatusQuery rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var ret = new RetOrderSkuPickupStatusQuery();
+            var ret = new RetOrderPickupStatusQuery();
 
-            var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rup.UniqueId && m.OrderId == rup.OrderId && m.PrdProductSkuId == rup.SkuId && m.SlotId == rup.SlotId).FirstOrDefault();
 
-            ret.Status = orderDetailsChildSon.Status;
-            ret.Tips = orderDetailsChildSon.Status.ToString();
+            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rup.OrderId).ToList();
+            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rup.OrderId).ToList();
 
+
+            foreach (var orderDetailsChild in orderDetailsChilds)
+            {
+                var sku = new RetOrderPickupStatusQuery.ProductSku();
+                sku.Id = orderDetailsChild.PrdProductSkuId;
+                sku.Name = orderDetailsChild.PrdProductSkuName;
+                sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
+                sku.Quantity = orderDetailsChild.Quantity;
+
+
+                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
+
+                sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
+                sku.QuantityByException = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Exception).Count();
+                foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
+                {
+                    var slot = new RetOrderPickupStatusQuery.Slot();
+                    slot.UniqueId = orderDetailsChildSon.Id;
+                    slot.SlotId = orderDetailsChildSon.SlotId;
+                    slot.Status = orderDetailsChildSon.Status;
+                    sku.Slots.Add(slot);
+                }
+
+                ret.ProductSkus.Add(sku);
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
 
-        public CustomJsonResult SkuPickupEventNotify(RopOrderSkuPickupEventNotify rop)
+        public CustomJsonResult PickupEventNotify(RopOrderPickupEventNotify rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            //result = BizFactory.Order.Cancle(operater, rop.OrderSn, rop.Reason);
+          
 
             return result;
         }

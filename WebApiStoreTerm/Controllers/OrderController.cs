@@ -38,16 +38,16 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse SkuPickupStatusQuery([FromUri]RupOrderSkuPickupStatusQuery rup)
+        public OwnApiHttpResponse PickupStatusQuery([FromUri]RupOrderPickupStatusQuery rup)
         {
-            IResult result = StoreTermServiceFactory.Order.SkuPickupStatusQuery(rup);
+            IResult result = StoreTermServiceFactory.Order.PickupStatusQuery(rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SkuPickupEventNotify([FromBody]RopOrderSkuPickupEventNotify rop)
+        public OwnApiHttpResponse PickupEventNotify([FromBody]RopOrderPickupEventNotify rop)
         {
-            IResult result = StoreTermServiceFactory.Order.SkuPickupEventNotify(rop);
+            IResult result = StoreTermServiceFactory.Order.PickupEventNotify(rop);
             return new OwnApiHttpResponse(result);
         }
     }

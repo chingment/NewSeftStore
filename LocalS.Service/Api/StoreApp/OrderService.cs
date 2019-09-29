@@ -59,7 +59,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = productSku.ReceptionMode });
             }
-    
+
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(operater, bizRop);
 
             if (bizResult.Result == ResultType.Success)
@@ -565,12 +565,13 @@ namespace LocalS.Service.Api.StoreApp
             order.PayWay = rup.PayWay;
             switch (rup.PayCaller)
             {
-                case  E_OrderPayCaller.WechatByMp:
+                case E_OrderPayCaller.WechatByMp:
 
                     var orderAttach = new BLL.Biz.OrderAttachModel();
                     orderAttach.MerchId = order.MerchId;
                     orderAttach.StoreId = order.StoreId;
-    
+                    orderAttach.PayCaller = rup.PayCaller;
+
                     var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wxAppInfoConfig, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
 
                     if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))

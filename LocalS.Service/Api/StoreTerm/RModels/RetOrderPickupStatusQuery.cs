@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RetOrderDetails
+    public class RetOrderPickupStatusQuery
     {
-        public RetOrderDetails()
-        {
-            this.ProductSkus = new List<ProductSku>();
-        }
-        public string CsrQrCode { get; set; }
-        public string OrderSn { get; set; }
         public List<ProductSku> ProductSkus { get; set; }
         public class ProductSku
         {

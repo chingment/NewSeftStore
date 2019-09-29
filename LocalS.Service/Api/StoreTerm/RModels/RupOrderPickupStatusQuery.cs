@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupOrderSkuPickupStatusQuery
+    public class RupOrderPickupStatusQuery
     {
         public string MachineId { get; set; }
         public string OrderId { get; set; }
-        public string UniqueId { get; set; }
-        public string SkuId { get; set; }
-        public string SlotId { get; set; }
     }
 }
