@@ -7,11 +7,11 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
+      <el-form-item label="图片" prop="displayImgUrls">
+        <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
           ref="uploadImg"
-          v-model="form.dispalyImgUrls"
+          v-model="form.displayImgUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
           :on-success="handleSuccess"
@@ -50,12 +50,12 @@ export default {
         pName: '',
         id: '',
         name: '',
-        dispalyImgUrls: [],
+        displayImgUrls: [],
         description: ''
       },
       rules: {
         name: [{ required: true, min: 1, max: 20, message: '必填,且不能超过20个字符', trigger: 'change' }],
-        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         description: [{ required: false, min: 0, max: 500, message: '不能超过500个字符', trigger: 'change' }]
       },
       uploadImglist: [],
@@ -76,7 +76,7 @@ export default {
           var d = res.data
           this.form = d
 
-          this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+          this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
         }
         this.loading = false
       })
@@ -99,34 +99,34 @@ export default {
         }
       })
     },
-    getUploadImglist(dispalyImgUrls) {
+    getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
-      for (var i = 0; i < dispalyImgUrls.length; i++) {
-        _uploadImglist.push({ status: 'success', url: dispalyImgUrls[i].url, response: { data: { name: dispalyImgUrls[i].name, url: dispalyImgUrls[i].url }}})
+      for (var i = 0; i < displayImgUrls.length; i++) {
+        _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
       }
 
       return _uploadImglist
     },
-    getDispalyImgUrls(fileList) {
-      var _dispalyImgUrls = []
+    getdisplayImgUrls(fileList) {
+      var _displayImgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _dispalyImgUrls
+      return _displayImgUrls
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url

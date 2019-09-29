@@ -3,7 +3,7 @@
 <view class="details">
 <view class="details-main" >
   <swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-    <block wx:for-items="{{product.dispalyImgUrls}}" wx:for-item="item" wx:key="{{index}}">
+    <block wx:for-items="{{product.displayImgUrls}}" wx:for-item="item" wx:key="{{index}}">
       <swiper-item>
         <image src="{{item.url}}"></image>
       </swiper-item>

@@ -4,11 +4,11 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
+      <el-form-item label="图片" prop="displayImgUrls">
+        <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
           ref="uploadImg"
-          v-model="form.dispalyImgUrls"
+          v-model="form.displayImgUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
           :on-success="handleSuccess"
@@ -113,14 +113,14 @@ export default {
         subjectIds: [],
         detailsDes: '',
         briefDes: '',
-        dispalyImgUrls: [],
+        displayImgUrls: [],
         singleSkuSalePrice: 0,
         singleSkuSpecDes: ''
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
-        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
@@ -177,12 +177,12 @@ export default {
           this.form.kindIds = d.kindIds
           this.form.detailsDes = d.detailsDes
           this.form.briefDes = d.briefDes
-          this.form.dispalyImgUrls = d.dispalyImgUrls
+          this.form.displayImgUrls = d.displayImgUrls
           this.form.singleSkuId = d.skus[0].id
           this.form.singleSkuSalePrice = d.skus[0].salePrice
           this.form.singleSkuSpecDes = d.skus[0].specDes
 
-          this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+          this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
           this.treeselect_subject_options = d.subjects
           this.treeselect_kind_options = d.kinds
         }
@@ -204,7 +204,7 @@ export default {
           _form.kindIds = this.form.kindIds
           _form.detailsDes = this.form.detailsDes
           _form.briefDes = this.form.briefDes
-          _form.dispalyImgUrls = this.form.dispalyImgUrls
+          _form.displayImgUrls = this.form.displayImgUrls
           _form.skus = skus
 
           MessageBox.confirm('确定要保存', '提示', {
@@ -222,34 +222,34 @@ export default {
         }
       })
     },
-    getUploadImglist(dispalyImgUrls) {
+    getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
-      for (var i = 0; i < dispalyImgUrls.length; i++) {
-        _uploadImglist.push({ status: 'success', url: dispalyImgUrls[i].url, response: { data: { name: dispalyImgUrls[i].name, url: dispalyImgUrls[i].url }}})
+      for (var i = 0; i < displayImgUrls.length; i++) {
+        _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
       }
 
       return _uploadImglist
     },
-    getDispalyImgUrls(fileList) {
-      var _dispalyImgUrls = []
+    getdisplayImgUrls(fileList) {
+      var _displayImgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _dispalyImgUrls
+      return _displayImgUrls
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url
@@ -277,7 +277,7 @@ export default {
           var item = _this.uploadImglist.splice(oldIndex, 1)
           _this.uploadImglist.splice(newIndex, 0, item[0])
 
-          _this.form.dispalyImgUrls = _this.getDispalyImgUrls(_this.uploadImglist)
+          _this.form.displayImgUrls = _this.getdisplayImgUrls(_this.uploadImglist)
         // 下一个tick就会走patch更新
         },
         animation: 150

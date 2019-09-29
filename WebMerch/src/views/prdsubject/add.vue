@@ -7,11 +7,11 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
+      <el-form-item label="图片" prop="displayImgUrls">
+        <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
           ref="uploadImg"
-          v-model="form.dispalyImgUrls"
+          v-model="form.displayImgUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
           :on-success="handleSuccess"
@@ -51,7 +51,7 @@ export default {
         pId: '',
         pName: '',
         name: '',
-        dispalyImgUrls: [],
+        displayImgUrls: [],
         description: ''
       },
       rules: {
@@ -105,26 +105,26 @@ export default {
         }
       })
     },
-    getDispalyImgUrls(fileList) {
-      var _dispalyImgUrls = []
+    getdisplayImgUrls(fileList) {
+      var _displayImgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _dispalyImgUrls
+      return _displayImgUrls
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url

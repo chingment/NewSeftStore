@@ -80,7 +80,7 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }]
+        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }]
       },
       uploadImglist: [],
       uploadImgPreImgDialogUrl: '',
@@ -141,25 +141,25 @@ export default {
     cancleEdit() {
       this.isEdit = false
     },
-    getDispalyImgUrls(fileList) {
-      var _dispalyImgUrls = []
+    getdisplayImgUrls(fileList) {
+      var _displayImgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _dispalyImgUrls
+      return _displayImgUrls
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
       this.form.logoImgUrl = URL.createObjectURL(file.raw)
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url

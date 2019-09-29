@@ -35,11 +35,11 @@
       <el-form-item label="地址" prop="name">
         <el-input v-model="form.address" />
       </el-form-item>
-      <el-form-item label="图片" prop="dispalyImgUrls">
-        <el-input :value="form.dispalyImgUrls.toString()" style="display:none" />
+      <el-form-item label="图片" prop="displayImgUrls">
+        <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
           ref="uploadImg"
-          v-model="form.dispalyImgUrls"
+          v-model="form.displayImgUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
           :on-success="handleSuccess"
@@ -98,13 +98,13 @@ export default {
         name: '',
         address: '',
         briefDes: '',
-        dispalyImgUrls: [],
+        displayImgUrls: [],
         isOpen: false
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         address: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        dispalyImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
       uploadImglist: [],
@@ -135,14 +135,14 @@ export default {
           this.form.name = d.name
           this.form.address = d.address
           this.form.briefDes = d.briefDes
-          this.form.dispalyImgUrls = d.dispalyImgUrls
+          this.form.displayImgUrls = d.displayImgUrls
           this.form.isOpen = d.isOpen
-          this.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+          this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
 
           this.temp.name = d.name
           this.temp.address = d.address
           this.temp.briefDes = d.briefDes
-          this.temp.uploadImglist = this.getUploadImglist(d.dispalyImgUrls)
+          this.temp.uploadImglist = this.getUploadImglist(d.displayImgUrls)
           this.temp.status = d.status
         }
         this.loading = false
@@ -173,36 +173,36 @@ export default {
     cancleEdit() {
       this.isEdit = false
     },
-    getUploadImglist(dispalyImgUrls) {
+    getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
-      if (dispalyImgUrls !== null) {
-        for (var i = 0; i < dispalyImgUrls.length; i++) {
-          _uploadImglist.push({ status: 'success', url: dispalyImgUrls[i].url, response: { data: { name: dispalyImgUrls[i].name, url: dispalyImgUrls[i].url }}})
+      if (displayImgUrls !== null) {
+        for (var i = 0; i < displayImgUrls.length; i++) {
+          _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
         }
       }
 
       return _uploadImglist
     },
-    getDispalyImgUrls(fileList) {
-      var _dispalyImgUrls = []
+    getdisplayImgUrls(fileList) {
+      var _displayImgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _dispalyImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _dispalyImgUrls
+      return _displayImgUrls
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList
-      this.form.dispalyImgUrls = this.getDispalyImgUrls(fileList)
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url
@@ -230,7 +230,7 @@ export default {
           var item = _this.uploadImglist.splice(oldIndex, 1)
           _this.uploadImglist.splice(newIndex, 0, item[0])
 
-          _this.form.dispalyImgUrls = _this.getDispalyImgUrls(_this.uploadImglist)
+          _this.form.displayImgUrls = _this.getdisplayImgUrls(_this.uploadImglist)
         // 下一个tick就会走patch更新
         },
         animation: 150
