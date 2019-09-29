@@ -1,4 +1,5 @@
 ﻿
+using LocalS.Service.Api.StoreTerm;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -95,9 +96,17 @@ namespace WebApiStoreTerm.Controllers
             //host = "http://demo.api.term.17fanju.com";
 
             string machineId = "000000000000000";
+
+            RopOrderReserve rop = new RopOrderReserve();
+            rop.MachineId = "000000000000000";
+            rop.PayCaller =  LocalS.Entity.E_OrderPayCaller.WechatByNative;
+            rop.PayWay = LocalS.Entity.E_OrderPayWay.Wechat;
+            rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "0cea859026154bbd80c1e6f98d6d8853", Quantity = 2});
+            StoreTermServiceFactory.Order.Reserve(rop);
+
             //model.Add("获取机器初始数据", MachineInitData(machineId));
             //model.Add("预定商品", OrderReserve(machineId));
-           // model.Add("生成支付二维码", OrderPayUrlBuild(machineId, "bc427a99e2e94e338f9bcea16d67a062"));
+            // model.Add("生成支付二维码", OrderPayUrlBuild(machineId, "bc427a99e2e94e338f9bcea16d67a062"));
 
             //model.Add("登陆机器", MachineLogin(machineId,"a","b"));
 

@@ -36,7 +36,7 @@ namespace LocalS.BLL.Task
             RedisManager.Db.HashDelete(key, id);
         }
 
-        public List<TaskData> GetList()
+        public static List<TaskData> GetList()
         {
             List<TaskData> list = new List<TaskData>();
             var hs = RedisManager.Db.HashGetAll(key);
@@ -45,7 +45,7 @@ namespace LocalS.BLL.Task
 
             foreach (var item in d)
             {
-                var obj = item.Value.ToJsonObject<TaskData>();
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<TaskData>(item.Value);
                 list.Add(obj);
             }
             return list;

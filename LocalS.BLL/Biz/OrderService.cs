@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Task;
 using LocalS.Entity;
 using LocalS.Mq;
 using LocalS.Mq.MqByRedis;
@@ -350,6 +351,8 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
                 ReidsMqFactory.Global.PushOrderReserve(new Mq.MqMessageConentModel.OrderReserveModel { OrderId = order.Id });
+
+                Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.PayExpireTime.Value, order);
 
                 result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
 
