@@ -15,5 +15,13 @@ namespace LocalS.BLL.Task
                 return new Launcher();
             }
         }
+
+        public static Task4Tim2GlobalProvider Global
+        {
+            get
+            {
+                return new Task4Tim2GlobalProvider();
+            }
+        }
     }
 }

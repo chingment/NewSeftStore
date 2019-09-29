@@ -31,5 +31,13 @@ namespace LocalS.BLL.Biz
                 return new PrdProductService();
             }
         }
+
+        public static BackgroundJobProvider BackgroundJob
+        {
+            get
+            {
+                return new BackgroundJobProvider();
+            }
+        }
     }
 }

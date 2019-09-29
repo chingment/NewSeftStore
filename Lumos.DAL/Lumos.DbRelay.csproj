@@ -70,6 +70,8 @@
     <Compile Include="DatabaseFactory\IDBOption.cs" />
     <Compile Include="DatabaseFactory\IDBOptionBySqlSentence.cs" />
     <Compile Include="DatabaseFactory\SqlServerOptionBySqlSentence.cs" />
+    <Compile Include="Entity\BackgroundJob\BackgroundJob.cs" />
+    <Compile Include="Entity\BackgroundJob\BackgroundJobLog.cs" />
     <Compile Include="Entity\SysAdminUser.cs" />
     <Compile Include="Entity\SysClientUser.cs" />
     <Compile Include="Entity\SysMenu.cs" />
