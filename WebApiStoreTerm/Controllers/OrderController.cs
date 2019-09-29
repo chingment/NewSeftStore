@@ -31,9 +31,9 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse Details([FromUri]RupOrderDetails rup)
+        public OwnApiHttpResponse Search([FromUri]RupOrderSearch rup)
         {
-            IResult result = StoreTermServiceFactory.Order.Details(rup);
+            IResult result = StoreTermServiceFactory.Order.Search(rup);
             return new OwnApiHttpResponse(result);
         }
 

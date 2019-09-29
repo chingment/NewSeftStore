@@ -53,7 +53,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.LogoImgUrl = merchMachine.LogoImgUrl;
             ret.Machine.MerchName = merch.Name;
             ret.Machine.StoreName = store.Name;
-
+            ret.Machine.CsrQrCode = merch.CsrQrCode;
 
             ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machine.MerchId, machine.StoreId, machine.Id);
 

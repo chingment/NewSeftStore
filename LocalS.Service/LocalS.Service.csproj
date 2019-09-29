@@ -295,7 +295,7 @@
     <Compile Include="Api\StoreTerm\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineGetSlotSkuStock.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineInitData.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RupOrderDetails.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupOrderSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPayStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupProductList.cs" />

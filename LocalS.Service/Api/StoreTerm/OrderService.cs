@@ -92,9 +92,10 @@ namespace LocalS.Service.Api.StoreTerm
             var ret = new RetOrderDetails();
 
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
-            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId).ToList();
+            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
 
+            ret.OrderId = order.Id;
             ret.OrderSn = order.Sn;
 
             foreach (var orderDetailsChild in orderDetailsChilds)
@@ -106,7 +107,7 @@ namespace LocalS.Service.Api.StoreTerm
                 sku.Quantity = orderDetailsChild.Quantity;
 
 
-                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
+                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.OrderDetailsChildId == orderDetailsChild.Id && m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
 
                 sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
 
@@ -126,10 +127,23 @@ namespace LocalS.Service.Api.StoreTerm
             return ret;
         }
 
-        public CustomJsonResult Details(RupOrderDetails rup)
+        public CustomJsonResult Search(RupOrderSearch rup)
         {
             CustomJsonResult result = new CustomJsonResult();
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", GetOrderDetails(rup.MachineId, rup.OrderId));
+
+            Order order = null;
+
+            if (!string.IsNullOrEmpty(rup.PickCode))
+            {
+                order = CurrentDb.Order.Where(m => m.PickCode == rup.PickCode).FirstOrDefault();
+            }
+
+            if (order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", GetOrderDetails(rup.MachineId, order.Id));
             return result;
         }
 

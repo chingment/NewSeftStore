@@ -16,7 +16,6 @@ namespace LocalS.Service.Api.StoreTerm
             this.ProductKinds = new List<ProductKindModel>();
         }
         public MachineModel Machine { get; set; }
-
         public List<BannerModel> Banners { get; set; }
         public Dictionary<string, PrdProductModel2> Products { get; set; }
         public List<ProductKindModel> ProductKinds { get; set; }

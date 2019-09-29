@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupOrderDetails
+    public class RupOrderSearch
     {
         public string MachineId { get; set; }
-        public string OrderId { get; set; }
+        public string PickCode { get; set; }
     }
 }

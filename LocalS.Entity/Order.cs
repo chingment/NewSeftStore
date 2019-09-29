@@ -35,7 +35,8 @@ namespace LocalS.Entity
         Unknow = 0,
         WechatByNative = 10, //微信Native发起支付
         WechatByPa = 11, //微信公众号发起支付
-        WechatByMp = 12 //微信小程序发起支付
+        WechatByMp = 12, //微信小程序发起支付,
+        AlipayByNative = 20 //微信小程序发起支付
     }
 
     [Table("Order")]

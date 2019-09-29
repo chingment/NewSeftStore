@@ -321,8 +321,9 @@ namespace LocalS.BLL.Biz
 
                 switch (rop.PayCaller)
                 {
+                    case E_OrderPayCaller.AlipayByNative:
+                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "暂时不支持支付宝支付", null);
                     case E_OrderPayCaller.WechatByMp:
-
                         break;
                     case E_OrderPayCaller.WechatByNative:
                         var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
@@ -340,6 +341,8 @@ namespace LocalS.BLL.Biz
                         ret.ChargeAmount = order.ChargeAmount.ToF2Price();
 
                         break;
+                    default:
+                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
                 }
 
                 CurrentDb.Order.Add(order);

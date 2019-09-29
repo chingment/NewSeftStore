@@ -9,6 +9,11 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RetOrderPickupStatusQuery
     {
+        public RetOrderPickupStatusQuery()
+        {
+            this.ProductSkus = new List<ProductSku>();
+        }
+
         public List<ProductSku> ProductSkus { get; set; }
         public class ProductSku
         {
