@@ -44,8 +44,8 @@ namespace LocalS.BLL
 
                 prdProductByCache.Id = prdProductByDb.Id;
                 prdProductByCache.Name = prdProductByDb.Name;
-                prdProductByCache.DispalyImgUrls = prdProductByDb.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
-                prdProductByCache.MainImgUrl = ImgSet.GetMain(prdProductByDb.DispalyImgUrls);
+                prdProductByCache.DisplayImgUrls = prdProductByDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
+                prdProductByCache.MainImgUrl = ImgSet.GetMain(prdProductByDb.DisplayImgUrls);
                 prdProductByCache.DetailsDes = prdProductByDb.DetailsDes;
                 prdProductByCache.BriefDes = prdProductByDb.BriefDes;
 
@@ -110,7 +110,7 @@ namespace LocalS.BLL
                 prdProductSkuByCache.Id = prdProductRefSkuByDb.Id;
                 prdProductSkuByCache.PrdProductId = prdProductRefSkuByDb.PrdProductId;
                 prdProductSkuByCache.Name = prdProductRefSkuByDb.Name;
-                prdProductSkuByCache.DispalyImgUrls = prdProduct.DispalyImgUrls;
+                prdProductSkuByCache.DisplayImgUrls = prdProduct.DisplayImgUrls;
                 prdProductSkuByCache.MainImgUrl = prdProduct.MainImgUrl;
                 prdProductSkuByCache.DetailsDes = prdProduct.DetailsDes;
                 prdProductSkuByCache.BriefDes = prdProduct.BriefDes;

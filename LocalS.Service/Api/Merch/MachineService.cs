@@ -162,7 +162,7 @@ namespace LocalS.Service.Api.Merch
                     var productSkuModel = new ProductSkuModel();
                     productSkuModel.Id = prdProductSku.Id;
                     productSkuModel.Name = prdProductSku.Name;
-                    productSkuModel.DispalyImgUrls = prdProductSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                    productSkuModel.DisplayImgUrls = prdProductSku.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                     productSkuModel.MainImgUrl = prdProductSku.MainImgUrl;
                     productSkuModel.BriefDes = prdProductSku.BriefDes;
                     productSkuModel.DetailsDes = prdProductSku.DetailsDes;

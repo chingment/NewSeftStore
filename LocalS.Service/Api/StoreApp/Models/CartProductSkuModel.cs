@@ -18,7 +18,7 @@ namespace LocalS.Service.Api.StoreApp
         public decimal SalePrice { get; set; }
         public decimal ShowPrice { get; set; }
         public string BriefInfo { get; set; }
-        public List<Lumos.ImgSet> DispalyImgUrls { get; set; }
+        public List<Lumos.ImgSet> DisplayImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string SpecDes { get; set; }
         public string CartId { get; set; }

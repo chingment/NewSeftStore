@@ -118,8 +118,8 @@ namespace LocalS.Service.Api.Merch
                 productKind.PId = rop.PId;
                 productKind.Name = rop.Name;
                 productKind.IconImgUrl = rop.IconImgUrl;
-                productKind.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                productKind.MainImgUrl = ImgSet.GetMain(productKind.DispalyImgUrls);
+                productKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                productKind.MainImgUrl = ImgSet.GetMain(productKind.DisplayImgUrls);
                 productKind.MerchId = merchId;
                 productKind.Description = rop.Description;
                 productKind.Depth = pPrdKind.Depth + 1;
@@ -149,7 +149,7 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.Id = prdKind.Id;
                 ret.Name = prdKind.Name;
-                ret.DispalyImgUrls = prdKind.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                ret.DisplayImgUrls = prdKind.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
 
 
                 ret.Description = prdKind.Description;
@@ -188,8 +188,8 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
                 }
                 prdKind.Name = rop.Name;
-                prdKind.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                prdKind.MainImgUrl = ImgSet.GetMain(prdKind.DispalyImgUrls);
+                prdKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                prdKind.MainImgUrl = ImgSet.GetMain(prdKind.DisplayImgUrls);
                 prdKind.Description = rop.Description;
                 prdKind.MendTime = DateTime.Now;
                 prdKind.Mender = operater;

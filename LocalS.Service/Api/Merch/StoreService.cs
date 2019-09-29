@@ -107,8 +107,8 @@ namespace LocalS.Service.Api.Merch
                 store.Address = rop.Address;
                 store.BriefDes = rop.BriefDes;
                 store.IsOpen = false;
-                store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                store.MainImgUrl = ImgSet.GetMain(store.DispalyImgUrls);
+                store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                store.MainImgUrl = ImgSet.GetMain(store.DisplayImgUrls);
                 store.CreateTime = DateTime.Now;
                 store.Creator = operater;
                 CurrentDb.Store.Add(store);
@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.Merch
             ret.Name = store.Name;
             ret.Address = store.Address;
             ret.BriefDes = store.BriefDes;
-            ret.DispalyImgUrls = store.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+            ret.DisplayImgUrls = store.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
             ret.IsOpen = store.IsOpen;
             ret.Status = GetStatus(store.IsOpen);
 
@@ -159,8 +159,8 @@ namespace LocalS.Service.Api.Merch
                 store.Name = rop.Name;
                 store.Address = rop.Address;
                 store.BriefDes = rop.BriefDes;
-                store.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                store.MainImgUrl = ImgSet.GetMain(store.DispalyImgUrls);
+                store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                store.MainImgUrl = ImgSet.GetMain(store.DisplayImgUrls);
                 store.IsOpen = rop.IsOpen;
                 store.MendTime = DateTime.Now;
                 store.Mender = operater;
@@ -243,7 +243,7 @@ namespace LocalS.Service.Api.Merch
                     var productSkuModel = new ProductSkuModel();
                     productSkuModel.Id = prdProductSku.Id;
                     productSkuModel.Name = prdProductSku.Name;
-                    productSkuModel.DispalyImgUrls = prdProductSku.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                    productSkuModel.DisplayImgUrls = prdProductSku.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                     productSkuModel.MainImgUrl = prdProductSku.MainImgUrl;
                     productSkuModel.BriefDes = prdProductSku.BriefDes;
                     productSkuModel.DetailsDes = prdProductSku.DetailsDes;

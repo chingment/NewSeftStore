@@ -178,7 +178,7 @@ namespace LocalS.Service.Api.Merch
                 adSpaceContent.MerchId = merchId;
                 adSpaceContent.Priority = 0;
                 adSpaceContent.Title = rop.Title;
-                adSpaceContent.Url = rop.DispalyImgUrls[0].Url;
+                adSpaceContent.Url = rop.DisplayImgUrls[0].Url;
                 adSpaceContent.Status = E_AdContentStatus.Normal;
                 adSpaceContent.Creator = operater;
                 adSpaceContent.CreateTime = DateTime.Now;

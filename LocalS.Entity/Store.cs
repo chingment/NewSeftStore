@@ -23,7 +23,7 @@ namespace LocalS.Entity
 
         public string MainImgUrl { get; set; }
 
-        public string DispalyImgUrls { get; set; }
+        public string DisplayImgUrls { get; set; }
         [MaxLength(128)]
         public string Address { get; set; }
         public double Lat { get; set; }

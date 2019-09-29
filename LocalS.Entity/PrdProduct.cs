@@ -17,7 +17,7 @@ namespace LocalS.Entity
         public string PinYinName{ get; set; }
         public string PinYinIndex { get; set; }
         public string MainImgUrl { get; set; }
-        public string DispalyImgUrls { get; set; }
+        public string DisplayImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public string Creator { get; set; }

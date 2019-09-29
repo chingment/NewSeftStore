@@ -23,7 +23,7 @@ namespace LocalS.Service.Api.Merch
 
         public string BarCode { get; set; }
 
-        public List<ImgSet> DispalyImgUrls { get; set; }
+        public List<ImgSet> DisplayImgUrls { get; set; }
 
         public string DetailsDes { get; set; }
 

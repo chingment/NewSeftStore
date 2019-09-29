@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.Merch
         public decimal SalePrice { get; set; }
         public string BriefDes { get; set; }
         public string MainImgUrl { get; set; }
-        public List<ImgSet> DispalyImgUrls { get; set; }
+        public List<ImgSet> DisplayImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string SpecDes { get; set; }
         public int SumQuantity { get; set; }

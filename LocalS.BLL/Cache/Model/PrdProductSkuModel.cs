@@ -19,7 +19,7 @@ namespace LocalS.BLL
         public string PrdProductId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
-        public List<ImgSet> DispalyImgUrls { get; set; }
+        public List<ImgSet> DisplayImgUrls { get; set; }
         public string DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public decimal SalePrice { get; set; }

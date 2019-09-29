@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string Id { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
-        public List<Lumos.ImgSet> DispalyImgUrls { get; set; }
+        public List<Lumos.ImgSet> DisplayImgUrls { get; set; }
         public string BriefDes { get; set; }
         public string DetailsDes { get; set; }
         public RefSkuModel RefSku { get; set; }

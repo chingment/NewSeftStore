@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.BriefDes, u.CreateTime, u.DispalyImgUrls });
+                         select new { u.Id, u.Name, u.BriefDes, u.CreateTime, u.DisplayImgUrls });
 
 
             int total = query.Count();
@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Name = item.Name,
                     BriefDes = item.BriefDes,
-                    MainImgUrl = ImgSet.GetMain(item.DispalyImgUrls),
+                    MainImgUrl = ImgSet.GetMain(item.DisplayImgUrls),
                     KindNames = str_prdKindNames,
                     Skus = list_Sku,
                     CreateTime = item.CreateTime,
@@ -170,7 +170,7 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品栏目");
             }
 
-            if (rop.DispalyImgUrls == null || rop.DispalyImgUrls.Count == 0)
+            if (rop.DisplayImgUrls == null || rop.DisplayImgUrls.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少上传一张商品图片");
             }
@@ -184,8 +184,8 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.BarCode = rop.BarCode;
                 prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
                 prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
-                prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
-                prdProduct.MainImgUrl = ImgSet.GetMain(prdProduct.DispalyImgUrls);
+                prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                prdProduct.MainImgUrl = ImgSet.GetMain(prdProduct.DisplayImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes;
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.Creator = operater;
@@ -259,7 +259,7 @@ namespace LocalS.Service.Api.Merch
                 ret.BriefDes = prdProduct.BriefDes;
                 ret.KindIds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdKindId).ToList();
                 ret.SubjectIds = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdSubjectId).ToList();
-                ret.DispalyImgUrls = prdProduct.DispalyImgUrls.ToJsonObject<List<ImgSet>>();
+                ret.DisplayImgUrls = prdProduct.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 ret.Kinds = GetKindTree(merchId);
                 ret.Subjects = GetSubjectTree(merchId);
 
@@ -293,7 +293,7 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
             }
 
-            if (rop.DispalyImgUrls == null || rop.DispalyImgUrls.Count == 0)
+            if (rop.DisplayImgUrls == null || rop.DisplayImgUrls.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
@@ -307,7 +307,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.DetailsDes = rop.DetailsDes;
-                prdProduct.DispalyImgUrls = rop.DispalyImgUrls.ToJsonString();
+                prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.Mender = operater;
                 prdProduct.MendTime = DateTime.Now;
 

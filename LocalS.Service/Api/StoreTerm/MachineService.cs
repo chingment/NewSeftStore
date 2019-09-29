@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in adContents)
             {
-                bannerModels.Add(new BannerModel { ImgUrl = item.Url });
+                bannerModels.Add(new BannerModel { Url = item.Url });
             }
 
             return bannerModels;

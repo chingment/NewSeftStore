@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreTerm
                     prdProductModel2.Id = productModel.Id;
                     prdProductModel2.Name = productModel.Name;
                     prdProductModel2.MainImgUrl = productModel.MainImgUrl;
-                    prdProductModel2.DispalyImgUrls = productModel.DispalyImgUrls;
+                    prdProductModel2.DisplayImgUrls = productModel.DisplayImgUrls;
                     prdProductModel2.DetailsDes = productModel.DetailsDes;
                     prdProductModel2.BriefDes = productModel.BriefDes;
                     prdProductModel2.RefSku.Id = productModel.RefSku.Id;

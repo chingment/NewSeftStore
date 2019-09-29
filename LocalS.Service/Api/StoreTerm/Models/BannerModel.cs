@@ -8,6 +8,6 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class BannerModel
     {
-        public string ImgUrl { get; set; }
+        public string Url { get; set; }
     }
 }

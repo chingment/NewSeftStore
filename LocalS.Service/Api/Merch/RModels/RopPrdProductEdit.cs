@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.Merch
 
         public string SimpleCode { get; set; }
 
-        public List<ImgSet> DispalyImgUrls { get; set; }
+        public List<ImgSet> DisplayImgUrls { get; set; }
 
         public decimal ShowPrice { get; set; }
 
