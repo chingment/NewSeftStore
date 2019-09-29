@@ -11,33 +11,24 @@ using System.Linq;
 namespace LocalS.BLL.Task
 {
 
-    public enum TimerTaskType
+    public enum Task4TimType
     {
         Unknow = 0,
-        CheckOrderPay = 1
-    }
-
-
-    public class Task4Tim2GlobalData
-    {
-        public string Id { get; set; }
-        public TimerTaskType Type { get; set; }
-        public DateTime ExpireTime { get; set; }
-        public object Data { get; set; }
+        Order2CheckPay = 1
     }
 
     public class Task4Tim2GlobalProvider : BaseDbContext, IJob
     {
-        private static readonly string key = "task4GlobalTimer";
+        private static readonly string key = "task4Tim2Global";
 
-        public void Enter(TimerTaskType type, DateTime expireTime, object data)
+        public void Enter(Task4TimType type, DateTime expireTime, object data)
         {
-            var d = new Task4Tim2GlobalData();
+            var d = new TaskData();
             d.Id = GuidUtil.New();
             d.Type = type;
             d.ExpireTime = expireTime;
             d.Data = data;
-            RedisManager.Db.HashSetAsync(key, d.Id, Newtonsoft.Json.JsonConvert.SerializeObject(d), StackExchange.Redis.When.Always);
+            RedisManager.Db.HashSetAsync(key, d.Id,d.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
         public void Exit(string id)
@@ -45,16 +36,16 @@ namespace LocalS.BLL.Task
             RedisManager.Db.HashDelete(key, id);
         }
 
-        public static List<Task4Tim2GlobalData> GetList()
+        public List<TaskData> GetList()
         {
-            List<Task4Tim2GlobalData> list = new List<Task4Tim2GlobalData>();
+            List<TaskData> list = new List<TaskData>();
             var hs = RedisManager.Db.HashGetAll(key);
 
             var d = (from i in hs select i).ToList();
 
             foreach (var item in d)
             {
-                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<Task4Tim2GlobalData>(item.Value);
+                var obj = item.Value.ToJsonObject<TaskData>();
                 list.Add(obj);
             }
             return list;
@@ -74,38 +65,46 @@ namespace LocalS.BLL.Task
                     {
                         switch (m.Type)
                         {
-                            case TimerTaskType.CheckOrderPay:
+                            case Task4TimType.Order2CheckPay:
                                 #region 检查支付状态
-                                if (m.ExpireTime.AddMinutes(1) >= DateTime.Now)//未过期
+                                var order = m.Data.ToJsonObject<Order>();
+                                LogUtil.Info(string.Format("查询订单号：{0}", order.Sn));
+                                //判断支付过期时间
+                                if (m.ExpireTime.AddMinutes(1) >= DateTime.Now)
                                 {
-                                    var chData = m.Data.ToJsonObject<Order>();
-
-                                    LogUtil.Info(string.Format("查询订单号：{0}", chData.Sn));
-
+                                    //未过期查询支付状态
                                     bool isPaySuccessed = false;
-
-                                    if (!string.IsNullOrEmpty(chData.AppId))
+                                    string content = "";
+                                    switch (order.PayCaller)
                                     {
-                                        var appInfo = BizFactory.Merch.GetWxPaAppInfoConfig(chData.MerchId);
-
-                                        string xml = SdkFactory.Wx.OrderQuery(appInfo, chData.Sn);
-                                        LogUtil.Info(string.Format("订单号：{0},结果文件:{1}", chData.Sn, xml));
-                                        BizFactory.Order.PayResultNotify(GuidUtil.Empty(),E_OrderNotifyLogNotifyFrom.OrderQuery, xml, chData.Sn, out isPaySuccessed);
+                                        case E_OrderPayCaller.WechatByNative:
+                                            var wxPaAppInfoConfig = BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
+                                            content = SdkFactory.Wx.OrderQuery(wxPaAppInfoConfig, order.Sn);
+                                            break;
+                                        case E_OrderPayCaller.WechatByMp:
+                                            var wxMpAppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                            content = SdkFactory.Wx.OrderQuery(wxMpAppInfoConfig, order.Sn);
+                                            break;
                                     }
+
+                                    LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
+
+                                    BizFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.OrderQuery, content, order.Sn, out isPaySuccessed);
 
                                     if (isPaySuccessed)
                                     {
                                         Task4Factory.Global.Exit(m.Id);
-                                        LogUtil.Info(string.Format("订单号：{0},支付成功,删除缓存", chData.Sn));
+                                        LogUtil.Info(string.Format("订单号：{0},支付成功,删除缓存", order.Sn));
                                     }
                                 }
                                 else
                                 {
-                                    var chData = m.Data.ToJsonObject<Order>();
-                                    var rt = BizFactory.Order.Cancle(GuidUtil.Empty(), chData.Id, "订单支付有效时间过期");
+                                    //已过期，取消订单
+                                    var rt = BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
                                     if (rt.Result == ResultType.Success)
                                     {
                                         Task4Factory.Global.Exit(m.Id);
+                                        LogUtil.Info(string.Format("订单号：{0},支付超时,取消订单，删除缓存", order.Sn));
                                     }
                                 }
                                 #endregion 
@@ -121,6 +120,14 @@ namespace LocalS.BLL.Task
                 LogUtil.Error("全局定时任务发生异常", ex);
             }
             #endregion
+        }
+
+        public class TaskData
+        {
+            public string Id { get; set; }
+            public Task4TimType Type { get; set; }
+            public DateTime ExpireTime { get; set; }
+            public object Data { get; set; }
         }
     }
 }

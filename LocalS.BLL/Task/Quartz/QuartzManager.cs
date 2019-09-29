@@ -56,25 +56,21 @@ namespace LocalS.BLL.Task
         /// <returns></returns>
         public static string GetAbsolutePath(string relativePath)
         {
-            //if (string.IsNullOrEmpty(relativePath))
-            //{
-            //    throw new ArgumentNullException("参数relativePath空异常！");
-            //}
-            //relativePath = relativePath.Replace("/", "\\");
-            //if (relativePath[0] == '\\')
-            //{
-            //    relativePath = relativePath.Remove(0, 1);
-            //}
-            //if (HttpContext.Current != null)
-            //{
-            //    return Path.Combine(HttpRuntime.AppDomainAppPath + "\\bin\\", relativePath);
-            //}
-            //else
-            //{
-            //    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
-            //}
+            if (string.IsNullOrEmpty(relativePath))
+            {
+                throw new ArgumentNullException("参数relativePath空异常！");
+            }
+            relativePath = relativePath.Replace("/", "\\");
+            if (relativePath[0] == '\\')
+            {
+                relativePath = relativePath.Remove(0, 1);
+            }
 
-            return "";
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            return Path.Combine(path, relativePath);
+
+
+            // return "";
         }
 
 
@@ -85,7 +81,7 @@ namespace LocalS.BLL.Task
         /// <param name="jobInfo"></param>
         public static void ScheduleJob(IScheduler scheduler, BackgroundJob jobInfo)
         {
-           
+
             if (ValidExpression(jobInfo.CronExpression))
             {
                 Type type = GetClassInfo(jobInfo.AssemblyName, jobInfo.ClassName);
