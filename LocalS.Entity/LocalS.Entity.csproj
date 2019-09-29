@@ -64,6 +64,7 @@
     <Compile Include="OrderDetailsChild.cs" />
     <Compile Include="OrderDetailsChildSon.cs" />
     <Compile Include="OrderNotifyLog.cs" />
+    <Compile Include="OrderPickupLog.cs" />
     <Compile Include="PrdProduct.cs" />
     <Compile Include="PrdKind.cs" />
     <Compile Include="PrdProductSku.cs" />

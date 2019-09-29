@@ -52,6 +52,8 @@ namespace LocalS.DAL
         public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
         public IDbSet<Term> Term { get; set; }
         public IDbSet<Machine> Machine { get; set; }
+
+        public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

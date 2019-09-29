@@ -178,7 +178,36 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-          
+            var orderPickupLog = new OrderPickupLog();
+            orderPickupLog.Id = GuidUtil.New();
+            orderPickupLog.OrderId = rop.OrderId;
+            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+            orderPickupLog.SellChannelRefId = rop.MachineId;
+            orderPickupLog.UniqueId = rop.UniqueId;
+            orderPickupLog.ProductSkuId = rop.ProductSkuId;
+            orderPickupLog.SlotId = rop.SlotId;
+            orderPickupLog.EventCode = rop.EventCode;
+            orderPickupLog.EventRemark = rop.EventRemark;
+            orderPickupLog.CreateTime = DateTime.Now;
+            orderPickupLog.Creator = rop.MachineId;
+            CurrentDb.OrderPickupLog.Add(orderPickupLog);
+            CurrentDb.SaveChanges();
+
+            switch (rop.EventCode)
+            {
+                case "1000":
+
+                    break;
+                case "2000":
+
+                    break;
+                case "3000":
+
+                    break;
+                case "4000":
+
+                    break;
+            }
 
             return result;
         }
