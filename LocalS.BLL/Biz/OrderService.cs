@@ -352,7 +352,7 @@ namespace LocalS.BLL.Biz
 
                 ReidsMqFactory.Global.PushOrderReserve(new Mq.MqMessageConentModel.OrderReserveModel { OrderId = order.Id });
 
-                Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.PayExpireTime.Value, order);
+                Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
                 result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
 
@@ -862,6 +862,7 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
                     ReidsMqFactory.Global.PushOrderCancle(new Mq.MqMessageConentModel.OrderCancleModel { OrderId = order.Id });
+                    Task4Factory.Global.Exit(order.Id);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }

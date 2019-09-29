@@ -21,10 +21,10 @@ namespace LocalS.BLL.Task
     {
         private static readonly string key = "task4Tim2Global";
 
-        public void Enter(Task4TimType type, DateTime expireTime, object data)
+        public void Enter(Task4TimType type,string id, DateTime expireTime, object data)
         {
             var d = new TaskData();
-            d.Id = GuidUtil.New();
+            d.Id = id;
             d.Type = type;
             d.ExpireTime = expireTime;
             d.Data = data;
@@ -103,7 +103,6 @@ namespace LocalS.BLL.Task
                                     var rt = BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
                                     if (rt.Result == ResultType.Success)
                                     {
-                                        Task4Factory.Global.Exit(m.Id);
                                         LogUtil.Info(string.Format("订单号：{0},支付超时,取消订单，删除缓存", order.Sn));
                                     }
                                 }
