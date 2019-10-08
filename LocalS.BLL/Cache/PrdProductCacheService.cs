@@ -43,11 +43,11 @@ namespace LocalS.BLL
                 prdProductByCache = new PrdProductModel();
 
                 prdProductByCache.Id = prdProductByDb.Id;
-                prdProductByCache.Name = prdProductByDb.Name;
+                prdProductByCache.Name = prdProductByDb.Name.NullToEmpty();
                 prdProductByCache.DisplayImgUrls = prdProductByDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 prdProductByCache.MainImgUrl = ImgSet.GetMain(prdProductByDb.DisplayImgUrls);
-                prdProductByCache.DetailsDes = prdProductByDb.DetailsDes;
-                prdProductByCache.BriefDes = prdProductByDb.BriefDes;
+                prdProductByCache.DetailsDes = prdProductByDb.DetailsDes.NullToEmpty();
+                prdProductByCache.BriefDes = prdProductByDb.BriefDes.NullToEmpty();
 
 
                 prdProductByCache.RefSku = new PrdProductModel.RefSkuModel { Id = prdProductRefSkuByDb.Id, SalePrice = prdProductRefSkuByDb.SalePrice, SpecDes = prdProductRefSkuByDb.SpecDes };
@@ -92,32 +92,42 @@ namespace LocalS.BLL
 
         public PrdProductSkuModel GetProductSkuInfo(string productSkuId)
         {
+            var prdProductSkuModel = new PrdProductSkuModel();
 
-            var prdProductSkuByCache = RedisHashUtil.Get<PrdProductSkuModel>(redis_key_productSku_info, productSkuId);
+            var prdProductSku2ByCache = RedisHashUtil.Get<PrdProductSkuModel2>(redis_key_productSku_info, productSkuId);
 
             //如商品信息从缓存取不到，读取数据库信息加载
-            if (prdProductSkuByCache == null)
+            if (prdProductSku2ByCache == null)
             {
-                var prdProductRefSkuByDb = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
-                if (prdProductRefSkuByDb == null)
+                var prdProductSkuByDb = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+                if (prdProductSkuByDb == null)
                     return null;
 
-                var prdProduct = GetProductInfo(prdProductRefSkuByDb.PrdProductId);
+                var prdProduct = GetProductInfo(prdProductSkuByDb.PrdProductId);
                 if (prdProduct == null)
                     return null;
 
-                prdProductSkuByCache = new PrdProductSkuModel();
-                prdProductSkuByCache.Id = prdProductRefSkuByDb.Id;
-                prdProductSkuByCache.PrdProductId = prdProductRefSkuByDb.PrdProductId;
-                prdProductSkuByCache.Name = prdProductRefSkuByDb.Name;
-                prdProductSkuByCache.DisplayImgUrls = prdProduct.DisplayImgUrls;
-                prdProductSkuByCache.MainImgUrl = prdProduct.MainImgUrl;
-                prdProductSkuByCache.DetailsDes = prdProduct.DetailsDes;
-                prdProductSkuByCache.BriefDes = prdProduct.BriefDes;
-                prdProductSkuByCache.SpecDes = prdProductRefSkuByDb.SpecDes;
+                prdProductSku2ByCache = new PrdProductSkuModel2();
+                prdProductSku2ByCache.Id = prdProductSkuByDb.Id;
+                prdProductSku2ByCache.PrdProductId = prdProductSkuByDb.PrdProductId;
+                prdProductSku2ByCache.Name = prdProductSkuByDb.Name.NullToEmpty();
+                prdProductSku2ByCache.DisplayImgUrls = prdProduct.DisplayImgUrls;
+                prdProductSku2ByCache.MainImgUrl = prdProduct.MainImgUrl.NullToEmpty();
+                prdProductSku2ByCache.DetailsDes = prdProduct.DetailsDes.NullToEmpty();
+                prdProductSku2ByCache.BriefDes = prdProduct.BriefDes.NullToEmpty();
+                prdProductSku2ByCache.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty(); 
 
-                RedisManager.Db.HashSetAsync(redis_key_productSku_info, productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuByCache), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(redis_key_productSku_info, productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSku2ByCache), StackExchange.Redis.When.Always);
             }
+
+            prdProductSkuModel.Id = prdProductSku2ByCache.Id;
+            prdProductSkuModel.PrdProductId = prdProductSku2ByCache.PrdProductId;
+            prdProductSkuModel.Name = prdProductSku2ByCache.Name;
+            prdProductSkuModel.DisplayImgUrls = prdProductSku2ByCache.DisplayImgUrls;
+            prdProductSkuModel.MainImgUrl = prdProductSku2ByCache.MainImgUrl;
+            prdProductSkuModel.DetailsDes = prdProductSku2ByCache.DetailsDes;
+            prdProductSkuModel.BriefDes = prdProductSku2ByCache.BriefDes;
+            prdProductSkuModel.SpecDes = prdProductSku2ByCache.SpecDes;
 
             var skuStock = GetProductSkuStock(productSkuId);
             if (skuStock == null)
@@ -133,9 +143,9 @@ namespace LocalS.BLL
                 else
                 {
 
-                    prdProductSkuByCache.SalePrice = skuStock.Stocks[0].SalePrice;
-                    prdProductSkuByCache.SalePriceByVip = skuStock.Stocks[0].SalePriceByVip;
-                    prdProductSkuByCache.IsOffSell = skuStock.Stocks[0].IsOffSell;
+                    prdProductSkuModel.SalePrice = skuStock.Stocks[0].SalePrice;
+                    prdProductSkuModel.SalePriceByVip = skuStock.Stocks[0].SalePriceByVip;
+                    prdProductSkuModel.IsOffSell = skuStock.Stocks[0].IsOffSell;
 
                     foreach (var stock in skuStock.Stocks)
                     {
@@ -147,24 +157,18 @@ namespace LocalS.BLL
                         l_stock.SellQuantity = stock.SellQuantity;
                         l_stock.LockQuantity = stock.LockQuantity;
 
-                        if (prdProductSkuByCache.Stocks == null)
+                        if (prdProductSkuModel.Stocks == null)
                         {
-                            prdProductSkuByCache.Stocks = new List<PrdProductSkuModel.Stock>();
+                            prdProductSkuModel.Stocks = new List<PrdProductSkuModel.Stock>();
                         }
 
-                        prdProductSkuByCache.Stocks.Add(l_stock);
+                        prdProductSkuModel.Stocks.Add(l_stock);
                     }
                 }
             }
 
-
-            prdProductSkuByCache.BriefDes = prdProductSkuByCache.BriefDes.NullToEmpty();
-
-
-
-            return prdProductSkuByCache;
+            return prdProductSkuModel;
         }
-
 
         public PrdProductSkuStockModel GetProductSkuStock(string productSkuId)
         {
