@@ -62,7 +62,7 @@ export default {
     },
     handleChangeStore(command) {
       this.$router.push({
-        path: '/store/manage?id=' + command
+        path: '/store/manage?id=' + command + '&tab=' + this.activeName
       })
     },
     handleClick(tab, event) {

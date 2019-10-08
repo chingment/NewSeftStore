@@ -21,15 +21,15 @@
               <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
             </div>
             <div class="right">
-              <el-button type="text" @click="handleUpdate(item)">设置</el-button>
+              <el-button type="text" @click="handleManage(item)">管理</el-button>
             </div>
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
-                <li><el-button type="text" style="color:#67c23a" @click="handleViewOrder(item)">订单信息</el-button></li>
+                <li><el-button type="text" @click="handleManageStock(item)">库存管理</el-button></li>
+                <li><el-button type="text" style="color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
               </ul>
             </div>
           </div>
@@ -82,22 +82,21 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleUpdate(row) {
+    handleManage(row) {
       this.$router.push({
         path: '/machine/manage?id=' + row.id + '&tab=tabBaseInfo'
       })
     },
-    handleViewStock(row) {
+    handleManageStock(row) {
       this.$router.push({
         path: '/machine/manage?id=' + row.id + '&tab=tabStock'
       })
     },
-    handleViewOrder(row) {
+    handleManageOrder(row) {
       this.$router.push({
         path: '/machine/manage?id=' + row.id + '&tab=tabOrder'
       })
     }
-
   }
 }
 </script>

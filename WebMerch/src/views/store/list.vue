@@ -20,15 +20,15 @@
               <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
             </div>
             <div class="right">
-              <el-button type="text" @click="handleUpdate(item)">管理</el-button>
+              <el-button type="text" @click="handleManage(item)">管理</el-button>
             </div>
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" @click="handleViewMachine(item)">机器管理</el-button></li>
-                <li><el-button type="text" style="color:#67c23a" @click="handleViewOrder(item)">订单信息</el-button></li>
+                <li><el-button type="text" @click="handleManageMachine(item)">机器管理</el-button></li>
+                <li><el-button type="text" style="color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
               </ul>
             </div>
           </div>
@@ -96,17 +96,17 @@ export default {
         path: '/store/add'
       })
     },
-    handleUpdate(row) {
+    handleManage(row) {
       this.$router.push({
         path: '/store/manage?id=' + row.id + '&tab=tabBaseInfo'
       })
     },
-    handleViewMachine(row) {
+    handleManageMachine(row) {
       this.$router.push({
         path: '/store/manage?id=' + row.id + '&tab=tabMachine'
       })
     },
-    handleViewOrder(row) {
+    handleManageOrder(row) {
       this.$router.push({
         path: '/store/manage?id=' + row.id + '&tab=tabOrder'
       })
