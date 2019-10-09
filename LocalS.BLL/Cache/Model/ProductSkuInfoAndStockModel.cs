@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class PrdProductSkuModel
+    public class ProductSkuInfoAndStockModel
     {
-        public PrdProductSkuModel()
+        public ProductSkuInfoAndStockModel()
         {
-            this.Stocks = new List<Stock>();
+            this.Stocks = new List<ProductSkuStockModel>();
         }
 
         public string Id { get; set; }
@@ -27,15 +27,15 @@ namespace LocalS.BLL
         public bool IsShowPrice { get; set; }
         public string SpecDes { get; set; }
         public bool IsOffSell { get; set; }
-        public List<Stock> Stocks { get; set; }
-        public class Stock
-        {
-            public E_SellChannelRefType RefType { get; set; }
-            public string RefId { get; set; }
-            public string SlotId { get; set; }
-            public int SumQuantity { get; set; }
-            public int LockQuantity { get; set; }
-            public int SellQuantity { get; set; }
-        }
+        public List<ProductSkuStockModel> Stocks { get; set; }
+        //public class Stock
+        //{
+        //    public E_SellChannelRefType RefType { get; set; }
+        //    public string RefId { get; set; }
+        //    public string SlotId { get; set; }
+        //    public int SumQuantity { get; set; }
+        //    public int LockQuantity { get; set; }
+        //    public int SellQuantity { get; set; }
+        //}
     }
 }

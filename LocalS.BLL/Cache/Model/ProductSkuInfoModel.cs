@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class PrdProductSkuModel2
+    public class ProductSkuInfoModel
     {
         public string Id { get; set; }
         public string PrdProductId { get; set; }

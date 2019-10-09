@@ -60,7 +60,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var productModel = BizFactory.PrdProduct.GetProductInfo(item.PrdProductId);
+                var productModel = CacheServiceFactory.Product.GetInfo(item.PrdProductId);
                 if (productModel != null)
                 {
                     var prdProductModel2 = new PrdProductModel2();
@@ -92,7 +92,7 @@ namespace LocalS.Service.Api.StoreApp
         public CustomJsonResult Details(string operater, string clientUserId, RupProductDetails rup)
         {
             var result = new CustomJsonResult();
-            var productModel = BizFactory.PrdProduct.GetProductInfo(rup.Id);
+            var productModel = CacheServiceFactory.Product.GetInfo(rup.Id);
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);
 
             return result;

@@ -69,7 +69,6 @@
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\OrderService.cs" />
-    <Compile Include="Biz\PrdProductService.cs" />
     <Compile Include="Biz\RModels\RetBackgroundJobGetDetails.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
@@ -77,12 +76,13 @@
     <Compile Include="Biz\RModels\RopBackgroundJobEdit.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
     <Compile Include="Cache\CacheServiceFactory.cs" />
-    <Compile Include="Cache\Model\PrdProductModel.cs" />
-    <Compile Include="Cache\Model\PrdProductSkuModel.cs" />
-    <Compile Include="Cache\Model\PrdProductSkuModel2.cs" />
-    <Compile Include="Cache\Model\PrdProductSkuStockModel.cs" />
+    <Compile Include="Cache\Model\ProductInfoModel.cs" />
+    <Compile Include="Cache\Model\ProductSkuInfoAndStockModel.cs" />
+    <Compile Include="Cache\Model\ProductSkuInfoModel.cs" />
+    <Compile Include="Cache\Model\ProductSkuStockModel.cs" />
     <Compile Include="Cache\PrdProductCacheService.cs" />
-    <Compile Include="Cache\SellChannelStockCacheService.cs" />
+    <Compile Include="Cache\PrdProductSkuCacheService.cs" />
+    <Compile Include="Cache\PrdStockCacheService.cs" />
     <Compile Include="Mq\MqMessageConentModel\StockOperateModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />

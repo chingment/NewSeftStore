@@ -62,14 +62,15 @@ namespace LocalS.BLL.Biz
                 //检查是否有可买的商品
                 List<string> warn_tips = new List<string>();
                 var operateStocks = new List<OperateStock>();
-                List<PrdProductSkuModel> productSkus = new List<BLL.PrdProductSkuModel>();
+
+                List<ProductSkuInfoAndStockModel> productSkuInfoAndStocks = new List<BLL.ProductSkuInfoAndStockModel>();
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    var l_ProductSku = BizFactory.PrdProduct.GetProductSkuInfo(productSku.Id);
-                    if (l_ProductSku == null)
+                    var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(productSku.Id);
+                    if (l_ProductSkuInfoAndStock == null)
                     {
-                        warn_tips.Add(string.Format("{0}商品库存信息不存在", l_ProductSku.Name));
+                        warn_tips.Add(string.Format("{0}商品库存信息不存在", l_ProductSkuInfoAndStock.Name));
                     }
                     else
                     {
@@ -77,37 +78,36 @@ namespace LocalS.BLL.Biz
 
                         if (rop.ReserveMode == E_ReserveMode.OffLine)
                         {
-                            sellQuantity = l_ProductSku.Stocks.Where(m => m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
+                            sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
                         }
                         else if (rop.ReserveMode == E_ReserveMode.Online)
                         {
                             if (productSku.ReceptionMode == E_ReceptionMode.Machine)
                             {
-                                sellQuantity = l_ProductSku.Stocks.Where(m => m.RefType == E_SellChannelRefType.Machine).Sum(m => m.SellQuantity);
+                                sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.Machine).Sum(m => m.SellQuantity);
                             }
                             else if (productSku.ReceptionMode == E_ReceptionMode.Express)
                             {
-                                sellQuantity = l_ProductSku.Stocks.Where(m => m.RefType == E_SellChannelRefType.Express).Sum(m => m.SellQuantity);
+                                sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.Express).Sum(m => m.SellQuantity);
                             }
                             else if (productSku.ReceptionMode == E_ReceptionMode.SelfTake)
                             {
-                                sellQuantity = l_ProductSku.Stocks.Where(m => m.RefType == E_SellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
+                                sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
                             }
                         }
 
-                        if (l_ProductSku.IsOffSell)
+                        if (l_ProductSkuInfoAndStock.IsOffSell)
                         {
-                            warn_tips.Add(string.Format("{0}已经下架", l_ProductSku.Name));
+                            warn_tips.Add(string.Format("{0}已经下架", l_ProductSkuInfoAndStock.Name));
                         }
                         else
                         {
                             if (sellQuantity < productSku.Quantity)
                             {
-                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", l_ProductSku.Name, sellQuantity));
+                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", l_ProductSkuInfoAndStock.Name, sellQuantity));
                             }
                         }
-
-                        productSkus.Add(l_ProductSku);
+                        productSkuInfoAndStocks.Add(l_ProductSkuInfoAndStock);
                     }
                 }
 
@@ -115,6 +115,9 @@ namespace LocalS.BLL.Biz
                 {
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
                 }
+
+
+               var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
 
                 var order = new Order();
                 order.Id = GuidUtil.New();
@@ -156,8 +159,6 @@ namespace LocalS.BLL.Biz
                     }
                 }
                 #endregion 
-
-                var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkus);
 
                 order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
                 order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
@@ -339,7 +340,7 @@ namespace LocalS.BLL.Biz
 
         }
 
-        private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<PrdProductSkuModel> productSkus)
+        private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoAndStockModel> productSkus)
         {
             List<OrderReserveDetail> details = new List<OrderReserveDetail>();
 
@@ -543,7 +544,6 @@ namespace LocalS.BLL.Biz
 
             return details;
         }
-
         private static readonly object lock_PayResultNotify = new object();
         public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, string orderSn, out bool isPaySuccessed)
         {
@@ -610,7 +610,6 @@ namespace LocalS.BLL.Biz
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             }
         }
-
         public CustomJsonResult PayCompleted(string operater, string orderSn, DateTime completedTime)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -694,7 +693,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult<RetPayResultQuery> PayResultQuery(string operater, string orderId)
         {
             var result = new CustomJsonResult<RetPayResultQuery>();
@@ -716,7 +714,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult Cancle(string operater, string orderId, string cancelReason)
         {
             var result = new CustomJsonResult();

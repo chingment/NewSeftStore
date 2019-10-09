@@ -8,9 +8,9 @@ using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class PrdProductModel
+    public class ProductInfoModel
     {
-        public PrdProductModel()
+        public ProductInfoModel()
         {
 
         }

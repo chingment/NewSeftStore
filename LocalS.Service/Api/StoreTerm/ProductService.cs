@@ -63,7 +63,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in list)
             {
-                var productModel = BizFactory.PrdProduct.GetProductInfo(item.PrdProductId);
+                var productModel = CacheServiceFactory.Product.GetInfo(item.PrdProductId);
                 if (productModel != null)
                 {
                     var prdProductModel2 = new PrdProductModel2();

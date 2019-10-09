@@ -35,7 +35,6 @@ namespace LocalS.BLL.Mq.MqMessageConentModel
             public string SlotId { get; set; }
             public E_SellChannelRefType RefType { get; set; }
             public string RefId { get; set; }
-
             public int Quantity { get; set; }
         }
     }

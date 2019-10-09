@@ -28,7 +28,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var clientCart in clientCarts)
             {
-                var productSkuModel = BizFactory.PrdProduct.GetProductSkuInfo(clientCart.PrdProductSkuId);
+                var productSkuModel = CacheServiceFactory.ProductSku.GetInfoAndStock(clientCart.PrdProductSkuId);
                 if (productSkuModel != null)
                 {
                     var cartProcudtSkuModel = new CartProductSkuModel();

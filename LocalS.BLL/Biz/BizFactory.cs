@@ -24,14 +24,6 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public static PrdProductService PrdProduct
-        {
-            get
-            {
-                return new PrdProductService();
-            }
-        }
-
         public static BackgroundJobProvider BackgroundJob
         {
             get
