@@ -22,8 +22,8 @@ namespace LocalS.Service.Api.StoreTerm
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;
-            bizRop.SellChannelRefId = machine.Id;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
+            bizRop.SellChannelRefId = machine.Id;//指定机器
             bizRop.PayWay = rop.PayWay;
             bizRop.PayCaller = rop.PayCaller;
 

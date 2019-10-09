@@ -8,6 +8,17 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
+    public enum StockOperateType
+    {
+        Unknow = 0,
+        OrderReserveSuccess = 1,
+        //OrderReserveFailure = 2,
+        OrderPaySuccess = 3,
+        //OrderPayFailure = 4,
+        OrderCancle = 5
+        //OrderPayTimeout = 6
+    }
+
     public class PrdProductSkuCacheService : BaseDbContext
     {
         private static readonly string redis_key_productSku_info = "info:ProductSku";
@@ -120,6 +131,37 @@ namespace LocalS.BLL
             }
 
             return productSkuStockModels;
+        }
+
+        public void StockOperate(StockOperateType operateType, string productSkuId, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
+        {
+            var redis = new RedisClient<List<ProductSkuStockModel>>();
+
+            var stock = GetStock(productSkuId);
+
+            for (int i = 0; i < stock.Count; i++)
+            {
+                if (stock[i].RefType == refType && stock[i].RefId == refId && stock[i].SlotId == slotId)
+                {
+                    switch (operateType)
+                    {
+                        case StockOperateType.OrderReserveSuccess:
+                            stock[i].LockQuantity += quantity;
+                            stock[i].SellQuantity -= quantity;
+                            break;
+                        case StockOperateType.OrderPaySuccess:
+                            stock[i].LockQuantity -= quantity;
+                            stock[i].SumQuantity -= quantity;
+                            break;
+                        case StockOperateType.OrderCancle:
+                            stock[i].LockQuantity -= quantity;
+                            stock[i].SumQuantity += quantity;
+                            break;
+                    }
+                }
+            }
+
+            redis.KSet(string.Format(redis_key_productSku_stock, productSkuId), stock, new TimeSpan(100, 0, 0));
         }
     }
 }

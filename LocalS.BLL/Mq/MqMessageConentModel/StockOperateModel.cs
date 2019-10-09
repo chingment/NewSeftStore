@@ -7,17 +7,6 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Mq.MqMessageConentModel
 {
-    public enum StockOperateType
-    {
-        Unknow = 0,
-        OrderReserveSuccess = 1,
-        //OrderReserveFailure = 2,
-        OrderPaySuccess = 3,
-        //OrderPayFailure = 4,
-        OrderCancle = 5
-        //OrderPayTimeout = 6
-    }
-
     public class StockOperateModel
     {
         public StockOperateModel()

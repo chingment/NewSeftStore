@@ -86,6 +86,8 @@ namespace LocalS.BLL.Mq.MqByRedis
                                 sellChannelStockLog.CreateTime = DateTime.Now;
                                 sellChannelStockLog.RemarkByDev = string.Format("预定成功，减少可销库存：{0}", stock.Quantity);
                                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                                CurrentDb.SaveChanges();
+                                ts.Complete();
                             }
                             break;
                         case StockOperateType.OrderPaySuccess:
@@ -114,6 +116,10 @@ namespace LocalS.BLL.Mq.MqByRedis
                                 sellChannelStockLog.CreateTime = DateTime.Now;
                                 sellChannelStockLog.RemarkByDev = string.Format("成功支付，减少实际库存：{0}", stock.Quantity);
                                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                                CurrentDb.SaveChanges();
+                                ts.Complete();
+
+                                CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderPaySuccess, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                             }
 
                             break;
@@ -144,13 +150,14 @@ namespace LocalS.BLL.Mq.MqByRedis
                                 sellChannelStockLog.CreateTime = DateTime.Now;
                                 sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复可销库存：{0}", stock.Quantity);
                                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                                CurrentDb.SaveChanges();
+                                ts.Complete();
+
+                                CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderCancle, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                             }
 
                             break;
                     }
-
-                    CurrentDb.SaveChanges();
-                    ts.Complete();
                 }
             }
         }

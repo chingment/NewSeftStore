@@ -94,6 +94,9 @@ namespace LocalS.BLL.Biz
                 }
 
 
+
+
+
                 var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
 
                 var order = new Order();
@@ -156,19 +159,19 @@ namespace LocalS.BLL.Biz
                     {
                         case E_SellChannelRefType.Express:
                             orderDetails.SellChannelRefName = "【快递】";
+                            orderDetails.SellChannelRefType = E_SellChannelRefType.Express;
+                            orderDetails.SellChannelRefId = GuidUtil.Empty();
                             orderDetails.Receiver = rop.Receiver;
                             orderDetails.ReceiverPhone = rop.ReceiverPhone;
                             orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                            orderDetails.SellChannelRefType = E_SellChannelRefType.Express;
-                            orderDetails.SellChannelRefId = GuidUtil.Empty();
                             break;
                         case E_SellChannelRefType.SelfTake:
                             orderDetails.SellChannelRefName = "【店内自取】";
+                            orderDetails.SellChannelRefType = E_SellChannelRefType.SelfTake;
+                            orderDetails.SellChannelRefId = GuidUtil.Empty();
                             orderDetails.Receiver = rop.Receiver;
                             orderDetails.ReceiverPhone = rop.ReceiverPhone;
                             orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                            orderDetails.SellChannelRefType = E_SellChannelRefType.SelfTake;
-                            orderDetails.SellChannelRefId = GuidUtil.Empty();
                             break;
                         case E_SellChannelRefType.Machine:
                             orderDetails.SellChannelRefName = "【机器自提】 " + BizFactory.Merch.GetMachineName(order.MerchId, detail.SellChannelRefId);
@@ -305,7 +308,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = Mq.MqMessageConentModel.StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
+                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
                 Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
@@ -663,7 +666,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = Mq.MqMessageConentModel.StockOperateType.OrderPaySuccess, OperateStocks = operateStocks });
+                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderPaySuccess, OperateStocks = operateStocks });
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
             }
@@ -694,7 +697,6 @@ namespace LocalS.BLL.Biz
         public CustomJsonResult Cancle(string operater, string orderId, string cancelReason)
         {
             var result = new CustomJsonResult();
-
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -772,7 +774,7 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = Mq.MqMessageConentModel.StockOperateType.OrderCancle, OperateStocks = operateStocks });
+                    ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderCancle, OperateStocks = operateStocks });
                     Task4Factory.Global.Exit(order.Id);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
