@@ -33,12 +33,12 @@ namespace LocalS.Entity
     }
 
 
-    public enum E_ReserveMode
-    {
-        Unknow = 0,
-        OffLine = 1,
-        Online = 2
-    }
+    //public enum E_ReserveMode
+    //{
+    //    Unknow = 0,
+    //    OffLine = 1,
+    //    Online = 2
+    //}
 
 
 }

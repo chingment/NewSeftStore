@@ -36,19 +36,6 @@ namespace LocalS.BLL.Biz
                 return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
             }
 
-            if (rop.ReserveMode == E_ReserveMode.Unknow)
-            {
-                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定方式不支持", null);
-            }
-
-            if (rop.ReserveMode == E_ReserveMode.OffLine)
-            {
-                if (string.IsNullOrEmpty(rop.SellChannelRefId))
-                {
-                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定机器未选择", null);
-                }
-            }
-
             var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
             if (store == null)
             {
@@ -68,6 +55,7 @@ namespace LocalS.BLL.Biz
                 foreach (var productSku in rop.ProductSkus)
                 {
                     var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(productSku.Id);
+
                     if (l_ProductSkuInfoAndStock == null)
                     {
                         warn_tips.Add(string.Format("{0}商品库存信息不存在", l_ProductSkuInfoAndStock.Name));
@@ -76,24 +64,13 @@ namespace LocalS.BLL.Biz
                     {
                         var sellQuantity = 0;
 
-                        if (rop.ReserveMode == E_ReserveMode.OffLine)
+                        if (string.IsNullOrEmpty(rop.SellChannelRefId))
                         {
-                            sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
+                            sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType).Sum(m => m.SellQuantity);
                         }
-                        else if (rop.ReserveMode == E_ReserveMode.Online)
+                        else
                         {
-                            if (productSku.ReceptionMode == E_ReceptionMode.Machine)
-                            {
-                                sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.Machine).Sum(m => m.SellQuantity);
-                            }
-                            else if (productSku.ReceptionMode == E_ReceptionMode.Express)
-                            {
-                                sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.Express).Sum(m => m.SellQuantity);
-                            }
-                            else if (productSku.ReceptionMode == E_ReceptionMode.SelfTake)
-                            {
-                                sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == E_SellChannelRefType.SelfTake).Sum(m => m.SellQuantity);
-                            }
+                            sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
                         }
 
                         if (l_ProductSkuInfoAndStock.IsOffSell)
@@ -117,7 +94,7 @@ namespace LocalS.BLL.Biz
                 }
 
 
-               var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
+                var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
 
                 var order = new Order();
                 order.Id = GuidUtil.New();

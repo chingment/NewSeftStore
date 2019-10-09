@@ -50,10 +50,11 @@ namespace LocalS.Service.Api.StoreApp
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
-            bizRop.ReserveMode = E_ReserveMode.Online;
             bizRop.ClientUserId = clientUserId;
             bizRop.PayWay = rop.PayWay;
             bizRop.PayCaller = rop.PayCaller;
+            bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
+            bizRop.SellChannelRefId = null;//不指定机器
 
             foreach (var productSku in rop.ProductSkus)
             {
