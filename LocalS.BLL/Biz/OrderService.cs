@@ -308,6 +308,11 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                for (int i = 0; i < operateStocks.Count; i++)
+                {
+                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
+                }
+
                 ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
                 Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);

@@ -109,21 +109,22 @@ namespace LocalS.BLL
 
             if (productSkuStockModels == null)
             {
+                productSkuStockModels = new List<ProductSkuStockModel>();
 
-                var merchSellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
 
-                foreach (var merchSellChannelStock in merchSellChannelStocks)
+                foreach (var sellChannelStock in sellChannelStocks)
                 {
                     var productSkuStockModel = new ProductSkuStockModel();
-                    productSkuStockModel.RefType = merchSellChannelStock.RefType;
-                    productSkuStockModel.RefId = merchSellChannelStock.RefId;
-                    productSkuStockModel.SlotId = merchSellChannelStock.SlotId;
-                    productSkuStockModel.SumQuantity = merchSellChannelStock.SumQuantity;
-                    productSkuStockModel.LockQuantity = merchSellChannelStock.LockQuantity;
-                    productSkuStockModel.SellQuantity = merchSellChannelStock.SellQuantity;
-                    productSkuStockModel.IsOffSell = merchSellChannelStock.IsOffSell;
-                    productSkuStockModel.SalePrice = merchSellChannelStock.SalePrice;
-                    productSkuStockModel.SalePriceByVip = merchSellChannelStock.SalePriceByVip;
+                    productSkuStockModel.RefType = sellChannelStock.RefType;
+                    productSkuStockModel.RefId = sellChannelStock.RefId;
+                    productSkuStockModel.SlotId = sellChannelStock.SlotId;
+                    productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
+                    productSkuStockModel.LockQuantity = sellChannelStock.LockQuantity;
+                    productSkuStockModel.SellQuantity = sellChannelStock.SellQuantity;
+                    productSkuStockModel.IsOffSell = sellChannelStock.IsOffSell;
+                    productSkuStockModel.SalePrice = sellChannelStock.SalePrice;
+                    productSkuStockModel.SalePriceByVip = sellChannelStock.SalePriceByVip;
                     productSkuStockModels.Add(productSkuStockModel);
                 }
 
@@ -155,7 +156,7 @@ namespace LocalS.BLL
                             break;
                         case StockOperateType.OrderCancle:
                             stock[i].LockQuantity -= quantity;
-                            stock[i].SumQuantity += quantity;
+                            stock[i].SellQuantity += quantity;
                             break;
                     }
                 }
