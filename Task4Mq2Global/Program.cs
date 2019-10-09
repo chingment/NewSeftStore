@@ -4,10 +4,12 @@ using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using Topshelf;
 
 namespace Task4Mq2Global
 {
@@ -15,27 +17,22 @@ namespace Task4Mq2Global
     {
         public static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        [DllImport("User32.dll", EntryPoint = "ShowWindow")]
-        private static extern bool ShowWindow(IntPtr hWnd, int type);
-
         static void Main(string[] args)
         {
-            LogUtil.SetTrackId();
-            LogUtil.Info("程序开始运行");
+            log.InfoFormat("程序开始");
 
-            ShowWindow(Process.GetCurrentProcess().MainWindowHandle, 2);//隐藏本dos窗体, 0: 后台执行；1:正常启动；2:最小化到任务栏；3:最大化
-
-            try
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "log4net.config"));
+            HostFactory.Run(x =>
             {
-                string taskProvider = System.Configuration.ConfigurationManager.AppSettings["custom:Task4Provider"];
-                Task4Factory.Launcher.Launch(taskProvider);
-            }
-            catch (Exception ex)
-            {
-                LogUtil.Error("异常错误", ex);
-            }
-
-            LogUtil.Info("程序结束运行");
+                x.UseLog4Net();
+                x.RunAsLocalSystem();
+                x.Service<ServiceRunner>();
+                x.SetDescription(string.Format("{0} Ver:{1}", System.Configuration.ConfigurationManager.AppSettings.Get("ServiceName"), System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()));
+                x.SetDisplayName(System.Configuration.ConfigurationManager.AppSettings.Get("ServiceDisplayName"));
+                x.SetServiceName(System.Configuration.ConfigurationManager.AppSettings.Get("ServiceName"));
+                x.EnablePauseAndContinue();
+            });
         }
     }
 }
+
