@@ -116,9 +116,12 @@ namespace LocalS.Service.Api.StoreApp
                                 }
                                 break;
                             case E_CartOperateType.Increase:
+
+                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.Id);
+
                                 if (clientCart == null)
                                 {
-                                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == item.Id).FirstOrDefault();
+
                                     var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
 
                                     clientCart = new ClientCart();
@@ -142,6 +145,12 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.MendTime = DateTime.Now;
                                     clientCart.Mender = operater;
                                 }
+
+                                //if (productSku.Stocks.Sum(m => m.SellQuantity) > clientCart.Quantity)
+                                //{
+                                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "操作成功");
+                                //}
+
                                 break;
                             case E_CartOperateType.Delete:
                                 clientCart.Status = E_ClientCartStatus.Deleted;

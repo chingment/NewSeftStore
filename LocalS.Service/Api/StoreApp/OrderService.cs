@@ -54,7 +54,10 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.PayWay = rop.PayWay;
             bizRop.PayCaller = rop.PayCaller;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
-            bizRop.SellChannelRefId = null;//不指定机器
+
+            var sellChannelRefIds = CurrentDb.MerchMachine.Where(m => m.StoreId == rop.StoreId).Select(m => m.MachineId).ToArray();
+
+            bizRop.SellChannelRefIds = sellChannelRefIds;//不指定机器
 
             foreach (var productSku in rop.ProductSkus)
             {

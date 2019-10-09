@@ -23,7 +23,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
-            bizRop.SellChannelRefId = machine.Id;//指定机器
+            bizRop.SellChannelRefIds = new string[] { machine.Id };//指定机器
             bizRop.PayWay = rop.PayWay;
             bizRop.PayCaller = rop.PayCaller;
 
@@ -70,7 +70,10 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.Data.OrderId = ret_Biz.Data.OrderId;
                 ret.Data.OrderSn = ret_Biz.Data.OrderSn;
                 ret.Data.Status = ret_Biz.Data.Status;
-                ret.Data.OrderDetails = GetOrderDetails(rup.MachineId, rup.OrderId);
+                if (ret_Biz.Data.Status == E_OrderStatus.Payed)
+                {
+                    ret.Data.OrderDetails = GetOrderDetails(rup.MachineId, rup.OrderId);
+                }
             }
 
             return ret;
@@ -84,46 +87,6 @@ namespace LocalS.Service.Api.StoreTerm
             result = LocalS.BLL.Biz.BizFactory.Order.Cancle(GuidUtil.Empty(), rop.OrderId, rop.Reason);
 
             return result;
-        }
-
-        private RetOrderDetails GetOrderDetails(string machineId, string orderId)
-        {
-            var ret = new RetOrderDetails();
-
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
-            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
-            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
-
-            ret.OrderId = order.Id;
-            ret.OrderSn = order.Sn;
-
-            foreach (var orderDetailsChild in orderDetailsChilds)
-            {
-                var sku = new RetOrderDetails.ProductSku();
-                sku.Id = orderDetailsChild.PrdProductSkuId;
-                sku.Name = orderDetailsChild.PrdProductSkuName;
-                sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
-                sku.Quantity = orderDetailsChild.Quantity;
-
-
-                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.OrderDetailsChildId == orderDetailsChild.Id && m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
-
-                sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
-
-                foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
-                {
-                    var slot = new RetOrderDetails.Slot();
-                    slot.UniqueId = orderDetailsChildSon.Id;
-                    slot.SlotId = orderDetailsChildSon.SlotId;
-                    slot.Status = orderDetailsChildSon.Status;
-
-                    sku.Slots.Add(slot);
-                }
-
-                ret.ProductSkus.Add(sku);
-            }
-
-            return ret;
         }
 
         public CustomJsonResult Search(RupOrderSearch rup)
@@ -225,5 +188,44 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
+        private RetOrderDetails GetOrderDetails(string machineId, string orderId)
+        {
+            var ret = new RetOrderDetails();
+
+            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
+            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
+
+            ret.OrderId = order.Id;
+            ret.OrderSn = order.Sn;
+
+            foreach (var orderDetailsChild in orderDetailsChilds)
+            {
+                var sku = new RetOrderDetails.ProductSku();
+                sku.Id = orderDetailsChild.PrdProductSkuId;
+                sku.Name = orderDetailsChild.PrdProductSkuName;
+                sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
+                sku.Quantity = orderDetailsChild.Quantity;
+
+
+                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.OrderDetailsChildId == orderDetailsChild.Id && m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
+
+                sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
+
+                foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
+                {
+                    var slot = new RetOrderDetails.Slot();
+                    slot.UniqueId = orderDetailsChildSon.Id;
+                    slot.SlotId = orderDetailsChildSon.SlotId;
+                    slot.Status = orderDetailsChildSon.Status;
+
+                    sku.Slots.Add(slot);
+                }
+
+                ret.ProductSkus.Add(sku);
+            }
+
+            return ret;
+        }
     }
 }

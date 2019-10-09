@@ -62,16 +62,9 @@ namespace LocalS.BLL.Biz
                     }
                     else
                     {
-                        var sellQuantity = 0;
 
-                        if (string.IsNullOrEmpty(rop.SellChannelRefId))
-                        {
-                            sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType).Sum(m => m.SellQuantity);
-                        }
-                        else
-                        {
-                            sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType && m.RefId == rop.SellChannelRefId).Sum(m => m.SellQuantity);
-                        }
+                        var sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType && rop.SellChannelRefIds.Contains(m.RefId)).Sum(m => m.SellQuantity);
+
 
                         if (l_ProductSkuInfoAndStock.IsOffSell)
                         {
