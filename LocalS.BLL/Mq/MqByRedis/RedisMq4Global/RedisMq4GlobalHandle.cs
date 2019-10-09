@@ -62,6 +62,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                     using (TransactionScope ts = new TransactionScope())
                     {
 
+                        #region 更新数据库 
                         switch (model.OperateType)
                         {
                             case StockOperateType.OrderReserveSuccess:
@@ -159,6 +160,37 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                         CurrentDb.SaveChanges();
                         ts.Complete();
+                        #endregion
+
+                        #region 更新缓存
+
+                        switch (model.OperateType)
+                        {
+                            case StockOperateType.OrderReserveSuccess:
+
+                                foreach (var stock in model.OperateStocks)
+                                {
+                                }
+                                break;
+                            case StockOperateType.OrderPaySuccess:
+
+                                foreach (var stock in model.OperateStocks)
+                                {
+                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderPaySuccess, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                }
+
+                                break;
+                            case StockOperateType.OrderCancle:
+
+                                foreach (var stock in model.OperateStocks)
+                                {
+                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderCancle, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                }
+
+                                break;
+                        }
+
+                        #endregion
                     }
                 }
             }
