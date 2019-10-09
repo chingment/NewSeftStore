@@ -12,7 +12,7 @@ namespace LocalS.BLL
     public class PrdProductCacheService : BaseDbContext
     {
         private static readonly string redis_key_product_info = "info:Product";
-        public void RemoveProductInfo(string productId)
+        public void RemoveInfo(string productId)
         {
             RedisHashUtil.Remove(redis_key_product_info, productId);
         }
