@@ -1,4 +1,6 @@
-﻿using LocalS.DAL;
+﻿using LocalS.BLL.Mq.MqMessageConentModel;
+using LocalS.DAL;
+using LocalS.Entity;
 using Lumos;
 using Newtonsoft.Json.Linq;
 using System;
@@ -8,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace LocalS.Mq.MqByRedis
+namespace LocalS.BLL.Mq.MqByRedis
 {
     public class RedisMq4GlobalHandle
     {
@@ -30,14 +32,8 @@ namespace LocalS.Mq.MqByRedis
                     {
                         switch (this.Type)
                         {
-                            case MqMessageType.OrderReserve:
-                                OrderReserve();
-                                break;
-                            case MqMessageType.OrderPayCompleted:
-                                OrderPayCompleted();
-                                break;
-                            case MqMessageType.OrderCancle:
-                                OrderCancle();
+                            case MqMessageType.StockOperate:
+                                StockOperate(GuidUtil.Empty(), (StockOperateModel)this.Content);
                                 break;
                         }
 
@@ -54,57 +50,107 @@ namespace LocalS.Mq.MqByRedis
         }
 
 
-        private void OrderReserve()
+        private void StockOperate(string operater, StockOperateModel model)
         {
             using (DbContext CurrentDb = new DbContext())
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    // string orderId = "";
-                    // var ore= CurrentDb.OrderDetailsChildSon.Where(m=>m.Id== orderId)
-                }
-            }
-        }
-        private void OrderPayCompleted()
-        {
-            using (DbContext CurrentDb = new DbContext())
-            {
-                using (TransactionScope ts = new TransactionScope())
-                {
-                    //var orderDetailsChildSons=CurrentDb.OR
-                    //var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == item.PrdProductSkuId && m.SlotId == item.SlotId && m.RefId == item.SellChannelRefId && m.RefType == item.SellChannelRefType).FirstOrDefault();
 
-                    //sellChannelStock.LockQuantity -= item.Quantity;
-                    //sellChannelStock.SellQuantity += item.Quantity;
-                    //sellChannelStock.Mender = operater;
-                    //sellChannelStock.MendTime = DateTime.Now;
+                    switch (model.OperateType)
+                    {
+                        case StockOperateType.OrderReserveSuccess:
 
-                    //var sellChannelStockLog = new SellChannelStockLog();
-                    //sellChannelStockLog.Id = GuidUtil.New();
-                    //sellChannelStockLog.MerchId = item.MerchId;
-                    //sellChannelStockLog.RefId = item.SellChannelRefId;
-                    //sellChannelStockLog.RefType = item.SellChannelRefType;
-                    //sellChannelStockLog.SlotId = item.SlotId;
-                    //sellChannelStockLog.PrdProductSkuId = item.PrdProductSkuId;
-                    //sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                    //sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
-                    //sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                    //sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Lock;
-                    //sellChannelStockLog.ChangeQuantity = item.Quantity;
-                    //sellChannelStockLog.Creator = operater;
-                    //sellChannelStockLog.CreateTime = DateTime.Now;
-                    //sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复库存：{0}", item.Quantity);
-                    //CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-                }
-            }
-        }
+                            foreach (var stock in model.OperateStocks)
+                            {
+                                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.PrdProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
 
-        private void OrderCancle()
-        {
-            using (DbContext CurrentDb = new DbContext())
-            {
-                using (TransactionScope ts = new TransactionScope())
-                {
+                                sellChannelStock.LockQuantity += stock.Quantity;
+                                sellChannelStock.SellQuantity -= stock.Quantity;
+                                sellChannelStock.Mender = operater;
+                                sellChannelStock.MendTime = DateTime.Now;
+
+                                var sellChannelStockLog = new SellChannelStockLog();
+                                sellChannelStockLog.Id = GuidUtil.New();
+                                sellChannelStockLog.MerchId = stock.MerchId;
+                                sellChannelStockLog.RefType = stock.RefType;
+                                sellChannelStockLog.RefId = stock.RefId;
+                                sellChannelStockLog.SlotId = stock.SlotId;
+                                sellChannelStockLog.PrdProductSkuId = stock.PrdProductSkuId;
+                                sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                                sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                                sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                                sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.ReserveSuccess;
+                                sellChannelStockLog.ChangeQuantity = stock.Quantity;
+                                sellChannelStockLog.Creator = operater;
+                                sellChannelStockLog.CreateTime = DateTime.Now;
+                                sellChannelStockLog.RemarkByDev = string.Format("预定成功，减少可销库存：{0}", stock.Quantity);
+                                CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                            }
+                            break;
+                        case StockOperateType.OrderPaySuccess:
+
+                            foreach (var stock in model.OperateStocks)
+                            {
+                                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.PrdProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
+                                sellChannelStock.LockQuantity -= stock.Quantity;
+                                sellChannelStock.SumQuantity -= stock.Quantity;
+                                sellChannelStock.Mender = operater;
+                                sellChannelStock.MendTime = DateTime.Now;
+
+                                var sellChannelStockLog = new SellChannelStockLog();
+                                sellChannelStockLog.Id = GuidUtil.New();
+                                sellChannelStockLog.MerchId = stock.MerchId;
+                                sellChannelStockLog.RefId = stock.RefId;
+                                sellChannelStockLog.RefType = stock.RefType;
+                                sellChannelStockLog.SlotId = stock.SlotId;
+                                sellChannelStockLog.PrdProductSkuId = stock.PrdProductSkuId;
+                                sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                                sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                                sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                                sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPaySuccess;
+                                sellChannelStockLog.ChangeQuantity = stock.Quantity;
+                                sellChannelStockLog.Creator = operater;
+                                sellChannelStockLog.CreateTime = DateTime.Now;
+                                sellChannelStockLog.RemarkByDev = string.Format("成功支付，减少实际库存：{0}", stock.Quantity);
+                                CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                            }
+
+                            break;
+                        case StockOperateType.OrderCancle:
+
+                            foreach (var stock in model.OperateStocks)
+                            {
+                                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.PrdProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
+
+                                sellChannelStock.LockQuantity -= stock.Quantity;
+                                sellChannelStock.SellQuantity += stock.Quantity;
+                                sellChannelStock.Mender = operater;
+                                sellChannelStock.MendTime = DateTime.Now;
+
+                                var sellChannelStockLog = new SellChannelStockLog();
+                                sellChannelStockLog.Id = GuidUtil.New();
+                                sellChannelStockLog.MerchId = stock.MerchId;
+                                sellChannelStockLog.RefId = stock.RefId;
+                                sellChannelStockLog.RefType = stock.RefType;
+                                sellChannelStockLog.SlotId = stock.SlotId;
+                                sellChannelStockLog.PrdProductSkuId = stock.PrdProductSkuId;
+                                sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                                sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                                sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                                sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderCancle;
+                                sellChannelStockLog.ChangeQuantity = stock.Quantity;
+                                sellChannelStockLog.Creator = operater;
+                                sellChannelStockLog.CreateTime = DateTime.Now;
+                                sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复可销库存：{0}", stock.Quantity);
+                                CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                            }
+
+                            break;
+                    }
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
                 }
             }
         }

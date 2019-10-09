@@ -83,9 +83,7 @@
     <Compile Include="Cache\Model\PrdProductSkuStockModel.cs" />
     <Compile Include="Cache\PrdProductCacheService.cs" />
     <Compile Include="Cache\SellChannelStockCacheService.cs" />
-    <Compile Include="Mq\MqMessageConentModel\OrderCancleModel.cs" />
-    <Compile Include="Mq\MqMessageConentModel\OrderPayCompletedModel.cs" />
-    <Compile Include="Mq\MqMessageConentModel\OrderReserveModel.cs" />
+    <Compile Include="Mq\MqMessageConentModel\StockOperateModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />

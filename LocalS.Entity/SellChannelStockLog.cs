@@ -8,9 +8,9 @@ namespace LocalS.Entity
     public enum E_SellChannelStockLogChangeTpye
     {
         Unknow = 0,
-        Sales = 1,
-        Lock = 2,
-        UnLock = 3
+        ReserveSuccess = 1,
+        OrderPaySuccess = 2,
+        OrderCancle = 3
     }
 
     [Table("SellChannelStockLog")]

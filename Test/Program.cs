@@ -1,4 +1,4 @@
-﻿using LocalS.Mq.MqByRedis;
+﻿using LocalS.BLL.Mq.MqByRedis;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -23,9 +23,9 @@ namespace Test
 
         static void Main(string[] args)
         {
-            ReidsMqFactory.Global.PushOrderReserve(new LocalS.BLL.Mq.MqMessageConentModel.OrderReserveModel { OrderId = "1" });
-            ReidsMqFactory.Global.PushOrderPayCompleted(new LocalS.BLL.Mq.MqMessageConentModel.OrderPayCompletedModel { OrderId = "1" });
-            ReidsMqFactory.Global.PushOrderCancle(new LocalS.BLL.Mq.MqMessageConentModel.OrderCancleModel { OrderId = "1" });
+            //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
+            //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
+            //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
 
             Console.ReadLine();
             //string publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTT1ryGLfq5lucyHdzPLbjtcVsgurf5x4Y09U/cTiV85duIk0zQeRTXNyGcMAS92+xV/eGp7IjncwL8QE8JqlclLvuOU3zTdlAQ58lu/JcTcsF6eA6JXb8OJAhmDoug1J77M2GLoqAl0Cf34kavj/r9bAQpWqbk8JlJU3YqIePuwIDAQAB";

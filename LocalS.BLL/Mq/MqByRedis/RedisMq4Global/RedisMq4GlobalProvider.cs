@@ -6,35 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Mq.MqByRedis
+namespace LocalS.BLL.Mq.MqByRedis
 {
     public class RedisMq4GlobalProvider : RedisMqObject<RedisMq4GlobalHandle>
     {
         protected override string MessageQueueKeyName { get { return "RedisMq4Global"; } }
         protected override bool IsTran { get { return false; } }
 
-        public void PushOrderReserve(OrderReserveModel messageConent)
+        public void PushStockOperate(StockOperateModel messageConent)
         {
             var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.OrderReserve;
+            obj.Type = MqMessageType.StockOperate;
             obj.Content = messageConent;
             this.Push(obj);
         }
 
-        public void PushOrderCancle(OrderCancleModel messageConent)
-        {
-            var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.OrderCancle;
-            obj.Content = messageConent;
-            this.Push(obj);
-        }
-
-        public void PushOrderPayCompleted(OrderPayCompletedModel messageConent)
-        {
-            var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.OrderPayCompleted;
-            obj.Content = messageConent;
-            this.Push(obj);
-        }
     }
 }

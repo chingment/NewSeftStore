@@ -1,8 +1,8 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Task;
 using LocalS.Entity;
-using LocalS.Mq;
-using LocalS.Mq.MqByRedis;
+using LocalS.BLL.Mq;
+using LocalS.BLL.Mq.MqByRedis;
 using Lumos;
 using Lumos.Redis;
 using System;
@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using static LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel;
 
 namespace LocalS.BLL.Biz
 {
@@ -60,7 +61,7 @@ namespace LocalS.BLL.Biz
 
                 //检查是否有可买的商品
                 List<string> warn_tips = new List<string>();
-
+                var operateStocks = new List<OperateStock>();
                 List<PrdProductSkuModel> productSkus = new List<BLL.PrdProductSkuModel>();
 
                 foreach (var productSku in rop.ProductSkus)
@@ -280,31 +281,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var slotStock in detailsChild.SlotStock)
                         {
-                            var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == slotStock.PrdProductSkuId && m.SlotId == slotStock.SlotId && m.RefId == slotStock.SellChannelRefId).FirstOrDefault();
-
-                            sellChannelStock.LockQuantity += slotStock.Quantity;
-                            sellChannelStock.SellQuantity -= slotStock.Quantity;
-                            sellChannelStock.Mender = operater;
-                            sellChannelStock.MendTime = DateTime.Now;
-
-                            var sellChannelStockLog = new SellChannelStockLog();
-                            sellChannelStockLog.Id = GuidUtil.New();
-                            sellChannelStockLog.MerchId = store.MerchId;
-                            sellChannelStockLog.RefType = slotStock.SellChannelRefType;
-                            sellChannelStockLog.RefId = slotStock.SellChannelRefId;
-                            sellChannelStockLog.SlotId = slotStock.SlotId;
-                            sellChannelStockLog.PrdProductSkuId = slotStock.PrdProductSkuId;
-                            sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                            sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
-                            sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                            sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Lock;
-                            sellChannelStockLog.ChangeQuantity = slotStock.Quantity;
-                            sellChannelStockLog.Creator = operater;
-                            sellChannelStockLog.CreateTime = DateTime.Now;
-                            sellChannelStockLog.RemarkByDev = string.Format("预定锁定库存：{0}", slotStock.Quantity);
-                            CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-
-
+                            operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = slotStock.PrdProductSkuId, RefType = slotStock.SellChannelRefType, RefId = slotStock.SellChannelRefId, SlotId = slotStock.SlotId, Quantity = slotStock.Quantity });
                         }
                     }
                 }
@@ -350,7 +327,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                ReidsMqFactory.Global.PushOrderReserve(new Mq.MqMessageConentModel.OrderReserveModel { OrderId = order.Id });
+                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = Mq.MqMessageConentModel.StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
                 Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
@@ -699,38 +676,18 @@ namespace LocalS.BLL.Biz
                     group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
                     select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
+
+                var operateStocks = new List<OperateStock>();
+
                 foreach (var childSon in childSons)
                 {
-                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == childSon.PrdProductSkuId && m.SlotId == childSon.SlotId && m.RefId == childSon.SellChannelRefId && m.RefType == childSon.SellChannelRefType).FirstOrDefault();
-
-                    sellChannelStock.LockQuantity -= childSon.Quantity;
-                    sellChannelStock.SumQuantity -= childSon.Quantity;
-                    sellChannelStock.Mender = operater;
-                    sellChannelStock.MendTime = DateTime.Now;
-
-                    var sellChannelStockLog = new SellChannelStockLog();
-                    sellChannelStockLog.Id = GuidUtil.New();
-                    sellChannelStockLog.MerchId = order.MerchId;
-                    sellChannelStockLog.RefId = childSon.SellChannelRefId;
-                    sellChannelStockLog.RefType = childSon.SellChannelRefType;
-                    sellChannelStockLog.SlotId = childSon.SlotId;
-                    sellChannelStockLog.PrdProductSkuId = childSon.PrdProductSkuId;
-                    sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                    sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
-                    sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                    sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Sales;
-                    sellChannelStockLog.ChangeQuantity = childSon.Quantity;
-                    sellChannelStockLog.Creator = operater;
-                    sellChannelStockLog.CreateTime = DateTime.Now;
-                    sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复库存：{0}", childSon.Quantity);
-                    CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                    operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
                 }
-
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                ReidsMqFactory.Global.PushOrderPayCompleted(new Mq.MqMessageConentModel.OrderPayCompletedModel { OrderId = order.Id });
+                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = Mq.MqMessageConentModel.StockOperateType.OrderPaySuccess, OperateStocks = operateStocks });
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
             }
@@ -831,37 +788,17 @@ namespace LocalS.BLL.Biz
                         group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
                         select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
+                    var operateStocks = new List<OperateStock>();
+
                     foreach (var childSon in childSons)
                     {
-                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == childSon.PrdProductSkuId && m.SlotId == childSon.SlotId && m.RefId == childSon.SellChannelRefId && m.RefType == childSon.SellChannelRefType).FirstOrDefault();
-
-                        sellChannelStock.LockQuantity -= childSon.Quantity;
-                        sellChannelStock.SellQuantity += childSon.Quantity;
-                        sellChannelStock.Mender = operater;
-                        sellChannelStock.MendTime = DateTime.Now;
-
-                        var sellChannelStockLog = new SellChannelStockLog();
-                        sellChannelStockLog.Id = GuidUtil.New();
-                        sellChannelStockLog.MerchId = order.MerchId;
-                        sellChannelStockLog.RefId = childSon.SellChannelRefId;
-                        sellChannelStockLog.RefType = childSon.SellChannelRefType;
-                        sellChannelStockLog.SlotId = childSon.SlotId;
-                        sellChannelStockLog.PrdProductSkuId = childSon.PrdProductSkuId;
-                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
-                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Lock;
-                        sellChannelStockLog.ChangeQuantity = childSon.Quantity;
-                        sellChannelStockLog.Creator = operater;
-                        sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复库存：{0}", childSon.Quantity);
-                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                        operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
                     }
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    ReidsMqFactory.Global.PushOrderCancle(new Mq.MqMessageConentModel.OrderCancleModel { OrderId = order.Id });
+                    ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = Mq.MqMessageConentModel.StockOperateType.OrderCancle, OperateStocks = operateStocks });
                     Task4Factory.Global.Exit(order.Id);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");

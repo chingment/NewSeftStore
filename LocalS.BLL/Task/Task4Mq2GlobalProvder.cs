@@ -1,4 +1,4 @@
-﻿using LocalS.Mq.MqByRedis;
+﻿using LocalS.BLL.Mq.MqByRedis;
 using Lumos;
 using Newtonsoft.Json.Linq;
 using System;

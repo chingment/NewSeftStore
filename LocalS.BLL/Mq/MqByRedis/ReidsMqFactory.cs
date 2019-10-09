@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Mq.MqByRedis
+namespace LocalS.BLL.Mq.MqByRedis
 {
     public static class ReidsMqFactory
     {
