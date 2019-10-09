@@ -590,16 +590,6 @@ namespace LocalS.Service.Api.StoreApp
                     break;
             }
 
-
-
-
-
-
-
-            //JsApiPayParams parms = new JsApiPayParams("wxb01e0e16d57bd762", "37b016a9569e4f519702696e1274d63a", ret_UnifiedOrder.PrepayId, order.Id, order.Sn);
-
-            //return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret.Data);
-
             return result;
         }
 
