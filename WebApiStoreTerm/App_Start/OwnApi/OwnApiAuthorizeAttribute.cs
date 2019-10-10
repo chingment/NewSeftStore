@@ -8,7 +8,6 @@ using Lumos.Web.Http;
 using System.IO;
 using System.Text;
 using Lumos;
-using Lumos.BLL;
 using System.Web.Http;
 using System.Linq;
 using LocalS.Service.Api.StoreTerm;

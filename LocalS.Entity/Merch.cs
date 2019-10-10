@@ -24,7 +24,11 @@ namespace LocalS.Entity
         public string WxPaAppSecret { get; set; }
         public string WxMpAppId { get; set; }
         public string WxMpAppSecret { get; set; }
+        public string AlipayPaAppId { get; set; }
+        public string AlipayPaAppPrivateSecret { get; set; }
+        public string AlipayPublicSecret { get; set; }
 
+        public string AlipayResultNotifyUrl { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

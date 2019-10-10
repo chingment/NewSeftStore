@@ -11,8 +11,9 @@ using WeiXinSdk.Tenpay;
 using System.Security.Cryptography;
 using LocalS.BLL;
 using LocalS.BLL.Biz;
+using Lumos;
 
-namespace Lumos.BLL
+namespace LocalS.BLL
 {
     public class WxSdkProvider : BaseDbContext
     {

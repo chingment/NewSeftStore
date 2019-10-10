@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using static LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel;
-using Lumos.BLL;
+
 
 namespace LocalS.BLL.Biz
 {
@@ -503,7 +503,7 @@ namespace LocalS.BLL.Biz
                 string orderSn = "";
                 switch (order.PayWay)
                 {
-                    case  E_OrderPayWay.Wechat:
+                    case E_OrderPayWay.Wechat:
 
                         var dicXml = WeiXinSdk.CommonUtil.ToDictionary(content);
 
@@ -512,7 +512,7 @@ namespace LocalS.BLL.Biz
                             orderSn = dicXml["out_trade_no"].ToString();
                         }
 
-                        order =CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+                        order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
                         if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("trade_state"))
                         {
@@ -764,10 +764,22 @@ namespace LocalS.BLL.Biz
                 switch (rop.PayCaller)
                 {
                     case E_OrderPayCaller.AlipayByNative:
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持支付宝支付");
+                        var alipayByNative_PaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayPaAppInfoConfig(order.MerchId);
+                        var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_PaAppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                        }
+
+                        order.PayQrCodeUrl = alipayByNative_UnifiedOrder.CodeUrl;
+
+                        var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
+                        break;
                     case E_OrderPayCaller.WechatByNative:
                         var wechatByNative_PaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
-                        var wechatByNative_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_PaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_PaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                         if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");

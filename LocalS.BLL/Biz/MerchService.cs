@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlipaySdk;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,23 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
+        public AlipayAppInfoConfig GetAlipayPaAppInfoConfig(string merchId)
+        {
+
+            var config = new AlipayAppInfoConfig();
+
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (merch == null)
+                return null;
+
+
+            config.AppId = merch.AlipayPaAppId;
+            config.AppPrivateKey = merch.AlipayPaAppPrivateSecret;
+            config.AlipayPublicKey = merch.AlipayPublicSecret;
+            config.PayResultNotifyUrl = merch.AlipayResultNotifyUrl;
+
+            return config;
+        }
 
         public string GetMachineName(string merchId, string machineId)
         {

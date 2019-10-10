@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Lumos;
-using Lumos.BLL;
 using LocalS.Service.Api.StoreApp;
 
 namespace WebApiStoreApp.Controllers

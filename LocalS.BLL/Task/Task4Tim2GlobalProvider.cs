@@ -1,7 +1,6 @@
 ﻿using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
-using Lumos.BLL;
 using Lumos.Redis;
 using Quartz;
 using System;

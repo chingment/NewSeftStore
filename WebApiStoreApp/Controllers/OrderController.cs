@@ -3,7 +3,6 @@ using System.Web.Http;
 using Lumos;
 using System.IO;
 using System.Net.Http;
-using Lumos.BLL;
 using System.Net;
 using System.Text;
 using System.Web;

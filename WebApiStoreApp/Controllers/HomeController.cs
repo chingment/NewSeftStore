@@ -3,7 +3,6 @@ using LocalS.BLL;
 using LocalS.DAL;
 using LocalS.Service.Api.StoreApp;
 using log4net;
-using Lumos.BLL;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
