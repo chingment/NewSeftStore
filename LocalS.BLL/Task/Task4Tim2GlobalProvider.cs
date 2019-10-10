@@ -89,7 +89,7 @@ namespace LocalS.BLL.Task
 
                                     LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
 
-                                    BizFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.OrderQuery, content, order.Sn, out isPaySuccessed);
+                                    BizFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.OrderQuery, content, out isPaySuccessed);
 
                                     if (isPaySuccessed)
                                     {

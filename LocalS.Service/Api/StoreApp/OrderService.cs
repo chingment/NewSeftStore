@@ -539,9 +539,9 @@ namespace LocalS.Service.Api.StoreApp
 
             return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
-        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, string orderSn, out bool isPaySuccessed)
+        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, out bool isPaySuccessed)
         {
-            return BLL.Biz.BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);
+            return BLL.Biz.BizFactory.Order.PayResultNotify(operater, from, content, out isPaySuccessed);
         }
     }
 }

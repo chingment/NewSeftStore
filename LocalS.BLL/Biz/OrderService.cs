@@ -494,27 +494,29 @@ namespace LocalS.BLL.Biz
             return details;
         }
         private static readonly object lock_PayResultNotify = new object();
-        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, string orderSn, out bool isPaySuccessed)
+        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, out bool isPaySuccessed)
         {
             lock (lock_PayResultNotify)
             {
                 bool m_isPaySuccessed = false;
-                var mod_OrderNotifyLog = new OrderNotifyLog();
-
-                switch (from)
+                Order order = null;
+                string orderSn = "";
+                switch (order.PayWay)
                 {
-                    case E_OrderNotifyLogNotifyFrom.WebApp:
-                        if (content == "chooseWXPay:ok")
+                    case  E_OrderPayWay.Wechat:
+
+                        var dicXml = WeiXinSdk.CommonUtil.ToDictionary(content);
+
+                        if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
                         {
-                            // PayCompleted(operater, orderSn, this.DateTime);
+                            orderSn = dicXml["out_trade_no"].ToString();
                         }
-                        break;
-                    case E_OrderNotifyLogNotifyFrom.OrderQuery:
-                        var dic1 = WeiXinSdk.CommonUtil.ToDictionary(content);
-                        if (dic1.ContainsKey("out_trade_no") && dic1.ContainsKey("trade_state"))
+
+                        order =CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                        if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("trade_state"))
                         {
-                            orderSn = dic1["out_trade_no"].ToString();
-                            string trade_state = dic1["trade_state"].ToString();
+                            string trade_state = dicXml["trade_state"].ToString();
                             if (trade_state == "SUCCESS")
                             {
                                 m_isPaySuccessed = true;
@@ -522,37 +524,24 @@ namespace LocalS.BLL.Biz
                             }
                         }
                         break;
-                    case E_OrderNotifyLogNotifyFrom.NotifyUrl:
-                        var dic2 = WeiXinSdk.CommonUtil.ToDictionary(content);
-                        if (dic2.ContainsKey("out_trade_no") && dic2.ContainsKey("result_code"))
-                        {
-                            orderSn = dic2["out_trade_no"].ToString();
-                            string result_code = dic2["result_code"].ToString();
-
-                            if (result_code == "SUCCESS")
-                            {
-                                m_isPaySuccessed = true;
-                                PayCompleted(operater, orderSn, DateTime.Now);
-                            }
-                        }
-                        break;
                 }
 
-                var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
                 if (order != null)
                 {
+
+                    var mod_OrderNotifyLog = new OrderNotifyLog();
+                    mod_OrderNotifyLog.Id = GuidUtil.New();
                     mod_OrderNotifyLog.MerchId = order.MerchId;
                     mod_OrderNotifyLog.OrderId = order.Id;
                     mod_OrderNotifyLog.OrderSn = order.Sn;
+                    mod_OrderNotifyLog.NotifyContent = content;
+                    mod_OrderNotifyLog.NotifyFrom = from;
+                    mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
+                    mod_OrderNotifyLog.CreateTime = DateTime.Now;
+                    mod_OrderNotifyLog.Creator = operater;
+                    CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
+                    CurrentDb.SaveChanges();
                 }
-                mod_OrderNotifyLog.Id = GuidUtil.New();
-                mod_OrderNotifyLog.NotifyContent = content;
-                mod_OrderNotifyLog.NotifyFrom = from;
-                mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
-                mod_OrderNotifyLog.CreateTime = DateTime.Now;
-                mod_OrderNotifyLog.Creator = operater;
-                CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
-                CurrentDb.SaveChanges();
 
                 isPaySuccessed = m_isPaySuccessed;
 
@@ -752,7 +741,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult BuildPayParams(string operater, RopOrderBuildPayParams rop)
         {
 
