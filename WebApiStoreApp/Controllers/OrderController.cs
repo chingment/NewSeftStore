@@ -57,7 +57,6 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage PayResultNotify()
@@ -65,16 +64,18 @@ namespace WebApiStoreApp.Controllers
             var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
             Stream stream = myRequest.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
+
             string content = new StreamReader(stream).ReadToEnd();
+
+            LogUtil.Info("接收支付结果:" + content);
 
             if (string.IsNullOrEmpty(content))
             {
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
             }
 
-            LogUtil.Info("接收支付结果:" + content);
-
             var dicXml = WeiXinSdk.CommonUtil.ToDictionary(content);
+
             if (!dicXml.ContainsKey("appid"))
             {
                 LogUtil.Warn("查找不到appid");
@@ -82,7 +83,7 @@ namespace WebApiStoreApp.Controllers
             }
 
             string str_attach = dicXml["attach"].ToString();
-            LogUtil.Info("接收支付结果 attach:" + str_attach);
+ 
             if (string.IsNullOrEmpty(str_attach))
             {
                 LogUtil.Warn("attach 不符合格式");
@@ -91,17 +92,17 @@ namespace WebApiStoreApp.Controllers
 
             var obj_attach = Newtonsoft.Json.JsonConvert.DeserializeObject<LocalS.BLL.Biz.OrderAttachModel>(str_attach);
 
-            string appId = dicXml["appid"].ToString();
-            LogUtil.Info("接收支付结果 appId:" + appId);
             WxAppInfoConfig appInfo = null;
 
             switch (obj_attach.PayCaller)
             {
+                case E_OrderPayCaller.WechatByNative:
+                    appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(obj_attach.MerchId);
+                    break;
                 case E_OrderPayCaller.WechatByMp:
+                    appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(obj_attach.MerchId);
                     break;
                 case E_OrderPayCaller.WechatByPa:
-                    break;
-                case E_OrderPayCaller.WechatByNative:
                     appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(obj_attach.MerchId);
                     break;
             }
