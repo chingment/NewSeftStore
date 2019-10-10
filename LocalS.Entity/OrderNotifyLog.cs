@@ -15,7 +15,6 @@ namespace LocalS.Entity
     public enum E_OrderNotifyLogNotifyFrom
     {
         Unknow = 0,
-        WebApp = 1,
         NotifyUrl = 2,
         OrderQuery = 3
     }
