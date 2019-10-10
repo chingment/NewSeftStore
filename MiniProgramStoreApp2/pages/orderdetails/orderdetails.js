@@ -42,7 +42,7 @@ Page({
     apiOrder.buildPayParams({
       orderId: orderId,
       payWay: 1,
-      caller: 2
+      payCaller: 12,
     }, {
         success: function (res) {
           if (res.result == 1) {

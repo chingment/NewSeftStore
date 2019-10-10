@@ -9,8 +9,6 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopOrderBuildPayParams
     {
-        public string MerchId { get; set; }
-        public string AppId { get; set; }
         public string OrderId { get; set; }
         /// <summary>
         /// 1: Wechat,  2 AliPay

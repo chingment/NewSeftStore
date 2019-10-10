@@ -147,9 +147,7 @@ Page({
       apiOrder.reserve({
         storeId: ownRequest.getCurrentStoreId(),
         productSkus: productSkus,
-        source: 3,
-        payWay: 1,
-        payCaller: 12,
+        source: 3
       }, {
           success: function (res) {
             if (res.result == 1) {
