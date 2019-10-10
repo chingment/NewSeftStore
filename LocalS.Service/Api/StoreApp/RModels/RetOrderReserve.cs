@@ -10,7 +10,6 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string OrderId { get; set; }
         public string OrderSn { get; set; }
-        public string PayUrl { get; set; }
         public string ChargeAmount { get; set; }
     }
 }

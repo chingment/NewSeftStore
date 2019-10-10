@@ -50,10 +50,10 @@ namespace WebApiStoreApp.Controllers
             return StoreAppServiceFactory.Order.Cancle(this.CurrentUserId, this.CurrentUserId, rop);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse JsApiPaymentPms([FromUri]RupOrderJsApiPaymentPms rop)
+        [HttpPost]
+        public OwnApiHttpResponse BuildPayParams([FromBody]RopOrderBuildPayParams rop)
         {
-            IResult result = StoreAppServiceFactory.Order.JsApiPaymentPms(this.CurrentUserId, this.CurrentUserId, rop);
+            IResult result = StoreAppServiceFactory.Order.BuildPayParams(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

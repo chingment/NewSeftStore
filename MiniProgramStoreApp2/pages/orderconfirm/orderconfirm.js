@@ -148,8 +148,8 @@ Page({
         storeId: ownRequest.getCurrentStoreId(),
         productSkus: productSkus,
         source: 3,
-        payWay:1,
-        payCaller:12,
+        payWay: 1,
+        payCaller: 12,
       }, {
           success: function (res) {
             if (res.result == 1) {
@@ -172,8 +172,7 @@ Page({
     }
   },
   goPay: function () {
-    apiOrder.jsApiPaymentPms({
-      merchId: config.merchId,
+    apiOrder.buildPayParams({
       orderId: orderId,
       payWay: 1,
       payCaller: 12,

@@ -18,8 +18,6 @@ namespace LocalS.Service.Api.StoreTerm
 
         public string MachineId { get; set; }
         public List<ProductSku> ProductSkus { get; set; }
-        public E_OrderPayWay PayWay { get; set; }
-        public E_OrderPayCaller PayCaller { get; set; }
         public class ProductSku
         {
             public string Id { get; set; }

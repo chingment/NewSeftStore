@@ -1,14 +1,13 @@
-﻿using LocalS.BLL.Biz;
-using LocalS.Entity;
+﻿using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.StoreApp
+namespace LocalS.BLL.Biz
 {
-    public class RupOrderJsApiPaymentPms
+    public class RopOrderBuildPayParams
     {
         public string MerchId { get; set; }
         public string AppId { get; set; }
@@ -18,6 +17,5 @@ namespace LocalS.Service.Api.StoreApp
         /// </summary>
         public E_OrderPayWay PayWay { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
-
     }
 }

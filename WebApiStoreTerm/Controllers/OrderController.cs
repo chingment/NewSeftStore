@@ -30,6 +30,13 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse BuildPayParams([FromBody]RopOrderBuildPayParams rop)
+        {
+            IResult result = StoreTermServiceFactory.Order.BuildPayParams(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse Search([FromUri]RupOrderSearch rup)
         {

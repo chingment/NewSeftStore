@@ -51,8 +51,6 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
-            bizRop.PayWay = rop.PayWay;
-            bizRop.PayCaller = rop.PayCaller;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
 
             var sellChannelRefIds = CurrentDb.MerchMachine.Where(m => m.StoreId == rop.StoreId).Select(m => m.MachineId).ToArray();
@@ -71,7 +69,6 @@ namespace LocalS.Service.Api.StoreApp
                 RetOrderReserve ret = new RetOrderReserve();
                 ret.OrderId = bizResult.Data.OrderId;
                 ret.OrderSn = bizResult.Data.OrderSn;
-                ret.PayUrl = bizResult.Data.PayUrl;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
@@ -533,71 +530,15 @@ namespace LocalS.Service.Api.StoreApp
             return BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
         }
 
-        public CustomJsonResult JsApiPaymentPms(string operater, string clientUserId, RupOrderJsApiPaymentPms rup)
+        public CustomJsonResult BuildPayParams(string operater, string clientUserId, RopOrderBuildPayParams rop)
         {
-            var result = new CustomJsonResult();
+            LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
+            bizRop.OrderId = rop.OrderId;
+            bizRop.PayWay = rop.PayWay;
+            bizRop.PayCaller = rop.PayCaller;
 
-            var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == clientUserId).FirstOrDefault();
-
-            if (wxUserInfo == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
-            }
-
-            var order = CurrentDb.Order.Where(m => m.Id == rup.OrderId).FirstOrDefault();
-
-            if (order == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
-            }
-
-            LogUtil.Info("MerchId:" + order.MerchId);
-            LogUtil.Info("WxMpAppId:" + rup.AppId);
-
-            var wxAppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-
-            if (wxAppInfoConfig == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
-            }
-
-
-            order.AppId = wxAppInfoConfig.AppId;
-            order.ClientUserId = wxUserInfo.ClientUserId;
-            order.PayExpireTime = DateTime.Now.AddMinutes(5);
-            order.PayCaller = rup.PayCaller;
-            order.PayWay = rup.PayWay;
-            switch (rup.PayCaller)
-            {
-                case E_OrderPayCaller.WechatByMp:
-
-                    var orderAttach = new BLL.Biz.OrderAttachModel();
-                    orderAttach.MerchId = order.MerchId;
-                    orderAttach.StoreId = order.StoreId;
-                    orderAttach.PayCaller = rup.PayCaller;
-
-                    var ret_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wxAppInfoConfig, wxUserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-
-                    if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                    }
-                    order.PayPrepayId = ret_UnifiedOrder.PrepayId;
-                    order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
-                    CurrentDb.SaveChanges();
-
-                    //Task4Factory.Global.Enter(TimerTaskType.CheckOrderPay, order.PayExpireTime.Value, order);
-
-                    var pms = SdkFactory.Wx.GetJsApiPayParams(wxAppInfoConfig, order.Id, order.Sn, ret_UnifiedOrder.PrepayId);
-
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
-                    break;
-            }
-
-            return result;
+            return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
-
-
         public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, string orderSn, out bool isPaySuccessed)
         {
             return BLL.Biz.BizFactory.Order.PayResultNotify(operater, from, content, orderSn, out isPaySuccessed);

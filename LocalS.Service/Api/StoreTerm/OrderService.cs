@@ -24,8 +24,6 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.StoreId = machine.StoreId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
             bizRop.SellChannelRefIds = new string[] { machine.Id };//指定机器
-            bizRop.PayWay = rop.PayWay;
-            bizRop.PayCaller = rop.PayCaller;
 
             foreach (var productSku in rop.ProductSkus)
             {
@@ -39,7 +37,6 @@ namespace LocalS.Service.Api.StoreTerm
                 RetOrderReserve ret = new RetOrderReserve();
                 ret.OrderId = bizResult.Data.OrderId;
                 ret.OrderSn = bizResult.Data.OrderSn;
-                ret.PayUrl = bizResult.Data.PayUrl;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
             }
@@ -188,6 +185,18 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
+        public CustomJsonResult BuildPayParams(RopOrderBuildPayParams rop)
+        {
+            LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
+            bizRop.AppId = rop.AppId;
+            bizRop.MerchId = rop.MerchId;
+            bizRop.OrderId = rop.OrderId;
+            bizRop.PayWay = rop.PayWay;
+            bizRop.PayCaller = rop.PayCaller;
+
+            return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
+        }
+
         private RetOrderDetails GetOrderDetails(string machineId, string orderId)
         {
             var ret = new RetOrderDetails();
@@ -227,5 +236,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             return ret;
         }
+
+
     }
 }

@@ -56,11 +56,11 @@ function cancle(params, requestHandler) {
   })
 }
 
-function jsApiPaymentPms(urlParams, requestHandler) {
+function buildPayParams(params, requestHandler) {
 
-  lumos.getJson({
-    url: config.apiUrl.orderJsApiPaymentPms,
-    urlParams: urlParams,
+  lumos.postJson({
+    url: config.apiUrl.orderBuildPayParams,
+    dataParams: params,
     success: function (res) {
       requestHandler.success(res)
     }
@@ -73,5 +73,5 @@ module.exports = {
   list: list,
   details: details,
   cancle: cancle,
-  jsApiPaymentPms: jsApiPaymentPms
+  buildPayParams: buildPayParams
 }

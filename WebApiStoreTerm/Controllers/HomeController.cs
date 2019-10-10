@@ -99,8 +99,6 @@ namespace WebApiStoreTerm.Controllers
 
             RopOrderReserve rop = new RopOrderReserve();
             rop.MachineId = "000000000000000";
-            rop.PayCaller =  LocalS.Entity.E_OrderPayCaller.WechatByNative;
-            rop.PayWay = LocalS.Entity.E_OrderPayWay.Wechat;
             rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "0cea859026154bbd80c1e6f98d6d8853", Quantity = 2});
             StoreTermServiceFactory.Order.Reserve(rop);
 

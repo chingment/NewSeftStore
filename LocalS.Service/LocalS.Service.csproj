@@ -266,7 +266,7 @@
     <Compile Include="Api\StoreApp\RModels\RupCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalDataSet.cs" />
-    <Compile Include="Api\StoreApp\RModels\RupOrderJsApiPaymentPms.cs" />
+    <Compile Include="Api\StoreApp\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductDetails.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductList.cs" />
@@ -289,6 +289,7 @@
     <Compile Include="Api\StoreTerm\RModels\RetOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUpdateInfo.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderCancle.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderPickupEventNotify.cs" />

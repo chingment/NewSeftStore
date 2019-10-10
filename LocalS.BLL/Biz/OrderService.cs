@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using static LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel;
+using Lumos.BLL;
 
 namespace LocalS.BLL.Biz
 {
@@ -103,8 +104,6 @@ namespace LocalS.BLL.Biz
                 order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                 order.Status = E_OrderStatus.WaitPay;
                 order.Source = rop.Source;
-                order.PayWay = rop.PayWay;
-                order.PayCaller = rop.PayCaller;
                 order.PickCode = BuildPickCode();
                 order.SubmitTime = DateTime.Now;
                 order.PayExpireTime = DateTime.Now.AddSeconds(300);
@@ -260,43 +259,6 @@ namespace LocalS.BLL.Biz
                     }
                 }
 
-
-                //生产支付信息
-
-                var orderAttach = new LocalS.BLL.Biz.OrderAttachModel();
-                orderAttach.MerchId = order.MerchId;
-                orderAttach.StoreId = order.StoreId;
-                orderAttach.PayCaller = rop.PayCaller;
-
-                ret.OrderId = order.Id;
-                ret.OrderSn = order.Sn;
-
-                switch (rop.PayCaller)
-                {
-                    case E_OrderPayCaller.AlipayByNative:
-                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "暂时不支持支付宝支付", null);
-                    case E_OrderPayCaller.WechatByMp:
-                        break;
-                    case E_OrderPayCaller.WechatByNative:
-                        var wxPaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
-                        var ret_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wxPaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-
-                        if (string.IsNullOrEmpty(ret_UnifiedOrder.PrepayId))
-                        {
-                            return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败", null);
-                        }
-
-                        order.PayPrepayId = ret_UnifiedOrder.PrepayId;
-                        order.PayQrCodeUrl = ret_UnifiedOrder.CodeUrl;
-
-                        ret.PayUrl = order.PayQrCodeUrl;
-                        ret.ChargeAmount = order.ChargeAmount.ToF2Price();
-
-                        break;
-                    default:
-                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
-                }
-
                 CurrentDb.Order.Add(order);
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -308,7 +270,10 @@ namespace LocalS.BLL.Biz
 
                 ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
-                Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+
+                ret.OrderId = order.Id;
+                ret.OrderSn = order.Sn;
+                ret.ChargeAmount = order.ChargeAmount.ToF2Price();
 
                 result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
 
@@ -317,7 +282,6 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-
         private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoAndStockModel> productSkus)
         {
             List<OrderReserveDetail> details = new List<OrderReserveDetail>();
@@ -777,6 +741,96 @@ namespace LocalS.BLL.Biz
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult BuildPayParams(string operater, RopOrderBuildPayParams rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
+
+                if (order == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
+                }
+
+                order.PayExpireTime = DateTime.Now.AddMinutes(5);
+                order.PayCaller = rop.PayCaller;
+                order.PayWay = rop.PayWay;
+
+                var orderAttach = new BLL.Biz.OrderAttachModel();
+
+                switch (rop.PayCaller)
+                {
+                    case E_OrderPayCaller.AlipayByNative:
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持支付宝支付");
+                    case E_OrderPayCaller.WechatByNative:
+                        var wechatByNative_PaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
+                        var wechatByNative_UnifiedOrder = Lumos.BLL.SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_PaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                        }
+
+                        order.PayPrepayId = wechatByNative_UnifiedOrder.PrepayId;
+                        order.PayQrCodeUrl = wechatByNative_UnifiedOrder.CodeUrl;
+
+                        var wechatByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByNative_PayParams);
+
+                        break;
+                    case E_OrderPayCaller.WechatByMp:
+
+                        var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
+
+                        if (wechatByMp_UserInfo == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
+                        }
+
+                        var wechatByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+
+                        if (wechatByMp_AppInfoConfig == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+                        }
+
+                        orderAttach.MerchId = order.MerchId;
+                        orderAttach.StoreId = order.StoreId;
+                        orderAttach.PayCaller = rop.PayCaller;
+
+                        var wechatByMp_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wechatByMp_AppInfoConfig, wechatByMp_UserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+
+                        if (string.IsNullOrEmpty(wechatByMp_UnifiedOrder.PrepayId))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                        }
+
+                        order.PayPrepayId = wechatByMp_UnifiedOrder.PrepayId;
+
+                        var pms = SdkFactory.Wx.GetJsApiPayParams(wechatByMp_AppInfoConfig, order.Id, order.Sn, wechatByMp_UnifiedOrder.PrepayId);
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
+                        break;
+                    default:
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                if (result.Result == ResultType.Success)
+                {
+                    Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+                }
+
             }
 
             return result;

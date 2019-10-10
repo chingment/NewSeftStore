@@ -39,7 +39,7 @@ Page({
   },
   goPay: function () {
 
-    apiOrder.jsApiPaymentPms({
+    apiOrder.buildPayParams({
       orderId: orderId,
       payWay: 1,
       caller: 2

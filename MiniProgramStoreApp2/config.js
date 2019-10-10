@@ -27,7 +27,7 @@ var config = {
     operateResult: `${host}/Operate/Result`,
     orderConfirm: `${host}/Order/Confirm`,
     orderReserve: `${host}/Order/Reserve`,
-    orderJsApiPaymentPms: `${host}/Order/JsApiPaymentPms`,
+    orderBuildPayParams: `${host}/Order/BuildPayParams`,
     orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
     orderDetails: `${host}/Order/Details`,

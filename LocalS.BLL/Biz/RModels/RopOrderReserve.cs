@@ -23,8 +23,6 @@ namespace LocalS.BLL.Biz
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }
         public List<ProductSku> ProductSkus { get; set; }
-        public E_OrderPayWay PayWay { get; set; }
-        public E_OrderPayCaller PayCaller { get; set; }
         public class ProductSku
         {
             public string CartId { get; set; }
