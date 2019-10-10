@@ -28,255 +28,262 @@ namespace LocalS.BLL.Biz
 
             return pickCode;
         }
+
+        private static readonly object lock_Reserve = new object();
+
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
             CustomJsonResult<RetOrderReserve> result = new CustomJsonResult<RetOrderReserve>();
 
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            lock (lock_Reserve)
             {
-                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
-            }
-
-            var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-            if (store == null)
-            {
-                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);
-            }
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                RetOrderReserve ret = new RetOrderReserve();
-
-                //检查是否有可买的商品
-                List<string> warn_tips = new List<string>();
-                var operateStocks = new List<OperateStock>();
-
-                List<ProductSkuInfoAndStockModel> productSkuInfoAndStocks = new List<BLL.ProductSkuInfoAndStockModel>();
-
-                foreach (var productSku in rop.ProductSkus)
+                if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
                 {
-                    var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(productSku.Id);
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
+                }
 
-                    if (l_ProductSkuInfoAndStock == null)
+                var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+                if (store == null)
+                {
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);
+                }
+
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    RetOrderReserve ret = new RetOrderReserve();
+
+                    //检查是否有可买的商品
+                    List<string> warn_tips = new List<string>();
+                    var operateStocks = new List<OperateStock>();
+
+                    List<ProductSkuInfoAndStockModel> productSkuInfoAndStocks = new List<BLL.ProductSkuInfoAndStockModel>();
+
+                    foreach (var productSku in rop.ProductSkus)
                     {
-                        warn_tips.Add(string.Format("{0}商品库存信息不存在", l_ProductSkuInfoAndStock.Name));
-                    }
-                    else
-                    {
+                        var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(productSku.Id);
 
-                        var sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType && rop.SellChannelRefIds.Contains(m.RefId)).Sum(m => m.SellQuantity);
-
-
-                        if (l_ProductSkuInfoAndStock.IsOffSell)
+                        if (l_ProductSkuInfoAndStock == null)
                         {
-                            warn_tips.Add(string.Format("{0}已经下架", l_ProductSkuInfoAndStock.Name));
+                            warn_tips.Add(string.Format("{0}商品库存信息不存在", l_ProductSkuInfoAndStock.Name));
                         }
                         else
                         {
-                            if (sellQuantity < productSku.Quantity)
+
+                            var sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType && rop.SellChannelRefIds.Contains(m.RefId)).Sum(m => m.SellQuantity);
+
+                            Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                            if (l_ProductSkuInfoAndStock.IsOffSell)
                             {
-                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", l_ProductSkuInfoAndStock.Name, sellQuantity));
+                                warn_tips.Add(string.Format("{0}已经下架", l_ProductSkuInfoAndStock.Name));
+                            }
+                            else
+                            {
+                                if (sellQuantity < productSku.Quantity)
+                                {
+                                    warn_tips.Add(string.Format("{0}的可销售数量为{1}个", l_ProductSkuInfoAndStock.Name, sellQuantity));
+                                }
+                            }
+                            productSkuInfoAndStocks.Add(l_ProductSkuInfoAndStock);
+                        }
+                    }
+
+                    if (warn_tips.Count > 0)
+                    {
+                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
+                    }
+
+
+
+
+
+                    var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
+
+                    var order = new Order();
+                    order.Id = GuidUtil.New();
+                    order.Sn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);
+                    order.MerchId = store.MerchId;
+                    order.StoreId = rop.StoreId;
+                    order.StoreName = store.Name;
+                    order.ClientUserId = rop.ClientUserId;
+                    order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
+                    order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
+                    order.Status = E_OrderStatus.WaitPay;
+                    order.Source = rop.Source;
+                    order.PickCode = BuildPickCode();
+                    order.SubmitTime = DateTime.Now;
+                    order.PayExpireTime = DateTime.Now.AddSeconds(300);
+                    order.Creator = operater;
+                    order.CreateTime = DateTime.Now;
+
+                    #region 更改购物车标识
+
+                    if (!string.IsNullOrEmpty(rop.ClientUserId))
+                    {
+                        var cartsIds = rop.ProductSkus.Select(m => m.CartId).Distinct().ToArray();
+                        if (cartsIds != null)
+                        {
+                            var clientCarts = CurrentDb.ClientCart.Where(m => cartsIds.Contains(m.Id) && m.ClientUserId == rop.ClientUserId).ToList();
+                            if (clientCarts != null)
+                            {
+                                foreach (var cart in clientCarts)
+                                {
+                                    cart.Status = E_ClientCartStatus.Settling;
+                                    cart.Mender = operater;
+                                    cart.MendTime = DateTime.Now;
+                                    CurrentDb.SaveChanges();
+                                }
                             }
                         }
-                        productSkuInfoAndStocks.Add(l_ProductSkuInfoAndStock);
                     }
-                }
+                    #endregion
 
-                if (warn_tips.Count > 0)
-                {
-                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
-                }
+                    order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
+                    order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
+                    order.ChargeAmount = reserveDetails.Sum(m => m.ChargeAmount);
+                    order.SellChannelRefIds = string.Join(",", reserveDetails.Select(m => m.SellChannelRefId).ToArray());
 
-
-
-
-
-                var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
-
-                var order = new Order();
-                order.Id = GuidUtil.New();
-                order.Sn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);
-                order.MerchId = store.MerchId;
-                order.StoreId = rop.StoreId;
-                order.StoreName = store.Name;
-                order.ClientUserId = rop.ClientUserId;
-                order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
-                order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
-                order.Status = E_OrderStatus.WaitPay;
-                order.Source = rop.Source;
-                order.PickCode = BuildPickCode();
-                order.SubmitTime = DateTime.Now;
-                order.PayExpireTime = DateTime.Now.AddSeconds(300);
-                order.Creator = operater;
-                order.CreateTime = DateTime.Now;
-
-                #region 更改购物车标识
-
-                if (!string.IsNullOrEmpty(rop.ClientUserId))
-                {
-                    var cartsIds = rop.ProductSkus.Select(m => m.CartId).Distinct().ToArray();
-                    if (cartsIds != null)
+                    foreach (var detail in reserveDetails)
                     {
-                        var clientCarts = CurrentDb.ClientCart.Where(m => cartsIds.Contains(m.Id) && m.ClientUserId == rop.ClientUserId).ToList();
-                        if (clientCarts != null)
+                        var orderDetails = new OrderDetails();
+                        orderDetails.Id = GuidUtil.New();
+                        orderDetails.Sn = order.Sn + reserveDetails.IndexOf(detail).ToString();
+                        orderDetails.ClientUserId = rop.ClientUserId;
+                        orderDetails.MerchId = store.MerchId;
+                        orderDetails.StoreId = rop.StoreId;
+                        orderDetails.SellChannelRefType = detail.SellChannelRefType;
+                        orderDetails.SellChannelRefId = detail.SellChannelRefId;
+                        switch (detail.SellChannelRefType)
                         {
-                            foreach (var cart in clientCarts)
+                            case E_SellChannelRefType.Express:
+                                orderDetails.SellChannelRefName = "【快递】";
+                                orderDetails.SellChannelRefType = E_SellChannelRefType.Express;
+                                orderDetails.SellChannelRefId = GuidUtil.Empty();
+                                orderDetails.Receiver = rop.Receiver;
+                                orderDetails.ReceiverPhone = rop.ReceiverPhone;
+                                orderDetails.ReceptionAddress = rop.ReceptionAddress;
+                                break;
+                            case E_SellChannelRefType.SelfTake:
+                                orderDetails.SellChannelRefName = "【店内自取】";
+                                orderDetails.SellChannelRefType = E_SellChannelRefType.SelfTake;
+                                orderDetails.SellChannelRefId = GuidUtil.Empty();
+                                orderDetails.Receiver = rop.Receiver;
+                                orderDetails.ReceiverPhone = rop.ReceiverPhone;
+                                orderDetails.ReceptionAddress = rop.ReceptionAddress;
+                                break;
+                            case E_SellChannelRefType.Machine:
+                                orderDetails.SellChannelRefName = "【机器自提】 " + BizFactory.Merch.GetMachineName(order.MerchId, detail.SellChannelRefId);
+                                orderDetails.SellChannelRefType = E_SellChannelRefType.Machine;
+                                orderDetails.SellChannelRefId = detail.SellChannelRefId;
+                                orderDetails.Receiver = null;
+                                orderDetails.ReceiverPhone = null;
+                                orderDetails.ReceptionAddress = store.Address;
+                                break;
+                        }
+                        orderDetails.OrderId = order.Id;
+                        orderDetails.OrderSn = order.Sn;
+                        orderDetails.OriginalAmount = detail.OriginalAmount;
+                        orderDetails.DiscountAmount = detail.DiscountAmount;
+                        orderDetails.ChargeAmount = detail.ChargeAmount;
+                        orderDetails.Status = E_OrderStatus.WaitPay;
+                        orderDetails.Quantity = detail.Quantity;
+                        orderDetails.SubmitTime = DateTime.Now;
+                        orderDetails.Creator = operater;
+                        orderDetails.CreateTime = DateTime.Now;
+                        CurrentDb.OrderDetails.Add(orderDetails);
+
+                        foreach (var detailsChild in detail.Details)
+                        {
+                            var orderDetailsChild = new OrderDetailsChild();
+                            orderDetailsChild.Id = GuidUtil.New();
+                            orderDetailsChild.Sn = orderDetails.Sn + detail.Details.IndexOf(detailsChild).ToString();
+                            orderDetailsChild.ClientUserId = rop.ClientUserId;
+                            orderDetailsChild.MerchId = store.MerchId;
+                            orderDetailsChild.StoreId = rop.StoreId;
+                            orderDetailsChild.SellChannelRefType = detailsChild.SellChannelRefType;
+                            orderDetailsChild.SellChannelRefId = detailsChild.SellChannelRefId;
+                            orderDetailsChild.SellChannelRefName = orderDetails.SellChannelRefName;
+                            orderDetailsChild.OrderId = order.Id;
+                            orderDetailsChild.OrderSn = order.Sn;
+                            orderDetailsChild.OrderDetailsId = orderDetails.Id;
+                            orderDetailsChild.OrderDetailsSn = orderDetails.Sn;
+                            orderDetailsChild.PrdProductSkuId = detailsChild.PrdProductSkuId;
+                            orderDetailsChild.PrdProductId = detailsChild.PrdProductId;
+                            orderDetailsChild.PrdProductSkuName = detailsChild.PrdProductSkuName;
+                            orderDetailsChild.PrdProductSkuMainImgUrl = detailsChild.PrdProductSkuMainImgUrl;
+                            orderDetailsChild.SalePrice = detailsChild.SalePrice;
+                            orderDetailsChild.SalePriceByVip = detailsChild.SalePriceByVip;
+                            orderDetailsChild.Quantity = detailsChild.Quantity;
+                            orderDetailsChild.OriginalAmount = detailsChild.OriginalAmount;
+                            orderDetailsChild.DiscountAmount = detailsChild.DiscountAmount;
+                            orderDetailsChild.ChargeAmount = detailsChild.ChargeAmount;
+                            orderDetailsChild.SubmitTime = DateTime.Now;
+                            orderDetailsChild.Status = E_OrderStatus.WaitPay;
+                            orderDetailsChild.Creator = operater;
+                            orderDetailsChild.CreateTime = DateTime.Now;
+                            CurrentDb.OrderDetailsChild.Add(orderDetailsChild);
+
+                            foreach (var detailsChildSon in detailsChild.Details)
                             {
-                                cart.Status = E_ClientCartStatus.Settling;
-                                cart.Mender = operater;
-                                cart.MendTime = DateTime.Now;
-                                CurrentDb.SaveChanges();
+                                var orderDetailsChildSon = new OrderDetailsChildSon();
+                                orderDetailsChildSon.Id = GuidUtil.New();
+                                orderDetailsChildSon.Sn = orderDetailsChild.Sn + detailsChild.Details.IndexOf(detailsChildSon);
+                                orderDetailsChildSon.ClientUserId = rop.ClientUserId;
+                                orderDetailsChildSon.MerchId = store.MerchId;
+                                orderDetailsChildSon.StoreId = rop.StoreId;
+                                orderDetailsChildSon.SellChannelRefType = detailsChildSon.SellChannelRefType;
+                                orderDetailsChildSon.SellChannelRefId = detailsChildSon.SellChannelRefId;
+                                orderDetailsChildSon.SellChannelRefName = orderDetailsChild.SellChannelRefName;
+                                orderDetailsChildSon.OrderId = order.Id;
+                                orderDetailsChildSon.OrderSn = order.Sn;
+                                orderDetailsChildSon.OrderDetailsId = orderDetails.Id;
+                                orderDetailsChildSon.OrderDetailsSn = orderDetails.Sn;
+                                orderDetailsChildSon.OrderDetailsChildId = orderDetailsChild.Id;
+                                orderDetailsChildSon.OrderDetailsChildSn = orderDetailsChild.Sn;
+                                orderDetailsChildSon.SlotId = detailsChildSon.SlotId;
+                                orderDetailsChildSon.PrdProductSkuId = detailsChildSon.PrdProductSkuId;
+                                orderDetailsChildSon.PrdProductId = orderDetailsChild.PrdProductId;
+                                orderDetailsChildSon.PrdProductSkuName = detailsChildSon.PrdProductSkuName;
+                                orderDetailsChildSon.PrdProductSkuMainImgUrl = detailsChildSon.PrdProductSkuMainImgUrl;
+                                orderDetailsChildSon.SalePrice = detailsChildSon.SalePrice;
+                                orderDetailsChildSon.SalePriceByVip = detailsChildSon.SalePriceByVip;
+                                orderDetailsChildSon.Quantity = detailsChildSon.Quantity;
+                                orderDetailsChildSon.OriginalAmount = detailsChildSon.OriginalAmount;
+                                orderDetailsChildSon.DiscountAmount = detailsChildSon.DiscountAmount;
+                                orderDetailsChildSon.ChargeAmount = detailsChildSon.ChargeAmount;
+                                orderDetailsChildSon.SubmitTime = DateTime.Now;
+                                orderDetailsChildSon.Creator = operater;
+                                orderDetailsChildSon.CreateTime = DateTime.Now;
+                                orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPay;
+                                CurrentDb.OrderDetailsChildSon.Add(orderDetailsChildSon);
+                            }
+
+                            foreach (var slotStock in detailsChild.SlotStock)
+                            {
+                                operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = slotStock.PrdProductSkuId, RefType = slotStock.SellChannelRefType, RefId = slotStock.SellChannelRefId, SlotId = slotStock.SlotId, Quantity = slotStock.Quantity });
                             }
                         }
                     }
-                }
-                #endregion 
 
-                order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
-                order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
-                order.ChargeAmount = reserveDetails.Sum(m => m.ChargeAmount);
-                order.SellChannelRefIds = string.Join(",", reserveDetails.Select(m => m.SellChannelRefId).ToArray());
+                    CurrentDb.Order.Add(order);
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
 
-                foreach (var detail in reserveDetails)
-                {
-                    var orderDetails = new OrderDetails();
-                    orderDetails.Id = GuidUtil.New();
-                    orderDetails.Sn = order.Sn + reserveDetails.IndexOf(detail).ToString();
-                    orderDetails.ClientUserId = rop.ClientUserId;
-                    orderDetails.MerchId = store.MerchId;
-                    orderDetails.StoreId = rop.StoreId;
-                    orderDetails.SellChannelRefType = detail.SellChannelRefType;
-                    orderDetails.SellChannelRefId = detail.SellChannelRefId;
-                    switch (detail.SellChannelRefType)
+                    for (int i = 0; i < operateStocks.Count; i++)
                     {
-                        case E_SellChannelRefType.Express:
-                            orderDetails.SellChannelRefName = "【快递】";
-                            orderDetails.SellChannelRefType = E_SellChannelRefType.Express;
-                            orderDetails.SellChannelRefId = GuidUtil.Empty();
-                            orderDetails.Receiver = rop.Receiver;
-                            orderDetails.ReceiverPhone = rop.ReceiverPhone;
-                            orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                            break;
-                        case E_SellChannelRefType.SelfTake:
-                            orderDetails.SellChannelRefName = "【店内自取】";
-                            orderDetails.SellChannelRefType = E_SellChannelRefType.SelfTake;
-                            orderDetails.SellChannelRefId = GuidUtil.Empty();
-                            orderDetails.Receiver = rop.Receiver;
-                            orderDetails.ReceiverPhone = rop.ReceiverPhone;
-                            orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                            break;
-                        case E_SellChannelRefType.Machine:
-                            orderDetails.SellChannelRefName = "【机器自提】 " + BizFactory.Merch.GetMachineName(order.MerchId, detail.SellChannelRefId);
-                            orderDetails.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderDetails.SellChannelRefId = detail.SellChannelRefId;
-                            orderDetails.Receiver = null;
-                            orderDetails.ReceiverPhone = null;
-                            orderDetails.ReceptionAddress = store.Address;
-                            break;
+                        CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
                     }
-                    orderDetails.OrderId = order.Id;
-                    orderDetails.OrderSn = order.Sn;
-                    orderDetails.OriginalAmount = detail.OriginalAmount;
-                    orderDetails.DiscountAmount = detail.DiscountAmount;
-                    orderDetails.ChargeAmount = detail.ChargeAmount;
-                    orderDetails.Status = E_OrderStatus.WaitPay;
-                    orderDetails.Quantity = detail.Quantity;
-                    orderDetails.SubmitTime = DateTime.Now;
-                    orderDetails.Creator = operater;
-                    orderDetails.CreateTime = DateTime.Now;
-                    CurrentDb.OrderDetails.Add(orderDetails);
 
-                    foreach (var detailsChild in detail.Details)
-                    {
-                        var orderDetailsChild = new OrderDetailsChild();
-                        orderDetailsChild.Id = GuidUtil.New();
-                        orderDetailsChild.Sn = orderDetails.Sn + detail.Details.IndexOf(detailsChild).ToString();
-                        orderDetailsChild.ClientUserId = rop.ClientUserId;
-                        orderDetailsChild.MerchId = store.MerchId;
-                        orderDetailsChild.StoreId = rop.StoreId;
-                        orderDetailsChild.SellChannelRefType = detailsChild.SellChannelRefType;
-                        orderDetailsChild.SellChannelRefId = detailsChild.SellChannelRefId;
-                        orderDetailsChild.SellChannelRefName = orderDetails.SellChannelRefName;
-                        orderDetailsChild.OrderId = order.Id;
-                        orderDetailsChild.OrderSn = order.Sn;
-                        orderDetailsChild.OrderDetailsId = orderDetails.Id;
-                        orderDetailsChild.OrderDetailsSn = orderDetails.Sn;
-                        orderDetailsChild.PrdProductSkuId = detailsChild.PrdProductSkuId;
-                        orderDetailsChild.PrdProductId = detailsChild.PrdProductId;
-                        orderDetailsChild.PrdProductSkuName = detailsChild.PrdProductSkuName;
-                        orderDetailsChild.PrdProductSkuMainImgUrl = detailsChild.PrdProductSkuMainImgUrl;
-                        orderDetailsChild.SalePrice = detailsChild.SalePrice;
-                        orderDetailsChild.SalePriceByVip = detailsChild.SalePriceByVip;
-                        orderDetailsChild.Quantity = detailsChild.Quantity;
-                        orderDetailsChild.OriginalAmount = detailsChild.OriginalAmount;
-                        orderDetailsChild.DiscountAmount = detailsChild.DiscountAmount;
-                        orderDetailsChild.ChargeAmount = detailsChild.ChargeAmount;
-                        orderDetailsChild.SubmitTime = DateTime.Now;
-                        orderDetailsChild.Status = E_OrderStatus.WaitPay;
-                        orderDetailsChild.Creator = operater;
-                        orderDetailsChild.CreateTime = DateTime.Now;
-                        CurrentDb.OrderDetailsChild.Add(orderDetailsChild);
+                    ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
-                        foreach (var detailsChildSon in detailsChild.Details)
-                        {
-                            var orderDetailsChildSon = new OrderDetailsChildSon();
-                            orderDetailsChildSon.Id = GuidUtil.New();
-                            orderDetailsChildSon.Sn = orderDetailsChild.Sn + detailsChild.Details.IndexOf(detailsChildSon);
-                            orderDetailsChildSon.ClientUserId = rop.ClientUserId;
-                            orderDetailsChildSon.MerchId = store.MerchId;
-                            orderDetailsChildSon.StoreId = rop.StoreId;
-                            orderDetailsChildSon.SellChannelRefType = detailsChildSon.SellChannelRefType;
-                            orderDetailsChildSon.SellChannelRefId = detailsChildSon.SellChannelRefId;
-                            orderDetailsChildSon.SellChannelRefName = orderDetailsChild.SellChannelRefName;
-                            orderDetailsChildSon.OrderId = order.Id;
-                            orderDetailsChildSon.OrderSn = order.Sn;
-                            orderDetailsChildSon.OrderDetailsId = orderDetails.Id;
-                            orderDetailsChildSon.OrderDetailsSn = orderDetails.Sn;
-                            orderDetailsChildSon.OrderDetailsChildId = orderDetailsChild.Id;
-                            orderDetailsChildSon.OrderDetailsChildSn = orderDetailsChild.Sn;
-                            orderDetailsChildSon.SlotId = detailsChildSon.SlotId;
-                            orderDetailsChildSon.PrdProductSkuId = detailsChildSon.PrdProductSkuId;
-                            orderDetailsChildSon.PrdProductId = orderDetailsChild.PrdProductId;
-                            orderDetailsChildSon.PrdProductSkuName = detailsChildSon.PrdProductSkuName;
-                            orderDetailsChildSon.PrdProductSkuMainImgUrl = detailsChildSon.PrdProductSkuMainImgUrl;
-                            orderDetailsChildSon.SalePrice = detailsChildSon.SalePrice;
-                            orderDetailsChildSon.SalePriceByVip = detailsChildSon.SalePriceByVip;
-                            orderDetailsChildSon.Quantity = detailsChildSon.Quantity;
-                            orderDetailsChildSon.OriginalAmount = detailsChildSon.OriginalAmount;
-                            orderDetailsChildSon.DiscountAmount = detailsChildSon.DiscountAmount;
-                            orderDetailsChildSon.ChargeAmount = detailsChildSon.ChargeAmount;
-                            orderDetailsChildSon.SubmitTime = DateTime.Now;
-                            orderDetailsChildSon.Creator = operater;
-                            orderDetailsChildSon.CreateTime = DateTime.Now;
-                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPay;
-                            CurrentDb.OrderDetailsChildSon.Add(orderDetailsChildSon);
-                        }
 
-                        foreach (var slotStock in detailsChild.SlotStock)
-                        {
-                            operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = slotStock.PrdProductSkuId, RefType = slotStock.SellChannelRefType, RefId = slotStock.SellChannelRefId, SlotId = slotStock.SlotId, Quantity = slotStock.Quantity });
-                        }
-                    }
+                    ret.OrderId = order.Id;
+                    ret.OrderSn = order.Sn;
+                    ret.ChargeAmount = order.ChargeAmount.ToF2Price();
+
+                    result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
+
                 }
-
-                CurrentDb.Order.Add(order);
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                for (int i = 0; i < operateStocks.Count; i++)
-                {
-                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
-                }
-
-                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
-
-
-                ret.OrderId = order.Id;
-                ret.OrderSn = order.Sn;
-                ret.ChargeAmount = order.ChargeAmount.ToF2Price();
-
-                result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
-
             }
 
             return result;

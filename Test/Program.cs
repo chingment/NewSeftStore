@@ -1,9 +1,11 @@
 ﻿using LocalS.BLL.Mq.MqByRedis;
+using LocalS.Service.Api.StoreApp;
 using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using YsyInscarSdk;
 
@@ -27,7 +29,7 @@ namespace Test
             //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
             //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
 
-            Console.ReadLine();
+
             //string publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTT1ryGLfq5lucyHdzPLbjtcVsgurf5x4Y09U/cTiV85duIk0zQeRTXNyGcMAS92+xV/eGp7IjncwL8QE8JqlclLvuOU3zTdlAQ58lu/JcTcsF6eA6JXb8OJAhmDoug1J77M2GLoqAl0Cf34kavj/r9bAQpWqbk8JlJU3YqIePuwIDAQAB";
             //RSAForJava rsa = new RSAForJava();
 
@@ -47,7 +49,29 @@ namespace Test
 
 
 
+            for (int i = 0; i < 1000; i++)
+            {
+                string threadName = "thread " + i;
+                int secondsToWait = 2 + 2 * i;
+                var t = new Thread(new ThreadStart(DoWork));
+                t.Start();
 
+            }
+
+            Console.ReadLine();
+        }
+
+        public static void DoWork()
+        {
+
+
+            RopOrderReserve rop = new RopOrderReserve();
+
+            rop.Source = LocalS.Entity.E_OrderSource.WechatMiniProgram;
+            rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
+            rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
+            var result = StoreAppServiceFactory.Order.Reserve(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
         }
     }
 }
