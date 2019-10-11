@@ -508,10 +508,10 @@ namespace LocalS.BLL.Biz
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信PayResultNotify");
 
-                    var dicXml = MyWeiXinSdk.CommonUtil.ToDictionary(content);
-                    if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
+                    var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
+                    if (dic.ContainsKey("out_trade_no"))
                     {
-                        orderSn = dicXml["out_trade_no"].ToString();
+                        orderSn = dic["out_trade_no"].ToString();
                     }
 
                     LogUtil.Info("解释微信PayResultNotify，订单号：" + orderSn);
@@ -520,9 +520,9 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
-                        if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("trade_state"))
+                        if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
                         {
-                            string trade_state = dicXml["trade_state"].ToString();
+                            string trade_state = dic["trade_state"].ToString();
                             LogUtil.Info("解释微信订单轮训状态PayResultNotify，订单状态：" + trade_state);
                             if (trade_state == "SUCCESS")
                             {
@@ -532,9 +532,9 @@ namespace LocalS.BLL.Biz
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
-                        if (dicXml.ContainsKey("result_code"))
+                        if (dic.ContainsKey("result_code"))
                         {
-                            string result_code = dicXml["result_code"].ToString();
+                            string result_code = dic["result_code"].ToString();
                             LogUtil.Info("解释微信订单异步通知PayResultNotify，订单状态：" + result_code);
                             if (result_code == "SUCCESS")
                             {
@@ -542,6 +542,40 @@ namespace LocalS.BLL.Biz
                             }
                         }
                     }
+                    #endregion
+                }
+                else if (content.IndexOf("app_id") > -1)
+                {
+                    #region 解释支付宝支付协议
+
+                    var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
+
+                    if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
+                    {
+                    }
+                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    {
+                        if (dic.ContainsKey("out_trade_no"))
+                        {
+                            orderSn = dic["out_trade_no"].ToString();
+                        }
+
+                        order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                        order.ClientUserName = dic["buyer_logon_id"];
+
+                        if (dic.ContainsKey("trade_status"))
+                        {
+                            string trade_status = dic["trade_status"].ToString();
+                            LogUtil.Info("解释支付宝订单异步通知PayResultNotify，订单状态：" + trade_status);
+                            if (trade_status == "TRADE_SUCCESS")
+                            {
+                                isPaySuccess = true;
+                            }
+                        }
+
+                    }
+
                     #endregion
                 }
 
@@ -553,7 +587,6 @@ namespace LocalS.BLL.Biz
 
                 if (order != null)
                 {
-
                     var mod_OrderNotifyLog = new OrderNotifyLog();
                     mod_OrderNotifyLog.Id = GuidUtil.New();
                     mod_OrderNotifyLog.MerchId = order.MerchId;
@@ -567,9 +600,9 @@ namespace LocalS.BLL.Biz
                     CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
                     CurrentDb.SaveChanges();
                 }
-
-                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
         public CustomJsonResult PayCompleted(string operater, string orderSn, DateTime completedTime)
         {

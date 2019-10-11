@@ -128,7 +128,7 @@ namespace MyWeiXinSdk
             return paySign;
         }
 
-        public static SortedDictionary<string, object> ToDictionary(string xml)
+        public static SortedDictionary<string, object> XmlToDictionary(string xml)
         {
             SortedDictionary<string, object> m_values = new SortedDictionary<string, object>();
             XmlDocument xmlDoc = new XmlDocument();

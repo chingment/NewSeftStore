@@ -306,7 +306,7 @@ namespace LocalS.BLL
         public bool CheckPayNotifySign(WxAppInfoConfig config, string xml)
         {
 
-            var dic1 = MyWeiXinSdk.CommonUtil.ToDictionary(xml);
+            var dic1 = MyWeiXinSdk.CommonUtil.XmlToDictionary(xml);
 
             if (dic1["sign"] == null)
             {
