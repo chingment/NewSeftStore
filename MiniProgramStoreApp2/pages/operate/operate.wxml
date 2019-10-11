@@ -26,6 +26,12 @@
             <view class="btn" bindtap="operate" data-reply-opval="{{item.opVal}}" data-reply-optype="{{item.opType}}" style="color:{{item.name.color}}; border:1px solid {{item.name.color}};"  >{{item.name.content}}</view>
           </view>
         </block>
+
+        
+         <view wx:if="{{result.isShowContactButton}}" class="btnbox">
+        <button class="btn-noboder btn"  open-type="contact">联系客服</button>
+        </view>
+
       </view>
       <view class="its-a">
         <block wx:for="{{result.fields}}" wx:key="item">

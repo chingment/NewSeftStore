@@ -115,7 +115,7 @@
         </view>
       </div>
 
-      <view class="col-nav-item" hover-class="none">
+      <button class="btn-noboder col-nav-item" hover-class="none" open-type="contact">
         <view class="item-left">
           <image src='/content/default/images/col_nav_icon_service.png'></image>
         </view>
@@ -125,7 +125,7 @@
         <view class='item-right'>
           <image src='/content/default/images/col_nav_right.png'></image>
         </view>
-      </view>
+      </button>
 
     </view>
   </view>

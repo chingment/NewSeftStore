@@ -49,6 +49,7 @@
   padding: 4px 20px;
   display: inline-block;
   font-size: 14px;
+  line-height: 1.1rem;
 }
 
 .operate-check .it-message {

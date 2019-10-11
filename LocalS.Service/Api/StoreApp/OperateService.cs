@@ -44,6 +44,7 @@ namespace LocalS.Service.Api.StoreApp
                 ret.Result = RetOperateResult.ResultType.Failure;
                 ret.Message = "系统找不到该订单号";
                 ret.IsComplete = true;
+                ret.IsShowContactButton = true;
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "查询支付结果失败：找不到该订单", ret);
             }
 
@@ -52,6 +53,7 @@ namespace LocalS.Service.Api.StoreApp
                 ret.Result = RetOperateResult.ResultType.Exception;
                 ret.Message = "处理超时......";
                 ret.IsComplete = true;
+                ret.IsShowContactButton = true;
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理超时......", ret);
             }
             else
@@ -132,25 +134,27 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetOperateResult();
 
 
+            var order = CurrentDb.Order.Where(m => m.Id == rup.Id).FirstOrDefault();
+
+            if (order == null)
+            {
+                ret.Result = RetOperateResult.ResultType.Failure;
+                ret.Message = "系统找不到该订单号";
+                ret.IsComplete = true;
+                ret.IsShowContactButton = true;
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "查询支付结果失败：找不到该订单", ret);
+            }
+
             if (rup.IsTimeOut)
             {
                 ret.Result = RetOperateResult.ResultType.Exception;
                 ret.Message = "处理超时......";
                 ret.IsComplete = true;
+                ret.IsShowContactButton = true;
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理超时......", ret);
             }
             else
             {
-                var order = CurrentDb.Order.Where(m => m.Id == rup.Id).FirstOrDefault();
-
-                if (order == null)
-                {
-                    ret.Result = RetOperateResult.ResultType.Failure;
-                    ret.Message = "系统找不到该订单号";
-                    ret.IsComplete = true;
-                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "查询支付结果失败：找不到该订单", ret);
-                }
-
                 ret.Result = RetOperateResult.ResultType.Tips;
                 ret.IsComplete = true;
                 ret.Message = "您已取消支付操作";

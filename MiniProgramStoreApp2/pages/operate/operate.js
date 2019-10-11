@@ -7,7 +7,8 @@ Page({
   data: {
     result: {
       isComplete: false,
-      message: "正在处理，请耐心等候"
+      message: "正在处理，请耐心等候",
+      isShowContactButton:false
     }
   },
   getResult: function (id, tp, caller,isTimeout) {

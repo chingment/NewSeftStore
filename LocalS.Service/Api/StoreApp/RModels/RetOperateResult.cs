@@ -21,6 +21,7 @@ namespace LocalS.Service.Api.StoreApp
         public List<FsField> Fields { get; set; }
         public List<FsButton> Buttons { get; set; }
 
+        public bool IsShowContactButton { get; set; }
         public enum ResultType
         {
             Unknown = 0,

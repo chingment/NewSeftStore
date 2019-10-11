@@ -92,6 +92,7 @@ page {
 .col-nav-item .item-middle {
   flex: 1;
   line-height: 64rpx;
+  text-align: left;
 }
 
 .col-nav-item .item-middle .title {
@@ -110,6 +111,9 @@ page {
   height: 16rpx;
   margin-left: 8rpx;
 }
+
+.btn-noboder{ border: none;background: none; }
+.btn-noboder::after{ border: none;background: none; }
 
 .its-form {
   padding: 0px 16px;
