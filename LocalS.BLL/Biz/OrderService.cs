@@ -506,7 +506,7 @@ namespace LocalS.BLL.Biz
                 if (content.IndexOf("appid") > -1)
                 {
                     #region 解释微信支付协议
-                    LogUtil.Info("解释微信PayResultNotify");
+                    LogUtil.Info("解释微信支付协议");
 
                     var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
                     if (dic.ContainsKey("out_trade_no"))
@@ -514,7 +514,7 @@ namespace LocalS.BLL.Biz
                         orderSn = dic["out_trade_no"].ToString();
                     }
 
-                    LogUtil.Info("解释微信PayResultNotify，订单号：" + orderSn);
+                    LogUtil.Info("解释微信支付协议，订单号：" + orderSn);
 
                     order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
@@ -523,7 +523,7 @@ namespace LocalS.BLL.Biz
                         if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
                         {
                             string trade_state = dic["trade_state"].ToString();
-                            LogUtil.Info("解释微信订单轮训状态PayResultNotify，订单状态：" + trade_state);
+                            LogUtil.Info("解释微信支付协议，（trade_state）订单状态：" + trade_state);
                             if (trade_state == "SUCCESS")
                             {
                                 isPaySuccess = true;
@@ -535,7 +535,7 @@ namespace LocalS.BLL.Biz
                         if (dic.ContainsKey("result_code"))
                         {
                             string result_code = dic["result_code"].ToString();
-                            LogUtil.Info("解释微信订单异步通知PayResultNotify，订单状态：" + result_code);
+                            LogUtil.Info("解释微信支付协议，（result_code）订单状态：" + result_code);
                             if (result_code == "SUCCESS")
                             {
                                 isPaySuccess = true;
@@ -547,11 +547,12 @@ namespace LocalS.BLL.Biz
                 else if (content.IndexOf("app_id") > -1)
                 {
                     #region 解释支付宝支付协议
-
+                    LogUtil.Info("解释支付宝支付协议");
                     var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
+
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
@@ -560,6 +561,8 @@ namespace LocalS.BLL.Biz
                             orderSn = dic["out_trade_no"].ToString();
                         }
 
+                        LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
+
                         order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
                         order.ClientUserName = dic["buyer_logon_id"];
@@ -567,7 +570,7 @@ namespace LocalS.BLL.Biz
                         if (dic.ContainsKey("trade_status"))
                         {
                             string trade_status = dic["trade_status"].ToString();
-                            LogUtil.Info("解释支付宝订单异步通知PayResultNotify，订单状态：" + trade_status);
+                            LogUtil.Info("解释支付宝支付协议，（trade_status）订单状态：" + trade_status);
                             if (trade_status == "TRADE_SUCCESS")
                             {
                                 isPaySuccess = true;
@@ -581,7 +584,7 @@ namespace LocalS.BLL.Biz
 
                 if (isPaySuccess)
                 {
-                    LogUtil.Info("解释微信PayResultNotify，支付成功");
+                    LogUtil.Info("解释支付协议结果，支付成功");
                     PayCompleted(operater, orderSn, DateTime.Now);
                 }
 

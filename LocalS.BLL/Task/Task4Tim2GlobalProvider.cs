@@ -76,6 +76,11 @@ namespace LocalS.BLL.Task
                                     string content = "";
                                     switch (order.PayCaller)
                                     {
+                                        case E_OrderPayCaller.AlipayByNative:
+                                            var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
+                                            content = SdkFactory.Alipay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
+                                            break;
+
                                         case E_OrderPayCaller.WechatByNative:
                                             var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                             content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);

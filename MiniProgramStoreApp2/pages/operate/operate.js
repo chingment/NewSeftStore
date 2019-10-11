@@ -10,14 +10,15 @@ Page({
       message: "正在处理，请耐心等候"
     }
   },
-  getResult: function (id, tp, caller) {
+  getResult: function (id, tp, caller,isTimeout) {
 
     var _this = this;
 
     apiOperate.result({
       id: id,
       type: tp,
-      caller: caller
+      caller: caller,
+      isTimeout: isTimeout
     }, {
         success: function (res) {
           if (res.result == 1) {
@@ -53,8 +54,9 @@ Page({
         end = end + 2 * Math.PI / n;
         ringMove(start, end);
         step++;
-        _this.getResult(_id, _type, _caller)
+        _this.getResult(_id, _type, _caller,false)
       } else {
+        _this.getResult(_id, _type, _caller, true)
         clearInterval(time);
       }
     };
@@ -116,7 +118,12 @@ Page({
 
     _this.countDown = time
   },
-
+  onHide: function () {
+    var _this = this
+    if (_this.countDown){
+    clearInterval(_this.countDown);
+    }
+  },
 
 
   /**

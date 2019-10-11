@@ -33,5 +33,11 @@ namespace LocalS.BLL
             return ret;
 
         }
+
+        public string OrderQuery(AlipayAppInfoConfig config, string orderSn)
+        {
+            AlipayUtil alipayUtil = new AlipayUtil(config);
+            return alipayUtil.OrderQuery(orderSn);
+        }
     }
 }
