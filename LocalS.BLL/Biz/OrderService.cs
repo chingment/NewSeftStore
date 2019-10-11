@@ -274,7 +274,7 @@ namespace LocalS.BLL.Biz
                         CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
                     }
 
-                    ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
+                    MqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
 
                     ret.OrderId = order.Id;
@@ -494,36 +494,61 @@ namespace LocalS.BLL.Biz
             return details;
         }
         private static readonly object lock_PayResultNotify = new object();
-        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content, out bool isPaySuccessed)
+        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content)
         {
+            LogUtil.Info("PayResultNotify");
             lock (lock_PayResultNotify)
             {
-                bool m_isPaySuccessed = false;
+
                 Order order = null;
                 string orderSn = "";
-                switch (order.PayWay)
+                bool isPaySuccess = false;
+                if (content.IndexOf("appid") > -1)
                 {
-                    case E_OrderPayWay.Wechat:
+                    #region 解释微信支付协议
+                    LogUtil.Info("解释微信PayResultNotify");
 
-                        var dicXml = MyWeiXinSdk.CommonUtil.ToDictionary(content);
+                    var dicXml = MyWeiXinSdk.CommonUtil.ToDictionary(content);
+                    if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
+                    {
+                        orderSn = dicXml["out_trade_no"].ToString();
+                    }
 
-                        if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
-                        {
-                            orderSn = dicXml["out_trade_no"].ToString();
-                        }
+                    LogUtil.Info("解释微信PayResultNotify，订单号：" + orderSn);
 
-                        order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+                    order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
+                    if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
+                    {
                         if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("trade_state"))
                         {
                             string trade_state = dicXml["trade_state"].ToString();
+                            LogUtil.Info("解释微信订单轮训状态PayResultNotify，订单状态：" + trade_state);
                             if (trade_state == "SUCCESS")
                             {
-                                m_isPaySuccessed = true;
-                                PayCompleted(operater, orderSn, DateTime.Now);
+                                isPaySuccess = true;
                             }
                         }
-                        break;
+                    }
+                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    {
+                        if (dicXml.ContainsKey("result_code"))
+                        {
+                            string result_code = dicXml["result_code"].ToString();
+                            LogUtil.Info("解释微信订单异步通知PayResultNotify，订单状态：" + result_code);
+                            if (result_code == "SUCCESS")
+                            {
+                                isPaySuccess = true;
+                            }
+                        }
+                    }
+                    #endregion
+                }
+
+                if (isPaySuccess)
+                {
+                    LogUtil.Info("解释微信PayResultNotify，支付成功");
+                    PayCompleted(operater, orderSn, DateTime.Now);
                 }
 
                 if (order != null)
@@ -542,8 +567,6 @@ namespace LocalS.BLL.Biz
                     CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
                     CurrentDb.SaveChanges();
                 }
-
-                isPaySuccessed = m_isPaySuccessed;
 
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             }
@@ -624,8 +647,8 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderPaySuccess, OperateStocks = operateStocks });
-
+                MqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderPaySuccess, OperateStocks = operateStocks });
+                Task4Factory.Global.Exit(order.Id);
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
             }
 
@@ -732,7 +755,7 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    ReidsMqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderCancle, OperateStocks = operateStocks });
+                    MqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderCancle, OperateStocks = operateStocks });
                     Task4Factory.Global.Exit(order.Id);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
@@ -764,8 +787,8 @@ namespace LocalS.BLL.Biz
                 switch (rop.PayCaller)
                 {
                     case E_OrderPayCaller.AlipayByNative:
-                        var alipayByNative_PaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayPaAppInfoConfig(order.MerchId);
-                        var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_PaAppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
+                        var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                         if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -778,8 +801,8 @@ namespace LocalS.BLL.Biz
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
                         break;
                     case E_OrderPayCaller.WechatByNative:
-                        var wechatByNative_PaAppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
-                        var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_PaAppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                        var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                         if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");

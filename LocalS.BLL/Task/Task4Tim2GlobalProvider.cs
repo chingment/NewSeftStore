@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -20,14 +21,14 @@ namespace LocalS.BLL.Task
     {
         private static readonly string key = "task4Tim2Global";
 
-        public void Enter(Task4TimType type,string id, DateTime expireTime, object data)
+        public void Enter(Task4TimType type, string id, DateTime expireTime, object data)
         {
             var d = new TaskData();
             d.Id = id;
             d.Type = type;
             d.ExpireTime = expireTime;
             d.Data = data;
-            RedisManager.Db.HashSetAsync(key, d.Id,d.ToJsonString(), StackExchange.Redis.When.Always);
+            RedisManager.Db.HashSetAsync(key, d.Id, d.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
         public void Exit(string id)
@@ -72,29 +73,30 @@ namespace LocalS.BLL.Task
                                 if (m.ExpireTime.AddMinutes(1) >= DateTime.Now)
                                 {
                                     //未过期查询支付状态
-                                    bool isPaySuccessed = false;
                                     string content = "";
                                     switch (order.PayCaller)
                                     {
                                         case E_OrderPayCaller.WechatByNative:
-                                            var wxPaAppInfoConfig = BizFactory.Merch.GetWxPaAppInfoConfig(order.MerchId);
-                                            content = SdkFactory.Wx.OrderQuery(wxPaAppInfoConfig, order.Sn);
+                                            var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                            content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);
                                             break;
                                         case E_OrderPayCaller.WechatByMp:
-                                            var wxMpAppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                            content = SdkFactory.Wx.OrderQuery(wxMpAppInfoConfig, order.Sn);
+                                            var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                            content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
                                             break;
                                     }
 
                                     LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
 
-                                    BizFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.OrderQuery, content, out isPaySuccessed);
+                                    MqFactory.Global.PushPayResultNotify(E_OrderNotifyLogNotifyFrom.OrderQuery, content);
 
-                                    if (isPaySuccessed)
-                                    {
-                                        Task4Factory.Global.Exit(m.Id);
-                                        LogUtil.Info(string.Format("订单号：{0},支付成功,删除缓存", order.Sn));
-                                    }
+                                    //BizFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.OrderQuery, content, out isPaySuccessed);
+
+                                    //if (isPaySuccessed)
+                                    //{
+                                    //    Task4Factory.Global.Exit(m.Id);
+                                    //    LogUtil.Info(string.Format("订单号：{0},支付成功,删除缓存", order.Sn));
+                                    //}
                                 }
                                 else
                                 {

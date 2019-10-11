@@ -1,12 +1,13 @@
-﻿using System;
+﻿using LocalS.BLL.Mq.MqByRedis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL.Mq.MqByRedis
+namespace LocalS.BLL.Mq
 {
-    public static class ReidsMqFactory
+    public class MqFactory
     {
         public static RedisMq4GlobalProvider Global
         {

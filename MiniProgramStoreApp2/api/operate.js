@@ -8,6 +8,7 @@ function result(urlParams, requestHandler) {
   lumos.getJson({
     url: config.apiUrl.operateResult,
     urlParams: urlParams,
+    isShowLoading:false,
     success: function (res) {
       requestHandler.success(res)
     }

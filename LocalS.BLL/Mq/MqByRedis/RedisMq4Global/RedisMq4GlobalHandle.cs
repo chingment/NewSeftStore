@@ -33,8 +33,14 @@ namespace LocalS.BLL.Mq.MqByRedis
                         switch (this.Type)
                         {
                             case MqMessageType.StockOperate:
-                                StockOperateModel t = Newtonsoft.Json.JsonConvert.DeserializeObject<StockOperateModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                StockOperate(GuidUtil.Empty(), t);
+                                LogUtil.Info("StockOperate");
+                                StockOperateModel t1 = Newtonsoft.Json.JsonConvert.DeserializeObject<StockOperateModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                StockOperate(GuidUtil.Empty(), t1);
+                                break;
+                            case MqMessageType.PayResultNotify:
+                                LogUtil.Info("PayResultNotify");
+                                PayResultNotifyModel t2 = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), t2.From, t2.Content);
                                 break;
                         }
 

@@ -9,6 +9,7 @@ namespace LocalS.BLL.Mq
     public enum MqMessageType
     {
         Unknow = 0,
-        StockOperate = 1
+        StockOperate = 1,
+        PayResultNotify = 2
     }
 }

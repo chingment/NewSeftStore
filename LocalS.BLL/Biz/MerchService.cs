@@ -29,26 +29,26 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
-        public WxAppInfoConfig GetWxPaAppInfoConfig(string merchId)
-        {
+        //public WxAppInfoConfig GetWxPaAppInfoConfig(string merchId)
+        //{
 
-            var config = new WxAppInfoConfig();
+        //    var config = new WxAppInfoConfig();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-            if (merch == null)
-                return null;
+        //    var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+        //    if (merch == null)
+        //        return null;
 
 
-            config.AppId = merch.WxPaAppId;
-            config.AppSecret = merch.WxPaAppSecret;
-            config.PayMchId = merch.WxPayMchId;
-            config.PayKey = merch.WxPayKey;
-            config.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+        //    config.AppId = merch.WxPaAppId;
+        //    config.AppSecret = merch.WxPaAppSecret;
+        //    config.PayMchId = merch.WxPayMchId;
+        //    config.PayKey = merch.WxPayKey;
+        //    config.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
 
-            return config;
-        }
+        //    return config;
+        //}
 
-        public AlipayAppInfoConfig GetAlipayPaAppInfoConfig(string merchId)
+        public AlipayAppInfoConfig GetAlipayMpAppInfoConfig(string merchId)
         {
 
             var config = new AlipayAppInfoConfig();
@@ -58,13 +58,14 @@ namespace LocalS.BLL.Biz
                 return null;
 
 
-            config.AppId = merch.AlipayPaAppId;
-            config.AppPrivateKey = merch.AlipayPaAppPrivateSecret;
+            config.AppId = merch.AlipayMpAppId;
+            config.AppPrivateKey = merch.AlipayMpAppPrivateSecret;
             config.AlipayPublicKey = merch.AlipayPublicSecret;
             config.PayResultNotifyUrl = merch.AlipayResultNotifyUrl;
 
             return config;
         }
+
 
         public string GetMachineName(string merchId, string machineId)
         {
