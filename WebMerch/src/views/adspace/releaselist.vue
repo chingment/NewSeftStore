@@ -18,22 +18,22 @@
           <img :src="scope.row.url" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column label="标题" prop="title" align="left" min-width="75%">
+      <el-table-column v-if="isDesktop" label="标题" prop="title" align="left" min-width="70%">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" align="left" min-width="10%">
+      <el-table-column label="状态" prop="status" align="left" min-width="15%">
         <template slot-scope="scope">
           <span :class="'enable-status enable-status-'+scope.row.status.value">{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布时间" prop="createTime" align="left" min-width="15%">
+      <el-table-column v-if="isDesktop" label="发布时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleDelete(row)">
             删除

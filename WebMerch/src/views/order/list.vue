@@ -44,17 +44,17 @@
           <span>{{ scope.row.sn }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="店铺" prop="storeName" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下单用户" prop="clientUserName" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.clientUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下单方式" prop="sourceName" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="下单方式" prop="sourceName" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.sourceName }}</span>
         </template>
@@ -69,12 +69,12 @@
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" align="left" min-width="15%">
+      <el-table-column v-if="isDesktop" label="状态" prop="status" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下单时间" prop="submitTime" align="left" min-width="15%">
+      <el-table-column v-if="isDesktop" label="下单时间" prop="submitTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.submitTime }}</span>
         </template>
@@ -235,7 +235,6 @@ export default {
         storeId: undefined,
         machineId: undefined
       },
-      isDesktop: this.$store.getters.isDesktop,
       dialogDetailsIsVisible: false,
       details: {
         sn: '',
@@ -249,7 +248,8 @@ export default {
         submitTime: '',
         status: { text: '' },
         details: undefined
-      }
+      },
+      isDesktop: this.$store.getters.isDesktop
     }
   },
   watch: {

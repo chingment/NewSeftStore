@@ -18,12 +18,12 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" prop="fullName" align="left" min-width="70%">
+      <el-table-column v-if="isDesktop" label="描述" prop="fullName" align="left" min-width="70%">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleRelease(row)">
             发布
