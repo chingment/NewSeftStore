@@ -1,4 +1,4 @@
-﻿using AlipaySdk;
+﻿using MyAlipaySdk;
 using LocalS.BLL.Biz;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class AlipaySdkProvider : BaseDbContext
+    public class MyAlipaySdkProvider : BaseDbContext
     {
         public UnifiedOrderResult UnifiedOrderByNative(AlipayAppInfoConfig config, string merchId,string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeiXinSdk.MsgPush
+namespace MyWeiXinSdk.MsgPush
 {
     public class TextMsg:BaseEventMsg
     {

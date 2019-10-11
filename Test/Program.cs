@@ -48,9 +48,9 @@ namespace Test
             //String encry = rsa.EncryptByPublicKey(input, publicKey);
 
 
-            AlipaySdk.AlipayUtil alipay = new AlipaySdk.AlipayUtil(null);
+            MyAlipaySdk.AlipayUtil alipay = new MyAlipaySdk.AlipayUtil(null);
 
-            var u = new AlipaySdk.UnifiedOrder();
+            var u = new MyAlipaySdk.UnifiedOrder();
 
             u.out_trade_no = "201503200101010011";
            // u.store_id = "sdasdd";

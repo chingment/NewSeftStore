@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using log4net;
 using System.Reflection;
 
-namespace WeiXinSdk
+namespace MyWeiXinSdk
 {
 
     public interface IWxApi
@@ -39,7 +39,7 @@ namespace WeiXinSdk
             string realServerUrl = request.ApiUrl;
             WebUtils webUtils = new WebUtils();
             string body = webUtils.DoGet(realServerUrl, request.GetUrlParameters(), null);
-            log.InfoFormat("WeiXinSdk-Get->{0}", body);
+            log.InfoFormat("MyWeiXinSdk-Get->{0}", body);
             T rsp = JsonConvert.DeserializeObject<T>(body);
 
 
@@ -64,9 +64,9 @@ namespace WeiXinSdk
                 postData = JsonConvert.SerializeObject(request.PostData);
             }
 
-            log.InfoFormat("WeiXinSdk-Post->{0}", postData);
+            log.InfoFormat("MyWeiXinSdk-Post->{0}", postData);
             responseString = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData);
-            log.InfoFormat("WeiXinSdk-Result->{0}", responseString);
+            log.InfoFormat("MyWeiXinSdk-Result->{0}", responseString);
             T rsp = JsonConvert.DeserializeObject<T>(responseString);
 
 

@@ -68,9 +68,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlipaySdk\AlipaySdk.csproj">
+    <ProjectReference Include="..\AlipaySdk\MyAlipaySdk.csproj">
       <Project>{28d06c14-41ed-4d4c-a221-d7b3a785640e}</Project>
-      <Name>AlipaySdk</Name>
+      <Name>MyAlipaySdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\LocalS.BLL\LocalS.BLL.csproj">
       <Project>{15d7ce8c-a100-4d87-a1c2-d76339e78ad6}</Project>

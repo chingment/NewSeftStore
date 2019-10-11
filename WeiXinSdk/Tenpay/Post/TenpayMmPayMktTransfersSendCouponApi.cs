@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeiXinSdk.Tenpay
+namespace MyWeiXinSdk.Tenpay
 {
     public class TenpayMmPayMktTransfersSendCouponApi : TenpayBasePostApi, ITenpayPostApi
     {

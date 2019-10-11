@@ -16,11 +16,11 @@ namespace LocalS.BLL
             }
         }
 
-        public static AlipaySdkProvider Alipay
+        public static MyAlipaySdkProvider Alipay
         {
             get
             {
-                return new AlipaySdkProvider();
+                return new MyAlipaySdkProvider();
             }
         }
 

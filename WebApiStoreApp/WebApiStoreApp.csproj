@@ -240,9 +240,9 @@
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WeiXinSdk\WeiXinSdk.csproj">
+    <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>
-      <Name>WeiXinSdk</Name>
+      <Name>MyWeiXinSdk</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

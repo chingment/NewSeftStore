@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace WeiXinSdk
+namespace MyWeiXinSdk
 {
     public static class OAuthApi
     {

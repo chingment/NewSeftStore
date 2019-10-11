@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeiXinSdk.MsgPush
+namespace MyWeiXinSdk.MsgPush
 {
     /// <summary>
     /// 事件类型枚举

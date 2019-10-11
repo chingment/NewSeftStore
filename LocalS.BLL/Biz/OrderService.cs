@@ -505,7 +505,7 @@ namespace LocalS.BLL.Biz
                 {
                     case E_OrderPayWay.Wechat:
 
-                        var dicXml = WeiXinSdk.CommonUtil.ToDictionary(content);
+                        var dicXml = MyWeiXinSdk.CommonUtil.ToDictionary(content);
 
                         if (dicXml.ContainsKey("out_trade_no") && dicXml.ContainsKey("result_code"))
                         {

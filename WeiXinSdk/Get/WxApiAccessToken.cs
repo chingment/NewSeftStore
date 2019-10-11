@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeiXinSdk
+namespace MyWeiXinSdk
 {
     public class WxApiAccessToken : IWxApiGetRequest<WxApiAccessTokenResult>
     {

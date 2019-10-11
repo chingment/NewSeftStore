@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeiXinSdk
+namespace MyWeiXinSdk
 {
     //{ "openId":"ol1Iu5VfH-UocXdmU2SDtLNO8W88","nickName":"邱庆文","gender":1,"language":"zh_CN","city":"Guangzhou","province":"Guangdong","country":"China","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/KDXdSp0mgZPfFu81OicXewUnDaYVGNkpwwSDqbyFE6m8BRv8OevTamibicBzvSzNWDAsdDIaaU9xS9r2ZvLBBjoSA/132","watermark":{ "timestamp":1538208985,"appid":"wxb01e0e16d57bd762"} }
 

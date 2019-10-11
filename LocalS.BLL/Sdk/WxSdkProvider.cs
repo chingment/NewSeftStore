@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using Newtonsoft.Json;
-using WeiXinSdk;
-using WeiXinSdk.Tenpay;
+using MyWeiXinSdk;
+using MyWeiXinSdk.Tenpay;
 using System.Security.Cryptography;
 using LocalS.BLL;
 using LocalS.BLL.Biz;
@@ -306,7 +306,7 @@ namespace LocalS.BLL
         public bool CheckPayNotifySign(WxAppInfoConfig config, string xml)
         {
 
-            var dic1 = WeiXinSdk.CommonUtil.ToDictionary(xml);
+            var dic1 = MyWeiXinSdk.CommonUtil.ToDictionary(xml);
 
             if (dic1["sign"] == null)
             {

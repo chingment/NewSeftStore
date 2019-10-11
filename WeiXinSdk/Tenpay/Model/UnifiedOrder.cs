@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeiXinSdk
+namespace MyWeiXinSdk
 {
     /// <summary>
     /// 微信统一接口请求实体对象

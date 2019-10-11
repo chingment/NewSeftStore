@@ -103,9 +103,9 @@
     <Compile Include="YbInsUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlipaySdk\AlipaySdk.csproj">
+    <ProjectReference Include="..\AlipaySdk\MyAlipaySdk.csproj">
       <Project>{28d06c14-41ed-4d4c-a221-d7b3a785640e}</Project>
-      <Name>AlipaySdk</Name>
+      <Name>MyAlipaySdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\LocalS.DAL\LocalS.DAL.csproj">
       <Project>{22abb57b-64ed-42fc-a64d-d603a90cb81b}</Project>
@@ -131,9 +131,9 @@
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WeiXinSdk\WeiXinSdk.csproj">
+    <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>
-      <Name>WeiXinSdk</Name>
+      <Name>MyWeiXinSdk</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

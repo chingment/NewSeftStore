@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WeiXinSdk;
+using MyWeiXinSdk;
 
 namespace LocalS.Service.Api.StoreApp
 {

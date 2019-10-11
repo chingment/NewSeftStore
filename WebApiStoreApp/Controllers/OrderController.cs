@@ -8,7 +8,7 @@ using System.Text;
 using System.Web;
 using LocalS.Service.Api.StoreApp;
 using LocalS.Entity;
-using WeiXinSdk;
+using MyWeiXinSdk;
 
 namespace WebApiStoreApp.Controllers
 {
@@ -73,7 +73,7 @@ namespace WebApiStoreApp.Controllers
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
             }
 
-            var dicXml = WeiXinSdk.CommonUtil.ToDictionary(content);
+            var dicXml = MyWeiXinSdk.CommonUtil.ToDictionary(content);
 
             if (!dicXml.ContainsKey("appid"))
             {

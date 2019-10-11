@@ -1,4 +1,4 @@
-﻿using WeiXinSdk;
+﻿using MyWeiXinSdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using log4net;
 using System.Reflection;
 using System.Xml;
 
-namespace WeiXinSdk.Tenpay
+namespace MyWeiXinSdk.Tenpay
 {
     public class TenpayRequest : ITenpayRequest
     {

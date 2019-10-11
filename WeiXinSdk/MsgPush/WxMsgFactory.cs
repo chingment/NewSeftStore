@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace WeiXinSdk.MsgPush
+namespace MyWeiXinSdk.MsgPush
 {
     public class WxMsgFactory
     {

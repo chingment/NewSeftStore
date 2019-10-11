@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace WeiXinSdk
+namespace MyWeiXinSdk
 {
     /// <summary>
     /// 文件元数据。
