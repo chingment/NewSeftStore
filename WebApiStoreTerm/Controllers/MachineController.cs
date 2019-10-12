@@ -20,7 +20,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetSlotStock([FromUri]RupMachineGetSlotStock rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.GetSlotStock(rup.MerchantId, rup.MachineId);
+            IResult result = StoreTermServiceFactory.Machine.GetSlotStock(rup.MachineId);
             return new OwnApiHttpResponse(result);
         }
 

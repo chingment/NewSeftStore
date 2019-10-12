@@ -8,7 +8,6 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RupMachineGetSlotStock
     {
-        public string MerchantId { get; set; }
         public string MachineId { get; set; }
     }
 }

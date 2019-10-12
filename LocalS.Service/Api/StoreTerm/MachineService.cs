@@ -142,12 +142,18 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult GetSlotStock(string merchId, string machineId)
+        public CustomJsonResult GetSlotStock(string machineId)
         {
             var ret = new RetMachineGetSlotStock();
 
+            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
+            if (machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+            }
+
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
 
             foreach (var item in machineStocks)
             {
@@ -165,7 +171,7 @@ namespace LocalS.Service.Api.StoreTerm
                     slotProductSkuModel.LockQuantity = item.LockQuantity;
                     slotProductSkuModel.SellQuantity = item.SellQuantity;
 
-                    ret.SlotProductSkus.Add(slotProductSkuModel);
+                    ret.SlotProductSkus.Add(item.SlotId, slotProductSkuModel);
                 }
             }
 
