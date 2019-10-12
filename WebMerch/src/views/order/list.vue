@@ -10,12 +10,21 @@
           <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">
+            <el-option
+              v-for="item in options_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
         </el-col>
       </el-row>
-
       <!-- // <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       // <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       // <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -105,7 +114,7 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <el-dialog title="订单详情" :visible.sync="dialogDetailsIsVisible" width="800px">
+    <el-dialog title="订单详情" :visible.sync="dialogDetailsIsVisible" :width="isDesktop==true?'800px':'90%'">
       <div>
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
@@ -130,51 +139,55 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="下单用户:" class="postInfo-container-item">
                     {{ details.clientUserName }}
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="下单方式:" class="postInfo-container-item">
                     {{ details.sourceName }}
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row>
 
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="下单时间:" class="postInfo-container-item">
                     {{ details.submitTime }}
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
+
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="原金额:" class="postInfo-container-item">
                     {{ details.originalAmount }}
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="优惠金额:" class="postInfo-container-item">
                     {{ details.discountAmount }}
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="支付金额:" class="postInfo-container-item">
                     {{ details.chargeAmount }}
                   </el-form-item>
                 </el-col>
               </el-row>
+
               <el-row>
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item label-width="80px" label="状态:" class="postInfo-container-item">
                     {{ details.status.text }}
                   </el-form-item>
                 </el-col>
-                <el-col :span="8" />
-                <el-col :span="8" />
+                <el-col :span="12" />
               </el-row>
             </div>
           </el-col>
@@ -264,6 +277,19 @@ export default {
         status: { text: '' },
         details: undefined
       },
+      options_status: [{
+        value: '2000',
+        label: '待支付'
+      }, {
+        value: '3000',
+        label: '已支付'
+      }, {
+        value: '4000',
+        label: '已完成'
+      }, {
+        value: '5000',
+        label: '已取消'
+      }],
       isDesktop: this.$store.getters.isDesktop
     }
   },
