@@ -1,11 +1,26 @@
 <template>
   <div id="productsku_list" class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        查询
-      </el-button>
+
+      <el-row :gutter="12">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
+        </el-col>
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
+        </el-col>
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            查询
+          </el-button>
+        </el-col>
+      </el-row>
+
+      <!-- // <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      // <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      // <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
+      //   查询
+      // </el-button> -->
     </div>
     <el-table
       :key="listKey"
@@ -39,7 +54,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="订单号" prop="sn" align="left" width="220">
+      <el-table-column label="订单号" prop="sn" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
           <span>{{ scope.row.sn }}</span>
         </template>
@@ -59,17 +74,17 @@
           <span>{{ scope.row.sourceName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" prop="quantity" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="数量" prop="quantity" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" prop="chargeAmount" align="left" min-width="10%">
+      <el-table-column label="金额" prop="chargeAmount" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="状态" prop="status" align="left" min-width="15%">
+      <el-table-column label="状态" prop="status" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.status.text }}</span>
         </template>

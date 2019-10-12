@@ -8,10 +8,17 @@
     </div>
 
     <div class="filter-container">
-      <el-input v-model="listQuery.productSkuName" placeholder="商品名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        查询
-      </el-button>
+
+      <el-row :gutter="12">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.productSkuName" style="width: 100%" placeholder="商品名称" va class="filter-item" @keyup.enter.native="handleFilter" />
+        </el-col>
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            查询
+          </el-button>
+        </el-col>
+      </el-row>
     </div>
     <el-row v-loading="loading" :gutter="20">
 
@@ -50,7 +57,7 @@
       <span>暂无数据</span>
     </div>
 
-    <el-dialog title="商品编辑" :visible.sync="dialogEditIsVisible" width="500px">
+    <el-dialog title="商品库存编辑" :visible.sync="dialogEditIsVisible" width="500px">
 
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称">
@@ -290,10 +297,5 @@ color: #e6a23c;
           background-color: #e6a23c
         }
 
-    .el-input-group__prepend {
-    width: 40px !important;
-    text-align: center !important;
-    padding: 0 !important;
-  }
 }
 </style>

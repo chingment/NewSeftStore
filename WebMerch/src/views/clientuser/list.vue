@@ -1,10 +1,18 @@
 <template>
   <div id="user_list" class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.userName" placeholder="用户名" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        查询
-      </el-button>
+
+      <el-row :gutter="12">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.userName" style="width: 100%" placeholder="用户名" va class="filter-item" @keyup.enter.native="handleFilter" />
+        </el-col>
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            查询
+          </el-button>
+        </el-col>
+      </el-row>
+
     </div>
     <el-table
       :key="listKey"

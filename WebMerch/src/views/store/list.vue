@@ -6,10 +6,17 @@
       <span class="circle-status circle-status-2" /> <span class="name">正常</span>
     </div>
     <div class="filter-container">
-      <el-input v-model="listQuery.name" placeholder="店铺名称" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        查询
-      </el-button>
+
+      <el-row :gutter="12">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.name" style="width: 100%" placeholder="店铺名称" va class="filter-item" @keyup.enter.native="handleFilter" />
+        </el-col>
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            查询
+          </el-button>
+        </el-col>
+      </el-row>
     </div>
     <el-row v-loading="loading" :gutter="20">
 
