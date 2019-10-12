@@ -19,7 +19,6 @@ namespace WebApiStoreApp.Controllers
         public OwnApiHttpResponse Confirm([FromBody]RopOrderConfirm rop)
         {
             IResult result = StoreAppServiceFactory.Order.Confrim(this.CurrentUserId, this.CurrentUserId, rop);
-
             return new OwnApiHttpResponse(result);
         }
 
@@ -38,16 +37,17 @@ namespace WebApiStoreApp.Controllers
         }
 
         [HttpGet]
-        public CustomJsonResult Details(string id)
+        public OwnApiHttpResponse Details(string id)
         {
-            return StoreAppServiceFactory.Order.Details(this.CurrentUserId, this.CurrentUserId, id);
+            IResult result = StoreAppServiceFactory.Order.Details(this.CurrentUserId, this.CurrentUserId, id);
+            return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public CustomJsonResult Cancle(RopOrderCancle rop)
+        public OwnApiHttpResponse Cancle(RopOrderCancle rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
-            return StoreAppServiceFactory.Order.Cancle(this.CurrentUserId, this.CurrentUserId, rop);
+            IResult result = StoreAppServiceFactory.Order.Cancle(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
