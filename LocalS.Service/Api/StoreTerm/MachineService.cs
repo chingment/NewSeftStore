@@ -142,9 +142,10 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult GetSlotSkusStock(string merchId, string machineId)
+        public CustomJsonResult GetSlotStock(string merchId, string machineId)
         {
-            var slotProductSkuModels = new List<SlotProductSkuModel>();
+            var ret = new RetMachineGetSlotStock();
+
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
 
@@ -164,12 +165,12 @@ namespace LocalS.Service.Api.StoreTerm
                     slotProductSkuModel.LockQuantity = item.LockQuantity;
                     slotProductSkuModel.SellQuantity = item.SellQuantity;
 
-                    slotProductSkuModels.Add(slotProductSkuModel);
+                    ret.SlotProductSkus.Add(slotProductSkuModel);
                 }
             }
 
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", slotProductSkuModels);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)

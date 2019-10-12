@@ -18,9 +18,9 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetSlotSkuStock([FromUri]RupMachineGetSlotSkuStock rup)
+        public OwnApiHttpResponse GetSlotStock([FromUri]RupMachineGetSlotStock rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.GetSlotSkusStock(rup.MerchantId, rup.MachineId);
+            IResult result = StoreTermServiceFactory.Machine.GetSlotStock(rup.MerchantId, rup.MachineId);
             return new OwnApiHttpResponse(result);
         }
 

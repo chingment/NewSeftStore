@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupMachineGetSlotSkuStock
+    public class RupMachineGetSlotStock
     {
         public string MerchantId { get; set; }
-        public string StoreId { get; set; }
         public string MachineId { get; set; }
     }
 }
