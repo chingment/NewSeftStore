@@ -33,10 +33,10 @@ namespace LocalS.Service.Api.InsApp
             string url = string.Format("https://www.ybinsure.com/spa/newCarTest/autoLogin?channelCode=QXT-001&sign={0}", System.Web.HttpUtility.UrlEncode(sysAgentUser.YbInsureSign));
             LogUtil.Info("UrlL:" + url);
 
-            lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车险报价", OpType = "HURL", OpContent = url });
+            //lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车险报价", OpType = "HURL", OpContent = url });
 
-            //lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车险报价", OpType = "HURL", OpContent = string.Format("http://weixin.implus100.com/agent-new/channel_redirect.jsp?channelAccount=ff8080816be268a8016be3f449d10076&userId={0}&type=insure", uId) });
-            //lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车险订单", OpType = "HURL", OpContent = string.Format("http://weixin.implus100.com/agent-new/channel_redirect.jsp?channelAccount=ff8080816be268a8016be3f449d10076&userId={0}&type=order", uId) });
+            lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车险报价", OpType = "HURL", OpContent = string.Format("http://weixin.implus100.com/agent-new/channel_redirect.jsp?channelAccount=ff8080816be268a8016be3f449d10076&userId={0}&type=insure", uId) });
+            lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车险订单", OpType = "HURL", OpContent = string.Format("http://weixin.implus100.com/agent-new/channel_redirect.jsp?channelAccount=ff8080816be268a8016be3f449d10076&userId={0}&type=order", uId) });
             lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "理赔服务", OpType = "PURL", OpContent = "/Error/NonOpen" });
             lNavGridByInsCar.Items.Add(new LNavGridItemModel { Title = "车辆定损", OpType = "PURL", OpContent = "/Error/NonOpen" });
 

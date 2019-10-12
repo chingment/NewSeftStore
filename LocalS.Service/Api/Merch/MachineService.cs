@@ -137,7 +137,7 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId &&
                          u.RefType == E_SellChannelRefType.Machine &&
                          u.RefId == rup.MachineId
-                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
+                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.RefType, u.SlotId, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
 
             int total = query.Count();
 
@@ -159,19 +159,21 @@ namespace LocalS.Service.Api.Merch
                 var prdProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.PrdProductSkuId);
                 if (prdProductSku != null)
                 {
-                    var productSkuModel = new ProductSkuModel();
-                    productSkuModel.Id = prdProductSku.Id;
-                    productSkuModel.Name = prdProductSku.Name;
-                    productSkuModel.DisplayImgUrls = prdProductSku.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                    productSkuModel.MainImgUrl = prdProductSku.MainImgUrl;
-                    productSkuModel.BriefDes = prdProductSku.BriefDes;
-                    productSkuModel.DetailsDes = prdProductSku.DetailsDes;
-                    productSkuModel.SumQuantity = item.SumQuantity;
-                    productSkuModel.LockQuantity = item.LockQuantity;
-                    productSkuModel.SellQuantity = item.SellQuantity;
-                    productSkuModel.SalePrice = item.SalePrice;
-                    productSkuModel.IsOffSell = item.IsOffSell;
-                    olist.Add(productSkuModel);
+                    olist.Add(new
+                    {
+                        Id = prdProductSku.Id,
+                        Name = prdProductSku.Name,
+                        DisplayImgUrls = prdProductSku.DisplayImgUrls,
+                        MainImgUrl = prdProductSku.MainImgUrl,
+                        BriefDes = prdProductSku.BriefDes,
+                        DetailsDes = prdProductSku.DetailsDes,
+                        SumQuantity = item.SumQuantity,
+                        LockQuantity = item.LockQuantity,
+                        SellQuantity = item.SellQuantity,
+                        SalePrice = item.SalePrice,
+                        IsOffSell = item.IsOffSell,
+                        SlotId = item.SlotId
+                    });
                 }
             }
 
@@ -179,6 +181,37 @@ namespace LocalS.Service.Api.Merch
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult ManageStockEditStock(string operater, string merchId, RopMachineEditStock rop)
+        {
+            var result = new CustomJsonResult();
+
+
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && m.PrdProductSkuId == rop.ProductSkuId).ToList();
+
+            foreach (var sellChannelStock in sellChannelStocks)
+            {
+                if (sellChannelStock.SlotId == rop.SlotId)
+                {
+                    sellChannelStock.LockQuantity = rop.LockQuantity;
+                    sellChannelStock.SellQuantity = rop.SellQuantity;
+                    sellChannelStock.SumQuantity = rop.SellQuantity + rop.LockQuantity;
+                }
+
+                sellChannelStock.IsOffSell = rop.IsOffSell;
+                sellChannelStock.SalePrice = rop.SalePrice;
+            }
+
+            CacheServiceFactory.ProductSku.RemoveInfo(rop.ProductSkuId);
+
+            CurrentDb.SaveChanges();
+
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }

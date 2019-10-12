@@ -48,11 +48,20 @@ export function manageStockGetStockList(params) {
   })
 }
 
+export function manageStockEditStock(data) {
+  return request({
+    url: '/machine/manageStockEditStock',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   edit: edit,
   initManage: initManage,
   initManageBaseInfo: initManageBaseInfo,
   initManageStock: initManageStock,
-  manageStockGetStockList: manageStockGetStockList
+  manageStockGetStockList: manageStockGetStockList,
+  manageStockEditStock: manageStockEditStock
 }

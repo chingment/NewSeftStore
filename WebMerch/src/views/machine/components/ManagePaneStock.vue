@@ -33,8 +33,8 @@
           </div>
           <div class="below">
             <div class="below-left">
-              <el-button type="success">置满</el-button>
-              <el-button type="warning">沽清</el-button>
+              <!-- <el-button type="success">置满</el-button>
+              <el-button type="warning">沽清</el-button> -->
             </div>
             <div class="below-right">
               <el-button type="primary" @click="dialogEditOpen(productSku)">编辑</el-button>
@@ -52,6 +52,38 @@
 
     <el-dialog title="商品编辑" :visible.sync="dialogEditIsVisible" width="500px">
 
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="名称">
+          <span>{{ form.name }}</span>
+        </el-form-item>
+        <el-form-item label="图片">
+
+          <img
+            :src="form.mainImgUrl"
+            alt=""
+            style="width:100px;height:100px"
+          >
+        </el-form-item>
+        <el-form-item
+          label="
+            可售库存"
+          prop="sellQuantity"
+        >
+          <el-input-number v-model="form.sellQuantity" :min="0" :max="20" label="描述文字" style="width:160px" />
+        </el-form-item>
+        <el-form-item label="锁定库存" prop="lockQuantity">
+          <el-input-number v-model="form.lockQuantity" :min="0" :max="20" label="描述文字" style="width:160px" />
+        </el-form-item>
+        <el-form-item label="销售价" prop="salePrice">
+          <el-input v-model="form.salePrice" style="width:160px" class="ip-prepend">
+            <template slot="prepend">￥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="下架" prop="isOffSell">
+          <el-checkbox v-model="form.isOffSell" />
+        </el-form-item>
+      </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogEditIsVisible = false">
           取消
@@ -66,9 +98,11 @@
 </template>
 
 <script>
-import { initManageStock, manageStockGetStockList } from '@/api/machine'
+import { MessageBox } from 'element-ui'
+import { initManageStock, manageStockGetStockList, manageStockEditStock } from '@/api/machine'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam } from '@/utils/commonUtil'
+import fromReg from '@/utils/formReg'
 export default {
   name: 'ManagePaneStock',
   components: { Pagination },
@@ -83,7 +117,22 @@ export default {
         machineId: undefined
       },
       listData: [],
-      dialogEditIsVisible: false
+      dialogEditIsVisible: false,
+      rules: {
+        id: [{ required: true, min: 1, max: 200, message: '', trigger: 'change' }],
+        salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }]
+      },
+      form: {
+        productSkuId: '',
+        name: '',
+        sellQuantity: 0,
+        lockQuantity: 0,
+        salePrice: 0,
+        isOffSell: false,
+        mainImgUrl: '',
+        machineId: '',
+        slotId: ''
+      }
     }
   },
   watch: {
@@ -127,9 +176,35 @@ export default {
     },
     dialogEditOpen(productSku) {
       this.dialogEditIsVisible = true
+
+      this.form.productSkuId = productSku.id
+      this.form.name = productSku.name
+      this.form.sellQuantity = productSku.sellQuantity
+      this.form.lockQuantity = productSku.lockQuantity
+      this.form.salePrice = productSku.salePrice
+      this.form.isOffSell = productSku.isOffSell
+      this.form.mainImgUrl = productSku.mainImgUrl
+      this.form.slotId = productSku.slotId
+      this.form.machineId = getUrlParam('id')
     },
     handleEdit() {
-
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            manageStockEditStock(this.form).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.dialogEditIsVisible = false
+                this.getListData(this.listQuery)
+              }
+            })
+          })
+        }
+      })
     }
   }
 }
@@ -214,5 +289,11 @@ color: #e6a23c;
         .sumQuantity-bg{
           background-color: #e6a23c
         }
+
+    .el-input-group__prepend {
+    width: 40px !important;
+    text-align: center !important;
+    padding: 0 !important;
+  }
 }
 </style>
