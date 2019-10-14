@@ -111,18 +111,14 @@ namespace LocalS.Service.Api.StoreTerm
                 prdKindModel.Id = prdKind.Id;
                 prdKindModel.Name = prdKind.Name;
 
-                var products = StoreTermServiceFactory.Product.GetPageList(0, 10, merchId, storeId, machineId, prdKind.Id);
+                var productIds = CurrentDb.PrdProductKind.Where(m => m.Id == prdKind.Id).Select(m => m.PrdProductId).ToList();
 
-                if (products != null)
+                if (productIds != null)
                 {
-                    if (products.Items != null)
+                    if (productIds.Count > 0)
                     {
-                        if (products.Items.Count > 0)
-                        {
-                            prdKindModel.Childs = products.Items.Select(m => m.Id).ToList();
-
-                            productKindModels.Add(prdKindModel);
-                        }
+                        prdKindModel.Childs = productIds;
+                        productKindModels.Add(prdKindModel);
                     }
                 }
 

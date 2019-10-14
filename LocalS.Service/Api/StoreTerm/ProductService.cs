@@ -11,18 +11,6 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ProductService : BaseDbContext
     {
-        public CustomJsonResult List(string operater, string clientUserId, RupProductList rup)
-        {
-            var result = new CustomJsonResult();
-
-            var pageEntiy = GetPageList(rup.PageIndex, rup.PageSize, rup.MachineId, rup.StoreId, rup.MachineId, rup.KindId);
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntiy);
-
-            return result;
-        }
-
-
         public PageEntity<PrdProductModel2> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string machineId, string kindId)
         {
             var pageEntiy = new PageEntity<PrdProductModel2>();
@@ -30,16 +18,12 @@ namespace LocalS.Service.Api.StoreTerm
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
 
-            var query = (from m in CurrentDb.SellChannelStock
-
-                         where (m.MerchId == merchId &&
-             m.RefId == machineId &&
-             m.RefType == Entity.E_SellChannelRefType.Machine)
-
-                         orderby m.CreateTime //默认升序ascending,降序descending
-
+            var query = (from m in CurrentDb.SellChannelStock  where (
+                         m.MerchId== merchId &&
+                         m.RefId == machineId && 
+                         m.RefType == Entity.E_SellChannelRefType.Machine)
+                         orderby m.CreateTime
                          select new { m.PrdProductId }).Distinct();
-
 
             if (!string.IsNullOrEmpty(kindId))
             {
