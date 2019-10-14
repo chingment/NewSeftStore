@@ -18,6 +18,8 @@ namespace LocalS.Service.Api.StoreTerm
         public string BriefDes { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }
+
+        public decimal ShowPrice { get; set; }
         public bool IsShowPrice { get; set; }
         public string SpecDes { get; set; }
         public bool IsOffSell { get; set; }

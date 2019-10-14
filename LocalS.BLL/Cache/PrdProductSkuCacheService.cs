@@ -35,8 +35,15 @@ namespace LocalS.BLL
         {
             var productSkuInfoAndStockModel = new ProductSkuInfoAndStockModel();
 
+
             var productSkuInfo = GetInfo(merchId, productSkuId);
+            if (productSkuInfo == null)
+            {
+                return null;
+            }
+
             var productSkuStock = GetStock(merchId, productSkuId);
+
 
             productSkuInfoAndStockModel.Id = productSkuInfo.Id;
             productSkuInfoAndStockModel.ProductId = productSkuInfo.PrdProductId;
@@ -49,12 +56,15 @@ namespace LocalS.BLL
 
             productSkuInfoAndStockModel.Stocks = productSkuStock;
 
-            if (productSkuStock.Count > 0)
+            if (productSkuStock != null)
             {
-                productSkuInfoAndStockModel.SalePrice = productSkuStock[0].SalePrice;
-                productSkuInfoAndStockModel.SalePriceByVip = productSkuStock[0].SalePriceByVip;
-                productSkuInfoAndStockModel.IsShowPrice = false;
-                productSkuInfoAndStockModel.IsOffSell = productSkuStock[0].IsOffSell;
+                if (productSkuStock.Count > 0)
+                {
+                    productSkuInfoAndStockModel.SalePrice = productSkuStock[0].SalePrice;
+                    productSkuInfoAndStockModel.SalePriceByVip = productSkuStock[0].SalePriceByVip;
+                    productSkuInfoAndStockModel.IsShowPrice = false;
+                    productSkuInfoAndStockModel.IsOffSell = productSkuStock[0].IsOffSell;
+                }
             }
 
             return productSkuInfoAndStockModel;
