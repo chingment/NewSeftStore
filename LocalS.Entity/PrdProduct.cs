@@ -13,7 +13,7 @@ namespace LocalS.Entity
         public string PrdKindIds { get; set; }
         public string PrdSubjectIds { get; set; }
         public string Name { get; set; }
-        public string BarCode { get; set; }
+        //public string BarCode { get; set; }
         public string PinYinName{ get; set; }
         public string PinYinIndex { get; set; }
         public string MainImgUrl { get; set; }

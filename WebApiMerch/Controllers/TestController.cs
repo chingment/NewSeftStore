@@ -15,8 +15,7 @@ namespace WebApiMerch.Controllers
             RopPrdProductAdd rop  = new RopPrdProductAdd();
             rop.Name = "dasddd";
             rop.DetailsDes = "Das";
-            rop.BarCode = "Dadsad";
-            
+
             MerchServiceFactory.PrdProduct.Add("das", "2", rop);
             IResult result = new CustomJsonResult { Result = ResultType.Success, Code = ResultCode.Success, Data = { } };
 

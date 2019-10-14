@@ -10,7 +10,6 @@ namespace LocalS.Service.Api.Merch
     public class RopPrdProductAdd
     {
         public string Name { get; set; }
-        public string BarCode { get; set; }
         public string SimpleCode { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public string DetailsDes { get; set; }
@@ -23,6 +22,7 @@ namespace LocalS.Service.Api.Merch
         public List<Sku> Skus { get; set; }
         public class Sku
         {
+            public string BarCode { get; set; }
             public string SpecDes { get; set; }
 
             public decimal SalePrice { get; set; }

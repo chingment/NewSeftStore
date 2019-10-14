@@ -177,11 +177,12 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
+
+
                 var prdProduct = new PrdProduct();
                 prdProduct.Id = GuidUtil.New();
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name;
-                prdProduct.BarCode = rop.BarCode;
                 prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
                 prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
@@ -193,10 +194,19 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var sku in rop.Skus)
                 {
+                    var isExtitBarCode = CurrentDb.PrdProductSku.Where(m => m.BarCode == sku.BarCode).FirstOrDefault();
+                    if (isExtitBarCode != null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该条形码商品已经存在");
+                    }
+
                     var prdProductSku = new PrdProductSku();
                     prdProductSku.Id = GuidUtil.New();
                     prdProductSku.MerchId = prdProduct.MerchId;
                     prdProductSku.PrdProductId = prdProduct.Id;
+                    prdProductSku.BarCode = sku.BarCode;
+                    prdProductSku.PinYinName = prdProduct.PinYinName;
+                    prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                     prdProductSku.Name = prdProduct.Name;
                     prdProductSku.SpecDes = sku.SpecDes;
                     prdProductSku.SalePrice = sku.SalePrice;
@@ -267,7 +277,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var prdProductSku in prdProductSkus)
                 {
-                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, SpecDes = prdProductSku.SpecDes });
+                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, SpecDes = prdProductSku.SpecDes });
                 }
             }
 
@@ -313,9 +323,16 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var sku in rop.Skus)
                 {
+                    var isExtitBarCode = CurrentDb.PrdProductSku.Where(m => m.Id != sku.Id && m.BarCode == sku.BarCode).FirstOrDefault();
+                    if (isExtitBarCode != null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该条形码商品已经存在");
+                    }
+
                     var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (prdProductSku != null)
                     {
+                        prdProductSku.BarCode = sku.BarCode;
                         prdProductSku.SpecDes = sku.SpecDes;
                         prdProductSku.SalePrice = sku.SalePrice;
                         prdProductSku.Mender = operater;

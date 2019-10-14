@@ -279,10 +279,10 @@
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
     <Compile Include="Api\StoreTerm\Models\PrdProductModel2.cs" />
-    <Compile Include="Api\StoreTerm\Models\SlotProductSkuModel.cs" />
+    <Compile Include="Api\StoreTerm\Models\SlotStockModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductService.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetMachineGetSlotStock.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RetMachineGetSlotStocks.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderDetails.cs" />
@@ -296,7 +296,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupBaseGetList.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RupMachineGetSlotStock.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupMachineSlotStocks.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPayStatusQuery.cs" />

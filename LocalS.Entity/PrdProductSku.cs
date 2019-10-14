@@ -11,11 +11,13 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
+        public string BarCode { get; set; }
+        public string PinYinName { get; set; }
+        public string PinYinIndex { get; set; }
         public string PrdProductId { get; set; }
         public string Name { get; set; }
         public decimal SalePrice { get; set; }
         public string SpecDes { get; set; }
-
         public bool IsRef { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

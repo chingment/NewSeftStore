@@ -4,6 +4,9 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
+      <el-form-item label="条形码" prop="barCode">
+        <el-input v-model="form.singleSkuBarCode" />
+      </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
@@ -109,6 +112,7 @@ export default {
       form: {
         id: '',
         name: '',
+        barCode: '',
         kindIds: [],
         subjectIds: [],
         detailsDes: '',
@@ -119,6 +123,7 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        singleSkuBarCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
@@ -178,7 +183,9 @@ export default {
           this.form.detailsDes = d.detailsDes
           this.form.briefDes = d.briefDes
           this.form.displayImgUrls = d.displayImgUrls
+
           this.form.singleSkuId = d.skus[0].id
+          this.form.singleSkuBarCode = d.skus[0].barCode
           this.form.singleSkuSalePrice = d.skus[0].salePrice
           this.form.singleSkuSpecDes = d.skus[0].specDes
 
@@ -197,7 +204,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           var skus = []
-          skus.push({ id: this.form.singleSkuId, specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice })
+          skus.push({ id: this.form.singleSkuId, specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode })
           var _form = {}
           _form.id = this.form.id
           _form.name = this.form.name

@@ -23,7 +23,7 @@ namespace LocalS.BLL
     {
         private static readonly string redis_key_productSku_info = "info:ProductSku";
         private static readonly string redis_key_productSku_stock = "stock:ProductSku:{0}";
-
+        private static readonly string redis_key_productSku_search = "search:ProductSku:{0}";
         public void RemoveInfo(string productSkuId)
         {
             RedisHashUtil.Remove(redis_key_productSku_info, productSkuId);
@@ -82,6 +82,8 @@ namespace LocalS.BLL
                 prdProductSkuModel.DetailsDes = prdProduct.DetailsDes.NullToEmpty();
                 prdProductSkuModel.BriefDes = prdProduct.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
+
+                //RedisManager.Db.HashSetAsync(string.Format(redis_key_productSku_search,prdProductSkuByDb.MerchId, "barcode:" + prdProductSkuModel.BarCode + ",name:" + sku.Name + ",simplecode:" + p, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
 
                 RedisManager.Db.HashSetAsync(redis_key_productSku_info, productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
             }

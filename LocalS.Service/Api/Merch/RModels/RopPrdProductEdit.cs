@@ -40,6 +40,8 @@ namespace LocalS.Service.Api.Merch
             public string SpecDes { get; set; }
 
             public decimal SalePrice { get; set; }
+
+            public string BarCode { get; set; }
         }
     }
 }
