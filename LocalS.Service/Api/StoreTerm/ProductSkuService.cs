@@ -17,11 +17,11 @@ namespace LocalS.Service.Api.StoreTerm
             var ret = new RetProductSkuSearch();
 
             var machine = CurrentDb.Machine.Where(m => m.Id == rup.MachineId).FirstOrDefault();
+
             if (result == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
             }
-
 
             ret.ProductSkus = CacheServiceFactory.ProductSku.Search(machine.MerchId, rup.Key);
 

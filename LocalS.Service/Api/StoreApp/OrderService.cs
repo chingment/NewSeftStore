@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using MyWeiXinSdk;
+using LocalS.BLL.Biz;
 
 namespace LocalS.Service.Api.StoreApp
 {
@@ -98,11 +99,12 @@ namespace LocalS.Service.Api.StoreApp
             decimal skuAmountByOriginal = 0;//原总价
             decimal skuAmountByMemebr = 0;//普通用户总价
             decimal skuAmountByVip = 0;//会员总价
-            Store store;
+
+            StoreInfoModel store;
 
             if (string.IsNullOrEmpty(rop.OrderId))
             {
-                store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+                store = BizFactory.Store.GetOne(rop.StoreId);
 
                 foreach (var item in rop.ProductSkus)
                 {
@@ -140,12 +142,9 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不在就绪支付状态");
                 }
 
+                store = BizFactory.Store.GetOne(order.StoreId);
 
                 var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rop.OrderId).ToList();
-
-                var storeId = orderDetailsChilds[0].StoreId;
-
-                store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
                 foreach (var item in orderDetailsChilds)
                 {

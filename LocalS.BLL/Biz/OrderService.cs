@@ -42,7 +42,8 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
                 }
 
-                var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+                var store = BizFactory.Store.GetOne(rop.StoreId);
+
                 if (store == null)
                 {
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);

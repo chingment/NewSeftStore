@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
+using LocalS.BLL.Biz;
 
 namespace LocalS.Service.Api.StoreApp
 {
@@ -15,9 +16,10 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == rup.MerchId && m.IsDelete == false).ToList();
+            var stores = BizFactory.Store.GetAll(rup.MerchId);
 
             var storeModels = new List<StoreModel>();
+
             foreach (var m in stores)
             {
                 double distance = 0;

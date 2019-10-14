@@ -99,7 +99,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    var storeInfo = BizFactory.Store.GetInfo(rop.StoreId);
+                    var store = BizFactory.Store.GetOne(rop.StoreId);
 
                     foreach (var item in rop.ProductSkus)
                     {
@@ -120,14 +120,14 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(storeInfo.MerchId, item.Id);
+                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, item.Id);
 
                                 if (clientCart == null)
                                 {
                                     clientCart = new ClientCart();
                                     clientCart.Id = GuidUtil.New();
                                     clientCart.ClientUserId = clientUserId;
-                                    clientCart.MerchId = storeInfo.MerchId;
+                                    clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
                                     clientCart.PrdProductId = productSku.PrdProductId;
                                     clientCart.PrdProductSkuId = item.Id;

@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -134,7 +135,7 @@ namespace LocalS.Service.Api.Merch
 
                 if (adSpace.BelongType == E_AdSpaceBelongType.App)
                 {
-                    var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                    var stores = BizFactory.Store.GetAll(merchId);
 
                     foreach (var store in stores)
                     {
@@ -148,7 +149,7 @@ namespace LocalS.Service.Api.Merch
                     foreach (var merchMachine in merchMachines)
                     {
                         string storeName = "未绑定店铺";
-                        var store = CurrentDb.Store.Where(m => m.Id == merchMachine.StoreId).FirstOrDefault();
+                        var store = BizFactory.Store.GetOne(merchMachine.StoreId);
                         if (store != null)
                         {
                             storeName = store.Name;

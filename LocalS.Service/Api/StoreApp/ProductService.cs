@@ -31,7 +31,8 @@ namespace LocalS.Service.Api.StoreApp
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
 
-            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var store = BizFactory.Store.GetOne(storeId);
+
 
             var machineIds = CurrentDb.MerchMachine.Where(m => m.StoreId == storeId).Select(m => m.MachineId).ToArray();
 
@@ -93,7 +94,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+            var store = BizFactory.Store.GetOne(rup.StoreId);
 
             var productModel = CacheServiceFactory.Product.GetInfo(store.MerchId, rup.Id);
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);

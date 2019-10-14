@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
 
-            var store = CurrentDb.Store.Where(m => m.Id == machine.StoreId).FirstOrDefault();
+            var store = BizFactory.Store.GetOne(machine.StoreId);
 
             if (store == null)
             {

@@ -68,7 +68,7 @@
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
-    <Compile Include="Biz\Models\StoreModel.cs" />
+    <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\RModels\RetBackgroundJobGetDetails.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />

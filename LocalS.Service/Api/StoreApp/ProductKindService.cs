@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var prdKindModels = new List<PrdKindModel>();
 
-            var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+            var store = BizFactory.Store.GetOne(rup.StoreId);
 
             var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 

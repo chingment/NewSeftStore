@@ -9,11 +9,17 @@ namespace LocalS.BLL.Biz
     public class StoreService : BaseDbContext
     {
 
-        public StoreModel GetInfo(string id)
+        public StoreInfoModel GetOne(string id)
         {
-            var model = new StoreModel();
+            var model = new StoreInfoModel();
+
+            return model;
+        }
 
 
+        public List<StoreInfoModel> GetAll(string merchId)
+        {
+            var model = new List<StoreInfoModel>();
 
             return model;
         }

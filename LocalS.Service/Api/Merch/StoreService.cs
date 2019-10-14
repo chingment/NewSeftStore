@@ -127,13 +127,13 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetStoreInitManageBaseInfo();
 
-            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var store = BizFactory.Store.GetOne(storeId);
 
             ret.Id = store.Id;
             ret.Name = store.Name;
             ret.Address = store.Address;
             ret.BriefDes = store.BriefDes;
-            ret.DisplayImgUrls = store.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
+            ret.DisplayImgUrls = store.DisplayImgUrls;
             ret.IsOpen = store.IsOpen;
             ret.Status = GetStatus(store.IsOpen);
 
@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetStoreInitManage();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = BizFactory.Store.GetAll(merchId);
 
 
             foreach (var store in stores)
@@ -269,7 +269,7 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetStoreInitManageMachine();
 
-            var store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var store =BizFactory.Store.GetOne(storeId);
 
             ret.StoreName = store.Name;
 
@@ -287,7 +287,8 @@ namespace LocalS.Service.Api.Merch
                 }
                 else
                 {
-                    var l_store = CurrentDb.Store.Where(m => m.Id == merchMachine.StoreId).FirstOrDefault();
+                    var l_store = BizFactory.Store.GetOne(merchMachine.StoreId);
+
                     label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.Name, l_store.Name);
                     disabled = true;
                 }
