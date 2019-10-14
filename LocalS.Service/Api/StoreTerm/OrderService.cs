@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -17,7 +18,22 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+
+            if (machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+            }
+
+            if (string.IsNullOrEmpty(machine.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+            }
+
+            if (string.IsNullOrEmpty(machine.StoreId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
+            }
 
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = E_OrderSource.Machine;

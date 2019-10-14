@@ -33,16 +33,10 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(storeId);
 
-
-            var machineIds = CurrentDb.MerchMachine.Where(m => m.StoreId == storeId).Select(m => m.MachineId).ToArray();
-
             var query = CurrentDb.SellChannelStock.Where(m =>
             m.MerchId == store.MerchId
-            && (
-            machineIds.Contains(m.RefId) && m.RefType == Entity.E_SellChannelRefType.Machine
-            )
+            && (store.MachineIds.Contains(m.RefId) && m.RefType == Entity.E_SellChannelRefType.Machine )
             );
-
 
             if (!string.IsNullOrEmpty(kindId))
             {

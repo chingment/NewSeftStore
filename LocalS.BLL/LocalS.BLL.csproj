@@ -66,7 +66,9 @@
     <Compile Include="BaseDbContext.cs" />
     <Compile Include="Biz\BackgroundJobProvider.cs" />
     <Compile Include="Biz\BizFactory.cs" />
+    <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
+    <Compile Include="Biz\Models\MachineInfoModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\OrderService.cs" />

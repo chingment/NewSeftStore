@@ -20,40 +20,29 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetMachineInitData();
 
-            var machine = CurrentDb.Machine.Where(m => m.Id == rup.MachineId).FirstOrDefault();
+            var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
             if (machine == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
             }
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
-
-            if (merch == null)
+            if (string.IsNullOrEmpty(machine.MerchId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
 
-            var store = BizFactory.Store.GetOne(machine.StoreId);
-
-            if (store == null)
+            if (string.IsNullOrEmpty(machine.StoreId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.MachineId == machine.Id).FirstOrDefault();
-
-            if (merchMachine == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器对应商户信息不存在");
-            }
-
             ret.Machine.Id = machine.Id;
-            ret.Machine.Name = merchMachine.Name;
-            ret.Machine.LogoImgUrl = merchMachine.LogoImgUrl;
-            ret.Machine.MerchName = merch.Name;
-            ret.Machine.StoreName = store.Name;
-            ret.Machine.CsrQrCode = merch.CsrQrCode;
+            ret.Machine.Name = machine.Name;
+            ret.Machine.LogoImgUrl = machine.LogoImgUrl;
+            ret.Machine.MerchName = machine.MerchName;
+            ret.Machine.StoreName = machine.StoreName;
+            ret.Machine.CsrQrCode = machine.CsrQrCode;
 
             ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machine.MerchId, machine.StoreId, machine.Id);
 
@@ -146,11 +135,21 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var ret = new RetMachineGetSlotStocks();
 
-            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+            var machine = BizFactory.Machine.GetOne(machineId);
 
             if (machine == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+            }
+
+            if (string.IsNullOrEmpty(machine.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+            }
+
+            if (string.IsNullOrEmpty(machine.StoreId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();

@@ -32,6 +32,14 @@ namespace LocalS.BLL.Biz
             }
         }
 
+        public static MachineService Machine
+        {
+            get
+            {
+                return new MachineService();
+            }
+        }
+
         public static BackgroundJobProvider BackgroundJob
         {
             get

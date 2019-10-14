@@ -46,16 +46,16 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Reserve(string operater, string clientUserId, RopOrderReserve rop)
         {
+
+            var store = BizFactory.Store.GetOne(rop.StoreId);
+
             CustomJsonResult result = new CustomJsonResult();
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
-
-            var sellChannelRefIds = CurrentDb.MerchMachine.Where(m => m.StoreId == rop.StoreId).Select(m => m.MachineId).ToArray();
-
-            bizRop.SellChannelRefIds = sellChannelRefIds;//不指定机器
+            bizRop.SellChannelRefIds = store.MachineIds;//不指定机器
 
             foreach (var productSku in rop.ProductSkus)
             {
