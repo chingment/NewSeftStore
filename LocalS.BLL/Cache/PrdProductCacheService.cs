@@ -11,15 +11,15 @@ namespace LocalS.BLL
 {
     public class PrdProductCacheService : BaseDbContext
     {
-        private static readonly string redis_key_product_info = "info:Product";
-        public void RemoveInfo(string productId)
+        private static readonly string redis_key_all_spu_info_by_merchId = "info_sku_all:{0}";
+        public void Remove(string merchId, string productId)
         {
-            RedisHashUtil.Remove(redis_key_product_info, productId);
+            RedisHashUtil.Remove(string.Format(redis_key_all_spu_info_by_merchId, merchId), productId);
         }
-        public ProductInfoModel GetInfo(string productId)
+        public ProductInfoModel GetInfo(string merchId, string productId)
         {
             //先从缓存信息读取商品信息
-            ProductInfoModel prdProductByCache = RedisHashUtil.Get<ProductInfoModel>(redis_key_product_info, productId);
+            ProductInfoModel prdProductByCache = RedisHashUtil.Get<ProductInfoModel>(string.Format(redis_key_all_spu_info_by_merchId, merchId), productId);
 
             //如商品信息从缓存取不到，读取数据库信息加载
             if (prdProductByCache == null)
@@ -45,7 +45,7 @@ namespace LocalS.BLL
                 prdProductByCache.RefSku = new ProductInfoModel.RefSkuModel { Id = prdProductRefSkuByDb.Id, SalePrice = prdProductRefSkuByDb.SalePrice, SpecDes = prdProductRefSkuByDb.SpecDes };
 
 
-                RedisManager.Db.HashSetAsync(redis_key_product_info, prdProductByCache.Id, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductByCache), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_spu_info_by_merchId, prdProductByDb.MerchId), prdProductByCache.Id, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductByCache), StackExchange.Redis.When.Always);
             }
 
             if (prdProductByCache.RefSku == null)
@@ -53,7 +53,7 @@ namespace LocalS.BLL
 
             //从缓存中取店铺的商品库存信息
 
-            var refSkuStock =CacheServiceFactory.ProductSku.GetStock(prdProductByCache.RefSku.Id);
+            var refSkuStock = CacheServiceFactory.ProductSku.GetStock(merchId, prdProductByCache.RefSku.Id);
 
             if (refSkuStock == null)
             {

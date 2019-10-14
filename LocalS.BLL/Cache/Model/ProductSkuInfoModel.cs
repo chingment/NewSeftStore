@@ -10,6 +10,8 @@ namespace LocalS.BLL
     public class ProductSkuInfoModel
     {
         public string Id { get; set; }
+        public string BarCode { get; set; }
+        public string PinYinIndx { get; set; }
         public string PrdProductId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }

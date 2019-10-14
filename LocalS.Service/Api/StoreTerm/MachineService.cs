@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var productSkuModel = CacheServiceFactory.ProductSku.GetInfo(item.PrdProductSkuId);
+                var productSkuModel = CacheServiceFactory.ProductSku.GetInfo(item.MerchId, item.PrdProductSkuId);
 
                 if (productSkuModel != null)
                 {

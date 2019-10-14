@@ -332,6 +332,8 @@ namespace LocalS.Service.Api.Merch
                     var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (prdProductSku != null)
                     {
+                        prdProductSku.PinYinName = prdProduct.PinYinName;
+                        prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                         prdProductSku.BarCode = sku.BarCode;
                         prdProductSku.SpecDes = sku.SpecDes;
                         prdProductSku.SalePrice = sku.SalePrice;
@@ -386,8 +388,12 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
+
+
 
             return result;
         }

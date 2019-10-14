@@ -179,7 +179,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderPaySuccess, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderPaySuccess, stock.MerchId, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                                 }
 
                                 break;
@@ -187,7 +187,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderCancle, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderCancle, stock.MerchId, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                                 }
 
                                 break;

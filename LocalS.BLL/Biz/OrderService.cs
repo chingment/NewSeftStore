@@ -60,7 +60,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(productSku.Id);
+                        var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, productSku.Id);
 
                         if (l_ProductSkuInfoAndStock == null)
                         {
@@ -271,7 +271,7 @@ namespace LocalS.BLL.Biz
 
                     for (int i = 0; i < operateStocks.Count; i++)
                     {
-                        CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
+                        CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].MerchId, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
                     }
 
                     MqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });

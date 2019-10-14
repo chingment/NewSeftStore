@@ -40,5 +40,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
+        public static ProductSkuService ProductSku
+        {
+            get
+            {
+                return new ProductSkuService();
+            }
+        }
+
     }
 }

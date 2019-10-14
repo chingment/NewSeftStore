@@ -4,7 +4,7 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="条形码" prop="barCode">
+      <el-form-item label="条形码" prop="singleSkuBarCode">
         <el-input v-model="form.singleSkuBarCode" />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
@@ -112,12 +112,12 @@ export default {
       form: {
         id: '',
         name: '',
-        barCode: '',
         kindIds: [],
         subjectIds: [],
         detailsDes: '',
         briefDes: '',
         displayImgUrls: [],
+        singleSkuBarCode: '',
         singleSkuSalePrice: 0,
         singleSkuSpecDes: ''
       },

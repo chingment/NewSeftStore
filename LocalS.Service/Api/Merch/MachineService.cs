@@ -156,7 +156,7 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-                var prdProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.PrdProductSkuId);
+                var prdProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.PrdProductSkuId);
                 if (prdProductSku != null)
                 {
                     olist.Add(new
@@ -205,7 +205,7 @@ namespace LocalS.Service.Api.Merch
                 sellChannelStock.SalePrice = rop.SalePrice;
             }
 
-            CacheServiceFactory.ProductSku.RemoveInfo(rop.ProductSkuId);
+            CacheServiceFactory.ProductSku.Remove(merchId, rop.ProductSkuId);
 
             CurrentDb.SaveChanges();
 

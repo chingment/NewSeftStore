@@ -28,7 +28,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var clientCart in clientCarts)
             {
-                var productSkuModel = CacheServiceFactory.ProductSku.GetInfoAndStock(clientCart.PrdProductSkuId);
+                var productSkuModel = CacheServiceFactory.ProductSku.GetInfoAndStock(clientCart.MerchId, clientCart.PrdProductSkuId);
                 if (productSkuModel != null)
                 {
                     var cartProcudtSkuModel = new CartProductSkuModel();
@@ -101,6 +101,7 @@ namespace LocalS.Service.Api.StoreApp
                     foreach (var item in rop.ProductSkus)
                     {
                         var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
+                        var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
 
                         switch (rop.Operate)
                         {
@@ -117,13 +118,10 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.Id);
+                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, item.Id);
 
                                 if (clientCart == null)
                                 {
-
-                                    var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-
                                     clientCart = new ClientCart();
                                     clientCart.Id = GuidUtil.New();
                                     clientCart.ClientUserId = clientUserId;

@@ -21,20 +21,22 @@ namespace LocalS.BLL
 
     public class PrdProductSkuCacheService : BaseDbContext
     {
-        private static readonly string redis_key_productSku_info = "info:ProductSku";
-        private static readonly string redis_key_productSku_stock = "stock:ProductSku:{0}";
-        private static readonly string redis_key_productSku_search = "search:ProductSku:{0}";
-        public void RemoveInfo(string productSkuId)
+        private static readonly string redis_key_all_sku_info_by_merchId = "info_sku_all:{0}";
+        private static readonly string redis_key_one_sku_stock_by_productId = "stock_sku_one:{0}";
+        private static readonly string redis_key_all_sku_search_by_merchId = "search_sku_all:{0}";
+        public void Remove(string merchId, string productSkuId)
         {
-            RedisHashUtil.Remove(redis_key_productSku_info, productSkuId);
+            RedisHashUtil.Remove(string.Format(redis_key_all_sku_info_by_merchId, merchId, productSkuId));
+            RedisHashUtil.Remove(string.Format(redis_key_all_sku_search_by_merchId, merchId, productSkuId));
+            RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
         }
 
-        public ProductSkuInfoAndStockModel GetInfoAndStock(string productSkuId)
+        public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string productSkuId)
         {
             var productSkuInfoAndStockModel = new ProductSkuInfoAndStockModel();
 
-            var productSkuInfo = GetInfo(productSkuId);
-            var productSkuStock = GetStock(productSkuId);
+            var productSkuInfo = GetInfo(merchId,productSkuId);
+            var productSkuStock = GetStock(merchId,productSkuId);
 
             productSkuInfoAndStockModel.Id = productSkuInfo.Id;
             productSkuInfoAndStockModel.PrdProductId = productSkuInfo.PrdProductId;
@@ -58,9 +60,9 @@ namespace LocalS.BLL
             return productSkuInfoAndStockModel;
         }
 
-        public ProductSkuInfoModel GetInfo(string productSkuId)
+        public ProductSkuInfoModel GetInfo(string merchId, string productSkuId)
         {
-            var prdProductSkuModel = RedisHashUtil.Get<ProductSkuInfoModel>(redis_key_productSku_info, productSkuId);
+            var prdProductSkuModel = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(redis_key_all_sku_info_by_merchId, merchId), productSkuId);
 
             //如商品信息从缓存取不到，读取数据库信息加载
             if (prdProductSkuModel == null)
@@ -69,12 +71,14 @@ namespace LocalS.BLL
                 if (prdProductSkuByDb == null)
                     return null;
 
-                var prdProduct = CacheServiceFactory.Product.GetInfo(prdProductSkuByDb.PrdProductId);
+                var prdProduct = CacheServiceFactory.Product.GetInfo(prdProductSkuByDb.MerchId, prdProductSkuByDb.PrdProductId);
                 if (prdProduct == null)
                     return null;
 
                 prdProductSkuModel = new ProductSkuInfoModel();
                 prdProductSkuModel.Id = prdProductSkuByDb.Id;
+                prdProductSkuModel.BarCode = prdProductSkuByDb.BarCode;
+                prdProductSkuModel.PinYinIndx = prdProductSkuByDb.PinYinIndex;
                 prdProductSkuModel.PrdProductId = prdProductSkuByDb.PrdProductId;
                 prdProductSkuModel.Name = prdProductSkuByDb.Name.NullToEmpty();
                 prdProductSkuModel.DisplayImgUrls = prdProduct.DisplayImgUrls;
@@ -83,19 +87,21 @@ namespace LocalS.BLL
                 prdProductSkuModel.BriefDes = prdProduct.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
 
-                //RedisManager.Db.HashSetAsync(string.Format(redis_key_productSku_search,prdProductSkuByDb.MerchId, "barcode:" + prdProductSkuModel.BarCode + ",name:" + sku.Name + ",simplecode:" + p, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
+                var productSkuInfoBySearchModel = new ProductSkuInfoBySearchModel { Id = prdProductSkuByDb.Id, BarCode = prdProductSkuByDb.BarCode, Name = prdProductSkuModel.Name, MainImgUrl = prdProductSkuModel.MainImgUrl };
 
-                RedisManager.Db.HashSetAsync(redis_key_productSku_info, productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_sku_search_by_merchId, prdProductSkuByDb.MerchId), "barcode:" + prdProductSkuModel.BarCode + ",pyindex:" + prdProductSkuModel.PinYinIndx + ",name:" + prdProductSkuModel.Name, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuInfoBySearchModel), StackExchange.Redis.When.Always);
+
+                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_sku_info_by_merchId, prdProductSkuByDb.MerchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
             }
 
             return prdProductSkuModel;
         }
 
-        public List<ProductSkuStockModel> GetStock(string productSkuId)
+        public List<ProductSkuStockModel> GetStock(string merchId, string productSkuId)
         {
             var redis = new RedisClient<List<ProductSkuStockModel>>();
 
-            var productSkuStockModels = redis.KGet(string.Format(redis_key_productSku_stock, productSkuId));
+            var productSkuStockModels = redis.KGet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
 
             if (productSkuStockModels == null)
             {
@@ -118,17 +124,17 @@ namespace LocalS.BLL
                     productSkuStockModels.Add(productSkuStockModel);
                 }
 
-                redis.KSet(string.Format(redis_key_productSku_stock, productSkuId), productSkuStockModels, new TimeSpan(100, 0, 0));
+                redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), productSkuStockModels, new TimeSpan(100, 0, 0));
             }
 
             return productSkuStockModels;
         }
 
-        public void StockOperate(StockOperateType operateType, string productSkuId, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
+        public void StockOperate(StockOperateType operateType, string merchId, string productSkuId, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
         {
             var redis = new RedisClient<List<ProductSkuStockModel>>();
 
-            var stock = GetStock(productSkuId);
+            var stock = GetStock(merchId,productSkuId);
 
             for (int i = 0; i < stock.Count; i++)
             {
@@ -152,7 +158,24 @@ namespace LocalS.BLL
                 }
             }
 
-            redis.KSet(string.Format(redis_key_productSku_stock, productSkuId), stock, new TimeSpan(100, 0, 0));
+            redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), stock, new TimeSpan(100, 0, 0));
+        }
+
+        public List<ProductSkuInfoBySearchModel> Search(string merchId, string key)
+        {
+            List<ProductSkuInfoBySearchModel> list = new List<ProductSkuInfoBySearchModel>();
+            var hs = RedisManager.Db.HashGetAll(string.Format(redis_key_all_sku_search_by_merchId, merchId));
+
+            key = key.ToUpper();
+
+            var d = (from i in hs select i).Where(x => x.Name.ToString().Contains(key)).Take(5).ToList();
+
+            foreach (var item in d)
+            {
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoBySearchModel>(item.Value);
+                list.Add(obj);
+            }
+            return list;
         }
     }
 }
