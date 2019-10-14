@@ -114,7 +114,7 @@ namespace LocalS.Service.Api.StoreTerm
                 var productIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
                 if (productIds.Count > 0)
                 {
-                    var productSkuIds = CurrentDb.PrdProductSku.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductId).Distinct().ToList();
+                    var productSkuIds = CurrentDb.PrdProductSku.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.Id).Distinct().ToList();
                     if (productSkuIds.Count > 0)
                     {
                         prdKindModel.Childs = productSkuIds;
