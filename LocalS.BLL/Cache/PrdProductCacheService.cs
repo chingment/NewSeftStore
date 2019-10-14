@@ -11,11 +11,12 @@ namespace LocalS.BLL
 {
     public class PrdProductCacheService : BaseDbContext
     {
-        private static readonly string redis_key_all_spu_info_by_merchId = "info_sku_all:{0}";
+        private static readonly string redis_key_all_spu_info_by_merchId = "info_spu_all:{0}";
         public void Remove(string merchId, string productId)
         {
             RedisHashUtil.Remove(string.Format(redis_key_all_spu_info_by_merchId, merchId), productId);
         }
+
         public ProductInfoModel GetInfo(string merchId, string productId)
         {
             //先从缓存信息读取商品信息
@@ -40,8 +41,6 @@ namespace LocalS.BLL
                 prdProductByCache.MainImgUrl = ImgSet.GetMain(prdProductByDb.DisplayImgUrls);
                 prdProductByCache.DetailsDes = prdProductByDb.DetailsDes.NullToEmpty();
                 prdProductByCache.BriefDes = prdProductByDb.BriefDes.NullToEmpty();
-
-
                 prdProductByCache.RefSku = new ProductInfoModel.RefSkuModel { Id = prdProductRefSkuByDb.Id, SalePrice = prdProductRefSkuByDb.SalePrice, SpecDes = prdProductRefSkuByDb.SpecDes };
 
 
@@ -77,9 +76,8 @@ namespace LocalS.BLL
                 }
             }
 
-            prdProductByCache.BriefDes = prdProductByCache.BriefDes.NullToEmpty();
-
             return prdProductByCache;
         }
+
     }
 }

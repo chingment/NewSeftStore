@@ -40,11 +40,6 @@ namespace LocalS.Service.Api.StoreTerm
 
                          select new { m.PrdProductId }).Distinct();
 
-            //var query = CurrentDb.SellChannelStock.Where(m =>
-            //m.MerchId == merchId &&
-            //m.RefId == machineId &&
-            //m.RefType == Entity.E_SellChannelRefType.Machine
-            //);
 
             if (!string.IsNullOrEmpty(kindId))
             {

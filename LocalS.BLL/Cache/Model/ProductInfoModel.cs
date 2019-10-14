@@ -14,6 +14,7 @@ namespace LocalS.BLL
         {
 
         }
+
         public string Id { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
