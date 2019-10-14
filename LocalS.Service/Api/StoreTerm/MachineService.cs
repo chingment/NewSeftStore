@@ -167,14 +167,13 @@ namespace LocalS.Service.Api.StoreTerm
                     slotProductSkuModel.SlotId = item.SlotId;
                     slotProductSkuModel.Name = productSkuModel.Name;
                     slotProductSkuModel.MainImgUrl = productSkuModel.MainImgUrl;
+                    slotProductSkuModel.SalePrice = item.SalePrice.ToF2Price();
                     slotProductSkuModel.SumQuantity = item.SumQuantity;
                     slotProductSkuModel.LockQuantity = item.LockQuantity;
                     slotProductSkuModel.SellQuantity = item.SellQuantity;
-
                     ret.SlotProductSkus.Add(item.SlotId, slotProductSkuModel);
                 }
             }
-
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
