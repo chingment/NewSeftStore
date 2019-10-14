@@ -94,14 +94,16 @@ namespace LocalS.Service.Api.StoreApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
 
+           
             lock (lock_Operate)
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
+                    var storeInfo = BizFactory.Store.GetInfo(rop.StoreId);
+
                     foreach (var item in rop.ProductSkus)
                     {
                         var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
-                        var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
 
                         switch (rop.Operate)
                         {
@@ -118,14 +120,14 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, item.Id);
+                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(storeInfo.MerchId, item.Id);
 
                                 if (clientCart == null)
                                 {
                                     clientCart = new ClientCart();
                                     clientCart.Id = GuidUtil.New();
                                     clientCart.ClientUserId = clientUserId;
-                                    clientCart.MerchId = store.MerchId;
+                                    clientCart.MerchId = storeInfo.MerchId;
                                     clientCart.StoreId = rop.StoreId;
                                     clientCart.PrdProductId = productSku.PrdProductId;
                                     clientCart.PrdProductSkuId = item.Id;
@@ -143,11 +145,6 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.MendTime = DateTime.Now;
                                     clientCart.Mender = operater;
                                 }
-
-                                //if (productSku.Stocks.Sum(m => m.SellQuantity) > clientCart.Quantity)
-                                //{
-                                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "操作成功");
-                                //}
 
                                 break;
                             case E_CartOperateType.Delete:

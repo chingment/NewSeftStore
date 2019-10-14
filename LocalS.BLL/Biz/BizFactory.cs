@@ -24,6 +24,14 @@ namespace LocalS.BLL.Biz
             }
         }
 
+        public static StoreService Store
+        {
+            get
+            {
+                return new StoreService();
+            }
+        }
+
         public static BackgroundJobProvider BackgroundJob
         {
             get
