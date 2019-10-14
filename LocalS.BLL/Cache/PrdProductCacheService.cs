@@ -20,10 +20,10 @@ namespace LocalS.BLL
         public ProductInfoModel GetInfo(string merchId, string productId)
         {
             //先从缓存信息读取商品信息
-            ProductInfoModel prdProductByCache = RedisHashUtil.Get<ProductInfoModel>(string.Format(redis_key_all_spu_info_by_merchId, merchId), productId);
+            ProductInfoModel2 productInfoModel2 = RedisHashUtil.Get<ProductInfoModel2>(string.Format(redis_key_all_spu_info_by_merchId, merchId), productId);
 
             //如商品信息从缓存取不到，读取数据库信息加载
-            if (prdProductByCache == null)
+            if (productInfoModel2 == null)
             {
                 var prdProductByDb = CurrentDb.PrdProduct.Where(m => m.Id == productId).FirstOrDefault();
                 if (prdProductByDb == null)
@@ -33,51 +33,60 @@ namespace LocalS.BLL
                 if (prdProductRefSkuByDb == null)
                     return null;
 
-                prdProductByCache = new ProductInfoModel();
+                productInfoModel2 = new ProductInfoModel2();
 
-                prdProductByCache.Id = prdProductByDb.Id;
-                prdProductByCache.Name = prdProductByDb.Name.NullToEmpty();
-                prdProductByCache.DisplayImgUrls = prdProductByDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                prdProductByCache.MainImgUrl = ImgSet.GetMain(prdProductByDb.DisplayImgUrls);
-                prdProductByCache.DetailsDes = prdProductByDb.DetailsDes.NullToEmpty();
-                prdProductByCache.BriefDes = prdProductByDb.BriefDes.NullToEmpty();
-                prdProductByCache.RefSku = new ProductInfoModel.RefSkuModel { Id = prdProductRefSkuByDb.Id, SalePrice = prdProductRefSkuByDb.SalePrice, SpecDes = prdProductRefSkuByDb.SpecDes };
-
-
-                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_spu_info_by_merchId, prdProductByDb.MerchId), prdProductByCache.Id, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductByCache), StackExchange.Redis.When.Always);
+                productInfoModel2.Id = prdProductByDb.Id;
+                productInfoModel2.Name = prdProductByDb.Name.NullToEmpty();
+                productInfoModel2.DisplayImgUrls = prdProductByDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
+                productInfoModel2.MainImgUrl = ImgSet.GetMain(prdProductByDb.DisplayImgUrls);
+                productInfoModel2.DetailsDes = prdProductByDb.DetailsDes.NullToEmpty();
+                productInfoModel2.BriefDes = prdProductByDb.BriefDes.NullToEmpty();
+                productInfoModel2.RefSkuId = prdProductRefSkuByDb.Id;
+                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_spu_info_by_merchId, prdProductByDb.MerchId), prdProductByDb.Id, Newtonsoft.Json.JsonConvert.SerializeObject(productInfoModel2), StackExchange.Redis.When.Always);
             }
 
-            if (prdProductByCache.RefSku == null)
+            if (productInfoModel2.RefSkuId == null)
                 return null;
 
+            var productInfoModel = new ProductInfoModel();
+            productInfoModel.Id = productInfoModel2.Id;
+            productInfoModel.Name = productInfoModel2.Name.NullToEmpty();
+            productInfoModel.DisplayImgUrls = productInfoModel2.DisplayImgUrls;
+            productInfoModel.MainImgUrl = productInfoModel2.MainImgUrl;
+            productInfoModel.DetailsDes = productInfoModel2.DetailsDes.NullToEmpty();
+            productInfoModel.BriefDes = productInfoModel2.BriefDes.NullToEmpty();
+            productInfoModel.RefSku.Id = productInfoModel2.RefSkuId;
             //从缓存中取店铺的商品库存信息
 
-            var refSkuStock = CacheServiceFactory.ProductSku.GetStock(merchId, prdProductByCache.RefSku.Id);
+            var refSkuStock = CacheServiceFactory.ProductSku.GetStock(merchId, productInfoModel2.RefSkuId);
 
             if (refSkuStock == null)
             {
-                LogUtil.Info(string.Format("库存,Product,SkuId:{0},数据为NULL", prdProductByCache.RefSku.Id));
+                LogUtil.Info(string.Format("库存,Product,SkuId:{0},数据为NULL", productInfoModel2.RefSkuId));
             }
             else
             {
                 if (refSkuStock == null || refSkuStock.Count == 0)
                 {
-                    LogUtil.Info(string.Format("库存,Product,SkuId:{0},Stocks为NULL", prdProductByCache.RefSku.Id));
+                    LogUtil.Info(string.Format("库存,Product,SkuId:{0},Stocks为NULL", productInfoModel2.RefSkuId));
                 }
                 else
                 {
-                    prdProductByCache.RefSku.ReceptionMode = Entity.E_ReceptionMode.Machine;
-                    prdProductByCache.RefSku.SumQuantity = refSkuStock.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.SumQuantity);
-                    prdProductByCache.RefSku.LockQuantity = refSkuStock.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.LockQuantity);
-                    prdProductByCache.RefSku.SellQuantity = refSkuStock.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.SellQuantity);
-                    prdProductByCache.RefSku.SalePrice = refSkuStock[0].SalePrice;
-                    prdProductByCache.RefSku.SalePriceByVip = refSkuStock[0].SalePriceByVip;
-                    prdProductByCache.RefSku.IsOffSell = refSkuStock[0].IsOffSell;
+                    productInfoModel.RefSku.ReceptionMode = Entity.E_ReceptionMode.Machine;
+                    productInfoModel.RefSku.SumQuantity = refSkuStock.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.SumQuantity);
+                    productInfoModel.RefSku.LockQuantity = refSkuStock.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.LockQuantity);
+                    productInfoModel.RefSku.SellQuantity = refSkuStock.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine).Sum(m => m.SellQuantity);
+                    productInfoModel.RefSku.SalePrice = refSkuStock[0].SalePrice;
+                    productInfoModel.RefSku.SalePriceByVip = refSkuStock[0].SalePriceByVip;
+                    productInfoModel.RefSku.IsOffSell = refSkuStock[0].IsOffSell;
                 }
             }
 
-            return prdProductByCache;
+            return productInfoModel;
         }
+
+
+        
 
     }
 }
