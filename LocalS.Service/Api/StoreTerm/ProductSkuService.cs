@@ -11,6 +11,66 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ProductSkuService : BaseDbContext
     {
+        public PageEntity<ProductSkuModel> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string machineId)
+        {
+            var pageEntiy = new PageEntity<ProductSkuModel>();
+
+            pageEntiy.PageIndex = pageIndex;
+            pageEntiy.PageSize = pageSize;
+
+            var query = (from m in CurrentDb.SellChannelStock
+                         where (
+m.MerchId == merchId &&
+m.RefId == machineId &&
+m.RefType == Entity.E_SellChannelRefType.Machine)
+                         orderby m.CreateTime
+                         select new { m.PrdProductSkuId }).Distinct();
+
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
+
+            query = query.OrderBy(m => m.PrdProductSkuId).Skip(pageSize * pageIndex).Take(pageSize);
+
+            var list = query.Distinct().ToList();
+
+
+            foreach (var item in list)
+            {
+                var productSkuInfoAndStockModel = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, item.PrdProductSkuId);
+                if (productSkuInfoAndStockModel != null)
+                {
+                    var productSkuModel = new ProductSkuModel();
+                    productSkuModel.Id = productSkuInfoAndStockModel.Id;
+                    productSkuModel.ProductId = productSkuInfoAndStockModel.ProductId;
+                    productSkuModel.Name = productSkuInfoAndStockModel.Name;
+                    productSkuModel.MainImgUrl = productSkuInfoAndStockModel.MainImgUrl;
+                    productSkuModel.DisplayImgUrls = productSkuInfoAndStockModel.DisplayImgUrls;
+                    productSkuModel.DetailsDes = productSkuInfoAndStockModel.DetailsDes;
+                    productSkuModel.BriefDes = productSkuInfoAndStockModel.BriefDes;
+                    productSkuModel.SpecDes = productSkuInfoAndStockModel.SpecDes;
+
+                    var stocks = productSkuInfoAndStockModel.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
+
+                    if (stocks.Count > 0)
+                    {
+                        productSkuModel.IsShowPrice = false;
+                        productSkuModel.SalePrice = stocks[0].SalePrice;
+                        productSkuModel.SalePriceByVip = stocks[0].SalePriceByVip;
+                        productSkuModel.IsOffSell = stocks[0].IsOffSell;
+                        productSkuModel.SumQuantity = stocks.Sum(m => m.SumQuantity);
+                        productSkuModel.LockQuantity = stocks.Sum(m => m.LockQuantity);
+                        productSkuModel.SellQuantity = stocks.Sum(m => m.SellQuantity);
+                    }
+
+
+                    pageEntiy.Items.Add(productSkuModel);
+                }
+            }
+
+            return pageEntiy;
+
+        }
+
         public CustomJsonResult Search(RupProductSkuSearch rup)
         {
             var result = new CustomJsonResult();

@@ -55,34 +55,33 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var productModel = CacheServiceFactory.Product.GetInfo(store.MerchId, item.PrdProductId);
-                if (productModel != null)
-                {
-                    var prdProductModel2 = new PrdProductModel2();
+                //var productModel = CacheServiceFactory.Product.GetInfo(store.MerchId, item.PrdProductId);
+                //if (productModel != null)
+                //{
+                //    var prdProductModel2 = new PrdProductModel2();
 
-                    prdProductModel2.Id = productModel.Id;
-                    prdProductModel2.Name = productModel.Name;
-                    prdProductModel2.MainImgUrl = productModel.MainImgUrl;
-                    prdProductModel2.BriefDes = productModel.BriefDes;
-                    prdProductModel2.RefSku.Id = productModel.RefSku.Id;
-                    prdProductModel2.RefSku.ReceptionMode = productModel.RefSku.ReceptionMode;
-                    prdProductModel2.RefSku.SumQuantity = productModel.RefSku.SumQuantity;
-                    prdProductModel2.RefSku.LockQuantity = productModel.RefSku.LockQuantity;
-                    prdProductModel2.RefSku.SellQuantity = productModel.RefSku.SellQuantity;
-                    prdProductModel2.RefSku.IsOffSell = productModel.RefSku.IsOffSell;
-                    prdProductModel2.RefSku.SalePrice = productModel.RefSku.SalePrice;
-                    prdProductModel2.RefSku.SalePriceByVip = productModel.RefSku.SalePriceByVip;
-                    prdProductModel2.RefSku.ShowPrice = productModel.RefSku.ShowPrice;
-                    prdProductModel2.RefSku.SpecDes = productModel.RefSku.SpecDes;
-                    prdProductModel2.RefSku.IsShowPrice = productModel.RefSku.IsShowPrice;
-                    pageEntiy.Items.Add(prdProductModel2);
-                }
+                //    prdProductModel2.Id = productModel.Id;
+                //    prdProductModel2.Name = productModel.Name;
+                //    prdProductModel2.MainImgUrl = productModel.MainImgUrl;
+                //    prdProductModel2.BriefDes = productModel.BriefDes;
+                //    prdProductModel2.RefSku.Id = productModel.RefSku.Id;
+                //    prdProductModel2.RefSku.ReceptionMode = productModel.RefSku.ReceptionMode;
+                //    prdProductModel2.RefSku.SumQuantity = productModel.RefSku.SumQuantity;
+                //    prdProductModel2.RefSku.LockQuantity = productModel.RefSku.LockQuantity;
+                //    prdProductModel2.RefSku.SellQuantity = productModel.RefSku.SellQuantity;
+                //    prdProductModel2.RefSku.IsOffSell = productModel.RefSku.IsOffSell;
+                //    prdProductModel2.RefSku.SalePrice = productModel.RefSku.SalePrice;
+                //    prdProductModel2.RefSku.SalePriceByVip = productModel.RefSku.SalePriceByVip;
+                //    prdProductModel2.RefSku.ShowPrice = productModel.RefSku.ShowPrice;
+                //    prdProductModel2.RefSku.SpecDes = productModel.RefSku.SpecDes;
+                //    prdProductModel2.RefSku.IsShowPrice = productModel.RefSku.IsShowPrice;
+                //    pageEntiy.Items.Add(prdProductModel2);
+                //}
             }
 
             return pageEntiy;
 
         }
-
 
         public CustomJsonResult Details(string operater, string clientUserId, RupProductDetails rup)
         {
@@ -90,8 +89,8 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var productModel = CacheServiceFactory.Product.GetInfo(store.MerchId, rup.Id);
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);
+            //var productModel = CacheServiceFactory.Product.GetInfo(store.MerchId, rup.Id);
+            //result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productModel);
 
             return result;
         }

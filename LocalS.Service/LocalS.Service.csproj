@@ -278,10 +278,9 @@
     <Compile Include="Api\StoreTerm\Models\BannerModel.cs" />
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
-    <Compile Include="Api\StoreTerm\Models\PrdProductModel2.cs" />
-    <Compile Include="Api\StoreTerm\Models\SlotStockModel.cs" />
+    <Compile Include="Api\StoreTerm\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\StoreTerm\Models\SlotProductSkuModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
-    <Compile Include="Api\StoreTerm\ProductService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineGetSlotStocks.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />

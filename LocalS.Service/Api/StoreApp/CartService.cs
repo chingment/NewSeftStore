@@ -129,7 +129,7 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.ClientUserId = clientUserId;
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
-                                    clientCart.PrdProductId = productSku.PrdProductId;
+                                    clientCart.PrdProductId = productSku.ProductId;
                                     clientCart.PrdProductSkuId = item.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;

@@ -237,7 +237,7 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-                var prdProductSku = CacheServiceFactory.ProductSku.GetInfo(item.MerchId,item.PrdProductSkuId);
+                var prdProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId,item.PrdProductSkuId);
                 if (prdProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();

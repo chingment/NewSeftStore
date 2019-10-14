@@ -48,16 +48,16 @@ namespace LocalS.Service.Api.StoreTerm
 
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machine.MerchId, machine.StoreId, machine.Id);
 
-            ret.Products = StoreTermServiceFactory.Machine.GetProducts(machine.MerchId, machine.StoreId, machine.Id);
+            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machine.MerchId, machine.StoreId, machine.Id);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public Dictionary<string, PrdProductModel2> GetProducts(string merchId, string storeId, string machineId)
+        public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string machineId)
         {
-            var products = StoreTermServiceFactory.Product.GetPageList(0, int.MaxValue, merchId, storeId, machineId, "");
+            var products = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, machineId);
 
-            var dics = new Dictionary<string, PrdProductModel2>();
+            var dics = new Dictionary<string, ProductSkuModel>();
 
             if (products == null)
             {
@@ -111,13 +111,13 @@ namespace LocalS.Service.Api.StoreTerm
                 prdKindModel.Id = prdKind.Id;
                 prdKindModel.Name = prdKind.Name;
 
-                var productIds = CurrentDb.PrdProductKind.Where(m => m.Id == prdKind.Id).Select(m => m.PrdProductId).ToList();
-
-                if (productIds != null)
+                var productIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
+                if (prdKinds.Count > 0)
                 {
-                    if (productIds.Count > 0)
+                    var productSkuIds = CurrentDb.PrdProductSku.Where(m => productIds.Contains(m.Id)).Select(m => m.PrdProductId).Distinct().ToList();
+                    if (productSkuIds.Count > 0)
                     {
-                        prdKindModel.Childs = productIds;
+                        prdKindModel.Childs = productSkuIds;
                         productKindModels.Add(prdKindModel);
                     }
                 }
@@ -152,11 +152,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var productSkuModel = CacheServiceFactory.ProductSku.GetInfo(item.MerchId, item.PrdProductSkuId);
+                var productSkuModel = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.PrdProductSkuId);
 
                 if (productSkuModel != null)
                 {
-                    var slotStockModel = new SlotStockModel();
+                    var slotStockModel = new SlotProductSkuModel();
 
                     slotStockModel.Id = productSkuModel.Id;
                     slotStockModel.SlotId = item.SlotId;

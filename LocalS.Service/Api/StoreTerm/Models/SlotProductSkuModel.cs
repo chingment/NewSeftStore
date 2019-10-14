@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class SlotStockModel
+    public class SlotProductSkuModel
     {
         public string Id { get; set; }
         public string SlotId { get; set; }

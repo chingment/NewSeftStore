@@ -336,7 +336,7 @@ namespace LocalS.BLL.Biz
                                 detailChildSon.SellChannelRefId = item.RefId;
                                 detailChildSon.ReceptionMode = receptionMode;
                                 detailChildSon.PrdProductSkuId = productSku.Id;
-                                detailChildSon.PrdProductId = productSku.PrdProductId;
+                                detailChildSon.PrdProductId = productSku.ProductId;
                                 detailChildSon.PrdProductSkuName = productSku.Name;
                                 detailChildSon.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
                                 detailChildSon.SlotId = item.SlotId;

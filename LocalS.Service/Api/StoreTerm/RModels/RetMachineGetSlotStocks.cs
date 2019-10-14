@@ -10,9 +10,9 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public RetMachineGetSlotStocks()
         {
-            this.SlotStocks = new Dictionary<string, SlotStockModel>();
+            this.SlotStocks = new Dictionary<string, SlotProductSkuModel>();
         }
 
-        public Dictionary<string, SlotStockModel> SlotStocks { get; set; }
+        public Dictionary<string, SlotProductSkuModel> SlotStocks { get; set; }
     }
 }

@@ -35,11 +35,11 @@ namespace LocalS.BLL
         {
             var productSkuInfoAndStockModel = new ProductSkuInfoAndStockModel();
 
-            var productSkuInfo = GetInfo(merchId,productSkuId);
-            var productSkuStock = GetStock(merchId,productSkuId);
+            var productSkuInfo = GetInfo(merchId, productSkuId);
+            var productSkuStock = GetStock(merchId, productSkuId);
 
             productSkuInfoAndStockModel.Id = productSkuInfo.Id;
-            productSkuInfoAndStockModel.PrdProductId = productSkuInfo.PrdProductId;
+            productSkuInfoAndStockModel.ProductId = productSkuInfo.PrdProductId;
             productSkuInfoAndStockModel.Name = productSkuInfo.Name;
             productSkuInfoAndStockModel.MainImgUrl = productSkuInfo.MainImgUrl;
             productSkuInfoAndStockModel.DisplayImgUrls = productSkuInfo.DisplayImgUrls;
@@ -71,8 +71,8 @@ namespace LocalS.BLL
                 if (prdProductSkuByDb == null)
                     return null;
 
-                var prdProduct = CacheServiceFactory.Product.GetInfo(prdProductSkuByDb.MerchId, prdProductSkuByDb.PrdProductId);
-                if (prdProduct == null)
+                var prdProductDb = CurrentDb.PrdProduct.Where(m => m.Id == prdProductSkuByDb.PrdProductId).FirstOrDefault();
+                if (prdProductDb == null)
                     return null;
 
                 prdProductSkuModel = new ProductSkuInfoModel();
@@ -81,10 +81,10 @@ namespace LocalS.BLL
                 prdProductSkuModel.PinYinIndx = prdProductSkuByDb.PinYinIndex;
                 prdProductSkuModel.PrdProductId = prdProductSkuByDb.PrdProductId;
                 prdProductSkuModel.Name = prdProductSkuByDb.Name.NullToEmpty();
-                prdProductSkuModel.DisplayImgUrls = prdProduct.DisplayImgUrls;
-                prdProductSkuModel.MainImgUrl = prdProduct.MainImgUrl.NullToEmpty();
-                prdProductSkuModel.DetailsDes = prdProduct.DetailsDes.NullToEmpty();
-                prdProductSkuModel.BriefDes = prdProduct.BriefDes.NullToEmpty();
+                prdProductSkuModel.DisplayImgUrls = prdProductDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
+                prdProductSkuModel.MainImgUrl = prdProductDb.MainImgUrl.NullToEmpty();
+                prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.NullToEmpty();
+                prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
 
                 var productSkuInfoBySearchModel = new ProductSkuInfoBySearchModel { Id = prdProductSkuByDb.Id, BarCode = prdProductSkuByDb.BarCode, Name = prdProductSkuModel.Name, MainImgUrl = prdProductSkuModel.MainImgUrl };
@@ -134,7 +134,7 @@ namespace LocalS.BLL
         {
             var redis = new RedisClient<List<ProductSkuStockModel>>();
 
-            var stock = GetStock(merchId,productSkuId);
+            var stock = GetStock(merchId, productSkuId);
 
             for (int i = 0; i < stock.Count; i++)
             {
