@@ -19,7 +19,7 @@ namespace LocalS.BLL
         //OrderPayTimeout = 6
     }
 
-    public class PrdProductSkuCacheService : BaseDbContext
+    public class ProductSkuCacheService : BaseDbContext
     {
         private static readonly string redis_key_all_sku_info_by_merchId = "info_sku_all:{0}";
         private static readonly string redis_key_one_sku_stock_by_productId = "stock_sku_one:{0}";
@@ -42,8 +42,6 @@ namespace LocalS.BLL
                 return null;
             }
 
-            var productSkuStock = GetStock(merchId, productSkuId);
-
             productSkuInfoAndStockModel.Id = productSkuInfo.Id;
             productSkuInfoAndStockModel.ProductId = productSkuInfo.PrdProductId;
             productSkuInfoAndStockModel.Name = productSkuInfo.Name;
@@ -52,15 +50,8 @@ namespace LocalS.BLL
             productSkuInfoAndStockModel.DetailsDes = productSkuInfo.DetailsDes;
             productSkuInfoAndStockModel.BriefDes = productSkuInfo.BriefDes;
             productSkuInfoAndStockModel.SpecDes = productSkuInfo.BriefDes;
+            productSkuInfoAndStockModel.Stocks = GetStock(merchId, productSkuId);
 
-            if (productSkuStock == null)
-            {
-                productSkuInfoAndStockModel.Stocks = new List<ProductSkuStockModel>();
-            }
-            else
-            {
-                productSkuInfoAndStockModel.Stocks = productSkuStock;
-            }
 
             return productSkuInfoAndStockModel;
         }
