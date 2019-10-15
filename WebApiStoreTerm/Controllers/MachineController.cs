@@ -25,6 +25,13 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse SaveSlotStock([FromBody]RopMachineSaveSlotStock rop)
+        {
+            IResult result = StoreTermServiceFactory.Machine.SaveSlotStock(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         public OwnApiHttpResponse UpdateInfo([FromBody]RopMachineUpdateInfo rop)
         {
             IResult result = StoreTermServiceFactory.Machine.UpdateInfo(rop);

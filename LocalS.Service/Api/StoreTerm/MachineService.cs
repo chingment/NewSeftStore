@@ -173,6 +173,33 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
+        public CustomJsonResult SaveSlotStock(RopMachineSaveSlotStock rop)
+        {
+            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+
+            if (string.IsNullOrEmpty(rop.ProductSkuId))
+            {
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.SlotId).FirstOrDefault();
+                if (sellChannelStock != null)
+                {
+                    CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                    CurrentDb.SaveChanges();
+                }
+            }
+            else
+            {
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.SlotId && m.PrdProductSkuId == rop.ProductSkuId).FirstOrDefault();
+                if (sellChannelStock != null)
+                {
+                    sellChannelStock.SumQuantity = rop.SumQuantity;
+                    sellChannelStock.SellQuantity = rop.SumQuantity - sellChannelStock.LockQuantity;
+                    CurrentDb.SaveChanges();
+                }
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        }
+
         public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)
         {
             var result = new CustomJsonResult();
@@ -243,5 +270,6 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
         }
+
     }
 }
