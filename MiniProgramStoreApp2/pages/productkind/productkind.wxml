@@ -11,23 +11,23 @@
       <scroll-view class='kind-right-content {{tab.selected==true ? "":"hidden" }}' data-reply-index="{{tabIndex}}" scroll-y="true" bindscrolltolower="productLoadMore" bindscrolltoupper="productRefesh">
 
         <view class="prd-list-2">
-          <block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="product" wx:key="listIndex">
+          <block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
             <view class='it'>
               <view class="it-left">
-                <navigator class='imgurl' url="/pages/productdetails/productdetails?id={{product.id}}">
-                  <image class="img" src="{{product.mainImgUrl}}"></image>
+                <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+                  <image class="img" src="{{item.mainImgUrl}}"></image>
                 </navigator>
               </view>
               <view class="it-right">
-                <text class="name font-gray">{{product.name}}</text>
-                <text class="briefInfo font-gray">{{product.briefDes}}</text>
+                <text class="name font-gray">{{item.name}}</text>
+                <text class="briefInfo font-gray">{{item.briefDes}}</text>
                 <view class="area2">
                   <view class="price">
-                    <text class="saleprice font-black">{{product.refSku.salePrice}}</text>
-                    <text wx:if="{{product.refSku.isShowPrice}}" class="showprice font-gray">{{product.refSku.showPrice}}</text>
+                    <text class="saleprice font-black">{{item.salePrice}}</text>
+                    <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
                   </view>
                   <view class="operate">
-                    <image bindtap="addToCart" data-reply-skuid="{{product.refSku.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                    <image bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
                   </view>
                 </view>
               </view>

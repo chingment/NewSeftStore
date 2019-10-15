@@ -23,20 +23,20 @@
       <scroll-view scroll-top="{{tab.scrollTop}}" scroll-y="true" data-reply-index="{{index}}" style="height:{{scrollHeight}}px" bindscrolltolower="loadMore" bindscrolltoupper="refesh" bindscroll="scroll">
 
         <view class='list-data prd-list-1' wx:if="{{tab.list.items.length>0}}">
-          <block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="product" wx:key="list">
+          <block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
             <view class='it it-{{index%2}}'>
-              <navigator class='imgurl' url="/pages/productdetails/productdetails?id={{product.id}}">
-                <image class="img" src="{{product.mainImgUrl}}"></image>
+              <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+                <image class="img" src="{{item.mainImgUrl}}"></image>
               </navigator>
-              <text class="name font-gray">{{product.name}}</text>
-              <text class="briefInfo font-gray">{{product.briefInfo}}</text>
+              <text class="name font-gray">{{item.name}}</text>
+              <text class="briefInfo font-gray">{{item.briefDes}}</text>
               <view class="area2">
                 <view class="price">
-                  <text class="saleprice font-black">{{product.refSku.salePrice}}</text>
-                  <text wx:if="{{product.refSku.isShowPrice}}" class="showprice font-gray">{{product.refSku.showPrice}}</text>
+                  <text class="saleprice font-black">{{item.salePrice}}</text>
+                  <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
                 </view>
                 <view class="operate">
-                  <image bindtap="addToCart" data-reply-skuId="{{product.refSku.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                  <image bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
                 </view>
               </view>
             </view>

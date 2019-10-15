@@ -20,7 +20,7 @@
                       </view>
                       <view class="it-m">
                         <view class="it-ml">
-                          <navigator url="/pages/productdetails/productdetails?id={{itemsku.productId}}" style='height:100%;width:100%'>
+                          <navigator url="/pages/productdetails/productdetails?skuId={{itemsku.id}}" style='height:100%;width:100%'>
                             <image class='img' src="{{itemsku.mainImgUrl}}" />
                           </navigator>
                         </view>

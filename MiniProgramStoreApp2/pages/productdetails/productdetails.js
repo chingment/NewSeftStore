@@ -20,17 +20,18 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
-    var id = options.id == undefined ? "0" : options.id
+    var skuId = options.skuId == undefined ? "0" : options.skuId
 
     //app.changeData("main", { cart: cart })
 
     apiProduct.details({
-      id: id
+      storeId: ownRequest.getCurrentStoreId(),
+      skuId: skuId
     }, {
         success: function (res) {
           if (res.result == 1) {
             _this.setData({
-              product: res.data,
+              productSku: res.data,
               cart: storeage.getCart()
             })
 

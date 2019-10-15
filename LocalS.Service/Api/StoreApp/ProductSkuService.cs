@@ -90,9 +90,29 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
-            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, rup.Id);
+            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, rup.SkuId);
+            if (bizProductSku != null)
+            {
+                var productSkuModel = new ProductSkuModel();
+                productSkuModel.Id = bizProductSku.Id;
+                productSkuModel.ProductId = bizProductSku.ProductId;
+                productSkuModel.Name = bizProductSku.Name;
+                productSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
+                productSkuModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
+                productSkuModel.DetailsDes = bizProductSku.DetailsDes;
+                productSkuModel.BriefDes = bizProductSku.BriefDes;
+                productSkuModel.SpecDes = bizProductSku.SpecDes;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", bizProductSku);
+                if (bizProductSku.Stocks.Count > 0)
+                {
+                    productSkuModel.IsShowPrice = false;
+                    productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                    productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                    productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                }
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuModel);
+            }
 
             return result;
         }

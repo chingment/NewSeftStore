@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var stores = BizFactory.Store.GetAll(rup.MerchId);
+            var stores = BizFactory.Store.GetAll(rup.MerchId).Where(m => m.IsDelete == false);
 
             var storeModels = new List<StoreModel>();
 
