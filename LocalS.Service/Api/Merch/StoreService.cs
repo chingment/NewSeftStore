@@ -210,11 +210,12 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var store = BizFactory.Store.GetOne(rup.StoreId);
 
             var query = (from u in CurrentDb.SellChannelStock
                          where
-                         u.MerchId == merchId 
-                         select new { u.Id, u.PrdProductSkuId, u.MerchId,  u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
+                         u.MerchId == merchId
+                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.RefType, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
 
             if (!string.IsNullOrEmpty(rup.SellChannelRefId))
             {
@@ -237,16 +238,16 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-                var prdProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId,item.PrdProductSkuId);
-                if (prdProductSku != null)
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, store.MachineIds, item.PrdProductSkuId);
+                if (bizProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
-                    productSkuModel.Id = prdProductSku.Id;
-                    productSkuModel.Name = prdProductSku.Name;
-                    productSkuModel.DisplayImgUrls = prdProductSku.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                    productSkuModel.MainImgUrl = prdProductSku.MainImgUrl;
-                    productSkuModel.BriefDes = prdProductSku.BriefDes;
-                    productSkuModel.DetailsDes = prdProductSku.DetailsDes;
+                    productSkuModel.Id = bizProductSku.Id;
+                    productSkuModel.Name = bizProductSku.Name;
+                    productSkuModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
+                    productSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
+                    productSkuModel.BriefDes = bizProductSku.BriefDes;
+                    productSkuModel.DetailsDes = bizProductSku.DetailsDes;
                     productSkuModel.SumQuantity = item.SumQuantity;
                     productSkuModel.LockQuantity = item.LockQuantity;
                     productSkuModel.SellQuantity = item.SellQuantity;
@@ -269,7 +270,7 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetStoreInitManageMachine();
 
-            var store =BizFactory.Store.GetOne(storeId);
+            var store = BizFactory.Store.GetOne(storeId);
 
             ret.StoreName = store.Name;
 

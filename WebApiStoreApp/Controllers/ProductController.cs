@@ -10,7 +10,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupProductList rup)
         {
-            var result = StoreAppServiceFactory.Product.List(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.ProductSku.List(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
 
@@ -20,7 +20,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse Details([FromUri]RupProductDetails rup)
         {
-            var result = StoreAppServiceFactory.Product.Details(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.ProductSku.Details(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

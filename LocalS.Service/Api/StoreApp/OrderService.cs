@@ -108,18 +108,20 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, item.Id);
+                    var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, item.Id);
                     if (productSku != null)
                     {
                         item.Name = productSku.Name;
                         item.MainImgUrl = productSku.MainImgUrl;
-                        item.SalePrice = productSku.SalePrice;
 
-                        skuAmountByOriginal += (productSku.SalePrice * item.Quantity);
-                        skuAmountByMemebr += (productSku.SalePrice * item.Quantity);
-                        skuAmountByVip += (productSku.SalePriceByVip * item.Quantity);
-
-                        skus.Add(item);
+                        if (productSku.Stocks.Count > 0)
+                        {
+                            item.SalePrice = productSku.Stocks[0].SalePrice;
+                            skuAmountByOriginal += (productSku.Stocks[0].SalePrice * item.Quantity);
+                            skuAmountByMemebr += (productSku.Stocks[0].SalePrice * item.Quantity);
+                            skuAmountByVip += (productSku.Stocks[0].SalePriceByVip * item.Quantity);
+                            skus.Add(item);
+                        }
                     }
                     else
                     {

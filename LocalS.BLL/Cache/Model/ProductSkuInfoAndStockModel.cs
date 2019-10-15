@@ -23,12 +23,6 @@ namespace LocalS.BLL
         public string DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public string SpecDes { get; set; }
-  
         public List<ProductSkuStockModel> Stocks { get; set; }
-
-        public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
-        public bool IsShowPrice { get; set; }
-        public bool IsOffSell { get; set; }
     }
 }

@@ -156,17 +156,17 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-                var prdProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.PrdProductSkuId);
-                if (prdProductSku != null)
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, new string[] { rup.MachineId }, item.PrdProductSkuId);
+                if (bizProductSku != null)
                 {
                     olist.Add(new
                     {
-                        Id = prdProductSku.Id,
-                        Name = prdProductSku.Name,
-                        DisplayImgUrls = prdProductSku.DisplayImgUrls,
-                        MainImgUrl = prdProductSku.MainImgUrl,
-                        BriefDes = prdProductSku.BriefDes,
-                        DetailsDes = prdProductSku.DetailsDes,
+                        Id = bizProductSku.Id,
+                        Name = bizProductSku.Name,
+                        DisplayImgUrls = bizProductSku.DisplayImgUrls,
+                        MainImgUrl = bizProductSku.MainImgUrl,
+                        BriefDes = bizProductSku.BriefDes,
+                        DetailsDes = bizProductSku.DetailsDes,
                         SumQuantity = item.SumQuantity,
                         LockQuantity = item.LockQuantity,
                         SellQuantity = item.SellQuantity,

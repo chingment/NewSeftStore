@@ -152,17 +152,16 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var productSkuModel = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId,new string[] { machineId }, item.PrdProductSkuId);
 
-                if (productSkuModel != null)
+                if (bizProductSku != null)
                 {
                     var slot = new SlotModel();
 
                     slot.Id = item.SlotId;
-                    slot.ProductSkuId = productSkuModel.Id;
-                    slot.ProductSkuName = productSkuModel.Name;
-                    slot.ProductSkuMainImgUrl = productSkuModel.MainImgUrl;
-                    slot.SalePrice = item.SalePrice.ToF2Price();
+                    slot.ProductSkuId = bizProductSku.Id;
+                    slot.ProductSkuName = bizProductSku.Name;
+                    slot.ProductSkuMainImgUrl = bizProductSku.MainImgUrl;
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.LockQuantity;
                     slot.SellQuantity = item.SellQuantity;
@@ -190,7 +189,16 @@ namespace LocalS.Service.Api.StoreTerm
             else
             {
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.Id && m.PrdProductSkuId == rop.ProductSkuId).FirstOrDefault();
-                if (sellChannelStock != null)
+                if (sellChannelStock == null)
+                {
+                    sellChannelStock = new SellChannelStock();
+                    sellChannelStock.Id = GuidUtil.New();
+                    sellChannelStock.MerchId = machine.MerchId;
+                    sellChannelStock.RefType = E_SellChannelRefType.Machine;
+                    sellChannelStock.RefId = machine.Id;
+                    sellChannelStock.IsOffSell = false;
+                }
+                else
                 {
                     sellChannelStock.SumQuantity = rop.SumQuantity;
                     sellChannelStock.SellQuantity = rop.SumQuantity - sellChannelStock.LockQuantity;

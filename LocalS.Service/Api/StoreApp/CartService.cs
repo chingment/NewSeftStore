@@ -19,6 +19,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetCartPageData();
 
+            var store = BizFactory.Store.GetOne(rup.StoreId);
 
             var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
 
@@ -28,21 +29,24 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var clientCart in clientCarts)
             {
-                var productSkuModel = CacheServiceFactory.ProductSku.GetInfoAndStock(clientCart.MerchId, clientCart.PrdProductSkuId);
-                if (productSkuModel != null)
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(clientCart.MerchId, store.MachineIds, clientCart.PrdProductSkuId);
+                if (bizProductSku != null)
                 {
-                    var cartProcudtSkuModel = new CartProductSkuModel();
-                    cartProcudtSkuModel.CartId = clientCart.Id;
-                    cartProcudtSkuModel.Id = clientCart.PrdProductSkuId;
-                    cartProcudtSkuModel.ProductId = clientCart.PrdProductId;
-                    cartProcudtSkuModel.Name = productSkuModel.Name;
-                    cartProcudtSkuModel.MainImgUrl = productSkuModel.MainImgUrl;
-                    cartProcudtSkuModel.SalePrice = productSkuModel.SalePrice;
-                    cartProcudtSkuModel.Quantity = clientCart.Quantity;
-                    cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
-                    cartProcudtSkuModel.Selected = clientCart.Selected;
-                    cartProcudtSkuModel.ReceptionMode = clientCart.ReceptionMode;
-                    cartProductSkuModels.Add(cartProcudtSkuModel);
+                    if (bizProductSku.Stocks.Count > 0)
+                    {
+                        var cartProcudtSkuModel = new CartProductSkuModel();
+                        cartProcudtSkuModel.CartId = clientCart.Id;
+                        cartProcudtSkuModel.Id = clientCart.PrdProductSkuId;
+                        cartProcudtSkuModel.ProductId = clientCart.PrdProductId;
+                        cartProcudtSkuModel.Name = bizProductSku.Name;
+                        cartProcudtSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
+                        cartProcudtSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                        cartProcudtSkuModel.Quantity = clientCart.Quantity;
+                        cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
+                        cartProcudtSkuModel.Selected = clientCart.Selected;
+                        cartProcudtSkuModel.ReceptionMode = clientCart.ReceptionMode;
+                        cartProductSkuModels.Add(cartProcudtSkuModel);
+                    }
                 }
             }
 
@@ -94,7 +98,7 @@ namespace LocalS.Service.Api.StoreApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
 
-           
+
             lock (lock_Operate)
             {
                 using (TransactionScope ts = new TransactionScope())
@@ -120,7 +124,7 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, item.Id);
+                                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, item.Id);
 
                                 if (clientCart == null)
                                 {
@@ -129,7 +133,7 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.ClientUserId = clientUserId;
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
-                                    clientCart.PrdProductId = productSku.ProductId;
+                                    clientCart.PrdProductId = bizProductSku.ProductId;
                                     clientCart.PrdProductSkuId = item.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;

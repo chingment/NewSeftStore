@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreApp
             var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
 
             BannerModel bannerModel = new BannerModel();
-   
+
             foreach (var item in adContents)
             {
                 var imgModel = new BannerModel.ImgModel();
@@ -58,7 +58,7 @@ namespace LocalS.Service.Api.StoreApp
                 tab.Id = prdKind.Id;
                 tab.Name = prdKind.Name;
                 tab.MainImgUrl = prdKind.MainImgUrl;
-                tab.List = StoreAppServiceFactory.Product.GetPageList(0, 6, rup.StoreId, prdKind.Id);
+                tab.List = StoreAppServiceFactory.ProductSku.GetPageList(0, 6, rup.StoreId, prdKind.Id);
                 if (tab.List.Items.Count > 0)
                 {
                     pdAreaModel.Tabs.Add(tab);

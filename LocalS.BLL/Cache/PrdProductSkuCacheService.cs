@@ -31,19 +31,18 @@ namespace LocalS.BLL
             RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
         }
 
-        public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string productSkuId)
+        private ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string productSkuId)
         {
             var productSkuInfoAndStockModel = new ProductSkuInfoAndStockModel();
 
-
             var productSkuInfo = GetInfo(merchId, productSkuId);
+
             if (productSkuInfo == null)
             {
                 return null;
             }
 
             var productSkuStock = GetStock(merchId, productSkuId);
-
 
             productSkuInfoAndStockModel.Id = productSkuInfo.Id;
             productSkuInfoAndStockModel.ProductId = productSkuInfo.PrdProductId;
@@ -54,20 +53,34 @@ namespace LocalS.BLL
             productSkuInfoAndStockModel.BriefDes = productSkuInfo.BriefDes;
             productSkuInfoAndStockModel.SpecDes = productSkuInfo.BriefDes;
 
-            productSkuInfoAndStockModel.Stocks = productSkuStock;
-
-            if (productSkuStock != null)
+            if (productSkuStock == null)
             {
-                if (productSkuStock.Count > 0)
-                {
-                    productSkuInfoAndStockModel.SalePrice = productSkuStock[0].SalePrice;
-                    productSkuInfoAndStockModel.SalePriceByVip = productSkuStock[0].SalePriceByVip;
-                    productSkuInfoAndStockModel.IsShowPrice = false;
-                    productSkuInfoAndStockModel.IsOffSell = productSkuStock[0].IsOffSell;
-                }
+                productSkuInfoAndStockModel.Stocks = new List<ProductSkuStockModel>();
+            }
+            else
+            {
+                productSkuInfoAndStockModel.Stocks = productSkuStock;
             }
 
             return productSkuInfoAndStockModel;
+        }
+
+
+        public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string[] machineIds, string productSkuId)
+        {
+            var productSku = GetInfoAndStock(merchId, productSkuId);
+
+            if (productSku.Stocks != null)
+            {
+                if (productSku.Stocks.Count > 0)
+                {
+                    var stocks = productSku.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine && machineIds.Contains(m.RefId)).ToList();
+                    productSku.Stocks = stocks;
+
+                }
+            }
+
+            return productSku;
         }
 
         public ProductSkuInfoModel GetInfo(string merchId, string productSkuId)

@@ -57,35 +57,42 @@ namespace LocalS.BLL.Biz
                     List<string> warn_tips = new List<string>();
                     var operateStocks = new List<OperateStock>();
 
-                    List<ProductSkuInfoAndStockModel> productSkuInfoAndStocks = new List<BLL.ProductSkuInfoAndStockModel>();
+                    List<ProductSkuInfoAndStockModel> bizProductSkus = new List<BLL.ProductSkuInfoAndStockModel>();
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var l_ProductSkuInfoAndStock = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, productSku.Id);
+                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.SellChannelRefIds, productSku.Id);
 
-                        if (l_ProductSkuInfoAndStock == null)
+                        if (bizProductSku == null)
                         {
-                            warn_tips.Add(string.Format("{0}商品库存信息不存在", l_ProductSkuInfoAndStock.Name));
+                            warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
                         }
                         else
                         {
-
-                            var sellQuantity = l_ProductSkuInfoAndStock.Stocks.Where(m => m.RefType == rop.SellChannelRefType && rop.SellChannelRefIds.Contains(m.RefId)).Sum(m => m.SellQuantity);
-
-                            Console.WriteLine("sellQuantity：" + sellQuantity);
-
-                            if (l_ProductSkuInfoAndStock.IsOffSell)
+                            if (bizProductSku.Stocks.Count == 0)
                             {
-                                warn_tips.Add(string.Format("{0}已经下架", l_ProductSkuInfoAndStock.Name));
+                                warn_tips.Add(string.Format("{0}商品库存信息不存在", bizProductSku.Name));
                             }
                             else
                             {
-                                if (sellQuantity < productSku.Quantity)
+                                var sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+
+                                Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                                if (bizProductSku.Stocks[0].IsOffSell)
                                 {
-                                    warn_tips.Add(string.Format("{0}的可销售数量为{1}个", l_ProductSkuInfoAndStock.Name, sellQuantity));
+                                    warn_tips.Add(string.Format("{0}已经下架", bizProductSku.Name));
                                 }
+                                else
+                                {
+                                    if (sellQuantity < productSku.Quantity)
+                                    {
+                                        warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
+                                    }
+                                }
+                                bizProductSkus.Add(bizProductSku);
+
                             }
-                            productSkuInfoAndStocks.Add(l_ProductSkuInfoAndStock);
                         }
                     }
 
@@ -94,11 +101,7 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
                     }
 
-
-
-
-
-                    var reserveDetails = GetReserveDetail(rop.ProductSkus, productSkuInfoAndStocks);
+                    var reserveDetails = GetReserveDetail(rop.ProductSkus, bizProductSkus);
 
                     var order = new Order();
                     order.Id = GuidUtil.New();
@@ -341,9 +344,9 @@ namespace LocalS.BLL.Biz
                                 detailChildSon.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
                                 detailChildSon.SlotId = item.SlotId;
                                 detailChildSon.Quantity = 1;
-                                detailChildSon.SalePrice = productSku.SalePrice;
-                                detailChildSon.SalePriceByVip = productSku.SalePriceByVip;
-                                detailChildSon.OriginalAmount = detailChildSon.Quantity * productSku.SalePrice;
+                                detailChildSon.SalePrice = productSku_Stocks[0].SalePrice;
+                                detailChildSon.SalePriceByVip = productSku_Stocks[0].SalePriceByVip;
+                                detailChildSon.OriginalAmount = detailChildSon.Quantity * productSku_Stocks[0].SalePrice;
                                 detailChildSons.Add(detailChildSon);
                             }
                         }
