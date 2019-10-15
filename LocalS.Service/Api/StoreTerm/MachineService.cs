@@ -127,9 +127,9 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult GetSlotStocks(string machineId)
+        public CustomJsonResult GetSlots(string machineId)
         {
-            var ret = new RetMachineGetSlotStocks();
+            var ret = new RetMachineGetSlots();
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
@@ -156,30 +156,31 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (productSkuModel != null)
                 {
-                    var slotStockModel = new SlotProductSkuModel();
+                    var slot = new SlotModel();
 
-                    slotStockModel.Id = productSkuModel.Id;
-                    slotStockModel.SlotId = item.SlotId;
-                    slotStockModel.Name = productSkuModel.Name;
-                    slotStockModel.MainImgUrl = productSkuModel.MainImgUrl;
-                    slotStockModel.SalePrice = item.SalePrice.ToF2Price();
-                    slotStockModel.SumQuantity = item.SumQuantity;
-                    slotStockModel.LockQuantity = item.LockQuantity;
-                    slotStockModel.SellQuantity = item.SellQuantity;
-                    ret.SlotStocks.Add(item.SlotId, slotStockModel);
+                    slot.Id = item.SlotId;
+                    slot.ProductSkuId = productSkuModel.Id;
+                    slot.ProductSkuName = productSkuModel.Name;
+                    slot.ProductSkuMainImgUrl = productSkuModel.MainImgUrl;
+                    slot.SalePrice = item.SalePrice.ToF2Price();
+                    slot.SumQuantity = item.SumQuantity;
+                    slot.LockQuantity = item.LockQuantity;
+                    slot.SellQuantity = item.SellQuantity;
+                    slot.MaxQuantity = 10;
+                    ret.Slots.Add(item.SlotId, slot);
                 }
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult SaveSlotStock(RopMachineSaveSlotStock rop)
+        public CustomJsonResult SaveSlot(RopMachineSaveSlot rop)
         {
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.SlotId).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.Id).FirstOrDefault();
                 if (sellChannelStock != null)
                 {
                     CurrentDb.SellChannelStock.Remove(sellChannelStock);
@@ -188,7 +189,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.SlotId && m.PrdProductSkuId == rop.ProductSkuId).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.Id && m.PrdProductSkuId == rop.ProductSkuId).FirstOrDefault();
                 if (sellChannelStock != null)
                 {
                     sellChannelStock.SumQuantity = rop.SumQuantity;

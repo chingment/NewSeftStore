@@ -18,16 +18,16 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse SlotStocks([FromUri]RupMachineSlotStocks rup)
+        public OwnApiHttpResponse GetSlots([FromUri]RupMachineSlotStocks rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.GetSlotStocks(rup.MachineId);
+            IResult result = StoreTermServiceFactory.Machine.GetSlots(rup.MachineId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SaveSlotStock([FromBody]RopMachineSaveSlotStock rop)
+        public OwnApiHttpResponse SaveSlot([FromBody]RopMachineSaveSlot rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.SaveSlotStock(rop);
+            IResult result = StoreTermServiceFactory.Machine.SaveSlot(rop);
             return new OwnApiHttpResponse(result);
         }
 
