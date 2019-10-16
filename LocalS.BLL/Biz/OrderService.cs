@@ -53,11 +53,10 @@ namespace LocalS.BLL.Biz
                 {
                     RetOrderReserve ret = new RetOrderReserve();
 
-                    //检查是否有可买的商品
-                    List<string> warn_tips = new List<string>();
-                    var operateStocks = new List<OperateStock>();
-
                     List<ProductSkuInfoAndStockModel> bizProductSkus = new List<BLL.ProductSkuInfoAndStockModel>();
+
+                    #region 检查可售商品信息是否符合实际环境
+                    List<string> warn_tips = new List<string>();
 
                     foreach (var productSku in rop.ProductSkus)
                     {
@@ -89,9 +88,11 @@ namespace LocalS.BLL.Biz
                                     {
                                         warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
                                     }
+                                    else
+                                    {
+                                        bizProductSkus.Add(bizProductSku);
+                                    }
                                 }
-                                bizProductSkus.Add(bizProductSku);
-
                             }
                         }
                     }
@@ -101,7 +102,7 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
                     }
 
-
+                    #endregion
 
                     var reserveDetails = GetReserveDetail(rop.ProductSkus, bizProductSkus);
 
@@ -266,9 +267,11 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in detailsChild.SlotStock)
                             {
-                                operateStocks.Add(new OperateStock { MerchId = order.MerchId, ProductSkuId = slotStock.PrdProductSkuId, RefType = slotStock.SellChannelRefType, RefId = slotStock.SellChannelRefId, SlotId = slotStock.SlotId, Quantity = slotStock.Quantity });
-
                                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == slotStock.PrdProductSkuId && m.SlotId == slotStock.SlotId && m.RefType == slotStock.SellChannelRefType && m.RefId == slotStock.SellChannelRefId).FirstOrDefault();
+                                if (sellChannelStock == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "查找不到库存信息", null);
+                                }
 
                                 sellChannelStock.LockQuantity += slotStock.Quantity;
                                 sellChannelStock.SellQuantity -= slotStock.Quantity;
@@ -291,7 +294,6 @@ namespace LocalS.BLL.Biz
                                 sellChannelStockLog.CreateTime = DateTime.Now;
                                 sellChannelStockLog.RemarkByDev = string.Format("预定成功，减少可销库存：{0}", slotStock.Quantity);
                                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-
                             }
                         }
                     }
@@ -301,13 +303,7 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
 
-                    //foreach (var stock in operateStocks)
-                    //{
-                    //    CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderReserveSuccess, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
-                    //}
-
-                    // MqFactory.Global.PushStockOperate(GuidUtil.New(), new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
-
+                    Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
                     ret.OrderId = order.Id;
                     ret.OrderSn = order.Sn;
@@ -788,14 +784,16 @@ namespace LocalS.BLL.Biz
                     select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
 
-                var operateStocks = new List<OperateStock>();
+
 
                 foreach (var childSon in childSons)
                 {
-                    operateStocks.Add(new OperateStock { MerchId = order.MerchId, ProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
-
-
                     var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == childSon.PrdProductSkuId && m.SlotId == childSon.SlotId && m.RefType == childSon.SellChannelRefType && m.RefId == childSon.SellChannelRefId).FirstOrDefault();
+                    if (sellChannelStock == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("通知失败({0})，库存信息找不到", orderSn));
+                    }
+
                     sellChannelStock.LockQuantity -= childSon.Quantity;
                     sellChannelStock.SumQuantity -= childSon.Quantity;
                     sellChannelStock.Mender = operater;
@@ -920,14 +918,14 @@ namespace LocalS.BLL.Biz
                         group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
                         select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
-                    var operateStocks = new List<OperateStock>();
 
                     foreach (var childSon in childSons)
                     {
-                        operateStocks.Add(new OperateStock { MerchId = order.MerchId, ProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
-
-
                         var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == order.MerchId && m.PrdProductSkuId == childSon.PrdProductSkuId && m.SlotId == childSon.SlotId && m.RefType == childSon.SellChannelRefType && m.RefId == childSon.SellChannelRefId).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "取消失败");
+                        }
 
                         sellChannelStock.LockQuantity -= childSon.Quantity;
                         sellChannelStock.SellQuantity += childSon.Quantity;
@@ -1054,12 +1052,6 @@ namespace LocalS.BLL.Biz
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
-
-                if (result.Result == ResultType.Success)
-                {
-                    Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
-                }
-
             }
 
             return result;

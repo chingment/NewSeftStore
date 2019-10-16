@@ -141,35 +141,45 @@ namespace LocalS.BLL
             return productSkuStockModels;
         }
 
-        public void OperateStock(string merchId, string productSkuId, StockOperateType operateType, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
+        public bool OperateStock(string merchId, string productSkuId, StockOperateType operateType, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
         {
-            var redis = new RedisClient<List<ProductSkuStockModel>>();
-
-            var stock = GetStock(merchId, productSkuId);
-
-            for (int i = 0; i < stock.Count; i++)
+            bool isSuccess = false;
+            try
             {
-                if (stock[i].RefType == refType && stock[i].RefId == refId && stock[i].SlotId == slotId)
+                var redis = new RedisClient<List<ProductSkuStockModel>>();
+
+                var stock = GetStock(merchId, productSkuId);
+
+                for (int i = 0; i < stock.Count; i++)
                 {
-                    switch (operateType)
+                    if (stock[i].RefType == refType && stock[i].RefId == refId && stock[i].SlotId == slotId)
                     {
-                        case StockOperateType.OrderReserveSuccess:
-                            stock[i].LockQuantity += quantity;
-                            stock[i].SellQuantity -= quantity;
-                            break;
-                        case StockOperateType.OrderPaySuccess:
-                            stock[i].LockQuantity -= quantity;
-                            stock[i].SumQuantity -= quantity;
-                            break;
-                        case StockOperateType.OrderCancle:
-                            stock[i].LockQuantity -= quantity;
-                            stock[i].SellQuantity += quantity;
-                            break;
+                        switch (operateType)
+                        {
+                            case StockOperateType.OrderReserveSuccess:
+                                stock[i].LockQuantity += quantity;
+                                stock[i].SellQuantity -= quantity;
+                                break;
+                            case StockOperateType.OrderPaySuccess:
+                                stock[i].LockQuantity -= quantity;
+                                stock[i].SumQuantity -= quantity;
+                                break;
+                            case StockOperateType.OrderCancle:
+                                stock[i].LockQuantity -= quantity;
+                                stock[i].SellQuantity += quantity;
+                                break;
+                        }
                     }
                 }
+
+                isSuccess = redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), stock, new TimeSpan(100, 0, 0));
+            }
+            catch (Exception ex)
+            {
+
             }
 
-            redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), stock, new TimeSpan(100, 0, 0));
+            return isSuccess;
         }
 
         public List<ProductSkuInfoBySearchModel> Search(string merchId, string key)
