@@ -12,7 +12,7 @@ namespace LocalS.BLL
         public string Id { get; set; }
         public string BarCode { get; set; }
         public string PinYinIndx { get; set; }
-        public string PrdProductId { get; set; }
+        public string ProductId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }

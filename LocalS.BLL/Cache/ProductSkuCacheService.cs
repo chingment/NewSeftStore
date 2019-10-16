@@ -43,7 +43,7 @@ namespace LocalS.BLL
             }
 
             productSkuInfoAndStockModel.Id = productSkuInfo.Id;
-            productSkuInfoAndStockModel.ProductId = productSkuInfo.PrdProductId;
+            productSkuInfoAndStockModel.ProductId = productSkuInfo.ProductId;
             productSkuInfoAndStockModel.Name = productSkuInfo.Name;
             productSkuInfoAndStockModel.MainImgUrl = productSkuInfo.MainImgUrl;
             productSkuInfoAndStockModel.DisplayImgUrls = productSkuInfo.DisplayImgUrls;
@@ -86,7 +86,7 @@ namespace LocalS.BLL
                 prdProductSkuModel.Id = prdProductSkuByDb.Id;
                 prdProductSkuModel.BarCode = prdProductSkuByDb.BarCode;
                 prdProductSkuModel.PinYinIndx = prdProductSkuByDb.PinYinIndex;
-                prdProductSkuModel.PrdProductId = prdProductSkuByDb.PrdProductId;
+                prdProductSkuModel.ProductId = prdProductSkuByDb.PrdProductId;
                 prdProductSkuModel.Name = prdProductSkuByDb.Name.NullToEmpty();
                 prdProductSkuModel.DisplayImgUrls = prdProductDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 prdProductSkuModel.MainImgUrl = ImgSet.GetMain(prdProductDb.DisplayImgUrls);

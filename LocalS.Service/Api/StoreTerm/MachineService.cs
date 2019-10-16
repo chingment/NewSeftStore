@@ -193,7 +193,7 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == rop.ProductSkuId).FirstOrDefault();
 
-                    var bizProdcutSku = CacheServiceFactory.ProductSku.GetInfoAndStock(machine.MerchId, new string[] { machine.Id }, rop.ProductSkuId);
+                    var bizProdcutSku = CacheServiceFactory.ProductSku.GetInfo(machine.MerchId,rop.ProductSkuId);
                     sellChannelStock = new SellChannelStock();
                     sellChannelStock.Id = GuidUtil.New();
                     sellChannelStock.MerchId = machine.MerchId;
