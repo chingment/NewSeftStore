@@ -44,6 +44,19 @@ namespace LocalS.BLL.Biz
                             CurrentDb.SellChannelStock.Remove(sellChannelStock);
                             CurrentDb.SaveChanges();
                         }
+                        var slot = new
+                        {
+                            Id = slotId,
+                            ProductSkuId = "",
+                            ProductSkuName = "暂无商品",
+                            ProductSkuMainImgUrl = "",
+                            SumQuantity = 0,
+                            LockQuantity = 0,
+                            SellQuantity = 0,
+                            MaxQuantity = 10
+                        };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
                         #endregion MachineSlotRemove
                         break;
                     case OperateStockType.MachineSlotSave:
@@ -80,6 +93,21 @@ namespace LocalS.BLL.Biz
                             CurrentDb.SaveChanges();
                         }
 
+                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
+
+                        var slot2 = new
+                        {
+                            Id = slotId,
+                            ProductSkuId = bizProductSku.Id,
+                            ProductSkuName = bizProductSku.Name,
+                            ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
+                            SumQuantity = sellChannelStock.SumQuantity,
+                            LockQuantity = sellChannelStock.LockQuantity,
+                            SellQuantity = sellChannelStock.SellQuantity,
+                            MaxQuantity = 10
+                        };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot2);
                         #endregion
                         break;
                     case OperateStockType.OrderReserve:
@@ -112,7 +140,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.CreateTime = DateTime.Now;
                         sellChannelStockLog.RemarkByDev = string.Format("预定成功，减少可销库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
                         break;
                     case OperateStockType.OrderCancle:
@@ -145,7 +173,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.CreateTime = DateTime.Now;
                         sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复可销库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
                         break;
                     case OperateStockType.OrderPaySuccess:
@@ -178,7 +206,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.CreateTime = DateTime.Now;
                         sellChannelStockLog.RemarkByDev = string.Format("成功支付，减少实际库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
                         break;
                 }
@@ -186,7 +214,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+
             }
 
             return result;

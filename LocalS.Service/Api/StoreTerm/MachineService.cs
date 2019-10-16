@@ -179,14 +179,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, rop.ProductSkuId, rop.MachineId, rop.Id);
+                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, rop.ProductSkuId, rop.MachineId, rop.Id);
             }
             else
             {
-                BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, rop.ProductSkuId, rop.MachineId, rop.Id, rop.SumQuantity);
+                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, rop.ProductSkuId, rop.MachineId, rop.Id, rop.SumQuantity);
             }
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
         }
 
         public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)
