@@ -59,7 +59,7 @@ namespace Test
 
             // alipay.UnifiedOrder(u);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10; i++)
             {
                 string threadName = "thread " + i;
                 int secondsToWait = 2 + 2 * i;
@@ -80,7 +80,7 @@ namespace Test
             rop.Source = LocalS.Entity.E_OrderSource.WechatMiniProgram;
             rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
             rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
-            var result = StoreAppServiceFactory.Order.Reserve(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
+            var result = StoreAppServiceFactory.Order.Reserve2(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
         }
     }

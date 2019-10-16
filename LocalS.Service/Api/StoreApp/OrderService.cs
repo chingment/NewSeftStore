@@ -81,6 +81,39 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+        public CustomJsonResult Reserve2(string operater, string clientUserId, RopOrderReserve rop)
+        {
+
+            var store = BizFactory.Store.GetOne(rop.StoreId);
+
+            CustomJsonResult result = new CustomJsonResult();
+            LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
+            bizRop.Source = rop.Source;
+            bizRop.StoreId = rop.StoreId;
+            bizRop.ClientUserId = clientUserId;
+            bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
+            bizRop.SellChannelRefIds = store.MachineIds;//不指定机器
+
+            foreach (var productSku in rop.ProductSkus)
+            {
+                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = productSku.ReceptionMode });
+            }
+
+            var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve2(operater, bizRop);
+
+            if (bizResult.Result == ResultType.Success)
+            {
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", bizResult.Data);
+            }
+            else
+            {
+                result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, bizResult.Message);
+            }
+
+            return result;
+        }
+
         public CustomJsonResult Confrim(string operater, string clientUserId, RopOrderConfirm rop)
         {
             var result = new CustomJsonResult();

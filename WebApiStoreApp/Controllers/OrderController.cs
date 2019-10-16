@@ -75,7 +75,8 @@ namespace WebApiStoreApp.Controllers
 
                 if (!string.IsNullOrEmpty(content))
                 {
-                    MqFactory.Global.PushPayResultNotify(E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                   
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             catch (System.Exception ex)

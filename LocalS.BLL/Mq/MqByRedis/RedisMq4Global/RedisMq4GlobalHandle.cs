@@ -15,6 +15,7 @@ namespace LocalS.BLL.Mq.MqByRedis
     public class RedisMq4GlobalHandle
     {
         public MqMessageType Type { get; set; }
+        public string Ticket { get; set; }
         public object Content { get; set; }
         private static readonly object lock_Handle = new object();
         public void Handle()
@@ -32,15 +33,15 @@ namespace LocalS.BLL.Mq.MqByRedis
                     {
                         switch (this.Type)
                         {
-                            case MqMessageType.StockOperate:
-                                LogUtil.Info("StockOperate");
-                                StockOperateModel t1 = Newtonsoft.Json.JsonConvert.DeserializeObject<StockOperateModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                StockOperate(GuidUtil.Empty(), t1);
-                                break;
                             case MqMessageType.PayResultNotify:
                                 LogUtil.Info("PayResultNotify");
                                 PayResultNotifyModel t2 = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
                                 BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), t2.From, t2.Content);
+                                break;
+                            case MqMessageType.OrderReserve:
+                                LogUtil.Info("PayResultNotify");
+                                LocalS.BLL.Biz.RopOrderReserve t1 = Newtonsoft.Json.JsonConvert.DeserializeObject<LocalS.BLL.Biz.RopOrderReserve>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.Order.Reserve(GuidUtil.Empty(), t1);
                                 break;
                         }
 
