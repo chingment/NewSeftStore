@@ -89,7 +89,6 @@
     <Compile Include="Cache\ProductSkuCacheService.cs" />
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayResultNotifyModel.cs" />
-    <Compile Include="Mq\MqMessageConentModel\StockOperateModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />

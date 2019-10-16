@@ -47,5 +47,13 @@ namespace LocalS.BLL.Biz
                 return new BackgroundJobProvider();
             }
         }
+
+        public static ProductSkuService ProductSku
+        {
+            get
+            {
+                return new ProductSkuService();
+            }
+        }
     }
 }
