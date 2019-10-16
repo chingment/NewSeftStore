@@ -49,15 +49,18 @@ m.RefType == Entity.E_SellChannelRefType.Machine)
                     productSkuModel.BriefDes = bizProductSku.BriefDes;
                     productSkuModel.SpecDes = bizProductSku.SpecDes;
 
-                    if (bizProductSku.Stocks.Count > 0)
+                    if (bizProductSku.Stocks != null)
                     {
-                        productSkuModel.IsShowPrice = false;
-                        productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                        productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
-                        productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                        productSkuModel.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
-                        productSkuModel.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
-                        productSkuModel.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                        if (bizProductSku.Stocks.Count > 0)
+                        {
+                            productSkuModel.IsShowPrice = false;
+                            productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                            productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                            productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                            productSkuModel.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                            productSkuModel.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
+                            productSkuModel.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                        }
                     }
 
                     pageEntiy.Items.Add(productSkuModel);

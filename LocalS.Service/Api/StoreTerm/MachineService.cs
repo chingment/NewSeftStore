@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId,new string[] { machineId }, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, new string[] { machineId }, item.PrdProductSkuId);
 
                 if (bizProductSku != null)
                 {
@@ -191,12 +191,27 @@ namespace LocalS.Service.Api.StoreTerm
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machine.Id && m.SlotId == rop.Id && m.PrdProductSkuId == rop.ProductSkuId).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
+                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == rop.ProductSkuId).FirstOrDefault();
+
+                    var bizProdcutSku = CacheServiceFactory.ProductSku.GetInfoAndStock(machine.MerchId, new string[] { machine.Id }, rop.ProductSkuId);
                     sellChannelStock = new SellChannelStock();
                     sellChannelStock.Id = GuidUtil.New();
                     sellChannelStock.MerchId = machine.MerchId;
                     sellChannelStock.RefType = E_SellChannelRefType.Machine;
                     sellChannelStock.RefId = machine.Id;
+                    sellChannelStock.PrdProductId = bizProdcutSku.ProductId;
+                    sellChannelStock.PrdProductSkuId = bizProdcutSku.Id;
+                    sellChannelStock.SlotId = rop.Id;
+                    sellChannelStock.SumQuantity = rop.SumQuantity;
+                    sellChannelStock.SellQuantity = 0;
+                    sellChannelStock.LockQuantity = 0;
                     sellChannelStock.IsOffSell = false;
+                    sellChannelStock.SalePrice = productSku.SalePrice;
+                    sellChannelStock.SalePriceByVip = productSku.SalePrice;
+                    sellChannelStock.CreateTime = DateTime.Now;
+                    sellChannelStock.Creator = GuidUtil.Empty();
+                    CurrentDb.SellChannelStock.Add(sellChannelStock);
+                    CurrentDb.SaveChanges();
                 }
                 else
                 {

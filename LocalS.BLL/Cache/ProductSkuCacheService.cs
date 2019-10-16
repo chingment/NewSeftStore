@@ -60,15 +60,9 @@ namespace LocalS.BLL
         public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string[] machineIds, string productSkuId)
         {
             var productSku = GetInfoAndStock(merchId, productSkuId);
-
-            if (productSku.Stocks != null)
+            if (productSku != null)
             {
-                if (productSku.Stocks.Count > 0)
-                {
-                    var stocks = productSku.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine && machineIds.Contains(m.RefId)).ToList();
-                    productSku.Stocks = stocks;
-
-                }
+                productSku.Stocks = productSku.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine && machineIds.Contains(m.RefId)).ToList();
             }
 
             return productSku;
@@ -116,7 +110,6 @@ namespace LocalS.BLL
             var redis = new RedisClient<List<ProductSkuStockModel>>();
 
             var productSkuStockModels = redis.KGet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
-
             if (productSkuStockModels == null)
             {
                 productSkuStockModels = new List<ProductSkuStockModel>();
@@ -139,6 +132,11 @@ namespace LocalS.BLL
                 }
 
                 redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), productSkuStockModels, new TimeSpan(100, 0, 0));
+            }
+
+            if (productSkuStockModels == null)
+            {
+                productSkuStockModels = new List<ProductSkuStockModel>();
             }
 
             return productSkuStockModels;
