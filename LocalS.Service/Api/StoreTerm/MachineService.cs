@@ -260,5 +260,31 @@ namespace LocalS.Service.Api.StoreTerm
 
         }
 
+        public CustomJsonResult SendRunStatus(RopMachineSendRunStatus rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+
+            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+
+            if (machine != null)
+            {
+                switch (rop.Status)
+                {
+                    case "running":
+                        machine.RunStatus = E_MachineRunStatus.Running;
+                        machine.LastRequestTime = DateTime.Now;
+                        break;
+                    case "setting":
+                        machine.RunStatus = E_MachineRunStatus.Setting;
+                        machine.LastRequestTime = DateTime.Now;
+                        break;
+                }
+
+                CurrentDb.SaveChanges();
+            }
+
+            return result;
+        }
     }
 }

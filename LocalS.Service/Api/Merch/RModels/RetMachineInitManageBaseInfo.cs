@@ -12,6 +12,7 @@ namespace LocalS.Service.Api.Merch
 
         public string Name { get; set; }
 
+        public string LastRequestTime { get; set; }
 
         public StatusModel Status { get; set; }
     }

@@ -329,7 +329,7 @@ namespace LocalS.Service.Api.Merch
                     Id = item.MachineId,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
-                    Status = MerchServiceFactory.Machine.GetStatus(),
+                    Status = MerchServiceFactory.Machine.GetStatus(machine.RunStatus, machine.LastRequestTime),
                     CreateTime = item.CreateTime,
                 });
             }

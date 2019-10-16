@@ -14,9 +14,26 @@ namespace LocalS.Service.Api.Merch
     public class MachineService : BaseDbContext
     {
 
-        public StatusModel GetStatus()
+        public StatusModel GetStatus(E_MachineRunStatus runstatus, DateTime? lastRequestTime)
         {
             var status = new StatusModel();
+
+            switch (runstatus)
+            {
+                case E_MachineRunStatus.Running:
+                    status.Text = "运行中";
+                    status.Value = 2;
+                    break;
+                case E_MachineRunStatus.Setting:
+                    status.Text = "设置中";
+                    status.Value = 3;
+                    break;
+                case E_MachineRunStatus.Stoped:
+                    status.Text = "已停止";
+                    status.Value = 1;
+                    break;
+            }
+
             return status;
         }
 
@@ -51,8 +68,10 @@ namespace LocalS.Service.Api.Merch
                     Id = item.MachineId,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
-                    Status = GetStatus(),
+                    Status = GetStatus(machine.RunStatus, machine.LastRequestTime),
+                    LastRequestTime = machine.LastRequestTime,
                     CreateTime = item.CreateTime,
+
                 });
             }
 
@@ -96,10 +115,12 @@ namespace LocalS.Service.Api.Merch
             var ret = new RetMachineInitManageBaseInfo();
 
             var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
+            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
 
             ret.Id = merchMachine.MachineId;
             ret.Name = merchMachine.Name;
-            ret.Status = GetStatus();
+            ret.Status = GetStatus(machine.RunStatus, machine.LastRequestTime);
+            ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

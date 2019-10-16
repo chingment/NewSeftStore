@@ -4,6 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_MachineRunStatus
+    {
+        Unknow = 0,
+        Running = 1,
+        Stoped = 2,
+        Setting = 3
+    }
+
     [Table("Machine")]
     public class Machine
     {
@@ -11,7 +19,6 @@ namespace LocalS.Entity
         public string Id { get; set; }
         [MaxLength(128)]
         public string Name { get; set; }
-
         public string MainImgUrl { get; set; }
         [MaxLength(128)]
         public string MacAddress { get; set; }
@@ -25,5 +32,7 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string LogoImgUrl { get; set; }
+        public DateTime? LastRequestTime { get; set; }
+        public E_MachineRunStatus RunStatus { get; set; }
     }
 }

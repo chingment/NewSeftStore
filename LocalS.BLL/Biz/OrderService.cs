@@ -48,6 +48,7 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);
                 }
 
+
                 using (TransactionScope ts = new TransactionScope())
                 {
                     RetOrderReserve ret = new RetOrderReserve();
@@ -105,6 +106,7 @@ namespace LocalS.BLL.Biz
 
                     var reserveDetails = GetReserveDetail(rop.ProductSkus, bizProductSkus);
 
+                  
                     var order = new Order();
                     order.Id = GuidUtil.New();
                     order.Sn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);

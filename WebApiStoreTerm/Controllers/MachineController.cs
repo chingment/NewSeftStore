@@ -46,6 +46,13 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse SendRunStatus([FromBody]RopMachineSendRunStatus rop)
+        {
+            IResult result = StoreTermServiceFactory.Machine.SendRunStatus(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         public OwnApiHttpResponse UpLoadLog()
         {

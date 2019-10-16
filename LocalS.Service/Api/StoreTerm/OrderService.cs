@@ -35,6 +35,8 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
+
+
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;

@@ -292,6 +292,7 @@
     <Compile Include="Api\StoreTerm\RModels\RetProductSkuSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineSaveSlot.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopMachineSendRunStatus.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUpdateInfo.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderCancle.cs" />

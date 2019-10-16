@@ -61,7 +61,7 @@ namespace LocalS.BLL.Biz
                         break;
                     case OperateStockType.MachineSlotSave:
                         #region MachineSlotSave
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
