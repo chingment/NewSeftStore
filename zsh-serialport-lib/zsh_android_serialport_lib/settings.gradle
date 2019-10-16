@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='zsh_android_serialport_lib'
