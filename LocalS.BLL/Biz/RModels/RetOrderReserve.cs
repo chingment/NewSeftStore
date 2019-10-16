@@ -46,10 +46,10 @@ namespace LocalS.BLL.Biz
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
 
-            public string PrdProductId { get; set; }
-            public string PrdProductSkuId { get; set; }
-            public string PrdProductSkuName { get; set; }
-            public string PrdProductSkuMainImgUrl { get; set; }
+            public string ProductId { get; set; }
+            public string ProductSkuId { get; set; }
+            public string ProductSkuName { get; set; }
+            public string ProductSkuMainImgUrl { get; set; }
             public decimal SalePrice { get; set; }
 
             public decimal SalePriceByVip { get; set; }
@@ -69,10 +69,10 @@ namespace LocalS.BLL.Biz
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
             public int Quantity { get; set; }
-            public string PrdProductId { get; set; }
-            public string PrdProductSkuId { get; set; }
-            public string PrdProductSkuName { get; set; }
-            public string PrdProductSkuMainImgUrl { get; set; }
+            public string ProductId { get; set; }
+            public string ProductSkuId { get; set; }
+            public string ProductSkuName { get; set; }
+            public string ProductSkuMainImgUrl { get; set; }
             public decimal SalePrice { get; set; }
             public decimal SalePriceByVip { get; set; }
             public decimal OriginalAmount { get; set; }
@@ -87,7 +87,7 @@ namespace LocalS.BLL.Biz
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
             public string SlotId { get; set; }
-            public string PrdProductSkuId { get; set; }
+            public string ProductSkuId { get; set; }
             public int Quantity { get; set; }
         }
     }
