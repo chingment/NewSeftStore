@@ -14,12 +14,12 @@ namespace LocalS.BLL.Mq.MqByRedis
         protected override string MessageQueueKeyName { get { return "RedisMq4Global"; } }
         protected override bool IsTran { get { return false; } }
 
-        public void PushPayResultNotify(string ticket, PayResultNotifyModel messageConent)
+        public void PushPayResultNotify(string ticket, E_OrderNotifyLogNotifyFrom from, string content)
         {
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.PayResultNotify;
             obj.Ticket = ticket;
-            obj.Content = messageConent;
+            obj.Content = new PayResultNotifyModel { From = from, Content = content } ;
             this.Push(obj);
         }
 
