@@ -22,6 +22,14 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
+        public void OrderReserve(LocalS.BLL.Biz.RopOrderReserve messageConent)
+        {
+            var obj = new RedisMq4GlobalHandle();
+            obj.Type = MqMessageType.StockOperate;
+            obj.Content = messageConent;
+            this.Push(obj);
+        }
+
         public void PushPayResultNotify(E_OrderNotifyLogNotifyFrom from, string content)
         {
             var obj = new RedisMq4GlobalHandle();

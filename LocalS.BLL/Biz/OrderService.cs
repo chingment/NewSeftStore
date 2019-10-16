@@ -101,6 +101,8 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
                     }
 
+
+
                     var reserveDetails = GetReserveDetail(rop.ProductSkus, bizProductSkus);
 
                     var order = new Order();
@@ -264,7 +266,7 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in detailsChild.SlotStock)
                             {
-                                operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = slotStock.PrdProductSkuId, RefType = slotStock.SellChannelRefType, RefId = slotStock.SellChannelRefId, SlotId = slotStock.SlotId, Quantity = slotStock.Quantity });
+                                operateStocks.Add(new OperateStock { MerchId = order.MerchId, ProductSkuId = slotStock.PrdProductSkuId, RefType = slotStock.SellChannelRefType, RefId = slotStock.SellChannelRefId, SlotId = slotStock.SlotId, Quantity = slotStock.Quantity });
                             }
                         }
                     }
@@ -273,10 +275,6 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    for (int i = 0; i < operateStocks.Count; i++)
-                    {
-                        CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderReserveSuccess, operateStocks[i].MerchId, operateStocks[i].PrdProductSkuId, operateStocks[i].RefType, operateStocks[i].RefId, operateStocks[i].SlotId, operateStocks[i].Quantity);
-                    }
 
                     MqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
@@ -293,6 +291,96 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
+
+        public CustomJsonResult<RetOrderReserve> Reserve2(string operater, RopOrderReserve rop)
+        {
+            CustomJsonResult<RetOrderReserve> result = new CustomJsonResult<RetOrderReserve>();
+
+            lock (lock_Reserve)
+            {
+                if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+                {
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
+                }
+
+                var store = BizFactory.Store.GetOne(rop.StoreId);
+
+                if (store == null)
+                {
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);
+                }
+
+
+                RetOrderReserve ret = new RetOrderReserve();
+
+                //检查是否有可买的商品销售提示
+                List<string> warn_tips = new List<string>();
+
+                List<ProductSkuInfoAndStockModel> bizProductSkus = new List<BLL.ProductSkuInfoAndStockModel>();
+
+                foreach (var productSku in rop.ProductSkus)
+                {
+                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.SellChannelRefIds, productSku.Id);
+
+                    if (bizProductSku == null)
+                    {
+                        warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
+                    }
+                    else
+                    {
+                        if (bizProductSku.Stocks.Count == 0)
+                        {
+                            warn_tips.Add(string.Format("{0}商品库存信息不存在", bizProductSku.Name));
+                        }
+                        else
+                        {
+                            if (bizProductSku.Stocks[0].IsOffSell)
+                            {
+                                warn_tips.Add(string.Format("{0}已经下架", bizProductSku.Name));
+                            }
+                            else
+                            {
+                                var sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+
+                                if (sellQuantity < productSku.Quantity)
+                                {
+                                    warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
+                                }
+                            }
+
+                            bizProductSkus.Add(bizProductSku);
+                        }
+                    }
+                }
+
+                if (warn_tips.Count > 0)
+                {
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join(";", warn_tips.ToArray()), null);
+                }
+
+
+                //MqFactory.Global.OrderReserve();
+
+                //bool isStop = false;
+                //while (!isStop)
+                //{
+                    
+                //}
+                string orderId = GuidUtil.New();
+                string orderSn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);
+
+                ret.OrderId = orderId;
+                ret.OrderSn = orderSn;
+
+
+                result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "", ret);
+
+            }
+
+            return result;
+
+        }
+
         private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoAndStockModel> productSkus)
         {
             List<OrderReserveDetail> details = new List<OrderReserveDetail>();
@@ -681,7 +769,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var childSon in childSons)
                 {
-                    operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
+                    operateStocks.Add(new OperateStock { MerchId = order.MerchId, ProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
                 }
 
                 CurrentDb.SaveChanges();
@@ -789,7 +877,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var childSon in childSons)
                     {
-                        operateStocks.Add(new OperateStock { MerchId = order.MerchId, PrdProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
+                        operateStocks.Add(new OperateStock { MerchId = order.MerchId, ProductSkuId = childSon.PrdProductSkuId, RefType = childSon.SellChannelRefType, RefId = childSon.SellChannelRefId, SlotId = childSon.SlotId, Quantity = childSon.Quantity });
                     }
 
                     CurrentDb.SaveChanges();

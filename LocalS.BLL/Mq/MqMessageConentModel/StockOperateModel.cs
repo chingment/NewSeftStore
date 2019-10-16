@@ -20,7 +20,7 @@ namespace LocalS.BLL.Mq.MqMessageConentModel
         public class OperateStock
         {
             public string MerchId { get; set; }
-            public string PrdProductSkuId { get; set; }
+            public string ProductSkuId { get; set; }
             public string SlotId { get; set; }
             public E_SellChannelRefType RefType { get; set; }
             public string RefId { get; set; }

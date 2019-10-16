@@ -75,7 +75,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.PrdProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
+                                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.ProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
 
                                     sellChannelStock.LockQuantity += stock.Quantity;
                                     sellChannelStock.SellQuantity -= stock.Quantity;
@@ -88,7 +88,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                                     sellChannelStockLog.RefType = stock.RefType;
                                     sellChannelStockLog.RefId = stock.RefId;
                                     sellChannelStockLog.SlotId = stock.SlotId;
-                                    sellChannelStockLog.PrdProductSkuId = stock.PrdProductSkuId;
+                                    sellChannelStockLog.PrdProductSkuId = stock.ProductSkuId;
                                     sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                                     sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
                                     sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
@@ -104,7 +104,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.PrdProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
+                                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.ProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
                                     sellChannelStock.LockQuantity -= stock.Quantity;
                                     sellChannelStock.SumQuantity -= stock.Quantity;
                                     sellChannelStock.Mender = operater;
@@ -116,7 +116,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                                     sellChannelStockLog.RefId = stock.RefId;
                                     sellChannelStockLog.RefType = stock.RefType;
                                     sellChannelStockLog.SlotId = stock.SlotId;
-                                    sellChannelStockLog.PrdProductSkuId = stock.PrdProductSkuId;
+                                    sellChannelStockLog.PrdProductSkuId = stock.ProductSkuId;
                                     sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                                     sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
                                     sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
@@ -133,7 +133,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.PrdProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
+                                    var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == stock.MerchId && m.PrdProductSkuId == stock.ProductSkuId && m.SlotId == stock.SlotId && m.RefType == stock.RefType && m.RefId == stock.RefId).FirstOrDefault();
 
                                     sellChannelStock.LockQuantity -= stock.Quantity;
                                     sellChannelStock.SellQuantity += stock.Quantity;
@@ -146,7 +146,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                                     sellChannelStockLog.RefId = stock.RefId;
                                     sellChannelStockLog.RefType = stock.RefType;
                                     sellChannelStockLog.SlotId = stock.SlotId;
-                                    sellChannelStockLog.PrdProductSkuId = stock.PrdProductSkuId;
+                                    sellChannelStockLog.PrdProductSkuId = stock.ProductSkuId;
                                     sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                                     sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
                                     sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
@@ -170,16 +170,16 @@ namespace LocalS.BLL.Mq.MqByRedis
                         switch (model.OperateType)
                         {
                             case StockOperateType.OrderReserveSuccess:
-
                                 foreach (var stock in model.OperateStocks)
                                 {
+                                    CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderReserveSuccess, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                                 }
                                 break;
                             case StockOperateType.OrderPaySuccess:
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderPaySuccess, stock.MerchId, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                    CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderPaySuccess, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                                 }
 
                                 break;
@@ -187,7 +187,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
                                 foreach (var stock in model.OperateStocks)
                                 {
-                                    CacheServiceFactory.ProductSku.StockOperate(StockOperateType.OrderCancle, stock.MerchId, stock.PrdProductSkuId, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                    CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderCancle, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
                                 }
 
                                 break;

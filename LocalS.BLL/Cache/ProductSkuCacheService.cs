@@ -56,7 +56,6 @@ namespace LocalS.BLL
             return productSkuInfoAndStockModel;
         }
 
-
         public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string[] machineIds, string productSkuId)
         {
             var productSku = GetInfoAndStock(merchId, productSkuId);
@@ -142,7 +141,7 @@ namespace LocalS.BLL
             return productSkuStockModels;
         }
 
-        public void StockOperate(StockOperateType operateType, string merchId, string productSkuId, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
+        public void OperateStock(string merchId, string productSkuId, StockOperateType operateType, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
         {
             var redis = new RedisClient<List<ProductSkuStockModel>>();
 

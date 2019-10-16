@@ -35,16 +35,12 @@ namespace LocalS.DAL
         public IDbSet<Store> Store { get; set; }
         public IDbSet<SellChannelStock> SellChannelStock { get; set; }
         public IDbSet<SellChannelStockLog> SellChannelStockLog { get; set; }
-        
         public IDbSet<ClientCart> ClientCart { get; set; }
         public IDbSet<ClientCoupon> ClientCoupon { get; set; }
-
         public IDbSet<AdContent> AdContent { get; set; }
         public IDbSet<AdContentBelong> AdContentBelong { get; set; }
         public IDbSet<AdSpace> AdSpace { get; set; }
-
         public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }
-
         public IDbSet<Order> Order { get; set; }
         public IDbSet<OrderDetails> OrderDetails { get; set; }
         public IDbSet<OrderDetailsChild> OrderDetailsChild { get; set; }
@@ -52,7 +48,6 @@ namespace LocalS.DAL
         public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
         public IDbSet<Term> Term { get; set; }
         public IDbSet<Machine> Machine { get; set; }
-
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

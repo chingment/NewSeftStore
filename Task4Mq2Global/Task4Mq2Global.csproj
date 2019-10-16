@@ -73,10 +73,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\alipay-sdk-NET20161213174056\AopSdk.csproj">
-      <Project>{9c11cae5-5188-4e71-825b-68fc3135728a}</Project>
-      <Name>AopSdk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AlipaySdk\MyAlipaySdk.csproj">
       <Project>{28d06c14-41ed-4d4c-a221-d7b3a785640e}</Project>
       <Name>MyAlipaySdk</Name>
