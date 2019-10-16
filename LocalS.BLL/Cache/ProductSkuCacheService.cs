@@ -106,80 +106,60 @@ namespace LocalS.BLL
 
         public List<ProductSkuStockModel> GetStock(string merchId, string productSkuId)
         {
-            var redis = new RedisClient<List<ProductSkuStockModel>>();
+            var productSkuStockModels = new List<ProductSkuStockModel>();
 
-            var productSkuStockModels = redis.KGet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
-            if (productSkuStockModels == null)
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+
+            foreach (var sellChannelStock in sellChannelStocks)
             {
-                productSkuStockModels = new List<ProductSkuStockModel>();
-
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
-
-                foreach (var sellChannelStock in sellChannelStocks)
-                {
-                    var productSkuStockModel = new ProductSkuStockModel();
-                    productSkuStockModel.RefType = sellChannelStock.RefType;
-                    productSkuStockModel.RefId = sellChannelStock.RefId;
-                    productSkuStockModel.SlotId = sellChannelStock.SlotId;
-                    productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
-                    productSkuStockModel.LockQuantity = sellChannelStock.LockQuantity;
-                    productSkuStockModel.SellQuantity = sellChannelStock.SellQuantity;
-                    productSkuStockModel.IsOffSell = sellChannelStock.IsOffSell;
-                    productSkuStockModel.SalePrice = sellChannelStock.SalePrice;
-                    productSkuStockModel.SalePriceByVip = sellChannelStock.SalePriceByVip;
-                    productSkuStockModels.Add(productSkuStockModel);
-                }
-
-                redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), productSkuStockModels, new TimeSpan(100, 0, 0));
-            }
-
-            if (productSkuStockModels == null)
-            {
-                productSkuStockModels = new List<ProductSkuStockModel>();
+                var productSkuStockModel = new ProductSkuStockModel();
+                productSkuStockModel.RefType = sellChannelStock.RefType;
+                productSkuStockModel.RefId = sellChannelStock.RefId;
+                productSkuStockModel.SlotId = sellChannelStock.SlotId;
+                productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
+                productSkuStockModel.LockQuantity = sellChannelStock.LockQuantity;
+                productSkuStockModel.SellQuantity = sellChannelStock.SellQuantity;
+                productSkuStockModel.IsOffSell = sellChannelStock.IsOffSell;
+                productSkuStockModel.SalePrice = sellChannelStock.SalePrice;
+                productSkuStockModel.SalePriceByVip = sellChannelStock.SalePriceByVip;
+                productSkuStockModels.Add(productSkuStockModel);
             }
 
             return productSkuStockModels;
-        }
 
-        public bool OperateStock(string merchId, string productSkuId, StockOperateType operateType, Entity.E_SellChannelRefType refType, string refId, string slotId, int quantity)
-        {
-            bool isSuccess = false;
-            try
-            {
-                var redis = new RedisClient<List<ProductSkuStockModel>>();
+            //var redis = new RedisClient<List<ProductSkuStockModel>>();
 
-                var stock = GetStock(merchId, productSkuId);
+            //var productSkuStockModels = redis.KGet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
+            //if (productSkuStockModels == null)
+            //{
+            //    productSkuStockModels = new List<ProductSkuStockModel>();
 
-                for (int i = 0; i < stock.Count; i++)
-                {
-                    if (stock[i].RefType == refType && stock[i].RefId == refId && stock[i].SlotId == slotId)
-                    {
-                        switch (operateType)
-                        {
-                            case StockOperateType.OrderReserveSuccess:
-                                stock[i].LockQuantity += quantity;
-                                stock[i].SellQuantity -= quantity;
-                                break;
-                            case StockOperateType.OrderPaySuccess:
-                                stock[i].LockQuantity -= quantity;
-                                stock[i].SumQuantity -= quantity;
-                                break;
-                            case StockOperateType.OrderCancle:
-                                stock[i].LockQuantity -= quantity;
-                                stock[i].SellQuantity += quantity;
-                                break;
-                        }
-                    }
-                }
+            //    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
 
-                isSuccess = redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), stock, new TimeSpan(100, 0, 0));
-            }
-            catch (Exception ex)
-            {
+            //    foreach (var sellChannelStock in sellChannelStocks)
+            //    {
+            //        var productSkuStockModel = new ProductSkuStockModel();
+            //        productSkuStockModel.RefType = sellChannelStock.RefType;
+            //        productSkuStockModel.RefId = sellChannelStock.RefId;
+            //        productSkuStockModel.SlotId = sellChannelStock.SlotId;
+            //        productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
+            //        productSkuStockModel.LockQuantity = sellChannelStock.LockQuantity;
+            //        productSkuStockModel.SellQuantity = sellChannelStock.SellQuantity;
+            //        productSkuStockModel.IsOffSell = sellChannelStock.IsOffSell;
+            //        productSkuStockModel.SalePrice = sellChannelStock.SalePrice;
+            //        productSkuStockModel.SalePriceByVip = sellChannelStock.SalePriceByVip;
+            //        productSkuStockModels.Add(productSkuStockModel);
+            //    }
 
-            }
+            //    redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), productSkuStockModels, new TimeSpan(100, 0, 0));
+            //}
 
-            return isSuccess;
+            //if (productSkuStockModels == null)
+            //{
+            //    productSkuStockModels = new List<ProductSkuStockModel>();
+            //}
+
+            //return productSkuStockModels;
         }
 
         public List<ProductSkuInfoBySearchModel> Search(string merchId, string key)
