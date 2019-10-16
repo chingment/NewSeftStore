@@ -276,6 +276,11 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
 
+                    foreach (var stock in operateStocks)
+                    {
+                        CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderReserveSuccess, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                    }
+
                     MqFactory.Global.PushStockOperate(new Mq.MqMessageConentModel.StockOperateModel { OperateType = StockOperateType.OrderReserveSuccess, OperateStocks = operateStocks });
 
 

@@ -170,10 +170,10 @@ namespace LocalS.BLL.Mq.MqByRedis
                         switch (model.OperateType)
                         {
                             case StockOperateType.OrderReserveSuccess:
-                                foreach (var stock in model.OperateStocks)
-                                {
-                                    CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderReserveSuccess, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
-                                }
+                                //foreach (var stock in model.OperateStocks)
+                                //{
+                                //    CacheServiceFactory.ProductSku.OperateStock(stock.MerchId, stock.ProductSkuId, StockOperateType.OrderReserveSuccess, stock.RefType, stock.RefId, stock.SlotId, stock.Quantity);
+                                //}
                                 break;
                             case StockOperateType.OrderPaySuccess:
 

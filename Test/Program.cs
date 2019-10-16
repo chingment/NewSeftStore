@@ -47,26 +47,26 @@ namespace Test
             //String encry = rsa.EncryptByPublicKey(input, publicKey);
 
 
-            MyAlipaySdk.AlipayUtil alipay = new MyAlipaySdk.AlipayUtil(null);
+            // MyAlipaySdk.AlipayUtil alipay = new MyAlipaySdk.AlipayUtil(null);
 
-            var u = new MyAlipaySdk.UnifiedOrder();
+            // var u = new MyAlipaySdk.UnifiedOrder();
 
-            u.out_trade_no = "201503200101010011";
-           // u.store_id = "sdasdd";
-            u.subject = "Iphone6 16G";
-            u.timeout_express = "2m";
-            u.total_amount = "0.01";
+            // u.out_trade_no = "201503200101010011";
+            //// u.store_id = "sdasdd";
+            // u.subject = "Iphone6 16G";
+            // u.timeout_express = "2m";
+            // u.total_amount = "0.01";
 
-            alipay.UnifiedOrder(u);
+            // alipay.UnifiedOrder(u);
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    string threadName = "thread " + i;
-            //    int secondsToWait = 2 + 2 * i;
-            //    var t = new Thread(new ThreadStart(DoWork));
-            //    t.Start();
+            for (int i = 0; i < 1000; i++)
+            {
+                string threadName = "thread " + i;
+                int secondsToWait = 2 + 2 * i;
+                var t = new Thread(new ThreadStart(DoWork));
+                t.Start();
 
-            //}
+            }
 
             Console.ReadLine();
         }
