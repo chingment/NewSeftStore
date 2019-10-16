@@ -189,29 +189,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && m.PrdProductSkuId == rop.ProductSkuId).ToList();
-
-            foreach (var sellChannelStock in sellChannelStocks)
-            {
-                if (sellChannelStock.SlotId == rop.SlotId)
-                {
-                    sellChannelStock.LockQuantity = rop.LockQuantity;
-                    sellChannelStock.SellQuantity = rop.SellQuantity;
-                    sellChannelStock.SumQuantity = rop.SellQuantity + rop.LockQuantity;
-                }
-
-                sellChannelStock.IsOffSell = rop.IsOffSell;
-                sellChannelStock.SalePrice = rop.SalePrice;
-            }
-
-            CacheServiceFactory.ProductSku.Remove(merchId, rop.ProductSkuId);
-
-            CurrentDb.SaveChanges();
-
-
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            result = BizFactory.ProductSku.OperateStock(operater, merchId, rop.ProductSkuId, rop.MachineId, rop.SlotId, rop.SellQuantity, rop.LockQuantity, rop.IsOffSell, rop.SalePrice);
 
             return result;
         }

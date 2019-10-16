@@ -28,7 +28,7 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if(productSkuId== "2b239e36688e4910adffe36848921015")
+                if (productSkuId == "2b239e36688e4910adffe36848921015")
                 {
                     //int.Parse("dadsdd");
                 }
@@ -186,10 +186,44 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result= new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
             }
 
             return result;
+        }
+
+        public CustomJsonResult OperateStock(string operater, string merchId, string productSkuId, string machineId, string slotId, int sellQuantity, int lockQuantity, bool isOffSell, decimal salePrice)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
+
+                foreach (var sellChannelStock in sellChannelStocks)
+                {
+                    if (sellChannelStock.SlotId == slotId)
+                    {
+                        sellChannelStock.LockQuantity = lockQuantity;
+                        sellChannelStock.SellQuantity = sellQuantity;
+                        sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
+                    }
+
+                    sellChannelStock.IsOffSell = isOffSell;
+                    sellChannelStock.SalePrice = salePrice;
+                }
+
+                CacheServiceFactory.ProductSku.Remove(merchId, productSkuId);
+
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+            }
+
+            return result;
+
         }
     }
 }

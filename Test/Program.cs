@@ -59,7 +59,7 @@ namespace Test
 
             // alipay.UnifiedOrder(u);
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 string threadName = "thread " + i;
                 int secondsToWait = 2 + 2 * i;
