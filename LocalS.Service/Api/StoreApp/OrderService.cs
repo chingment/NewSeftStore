@@ -488,7 +488,7 @@ namespace LocalS.Service.Api.StoreApp
 
 
             ret.Tag.Name = new FsText(order.StoreName, "");
-            ret.Tag.Desc = new FsField("状态", "", GetOrderStatus(order.Status), "");
+            ret.Tag.Desc = new FsField("", "", GetOrderStatus(order.Status), "");
 
             var fsBlockByField = new FsBlockByField();
 
