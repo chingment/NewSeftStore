@@ -1,4 +1,4 @@
-<scroll-view  scroll-y="true" style="height:{{height}}px;" >
+<scroll-view scroll-y="true" style="height:{{height}}px;">
 
   <view class="st-index">
     <navigator class="store" url="/pages/store/store" hover-class="none">
@@ -15,11 +15,8 @@
     <view class="banner">
       <view class="ct">
         <block wx:if="{{banner.imgs.length>0}}">
-          <swiper class="its-swiper" autoplay="true"
-          interval="2000" duration="500" circular="true"
-          indicator-dots="true"
-           >
-            <block wx:for="{{banner.imgs}}" wx:key="item" >
+          <swiper class="its-swiper" autoplay="true" interval="2000" duration="500" circular="true" indicator-dots="true">
+            <block wx:for="{{banner.imgs}}" wx:key="item">
               <swiper-item class="it">
                 <image class="img" src="{{item.url}}"></image>
               </swiper-item>
@@ -95,8 +92,13 @@
               </view>
               <view class="it-a3 prd-list-1">
                 <block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+
                   <view class='it it-{{index%2}}'>
+
                     <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+                      <view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+                        <view class="isOffSell-tip">已下架</view>
+                      </view>
                       <image class="img" src="{{item.mainImgUrl}}"></image>
                     </navigator>
                     <text class="name font-gray">{{item.name}}</text>
@@ -104,12 +106,13 @@
                     <view class="area2">
                       <view class="price">
                         <text class="saleprice font-black">{{item.salePrice}}</text>
-                        <text  wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
+                        <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
                       </view>
                       <view class="operate">
-                        <image bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                        <image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
                       </view>
                     </view>
+
                   </view>
                 </block>
               </view>
@@ -119,4 +122,4 @@
       </view>
     </view>
   </view>
-  </scroll-view>
+</scroll-view>

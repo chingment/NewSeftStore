@@ -41,6 +41,7 @@ namespace LocalS.Service.Api.StoreApp
                         cartProcudtSkuModel.Name = bizProductSku.Name;
                         cartProcudtSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
                         cartProcudtSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                        cartProcudtSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                         cartProcudtSkuModel.Quantity = clientCart.Quantity;
                         cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
                         cartProcudtSkuModel.Selected = clientCart.Selected;
@@ -125,6 +126,11 @@ namespace LocalS.Service.Api.StoreApp
                             case E_CartOperateType.Increase:
 
                                 var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, item.Id);
+
+                                if (bizProductSku.Stocks[0].IsOffSell)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品已下架");
+                                }
 
                                 if (clientCart == null)
                                 {

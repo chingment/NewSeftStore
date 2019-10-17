@@ -65,7 +65,14 @@ Component({
           productSkus: operateProductSkus
         }, {
             success: function (res) {
-
+              if (res.result == 1) {
+                
+              }
+              else {
+                toast.show({
+                  title: res.message
+                })
+              }
             },
             fail: function () { }
           })

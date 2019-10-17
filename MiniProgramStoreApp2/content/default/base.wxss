@@ -261,6 +261,7 @@ page {
   box-sizing: border-box;
   text-align: center;
   padding: 0.5rem 0;
+  overflow:hidden;
 }
 
 .prd-list-1 .it-0 {
@@ -278,6 +279,8 @@ page {
   height: 7rem;
   width: 7rem;
   margin: auto;
+  position:relative;
+  overflow:hidden;
 }
 
 .prd-list-1 .name {
@@ -365,6 +368,7 @@ page {
   box-sizing: border-box;
   text-align: center;
   padding: 0.5rem 0;
+  overflow:hidden;
 }
 
 .prd-list-2  .it-left{
@@ -381,6 +385,8 @@ page {
   height: 5rem;
   width: 5rem;
   margin: auto;
+  position:relative;
+  overflow:hidden;
 }
 
 .prd-list-2 .name {
@@ -708,4 +714,41 @@ page {
 .login-box .btn-login{
   color: #fff;
   margin: 0 1rem;
+}
+
+
+
+
+
+
+.isselloff-bg {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 999999;
+  width: 100%;
+  height: 100%;
+}
+
+.isOffSell-box{
+height:100%;
+width:100%;
+background: rgba(208,208,208, 0.5);
+position:absolute;
+display:flex;
+overflow:hidden;
+justify-content: center;
+align-items: center;
+}
+/*水平居中必备样式*/
+
+.isOffSell-tip {
+  display: inline-block;
+  padding: .2rem .5rem;
+  font-size: .6rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: .2rem;
+  text-align: center;
+  line-height:.6rem;
 }

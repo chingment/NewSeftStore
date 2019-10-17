@@ -112,8 +112,15 @@ Component({
           productSkus: operateProductSkus
         }, {
             success: function (res) {
-
-              _self.setData({ cart: storeage.getCart() })
+              if(res.result==1)
+              {
+                _self.setData({ cart: storeage.getCart() })
+              }
+              else{
+                toast.show({
+                  title: res.message
+                })
+              }
             },
             fail: function () { }
           })

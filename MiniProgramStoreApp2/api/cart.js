@@ -8,8 +8,8 @@ function operate(params, requestHandler) {
     url: config.apiUrl.cartOperate,
     dataParams: params,
     success: function (res) {
+      requestHandler.success(res)
       if (res.result == 1) {
-        requestHandler.success(res)
         pageData(requestHandler)
       }
     }

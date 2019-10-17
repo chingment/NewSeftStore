@@ -26,6 +26,9 @@
           <block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
             <view class='it it-{{index%2}}'>
               <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+                 <view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+                        <view class="isOffSell-tip">已下架</view>
+                 </view>
                 <image class="img" src="{{item.mainImgUrl}}"></image>
               </navigator>
               <text class="name font-gray">{{item.name}}</text>
@@ -36,7 +39,7 @@
                   <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
                 </view>
                 <view class="operate">
-                  <image bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                  <image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
                 </view>
               </view>
             </view>

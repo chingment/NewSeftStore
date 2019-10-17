@@ -12,17 +12,35 @@ namespace Test
 {
     class Program
     {
+        public static sbyte[] a(byte[] myByte)
+        {
+            sbyte[] mySByte = new sbyte[myByte.Length];
+
+            for (int i = 0; i < myByte.Length; i++)
+            {
+                if (myByte[i] > 127)
+                    mySByte[i] = (sbyte)(myByte[i] - 256);
+                else
+                    mySByte[i] = (sbyte)myByte[i];
+            }
+
+            return mySByte;
+        }
         static void Main(string[] args)
         {
-            
-            for (int i = 0; i < 1000; i++)
-            {
-                string threadName = "thread " + i;
-                int secondsToWait = 2 + 2 * i;
-                var t = new Thread(new ThreadStart(DoWork));
-                t.Start();
+            sbyte[] orig = a(new byte[] { 0x82 });
 
-            }
+
+
+            SendCmd(orig, new sbyte[] { 0x1 });
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    string threadName = "thread " + i;
+            //    int secondsToWait = 2 + 2 * i;
+            //    var t = new Thread(new ThreadStart(DoWork));
+            //    t.Start();
+
+            //}
 
             Console.ReadLine();
         }
@@ -39,5 +57,59 @@ namespace Test
             var result = StoreAppServiceFactory.Order.Reserve(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
         }
+
+        private static sbyte[] SendCmd(sbyte[] frameCmd, sbyte[] frameCmdParms)
+        {
+            sbyte[] frameHead = new sbyte[] { 0x24 };
+            sbyte[] frameEnd = new sbyte[] { 0x0D, 0x0A };
+            if (frameCmd == null)
+            {
+                frameCmd = new sbyte[] { };
+            }
+
+            if (frameCmdParms == null)
+            {
+                frameCmdParms = new sbyte[] { };
+            }
+
+            //长度码=命令码字节数+命令参数字节数+校验码字节数
+            sbyte framLengthCode = Convert.ToSByte(frameCmd.Length + frameCmdParms.Length + 1);
+
+            //int xorAndLength = 1 + i_framLenth;
+
+            sbyte[] xorAnd = new sbyte[1 + frameCmd.Length + frameCmdParms.Length];
+
+            xorAnd[0] = framLengthCode;
+
+            for (int i = 0; i < frameCmd.Length; i++)
+            {
+                xorAnd[i + 1] = frameCmd[i];
+            }
+
+            for (int i = 0; i < frameCmdParms.Length; i++)
+            {
+                xorAnd[frameCmd.Length + 1] = frameCmdParms[i];
+            }
+
+
+            sbyte framXorCode = 0;
+            for (int i = 0; i < xorAnd.Length; i++)
+            {
+                framXorCode ^= xorAnd[i];
+            }
+
+            List<sbyte> frame = new List<sbyte>();
+
+            frame.AddRange(frameHead);
+            frame.Add(framLengthCode);
+            frame.AddRange(frameCmd);
+            frame.AddRange(frameCmdParms);
+            frame.Add(framXorCode);
+            frame.AddRange(frameEnd);
+
+            return frame.ToArray();
+        }
+
+
     }
 }

@@ -15,6 +15,9 @@
             <view class='it'>
               <view class="it-left">
                 <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+                  <view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+                        <view class="isOffSell-tip">已下架</view>
+                 </view>
                   <image class="img" src="{{item.mainImgUrl}}"></image>
                 </navigator>
               </view>
@@ -27,7 +30,7 @@
                     <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
                   </view>
                   <view class="operate">
-                    <image bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+                    <image  wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
                   </view>
                 </view>
               </view>
