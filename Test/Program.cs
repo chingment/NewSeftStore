@@ -12,53 +12,9 @@ namespace Test
 {
     class Program
     {
-        public class userInfo
-        {
-            public string channelUserCode { get; set; }
-            public string userName { get; set; }
-            public string phone { get; set; }
-            public string idName { get; set; }
-            public string email { get; set; }
-            public string channelCompanyCode { get; set; }
-        }
-
         static void Main(string[] args)
         {
-            //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
-            //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
-            //ReidsMqFactory.Global.PushStockOperate(new LocalS.BLL.Mq.MqMessageConentModel.StockOperateModel { OrderId = "1" });
-
-
-            //string publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTT1ryGLfq5lucyHdzPLbjtcVsgurf5x4Y09U/cTiV85duIk0zQeRTXNyGcMAS92+xV/eGp7IjncwL8QE8JqlclLvuOU3zTdlAQ58lu/JcTcsF6eA6JXb8OJAhmDoug1J77M2GLoqAl0Cf34kavj/r9bAQpWqbk8JlJU3YqIePuwIDAQAB";
-            //RSAForJava rsa = new RSAForJava();
-
-            //userInfo u = new userInfo();
-
-            //u.channelUserCode = "e5d1a2ca4883474791ca91ce20c90014";
-            //u.userName = "e5d1a2ca4883474791ca91ce20c90014";
-            //u.phone = "15989287032";
-            //u.idName = "银联";
-            //u.email = "";
-            //u.channelCompanyCode = "";
-
-            //string input = Newtonsoft.Json.JsonConvert.SerializeObject(u);
-
-
-            //String encry = rsa.EncryptByPublicKey(input, publicKey);
-
-
-            // MyAlipaySdk.AlipayUtil alipay = new MyAlipaySdk.AlipayUtil(null);
-
-            // var u = new MyAlipaySdk.UnifiedOrder();
-
-            // u.out_trade_no = "201503200101010011";
-            //// u.store_id = "sdasdd";
-            // u.subject = "Iphone6 16G";
-            // u.timeout_express = "2m";
-            // u.total_amount = "0.01";
-
-            // alipay.UnifiedOrder(u);
-
+            
             for (int i = 0; i < 1000; i++)
             {
                 string threadName = "thread " + i;
@@ -73,7 +29,6 @@ namespace Test
 
         public static void DoWork()
         {
-
 
             RopOrderReserve rop = new RopOrderReserve();
 
