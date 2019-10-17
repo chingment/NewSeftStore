@@ -45,10 +45,10 @@
     <view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
     <image src="/content/default/images/cart.png" />
   </view>
-  <view bindtap="addToCart" class='item-increase bg-blue' data-reply-skuid="{{productSku.id}}">
+  <view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'   data-reply-skuid="{{productSku.id}}">
     <text>加入购物车</text>
   </view>
-  <view bindtap="immeBuy" class="item-buy bg-main" data-reply-skuid="{{productSku.id}}" >
+  <view  bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}" >
     <text>立即购买</text>
   </view>
 </view>

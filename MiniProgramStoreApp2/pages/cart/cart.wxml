@@ -21,7 +21,7 @@
                       <view class="it-m">
                         <view class="it-ml">
                           <navigator class="imgUrl"  url="/pages/productdetails/productdetails?skuId={{itemsku.id}}" style='height:100%;width:100%;position:relative; overflow:hidden;'>
-                            <view  class="isOffSell-box">
+                            <view wx:if="{{itemsku.isOffSell}}" class="isOffSell-box">
                                 <view class="isOffSell-tip" >已下架</view>
                               </view>
                             <image class='img' src="{{itemsku.mainImgUrl}}" />

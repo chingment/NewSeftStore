@@ -1,3 +1,4 @@
+const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const wxparse = require("../../components/wxParse/wxParse.js")
@@ -54,8 +55,15 @@ Page({
     this.selectComponent("#cart").open()
   },
   addToCart: function (e) {
-
     var _self = this
+
+    if (_self.data.productSku.isOffSell) {
+      toast.show({
+        title: '商品已下架'
+      })
+      return
+    }
+
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
 
     var productSkus = new Array();
@@ -72,7 +80,15 @@ Page({
       productSkus: productSkus
     }, {
         success: function (res) {
+            if(res.result==1)
+            {
 
+            }
+            else{
+              toast.show({
+                title: res.message
+              })
+            }
         },
         fail: function () {
 
@@ -83,6 +99,13 @@ Page({
 
   immeBuy: function (e) {
     var _this = this
+
+    if(_this.data.productSku.isOffSell){
+      toast.show({
+        title:'商品已下架'
+      })
+      return
+    }
 
     if (!ownRequest.isLogin()) {
       ownRequest.goLogin()
