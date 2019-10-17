@@ -225,10 +225,10 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
+            List<UpdateProductSkuStockModel> updaeStocks = new List<UpdateProductSkuStockModel>();
+
             using (TransactionScope ts = new TransactionScope())
             {
-
-                List<UpdateProductSkuStockModel> updaeStocks = new List<UpdateProductSkuStockModel>();
 
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
 
@@ -245,8 +245,10 @@ namespace LocalS.BLL.Biz
                     sellChannelStock.SalePrice = salePrice;
 
                     var updateStock = new UpdateProductSkuStockModel();
-                    updateStock.Id = sellChannelStock.PrdProductId;
+                    updateStock.Id = sellChannelStock.PrdProductSkuId;
                     updateStock.IsOffSell = isOffSell;
+                    updateStock.SalePrice = sellChannelStock.SalePrice;
+                    updateStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
                     updateStock.LockQuantity = sellChannelStock.LockQuantity;
                     updateStock.SellQuantity = sellChannelStock.SellQuantity;
                     updateStock.SumQuantity = sellChannelStock.SumQuantity;
@@ -259,12 +261,12 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
 
                 ts.Complete();
-
-
-                BizFactory.Machine.SendUpdateProductSkuStock(machineId, updaeStocks);
-              
-
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+            }
+
+            if(result.Result== ResultType.Success)
+            {
+                BizFactory.Machine.SendUpdateProductSkuStock(machineId, updaeStocks);
             }
 
             return result;

@@ -50,8 +50,11 @@ namespace LocalS.BLL.Biz
 
         public void SendUpdateProductSkuStock(string id, List<UpdateProductSkuStockModel> productSkus)
         {
-            var machine = BizFactory.Machine.GetOne(id);
-            PushService.SendUpdateProductSkuStock(machine.JPushRegId, productSkus);
+            if (productSkus != null && productSkus.Count > 0)
+            {
+                var machine = BizFactory.Machine.GetOne(id);
+                PushService.SendUpdateProductSkuStock(machine.JPushRegId, productSkus);
+            }
         }
     }
 }

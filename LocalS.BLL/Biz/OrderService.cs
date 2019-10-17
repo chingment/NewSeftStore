@@ -17,16 +17,6 @@ namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseDbContext
     {
-        public string BuildPickCode()
-        {
-            // todo
-            string pickCode = "";
-            Random rd = new Random();
-            int num = rd.Next(100000, 1000000);
-            pickCode = num.ToString();
-
-            return pickCode;
-        }
 
         private static readonly object lock_Reserve = new object();
 
@@ -106,7 +96,7 @@ namespace LocalS.BLL.Biz
 
                     var reserveDetails = GetReserveDetail(rop.ProductSkus, bizProductSkus);
 
-                  
+
                     var order = new Order();
                     order.Id = GuidUtil.New();
                     order.Sn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);
@@ -118,7 +108,13 @@ namespace LocalS.BLL.Biz
                     order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                     order.Status = E_OrderStatus.WaitPay;
                     order.Source = rop.Source;
-                    order.PickCode = BuildPickCode();
+                    order.PickCode = RedisSnUtil.BuildPickCode();
+
+                    if (order.PickCode == null)
+                    {
+                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
+                    }
+
                     order.SubmitTime = DateTime.Now;
                     order.PayExpireTime = DateTime.Now.AddSeconds(300);
                     order.Creator = operater;
