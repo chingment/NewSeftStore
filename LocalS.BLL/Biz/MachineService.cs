@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyPushSdk;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ namespace LocalS.BLL.Biz
             model.Id = machine.Id;
             model.Name = machine.Name;
             model.LogoImgUrl = machine.LogoImgUrl;
+            model.JPushRegId = machine.JPushRegId;
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
 
@@ -44,6 +46,12 @@ namespace LocalS.BLL.Biz
                 }
             }
             return model;
+        }
+
+        public void SendUpdateProductSkuStock(string id, List<UpdateProductSkuStockModel> productSkus)
+        {
+            var machine = BizFactory.Machine.GetOne(id);
+            PushService.SendUpdateProductSkuStock(machine.JPushRegId, productSkus);
         }
     }
 }

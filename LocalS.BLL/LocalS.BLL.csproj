@@ -71,6 +71,7 @@
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
+    <Compile Include="Biz\Models\UpdateProductSkuStockModel.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />
     <Compile Include="Biz\RModels\RetBackgroundJobGetDetails.cs" />
@@ -134,6 +135,10 @@
     <ProjectReference Include="..\Lumos\Lumos.csproj">
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyPushSdk\MyPushSdk.csproj">
+      <Project>{9b2a3d2e-47e6-4403-8f68-d3279a19173d}</Project>
+      <Name>MyPushSdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>

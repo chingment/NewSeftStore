@@ -19,5 +19,7 @@ namespace LocalS.BLL.Biz
 
         public string StoreName { get; set; }
 
+        public string JPushRegId { get; set; }
+
     }
 }

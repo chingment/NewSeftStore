@@ -1,5 +1,6 @@
 ﻿using LocalS.Entity;
 using Lumos;
+using MyPushSdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -226,6 +227,9 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
+
+                List<UpdateProductSkuStockModel> updaeStocks = new List<UpdateProductSkuStockModel>();
+
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
 
                 foreach (var sellChannelStock in sellChannelStocks)
@@ -239,6 +243,15 @@ namespace LocalS.BLL.Biz
 
                     sellChannelStock.IsOffSell = isOffSell;
                     sellChannelStock.SalePrice = salePrice;
+
+                    var updateStock = new UpdateProductSkuStockModel();
+                    updateStock.Id = sellChannelStock.PrdProductId;
+                    updateStock.IsOffSell = isOffSell;
+                    updateStock.LockQuantity = sellChannelStock.LockQuantity;
+                    updateStock.SellQuantity = sellChannelStock.SellQuantity;
+                    updateStock.SumQuantity = sellChannelStock.SumQuantity;
+
+                    updaeStocks.Add(updateStock);
                 }
 
                 CacheServiceFactory.ProductSku.Remove(merchId, productSkuId);
@@ -246,6 +259,10 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
 
                 ts.Complete();
+
+
+                BizFactory.Machine.SendUpdateProductSkuStock(machineId, updaeStocks);
+              
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
             }
