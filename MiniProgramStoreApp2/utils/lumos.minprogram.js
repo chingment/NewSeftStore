@@ -301,7 +301,7 @@ function wxRequest(opts) {
       wx.showModal({
         showCancel: false,
         title: '提示',
-        content: res.errMsg
+        content: '网络请求错误'
       })
      },
     complete: function () {

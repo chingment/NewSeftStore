@@ -11,7 +11,8 @@ namespace LocalS.Entity
         WaitPay = 2000,
         Payed = 3000,
         WaitPick = 3010,
-        Picking = 3011,
+        SendPick = 3011,
+        Picking = 3012,
         Completed = 4000,
         Cancled = 5000,
         Exception = 6000

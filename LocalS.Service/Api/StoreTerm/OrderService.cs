@@ -169,35 +169,73 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var orderPickupLog = new OrderPickupLog();
-            orderPickupLog.Id = GuidUtil.New();
-            orderPickupLog.OrderId = rop.OrderId;
-            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-            orderPickupLog.SellChannelRefId = rop.MachineId;
-            orderPickupLog.UniqueId = rop.UniqueId;
-            orderPickupLog.ProductSkuId = rop.ProductSkuId;
-            orderPickupLog.SlotId = rop.SlotId;
-            orderPickupLog.EventCode = rop.EventCode;
-            orderPickupLog.EventRemark = rop.EventRemark;
-            orderPickupLog.CreateTime = DateTime.Now;
-            orderPickupLog.Creator = rop.MachineId;
-            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-            CurrentDb.SaveChanges();
-
-            switch (rop.EventCode)
+            using (TransactionScope ts = new TransactionScope())
             {
-                case "1000":
+                var orderPickupLog = new OrderPickupLog();
+                orderPickupLog.Id = GuidUtil.New();
+                orderPickupLog.OrderId = rop.OrderId;
+                orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                orderPickupLog.SellChannelRefId = rop.MachineId;
+                orderPickupLog.UniqueId = rop.UniqueId;
+                orderPickupLog.ProductSkuId = rop.ProductSkuId;
+                orderPickupLog.SlotId = rop.SlotId;
+                orderPickupLog.EventCode = rop.EventCode;
+                orderPickupLog.EventRemark = rop.EventRemark;
+                orderPickupLog.CreateTime = DateTime.Now;
+                orderPickupLog.Creator = rop.MachineId;
+                CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                    break;
-                case "2000":
+                var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
+                if (orderDetailsChildSon != null)
+                {
+                    switch (rop.EventCode)
+                    {
+                        case "1000":
+                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.SendPick;
+                            break;
+                        case "2000":
+                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Picking;
+                            break;
+                        case "3000":
+                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Completed;
+                            break;
+                        case "4000":
+                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Exception;
+                            break;
+                    }
+                }
 
-                    break;
-                case "3000":
+                var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rop.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
 
-                    break;
-                case "4000":
+                if (orderDetailsChildSonsNoCompeleteCount == 0)
+                {
+                    var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
+                    if (order != null)
+                    {
+                        order.Status = E_OrderStatus.Completed;
+                        order.CompletedTime = DateTime.Now;
 
-                    break;
+                        var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == rop.OrderId).ToList();
+                        foreach (var orderDetail in orderDetails)
+                        {
+                            orderDetail.Status = E_OrderStatus.Completed;
+                            orderDetail.CompletedTime = DateTime.Now;
+
+                            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rop.OrderId).ToList();
+
+                            foreach (var orderDetailsChild in orderDetails)
+                            {
+                                orderDetailsChild.Status = E_OrderStatus.Completed;
+                                orderDetailsChild.CompletedTime = DateTime.Now;
+                            }
+                        }
+                    }
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             }
 
             return result;

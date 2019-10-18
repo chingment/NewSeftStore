@@ -16,8 +16,8 @@ namespace LocalS.Service.Api.StoreTerm
         /// <summary>
         /// 1000 发起取货
         /// 2000 正在取货
-        /// 3000 取货异常
-        /// 4000 取货成功
+        /// 3000 取货成功
+        /// 4000 取货异常
         /// </summary>
         public string EventCode { get; set; }
         public string EventRemark { get; set; }
