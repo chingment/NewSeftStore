@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.IsOffSell == false).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
 
             foreach (var item in machineStocks)
             {

@@ -77,7 +77,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStock.PrdProductSkuId = bizProdcutSku.Id;
                             sellChannelStock.SlotId = slotId;
                             sellChannelStock.SumQuantity = quantity;
-                            sellChannelStock.SellQuantity = 0;
+                            sellChannelStock.SellQuantity = quantity;
                             sellChannelStock.LockQuantity = 0;
                             sellChannelStock.IsOffSell = false;
                             sellChannelStock.SalePrice = productSku.SalePrice;

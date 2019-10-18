@@ -25,9 +25,12 @@
       <el-col v-for="(productSku,index) in listData" :key="index" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div class="above">
+            <div v-show="productSku.isOffSell" class="isOffSell-box">
+              <div class="isOffSell-tip">已下架</div>
+            </div>
             <div class="above-des">
               <div class="des1">
-                <div class="name">{{ productSku.name }}</div>
+                <div class="name">      <span>({{ productSku.slotId }})</span> {{ productSku.name }}</div>
                 <div class="price"> <span class="saleprice">{{ productSku.salePrice }}</span> </div>
               </div>
               <div class="des2">
@@ -44,6 +47,7 @@
               <el-button type="warning">沽清</el-button> -->
             </div>
             <div class="below-right">
+
               <el-button type="primary" @click="dialogEditOpen(productSku)">编辑</el-button>
             </div>
           </div>
@@ -60,6 +64,9 @@
     <el-dialog title="商品库存编辑" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'500px':'90%'">
 
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="货槽编号">
+          <span>{{ form.slotId }}</span>
+        </el-form-item>
         <el-form-item label="名称">
           <span>{{ form.name }}</span>
         </el-form-item>
@@ -226,7 +233,7 @@ export default {
   .above{
     height: 110px;
     display: flex;
-
+    position: relative;
     .above-des{
      flex: 1;
       .des1{
@@ -297,6 +304,29 @@ color: #e6a23c;
         .sumQuantity-bg{
           background-color: #e6a23c
         }
+
+.isOffSell-box{
+height:100%;
+width:100%;
+background: rgba(208,208,208, 0.5);
+position:absolute;
+display:flex;
+overflow:hidden;
+justify-content: center;
+align-items: center;
+}
+/*水平居中必备样式*/
+
+.isOffSell-tip {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: .1.2rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: .5rem;
+  text-align: center;
+  line-height:1.2rem;
+}
 
 }
 </style>
