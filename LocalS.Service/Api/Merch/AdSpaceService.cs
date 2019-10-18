@@ -205,6 +205,12 @@ namespace LocalS.Service.Api.Merch
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
+
+            if (result.Result == ResultType.Success)
+            {
+                
+            }
+
             return result;
         }
 

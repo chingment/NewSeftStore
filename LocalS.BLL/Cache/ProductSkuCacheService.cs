@@ -22,13 +22,15 @@ namespace LocalS.BLL
     public class ProductSkuCacheService : BaseDbContext
     {
         private static readonly string redis_key_all_sku_info_by_merchId = "info_sku_all:{0}";
-        private static readonly string redis_key_one_sku_stock_by_productId = "stock_sku_one:{0}";
+        private static readonly string redis_key_one_sku_stock_by_productSkuId = "stock_sku_one:{0}";
         private static readonly string redis_key_all_sku_search_by_merchId = "search_sku_all:{0}";
         public void Remove(string merchId, string productSkuId)
         {
-            RedisHashUtil.Remove(string.Format(redis_key_all_sku_info_by_merchId, merchId, productSkuId));
-            RedisHashUtil.Remove(string.Format(redis_key_all_sku_search_by_merchId, merchId, productSkuId));
-            RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
+            RedisHashUtil.Remove(string.Format(redis_key_all_sku_info_by_merchId, merchId), productSkuId);
+            RedisHashUtil.Remove(string.Format(redis_key_all_sku_search_by_merchId, merchId), productSkuId);
+            RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productSkuId, productSkuId));
+
+            GetInfo(merchId, productSkuId);
         }
 
         private ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string productSkuId)

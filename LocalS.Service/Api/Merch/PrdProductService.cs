@@ -128,6 +128,11 @@ namespace LocalS.Service.Api.Merch
                 });
             }
 
+            //var productSkus = CurrentDb.PrdProductSku.ToList();
+            //foreach(var item in productSkus)
+            //{
+            //    CacheServiceFactory.ProductSku.GetInfo(item.MerchId, item.Id);
+            //}
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
@@ -308,6 +313,8 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
+    
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
@@ -320,6 +327,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.Mender = operater;
                 prdProduct.MendTime = DateTime.Now;
+
 
                 foreach (var sku in rop.Skus)
                 {
@@ -388,11 +396,16 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-
-
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
+            if (result.Result == ResultType.Success)
+            {
+                for (var i = 0; i < rop.Skus.Count; i++)
+                {
+                    CacheServiceFactory.ProductSku.Remove(merchId, rop.Skus[i].Id);
+                }
+            }
 
 
             return result;

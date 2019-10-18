@@ -43,6 +43,10 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.MerchName = machine.MerchName;
             ret.Machine.StoreName = machine.StoreName;
             ret.Machine.CsrQrCode = machine.CsrQrCode;
+            ret.Machine.CabinetId_1 = machine.CabinetId_1;
+            ret.Machine.CabinetName_1 = machine.CabinetName_1;
+            ret.Machine.CabinetMaxRow_1 = machine.CabinetMaxRow_1;
+            ret.Machine.CabinetMaxCol_1 = machine.CabinetMaxCol_1;
 
             ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machine.MerchId, machine.StoreId, machine.Id);
 
@@ -114,7 +118,7 @@ namespace LocalS.Service.Api.StoreTerm
                 var productIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
                 if (productIds.Count > 0)
                 {
-                    var productSkuIds = CurrentDb.PrdProductSku.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.Id).Distinct().ToList();
+                    var productSkuIds = CurrentDb.SellChannelStock.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();
                     if (productSkuIds.Count > 0)
                     {
                         prdKindModel.Childs = productSkuIds;

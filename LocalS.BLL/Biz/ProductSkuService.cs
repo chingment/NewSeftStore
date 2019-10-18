@@ -256,7 +256,6 @@ namespace LocalS.BLL.Biz
                     updaeStocks.Add(updateStock);
                 }
 
-                CacheServiceFactory.ProductSku.Remove(merchId, productSkuId);
 
                 CurrentDb.SaveChanges();
 

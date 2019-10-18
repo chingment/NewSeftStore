@@ -22,6 +22,10 @@ namespace LocalS.BLL.Biz
             model.Name = machine.Name;
             model.LogoImgUrl = machine.LogoImgUrl;
             model.JPushRegId = machine.JPushRegId;
+            model.CabinetId_1 = machine.CabinetId_1;
+            model.CabinetName_1 = machine.CabinetName_1;
+            model.CabinetMaxRow_1 = machine.CabinetMaxRow_1;
+            model.CabinetMaxCol_1 = machine.CabinetMaxCol_1;
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
 
@@ -55,6 +59,15 @@ namespace LocalS.BLL.Biz
                 var machine = BizFactory.Machine.GetOne(id);
                 PushService.SendUpdateProductSkuStock(machine.JPushRegId, productSkus);
             }
+        }
+
+        public void SendUpdateHomeBanner(string id)
+        {
+            //if (homeBanners != null && homeBanners.Count > 0)
+            //{
+            //    var machine = BizFactory.Machine.GetOne(id);
+            //    PushService.SendUpdateHomeBanner(machine.JPushRegId, homeBanners);
+            //}
         }
     }
 }

@@ -25,5 +25,12 @@ namespace MyPushSdk
             return result;
         }
 
+        public static CustomJsonResult SendUpdateHomeBanner(string regId, object content)
+        {
+            var result = new CustomJsonResult();
+            pushService.Send(regId, "update:homeBanner", content);
+            return result;
+        }
+
     }
 }
