@@ -8,8 +8,6 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopMachineUpdateInfo
     {
-        public string MerchantId { get; set; }
-        public string StoreId { get; set; }
         public string MachineId { get; set; }
         public float Lat { get; set; }
         public float Lng { get; set; }
