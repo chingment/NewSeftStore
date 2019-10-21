@@ -22,14 +22,5 @@ namespace LocalS.BLL.Mq.MqByRedis
             obj.Content = new PayResultNotifyModel { From = from, Content = content } ;
             this.Push(obj);
         }
-
-        public void PushOrderReserve(string ticket, LocalS.BLL.Biz.RopOrderReserve messageConent)
-        {
-            var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.OrderReserve;
-            obj.Ticket = ticket;
-            obj.Content = messageConent;
-            this.Push(obj);
-        }
     }
 }

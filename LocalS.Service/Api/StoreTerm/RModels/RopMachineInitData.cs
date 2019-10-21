@@ -10,5 +10,8 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string MachineId { get; set; }
         public string JPushRegId { get; set; }
+        public string MacAddress { get; set; }
+        public string AppVersionCode { get; set; }
+        public string AppVersionName{ get; set; }
     }
 }

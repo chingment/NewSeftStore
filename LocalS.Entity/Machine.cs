@@ -32,6 +32,8 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string LogoImgUrl { get; set; }
+        public string AppVersionCode { get; set; }
+        public string AppVersionName { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }
 

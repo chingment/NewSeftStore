@@ -25,10 +25,25 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (machine == null)
             {
+                machine.Id = GuidUtil.New();
                 machine.JPushRegId = rop.JPushRegId;
+                machine.MacAddress = rop.MacAddress;
+                machine.AppVersionCode = rop.AppVersionCode;
+                machine.AppVersionName = rop.AppVersionName;
+                machine.CreateTime = DateTime.Now;
+                machine.Creator = GuidUtil.Empty();
+                CurrentDb.Machine.Add(machine);
                 CurrentDb.SaveChanges();
-
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+            }
+            else
+            {
+                machine.JPushRegId = rop.JPushRegId;
+                machine.MacAddress = rop.MacAddress;
+                machine.AppVersionCode = rop.AppVersionCode;
+                machine.AppVersionName = rop.AppVersionName;
+                machine.MendTime = DateTime.Now;
+                machine.Mender = GuidUtil.Empty();
+                CurrentDb.SaveChanges();
             }
 
             if (string.IsNullOrEmpty(machine.MerchId))
