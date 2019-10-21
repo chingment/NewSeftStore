@@ -22,7 +22,7 @@
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>最近7天销售额</span>
+            <span>今日店铺销售额</span>
 
             <el-button style="float: right; padding: 0px 0" type="text">更多</el-button>
           </div>
@@ -34,7 +34,7 @@
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>今日店铺销售额</span>
+            <span>最近7天销售额</span>
           </div>
           <div style="height:200px;" />
         </el-card>
