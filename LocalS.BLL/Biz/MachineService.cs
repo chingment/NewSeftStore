@@ -52,49 +52,6 @@ namespace LocalS.BLL.Biz
             return model;
         }
 
-        public MachineInfoModel SetJPushRegId(string id,string jPushRegId)
-        {
-            var model = new MachineInfoModel();
-
-            var machine = CurrentDb.Machine.Where(m => m.Id == id).FirstOrDefault();
-
-            if (machine == null)
-                return null;
-
-            model.Id = machine.Id;
-            model.Name = machine.Name;
-            model.LogoImgUrl = machine.LogoImgUrl;
-            model.JPushRegId = machine.JPushRegId;
-            model.CabinetId_1 = machine.CabinetId_1;
-            model.CabinetName_1 = machine.CabinetName_1;
-            model.CabinetMaxRow_1 = machine.CabinetMaxRow_1;
-            model.CabinetMaxCol_1 = machine.CabinetMaxCol_1;
-
-            var merch = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
-
-            if (merch != null)
-            {
-                model.MerchId = merch.Id;
-                model.MerchName = merch.Name;
-                model.CsrQrCode = merch.CsrQrCode;
-
-                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.MerchId && m.MachineId == id).FirstOrDefault();
-                if (merchMachine != null)
-                {
-                    model.Name = merchMachine.Name;
-                    model.LogoImgUrl = merchMachine.LogoImgUrl;
-                }
-
-                var merchStore = BizFactory.Store.GetOne(machine.StoreId);
-                if (merchStore != null)
-                {
-                    model.StoreId = merchStore.Id;
-                    model.StoreName = merchStore.Name;
-                }
-            }
-            return model;
-        }
-
         public void SendUpdateProductSkuStock(string id, List<UpdateProductSkuStockModel> productSkus)
         {
             if (productSkus != null && productSkus.Count > 0)

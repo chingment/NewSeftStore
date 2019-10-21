@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupMachineInitData
+    public class RopMachineInitData
     {
         public string MachineId { get; set; }
-        public DateTime? Datetime { get; set; }
+        public string JPushRegId { get; set; }
     }
 }

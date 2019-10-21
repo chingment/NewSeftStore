@@ -301,7 +301,7 @@
     <Compile Include="Api\StoreTerm\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupProductSkuSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineSlotStocks.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RupMachineInitData.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPayStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPickupStatusQuery.cs" />

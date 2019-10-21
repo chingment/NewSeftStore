@@ -10,10 +10,10 @@ namespace WebApiStoreTerm.Controllers
     [OwnApiAuthorize]
     public class MachineController : OwnApiBaseController
     {
-        [HttpGet]
-        public OwnApiHttpResponse InitData([FromUri]RupMachineInitData rup)
+        [HttpPost]
+        public OwnApiHttpResponse InitData([FromBody]RopMachineInitData rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.InitData(rup);
+            IResult result = StoreTermServiceFactory.Machine.InitData(rop);
             return new OwnApiHttpResponse(result);
         }
 

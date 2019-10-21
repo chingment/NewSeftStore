@@ -14,16 +14,20 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class MachineService : BaseDbContext
     {
-        public CustomJsonResult InitData(RupMachineInitData rup)
+        public CustomJsonResult InitData(RopMachineInitData rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             var ret = new RetMachineInitData();
 
-            var machine = BizFactory.Machine.GetOne(rup.MachineId);
+
+            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 
             if (machine == null)
             {
+                machine.JPushRegId = rop.JPushRegId;
+                CurrentDb.SaveChanges();
+
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
             }
 
@@ -37,22 +41,21 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            ret.Machine.Id = machine.Id;
-            ret.Machine.Name = machine.Name;
-            ret.Machine.LogoImgUrl = machine.LogoImgUrl;
-            ret.Machine.MerchName = machine.MerchName;
-            ret.Machine.StoreName = machine.StoreName;
-            ret.Machine.CsrQrCode = machine.CsrQrCode;
-            ret.Machine.CabinetId_1 = machine.CabinetId_1;
-            ret.Machine.CabinetName_1 = machine.CabinetName_1;
-            ret.Machine.CabinetMaxRow_1 = machine.CabinetMaxRow_1;
-            ret.Machine.CabinetMaxCol_1 = machine.CabinetMaxCol_1;
+            var machineInfo = BizFactory.Machine.GetOne(rop.MachineId);
+            ret.Machine.Id = machineInfo.Id;
+            ret.Machine.Name = machineInfo.Name;
+            ret.Machine.LogoImgUrl = machineInfo.LogoImgUrl;
+            ret.Machine.MerchName = machineInfo.MerchName;
+            ret.Machine.StoreName = machineInfo.StoreName;
+            ret.Machine.CsrQrCode = machineInfo.CsrQrCode;
+            ret.Machine.CabinetId_1 = machineInfo.CabinetId_1;
+            ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
+            ret.Machine.CabinetMaxRow_1 = machineInfo.CabinetMaxRow_1;
+            ret.Machine.CabinetMaxCol_1 = machineInfo.CabinetMaxCol_1;
 
-            ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machine.MerchId, machine.StoreId, machine.Id);
-
-            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machine.MerchId, machine.StoreId, machine.Id);
-
-            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machine.MerchId, machine.StoreId, machine.Id);
+            ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
+            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
+            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
