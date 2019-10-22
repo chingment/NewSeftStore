@@ -71,7 +71,7 @@ namespace Lumos.Redis
             try
             {
                 ThreadSafeRandom rd = new ThreadSafeRandom();
-                int part1 = rd.Next(100, 100);
+                int part1 = rd.Next(100, 999);
                 var incr = RedisManager.Db.StringIncrement("PickCodeIncr", 1);
 
                 string part2 = incr.ToString().PadLeft(5, '0');
