@@ -151,42 +151,28 @@ namespace LocalS.Service.Api.StoreTerm
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var orderPickupLog = new OrderPickupLog();
-                orderPickupLog.Id = GuidUtil.New();
-                orderPickupLog.OrderId = rop.OrderId;
-                orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                orderPickupLog.SellChannelRefId = rop.MachineId;
-                orderPickupLog.UniqueId = rop.UniqueId;
-                orderPickupLog.ProductSkuId = rop.ProductSkuId;
-                orderPickupLog.SlotId = rop.SlotId;
-                orderPickupLog.Status = rop.Status;
-                orderPickupLog.Remark = rop.Remark;
-                orderPickupLog.CreateTime = DateTime.Now;
-                orderPickupLog.Creator = rop.MachineId;
-                CurrentDb.OrderPickupLog.Add(orderPickupLog);
-
                 var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
                 if (orderDetailsChildSon != null)
                 {
                     orderDetailsChildSon.Status = rop.Status;
 
-                    var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rop.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
+                    var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
 
                     if (orderDetailsChildSonsNoCompeleteCount == 0)
                     {
-                        var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
+                        var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
                         if (order != null)
                         {
                             order.Status = E_OrderStatus.Completed;
                             order.CompletedTime = DateTime.Now;
 
-                            var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == rop.OrderId).ToList();
+                            var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
                             foreach (var orderDetail in orderDetails)
                             {
                                 orderDetail.Status = E_OrderStatus.Completed;
                                 orderDetail.CompletedTime = DateTime.Now;
 
-                                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rop.OrderId).ToList();
+                                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
 
                                 foreach (var orderDetailsChild in orderDetails)
                                 {
@@ -197,11 +183,25 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
+                    var orderPickupLog = new OrderPickupLog();
+                    orderPickupLog.Id = GuidUtil.New();
+                    orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                    orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                    orderPickupLog.SellChannelRefId = rop.MachineId;
+                    orderPickupLog.UniqueId = rop.UniqueId;
+                    orderPickupLog.ProductSkuId = orderDetailsChildSon.PrdProductSkuId;
+                    orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
+                    orderPickupLog.Status = rop.Status;
+                    orderPickupLog.Remark = rop.Remark;
+                    orderPickupLog.CreateTime = DateTime.Now;
+                    orderPickupLog.Creator = rop.MachineId;
+                    CurrentDb.OrderPickupLog.Add(orderPickupLog);
+
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
                 }
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             }
 
             return result;
