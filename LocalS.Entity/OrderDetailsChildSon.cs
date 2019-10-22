@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    // 1000 待取货，2000 已发命令取货 3000 取货中 4000 取货成功 5000 取货失败
     public enum E_OrderDetailsChildSonStatus
     {
         Unknow = 0,

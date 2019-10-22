@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace LocalS.Service.Api.StoreTerm
         /// 3000 取货成功
         /// 4000 取货异常
         /// </summary>
-        public string EventCode { get; set; }
-        public string EventRemark { get; set; }
+        public E_OrderDetailsChildSonStatus Status { get; set; }
+        public string Remark { get; set; }
     }
 }

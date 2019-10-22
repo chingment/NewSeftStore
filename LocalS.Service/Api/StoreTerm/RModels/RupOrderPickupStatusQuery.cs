@@ -9,6 +9,6 @@ namespace LocalS.Service.Api.StoreTerm
     public class RupOrderPickupStatusQuery
     {
         public string MachineId { get; set; }
-        public string OrderId { get; set; }
+        public string UniqueId { get; set; }
     }
 }

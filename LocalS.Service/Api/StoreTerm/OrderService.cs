@@ -130,37 +130,17 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetOrderPickupStatusQuery();
 
+            var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
 
-            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rup.OrderId).ToList();
-            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rup.OrderId).ToList();
-
-
-            foreach (var orderDetailsChild in orderDetailsChilds)
+            if (orderDetailsChildSon != null)
             {
-                var sku = new RetOrderPickupStatusQuery.ProductSku();
-                sku.Id = orderDetailsChild.PrdProductSkuId;
-                sku.Name = orderDetailsChild.PrdProductSkuName;
-                sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
-                sku.Quantity = orderDetailsChild.Quantity;
+                ret.ProductSkuId = orderDetailsChildSon.PrdProductId;
+                ret.SlotId = orderDetailsChildSon.SlotId;
+                ret.UniqueId = orderDetailsChildSon.Id;
+                ret.Status = orderDetailsChildSon.Status;
 
-
-                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
-
-                sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
-                sku.QuantityByException = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Exception).Count();
-                foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
-                {
-                    var slot = new RetOrderPickupStatusQuery.Slot();
-                    slot.UniqueId = orderDetailsChildSon.Id;
-                    slot.SlotId = orderDetailsChildSon.SlotId;
-                    slot.Status = orderDetailsChildSon.Status;
-                    sku.Slots.Add(slot);
-                }
-
-                ret.ProductSkus.Add(sku);
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             }
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
@@ -179,8 +159,8 @@ namespace LocalS.Service.Api.StoreTerm
                 orderPickupLog.UniqueId = rop.UniqueId;
                 orderPickupLog.ProductSkuId = rop.ProductSkuId;
                 orderPickupLog.SlotId = rop.SlotId;
-                orderPickupLog.EventCode = rop.EventCode;
-                orderPickupLog.EventRemark = rop.EventRemark;
+                orderPickupLog.Status = rop.Status;
+                orderPickupLog.Remark = rop.Remark;
                 orderPickupLog.CreateTime = DateTime.Now;
                 orderPickupLog.Creator = rop.MachineId;
                 CurrentDb.OrderPickupLog.Add(orderPickupLog);
@@ -188,53 +168,39 @@ namespace LocalS.Service.Api.StoreTerm
                 var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
                 if (orderDetailsChildSon != null)
                 {
-                    switch (rop.EventCode)
+                    orderDetailsChildSon.Status = rop.Status;
+
+                    var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rop.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
+
+                    if (orderDetailsChildSonsNoCompeleteCount == 0)
                     {
-                        case "1000":
-                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.SendPick;
-                            break;
-                        case "2000":
-                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Picking;
-                            break;
-                        case "3000":
-                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Completed;
-                            break;
-                        case "4000":
-                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Exception;
-                            break;
-                    }
-                }
-
-                var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rop.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
-
-                if (orderDetailsChildSonsNoCompeleteCount == 0)
-                {
-                    var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
-                    if (order != null)
-                    {
-                        order.Status = E_OrderStatus.Completed;
-                        order.CompletedTime = DateTime.Now;
-
-                        var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == rop.OrderId).ToList();
-                        foreach (var orderDetail in orderDetails)
+                        var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
+                        if (order != null)
                         {
-                            orderDetail.Status = E_OrderStatus.Completed;
-                            orderDetail.CompletedTime = DateTime.Now;
+                            order.Status = E_OrderStatus.Completed;
+                            order.CompletedTime = DateTime.Now;
 
-                            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rop.OrderId).ToList();
-
-                            foreach (var orderDetailsChild in orderDetails)
+                            var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == rop.OrderId).ToList();
+                            foreach (var orderDetail in orderDetails)
                             {
-                                orderDetailsChild.Status = E_OrderStatus.Completed;
-                                orderDetailsChild.CompletedTime = DateTime.Now;
+                                orderDetail.Status = E_OrderStatus.Completed;
+                                orderDetail.CompletedTime = DateTime.Now;
+
+                                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rop.OrderId).ToList();
+
+                                foreach (var orderDetailsChild in orderDetails)
+                                {
+                                    orderDetailsChild.Status = E_OrderStatus.Completed;
+                                    orderDetailsChild.CompletedTime = DateTime.Now;
+                                }
                             }
                         }
                     }
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
+
                 }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             }
 
