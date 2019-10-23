@@ -171,7 +171,7 @@ namespace LocalS.BLL
 
             key = key.ToUpper();
 
-            var d = (from i in hs select i).Where(x => x.Name.ToString().Contains(key)).ToList();
+            var d = (from i in hs select i).Where(x => x.Name.ToString().StartsWith(key)).ToList();
 
             foreach (var item in d)
             {
