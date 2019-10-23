@@ -2,6 +2,7 @@
 using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace LocalS.Service.Api.StoreTerm
 
     public class OrderService : BaseDbContext
     {
+        private static readonly string redis_machine_lstord = "machine_lstord:{0}";
+
         public CustomJsonResult Reserve(RopOrderReserve rop)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -36,7 +39,6 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;
@@ -56,6 +58,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.OrderId = bizResult.Data.OrderId;
                 ret.OrderSn = bizResult.Data.OrderSn;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
             }
             else
@@ -155,6 +158,7 @@ namespace LocalS.Service.Api.StoreTerm
                 if (orderDetailsChildSon != null)
                 {
                     orderDetailsChildSon.Status = rop.Status;
+                    CurrentDb.SaveChanges();
 
                     var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
 
