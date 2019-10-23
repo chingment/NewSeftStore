@@ -178,7 +178,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                                 var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
 
-                                foreach (var orderDetailsChild in orderDetails)
+                                foreach (var orderDetailsChild in orderDetailsChilds)
                                 {
                                     orderDetailsChild.Status = E_OrderStatus.Completed;
                                     orderDetailsChild.CompletedTime = DateTime.Now;
