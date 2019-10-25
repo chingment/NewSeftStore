@@ -19,11 +19,19 @@ namespace WebApiMerch.Controllers
 
             return new OwnApiHttpResponse(result);
         }
+        [HttpGet]
+        public OwnApiHttpResponse Get7DayGmv()
+        {
+            IResult result = MerchServiceFactory.Home.Get7DayGmv(this.CurrentUserId, this.CurrentMerchId);
+
+            return new OwnApiHttpResponse(result);
+        }
+
 
         [HttpGet]
-        public OwnApiHttpResponse GetTodaySummary()
+        public OwnApiHttpResponse GetTodayStoreGmvRl()
         {
-            IResult result = MerchServiceFactory.Home.GetTodaySummary(this.CurrentUserId, this.CurrentMerchId);
+            IResult result = MerchServiceFactory.Home.GetTodayStoreGmvRl(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }

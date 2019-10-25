@@ -697,7 +697,7 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.ClientUserId = order.ClientUserId;
                         rptOrderDetailsChild.StoreId = order.StoreId;
                         rptOrderDetailsChild.StoreName = order.StoreName;
-                        rptOrderDetailsChild.Quantity = orderDetail.Quantity;
+                        rptOrderDetailsChild.Quantity = orderDetailsChild.Quantity;
                         rptOrderDetailsChild.PrdProductId = orderDetailsChild.PrdProductId;
                         rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
                         rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;

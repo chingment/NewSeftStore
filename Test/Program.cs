@@ -28,11 +28,30 @@ namespace Test
         }
         static void Main(string[] args)
         {
-            sbyte[] orig = a(new byte[] { 0x82 });
+
+            StringBuilder sql = new StringBuilder();
+            sql.Append(" select a1.datef, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
+            for (int i = 0; i < 7; i++)
+            {
+                string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
+
+                sql.Append(" select '" + datef + "' datef union");
+            }
+            sql.Remove(sql.Length - 5, 5);
+
+            sql.Append(" ) a1 left join ");
+            sql.Append(" ( select CONVERT(varchar(100), GETDATE(), 23) datef ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  DateDiff(dd, TradeTime, getdate()) <= 7 ) b1 ");
+            sql.Append(" on  a1.datef=b1.datef  ");
+            sql.Append(" order by a1.datef desc  ");
+
+
+            string a = sql.ToString();
+
+            //sbyte[] orig = a(new byte[] { 0x82 });
 
 
 
-            SendCmd(orig, new sbyte[] { 0x1 });
+            //SendCmd(orig, new sbyte[] { 0x1 });
             //for (int i = 0; i < 1000; i++)
             //{
             //    string threadName = "thread " + i;
