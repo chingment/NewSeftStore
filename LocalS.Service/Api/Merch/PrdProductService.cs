@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -313,7 +314,7 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
-    
+
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -410,6 +411,78 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+
+        //public CustomJsonResult GetListByInStoreSale(string operater, string merchId, string productId)
+        //{
+        //    var query = (from u in CurrentDb.SellChannelStock
+        //                 where u.PrdProductId == productId
+        //                 && u.MerchId == merchId
+        //                 select new { u.RefId, u.RefType, u.PrdProductId, u.PrdProductSkuId, u.SalePrice, u.SumQuantity, u.SellQuantity, u.LockQuantity, u.SalePriceByVip }).Distinct();
+
+        //    int total = query.Count();
+
+        //    int pageIndex = 0;
+        //    int pageSize = int.MaxValue;
+        //    query = query.OrderByDescending(r => r.SalePrice).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+
+        //    var list = query.ToList();
+
+        //    List<object> olist = new List<object>();
+
+        //    var refs = (from u in list select new { u.RefId, u.RefType }).Distinct().ToList();
+        //    var orefs = new Dictionary<string, ProductSkuInStoreModel>();
+        //    foreach (var r in refs)
+        //    {
+        //        switch (r.RefType)
+        //        {
+        //            case E_SellChannelRefType.Machine:
+        //                var machine = BizFactory.Machine.GetOne(r.RefId);
+        //                if (!string.IsNullOrEmpty(machine.StoreId))
+        //                {
+        //                    if (!orefs.ContainsKey(machine.StoreId))
+        //                    {
+        //                        ProductSkuInStoreModel model = new ProductSkuInStoreModel();
+
+        //                        model.StoreId = machine.StoreId;
+        //                        model.StoreName = machine.StoreName;
+        //                        model.Refs.Add(new ProductSkuInStoreModel.RefModel { RefType = r.RefType, RefId = r.RefId });
+
+        //                        orefs.Add(machine.StoreId, model);
+        //                    }
+        //                    else
+        //                    {
+        //                        ProductSkuInStoreModel model = orefs[machine.StoreId];
+        //                        model.Refs.Add(new ProductSkuInStoreModel.RefModel { RefType = r.RefType, RefId = r.RefId });
+                        
+        //                        orefs[machine.StoreId] = model;
+        //                    }
+        //                }
+        //                break;
+        //        }
+        //    }
+
+
+
+        //    foreach (var oref in orefs)
+        //    {
+        //        var machine = BizFactory.Machine.GetOne(item.RefId);
+
+        //        var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, item.PrdProductSkuId);
+        //        olist.Add(new
+        //        {
+        //            Id = item.PrdProductSkuId,
+        //            Name = productSku.Name,
+        //            MainImgUrl = productSku.MainImgUrl,
+        //            StoreId = machine.StoreId,
+        //            StoreName = machine.StoreName,
+        //            SalePrice = item.SalePrice.ToF2Price()
+        //        });
+        //    }
+
+        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+        //}
 
     }
 }

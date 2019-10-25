@@ -45,5 +45,7 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.PrdProduct.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+
     }
 }

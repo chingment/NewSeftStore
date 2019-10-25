@@ -157,6 +157,7 @@
     <Compile Include="Api\Merch\ClientUserService.cs" />
     <Compile Include="Api\Merch\MachineService.cs" />
     <Compile Include="Api\Merch\Models\MachineModel.cs" />
+    <Compile Include="Api\Merch\Models\ProductSkuInStoreModel.cs" />
     <Compile Include="Api\Merch\Models\ProductSkuModel.cs" />
     <Compile Include="Api\Merch\Models\StatusModel.cs" />
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
