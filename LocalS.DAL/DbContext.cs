@@ -49,6 +49,9 @@ namespace LocalS.DAL
         public IDbSet<Term> Term { get; set; }
         public IDbSet<Machine> Machine { get; set; }
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
+        public IDbSet<RptOrder> RptOrder { get; set; }
+        public IDbSet<RptOrderDetails> RptOrderDetails { get; set; }
+        public IDbSet<RptOrderDetailsChild> RptOrderDetailsChild { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

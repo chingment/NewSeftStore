@@ -88,7 +88,6 @@
     <Compile Include="Cache\Model\ProductSkuInfoBySearchModel.cs" />
     <Compile Include="Cache\Model\ProductSkuInfoModel.cs" />
     <Compile Include="Cache\Model\ProductSkuStockModel.cs" />
-    <Compile Include="Cache\OrderCacheService.cs" />
     <Compile Include="Cache\ProductSkuCacheService.cs" />
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayResultNotifyModel.cs" />

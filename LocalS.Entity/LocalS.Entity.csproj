@@ -73,6 +73,9 @@
     <Compile Include="PrdProductSubject.cs" />
     <Compile Include="PrdSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RptOrder.cs" />
+    <Compile Include="RptOrderDetails.cs" />
+    <Compile Include="RptOrderDetailsChild.cs" />
     <Compile Include="SellChannel.cs" />
     <Compile Include="Store.cs" />
     <Compile Include="SellChannelStock.cs" />
