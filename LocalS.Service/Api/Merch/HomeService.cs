@@ -38,7 +38,7 @@ namespace LocalS.Service.Api.Merch
             sql.Remove(sql.Length - 5, 5);
 
             sql.Append(" ) a1 left join ");
-            sql.Append(" ( select CONVERT(varchar(100), GETDATE(), 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='" + merchId + "' and DateDiff(dd, TradeTime, getdate()) <= 7 ) b1 ");
+            sql.Append(" (    select datef, sum(sumCount) as sumCount ,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='" + merchId + "' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
             sql.Append(" on  a1.datef=b1.datef  ");
             sql.Append(" order by a1.datef desc  ");
 

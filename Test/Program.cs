@@ -30,7 +30,7 @@ namespace Test
         {
 
             StringBuilder sql = new StringBuilder();
-            sql.Append(" select a1.datef, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
+            sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
             for (int i = 0; i < 7; i++)
             {
                 string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
@@ -40,7 +40,7 @@ namespace Test
             sql.Remove(sql.Length - 5, 5);
 
             sql.Append(" ) a1 left join ");
-            sql.Append(" ( select CONVERT(varchar(100), GETDATE(), 23) datef ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  DateDiff(dd, TradeTime, getdate()) <= 7 ) b1 ");
+            sql.Append(" (    select datef, sum(sumCount),sum(sumTradeAmount) from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='d17df2252133478c99104180e8062230' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
             sql.Append(" on  a1.datef=b1.datef  ");
             sql.Append(" order by a1.datef desc  ");
 

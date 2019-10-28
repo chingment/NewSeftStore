@@ -168,10 +168,7 @@ namespace LocalS.BLL
         {
             List<ProductSkuInfoBySearchModel> list = new List<ProductSkuInfoBySearchModel>();
             var hs = RedisManager.Db.HashGetAll(string.Format(redis_key_all_sku_search_by_merchId, merchId));
-
-            key = key.ToUpper();
-
-            var d = (from i in hs select i).Where(x => x.Name.ToString().StartsWith(key)).ToList();
+            var d = (from i in hs select i).Where(x => x.Name.ToString().Contains(key)).ToList();
 
             foreach (var item in d)
             {
