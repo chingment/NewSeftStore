@@ -206,6 +206,61 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+
+        public CustomJsonResult ManageStockGetStockList2(string operater, string merchId, string machineId)
+        {
+            var result = new CustomJsonResult();
+
+            var machine = BizFactory.Machine.GetOne(machineId);
+
+            List<object> olist = new List<object>();
+
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
+
+            List<SlotRowModel> rows = new List<SlotRowModel>();
+
+            for (int i = machine.CabinetMaxRow_1; i > 0; i--)
+            {
+                SlotRowModel row = new SlotRowModel();
+                row.No = i;
+
+                for (int j = 0; j < machine.CabinetMaxCol_1; i++)
+                {
+                    var slotId = "n1" + "r" + i + "c" + j;
+
+                    var col = new SlotColModel();
+                    col.No = j;
+                    col.SlotId = slotId;
+
+                    var slotStock = machineStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
+                    if (slotStock == null)
+                    {
+                        col.SlotInfo.Id = slotId;
+                    }
+                    else
+                    {
+                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
+                        if (bizProductSku != null)
+                        {
+                            col.SlotInfo.Id = slotId;
+                            col.SlotInfo.ProductSkuId = bizProductSku.Id;
+                            col.SlotInfo.ProductSkuName = bizProductSku.Name;
+                            col.SlotInfo.ProductSkuMainImgUrl = bizProductSku.MainImgUrl;
+                            col.SlotInfo.SumQuantity = slotStock.SumQuantity;
+                            col.SlotInfo.LockQuantity = slotStock.LockQuantity;
+                            col.SlotInfo.SellQuantity = slotStock.SellQuantity;
+                            col.SlotInfo.MaxQuantity = 10;
+                        }
+                    }
+                    row.Cols.Add(col);
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", rows);
+
+            return result;
+        }
+
         public CustomJsonResult ManageStockEditStock(string operater, string merchId, RopMachineEditStock rop)
         {
             var result = new CustomJsonResult();
