@@ -20,26 +20,28 @@
         </el-col>
       </el-row>
     </div>
-    <el-row v-loading="loading" :gutter="20">
 
-      <el-col v-for="(productSku,index) in listData" :key="index" :span="6" :xs="24" style="margin-bottom:20px">
+    <el-row v-for="(row,rindex) in listData" :key="rindex" :gutter="12">
+
+      <el-col v-for="(col,cindex) in row.cols" :key="cindex" :span="2" :xs="24" style="margin-bottom:20px;">
         <el-card class="box-card">
           <div class="above">
-            <div v-show="productSku.isOffSell" class="isOffSell-box">
-              <div class="isOffSell-tip">已下架</div>
-            </div>
+            <div class="above-img">
+              <div v-show="col.isOffSell" class="isOffSell-box">
+                <div class="isOffSell-tip">已下架</div>
+              </div>
+              <img :src="col.mainImgUrl" alt=""> </div>
             <div class="above-des">
               <div class="des1">
-                <div class="name">      <span>({{ productSku.slotId }})</span> {{ productSku.name }}</div>
-                <div class="price"> <span class="saleprice">{{ productSku.salePrice }}</span> </div>
+                <div class="name">      <span>({{ col.slotId }})</span> {{ col.name }}</div>
+                <div class="price"> <span class="saleprice">{{ col.salePrice }}</span> </div>
               </div>
               <div class="des2">
-                <span class="sellQuantity">{{ productSku.sellQuantity }}</span> /
-                <span class="lockQuantity">{{ productSku.lockQuantity }}</span> /
-                <span class="sumQuantity">{{ productSku.sumQuantity }}</span>
+                <span class="sellQuantity">{{ col.sellQuantity }}</span> /
+                <span class="lockQuantity">{{ col.lockQuantity }}</span> /
+                <span class="sumQuantity">{{ col.sumQuantity }}</span>
               </div>
             </div>
-            <div class="above-img"> <img :src="productSku.mainImgUrl" alt=""> </div>
           </div>
           <div class="below">
             <div class="below-left">
@@ -48,14 +50,12 @@
             </div>
             <div class="below-right">
 
-              <el-button type="primary" @click="dialogEditOpen(productSku)">编辑</el-button>
+              <el-button type="primary" @click="dialogEditOpen(col)">编辑</el-button>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
-
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
     <div v-show="listTotal<=0" class="list-empty">
       <span>暂无数据</span>
@@ -114,12 +114,10 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { initManageStock, manageStockGetStockList, manageStockEditStock } from '@/api/machine'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
 export default {
   name: 'ManagePaneStock',
-  components: { Pagination },
   data() {
     return {
       loading: false,
@@ -179,8 +177,7 @@ export default {
       manageStockGetStockList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.listData = d.items
-          this.listTotal = d.total
+          this.listData = d
         }
         this.loading = false
       })
@@ -231,8 +228,7 @@ export default {
   padding: 20px;
   padding-top: 0px;
   .above{
-    height: 110px;
-    display: flex;
+
     position: relative;
     .above-des{
      flex: 1;
@@ -258,6 +254,7 @@ export default {
       }
      }
     .above-img{
+      text-align: center;
      img{
       width: 80px;
       height: 80px;

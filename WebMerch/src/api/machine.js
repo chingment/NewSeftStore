@@ -42,7 +42,7 @@ export function initManageStock(params) {
 
 export function manageStockGetStockList(params) {
   return request({
-    url: '/machine/manageStockGetStockList',
+    url: '/machine/manageStockGetStockList2',
     method: 'get',
     params
   })

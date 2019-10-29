@@ -10,26 +10,23 @@ namespace LocalS.Service.Api.Merch
     {
         public SlotColModel()
         {
-            this.SlotInfo = new SlotModel();
+
         }
 
         public int No;
-
+        public string ProductSkuId { get; set; }
         public string SlotId { get; set; }
+        public string Name { get; set; }
+        public string MainImgUrl { get; set; }
+        public int SumQuantity { get; set; }
+        public int LockQuantity { get; set; }
+        public int SellQuantity { get; set; }
+        public int MaxQuantity { get; set; }
 
-        public SlotModel SlotInfo { get; set; }
+        public bool IsOffSell { get; set; }
 
-        public class SlotModel
-        {
-            public string Id { get; set; }
-            public string ProductSkuId { get; set; }
-            public string ProductSkuName { get; set; }
-            public string ProductSkuMainImgUrl { get; set; }
-            public int SumQuantity { get; set; }
-            public int LockQuantity { get; set; }
-            public int SellQuantity { get; set; }
-            public int MaxQuantity { get; set; }
-        }
+        public decimal SalePrice { get; set; }
+
     }
     public class SlotRowModel
     {
@@ -38,7 +35,7 @@ namespace LocalS.Service.Api.Merch
         {
             this.Cols = new List<SlotColModel>();
         }
-        
+
         public int No { get; set; }
         public List<SlotColModel> Cols { get; set; }
     }

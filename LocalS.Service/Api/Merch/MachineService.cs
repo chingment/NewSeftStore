@@ -219,12 +219,12 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            for (int i = machine.CabinetMaxRow_1; i > 0; i--)
+            for (int i = machine.CabinetMaxRow_1 - 1; i >= 0; i--)
             {
                 SlotRowModel row = new SlotRowModel();
                 row.No = i;
 
-                for (int j = 0; j < machine.CabinetMaxCol_1; i++)
+                for (int j = 0; j < machine.CabinetMaxCol_1; j++)
                 {
                     var slotId = "n1" + "r" + i + "c" + j;
 
@@ -235,25 +235,28 @@ namespace LocalS.Service.Api.Merch
                     var slotStock = machineStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                     if (slotStock == null)
                     {
-                        col.SlotInfo.Id = slotId;
+
                     }
                     else
                     {
                         var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
                         if (bizProductSku != null)
                         {
-                            col.SlotInfo.Id = slotId;
-                            col.SlotInfo.ProductSkuId = bizProductSku.Id;
-                            col.SlotInfo.ProductSkuName = bizProductSku.Name;
-                            col.SlotInfo.ProductSkuMainImgUrl = bizProductSku.MainImgUrl;
-                            col.SlotInfo.SumQuantity = slotStock.SumQuantity;
-                            col.SlotInfo.LockQuantity = slotStock.LockQuantity;
-                            col.SlotInfo.SellQuantity = slotStock.SellQuantity;
-                            col.SlotInfo.MaxQuantity = 10;
+                            col.ProductSkuId = bizProductSku.Id;
+                            col.Name = bizProductSku.Name;
+                            col.MainImgUrl = bizProductSku.MainImgUrl;
+                            col.SumQuantity = slotStock.SumQuantity;
+                            col.LockQuantity = slotStock.LockQuantity;
+                            col.SellQuantity = slotStock.SellQuantity;
+                            col.MaxQuantity = 10;
+                            col.SalePrice = slotStock.SalePrice;
+                            col.IsOffSell = slotStock.IsOffSell;
                         }
                     }
                     row.Cols.Add(col);
                 }
+
+                rows.Add(row);
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", rows);
