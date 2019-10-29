@@ -29,6 +29,8 @@ namespace Test
         static void Main(string[] args)
         {
 
+            bool a1 = CommonUtil.IsNumber("1312331333x13133123");
+
             StringBuilder sql = new StringBuilder();
             sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
             for (int i = 0; i < 7; i++)

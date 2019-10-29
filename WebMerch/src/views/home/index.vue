@@ -232,11 +232,13 @@ export default {
 
       .m1{
        font-size: 42px;
+       line-height: 60px;
       }
 
        .m2{
        font-size: 42px;
        color: #cf9236;
+         line-height: 60px;
       }
     }
   }

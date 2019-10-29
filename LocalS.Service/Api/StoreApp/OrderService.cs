@@ -490,6 +490,14 @@ namespace LocalS.Service.Api.StoreApp
 
                 block.Tag.Name = new FsText(orderDetail.SellChannelRefName, "");
 
+                if (orderDetail.Status == E_OrderStatus.Payed)
+                {
+                    if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
+                    {
+                        block.Tag.Desc = new FsField("取货码", "", order.PickCode, "#f18d00");
+                    }
+                }
+
 
                 var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderDetailsId == orderDetail.Id).ToList();
 

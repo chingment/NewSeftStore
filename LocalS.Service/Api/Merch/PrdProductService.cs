@@ -341,6 +341,7 @@ namespace LocalS.Service.Api.Merch
                     var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (prdProductSku != null)
                     {
+                        prdProductSku.Name= rop.Name;
                         prdProductSku.PinYinName = prdProduct.PinYinName;
                         prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                         prdProductSku.BarCode = sku.BarCode;
@@ -405,6 +406,8 @@ namespace LocalS.Service.Api.Merch
                 for (var i = 0; i < rop.Skus.Count; i++)
                 {
                     CacheServiceFactory.ProductSku.Remove(merchId, rop.Skus[i].Id);
+                    CacheServiceFactory.ProductSku.GetInfo(merchId, rop.Skus[i].Id);
+
                 }
             }
 
