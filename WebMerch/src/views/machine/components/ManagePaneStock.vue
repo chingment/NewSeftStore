@@ -11,7 +11,7 @@
 
       <el-row :gutter="12">
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.productSkuName" style="width: 100%" placeholder="商品名称" va class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.productSkuName" style="width: 100%" placeholder="商品名称" class="filter-item" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -21,43 +21,54 @@
       </el-row>
     </div>
 
-    <el-row v-for="(row,rindex) in listData" :key="rindex" :gutter="12">
+    <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
 
-      <el-col v-for="(col,cindex) in row.cols" :key="cindex" :span="2" :xs="24" style="margin-bottom:20px;">
-        <el-card class="box-card">
-          <div class="above">
-            <div class="above-img">
-              <div v-show="col.isOffSell" class="isOffSell-box">
-                <div class="isOffSell-tip">已下架</div>
+      <template v-for="(col,cindex) in row.cols">
+        <div v-show="col.isShow" :key="cindex" class="col">
+
+          <div class="box-slot">
+
+            <div v-if="col.productSkuId!=null">
+              <div class="above">
+                <div class="above-img">
+                  <div v-show="col.isOffSell" class="isOffSell-box">
+                    <div class="isOffSell-tip">已下架</div>
+                  </div>
+                  <img :src="col.mainImgUrl" alt=""> </div>
+                <div class="above-des">
+                  <div class="des1">
+                    <div class="name">{{ col.name }}</div>
+                    <div class="price"> <span class="saleprice">{{ col.salePrice }}</span> </div>
+                  </div>
+                  <div class="des2">
+                    <span class="sellQuantity">{{ col.sellQuantity }}</span> /
+                    <span class="lockQuantity">{{ col.lockQuantity }}</span> /
+                    <span class="sumQuantity">{{ col.sumQuantity }}</span>
+                  </div>
+                </div>
               </div>
-              <img :src="col.mainImgUrl" alt=""> </div>
-            <div class="above-des">
-              <div class="des1">
-                <div class="name">      <span>({{ col.slotId }})</span> {{ col.name }}</div>
-                <div class="price"> <span class="saleprice">{{ col.salePrice }}</span> </div>
-              </div>
-              <div class="des2">
-                <span class="sellQuantity">{{ col.sellQuantity }}</span> /
-                <span class="lockQuantity">{{ col.lockQuantity }}</span> /
-                <span class="sumQuantity">{{ col.sumQuantity }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="below">
-            <div class="below-left">
-              <!-- <el-button type="success">置满</el-button>
+              <div class="below">
+                <div class="below-left">
+                <!-- <el-button type="success">置满</el-button>
               <el-button type="warning">沽清</el-button> -->
-            </div>
-            <div class="below-right">
+                </div>
+                <div class="below-right">
 
-              <el-button type="primary" @click="dialogEditOpen(col)">编辑</el-button>
+                  <el-button type="primary" @click="dialogEditOpen(col)">编辑</el-button>
+                </div>
+              </div>
             </div>
+            <div v-else>
+              未设置
+            </div>
+
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
 
-    <div v-show="listTotal<=0" class="list-empty">
+        </div>
+      </template>
+    </div>
+
+    <div v-show="listData.length<=0" class="list-empty">
       <span>暂无数据</span>
     </div>
 
@@ -178,18 +189,75 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.listData = d
+
+          for (var i = 0; i < this.listData.length; i++) {
+            for (var j = 0; j < this.listData[i].cols.length; j++) {
+              this.listData[i].cols[j].isShow = true
+            }
+          }
         }
         this.loading = false
       })
     },
     handleFilter() {
-      this.listQuery.page = 1
-      this.getListData()
+      // this.listQuery.page = 1
+      // this.getListData()
+
+      // console.log('this.listQuery.productSkuName:' + this.listQuery.productSkuName)
+      var search = this.listQuery.productSkuName
+      console.log('dsadd' + search)
+      var l_listData = this.listData
+      for (var i = 0; i < l_listData.length; i++) {
+        for (var j = 0; j < l_listData[i].cols.length; j++) {
+          if (search !== undefined && search != null && search.length > 0) {
+            if (l_listData[i].cols[j].name == null) {
+              l_listData[i].cols[j].isShow = false
+            } else {
+              if (l_listData[i].cols[j].name.search(search) !== -1) {
+                console.log(l_listData[i].cols[j].name)
+                l_listData[i].cols[j].isShow = true
+              } else {
+                l_listData[i].cols[j].isShow = false
+              }
+            }
+          } else {
+            l_listData[i].cols[j].isShow = true
+          }
+        }
+      }
+      this.listData = []
+      this.listData = l_listData
+      // this.listData = this.listData
+      // if (l_listData[i].cols[j].name != null) {
+      //       if (this.listQuery.productSkuName != null) {
+      //         if (l_listData[i].cols[j].name.search(this.listQuery.productSkuName) !== -1) {
+      //           console.log(l_listData[i].cols[j].name)
+      //           l_listData[i].cols[j].isShow = undefined
+      //         } else {
+      //           l_listData[i].cols[j].isShow = false
+      //         }
+      //       } else {
+      //         l_listData[i].cols[j].isShow = undefined
+      //       }
+      //     } else {
+      //       l_listData[i].cols[j].isShow = false
+      //     }
+
+      // this.listData.forEach(element => {
+      //   element.cols.forEach(e => {
+      //     if (e.name != null) {
+      //       if (e.name.search('伯') !== -1) {
+      //         console.log(e.name)
+      //         e.isShow = true
+      //       }
+      //     }
+      //   })
+      // })
     },
     dialogEditOpen(productSku) {
       this.dialogEditIsVisible = true
 
-      this.form.productSkuId = productSku.id
+      this.form.productSkuId = productSku.productSkuId
       this.form.name = productSku.name
       this.form.sellQuantity = productSku.sellQuantity
       this.form.lockQuantity = productSku.lockQuantity
@@ -227,18 +295,68 @@ export default {
 #machine_stock{
   padding: 20px;
   padding-top: 0px;
+
+.row{
+
+  .col{
+    margin-bottom:10px;
+  }
+}
+
+.row-block{
+  display: block;
+
+  .col{
+    display: block;
+
+  }
+
+    .box-slot{
+     width: 100%;
+  }
+}
+
+.row-flex{
+  display: flex;
+
+  .col{
+      margin-right: 10px;
+    flex: 1;
+  }
+
+  .col:last-child{
+    margin-right: 0px;
+  }
+
+  .box-slot{
+     min-width: 160px;
+  }
+}
+
+.box-slot {
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border: 1px solid #EBEEF5;
+    background-color: #FFF;
+    color: #303133;
+    -webkit-transition: .3s;
+    transition: .3s;
+    padding: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 188px;
+}
   .above{
 
     position: relative;
     .above-des{
      flex: 1;
       .des1{
-        height: 80px;
+        height: 65px;
 
         .name{
           line-height: 21px;
           max-height: 42px;
-          font-size: 16px;
+          font-size: 14px;
           color: #909399;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -250,14 +368,16 @@ export default {
         }
       }
       .des2{
-        height: 30px;
+        height: 24px;
+        line-height: 24px;
       }
      }
     .above-img{
       text-align: center;
+          position: relative;
      img{
-      width: 80px;
-      height: 80px;
+      width: 50px;
+      height: 50px;
     }
      }
   }
@@ -316,13 +436,12 @@ align-items: center;
 
 .isOffSell-tip {
   display: inline-block;
-  padding: 1rem 2rem;
-  font-size: .1.2rem;
+  padding: 5px;
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
   border-radius: .5rem;
   text-align: center;
-  line-height:1.2rem;
+
 }
 
 }

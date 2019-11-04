@@ -33,10 +33,16 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(storeId);
 
-            var query = CurrentDb.SellChannelStock.Where(m =>
-            m.MerchId == store.MerchId
-            && (store.MachineIds.Contains(m.RefId) && m.RefType == Entity.E_SellChannelRefType.Machine)
-            );
+            var query = (from m in CurrentDb.SellChannelStock
+                         where m.MerchId == store.MerchId
+                         && store.MachineIds.Contains(m.RefId)
+                         && m.RefType == Entity.E_SellChannelRefType.Machine
+                         select new { m.PrdProductId, m.PrdProductSkuId }).Distinct();
+
+            //var query = CurrentDb.SellChannelStock.Where(m =>
+            //m.MerchId == store.MerchId
+            //&& (store.MachineIds.Contains(m.RefId) && m.RefType == Entity.E_SellChannelRefType.Machine)
+            //);
 
             if (!string.IsNullOrEmpty(kindId))
             {
@@ -48,7 +54,7 @@ namespace LocalS.Service.Api.StoreApp
             pageEntiy.Total = query.Count();
             pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * pageIndex).Take(pageSize);
+            query = query.OrderByDescending(r => r.PrdProductSkuId).Skip(pageSize * pageIndex).Take(pageSize);
 
             var list = query.ToList();
 

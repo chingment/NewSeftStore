@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    this.setUploadImgSort()
+    
   },
   created() {
     this.init()

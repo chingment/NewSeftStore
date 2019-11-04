@@ -6,7 +6,7 @@
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px" v-if="isShowClientUserNameInput">
           <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
@@ -290,18 +290,17 @@ export default {
         value: '5000',
         label: '已取消'
       }],
-      isDesktop: this.$store.getters.isDesktop
+      isDesktop: this.$store.getters.isDesktop,
+      isShowClientUserNameInput:true
     }
   },
   watch: {
     storeid: function(value) {
       this.listQuery.storeId = value
-      console.log('this.listQuery.storeId 2 :' + this.listQuery.storeId)
       this.init()
     },
     machineid: function(value) {
       this.listQuery.machineId = value
-      console.log('this.listQuery.machineId 2 :' + this.listQuery.machineId)
       this.init()
     }
   },
@@ -312,11 +311,14 @@ export default {
 
     this.listQuery.storeId = this.storeid
     this.listQuery.machineId = this.machineid
+    
+    if(this.clientuserid=='') {
+      this.isShowClientUserNameInput=true
+    }
+    else  {
+      this.isShowClientUserNameInput=false
+    }
     this.listQuery.clientUserId = this.clientuserid
-
-    console.log('this.listQuery.storeId 1 :' + this.listQuery.storeId)
-    console.log('this.listQuery.machineid 1 :' + this.listQuery.machineid)
-    console.log('this.listQuery.clientUserId 1 :' + this.listQuery.clientUserId)
     this.init()
   },
   methods: {

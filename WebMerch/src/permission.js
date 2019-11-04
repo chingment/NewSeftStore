@@ -19,7 +19,7 @@ router.beforeEach(async(to, from, next) => {
       store.dispatch('own/setToken', token)
     }
     token = getToken()
-    console.log('token: ' + token)
+    // console.log('token: ' + token)
     var path = encodeURIComponent(window.location.href)
     if (token) {
       if (store.getters.userInfo == null) {
