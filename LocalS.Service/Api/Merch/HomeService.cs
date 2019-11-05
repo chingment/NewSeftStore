@@ -38,7 +38,7 @@ namespace LocalS.Service.Api.Merch
             sql.Remove(sql.Length - 5, 5);
 
             sql.Append(" ) a1 left join ");
-            sql.Append(" (    select datef, sum(sumCount) as sumCount ,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='" + merchId + "' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
+            sql.Append(" (    select datef, sum(sumCount) as sumCount ,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder WITH(NOLOCK)  where  merchId='" + merchId + "' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
             sql.Append(" on  a1.datef=b1.datef  ");
             sql.Append(" order by a1.datef desc  ");
 
@@ -73,7 +73,7 @@ namespace LocalS.Service.Api.Merch
             string endTime = CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).ToUnifiedFormatDateTime();
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
-            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(TradeAmount) as sumTradeAmount  from RptOrder where merchId='" + merchId + "' and TradeTime>='" + startTime + "'  and TradeTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
+            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(TradeAmount) as sumTradeAmount  from RptOrder WITH(NOLOCK) where merchId='" + merchId + "' and TradeTime>='" + startTime + "'  and TradeTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
             sql.Append("  where merchId='" + merchId + "' order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
@@ -101,7 +101,7 @@ namespace LocalS.Service.Api.Merch
             var retRptStoreGmvRl = new RetRptStoreGmvRl();
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
-            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(TradeAmount) as sumTradeAmount  from RptOrder where merchId='" + merchId + "' group by StoreId  )  b on a.id=b.storeId ");
+            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(TradeAmount) as sumTradeAmount  from RptOrder WITH(NOLOCK) where merchId='" + merchId + "' group by StoreId  )  b on a.id=b.storeId ");
             sql.Append("  where merchId='" + merchId + "' order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
@@ -128,7 +128,7 @@ namespace LocalS.Service.Api.Merch
 
             var retRptProductSkuSaleRl = new RetRptProductSkuSaleRl();
 
-            StringBuilder sql = new StringBuilder("  select top 10 prdProductSkuName ,sum(Quantity) as sumQuantity,sum(TradeAmount) as sumTradeAmount  from RptOrderDetailsChild where merchId='" + merchId + "' group by PrdProductSkuName order by sumQuantity desc ");
+            StringBuilder sql = new StringBuilder("  select top 10 prdProductSkuName ,sum(Quantity) as sumQuantity,sum(TradeAmount) as sumTradeAmount  from RptOrderDetailsChild WITH(NOLOCK) where merchId='" + merchId + "' group by PrdProductSkuName order by sumQuantity desc ");
 
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)

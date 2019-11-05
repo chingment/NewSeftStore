@@ -23,11 +23,8 @@
   </div>
 </template>
 <script>
-
-import { MessageBox } from 'element-ui'
 import { initDetailsBaseInfo } from '@/api/clientuser'
 import { getUrlParam } from '@/utils/commonUtil'
-import Sortable from 'sortablejs'
 
 export default {
   name: 'ManagePaneBaseInfo',
@@ -50,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    
+
   },
   created() {
     this.init()

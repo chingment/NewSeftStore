@@ -341,7 +341,7 @@ namespace LocalS.Service.Api.Merch
                     var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (prdProductSku != null)
                     {
-                        prdProductSku.Name= rop.Name;
+                        prdProductSku.Name = rop.Name;
                         prdProductSku.PinYinName = prdProduct.PinYinName;
                         prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                         prdProductSku.BarCode = sku.BarCode;
@@ -415,77 +415,45 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
-        //public CustomJsonResult GetListByInStoreSale(string operater, string merchId, string productId)
-        //{
-        //    var query = (from u in CurrentDb.SellChannelStock
-        //                 where u.PrdProductId == productId
-        //                 && u.MerchId == merchId
-        //                 select new { u.RefId, u.RefType, u.PrdProductId, u.PrdProductSkuId, u.SalePrice, u.SumQuantity, u.SellQuantity, u.LockQuantity, u.SalePriceByVip }).Distinct();
-
-        //    int total = query.Count();
-
-        //    int pageIndex = 0;
-        //    int pageSize = int.MaxValue;
-        //    query = query.OrderByDescending(r => r.SalePrice).Skip(pageSize * (pageIndex)).Take(pageSize);
+        public CustomJsonResult GetOnSaleStores(string operater, string merchId, string productId)
+        {
+            //var list = (from u in CurrentDb.SellChannelStock
+            //            where u.PrdProductId == productId
+            //            && u.MerchId == merchId
+            //            && u.RefType == E_SellChannelRefType.Machine
+            //            select new { u.PrdProductId, u.PrdProductSkuId, u.SellQuantity, u.LockQuantity, u.IsOffSell, u.SumQuantity, u.SlotId, u.SalePrice, u.SalePriceByVip, u.RefId, u.RefType }).ToList();
 
 
-        //    var list = query.ToList();
+            //var ref_Sales = (from u in list select new { u.PrdProductSkuId, u.SalePrice, u.IsOffSell, u.RefType, u.RefId }).Distinct();
 
-        //    List<object> olist = new List<object>();
+            //List<OnSaleStoreModel> onSaleStoreModels = new List<OnSaleStoreModel>();
 
-        //    var refs = (from u in list select new { u.RefId, u.RefType }).Distinct().ToList();
-        //    var orefs = new Dictionary<string, ProductSkuInStoreModel>();
-        //    foreach (var r in refs)
-        //    {
-        //        switch (r.RefType)
-        //        {
-        //            case E_SellChannelRefType.Machine:
-        //                var machine = BizFactory.Machine.GetOne(r.RefId);
-        //                if (!string.IsNullOrEmpty(machine.StoreId))
-        //                {
-        //                    if (!orefs.ContainsKey(machine.StoreId))
-        //                    {
-        //                        ProductSkuInStoreModel model = new ProductSkuInStoreModel();
+            //foreach (var ref_Sale in ref_Sales)
+            //{
+            //    var machine = BizFactory.Machine.GetOne(ref_Sale.RefId);
 
-        //                        model.StoreId = machine.StoreId;
-        //                        model.StoreName = machine.StoreName;
-        //                        model.Refs.Add(new ProductSkuInStoreModel.RefModel { RefType = r.RefType, RefId = r.RefId });
+            //    if (machine != null)
+            //    {
+          
+            //        if (!string.IsNullOrEmpty(machine.StoreId))
+            //        {
+            //            var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, ref_Sale.PrdProductSkuId);
+            //            var onSaleStoreModel = new OnSaleStoreModel();
+            //            onSaleStoreModel.StoreId = machine.StoreId;
+            //            onSaleStoreModel.StoreName = machine.StoreName;
+            //            onSaleStoreModel.ProductSkuId = ref_Sale.PrdProductSkuId;
+            //            onSaleStoreModel.ProductSkuName = productSku.Name;
+            //            onSaleStoreModel.ProductSkuMainImgUrl = productSku.MainImgUrl;
+            //            onSaleStoreModel.ProductSkuSalePrice = ref_Sale.SalePrice;
+            //            onSaleStoreModel.ProductSkuIsOffSell = ref_Sale.IsOffSell;
+            //            onSaleStoreModels.Add(onSaleStoreModel);
+            //        }
+            //    }
+            //}
 
-        //                        orefs.Add(machine.StoreId, model);
-        //                    }
-        //                    else
-        //                    {
-        //                        ProductSkuInStoreModel model = orefs[machine.StoreId];
-        //                        model.Refs.Add(new ProductSkuInStoreModel.RefModel { RefType = r.RefType, RefId = r.RefId });
-                        
-        //                        orefs[machine.StoreId] = model;
-        //                    }
-        //                }
-        //                break;
-        //        }
-        //    }
+            //PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
-
-
-        //    foreach (var oref in orefs)
-        //    {
-        //        var machine = BizFactory.Machine.GetOne(item.RefId);
-
-        //        var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, item.PrdProductSkuId);
-        //        olist.Add(new
-        //        {
-        //            Id = item.PrdProductSkuId,
-        //            Name = productSku.Name,
-        //            MainImgUrl = productSku.MainImgUrl,
-        //            StoreId = machine.StoreId,
-        //            StoreName = machine.StoreName,
-        //            SalePrice = item.SalePrice.ToF2Price()
-        //        });
-        //    }
-
-        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
-        //}
-
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", null);
+        }
     }
 }

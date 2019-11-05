@@ -40,10 +40,19 @@ export function edit(data) {
   })
 }
 
+export function getOnSaleStores(params) {
+  return request({
+    url: '/prdproduct/getOnSaleStores',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
   add: add,
   initEdit: initEdit,
-  edit: edit
+  edit: edit,
+  getOnSaleStores: getOnSaleStores
 }

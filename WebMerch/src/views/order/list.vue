@@ -6,7 +6,7 @@
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px" v-if="isShowClientUserNameInput">
+        <el-col v-if="isShowClientUserNameInput" :span="4" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
@@ -291,7 +291,7 @@ export default {
         label: '已取消'
       }],
       isDesktop: this.$store.getters.isDesktop,
-      isShowClientUserNameInput:true
+      isShowClientUserNameInput: true
     }
   },
   watch: {
@@ -311,12 +311,11 @@ export default {
 
     this.listQuery.storeId = this.storeid
     this.listQuery.machineId = this.machineid
-    
-    if(this.clientuserid=='') {
-      this.isShowClientUserNameInput=true
-    }
-    else  {
-      this.isShowClientUserNameInput=false
+
+    if (this.clientuserid === '') {
+      this.isShowClientUserNameInput = true
+    } else {
+      this.isShowClientUserNameInput = false
     }
     this.listQuery.clientUserId = this.clientuserid
     this.init()

@@ -113,7 +113,7 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/prdproduct/edit?id=' + row.id
+        path: '/prdproduct/manage?id=' + row.id + '&tab=tabBaseInfo'
       })
     }
   }

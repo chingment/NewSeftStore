@@ -47,5 +47,11 @@ namespace WebApiMerch.Controllers
         }
 
 
+        [HttpGet]
+        public OwnApiHttpResponse GetOnSaleStores([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.PrdProduct.GetOnSaleStores(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
