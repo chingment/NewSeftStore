@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var machine = CurrentDb.Machine.Where(m => m.Id == item.MachineId).FirstOrDefault();
+                var machine = BizFactory.Machine.GetOne(item.MachineId);
 
                 olist.Add(new
                 {
@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.Merch
             var ret = new RetMachineInitManageBaseInfo();
 
             var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
-            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+            var machine = BizFactory.Machine.GetOne(machineId);
 
             ret.Id = merchMachine.MachineId;
             ret.Name = merchMachine.Name;

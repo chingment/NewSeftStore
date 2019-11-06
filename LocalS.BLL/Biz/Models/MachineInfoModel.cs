@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,17 +15,18 @@ namespace LocalS.BLL.Biz
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string CsrQrCode { get; set; }
-
         public string MerchName { get; set; }
-
         public string StoreName { get; set; }
-
         public string JPushRegId { get; set; }
-
         public string CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public int CabinetMaxRow_1 { get; set; }
         public int CabinetMaxCol_1 { get; set; }
+
+        public string MainImgUrl { get; set; }
+
+        public DateTime? LastRequestTime { get; set; }
+        public E_MachineRunStatus RunStatus { get; set; }
 
     }
 }
