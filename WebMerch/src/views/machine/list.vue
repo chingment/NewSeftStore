@@ -25,7 +25,7 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
+              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span> ({{ item.status.text }})
             </div>
             <div class="right">
               <el-button type="text" @click="handleManage(item)">管理</el-button>

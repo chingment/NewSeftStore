@@ -21,6 +21,7 @@ namespace LocalS.Service.Api.StoreTerm
             var query = (from m in CurrentDb.SellChannelStock
                          where (
 m.MerchId == merchId &&
+m.StoreId == storeId &&
 m.RefId == machineId &&
 m.RefType == Entity.E_SellChannelRefType.Machine)
                          orderby m.CreateTime
@@ -36,7 +37,7 @@ m.RefType == Entity.E_SellChannelRefType.Machine)
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, new string[] { machineId }, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();

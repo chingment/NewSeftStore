@@ -58,12 +58,12 @@ namespace LocalS.BLL
             return productSkuInfoAndStockModel;
         }
 
-        public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string[] machineIds, string productSkuId)
+        public ProductSkuInfoAndStockModel GetInfoAndStock(string merchId, string storeId, string[] machineIds, string productSkuId)
         {
             var productSku = GetInfoAndStock(merchId, productSkuId);
             if (productSku != null)
             {
-                productSku.Stocks = productSku.Stocks.Where(m => m.RefType == Entity.E_SellChannelRefType.Machine && machineIds.Contains(m.RefId)).ToList();
+                productSku.Stocks = productSku.Stocks.Where(m => m.StoreId == storeId && m.RefType == Entity.E_SellChannelRefType.Machine && machineIds.Contains(m.RefId)).ToList();
             }
 
             return productSku;
@@ -115,6 +115,7 @@ namespace LocalS.BLL
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var productSkuStockModel = new ProductSkuStockModel();
+                productSkuStockModel.StoreId = sellChannelStock.StoreId;
                 productSkuStockModel.RefType = sellChannelStock.RefType;
                 productSkuStockModel.RefId = sellChannelStock.RefId;
                 productSkuStockModel.SlotId = sellChannelStock.SlotId;

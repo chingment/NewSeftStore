@@ -10,7 +10,7 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
+              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span> ({{ item.status.text }})
             </div>
             <div class="right">
               <el-button type="text" @click="handleRemoveMachine(item)">移除</el-button>
@@ -241,6 +241,8 @@ white-space: nowrap;
         margin: 0px;
         list-style: none;
          li{
+           width: 100%;
+             text-align: right;
         height: 26px;
         line-height: 26px;
       }

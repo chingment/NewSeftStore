@@ -29,8 +29,8 @@ namespace LocalS.Entity
         public float Lat { get; set; }
         public float Lng { get; set; }
         public string JPushRegId { get; set; }
-        public string MerchId { get; set; }
-        public string StoreId { get; set; }
+        public string CurUseMerchId { get; set; }
+        public string CurUseStoreId { get; set; }
         public string LogoImgUrl { get; set; }
         public string AppVersionCode { get; set; }
         public string AppVersionName { get; set; }

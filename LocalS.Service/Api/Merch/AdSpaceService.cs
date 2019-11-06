@@ -149,7 +149,7 @@ namespace LocalS.Service.Api.Merch
                     foreach (var merchMachine in merchMachines)
                     {
                         string storeName = "未绑定店铺";
-                        var store = BizFactory.Store.GetOne(merchMachine.StoreId);
+                        var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
                         if (store != null)
                         {
                             storeName = store.Name;

@@ -61,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.MachineIds, item.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
@@ -96,7 +96,7 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
-            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, rup.SkuId);
+            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.MachineIds, rup.SkuId);
             if (bizProductSku != null)
             {
                 var productSkuModel = new ProductSkuModel();

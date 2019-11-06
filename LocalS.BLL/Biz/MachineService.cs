@@ -27,7 +27,7 @@ namespace LocalS.BLL.Biz
             model.CabinetMaxRow_1 = machine.CabinetMaxRow_1;
             model.CabinetMaxCol_1 = machine.CabinetMaxCol_1;
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == machine.MerchId).FirstOrDefault();
+            var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 
             if (merch != null)
             {
@@ -35,14 +35,14 @@ namespace LocalS.BLL.Biz
                 model.MerchName = merch.Name;
                 model.CsrQrCode = merch.CsrQrCode;
 
-                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.MerchId && m.MachineId == id).FirstOrDefault();
+                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
                 if (merchMachine != null)
                 {
                     model.Name = merchMachine.Name;
                     model.LogoImgUrl = merchMachine.LogoImgUrl;
                 }
 
-                var merchStore = BizFactory.Store.GetOne(machine.StoreId);
+                var merchStore = BizFactory.Store.GetOne(machine.CurUseStoreId);
                 if (merchStore != null)
                 {
                     model.StoreId = merchStore.Id;

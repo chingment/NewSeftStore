@@ -54,20 +54,6 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitManageProduct([FromUri]string id)
-        {
-            IResult result = MerchServiceFactory.Store.InitManageProduct(this.CurrentUserId, this.CurrentMerchId, id);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
-        public OwnApiHttpResponse ManageProductGetProductList([FromUri]RupStoreManageProductGetProductList rup)
-        {
-            IResult result = MerchServiceFactory.Store.ManageProductGetProductList(this.CurrentUserId, this.CurrentMerchId, rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
         public OwnApiHttpResponse InitManageMachine([FromUri]string id)
         {
             IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);

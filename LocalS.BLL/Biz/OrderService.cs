@@ -50,7 +50,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.SellChannelRefIds, productSku.Id);
+                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.StoreId, rop.SellChannelRefIds, productSku.Id);
 
                         if (bizProductSku == null)
                         {
@@ -264,7 +264,7 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in detailsChild.SlotStock)
                             {
-                                BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderReserve, order.MerchId, slotStock.ProductSkuId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.Quantity);
+                                BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderReserve, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
                             }
                         }
                     }
@@ -732,7 +732,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in childSons)
                 {
-                    BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderPaySuccess, order.MerchId, item.PrdProductSkuId, item.SellChannelRefId, item.SlotId, item.Quantity);
+                    BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
 
                 }
 
@@ -842,7 +842,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderCancle, order.MerchId, item.PrdProductSkuId, item.SellChannelRefId, item.SlotId, item.Quantity);
+                        BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderCancle, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
 
                     CurrentDb.SaveChanges();

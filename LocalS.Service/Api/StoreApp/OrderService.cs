@@ -108,7 +108,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.MachineIds, item.Id);
+                    var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.MachineIds, item.Id);
                     if (productSku != null)
                     {
                         item.Name = productSku.Name;

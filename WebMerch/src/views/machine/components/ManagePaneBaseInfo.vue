@@ -11,26 +11,6 @@
       <el-form-item label="状态">
         {{ temp.status.text }}
       </el-form-item>
-      <el-form-item label="图片">
-        <el-upload
-          ref="uploadImg"
-          :action="uploadImgServiceUrl"
-          list-type="picture-card"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :on-preview="handlePreview"
-          :show-file-list="false"
-        >
-
-          <img v-if="form.logoImgUrl" :src="form.logoImgUrl">
-
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
-        </el-dialog>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="openEdit">编辑</el-button>
       </el-form-item>
@@ -58,7 +38,6 @@
 import { MessageBox } from 'element-ui'
 import { edit, initManageBaseInfo } from '@/api/machine'
 import { getUrlParam } from '@/utils/commonUtil'
-import Sortable from 'sortablejs'
 
 export default {
   name: 'ManagePaneBaseInfo',

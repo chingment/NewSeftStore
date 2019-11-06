@@ -23,7 +23,7 @@ namespace LocalS.BLL.Biz
 
     public class ProductSkuService : BaseDbContext
     {
-        public CustomJsonResult OperateStock(string operater, OperateStockType type, string merchId, string productSkuId, string machineId, string slotId, int quantity = 0)
+        public CustomJsonResult OperateStock(string operater, OperateStockType type, string merchId, string storeId, string machineId, string slotId, string productSkuId, int quantity = 0)
         {
             var result = new CustomJsonResult();
 
@@ -35,7 +35,7 @@ namespace LocalS.BLL.Biz
                 {
                     case OperateStockType.MachineSlotRemove:
                         #region MachineSlotRemove
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
                         if (sellChannelStock != null)
                         {
                             CurrentDb.SellChannelStock.Remove(sellChannelStock);
@@ -58,7 +58,7 @@ namespace LocalS.BLL.Biz
                         break;
                     case OperateStockType.MachineSlotSave:
                         #region MachineSlotSave
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
@@ -67,11 +67,12 @@ namespace LocalS.BLL.Biz
                             sellChannelStock = new SellChannelStock();
                             sellChannelStock.Id = GuidUtil.New();
                             sellChannelStock.MerchId = merchId;
+                            sellChannelStock.StoreId = storeId;
                             sellChannelStock.RefType = E_SellChannelRefType.Machine;
                             sellChannelStock.RefId = machineId;
+                            sellChannelStock.SlotId = slotId;
                             sellChannelStock.PrdProductId = bizProdcutSku.ProductId;
                             sellChannelStock.PrdProductSkuId = bizProdcutSku.Id;
-                            sellChannelStock.SlotId = slotId;
                             sellChannelStock.SumQuantity = quantity;
                             sellChannelStock.SellQuantity = quantity;
                             sellChannelStock.LockQuantity = 0;
@@ -110,7 +111,7 @@ namespace LocalS.BLL.Biz
                     case OperateStockType.OrderReserve:
                         #region OrderReserve
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.PrdProductSkuId == productSkuId && m.SlotId == slotId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "查找不到库存信息");
@@ -124,6 +125,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog = new SellChannelStockLog();
                         sellChannelStockLog.Id = GuidUtil.New();
                         sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.RefType = sellChannelStock.RefType;
                         sellChannelStockLog.RefId = sellChannelStock.RefId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
@@ -143,7 +145,7 @@ namespace LocalS.BLL.Biz
                     case OperateStockType.OrderCancle:
                         #region OrderCancle
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.PrdProductSkuId == productSkuId && m.SlotId == slotId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "取消失败");
@@ -157,6 +159,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog = new SellChannelStockLog();
                         sellChannelStockLog.Id = GuidUtil.New();
                         sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.RefId = sellChannelStock.RefId;
                         sellChannelStockLog.RefType = sellChannelStock.RefType;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
@@ -176,7 +179,7 @@ namespace LocalS.BLL.Biz
                     case OperateStockType.OrderPaySuccess:
                         #region OrderPaySuccess
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.PrdProductSkuId == productSkuId && m.SlotId == slotId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{}", productSkuId));
@@ -190,6 +193,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog = new SellChannelStockLog();
                         sellChannelStockLog.Id = GuidUtil.New();
                         sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.RefId = sellChannelStock.RefId;
                         sellChannelStockLog.RefType = sellChannelStock.RefType;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
@@ -217,7 +221,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStock(string operater, string merchId, string productSkuId, string machineId, string slotId, int sellQuantity, int lockQuantity, bool isOffSell, decimal salePrice)
+        public CustomJsonResult OperateStock(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int sellQuantity, int lockQuantity, bool isOffSell, decimal salePrice)
         {
             var result = new CustomJsonResult();
 
@@ -226,7 +230,7 @@ namespace LocalS.BLL.Biz
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
 
                 foreach (var sellChannelStock in sellChannelStocks)
                 {
@@ -259,7 +263,7 @@ namespace LocalS.BLL.Biz
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
             }
 
-            if(result.Result== ResultType.Success)
+            if (result.Result == ResultType.Success)
             {
                 BizFactory.Machine.SendUpdateProductSkuStock(machineId, updaeStocks);
             }

@@ -46,12 +46,12 @@ namespace LocalS.Service.Api.StoreTerm
                 CurrentDb.SaveChanges();
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
+            if (string.IsNullOrEmpty(machine.CurUseMerchId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(machine.StoreId))
+            if (string.IsNullOrEmpty(machine.CurUseStoreId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
@@ -170,11 +170,11 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
 
             foreach (var item in machineStocks)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, new string[] { machineId }, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.StoreId, new string[] { machineId }, item.PrdProductSkuId);
 
                 if (bizProductSku != null)
                 {
@@ -201,11 +201,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, rop.ProductSkuId, rop.MachineId, rop.Id);
+                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
             }
             else
             {
-                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, rop.ProductSkuId, rop.MachineId, rop.Id, rop.SumQuantity);
+                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.SumQuantity);
             }
 
 
@@ -267,7 +267,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户密码错误");
             }
 
-            if (sysMerchantUser.MerchId != machine.MerchId)
+            if (sysMerchantUser.MerchId != machine.CurUseMerchId)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
             }

@@ -14,9 +14,19 @@ namespace LocalS.Service.Api.Merch
     public class MachineService : BaseDbContext
     {
 
-        public StatusModel GetStatus(E_MachineRunStatus runstatus, DateTime? lastRequestTime)
+        public StatusModel GetStatus(string curUseStoreId, bool isStopUse, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
         {
             var status = new StatusModel();
+
+            if (isStopUse)
+            {
+                return new StatusModel(3, "停止使用");
+            }
+
+            if (string.IsNullOrEmpty(curUseStoreId))
+            {
+                return new StatusModel(3, "未绑定店铺");
+            }
 
             switch (runstatus)
             {
@@ -25,11 +35,15 @@ namespace LocalS.Service.Api.Merch
                     status.Value = 2;
                     break;
                 case E_MachineRunStatus.Setting:
-                    status.Text = "设置中";
+                    status.Text = "维护中";
                     status.Value = 3;
                     break;
                 case E_MachineRunStatus.Stoped:
-                    status.Text = "已停止";
+                    status.Text = "停止";
+                    status.Value = 1;
+                    break;
+                default:
+                    status.Text = "未知状态";
                     status.Value = 1;
                     break;
             }
@@ -45,8 +59,13 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.MachineId, u.Name, u.StoreId, u.CreateTime });
+                         select new { u.Id, u.MachineId, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
 
+
+            if (!string.IsNullOrEmpty(rup.StoreId))
+            {
+                query = query.Where(m => m.CurUseStoreId == rup.StoreId);
+            }
 
             int total = query.Count();
 
@@ -68,10 +87,9 @@ namespace LocalS.Service.Api.Merch
                     Id = item.MachineId,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
-                    Status = GetStatus(machine.RunStatus, machine.LastRequestTime),
+                    Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
                     LastRequestTime = machine.LastRequestTime,
                     CreateTime = item.CreateTime,
-
                 });
             }
 
@@ -119,7 +137,7 @@ namespace LocalS.Service.Api.Merch
 
             ret.Id = merchMachine.MachineId;
             ret.Name = merchMachine.Name;
-            ret.Status = GetStatus(machine.RunStatus, machine.LastRequestTime);
+            ret.Status = GetStatus(merchMachine.CurUseStoreId, merchMachine.IsStopUse, machine.RunStatus, machine.LastRequestTime);
             ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -268,7 +286,9 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            result = BizFactory.ProductSku.OperateStock(operater, merchId, rop.ProductSkuId, rop.MachineId, rop.SlotId, rop.SellQuantity, rop.LockQuantity, rop.IsOffSell, rop.SalePrice);
+            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+
+            result = BizFactory.ProductSku.OperateStock(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId,rop.ProductSkuId, rop.SellQuantity, rop.LockQuantity, rop.IsOffSell, rop.SalePrice);
 
             return result;
         }

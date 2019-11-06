@@ -29,7 +29,7 @@ namespace LocalS.BLL.Biz
             model.Lat = store.Lat;
             model.IsOpen = store.IsOpen;
             model.IsDelete = store.IsDelete;
-            model.MachineIds = CurrentDb.MerchMachine.Where(m => m.StoreId == id).Select(m => m.MachineId).ToArray();
+            model.MachineIds = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == id).Select(m => m.MachineId).ToArray();
             return model;
         }
 
@@ -54,7 +54,7 @@ namespace LocalS.BLL.Biz
                 model.Lat = store.Lat;
                 model.IsOpen = store.IsOpen;
                 model.IsDelete = store.IsDelete;
-                model.MachineIds = CurrentDb.MerchMachine.Where(m => m.StoreId == store.Id).Select(m => m.MachineId).ToArray();
+                model.MachineIds = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == store.Id).Select(m => m.MachineId).ToArray();
                 models.Add(model);
 
             }

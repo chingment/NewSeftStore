@@ -19,6 +19,8 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
+
+        public string StoreId { get; set; }
         public string SlotId { get; set; }
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
