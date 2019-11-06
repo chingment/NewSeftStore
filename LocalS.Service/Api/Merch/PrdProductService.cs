@@ -417,16 +417,35 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult GetOnSaleStores(string operater, string merchId, string productId)
         {
-            //var list = (from u in CurrentDb.SellChannelStock
-            //            where u.PrdProductId == productId
-            //            && u.MerchId == merchId
-            //            && u.RefType == E_SellChannelRefType.Machine
-            //            select new { u.PrdProductId, u.PrdProductSkuId, u.SellQuantity, u.LockQuantity, u.IsOffSell, u.SumQuantity, u.SlotId, u.SalePrice, u.SalePriceByVip, u.RefId, u.RefType }).ToList();
+
+            List<OnSaleStoreModel> onSaleStoreModels = new List<OnSaleStoreModel>();
+
+            var list = (from u in CurrentDb.SellChannelStock
+                        where u.PrdProductId == productId
+                        && u.MerchId == merchId
+                        && u.RefType == E_SellChannelRefType.Machine
+                        select new { u.PrdProductId, u.PrdProductSkuId, u.SellQuantity, u.LockQuantity, u.IsOffSell, u.SumQuantity, u.SlotId, u.SalePrice, u.SalePriceByVip, u.RefId, u.RefType }).ToList();
 
 
-            //var ref_Sales = (from u in list select new { u.PrdProductSkuId, u.SalePrice, u.IsOffSell, u.RefType, u.RefId }).Distinct();
+            var ref_Sales = (from u in list select new { u.RefType, u.RefId }).Distinct();
 
-            //List<OnSaleStoreModel> onSaleStoreModels = new List<OnSaleStoreModel>();
+            foreach (var ref_Sale in ref_Sales)
+            {
+                switch (ref_Sale.RefType)
+                {
+                    case E_SellChannelRefType.Machine:
+                        var machine = BizFactory.Machine.GetOne(ref_Sale.RefId);
+                        if (machine != null)
+                        {
+                            if (!string.IsNullOrEmpty(machine.StoreId))
+                            {
+
+                            }
+                        }
+                        break;
+                }
+            }
+
 
             //foreach (var ref_Sale in ref_Sales)
             //{
@@ -434,7 +453,7 @@ namespace LocalS.Service.Api.Merch
 
             //    if (machine != null)
             //    {
-          
+
             //        if (!string.IsNullOrEmpty(machine.StoreId))
             //        {
             //            var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, ref_Sale.PrdProductSkuId);

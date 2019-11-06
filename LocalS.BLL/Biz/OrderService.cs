@@ -159,22 +159,22 @@ namespace LocalS.BLL.Biz
                         orderDetails.SellChannelRefId = detail.SellChannelRefId;
                         switch (detail.SellChannelRefType)
                         {
-                            case E_SellChannelRefType.Express:
-                                orderDetails.SellChannelRefName = "【快递】";
-                                orderDetails.SellChannelRefType = E_SellChannelRefType.Express;
-                                orderDetails.SellChannelRefId = GuidUtil.Empty();
-                                orderDetails.Receiver = rop.Receiver;
-                                orderDetails.ReceiverPhone = rop.ReceiverPhone;
-                                orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                                break;
-                            case E_SellChannelRefType.SelfTake:
-                                orderDetails.SellChannelRefName = "【店内自取】";
-                                orderDetails.SellChannelRefType = E_SellChannelRefType.SelfTake;
-                                orderDetails.SellChannelRefId = GuidUtil.Empty();
-                                orderDetails.Receiver = rop.Receiver;
-                                orderDetails.ReceiverPhone = rop.ReceiverPhone;
-                                orderDetails.ReceptionAddress = rop.ReceptionAddress;
-                                break;
+                            //case E_SellChannelRefType.Express:
+                            //    orderDetails.SellChannelRefName = "【快递】";
+                            //    orderDetails.SellChannelRefType = E_SellChannelRefType.Express;
+                            //    orderDetails.SellChannelRefId = GuidUtil.Empty();
+                            //    orderDetails.Receiver = rop.Receiver;
+                            //    orderDetails.ReceiverPhone = rop.ReceiverPhone;
+                            //    orderDetails.ReceptionAddress = rop.ReceptionAddress;
+                            //    break;
+                            //case E_SellChannelRefType.SelfTake:
+                            //    orderDetails.SellChannelRefName = "【店内自取】";
+                            //    orderDetails.SellChannelRefType = E_SellChannelRefType.SelfTake;
+                            //    orderDetails.SellChannelRefId = GuidUtil.Empty();
+                            //    orderDetails.Receiver = rop.Receiver;
+                            //    orderDetails.ReceiverPhone = rop.ReceiverPhone;
+                            //    orderDetails.ReceptionAddress = rop.ReceptionAddress;
+                            //    break;
                             case E_SellChannelRefType.Machine:
                                 orderDetails.SellChannelRefName = "【机器自提】 " + BizFactory.Merch.GetMachineName(order.MerchId, detail.SellChannelRefId);
                                 orderDetails.SellChannelRefType = E_SellChannelRefType.Machine;
@@ -306,12 +306,12 @@ namespace LocalS.BLL.Biz
                     E_SellChannelRefType channelType = E_SellChannelRefType.Unknow;
                     switch (receptionMode)
                     {
-                        case E_ReceptionMode.Express:
-                            channelType = E_SellChannelRefType.Express;
-                            break;
-                        case E_ReceptionMode.SelfTake:
-                            channelType = E_SellChannelRefType.SelfTake;
-                            break;
+                        //case E_ReceptionMode.Express:
+                        //    channelType = E_SellChannelRefType.Express;
+                        //    break;
+                        //case E_ReceptionMode.SelfTake:
+                        //    channelType = E_SellChannelRefType.SelfTake;
+                        //    break;
                         case E_ReceptionMode.Machine:
                             channelType = E_SellChannelRefType.Machine;
                             break;

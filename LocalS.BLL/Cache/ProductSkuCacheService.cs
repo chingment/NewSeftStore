@@ -128,40 +128,6 @@ namespace LocalS.BLL
             }
 
             return productSkuStockModels;
-
-            //var redis = new RedisClient<List<ProductSkuStockModel>>();
-
-            //var productSkuStockModels = redis.KGet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId));
-            //if (productSkuStockModels == null)
-            //{
-            //    productSkuStockModels = new List<ProductSkuStockModel>();
-
-            //    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
-
-            //    foreach (var sellChannelStock in sellChannelStocks)
-            //    {
-            //        var productSkuStockModel = new ProductSkuStockModel();
-            //        productSkuStockModel.RefType = sellChannelStock.RefType;
-            //        productSkuStockModel.RefId = sellChannelStock.RefId;
-            //        productSkuStockModel.SlotId = sellChannelStock.SlotId;
-            //        productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
-            //        productSkuStockModel.LockQuantity = sellChannelStock.LockQuantity;
-            //        productSkuStockModel.SellQuantity = sellChannelStock.SellQuantity;
-            //        productSkuStockModel.IsOffSell = sellChannelStock.IsOffSell;
-            //        productSkuStockModel.SalePrice = sellChannelStock.SalePrice;
-            //        productSkuStockModel.SalePriceByVip = sellChannelStock.SalePriceByVip;
-            //        productSkuStockModels.Add(productSkuStockModel);
-            //    }
-
-            //    redis.KSet(string.Format(redis_key_one_sku_stock_by_productId, productSkuId), productSkuStockModels, new TimeSpan(100, 0, 0));
-            //}
-
-            //if (productSkuStockModels == null)
-            //{
-            //    productSkuStockModels = new List<ProductSkuStockModel>();
-            //}
-
-            //return productSkuStockModels;
         }
 
         public List<ProductSkuInfoBySearchModel> Search(string merchId, string key)

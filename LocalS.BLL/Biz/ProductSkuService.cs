@@ -29,10 +29,6 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (productSkuId == "2b239e36688e4910adffe36848921015")
-                {
-                    //int.Parse("dadsdd");
-                }
                 SellChannelStock sellChannelStock = null;
                 SellChannelStockLog sellChannelStockLog = null;
                 switch (type)
