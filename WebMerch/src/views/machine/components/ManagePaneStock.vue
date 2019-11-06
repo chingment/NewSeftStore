@@ -38,7 +38,7 @@
                 <div class="above-des">
                   <div class="des1">
                     <div class="name">{{ col.name }}</div>
-                    <div class="price"> <span class="saleprice">{{ col.salePrice }}</span> </div>
+                    <div class="price" style="display:none;"> <span class="saleprice">{{ col.salePrice }}</span> </div>
                   </div>
                   <div class="des2">
                     <span class="sellQuantity">{{ col.sellQuantity }}</span> /
@@ -94,17 +94,20 @@
             可售库存"
           prop="sellQuantity"
         >
-          <el-input-number v-model="form.sellQuantity" :min="0" :max="20" label="描述文字" style="width:160px" />
+          <el-input-number v-model="form.sellQuantity" :min="0" :max="20" style="width:160px" @change="sellQuantityChange" />
         </el-form-item>
         <el-form-item label="锁定库存" prop="lockQuantity">
-          <el-input-number v-model="form.lockQuantity" :min="0" :max="20" label="描述文字" style="width:160px" />
+          <el-input-number v-model="form.lockQuantity" :min="0" :max="20" style="width:160px" @change="lockQuantityChange" />
         </el-form-item>
-        <el-form-item label="销售价" prop="salePrice">
+        <el-form-item label="总库存">
+          <el-input-number v-model="form.sumQuantity" :disabled="true" :min="0" :max="20" style="width:160px" />
+        </el-form-item>
+        <el-form-item v-show="false" label="销售价" prop="salePrice">
           <el-input v-model="form.salePrice" style="width:160px" class="ip-prepend">
             <template slot="prepend">￥</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="下架" prop="isOffSell">
+        <el-form-item v-show="false" label="下架" prop="isOffSell">
           <el-checkbox v-model="form.isOffSell" />
         </el-form-item>
       </el-form>
@@ -200,12 +203,7 @@ export default {
       })
     },
     handleFilter() {
-      // this.listQuery.page = 1
-      // this.getListData()
-
-      // console.log('this.listQuery.productSkuName:' + this.listQuery.productSkuName)
       var search = this.listQuery.productSkuName
-      console.log('dsadd' + search)
       var l_listData = this.listData
       for (var i = 0; i < l_listData.length; i++) {
         for (var j = 0; j < l_listData[i].cols.length; j++) {
@@ -227,32 +225,6 @@ export default {
       }
       this.listData = []
       this.listData = l_listData
-      // this.listData = this.listData
-      // if (l_listData[i].cols[j].name != null) {
-      //       if (this.listQuery.productSkuName != null) {
-      //         if (l_listData[i].cols[j].name.search(this.listQuery.productSkuName) !== -1) {
-      //           console.log(l_listData[i].cols[j].name)
-      //           l_listData[i].cols[j].isShow = undefined
-      //         } else {
-      //           l_listData[i].cols[j].isShow = false
-      //         }
-      //       } else {
-      //         l_listData[i].cols[j].isShow = undefined
-      //       }
-      //     } else {
-      //       l_listData[i].cols[j].isShow = false
-      //     }
-
-      // this.listData.forEach(element => {
-      //   element.cols.forEach(e => {
-      //     if (e.name != null) {
-      //       if (e.name.search('伯') !== -1) {
-      //         console.log(e.name)
-      //         e.isShow = true
-      //       }
-      //     }
-      //   })
-      // })
     },
     dialogEditOpen(productSku) {
       this.dialogEditIsVisible = true
@@ -261,6 +233,7 @@ export default {
       this.form.name = productSku.name
       this.form.sellQuantity = productSku.sellQuantity
       this.form.lockQuantity = productSku.lockQuantity
+      this.form.sumQuantity = productSku.sumQuantity
       this.form.salePrice = productSku.salePrice
       this.form.isOffSell = productSku.isOffSell
       this.form.mainImgUrl = productSku.mainImgUrl
@@ -285,6 +258,12 @@ export default {
           })
         }
       })
+    },
+    sellQuantityChange(currentValue, oldValue) {
+      this.form.sumQuantity = currentValue - this.form.lockQuantity
+    },
+    lockQuantityChange(currentValue, oldValue) {
+      this.form.sumQuantity = currentValue + this.form.sellQuantity
     }
   }
 }

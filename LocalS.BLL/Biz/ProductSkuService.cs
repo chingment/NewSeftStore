@@ -221,7 +221,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStock(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int sellQuantity, int lockQuantity, bool isOffSell, decimal salePrice)
+        public CustomJsonResult OperateStock(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int sellQuantity, int lockQuantity)
         {
             var result = new CustomJsonResult();
 
@@ -230,31 +230,67 @@ namespace LocalS.BLL.Biz
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId && m.SlotId == slotId).FirstOrDefault();
 
-                foreach (var sellChannelStock in sellChannelStocks)
-                {
-                    if (sellChannelStock.SlotId == slotId)
-                    {
-                        sellChannelStock.LockQuantity = lockQuantity;
-                        sellChannelStock.SellQuantity = sellQuantity;
-                        sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
-                    }
+                sellChannelStock.LockQuantity = lockQuantity;
+                sellChannelStock.SellQuantity = sellQuantity;
+                sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
 
-                    sellChannelStock.IsOffSell = isOffSell;
-                    sellChannelStock.SalePrice = salePrice;
+                var sellChannelStockLog = new SellChannelStockLog();
+                sellChannelStockLog.Id = GuidUtil.New();
+                sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                sellChannelStockLog.RefId = sellChannelStock.RefId;
+                sellChannelStockLog.RefType = sellChannelStock.RefType;
+                sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Adjust;
+                sellChannelStockLog.ChangeQuantity = 0;
+                sellChannelStockLog.Creator = operater;
+                sellChannelStockLog.CreateTime = DateTime.Now;
+                sellChannelStockLog.RemarkByDev = "调试库存";
+                CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                    var updateStock = new UpdateProductSkuStockModel();
-                    updateStock.Id = sellChannelStock.PrdProductSkuId;
-                    updateStock.IsOffSell = isOffSell;
-                    updateStock.SalePrice = sellChannelStock.SalePrice;
-                    updateStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
-                    updateStock.LockQuantity = sellChannelStock.LockQuantity;
-                    updateStock.SellQuantity = sellChannelStock.SellQuantity;
-                    updateStock.SumQuantity = sellChannelStock.SumQuantity;
+                var updateStock = new UpdateProductSkuStockModel();
+                updateStock.Id = sellChannelStock.PrdProductSkuId;
+                updateStock.IsOffSell = sellChannelStock.IsOffSell;
+                updateStock.SalePrice = sellChannelStock.SalePrice;
+                updateStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
+                updateStock.LockQuantity = sellChannelStock.LockQuantity;
+                updateStock.SellQuantity = sellChannelStock.SellQuantity;
+                updateStock.SumQuantity = sellChannelStock.SumQuantity;
 
-                    updaeStocks.Add(updateStock);
-                }
+                updaeStocks.Add(updateStock);
+
+
+                //var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
+
+                //foreach (var sellChannelStock in sellChannelStocks)
+                //{
+                //    if (sellChannelStock.SlotId == slotId)
+                //    {
+                //        sellChannelStock.LockQuantity = lockQuantity;
+                //        sellChannelStock.SellQuantity = sellQuantity;
+                //        sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
+                //    }
+
+                //    sellChannelStock.IsOffSell = isOffSell;
+                //    sellChannelStock.SalePrice = salePrice;
+
+                //    var updateStock = new UpdateProductSkuStockModel();
+                //    updateStock.Id = sellChannelStock.PrdProductSkuId;
+                //    updateStock.IsOffSell = isOffSell;
+                //    updateStock.SalePrice = sellChannelStock.SalePrice;
+                //    updateStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
+                //    updateStock.LockQuantity = sellChannelStock.LockQuantity;
+                //    updateStock.SellQuantity = sellChannelStock.SellQuantity;
+                //    updateStock.SumQuantity = sellChannelStock.SumQuantity;
+
+                //    updaeStocks.Add(updateStock);
+                //}
 
 
                 CurrentDb.SaveChanges();

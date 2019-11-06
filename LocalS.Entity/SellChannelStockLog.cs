@@ -10,7 +10,8 @@ namespace LocalS.Entity
         Unknow = 0,
         ReserveSuccess = 1,
         OrderPaySuccess = 2,
-        OrderCancle = 3
+        OrderCancle = 3,
+        Adjust = 4
     }
 
     [Table("SellChannelStockLog")]
