@@ -40,16 +40,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse ManageStockGetStockList([FromUri]RupMachineGetStockList rup)
+        public OwnApiHttpResponse ManageStockGetStocks([FromUri]RupMachineGetStocks rup)
         {
-            IResult result = MerchServiceFactory.Machine.ManageStockGetStockList(this.CurrentUserId, this.CurrentMerchId, rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
-        public OwnApiHttpResponse ManageStockGetStockList2([FromUri]RupMachineGetStockList rup)
-        {
-            IResult result = MerchServiceFactory.Machine.ManageStockGetStockList2(this.CurrentUserId, this.CurrentMerchId, rup.MachineId);
+            IResult result = MerchServiceFactory.Machine.ManageStockGetStocks(this.CurrentUserId, this.CurrentMerchId, rup.MachineId);
             return new OwnApiHttpResponse(result);
         }
 

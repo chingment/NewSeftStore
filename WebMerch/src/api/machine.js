@@ -40,9 +40,9 @@ export function initManageStock(params) {
   })
 }
 
-export function manageStockGetStockList(params) {
+export function manageStockGetStocks(params) {
   return request({
-    url: '/machine/manageStockGetStockList2',
+    url: '/machine/manageStockGetStocks',
     method: 'get',
     params
   })
@@ -62,6 +62,6 @@ export default {
   initManage: initManage,
   initManageBaseInfo: initManageBaseInfo,
   initManageStock: initManageStock,
-  manageStockGetStockList: manageStockGetStockList,
+  manageStockGetStocks: manageStockGetStocks,
   manageStockEditStock: manageStockEditStock
 }

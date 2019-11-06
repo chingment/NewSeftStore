@@ -146,7 +146,6 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-
         public CustomJsonResult InitManageStock(string operater, string merchId, string machineId)
         {
             var result = new CustomJsonResult();
@@ -159,73 +158,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-
-        public CustomJsonResult ManageStockGetStockList(string operater, string merchId, RupMachineGetStockList rup)
-        {
-            var result = new CustomJsonResult();
-
-            string[] productSkuIds = new string[] { };
-            if (!string.IsNullOrEmpty(rup.ProductSkuName))
-            {
-                productSkuIds = CurrentDb.PrdProductSku.Where(m => m.Name.Contains(rup.ProductSkuName)).Select(m => m.Id).ToArray();
-            }
-
-
-            var query = (from u in CurrentDb.SellChannelStock
-                         where
-                         u.MerchId == merchId &&
-                         u.RefType == E_SellChannelRefType.Machine &&
-                         u.RefId == rup.MachineId
-                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.StoreId, u.RefType, u.SlotId, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
-
-            int total = query.Count();
-
-            int pageIndex = rup.Page - 1;
-            int pageSize = rup.Limit;
-
-            if (productSkuIds.Length > 0)
-            {
-                query = query.Where(m => productSkuIds.Contains(m.PrdProductSkuId));
-            }
-
-            query = query.OrderByDescending(r => r.PrdProductSkuId).Skip(pageSize * (pageIndex)).Take(pageSize);
-
-            List<object> olist = new List<object>();
-
-            var list = query.ToList();
-            foreach (var item in list)
-            {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.StoreId, new string[] { rup.MachineId }, item.PrdProductSkuId);
-                if (bizProductSku != null)
-                {
-                    olist.Add(new
-                    {
-                        Id = bizProductSku.Id,
-                        Name = bizProductSku.Name,
-                        DisplayImgUrls = bizProductSku.DisplayImgUrls,
-                        MainImgUrl = bizProductSku.MainImgUrl,
-                        BriefDes = bizProductSku.BriefDes,
-                        DetailsDes = bizProductSku.DetailsDes,
-                        SumQuantity = item.SumQuantity,
-                        LockQuantity = item.LockQuantity,
-                        SellQuantity = item.SellQuantity,
-                        SalePrice = item.SalePrice,
-                        IsOffSell = item.IsOffSell,
-                        SlotId = item.SlotId
-                    });
-                }
-            }
-
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
-
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
-
-            return result;
-        }
-
-
-        public CustomJsonResult ManageStockGetStockList2(string operater, string merchId, string machineId)
+        public CustomJsonResult ManageStockGetStocks(string operater, string merchId, string machineId)
         {
             var result = new CustomJsonResult();
 
@@ -269,6 +202,7 @@ namespace LocalS.Service.Api.Merch
                             col.MaxQuantity = 10;
                             col.SalePrice = slotStock.SalePrice;
                             col.IsOffSell = slotStock.IsOffSell;
+                            col.Version = slotStock.Version;
                         }
                     }
                     row.Cols.Add(col);
@@ -288,7 +222,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.OperateStock(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId, rop.ProductSkuId, rop.SellQuantity, rop.LockQuantity);
+            result = BizFactory.ProductSku.OperateStock(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SellQuantity, rop.LockQuantity);
 
             return result;
         }

@@ -118,7 +118,6 @@ namespace LocalS.Service.Api.Merch
             return treeNodes;
         }
 
-
         public CustomJsonResult InitAdd(string operater, string merchId)
         {
             var result = new CustomJsonResult();
@@ -167,10 +166,10 @@ namespace LocalS.Service.Api.Merch
                 merchUser.IsDisable = false;
                 merchUser.IsMaster = false;
                 merchUser.MerchId = merchId;
-                merchUser.Creator = operater;
-                merchUser.CreateTime = DateTime.Now;
                 merchUser.RegisterTime = DateTime.Now;
                 merchUser.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
+                merchUser.Creator = operater;
+                merchUser.CreateTime = DateTime.Now;
                 CurrentDb.SysMerchUser.Add(merchUser);
 
                 if (rop.RoleIds != null)

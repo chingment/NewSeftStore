@@ -20,6 +20,7 @@ namespace LocalS.BLL.Biz
 
             model.Id = machine.Id;
             model.Name = machine.Name;
+            model.MainImgUrl = machine.MainImgUrl;
             model.LogoImgUrl = machine.LogoImgUrl;
             model.JPushRegId = machine.JPushRegId;
             model.CabinetId_1 = machine.CabinetId_1;

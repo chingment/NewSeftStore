@@ -27,6 +27,8 @@ namespace LocalS.Service.Api.Merch
 
         public decimal SalePrice { get; set; }
 
+        public int Version { get; set; }
+
     }
     public class SlotRowModel
     {

@@ -15,5 +15,7 @@ namespace LocalS.Service.Api.Merch
         public int SellQuantity { get; set; }
         public decimal SalePrice { get; set; }
         public bool IsOffSell { get; set; }
+
+        public int Version { get; set; }
     }
 }

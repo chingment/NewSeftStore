@@ -221,7 +221,7 @@
     <Compile Include="Api\Merch\RModels\RupClientDetailsOrdersGetOrderList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupMachineGetList.cs" />
-    <Compile Include="Api\Merch\RModels\RupMachineGetStockList.cs" />
+    <Compile Include="Api\Merch\RModels\RupMachineGetStocks.cs" />
     <Compile Include="Api\Merch\RModels\RupOrderGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdKindGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />

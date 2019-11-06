@@ -57,6 +57,8 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
             bizRop.SellChannelRefIds = store.MachineIds;//不指定机器
 
+            //todo 判断机器状态 才能下单
+
             foreach (var productSku in rop.ProductSkus)
             {
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = productSku.ReceptionMode });

@@ -88,6 +88,7 @@ namespace LocalS.BLL.Biz
                         {
                             sellChannelStock.SumQuantity = quantity;
                             sellChannelStock.SellQuantity = quantity - sellChannelStock.LockQuantity;
+                            sellChannelStock.Version += 1;
                             CurrentDb.SaveChanges();
                         }
 
@@ -119,6 +120,7 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.LockQuantity += quantity;
                         sellChannelStock.SellQuantity -= quantity;
+                        sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
 
@@ -153,6 +155,7 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.LockQuantity -= quantity;
                         sellChannelStock.SellQuantity += quantity;
+                        sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
 
@@ -187,6 +190,7 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.LockQuantity -= quantity;
                         sellChannelStock.SumQuantity -= quantity;
+                        sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
 
@@ -221,7 +225,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStock(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int sellQuantity, int lockQuantity)
+        public CustomJsonResult OperateStock(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int version, int sellQuantity, int lockQuantity)
         {
             var result = new CustomJsonResult();
 
@@ -231,10 +235,20 @@ namespace LocalS.BLL.Biz
             {
 
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId && m.SlotId == slotId).FirstOrDefault();
+                if (sellChannelStock == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，找不到该数据");
+                }
+
+                if (sellChannelStock.Version != version)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，数据已经被更改，请刷新页面再尝试");
+                }
 
                 sellChannelStock.LockQuantity = lockQuantity;
                 sellChannelStock.SellQuantity = sellQuantity;
                 sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
+                sellChannelStock.Version += 1;
 
                 var sellChannelStockLog = new SellChannelStockLog();
                 sellChannelStockLog.Id = GuidUtil.New();

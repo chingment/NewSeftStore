@@ -127,7 +127,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initManageStock, manageStockGetStockList, manageStockEditStock } from '@/api/machine'
+import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/api/machine'
 import { getUrlParam } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
 export default {
@@ -157,7 +157,8 @@ export default {
         isOffSell: false,
         mainImgUrl: '',
         machineId: '',
-        slotId: ''
+        slotId: '',
+        version: 0
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -188,7 +189,7 @@ export default {
       console.log('getListData')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
-      manageStockGetStockList(this.listQuery).then(res => {
+      manageStockGetStocks(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d
@@ -238,6 +239,7 @@ export default {
       this.form.isOffSell = productSku.isOffSell
       this.form.mainImgUrl = productSku.mainImgUrl
       this.form.slotId = productSku.slotId
+      this.form.version = productSku.version
       this.form.machineId = getUrlParam('id')
     },
     handleEdit() {
