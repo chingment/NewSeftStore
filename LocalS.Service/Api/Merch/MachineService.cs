@@ -176,7 +176,7 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId &&
                          u.RefType == E_SellChannelRefType.Machine &&
                          u.RefId == rup.MachineId
-                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.RefType, u.SlotId, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
+                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.StoreId, u.RefType, u.SlotId, u.RefId, u.SalePrice, u.IsOffSell, u.LockQuantity, u.SumQuantity, u.SellQuantity });
 
             int total = query.Count();
 
@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.Merch
             var list = query.ToList();
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, new string[] { rup.MachineId }, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.StoreId, new string[] { rup.MachineId }, item.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     olist.Add(new
@@ -288,7 +288,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.OperateStock(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId,rop.ProductSkuId, rop.SellQuantity, rop.LockQuantity, rop.IsOffSell, rop.SalePrice);
+            result = BizFactory.ProductSku.OperateStock(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId, rop.ProductSkuId, rop.SellQuantity, rop.LockQuantity, rop.IsOffSell, rop.SalePrice);
 
             return result;
         }
