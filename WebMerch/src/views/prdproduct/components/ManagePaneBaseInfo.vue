@@ -26,6 +26,7 @@
         <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
           <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
         </el-dialog>
+        <div class="remark-tip"><span class="sign">*注</span>：第一张默认为主图，可拖动改变图片顺便</div>
       </el-form-item>
       <el-form-item label="所属分类" prop="kindIds">
         <el-input :value="form.kindIds.toString()" style="display:none" />
@@ -45,6 +46,7 @@
         <el-input v-model="form.singleSkuSalePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
+        <div class="remark-tip"><span class="sign">*注</span>：该价格作为初始价，若更改可在编辑-》在售店铺里修改</div>
       </el-form-item>
       <el-form-item label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" />

@@ -45,8 +45,9 @@
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="销售价" prop="skus" align="left" min-width="30%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.skus[0].salePrice }}</span>
+        <template slot-scope="{row}">
+          <el-button type="text" @click="handleSalePrice(row)">{{ row.skus[0].salePrice }}</el-button>
+
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
@@ -114,6 +115,11 @@ export default {
     handleUpdate(row) {
       this.$router.push({
         path: '/prdproduct/manage?id=' + row.id + '&tab=tabBaseInfo'
+      })
+    },
+    handleSalePrice(row) {
+      this.$router.push({
+        path: '/prdproduct/manage?id=' + row.id + '&tab=tabStoreSale'
       })
     }
   }

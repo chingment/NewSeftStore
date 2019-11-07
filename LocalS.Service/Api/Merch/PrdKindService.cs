@@ -28,20 +28,21 @@ namespace LocalS.Service.Api.Merch
                 treeNode.Description = p_prdKind.Description;
                 treeNode.Depth = p_prdKind.Depth;
 
+                var productCount = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == p_prdKind.Id).Count();
+
                 if (p_prdKind.Depth == 0)
                 {
-                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false };
+                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false, ProductCount = productCount };
                 }
                 else
                 {
-
                     if (p_prdKind.Depth >= 1)
                     {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true };
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true, ProductCount = productCount };
                     }
                     else
                     {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true };
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true, ProductCount = productCount };
                     }
                 }
 
