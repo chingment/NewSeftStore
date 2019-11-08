@@ -22,6 +22,7 @@ namespace LocalS.Service.Api.Merch
         public List<Sku> Skus { get; set; }
         public class Sku
         {
+            public string Id { get; set; }
             public string BarCode { get; set; }
             public string SpecDes { get; set; }
 

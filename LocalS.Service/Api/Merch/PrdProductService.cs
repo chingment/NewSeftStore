@@ -219,6 +219,8 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;
                     CurrentDb.PrdProductSku.Add(prdProductSku);
+
+                    sku.Id = prdProductSku.Id;
                 }
 
                 if (rop.KindIds != null)
@@ -258,6 +260,14 @@ namespace LocalS.Service.Api.Merch
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+
+            if (result.Result == ResultType.Success)
+            {
+                for (var i = 0; i < rop.Skus.Count; i++)
+                {
+                    CacheServiceFactory.ProductSku.Update(merchId, rop.Skus[i].Id);
+                }
             }
 
             return result;
@@ -405,9 +415,7 @@ namespace LocalS.Service.Api.Merch
             {
                 for (var i = 0; i < rop.Skus.Count; i++)
                 {
-                    CacheServiceFactory.ProductSku.Remove(merchId, rop.Skus[i].Id);
-                    CacheServiceFactory.ProductSku.GetInfo(merchId, rop.Skus[i].Id);
-
+                    CacheServiceFactory.ProductSku.Update(merchId, rop.Skus[i].Id);
                 }
             }
 

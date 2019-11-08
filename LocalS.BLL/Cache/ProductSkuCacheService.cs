@@ -24,11 +24,17 @@ namespace LocalS.BLL
         private static readonly string redis_key_all_sku_info_by_merchId = "info_sku_all:{0}";
         private static readonly string redis_key_one_sku_stock_by_productSkuId = "stock_sku_one:{0}";
         private static readonly string redis_key_all_sku_search_by_merchId = "search_sku_all:{0}";
-        public void Remove(string merchId, string productSkuId)
+        public void Update(string merchId, string productSkuId)
         {
             RedisHashUtil.Remove(string.Format(redis_key_all_sku_info_by_merchId, merchId), productSkuId);
-            RedisHashUtil.Remove(string.Format(redis_key_all_sku_search_by_merchId, merchId), productSkuId);
             RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productSkuId, productSkuId));
+
+            var search_Scans = RedisManager.Db.HashScan(string.Format(redis_key_all_sku_search_by_merchId, merchId), string.Format("{0}*", productSkuId));
+
+            foreach (var scan in search_Scans)
+            {
+                RedisHashUtil.Remove(string.Format(redis_key_all_sku_search_by_merchId, merchId), scan.Name);
+            }
 
             GetInfo(merchId, productSkuId);
         }
@@ -98,7 +104,7 @@ namespace LocalS.BLL
 
                 var productSkuInfoBySearchModel = new ProductSkuInfoBySearchModel { Id = prdProductSkuByDb.Id, BarCode = prdProductSkuByDb.BarCode, Name = prdProductSkuModel.Name, MainImgUrl = prdProductSkuModel.MainImgUrl };
 
-                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_sku_search_by_merchId, prdProductSkuByDb.MerchId), "barcode:" + prdProductSkuModel.BarCode + ",pyindex:" + prdProductSkuModel.PinYinIndx + ",name:" + prdProductSkuModel.Name, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuInfoBySearchModel), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(redis_key_all_sku_search_by_merchId, prdProductSkuByDb.MerchId), productSkuId + ",barcode:" + prdProductSkuModel.BarCode + ",pyindex:" + prdProductSkuModel.PinYinIndx + ",name:" + prdProductSkuModel.Name, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuInfoBySearchModel), StackExchange.Redis.When.Always);
 
                 RedisManager.Db.HashSetAsync(string.Format(redis_key_all_sku_info_by_merchId, prdProductSkuByDb.MerchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
             }

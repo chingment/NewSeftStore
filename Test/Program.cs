@@ -2,6 +2,7 @@
 using LocalS.BLL.Mq.MqByRedis;
 using LocalS.Service.Api.StoreApp;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,21 @@ namespace Test
         }
         static void Main(string[] args)
         {
+
+            var b = RedisManager.Db.HashScan("aaa", "a1*");
+            var b1 = b.ToList();
+
+            foreach (var b2 in b1)
+            {
+                string b3 = b2.Name;
+            }
+            RedisManager.Db.HashScan("aaa", "a1*");
+
+            var s1 = new { a = 1, b = 2 };
+            //.Db.HashSetAsync("aaa","a1xxx", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
+            //RedisManager.Db.HashSetAsync("aaa", "a2ss", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
+            //RedisManager.Db.HashSetAsync("aaa", "b2ww", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
+
 
             var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
 
