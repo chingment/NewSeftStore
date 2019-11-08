@@ -1,4 +1,5 @@
-﻿using LocalS.BLL.Mq.MqByRedis;
+﻿using LocalS.BLL.Biz;
+using LocalS.BLL.Mq.MqByRedis;
 using LocalS.Service.Api.StoreApp;
 using Lumos;
 using System;
@@ -28,6 +29,8 @@ namespace Test
         }
         static void Main(string[] args)
         {
+
+            var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
 
             bool a1 = CommonUtil.IsNumber("1312331333x13133123");
 
@@ -69,14 +72,14 @@ namespace Test
         public static void DoWork()
         {
 
-            RopOrderReserve rop = new RopOrderReserve();
+            //RopOrderReserve rop = new RopOrderReserve();
 
-            rop.Source = LocalS.Entity.E_OrderSource.WechatMiniProgram;
-            rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
-            rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
-            rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "2b239e36688e4910adffe36848921015", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
-            var result = StoreAppServiceFactory.Order.Reserve(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
+            //rop.Source = LocalS.Entity.E_OrderSource.WechatMiniProgram;
+            //rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
+            //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
+            //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "2b239e36688e4910adffe36848921015", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
+            //var result = StoreAppServiceFactory.Order.Reserve(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
+            //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
         }
 
         private static sbyte[] SendCmd(sbyte[] frameCmd, sbyte[] frameCmdParms)

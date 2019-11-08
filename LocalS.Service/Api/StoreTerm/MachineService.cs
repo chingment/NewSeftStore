@@ -65,8 +65,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CsrQrCode = machineInfo.CsrQrCode;
             ret.Machine.CabinetId_1 = machineInfo.CabinetId_1;
             ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
-            ret.Machine.CabinetMaxRow_1 = machineInfo.CabinetMaxRow_1;
-            ret.Machine.CabinetMaxCol_1 = machineInfo.CabinetMaxCol_1;
+            ret.Machine.CabineRowColLayout_1 = machineInfo.CabineRowColLayout_1;
 
             ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);

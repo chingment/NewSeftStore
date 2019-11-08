@@ -20,9 +20,7 @@ namespace LocalS.BLL.Biz
         public string JPushRegId { get; set; }
         public string CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
-        public int CabinetMaxRow_1 { get; set; }
-        public int CabinetMaxCol_1 { get; set; }
-
+        public CabineRowColLayoutModel CabineRowColLayout_1 { get; set; }
         public string MainImgUrl { get; set; }
 
         public DateTime? LastRequestTime { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.BLL.Biz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string CsrQrCode { get; set; }
         public string CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
-        public int CabinetMaxRow_1 { get; set; }
-        public int CabinetMaxCol_1 { get; set; }
+        public CabineRowColLayoutModel CabineRowColLayout_1 { get; set; }
+
     }
 }

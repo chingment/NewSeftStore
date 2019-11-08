@@ -164,18 +164,36 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
+            if (machine.CabineRowColLayout_1.Rows <= 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器行数");
+            }
+
+            if (machine.CabineRowColLayout_1.RowsCols == null || machine.CabineRowColLayout_1.RowsCols.Length == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
+            }
+
+            if (machine.CabineRowColLayout_1.Rows != machine.CabineRowColLayout_1.RowsCols.Length)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "行列数据解释不匹配");
+            }
+
             List<object> olist = new List<object>();
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == machine.StoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            for (int i = machine.CabinetMaxRow_1 - 1; i >= 0; i--)
+
+            for (int i = machine.CabineRowColLayout_1.Rows - 1; i >= 0; i--)
             {
                 SlotRowModel row = new SlotRowModel();
                 row.No = i;
 
-                for (int j = 0; j < machine.CabinetMaxCol_1; j++)
+                int cols = machine.CabineRowColLayout_1.RowsCols[i];
+
+                for (int j = 0; j < cols; j++)
                 {
                     var slotId = "n1" + "r" + i + "c" + j;
 
@@ -183,12 +201,8 @@ namespace LocalS.Service.Api.Merch
                     col.No = j;
                     col.SlotId = slotId;
 
-                    var slotStock = machineStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
-                    if (slotStock == null)
-                    {
-
-                    }
-                    else
+                    var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
+                    if (slotStock != null)
                     {
                         var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
                         if (bizProductSku != null)
@@ -205,6 +219,7 @@ namespace LocalS.Service.Api.Merch
                             col.Version = slotStock.Version;
                         }
                     }
+
                     row.Cols.Add(col);
                 }
 

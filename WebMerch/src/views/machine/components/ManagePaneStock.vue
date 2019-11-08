@@ -199,6 +199,8 @@ export default {
               this.listData[i].cols[j].isShow = true
             }
           }
+        } else {
+          this.listData = []
         }
         this.loading = false
       })

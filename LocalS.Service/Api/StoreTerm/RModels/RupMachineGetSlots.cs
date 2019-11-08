@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupMachineSlotStocks
+    public class RupMachineGetSlots
     {
         public string MachineId { get; set; }
     }
