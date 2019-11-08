@@ -112,7 +112,7 @@ namespace LocalS.BLL
             return prdProductSkuModel;
         }
 
-        public List<ProductSkuStockModel> GetStock(string merchId, string productSkuId)
+        public List<ProductSkuStockModel> GetStock(string merchId,string productSkuId)
         {
             var productSkuStockModels = new List<ProductSkuStockModel>();
 

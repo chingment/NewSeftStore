@@ -265,7 +265,7 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.ChangeQuantity = 0;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
-                sellChannelStockLog.RemarkByDev = "调试库存";
+                sellChannelStockLog.RemarkByDev = "调整库存";
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
                 var updateStock = new UpdateProductSkuStockModel();
@@ -278,34 +278,6 @@ namespace LocalS.BLL.Biz
                 updateStock.SumQuantity = sellChannelStock.SumQuantity;
 
                 updaeStocks.Add(updateStock);
-
-
-                //var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.PrdProductSkuId == productSkuId).ToList();
-
-                //foreach (var sellChannelStock in sellChannelStocks)
-                //{
-                //    if (sellChannelStock.SlotId == slotId)
-                //    {
-                //        sellChannelStock.LockQuantity = lockQuantity;
-                //        sellChannelStock.SellQuantity = sellQuantity;
-                //        sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
-                //    }
-
-                //    sellChannelStock.IsOffSell = isOffSell;
-                //    sellChannelStock.SalePrice = salePrice;
-
-                //    var updateStock = new UpdateProductSkuStockModel();
-                //    updateStock.Id = sellChannelStock.PrdProductSkuId;
-                //    updateStock.IsOffSell = isOffSell;
-                //    updateStock.SalePrice = sellChannelStock.SalePrice;
-                //    updateStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
-                //    updateStock.LockQuantity = sellChannelStock.LockQuantity;
-                //    updateStock.SellQuantity = sellChannelStock.SellQuantity;
-                //    updateStock.SumQuantity = sellChannelStock.SumQuantity;
-
-                //    updaeStocks.Add(updateStock);
-                //}
-
 
                 CurrentDb.SaveChanges();
 
