@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.BLL.Biz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace LocalS.Service.Api.StoreTerm
         {
             this.Slots = new Dictionary<string, SlotModel>();
         }
+
+        public CabineRowColLayoutModel RowColLayout { get; set; }
 
         public Dictionary<string, SlotModel> Slots { get; set; }
     }
