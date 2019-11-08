@@ -130,9 +130,9 @@ namespace LocalS.Service.Api.Merch
             }
 
             //var productSkus = CurrentDb.PrdProductSku.ToList();
-            //foreach(var item in productSkus)
+            //foreach (var item in productSkus)
             //{
-            //    CacheServiceFactory.ProductSku.GetInfo(item.MerchId, item.Id);
+            //    CacheServiceFactory.ProductSku.Update(item.MerchId, item.Id);
             //}
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
