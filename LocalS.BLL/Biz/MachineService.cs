@@ -25,7 +25,7 @@ namespace LocalS.BLL.Biz
             model.JPushRegId = machine.JPushRegId;
             model.CabinetId_1 = machine.CabinetId_1;
             model.CabinetName_1 = machine.CabinetName_1;
-            model.CabineRowColLayout_1 = CabineRowColLayoutModel.Convert(machine.CabineRowColLayout_1);
+            model.CabineRowColLayout_1 = GetLayout(machine.CabineRowColLayout_1);
             model.RunStatus = machine.RunStatus;
             model.LastRequestTime = machine.LastRequestTime;
 
@@ -70,6 +70,41 @@ namespace LocalS.BLL.Biz
             //    var machine = BizFactory.Machine.GetOne(id);
             //    PushService.SendUpdateHomeBanner(machine.JPushRegId, homeBanners);
             //}
+        }
+
+
+
+
+        private static int[] GetLayout(string str)
+        {
+            int[] layout = null;
+
+            if (string.IsNullOrEmpty(str))
+            {
+                return null;
+            }
+
+            try
+            {
+                string[] data = str.Split(',');
+                if (data.Length > 0)
+                {
+
+                    layout = new int[data.Length];
+
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        layout[i] = int.Parse(data[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+            return layout;
         }
     }
 }

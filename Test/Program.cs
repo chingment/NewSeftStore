@@ -46,7 +46,7 @@ namespace Test
             //RedisManager.Db.HashSetAsync("aaa", "b2ww", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
 
 
-            var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
+           // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
 
             bool a1 = CommonUtil.IsNumber("1312331333x13133123");
 

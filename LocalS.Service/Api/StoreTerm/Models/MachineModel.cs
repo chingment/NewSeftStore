@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string CsrQrCode { get; set; }
         public string CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
-        public CabineRowColLayoutModel CabineRowColLayout_1 { get; set; }
+        public int[] CabineRowColLayout_1 { get; set; }
 
     }
 }

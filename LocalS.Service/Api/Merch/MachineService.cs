@@ -164,19 +164,10 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
-            if (machine.CabineRowColLayout_1.Rows <= 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器行数");
-            }
 
             if (machine.CabineRowColLayout_1.RowsCols == null || machine.CabineRowColLayout_1.RowsCols.Length == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
-            }
-
-            if (machine.CabineRowColLayout_1.Rows != machine.CabineRowColLayout_1.RowsCols.Length)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "行列数据解释不匹配");
             }
 
             List<object> olist = new List<object>();
@@ -185,8 +176,9 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
+            int rowsLength = machine.CabineRowColLayout_1.RowsCols.Length;
 
-            for (int i = machine.CabineRowColLayout_1.Rows - 1; i >= 0; i--)
+            for (int i = rowsLength - 1; i >= 0; i--)
             {
                 SlotRowModel row = new SlotRowModel();
                 row.No = i;
