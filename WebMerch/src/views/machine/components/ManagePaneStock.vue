@@ -21,53 +21,55 @@
       </el-row>
     </div>
 
-    <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
+    <div class="rows">
 
-      <template v-for="(col,cindex) in row.cols">
-        <div v-show="col.isShow" :key="cindex" class="col">
+      <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
 
-          <div class="box-slot">
+        <template v-for="(col,cindex) in row.cols">
+          <div v-show="col.isShow" :key="cindex" class="col">
 
-            <div v-if="col.productSkuId!=null">
-              <div class="above">
-                <div class="above-img">
-                  <div v-show="col.isOffSell" class="isOffSell-box">
-                    <div class="isOffSell-tip">已下架</div>
-                  </div>
-                  <img :src="col.mainImgUrl" alt=""> </div>
-                <div class="above-des">
-                  <div class="des1">
-                    <div class="name">{{ col.name }}</div>
-                    <div class="price" style="display:none;"> <span class="saleprice">{{ col.salePrice }}</span> </div>
-                  </div>
-                  <div class="des2">
-                    <span class="sellQuantity">{{ col.sellQuantity }}</span> /
-                    <span class="lockQuantity">{{ col.lockQuantity }}</span> /
-                    <span class="sumQuantity">{{ col.sumQuantity }}</span>
+            <div class="box-slot">
+
+              <div v-if="col.productSkuId!=null">
+                <div class="above">
+                  <div class="above-img">
+                    <div v-show="col.isOffSell" class="isOffSell-box">
+                      <div class="isOffSell-tip">已下架</div>
+                    </div>
+                    <img :src="col.mainImgUrl" alt=""> </div>
+                  <div class="above-des">
+                    <div class="des1">
+                      <div class="name">{{ col.name }}</div>
+                      <div class="price" style="display:none;"> <span class="saleprice">{{ col.salePrice }}</span> </div>
+                    </div>
+                    <div class="des2">
+                      <span class="sellQuantity">{{ col.sellQuantity }}</span> /
+                      <span class="lockQuantity">{{ col.lockQuantity }}</span> /
+                      <span class="sumQuantity">{{ col.sumQuantity }}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="below">
-                <div class="below-left">
-                <!-- <el-button type="success">置满</el-button>
+                <div class="below">
+                  <div class="below-left">
+                    <!-- <el-button type="success">置满</el-button>
               <el-button type="warning">沽清</el-button> -->
-                </div>
-                <div class="below-right">
+                  </div>
+                  <div class="below-right">
 
-                  <el-button type="primary" @click="dialogEditOpen(col)">编辑</el-button>
+                    <el-button type="primary" @click="dialogEditOpen(col)">编辑</el-button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-else>
-              未设置
+              <div v-else>
+                未设置
+              </div>
+
             </div>
 
           </div>
-
-        </div>
-      </template>
+        </template>
+      </div>
     </div>
-
     <div v-show="listData.length<=0" class="list-empty">
       <span>暂无数据</span>
     </div>
@@ -279,6 +281,7 @@ export default {
   padding: 20px;
   padding-top: 0px;
 
+.rows{
 .row{
 
   .col{
@@ -384,27 +387,6 @@ export default {
    }
   }
 
-          .sellQuantity{
-          color: #67c23a;
-        }
-.sellQuantity-bg{
-  background-color: #67c23a
-}
-
-        .lockQuantity{
-color: #f56c6c;
-        }
-        .lockQuantity-bg{
-          background-color: #f56c6c
-        }
-        .sumQuantity{
-color: #e6a23c;
-        }
-
-        .sumQuantity-bg{
-          background-color: #e6a23c
-        }
-
 .isOffSell-box{
 height:100%;
 width:100%;
@@ -426,6 +408,28 @@ align-items: center;
   text-align: center;
 
 }
+}
+
+          .sellQuantity{
+          color: #67c23a;
+        }
+.sellQuantity-bg{
+  background-color: #67c23a
+}
+
+        .lockQuantity{
+color: #f56c6c;
+        }
+        .lockQuantity-bg{
+          background-color: #f56c6c
+        }
+        .sumQuantity{
+color: #e6a23c;
+        }
+
+        .sumQuantity-bg{
+          background-color: #e6a23c
+        }
 
 }
 </style>
