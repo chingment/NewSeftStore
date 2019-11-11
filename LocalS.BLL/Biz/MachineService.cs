@@ -28,8 +28,8 @@ namespace LocalS.BLL.Biz
             model.CabineRowColLayout_1 = GetLayout(machine.CabineRowColLayout_1);
             model.RunStatus = machine.RunStatus;
             model.LastRequestTime = machine.LastRequestTime;
-            model.AppVersionCode = machine.AppVersionCode;
-            model.CtrlSdkVersionCode = machine.CtrlSdkVersionCode;
+            model.AppVersion = machine.AppVersionName;
+            model.CtrlSdkVersion = machine.CtrlSdkVersionCode;
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 

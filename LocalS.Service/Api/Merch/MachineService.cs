@@ -87,8 +87,8 @@ namespace LocalS.Service.Api.Merch
                     Id = item.MachineId,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
-                    AppVersionCode = machine.AppVersionCode,
-                    CtrlSdkVersionCode = machine.CtrlSdkVersionCode,
+                    AppVersion = machine.AppVersion,
+                    CtrlSdkVersion= machine.CtrlSdkVersion,
                     Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
                     LastRequestTime = machine.LastRequestTime,
                     CreateTime = item.CreateTime,
@@ -141,6 +141,8 @@ namespace LocalS.Service.Api.Merch
             ret.Name = merchMachine.Name;
             ret.Status = GetStatus(merchMachine.CurUseStoreId, merchMachine.IsStopUse, machine.RunStatus, machine.LastRequestTime);
             ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
+            ret.AppVersion = machine.AppVersion;
+            ret.CtrlSdkVersion = machine.CtrlSdkVersion;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

@@ -9,10 +9,10 @@
         {{ temp.name }}
       </el-form-item>
       <el-form-item label="控制程序号">
-        {{ temp.ctrlSdkVersionCode }}
+        {{ temp.ctrlSdkVersion }}
       </el-form-item>
       <el-form-item label="应用程序号">
-        {{ temp.appVersionCode }}
+        {{ temp.appVersion }}
       </el-form-item>
       <el-form-item label="机器状态">
         {{ temp.status.text }}
@@ -30,10 +30,10 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="控制程序号">
-        {{ temp.ctrlSdkVersionCode }}
+        {{ temp.ctrlSdkVersion }}
       </el-form-item>
       <el-form-item label="应用程序号">
-        {{ temp.appVersionCode }}
+        {{ temp.appVersion }}
       </el-form-item>
       <el-form-item label="机器状态">
         {{ temp.status.text }}
@@ -103,8 +103,8 @@ export default {
           this.temp.id = d.id
           this.temp.name = d.name
           this.temp.status = d.status
-          this.temp.ctrlSdkVersionCode = d.ctrlSdkVersionCode
-          this.temp.appVersionCode = d.appVersionCode
+          this.temp.ctrlSdkVersion = d.ctrlSdkVersion
+          this.temp.appVersion = d.appVersion
         }
         this.loading = false
       })

@@ -15,5 +15,8 @@ namespace LocalS.Service.Api.Merch
         public string LastRequestTime { get; set; }
 
         public StatusModel Status { get; set; }
+
+        public string AppVersion { get; set; }
+        public string CtrlSdkVersion { get; set; }
     }
 }
