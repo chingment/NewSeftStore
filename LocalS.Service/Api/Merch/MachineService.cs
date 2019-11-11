@@ -165,7 +165,7 @@ namespace LocalS.Service.Api.Merch
             var machine = BizFactory.Machine.GetOne(machineId);
 
 
-            if (machine.CabineRowColLayout_1.RowsCols == null || machine.CabineRowColLayout_1.RowsCols.Length == 0)
+            if (machine.CabineRowColLayout_1 == null || machine.CabineRowColLayout_1.Length == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
             }
@@ -176,14 +176,14 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            int rowsLength = machine.CabineRowColLayout_1.RowsCols.Length;
+            int rowsLength = machine.CabineRowColLayout_1.Length;
 
             for (int i = rowsLength - 1; i >= 0; i--)
             {
                 SlotRowModel row = new SlotRowModel();
                 row.No = i;
 
-                int cols = machine.CabineRowColLayout_1.RowsCols[i];
+                int cols = machine.CabineRowColLayout_1[i];
 
                 for (int j = 0; j < cols; j++)
                 {
