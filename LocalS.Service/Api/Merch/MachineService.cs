@@ -87,6 +87,8 @@ namespace LocalS.Service.Api.Merch
                     Id = item.MachineId,
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
+                    AppVersionCode = machine.AppVersionCode,
+                    CtrlSdkVersionCode = machine.CtrlSdkVersionCode,
                     Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
                     LastRequestTime = machine.LastRequestTime,
                     CreateTime = item.CreateTime,

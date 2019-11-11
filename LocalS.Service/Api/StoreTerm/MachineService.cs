@@ -30,6 +30,7 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
+                machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
                 machine.CreateTime = DateTime.Now;
                 machine.Creator = GuidUtil.Empty();
                 CurrentDb.Machine.Add(machine);
@@ -41,6 +42,7 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
+                machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
                 machine.MendTime = DateTime.Now;
                 machine.Mender = GuidUtil.Empty();
                 CurrentDb.SaveChanges();
@@ -148,7 +150,7 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult GetSlots(string machineId)
+        public CustomJsonResult GetSlots(string machineId, string cabinetId)
         {
             var ret = new RetMachineGetSlots();
 
@@ -167,6 +169,11 @@ namespace LocalS.Service.Api.StoreTerm
             if (string.IsNullOrEmpty(machine.StoreId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
+            }
+
+            if (machine.CabineRowColLayout_1 == null || machine.CabineRowColLayout_1.Length == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未识别到行列布局，请点击扫描按钮");
             }
 
             ret.RowColLayout = machine.CabineRowColLayout_1;

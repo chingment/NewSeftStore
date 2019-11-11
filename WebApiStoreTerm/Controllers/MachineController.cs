@@ -20,7 +20,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetSlots([FromUri]RupMachineGetSlots rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.GetSlots(rup.MachineId);
+            IResult result = StoreTermServiceFactory.Machine.GetSlots(rup.MachineId, rup.CabinetId);
             return new OwnApiHttpResponse(result);
         }
 

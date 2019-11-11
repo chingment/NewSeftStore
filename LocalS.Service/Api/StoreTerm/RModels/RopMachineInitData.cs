@@ -13,5 +13,6 @@ namespace LocalS.Service.Api.StoreTerm
         public string MacAddress { get; set; }
         public string AppVersionCode { get; set; }
         public string AppVersionName{ get; set; }
+        public string CtrlSdkVersionCode { get; set; }
     }
 }

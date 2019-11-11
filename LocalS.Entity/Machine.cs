@@ -39,7 +39,7 @@ namespace LocalS.Entity
         public string CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public string CabineRowColLayout_1 { get; set; }
-
+        public string CtrlSdkVersionCode { get; set; }
         //public int CabinetMaxRow_1 { get; set; }
         //public int CabinetMaxCol_1 { get; set; }
     }

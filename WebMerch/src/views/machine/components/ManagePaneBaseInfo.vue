@@ -1,14 +1,20 @@
 <template>
   <div id="machine_baseinfo" v-loading="loading" class="app-container">
 
-    <el-form v-show="!isEdit" class="noeditform" label-width="80px">
-      <el-form-item label="编号">
+    <el-form v-show="!isEdit" class="noeditform" label-width="100px">
+      <el-form-item label="机器编号">
         {{ temp.id }}
       </el-form-item>
-      <el-form-item label="名称">
+      <el-form-item label="机器名称">
         {{ temp.name }}
       </el-form-item>
-      <el-form-item label="状态">
+      <el-form-item label="控制程序号">
+        {{ temp.ctrlSdkVersionCode }}
+      </el-form-item>
+      <el-form-item label="应用程序号">
+        {{ temp.appVersionCode }}
+      </el-form-item>
+      <el-form-item label="机器状态">
         {{ temp.status.text }}
       </el-form-item>
       <el-form-item>
@@ -16,14 +22,20 @@
       </el-form-item>
     </el-form>
 
-    <el-form v-show="isEdit" ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="编号">
+    <el-form v-show="isEdit" ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
+      <el-form-item label="机器编号">
         {{ temp.id }}
       </el-form-item>
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="机器名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="状态">
+      <el-form-item label="控制程序号">
+        {{ temp.ctrlSdkVersionCode }}
+      </el-form-item>
+      <el-form-item label="应用程序号">
+        {{ temp.appVersionCode }}
+      </el-form-item>
+      <el-form-item label="机器状态">
         {{ temp.status.text }}
       </el-form-item>
       <el-form-item>
@@ -91,6 +103,8 @@ export default {
           this.temp.id = d.id
           this.temp.name = d.name
           this.temp.status = d.status
+          this.temp.ctrlSdkVersionCode = d.ctrlSdkVersionCode
+          this.temp.appVersionCode = d.appVersionCode
         }
         this.loading = false
       })

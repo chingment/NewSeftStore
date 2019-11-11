@@ -9,5 +9,7 @@ namespace LocalS.Service.Api.StoreTerm
     public class RupMachineGetSlots
     {
         public string MachineId { get; set; }
+
+        public string CabinetId { get; set; }
     }
 }

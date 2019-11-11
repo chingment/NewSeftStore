@@ -24,6 +24,9 @@ namespace LocalS.BLL.Biz
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }
+        public string AppVersionCode { get; set; }
+
+        public string CtrlSdkVersionCode { get; set; }
 
     }
 }
