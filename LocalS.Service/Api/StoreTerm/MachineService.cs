@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace LocalS.Service.Api.StoreTerm
 {
@@ -217,6 +218,46 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
+        }
+
+        public CustomJsonResult SaveScanSlotResult(RopMachineSaveScanSlotResult rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+
+                machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
+
+                int rowLength = rop.CabinetRowColLayout.Length;
+
+                List<string> slotIds = new List<string>();
+                for (int i = 0; i < rowLength; i++)
+                {
+                    int colLength = rop.CabinetRowColLayout[i];
+
+                    for (var j = 0; j < colLength; j++)
+                    {
+                        slotIds.Add(string.Format("n1r{0}c{1}", i, j));
+                    }
+                }
+
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && !slotIds.Contains(m.SlotId)).ToList();
+                foreach (var sellChannelStock in sellChannelStocks)
+                {
+                    LogUtil.Info("id:" + sellChannelStock.SlotId);
+
+                    //CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+
+            return result;
         }
 
         public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)

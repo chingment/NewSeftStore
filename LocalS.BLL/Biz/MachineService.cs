@@ -25,7 +25,7 @@ namespace LocalS.BLL.Biz
             model.JPushRegId = machine.JPushRegId;
             model.CabinetId_1 = machine.CabinetId_1;
             model.CabinetName_1 = machine.CabinetName_1;
-            model.CabineRowColLayout_1 = GetLayout(machine.CabineRowColLayout_1);
+            model.CabineRowColLayout_1 = GetLayout(machine.CabinetRowColLayout_1);
             model.RunStatus = machine.RunStatus;
             model.LastRequestTime = machine.LastRequestTime;
             model.AppVersion = machine.AppVersionName;
