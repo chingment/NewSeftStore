@@ -21,10 +21,25 @@
       </el-row>
     </div>
 
+    <!-- <vueSeamlessScroll :data="listData3" :class-option="classOption3" class="warp2 demo4">
+      <span
+        slot="left-switch"
+        class="name"
+        style="display: block;width: 30px;height: 40px;cursor: pointer;background-color:yellow;text-align: center;line-height:40px;"
+      >&lt;</span>
+      <ul class="ul-item clearfix">
+        <li v-for="(item, index) in listData3" :key="index" class="li-item">{{ item }}</li>
+      </ul>
+      <span
+        slot="right-switch"
+        class="name"
+        style="display: block;width: 30px;height: 40px;cursor: pointer;background-color:yellow;text-align: center;line-height:40px;"
+      >&gt;</span>
+    </vueSeamlessScroll> -->
+
     <div class="rows">
 
       <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
-
         <template v-for="(col,cindex) in row.cols">
           <div v-show="col.isShow" :key="cindex" class="col">
 
@@ -132,10 +147,15 @@ import { MessageBox } from 'element-ui'
 import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/api/machine'
 import { getUrlParam } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
+import vueSeamlessScroll from 'vue-seamless-scroll'
 export default {
   name: 'ManagePaneStock',
+  components: {
+    vueSeamlessScroll
+  },
   data() {
     return {
+      listData3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 3, 4],
       loading: false,
       listTotal: 0,
       listQuery: {
@@ -164,6 +184,14 @@ export default {
         version: 0
       },
       isDesktop: this.$store.getters.isDesktop
+    }
+  },
+  computed: {
+    classOption3() {
+      return {
+        direction: 2,
+        navigation: true
+      }
     }
   },
   watch: {
@@ -434,4 +462,60 @@ color: #e6a23c;
         }
 
 }
+
+ .demo4 {
+    width: 1500px !important;
+    margin: auto;
+    .ul-item {
+      width: 3000px;
+    }
+  }
+  .ul-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 670px;
+    &.random {
+      display: flex;
+      width: auto;
+    }
+    &.decimal {
+      width: 670.4px;
+    }
+    &.ul-item2 {
+      width: 0;
+    }
+    .li-item {
+      float: left;
+      width: 124px;
+      height: 124px;
+      margin: 10px 0 10px 10px;
+      line-height: 124px;
+      background-color: lightgray;
+      font-family: "Amaranth", sans-serif;
+      font-size: 82px;
+      text-align: center;
+    }
+  }
+  .warp2 {
+    width: 400px;
+    height: 150px;
+    overflow: hidden;
+  }
+  .test {
+    height: 126px;
+    width: 600px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  .test .item {
+    display: flex;
+    margin-top: 10px;
+    div {
+      flex: 1;
+    }
+    a {
+      display: block;
+    }
+  }
 </style>
