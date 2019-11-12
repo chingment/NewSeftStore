@@ -36,7 +36,7 @@ namespace LocalS.Entity
         public string AppVersionName { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }
-        public string CabinetId_1 { get; set; }
+        public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public string CabinetRowColLayout_1 { get; set; }
         public string CtrlSdkVersionCode { get; set; }

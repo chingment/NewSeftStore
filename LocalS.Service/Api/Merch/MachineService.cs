@@ -88,7 +88,7 @@ namespace LocalS.Service.Api.Merch
                     Name = item.Name,
                     MainImgUrl = machine.MainImgUrl,
                     AppVersion = machine.AppVersion,
-                    CtrlSdkVersion= machine.CtrlSdkVersion,
+                    CtrlSdkVersion = machine.CtrlSdkVersion,
                     Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
                     LastRequestTime = machine.LastRequestTime,
                     CreateTime = item.CreateTime,
@@ -162,14 +162,14 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult ManageStockGetStocks(string operater, string merchId, string machineId)
+        public CustomJsonResult ManageStockGetStocks(string operater, string merchId, string machineId, string cabinetId)
         {
             var result = new CustomJsonResult();
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
 
-            if (machine.CabineRowColLayout_1 == null || machine.CabineRowColLayout_1.Length == 0)
+            if (machine.CabinetRowColLayout_1 == null || machine.CabinetRowColLayout_1.Length == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
             }
@@ -180,18 +180,18 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            int rowsLength = machine.CabineRowColLayout_1.Length;
+            int rowsLength = machine.CabinetRowColLayout_1.Length;
 
             for (int i = rowsLength - 1; i >= 0; i--)
             {
                 SlotRowModel row = new SlotRowModel();
                 row.No = i;
 
-                int cols = machine.CabineRowColLayout_1[i];
+                int cols = machine.CabinetRowColLayout_1[i];
 
                 for (int j = 0; j < cols; j++)
                 {
-                    var slotId = "n1" + "r" + i + "c" + j;
+                    var slotId = string.Format("n{0}r{1}c{2}", cabinetId, i, j);
 
                     var col = new SlotColModel();
                     col.No = j;

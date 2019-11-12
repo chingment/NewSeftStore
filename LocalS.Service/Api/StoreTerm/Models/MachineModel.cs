@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string StoreName { get; set; }
         public string LogoImgUrl { get; set; }
         public string CsrQrCode { get; set; }
-        public string CabinetId_1 { get; set; }
+        public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public int[] CabinetRowColLayout_1 { get; set; }
 

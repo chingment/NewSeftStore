@@ -18,23 +18,23 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetSlots([FromUri]RupMachineGetSlots rup)
+        public OwnApiHttpResponse GetCabinetSlots([FromUri]RupMachineGetCabinetSlots rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.GetSlots(rup.MachineId, rup.CabinetId);
+            IResult result = StoreTermServiceFactory.Machine.GetCabinetSlots(rup.MachineId, rup.CabinetId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SaveSlot([FromBody]RopMachineSaveSlot rop)
+        public OwnApiHttpResponse SaveCabinetSlot([FromBody]RopMachineSaveCabinetSlot rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.SaveSlot(rop);
+            IResult result = StoreTermServiceFactory.Machine.SaveCabinetSlot(rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SaveSlots([FromBody]RopMachineSaveSlot rop)
+        public OwnApiHttpResponse SaveCabinetRowColLayout([FromBody]RopMachineSaveCabinetRowColLayout rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.SaveSlot(rop);
+            IResult result = StoreTermServiceFactory.Machine.SaveCabinetRowColLayout(rop);
             return new OwnApiHttpResponse(result);
         }
 

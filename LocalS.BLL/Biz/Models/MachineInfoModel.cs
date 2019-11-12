@@ -18,9 +18,9 @@ namespace LocalS.BLL.Biz
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string JPushRegId { get; set; }
-        public string CabinetId_1 { get; set; }
+        public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
-        public int[] CabineRowColLayout_1 { get; set; }
+        public int[] CabinetRowColLayout_1 { get; set; }
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }

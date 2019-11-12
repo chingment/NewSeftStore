@@ -68,7 +68,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CsrQrCode = machineInfo.CsrQrCode;
             ret.Machine.CabinetId_1 = machineInfo.CabinetId_1;
             ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
-            ret.Machine.CabinetRowColLayout_1 = machineInfo.CabineRowColLayout_1;
+            ret.Machine.CabinetRowColLayout_1 = machineInfo.CabinetRowColLayout_1;
 
             ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
@@ -151,7 +151,7 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult GetSlots(string machineId, string cabinetId)
+        public CustomJsonResult GetCabinetSlots(string machineId, string cabinetId)
         {
             var ret = new RetMachineGetSlots();
 
@@ -172,12 +172,12 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            if (machine.CabineRowColLayout_1 == null || machine.CabineRowColLayout_1.Length == 0)
+            if (machine.CabinetRowColLayout_1 == null || machine.CabinetRowColLayout_1.Length == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未识别到行列布局，请点击扫描按钮");
             }
 
-            ret.RowColLayout = machine.CabineRowColLayout_1;
+            ret.RowColLayout = machine.CabinetRowColLayout_1;
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
 
@@ -204,7 +204,7 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult SaveSlot(RopMachineSaveSlot rop)
+        public CustomJsonResult SaveCabinetSlot(RopMachineSaveCabinetSlot rop)
         {
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
@@ -220,7 +220,7 @@ namespace LocalS.Service.Api.StoreTerm
 
         }
 
-        public CustomJsonResult SaveScanSlotResult(RopMachineSaveScanSlotResult rop)
+        public CustomJsonResult SaveCabinetRowColLayout(RopMachineSaveCabinetRowColLayout rop)
         {
             var result = new CustomJsonResult();
 
@@ -239,22 +239,20 @@ namespace LocalS.Service.Api.StoreTerm
 
                     for (var j = 0; j < colLength; j++)
                     {
-                        slotIds.Add(string.Format("n1r{0}c{1}", i, j));
+                        slotIds.Add(string.Format("n{0}r{1}c{1}", rop.CabinetId, i, j));
                     }
                 }
 
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && !slotIds.Contains(m.SlotId)).ToList();
                 foreach (var sellChannelStock in sellChannelStocks)
                 {
-                    LogUtil.Info("id:" + sellChannelStock.SlotId);
-
-                    //CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                    CurrentDb.SellChannelStock.Remove(sellChannelStock);
                 }
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功");
             }
 
             return result;

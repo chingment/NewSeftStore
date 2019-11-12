@@ -142,7 +142,8 @@ export default {
         page: 1,
         limit: 10,
         productSkuName: undefined,
-        machineId: undefined
+        machineId: undefined,
+        cabinetId: undefined
       },
       listData: [],
       dialogEditIsVisible: false,
@@ -178,6 +179,7 @@ export default {
       var id = getUrlParam('id')
       this.loading = true
       this.listQuery.machineId = id
+      this.listQuery.cabinetId = '0'
       initManageStock({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data

@@ -42,7 +42,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse ManageStockGetStocks([FromUri]RupMachineGetStocks rup)
         {
-            IResult result = MerchServiceFactory.Machine.ManageStockGetStocks(this.CurrentUserId, this.CurrentMerchId, rup.MachineId);
+            IResult result = MerchServiceFactory.Machine.ManageStockGetStocks(this.CurrentUserId, this.CurrentMerchId, rup.MachineId, rup.CabinetId);
             return new OwnApiHttpResponse(result);
         }
 
