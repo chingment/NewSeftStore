@@ -239,14 +239,14 @@ namespace LocalS.Service.Api.StoreTerm
 
                     for (var j = 0; j < colLength; j++)
                     {
-                        slotIds.Add(string.Format("n{0}r{1}c{1}", rop.CabinetId, i, j));
+                        slotIds.Add(string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j));
                     }
                 }
 
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && !slotIds.Contains(m.SlotId)).ToList();
                 foreach (var sellChannelStock in sellChannelStocks)
                 {
-                    CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                    BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, sellChannelStock.MerchId, sellChannelStock.StoreId, rop.MachineId, sellChannelStock.SlotId, sellChannelStock.PrdProductSkuId);
                 }
 
                 CurrentDb.SaveChanges();

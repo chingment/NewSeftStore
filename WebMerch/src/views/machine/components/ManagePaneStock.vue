@@ -30,7 +30,7 @@
 
             <div class="box-slot">
 
-              <div v-if="col.productSkuId!=null">
+              <div v-if="col.productSkuId!=null" style="max-width:180px;margin:auto">
                 <div class="above">
                   <div class="above-img">
                     <div v-show="col.isOffSell" class="isOffSell-box">
