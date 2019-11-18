@@ -221,16 +221,18 @@ namespace LocalS.Service.Api.StoreTerm
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(3, 0, 0));
 
-            LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器");
+            LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器管理后台");
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
         }
 
-        public CustomJsonResult Logout(string operater, RopMachineLogout rop)
+        public CustomJsonResult Logout(string operater,string token, RopMachineLogout rop)
         {
 
-            LogAction(operater, rop.MachineId, "login", "登录机器");
+            SSOUtil.Quit(token);
+
+            LogAction(operater, rop.MachineId, "logout", "退出机器管理后台");
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 

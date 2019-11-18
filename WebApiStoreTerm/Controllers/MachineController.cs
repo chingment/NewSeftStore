@@ -34,7 +34,16 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Logout([FromBody]RopMachineLogout rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.Logout(this.CurrentUserId, rop);
+            IResult result = StoreTermServiceFactory.Machine.Logout(this.CurrentUserId, this.Token, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse LogAction([FromBody]RopMachineLogAction rop)
+        {
+            StoreTermServiceFactory.Machine.LogAction(this.CurrentUserId, rop.MachineId, rop.Action, rop.Remark);
+
+            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
             return new OwnApiHttpResponse(result);
         }
 
