@@ -1,6 +1,8 @@
 ﻿
 using Lumos.Web.Http;
 using Lumos;
+using Lumos.Session;
+using System.Web;
 
 namespace WebApiStoreTerm
 {
@@ -41,5 +43,44 @@ namespace WebApiStoreTerm
             return new OwnApiHttpResponse(_result);
         }
 
+        public string Token
+        {
+            get
+            {
+                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                var token = request.QueryString["token"];
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = request.Headers["X-Token"];
+                    if (token != null)
+                    {
+                        token = request.Headers["X-Token"].ToString();
+                    }
+                }
+
+                return token;
+            }
+        }
+        private TokenInfo TokenInfo
+        {
+            get
+            {
+                var tokenInfo = SSOUtil.GetTokenInfo(this.Token);
+                if (tokenInfo == null)
+                {
+                    tokenInfo = new TokenInfo();
+                    tokenInfo.UserId = "";
+                }
+                return tokenInfo;
+            }
+        }
+
+        public string CurrentUserId
+        {
+            get
+            {
+                return this.TokenInfo.UserId;
+            }
+        }
     }
 }

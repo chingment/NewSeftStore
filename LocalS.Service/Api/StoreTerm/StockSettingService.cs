@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class StockSettingService : BaseDbContext
     {
-        public CustomJsonResult GetCabinetSlots(string operater,RupStockSettingGetCabinetSlots rup)
+        public CustomJsonResult GetCabinetSlots(string operater, RupStockSettingGetCabinetSlots rup)
         {
             var ret = new RetStockSettingGetSlots();
 
@@ -65,6 +65,9 @@ namespace LocalS.Service.Api.StoreTerm
                 }
             }
 
+
+            StoreTermServiceFactory.Machine.LogAction(operater, machine.Id, "GetCabinetSlots", "查看库存");
+
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
@@ -74,11 +77,34 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
+
+                var result = BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
+
+                if (result.Result == ResultType.Success)
+                {
+                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品成功");
+                }
+                else
+                {
+                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品失败");
+                }
+
+                return result;
             }
             else
             {
-                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.SumQuantity);
+                var result = BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.SumQuantity);
+
+                if (result.Result == ResultType.Success)
+                {
+                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品成功");
+                }
+                else
+                {
+                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
+                }
+
+                return result;
             }
 
 
@@ -117,6 +143,15 @@ namespace LocalS.Service.Api.StoreTerm
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功");
+            }
+
+            if (result.Result == ResultType.Success)
+            {
+                StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果成功");
+            }
+            else
+            {
+                StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果失败");
             }
 
             return result;

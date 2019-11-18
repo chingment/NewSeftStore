@@ -34,7 +34,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Logout([FromBody]RopMachineLogout rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.Logout("", rop);
+            IResult result = StoreTermServiceFactory.Machine.Logout(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

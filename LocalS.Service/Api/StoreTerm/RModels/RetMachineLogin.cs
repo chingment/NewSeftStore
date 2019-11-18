@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RetMachineLogin
     {
-        public string UserId { get; set; }
+        public string Token { get; set; }
 
         public string UserName { get; set; }
 

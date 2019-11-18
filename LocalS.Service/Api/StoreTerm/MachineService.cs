@@ -4,6 +4,7 @@ using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
+using Lumos.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -162,15 +163,15 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "更新失败，找不到机器信息");
             }
 
-            switch(rop.DataType)
+            switch (rop.DataType)
             {
                 case 1:
                     break;
             }
-        
+
             //machine.Lat = rop.Lat;
             //machine.Lng = rop.Lng;
-         
+
 
 
 
@@ -210,9 +211,15 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetMachineLogin();
 
-            ret.UserId = sysMerchantUser.Id;
+            ret.Token = GuidUtil.New();
             ret.UserName = sysMerchantUser.UserName;
             ret.FullName = sysMerchantUser.FullName;
+
+            var tokenInfo = new TokenInfo();
+            tokenInfo.UserId = sysMerchantUser.Id ;
+            tokenInfo.MerchId = sysMerchantUser.MerchId;
+
+            SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(3, 0, 0));
 
             LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器");
 

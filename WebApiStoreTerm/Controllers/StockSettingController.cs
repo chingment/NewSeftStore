@@ -13,21 +13,21 @@ namespace WebApiStoreTerm.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetCabinetSlots([FromUri]RupStockSettingGetCabinetSlots rup)
         {
-            IResult result = StoreTermServiceFactory.StockSetting.GetCabinetSlots("",rup);
+            IResult result = StoreTermServiceFactory.StockSetting.GetCabinetSlots(this.CurrentUserId,rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse SaveCabinetSlot([FromBody]RopStockSettingSaveCabinetSlot rop)
         {
-            IResult result = StoreTermServiceFactory.StockSetting.SaveCabinetSlot("", rop);
+            IResult result = StoreTermServiceFactory.StockSetting.SaveCabinetSlot(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse SaveCabinetRowColLayout([FromBody]RopStockSettingSaveCabinetRowColLayout rop)
         {
-            IResult result = StoreTermServiceFactory.StockSetting.SaveCabinetRowColLayout("", rop);
+            IResult result = StoreTermServiceFactory.StockSetting.SaveCabinetRowColLayout(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
