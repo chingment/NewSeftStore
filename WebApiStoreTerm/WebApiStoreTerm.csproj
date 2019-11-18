@@ -145,6 +145,7 @@
     <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductSkuController.cs" />
+    <Compile Include="Controllers\StockSettingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

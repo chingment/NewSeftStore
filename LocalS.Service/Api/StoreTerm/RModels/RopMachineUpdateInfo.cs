@@ -9,8 +9,15 @@ namespace LocalS.Service.Api.StoreTerm
     public class RopMachineUpdateInfo
     {
         public string MachineId { get; set; }
-        public float Lat { get; set; }
-        public float Lng { get; set; }
-        public string JPushRegId { get; set; }
+        public int DataType { get; set; }
+        public object DataContent { get; set; }
+
+
+        public class DataContentByLatLng
+        {
+            public float Lng { get; set; }
+
+            public float Lat { get; set; }
+        }
     }
 }

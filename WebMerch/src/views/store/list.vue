@@ -34,8 +34,8 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" @click="handleManageMachine(item)">机器管理</el-button></li>
-                <li><el-button type="text" style="color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
+                <li><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
               </ul>
             </div>
           </div>

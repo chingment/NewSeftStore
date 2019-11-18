@@ -92,6 +92,8 @@ namespace LocalS.Service.Api.Merch
                     Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
                     LastRequestTime = machine.LastRequestTime,
                     CreateTime = item.CreateTime,
+                    StoreId = machine.StoreId,
+                    StoreName = string.IsNullOrEmpty(machine.StoreId) ? "未绑定店铺" : machine.StoreName
                 });
             }
 
@@ -143,6 +145,14 @@ namespace LocalS.Service.Api.Merch
             ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
             ret.AppVersion = machine.AppVersion;
             ret.CtrlSdkVersion = machine.CtrlSdkVersion;
+            if (string.IsNullOrEmpty(machine.StoreId))
+            {
+                ret.StoreName = "未绑定店铺";
+            }
+            else
+            {
+                ret.StoreName = machine.StoreName;
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

@@ -40,5 +40,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
+        public static StockSettingService StockSetting
+        {
+            get
+            {
+                return new StockSettingService();
+            }
+        }
+
     }
 }

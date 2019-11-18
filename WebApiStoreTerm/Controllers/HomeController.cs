@@ -1,5 +1,6 @@
 ﻿
 using LocalS.Service.Api.StoreTerm;
+using Lumos;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -82,6 +83,7 @@ namespace WebApiStoreTerm.Controllers
 
         Dictionary<string, string> model = new Dictionary<string, string>();
 
+
         public ActionResult Index()
         {
             if (ConfigurationManager.AppSettings["custom:IsTest"] == null)
@@ -96,6 +98,12 @@ namespace WebApiStoreTerm.Controllers
             //host = "http://demo.api.term.17fanju.com";
 
             string machineId = "000000000000000";
+
+
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("machineId", machineId.ToString());
+            parames.Add("key", "http%3A%2F%2Fqr.weibo.cn%2Fg%2F3iv86t");
+            string signStr = Signature.Compute("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1573793412, Signature.GetQueryData(parames));
 
             RopOrderReserve rop = new RopOrderReserve();
             rop.MachineId = "000000000000000";

@@ -25,18 +25,22 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span> ({{ item.status.text }})
+              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
+
+              <span style="font-size:12px;"> ({{ item.status.text }})</span>
             </div>
             <div class="right">
               <el-button type="text" @click="handleManage(item)">管理</el-button>
             </div>
           </div>
+          <div class="storeName" style="font-size:12px;">{{ item.storeName }} </div>
           <div class="it-component">
+
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" @click="handleManageStock(item)">库存管理</el-button></li>
-                <li><el-button type="text" style="color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
+                <li><el-button type="text" style="padding:0px;" @click="handleManageStock(item)">库存管理</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
               </ul>
             </div>
           </div>

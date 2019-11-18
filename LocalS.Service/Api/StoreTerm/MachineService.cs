@@ -151,113 +151,6 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult GetCabinetSlots(string machineId, string cabinetId)
-        {
-            var ret = new RetMachineGetSlots();
-
-            var machine = BizFactory.Machine.GetOne(machineId);
-
-            if (machine == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
-            }
-
-            if (string.IsNullOrEmpty(machine.MerchId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
-            }
-
-            if (string.IsNullOrEmpty(machine.StoreId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
-            }
-
-            if (machine.CabinetRowColLayout_1 == null || machine.CabinetRowColLayout_1.Length == 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未识别到行列布局，请点击扫描按钮");
-            }
-
-            ret.RowColLayout = machine.CabinetRowColLayout_1;
-
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
-
-            foreach (var item in machineStocks)
-            {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(item.MerchId, item.StoreId, new string[] { machineId }, item.PrdProductSkuId);
-
-                if (bizProductSku != null)
-                {
-                    var slot = new SlotModel();
-
-                    slot.Id = item.SlotId;
-                    slot.ProductSkuId = bizProductSku.Id;
-                    slot.ProductSkuName = bizProductSku.Name;
-                    slot.ProductSkuMainImgUrl = bizProductSku.MainImgUrl;
-                    slot.SumQuantity = item.SumQuantity;
-                    slot.LockQuantity = item.LockQuantity;
-                    slot.SellQuantity = item.SellQuantity;
-                    slot.MaxQuantity = 10;
-                    ret.Slots.Add(item.SlotId, slot);
-                }
-            }
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-        }
-
-        public CustomJsonResult SaveCabinetSlot(RopMachineSaveCabinetSlot rop)
-        {
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
-
-            if (string.IsNullOrEmpty(rop.ProductSkuId))
-            {
-                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
-            }
-            else
-            {
-                return BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.SumQuantity);
-            }
-
-
-        }
-
-        public CustomJsonResult SaveCabinetRowColLayout(RopMachineSaveCabinetRowColLayout rop)
-        {
-            var result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-
-                machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
-
-                int rowLength = rop.CabinetRowColLayout.Length;
-
-                List<string> slotIds = new List<string>();
-                for (int i = 0; i < rowLength; i++)
-                {
-                    int colLength = rop.CabinetRowColLayout[i];
-
-                    for (var j = 0; j < colLength; j++)
-                    {
-                        slotIds.Add(string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j));
-                    }
-                }
-
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && !slotIds.Contains(m.SlotId)).ToList();
-                foreach (var sellChannelStock in sellChannelStocks)
-                {
-                    BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, sellChannelStock.MerchId, sellChannelStock.StoreId, rop.MachineId, sellChannelStock.SlotId, sellChannelStock.PrdProductSkuId);
-                }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功");
-            }
-
-            return result;
-        }
-
         public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)
         {
             var result = new CustomJsonResult();
@@ -269,20 +162,16 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "更新失败，找不到机器信息");
             }
 
-            if (rop.Lat > 0)
+            switch(rop.DataType)
             {
-                machine.Lat = rop.Lat;
+                case 1:
+                    break;
             }
+        
+            //machine.Lat = rop.Lat;
+            //machine.Lng = rop.Lng;
+         
 
-            if (rop.Lng > 0)
-            {
-                machine.Lng = rop.Lng;
-            }
-
-            if (string.IsNullOrEmpty(rop.JPushRegId))
-            {
-                machine.JPushRegId = rop.JPushRegId;
-            }
 
 
             CurrentDb.SaveChanges();
@@ -325,7 +214,18 @@ namespace LocalS.Service.Api.StoreTerm
             ret.UserName = sysMerchantUser.UserName;
             ret.FullName = sysMerchantUser.FullName;
 
+            LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器");
+
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
+
+        }
+
+        public CustomJsonResult Logout(string operater, RopMachineLogout rop)
+        {
+
+            LogAction(operater, rop.MachineId, "login", "登录机器");
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 
         }
 
@@ -354,6 +254,39 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             return result;
+        }
+
+        public Task<bool> LogAction(string operater, string machineId, string action, string remark)
+        {
+            var task = Task.Run(() =>
+            {
+
+                var machine = BizFactory.Machine.GetOne(machineId);
+
+                var machineLog = new MachineLog();
+                machineLog.Id = GuidUtil.New();
+
+                if (machine != null)
+                {
+                    machineLog.MerchId = machine.MerchId;
+                    machineLog.StoreId = machine.StoreId;
+                }
+
+                machineLog.MachineId = machineId;
+                machineLog.OperaterUserId = operater;
+                machineLog.Action = action;
+                machineLog.Remark = remark;
+                machineLog.Creator = operater;
+                machineLog.CreateTime = DateTime.Now;
+
+
+                CurrentDb.MachineLog.Add(machineLog);
+                CurrentDb.SaveChanges();
+
+                return true;
+            });
+
+            return task;
         }
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RopMachineSaveCabinetSlot
+    public class RopStockSettingSaveCabinetRowColLayout
     {
-        public string Id { get; set; }
         public string MachineId { get; set; }
-        public string ProductSkuId { get; set; }
-        public int SumQuantity { get; set; }
+
+        public int CabinetId { get; set; }
+        public int[] CabinetRowColLayout { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Test
 {
@@ -28,9 +29,28 @@ namespace Test
 
             return mySByte;
         }
+        public static string UrlEncode1(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (HttpUtility.UrlEncode(c.ToString()).Length > 1)
+                {
+                    sb.Append(HttpUtility.UrlEncode(c.ToString()).ToUpper());
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+
+
         static void Main(string[] args)
         {
 
+            string s = UrlEncode1("http://demo.api.term.17fanju.com");
             var b = RedisManager.Db.HashScan("aaa", "a1*");
             var b1 = b.ToList();
 

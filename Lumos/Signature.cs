@@ -154,7 +154,7 @@ namespace Lumos
             while (dem.MoveNext())
             {
                 string key = dem.Current.Key;
-                string value = HttpUtility.UrlEncode(dem.Current.Value, UTF8Encoding.UTF8);
+                string value =dem.Current.Value;
                 if (!string.IsNullOrEmpty(key))
                 {
                     queryStr.Append("&").Append(key).Append("=").Append(value);

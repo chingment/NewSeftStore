@@ -17,27 +17,6 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse GetCabinetSlots([FromUri]RupMachineGetCabinetSlots rup)
-        {
-            IResult result = StoreTermServiceFactory.Machine.GetCabinetSlots(rup.MachineId, rup.CabinetId);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse SaveCabinetSlot([FromBody]RopMachineSaveCabinetSlot rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.SaveCabinetSlot(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse SaveCabinetRowColLayout([FromBody]RopMachineSaveCabinetRowColLayout rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.SaveCabinetRowColLayout(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
         [HttpPost]
         public OwnApiHttpResponse UpdateInfo([FromBody]RopMachineUpdateInfo rop)
         {
@@ -49,6 +28,13 @@ namespace WebApiStoreTerm.Controllers
         public OwnApiHttpResponse Login([FromBody]RopMachineLogin rop)
         {
             IResult result = StoreTermServiceFactory.Machine.Login(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Logout([FromBody]RopMachineLogout rop)
+        {
+            IResult result = StoreTermServiceFactory.Machine.Logout("", rop);
             return new OwnApiHttpResponse(result);
         }
 

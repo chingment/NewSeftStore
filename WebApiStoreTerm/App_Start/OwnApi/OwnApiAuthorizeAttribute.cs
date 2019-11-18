@@ -28,6 +28,23 @@ namespace WebApiStoreTerm
             return dt;
         }
 
+        public static string UrlEncode(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (HttpUtility.UrlEncode(c.ToString()).Length > 1)
+                {
+                    sb.Append(HttpUtility.UrlEncode(c.ToString()).ToUpper());
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+
         public static string GetQueryData(Dictionary<string, string> parames)
         {
             // 第一步：把字典按Key的字母顺序排序
@@ -43,7 +60,7 @@ namespace WebApiStoreTerm
             while (dem.MoveNext())
             {
                 string key = dem.Current.Key;
-                string value = HttpUtility.UrlEncode(dem.Current.Value, UTF8Encoding.UTF8);
+                string value = UrlEncode(dem.Current.Value);
                 if (!string.IsNullOrEmpty(key))
                 {
                     queryStr.Append("&").Append(key).Append("=").Append(value);

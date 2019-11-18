@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RetMachineGetSlots
+    public class RetStockSettingGetSlots
     {
-        public RetMachineGetSlots()
+        public RetStockSettingGetSlots()
         {
             this.Slots = new Dictionary<string, SlotModel>();
         }

@@ -296,7 +296,7 @@
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetMachineGetSlots.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderDetails.cs" />
@@ -305,8 +305,9 @@
     <Compile Include="Api\StoreTerm\RModels\RetOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetProductSkuSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopMachineSaveCabinetRowColLayout.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopMachineSaveCabinetSlot.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopMachineLogout.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineSendRunStatus.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUpdateInfo.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderBuildPayParams.cs" />
@@ -315,11 +316,12 @@
     <Compile Include="Api\StoreTerm\RModels\RopOrderPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupProductSkuSearch.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RupMachineGetCabinetSlots.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupStockSettingGetCabinetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPayStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPickupStatusQuery.cs" />
+    <Compile Include="Api\StoreTerm\StockSettingService.cs" />
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
     <Compile Include="Api\StoreTerm\TermService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

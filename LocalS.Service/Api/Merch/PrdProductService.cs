@@ -171,10 +171,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品模块");
             }
 
-            if (rop.SubjectIds == null || rop.SubjectIds.Count == 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品栏目");
-            }
+            //if (rop.SubjectIds == null || rop.SubjectIds.Count == 0)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品栏目");
+            //}
 
             if (rop.DisplayImgUrls == null || rop.DisplayImgUrls.Count == 0)
             {

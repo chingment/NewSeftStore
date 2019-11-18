@@ -27,5 +27,6 @@ namespace LocalS.BLL
                 return _CurrentDb;
             }
         }
+
     }
 }

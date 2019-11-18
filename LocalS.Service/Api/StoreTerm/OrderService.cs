@@ -15,8 +15,6 @@ namespace LocalS.Service.Api.StoreTerm
 
     public class OrderService : BaseDbContext
     {
-        private static readonly string redis_machine_lstord = "machine_lstord:{0}";
-
         public CustomJsonResult Reserve(RopOrderReserve rop)
         {
             CustomJsonResult result = new CustomJsonResult();
