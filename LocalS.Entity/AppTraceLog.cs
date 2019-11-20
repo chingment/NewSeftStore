@@ -32,6 +32,7 @@ namespace LocalS.Entity
         public string EventRefererPageId { get; set; }
         public string EventName { get; set; }
         public string EventActionTime { get; set; }
+        public string ExceptionInfos { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

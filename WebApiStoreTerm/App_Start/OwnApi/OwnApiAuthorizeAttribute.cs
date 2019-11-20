@@ -97,7 +97,6 @@ namespace WebApiStoreTerm
                 string app_version = request.Headers["version"];
                 string app_timestamp_s = request.Headers["timestamp"];
 
-
                 string app_data = null;
 
                 if (requestMethod == "POST")

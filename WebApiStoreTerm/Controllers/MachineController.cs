@@ -51,9 +51,16 @@ namespace WebApiStoreTerm.Controllers
         {
             var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
 
-            if (request.Headers["appInfo"] != null)
+            if (request.Headers["data_head"] != null)
             {
-                rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(request.Headers["appInfo"].ToString());
+                string data_head = System.Web.HttpUtility.UrlDecode(request.Headers["data_head"].ToString());
+                LogUtil.Info("data_head:"+ data_head);
+
+                rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(data_head);
+            }
+            else
+            {
+                LogUtil.Info("data_head: NULL");
             }
 
             StoreTermServiceFactory.Machine.UpLoadTraceLog(rop);

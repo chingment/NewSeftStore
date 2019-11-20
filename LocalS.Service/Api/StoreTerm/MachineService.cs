@@ -306,11 +306,11 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     foreach (var pa in rop.appActions)
                     {
-                        var appTraceLog = new AppTraceLog();
+                        var appTraceLog = new AppTraceLog(); 
                         appTraceLog.Id = GuidUtil.New();
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChanel;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
                         appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
                         appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
                         appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
@@ -325,7 +325,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.AppActionTime = pa.action_time;
                         appTraceLog.AppActionType = pa.action_type;
                         appTraceLog.AppActionDesc = pa.action_desc;
-
+                        appTraceLog.ExceptionInfos = rop.exceptionInfos.ToJsonString();
                         appTraceLog.CreateTime = DateTime.Now;
                         appTraceLog.Creator = GuidUtil.Empty();
 
@@ -339,7 +339,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.Id = GuidUtil.New();
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChanel;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
                         appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
                         appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
                         appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
@@ -356,6 +356,8 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.PageStartTime = pa.page_start_time;
                         appTraceLog.PageEndTime = pa.page_end_time;
 
+                        appTraceLog.ExceptionInfos = rop.exceptionInfos.ToJsonString();
+
                         appTraceLog.CreateTime = DateTime.Now;
                         appTraceLog.Creator = GuidUtil.Empty();
 
@@ -369,7 +371,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.Id = GuidUtil.New();
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChanel;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
                         appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
                         appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
                         appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
@@ -384,6 +386,8 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.EventPageId = ev.page_id;
                         appTraceLog.EventRefererPageId = ev.referer_page_id;
                         appTraceLog.EventActionTime = ev.action_time;
+
+                        appTraceLog.ExceptionInfos = rop.exceptionInfos.ToJsonString();
 
                         appTraceLog.CreateTime = DateTime.Now;
                         appTraceLog.Creator = GuidUtil.Empty();

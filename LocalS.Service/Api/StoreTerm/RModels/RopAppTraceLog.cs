@@ -14,6 +14,7 @@ namespace LocalS.Service.Api.StoreTerm
             this.appActions = new List<AppAction>();
             this.pages = new List<Page>();
             this.events = new List<Event>();
+            this.exceptionInfos = new List<ExceptionInfo>();
         }
 
         public Device device { get; set; }
@@ -21,6 +22,8 @@ namespace LocalS.Service.Api.StoreTerm
         public List<AppAction> appActions { get; set; }
         public List<Page> pages { get; set; }
         public List<Event> events { get; set; }
+
+        public List<ExceptionInfo> exceptionInfos { get; set; }
 
         public class AppAction
         {
@@ -57,16 +60,18 @@ namespace LocalS.Service.Api.StoreTerm
                 this.appinfo = new AppInfo();
                 this.deviceinfo = new DeviceInfo();
                 this.networkinfo = new NetworkInfo();
+
             }
 
             public AppInfo appinfo { get; set; }
             public DeviceInfo deviceinfo { get; set; }
             public NetworkInfo networkinfo { get; set; }
+
         }
 
         public class AppInfo
         {
-            public string appChanel { get; set; }
+            public string appChannel { get; set; }
             public string appId { get; set; }
             public string appVersion { get; set; }
         }
@@ -87,6 +92,14 @@ namespace LocalS.Service.Api.StoreTerm
         {
             public string ipAddr { get; set; }
             public bool wifi { get; set; }
+        }
+
+        public class ExceptionInfo
+        {
+            public string phoneModel { get; set; }
+            public string systemModel { get; set; }
+            public string systemVersion { get; set; }
+            public string exceptionString { get; set; }
         }
     }
 }
