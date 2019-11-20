@@ -216,7 +216,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.FullName = sysMerchantUser.FullName;
 
             var tokenInfo = new TokenInfo();
-            tokenInfo.UserId = sysMerchantUser.Id ;
+            tokenInfo.UserId = sysMerchantUser.Id;
             tokenInfo.MerchId = sysMerchantUser.MerchId;
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(3, 0, 0));
@@ -227,7 +227,7 @@ namespace LocalS.Service.Api.StoreTerm
 
         }
 
-        public CustomJsonResult Logout(string operater,string token, RopMachineLogout rop)
+        public CustomJsonResult Logout(string operater, string token, RopMachineLogout rop)
         {
 
             SSOUtil.Quit(token);
@@ -291,6 +291,107 @@ namespace LocalS.Service.Api.StoreTerm
 
                 CurrentDb.MachineLog.Add(machineLog);
                 CurrentDb.SaveChanges();
+
+                return true;
+            });
+
+            return task;
+        }
+
+        public Task<bool> UpLoadTraceLog(RopAppTraceLog rop)
+        {
+            var task = Task.Run(() =>
+            {
+                if (rop.events != null)
+                {
+                    foreach (var pa in rop.appActions)
+                    {
+                        var appTraceLog = new AppTraceLog();
+                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppId = rop.device.appinfo.appId;
+                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChanel;
+                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
+                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
+                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
+                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
+                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
+                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
+                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
+                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
+                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
+                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
+
+                        appTraceLog.AppActionTime = pa.action_time;
+                        appTraceLog.AppActionType = pa.action_type;
+                        appTraceLog.AppActionDesc = pa.action_desc;
+
+                        appTraceLog.CreateTime = DateTime.Now;
+                        appTraceLog.Creator = GuidUtil.Empty();
+
+                        CurrentDb.AppTraceLog.Add(appTraceLog);
+                        CurrentDb.SaveChanges();
+                    }
+
+                    foreach (var pa in rop.pages)
+                    {
+                        var appTraceLog = new AppTraceLog();
+                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppId = rop.device.appinfo.appId;
+                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChanel;
+                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
+                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
+                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
+                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
+                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
+                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
+                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
+                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
+                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
+                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
+
+                        appTraceLog.PageId = pa.page_id;
+                        appTraceLog.PageRefererPageId = pa.referer_page_id;
+                        appTraceLog.PageStartTime = pa.page_start_time;
+                        appTraceLog.PageEndTime = pa.page_end_time;
+
+                        appTraceLog.CreateTime = DateTime.Now;
+                        appTraceLog.Creator = GuidUtil.Empty();
+
+                        CurrentDb.AppTraceLog.Add(appTraceLog);
+                        CurrentDb.SaveChanges();
+                    }
+
+                    foreach (var ev in rop.events)
+                    {
+                        var appTraceLog = new AppTraceLog();
+                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppId = rop.device.appinfo.appId;
+                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChanel;
+                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
+                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
+                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
+                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
+                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
+                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
+                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
+                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
+                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
+                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
+                        appTraceLog.EventName = ev.event_name;
+                        appTraceLog.EventPageId = ev.page_id;
+                        appTraceLog.EventRefererPageId = ev.referer_page_id;
+                        appTraceLog.EventActionTime = ev.action_time;
+
+                        appTraceLog.CreateTime = DateTime.Now;
+                        appTraceLog.Creator = GuidUtil.Empty();
+
+                        CurrentDb.AppTraceLog.Add(appTraceLog);
+                        CurrentDb.SaveChanges();
+                    }
+                }
 
                 return true;
             });

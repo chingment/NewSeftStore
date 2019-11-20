@@ -47,6 +47,7 @@
     <Compile Include="AdContent.cs" />
     <Compile Include="AdSpace.cs" />
     <Compile Include="AdContentBelong.cs" />
+    <Compile Include="AppTraceLog.cs" />
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />
