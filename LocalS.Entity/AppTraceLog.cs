@@ -3,11 +3,22 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
+
+    public enum E_AppTraceType
+    {
+        Unknow = 0,
+        Action = 1,
+        Page = 2,
+        Event = 3,
+        Exception = 4
+    }
+
     [Table("AppTraceLog")]
     public class AppTraceLog
     {
         [Key]
         public string Id { get; set; }
+        public E_AppTraceType AppTraceType { get; set; }
         public string AppChannel { get; set; }
         public string AppId { get; set; }
         public string AppVersion { get; set; }
@@ -32,7 +43,10 @@ namespace LocalS.Entity
         public string EventRefererPageId { get; set; }
         public string EventName { get; set; }
         public string EventActionTime { get; set; }
-        public string ExceptionInfos { get; set; }
+        public string ExceptionString { get; set; }
+        public string ExceptionPhoneModel { get; set; }
+        public string ExceptionSystemModel { get; set; }
+        public string ExceptionSystemVersion { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

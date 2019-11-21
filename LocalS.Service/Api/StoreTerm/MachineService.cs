@@ -308,6 +308,7 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         var appTraceLog = new AppTraceLog(); 
                         appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppTraceType = E_AppTraceType.Action;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
                         appTraceLog.AppChannel = rop.device.appinfo.appChannel;
@@ -325,7 +326,6 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.AppActionTime = pa.action_time;
                         appTraceLog.AppActionType = pa.action_type;
                         appTraceLog.AppActionDesc = pa.action_desc;
-                        appTraceLog.ExceptionInfos = rop.exceptionInfos.ToJsonString();
                         appTraceLog.CreateTime = DateTime.Now;
                         appTraceLog.Creator = GuidUtil.Empty();
 
@@ -337,6 +337,7 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         var appTraceLog = new AppTraceLog();
                         appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppTraceType = E_AppTraceType.Page;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
                         appTraceLog.AppChannel = rop.device.appinfo.appChannel;
@@ -356,8 +357,6 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.PageStartTime = pa.page_start_time;
                         appTraceLog.PageEndTime = pa.page_end_time;
 
-                        appTraceLog.ExceptionInfos = rop.exceptionInfos.ToJsonString();
-
                         appTraceLog.CreateTime = DateTime.Now;
                         appTraceLog.Creator = GuidUtil.Empty();
 
@@ -369,6 +368,7 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         var appTraceLog = new AppTraceLog();
                         appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppTraceType = E_AppTraceType.Event;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
                         appTraceLog.AppChannel = rop.device.appinfo.appChannel;
@@ -387,7 +387,35 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.EventRefererPageId = ev.referer_page_id;
                         appTraceLog.EventActionTime = ev.action_time;
 
-                        appTraceLog.ExceptionInfos = rop.exceptionInfos.ToJsonString();
+                        appTraceLog.CreateTime = DateTime.Now;
+                        appTraceLog.Creator = GuidUtil.Empty();
+
+                        CurrentDb.AppTraceLog.Add(appTraceLog);
+                        CurrentDb.SaveChanges();
+                    }
+
+                    foreach (var ev in rop.exceptionInfos)
+                    {
+                        var appTraceLog = new AppTraceLog();
+                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.AppTraceType = E_AppTraceType.Exception;
+                        appTraceLog.AppId = rop.device.appinfo.appId;
+                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
+                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
+                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
+                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
+                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
+                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
+                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
+                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
+                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
+                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
+                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
+                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
+                        appTraceLog.ExceptionString = ev.exceptionString;
+                        appTraceLog.ExceptionSystemModel = ev.systemModel;
+                        appTraceLog.ExceptionSystemVersion = ev.systemVersion;
+                        appTraceLog.ExceptionPhoneModel = ev.phoneModel;
 
                         appTraceLog.CreateTime = DateTime.Now;
                         appTraceLog.Creator = GuidUtil.Empty();
