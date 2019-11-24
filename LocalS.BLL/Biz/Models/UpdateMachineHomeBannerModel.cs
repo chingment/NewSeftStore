@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class UpdateHomeBannerModel
+    public class UpdateMachineHomeBannerModel
     {
         public string Url { get; set; }
     }

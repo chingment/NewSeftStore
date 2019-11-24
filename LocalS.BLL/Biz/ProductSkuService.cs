@@ -229,7 +229,7 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
-            List<UpdateProductSkuStockModel> updaeStocks = new List<UpdateProductSkuStockModel>();
+            List<UpdateMachineStockSlotModel> updaeStockSlots = new List<UpdateMachineStockSlotModel>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -268,16 +268,17 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.RemarkByDev = "调整库存";
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                var updateStock = new UpdateProductSkuStockModel();
-                updateStock.Id = sellChannelStock.PrdProductSkuId;
-                updateStock.IsOffSell = sellChannelStock.IsOffSell;
-                updateStock.SalePrice = sellChannelStock.SalePrice;
-                updateStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
-                updateStock.LockQuantity = sellChannelStock.LockQuantity;
-                updateStock.SellQuantity = sellChannelStock.SellQuantity;
-                updateStock.SumQuantity = sellChannelStock.SumQuantity;
+                var updaeStockSlot = new UpdateMachineStockSlotModel();
+                updaeStockSlot.SlotId = sellChannelStock.SlotId;
+                updaeStockSlot.ProductSkuId = sellChannelStock.PrdProductSkuId;
+                updaeStockSlot.IsOffSell = sellChannelStock.IsOffSell;
+                updaeStockSlot.SalePrice = sellChannelStock.SalePrice;
+                updaeStockSlot.SalePriceByVip = sellChannelStock.SalePriceByVip;
+                updaeStockSlot.LockQuantity = sellChannelStock.LockQuantity;
+                updaeStockSlot.SellQuantity = sellChannelStock.SellQuantity;
+                updaeStockSlot.SumQuantity = sellChannelStock.SumQuantity;
 
-                updaeStocks.Add(updateStock);
+                updaeStockSlots.Add(updaeStockSlot);
 
                 CurrentDb.SaveChanges();
 
@@ -287,7 +288,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendUpdateProductSkuStock(machineId, updaeStocks);
+                BizFactory.Machine.SendUpdateStockSlots(machineId, updaeStockSlots);
             }
 
             return result;

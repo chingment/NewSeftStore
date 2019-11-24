@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
             ret.Machine.CabinetRowColLayout_1 = machineInfo.CabinetRowColLayout_1;
 
-            ret.Banners = StoreTermServiceFactory.Machine.GetBanners(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
+            ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
             ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
 
@@ -105,23 +105,6 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             return dics;
-        }
-
-        public List<BannerModel> GetBanners(string merchId, string storeId, string machineId)
-        {
-            var bannerModels = new List<BannerModel>();
-
-            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == merchId && m.AdSpaceId == E_AdSpaceId.MachineHome && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == machineId).Select(m => m.AdContentId).ToArray();
-
-            var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
-
-
-            foreach (var item in adContents)
-            {
-                bannerModels.Add(new BannerModel { Url = item.Url });
-            }
-
-            return bannerModels;
         }
 
         public List<ProductKindModel> GetProductKinds(string merchId, string storeId, string machineId)

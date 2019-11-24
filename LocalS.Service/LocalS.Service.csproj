@@ -291,7 +291,6 @@
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />
     <Compile Include="Api\StoreTerm\MachineService.cs" />
-    <Compile Include="Api\StoreTerm\Models\BannerModel.cs" />
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductSkuModel.cs" />

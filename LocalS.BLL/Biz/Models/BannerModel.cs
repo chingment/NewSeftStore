@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.StoreTerm
+namespace LocalS.BLL.Biz
 {
     public class BannerModel
     {

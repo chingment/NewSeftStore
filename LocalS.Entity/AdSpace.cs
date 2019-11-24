@@ -5,18 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    
     public enum E_AdSpaceId
     {
         Unknow = 0,
-        MachineHome = 1,
-        AppHomeTop = 2
+        MachineHomeBanner = 100,
+        AppHomeTopBanner = 200
     }
     public enum E_AdSpaceBelongType
     {
 
         Unknow = 0,
-        App = 1,
-        Machine = 2
+        Machine = 1,
+        App = 2
     }
 
     [Table("AdSpace")]

@@ -68,11 +68,12 @@
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
+    <Compile Include="Biz\Models\BannerModel.cs" />
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
-    <Compile Include="Biz\Models\UpdateHomeBannerModel.cs" />
-    <Compile Include="Biz\Models\UpdateProductSkuStockModel.cs" />
+    <Compile Include="Biz\Models\UpdateMachineHomeBannerModel.cs" />
+    <Compile Include="Biz\Models\UpdateMachineStockSlotModel.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />
     <Compile Include="Biz\RModels\RetBackgroundJobGetDetails.cs" />

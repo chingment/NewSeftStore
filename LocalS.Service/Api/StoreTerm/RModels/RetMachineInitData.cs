@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using System;
 using System.Collections.Generic;
 using System.Linq;

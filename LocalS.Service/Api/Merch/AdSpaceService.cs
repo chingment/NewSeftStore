@@ -208,7 +208,13 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                
+                if (rop.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+                {
+                    foreach (var belongId in rop.BelongIds)
+                    {
+                        BizFactory.Machine.SendUpdateHomeBanners(belongId);
+                    }
+                }
             }
 
             return result;

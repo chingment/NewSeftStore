@@ -1,4 +1,5 @@
-﻿using MyPushSdk;
+﻿using LocalS.Entity;
+using MyPushSdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,26 +57,41 @@ namespace LocalS.BLL.Biz
             return model;
         }
 
-        public void SendUpdateProductSkuStock(string id, List<UpdateProductSkuStockModel> productSkus)
+
+        public List<BannerModel> GetHomeBanners(string id)
         {
-            if (productSkus != null && productSkus.Count > 0)
+            var bannerModels = new List<BannerModel>();
+
+            var machine = BizFactory.Machine.GetOne(id);
+
+            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == machine.MerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+
+            var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
+
+
+            foreach (var item in adContents)
+            {
+                bannerModels.Add(new BannerModel { Url = item.Url });
+            }
+
+            return bannerModels;
+        }
+
+        public void SendUpdateStockSlots(string id, List<UpdateMachineStockSlotModel> stockSlots)
+        {
+            if (stockSlots != null && stockSlots.Count > 0)
             {
                 var machine = BizFactory.Machine.GetOne(id);
-                PushService.SendUpdateProductSkuStock(machine.JPushRegId, productSkus);
+                PushService.SendUpdateStockSlots(machine.JPushRegId, stockSlots);
             }
         }
 
-        public void SendUpdateHomeBanner(string id)
+        public void SendUpdateHomeBanners(string id)
         {
-            //if (homeBanners != null && homeBanners.Count > 0)
-            //{
-            //    var machine = BizFactory.Machine.GetOne(id);
-            //    PushService.SendUpdateHomeBanner(machine.JPushRegId, homeBanners);
-            //}
+            var machine = BizFactory.Machine.GetOne(id);
+            var banners = BizFactory.Machine.GetHomeBanners(id);
+            PushService.SendUpdateHomeBanners(machine.JPushRegId, banners);
         }
-
-
-
 
         private static int[] GetLayout(string str)
         {
