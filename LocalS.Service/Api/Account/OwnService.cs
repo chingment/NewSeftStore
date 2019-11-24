@@ -353,21 +353,10 @@ namespace LocalS.Service.Api.Account
             ret.Email = sysUser.Email;
             ret.PhoneNumber = sysUser.PhoneNumber;
 
-            string path = rup.Path;
-            if (rup.Path == "/")
-            {
-                path = "/home";
-            }
-
             switch (rup.WebSite)
             {
                 case "admin":
                     ret.Menus = GetMenus(Enumeration.BelongSite.Admin, userId);
-                    var hasMenu = ret.Menus.Where(m => m.Path == path).FirstOrDefault();
-                    if (hasMenu == null)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "没有权限访问页面");
-                    }
                     break;
                 case "agent":
                     ret.Menus = GetMenus(Enumeration.BelongSite.Agent, userId);

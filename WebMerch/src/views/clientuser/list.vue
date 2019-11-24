@@ -6,7 +6,7 @@
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.userName" style="width: 100%" placeholder="用户名" va class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col :span="8" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>

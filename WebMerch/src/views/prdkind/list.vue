@@ -13,7 +13,7 @@
       @node-drop="sort"
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
-        <span>{{ node.label }} ({{ data.extAttr.productCount }})</span>
+        <span>{{ node.label }}   <span v-if="data.depth!=0"> ({{ data.extAttr.productCount }})</span> </span>
 
         <span>
           <el-button
