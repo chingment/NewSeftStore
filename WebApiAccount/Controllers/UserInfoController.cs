@@ -17,5 +17,12 @@ namespace WebApiAccount.Controllers
             IResult result = AccountServiceFactory.UserInfo.Save(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse ChangePassword([FromBody]RopUserInfoChangePassword rop)
+        {
+            IResult result = AccountServiceFactory.UserInfo.ChangePassword(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

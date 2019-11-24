@@ -244,7 +244,7 @@ namespace LocalS.Service.Api.Account
             {
                 RoleModel model = new RoleModel();
                 model.Id = role.Id;
-                model.Name = role.PId;
+                model.Name = role.Name;
 
                 models.Add(model);
             }
