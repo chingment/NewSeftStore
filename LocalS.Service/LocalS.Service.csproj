@@ -67,6 +67,7 @@
     <Compile Include="Api\Account\AccountServiceFactory.cs" />
     <Compile Include="Api\Account\HomeService.cs" />
     <Compile Include="Api\Account\LoginLogService.cs" />
+    <Compile Include="Api\Account\Models\RoleModel.cs" />
     <Compile Include="Api\Account\OwnService.cs" />
     <Compile Include="Api\Account\RModels\RetHomeGetIndexPageData.cs" />
     <Compile Include="Api\Account\RModels\RetOwnGetInfo.cs" />
@@ -338,7 +339,6 @@
     <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Api\Account\Models\" />
     <Folder Include="Api\Admin\Models\" />
   </ItemGroup>
   <ItemGroup>

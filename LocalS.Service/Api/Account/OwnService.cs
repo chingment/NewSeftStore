@@ -225,6 +225,33 @@ namespace LocalS.Service.Api.Account
 
         }
 
+
+        public List<RoleModel> GetRoles(Enumeration.BelongSite belongSite, string userId)
+        {
+            List<RoleModel> models = new List<RoleModel>();
+
+
+            var roleIds = CurrentDb.SysUserRole.Where(m => m.UserId == userId).Select(m => m.RoleId).ToArray();
+
+            if (roleIds == null || roleIds.Length == 0)
+            {
+                return models;
+            }
+
+            var roles = CurrentDb.SysRole.Where(m => belongSite == Enumeration.BelongSite.Merch && roleIds.Contains(m.Id)).ToList();
+
+            foreach (var role in roles)
+            {
+                RoleModel model = new RoleModel();
+                model.Id = role.Id;
+                model.Name = role.PId;
+
+                models.Add(model);
+            }
+
+            return models;
+
+        }
         //private List<TreeNode> GetMenuTree(string id, List<SysMenu> sysMenus)
         //{
         //    List<TreeNode> treeNodes = new List<TreeNode>();
@@ -357,15 +384,19 @@ namespace LocalS.Service.Api.Account
             {
                 case "admin":
                     ret.Menus = GetMenus(Enumeration.BelongSite.Admin, userId);
+                    ret.Roles = GetRoles(Enumeration.BelongSite.Admin, userId);
                     break;
                 case "agent":
                     ret.Menus = GetMenus(Enumeration.BelongSite.Agent, userId);
+                    ret.Roles = GetRoles(Enumeration.BelongSite.Agent, userId);
                     break;
                 case "account":
                     ret.Menus = GetMenus(Enumeration.BelongSite.Account, userId);
+                    ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
                     break;
                 case "merch":
                     ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId);
+                    ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
                     break;
             }
 
