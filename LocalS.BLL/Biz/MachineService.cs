@@ -82,7 +82,7 @@ namespace LocalS.BLL.Biz
             if (stockSlots != null && stockSlots.Count > 0)
             {
                 var machine = BizFactory.Machine.GetOne(id);
-                PushService.SendUpdateStockSlots(machine.JPushRegId, stockSlots);
+                PushService.SendUpdateMachineStockSlots(machine.JPushRegId, stockSlots);
             }
         }
 
@@ -90,7 +90,7 @@ namespace LocalS.BLL.Biz
         {
             var machine = BizFactory.Machine.GetOne(id);
             var banners = BizFactory.Machine.GetHomeBanners(id);
-            PushService.SendUpdateHomeBanners(machine.JPushRegId, banners);
+            PushService.SendUpdateMachineHomeBanners(machine.JPushRegId, banners);
         }
 
         private static int[] GetLayout(string str)

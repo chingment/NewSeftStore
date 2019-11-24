@@ -18,17 +18,24 @@ namespace MyPushSdk
             return result;
         }
 
-        public static CustomJsonResult SendUpdateStockSlots(string regId,object content)
+        public static CustomJsonResult SendUpdateMachineStockSlots(string regId,object content)
         {
             var result = new CustomJsonResult();
             pushService.Send(regId, "update:StockSlots", content);
             return result;
         }
 
-        public static CustomJsonResult SendUpdateHomeBanners(string regId, object content)
+        public static CustomJsonResult SendUpdateMachineHomeBanners(string regId, object content)
         {
             var result = new CustomJsonResult();
             pushService.Send(regId, "update:HomeBanners", content);
+            return result;
+        }
+
+        public static CustomJsonResult SendUpdateMachineHomeLogo(string regId, object content)
+        {
+            var result = new CustomJsonResult();
+            pushService.Send(regId, "update:HomeLogo", content);
             return result;
         }
 
