@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
-export function getInfo(token, website, path) {
+export function getInfo(token, website) {
   return request({
     url: '/own/getInfo',
     method: 'get',
-    params: { token, website, path }
+    params: { token, website }
   })
 }
 
-export function checkPermission(tpye, content) {
+export function checkPermission(website,tpye, content) {
   return request({
     url: '/own/checkPermission',
     method: 'get',
-    params: { tpye, content }
+    params: { website, tpye, content }
   })
 }
 

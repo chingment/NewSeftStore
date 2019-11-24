@@ -387,12 +387,47 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-        public CustomJsonResult CheckPermission(string operater, string userId, string token, RupOwnCheckPermission rop)
+        public CustomJsonResult CheckPermission(string operater, string userId, string token, RupOwnCheckPermission rup)
         {
             var result = new CustomJsonResult();
 
+            Enumeration.BelongSite webSite = Enumeration.BelongSite.Unknow;
+            switch (rup.WebSite)
+            {
+                case "admin":
+                    webSite = Enumeration.BelongSite.Admin;
+                    break;
+                case "agent":
+                    webSite = Enumeration.BelongSite.Agent;
+                    break;
+                case "account":
+                    webSite = Enumeration.BelongSite.Account;
+                    break;
+                case "merch":
+                    webSite = Enumeration.BelongSite.Merch;
+                    break;
+            }
+
             SSOUtil.Postpone(token);
 
+            switch (rup.Type)
+            {
+                case "1":
+                    string path = rup.Content;
+                    if (rup.Content == "/")
+                    {
+                        path = "/home";
+                    }
+
+                    var menus = GetMenus(webSite, userId);
+                    var hasMenu = menus.Where(m => m.Path == path).FirstOrDefault();
+                    if (hasMenu == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "没有权限访问页面");
+                    }
+
+                    break;
+            }
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "检查成功");
 
             return result;

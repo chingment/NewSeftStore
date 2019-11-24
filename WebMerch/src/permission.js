@@ -22,19 +22,21 @@ router.beforeEach(async(to, from, next) => {
     // console.log('token: ' + token)
     var path = encodeURIComponent(window.location.href)
     if (token) {
-      if (store.getters.userInfo == null) {
-        await store.dispatch('own/getInfo', to.path).then((res) => {
+      if (store.getters.userInfo == null) { 
+        await store.dispatch('own/getInfo').then((res) => {
+          next({ ...to, replace: true })
+        })
+      }
+      
+      await store.dispatch('own/checkPermission', '1', to.path).then((res) => {
           if (res.code === 2401) {
             next('/401')
           } else {
-            next({ ...to, replace: true })
+            next()
           }
-        })
-      } else {
-        await store.dispatch('own/checkPermission', '1', to.path).then((res) => {
-          next()
-        })
-      }
+      })
+      
+
       NProgress.done()
     } else {
       window.location.href = `${process.env.VUE_APP_LOGIN_URL}?logout=2&redirect=${path}`

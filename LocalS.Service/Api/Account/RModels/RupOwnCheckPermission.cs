@@ -8,6 +8,7 @@ namespace LocalS.Service.Api.Account
 {
     public class RupOwnCheckPermission
     {
+        public string WebSite { get; set; }
         public string Type { get; set; }
 
         public string Content { get; set; }

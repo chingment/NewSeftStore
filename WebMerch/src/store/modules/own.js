@@ -28,9 +28,9 @@ const actions = {
   },
 
   // get user info
-  getInfo({ commit, state }, path) {
+  getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token, 'merch', path).then(res => {
+      getInfo(state.token, 'merch').then(res => {
         // console.log(JSON.stringify(res))
         if (res.result === 1) {
           const d = res.data
@@ -65,7 +65,7 @@ const actions = {
   // checkperminssion
   checkPermission({ commit }, type, content) {
     return new Promise((resolve, reject) => {
-      checkPermission(type, content).then(response => {
+      checkPermission('merch',type, content).then(response => {
         resolve(response)
       }).catch(error => {
         reject(error)
