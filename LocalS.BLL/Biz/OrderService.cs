@@ -268,7 +268,7 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in detailsChild.SlotStock)
                             {
-                                BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderReserve, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserve, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
                             }
                         }
                     }
@@ -736,7 +736,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in childSons)
                 {
-                    BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                    BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
 
                 }
 
@@ -846,7 +846,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStock(operater, OperateStockType.OrderCancle, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
 
                     CurrentDb.SaveChanges();

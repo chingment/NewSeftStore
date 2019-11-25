@@ -11,19 +11,136 @@ using System.Transactions;
 namespace LocalS.BLL.Biz
 {
 
-    public enum OperateStockType
+    public enum OperateSlotType
     {
         Unknow = 0,
         MachineSlotRemove = 1,
-        MachineSlotSave = 2,
-        OrderReserve = 3,
-        OrderCancle = 4,
-        OrderPaySuccess = 5
+        MachineSlotSave = 2
+    }
+
+    public enum OperateStockType
+    {
+        Unknow = 0,
+        OrderReserve = 1,
+        OrderCancle = 2,
+        OrderPaySuccess = 3
     }
 
     public class ProductSkuService : BaseDbContext
     {
-        public CustomJsonResult OperateStock(string operater, OperateStockType type, string merchId, string storeId, string machineId, string slotId, string productSkuId, int quantity = 0)
+
+        private void SendUpdateProductSkuStock(string merchId, string storeId, string[] machineIds, string productSkuId)
+        {
+            if (machineIds != null)
+            {
+                foreach (var machineId in machineIds)
+                {
+                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, productSkuId);
+
+                    if (bizProductSku != null)
+                    {
+                        var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
+                        updateProdcutSkuStock.Id = bizProductSku.Id;
+                        updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                        updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                        updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                        updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
+                        updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                        updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                        BizFactory.Machine.SendUpdateProductSkuStock(machineId, updateProdcutSkuStock);
+                    }
+                }
+            }
+        }
+        public CustomJsonResult OperateSlot(string operater, OperateSlotType type, string merchId, string storeId, string machineId, string slotId, string productSkuId)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                if (type == OperateSlotType.MachineSlotRemove)
+                {
+                    #region MachineSlotRemove
+                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
+                    if (sellChannelStock != null)
+                    {
+                        CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                        CurrentDb.SaveChanges();
+                        ts.Complete();
+                    }
+
+                    var slot = new
+                    {
+                        Id = slotId,
+                        ProductSkuId = "",
+                        ProductSkuName = "暂无商品",
+                        ProductSkuMainImgUrl = "",
+                        SumQuantity = 0,
+                        LockQuantity = 0,
+                        SellQuantity = 0,
+                        MaxQuantity = 10
+                    };
+
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
+                    #endregion MachineSlotRemove
+                }
+                else if (type == OperateSlotType.MachineSlotSave)
+                {
+                    #region MachineSlotSave
+                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
+                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
+                    if (sellChannelStock == null)
+                    {
+                        var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+
+                        sellChannelStock = new SellChannelStock();
+                        sellChannelStock.Id = GuidUtil.New();
+                        sellChannelStock.MerchId = merchId;
+                        sellChannelStock.StoreId = storeId;
+                        sellChannelStock.RefType = E_SellChannelRefType.Machine;
+                        sellChannelStock.RefId = machineId;
+                        sellChannelStock.SlotId = slotId;
+                        sellChannelStock.PrdProductId = bizProductSku.ProductId;
+                        sellChannelStock.PrdProductSkuId = productSkuId;
+                        sellChannelStock.LockQuantity = 0;
+                        sellChannelStock.SumQuantity = 0;
+                        sellChannelStock.SellQuantity = 0;
+                        sellChannelStock.IsOffSell = false;
+                        sellChannelStock.SalePrice = productSku.SalePrice;
+                        sellChannelStock.SalePriceByVip = productSku.SalePrice;
+                        sellChannelStock.CreateTime = DateTime.Now;
+                        sellChannelStock.Creator = GuidUtil.Empty();
+                        CurrentDb.SellChannelStock.Add(sellChannelStock);
+                        CurrentDb.SaveChanges();
+                        ts.Complete();
+                    }
+
+                    var slot = new
+                    {
+                        Id = slotId,
+                        ProductSkuId = bizProductSku.Id,
+                        ProductSkuName = bizProductSku.Name,
+                        ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
+                        SumQuantity = 0,
+                        LockQuantity = 0,
+                        SellQuantity = 0,
+                        MaxQuantity = 10
+                    };
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
+                    #endregion
+                }
+                else
+                {
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未知操作类型");
+                }
+
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult OperateStockQuantity(string operater, OperateStockType type, string merchId, string storeId, string machineId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
 
@@ -33,82 +150,6 @@ namespace LocalS.BLL.Biz
                 SellChannelStockLog sellChannelStockLog = null;
                 switch (type)
                 {
-                    case OperateStockType.MachineSlotRemove:
-                        #region MachineSlotRemove
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
-                        if (sellChannelStock != null)
-                        {
-                            CurrentDb.SellChannelStock.Remove(sellChannelStock);
-                            CurrentDb.SaveChanges();
-                        }
-                        var slot = new
-                        {
-                            Id = slotId,
-                            ProductSkuId = "",
-                            ProductSkuName = "暂无商品",
-                            ProductSkuMainImgUrl = "",
-                            SumQuantity = 0,
-                            LockQuantity = 0,
-                            SellQuantity = 0,
-                            MaxQuantity = 10
-                        };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
-                        #endregion MachineSlotRemove
-                        break;
-                    case OperateStockType.MachineSlotSave:
-                        #region MachineSlotSave
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
-                        if (sellChannelStock == null)
-                        {
-                            var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
-
-                            var bizProdcutSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
-                            sellChannelStock = new SellChannelStock();
-                            sellChannelStock.Id = GuidUtil.New();
-                            sellChannelStock.MerchId = merchId;
-                            sellChannelStock.StoreId = storeId;
-                            sellChannelStock.RefType = E_SellChannelRefType.Machine;
-                            sellChannelStock.RefId = machineId;
-                            sellChannelStock.SlotId = slotId;
-                            sellChannelStock.PrdProductId = bizProdcutSku.ProductId;
-                            sellChannelStock.PrdProductSkuId = bizProdcutSku.Id;
-                            sellChannelStock.SumQuantity = quantity;
-                            sellChannelStock.SellQuantity = quantity;
-                            sellChannelStock.LockQuantity = 0;
-                            sellChannelStock.IsOffSell = false;
-                            sellChannelStock.SalePrice = productSku.SalePrice;
-                            sellChannelStock.SalePriceByVip = productSku.SalePrice;
-                            sellChannelStock.CreateTime = DateTime.Now;
-                            sellChannelStock.Creator = GuidUtil.Empty();
-                            CurrentDb.SellChannelStock.Add(sellChannelStock);
-                            CurrentDb.SaveChanges();
-                        }
-                        else
-                        {
-                            sellChannelStock.SumQuantity = quantity;
-                            sellChannelStock.SellQuantity = quantity - sellChannelStock.LockQuantity;
-                            sellChannelStock.Version += 1;
-                            CurrentDb.SaveChanges();
-                        }
-
-                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
-
-                        var slot2 = new
-                        {
-                            Id = slotId,
-                            ProductSkuId = bizProductSku.Id,
-                            ProductSkuName = bizProductSku.Name,
-                            ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
-                            SumQuantity = sellChannelStock.SumQuantity,
-                            LockQuantity = sellChannelStock.LockQuantity,
-                            SellQuantity = sellChannelStock.SellQuantity,
-                            MaxQuantity = 10
-                        };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot2);
-                        #endregion
-                        break;
                     case OperateStockType.OrderReserve:
                         #region OrderReserve
 
@@ -219,13 +260,16 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-
+                if (result.Result == ResultType.Success)
+                {
+                    SendUpdateProductSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
+                }
             }
 
             return result;
         }
 
-        public CustomJsonResult OperateStock(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int version, int sellQuantity, int lockQuantity)
+        public CustomJsonResult AdjustStockQuantity(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int version, int sellQuantity, int lockQuantity)
         {
             var result = new CustomJsonResult();
 
@@ -275,24 +319,41 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, productSkuId);
-
-                if (bizProductSku != null)
-                {
-                    var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
-                    updateProdcutSkuStock.Id = bizProductSku.Id;
-                    updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                    updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                    updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
-                    updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
-                    updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
-                    updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
-                    BizFactory.Machine.SendUpdateProductSkuStock(machineId, updateProdcutSkuStock);
-                }
+                SendUpdateProductSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
             }
 
             return result;
 
+        }
+
+        public CustomJsonResult AdjustStockSalePrice(string operater, string merchId, string storeId, string productSkuId, decimal salePrice, bool isOffSell)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.PrdProductSkuId == productSkuId).ToList();
+                var machineIds = sellChannelStocks.Where(m => m.RefType == E_SellChannelRefType.Machine).Select(m => m.RefId).Distinct().ToArray();
+                foreach (var sellChannelStock in sellChannelStocks)
+                {
+
+                    sellChannelStock.SalePrice = salePrice;
+                    sellChannelStock.IsOffSell = isOffSell;
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+                if (result.Result == ResultType.Success)
+                {
+                    SendUpdateProductSkuStock(merchId, storeId, machineIds, productSkuId);
+                }
+            }
+
+
+            return result;
         }
     }
 }

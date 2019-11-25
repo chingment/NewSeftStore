@@ -78,7 +78,7 @@ namespace LocalS.Service.Api.StoreTerm
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
 
-                var result = BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -93,7 +93,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.SumQuantity);
+                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -136,7 +136,7 @@ namespace LocalS.Service.Api.StoreTerm
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && !slotIds.Contains(m.SlotId)).ToList();
                 foreach (var sellChannelStock in sellChannelStocks)
                 {
-                    BizFactory.ProductSku.OperateStock(GuidUtil.New(), OperateStockType.MachineSlotRemove, sellChannelStock.MerchId, sellChannelStock.StoreId, rop.MachineId, sellChannelStock.SlotId, sellChannelStock.PrdProductSkuId);
+                    BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, sellChannelStock.MerchId, sellChannelStock.StoreId, rop.MachineId, sellChannelStock.SlotId, sellChannelStock.PrdProductSkuId);
                 }
 
                 CurrentDb.SaveChanges();

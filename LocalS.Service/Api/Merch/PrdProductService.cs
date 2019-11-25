@@ -467,28 +467,7 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult EditSalePriceOnStore(string operater, string merchId, RopPrdProductEditSalePriceOnStore rop)
         {
-            var result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == rop.ProductSkuId).ToList();
-
-                foreach (var sellChannelStock in sellChannelStocks)
-                {
-
-                    sellChannelStock.SalePrice = rop.ProductSkuSalePrice;
-                    sellChannelStock.IsOffSell = rop.ProductSkuIsOffSell;
-
-                }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
-
-
-            return result;
+            return BizFactory.ProductSku.AdjustStockSalePrice(operater, merchId, rop.StoreId, rop.ProductSkuId, rop.ProductSkuSalePrice, rop.ProductSkuIsOffSell);
         }
     }
 }

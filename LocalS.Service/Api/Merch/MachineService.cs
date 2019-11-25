@@ -244,7 +244,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.OperateStock(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SellQuantity, rop.LockQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SellQuantity, rop.LockQuantity);
 
             return result;
         }
