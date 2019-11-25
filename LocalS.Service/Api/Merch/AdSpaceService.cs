@@ -241,7 +241,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var adContentBelong in adContentBelongs)
                 {
-                    if (adContentBelong.BelongType == E_AdSpaceBelongType.Machine)
+                    if (adContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
                     {
                         BizFactory.Machine.SendUpdateHomeBanners(adContentBelong.BelongId);
                     }

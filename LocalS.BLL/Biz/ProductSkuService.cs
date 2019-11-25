@@ -275,8 +275,6 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-
-
                 var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, productSkuId);
 
                 if (bizProductSku != null)

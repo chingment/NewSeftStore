@@ -17,12 +17,12 @@ namespace MyPushSdk
         {
             var result = new CustomJsonResult();
 
-            if (!string.IsNullOrEmpty(registrationid))
+            if (string.IsNullOrEmpty(registrationid))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "registrationid 不能为空");
             }
 
-            if (!string.IsNullOrEmpty(cmd))
+            if (string.IsNullOrEmpty(cmd))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "cmd 不能为空");
             }
