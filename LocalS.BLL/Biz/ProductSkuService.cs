@@ -305,11 +305,11 @@ namespace LocalS.BLL.Biz
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+            }
 
-                if (result.Result == ResultType.Success)
-                {
-                    SendUpdateProductSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
-                }
+            if (result.Result == ResultType.Success)
+            {
+                SendUpdateProductSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
             }
 
             return result;
@@ -404,13 +404,12 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
-                if (result.Result == ResultType.Success)
-                {
-                    SendUpdateProductSkuStock(merchId, storeId, machineIds, productSkuId);
-                }
             }
 
+            if (result.Result == ResultType.Success)
+            {
+                SendUpdateProductSkuStock(merchId, storeId, machineIds, productSkuId);
+            }
 
             return result;
         }
