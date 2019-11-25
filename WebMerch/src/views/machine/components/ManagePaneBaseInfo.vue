@@ -8,6 +8,9 @@
       <el-form-item label="机器名称">
         {{ temp.name }}
       </el-form-item>
+      <el-form-item label="机器Logo">
+        <img :src="temp.logoImgUrl" class="singlepic-machine-banner">
+      </el-form-item>
       <el-form-item label="所属店铺">
         {{ temp.storeName }}
       </el-form-item>
@@ -31,6 +34,20 @@
       </el-form-item>
       <el-form-item label="机器名称" prop="name">
         <el-input v-model="form.name" />
+      </el-form-item>
+      <el-form-item label="机器Logo">
+
+        <el-upload
+          class="singlepic-uploader"
+          :action="uploadImgServiceUrl"
+          :show-file-list="false"
+          :on-success="uploadSuccessHandle"
+          :before-upload="uploadBeforeHandle"
+        >
+          <img v-if="form.logoImgUrl" :src="form.logoImgUrl" class="singlepic-machine-banner">
+          <i v-else class="el-icon-plus singlepic-uploader-icon singlepic-machine-banner" />
+        </el-upload>
+
       </el-form-item>
       <el-form-item label="所属店铺">
         {{ temp.storeName }}
@@ -56,6 +73,7 @@
 import { MessageBox } from 'element-ui'
 import { edit, initManageBaseInfo } from '@/api/machine'
 import { getUrlParam } from '@/utils/commonUtil'
+import { all } from 'q'
 
 export default {
   name: 'ManagePaneBaseInfo',
@@ -65,6 +83,7 @@ export default {
       loading: false,
       temp: {
         name: '',
+        logoImgUrl: '',
         status: {
           text: '',
           value: ''
@@ -105,9 +124,11 @@ export default {
           var d = res.data
           this.form.id = d.id
           this.form.name = d.name
+          this.form.logoImgUrl = d.logoImgUrl
 
           this.temp.id = d.id
           this.temp.name = d.name
+          this.temp.logoImgUrl = d.logoImgUrl
           this.temp.status = d.status
           this.temp.ctrlSdkVersion = d.ctrlSdkVersion
           this.temp.appVersion = d.appVersion
@@ -141,30 +162,24 @@ export default {
     cancleEdit() {
       this.isEdit = false
     },
-    getdisplayImgUrls(fileList) {
-      var _displayImgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
-        }
+    uploadBeforeHandle(file) {
+      var imgtype = file.name.toLowerCase().split('.')[1]
+
+      if (imgtype !== 'png' && imgtype !== 'jpeg' && imgtype !== 'jpg') {
+        this.$message.error('上传图片只能是 jpg,png 格式!')
+        return false
       }
-      return _displayImgUrls
+      const isLt4M = file.size / 1024 / 1024 < 4
+      if (!isLt4M) {
+        this.$message.error('上传图片大小不能超过 4MB!')
+        return false
+      }
+      return true
     },
-    handleRemove(file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handleSuccess(response, file, fileList) {
-      this.form.logoImgUrl = URL.createObjectURL(file.raw)
-    },
-    handleError(errs, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handlePreview(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
+    uploadSuccessHandle(response, file, fileList) {
+      this.form.logoImgUrl = response.data.url
     }
+
   }
 }
 </script>
@@ -175,14 +190,11 @@ export default {
   max-width: 600px;
 }
 
-.el-upload-list >>> .sortable-ghost {
-  opacity: .8;
-  color: #fff !important;
-  background: #42b983 !important;
-}
-
-.el-upload-list >>> .el-tag {
-  cursor: pointer;
+.singlepic-machine-banner{
+  width: 500px;
+  height: 47px;
+  line-height: 47px;
+  font-size: 16px;
 }
 }
 

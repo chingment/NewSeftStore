@@ -141,6 +141,7 @@ namespace LocalS.Service.Api.Merch
 
             ret.Id = merchMachine.MachineId;
             ret.Name = merchMachine.Name;
+            ret.LogoImgUrl = merchMachine.LogoImgUrl;
             ret.Status = GetStatus(merchMachine.CurUseStoreId, merchMachine.IsStopUse, machine.RunStatus, machine.LastRequestTime);
             ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
             ret.AppVersion = machine.AppVersion;
@@ -262,12 +263,19 @@ namespace LocalS.Service.Api.Merch
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.Id).FirstOrDefault();
                 merchMachine.Name = rop.Name;
+                merchMachine.LogoImgUrl = rop.LogoImgUrl;
                 merchMachine.MendTime = DateTime.Now;
                 merchMachine.Mender = operater;
                 CurrentDb.SaveChanges();
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
+
+            if (result.Result == ResultType.Success)
+            {
+                BizFactory.Machine.SendUpdateHomeLogo(rop.Id, rop.LogoImgUrl);
+            }
+
             return result;
         }
 

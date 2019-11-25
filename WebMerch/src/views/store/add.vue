@@ -14,12 +14,12 @@
           v-model="form.displayImgUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :on-preview="handlePreview"
+          :before-upload="uploadBeforeHandle"
+          :on-success="uploadSuccessHandle"
+          :on-remove="uploadRemoveHandle"
+          :on-error="uploadErrorHandle"
+          :on-preview="uploadPreviewHandle"
           :file-list="uploadImglist"
-          :limit="4"
         >
           <i class="el-icon-plus" />
         </el-upload>
@@ -44,6 +44,7 @@ import { MessageBox } from 'element-ui'
 import { add, initAdd } from '@/api/store'
 import { goBack } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
+import { all } from 'q'
 
 export default {
   data() {
@@ -62,6 +63,7 @@ export default {
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
       uploadImglist: [],
+      uploadImgMaxSize: 4,
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
@@ -79,6 +81,7 @@ export default {
       initAdd().then(res => {
         if (res.result === 1) {
           var d = res.data
+          this.uploadCardCheckShow()
         }
         this.loading = false
       })
@@ -113,19 +116,48 @@ export default {
       }
       return _displayImgUrls
     },
-    handleRemove(file, fileList) {
+    uploadBeforeHandle(file) {
+      if (this.form.displayImgUrls.length >= this.uploadImgMaxSize) {
+        this.$message.error('上传图片不能超过4张!')
+        return false
+      }
+
+      var imgtype = file.name.toLowerCase().split('.')[1]
+
+      if (imgtype !== 'png' && imgtype !== 'jpeg' && imgtype !== 'jpg') {
+        this.$message.error('上传图片只能是 jpg,png 格式!')
+        return false
+      }
+      const isLt4M = file.size / 1024 / 1024 < 4
+      if (!isLt4M) {
+        this.$message.error('上传图片大小不能超过 4MB!')
+        return false
+      }
+      return true
+    },
+    uploadCardCheckShow() {
+      var uploadcard = this.$refs.uploadImg.$el.querySelectorAll('.el-upload--picture-card')
+      if (this.form.displayImgUrls.length === this.uploadImgMaxSize) {
+        uploadcard[0].style.display = 'none'
+      } else {
+        uploadcard[0].style.display = 'inline-block'
+      }
+    },
+    uploadRemoveHandle(file, fileList) {
+      this.uploadImglist = fileList
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+      this.uploadCardCheckShow()
+    },
+    uploadSuccessHandle(response, file, fileList) {
+      this.uploadImglist = fileList
+      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+      this.uploadCardCheckShow()
+    },
+    uploadErrorHandle(errs, file, fileList) {
       this.uploadImglist = fileList
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
-    handleSuccess(response, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handleError(errs, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handlePreview(file) {
+    uploadPreviewHandle(file) {
       this.uploadImgPreImgDialogUrl = file.url
       this.uploadImgPreImgDialogVisible = true
     },

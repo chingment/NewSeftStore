@@ -10,6 +10,7 @@ namespace LocalS.Service.Api.Merch
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string LogoImgUrl { get; set; }
         public string LastRequestTime { get; set; }
         public StatusModel Status { get; set; }
         public string AppVersion { get; set; }

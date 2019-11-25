@@ -11,14 +11,14 @@ namespace MyPushSdk
     {
         private static IPushService pushService = new JgPushService();
 
-        public static CustomJsonResult Send(string regId,string cmd, object content)
+        public static CustomJsonResult Send(string regId, string cmd, object content)
         {
             var result = new CustomJsonResult();
             pushService.Send(regId, cmd, content);
             return result;
         }
 
-        public static CustomJsonResult SendUpdateMachineStockSlots(string regId,object content)
+        public static CustomJsonResult SendUpdateMachineStockSlots(string regId, object content)
         {
             var result = new CustomJsonResult();
             pushService.Send(regId, "update:StockSlots", content);
@@ -32,10 +32,11 @@ namespace MyPushSdk
             return result;
         }
 
-        public static CustomJsonResult SendUpdateMachineHomeLogo(string regId, object content)
+        public static CustomJsonResult SendUpdateMachineHomeLogo(string regId, string logoImgUrl)
         {
             var result = new CustomJsonResult();
-            pushService.Send(regId, "update:HomeLogo", content);
+            var date = new { url = logoImgUrl };
+            pushService.Send(regId, "update:HomeLogo", date);
             return result;
         }
 

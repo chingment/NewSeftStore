@@ -49,3 +49,28 @@
   text-align: center !important;
   padding: 0 !important;
 }
+
+
+.singlepic-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.singlepic-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.singlepic-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}

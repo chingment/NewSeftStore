@@ -93,6 +93,13 @@ namespace LocalS.BLL.Biz
             PushService.SendUpdateMachineHomeBanners(machine.JPushRegId, banners);
         }
 
+        public void SendUpdateHomeLogo(string id, string logoImgUrl)
+        {
+            var machine = BizFactory.Machine.GetOne(id);
+     
+            PushService.SendUpdateMachineHomeLogo(machine.JPushRegId, logoImgUrl);
+        }
+
         private static int[] GetLayout(string str)
         {
             int[] layout = null;
