@@ -154,7 +154,7 @@ namespace LocalS.Service.Api.Merch
                         {
                             storeName = store.Name;
                         }
-                        ret.Belongs.Add(new { Id = merchMachine.Id, Name = string.Format("[机器({0})]{1}", storeName, merchMachine.Name) });
+                        ret.Belongs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器({0})]{1}", storeName, merchMachine.Name) });
                     }
                 }
             }
@@ -172,6 +172,7 @@ namespace LocalS.Service.Api.Merch
             {
                 var adSpace = CurrentDb.AdSpace.Where(m => m.Id == rop.AdSpaceId).FirstOrDefault();
 
+                LogUtil.Info("adSpace.Id)" + adSpace.Id);
                 var adSpaceContent = new AdContent();
 
                 adSpaceContent.Id = GuidUtil.New();
@@ -185,8 +186,10 @@ namespace LocalS.Service.Api.Merch
                 adSpaceContent.CreateTime = DateTime.Now;
                 CurrentDb.AdContent.Add(adSpaceContent);
 
+
                 foreach (var belongId in rop.BelongIds)
                 {
+                    LogUtil.Info("belongId.Id)" + belongId);
                     var adSpaceContentBelong = new AdContentBelong();
                     adSpaceContentBelong.Id = GuidUtil.New();
                     adSpaceContentBelong.MerchId = adSpaceContent.MerchId;
@@ -232,7 +235,21 @@ namespace LocalS.Service.Api.Merch
                 adContent.Mender = operater;
                 adContent.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
+
+
+                var adContentBelongs = CurrentDb.AdContentBelong.Where(m => m.AdContentId == adContent.Id).ToList();
+
+                foreach (var adContentBelong in adContentBelongs)
+                {
+                    if (adContentBelong.BelongType == E_AdSpaceBelongType.Machine)
+                    {
+                        BizFactory.Machine.SendUpdateHomeBanners(adContentBelong.BelongId);
+                    }
+                }
+
             }
+
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
 
