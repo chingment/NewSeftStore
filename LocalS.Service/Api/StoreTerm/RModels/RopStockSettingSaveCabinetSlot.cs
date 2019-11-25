@@ -11,6 +11,8 @@ namespace LocalS.Service.Api.StoreTerm
         public string Id { get; set; }
         public string MachineId { get; set; }
         public string ProductSkuId { get; set; }
-        public int SumQuantity { get; set; }
+        public int LockQuantity { get; set; }
+        public int SellQuantity { get; set; }
+        public int Version { get; set; }
     }
 }

@@ -109,10 +109,14 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.IsOffSell = false;
                         sellChannelStock.SalePrice = productSku.SalePrice;
                         sellChannelStock.SalePriceByVip = productSku.SalePrice;
+                        sellChannelStock.Version = 0;
                         sellChannelStock.CreateTime = DateTime.Now;
                         sellChannelStock.Creator = GuidUtil.Empty();
                         CurrentDb.SellChannelStock.Add(sellChannelStock);
                         CurrentDb.SaveChanges();
+
+
+
                         ts.Complete();
                     }
 
@@ -122,9 +126,9 @@ namespace LocalS.BLL.Biz
                         ProductSkuId = bizProductSku.Id,
                         ProductSkuName = bizProductSku.Name,
                         ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
-                        SumQuantity = 0,
-                        LockQuantity = 0,
-                        SellQuantity = 0,
+                        SumQuantity = sellChannelStock.SumQuantity,
+                        LockQuantity = sellChannelStock.LockQuantity,
+                        SellQuantity = sellChannelStock.SellQuantity,
                         MaxQuantity = 10
                     };
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
@@ -307,7 +311,7 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.ChangeQuantity = 0;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
-                sellChannelStockLog.RemarkByDev = "调整库存";
+                sellChannelStockLog.RemarkByDev = "重新调整库存";
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 

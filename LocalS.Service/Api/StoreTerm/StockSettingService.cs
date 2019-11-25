@@ -61,6 +61,7 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.LockQuantity = item.LockQuantity;
                     slot.SellQuantity = item.SellQuantity;
                     slot.MaxQuantity = 10;
+                    slot.Version = item.Version;
                     ret.Slots.Add(item.SlotId, slot);
                 }
             }
@@ -98,6 +99,8 @@ namespace LocalS.Service.Api.StoreTerm
                 if (result.Result == ResultType.Success)
                 {
                     StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品成功");
+
+                    result = BizFactory.ProductSku.AdjustStockQuantity(GuidUtil.New(), machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.Version, rop.SellQuantity, rop.LockQuantity);
                 }
                 else
                 {
