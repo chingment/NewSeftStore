@@ -66,6 +66,26 @@ namespace LocalS.BLL.Biz
                     if (sellChannelStock != null)
                     {
                         CurrentDb.SellChannelStock.Remove(sellChannelStock);
+
+
+                        var sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                        sellChannelStockLog.RefId = sellChannelStock.RefId;
+                        sellChannelStockLog.RefType = sellChannelStock.RefType;
+                        sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
+                        sellChannelStockLog.ChangeQuantity = 0;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = "移除库存";
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+
                         CurrentDb.SaveChanges();
                         ts.Complete();
                     }
@@ -113,6 +133,27 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.CreateTime = DateTime.Now;
                         sellChannelStock.Creator = GuidUtil.Empty();
                         CurrentDb.SellChannelStock.Add(sellChannelStock);
+
+
+
+                        var sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                        sellChannelStockLog.RefId = sellChannelStock.RefId;
+                        sellChannelStockLog.RefType = sellChannelStock.RefType;
+                        sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotInit;
+                        sellChannelStockLog.ChangeQuantity = 0;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = "初次加载";
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+
                         CurrentDb.SaveChanges();
 
 
@@ -310,11 +351,11 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                 sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
                 sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.Adjust;
+                sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotEdit;
                 sellChannelStockLog.ChangeQuantity = 0;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
-                sellChannelStockLog.RemarkByDev = "重新调整库存";
+                sellChannelStockLog.RemarkByDev = "库存调整";
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                 CurrentDb.SaveChanges();
                 ts.Complete();
