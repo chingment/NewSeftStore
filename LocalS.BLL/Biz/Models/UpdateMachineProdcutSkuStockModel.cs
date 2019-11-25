@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class UpdateMachineStockSlotModel
+    public class UpdateMachineProdcutSkuStockModel
     {
-        public string SlotId { get; set; }
-        public string ProductSkuId { get; set; }
+        public string Id { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }
         public bool IsOffSell { get; set; }

@@ -1,4 +1,5 @@
 ﻿using LocalS.Entity;
+using Lumos;
 using MyPushSdk;
 using System;
 using System.Collections.Generic;
@@ -64,25 +65,30 @@ namespace LocalS.BLL.Biz
 
             var machine = BizFactory.Machine.GetOne(id);
 
+            LogUtil.Info("MerchId：" + machine.MerchId);
+            LogUtil.Info("BelongId：" + id);
             var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == machine.MerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
 
-            var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
-
-
-            foreach (var item in adContents)
+            if (adContentIds != null && adContentIds.Length > 0)
             {
-                bannerModels.Add(new BannerModel { Url = item.Url });
+                var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
+
+
+                foreach (var item in adContents)
+                {
+                    bannerModels.Add(new BannerModel { Url = item.Url });
+                }
             }
 
             return bannerModels;
         }
 
-        public void SendUpdateStockSlots(string id, List<UpdateMachineStockSlotModel> stockSlots)
+        public void SendUpdateProductSkuStock(string id, UpdateMachineProdcutSkuStockModel updateProdcutSkuStock)
         {
-            if (stockSlots != null && stockSlots.Count > 0)
+            if (updateProdcutSkuStock != null)
             {
                 var machine = BizFactory.Machine.GetOne(id);
-                PushService.SendUpdateMachineStockSlots(machine.JPushRegId, stockSlots);
+                PushService.SendUpdateProductSkuStock(machine.JPushRegId, updateProdcutSkuStock);
             }
         }
 
@@ -96,7 +102,7 @@ namespace LocalS.BLL.Biz
         public void SendUpdateHomeLogo(string id, string logoImgUrl)
         {
             var machine = BizFactory.Machine.GetOne(id);
-     
+
             PushService.SendUpdateMachineHomeLogo(machine.JPushRegId, logoImgUrl);
         }
 

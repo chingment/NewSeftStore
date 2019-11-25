@@ -13,10 +13,25 @@ namespace MyPushSdk
     {
         private static JPushClient client = new JPushClient("47571aa2482f3b9e2af243a9", "8b0ea490c90fddbf64e0fb9f");
 
-        public CustomJsonResult Send(string registrationid,string cmd, object content)
+        public CustomJsonResult Send(string registrationid, string cmd, object content)
         {
             var result = new CustomJsonResult();
 
+            if (!string.IsNullOrEmpty(registrationid))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "registrationid 不能为空");
+            }
+
+            if (!string.IsNullOrEmpty(cmd))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "cmd 不能为空");
+            }
+
+
+            if (content == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "content 不能为空");
+            }
 
             Dictionary<String, Object> audience = new Dictionary<string, object>();
             List<string> registration_id = new List<string>();

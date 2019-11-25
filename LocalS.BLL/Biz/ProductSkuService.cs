@@ -229,8 +229,6 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
-            List<UpdateMachineStockSlotModel> updaeStockSlots = new List<UpdateMachineStockSlotModel>();
-
             using (TransactionScope ts = new TransactionScope())
             {
 
@@ -268,17 +266,6 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.RemarkByDev = "调整库存";
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                var updaeStockSlot = new UpdateMachineStockSlotModel();
-                updaeStockSlot.SlotId = sellChannelStock.SlotId;
-                updaeStockSlot.ProductSkuId = sellChannelStock.PrdProductSkuId;
-                updaeStockSlot.IsOffSell = sellChannelStock.IsOffSell;
-                updaeStockSlot.SalePrice = sellChannelStock.SalePrice;
-                updaeStockSlot.SalePriceByVip = sellChannelStock.SalePriceByVip;
-                updaeStockSlot.LockQuantity = sellChannelStock.LockQuantity;
-                updaeStockSlot.SellQuantity = sellChannelStock.SellQuantity;
-                updaeStockSlot.SumQuantity = sellChannelStock.SumQuantity;
-
-                updaeStockSlots.Add(updaeStockSlot);
 
                 CurrentDb.SaveChanges();
 
@@ -288,7 +275,22 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendUpdateStockSlots(machineId, updaeStockSlots);
+
+
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, productSkuId);
+
+                if (bizProductSku != null)
+                {
+                    var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
+                    updateProdcutSkuStock.Id = bizProductSku.Id;
+                    updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                    updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                    updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                    updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
+                    updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                    updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                    BizFactory.Machine.SendUpdateProductSkuStock(machineId, updateProdcutSkuStock);
+                }
             }
 
             return result;

@@ -18,10 +18,10 @@ namespace MyPushSdk
             return result;
         }
 
-        public static CustomJsonResult SendUpdateMachineStockSlots(string regId, object content)
+        public static CustomJsonResult SendUpdateProductSkuStock(string regId, object content)
         {
             var result = new CustomJsonResult();
-            pushService.Send(regId, "update:StockSlots", content);
+            pushService.Send(regId, "update:ProductSkuStock", content);
             return result;
         }
 
