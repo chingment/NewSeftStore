@@ -60,6 +60,7 @@ namespace MyPushSdk
 
             var response = client.SendPush(pushPayload);
 
+            //todo 查询 var response = client.Report.GetMessageSendStatus() 推送状态
             return result;
         }
     }
