@@ -129,7 +129,8 @@ namespace LocalS.BLL.Biz
                         SumQuantity = sellChannelStock.SumQuantity,
                         LockQuantity = sellChannelStock.LockQuantity,
                         SellQuantity = sellChannelStock.SellQuantity,
-                        MaxQuantity = 10
+                        MaxQuantity = 10,
+                        Version = sellChannelStock.Version
                     };
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
                     #endregion
@@ -291,6 +292,8 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，数据已经被更改，请刷新页面再尝试");
                 }
 
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
+
                 sellChannelStock.LockQuantity = lockQuantity;
                 sellChannelStock.SellQuantity = sellQuantity;
                 sellChannelStock.SumQuantity = sellQuantity + lockQuantity;
@@ -313,12 +316,23 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.CreateTime = DateTime.Now;
                 sellChannelStockLog.RemarkByDev = "重新调整库存";
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-
-
                 CurrentDb.SaveChanges();
-
                 ts.Complete();
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+
+                var slot = new
+                {
+                    Id = slotId,
+                    ProductSkuId = bizProductSku.Id,
+                    ProductSkuName = bizProductSku.Name,
+                    ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
+                    SumQuantity = sellChannelStock.SumQuantity,
+                    LockQuantity = sellChannelStock.LockQuantity,
+                    SellQuantity = sellChannelStock.SellQuantity,
+                    MaxQuantity = 10,
+                    Version = sellChannelStock.Version
+                };
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
             }
 
             if (result.Result == ResultType.Success)
