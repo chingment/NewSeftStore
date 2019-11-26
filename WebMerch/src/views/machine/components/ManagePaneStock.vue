@@ -111,13 +111,13 @@
             可售库存"
           prop="sellQuantity"
         >
-          <el-input-number v-model="form.sellQuantity" :min="0" :max="20" style="width:160px" @change="sellQuantityChange" />
+          <el-input-number v-model="form.sellQuantity" :disabled="true" :min="0" :max="20" style="width:160px" />
         </el-form-item>
         <el-form-item label="锁定库存" prop="lockQuantity">
-          <el-input-number v-model="form.lockQuantity" :min="0" :max="20" style="width:160px" @change="lockQuantityChange" />
+          <el-input-number v-model="form.lockQuantity" :disabled="true" :min="0" :max="20" style="width:160px" />
         </el-form-item>
         <el-form-item label="总库存">
-          <el-input-number v-model="form.sumQuantity" :disabled="true" :min="0" :max="20" style="width:160px" />
+          <el-input-number v-model="form.sumQuantity" :min="0" :max="20" style="width:160px" @change="sumQuantityChange" />
         </el-form-item>
         <el-form-item v-show="false" label="销售价" prop="salePrice">
           <el-input v-model="form.salePrice" style="width:160px" class="ip-prepend">
@@ -295,11 +295,8 @@ export default {
         }
       })
     },
-    sellQuantityChange(currentValue, oldValue) {
-      this.form.sumQuantity = currentValue - this.form.lockQuantity
-    },
-    lockQuantityChange(currentValue, oldValue) {
-      this.form.sumQuantity = currentValue + this.form.sellQuantity
+    sumQuantityChange(currentValue, oldValue) {
+      this.form.sellQuantity = currentValue - this.form.lockQuantity
     }
   }
 }

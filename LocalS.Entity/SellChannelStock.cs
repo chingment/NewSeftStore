@@ -19,6 +19,7 @@ namespace LocalS.Entity
         public int SumQuantity { get; set; }
         public int LockQuantity { get; set; }
         public int SellQuantity { get; set; }
+        public int MaxLimitSumQuantity { get; set; }
         public bool IsOffSell { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }
