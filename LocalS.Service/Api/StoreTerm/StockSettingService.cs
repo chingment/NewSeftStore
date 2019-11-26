@@ -124,29 +124,67 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
+            if (rop.CabinetRowColLayout == null || rop.CabinetRowColLayout.Length == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道结果为空，上传失败");
+            }
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 
-                machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
-
-                int rowLength = rop.CabinetRowColLayout.Length;
-
-                List<string> slotIds = new List<string>();
-                for (int i = 0; i < rowLength; i++)
+                if (string.IsNullOrEmpty(machine.CabinetRowColLayout_1))
                 {
-                    int colLength = rop.CabinetRowColLayout[i];
-
-                    for (var j = 0; j < colLength; j++)
-                    {
-                        slotIds.Add(string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j));
-                    }
+                    machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
                 }
-
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId && !slotIds.Contains(m.SlotId)).ToList();
-                foreach (var sellChannelStock in sellChannelStocks)
+                else
                 {
-                    BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, sellChannelStock.MerchId, sellChannelStock.StoreId, rop.MachineId, sellChannelStock.SlotId, sellChannelStock.PrdProductSkuId);
+
+                    List<string> slotIds = new List<string>();
+                    for (int i = 0; i < rop.CabinetRowColLayout.Length; i++)
+                    {
+                        int colLength = rop.CabinetRowColLayout[i];
+
+                        for (var j = 0; j < colLength; j++)
+                        {
+                            slotIds.Add(string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j));
+                        }
+                    }
+
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId).ToList();
+
+                    var oldCabinetRowColLayout = machine.CabinetRowColLayout_1.Split(',');
+
+                    for (int i = 0; i < oldCabinetRowColLayout.Length; i++)
+                    {
+                        int colLength = int.Parse(oldCabinetRowColLayout[i]);
+
+                        for (var j = 0; j < colLength; j++)
+                        {
+                            string slotId = string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j);
+
+                            var sellChannelStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
+                            if (sellChannelStock != null)
+                            {
+                                if (sellChannelStock.LockQuantity > 0)
+                                {
+                                    if (!slotIds.Contains(slotId))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道存在有上传失败");
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
+
+                    var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
+                    foreach (var removeSellChannelStock in removeSellChannelStocks)
+                    {
+                        BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+                    }
+
                 }
 
                 CurrentDb.SaveChanges();
