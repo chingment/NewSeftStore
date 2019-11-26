@@ -16,8 +16,8 @@ namespace LocalS.BLL.Biz
         public string MerchId { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
-        public string[] MachineIds { get; set; }
-
+        public string[] AllMachineIds { get; set; }
+        public string[] SellMachineIds { get; set; }
         public string BriefDes { get; set; }
 
         public bool IsOpen { get; set; }

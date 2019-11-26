@@ -43,6 +43,22 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "店铺已暂停营业", null);
                 }
 
+                List<string> machineIdsByValid = new List<string>();
+
+                foreach (var sellChannelRefId in rop.SellChannelRefIds)
+                {
+                    var machine = BizFactory.Machine.GetOne(sellChannelRefId);
+                    if (machine.RunStatus == E_MachineRunStatus.Running)
+                    {
+                        machineIdsByValid.Add(machine.Id);
+                    }
+                }
+
+                if (machineIdsByValid.Count == 0)
+                {
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "该店铺未配置售货机", null);
+                }
+
                 using (TransactionScope ts = new TransactionScope())
                 {
                     RetOrderReserve ret = new RetOrderReserve();
@@ -54,7 +70,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.StoreId, rop.SellChannelRefIds, productSku.Id);
+                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.StoreId, machineIdsByValid.ToArray(), productSku.Id);
 
                         if (bizProductSku == null)
                         {

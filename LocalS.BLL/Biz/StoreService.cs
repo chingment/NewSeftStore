@@ -19,6 +19,8 @@ namespace LocalS.BLL.Biz
             if (store == null)
                 return null;
 
+            var merchMachines = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == id).ToList();
+
             model.Id = store.Id;
             model.Name = store.Name;
             model.MerchId = store.MerchId;
@@ -29,7 +31,8 @@ namespace LocalS.BLL.Biz
             model.Lat = store.Lat;
             model.IsOpen = store.IsOpen;
             model.IsDelete = store.IsDelete;
-            model.MachineIds = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == id).Select(m => m.MachineId).ToArray();
+            model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();
+            model.SellMachineIds = merchMachines.Where(m => m.IsStopUse == false).Select(m => m.MachineId).ToArray();
             return model;
         }
 
@@ -43,6 +46,7 @@ namespace LocalS.BLL.Biz
 
             foreach (var store in stores)
             {
+                var merchMachines = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == store.Id).ToList();
                 var model = new StoreInfoModel();
                 model.Id = store.Id;
                 model.Name = store.Name;
@@ -54,7 +58,8 @@ namespace LocalS.BLL.Biz
                 model.Lat = store.Lat;
                 model.IsOpen = store.IsOpen;
                 model.IsDelete = store.IsDelete;
-                model.MachineIds = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == store.Id).Select(m => m.MachineId).ToArray();
+                model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();
+                model.SellMachineIds = merchMachines.Where(m => m.IsStopUse == false).Select(m => m.MachineId).ToArray();
                 models.Add(model);
 
             }

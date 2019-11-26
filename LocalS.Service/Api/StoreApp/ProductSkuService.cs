@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from m in CurrentDb.SellChannelStock
                          where m.MerchId == store.MerchId
-                         && store.MachineIds.Contains(m.RefId)
+                         && store.SellMachineIds.Contains(m.RefId)
                          && m.RefType == Entity.E_SellChannelRefType.Machine
                          select new { m.PrdProductId, m.PrdProductSkuId }).Distinct();
 
@@ -61,7 +61,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.MachineIds, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.SellMachineIds, item.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
@@ -96,7 +96,7 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
-            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.MachineIds, rup.SkuId);
+            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
             if (bizProductSku != null)
             {
                 var productSkuModel = new ProductSkuModel();

@@ -15,10 +15,11 @@
           ref="username"
           v-model="loginForm.username"
           placeholder="账号"
+          clearable
+          auto-complete="new-accounts"
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
         />
       </el-form-item>
 
@@ -34,7 +35,8 @@
           placeholder="密码"
           name="password"
           tabindex="2"
-          auto-complete="on"
+          clearable
+          auto-complete="new-password"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
@@ -68,8 +70,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'mtest',
-        password: '123456',
+        username: '',
+        password: '',
         loginWay: 1
       },
       loginRules: {

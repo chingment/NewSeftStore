@@ -55,7 +55,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
-            bizRop.SellChannelRefIds = store.MachineIds;//不指定机器
+            bizRop.SellChannelRefIds = store.SellMachineIds;//不指定机器
 
             //todo 判断机器状态 才能下单
 
@@ -110,7 +110,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in rop.ProductSkus)
                 {
-                    var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.MachineIds, item.Id);
+                    var productSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.SellMachineIds, item.Id);
                     if (productSku != null)
                     {
                         item.Name = productSku.Name;

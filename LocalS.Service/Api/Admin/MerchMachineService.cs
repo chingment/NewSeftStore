@@ -100,14 +100,14 @@ namespace LocalS.Service.Api.Admin
                     merchMachine.MerchId = rop.MerchId;
                     merchMachine.MachineId = rop.MachineId;
                     merchMachine.LogoImgUrl = null;
-                    merchMachine.IsStopUse = true;
+                    merchMachine.IsStopUse = false;
                     merchMachine.CreateTime = DateTime.Now;
                     merchMachine.Creator = operater;
                     CurrentDb.MerchMachine.Add(merchMachine);
                 }
                 else
                 {
-                    merchMachine.IsStopUse = true;
+                    merchMachine.IsStopUse = false;
                     merchMachine.Mender = operater;
                     merchMachine.MendTime = DateTime.Now;
                 }
