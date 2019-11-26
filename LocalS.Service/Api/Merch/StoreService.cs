@@ -266,6 +266,18 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.Mender = operater;
                 merchMachine.MendTime = DateTime.Now;
 
+
+                var machineBindLog = new MachineBindLog();
+                machineBindLog.Id = GuidUtil.New();
+                machineBindLog.MachineId = rop.MachineId;
+                machineBindLog.MerchId = merchId;
+                machineBindLog.StoreId = rop.StoreId;
+                machineBindLog.BindType = E_MachineBindType.BindOnStore;
+                machineBindLog.CreateTime = DateTime.Now;
+                machineBindLog.Creator = operater;
+                machineBindLog.RemarkByDev = "绑定店铺";
+                CurrentDb.MachineBindLog.Add(machineBindLog);
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
@@ -301,6 +313,18 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被移除");
                 }
 
+                var machineBindLog = new MachineBindLog();
+                machineBindLog.Id = GuidUtil.New();
+                machineBindLog.MachineId = rop.MachineId;
+                machineBindLog.MerchId = machine.CurUseMerchId;
+                machineBindLog.StoreId = machine.CurUseStoreId;
+                machineBindLog.BindType = E_MachineBindType.BindOffStore;
+                machineBindLog.CreateTime = DateTime.Now;
+                machineBindLog.Creator = operater;
+                machineBindLog.RemarkByDev = "解绑店铺";
+                CurrentDb.MachineBindLog.Add(machineBindLog);
+
+
                 machine.CurUseStoreId = null;
                 machine.Mender = operater;
                 machine.MendTime = DateTime.Now;
@@ -308,6 +332,8 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.CurUseStoreId = null;
                 merchMachine.Mender = operater;
                 merchMachine.MendTime = DateTime.Now;
+
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

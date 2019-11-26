@@ -255,24 +255,24 @@ namespace LocalS.Service.Api.StoreTerm
 
                 var machine = BizFactory.Machine.GetOne(machineId);
 
-                var machineLog = new MachineLog();
-                machineLog.Id = GuidUtil.New();
+                var machineOperateLog = new MachineOperateLog();
+                machineOperateLog.Id = GuidUtil.New();
 
                 if (machine != null)
                 {
-                    machineLog.MerchId = machine.MerchId;
-                    machineLog.StoreId = machine.StoreId;
+                    machineOperateLog.MerchId = machine.MerchId;
+                    machineOperateLog.StoreId = machine.StoreId;
                 }
 
-                machineLog.MachineId = machineId;
-                machineLog.OperaterUserId = operater;
-                machineLog.Action = action;
-                machineLog.Remark = remark;
-                machineLog.Creator = operater;
-                machineLog.CreateTime = DateTime.Now;
+                machineOperateLog.MachineId = machineId;
+                machineOperateLog.OperaterUserId = operater;
+                machineOperateLog.Action = action;
+                machineOperateLog.Remark = remark;
+                machineOperateLog.Creator = operater;
+                machineOperateLog.CreateTime = DateTime.Now;
 
 
-                CurrentDb.MachineLog.Add(machineLog);
+                CurrentDb.MachineOperateLog.Add(machineOperateLog);
                 CurrentDb.SaveChanges();
 
                 return true;

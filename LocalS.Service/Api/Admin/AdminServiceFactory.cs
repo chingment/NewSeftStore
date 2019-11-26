@@ -55,5 +55,13 @@ namespace LocalS.Service.Api.Admin
                 return new MerchMasterService();
             }
         }
+
+        public static MerchMachineService MerchMachine
+        {
+            get
+            {
+                return new MerchMachineService();
+            }
+        }
     }
 }

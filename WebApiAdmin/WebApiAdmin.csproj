@@ -150,6 +150,7 @@
     <Compile Include="Controllers\AgentMasterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
+    <Compile Include="Controllers\MerchMachineController.cs" />
     <Compile Include="Controllers\MerchMasterController.cs" />
     <Compile Include="Controllers\MerchMenuController.cs" />
     <Compile Include="Controllers\MerchRoleController.cs" />

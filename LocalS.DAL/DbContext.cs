@@ -48,7 +48,8 @@ namespace LocalS.DAL
         public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
         public IDbSet<Term> Term { get; set; }
         public IDbSet<Machine> Machine { get; set; }
-        public IDbSet<MachineLog> MachineLog { get; set; }
+        public IDbSet<MachineOperateLog> MachineOperateLog { get; set; }
+        public IDbSet<MachineBindLog> MachineBindLog { get; set; }
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
         public IDbSet<RptOrder> RptOrder { get; set; }
         public IDbSet<RptOrderDetails> RptOrderDetails { get; set; }

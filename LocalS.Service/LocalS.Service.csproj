@@ -83,12 +83,16 @@
     <Compile Include="Api\Account\RModels\RupOwnGetInfo.cs" />
     <Compile Include="Api\Account\UserInfoService.cs" />
     <Compile Include="Api\Admin\AdminOrgService.cs" />
+    <Compile Include="Api\Admin\MerchMachineService.cs" />
     <Compile Include="Api\Admin\RModels\RetSysMenuInitAdd.cs" />
     <Compile Include="Api\Admin\RModels\RetSysMenuInitEdit.cs" />
+    <Compile Include="Api\Admin\RModels\RopMerchMachineBindOffMerch.cs" />
+    <Compile Include="Api\Admin\RModels\RopMerchMachineBindOnMerch.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuAdd.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuSort.cs" />
     <Compile Include="Api\Admin\RModels\RopAdminOrgSort.cs" />
+    <Compile Include="Api\Admin\RModels\RupMerchMachineGetList.cs" />
     <Compile Include="Api\Admin\RModels\RupSysMenuGetList.cs" />
     <Compile Include="Api\Admin\SysMenuService.cs" />
     <Compile Include="Api\Admin\SysRoleService.cs" />

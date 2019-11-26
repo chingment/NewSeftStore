@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("MachineLog")]
-    public class MachineLog
+    [Table("MachineOperateLog")]
+    public class MachineOperateLog
     {
         [Key]
         public string Id { get; set; }
