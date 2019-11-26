@@ -389,10 +389,12 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
+            string[] machineIds = null;
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.PrdProductSkuId == productSkuId).ToList();
-                var machineIds = sellChannelStocks.Where(m => m.RefType == E_SellChannelRefType.Machine).Select(m => m.RefId).Distinct().ToArray();
+                machineIds = sellChannelStocks.Where(m => m.RefType == E_SellChannelRefType.Machine).Select(m => m.RefId).Distinct().ToArray();
                 foreach (var sellChannelStock in sellChannelStocks)
                 {
 
