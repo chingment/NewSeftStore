@@ -13,12 +13,29 @@ namespace LocalS.Service.Api.Admin
 {
     public class MerchMachineService : BaseDbContext
     {
+        public CustomJsonResult InitGetList(string operater)
+        {
+            var result = new CustomJsonResult();
+
+            var merchs = CurrentDb.Merch.ToList();
+
+            List<object> formSelectMerchs = new List<object>();
+            foreach (var merch in merchs)
+            {
+                formSelectMerchs.Add(new { value = merch.Id, label = merch.Name });
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { formSelectMerchs = formSelectMerchs });
+
+            return result;
+        }
+
         public CustomJsonResult GetList(string operater, RupMerchMachineGetList rup)
         {
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.Machine
-                         where (rup.Id == null || u.Id.Contains(rup.Id))
+                         where (rup.Id == null || u.Id == rup.Id)
                          select new { u.Id, u.Name, u.CreateTime });
 
 
@@ -40,7 +57,7 @@ namespace LocalS.Service.Api.Admin
                     Id = item.Id,
                     Name = item.Name,
                     MerchId = machine.MerchId,
-                    MerchName = machine.MerchName,
+                    MerchName = string.IsNullOrEmpty(machine.MerchId) == true ? "未绑定商户" : machine.MerchName,
                     CtrlSdkVersion = machine.CtrlSdkVersion,
                     AppVersion = machine.AppVersion,
                     JPushRegId = machine.JPushRegId,
@@ -114,7 +131,7 @@ namespace LocalS.Service.Api.Admin
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
             }
             return result;
         }
