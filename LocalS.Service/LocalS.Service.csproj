@@ -313,6 +313,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogAction.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogout.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupStockSettingCheckIsCanScanSlot.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />

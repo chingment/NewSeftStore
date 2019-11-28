@@ -21,5 +21,10 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+
+        public string AppId { get; set; }
+        public string VersionName { get; set; }
+        public string VersionCode { get; set; }
+        public string ApkDownUrl { get; set; }
     }
 }

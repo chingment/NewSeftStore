@@ -54,7 +54,7 @@ namespace WebApiStoreTerm.Controllers
             if (request.Headers["data_head"] != null)
             {
                 string data_head = System.Web.HttpUtility.UrlDecode(request.Headers["data_head"].ToString());
-                LogUtil.Info("data_head:"+ data_head);
+                LogUtil.Info("data_head:" + data_head);
 
                 rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(data_head);
             }
@@ -69,6 +69,13 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public OwnApiHttpResponse CheckUpdate(RupMachineCheckUpdate rup)
+        {
+            IResult result = StoreTermServiceFactory.Machine.CheckUpdate(rup);
+            return new OwnApiHttpResponse(result);
+        }
         //[HttpPost]
         //[AllowAnonymous]
         //public OwnApiHttpResponse UpLoadLog()

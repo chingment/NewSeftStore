@@ -29,6 +29,7 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 machine = new Machine();
                 machine.Id = rop.MachineId;
+                machine.Name = rop.MachineId;//默认名称为机器ID
                 machine.JPushRegId = rop.JPushRegId;
                 machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
@@ -249,6 +250,32 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
+
+        public CustomJsonResult CheckUpdate(RupMachineCheckUpdate rup)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            var term = CurrentDb.Term.Where(m => m.AppId == rup.AppId).FirstOrDefault();
+            if (term == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+            }
+
+            if (string.IsNullOrEmpty(term.VersionName))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+            }
+
+            if (string.IsNullOrEmpty(term.ApkDownUrl))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+            }
+
+            var model = new { versionCode = term.VersionCode, versionName = term.VersionName, apkDownUrl = term.ApkDownUrl };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
+        }
+
         public Task<bool> LogAction(string operater, string machineId, string action, string remark)
         {
             var task = Task.Run(() =>
@@ -290,7 +317,7 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     foreach (var pa in rop.appActions)
                     {
-                        var appTraceLog = new AppTraceLog(); 
+                        var appTraceLog = new AppTraceLog();
                         appTraceLog.Id = GuidUtil.New();
                         appTraceLog.AppTraceType = E_AppTraceType.Action;
                         appTraceLog.AppId = rop.device.appinfo.appId;
