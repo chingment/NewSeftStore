@@ -27,7 +27,8 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (machine == null)
             {
-                machine.Id = GuidUtil.New();
+                machine = new Machine();
+                machine.Id = rop.MachineId;
                 machine.JPushRegId = rop.JPushRegId;
                 machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
