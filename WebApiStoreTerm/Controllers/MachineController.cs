@@ -47,7 +47,7 @@ namespace WebApiStoreTerm.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public OwnApiHttpResponse UpLoadTraceLog(RopAppTraceLog rop)
+        public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
         {
             var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
 
@@ -71,7 +71,7 @@ namespace WebApiStoreTerm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public OwnApiHttpResponse CheckUpdate(RupMachineCheckUpdate rup)
+        public OwnApiHttpResponse CheckUpdate([FromUri]RupMachineCheckUpdate rup)
         {
             IResult result = StoreTermServiceFactory.Machine.CheckUpdate(rup);
             return new OwnApiHttpResponse(result);

@@ -10,5 +10,7 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string AppId { get; set; }
 
+        public string AppKey { get; set; }
+
     }
 }

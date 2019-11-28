@@ -25,6 +25,6 @@ namespace LocalS.Entity
         public string AppId { get; set; }
         public string VersionName { get; set; }
         public string VersionCode { get; set; }
-        public string ApkDownUrl { get; set; }
+        public string ApkDownloadUrl { get; set; }
     }
 }
