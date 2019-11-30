@@ -115,9 +115,10 @@ namespace LocalS.BLL.Biz
                     #region MachineSlotSave
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
                     var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
+                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
                     if (sellChannelStock == null)
                     {
-                        var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+
 
                         sellChannelStock = new SellChannelStock();
                         sellChannelStock.Id = GuidUtil.New();
@@ -160,12 +161,74 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = "初次加载";
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        CurrentDb.SaveChanges();
 
-
-
-                        ts.Complete();
                     }
+                    else
+                    {
+
+                        if (sellChannelStock.PrdProductSkuId != productSkuId)
+                        {
+
+                            var sellChannelStockLog = new SellChannelStockLog();
+                            sellChannelStockLog.Id = GuidUtil.New();
+                            sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                            sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                            sellChannelStockLog.RefId = sellChannelStock.RefId;
+                            sellChannelStockLog.RefType = sellChannelStock.RefType;
+                            sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                            sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                            sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                            sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                            sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                            sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
+                            sellChannelStockLog.ChangeQuantity = 0;
+                            sellChannelStockLog.Creator = operater;
+                            sellChannelStockLog.CreateTime = DateTime.Now;
+                            sellChannelStockLog.RemarkByDev = "货道移除";
+                            CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+
+                            sellChannelStock.PrdProductId = bizProductSku.ProductId;
+                            sellChannelStock.PrdProductSkuId = productSkuId;
+
+                            sellChannelStock.IsOffSell = false;
+                            sellChannelStock.SalePrice = productSku.SalePrice;
+                            sellChannelStock.SalePriceByVip = productSku.SalePrice;
+                            sellChannelStock.SumQuantity = 0;
+                            sellChannelStock.LockQuantity = 0;
+                            sellChannelStock.SellQuantity = 0;
+
+
+                            sellChannelStock.Version = -1;
+                            sellChannelStock.MaxLimitSumQuantity = 10;
+                            sellChannelStock.MendTime = DateTime.Now;
+                            sellChannelStock.Mender = GuidUtil.Empty();
+
+
+
+                            var sellChannelStockLog2 = new SellChannelStockLog();
+                            sellChannelStockLog2.Id = GuidUtil.New();
+                            sellChannelStockLog2.MerchId = sellChannelStock.MerchId;
+                            sellChannelStockLog2.StoreId = sellChannelStock.StoreId;
+                            sellChannelStockLog2.RefId = sellChannelStock.RefId;
+                            sellChannelStockLog2.RefType = sellChannelStock.RefType;
+                            sellChannelStockLog2.SlotId = sellChannelStock.SlotId;
+                            sellChannelStockLog2.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                            sellChannelStockLog2.SumQuantity = sellChannelStock.SumQuantity;
+                            sellChannelStockLog2.LockQuantity = sellChannelStock.LockQuantity;
+                            sellChannelStockLog2.SellQuantity = sellChannelStock.SellQuantity;
+                            sellChannelStockLog2.ChangeType = E_SellChannelStockLogChangeTpye.SlotInit;
+                            sellChannelStockLog2.ChangeQuantity = 0;
+                            sellChannelStockLog2.Creator = operater;
+                            sellChannelStockLog2.CreateTime = DateTime.Now;
+                            sellChannelStockLog2.RemarkByDev = "变换货道，初次加载";
+                            CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+
+                        }
+
+                    }
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
 
                     var slot = new
                     {
@@ -334,9 +397,12 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，找不到该数据");
                 }
 
-                if (sellChannelStock.Version != version)
+                if (sellChannelStock.Version != -1)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，数据已经被更改，请刷新页面再尝试");
+                    if (sellChannelStock.Version != version)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，数据已经被更改，请刷新页面再尝试");
+                    }
                 }
 
                 var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);

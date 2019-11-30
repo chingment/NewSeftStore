@@ -226,7 +226,7 @@ namespace LocalS.Service.Api.StoreTerm
         private RetOrderDetails GetOrderDetails(string machineId, string orderId)
         {
             var ret = new RetOrderDetails();
-
+         //   machineId = 861712043266632 & pickCode = 32500051
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
             var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
