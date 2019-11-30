@@ -47,14 +47,14 @@ namespace WebApiStoreTerm.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public OwnApiHttpResponse UpLoadTraceLog(RopAppTraceLog rop)
+        public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
         {
             var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
 
             if (request.Headers["data_head"] != null)
             {
                 string data_head = System.Web.HttpUtility.UrlDecode(request.Headers["data_head"].ToString());
-                LogUtil.Info("data_head:"+ data_head);
+                LogUtil.Info("data_head:" + data_head);
 
                 rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(data_head);
             }
@@ -69,6 +69,13 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public OwnApiHttpResponse CheckUpdate([FromUri]RupMachineCheckUpdate rup)
+        {
+            IResult result = StoreTermServiceFactory.Machine.CheckUpdate(rup);
+            return new OwnApiHttpResponse(result);
+        }
         //[HttpPost]
         //[AllowAnonymous]
         //public OwnApiHttpResponse UpLoadLog()
