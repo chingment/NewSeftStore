@@ -43,5 +43,10 @@ namespace Lumos
 
             return imgUrl;
         }
+
+        public static string Convert_Main_S(string imgUrl)
+        {
+            return imgUrl;
+        }
     }
 }
