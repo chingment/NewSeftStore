@@ -114,6 +114,14 @@ namespace LocalS.Service.Api.StoreTerm
             var productKindModels = new List<ProductKindModel>();
 
             var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId).ToList();
+
+
+            var prdKindModelByAll = new ProductKindModel();
+            prdKindModelByAll.Id = GuidUtil.Empty();
+            prdKindModelByAll.Name = "全部";
+            prdKindModelByAll.Childs = sellChannelStocks.Select(m => m.PrdProductSkuId).Distinct().ToList();
+            productKindModels.Add(prdKindModelByAll);
 
             foreach (var prdKind in prdKinds)
             {
@@ -124,14 +132,13 @@ namespace LocalS.Service.Api.StoreTerm
                 var productIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
                 if (productIds.Count > 0)
                 {
-                    var productSkuIds = CurrentDb.SellChannelStock.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();
+                    var productSkuIds = sellChannelStocks.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();
                     if (productSkuIds.Count > 0)
                     {
                         prdKindModel.Childs = productSkuIds;
                         productKindModels.Add(prdKindModel);
                     }
                 }
-
             }
 
             return productKindModels;
