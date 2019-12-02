@@ -122,7 +122,7 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Name = item.Name,
                     BriefDes = item.BriefDes,
-                    MainImgUrl = ImgSet.GetMain(item.DisplayImgUrls),
+                    MainImgUrl = ImgSet.GetMain_S(item.DisplayImgUrls),
                     KindNames = str_prdKindNames,
                     Skus = list_Sku,
                     CreateTime = item.CreateTime,
@@ -192,7 +192,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
                 prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                prdProduct.MainImgUrl = ImgSet.GetMain(prdProduct.DisplayImgUrls);
+                prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes;
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.Creator = operater;

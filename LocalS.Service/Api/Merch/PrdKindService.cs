@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.Merch
                 productKind.Name = rop.Name;
                 productKind.IconImgUrl = rop.IconImgUrl;
                 productKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                productKind.MainImgUrl = ImgSet.GetMain(productKind.DisplayImgUrls);
+                productKind.MainImgUrl = ImgSet.GetMain_O(productKind.DisplayImgUrls);
                 productKind.MerchId = merchId;
                 productKind.Description = rop.Description;
                 productKind.Depth = pPrdKind.Depth + 1;
@@ -191,7 +191,7 @@ namespace LocalS.Service.Api.Merch
                 }
                 prdKind.Name = rop.Name;
                 prdKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                prdKind.MainImgUrl = ImgSet.GetMain(prdKind.DisplayImgUrls);
+                prdKind.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
                 prdKind.Description = rop.Description;
                 prdKind.MendTime = DateTime.Now;
                 prdKind.Mender = operater;

@@ -108,7 +108,7 @@ namespace LocalS.Service.Api.Merch
                 store.BriefDes = rop.BriefDes;
                 store.IsOpen = false;
                 store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                store.MainImgUrl = ImgSet.GetMain(store.DisplayImgUrls);
+                store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
                 store.CreateTime = DateTime.Now;
                 store.Creator = operater;
                 CurrentDb.Store.Add(store);
@@ -160,7 +160,7 @@ namespace LocalS.Service.Api.Merch
                 store.Address = rop.Address;
                 store.BriefDes = rop.BriefDes;
                 store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                store.MainImgUrl = ImgSet.GetMain(store.DisplayImgUrls);
+                store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
                 store.IsOpen = rop.IsOpen;
                 store.MendTime = DateTime.Now;
                 store.Mender = operater;

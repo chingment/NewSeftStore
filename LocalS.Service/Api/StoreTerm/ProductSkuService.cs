@@ -44,7 +44,7 @@ m.RefType == Entity.E_SellChannelRefType.Machine)
                     productSkuModel.Id = bizProductSku.Id;
                     productSkuModel.ProductId = bizProductSku.ProductId;
                     productSkuModel.Name = bizProductSku.Name;
-                    productSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
+                    productSkuModel.MainImgUrl = ImgSet.Convert_B(bizProductSku.MainImgUrl);
                     productSkuModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
                     productSkuModel.DetailsDes = bizProductSku.DetailsDes;
                     productSkuModel.BriefDes = bizProductSku.BriefDes;

@@ -233,7 +233,7 @@ export default {
     getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
       for (var i = 0; i < displayImgUrls.length; i++) {
-        _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
+        _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, name: displayImgUrls[i].name, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
       }
 
       return _uploadImglist
@@ -252,8 +252,10 @@ export default {
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
+      console.log('a1:' + JSON.stringify(fileList))
       this.uploadImglist = fileList
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+      console.log('a2:' + JSON.stringify(this.form.displayImgUrls))
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList

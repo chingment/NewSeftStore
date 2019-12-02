@@ -97,7 +97,7 @@ namespace LocalS.BLL
                 prdProductSkuModel.ProductId = prdProductSkuByDb.PrdProductId;
                 prdProductSkuModel.Name = prdProductSkuByDb.Name.NullToEmpty();
                 prdProductSkuModel.DisplayImgUrls = prdProductDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                prdProductSkuModel.MainImgUrl = ImgSet.GetMain(prdProductDb.DisplayImgUrls);
+                prdProductSkuModel.MainImgUrl = ImgSet.GetMain_O(prdProductDb.DisplayImgUrls);
                 prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.NullToEmpty();
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
@@ -146,6 +146,9 @@ namespace LocalS.BLL
             foreach (var item in d)
             {
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoBySearchModel>(item.Value);
+
+                obj.MainImgUrl = ImgSet.Convert_S(obj.MainImgUrl);
+
                 list.Add(obj);
             }
             return list;

@@ -231,6 +231,7 @@ export default {
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handleSuccess(response, file, fileList) {
+      console.log('a1:' + JSON.stringify(fileList))
       this.uploadImglist = fileList
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
