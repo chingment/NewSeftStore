@@ -76,6 +76,20 @@ namespace WebApiStoreTerm.Controllers
             IResult result = StoreTermServiceFactory.Machine.CheckUpdate(rup);
             return new OwnApiHttpResponse(result);
         }
+
+
+        [HttpPost]
+        public OwnApiHttpResponse UploadImg(RopMachineUploadImg rop)
+        {
+
+            LogUtil.Info("进入UploadImg");
+            LogUtil.Info("进入UploadImg.Name:" + rop.Name);
+            LogUtil.Info("进入UploadImg.Type:" + rop.Type);
+            LogUtil.Info("进入UploadImg.Extension:" + rop.Extension);
+            IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+            return new OwnApiHttpResponse(result);
+        }
+
         //[HttpPost]
         //[AllowAnonymous]
         //public OwnApiHttpResponse UpLoadLog()
