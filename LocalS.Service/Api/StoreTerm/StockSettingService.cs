@@ -56,7 +56,7 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.Id = item.SlotId;
                     slot.ProductSkuId = bizProductSku.Id;
                     slot.ProductSkuName = bizProductSku.Name;
-                    slot.ProductSkuMainImgUrl =ImgSet.Convert_S(bizProductSku.MainImgUrl);
+                    slot.ProductSkuMainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.LockQuantity;
                     slot.SellQuantity = item.SellQuantity;
@@ -203,6 +203,16 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             return result;
+        }
+
+
+
+        public CustomJsonResult TestPickupEventNotify(string operater, RopStockSettingTestPickupEventNotify rop)
+        {
+
+            LogUtil.Info(string.Format("商品:{0},货槽:{1},当前动作:{2}{3}，状态：{4}{5}", rop.ProductSkuId, rop.SlotId, rop.ActionId, rop.ActionName, rop.ActionStatusCode, rop.ActionStatusName));
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
     }

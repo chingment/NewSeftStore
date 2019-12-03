@@ -159,6 +159,8 @@ namespace LocalS.Service.Api.StoreTerm
                 var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
                 if (orderDetailsChildSon != null)
                 {
+                    orderDetailsChildSon.LastPickupActionId = rop.ActionId;
+                    orderDetailsChildSon.LastPickupActionStatusCode = rop.ActionStatusCode;
                     orderDetailsChildSon.Status = rop.Status;
                     CurrentDb.SaveChanges();
 
@@ -198,16 +200,22 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.ProductSkuId = orderDetailsChildSon.PrdProductSkuId;
                     orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
                     orderPickupLog.Status = rop.Status;
+                    orderPickupLog.ActionId = rop.ActionId;
+                    orderPickupLog.ActionName = rop.ActionName;
+                    orderPickupLog.ActionStatusCode = rop.ActionStatusCode;
+                    orderPickupLog.ActionStatusName = rop.ActionStatusName;
                     orderPickupLog.Remark = rop.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                    CurrentDb.SaveChanges();
-                    ts.Complete();
-
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
                 }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+
             }
 
             return result;
@@ -226,7 +234,7 @@ namespace LocalS.Service.Api.StoreTerm
         private RetOrderDetails GetOrderDetails(string machineId, string orderId)
         {
             var ret = new RetOrderDetails();
-         //   machineId = 861712043266632 & pickCode = 32500051
+            //   machineId = 861712043266632 & pickCode = 32500051
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
             var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();

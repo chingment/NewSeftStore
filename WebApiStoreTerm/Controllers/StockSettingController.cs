@@ -31,5 +31,12 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse TestPickupEventNotify([FromBody]RopStockSettingTestPickupEventNotify rop)
+        {
+            IResult result = StoreTermServiceFactory.StockSetting.TestPickupEventNotify(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

@@ -16,6 +16,10 @@ namespace LocalS.Entity
         public string ProductSkuId { get; set; }
         public string SlotId { get; set; }
         public E_OrderDetailsChildSonStatus Status { get; set; }
+        public int ActionId { get; set; }
+        public string ActionName { get; set; }
+        public int ActionStatusCode { get; set; }
+        public string ActionStatusName { get; set; }
         public string Remark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
