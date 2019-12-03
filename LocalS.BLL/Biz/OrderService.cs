@@ -522,6 +522,7 @@ namespace LocalS.BLL.Biz
 
                 Order order = null;
                 string orderSn = "";
+                string clientUserName = "";
                 bool isPaySuccess = false;
                 if (content.IndexOf("appid") > -1)
                 {
@@ -536,7 +537,6 @@ namespace LocalS.BLL.Biz
 
                     LogUtil.Info("解释微信支付协议，订单号：" + orderSn);
 
-                    order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
@@ -583,9 +583,7 @@ namespace LocalS.BLL.Biz
 
                         LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
 
-                        order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
-
-                        order.ClientUserName = dic["buyer_logon_id"];
+                        clientUserName = dic["buyer_logon_id"];
 
                         if (dic.ContainsKey("trade_status"))
                         {
@@ -602,32 +600,40 @@ namespace LocalS.BLL.Biz
                     #endregion
                 }
 
-                if (isPaySuccess)
+                if (!string.IsNullOrEmpty(orderSn))
                 {
-                    LogUtil.Info("解释支付协议结果，支付成功");
-                    PaySuccess(operater, orderSn, DateTime.Now);
-                }
+                    if (isPaySuccess)
+                    {
+                        LogUtil.Info("解释支付协议结果，支付成功");
 
-                if (order != null)
-                {
-                    var mod_OrderNotifyLog = new OrderNotifyLog();
-                    mod_OrderNotifyLog.Id = GuidUtil.New();
-                    mod_OrderNotifyLog.MerchId = order.MerchId;
-                    mod_OrderNotifyLog.OrderId = order.Id;
-                    mod_OrderNotifyLog.OrderSn = order.Sn;
-                    mod_OrderNotifyLog.NotifyContent = content;
-                    mod_OrderNotifyLog.NotifyFrom = from;
-                    mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
-                    mod_OrderNotifyLog.CreateTime = DateTime.Now;
-                    mod_OrderNotifyLog.Creator = operater;
-                    CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
-                    CurrentDb.SaveChanges();
+                        Dictionary<string, string> pms = new Dictionary<string, string>();
+                        pms.Add("clientUserName", clientUserName);
+                        PaySuccess(operater, orderSn, DateTime.Now, pms);
+                    }
+
+                    order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                    if (order != null)
+                    {
+                        var mod_OrderNotifyLog = new OrderNotifyLog();
+                        mod_OrderNotifyLog.Id = GuidUtil.New();
+                        mod_OrderNotifyLog.MerchId = order.MerchId;
+                        mod_OrderNotifyLog.OrderId = order.Id;
+                        mod_OrderNotifyLog.OrderSn = order.Sn;
+                        mod_OrderNotifyLog.NotifyContent = content;
+                        mod_OrderNotifyLog.NotifyFrom = from;
+                        mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
+                        mod_OrderNotifyLog.CreateTime = DateTime.Now;
+                        mod_OrderNotifyLog.Creator = operater;
+                        CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
+                        CurrentDb.SaveChanges();
+                    }
                 }
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string orderSn, DateTime completedTime)
+        public CustomJsonResult PaySuccess(string operater, string orderSn, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -659,6 +665,13 @@ namespace LocalS.BLL.Biz
                 order.MendTime = DateTime.Now;
                 order.Mender = operater;
 
+                if (pms != null)
+                {
+                    if (pms.ContainsKey("clientUserName"))
+                    {
+                        order.ClientUserName = pms["clientUserName"];
+                    }
+                }
 
                 var rptOrder = new RptOrder();
                 rptOrder.Id = GuidUtil.New();
