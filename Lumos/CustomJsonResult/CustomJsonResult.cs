@@ -209,7 +209,14 @@ namespace Lumos
                     }
                 }
 
-                json.Append("\"code\": " + this._code + ",");
+                if (CommonUtil.IsNumber(this._code))
+                {
+                    json.Append("\"code\": " + this._code + ",");
+                }
+                else
+                {
+                    json.Append("\"code\": \"" + this._code + "\",");
+                }
 
                 json.Append("\"message\":" + JsonConvert.SerializeObject(this._message) + "");
 
