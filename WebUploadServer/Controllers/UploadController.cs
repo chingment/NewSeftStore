@@ -11,7 +11,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http;
 
-namespace WebUploadImageServer.Controllers
+namespace WebUploadServer.Controllers
 {
     public class UploadController : ApiController
     {

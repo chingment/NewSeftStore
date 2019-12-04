@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace WebUploadImageServer.Areas.HelpPage
+namespace WebUploadServer.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

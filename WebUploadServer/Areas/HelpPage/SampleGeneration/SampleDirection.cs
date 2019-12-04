@@ -1,4 +1,4 @@
-namespace WebUploadImageServer.Areas.HelpPage
+namespace WebUploadServer.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

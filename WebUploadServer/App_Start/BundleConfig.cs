@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace WebUploadImageServer
+namespace WebUploadServer
 {
     public class BundleConfig
     {

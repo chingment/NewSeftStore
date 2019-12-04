@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace WebUploadImageServer
+namespace WebUploadServer
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

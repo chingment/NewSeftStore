@@ -1,9 +1,9 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using WebUploadImageServer.Areas.HelpPage.Models;
+using WebUploadServer.Areas.HelpPage.Models;
 
-namespace WebUploadImageServer.Areas.HelpPage.Controllers
+namespace WebUploadServer.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

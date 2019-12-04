@@ -13,7 +13,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 
 
-namespace WebUploadImageServer.Controllers
+namespace WebUploadServer.Controllers
 {
     public class ElementUploadImageController : ApiController
     {

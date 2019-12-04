@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace WebUploadImageServer
+namespace WebUploadServer
 {
     public class FilterConfig
     {

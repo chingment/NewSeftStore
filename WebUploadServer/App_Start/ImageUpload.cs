@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 
 
-namespace WebUploadImageServer
+namespace WebUploadServer
 {
     public class ImageUpload
     {

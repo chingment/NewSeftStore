@@ -7,9 +7,9 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
-using WebUploadImageServer.Areas.HelpPage.Models;
+using WebUploadServer.Areas.HelpPage.Models;
 
-namespace WebUploadImageServer.Areas.HelpPage
+namespace WebUploadServer.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

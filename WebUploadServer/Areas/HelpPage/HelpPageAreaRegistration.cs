@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace WebUploadImageServer.Areas.HelpPage
+namespace WebUploadServer.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {
