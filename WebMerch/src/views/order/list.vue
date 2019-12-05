@@ -57,26 +57,27 @@
                 <td style="15%">
                   {{ sub_detail.status.text }}
                 </td>
-                     <td style="15%">
-    <el-popover
-  placement="right"
-  width="400"
-  trigger="click">
-   <el-timeline>
-    <el-timeline-item
-      v-for="(activity, index) in sub_detail.pickupLogs"
-      :key="index"
-      :timestamp="activity.timestamp">
-      {{activity.content}}
-      <br>
-    　<img v-if="activity.imgUrlByCHK!==null" :src="activity.imgUrlByCHK" style="width:100px;height:100px"/>
-    </el-timeline-item>
-  </el-timeline>
-  <el-button slot="reference">查看</el-button>
-</el-popover>
+                <td style="15%">
+                  <el-popover
+                    placement="right"
+                    width="400"
+                    trigger="click"
+                  >
+                    <el-timeline>
+                      <el-timeline-item
+                        v-for="(activity, index) in sub_detail.pickupLogs"
+                        :key="index"
+                        :timestamp="activity.timestamp"
+                      >
+                        {{ activity.content }}
+                        <br>
+                        　<img v-if="activity.imgUrlByCHK!==null" :src="activity.imgUrlByCHK" style="width:100px;height:100px">
+                      </el-timeline-item>
+                    </el-timeline>
+                    <el-button slot="reference">查看</el-button>
+                  </el-popover>
 
-
-              </td>
+                </td>
               </tr>
             </table>
           </div>
@@ -230,24 +231,25 @@
                 x {{ sub_detail.quantity }}
               </td>
               <td style="15%">
-                {{ sub_detail.status.text }} 
+                {{ sub_detail.status.text }}
               </td>
-                    <td style="15%">
-    <el-popover
-  placement="right"
-  width="400"
-  trigger="click">
-   <el-timeline>
-    <el-timeline-item
-      v-for="(activity, index) in sub_detail.pickupLogs"
-      :key="index"
-      :timestamp="activity.timestamp">
-      {{activity.content}}
-    </el-timeline-item>
-  </el-timeline>
-  <el-button slot="reference">查看</el-button>
-</el-popover>
-
+              <td style="15%">
+                <el-popover
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                >
+                  <el-timeline>
+                    <el-timeline-item
+                      v-for="(activity, index) in sub_detail.pickupLogs"
+                      :key="index"
+                      :timestamp="activity.timestamp"
+                    >
+                      {{ activity.content }}
+                    </el-timeline-item>
+                  </el-timeline>
+                  <el-button slot="reference">查看</el-button>
+                </el-popover>
 
               </td>
             </tr>
@@ -290,15 +292,15 @@ export default {
   data() {
     return {
       activities: [{
-          content: '活动按期开始',
-          timestamp: '2018-04-15'
-        }, {
-          content: '通过审核',
-          timestamp: '2018-04-13'
-        }, {
-          content: '创建成功',
-          timestamp: '2018-04-11'
-        }],
+        content: '活动按期开始',
+        timestamp: '2018-04-15'
+      }, {
+        content: '通过审核',
+        timestamp: '2018-04-13'
+      }, {
+        content: '创建成功',
+        timestamp: '2018-04-11'
+      }],
       loading: false,
       listKey: 0,
       listData: null,
