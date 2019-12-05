@@ -204,16 +204,17 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.ActionName = rop.ActionName;
                     orderPickupLog.ActionStatusCode = rop.ActionStatusCode;
                     orderPickupLog.ActionStatusName = rop.ActionStatusName;
-                    if (string.IsNullOrEmpty(rop.ActionName))
+                    orderPickupLog.IsPickupComplete = rop.IsPickupComplete;
+                    if (rop.IsPickupComplete)
                     {
-                        orderPickupLog.ActionRemark = rop.Remark;
+                        orderPickupLog.ImgUrlByCHK = "http://file.17fanju.com/upload/common/" + rop.UniqueId + ".jpg";
+                        orderPickupLog.PickupUseTime = rop.PickupUseTime;
+                        orderPickupLog.ActionRemark = "取货完成";
                     }
                     else
                     {
-                        orderPickupLog.ActionRemark = rop.IsPickupComplete == true ? "取货完成" : (rop.ActionName + rop.ActionStatusName);
+                        orderPickupLog.ActionRemark = rop.ActionName + rop.ActionStatusName;
                     }
-                    orderPickupLog.PickupUseTime = rop.PickupUseTime;
-                    orderPickupLog.IsPickupComplete = rop.IsPickupComplete;
                     orderPickupLog.Remark = rop.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
                     orderPickupLog.Creator = rop.MachineId;

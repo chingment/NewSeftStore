@@ -68,6 +68,8 @@
       :key="index"
       :timestamp="activity.timestamp">
       {{activity.content}}
+      <br>
+    　<img v-if="activity.imgUrlByCHK!==null" :src="activity.imgUrlByCHK" style="width:100px;height:100px"/>
     </el-timeline-item>
   </el-timeline>
   <el-button slot="reference">查看</el-button>
