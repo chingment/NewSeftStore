@@ -28,6 +28,7 @@ namespace WebUploadServer.Controllers
             try
             {
                 string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                string roorPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
 
                 log.Info("文件Count:" + request.Files.Count);
                 for (var i = 0; i < request.Files.Count; i++)
@@ -51,7 +52,7 @@ namespace WebUploadServer.Controllers
 
                 savePath += uploadFolder;
 
-                DirectoryInfo dir = new DirectoryInfo(savePath);
+                DirectoryInfo dir = new DirectoryInfo(roorPath + "/" + savePath);
                 if (!dir.Exists)
                 {
                     dir.Create();
@@ -67,7 +68,6 @@ namespace WebUploadServer.Controllers
                     string fileName = request.Files[0].FileName;
                     log.Info("fileName:" + fileName);
 
-                    string roorPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
 
                     string serverSavePath = roorPath + "/" + savePath + "/" + fileName;
                     string domainSavePath = domain + "/" + savePath + "/" + fileName;
@@ -90,7 +90,7 @@ namespace WebUploadServer.Controllers
                 r.Code = ResultCode.Exception;
                 r.Result = ResultType.Exception;
                 r.Message = "上传失败";
-                LogUtil.Error("WebApi上传图片异常", ex);
+                log.Error("WebApi上传图片异常", ex);
             }
 
             string json = r.ToString();

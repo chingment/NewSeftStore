@@ -157,8 +157,18 @@ namespace LocalS.Service.Api.Merch
 
                             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == item.Id).ToList();
 
+
                             foreach (var orderDetailsChildSon in orderDetailsChildSons)
                             {
+                                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderDetailsChildSon.Id).OrderByDescending(m => m.CreateTime).ToList();
+
+                                List<object> pickupLogs = new List<object>();
+
+                                foreach (var orderPickupLog in orderPickupLogs)
+                                {
+
+                                    pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrlByCHK = orderPickupLog.ImgUrlByCHK });
+                                }
 
                                 sub_Skus.Add(new
                                 {
@@ -166,7 +176,8 @@ namespace LocalS.Service.Api.Merch
                                     PrdProductSkuMainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
                                     PrdProductSkuName = orderDetailsChildSon.PrdProductSkuName,
                                     Quantity = orderDetailsChildSon.Quantity,
-                                    Status = GetSonStatus(orderDetailsChildSon.Status)
+                                    Status = GetSonStatus(orderDetailsChildSon.Status),
+                                    PickupLogs = pickupLogs
                                 });
                             }
 

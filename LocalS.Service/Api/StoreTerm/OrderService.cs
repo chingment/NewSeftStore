@@ -204,6 +204,16 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.ActionName = rop.ActionName;
                     orderPickupLog.ActionStatusCode = rop.ActionStatusCode;
                     orderPickupLog.ActionStatusName = rop.ActionStatusName;
+                    if (string.IsNullOrEmpty(rop.ActionName))
+                    {
+                        orderPickupLog.ActionRemark = rop.Remark;
+                    }
+                    else
+                    {
+                        orderPickupLog.ActionRemark = rop.IsPickupComplete == true ? "取货完成" : (rop.ActionName + rop.ActionStatusName);
+                    }
+                    orderPickupLog.PickupUseTime = rop.PickupUseTime;
+                    orderPickupLog.IsPickupComplete = rop.IsPickupComplete;
                     orderPickupLog.Remark = rop.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
                     orderPickupLog.Creator = rop.MachineId;

@@ -20,8 +20,15 @@ namespace LocalS.Entity
         public string ActionName { get; set; }
         public int ActionStatusCode { get; set; }
         public string ActionStatusName { get; set; }
+
+        public string ActionRemark { get; set; }
         public string Remark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
+
+        public int PickupUseTime { get; set; }
+        public bool IsPickupComplete { get; set; }
+
+        public string ImgUrlByCHK { get; set; }
     }
 }

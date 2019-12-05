@@ -15,5 +15,8 @@ namespace LocalS.Service.Api.StoreTerm
         public string ActionName { get; set; }
         public int ActionStatusCode { get; set; }
         public string ActionStatusName { get; set; }
+        public int PickupUseTime { get; set; }
+        public bool IsPickupComplete { get; set; }
+
     }
 }
