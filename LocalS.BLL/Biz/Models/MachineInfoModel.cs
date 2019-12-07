@@ -29,6 +29,6 @@ namespace LocalS.BLL.Biz
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
 
-
+        public int[] SupportPayPartner { get; set; }
     }
 }

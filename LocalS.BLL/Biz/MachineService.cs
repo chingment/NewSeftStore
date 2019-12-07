@@ -34,7 +34,8 @@ namespace LocalS.BLL.Biz
             model.CtrlSdkVersion = machine.CtrlSdkVersionCode;
             model.IsHiddenKind = machine.IsHiddenKind;
             model.KindRowCellSize = machine.KindRowCellSize;
-
+            model.SupportPayPartner = Array.ConvertAll<string, int>(machine.SupportPayPartner.Split(','), s => int.Parse(s));
+       
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 
             if (merch != null)
