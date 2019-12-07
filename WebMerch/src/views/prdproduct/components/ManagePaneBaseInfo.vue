@@ -1,6 +1,6 @@
 <template>
   <div id="productsku_edit" class="app-container">
-    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
@@ -42,11 +42,11 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="销售价" prop="singleSkuSalePrice">
+      <el-form-item label="默认销售价" prop="singleSkuSalePrice">
         <el-input v-model="form.singleSkuSalePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
-        <div class="remark-tip"><span class="sign">*注</span>：该价格作为初始价，若更改可在编辑-》在售店铺里修改</div>
+        <div class="remark-tip"><span class="sign">*注</span>：该价格作为默认销售价，若更改可在编辑-》在售店铺里修改</div>
       </el-form-item>
       <el-form-item label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" />

@@ -44,7 +44,7 @@
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="销售价" prop="skus" align="left" min-width="30%">
+      <el-table-column v-if="isDesktop" label="默认销售价" prop="skus" align="left" min-width="30%">
         <template slot-scope="{row}">
           <el-button type="text" @click="handleSalePrice(row)">{{ row.skus[0].salePrice }}</el-button>
 
