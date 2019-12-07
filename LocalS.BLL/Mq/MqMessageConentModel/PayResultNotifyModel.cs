@@ -13,5 +13,7 @@ namespace LocalS.BLL.Mq.MqMessageConentModel
         public string Content { get; set; }
 
         public E_OrderNotifyLogNotifyFrom From { get; set; }
+
+        public E_OrderPayPartner PayPartner { get; set; }
     }
 }

@@ -119,7 +119,7 @@ namespace LocalS.BLL
 
         }
 
-        public UnifiedOrderResult UnifiedOrderByNative(WxAppInfoConfig config, string merchantId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
+        public UnifiedOrderResult UnifiedOrderByNative(WxAppInfoConfig config, string merchantId, string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
         {
 
             var ret = new UnifiedOrderResult();

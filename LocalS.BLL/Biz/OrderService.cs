@@ -514,7 +514,7 @@ namespace LocalS.BLL.Biz
             return details;
         }
         private static readonly object lock_PayResultNotify = new object();
-        public CustomJsonResult PayResultNotify(string operater, E_OrderNotifyLogNotifyFrom from, string content)
+        public CustomJsonResult PayResultNotify(string operater, E_OrderPayPartner payPartner, E_OrderNotifyLogNotifyFrom from, string content)
         {
             LogUtil.Info("PayResultNotify");
             lock (lock_PayResultNotify)
@@ -524,7 +524,7 @@ namespace LocalS.BLL.Biz
                 string orderSn = "";
                 string clientUserName = "";
                 bool isPaySuccess = false;
-                if (content.IndexOf("appid") > -1)
+                if (payPartner == E_OrderPayPartner.Wechat)
                 {
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信支付协议");
@@ -564,7 +564,7 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
                 }
-                else if (content.IndexOf("app_id") > -1)
+                else if (payPartner == E_OrderPayPartner.AliPay)
                 {
                     #region 解释支付宝支付协议
                     LogUtil.Info("解释支付宝支付协议");
@@ -596,6 +596,13 @@ namespace LocalS.BLL.Biz
                         }
 
                     }
+
+                    #endregion
+                }
+
+                else if (payPartner == E_OrderPayPartner.TongGuan)
+                {
+                    #region 解释 通莞支付协议
 
                     #endregion
                 }
@@ -905,7 +912,7 @@ namespace LocalS.BLL.Biz
 
                 order.PayExpireTime = DateTime.Now.AddMinutes(5);
                 order.PayCaller = rop.PayCaller;
- 
+
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
@@ -913,6 +920,7 @@ namespace LocalS.BLL.Biz
                 {
                     case E_OrderPayCaller.AlipayByNative:
                         #region AlipayByNative
+                        order.PayPartner = E_OrderPayPartner.AliPay;
                         order.PayWay = E_OrderPayWay.AliPay;
                         var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
                         var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
@@ -930,9 +938,10 @@ namespace LocalS.BLL.Biz
                         break;
                     case E_OrderPayCaller.WechatByNative:
                         #region WechatByNative
+                        order.PayPartner = E_OrderPayPartner.Wechat;
                         order.PayWay = E_OrderPayWay.Wechat;
                         var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                        var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                         if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -948,6 +957,7 @@ namespace LocalS.BLL.Biz
                         break;
                     case E_OrderPayCaller.WechatByMp:
                         #region WechatByMp
+                        order.PayPartner = E_OrderPayPartner.Wechat;
                         order.PayWay = E_OrderPayWay.Wechat;
                         var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
 
@@ -980,6 +990,24 @@ namespace LocalS.BLL.Biz
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
                         #endregion 
+                        break;
+                    case E_OrderPayCaller.TongGuanByAllQrcodePay:
+                        #region TongGuanByAllQrcodePay
+                        order.PayPartner = E_OrderPayPartner.TongGuan;
+                        var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
+                        var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                        }
+
+                        order.PayQrCodeUrl = tongGuanPay_AllQrcodePay.codeUrl;
+
+                        var tongGuanPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tongGuanPay_AllQrcodePay_PayParams);
+
+                        #endregion
                         break;
                     default:
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);

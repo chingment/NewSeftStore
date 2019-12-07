@@ -36,7 +36,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                             case MqMessageType.PayResultNotify:
                                 LogUtil.Info("PayResultNotify");
                                 PayResultNotifyModel t2 = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), t2.From, t2.Content);
+                                BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), t2.PayPartner, t2.From, t2.Content);
                                 break;
                         }
 

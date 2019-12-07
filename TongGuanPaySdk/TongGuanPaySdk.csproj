@@ -59,7 +59,8 @@
     <Compile Include="Post\OrderQueryRequestData.cs" />
     <Compile Include="Post\OrderQueryRequestResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TongGuanApi.cs" />
+    <Compile Include="TongGuanUtil.cs" />
+    <Compile Include="TongGuanPayInfoConfg.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\FileItem.cs" />
     <Compile Include="Utils\WebUtils.cs" />

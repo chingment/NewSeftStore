@@ -7,12 +7,20 @@ using System.Threading.Tasks;
 
 namespace TongGuanPaySdk
 {
-    public class TongGuanApi
+    public class TongGuanUtil
     {
         private ApiDoPost _api = new ApiDoPost();
         private string notifyUrl = "https://demo.res.17fanju.com/Api/Order/PayResultNotify";
         private string account = "1571215372255";
         private string key = "bda1c3c86878b33258823d4d1dcc20ea";
+
+
+        public TongGuanUtil(TongGuanPayInfoConfg config)
+        {
+            this.account = config.Account;
+            this.key = config.Key;
+            this.notifyUrl = config.PayResultNotifyUrl;
+        }
 
         public string GetSign(Dictionary<string, string> dic)
         {
@@ -61,7 +69,8 @@ namespace TongGuanPaySdk
             return s_output;
         }
 
-        public string GetStrMd5(string ConvertString) {
+        public string GetStrMd5(string ConvertString)
+        {
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             string t2 = BitConverter.ToString(md5.ComputeHash(UTF8Encoding.Default.GetBytes(ConvertString)));
             t2 = t2.Replace("-", "");
@@ -110,6 +119,16 @@ namespace TongGuanPaySdk
 
 
             return result;
+        }
+
+        public string OrderQuery(string lowOrderId)
+        {
+            var result = new AllQrcodePayRequestResult();
+
+
+
+
+            return "";
         }
     }
 }

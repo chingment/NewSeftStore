@@ -52,7 +52,7 @@ namespace Test
         static void Main(string[] args)
         {
         
-            TongGuanApi api = new TongGuanApi();
+            TongGuanUtil api = new TongGuanUtil(null);
 
 
             Dictionary<string, string> dic = new Dictionary<string, string>();

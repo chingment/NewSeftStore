@@ -24,5 +24,13 @@ namespace LocalS.BLL
             }
         }
 
+        public static TongGuanSdkProvider TongGuan
+        {
+            get
+            {
+                return new TongGuanSdkProvider();
+            }
+        }
+
     }
 }

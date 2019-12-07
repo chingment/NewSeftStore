@@ -89,19 +89,15 @@ namespace LocalS.BLL.Task
                                             var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                             content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
                                             break;
+                                        case E_OrderPayCaller.TongGuanByAllQrcodePay:
+                                            var tongGuanByAllQrcodePay_AppInfoConfig = BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
+                                            content = SdkFactory.TongGuan.OrderQuery(tongGuanByAllQrcodePay_AppInfoConfig, order.Sn);
+                                            break;
                                     }
 
                                     LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
 
-                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderNotifyLogNotifyFrom.OrderQuery, content);
-
-                                    //BizFactory.Order.PayResultNotify(GuidUtil.Empty(), E_OrderNotifyLogNotifyFrom.OrderQuery, content, out isPaySuccessed);
-
-                                    //if (isPaySuccessed)
-                                    //{
-                                    //    Task4Factory.Global.Exit(m.Id);
-                                    //    LogUtil.Info(string.Format("订单号：{0},支付成功,删除缓存", order.Sn));
-                                    //}
+                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.OrderQuery, content);
                                 }
                                 else
                                 {

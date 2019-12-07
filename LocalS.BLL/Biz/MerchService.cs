@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
+using TongGuanPaySdk;
 
 namespace LocalS.BLL.Biz
 {
@@ -66,6 +67,22 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
+        public TongGuanPayInfoConfg GetTongGuanPayInfoConfg(string merchId)
+        {
+
+            var config = new TongGuanPayInfoConfg();
+
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (merch == null)
+                return null;
+
+
+            config.Account = merch.TongGuanPayAccount;
+            config.Key = merch.TongGuanPayKey;
+            config.PayResultNotifyUrl = merch.TongGuanPayResultNotifyUrl;
+
+            return config;
+        }
 
         public string GetMachineName(string merchId, string machineId)
         {

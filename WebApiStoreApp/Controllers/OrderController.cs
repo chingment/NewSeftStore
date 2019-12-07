@@ -59,7 +59,7 @@ namespace WebApiStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public HttpResponseMessage PayResultNotify()
+        public HttpResponseMessage PayResultNotifyByWx()
         {
             string content = "";
             string rt = "";
@@ -75,8 +75,7 @@ namespace WebApiStoreApp.Controllers
 
                 if (!string.IsNullOrEmpty(content))
                 {
-                   
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Wechat, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             catch (System.Exception ex)
@@ -85,16 +84,42 @@ namespace WebApiStoreApp.Controllers
             }
             finally
             {
-                if (content.IndexOf("appid") > -1)
+                //微信支付异步返回结果
+                rt = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(rt, Encoding.UTF8, "text/plain") };
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public HttpResponseMessage PayResultNotifyByAlipay()
+        {
+            string content = "";
+            string rt = "";
+            try
+            {
+                var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                Stream stream = myRequest.InputStream;
+                stream.Seek(0, SeekOrigin.Begin);
+
+                content = new StreamReader(stream).ReadToEnd();
+
+                LogUtil.Info("接收支付结果:" + content);
+
+                if (!string.IsNullOrEmpty(content))
                 {
-                    //微信支付异步返回结果
-                    rt = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.AliPay, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
-                else if (content.IndexOf("app_id") > -1)
-                {
-                    //支付宝支付异步返回结果
-                    rt = "success";
-                }
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+            finally
+            {
+                rt = "success";
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(rt, Encoding.UTF8, "text/plain") };
@@ -137,6 +162,42 @@ namespace WebApiStoreApp.Controllers
             //    LogUtil.Warn("支付通知结果签名验证失败");
             //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
             //}
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public HttpResponseMessage PayResultNotifyByTg()
+        {
+            string content = "";
+            string rt = "";
+            try
+            {
+                var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                Stream stream = myRequest.InputStream;
+                stream.Seek(0, SeekOrigin.Begin);
+
+                content = new StreamReader(stream).ReadToEnd();
+
+                LogUtil.Info("接收支付结果:" + content);
+
+                if (!string.IsNullOrEmpty(content))
+                {
+
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.TongGuan, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+            finally
+            {
+                rt = "SUCCESS";
+
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(rt, Encoding.UTF8, "text/plain") };
+
         }
     }
 }
