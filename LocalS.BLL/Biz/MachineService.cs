@@ -32,6 +32,8 @@ namespace LocalS.BLL.Biz
             model.LastRequestTime = machine.LastRequestTime;
             model.AppVersion = machine.AppVersionName;
             model.CtrlSdkVersion = machine.CtrlSdkVersionCode;
+            model.IsHiddenKind = machine.IsHiddenKind;
+            model.KindRowCellSize = machine.KindRowCellSize;
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 

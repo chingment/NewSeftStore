@@ -40,6 +40,8 @@ namespace LocalS.Entity
         public string CabinetName_1 { get; set; }
         public string CabinetRowColLayout_1 { get; set; }
         public string CtrlSdkVersionCode { get; set; }
+        public bool IsHiddenKind { get; set; }
+        public int KindRowCellSize { get; set; }
         //public int CabinetMaxRow_1 { get; set; }
         //public int CabinetMaxCol_1 { get; set; }
     }

@@ -26,6 +26,8 @@ namespace LocalS.BLL.Biz
         public E_MachineRunStatus RunStatus { get; set; }
         public string AppVersion { get; set; }
         public string CtrlSdkVersion { get; set; }
+        public bool IsHiddenKind { get; set; }
+        public int KindRowCellSize { get; set; }
 
 
     }

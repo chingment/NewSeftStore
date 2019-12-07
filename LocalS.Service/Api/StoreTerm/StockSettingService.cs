@@ -147,7 +147,9 @@ namespace LocalS.Service.Api.StoreTerm
 
                         for (var j = 0; j < colLength; j++)
                         {
-                            slotIds.Add(string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j));
+                            string slotId = string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j);
+                            LogUtil.Info("All.slotId:" + slotId);
+                            slotIds.Add(slotId);
                         }
                     }
 
@@ -182,6 +184,8 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
+                        LogUtil.Info("Remove.SlotId:" + removeSellChannelStock.SlotId);
+
                         BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
                     }
 
