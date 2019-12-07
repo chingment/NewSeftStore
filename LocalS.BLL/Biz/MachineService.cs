@@ -34,7 +34,7 @@ namespace LocalS.BLL.Biz
             model.CtrlSdkVersion = machine.CtrlSdkVersionCode;
             model.IsHiddenKind = machine.IsHiddenKind;
             model.KindRowCellSize = machine.KindRowCellSize;
-            model.SupportPayPartner = Array.ConvertAll<string, int>(machine.SupportPayPartner.Split(','), s => int.Parse(s));
+
        
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 
@@ -43,6 +43,7 @@ namespace LocalS.BLL.Biz
                 model.MerchId = merch.Id;
                 model.MerchName = merch.Name;
                 model.CsrQrCode = merch.CsrQrCode;
+                model.SupportPayPartner = Array.ConvertAll<string, int>(merch.SupportPayPartner.Split(','), s => int.Parse(s));
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
                 if (merchMachine != null)

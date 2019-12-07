@@ -42,7 +42,6 @@ namespace LocalS.Entity
         public string CtrlSdkVersionCode { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
-        public string SupportPayPartner { get; set; }
         //public int CabinetMaxRow_1 { get; set; }
         //public int CabinetMaxCol_1 { get; set; }
     }

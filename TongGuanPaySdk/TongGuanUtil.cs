@@ -11,8 +11,8 @@ namespace TongGuanPaySdk
     {
         private ApiDoPost _api = new ApiDoPost();
         private string notifyUrl = "https://demo.res.17fanju.com/Api/Order/PayResultNotify";
-        private string account = "1571215372255";
-        private string key = "bda1c3c86878b33258823d4d1dcc20ea";
+        private string account = "13974747474";
+        private string key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
 
 
         public TongGuanUtil(TongGuanPayInfoConfg config)
@@ -113,6 +113,13 @@ namespace TongGuanPaySdk
 
             dic.Add("sign", GetSign(dic));
 
+
+            Dictionary<string, string> dic1 = new Dictionary<string, string>();
+            foreach (var key in dic)
+            {
+                dic1.Add(key.Key, System.Web.HttpUtility.UrlEncode(key.Value));
+            }
+
             var request = new AllQrcodePayRequest(dic);
 
             var requestResult = _api.DoPost(request);
@@ -123,10 +130,19 @@ namespace TongGuanPaySdk
 
         public string OrderQuery(string lowOrderId)
         {
-            var result = new AllQrcodePayRequestResult();
 
 
+            Dictionary<string, string> dic = new Dictionary<string, string>();
 
+            dic.Add("account", account);
+            dic.Add("lowOrderId", lowOrderId);
+
+
+            dic.Add("sign", GetSign(dic));
+
+            var request = new OrderQueryRequest(dic);
+
+            var requestResult = _api.DoPost(request);
 
             return "";
         }

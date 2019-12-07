@@ -31,6 +31,7 @@ namespace LocalS.Entity
         public string TongGuanPayAccount { get; set; }
         public string TongGuanPayKey { get; set; }
         public string TongGuanPayResultNotifyUrl { get; set; }
+        public string SupportPayPartner { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

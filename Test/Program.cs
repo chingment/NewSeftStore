@@ -51,19 +51,23 @@ namespace Test
 
         static void Main(string[] args)
         {
-        
-            TongGuanUtil api = new TongGuanUtil(null);
+
+            TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
+            config.PayResultNotifyUrl = "https://demo.res.17fanju.com/Api/Order/PayResultNotify";
+            config.Account = "13974747474";
+            config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
+            TongGuanUtil api = new TongGuanUtil(config);
 
 
-            Dictionary<string, string> dic = new Dictionary<string, string>();
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
 
-            dic.Add("ac", "xxx");
-            dic.Add("ab", "xxx");
-            dic.Add("c", "xxx");
-            dic.Add("b", "xxx");
-            api.GetSign(dic);
-
-            api.AllQrcodePay("610005420191023162716933", "0.01", "自助商品", "867184037089830");
+            //dic.Add("ac", "xxx");
+            //dic.Add("ab", "xxx");
+            //dic.Add("c", "xxx");
+            //dic.Add("b", "xxx");
+            //api.GetSign(dic);
+          //  api.OrderQuery("610005420191023162716933");
+            api.AllQrcodePay("610005420191023162716935", "0.01", "我", "867184037089830");
             //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
 
             //string s23 = System.Web.HttpUtility.UrlDecode("%7B%22appinfo%22%3A%7B%22appChannel%22%3A%22com.uplink.selfstore%22%2C%22appId%22%3A%221%22%2C%22appVersion%22%3A%221.0.0.0%22%7D%2C%22deviceinfo%22%3A%7B%22deviceDensity%22%3A%221.0%22%2C%22deviceId%22%3A%224675a39a-d9b5-420b-bca5-45b767346088%22%2C%22deviceLocale%22%3A%22en%22%2C%22deviceMacAddr%22%3A%2202%3A00%3A00%3A00%3A00%3A00%22%2C%22deviceModel%22%3A%22Android+SDK+built+for+x86%22%2C%22deviceOsVersion%22%3A%227.1%22%2C%22devicePlatform%22%3A%22Android%22%2C%22deviceScreen%22%3A%221080*1872%22%7D%2C%22networkinfo%22%3A%7B%22ipAddr%22%3A%22fe80%3A%3A5054%3Aff%3Afe12%3A3456%25eth0%22%2C%22wifi%22%3Afalse%7D%7D");
@@ -83,7 +87,7 @@ namespace Test
             //RedisManager.Db.HashSetAsync("aaa", "b2ww", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
 
 
-           // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
+            // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
 
             bool a1 = CommonUtil.IsNumber("1312331333x13133123");
 
