@@ -101,6 +101,10 @@
       <Project>{9b2a3d2e-47e6-4403-8f68-d3279a19173d}</Project>
       <Name>MyPushSdk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TongGuanPaySdk\TongGuanPaySdk.csproj">
+      <Project>{259e83da-5441-4911-b284-d524201329fc}</Project>
+      <Name>TongGuanPaySdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

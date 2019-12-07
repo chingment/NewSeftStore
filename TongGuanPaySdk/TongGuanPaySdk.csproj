@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85E1B9CD-3435-4591-BC66-29FBEC2C67A3}</ProjectGuid>
+    <ProjectGuid>{259E83DA-5441-4911-B284-D524201329FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LocalS.Entity</RootNamespace>
-    <AssemblyName>LocalS.Entity</AssemblyName>
+    <RootNamespace>TongGuanPaySdk</RootNamespace>
+    <AssemblyName>TongGuanPaySdk</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,11 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net465\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.Composition.Registration" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,46 +48,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdContent.cs" />
-    <Compile Include="AdSpace.cs" />
-    <Compile Include="AdContentBelong.cs" />
-    <Compile Include="AppTraceLog.cs" />
-    <Compile Include="ClientCart.cs" />
-    <Compile Include="ClientCoupon.cs" />
-    <Compile Include="ClientDeliveryAddress.cs" />
-    <Compile Include="Enumeration.cs" />
-    <Compile Include="Ins\InsCarCompanyRule.cs" />
-    <Compile Include="Ins\InsCarModelInfo.cs" />
-    <Compile Include="Ins\InsCarPlateNoInfo.cs" />
-    <Compile Include="Ins\InsCarPlateNoSearchHis.cs" />
-    <Compile Include="Agent.cs" />
-    <Compile Include="Machine.cs" />
-    <Compile Include="MachineOperateLog.cs" />
-    <Compile Include="MerchMachine.cs" />
-    <Compile Include="MachineBindLog.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="OrderDetails.cs" />
-    <Compile Include="OrderDetailsChild.cs" />
-    <Compile Include="OrderDetailsChildSon.cs" />
-    <Compile Include="OrderNotifyLog.cs" />
-    <Compile Include="OrderPickupLog.cs" />
-    <Compile Include="PrdProduct.cs" />
-    <Compile Include="PrdKind.cs" />
-    <Compile Include="PrdProductSku.cs" />
-    <Compile Include="Merch.cs" />
-    <Compile Include="PrdProductKind.cs" />
-    <Compile Include="PrdProductSkuBatch.cs" />
-    <Compile Include="PrdProductSubject.cs" />
-    <Compile Include="PrdSubject.cs" />
+    <Compile Include="IApiPostRequest.cs" />
+    <Compile Include="ApiDoPost.cs" />
+    <Compile Include="Post\AllQrcodePayAsynNotifyResult.cs" />
+    <Compile Include="Post\AllQrcodePayRequest.cs" />
+    <Compile Include="Post\AllQrcodePayRequestData.cs" />
+    <Compile Include="Post\AllQrcodePayRequestResult.cs" />
+    <Compile Include="Post\BaseRequestData.cs" />
+    <Compile Include="Post\BaseRequestResult.cs" />
+    <Compile Include="Post\OrderQueryRequestData.cs" />
+    <Compile Include="Post\OrderQueryRequestResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RptOrder.cs" />
-    <Compile Include="RptOrderDetails.cs" />
-    <Compile Include="RptOrderDetailsChild.cs" />
-    <Compile Include="SellChannel.cs" />
-    <Compile Include="Store.cs" />
-    <Compile Include="SellChannelStock.cs" />
-    <Compile Include="SellChannelStockLog.cs" />
-    <Compile Include="Term.cs" />
+    <Compile Include="TongGuanApi.cs" />
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\FileItem.cs" />
+    <Compile Include="Utils\WebUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lumos\Lumos.csproj">
+      <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
+      <Name>Lumos</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

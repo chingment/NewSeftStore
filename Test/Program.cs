@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using TongGuanPaySdk;
 
 namespace Test
 {
@@ -50,19 +51,31 @@ namespace Test
 
         static void Main(string[] args)
         {
+        
+            TongGuanApi api = new TongGuanApi();
 
-            PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
 
-            string s23 = System.Web.HttpUtility.UrlDecode("%7B%22appinfo%22%3A%7B%22appChannel%22%3A%22com.uplink.selfstore%22%2C%22appId%22%3A%221%22%2C%22appVersion%22%3A%221.0.0.0%22%7D%2C%22deviceinfo%22%3A%7B%22deviceDensity%22%3A%221.0%22%2C%22deviceId%22%3A%224675a39a-d9b5-420b-bca5-45b767346088%22%2C%22deviceLocale%22%3A%22en%22%2C%22deviceMacAddr%22%3A%2202%3A00%3A00%3A00%3A00%3A00%22%2C%22deviceModel%22%3A%22Android+SDK+built+for+x86%22%2C%22deviceOsVersion%22%3A%227.1%22%2C%22devicePlatform%22%3A%22Android%22%2C%22deviceScreen%22%3A%221080*1872%22%7D%2C%22networkinfo%22%3A%7B%22ipAddr%22%3A%22fe80%3A%3A5054%3Aff%3Afe12%3A3456%25eth0%22%2C%22wifi%22%3Afalse%7D%7D");
-            string s = UrlEncode1("http://demo.api.term.17fanju.com");
-            var b = RedisManager.Db.HashScan("aaa", "a1*");
-            var b1 = b.ToList();
+            Dictionary<string, string> dic = new Dictionary<string, string>();
 
-            foreach (var b2 in b1)
-            {
-                string b3 = b2.Name;
-            }
-            RedisManager.Db.HashScan("aaa", "a1*");
+            dic.Add("ac", "xxx");
+            dic.Add("ab", "xxx");
+            dic.Add("c", "xxx");
+            dic.Add("b", "xxx");
+            api.GetSign(dic);
+
+            api.AllQrcodePay("610005420191023162716933", "0.01", "自助商品", "867184037089830");
+            //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
+
+            //string s23 = System.Web.HttpUtility.UrlDecode("%7B%22appinfo%22%3A%7B%22appChannel%22%3A%22com.uplink.selfstore%22%2C%22appId%22%3A%221%22%2C%22appVersion%22%3A%221.0.0.0%22%7D%2C%22deviceinfo%22%3A%7B%22deviceDensity%22%3A%221.0%22%2C%22deviceId%22%3A%224675a39a-d9b5-420b-bca5-45b767346088%22%2C%22deviceLocale%22%3A%22en%22%2C%22deviceMacAddr%22%3A%2202%3A00%3A00%3A00%3A00%3A00%22%2C%22deviceModel%22%3A%22Android+SDK+built+for+x86%22%2C%22deviceOsVersion%22%3A%227.1%22%2C%22devicePlatform%22%3A%22Android%22%2C%22deviceScreen%22%3A%221080*1872%22%7D%2C%22networkinfo%22%3A%7B%22ipAddr%22%3A%22fe80%3A%3A5054%3Aff%3Afe12%3A3456%25eth0%22%2C%22wifi%22%3Afalse%7D%7D");
+            //string s = UrlEncode1("http://demo.api.term.17fanju.com");
+            //var b = RedisManager.Db.HashScan("aaa", "a1*");
+            //var b1 = b.ToList();
+
+            //foreach (var b2 in b1)
+            //{
+            //    string b3 = b2.Name;
+            //}
+            //RedisManager.Db.HashScan("aaa", "a1*");
 
             var s1 = new { a = 1, b = 2 };
             //.Db.HashSetAsync("aaa","a1xxx", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);

@@ -905,13 +905,15 @@ namespace LocalS.BLL.Biz
 
                 order.PayExpireTime = DateTime.Now.AddMinutes(5);
                 order.PayCaller = rop.PayCaller;
-                order.PayWay = rop.PayWay;
+ 
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
                 switch (rop.PayCaller)
                 {
                     case E_OrderPayCaller.AlipayByNative:
+                        #region AlipayByNative
+                        order.PayWay = E_OrderPayWay.AliPay;
                         var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
                         var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                         if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
@@ -924,8 +926,11 @@ namespace LocalS.BLL.Biz
                         var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
+                        #endregion 
                         break;
                     case E_OrderPayCaller.WechatByNative:
+                        #region WechatByNative
+                        order.PayWay = E_OrderPayWay.Wechat;
                         var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                         var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                         if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
@@ -939,10 +944,11 @@ namespace LocalS.BLL.Biz
                         var wechatByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByNative_PayParams);
-
+                        #endregion
                         break;
                     case E_OrderPayCaller.WechatByMp:
-
+                        #region WechatByMp
+                        order.PayWay = E_OrderPayWay.Wechat;
                         var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
 
                         if (wechatByMp_UserInfo == null)
@@ -973,6 +979,7 @@ namespace LocalS.BLL.Biz
                         var pms = SdkFactory.Wx.GetJsApiPayParams(wechatByMp_AppInfoConfig, order.Id, order.Sn, wechatByMp_UnifiedOrder.PrepayId);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
+                        #endregion 
                         break;
                     default:
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
