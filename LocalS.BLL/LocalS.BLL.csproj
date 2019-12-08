@@ -140,7 +140,7 @@
       <Name>Lumos</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyPushSdk\MyPushSdk.csproj">
-      <Project>{9b2a3d2e-47e6-4403-8f68-d3279a19173d}</Project>
+      <Project>{ec691c59-681a-405e-93cb-4fe65d1a3db4}</Project>
       <Name>MyPushSdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\TongGuanPaySdk\TongGuanPaySdk.csproj">
