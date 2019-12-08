@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -79,8 +80,6 @@ namespace TongGuanPaySdk
 
         public AllQrcodePayRequestResult AllQrcodePay(string lowOrderId, string payMoney, string body, string lowCashier)
         {
-            var result = new AllQrcodePayRequestResult();
-
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
             dic.Add("account", account);
@@ -125,12 +124,13 @@ namespace TongGuanPaySdk
             var requestResult = _api.DoPost(request);
 
 
-            return result;
+            return requestResult;
         }
 
         public string OrderQuery(string lowOrderId)
         {
 
+            LogUtil.Info("OrderQuery:" + lowOrderId);
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -144,7 +144,7 @@ namespace TongGuanPaySdk
 
             var requestResult = _api.DoPost(request);
 
-            return "";
+            return requestResult.ToJsonString();
         }
     }
 }
