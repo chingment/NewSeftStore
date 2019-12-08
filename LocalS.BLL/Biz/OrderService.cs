@@ -162,6 +162,7 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
 
+
                     order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
                     order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
                     order.ChargeAmount = reserveDetails.Sum(m => m.ChargeAmount);
@@ -1064,6 +1065,8 @@ namespace LocalS.BLL.Biz
                     default:
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
                 }
+
+                Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
