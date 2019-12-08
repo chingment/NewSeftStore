@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-
+using TongGuanPaySdk;
 
 namespace LocalS.BLL.Biz
 {
@@ -523,11 +523,14 @@ namespace LocalS.BLL.Biz
                 Order order = null;
                 string orderSn = "";
                 string clientUserName = "";
+                E_OrderPayWay orderPayWay = E_OrderPayWay.Unknow;
                 bool isPaySuccess = false;
                 if (payPartner == E_OrderPayPartner.Wechat)
                 {
+
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信支付协议");
+                    orderPayWay = E_OrderPayWay.Wechat;
 
                     var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
                     if (dic.ContainsKey("out_trade_no"))
@@ -568,6 +571,7 @@ namespace LocalS.BLL.Biz
                 {
                     #region 解释支付宝支付协议
                     LogUtil.Info("解释支付宝支付协议");
+                    orderPayWay = E_OrderPayWay.AliPay;
                     var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
@@ -604,6 +608,53 @@ namespace LocalS.BLL.Biz
                 {
                     #region 解释 通莞支付协议
 
+                    if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    {
+                        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<AllQrcodePayAsynNotifyResult>(content);
+                        if (result != null)
+                        {
+                            if (result.state == "0")
+                            {
+                                isPaySuccess = true;
+                                orderSn = result.lowOrderId;
+
+                                if (result.channelID == "WX")
+                                {
+                                    orderPayWay = E_OrderPayWay.Wechat;
+                                }
+                                if (result.channelID == "ZFB")
+                                {
+                                    orderPayWay = E_OrderPayWay.AliPay;
+                                }
+
+                            }
+                        }
+                    }
+                    else if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
+                    {
+                        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderQueryRequestResult>(content);
+                        if (result != null)
+                        {
+                            if (result.status == "100")
+                            {
+                                if (result.state == "0")
+                                {
+                                    isPaySuccess = true;
+                                    orderSn = result.lowOrderId;
+
+                                    if (result.channelID == "WX")
+                                    {
+                                        orderPayWay = E_OrderPayWay.Wechat;
+                                    }
+                                    if (result.channelID == "ZFB")
+                                    {
+                                        orderPayWay = E_OrderPayWay.AliPay;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
                     #endregion
                 }
 
@@ -615,7 +666,7 @@ namespace LocalS.BLL.Biz
 
                         Dictionary<string, string> pms = new Dictionary<string, string>();
                         pms.Add("clientUserName", clientUserName);
-                        PaySuccess(operater, orderSn, DateTime.Now, pms);
+                        PaySuccess(operater, orderSn, orderPayWay, DateTime.Now, pms);
                     }
 
                     order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
@@ -640,7 +691,7 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string orderSn, DateTime completedTime, Dictionary<string, string> pms = null)
+        public CustomJsonResult PaySuccess(string operater, string orderSn, E_OrderPayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -667,6 +718,7 @@ namespace LocalS.BLL.Biz
 
                 LogUtil.Info("orderSn2:" + orderSn);
 
+                order.PayWay = payWay;
                 order.Status = E_OrderStatus.Payed;
                 order.PayTime = DateTime.Now;
                 order.MendTime = DateTime.Now;
