@@ -76,12 +76,12 @@ namespace LocalS.BLL.Task
                                     string content = "";
                                     switch (order.PayCaller)
                                     {
-                                        case E_OrderPayCaller.AlipayByNative:
+                                        case E_OrderPayCaller.AlipayByBuildQrCode:
                                             var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
                                             content = SdkFactory.Alipay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
                                             break;
 
-                                        case E_OrderPayCaller.WechatByNative:
+                                        case E_OrderPayCaller.WechatByBuildQrCode:
                                             var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                             content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);
                                             break;
@@ -89,7 +89,7 @@ namespace LocalS.BLL.Task
                                             var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                             content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
                                             break;
-                                        case E_OrderPayCaller.TongGuanByAllQrcodePay:
+                                        case E_OrderPayCaller.AggregatePayByBuildQrCode:
                                             
                                             var tongGuanByAllQrcodePay_AppInfoConfig = BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
                                             content = SdkFactory.TongGuan.OrderQuery(tongGuanByAllQrcodePay_AppInfoConfig, order.Sn);

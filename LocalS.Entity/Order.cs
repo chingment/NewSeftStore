@@ -41,11 +41,11 @@ namespace LocalS.Entity
     public enum E_OrderPayCaller
     {
         Unknow = 0,
-        WechatByNative = 10, //微信Native发起支付生成二维码
+        WechatByBuildQrCode = 10, //微信方式生成二维码
         WechatByPa = 11, //微信公众号发起支付
         WechatByMp = 12, //微信小程序发起支付,
-        AlipayByNative = 20, //微信小程序发起支付生成二维码
-        TongGuanByAllQrcodePay = 30 //通莞支付发起支付生成二维码 一码付
+        AlipayByBuildQrCode = 20, //支付宝方式生成二维码
+        AggregatePayByBuildQrCode = 90 //聚合方式生成二维码
 
     }
 

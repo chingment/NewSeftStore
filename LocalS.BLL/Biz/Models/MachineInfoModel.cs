@@ -29,6 +29,7 @@ namespace LocalS.BLL.Biz
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
 
-        public int[] SupportPayPartner { get; set; }
+        public int[] AggregatePaySupportWays { get; set; }
+        public int[] TerminalPayOptions { get; set; }
     }
 }

@@ -971,26 +971,8 @@ namespace LocalS.BLL.Biz
 
                 switch (rop.PayCaller)
                 {
-                    case E_OrderPayCaller.AlipayByNative:
-                        #region AlipayByNative
-                        order.PayPartner = E_OrderPayPartner.AliPay;
-                        order.PayWay = E_OrderPayWay.AliPay;
-                        var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                        var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-                        if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                        }
-
-                        order.PayQrCodeUrl = alipayByNative_UnifiedOrder.CodeUrl;
-
-                        var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
-                        #endregion 
-                        break;
-                    case E_OrderPayCaller.WechatByNative:
-                        #region WechatByNative
+                    case E_OrderPayCaller.WechatByBuildQrCode:
+                        #region WechatByBuildQrCode
                         order.PayPartner = E_OrderPayPartner.Wechat;
                         order.PayWay = E_OrderPayWay.Wechat;
                         var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
@@ -1044,8 +1026,26 @@ namespace LocalS.BLL.Biz
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
                         #endregion 
                         break;
-                    case E_OrderPayCaller.TongGuanByAllQrcodePay:
-                        #region TongGuanByAllQrcodePay
+                    case E_OrderPayCaller.AlipayByBuildQrCode:
+                        #region AlipayByBuildQrCode
+                        order.PayPartner = E_OrderPayPartner.AliPay;
+                        order.PayWay = E_OrderPayWay.AliPay;
+                        var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
+                        var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                        if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                        }
+
+                        order.PayQrCodeUrl = alipayByNative_UnifiedOrder.CodeUrl;
+
+                        var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
+                        #endregion 
+                        break;
+                    case E_OrderPayCaller.AggregatePayByBuildQrCode:
+                        #region AggregatePayByBuildQrCode
                         order.PayPartner = E_OrderPayPartner.TongGuan;
                         var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
                         var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
