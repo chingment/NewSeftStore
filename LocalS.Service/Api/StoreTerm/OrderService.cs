@@ -237,7 +237,7 @@ namespace LocalS.Service.Api.StoreTerm
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
             bizRop.OrderId = rop.OrderId;
             bizRop.PayCaller = rop.PayCaller;
-
+            bizRop.PayPartner = rop.PayPartner;
             return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
         }
 

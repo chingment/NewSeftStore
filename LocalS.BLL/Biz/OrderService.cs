@@ -969,98 +969,127 @@ namespace LocalS.BLL.Biz
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
-                switch (rop.PayCaller)
+
+                switch (rop.PayPartner)
                 {
-                    case E_OrderPayCaller.WechatByBuildQrCode:
-                        #region WechatByBuildQrCode
-                        order.PayPartner = E_OrderPayPartner.Wechat;
-                        order.PayWay = E_OrderPayWay.Wechat;
-                        var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                        var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-                        if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
+                    case E_OrderPayPartner.Wechat:
+                        #region  Wechat
+                        switch (rop.PayCaller)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                            case E_OrderPayCaller.WechatByBuildQrCode:
+                                #region WechatByBuildQrCode
+                                order.PayPartner = E_OrderPayPartner.Wechat;
+                                order.PayWay = E_OrderPayWay.Wechat;
+                                var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                }
+
+                                order.PayPrepayId = wechatByNative_UnifiedOrder.PrepayId;
+                                order.PayQrCodeUrl = wechatByNative_UnifiedOrder.CodeUrl;
+
+                                var wechatByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByNative_PayParams);
+                                #endregion
+                                break;
+                            case E_OrderPayCaller.WechatByMp:
+                                #region WechatByMp
+                                order.PayPartner = E_OrderPayPartner.Wechat;
+                                order.PayWay = E_OrderPayWay.Wechat;
+                                var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
+
+                                if (wechatByMp_UserInfo == null)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
+                                }
+
+                                var wechatByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+
+                                if (wechatByMp_AppInfoConfig == null)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+                                }
+
+                                orderAttach.MerchId = order.MerchId;
+                                orderAttach.StoreId = order.StoreId;
+                                orderAttach.PayCaller = rop.PayCaller;
+
+                                var wechatByMp_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wechatByMp_AppInfoConfig, wechatByMp_UserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+
+                                if (string.IsNullOrEmpty(wechatByMp_UnifiedOrder.PrepayId))
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                }
+
+                                order.PayPrepayId = wechatByMp_UnifiedOrder.PrepayId;
+
+                                var pms = SdkFactory.Wx.GetJsApiPayParams(wechatByMp_AppInfoConfig, order.Id, order.Sn, wechatByMp_UnifiedOrder.PrepayId);
+
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
+                                #endregion
+                                break;
+                            default:
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+
                         }
-
-                        order.PayPrepayId = wechatByNative_UnifiedOrder.PrepayId;
-                        order.PayQrCodeUrl = wechatByNative_UnifiedOrder.CodeUrl;
-
-                        var wechatByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByNative_PayParams);
-                        #endregion
-                        break;
-                    case E_OrderPayCaller.WechatByMp:
-                        #region WechatByMp
-                        order.PayPartner = E_OrderPayPartner.Wechat;
-                        order.PayWay = E_OrderPayWay.Wechat;
-                        var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
-
-                        if (wechatByMp_UserInfo == null)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
-                        }
-
-                        var wechatByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-
-                        if (wechatByMp_AppInfoConfig == null)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
-                        }
-
-                        orderAttach.MerchId = order.MerchId;
-                        orderAttach.StoreId = order.StoreId;
-                        orderAttach.PayCaller = rop.PayCaller;
-
-                        var wechatByMp_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wechatByMp_AppInfoConfig, wechatByMp_UserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-
-                        if (string.IsNullOrEmpty(wechatByMp_UnifiedOrder.PrepayId))
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                        }
-
-                        order.PayPrepayId = wechatByMp_UnifiedOrder.PrepayId;
-
-                        var pms = SdkFactory.Wx.GetJsApiPayParams(wechatByMp_AppInfoConfig, order.Id, order.Sn, wechatByMp_UnifiedOrder.PrepayId);
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
                         #endregion 
                         break;
-                    case E_OrderPayCaller.AlipayByBuildQrCode:
-                        #region AlipayByBuildQrCode
-                        order.PayPartner = E_OrderPayPartner.AliPay;
-                        order.PayWay = E_OrderPayWay.AliPay;
-                        var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                        var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-                        if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
+                    case E_OrderPayPartner.AliPay:
+                        #region AliPay
+                        switch (rop.PayCaller)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                            case E_OrderPayCaller.AlipayByBuildQrCode:
+                                #region AlipayByBuildQrCode
+                                order.PayPartner = E_OrderPayPartner.AliPay;
+                                order.PayWay = E_OrderPayWay.AliPay;
+                                var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
+                                var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                }
+
+                                order.PayQrCodeUrl = alipayByNative_UnifiedOrder.CodeUrl;
+
+                                var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
+                                #endregion
+                                break;
+                            default:
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
                         }
-
-                        order.PayQrCodeUrl = alipayByNative_UnifiedOrder.CodeUrl;
-
-                        var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
-                        #endregion 
-                        break;
-                    case E_OrderPayCaller.AggregatePayByBuildQrCode:
-                        #region AggregatePayByBuildQrCode
-                        order.PayPartner = E_OrderPayPartner.TongGuan;
-                        var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
-                        var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-                        if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                        }
-
-                        order.PayQrCodeUrl = tongGuanPay_AllQrcodePay.codeUrl;
-
-                        var tongGuanPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tongGuanPay_AllQrcodePay_PayParams);
-
                         #endregion
+                        break;
+                    case E_OrderPayPartner.TongGuan:
+                        #region 通莞支付
+                        switch (rop.PayCaller)
+                        {
+                            case E_OrderPayCaller.AggregatePayByBuildQrCode:
+                                #region AggregatePayByBuildQrCode
+                                order.PayPartner = E_OrderPayPartner.TongGuan;
+                                var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
+                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                }
+
+                                order.PayQrCodeUrl = tongGuanPay_AllQrcodePay.codeUrl;
+
+                                var tongGuanPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tongGuanPay_AllQrcodePay_PayParams);
+
+                                #endregion
+                                break;
+                            default:
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                        }
+                        #endregion 
                         break;
                     default:
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);

@@ -19,6 +19,6 @@ namespace LocalS.BLL.Biz
         public string OrderId { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
 
-        public E_PayOption PayOption { get; set; }
+        public E_OrderPayPartner PayPartner { get; set; }
     }
 }
