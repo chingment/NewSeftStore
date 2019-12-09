@@ -28,6 +28,6 @@ namespace LocalS.BLL.Biz
         public string CtrlSdkVersion { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
-        public List<PayOption> TerminalPayOptions { get; set; }
+        public List<PayOption> PayOptions { get; set; }
     }
 }

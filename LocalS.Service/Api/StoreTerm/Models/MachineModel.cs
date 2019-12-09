@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreTerm
         public int[] CabinetRowColLayout_1 { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
-        public List<PayOption> TerminalPayOptions { get; set; }
+        public List<PayOption> PayOptions { get; set; }
 
     }
 }

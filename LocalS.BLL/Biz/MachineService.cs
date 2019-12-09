@@ -44,7 +44,7 @@ namespace LocalS.BLL.Biz
                 model.MerchName = merch.Name;
                 model.CsrQrCode = merch.CsrQrCode;
 
-                model.TerminalPayOptions = merch.ToJsonObject<List<PayOption>>();
+                model.PayOptions = merch.TerminalPayOptions.ToJsonObject<List<PayOption>>();
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
                 if (merchMachine != null)

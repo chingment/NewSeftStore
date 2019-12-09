@@ -74,7 +74,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CabinetRowColLayout_1 = machineInfo.CabinetRowColLayout_1;
             ret.Machine.IsHiddenKind = machineInfo.IsHiddenKind;
             ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
-            ret.Machine.TerminalPayOptions = machineInfo.TerminalPayOptions;
+            ret.Machine.PayOptions = machineInfo.PayOptions;
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
             ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
