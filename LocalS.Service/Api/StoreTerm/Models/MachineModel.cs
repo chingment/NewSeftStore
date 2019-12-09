@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,7 @@ namespace LocalS.Service.Api.StoreTerm
         public int[] CabinetRowColLayout_1 { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
-
-        public int[] AggregatePaySupportWays { get; set; }
-        public int[] TerminalPayOptions { get; set; }
+        public List<PayOption> TerminalPayOptions { get; set; }
 
     }
 }

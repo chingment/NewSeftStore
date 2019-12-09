@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+
+
     [Table("Merch")]
     public class Merch
     {
@@ -35,10 +37,6 @@ namespace LocalS.Entity
         /// 终端机器，构建生成二维码的选项，1：，微信，2：支付宝，3：银联，4：京东钱包，5：掌上生活，9：聚合支付，当不是使用聚合支付 99：聚合一码 不显示
         /// </summary>
         public string TerminalPayOptions { get; set; }
-        /// <summary>
-        /// 当点击聚合支付显示支持的支付方式
-        /// </summary>
-        public string AggregatePaySupportWays { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

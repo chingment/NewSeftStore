@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
+using LocalS.Entity;
 using LocalS.Service.Api.StoreApp;
 using Lumos;
 using Lumos.Redis;
@@ -50,6 +51,23 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+
+            List<PayOption> payOptions = new List<PayOption>();
+
+            List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
+            payWay.Add(E_OrderPayWay.Wechat);
+
+            payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WechatByBuildQrCode, Partner = E_OrderPayPartner.Wechat, SupportWays = payWay });
+            payOptions.Add(new PayOption { Caller = E_OrderPayCaller.AlipayByBuildQrCode, Partner = E_OrderPayPartner.AliPay, SupportWays = payWay });
+
+            string a22 = payOptions.ToJsonString();
+
+
+           // [{"caller":10,"partner":1,"supportWays":[1]},{"caller":20,"partner":2,"supportWays":[2]}]
+
+
+           //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
 
             TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
             config.PayResultNotifyUrl = "https://demo.res.17fanju.com/Api/Order/PayResultNotify";
@@ -105,7 +123,7 @@ namespace Test
             sql.Append(" order by a1.datef desc  ");
 
 
-            string a = sql.ToString();
+            string a= sql.ToString();
 
             //sbyte[] orig = a(new byte[] { 0x82 });
 

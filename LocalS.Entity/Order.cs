@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
@@ -35,7 +36,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Wechat = 1,//微信支付
         AliPay = 2, //支付宝支付
-        TongGuan = 3 //通莞金服
+        TongGuan = 91 //通莞金服
     }
 
     public enum E_OrderPayCaller
@@ -47,6 +48,14 @@ namespace LocalS.Entity
         AlipayByBuildQrCode = 20, //支付宝方式生成二维码
         AggregatePayByBuildQrCode = 90 //聚合方式生成二维码
 
+    }
+
+
+    public class PayOption
+    {
+        public E_OrderPayCaller Caller { get; set; }
+        public E_OrderPayPartner Partner { get; set; }
+        public List<E_OrderPayWay> SupportWays { get; set; }
     }
 
     [Table("Order")]

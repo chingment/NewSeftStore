@@ -43,8 +43,8 @@ namespace LocalS.BLL.Biz
                 model.MerchId = merch.Id;
                 model.MerchName = merch.Name;
                 model.CsrQrCode = merch.CsrQrCode;
-                model.AggregatePaySupportWays = Array.ConvertAll<string, int>(merch.AggregatePaySupportWays.Split(','), s => int.Parse(s));
-                model.TerminalPayOptions = Array.ConvertAll<string, int>(merch.TerminalPayOptions.Split(','), s => int.Parse(s));
+
+                model.TerminalPayOptions = merch.ToJsonObject<List<PayOption>>();
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
                 if (merchMachine != null)
