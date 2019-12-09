@@ -43,7 +43,8 @@ namespace TongGuanPaySdk
             string str = "";
             foreach (var key in arrKeys)
             {
-                str += key + "=" + dic[key] + "&";
+                  str += key + "=" + dic[key] + "&";
+                //str += key + "=" + System.Web.HttpUtility.UrlEncode(dic[key]) + "&";
             }
 
 
@@ -62,7 +63,7 @@ namespace TongGuanPaySdk
 
 
 
-            byte[] result = Encoding.Default.GetBytes(material);    //tbPass为输入密码的文本框  
+            byte[] result = Encoding.UTF8.GetBytes(material);    //tbPass为输入密码的文本框  
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] output = md5.ComputeHash(result);
             string s_output = BitConverter.ToString(output).Replace("-", "");
@@ -139,6 +140,13 @@ namespace TongGuanPaySdk
 
 
             dic.Add("sign", GetSign(dic));
+
+
+            //Dictionary<string, string> dic1 = new Dictionary<string, string>();
+            //foreach (var key in dic)
+            //{
+            //    dic1.Add(key.Key, System.Web.HttpUtility.UrlEncode(key.Value));
+            //}
 
             var request = new OrderQueryRequest(dic);
 

@@ -51,8 +51,21 @@ namespace Test
 
         static void Main(string[] args)
         {
+            // { "status":100,"channelId":"WX","state":"4","settlementChannel":"038","payTime":"2019-12-08 17:00:43","payoffType":null,"lowOrderId":"6100054201910231627169351",
+            //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易","payMoney":"0.01"
+            //    ,"upOrderId":"91203600163013136384","payType":"0","account":"13974747474","openid":null,"openId":null}
 
-
+            //  15589D446B76FD679E3A6D7D34FF9A56
+            //{"status":100,
+            //"channelId":"WX",
+            //"state":"4",
+            //"settlementChannel":"038",
+            //"payTime":"2019-12-08 17:00:43",
+            //"payoffType":null,
+            //"lowOrderId": "6100054201910231627169351",
+            //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易",
+            //"payMoney":"0.01","upOrderId":"91203600163013136384",
+            //"payType":"0","account":"13974747474","openid":null,"openId":null}
             List<PayOption> payOptions = new List<PayOption>();
 
             List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
@@ -64,25 +77,31 @@ namespace Test
             string a22 = payOptions.ToJsonString();
 
 
-           // [{"caller":10,"partner":1,"supportWays":[1]},{"caller":20,"partner":2,"supportWays":[2]}]
+            // [{"caller":10,"partner":1,"supportWays":[1]},{"caller":20,"partner":2,"supportWays":[2]}]
 
 
-           //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
+            //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
 
             TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
             config.PayResultNotifyUrl = "https://demo.res.17fanju.com/Api/Order/PayResultNotify";
             config.Account = "13974747474";
             config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
             TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
-            tongGuanUtil.AllQrcodePay("6100054201910231627169351", "0.01", "", "867184037089830");
-
-            //Dictionary<string, string> dic = new Dictionary<string, string>();
-
-            //dic.Add("ac", "xxx");
-            //dic.Add("ab", "xxx");
-            //dic.Add("c", "xxx");
-            //dic.Add("b", "xxx");
-            //api.GetSign(dic);
+            //  tongGuanUtil.AllQrcodePay("6100054201910231627169351", "0.01", "", "867184037089830");
+             tongGuanUtil.OrderQuery("6100054201910231627169351我");
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("status", "100");
+            dic.Add("channelId", "WX");
+            dic.Add("state", "4");
+            dic.Add("settlementChannel", "038");
+            dic.Add("payTime", "2019-12-08 17:00:43");
+            dic.Add("lowOrderId", "6100054201910231627169351");
+            dic.Add("payMoney", "0.01");
+            dic.Add("upOrderId", "91203600163013136384");
+            dic.Add("payType", "0");
+            dic.Add("account", "13974747474");
+            dic.Add("message", "找不到交易");
+            string c = tongGuanUtil.GetSign(dic);
             //  api.OrderQuery("610005420191023162716933");
             //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
 
@@ -123,7 +142,7 @@ namespace Test
             sql.Append(" order by a1.datef desc  ");
 
 
-            string a= sql.ToString();
+            string a = sql.ToString();
 
             //sbyte[] orig = a(new byte[] { 0x82 });
 
