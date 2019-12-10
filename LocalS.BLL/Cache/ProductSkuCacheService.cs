@@ -70,7 +70,7 @@ namespace LocalS.BLL
             productSkuInfoAndStockModel.DisplayImgUrls = productSkuInfo.DisplayImgUrls;
             productSkuInfoAndStockModel.DetailsDes = productSkuInfo.DetailsDes;
             productSkuInfoAndStockModel.BriefDes = productSkuInfo.BriefDes;
-            productSkuInfoAndStockModel.SpecDes = productSkuInfo.BriefDes;
+            productSkuInfoAndStockModel.SpecDes = productSkuInfo.SpecDes;
             productSkuInfoAndStockModel.Stocks = GetStock(merchId, productSkuId);
 
 

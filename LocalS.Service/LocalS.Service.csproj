@@ -314,6 +314,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogAction.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogout.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopMachineScanSlotsEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingTestPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />
