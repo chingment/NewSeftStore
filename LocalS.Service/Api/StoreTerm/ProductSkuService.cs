@@ -95,14 +95,8 @@ m.RefType == Entity.E_SellChannelRefType.Machine)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            if (CommonUtil.IsNumber(rup.Key))
-            {
-                ret.ProductSkus = CacheServiceFactory.ProductSku.Search(machine.MerchId, "BarCode", rup.Key);
-            }
-            else
-            {
-                ret.ProductSkus = CacheServiceFactory.ProductSku.Search(machine.MerchId, "PinYinIndex", rup.Key);
-            }
+
+            ret.ProductSkus = CacheServiceFactory.ProductSku.Search(machine.MerchId, "All", rup.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

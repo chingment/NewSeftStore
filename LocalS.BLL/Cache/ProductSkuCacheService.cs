@@ -23,14 +23,31 @@ namespace LocalS.BLL
     public class ProductSkuCacheService : BaseDbContext
     {
         private static readonly string redis_key_all_sku_info_by_merchId = "info_Sku_all:{0}";
-        //private static readonly string redis_key_one_sku_stock_by_productSkuId = "stock_sku_one:{0}";
-        //private static readonly string redis_key_all_sku_search_by_merchId = "search_sku_all:{0}";
         private static readonly string redis_key_search_SkuByBarCode = "search_SkuByBarCode:{0}";
         private static readonly string redis_key_search_SkuByPinYinIndex = "search_SkuByPinYinIndex:{0}";
         private static readonly string redis_key_search_SkuByName = "search_SkuByName:{0}";
 
         public void Update(string merchId, string productSkuId)
         {
+            var prdProductSkuModel = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(redis_key_all_sku_info_by_merchId, merchId), productSkuId);
+            if (prdProductSkuModel != null)
+            {
+                if (!string.IsNullOrEmpty(prdProductSkuModel.BarCode))
+                {
+                    RedisManager.Db.HashDelete(string.Format(redis_key_search_SkuByBarCode, merchId), prdProductSkuModel.BarCode);
+                }
+
+                if (!string.IsNullOrEmpty(prdProductSkuModel.PinYinIndex))
+                {
+                    RedisManager.Db.HashDelete(string.Format(redis_key_search_SkuByPinYinIndex, merchId), prdProductSkuModel.PinYinIndex);
+                }
+
+                if (!string.IsNullOrEmpty(prdProductSkuModel.Name))
+                {
+                    RedisManager.Db.HashDelete(string.Format(redis_key_search_SkuByName, merchId), prdProductSkuModel.Name);
+                }
+            }
+
             RedisHashUtil.Remove(string.Format(redis_key_all_sku_info_by_merchId, merchId), productSkuId);
             GetInfo(merchId, productSkuId);
         }
@@ -85,6 +102,10 @@ namespace LocalS.BLL
                 var prdProductDb = CurrentDb.PrdProduct.Where(m => m.Id == prdProductSkuByDb.PrdProductId).FirstOrDefault();
                 if (prdProductDb == null)
                     return null;
+
+                string oldBarCode = "";
+                string oldPinYinIndex = "";
+                string oldName = "";
 
                 prdProductSkuModel = new ProductSkuInfoModel();
                 prdProductSkuModel.Id = prdProductSkuByDb.Id;
@@ -151,23 +172,26 @@ namespace LocalS.BLL
 
             List<RedisValue> productSkuIds = new List<RedisValue>();
 
-            switch (type)
+            if (type == "BarCode" || type == "All")
             {
-                case "BarCode":
-                    var search_Scan_BarCode = RedisManager.Db.HashScan(string.Format(redis_key_search_SkuByBarCode, merchId), string.Format("{0}*", key));
-                    foreach (var item in search_Scan_BarCode)
-                    {
-                        productSkuIds.Add(item.Value);
-                    }
-                    break;
-                case "PinYinIndex":
-                    var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(redis_key_search_SkuByPinYinIndex, merchId), string.Format("{0}*", key));
-                    foreach (var item in search_Scan_PinYinIndex)
-                    {
-                        productSkuIds.Add(item.Value);
-                    }
-                    break;
+                var search_Scan_BarCode = RedisManager.Db.HashScan(string.Format(redis_key_search_SkuByBarCode, merchId), string.Format("{0}*", key));
+                foreach (var item in search_Scan_BarCode)
+                {
+                    productSkuIds.Add(item.Value);
+                }
             }
+
+            if (type == "PinYinIndex" || type == "All")
+            {
+                var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(redis_key_search_SkuByPinYinIndex, merchId), string.Format("{0}*", key));
+                foreach (var item in search_Scan_PinYinIndex)
+                {
+                    productSkuIds.Add(item.Value);
+                }
+            }
+
+            productSkuIds = productSkuIds.Distinct().ToList();
+
 
             if (productSkuIds.Count > 0)
             {
@@ -175,7 +199,7 @@ namespace LocalS.BLL
 
                 foreach (var productSku in productSkus)
                 {
-                    var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoBySearchModel>(productSku);
+                    var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(productSku);
                     var searchModel = new ProductSkuInfoBySearchModel();
                     searchModel.Id = productSkuModel.Id;
                     searchModel.Name = productSkuModel.Name;
