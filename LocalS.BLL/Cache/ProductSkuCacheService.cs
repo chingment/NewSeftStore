@@ -102,7 +102,7 @@ namespace LocalS.BLL
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
 
-                var productSkuInfoBySearchModel = new ProductSkuInfoBySearchModel { Id = prdProductSkuByDb.Id, BarCode = prdProductSkuByDb.BarCode, Name = prdProductSkuModel.Name, MainImgUrl = prdProductSkuModel.MainImgUrl };
+                var productSkuInfoBySearchModel = new ProductSkuInfoBySearchModel { Id = prdProductSkuByDb.Id, BarCode = prdProductSkuByDb.BarCode, Name = prdProductSkuModel.Name, MainImgUrl = prdProductSkuModel.MainImgUrl, SpecDes = prdProductSkuModel.SpecDes };
 
                 RedisManager.Db.HashSetAsync(string.Format(redis_key_all_sku_search_by_merchId, prdProductSkuByDb.MerchId), productSkuId + ",barcode:" + prdProductSkuModel.BarCode + ",pyindex:" + prdProductSkuModel.PinYinIndx + ",name:" + prdProductSkuModel.Name, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuInfoBySearchModel), StackExchange.Redis.When.Always);
 
@@ -112,7 +112,7 @@ namespace LocalS.BLL
             return prdProductSkuModel;
         }
 
-        public List<ProductSkuStockModel> GetStock(string merchId,string productSkuId)
+        public List<ProductSkuStockModel> GetStock(string merchId, string productSkuId)
         {
             var productSkuStockModels = new List<ProductSkuStockModel>();
 
@@ -146,7 +146,6 @@ namespace LocalS.BLL
             foreach (var item in d)
             {
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoBySearchModel>(item.Value);
-
                 obj.MainImgUrl = ImgSet.Convert_S(obj.MainImgUrl);
 
                 list.Add(obj);
