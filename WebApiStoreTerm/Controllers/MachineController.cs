@@ -77,6 +77,12 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse ScanSlotsEventNotify([FromBody]RopMachineScanSlotsEventNotify rop)
+        {
+            IResult result = StoreTermServiceFactory.Machine.ScanSlotsEventNotify(rop);
+            return new OwnApiHttpResponse(result);
+        }
 
         [HttpPost]
         public OwnApiHttpResponse UploadImg(RopMachineUploadImg rop)

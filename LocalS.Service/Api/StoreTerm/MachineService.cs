@@ -286,6 +286,14 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
         }
 
+
+        public CustomJsonResult ScanSlotsEventNotify(RopMachineScanSlotsEventNotify rop)
+        {
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        }
+
         public Task<bool> LogAction(string operater, string machineId, string action, string remark)
         {
             var task = Task.Run(() =>
