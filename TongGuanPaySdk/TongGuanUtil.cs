@@ -11,9 +11,9 @@ namespace TongGuanPaySdk
     public class TongGuanUtil
     {
         private ApiDoPost _api = new ApiDoPost();
-        private string notifyUrl = "https://demo.res.17fanju.com/Api/Order/PayResultNotify";
-        private string account = "13974747474";
-        private string key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
+        private string notifyUrl = "";
+        private string account = "";
+        private string key = "";
 
 
         public TongGuanUtil(TongGuanPayInfoConfg config)

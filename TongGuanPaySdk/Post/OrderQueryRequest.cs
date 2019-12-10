@@ -19,7 +19,7 @@ namespace TongGuanPaySdk
         {
             get
             {
-                return "http://tgjf.833006.biz/tgPosp/services/payApi/orderQuery";
+                return "/tgPosp/services/payApi/orderQuery";
             }
         }
     }
