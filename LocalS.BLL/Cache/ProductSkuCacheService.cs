@@ -22,12 +22,12 @@ namespace LocalS.BLL
     public class ProductSkuCacheService : BaseDbContext
     {
         private static readonly string redis_key_all_sku_info_by_merchId = "info_sku_all:{0}";
-        private static readonly string redis_key_one_sku_stock_by_productSkuId = "stock_sku_one:{0}";
+        //private static readonly string redis_key_one_sku_stock_by_productSkuId = "stock_sku_one:{0}";
         private static readonly string redis_key_all_sku_search_by_merchId = "search_sku_all:{0}";
         public void Update(string merchId, string productSkuId)
         {
             RedisHashUtil.Remove(string.Format(redis_key_all_sku_info_by_merchId, merchId), productSkuId);
-            RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productSkuId, productSkuId));
+            //RedisHashUtil.Remove(string.Format(redis_key_one_sku_stock_by_productSkuId, productSkuId));
 
             var search_Scans = RedisManager.Db.HashScan(string.Format(redis_key_all_sku_search_by_merchId, merchId), string.Format("{0}*", productSkuId));
 
@@ -151,6 +151,25 @@ namespace LocalS.BLL
                 list.Add(obj);
             }
             return list;
+        }
+
+        public void ReLoad()
+        {
+            var merchs = CurrentDb.Merch.ToList();
+            foreach (var merch in merchs)
+            {
+                RedisManager.Db.KeyDelete(string.Format(redis_key_all_sku_search_by_merchId, merch.Id));
+                RedisManager.Db.KeyDelete(string.Format(redis_key_all_sku_info_by_merchId, merch.Id));
+            }
+
+            foreach (var merch in merchs)
+            {
+                var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
+                foreach (var productSku in productSkus)
+                {
+                    GetInfo(merch.Id, productSku.Id);
+                }
+            }
         }
     }
 }

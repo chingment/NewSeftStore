@@ -95,6 +95,7 @@
     <Compile Include="Api\Admin\RModels\RupMerchMachineGetList.cs" />
     <Compile Include="Api\Admin\RModels\RupSysMenuGetList.cs" />
     <Compile Include="Api\Admin\SysMenuService.cs" />
+    <Compile Include="Api\Admin\MerchRepairFunService.cs" />
     <Compile Include="Api\Admin\SysRoleService.cs" />
     <Compile Include="Api\Admin\AdminServiceFactory.cs" />
     <Compile Include="Api\Admin\AdminUserService.cs" />

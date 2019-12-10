@@ -155,6 +155,7 @@
     <Compile Include="Controllers\MerchMenuController.cs" />
     <Compile Include="Controllers\MerchRoleController.cs" />
     <Compile Include="Controllers\OwnController.cs" />
+    <Compile Include="Controllers\MerchRepairFunController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
