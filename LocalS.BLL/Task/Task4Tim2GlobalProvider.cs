@@ -90,7 +90,7 @@ namespace LocalS.BLL.Task
                                             content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
                                             break;
                                         case E_OrderPayCaller.AggregatePayByBuildQrCode:
-                                            
+
                                             var tongGuanByAllQrcodePay_AppInfoConfig = BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
                                             content = SdkFactory.TongGuan.OrderQuery(tongGuanByAllQrcodePay_AppInfoConfig, order.Sn);
                                             break;

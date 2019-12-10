@@ -103,10 +103,6 @@ namespace LocalS.BLL
                 if (prdProductDb == null)
                     return null;
 
-                string oldBarCode = "";
-                string oldPinYinIndex = "";
-                string oldName = "";
-
                 prdProductSkuModel = new ProductSkuInfoModel();
                 prdProductSkuModel.Id = prdProductSkuByDb.Id;
                 prdProductSkuModel.BarCode = prdProductSkuByDb.BarCode;
