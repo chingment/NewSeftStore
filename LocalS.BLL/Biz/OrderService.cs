@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using TongGuanPaySdk;
+using MyAlipaySdk;
 
 namespace LocalS.BLL.Biz
 {
@@ -577,47 +578,48 @@ namespace LocalS.BLL.Biz
                     #region 解释支付宝支付协议
                     LogUtil.Info("解释支付宝支付协议");
                     orderPayWay = E_OrderPayWay.AliPay;
-                    var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
+
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
-                        var dic1 = new SortedDictionary<string, string>();
-                        if (dic.ContainsKey("alipay_trade_query_response"))
+                        TradeQueryResult result = Newtonsoft.Json.JsonConvert.DeserializeObject<TradeQueryResult>(content);
+                        if (result != null)
                         {
-                            string response = dic["alipay_trade_query_response"].ToString();
-                            LogUtil.Info("response:" + response);
-                            dic1 = MyAlipaySdk.CommonUtil.FormStringToDictionary(response);
-                        }
 
-                        if (dic1.ContainsKey("out_trade_no"))
-                        {
-                            orderSn = dic1["out_trade_no"].ToString();
-                        }
-
-                        if (dic1.ContainsKey("trade_no"))
-                        {
-                            payPartnerOrderSn = dic1["trade_no"].ToString();
-                        }
-
-                        LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
-
-                        if (dic1.ContainsKey("buyer_logon_id"))
-                        {
-                            clientUserName = dic1["buyer_logon_id"];
-                        }
-
-                        if (dic1.ContainsKey("trade_status"))
-                        {
-                            string trade_status = dic1["trade_status"].ToString();
-                            LogUtil.Info("解释支付宝支付协议，（trade_status）订单状态：" + trade_status);
-                            if (trade_status == "TRADE_SUCCESS")
+                            var payResult = result.alipay_trade_query_response;
+                            if (payResult != null)
                             {
-                                isPaySuccess = true;
+                                if (payResult.code == "10000")
+                                {
+                                    if (!string.IsNullOrEmpty(payResult.out_trade_no))
+                                    {
+                                        orderSn = payResult.out_trade_no;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(payResult.trade_no))
+                                    {
+                                        payPartnerOrderSn = payResult.trade_no;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(payResult.buyer_logon_id))
+                                    {
+                                        clientUserName = payResult.buyer_logon_id;
+                                    }
+
+                                    LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
+
+                                    if (payResult.trade_status == "TRADE_SUCCESS")
+                                    {
+                                        isPaySuccess = true;
+                                    }
+                                }
                             }
                         }
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
+                        var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
+
                         if (dic.ContainsKey("out_trade_no"))
                         {
                             orderSn = dic["out_trade_no"].ToString();
@@ -1030,7 +1032,7 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.Wechat;
                                 order.PayWay = E_OrderPayWay.Wechat;
                                 var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "",Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -1095,7 +1097,7 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.AliPay;
                                 order.PayWay = E_OrderPayWay.AliPay;
                                 var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                                var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var alipayByNative_UnifiedOrder = SdkFactory.Alipay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -1121,7 +1123,7 @@ namespace LocalS.BLL.Biz
                                 #region AggregatePayByBuildQrCode
                                 order.PayPartner = E_OrderPayPartner.TongGuan;
                                 var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
-                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");

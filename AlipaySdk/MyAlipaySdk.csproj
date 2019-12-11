@@ -50,6 +50,7 @@
     <Compile Include="CommonUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AlipayUtil.cs" />
+    <Compile Include="TradeQueryResult.cs" />
     <Compile Include="UnifiedOrder.cs" />
     <Compile Include="UnifiedOrderResult.cs" />
   </ItemGroup>
