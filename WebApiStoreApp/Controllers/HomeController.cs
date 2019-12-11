@@ -3,6 +3,7 @@ using LocalS.BLL;
 using LocalS.DAL;
 using LocalS.Service.Api.StoreApp;
 using log4net;
+using Lumos;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -30,6 +31,7 @@ namespace WebApiStoreApp.Controllers
 
         public ActionResult Index()
         {
+            LogUtil.Info("Index");
             try
             {
                 //CacheServiceFactory.SellChannelStock.ReSet();
