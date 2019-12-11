@@ -16,7 +16,7 @@ namespace LocalS.BLL.Task
             }
         }
 
-        public static Task4Tim2GlobalProvider Global
+        public static Task4Tim2GlobalProvider Tim2Global
         {
             get
             {

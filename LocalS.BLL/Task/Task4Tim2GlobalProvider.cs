@@ -31,6 +31,11 @@ namespace LocalS.BLL.Task
             RedisManager.Db.HashSetAsync(key, d.Id, d.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
+        public void UpdateData(string id, object data)
+        {
+            RedisManager.Db.HashSetAsync(key, id, data.ToJsonString(), StackExchange.Redis.When.Always);
+        }
+
         public void Exit(string id)
         {
             RedisManager.Db.HashDelete(key, id);
@@ -74,31 +79,46 @@ namespace LocalS.BLL.Task
                                 {
                                     //未过期查询支付状态
                                     string content = "";
-                                    switch (order.PayCaller)
+                                    switch (order.PayPartner)
                                     {
-                                        case E_OrderPayCaller.AlipayByBuildQrCode:
-                                            var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                                            content = SdkFactory.Alipay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
+                                        case E_OrderPayPartner.Wechat:
+                                            switch (order.PayCaller)
+                                            {
+                                                case E_OrderPayCaller.WechatByBuildQrCode:
+                                                    var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                                    content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);
+                                                    break;
+                                                case E_OrderPayCaller.WechatByMp:
+                                                    var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                                    content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
+                                                    break;
+                                            }
                                             break;
-
-                                        case E_OrderPayCaller.WechatByBuildQrCode:
-                                            var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                            content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);
+                                        case E_OrderPayPartner.AliPay:
+                                            switch (order.PayCaller)
+                                            {
+                                                case E_OrderPayCaller.AlipayByBuildQrCode:
+                                                    var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
+                                                    content = SdkFactory.Alipay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
+                                                    break;
+                                            }
                                             break;
-                                        case E_OrderPayCaller.WechatByMp:
-                                            var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                            content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
-                                            break;
-                                        case E_OrderPayCaller.AggregatePayByBuildQrCode:
-
-                                            var tongGuanByAllQrcodePay_AppInfoConfig = BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
-                                            content = SdkFactory.TongGuan.OrderQuery(tongGuanByAllQrcodePay_AppInfoConfig, order.Sn);
+                                        case E_OrderPayPartner.TongGuan:
+                                            switch (order.PayCaller)
+                                            {
+                                                case E_OrderPayCaller.AggregatePayByBuildQrCode:
+                                                    var tongGuanByAllQrcodePay_AppInfoConfig = BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
+                                                    content = SdkFactory.TongGuan.OrderQuery(tongGuanByAllQrcodePay_AppInfoConfig, order.Sn);
+                                                    break;
+                                            }
                                             break;
                                     }
 
-                                    LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
-
-                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.OrderQuery, content);
+                                    if (order.PayPartner != E_OrderPayPartner.Unknow)
+                                    {
+                                        LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
+                                        MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.OrderQuery, content);
+                                    }
                                 }
                                 else
                                 {

@@ -77,6 +77,7 @@
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />
     <Compile Include="Biz\RModels\RetBackgroundJobGetDetails.cs" />
+    <Compile Include="Biz\RModels\RetOrderDetails.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
     <Compile Include="Biz\RModels\RopBackgroundJobAdd.cs" />

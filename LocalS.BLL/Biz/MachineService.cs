@@ -107,8 +107,17 @@ namespace LocalS.BLL.Biz
         public void SendUpdateHomeLogo(string id, string logoImgUrl)
         {
             var machine = BizFactory.Machine.GetOne(id);
+            var content = new { url = logoImgUrl };
+            PushService.SendUpdateMachineHomeLogo(machine.JPushRegId, content);
+        }
 
-            PushService.SendUpdateMachineHomeLogo(machine.JPushRegId, logoImgUrl);
+
+        public void SendPaySuccess(string id, string orderId, string orderSn)
+        {
+            var machine = BizFactory.Machine.GetOne(id);
+            var orderDetails = BizFactory.Order.GetOrderDetails(orderId, id);
+            var content = new { orderId = orderId, orderSn = orderSn, status = E_OrderStatus.Payed, OrderDetails = orderDetails };
+            PushService.SendPaySuccess(machine.JPushRegId, content);
         }
 
         private static int[] GetLayout(string str)

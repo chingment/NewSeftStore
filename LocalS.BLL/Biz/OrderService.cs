@@ -295,7 +295,7 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
 
-                    Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
                     ret.OrderId = order.Id;
                     ret.OrderSn = order.Sn;
@@ -523,12 +523,12 @@ namespace LocalS.BLL.Biz
 
                 Order order = null;
                 string orderSn = "";
+                string partnerOrderSn = "";
                 string clientUserName = "";
                 E_OrderPayWay orderPayWay = E_OrderPayWay.Unknow;
                 bool isPaySuccess = false;
                 if (payPartner == E_OrderPayPartner.Wechat)
                 {
-
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信支付协议");
                     orderPayWay = E_OrderPayWay.Wechat;
@@ -539,11 +539,17 @@ namespace LocalS.BLL.Biz
                         orderSn = dic["out_trade_no"].ToString();
                     }
 
+                    if (dic.ContainsKey("transaction_id"))
+                    {
+                        partnerOrderSn = dic["transaction_id"].ToString();
+                    }
+
                     LogUtil.Info("解释微信支付协议，订单号：" + orderSn);
 
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
+
                         if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
                         {
                             string trade_state = dic["trade_state"].ToString();
@@ -577,13 +583,40 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
+                        if (dic.ContainsKey("out_trade_no"))
+                        {
+                            orderSn = dic["out_trade_no"].ToString();
+                        }
 
+                        if (dic.ContainsKey("trade_no"))
+                        {
+                            partnerOrderSn = dic["trade_no"].ToString();
+                        }
+
+                        LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
+
+                        clientUserName = dic["buyer_logon_id"];
+
+                        if (dic.ContainsKey("trade_status"))
+                        {
+                            string trade_status = dic["trade_status"].ToString();
+                            LogUtil.Info("解释支付宝支付协议，（trade_status）订单状态：" + trade_status);
+                            if (trade_status == "TRADE_SUCCESS")
+                            {
+                                isPaySuccess = true;
+                            }
+                        }
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
                         if (dic.ContainsKey("out_trade_no"))
                         {
                             orderSn = dic["out_trade_no"].ToString();
+                        }
+
+                        if (dic.ContainsKey("trade_no"))
+                        {
+                            partnerOrderSn = dic["trade_no"].ToString();
                         }
 
                         LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
@@ -607,7 +640,7 @@ namespace LocalS.BLL.Biz
 
                 else if (payPartner == E_OrderPayPartner.TongGuan)
                 {
-                    #region 解释 通莞支付协议
+                    #region 解释通莞支付协议
 
                     if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
@@ -618,7 +651,7 @@ namespace LocalS.BLL.Biz
                             {
                                 isPaySuccess = true;
                                 orderSn = result.lowOrderId;
-
+                                partnerOrderSn = result.upOrderId;
                                 if (result.channelID == "WX")
                                 {
                                     orderPayWay = E_OrderPayWay.Wechat;
@@ -642,7 +675,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     isPaySuccess = true;
                                     orderSn = result.lowOrderId;
-
+                                    partnerOrderSn = result.upOrderId;
                                     if (result.channelID == "WX")
                                     {
                                         orderPayWay = E_OrderPayWay.Wechat;
@@ -667,6 +700,7 @@ namespace LocalS.BLL.Biz
 
                         Dictionary<string, string> pms = new Dictionary<string, string>();
                         pms.Add("clientUserName", clientUserName);
+
                         PaySuccess(operater, orderSn, orderPayWay, DateTime.Now, pms);
                     }
 
@@ -835,7 +869,7 @@ namespace LocalS.BLL.Biz
 
 
 
-                Task4Factory.Global.Exit(order.Id);
+                Task4Factory.Tim2Global.Exit(order.Id);
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
             }
 
@@ -941,7 +975,7 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    Task4Factory.Global.Exit(order.Id);
+                    Task4Factory.Tim2Global.Exit(order.Id);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
@@ -1095,13 +1129,53 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
                 }
 
-                Task4Factory.Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+                Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
             }
 
             return result;
+        }
+
+        public RetOrderDetails GetOrderDetails(string orderId, string machineId)
+        {
+            var ret = new RetOrderDetails();
+            //   machineId = 861712043266632 & pickCode = 32500051
+            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
+            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
+
+            ret.OrderId = order.Id;
+            ret.OrderSn = order.Sn;
+
+            foreach (var orderDetailsChild in orderDetailsChilds)
+            {
+                var sku = new RetOrderDetails.ProductSku();
+                sku.Id = orderDetailsChild.PrdProductSkuId;
+                sku.Name = orderDetailsChild.PrdProductSkuName;
+                sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
+                sku.Quantity = orderDetailsChild.Quantity;
+
+
+                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.OrderDetailsChildId == orderDetailsChild.Id && m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
+
+                sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
+
+                foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
+                {
+                    var slot = new RetOrderDetails.Slot();
+                    slot.UniqueId = orderDetailsChildSon.Id;
+                    slot.SlotId = orderDetailsChildSon.SlotId;
+                    slot.Status = orderDetailsChildSon.Status;
+
+                    sku.Slots.Add(slot);
+                }
+
+                ret.ProductSkus.Add(sku);
+            }
+
+            return ret;
         }
     }
 }

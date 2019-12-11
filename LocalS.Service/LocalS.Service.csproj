@@ -305,7 +305,6 @@
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineLogin.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPayStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPickupStatusQuery.cs" />

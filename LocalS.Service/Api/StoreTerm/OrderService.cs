@@ -92,7 +92,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.Data.Status = ret_Biz.Data.Status;
                 if (ret_Biz.Data.Status == E_OrderStatus.Payed)
                 {
-                    ret.Data.OrderDetails = GetOrderDetails(rup.MachineId, rup.OrderId);
+                    ret.Data.OrderDetails = BizFactory.Order.GetOrderDetails(rup.OrderId, rup.MachineId);
                 }
             }
 
@@ -125,7 +125,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", GetOrderDetails(rup.MachineId, order.Id));
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetails(order.Id, rup.MachineId));
             return result;
         }
 
@@ -239,46 +239,6 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
-        }
-
-        private RetOrderDetails GetOrderDetails(string machineId, string orderId)
-        {
-            var ret = new RetOrderDetails();
-            //   machineId = 861712043266632 & pickCode = 32500051
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
-            var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
-            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
-
-            ret.OrderId = order.Id;
-            ret.OrderSn = order.Sn;
-
-            foreach (var orderDetailsChild in orderDetailsChilds)
-            {
-                var sku = new RetOrderDetails.ProductSku();
-                sku.Id = orderDetailsChild.PrdProductSkuId;
-                sku.Name = orderDetailsChild.PrdProductSkuName;
-                sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
-                sku.Quantity = orderDetailsChild.Quantity;
-
-
-                var l_orderDetailsChildSons = orderDetailsChildSons.Where(m => m.OrderDetailsChildId == orderDetailsChild.Id && m.PrdProductSkuId == orderDetailsChild.PrdProductSkuId).ToList();
-
-                sku.QuantityBySuccess = l_orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
-
-                foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
-                {
-                    var slot = new RetOrderDetails.Slot();
-                    slot.UniqueId = orderDetailsChildSon.Id;
-                    slot.SlotId = orderDetailsChildSon.SlotId;
-                    slot.Status = orderDetailsChildSon.Status;
-
-                    sku.Slots.Add(slot);
-                }
-
-                ret.ProductSkus.Add(sku);
-            }
-
-            return ret;
         }
 
 

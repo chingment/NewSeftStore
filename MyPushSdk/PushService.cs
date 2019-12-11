@@ -32,11 +32,17 @@ namespace MyPushSdk
             return result;
         }
 
-        public static CustomJsonResult SendUpdateMachineHomeLogo(string regId, string logoImgUrl)
+        public static CustomJsonResult SendUpdateMachineHomeLogo(string regId, object content)
         {
             var result = new CustomJsonResult();
-            var date = new { url = logoImgUrl };
-            pushService.Send(regId, "update:HomeLogo", date);
+            pushService.Send(regId, "update:HomeLogo", content);
+            return result;
+        }
+
+        public static CustomJsonResult SendPaySuccess(string regId, object content)
+        {
+            var result = new CustomJsonResult();
+            pushService.Send(regId, "paySuccess", content);
             return result;
         }
 
