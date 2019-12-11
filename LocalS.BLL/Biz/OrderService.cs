@@ -520,10 +520,8 @@ namespace LocalS.BLL.Biz
             LogUtil.Info("PayResultNotify");
             lock (lock_PayResultNotify)
             {
-
-                Order order = null;
                 string orderSn = "";
-                string partnerOrderSn = "";
+                string payPartnerOrderSn = "";
                 string clientUserName = "";
                 E_OrderPayWay orderPayWay = E_OrderPayWay.Unknow;
                 bool isPaySuccess = false;
@@ -541,7 +539,7 @@ namespace LocalS.BLL.Biz
 
                     if (dic.ContainsKey("transaction_id"))
                     {
-                        partnerOrderSn = dic["transaction_id"].ToString();
+                        payPartnerOrderSn = dic["transaction_id"].ToString();
                     }
 
                     LogUtil.Info("解释微信支付协议，订单号：" + orderSn);
@@ -590,7 +588,7 @@ namespace LocalS.BLL.Biz
 
                         if (dic.ContainsKey("trade_no"))
                         {
-                            partnerOrderSn = dic["trade_no"].ToString();
+                            payPartnerOrderSn = dic["trade_no"].ToString();
                         }
 
                         LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
@@ -616,7 +614,7 @@ namespace LocalS.BLL.Biz
 
                         if (dic.ContainsKey("trade_no"))
                         {
-                            partnerOrderSn = dic["trade_no"].ToString();
+                            payPartnerOrderSn = dic["trade_no"].ToString();
                         }
 
                         LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
@@ -637,7 +635,6 @@ namespace LocalS.BLL.Biz
 
                     #endregion
                 }
-
                 else if (payPartner == E_OrderPayPartner.TongGuan)
                 {
                     #region 解释通莞支付协议
@@ -651,7 +648,7 @@ namespace LocalS.BLL.Biz
                             {
                                 isPaySuccess = true;
                                 orderSn = result.lowOrderId;
-                                partnerOrderSn = result.upOrderId;
+                                payPartnerOrderSn = result.upOrderId;
                                 if (result.channelID == "WX")
                                 {
                                     orderPayWay = E_OrderPayWay.Wechat;
@@ -675,7 +672,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     isPaySuccess = true;
                                     orderSn = result.lowOrderId;
-                                    partnerOrderSn = result.upOrderId;
+                                    payPartnerOrderSn = result.upOrderId;
                                     if (result.channelID == "WX")
                                     {
                                         orderPayWay = E_OrderPayWay.Wechat;
@@ -692,36 +689,41 @@ namespace LocalS.BLL.Biz
                     #endregion
                 }
 
-                if (!string.IsNullOrEmpty(orderSn))
+
+                if (isPaySuccess && !string.IsNullOrEmpty(orderSn))
                 {
-                    if (isPaySuccess)
-                    {
-                        LogUtil.Info("解释支付协议结果，支付成功");
+                    LogUtil.Info("解释支付协议结果，支付成功");
 
-                        Dictionary<string, string> pms = new Dictionary<string, string>();
-                        pms.Add("clientUserName", clientUserName);
+                    Dictionary<string, string> pms = new Dictionary<string, string>();
+                    pms.Add("clientUserName", clientUserName);
 
-                        PaySuccess(operater, orderSn, orderPayWay, DateTime.Now, pms);
-                    }
-
-                    order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
-
-                    if (order != null)
-                    {
-                        var mod_OrderNotifyLog = new OrderNotifyLog();
-                        mod_OrderNotifyLog.Id = GuidUtil.New();
-                        mod_OrderNotifyLog.MerchId = order.MerchId;
-                        mod_OrderNotifyLog.OrderId = order.Id;
-                        mod_OrderNotifyLog.OrderSn = order.Sn;
-                        mod_OrderNotifyLog.NotifyContent = content;
-                        mod_OrderNotifyLog.NotifyFrom = from;
-                        mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
-                        mod_OrderNotifyLog.CreateTime = DateTime.Now;
-                        mod_OrderNotifyLog.Creator = operater;
-                        CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
-                        CurrentDb.SaveChanges();
-                    }
+                    PaySuccess(operater, orderSn, orderPayWay, DateTime.Now, pms);
                 }
+
+
+                var mod_OrderNotifyLog = new OrderNotifyLog();
+                mod_OrderNotifyLog.Id = GuidUtil.New();
+
+                var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                if (order != null)
+                {
+                    mod_OrderNotifyLog.MerchId = order.MerchId;
+                    mod_OrderNotifyLog.OrderId = order.Id;
+                }
+
+                mod_OrderNotifyLog.OrderSn = order.Sn;
+                mod_OrderNotifyLog.PayPartner = payPartner;
+                mod_OrderNotifyLog.PayPartnerOrderSn = payPartnerOrderSn;
+                mod_OrderNotifyLog.NotifyContent = content;
+                mod_OrderNotifyLog.NotifyFrom = from;
+                mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
+                mod_OrderNotifyLog.CreateTime = DateTime.Now;
+                mod_OrderNotifyLog.Creator = operater;
+                CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
+                CurrentDb.SaveChanges();
+
+
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
@@ -865,9 +867,6 @@ namespace LocalS.BLL.Biz
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
-
-
-
 
                 Task4Factory.Tim2Global.Exit(order.Id);
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));

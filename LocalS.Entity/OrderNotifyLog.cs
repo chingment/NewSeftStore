@@ -30,6 +30,8 @@ namespace LocalS.Entity
 
         public string OrderSn { get; set; }
 
+        public E_OrderPayPartner PayPartner { get; set; }
+        public string PayPartnerOrderSn { get; set; }
         public E_OrderNotifyLogNotifyType NotifyType { get; set; }
 
         public E_OrderNotifyLogNotifyFrom NotifyFrom { get; set; }
