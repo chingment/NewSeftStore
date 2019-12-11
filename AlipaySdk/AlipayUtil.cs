@@ -53,9 +53,9 @@ namespace MyAlipaySdk
             ////支付宝公钥，由支付宝生成     到蚂蚁金服复制
             //string ALIPAY_PUBLIC_KEY = _config.AlipayPublicKey;// "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB";
             //IAopClient client = new DefaultAopClient(URL, APPID, APP_PRIVATE_KEY, FORMAT, "1.0", "RSA2", ALIPAY_PUBLIC_KEY, CHARSET, false);
-            
-            
-            
+
+
+
             //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称如：
             AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();//创建API对应的request类
             //SDK已经封装掉了公共参数，这里只需要传入业务参数
@@ -72,7 +72,7 @@ namespace MyAlipaySdk
             //                    "    \"timeout_express\":\"90m\"}";
 
             LogUtil.Info("BizContent:" + request.BizContent);
-      
+
 
             AlipayTradePrecreateResponse response = _client.Execute(request);
             //调用成功，则处理业务逻辑
@@ -94,12 +94,9 @@ namespace MyAlipaySdk
         public string OrderQuery(string out_trade_no)
         {
             AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
-            request.BizContent = "{" +
-            "\"out_trade_no\":\""+ out_trade_no + "\"," +
-            "  }";
+            request.BizContent = "{\"out_trade_no\":\"" + out_trade_no + "\"}";
             AlipayTradeQueryResponse response = _client.Execute(request);
-
             return response.Body;
         }
-    }
+}
 }

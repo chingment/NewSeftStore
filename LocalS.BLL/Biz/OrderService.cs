@@ -581,23 +581,34 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
-                        if (dic.ContainsKey("out_trade_no"))
+                        var dic1 = new SortedDictionary<string, string>();
+                        if (dic.ContainsKey("alipay_trade_query_response"))
                         {
-                            orderSn = dic["out_trade_no"].ToString();
+                            string response = dic["alipay_trade_query_response"].ToString();
+                            LogUtil.Info("response:" + response);
+                            dic1 = MyAlipaySdk.CommonUtil.FormStringToDictionary(response);
                         }
 
-                        if (dic.ContainsKey("trade_no"))
+                        if (dic1.ContainsKey("out_trade_no"))
                         {
-                            payPartnerOrderSn = dic["trade_no"].ToString();
+                            orderSn = dic1["out_trade_no"].ToString();
+                        }
+
+                        if (dic1.ContainsKey("trade_no"))
+                        {
+                            payPartnerOrderSn = dic1["trade_no"].ToString();
                         }
 
                         LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
 
-                        clientUserName = dic["buyer_logon_id"];
-
-                        if (dic.ContainsKey("trade_status"))
+                        if (dic1.ContainsKey("buyer_logon_id"))
                         {
-                            string trade_status = dic["trade_status"].ToString();
+                            clientUserName = dic1["buyer_logon_id"];
+                        }
+
+                        if (dic1.ContainsKey("trade_status"))
+                        {
+                            string trade_status = dic1["trade_status"].ToString();
                             LogUtil.Info("解释支付宝支付协议，（trade_status）订单状态：" + trade_status);
                             if (trade_status == "TRADE_SUCCESS")
                             {
@@ -619,7 +630,12 @@ namespace LocalS.BLL.Biz
 
                         LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
 
-                        clientUserName = dic["buyer_logon_id"];
+
+                        if (dic.ContainsKey("buyer_logon_id"))
+                        {
+                            clientUserName = dic["buyer_logon_id"];
+                        }
+
 
                         if (dic.ContainsKey("trade_status"))
                         {
@@ -712,7 +728,7 @@ namespace LocalS.BLL.Biz
                     mod_OrderNotifyLog.OrderId = order.Id;
                 }
 
-                mod_OrderNotifyLog.OrderSn = order.Sn;
+                mod_OrderNotifyLog.OrderSn = orderSn;
                 mod_OrderNotifyLog.PayPartner = payPartner;
                 mod_OrderNotifyLog.PayPartnerOrderSn = payPartnerOrderSn;
                 mod_OrderNotifyLog.NotifyContent = content;
