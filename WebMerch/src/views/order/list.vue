@@ -71,7 +71,12 @@
                       >
                         {{ activity.content }}
                         <br>
-                        　<img v-if="activity.imgUrlByCHK!==null" :src="activity.imgUrlByCHK" style="width:100px;height:100px">
+                          <el-image v-if="activity.imgUrl!==null"
+    style="width: 100px; height: 100px"
+    :src="activity.imgUrl" 
+    :preview-src-list="activity.imgUrls">
+  </el-image>
+
                       </el-timeline-item>
                     </el-timeline>
                     <el-button slot="reference">查看</el-button>
@@ -234,22 +239,29 @@
                 {{ sub_detail.status.text }}
               </td>
               <td style="15%">
-                <el-popover
-                  placement="right"
-                  width="400"
-                  trigger="click"
-                >
-                  <el-timeline>
-                    <el-timeline-item
-                      v-for="(activity, index) in sub_detail.pickupLogs"
-                      :key="index"
-                      :timestamp="activity.timestamp"
-                    >
-                      {{ activity.content }}
-                    </el-timeline-item>
-                  </el-timeline>
-                  <el-button slot="reference">查看</el-button>
-                </el-popover>
+                  <el-popover
+                    placement="right"
+                    width="400"
+                    trigger="click"
+                  >
+                    <el-timeline>
+                      <el-timeline-item
+                        v-for="(activity, index) in sub_detail.pickupLogs"
+                        :key="index"
+                        :timestamp="activity.timestamp"
+                      >
+                        {{ activity.content }}
+                        <br>
+                          <el-image v-if="activity.imgUrl!==null"
+    style="width: 100px; height: 100px"
+    :src="activity.imgUrl" 
+    :preview-src-list="activity.imgUrls">
+  </el-image>
+
+                      </el-timeline-item>
+                    </el-timeline>
+                    <el-button slot="reference">查看</el-button>
+                  </el-popover>
 
               </td>
             </tr>
@@ -291,16 +303,10 @@ export default {
   },
   data() {
     return {
-      activities: [{
-        content: '活动按期开始',
-        timestamp: '2018-04-15'
-      }, {
-        content: '通过审核',
-        timestamp: '2018-04-13'
-      }, {
-        content: '创建成功',
-        timestamp: '2018-04-11'
-      }],
+         srcList: [
+          'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
+          'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
+        ],
       loading: false,
       listKey: 0,
       listData: null,

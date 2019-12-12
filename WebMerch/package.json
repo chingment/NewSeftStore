@@ -18,7 +18,7 @@
     "@riophae/vue-treeselect": "^0.1.0",
     "@tinymce/tinymce-vue": "^2.1.0",
     "axios": "0.18.1",
-    "element-ui": "2.7.2",
+    "element-ui": "^2.13.0",
     "file-saver": "^2.0.2",
     "gzip": "^0.1.0",
     "js-cookie": "2.2.0",
