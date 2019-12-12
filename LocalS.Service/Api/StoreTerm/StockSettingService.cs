@@ -42,6 +42,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             ret.RowColLayout = machine.CabinetRowColLayout_1;
+            ret.PendantRows = machine.CabinetPendantRows_1;
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rup.MachineId).ToList();
 

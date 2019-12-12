@@ -16,6 +16,8 @@ namespace LocalS.Service.Api.StoreTerm
 
         public int[] RowColLayout { get; set; }
 
+        public int[] PendantRows { get; set; }
+
         public Dictionary<string, SlotModel> Slots { get; set; }
     }
 }

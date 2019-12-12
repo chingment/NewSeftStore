@@ -1032,7 +1032,7 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.Wechat;
                                 order.PayWay = E_OrderPayWay.Wechat;
                                 var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "",Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -1124,8 +1124,8 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.TongGuan;
                                 var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
 
-                                
-                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+
+                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
