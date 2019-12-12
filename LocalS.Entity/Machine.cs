@@ -39,6 +39,8 @@ namespace LocalS.Entity
         public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public string CabinetRowColLayout_1 { get; set; }
+
+        public string CabinetPendantRows_1 { get; set; }
         public string CtrlSdkVersionCode { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }

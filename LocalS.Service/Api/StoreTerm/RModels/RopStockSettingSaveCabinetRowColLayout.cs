@@ -12,5 +12,7 @@ namespace LocalS.Service.Api.StoreTerm
 
         public int CabinetId { get; set; }
         public int[] CabinetRowColLayout { get; set; }
+
+
     }
 }

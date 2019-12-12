@@ -28,6 +28,7 @@ namespace LocalS.BLL.Biz
             model.CabinetId_1 = machine.CabinetId_1;
             model.CabinetName_1 = machine.CabinetName_1;
             model.CabinetRowColLayout_1 = GetLayout(machine.CabinetRowColLayout_1);
+            model.CabinetPendantRows_1 = GetPendantRows(machine.CabinetPendantRows_1);
             model.RunStatus = machine.RunStatus;
             model.LastRequestTime = machine.LastRequestTime;
             model.AppVersion = machine.AppVersionName;
@@ -150,6 +151,23 @@ namespace LocalS.BLL.Biz
 
 
             return layout;
+        }
+
+        private static int[] GetPendantRows(string str)
+        {
+         
+            int[] layout = null;
+
+            try
+            {
+                string[] sNums = str.Split(',');
+                layout = Array.ConvertAll(sNums, int.Parse);
+                return layout;
+            }
+            catch(Exception ex)
+            {
+                return layout;
+            }
         }
     }
 }
