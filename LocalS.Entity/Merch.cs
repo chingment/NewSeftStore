@@ -43,5 +43,6 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
 
         public string CsrQrCode { get; set; }
+        public string CsrPhoneNumber { get; set; }
     }
 }

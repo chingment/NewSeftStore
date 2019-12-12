@@ -1123,6 +1123,8 @@ namespace LocalS.BLL.Biz
                                 #region AggregatePayByBuildQrCode
                                 order.PayPartner = E_OrderPayPartner.TongGuan;
                                 var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
+
+                                
                                 var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
                                 {
