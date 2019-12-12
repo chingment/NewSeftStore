@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.AdContent
-                         where u.AdSpaceId == rup.AdSpaceId
+                         where u.AdSpaceId == rup.AdSpaceId && u.MerchId == merchId
                          select new { u.Id, u.Title, u.Url, u.Status, u.CreateTime });
 
 
@@ -228,7 +228,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var adContent = CurrentDb.AdContent.Where(m => m.Id == adContentId).FirstOrDefault();
+            var adContent = CurrentDb.AdContent.Where(m => m.Id == adContentId && m.MerchId == merchId).FirstOrDefault();
             if (adContent != null)
             {
                 adContent.Status = E_AdContentStatus.Deleted;
@@ -237,7 +237,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
 
 
-                var adContentBelongs = CurrentDb.AdContentBelong.Where(m => m.AdContentId == adContent.Id).ToList();
+                var adContentBelongs = CurrentDb.AdContentBelong.Where(m => m.AdContentId == adContent.Id && m.MerchId == merchId).ToList();
 
                 foreach (var adContentBelong in adContentBelongs)
                 {
