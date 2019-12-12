@@ -287,9 +287,10 @@ namespace LocalS.Service.Api.StoreTerm
         }
 
 
-        public CustomJsonResult ScanSlotsEventNotify(RopMachineScanSlotsEventNotify rop)
+        public CustomJsonResult ScanSlotsEventNotify(string operater, RopMachineScanSlotsEventNotify rop)
         {
 
+            LogAction(operater, rop.MachineId, "ScanSlots", rop.Remark);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }

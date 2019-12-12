@@ -80,7 +80,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse ScanSlotsEventNotify([FromBody]RopMachineScanSlotsEventNotify rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.ScanSlotsEventNotify(rop);
+            IResult result = StoreTermServiceFactory.Machine.ScanSlotsEventNotify(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

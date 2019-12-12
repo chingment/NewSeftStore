@@ -128,7 +128,7 @@ export default {
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         singleSkuBarCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        // kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],

@@ -13,7 +13,7 @@ namespace LocalS.BLL
         public AllQrcodePayRequestResult AllQrcodePay(TongGuanPayInfoConfg config, string merchId, string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
         {
             TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
-            var ret = tongGuanUtil.AllQrcodePay(orderSn, orderAmount.ToString("#0.00"), "", storeId);
+            var ret = tongGuanUtil.AllQrcodePay(orderSn, orderAmount.ToString("#0.00"), body, storeId);
             return ret;
         }
 

@@ -219,11 +219,11 @@ namespace LocalS.Service.Api.StoreTerm
             string message = "";
             if (rop.IsPickupComplete)
             {
-                message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4}，状态({5})：{6}", rop.ProductSkuId, bizProduct.Name, rop.SlotId, rop.ActionId, rop.ActionName, rop.ActionStatusCode, rop.ActionStatusName);
+                message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4},取货完成，用时：{5}", rop.ProductSkuId, bizProduct.Name, rop.SlotId, rop.ActionId, rop.ActionName, rop.PickupUseTime);
             }
             else
             {
-                message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4},取货完成，用时：{5}", rop.ProductSkuId, bizProduct.Name, rop.SlotId, rop.ActionId, rop.ActionName, rop.PickupUseTime);
+                message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4}，状态({5})：{6}", rop.ProductSkuId, bizProduct.Name, rop.SlotId, rop.ActionId, rop.ActionName, rop.ActionStatusCode, rop.ActionStatusName);
             }
             LogUtil.Info(message);
 

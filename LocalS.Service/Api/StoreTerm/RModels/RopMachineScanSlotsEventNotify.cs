@@ -8,6 +8,10 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopMachineScanSlotsEventNotify
     {
+        public string MachineId { get; set; }
 
+        public int Status { get; set; }
+
+        public string Remark { get; set; }
     }
 }

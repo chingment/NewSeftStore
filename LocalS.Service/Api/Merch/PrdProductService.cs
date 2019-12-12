@@ -166,10 +166,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品名称不能为空");
             }
 
-            if (rop.KindIds == null || rop.KindIds.Count == 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品模块");
-            }
+            //if (rop.KindIds == null || rop.KindIds.Count == 0)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品模块");
+            //}
 
             //if (rop.SubjectIds == null || rop.SubjectIds.Count == 0)
             //{
@@ -314,10 +314,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品名称不能为空");
             }
 
-            if (rop.KindIds == null || rop.KindIds.Count == 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
-            }
+            //if (rop.KindIds == null || rop.KindIds.Count == 0)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
+            //}
 
             if (rop.DisplayImgUrls == null || rop.DisplayImgUrls.Count == 0)
             {

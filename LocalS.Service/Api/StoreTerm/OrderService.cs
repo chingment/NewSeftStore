@@ -213,7 +213,14 @@ namespace LocalS.Service.Api.StoreTerm
                     }
                     else
                     {
-                        orderPickupLog.ActionRemark = rop.ActionName + rop.ActionStatusName;
+                        if (rop.Status == E_OrderDetailsChildSonStatus.SendPick)
+                        {
+                            orderPickupLog.ActionRemark = "发送命令";
+                        }
+                        else
+                        {
+                            orderPickupLog.ActionRemark = rop.ActionName + rop.ActionStatusName;
+                        }
                     }
                     orderPickupLog.Remark = rop.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
