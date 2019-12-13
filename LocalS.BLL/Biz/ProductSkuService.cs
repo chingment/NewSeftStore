@@ -404,7 +404,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPaySuccess;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneBySuccess;
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;

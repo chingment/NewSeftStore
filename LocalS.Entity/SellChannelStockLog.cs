@@ -11,9 +11,11 @@ namespace LocalS.Entity
         ReserveSuccess = 1,
         OrderPaySuccess = 2,
         OrderCancle = 3,
-        SlotInit = 4,
-        SlotEdit = 5,
-        SlotRemove = 6
+        OrderPickupOneBySuccess = 4,
+        OrderPickupOneByFailure = 5,
+        SlotInit = 5,
+        SlotEdit = 6,
+        SlotRemove = 7
     }
 
     [Table("SellChannelStockLog")]
