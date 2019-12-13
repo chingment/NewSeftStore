@@ -207,6 +207,7 @@
     <Compile Include="Api\Merch\RModels\RopAdSpaceRelease.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEditStock.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrderInvolvePickupFlow.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindSort.cs" />

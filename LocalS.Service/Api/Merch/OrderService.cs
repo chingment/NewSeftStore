@@ -83,7 +83,6 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
-
         public string GetSourceName(E_OrderSource orderSource)
         {
             string name = "";
@@ -220,6 +219,15 @@ namespace LocalS.Service.Api.Merch
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult InvolvePickupFlow(string operater, string merchId, RopOrderInvolvePickupFlow rop)
+        {
+            var result = new CustomJsonResult();
+
+            
 
             return result;
         }

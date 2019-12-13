@@ -17,5 +17,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Order.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse InvolvePickupFlow([FromBody]RopOrderInvolvePickupFlow rop)
+        {
+            IResult result = MerchServiceFactory.Order.InvolvePickupFlow(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
