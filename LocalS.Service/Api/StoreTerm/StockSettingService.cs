@@ -154,16 +154,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                         for (var j = 0; j < colLength; j++)
                         {
-                            string slotId = "";
-                            if (cabinetPendantRows.Contains(i.ToString()))
-                            {
-                                slotId = string.Format("n{0}r{1}c{2}m1", rop.CabinetId, i, j);
-                            }
-                            else
-                            {
-                                slotId = string.Format("n{0}r{1}c{2}m0", rop.CabinetId, i, j);
-                            }
-
+                            string slotId = string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j);
                             LogUtil.Info("All.slotId:" + slotId);
                             slotIds.Add(slotId);
                         }
@@ -179,15 +170,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                         for (var j = 0; j < colLength; j++)
                         {
-                            string slotId = "";
-                            if (cabinetPendantRows.Contains(i.ToString()))
-                            {
-                                slotId = string.Format("n{0}r{1}c{2}m1", rop.CabinetId, i, j);
-                            }
-                            else
-                            {
-                                slotId = string.Format("n{0}r{1}c{2}m0", rop.CabinetId, i, j);
-                            }
+                            string slotId = string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j);
 
                             var sellChannelStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                             if (sellChannelStock != null)
