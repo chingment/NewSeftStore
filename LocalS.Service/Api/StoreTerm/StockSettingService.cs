@@ -60,7 +60,7 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.ProductSkuMainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
                     slot.ProductSkuSpecDes = bizProductSku.SpecDes;
                     slot.SumQuantity = item.SumQuantity;
-                    slot.LockQuantity = item.LockQuantity;
+                    slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
                     slot.MaxLimitSumQuantity = item.MaxLimitSumQuantity;
                     slot.Version = item.Version;
@@ -175,7 +175,9 @@ namespace LocalS.Service.Api.StoreTerm
                             var sellChannelStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                             if (sellChannelStock != null)
                             {
-                                if (sellChannelStock.LockQuantity > 0)
+                                int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
+
+                                if (lockQuantity > 0)
                                 {
                                     if (!slotIds.Contains(slotId))
                                     {

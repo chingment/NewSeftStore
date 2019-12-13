@@ -218,7 +218,7 @@ namespace LocalS.Service.Api.Merch
                             col.Name = bizProductSku.Name;
                             col.MainImgUrl = bizProductSku.MainImgUrl;
                             col.SumQuantity = slotStock.SumQuantity;
-                            col.LockQuantity = slotStock.LockQuantity;
+                            col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
                             col.SellQuantity = slotStock.SellQuantity;
                             col.MaxQuantity = 10;
                             col.SalePrice = slotStock.SalePrice;

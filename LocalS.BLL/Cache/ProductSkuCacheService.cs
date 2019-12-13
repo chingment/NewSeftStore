@@ -150,7 +150,7 @@ namespace LocalS.BLL
                 productSkuStockModel.RefId = sellChannelStock.RefId;
                 productSkuStockModel.SlotId = sellChannelStock.SlotId;
                 productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
-                productSkuStockModel.LockQuantity = sellChannelStock.LockQuantity;
+                productSkuStockModel.LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                 productSkuStockModel.SellQuantity = sellChannelStock.SellQuantity;
                 productSkuStockModel.IsOffSell = sellChannelStock.IsOffSell;
                 productSkuStockModel.SalePrice = sellChannelStock.SalePrice;

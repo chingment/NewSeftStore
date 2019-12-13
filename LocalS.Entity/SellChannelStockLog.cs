@@ -32,7 +32,9 @@ namespace LocalS.Entity
         public E_SellChannelStockLogChangeTpye ChangeType { get; set; }
         public int ChangeQuantity { get; set; }
         public int SumQuantity { get; set; }
-        public int LockQuantity { get; set; }
+        public int WaitPayLockQuantity { get; set; }
+        public int WaitPickupLockQuantity { get; set; }
+
         public int SellQuantity { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

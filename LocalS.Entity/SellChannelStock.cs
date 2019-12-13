@@ -17,7 +17,8 @@ namespace LocalS.Entity
         public string RefId { get; set; }
         public string SlotId { get; set; }
         public int SumQuantity { get; set; }
-        public int LockQuantity { get; set; }
+        public int WaitPayLockQuantity { get; set; }
+        public int WaitPickupLockQuantity { get; set; }
         public int SellQuantity { get; set; }
         public int MaxLimitSumQuantity { get; set; }
         public bool IsOffSell { get; set; }

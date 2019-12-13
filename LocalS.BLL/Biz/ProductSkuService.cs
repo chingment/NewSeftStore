@@ -23,7 +23,9 @@ namespace LocalS.BLL.Biz
         Unknow = 0,
         OrderReserve = 1,
         OrderCancle = 2,
-        OrderPaySuccess = 3
+        OrderPaySuccess = 3,
+        OrderPickupOneBySuccess = 4,
+        OrderPickupOneByFailure = 5
     }
 
     public class ProductSkuService : BaseDbContext
@@ -65,7 +67,7 @@ namespace LocalS.BLL.Biz
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
                     if (sellChannelStock != null)
                     {
-                        if (sellChannelStock.LockQuantity > 0)
+                        if (sellChannelStock.WaitPayLockQuantity > 0)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                         }
@@ -82,7 +84,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
                         sellChannelStockLog.ChangeQuantity = 0;
@@ -129,7 +131,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.SlotId = slotId;
                         sellChannelStock.PrdProductId = bizProductSku.ProductId;
                         sellChannelStock.PrdProductSkuId = productSkuId;
-                        sellChannelStock.LockQuantity = 0;
+                        sellChannelStock.WaitPayLockQuantity = 0;
                         sellChannelStock.SumQuantity = 0;
                         sellChannelStock.SellQuantity = 0;
                         sellChannelStock.IsOffSell = false;
@@ -152,7 +154,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotInit;
                         sellChannelStockLog.ChangeQuantity = 0;
@@ -178,7 +180,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                             sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                             sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                            sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                            sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                             sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                             sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
                             sellChannelStockLog.ChangeQuantity = 0;
@@ -194,7 +196,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStock.SalePrice = productSku.SalePrice;
                             sellChannelStock.SalePriceByVip = productSku.SalePrice;
                             sellChannelStock.SumQuantity = 0;
-                            sellChannelStock.LockQuantity = 0;
+                            sellChannelStock.WaitPayLockQuantity = 0;
                             sellChannelStock.SellQuantity = 0;
 
 
@@ -214,7 +216,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.SlotId = sellChannelStock.SlotId;
                             sellChannelStockLog2.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                             sellChannelStockLog2.SumQuantity = sellChannelStock.SumQuantity;
-                            sellChannelStockLog2.LockQuantity = sellChannelStock.LockQuantity;
+                            sellChannelStockLog2.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                             sellChannelStockLog2.SellQuantity = sellChannelStock.SellQuantity;
                             sellChannelStockLog2.ChangeType = E_SellChannelStockLogChangeTpye.SlotInit;
                             sellChannelStockLog2.ChangeQuantity = 0;
@@ -237,7 +239,7 @@ namespace LocalS.BLL.Biz
                         ProductSkuName = bizProductSku.Name,
                         ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
                         SumQuantity = sellChannelStock.SumQuantity,
-                        LockQuantity = sellChannelStock.LockQuantity,
+                        LockQuantity = sellChannelStock.WaitPayLockQuantity,
                         SellQuantity = sellChannelStock.SellQuantity,
                         MaxQuantity = 10,
                         Version = sellChannelStock.Version
@@ -271,10 +273,10 @@ namespace LocalS.BLL.Biz
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "查找不到库存信息");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
                         }
 
-                        sellChannelStock.LockQuantity += quantity;
+                        sellChannelStock.WaitPayLockQuantity += quantity;
                         sellChannelStock.SellQuantity -= quantity;
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
@@ -289,13 +291,14 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.ReserveSuccess;
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，减少可销库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可销库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -306,10 +309,10 @@ namespace LocalS.BLL.Biz
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "取消失败");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
                         }
 
-                        sellChannelStock.LockQuantity -= quantity;
+                        sellChannelStock.WaitPayLockQuantity -= quantity;
                         sellChannelStock.SellQuantity += quantity;
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
@@ -324,13 +327,14 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderCancle;
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("取消订单，恢复可销库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，恢复可销售库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -341,11 +345,12 @@ namespace LocalS.BLL.Biz
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{}", productSkuId));
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
                         }
 
-                        sellChannelStock.LockQuantity -= quantity;
-                        sellChannelStock.SumQuantity -= quantity;
+                        sellChannelStock.WaitPayLockQuantity -= quantity;
+                        sellChannelStock.WaitPickupLockQuantity += quantity;
+
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
@@ -359,16 +364,57 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                        sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPaySuccess;
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("成功支付，减少实际库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("成功支付，增加待取货库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
+                        break;
+                    case OperateStockType.OrderPickupOneBySuccess:
+                        #region OrderPaySuccess
+
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                        }
+
+                        sellChannelStock.WaitPickupLockQuantity -= quantity;
+                        sellChannelStock.SumQuantity -= quantity;
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+                        sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                        sellChannelStockLog.RefId = sellChannelStock.RefId;
+                        sellChannelStockLog.RefType = sellChannelStock.RefType;
+                        sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPaySuccess;
+                        sellChannelStockLog.ChangeQuantity = quantity;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0}", quantity);
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        #endregion
+                        break;
+                    case OperateStockType.OrderPickupOneByFailure:
+
                         break;
                 }
 
@@ -408,7 +454,7 @@ namespace LocalS.BLL.Biz
                 var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
 
                 sellChannelStock.SumQuantity = sumQuantity;
-                sellChannelStock.SellQuantity = sumQuantity - sellChannelStock.LockQuantity;
+                sellChannelStock.SellQuantity = sumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
                 sellChannelStock.Version += 1;
                 sellChannelStock.MaxLimitSumQuantity = sumQuantity;//取最近一次为置满库存
 
@@ -421,7 +467,8 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                 sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                 sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
-                sellChannelStockLog.LockQuantity = sellChannelStock.LockQuantity;
+                sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                 sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                 sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotEdit;
                 sellChannelStockLog.ChangeQuantity = 0;
@@ -439,7 +486,7 @@ namespace LocalS.BLL.Biz
                     ProductSkuName = bizProductSku.Name,
                     ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
                     SumQuantity = sellChannelStock.SumQuantity,
-                    LockQuantity = sellChannelStock.LockQuantity,
+                    LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                     SellQuantity = sellChannelStock.SellQuantity,
                     MaxQuantity = 10,
                     Version = sellChannelStock.Version
