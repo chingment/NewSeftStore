@@ -113,16 +113,21 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            Order order = null;
-
-            if (!string.IsNullOrEmpty(rup.PickCode))
+            if (string.IsNullOrEmpty(rup.PickCode))
             {
-                order = CurrentDb.Order.Where(m => m.PickCode == rup.PickCode).FirstOrDefault();
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
+
+            Order order = CurrentDb.Order.Where(m => m.PickCode == rup.PickCode).FirstOrDefault();
 
             if (order == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
+            }
+
+            if (order.Status != E_OrderStatus.Payed || order.Status != E_OrderStatus.Completed)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetails(order.Id, rup.MachineId));
@@ -172,7 +177,7 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         foreach (var item in orderDetailsChildSons)
                         {
-                            if (item.Status != E_OrderDetailsChildSonStatus.Completed)
+                            if (item.Status != E_OrderDetailsChildSonStatus.Completed || item.Status != E_OrderDetailsChildSonStatus.Cancled)
                             {
                                 item.Status = E_OrderDetailsChildSonStatus.Exception;
                                 CurrentDb.SaveChanges();

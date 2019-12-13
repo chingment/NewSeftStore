@@ -1192,7 +1192,7 @@ namespace LocalS.BLL.Biz
                     {
                         if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPick)
                         {
-                            slot.IsCanPickup = true;
+                            slot.IsAllowPickup = true;
                         }
                     }
 
