@@ -864,7 +864,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in orderDetailsChildSons)
                 {
-                    item.Status = E_OrderDetailsChildSonStatus.Payed;
+                    item.Status = E_OrderDetailsChildSonStatus.WaitPick;
                     item.Mender = GuidUtil.Empty();
                     item.MendTime = DateTime.Now;
                 }
@@ -1187,6 +1187,14 @@ namespace LocalS.BLL.Biz
                     slot.UniqueId = orderDetailsChildSon.Id;
                     slot.SlotId = orderDetailsChildSon.SlotId;
                     slot.Status = orderDetailsChildSon.Status;
+
+                    if (order.Status == E_OrderStatus.Payed)
+                    {
+                        if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPick)
+                        {
+                            slot.IsCanPickup = true;
+                        }
+                    }
 
                     sku.Slots.Add(slot);
                 }

@@ -55,10 +55,10 @@ namespace LocalS.Service.Api.Merch
                     status.Value = 2000;
                     status.Text = "待支付";
                     break;
-                case E_OrderDetailsChildSonStatus.Payed:
-                    status.Value = 3000;
-                    status.Text = "已支付";
-                    break;
+                //case E_OrderDetailsChildSonStatus.Payed:
+                //    status.Value = 3000;
+                //    status.Text = "已支付";
+                //    break;
                 case E_OrderDetailsChildSonStatus.WaitPick:
                     status.Value = 3010;
                     status.Text = "待取货";

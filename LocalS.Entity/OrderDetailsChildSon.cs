@@ -10,7 +10,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Submitted = 1000,
         WaitPay = 2000,
-        Payed = 3000,
+        //Payed = 3000,
         WaitPick = 3010,
         SendPick = 3011,
         Picking = 3012,
