@@ -229,6 +229,7 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
+                    StoreTermServiceFactory.Machine.LogAction(rop.MachineId, rop.MachineId, "OrderPickup", orderDetailsChildSon.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
                 }
 
                 CurrentDb.SaveChanges();

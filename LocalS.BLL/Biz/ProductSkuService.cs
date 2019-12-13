@@ -67,7 +67,8 @@ namespace LocalS.BLL.Biz
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId).FirstOrDefault();
                     if (sellChannelStock != null)
                     {
-                        if (sellChannelStock.WaitPayLockQuantity > 0)
+                        int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
+                        if (lockQuantity > 0)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                         }
@@ -85,6 +86,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                         sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
                         sellChannelStockLog.ChangeQuantity = 0;
@@ -132,6 +134,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.PrdProductId = bizProductSku.ProductId;
                         sellChannelStock.PrdProductSkuId = productSkuId;
                         sellChannelStock.WaitPayLockQuantity = 0;
+                        sellChannelStock.WaitPickupLockQuantity = 0;
                         sellChannelStock.SumQuantity = 0;
                         sellChannelStock.SellQuantity = 0;
                         sellChannelStock.IsOffSell = false;
@@ -155,6 +158,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                         sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotInit;
                         sellChannelStockLog.ChangeQuantity = 0;
@@ -181,6 +185,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                             sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                             sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                            sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                             sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                             sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
                             sellChannelStockLog.ChangeQuantity = 0;
@@ -197,6 +202,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStock.SalePriceByVip = productSku.SalePrice;
                             sellChannelStock.SumQuantity = 0;
                             sellChannelStock.WaitPayLockQuantity = 0;
+                            sellChannelStock.WaitPickupLockQuantity = 0;
                             sellChannelStock.SellQuantity = 0;
 
 
@@ -217,6 +223,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                             sellChannelStockLog2.SumQuantity = sellChannelStock.SumQuantity;
                             sellChannelStockLog2.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                            sellChannelStockLog2.WaitPayLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                             sellChannelStockLog2.SellQuantity = sellChannelStock.SellQuantity;
                             sellChannelStockLog2.ChangeType = E_SellChannelStockLogChangeTpye.SlotInit;
                             sellChannelStockLog2.ChangeQuantity = 0;
@@ -239,7 +246,7 @@ namespace LocalS.BLL.Biz
                         ProductSkuName = bizProductSku.Name,
                         ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
                         SumQuantity = sellChannelStock.SumQuantity,
-                        LockQuantity = sellChannelStock.WaitPayLockQuantity,
+                        LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                         SellQuantity = sellChannelStock.SellQuantity,
                         MaxQuantity = 10,
                         Version = sellChannelStock.Version
