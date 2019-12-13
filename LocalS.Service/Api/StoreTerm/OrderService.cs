@@ -164,9 +164,27 @@ namespace LocalS.Service.Api.StoreTerm
                     orderDetailsChildSon.Status = rop.Status;
                     CurrentDb.SaveChanges();
 
-                    var orderDetailsChildSonsNoCompeleteCount = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId && m.Status != E_OrderDetailsChildSonStatus.Completed).Count();
 
-                    if (orderDetailsChildSonsNoCompeleteCount == 0)
+                    //如果某次取货异常 剩下所有取货都标识为订单取货异常
+                    var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
+
+                    if (rop.Status == E_OrderDetailsChildSonStatus.Exception)
+                    {
+                        foreach (var item in orderDetailsChildSons)
+                        {
+                            if (item.Status != E_OrderDetailsChildSonStatus.Completed)
+                            {
+                                item.Status = E_OrderDetailsChildSonStatus.Exception;
+                                item.ExceptionReason = rop.Remark;
+                                CurrentDb.SaveChanges();
+                            }
+                        }
+                    }
+
+
+                    var orderDetailsChildSonsCompeleteCount = orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed).Count();
+                    //判断全部订单都是已完成
+                    if (orderDetailsChildSonsCompeleteCount == orderDetailsChildSons.Count)
                     {
                         var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
                         if (order != null)

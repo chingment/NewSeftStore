@@ -60,6 +60,7 @@ namespace LocalS.Entity
 
         public E_OrderDetailsChildSonStatus Status { get; set; }
 
+        public string ExceptionReason { get; set; }
         public int LastPickupActionId { get; set; }
         public int LastPickupActionStatusCode { get; set; }
 

@@ -227,7 +227,16 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            
+
+            switch (rop.InvolveOp)
+            {
+                case InvolveOp.GoodsHaveBeenDeliveredToCustomer:
+                    
+                    break;
+                case InvolveOp.GoodsNotHaveBeenDeliveredToCustomer:
+                    break;
+
+            }
 
             return result;
         }
