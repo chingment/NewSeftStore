@@ -175,7 +175,6 @@ namespace LocalS.Service.Api.StoreTerm
                             if (item.Status != E_OrderDetailsChildSonStatus.Completed)
                             {
                                 item.Status = E_OrderDetailsChildSonStatus.Exception;
-                                item.ExceptionReason = rop.Remark;
                                 CurrentDb.SaveChanges();
                             }
                         }

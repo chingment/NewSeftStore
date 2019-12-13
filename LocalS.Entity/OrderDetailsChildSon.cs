@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-   
+
     public enum E_OrderDetailsChildSonStatus
     {
         Unknow = 0,
@@ -57,10 +57,7 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
         public E_OrderDetailsChildSonStatus Status { get; set; }
-
-        public string ExceptionReason { get; set; }
         public int LastPickupActionId { get; set; }
         public int LastPickupActionStatusCode { get; set; }
 
