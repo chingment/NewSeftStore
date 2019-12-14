@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
 using LocalS.Entity;
+using LocalS.Service.Api.Merch;
 using LocalS.Service.Api.StoreApp;
 using Lumos;
 using Lumos.Redis;
@@ -51,6 +52,9 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPick);
+
             // { "status":100,"channelId":"WX","state":"4","settlementChannel":"038","payTime":"2019-12-08 17:00:43","payoffType":null,"lowOrderId":"6100054201910231627169351",
             //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易","payMoney":"0.01"
             //    ,"upOrderId":"91203600163013136384","payType":"0","account":"13974747474","openid":null,"openId":null}
@@ -82,30 +86,30 @@ namespace Test
 
             //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
 
-            TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
-            config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
-            config.Account = "15712153755";
-            config.Key = "bda1c3c86878b33258823d4d1dcc20ea";
-            //config.Account = "13974747474";
-            //config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
-            TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
-            decimal amount = 0.01m;
-            tongGuanUtil.AllQrcodePay("6100054201911231627169359", amount.ToString("#0.00"), "自助商品", "867184037089830");
-            tongGuanUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
-            //tongGuanUtil.OrderQuery("6100054201910231627169351我");
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("status", "100");
-            dic.Add("channelId", "WX");
-            dic.Add("state", "4");
-            dic.Add("settlementChannel", "038");
-            dic.Add("payTime", "2019-12-08 17:00:43");
-            dic.Add("lowOrderId", "6100054201910231627169351");
-            dic.Add("payMoney", "0.01");
-            dic.Add("upOrderId", "91203600163013136384");
-            dic.Add("payType", "0");
-            dic.Add("account", "13974747474");
-            dic.Add("message", "找不到交易");
-            string c = tongGuanUtil.GetSign(dic);
+            //TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
+            //config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
+            //config.Account = "15712153755";
+            //config.Key = "bda1c3c86878b33258823d4d1dcc20ea";
+            ////config.Account = "13974747474";
+            ////config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
+            //TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
+            //decimal amount = 0.01m;
+            //tongGuanUtil.AllQrcodePay("6100054201911231627169359", amount.ToString("#0.00"), "自助商品", "867184037089830");
+            //tongGuanUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
+            ////tongGuanUtil.OrderQuery("6100054201910231627169351我");
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+            //dic.Add("status", "100");
+            //dic.Add("channelId", "WX");
+            //dic.Add("state", "4");
+            //dic.Add("settlementChannel", "038");
+            //dic.Add("payTime", "2019-12-08 17:00:43");
+            //dic.Add("lowOrderId", "6100054201910231627169351");
+            //dic.Add("payMoney", "0.01");
+            //dic.Add("upOrderId", "91203600163013136384");
+            //dic.Add("payType", "0");
+            //dic.Add("account", "13974747474");
+            //dic.Add("message", "找不到交易");
+            //string c = tongGuanUtil.GetSign(dic);
             //  api.OrderQuery("610005420191023162716933");
             //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
 

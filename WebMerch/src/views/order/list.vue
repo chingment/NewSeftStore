@@ -41,31 +41,32 @@
     >
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <div v-for="(detail,index) in scope.row.details" :key="index">
-            <div><span>+ {{ detail.sellChannelRefName }} -> </span></div>
+          <div v-for="(sellChannelDetail,index) in scope.row.sellChannelDetails" :key="index">
+            <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
             <table class="table-skus" style="width:600px">
-              <tr v-for="(sub_detail,sub_index) in detail.detials" :key="sub_index">
+              <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
                 <td style="20%">
-                  <img :src="sub_detail.prdProductSkuMainImgUrl" style="width:50px;height:50px;">
+                  <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
                 </td>
                 <td style="20%">
-                  {{ sub_detail.prdProductSkuName }}
+                  {{ pickupSku.name }}
                 </td>
                 <td style="30%">
-                  x {{ sub_detail.quantity }}
+                  x {{ pickupSku.quantity }}
                 </td>
                 <td style="15%">
-                  {{ sub_detail.status.text }}
+                  {{ pickupSku.status.text }}
                 </td>
                 <td style="15%">
                   <el-popover
+                   v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
                     width="400"
                     trigger="click"
                   >
                     <el-timeline>
                       <el-timeline-item
-                        v-for="(activity, index) in sub_detail.pickupLogs"
+                        v-for="(activity, index) in pickupSku.pickupLogs"
                         :key="index"
                         :timestamp="activity.timestamp"
                       >
@@ -140,10 +141,14 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <el-dialog title="订单详情" :visible.sync="dialogDetailsIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <div>
+    <el-dialog  title="订单详情" :visible.sync="dialogDetailsIsVisible" :width="isDesktop==true?'800px':'90%'">
+      <div v-loading="detailsLoading" >
+
         <div class="row-title clearfix">
-          <div class="pull-left"> <h5>基本信息</h5>
+          <div class="pull-left"> <h5>基本信息</h5>  
+          </div>
+ <div class="pull-right">
+                 <el-button  icon="el-icon-refresh" circle @click="refreshDetails(details.id)" ></el-button>
           </div>
         </div>
         <el-form class="form-container" style="display:flex">
@@ -222,31 +227,32 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(detail,index) in details.details" :key="index">
-          <div><span>+ {{ detail.sellChannelRefName }} -> </span></div>
+        <div v-for="(sellChannelDetail,index) in details.sellChannelDetails" :key="index">
+          <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
           <table class="table-skus" style="width:600px">
-            <tr v-for="(sub_detail,sub_index) in detail.detials" :key="sub_index">
+            <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
               <td style="20%">
-                <img :src="sub_detail.prdProductSkuMainImgUrl" style="width:50px;height:50px;">
+                <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
               </td>
               <td style="20%">
-                {{ sub_detail.prdProductSkuName }}
+                {{ pickupSku.name }}
               </td>
               <td style="30%">
-                x {{ sub_detail.quantity }}
+                x {{ pickupSku.quantity }}
               </td>
               <td style="15%">
-                {{ sub_detail.status.text }}
+                {{ pickupSku.status.text }}
               </td>
               <td style="15%">
                   <el-popover
+                   v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
                     width="400"
                     trigger="click"
                   >
                     <el-timeline>
                       <el-timeline-item
-                        v-for="(activity, index) in sub_detail.pickupLogs"
+                        v-for="(activity, index) in pickupSku.pickupLogs"
                         :key="index"
                         :timestamp="activity.timestamp"
                       >
@@ -272,13 +278,14 @@
         <el-button @click="dialogDetailsIsVisible = false">
           关闭
         </el-button>
+          <el-button type="primary" @click="refreshDetails(details.id)">刷新</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/order'
+import { getList,getDetails } from '@/api/order'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -303,10 +310,6 @@ export default {
   },
   data() {
     return {
-         srcList: [
-          'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-          'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-        ],
       loading: false,
       listKey: 0,
       listData: null,
@@ -320,6 +323,7 @@ export default {
         machineId: undefined
       },
       dialogDetailsIsVisible: false,
+      detailsLoading:false,
       details: {
         sn: '',
         storeName: '',
@@ -396,9 +400,24 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
+    refreshDetails(id){
+      this.detailsLoading = true
+      getDetails({id:id}).then(res => {
+        if (res.result === 1) {
+           this.details = res.data
+        }
+        this.detailsLoading = false
+      })
+    },
     dialogDetailsOpen(row) {
-      this.details = row
-      this.dialogDetailsIsVisible = true
+      this.detailsLoading = true
+      getDetails({id:row.id}).then(res => {
+        if (res.result === 1) {
+           this.details = res.data
+        }
+        this.detailsLoading = false
+        this.dialogDetailsIsVisible = true
+      })
     }
   }
 }

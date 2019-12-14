@@ -180,6 +180,7 @@
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\PrdSubjectService.cs" />
+    <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetRpt7DayGmvRl.cs" />
     <Compile Include="Api\Merch\RModels\RetAdSpaceInitRelease.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitDetailsOrders.cs" />

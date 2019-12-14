@@ -8,6 +8,15 @@ export function getList(params) {
   })
 }
 
+export function getDetails(params) {
+  return request({
+    url: '/order/getDetails',
+    method: 'get',
+    params
+  })
+}
+
 export default {
-  getList: getList
+  getList: getList,
+  getDetails: getDetails
 }

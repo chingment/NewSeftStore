@@ -63,8 +63,12 @@ namespace LocalS.Service.Api.Merch
                     status.Value = 3010;
                     status.Text = "待取货";
                     break;
-                case E_OrderDetailsChildSonStatus.Picking:
+                case E_OrderDetailsChildSonStatus.SendPick:
                     status.Value = 3011;
+                    status.Text = "取货中";
+                    break;
+                case E_OrderDetailsChildSonStatus.Picking:
+                    status.Value = 3012;
                     status.Text = "取货中";
                     break;
                 case E_OrderDetailsChildSonStatus.Completed:
@@ -146,10 +150,10 @@ namespace LocalS.Service.Api.Merch
             {
                 var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == item.Id).ToList();
 
-                List<object> olist_Details = new List<object>();
+                List<object> sellChannelDetails = new List<object>();
                 foreach (var orderDetail in orderDetails)
                 {
-                    List<object> sub_Skus = new List<object>();
+                    List<object> pickupSkus = new List<object>();
                     switch (orderDetail.SellChannelRefType)
                     {
                         case E_SellChannelRefType.Machine:
@@ -176,25 +180,27 @@ namespace LocalS.Service.Api.Merch
                                     pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                                 }
 
-                                sub_Skus.Add(new
+                                pickupSkus.Add(new
                                 {
-                                    PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId,
-                                    PrdProductSkuMainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
-                                    PrdProductSkuName = orderDetailsChildSon.PrdProductSkuName,
+                                    Id = orderDetailsChildSon.PrdProductSkuId,
+                                    MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
+                                    Name = orderDetailsChildSon.PrdProductSkuName,
                                     Quantity = orderDetailsChildSon.Quantity,
                                     Status = GetSonStatus(orderDetailsChildSon.Status),
                                     PickupLogs = pickupLogs
                                 });
                             }
 
+                            sellChannelDetails.Add(new
+                            {
+                                Name = orderDetail.SellChannelRefName,
+                                Type = orderDetail.SellChannelRefType,
+                                DetailType = 1,
+                                DetailItems = pickupSkus
+                            });
+
                             break;
                     }
-                    olist_Details.Add(new
-                    {
-                        SellChannelRefName = orderDetail.SellChannelRefName,
-                        SellChannelRefType = orderDetail.SellChannelRefType,
-                        Detials = sub_Skus
-                    });
                 }
 
                 olist.Add(new
@@ -212,7 +218,7 @@ namespace LocalS.Service.Api.Merch
                     CreateTime = item.CreateTime,
                     Status = GetStatus(item.Status),
                     SourceName = GetSourceName(item.Source),
-                    Details = olist_Details
+                    SellChannelDetails = sellChannelDetails
                 });
             }
 
@@ -225,13 +231,89 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult GetDetails(string operater, string merchId, string orderId)
         {
-            var ret = new CustomJsonResult();
+            var result = new CustomJsonResult();
+
+            var ret = new RetOrderDetails();
+
+            var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
+            if (order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+            }
+
+            ret.Id = order.Id;
+            ret.Sn = order.Sn;
+            ret.ClientUserName = order.ClientUserName;
+            ret.ClientUserId = order.ClientUserId;
+            ret.StoreName = order.StoreName;
+            ret.SubmitTime = order.SubmitTime.ToUnifiedFormatDateTime();
+            ret.ChargeAmount = order.ChargeAmount.ToF2Price();
+            ret.DiscountAmount = order.DiscountAmount.ToF2Price();
+            ret.OriginalAmount = order.OriginalAmount.ToF2Price();
+            ret.Quantity = order.Quantity;
+            ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
+            ret.Status = GetStatus(order.Status);
+            ret.SourceName = GetSourceName(order.Source);
 
 
 
+            var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == order.Id).ToList();
 
-            return ret;
+            List<RetOrderDetails.SellChannelDetail> sellChannelDetails = new List<RetOrderDetails.SellChannelDetail>();
+            foreach (var orderDetail in orderDetails)
+            {
+                var sellChannelDetail = new RetOrderDetails.SellChannelDetail();
+
+                switch (orderDetail.SellChannelRefType)
+                {
+                    case E_SellChannelRefType.Machine:
+                        sellChannelDetail.Type = E_SellChannelRefType.Machine;
+                        sellChannelDetail.Name = orderDetail.SellChannelRefName;
+                        sellChannelDetail.DetailType = 1;
+
+                        var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderDetailsId == orderDetail.Id).ToList();
+                        var pickupSkus = new List<RetOrderDetails.PickupSku>();
+                        foreach (var orderDetailsChildSon in orderDetailsChildSons)
+                        {
+                            var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderDetailsChildSon.Id).OrderByDescending(m => m.CreateTime).ToList();
+
+                            List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
+
+                            foreach (var orderPickupLog in orderPickupLogs)
+                            {
+                                string imgUrl = null;
+                                List<string> imgUrls = new List<string>();
+                                if (!string.IsNullOrEmpty(orderPickupLog.ImgUrlByCHK))
+                                {
+                                    imgUrl = orderPickupLog.ImgUrlByCHK;
+                                    imgUrls.Add(orderPickupLog.ImgUrlByCHK);
+                                }
+
+                                pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                            }
+
+                            sellChannelDetail.DetailItems.Add(new RetOrderDetails.PickupSku
+                            {
+                                Id = orderDetailsChildSon.PrdProductSkuId,
+                                MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
+                                Name = orderDetailsChildSon.PrdProductSkuName,
+                                Quantity = orderDetailsChildSon.Quantity,
+                                Status = GetSonStatus(orderDetailsChildSon.Status),
+                                PickupLogs = pickupLogs
+                            });
+                        }
+
+                        ret.SellChannelDetails.Add(sellChannelDetail);
+                        break;
+                }
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+            return result;
+
         }
+
         public CustomJsonResult PickupExceptionHandle(string operater, string merchId, RopOrderPickupExceptionHandle rop)
         {
             var result = new CustomJsonResult();
