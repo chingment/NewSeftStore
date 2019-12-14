@@ -231,21 +231,21 @@
           <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
           <table class="table-skus" style="width:600px">
             <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
-              <td style="20%">
+              <td style="width:10%">
                 <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="20%">
+              <td style="width:20%">
                 {{ pickupSku.name }}
               </td>
-              <td style="30%">
+              <td style="width:10%">
                 x {{ pickupSku.quantity }}
               </td>
-              <td style="15%">
+              <td style="width:10%">
                 {{ pickupSku.status.text }}
               </td>
-              <td style="15%">
+              <td style="width:50%;text-align:right">
                   <el-popover
-                   v-if="pickupSku.pickupLogs.length>0"
+                  
                     placement="right"
                     width="400"
                     trigger="click"
@@ -266,9 +266,10 @@
 
                       </el-timeline-item>
                     </el-timeline>
-                    <el-button slot="reference">查看</el-button>
+                    <el-button slot="reference">取货流程</el-button>
                   </el-popover>
-
+<el-button type="danger" style="margin-left:15px;" >标记未取</el-button>
+<el-button type="success" style="margin-right:15px;">标记已取</el-button>
               </td>
             </tr>
           </table>

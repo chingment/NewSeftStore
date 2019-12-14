@@ -327,12 +327,12 @@ namespace LocalS.Service.Api.Merch
 
             switch (rop.HandleMethod)
             {
-                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.GoodsHaveBeenDeliveredToCustomer:
-
+                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
 
 
                     break;
-                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.GoodsNotHaveBeenDeliveredToCustomer:
+                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
+
                     break;
 
             }
