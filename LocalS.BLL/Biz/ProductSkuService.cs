@@ -54,6 +54,7 @@ namespace LocalS.BLL.Biz
                 }
             }
         }
+
         public CustomJsonResult OperateSlot(string operater, OperateSlotType type, string merchId, string storeId, string machineId, string slotId, string productSkuId)
         {
             var result = new CustomJsonResult();
