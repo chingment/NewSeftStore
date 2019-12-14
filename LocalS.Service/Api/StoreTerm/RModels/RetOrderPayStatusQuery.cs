@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string OrderSn { get; set; }
         public E_OrderStatus Status { get; set; }
 
-        public RetOrderDetails OrderDetails { get; set; }
+        public OrderDetailsByPickupModel OrderDetails { get; set; }
 
     }
 }

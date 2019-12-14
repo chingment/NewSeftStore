@@ -1157,20 +1157,19 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public RetOrderDetails GetOrderDetails(string orderId, string machineId)
+        public OrderDetailsByPickupModel GetOrderDetailsByPickup(string orderId, string machineId)
         {
-            var ret = new RetOrderDetails();
-            //   machineId = 861712043266632 & pickCode = 32500051
+            var model = new OrderDetailsByPickupModel();
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
             var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
 
-            ret.OrderId = order.Id;
-            ret.OrderSn = order.Sn;
+            model.OrderId = order.Id;
+            model.OrderSn = order.Sn;
 
             foreach (var orderDetailsChild in orderDetailsChilds)
             {
-                var sku = new RetOrderDetails.ProductSku();
+                var sku = new OrderDetailsByPickupModel.ProductSku();
                 sku.Id = orderDetailsChild.PrdProductSkuId;
                 sku.Name = orderDetailsChild.PrdProductSkuName;
                 sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
@@ -1183,7 +1182,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var orderDetailsChildSon in l_orderDetailsChildSons)
                 {
-                    var slot = new RetOrderDetails.Slot();
+                    var slot = new OrderDetailsByPickupModel.Slot();
                     slot.UniqueId = orderDetailsChildSon.Id;
                     slot.SlotId = orderDetailsChildSon.SlotId;
                     slot.Status = orderDetailsChildSon.Status;
@@ -1199,10 +1198,10 @@ namespace LocalS.BLL.Biz
                     sku.Slots.Add(slot);
                 }
 
-                ret.ProductSkus.Add(sku);
+                model.ProductSkus.Add(sku);
             }
 
-            return ret;
+            return model;
         }
     }
 }

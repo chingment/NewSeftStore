@@ -223,6 +223,13 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult GetDetails(string operater, string merchId, string orderId)
+        {
+            var ret = new CustomJsonResult();
+
+
+            return ret;
+        }
         public CustomJsonResult InvolvePickupFlow(string operater, string merchId, RopOrderInvolvePickupFlow rop)
         {
             var result = new CustomJsonResult();
@@ -231,7 +238,7 @@ namespace LocalS.Service.Api.Merch
             switch (rop.InvolveOp)
             {
                 case InvolveOp.GoodsHaveBeenDeliveredToCustomer:
-                    
+
                     break;
                 case InvolveOp.GoodsNotHaveBeenDeliveredToCustomer:
                     break;

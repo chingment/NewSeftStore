@@ -92,7 +92,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.Data.Status = ret_Biz.Data.Status;
                 if (ret_Biz.Data.Status == E_OrderStatus.Payed)
                 {
-                    ret.Data.OrderDetails = BizFactory.Order.GetOrderDetails(rup.OrderId, rup.MachineId);
+                    ret.Data.OrderDetails = BizFactory.Order.GetOrderDetailsByPickup(rup.OrderId, rup.MachineId);
                 }
             }
 
@@ -130,7 +130,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetails(order.Id, rup.MachineId));
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetailsByPickup(order.Id, rup.MachineId));
             return result;
         }
 

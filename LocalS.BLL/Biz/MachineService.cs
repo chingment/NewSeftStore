@@ -116,7 +116,7 @@ namespace LocalS.BLL.Biz
         public void SendPaySuccess(string id, string orderId, string orderSn)
         {
             var machine = BizFactory.Machine.GetOne(id);
-            var orderDetails = BizFactory.Order.GetOrderDetails(orderId, id);
+            var orderDetails = BizFactory.Order.GetOrderDetailsByPickup(orderId, id);
             var content = new { orderId = orderId, orderSn = orderSn, status = E_OrderStatus.Payed, OrderDetails = orderDetails };
             PushService.SendPaySuccess(machine.JPushRegId, content);
         }
@@ -155,7 +155,7 @@ namespace LocalS.BLL.Biz
 
         private static int[] GetPendantRows(string str)
         {
-         
+
             int[] layout = null;
 
             try
@@ -164,7 +164,7 @@ namespace LocalS.BLL.Biz
                 layout = Array.ConvertAll(sNums, int.Parse);
                 return layout;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return layout;
             }
