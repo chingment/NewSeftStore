@@ -26,9 +26,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse InvolvePickupFlow([FromBody]RopOrderInvolvePickupFlow rop)
+        public OwnApiHttpResponse PickupExceptionHandle([FromBody]RopOrderPickupExceptionHandle rop)
         {
-            IResult result = MerchServiceFactory.Order.InvolvePickupFlow(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Order.PickupExceptionHandle(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

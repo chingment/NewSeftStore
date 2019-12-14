@@ -31,12 +31,12 @@ namespace LocalS.BLL.Task
             RedisManager.Db.HashSetAsync(key, d.Id, d.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
-        public void UpdateData(string id, object data)
+        public void UpdateData(Task4TimType type, string id, object data)
         {
             RedisManager.Db.HashSetAsync(key, id, data.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
-        public void Exit(string id)
+        public void Exit(Task4TimType type, string id)
         {
             RedisManager.Db.HashDelete(key, id);
         }

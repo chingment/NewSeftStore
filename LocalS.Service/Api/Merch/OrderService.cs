@@ -228,19 +228,29 @@ namespace LocalS.Service.Api.Merch
             var ret = new CustomJsonResult();
 
 
+
+
             return ret;
         }
-        public CustomJsonResult InvolvePickupFlow(string operater, string merchId, RopOrderInvolvePickupFlow rop)
+        public CustomJsonResult PickupExceptionHandle(string operater, string merchId, RopOrderPickupExceptionHandle rop)
         {
             var result = new CustomJsonResult();
 
+            var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
 
-            switch (rop.InvolveOp)
+            if (orderDetailsChildSon == null)
             {
-                case InvolveOp.GoodsHaveBeenDeliveredToCustomer:
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
+            }
+
+            switch (rop.HandleMethod)
+            {
+                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.GoodsHaveBeenDeliveredToCustomer:
+
+
 
                     break;
-                case InvolveOp.GoodsNotHaveBeenDeliveredToCustomer:
+                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.GoodsNotHaveBeenDeliveredToCustomer:
                     break;
 
             }

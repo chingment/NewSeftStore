@@ -115,10 +115,10 @@ namespace LocalS.BLL.Biz
 
         public void SendPaySuccess(string id, string orderId, string orderSn)
         {
-            var machine = BizFactory.Machine.GetOne(id);
-            var orderDetails = BizFactory.Order.GetOrderDetailsByPickup(orderId, id);
-            var content = new { orderId = orderId, orderSn = orderSn, status = E_OrderStatus.Payed, OrderDetails = orderDetails };
-            PushService.SendPaySuccess(machine.JPushRegId, content);
+            //var machine = BizFactory.Machine.GetOne(id);
+            //var orderDetails = BizFactory.Order.GetOrderDetailsByPickup(orderId, id);
+            //var content = new { orderId = orderId, orderSn = orderSn, status = E_OrderStatus.Payed, OrderDetails = orderDetails };
+            //PushService.SendPaySuccess(machine.JPushRegId, content);
         }
 
         private static int[] GetLayout(string str)

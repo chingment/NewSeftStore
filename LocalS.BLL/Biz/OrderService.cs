@@ -18,9 +18,7 @@ namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseDbContext
     {
-
         private static readonly object lock_Reserve = new object();
-
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
             CustomJsonResult<RetOrderReserve> result = new CustomJsonResult<RetOrderReserve>();
@@ -310,7 +308,6 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-
         private List<OrderReserveDetail> GetReserveDetail(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoAndStockModel> productSkus)
         {
             List<OrderReserveDetail> details = new List<OrderReserveDetail>();
@@ -886,7 +883,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                Task4Factory.Tim2Global.Exit(order.Id);
+                Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
             }
 
@@ -992,7 +989,7 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    Task4Factory.Tim2Global.Exit(order.Id);
+                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
@@ -1156,7 +1153,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public OrderDetailsByPickupModel GetOrderDetailsByPickup(string orderId, string machineId)
         {
             var model = new OrderDetailsByPickupModel();
