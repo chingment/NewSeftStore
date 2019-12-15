@@ -24,8 +24,10 @@ namespace LocalS.BLL.Biz
         OrderReserve = 1,
         OrderCancle = 2,
         OrderPaySuccess = 3,
-        OrderPickupOneBySuccess = 4,
-        OrderPickupOneByFailure = 5
+        OrderPickupOneSysMadeSignTake = 5,
+        OrderPickupOneManMadeSignTakeByNotComplete = 6,
+        OrderPickupOneManMadeSignNotTakeByComplete = 7,
+        OrderPickupOneManMadeSignNotTakeByNotComplete = 8
     }
 
     public class ProductSkuService : BaseDbContext
@@ -384,7 +386,7 @@ namespace LocalS.BLL.Biz
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
                         break;
-                    case OperateStockType.OrderPickupOneBySuccess:
+                    case OperateStockType.OrderPickupOneSysMadeSignTake:
                         #region OrderPaySuccess
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
@@ -412,7 +414,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneBySuccess;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneSysMadeSignTake;
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
@@ -421,8 +423,139 @@ namespace LocalS.BLL.Biz
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
                         break;
-                    case OperateStockType.OrderPickupOneByFailure:
+                    case OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete:
+                        #region OrderPickupOneManMadeSignTakeByNotComplete
 
+
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                        }
+
+                        sellChannelStock.WaitPickupLockQuantity -= quantity;
+                        sellChannelStock.SumQuantity -= quantity;
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+                        sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                        sellChannelStockLog.RefId = sellChannelStock.RefId;
+                        sellChannelStockLog.RefType = sellChannelStock.RefType;
+                        sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignTakeByNotComplete;
+                        sellChannelStockLog.ChangeQuantity = quantity;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去待取货库存：{0}", quantity);
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+
+                        #endregion
+                        break;
+                    case OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete:
+                        #region OrderPickupOneManMadeSignNotTakeByComplete
+
+
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                        }
+
+                        sellChannelStock.SellQuantity += quantity;
+                        sellChannelStock.SumQuantity += quantity;
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+                        sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                        sellChannelStockLog.RefId = sellChannelStock.RefId;
+                        sellChannelStockLog.RefType = sellChannelStock.RefType;
+                        sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignNotTakeByComplete;
+                        sellChannelStockLog.ChangeQuantity = quantity;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = string.Format("系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，恢复库存：{0}", quantity);
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+
+                        #endregion
+                        break;
+                    case OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete:
+                        #region OrderPickupOneManMadeSignNotTakeByComplete
+
+
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                        }
+
+
+                        sellChannelStock.SellQuantity += 1;
+                        sellChannelStock.WaitPayLockQuantity -= quantity;
+
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+
+                        sellChannelStockLog = new SellChannelStockLog();
+                        sellChannelStockLog.Id = GuidUtil.New();
+                        sellChannelStockLog.MerchId = sellChannelStock.MerchId;
+                        sellChannelStockLog.StoreId = sellChannelStock.StoreId;
+                        sellChannelStockLog.RefId = sellChannelStock.RefId;
+                        sellChannelStockLog.RefType = sellChannelStock.RefType;
+                        sellChannelStockLog.SlotId = sellChannelStock.SlotId;
+                        sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
+                        sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignNotTakeByNotComplete;
+                        sellChannelStockLog.ChangeQuantity = quantity;
+                        sellChannelStockLog.Creator = operater;
+                        sellChannelStockLog.CreateTime = DateTime.Now;
+                        sellChannelStockLog.RemarkByDev = string.Format("人为标记未取货成功，恢复库存：{0}", quantity);
+                        CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+
+                        #endregion
                         break;
                 }
 

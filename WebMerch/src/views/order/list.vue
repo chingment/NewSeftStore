@@ -229,7 +229,7 @@
         </div>
         <div v-for="(sellChannelDetail,index) in details.sellChannelDetails" :key="index">
           <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
-          <table class="table-skus" style="width:600px">
+          <table class="table-skus" style="width:100%">
             <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
               <td style="width:10%">
                 <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">

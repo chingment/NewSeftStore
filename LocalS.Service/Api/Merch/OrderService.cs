@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
@@ -318,23 +320,49 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
-
-            if (orderDetailsChildSon == null)
+            using (TransactionScope ts = new TransactionScope())
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
-            }
+                var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
 
-            switch (rop.HandleMethod)
-            {
-                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
+                if (orderDetailsChildSon == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
+                }
 
+                if (orderDetailsChildSon.IsHasHandleException)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
+                }
 
-                    break;
-                case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
+                switch (rop.HandleMethod)
+                {
+                    case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
+                        orderDetailsChildSon.IsHasHandleException = true;
 
-                    break;
+                        if (orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Completed)
+                        {
+                            orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Completed;
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                        }
 
+                        break;
+                    case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
+                        orderDetailsChildSon.IsHasHandleException = true;
+
+                        if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Completed)
+                        {
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                        }
+                        else
+                        {
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                        }
+                        break;
+
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
             }
 
             return result;

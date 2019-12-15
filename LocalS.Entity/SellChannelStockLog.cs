@@ -9,13 +9,15 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         ReserveSuccess = 1,
-        OrderPaySuccess = 2,
-        OrderCancle = 3,
-        OrderPickupOneBySuccess = 4,
-        OrderPickupOneByFailure = 5,
-        SlotInit = 5,
-        SlotEdit = 6,
-        SlotRemove = 7
+        OrderCancle = 2,
+        OrderPaySuccess = 3,
+        OrderPickupOneSysMadeSignTake = 5,
+        OrderPickupOneManMadeSignTakeByNotComplete = 6,
+        OrderPickupOneManMadeSignNotTakeByComplete = 7,
+        OrderPickupOneManMadeSignNotTakeByNotComplete = 8,
+        SlotInit = 9,
+        SlotEdit = 10,
+        SlotRemove = 11
     }
 
     [Table("SellChannelStockLog")]

@@ -233,7 +233,7 @@ namespace LocalS.Service.Api.StoreTerm
                         orderPickupLog.PickupUseTime = rop.PickupUseTime;
                         orderPickupLog.ActionRemark = "取货完成";
 
-                        BizFactory.ProductSku.OperateStockQuantity(rop.MachineId, OperateStockType.OrderPickupOneBySuccess, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(rop.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
                     }
                     else
                     {
