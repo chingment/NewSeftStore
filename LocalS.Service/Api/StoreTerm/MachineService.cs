@@ -22,6 +22,16 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetMachineInitData();
 
+            if (string.IsNullOrEmpty(rop.MachineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备编码为空");
+            }
+
+            if (rop.MachineId == "ERROR")
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备编码获取错误");
+            }
+
 
             var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 
