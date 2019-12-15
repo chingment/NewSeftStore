@@ -16,6 +16,14 @@ export function getDetails(params) {
   })
 }
 
+export function pickupExceptionHandle(data) {
+  return request({
+    url: '/order/pickupExceptionHandle',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   getDetails: getDetails

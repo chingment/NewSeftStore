@@ -80,7 +80,7 @@
 
                       </el-timeline-item>
                     </el-timeline>
-                    <el-button slot="reference">查看</el-button>
+                    <el-button slot="reference">取货流程</el-button>
                   </el-popover>
 
                 </td>
@@ -245,7 +245,7 @@
               </td>
               <td style="width:50%;text-align:right">
                   <el-popover
-                  
+                     v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
                     width="400"
                     trigger="click"
@@ -266,10 +266,10 @@
 
                       </el-timeline-item>
                     </el-timeline>
-                    <el-button slot="reference">取货流程</el-button>
+                    <el-button slot="reference" style="margin-right:15px;">取货流程</el-button>
                   </el-popover>
-<el-button type="danger" style="margin-left:15px;" >标记未取</el-button>
-<el-button type="success" style="margin-right:15px;">标记已取</el-button>
+<el-button v-if="pickupSku.isHasHandleException==false" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)" >标记未取</el-button>
+<el-button v-if="pickupSku.isHasHandleException==false" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button>
               </td>
             </tr>
           </table>
@@ -286,7 +286,8 @@
 </template>
 
 <script>
-import { getList,getDetails } from '@/api/order'
+import { MessageBox } from 'element-ui'
+import { getList,getDetails,pickupExceptionHandle } from '@/api/order'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -419,6 +420,43 @@ export default {
         this.detailsLoading = false
         this.dialogDetailsIsVisible = true
       })
+    },
+    signNotTake(orderId,pickupSku){
+       var _this=this
+        MessageBox.confirm('确定要标记【'+pickupSku.name+'】<span style="color:#F56C6C">未取</span>,慎重操作，会影响机器实际库存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dangerouslyUseHTMLString: true,
+            type: 'warning'
+          }).then(() => {
+          
+            pickupExceptionHandle({uniqueId:pickupSku.uniqueId,handleMethod:2,remark:''}).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                 _this.refreshDetails(orderId)
+              }
+            })
+
+          })
+    },
+    signTake(orderId,pickupSku){
+      var _this=this
+        MessageBox.confirm('确定要标记【'+pickupSku.name+'】<span style="color:#67C23A">已取</span>,慎重操作，会影响机器实际库存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dangerouslyUseHTMLString: true,
+            type: 'warning'
+          }).then(() => {
+       
+
+            pickupExceptionHandle({uniqueId:pickupSku.uniqueId,handleMethod:1,remark:''}).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                 _this.refreshDetails(orderId)
+              }
+            })
+
+          })
     }
   }
 }

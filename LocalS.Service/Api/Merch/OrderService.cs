@@ -186,6 +186,8 @@ namespace LocalS.Service.Api.Merch
                                 {
                                     Id = orderDetailsChildSon.PrdProductSkuId,
                                     MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
+                                    UniqueId = orderDetailsChildSon.Id,
+                                    IsHasHandleException = orderDetailsChildSon.IsHasHandleException,
                                     Name = orderDetailsChildSon.PrdProductSkuName,
                                     Quantity = orderDetailsChildSon.Quantity,
                                     Status = GetSonStatus(orderDetailsChildSon.Status),
@@ -297,11 +299,13 @@ namespace LocalS.Service.Api.Merch
                             sellChannelDetail.DetailItems.Add(new RetOrderDetails.PickupSku
                             {
                                 Id = orderDetailsChildSon.PrdProductSkuId,
+                                UniqueId = orderDetailsChildSon.Id,
+                                IsHasHandleException = orderDetailsChildSon.IsHasHandleException,
                                 MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
                                 Name = orderDetailsChildSon.PrdProductSkuName,
                                 Quantity = orderDetailsChildSon.Quantity,
                                 Status = GetSonStatus(orderDetailsChildSon.Status),
-                                PickupLogs = pickupLogs
+                                PickupLogs = pickupLogs,
                             });
                         }
 
@@ -334,6 +338,8 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
                 }
 
+                var orderPickupLog = new OrderPickupLog();
+
                 switch (rop.HandleMethod)
                 {
                     case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
@@ -342,9 +348,26 @@ namespace LocalS.Service.Api.Merch
                         if (orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Completed)
                         {
                             orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Completed;
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
-                        }
 
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+
+
+                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
+                            orderPickupLog.UniqueId = rop.UniqueId;
+                            orderPickupLog.ProductSkuId = orderDetailsChildSon.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
+                            orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                            orderPickupLog.IsPickupComplete = true;
+                            orderPickupLog.ActionRemark = "人为标识已取货";
+                            orderPickupLog.Remark = rop.Remark;
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
+                        }
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "标识成功");
                         break;
                     case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
                         orderDetailsChildSon.IsHasHandleException = true;
@@ -352,11 +375,44 @@ namespace LocalS.Service.Api.Merch
                         if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Completed)
                         {
                             BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+
+                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
+                            orderPickupLog.UniqueId = rop.UniqueId;
+                            orderPickupLog.ProductSkuId = orderDetailsChildSon.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
+                            orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                            orderPickupLog.IsPickupComplete = false;
+                            orderPickupLog.ActionRemark = "人为标识未取货";
+                            orderPickupLog.Remark = rop.Remark;
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
                         }
                         else
                         {
                             BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+
+                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
+                            orderPickupLog.UniqueId = rop.UniqueId;
+                            orderPickupLog.ProductSkuId = orderDetailsChildSon.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
+                            orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                            orderPickupLog.IsPickupComplete = false;
+                            orderPickupLog.ActionRemark = "人为标识未取货";
+                            orderPickupLog.Remark = rop.Remark;
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
                         }
+
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "标识成功");
                         break;
 
                 }

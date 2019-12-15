@@ -284,7 +284,7 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in detailsChild.SlotStock)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserve, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserveSuccess, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
                             }
                         }
                     }

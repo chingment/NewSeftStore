@@ -21,13 +21,13 @@ namespace LocalS.BLL.Biz
     public enum OperateStockType
     {
         Unknow = 0,
-        OrderReserve = 1,
-        OrderCancle = 2,
-        OrderPaySuccess = 3,
-        OrderPickupOneSysMadeSignTake = 5,
-        OrderPickupOneManMadeSignTakeByNotComplete = 6,
-        OrderPickupOneManMadeSignNotTakeByComplete = 7,
-        OrderPickupOneManMadeSignNotTakeByNotComplete = 8
+        OrderReserveSuccess = 11,
+        OrderCancle = 12,
+        OrderPaySuccess = 13,
+        OrderPickupOneSysMadeSignTake = 15,
+        OrderPickupOneManMadeSignTakeByNotComplete = 16,
+        OrderPickupOneManMadeSignNotTakeByComplete = 17,
+        OrderPickupOneManMadeSignNotTakeByNotComplete = 18
     }
 
     public class ProductSkuService : BaseDbContext
@@ -277,7 +277,7 @@ namespace LocalS.BLL.Biz
                 SellChannelStockLog sellChannelStockLog = null;
                 switch (type)
                 {
-                    case OperateStockType.OrderReserve:
+                    case OperateStockType.OrderReserveSuccess:
                         #region OrderReserve
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.RefType == E_SellChannelRefType.Machine && m.RefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
@@ -304,11 +304,11 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
-                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.ReserveSuccess;
+                        sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.OrderReserveSuccess;
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可销库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可销库存：{0}，增加待取货库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -344,7 +344,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，恢复可销售库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，增加可销售库存：{0},减少未支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -381,7 +381,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("成功支付，增加待取货库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("成功支付，减少待支付库存：{0}，增加待取货库存：{0},可售库存不变，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -418,7 +418,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0},减少待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -461,7 +461,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去待取货库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去实际库存：{1}，减去待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -505,7 +505,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，恢复库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{0}，增加实际库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -523,7 +523,7 @@ namespace LocalS.BLL.Biz
 
 
                         sellChannelStock.SellQuantity += 1;
-                        sellChannelStock.WaitPayLockQuantity -= quantity;
+                        sellChannelStock.WaitPickupLockQuantity -= quantity;
 
 
                         sellChannelStock.Version += 1;
@@ -551,7 +551,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("人为标记未取货成功，恢复库存：{0}", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("人为标记未取货成功，恢复可售库存：{0},减去待取货库存：{0},实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 

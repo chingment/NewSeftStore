@@ -47,13 +47,16 @@ namespace LocalS.Service.Api.Merch
             {
                 this.PickupLogs = new List<PickupLog>();
             }
-
+            public string UniqueId { get; set; }
             public string Id { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
             public int Quantity { get; set; }
             public StatusModel Status { get; set; }
             public List<PickupLog> PickupLogs { get; set; }
+
+            public bool IsHasHandleException { get; set; }
+
         }
 
         public class PickupLog

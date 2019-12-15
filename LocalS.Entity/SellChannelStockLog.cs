@@ -8,16 +8,16 @@ namespace LocalS.Entity
     public enum E_SellChannelStockLogChangeTpye
     {
         Unknow = 0,
-        ReserveSuccess = 1,
-        OrderCancle = 2,
-        OrderPaySuccess = 3,
-        OrderPickupOneSysMadeSignTake = 5,
-        OrderPickupOneManMadeSignTakeByNotComplete = 6,
-        OrderPickupOneManMadeSignNotTakeByComplete = 7,
-        OrderPickupOneManMadeSignNotTakeByNotComplete = 8,
-        SlotInit = 9,
-        SlotEdit = 10,
-        SlotRemove = 11
+        OrderReserveSuccess = 11,
+        OrderCancle = 12,
+        OrderPaySuccess = 13,
+        OrderPickupOneSysMadeSignTake = 15,
+        OrderPickupOneManMadeSignTakeByNotComplete = 16,
+        OrderPickupOneManMadeSignNotTakeByComplete = 17,
+        OrderPickupOneManMadeSignNotTakeByNotComplete = 18,
+        SlotInit = 21,
+        SlotEdit = 22,
+        SlotRemove = 23
     }
 
     [Table("SellChannelStockLog")]
