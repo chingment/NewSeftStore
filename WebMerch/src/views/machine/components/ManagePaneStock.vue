@@ -20,7 +20,7 @@
         </el-col>
       </el-row>
     </div>
-
+   <el-button  style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" ></el-button>
     <!-- <vueSeamlessScroll :data="listData3" :class-option="classOption3" class="warp2 demo4">
       <span
         slot="left-switch"
