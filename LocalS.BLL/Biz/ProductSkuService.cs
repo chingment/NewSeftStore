@@ -87,15 +87,15 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RefType = sellChannelStock.RefType;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
-                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
+                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
                         sellChannelStockLog.WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity;
                         sellChannelStockLog.WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity;
-                        sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
+                        sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
                         sellChannelStockLog.ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove;
                         sellChannelStockLog.ChangeQuantity = 0;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = "移除库存";
+                        sellChannelStockLog.RemarkByDev = string.Format("删除货道，移除实际库存：{0}", sellChannelStock.SumQuantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
                         CurrentDb.SaveChanges();
@@ -167,7 +167,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = 0;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = "初次加载";
+                        sellChannelStockLog.RemarkByDev = "初次录入货道";
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
@@ -177,6 +177,11 @@ namespace LocalS.BLL.Biz
 
                         if (sellChannelStock.PrdProductSkuId != productSkuId)
                         {
+                            int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
+                            if (lockQuantity > 0)
+                            {
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
+                            }
 
                             var sellChannelStockLog = new SellChannelStockLog();
                             sellChannelStockLog.Id = GuidUtil.New();
@@ -194,7 +199,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog.ChangeQuantity = 0;
                             sellChannelStockLog.Creator = operater;
                             sellChannelStockLog.CreateTime = DateTime.Now;
-                            sellChannelStockLog.RemarkByDev = "货道移除";
+                            sellChannelStockLog.RemarkByDev = string.Format("货道被替换，移除实际库存：{0}", sellChannelStock.SumQuantity);
                             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
                             sellChannelStock.PrdProductId = bizProductSku.ProductId;
@@ -232,7 +237,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.ChangeQuantity = 0;
                             sellChannelStockLog2.Creator = operater;
                             sellChannelStockLog2.CreateTime = DateTime.Now;
-                            sellChannelStockLog2.RemarkByDev = "变换货道，初次加载";
+                            sellChannelStockLog2.RemarkByDev = string.Format("变换货道，实际库存：{0}", sellChannelStock.SumQuantity);
                             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
                         }
