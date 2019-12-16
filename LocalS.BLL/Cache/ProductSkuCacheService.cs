@@ -140,7 +140,7 @@ namespace LocalS.BLL
         {
             var productSkuStockModels = new List<ProductSkuStockModel>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.PrdProductSkuId == productSkuId).ToList();
 
             foreach (var sellChannelStock in sellChannelStocks)
             {

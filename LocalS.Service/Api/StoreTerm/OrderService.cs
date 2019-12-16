@@ -177,7 +177,7 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         foreach (var item in orderDetailsChildSons)
                         {
-                            if (item.Status != E_OrderDetailsChildSonStatus.Completed || item.Status != E_OrderDetailsChildSonStatus.Cancled)
+                            if (item.Status != E_OrderDetailsChildSonStatus.Completed && item.Status != E_OrderDetailsChildSonStatus.Cancled)
                             {
                                 item.Status = E_OrderDetailsChildSonStatus.Exception;
                                 CurrentDb.SaveChanges();

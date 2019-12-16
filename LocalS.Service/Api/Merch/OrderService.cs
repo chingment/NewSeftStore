@@ -349,8 +349,8 @@ namespace LocalS.Service.Api.Merch
                         {
                             orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.Completed;
 
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
 
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
 
                             orderPickupLog.Id = GuidUtil.New();
                             orderPickupLog.OrderId = orderDetailsChildSon.OrderId;

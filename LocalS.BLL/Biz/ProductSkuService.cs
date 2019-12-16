@@ -39,10 +39,12 @@ namespace LocalS.BLL.Biz
             {
                 foreach (var machineId in machineIds)
                 {
+
                     var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, productSkuId);
 
                     if (bizProductSku != null)
                     {
+
                         var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
                         updateProdcutSkuStock.Id = bizProductSku.Id;
                         updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
@@ -440,15 +442,10 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.WaitPickupLockQuantity -= quantity;
                         sellChannelStock.SumQuantity -= quantity;
-
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
 
-
-                        sellChannelStock.Version += 1;
-                        sellChannelStock.Mender = operater;
-                        sellChannelStock.MendTime = DateTime.Now;
 
                         sellChannelStockLog = new SellChannelStockLog();
                         sellChannelStockLog.Id = GuidUtil.New();
@@ -466,7 +463,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去实际库存：{1}，减去待取货库存：{0}，可售库存不变", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去实际库存：{0}，减去待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -484,12 +481,6 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.SellQuantity += quantity;
                         sellChannelStock.SumQuantity += quantity;
-
-                        sellChannelStock.Version += 1;
-                        sellChannelStock.Mender = operater;
-                        sellChannelStock.MendTime = DateTime.Now;
-
-
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
@@ -512,6 +503,9 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.CreateTime = DateTime.Now;
                         sellChannelStockLog.RemarkByDev = string.Format("系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{0}，增加实际库存：{0}", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+
+                        LogUtil.Info("bizProductSku.productSkuId22:");
+
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
                         #endregion
@@ -529,13 +523,6 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.SellQuantity += 1;
                         sellChannelStock.WaitPickupLockQuantity -= quantity;
-
-
-                        sellChannelStock.Version += 1;
-                        sellChannelStock.Mender = operater;
-                        sellChannelStock.MendTime = DateTime.Now;
-
-
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
