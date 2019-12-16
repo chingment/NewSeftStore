@@ -780,7 +780,10 @@ namespace LocalS.BLL.Biz
                 {
                     if (pms.ContainsKey("clientUserName"))
                     {
-                        order.ClientUserName = pms["clientUserName"];
+                        if (!string.IsNullOrEmpty(pms["clientUserName"]))
+                        {
+                            order.ClientUserName = pms["clientUserName"];
+                        }
                     }
                 }
 
