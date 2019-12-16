@@ -21,6 +21,7 @@ namespace LocalS.BLL.Biz
                 return null;
 
             model.Id = machine.Id;
+            model.DeviceId = machine.DeviceId;
             model.Name = machine.Name;
             model.MainImgUrl = machine.MainImgUrl;
             model.LogoImgUrl = machine.LogoImgUrl;

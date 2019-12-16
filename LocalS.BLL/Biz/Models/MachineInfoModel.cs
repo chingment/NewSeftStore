@@ -10,6 +10,8 @@ namespace LocalS.BLL.Biz
     public class MachineInfoModel
     {
         public string Id { get; set; }
+
+        public string DeviceId { get; set; }
         public string Name { get; set; }
         public string LogoImgUrl { get; set; }
         public string MerchId { get; set; }
@@ -22,7 +24,7 @@ namespace LocalS.BLL.Biz
         public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public int[] CabinetRowColLayout_1 { get; set; }
-        public int [] CabinetPendantRows_1 { get; set; }
+        public int[] CabinetPendantRows_1 { get; set; }
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }

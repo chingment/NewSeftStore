@@ -16,31 +16,29 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class MachineService : BaseDbContext
     {
+
+
         public CustomJsonResult InitData(RopMachineInitData rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             var ret = new RetMachineInitData();
 
-            if (string.IsNullOrEmpty(rop.MachineId))
+            if (string.IsNullOrEmpty(rop.DeviceId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备编码为空");
             }
 
-            if (rop.MachineId == "ERROR")
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备编码获取错误");
-            }
-
-
-            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+            var machine = CurrentDb.Machine.Where(m => m.ImeiId == rop.DeviceId || m.MacAddress == rop.DeviceId).FirstOrDefault();
 
             if (machine == null)
             {
                 machine = new Machine();
-                machine.Id = rop.MachineId;
-                machine.Name = rop.MachineId;//默认名称为机器ID
+                machine.Id = GuidUtil.New();
+                machine.Name = rop.DeviceId;//默认名称为机器ID
                 machine.JPushRegId = rop.JPushRegId;
+                machine.DeviceId = rop.DeviceId;
+                machine.ImeiId = rop.ImeiId;
                 machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
@@ -52,8 +50,10 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                machine.JPushRegId = rop.JPushRegId;
+                machine.DeviceId = rop.DeviceId;
+                machine.ImeiId = rop.ImeiId;
                 machine.MacAddress = rop.MacAddress;
+                machine.JPushRegId = rop.JPushRegId;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
                 machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
@@ -72,8 +72,9 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            var machineInfo = BizFactory.Machine.GetOne(rop.MachineId);
+            var machineInfo = BizFactory.Machine.GetOne(machine.Id);
             ret.Machine.Id = machineInfo.Id;
+            ret.Machine.DeviceId = machineInfo.DeviceId;
             ret.Machine.Name = machineInfo.Name;
             ret.Machine.LogoImgUrl = machineInfo.LogoImgUrl;
             ret.Machine.MerchName = machineInfo.MerchName;

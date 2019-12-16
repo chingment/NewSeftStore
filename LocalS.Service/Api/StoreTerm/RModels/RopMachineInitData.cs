@@ -8,11 +8,12 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopMachineInitData
     {
-        public string MachineId { get; set; }
+        public string ImeiId { get; set; }
+        public string DeviceId { get; set; }
         public string JPushRegId { get; set; }
         public string MacAddress { get; set; }
         public string AppVersionCode { get; set; }
-        public string AppVersionName{ get; set; }
+        public string AppVersionName { get; set; }
         public string CtrlSdkVersionCode { get; set; }
     }
 }

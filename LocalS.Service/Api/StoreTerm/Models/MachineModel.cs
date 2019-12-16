@@ -12,6 +12,8 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string Id { get; set; }
         public string Name { get; set; }
+
+        public string DeviceId { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string LogoImgUrl { get; set; }
