@@ -333,10 +333,17 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
                 }
 
+                if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Submitted || orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPay || orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Cancled)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当前流程不支持该操作");
+                }
+
                 if (orderDetailsChildSon.IsHasHandleException)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
                 }
+
+
 
                 var orderPickupLog = new OrderPickupLog();
 
@@ -344,6 +351,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
                         orderDetailsChildSon.IsHasHandleException = true;
+                        orderDetailsChildSon.IsTaked = true;
 
                         if (orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Completed)
                         {
@@ -371,7 +379,7 @@ namespace LocalS.Service.Api.Merch
                         break;
                     case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
                         orderDetailsChildSon.IsHasHandleException = true;
-
+                        orderDetailsChildSon.IsTaked = false;
                         if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Completed)
                         {
                             BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
@@ -393,6 +401,8 @@ namespace LocalS.Service.Api.Merch
                         }
                         else
                         {
+                            orderDetailsChildSon.Status =E_OrderDetailsChildSonStatus.Completed;
+
                             BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
 
                             orderPickupLog.Id = GuidUtil.New();

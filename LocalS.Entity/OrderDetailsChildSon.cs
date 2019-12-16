@@ -62,5 +62,7 @@ namespace LocalS.Entity
         public int LastPickupActionStatusCode { get; set; }
 
         public bool IsHasHandleException { get; set; }
+
+        public bool IsTaked { get; set; }
     }
 }

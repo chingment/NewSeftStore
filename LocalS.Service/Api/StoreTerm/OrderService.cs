@@ -167,6 +167,12 @@ namespace LocalS.Service.Api.StoreTerm
                     orderDetailsChildSon.LastPickupActionId = rop.ActionId;
                     orderDetailsChildSon.LastPickupActionStatusCode = rop.ActionStatusCode;
                     orderDetailsChildSon.Status = rop.Status;
+
+                    if (rop.Status == E_OrderDetailsChildSonStatus.Completed)
+                    {
+                        orderDetailsChildSon.IsTaked = true;
+                    }
+
                     CurrentDb.SaveChanges();
 
 
