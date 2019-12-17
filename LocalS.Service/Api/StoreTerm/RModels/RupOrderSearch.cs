@@ -9,6 +9,6 @@ namespace LocalS.Service.Api.StoreTerm
     public class RupOrderSearch
     {
         public string MachineId { get; set; }
-        public string PickCode { get; set; }
+        public string PickupCode { get; set; }
     }
 }

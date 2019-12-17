@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.Merch
                     status.Value = 4000;
                     status.Text = "已完成";
                     break;
-                case E_OrderStatus.Cancled:
+                case E_OrderStatus.Canceled:
                     status.Value = 5000;
                     status.Text = "已取消";
                     break;
@@ -77,7 +77,7 @@ namespace LocalS.Service.Api.Merch
                     status.Value = 4000;
                     status.Text = "已完成";
                     break;
-                case E_OrderDetailsChildSonStatus.Cancled:
+                case E_OrderDetailsChildSonStatus.Canceled:
                     status.Value = 5000;
                     status.Text = "已取消";
                     break;
@@ -116,7 +116,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderSn == null || o.Sn.Contains(rup.OrderSn)) &&
                          o.MerchId == merchId
-                         select new { o.Sn, o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmitTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Sn, o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
             {
@@ -214,7 +214,7 @@ namespace LocalS.Service.Api.Merch
                     ClientUserName = item.ClientUserName,
                     ClientUserId = item.ClientUserId,
                     StoreName = item.StoreName,
-                    SubmitTime = item.SubmitTime.ToUnifiedFormatDateTime(),
+                    SubmitTime = item.SubmittedTime.ToUnifiedFormatDateTime(),
                     ChargeAmount = item.ChargeAmount.ToF2Price(),
                     DiscountAmount = item.DiscountAmount.ToF2Price(),
                     OriginalAmount = item.OriginalAmount.ToF2Price(),
@@ -250,7 +250,7 @@ namespace LocalS.Service.Api.Merch
             ret.ClientUserName = order.ClientUserName;
             ret.ClientUserId = order.ClientUserId;
             ret.StoreName = order.StoreName;
-            ret.SubmitTime = order.SubmitTime.ToUnifiedFormatDateTime();
+            ret.SubmitTime = order.SubmittedTime.ToUnifiedFormatDateTime();
             ret.ChargeAmount = order.ChargeAmount.ToF2Price();
             ret.DiscountAmount = order.DiscountAmount.ToF2Price();
             ret.OriginalAmount = order.OriginalAmount.ToF2Price();
@@ -333,7 +333,7 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
                 }
 
-                if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Submitted || orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPay || orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Cancled)
+                if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Submitted || orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPay || orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Canceled)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当前流程不支持该操作");
                 }

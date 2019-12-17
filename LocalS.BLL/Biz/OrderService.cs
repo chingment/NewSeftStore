@@ -127,14 +127,14 @@ namespace LocalS.BLL.Biz
                     order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                     order.Status = E_OrderStatus.WaitPay;
                     order.Source = rop.Source;
-                    order.PickCode = RedisSnUtil.BuildPickCode();
+                    order.PickupCode = RedisSnUtil.BuildPickupCode();
 
-                    if (order.PickCode == null)
+                    if (order.PickupCode == null)
                     {
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
                     }
 
-                    order.SubmitTime = DateTime.Now;
+                    order.SubmittedTime = DateTime.Now;
                     order.PayExpireTime = DateTime.Now.AddSeconds(300);
                     order.Creator = operater;
                     order.CreateTime = DateTime.Now;
@@ -209,9 +209,7 @@ namespace LocalS.BLL.Biz
                         orderDetails.OriginalAmount = detail.OriginalAmount;
                         orderDetails.DiscountAmount = detail.DiscountAmount;
                         orderDetails.ChargeAmount = detail.ChargeAmount;
-                        orderDetails.Status = E_OrderStatus.WaitPay;
                         orderDetails.Quantity = detail.Quantity;
-                        orderDetails.SubmitTime = DateTime.Now;
                         orderDetails.Creator = operater;
                         orderDetails.CreateTime = DateTime.Now;
                         CurrentDb.OrderDetails.Add(orderDetails);
@@ -241,8 +239,6 @@ namespace LocalS.BLL.Biz
                             orderDetailsChild.OriginalAmount = detailsChild.OriginalAmount;
                             orderDetailsChild.DiscountAmount = detailsChild.DiscountAmount;
                             orderDetailsChild.ChargeAmount = detailsChild.ChargeAmount;
-                            orderDetailsChild.SubmitTime = DateTime.Now;
-                            orderDetailsChild.Status = E_OrderStatus.WaitPay;
                             orderDetailsChild.Creator = operater;
                             orderDetailsChild.CreateTime = DateTime.Now;
                             CurrentDb.OrderDetailsChild.Add(orderDetailsChild);
@@ -275,7 +271,6 @@ namespace LocalS.BLL.Biz
                                 orderDetailsChildSon.OriginalAmount = detailsChildSon.OriginalAmount;
                                 orderDetailsChildSon.DiscountAmount = detailsChildSon.DiscountAmount;
                                 orderDetailsChildSon.ChargeAmount = detailsChildSon.ChargeAmount;
-                                orderDetailsChildSon.SubmitTime = DateTime.Now;
                                 orderDetailsChildSon.Creator = operater;
                                 orderDetailsChildSon.CreateTime = DateTime.Now;
                                 orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPay;
@@ -772,7 +767,7 @@ namespace LocalS.BLL.Biz
 
                 order.PayWay = payWay;
                 order.Status = E_OrderStatus.Payed;
-                order.PayTime = DateTime.Now;
+                order.PayedTime = DateTime.Now;
                 order.MendTime = DateTime.Now;
                 order.Mender = operater;
 
@@ -798,7 +793,7 @@ namespace LocalS.BLL.Biz
                 rptOrder.TradeType = E_RptOrderTradeType.Pay;
                 rptOrder.TradeAmount = order.ChargeAmount;
                 rptOrder.Quantity = order.Quantity;
-                rptOrder.TradeTime = order.PayTime.Value;
+                rptOrder.TradeTime = order.PayedTime.Value;
                 CurrentDb.RptOrder.Add(rptOrder);
 
 
@@ -806,10 +801,6 @@ namespace LocalS.BLL.Biz
 
                 foreach (var orderDetail in orderDetails)
                 {
-                    orderDetail.Status = E_OrderStatus.Payed;
-                    orderDetail.Mender = GuidUtil.Empty();
-                    orderDetail.MendTime = DateTime.Now;
-
                     var rptOrderDetails = new RptOrderDetails();
                     rptOrderDetails.Id = GuidUtil.New();
                     rptOrderDetails.RptOrderId = rptOrder.Id;
@@ -820,7 +811,7 @@ namespace LocalS.BLL.Biz
                     rptOrderDetails.StoreName = order.StoreName;
                     rptOrderDetails.Quantity = orderDetail.Quantity;
                     rptOrderDetails.TradeType = E_RptOrderTradeType.Pay;
-                    rptOrderDetails.TradeTime = order.PayTime.Value;
+                    rptOrderDetails.TradeTime = order.PayedTime.Value;
                     rptOrderDetails.TradeAmount = orderDetail.ChargeAmount;
                     rptOrderDetails.SellChannelRefId = orderDetail.SellChannelRefId;
                     rptOrderDetails.SellChannelRefName = orderDetail.SellChannelRefName;
@@ -831,10 +822,6 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderDetailsChild in orderDetailsChilds)
                     {
-                        orderDetailsChild.Status = E_OrderStatus.Payed;
-                        orderDetailsChild.Mender = GuidUtil.Empty();
-                        orderDetailsChild.MendTime = DateTime.Now;
-
                         var rptOrderDetailsChild = new RptOrderDetailsChild();
                         rptOrderDetailsChild.Id = GuidUtil.New();
                         rptOrderDetailsChild.RptOrderId = rptOrder.Id;
@@ -849,7 +836,7 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
                         rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;
                         rptOrderDetailsChild.TradeType = E_RptOrderTradeType.Pay;
-                        rptOrderDetailsChild.TradeTime = order.PayTime.Value;
+                        rptOrderDetailsChild.TradeTime = order.PayedTime.Value;
                         rptOrderDetailsChild.TradeAmount = orderDetailsChild.ChargeAmount;
                         rptOrderDetailsChild.SellChannelRefId = orderDetailsChild.SellChannelRefId;
                         rptOrderDetailsChild.SellChannelRefName = orderDetailsChild.SellChannelRefName;
@@ -928,7 +915,7 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该订单号:{0},找不到", orderId));
                 }
 
-                if (order.Status == E_OrderStatus.Cancled)
+                if (order.Status == E_OrderStatus.Canceled)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经取消");
                 }
@@ -945,36 +932,17 @@ namespace LocalS.BLL.Biz
 
                 if (order.Status != E_OrderStatus.Payed && order.Status != E_OrderStatus.Completed)
                 {
-                    order.Status = E_OrderStatus.Cancled;
+                    order.Status = E_OrderStatus.Canceled;
                     order.Mender = GuidUtil.Empty();
                     order.MendTime = DateTime.Now;
-                    order.CancledTime = DateTime.Now;
+                    order.CanceledTime = DateTime.Now;
                     order.CancelReason = cancelReason;
-
-                    var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == order.Id).ToList();
-
-                    foreach (var item in orderDetails)
-                    {
-                        item.Status = E_OrderStatus.Cancled;
-                        item.Mender = GuidUtil.Empty();
-                        item.MendTime = DateTime.Now;
-                    }
-
-
-                    var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == order.Id).ToList();
-
-                    foreach (var item in orderDetailsChilds)
-                    {
-                        item.Status = E_OrderStatus.Cancled;
-                        item.Mender = GuidUtil.Empty();
-                        item.MendTime = DateTime.Now;
-                    }
 
                     var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == order.Id).ToList();
 
                     foreach (var item in orderDetailsChildSons)
                     {
-                        item.Status = E_OrderDetailsChildSonStatus.Cancled;
+                        item.Status = E_OrderDetailsChildSonStatus.Canceled;
                         item.Mender = GuidUtil.Empty();
                         item.MendTime = DateTime.Now;
                     }

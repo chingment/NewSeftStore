@@ -113,12 +113,12 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            if (string.IsNullOrEmpty(rup.PickCode))
+            if (string.IsNullOrEmpty(rup.PickupCode))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
-            Order order = CurrentDb.Order.Where(m => m.PickCode == rup.PickCode).FirstOrDefault();
+            Order order = CurrentDb.Order.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
 
             if (order == null)
             {
@@ -183,7 +183,7 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         foreach (var item in orderDetailsChildSons)
                         {
-                            if (item.Status != E_OrderDetailsChildSonStatus.Completed && item.Status != E_OrderDetailsChildSonStatus.Cancled)
+                            if (item.Status != E_OrderDetailsChildSonStatus.Completed && item.Status != E_OrderDetailsChildSonStatus.Canceled)
                             {
                                 item.Status = E_OrderDetailsChildSonStatus.Exception;
                                 CurrentDb.SaveChanges();
@@ -201,21 +201,6 @@ namespace LocalS.Service.Api.StoreTerm
                         {
                             order.Status = E_OrderStatus.Completed;
                             order.CompletedTime = DateTime.Now;
-
-                            var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
-                            foreach (var orderDetail in orderDetails)
-                            {
-                                orderDetail.Status = E_OrderStatus.Completed;
-                                orderDetail.CompletedTime = DateTime.Now;
-
-                                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
-
-                                foreach (var orderDetailsChild in orderDetailsChilds)
-                                {
-                                    orderDetailsChild.Status = E_OrderStatus.Completed;
-                                    orderDetailsChild.CompletedTime = DateTime.Now;
-                                }
-                            }
                         }
                     }
 

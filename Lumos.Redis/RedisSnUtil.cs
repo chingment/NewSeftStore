@@ -66,7 +66,7 @@ namespace Lumos.Redis
         }
 
 
-        public static string BuildPickCode()
+        public static string BuildPickupCode()
         {
             try
             {

@@ -30,14 +30,9 @@ namespace LocalS.Entity
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
-        public DateTime? SubmitTime { get; set; }
-        public DateTime? PayTime { get; set; }
-        public DateTime? CancledTime { get; set; }
-        public DateTime? CompletedTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-        public E_OrderStatus Status { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace LocalS.Service.Api.StoreApp
                 case E_OrderStatus.Completed:
                     text = "已完成";
                     break;
-                case E_OrderStatus.Cancled:
+                case E_OrderStatus.Canceled:
                     text = "已取消";
                     break;
                 default:
@@ -344,7 +344,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
-                         select new { o.Id, o.Sn, o.StoreId, o.PickCode, o.StoreName, o.Status, o.SubmitTime, o.CompletedTime, o.ChargeAmount, o.CancledTime }
+                         select new { o.Id, o.Sn, o.StoreId, o.PickupCode, o.StoreName, o.Status, o.SubmittedTime, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
              );
 
 
@@ -355,7 +355,7 @@ namespace LocalS.Service.Api.StoreApp
 
             int pageSize = 10;
 
-            query = query.OrderByDescending(r => r.SubmitTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -387,7 +387,7 @@ namespace LocalS.Service.Api.StoreApp
                     {
                         if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
-                            block.Tag.Desc = new FsField("取货码", "", item.PickCode, "#f18d00");
+                            block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
                         }
                     }
 
@@ -430,7 +430,7 @@ namespace LocalS.Service.Api.StoreApp
                     case E_OrderStatus.Completed:
                         model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id) });
                         break;
-                    case E_OrderStatus.Cancled:
+                    case E_OrderStatus.Canceled:
                         model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id) });
                         break;
                 }
@@ -464,19 +464,19 @@ namespace LocalS.Service.Api.StoreApp
             fsBlockByField.Tag.Name = new FsText("订单信息", "");
 
             fsBlockByField.Data.Add(new FsField("订单编号", "", order.Sn, ""));
-            fsBlockByField.Data.Add(new FsField("创建时间", "", order.SubmitTime.ToUnifiedFormatDateTime(), ""));
-            if (order.PayTime != null)
+            fsBlockByField.Data.Add(new FsField("创建时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
+            if (order.PayedTime != null)
             {
-                fsBlockByField.Data.Add(new FsField("付款时间", "", order.PayTime.ToUnifiedFormatDateTime(), ""));
+                fsBlockByField.Data.Add(new FsField("付款时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));
             }
             if (order.CompletedTime != null)
             {
                 fsBlockByField.Data.Add(new FsField("完成时间", "", order.CompletedTime.ToUnifiedFormatDateTime(), ""));
             }
 
-            if (order.CancledTime != null)
+            if (order.CanceledTime != null)
             {
-                fsBlockByField.Data.Add(new FsField("取消时间", "", order.CancledTime.ToUnifiedFormatDateTime(), ""));
+                fsBlockByField.Data.Add(new FsField("取消时间", "", order.CanceledTime.ToUnifiedFormatDateTime(), ""));
                 fsBlockByField.Data.Add(new FsField("取消原因", "", order.CancelReason, ""));
             }
 
@@ -492,11 +492,11 @@ namespace LocalS.Service.Api.StoreApp
 
                 block.Tag.Name = new FsText(orderDetail.SellChannelRefName, "");
 
-                if (orderDetail.Status == E_OrderStatus.Payed)
+                if (order.Status == E_OrderStatus.Payed)
                 {
                     if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
                     {
-                        block.Tag.Desc = new FsField("取货码", "", order.PickCode, "#f18d00");
+                        block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
                     }
                 }
 

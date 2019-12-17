@@ -24,10 +24,6 @@ namespace LocalS.Entity
         public string MainImgUrl { get; set; }
         [MaxLength(128)]
         public string MacAddress { get; set; }
-        public string Creator { get; set; }
-        public DateTime CreateTime { get; set; }
-        public string Mender { get; set; }
-        public DateTime? MendTime { get; set; }
         public float Lat { get; set; }
         public float Lng { get; set; }
         public string JPushRegId { get; set; }
@@ -41,12 +37,13 @@ namespace LocalS.Entity
         public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public string CabinetRowColLayout_1 { get; set; }
-
         public string CabinetPendantRows_1 { get; set; }
         public string CtrlSdkVersionCode { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
-        //public int CabinetMaxRow_1 { get; set; }
-        //public int CabinetMaxCol_1 { get; set; }
+        public string Creator { get; set; }
+        public DateTime CreateTime { get; set; }
+        public string Mender { get; set; }
+        public DateTime? MendTime { get; set; }
     }
 }

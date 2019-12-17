@@ -15,7 +15,7 @@ namespace LocalS.Entity
         SendPick = 3011,
         Picking = 3012,
         Completed = 4000,
-        Cancled = 5000,
+        Canceled = 5000,
         Exception = 6000
     }
 
@@ -38,7 +38,6 @@ namespace LocalS.Entity
         public string OrderDetailsChildId { get; set; }
         public string OrderDetailsChildSn { get; set; }
         public string SlotId { get; set; }
-
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string PrdProductSkuName { get; set; }
@@ -49,20 +48,14 @@ namespace LocalS.Entity
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
-        public DateTime? PayTime { get; set; }
-        public DateTime? SubmitTime { get; set; }
-        public DateTime? CancledTime { get; set; }
-        public DateTime? CompletedTime { get; set; }
+        public int LastPickupActionId { get; set; }
+        public int LastPickupActionStatusCode { get; set; }
+        public E_OrderDetailsChildSonStatus Status { get; set; }
+        public bool IsHasHandleException { get; set; }
+        public bool IsTaked { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-        public E_OrderDetailsChildSonStatus Status { get; set; }
-        public int LastPickupActionId { get; set; }
-        public int LastPickupActionStatusCode { get; set; }
-
-        public bool IsHasHandleException { get; set; }
-
-        public bool IsTaked { get; set; }
     }
 }
