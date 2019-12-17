@@ -24,7 +24,6 @@ namespace LocalS.Entity
         public E_RptOrderTradeType TradeType { get; set; }
         public decimal TradeAmount { get; set; }
         public DateTime TradeTime { get; set; }
-
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefName { get; set; }
         public string SellChannelRefId { get; set; }
