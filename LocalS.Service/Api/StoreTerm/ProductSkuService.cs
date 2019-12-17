@@ -22,8 +22,8 @@ namespace LocalS.Service.Api.StoreTerm
                          where (
 m.MerchId == merchId &&
 m.StoreId == storeId &&
-m.RefId == machineId &&
-m.RefType == Entity.E_SellChannelRefType.Machine)
+m.SellChannelRefId == machineId &&
+m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                          orderby m.CreateTime
                          select new { m.PrdProductSkuId }).Distinct();
 

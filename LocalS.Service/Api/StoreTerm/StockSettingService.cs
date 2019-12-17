@@ -44,7 +44,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.RowColLayout = machine.CabinetRowColLayout_1;
             ret.PendantRows = machine.CabinetPendantRows_1;
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rup.MachineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)
             {
@@ -160,7 +160,7 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.RefType == E_SellChannelRefType.Machine && m.RefId == rop.MachineId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rop.MachineId).ToList();
 
                     var oldCabinetRowColLayout = machine.CabinetRowColLayout_1.Split(',');
 

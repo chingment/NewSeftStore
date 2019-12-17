@@ -35,8 +35,8 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from m in CurrentDb.SellChannelStock
                          where m.MerchId == store.MerchId
-                         && store.SellMachineIds.Contains(m.RefId)
-                         && m.RefType == Entity.E_SellChannelRefType.Machine
+                         && store.SellMachineIds.Contains(m.SellChannelRefId)
+                         && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine
                          select new { m.PrdProductId, m.PrdProductSkuId }).Distinct();
 
             //var query = CurrentDb.SellChannelStock.Where(m =>

@@ -26,13 +26,12 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-
         public string StoreId { get; set; }
         public string SlotId { get; set; }
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
-        public E_SellChannelRefType RefType { get; set; }
-        public string RefId { get; set; }
+        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public string SellChannelRefId { get; set; }
         public E_SellChannelStockLogChangeTpye ChangeType { get; set; }
         public int ChangeQuantity { get; set; }
         public int SumQuantity { get; set; }

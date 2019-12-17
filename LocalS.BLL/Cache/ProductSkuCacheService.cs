@@ -146,8 +146,8 @@ namespace LocalS.BLL
             {
                 var productSkuStockModel = new ProductSkuStockModel();
                 productSkuStockModel.StoreId = sellChannelStock.StoreId;
-                productSkuStockModel.RefType = sellChannelStock.RefType;
-                productSkuStockModel.RefId = sellChannelStock.RefId;
+                productSkuStockModel.RefType = sellChannelStock.SellChannelRefType;
+                productSkuStockModel.RefId = sellChannelStock.SellChannelRefId;
                 productSkuStockModel.SlotId = sellChannelStock.SlotId;
                 productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
                 productSkuStockModel.LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
