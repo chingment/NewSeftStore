@@ -167,12 +167,6 @@ namespace LocalS.Service.Api.StoreTerm
                     orderDetailsChildSon.LastPickupActionId = rop.ActionId;
                     orderDetailsChildSon.LastPickupActionStatusCode = rop.ActionStatusCode;
                     orderDetailsChildSon.Status = rop.Status;
-
-                    if (rop.Status == E_OrderDetailsChildSonStatus.Completed)
-                    {
-                        orderDetailsChildSon.IsTaked = true;
-                    }
-
                     CurrentDb.SaveChanges();
 
 
@@ -210,7 +204,7 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                     orderPickupLog.SellChannelRefId = rop.MachineId;
                     orderPickupLog.UniqueId = rop.UniqueId;
-                    orderPickupLog.ProductSkuId = orderDetailsChildSon.PrdProductSkuId;
+                    orderPickupLog.PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId;
                     orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
                     orderPickupLog.Status = rop.Status;
                     orderPickupLog.ActionId = rop.ActionId;

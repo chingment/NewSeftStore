@@ -337,7 +337,6 @@
     <Compile Include="Api\StoreTerm\RModels\RupOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\StockSettingService.cs" />
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
-    <Compile Include="Api\StoreTerm\TermService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\FsBlock.cs" />
     <Compile Include="UI\FsBlockByField.cs" />

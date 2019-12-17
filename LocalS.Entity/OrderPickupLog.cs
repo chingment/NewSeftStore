@@ -13,7 +13,7 @@ namespace LocalS.Entity
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public string UniqueId { get; set; }
-        public string ProductSkuId { get; set; }
+        public string PrdProductSkuId { get; set; }
         public string SlotId { get; set; }
         public E_OrderDetailsChildSonStatus Status { get; set; }
         public int ActionId { get; set; }

@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.StoreTerm
+namespace LocalS.BLL.Biz
 {
-    public class TermService : BaseDbContext
+    public class AppSoftwareService : BaseDbContext
     {
         public string GetAppSecretByAppKey(string appKey)
         {
-            var term = CurrentDb.Term.Where(m => m.AppKey == appKey).FirstOrDefault();
+            var term = CurrentDb.AppSoftware.Where(m => m.AppApiAppKey == appKey).FirstOrDefault();
             if (term == null)
             {
                 return null;
             }
 
-            return term.AppSecret;
+            return term.AppApiAppSecret;
         }
     }
 }

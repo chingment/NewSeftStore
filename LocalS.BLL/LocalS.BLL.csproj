@@ -86,6 +86,7 @@
     <Compile Include="Biz\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
     <Compile Include="Biz\StoreService.cs" />
+    <Compile Include="Biz\AppSoftwareService.cs" />
     <Compile Include="Cache\CacheServiceFactory.cs" />
     <Compile Include="Cache\Model\ProductSkuInfoAndStockModel.cs" />
     <Compile Include="Cache\Model\ProductSkuInfoBySearchModel.cs" />

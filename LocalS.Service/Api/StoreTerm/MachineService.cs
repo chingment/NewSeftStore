@@ -277,24 +277,24 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
             LogUtil.Info("CheckUpdateCheckUpdate");
-            var term = CurrentDb.Term.Where(m => m.AppId == rup.AppId && m.AppKey == rup.AppKey).FirstOrDefault();
-            if (term == null)
+            var appSoftware = CurrentDb.AppSoftware.Where(m => m.AppId == rup.AppId && m.AppApiAppKey == rup.AppKey).FirstOrDefault();
+            if (appSoftware == null)
             {
                 LogUtil.Info("CheckUpdateCheckUpdate:1");
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
             LogUtil.Info("CheckUpdateCheckUpdate:2");
-            if (string.IsNullOrEmpty(term.VersionName))
+            if (string.IsNullOrEmpty(appSoftware.VersionName))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
             LogUtil.Info("CheckUpdateCheckUpdate:3");
-            if (string.IsNullOrEmpty(term.ApkDownloadUrl))
+            if (string.IsNullOrEmpty(appSoftware.ApkDownloadUrl))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
             LogUtil.Info("CheckUpdateCheckUpdate:4");
-            var model = new { versionCode = term.VersionCode, versionName = term.VersionName, apkDownloadUrl = term.ApkDownloadUrl };
+            var model = new { versionCode = appSoftware.VersionCode, versionName = appSoftware.VersionName, apkDownloadUrl = appSoftware.ApkDownloadUrl };
             LogUtil.Info("CheckUpdateCheckUpdate:5");
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
         }

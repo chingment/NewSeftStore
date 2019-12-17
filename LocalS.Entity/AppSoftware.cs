@@ -9,22 +9,21 @@ using System.Threading.Tasks;
 
 namespace LocalS.Entity
 {
-    [Table("Term")]
-    public class Term
+    [Table("AppSoftware")]
+    public class AppSoftware
     {
         [Key]
         public string Id { get; set; }
-        public string AppKey { get; set; }
-        public string AppSecret { get; set; }
+        public string AppId { get; set; }
+        public string AppApiAppKey { get; set; }
+        public string AppApiAppSecret { get; set; }
+        public string VersionName { get; set; }
+        public string VersionCode { get; set; }
+        public string ApkDownloadUrl { get; set; }
         public string Description { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
-        public string AppId { get; set; }
-        public string VersionName { get; set; }
-        public string VersionCode { get; set; }
-        public string ApkDownloadUrl { get; set; }
     }
 }

@@ -55,7 +55,7 @@ namespace LocalS.Service.Api.Merch
             public StatusModel Status { get; set; }
             public List<PickupLog> PickupLogs { get; set; }
 
-            public bool IsHasHandleException { get; set; }
+            public bool ExPickupIsHandled { get; set; }
 
         }
 

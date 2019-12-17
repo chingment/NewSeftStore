@@ -147,7 +147,7 @@ namespace WebApiStoreTerm
                 }
 
                 //检查key是否在数据库中存在
-                string app_secret = StoreTermServiceFactory.Term.GetAppSecretByAppKey(app_key);
+                string app_secret = LocalS.BLL.Biz.BizFactory.AppSoftware.GetAppSecretByAppKey(app_key);
 
                 if (app_secret == null)
                 {

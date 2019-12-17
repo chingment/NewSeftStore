@@ -55,5 +55,13 @@ namespace LocalS.BLL.Biz
                 return new ProductSkuService();
             }
         }
+
+        public static AppSoftwareService AppSoftware
+        {
+            get
+            {
+                return new AppSoftwareService();
+            }
+        }
     }
 }

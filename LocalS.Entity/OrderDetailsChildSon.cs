@@ -16,7 +16,16 @@ namespace LocalS.Entity
         Picking = 3012,
         Completed = 4000,
         Canceled = 5000,
-        Exception = 6000
+        Exception = 6000,
+        ExPickupSignTaked = 6010,
+        ExPickupSignUnTaked = 6011
+    }
+
+    public enum E_OrderDetailsChildSonExPickupHandleSign
+    {
+        Unknow = 0,
+        Taked = 1,
+        UnTaked = 2
     }
 
     [Table("OrderDetailsChildSon")]
@@ -51,8 +60,9 @@ namespace LocalS.Entity
         public int LastPickupActionId { get; set; }
         public int LastPickupActionStatusCode { get; set; }
         public E_OrderDetailsChildSonStatus Status { get; set; }
-        public bool IsHasHandleException { get; set; }
-        public bool IsTaked { get; set; }
+        public bool ExPickupIsHandled { get; set; }
+        public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
+        public bool ExPickupHandleRemark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
