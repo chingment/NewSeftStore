@@ -11,13 +11,13 @@ namespace LocalS.BLL.Biz
     {
         public string GetAppSecretByAppKey(string appKey)
         {
-            var term = CurrentDb.AppSoftware.Where(m => m.AppApiAppKey == appKey).FirstOrDefault();
+            var term = CurrentDb.AppSoftware.Where(m => m.AppApiKey == appKey).FirstOrDefault();
             if (term == null)
             {
                 return null;
             }
 
-            return term.AppApiAppSecret;
+            return term.AppApiSecret;
         }
     }
 }

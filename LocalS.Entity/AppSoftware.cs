@@ -15,8 +15,8 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string AppId { get; set; }
-        public string AppApiAppKey { get; set; }
-        public string AppApiAppSecret { get; set; }
+        public string AppApiKey { get; set; }
+        public string AppApiSecret { get; set; }
         public string VersionName { get; set; }
         public string VersionCode { get; set; }
         public string ApkDownloadUrl { get; set; }

@@ -277,7 +277,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
             LogUtil.Info("CheckUpdateCheckUpdate");
-            var appSoftware = CurrentDb.AppSoftware.Where(m => m.AppId == rup.AppId && m.AppApiAppKey == rup.AppKey).FirstOrDefault();
+            var appSoftware = CurrentDb.AppSoftware.Where(m => m.AppId == rup.AppId && m.AppApiKey == rup.AppKey).FirstOrDefault();
             if (appSoftware == null)
             {
                 LogUtil.Info("CheckUpdateCheckUpdate:1");
