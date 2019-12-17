@@ -62,7 +62,7 @@ namespace LocalS.Entity
         public E_OrderDetailsChildSonStatus Status { get; set; }
         public bool ExPickupIsHandled { get; set; }
         public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
-        public bool ExPickupHandleRemark { get; set; }
+        public string ExPickupHandleRemark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
