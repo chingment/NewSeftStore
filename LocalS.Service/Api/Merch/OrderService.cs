@@ -83,7 +83,15 @@ namespace LocalS.Service.Api.Merch
                     break;
                 case E_OrderDetailsChildSonStatus.Exception:
                     status.Value = 6000;
-                    status.Text = "异常";
+                    status.Text = "异常未处理";
+                    break;
+                case E_OrderDetailsChildSonStatus.ExPickupSignTaked:
+                    status.Value = 6010;
+                    status.Text = "异常已处理，标记为已取货";
+                    break;
+                case E_OrderDetailsChildSonStatus.ExPickupSignUnTaked:
+                    status.Value = 6010;
+                    status.Text = "异常已处理，标记为未取货";
                     break;
             }
             return status;

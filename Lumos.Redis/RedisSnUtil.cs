@@ -22,7 +22,7 @@ namespace Lumos.Redis
             {
                 try
                 {
-                    var incr = RedisManager.Db.StringIncrement("SnIncr", 1);
+                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IRPC, 1);
 
                     return (int)incr;
 
@@ -72,7 +72,7 @@ namespace Lumos.Redis
             {
                 ThreadSafeRandom rd = new ThreadSafeRandom();
                 int part1 = rd.Next(100, 999);
-                var incr = RedisManager.Db.StringIncrement("PickCodeIncr", 1);
+                var incr = RedisManager.Db.StringIncrement(RedisKeyS.IRPC, 1);
 
                 string part2 = incr.ToString().PadLeft(5, '0');
                 ThreadSafeRandom ran = new ThreadSafeRandom();

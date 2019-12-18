@@ -25,7 +25,7 @@
           </el-button>
         </el-col>
       </el-row>
-         <el-button  style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" ></el-button>
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
       <!-- // <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       // <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       // <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -60,7 +60,7 @@
                 </td>
                 <td style="15%">
                   <el-popover
-                   v-if="pickupSku.pickupLogs.length>0"
+                    v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
                     width="400"
                     trigger="click"
@@ -73,11 +73,12 @@
                       >
                         {{ activity.content }}
                         <br>
-                          <el-image v-if="activity.imgUrl!==null"
-    style="width: 100px; height: 100px"
-    :src="activity.imgUrl" 
-    :preview-src-list="activity.imgUrls">
-  </el-image>
+                        <el-image
+                          v-if="activity.imgUrl!==null"
+                          style="width: 100px; height: 100px"
+                          :src="activity.imgUrl"
+                          :preview-src-list="activity.imgUrls"
+                        />
 
                       </el-timeline-item>
                     </el-timeline>
@@ -142,14 +143,14 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <el-dialog  title="订单详情" :visible.sync="dialogDetailsIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <div v-loading="detailsLoading" >
+    <el-dialog title="订单详情" :visible.sync="dialogDetailsIsVisible" :width="isDesktop==true?'800px':'90%'">
+      <div v-loading="detailsLoading">
 
         <div class="row-title clearfix">
-          <div class="pull-left"> <h5>基本信息</h5>  
+          <div class="pull-left"> <h5>基本信息</h5>
           </div>
- <div class="pull-right">
-                 <el-button  icon="el-icon-refresh" circle @click="refreshDetails(details.id)" ></el-button>
+          <div class="pull-right">
+            <el-button icon="el-icon-refresh" circle @click="refreshDetails(details.id)" />
           </div>
         </div>
         <el-form class="form-container" style="display:flex">
@@ -245,32 +246,33 @@
                 {{ pickupSku.status.text }}
               </td>
               <td style="width:50%;text-align:right">
-                  <el-popover
-                     v-if="pickupSku.pickupLogs.length>0"
-                    placement="right"
-                    width="400"
-                    trigger="click"
-                  >
-                    <el-timeline>
-                      <el-timeline-item
-                        v-for="(activity, index) in pickupSku.pickupLogs"
-                        :key="index"
-                        :timestamp="activity.timestamp"
-                      >
-                        {{ activity.content }}
-                        <br>
-                          <el-image v-if="activity.imgUrl!==null"
-    style="width: 100px; height: 100px"
-    :src="activity.imgUrl" 
-    :preview-src-list="activity.imgUrls">
-  </el-image>
+                <el-popover
+                  v-if="pickupSku.pickupLogs.length>0"
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                >
+                  <el-timeline>
+                    <el-timeline-item
+                      v-for="(activity, index) in pickupSku.pickupLogs"
+                      :key="index"
+                      :timestamp="activity.timestamp"
+                    >
+                      {{ activity.content }}
+                      <br>
+                      <el-image
+                        v-if="activity.imgUrl!==null"
+                        style="width: 100px; height: 100px"
+                        :src="activity.imgUrl"
+                        :preview-src-list="activity.imgUrls"
+                      />
 
-                      </el-timeline-item>
-                    </el-timeline>
-                    <el-button slot="reference" style="margin-right:15px;">取货流程</el-button>
-                  </el-popover>
-<el-button v-if="pickupSku.isHasHandleException==false" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)" >标记未取</el-button>
-<el-button v-if="pickupSku.isHasHandleException==false" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button>
+                    </el-timeline-item>
+                  </el-timeline>
+                  <el-button slot="reference" style="margin-right:15px;">取货流程</el-button>
+                </el-popover>
+                <el-button v-if="pickupSku.exPickupIsHandled==false" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)">标记未取</el-button>
+                <el-button v-if="pickupSku.exPickupIsHandled==false" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button>
               </td>
             </tr>
           </table>
@@ -280,7 +282,7 @@
         <el-button @click="dialogDetailsIsVisible = false">
           关闭
         </el-button>
-          <el-button type="primary" @click="refreshDetails(details.id)">刷新</el-button>
+        <el-button type="primary" @click="refreshDetails(details.id)">刷新</el-button>
       </div>
     </el-dialog>
   </div>
@@ -288,7 +290,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList,getDetails,pickupExceptionHandle } from '@/api/order'
+import { getList, getDetails, pickupExceptionHandle } from '@/api/order'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -326,7 +328,7 @@ export default {
         machineId: undefined
       },
       dialogDetailsIsVisible: false,
-      detailsLoading:false,
+      detailsLoading: false,
       details: {
         sn: '',
         storeName: '',
@@ -403,61 +405,56 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    refreshDetails(id){
+    refreshDetails(id) {
       this.detailsLoading = true
-      getDetails({id:id}).then(res => {
+      getDetails({ id: id }).then(res => {
         if (res.result === 1) {
-           this.details = res.data
+          this.details = res.data
         }
         this.detailsLoading = false
       })
     },
     dialogDetailsOpen(row) {
       this.detailsLoading = true
-      getDetails({id:row.id}).then(res => {
+      getDetails({ id: row.id }).then(res => {
         if (res.result === 1) {
-           this.details = res.data
+          this.details = res.data
         }
         this.detailsLoading = false
         this.dialogDetailsIsVisible = true
       })
     },
-    signNotTake(orderId,pickupSku){
-       var _this=this
-        MessageBox.confirm('确定要标记【'+pickupSku.name+'】<span style="color:#F56C6C">未取</span>,慎重操作，会影响机器实际库存', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            dangerouslyUseHTMLString: true,
-            type: 'warning'
-          }).then(() => {
-          
-            pickupExceptionHandle({uniqueId:pickupSku.uniqueId,handleMethod:2,remark:''}).then(res => {
-              this.$message(res.message)
-              if (res.result === 1) {
-                 _this.refreshDetails(orderId)
-              }
-            })
-
-          })
+    signNotTake(orderId, pickupSku) {
+      var _this = this
+      MessageBox.confirm('确定要标记【' + pickupSku.name + '】<span style="color:#F56C6C">未取</span>,慎重操作，会影响机器实际库存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'warning'
+      }).then(() => {
+        pickupExceptionHandle({ uniqueId: pickupSku.uniqueId, handleMethod: 2, remark: '' }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            _this.refreshDetails(orderId)
+          }
+        })
+      })
     },
-    signTake(orderId,pickupSku){
-      var _this=this
-        MessageBox.confirm('确定要标记【'+pickupSku.name+'】<span style="color:#67C23A">已取</span>,慎重操作，会影响机器实际库存', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            dangerouslyUseHTMLString: true,
-            type: 'warning'
-          }).then(() => {
-       
-
-            pickupExceptionHandle({uniqueId:pickupSku.uniqueId,handleMethod:1,remark:''}).then(res => {
-              this.$message(res.message)
-              if (res.result === 1) {
-                 _this.refreshDetails(orderId)
-              }
-            })
-
-          })
+    signTake(orderId, pickupSku) {
+      var _this = this
+      MessageBox.confirm('确定要标记【' + pickupSku.name + '】<span style="color:#67C23A">已取</span>,慎重操作，会影响机器实际库存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'warning'
+      }).then(() => {
+        pickupExceptionHandle({ uniqueId: pickupSku.uniqueId, handleMethod: 1, remark: '' }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            _this.refreshDetails(orderId)
+          }
+        })
+      })
     }
   }
 }
