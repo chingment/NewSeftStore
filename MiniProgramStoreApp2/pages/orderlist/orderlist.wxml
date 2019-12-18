@@ -15,15 +15,15 @@
   </scroll-view>
 </block>
 
-
-
 <swiper class="tabbar-contents" bindchange="swiperSwitchTab" current="{{tabsSliderIndex}}" duration="300" style="height:{{scrollHeight}}px">
-  <block wx:for="{{tabs}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+  <block wx:for="{{tabs}}" wx:for-index="z" wx:for-item="item" wx:key="list">
     <swiper-item class="item" catchtouchmove="stopTouchMove">
       <scroll-view scroll-top="{{item.scrollTop}}" scroll-y="true" data-reply-index="{{index}}" style="height:{{scrollHeight}}px" bindscrolltolower="loadMore" bindscrolltoupper="refesh" bindscroll="scroll">
 
+
+
         <view class='list-data its-orderlist' wx:if="{{item.list.length>0}}">
-          <block wx:for="{{item.list}}" wx:for-index="index" wx:for-item="item2" wx:key="list">
+          <block wx:for="{{item.list}}" wx:for-index="i" wx:for-item="item2" wx:key="list">
 
             <view class="it">
 
@@ -47,9 +47,10 @@
                 </view>
               </view>
 
+             
               <view class="it-blocks">
 
-                <block wx:for="{{item2.blocks}}" wx:for-index="index" wx:for-item="block" wx:key="list">
+                <block wx:for="{{item2.blocks}}" wx:for-index="j" wx:for-item="block" wx:key="list">
                   <view class="block">
                     <view class="block-tag">
 
@@ -68,11 +69,17 @@
 
                       </view>
                     </view>
+
+             <!-- <view class="block-qrcode" >
+              <canvas canvas-id="qrcode{{z}}-{{i}}-{{j}}" />
+             </view> -->
+
+
                     <view class="block-field">
 
 
                       <view class="its-odcskus">
-                        <block wx:for="{{block.data}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+                        <block wx:for="{{block.data}}" wx:for-index="x" wx:for-item="skusitem" wx:key="list">
                           <view class="it">
                             <view class="it-l">
                               <view class="imgUrl">

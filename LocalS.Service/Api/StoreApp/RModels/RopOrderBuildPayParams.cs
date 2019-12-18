@@ -12,6 +12,6 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string OrderId { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
-
+        public E_OrderPayPartner PayPartner { get; set; }
     }
 }

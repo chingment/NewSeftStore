@@ -12,9 +12,11 @@ namespace LocalS.Service.UI
         {
             this.Tag = new FsTag();
             this.Data = new List<FsTemplateData>();
+            this.Qrcode = new FsQrcode();
         }
 
         public FsTag Tag { get; set; }
         public List<FsTemplateData> Data { get; set; }
+        public FsQrcode Qrcode { get; set; }
     }
 }

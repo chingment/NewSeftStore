@@ -1,5 +1,6 @@
 const storeage = require('../../utils/storeageutil.js')
 const util = require('../../utils/util.js')
+const qrcode  = require('../../utils/qrcode.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()

@@ -134,7 +134,7 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                var order = BizFactory.Order.GetOne(rup.Id);
+                var order = BizFactory.Order.GetOne(rop.OrderId);
 
                 if (order == null)
                 {
@@ -388,6 +388,8 @@ namespace LocalS.Service.Api.StoreApp
                         if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
                             block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
+                            block.Qrcode=new FsQrcode {  Code= item.PickupCode, Url= "http://file.17fanju.com/Upload/product/a055a033-d6c4-4fb1-b5a7-155579d1179b_O.jpg" }
+                            
                         }
                     }
 
@@ -545,7 +547,7 @@ namespace LocalS.Service.Api.StoreApp
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
             bizRop.OrderId = rop.OrderId;
             bizRop.PayCaller = rop.PayCaller;
-
+            bizRop.PayPartner = rop.PayPartner;
             return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
     }
