@@ -9,21 +9,16 @@ namespace LocalS.DAL
 {
     public class DbContext : AuthorizeRelayDbContext
     {
-
         public DbContext()
             : base("DefaultConnection")
         {
             // this.Configuration.ProxyCreationEnabled = false;
         }
-
         public IDbSet<InsCarPlateNoSearchHis> InsCarPlateNoSearchHis { get; set; }
         public IDbSet<InsCarCompanyRule> InsCarCompanyRule { get; set; }
-
         public IDbSet<InsCarPlateNoInfo> InsCarPlateNoInfo { get; set; }
         public IDbSet<InsCarModelInfo> InsCarModelInfo { get; set; }
-
         public IDbSet<Agent> Agent { get; set; }
-
         public IDbSet<Merch>  Merch { get; set; }
         public IDbSet<MerchMachine> MerchMachine { get; set; }
         public IDbSet<PrdKind> PrdKind { get; set; }
@@ -54,7 +49,6 @@ namespace LocalS.DAL
         public IDbSet<RptOrder> RptOrder { get; set; }
         public IDbSet<RptOrderDetails> RptOrderDetails { get; set; }
         public IDbSet<RptOrderDetailsChild> RptOrderDetailsChild { get; set; }
-
         public IDbSet<AppTraceLog> AppTraceLog { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
