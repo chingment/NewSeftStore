@@ -22,7 +22,7 @@ namespace Lumos.Redis
             {
                 try
                 {
-                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IRPC, 1);
+                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IRSN, 1);
 
                     return (int)incr;
 
