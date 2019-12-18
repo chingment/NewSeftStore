@@ -18,6 +18,13 @@ namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseDbContext
     {
+        public Order GetOne(string id)
+        {
+            var order = CurrentDb.Order.Where(m => m.Id == id).FirstOrDefault();
+
+            return order;
+        }
+
         private static readonly object lock_Reserve = new object();
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
@@ -883,7 +890,7 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult<RetPayResultQuery>();
 
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            var order = BizFactory.Order.GetOne(orderId);
 
             if (order == null)
             {
@@ -900,7 +907,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult Cancle(string operater, string orderId, string cancelReason)
         {
             var result = new CustomJsonResult();
@@ -1128,7 +1134,7 @@ namespace LocalS.BLL.Biz
         public OrderDetailsByPickupModel GetOrderDetailsByPickup(string orderId, string machineId)
         {
             var model = new OrderDetailsByPickupModel();
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            var order = BizFactory.Order.GetOne(orderId);
             var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
 

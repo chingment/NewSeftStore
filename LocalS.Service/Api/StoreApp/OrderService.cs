@@ -134,7 +134,7 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
+                var order = BizFactory.Order.GetOne(rup.Id);
 
                 if (order == null)
                 {

@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -37,7 +38,8 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetOperateResult();
 
 
-            var order = CurrentDb.Order.Where(m => m.Id == rup.Id).FirstOrDefault();
+
+            var order = BizFactory.Order.GetOne(rup.Id);
 
             if (order == null)
             {
@@ -133,8 +135,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetOperateResult();
 
-
-            var order = CurrentDb.Order.Where(m => m.Id == rup.Id).FirstOrDefault();
+            var order = BizFactory.Order.GetOne(rup.Id);
 
             if (order == null)
             {

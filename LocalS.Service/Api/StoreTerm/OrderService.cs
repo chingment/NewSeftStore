@@ -118,7 +118,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
-            Order order = CurrentDb.Order.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
 
             if (order == null)
             {
