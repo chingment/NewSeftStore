@@ -388,7 +388,7 @@ namespace LocalS.Service.Api.StoreApp
                         if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
                             block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
-                            block.Qrcode=new FsQrcode {  Code= item.PickupCode, Url= "http://file.17fanju.com/Upload/product/a055a033-d6c4-4fb1-b5a7-155579d1179b_O.jpg" }
+                            block.Qrcode = new FsQrcode { Code = item.PickupCode, Url = "http://file.17fanju.com/Upload/product/a055a033-d6c4-4fb1-b5a7-155579d1179b_O.jpg" };
                             
                         }
                     }

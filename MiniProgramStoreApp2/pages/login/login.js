@@ -73,6 +73,7 @@ Page({
       if (e.detail.userInfo) {
         wx.login({
           success(res) {
+            console.log(JSON.stringify(res))
             if (res.code) {
               _this.login('', res.code, e.detail.iv, e.detail.encryptedData)
             } else {
@@ -88,6 +89,19 @@ Page({
           title: '只有允许授权才能进行微信登录，请再次点击登录按钮'
         })
       }
+    }
+  },
+  bindgetphonenumber:function(e){
+    var _this=this;
+
+    console.log(e);
+    if (e.detail.errMsg == "getPhoneNumber:ok") {
+      _this.login('', '', e.detail.iv, e.detail.encryptedData)
+    }
+    else{
+      toast.show({
+        title: '登录失败'
+      })
     }
   }
 })

@@ -342,6 +342,7 @@
     <Compile Include="UI\FsBlockByField.cs" />
     <Compile Include="UI\FsButton.cs" />
     <Compile Include="UI\FsField.cs" />
+    <Compile Include="UI\FsQrcode.cs" />
     <Compile Include="UI\FsTag.cs" />
     <Compile Include="UI\FsTemplateData.cs" />
     <Compile Include="UI\FsText.cs" />

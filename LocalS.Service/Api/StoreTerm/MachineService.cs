@@ -39,6 +39,7 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.JPushRegId = rop.JPushRegId;
                 machine.DeviceId = rop.DeviceId;
                 machine.ImeiId = rop.ImeiId;
+                machine.MainImgUrl = "http://file.17fanju.com/Upload/machine1.jpg";
                 machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
