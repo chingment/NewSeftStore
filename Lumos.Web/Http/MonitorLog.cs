@@ -12,7 +12,6 @@ namespace Lumos.Web.Http
 {
     public static class MonitorLog
     {
-
         public static string GetPostData(Stream inputStream)
         {
             string s = "";
@@ -33,64 +32,65 @@ namespace Lumos.Web.Http
 
             return s;
         }
+        private static Task LogAsync(HttpRequestMessage request, HttpResponseMessage response = null)
+        {
+            return Task.Factory.StartNew(async () =>
+             {
+                 var sb = new StringBuilder();
+                 var myRequest = ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request;
+                 sb.Append("Url: " + myRequest.RawUrl + Environment.NewLine);
+                 sb.Append("IP: " + CommonUtil.GetIP() + Environment.NewLine);
+                 sb.Append("Method: " + myRequest.HttpMethod + Environment.NewLine);
+                 sb.Append("ContentType: " + myRequest.ContentType + Environment.NewLine);
+
+                 NameValueCollection headers = myRequest.Headers;
+
+                 string currentUserId = "";
+                 string requestGuid = "";
+
+                 if (request.Headers.GetValues("CurrentUserId") != null)
+                 {
+                     currentUserId = (request.Headers.GetValues("CurrentUserId") as string[])[0];
+                 }
+
+                 if (request.Headers.GetValues("RequestGuid") != null)
+                 {
+                     requestGuid = (request.Headers.GetValues("RequestGuid") as string[])[0];
+                 }
+
+
+                 sb.Append("Header.CurrentUserId: " + currentUserId + Environment.NewLine);
+                 sb.Append("Header.RequestGuid: " + requestGuid + Environment.NewLine);
+
+                 if (headers["key"] != null)
+                 {
+                     sb.Append("Header.key: " + headers["key"] + Environment.NewLine);
+                     sb.Append("Header.sign: " + headers["sign"] + Environment.NewLine);
+                     sb.Append("Header.version: " + headers["version"] + Environment.NewLine);
+                     sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
+                 }
+
+                 if (myRequest.ContentType.IndexOf("application/json") > -1)
+                 {
+                     sb.Append("PostData: " + GetPostData(myRequest.InputStream) + Environment.NewLine);
+                 }
+                 if (response != null)
+                 {
+                     string content = await response.Content.ReadAsStringAsync();
+                     sb.Append("Response: " + content + Environment.NewLine);
+                 }
+
+                 LogUtil.Info(sb.ToString());
+             });
+        }
 
         public static void OnActionExecuting(HttpActionContext filterContext)
         {
-            Task tk = LogAsync(filterContext.Request);
+            LogAsync(filterContext.Request);
         }
-
-        private static async Task LogAsync(HttpRequestMessage request, HttpResponseMessage response = null)
-        {
-            var sb = new StringBuilder();
-            var myRequest = ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request;
-            sb.Append("Url: " + myRequest.RawUrl + Environment.NewLine);
-            sb.Append("IP: " + CommonUtil.GetIP() + Environment.NewLine);
-            sb.Append("Method: " + myRequest.HttpMethod + Environment.NewLine);
-            sb.Append("ContentType: " + myRequest.ContentType + Environment.NewLine);
-
-            NameValueCollection headers = myRequest.Headers;
-
-            string currentUserId = "";
-            string requestGuid = "";
-
-            if(request.Headers.GetValues("CurrentUserId")!=null)
-            {
-                currentUserId = (request.Headers.GetValues("CurrentUserId") as string[])[0];
-            }
-
-            if (request.Headers.GetValues("RequestGuid") != null)
-            {
-                requestGuid = (request.Headers.GetValues("RequestGuid") as string[])[0];
-            }
-
-          
-            sb.Append("Header.CurrentUserId: " + currentUserId + Environment.NewLine);
-            sb.Append("Header.RequestGuid: " + requestGuid + Environment.NewLine);
-
-            if (headers["key"] != null)
-            {
-                sb.Append("Header.key: " + headers["key"] + Environment.NewLine);
-                sb.Append("Header.sign: " + headers["sign"] + Environment.NewLine);
-                sb.Append("Header.version: " + headers["version"] + Environment.NewLine);
-                sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
-            }
-
-            if (myRequest.ContentType.IndexOf("application/json") > -1)
-            {
-                sb.Append("PostData: " + GetPostData(myRequest.InputStream) + Environment.NewLine);
-            }
-            if (response != null)
-            {
-                string content = await response.Content.ReadAsStringAsync();
-                sb.Append("Response: " + content + Environment.NewLine);
-            }
-
-            LogUtil.Info(sb.ToString());
-        }
-
         public static void OnActionExecuted(HttpActionExecutedContext actionContext)
         {
-            Task tk = LogAsync(actionContext.Request, actionContext.Response);
+            LogAsync(actionContext.Request, actionContext.Response);
         }
     }
 }

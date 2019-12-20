@@ -11,7 +11,7 @@ var config = {
   // 下面的地址配合云端 Server 工作
   host,
   appId: `wx969a817779af7b53`,
-  merchId: `d17df2252133478c99104180e8062230`,
+  merchId: `2f54b8f1edb7492b8e1f377baf13c5fa`,
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     globalDataSet: `${host}/Global/DataSet`,

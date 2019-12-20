@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Lumos.Web.Http;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,7 @@ namespace WebApiStoreApp
         public static void Register(HttpConfiguration config)
         {
 
+            PreRouteHandler.HttpPreRoute(config);
 
             // Web API routes
             config.MapHttpAttributeRoutes();

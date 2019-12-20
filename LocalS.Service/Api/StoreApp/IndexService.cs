@@ -19,6 +19,13 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetIndexPageData();
 
+            string storeId = rup.StoreId;
+
+            if (string.IsNullOrEmpty(storeId))
+            {
+
+            }
+
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
             var storeModel = new StoreModel();
