@@ -24,7 +24,7 @@ namespace TestKafkaProducer
             var builder = new ProducerBuilder<string, string>(config);
             var message = new Message<string, string>();
             message.Key = "A";
-            message.Value = "我就是要传输的消息内容";
+            message.Value = "我就是要传输的消息内容:"+Guid.NewGuid().ToString();
 
 
             using (var producer = builder.Build())
