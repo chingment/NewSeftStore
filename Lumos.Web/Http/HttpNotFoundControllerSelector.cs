@@ -11,9 +11,9 @@ using System.Web.Http.Dispatcher;
 
 namespace Lumos.Web.Http
 {
-    public class HttpNotFoundDefaultHttpControllerSelector : DefaultHttpControllerSelector
+    public class HttpNotFoundControllerSelector : DefaultHttpControllerSelector
     {
-        public HttpNotFoundDefaultHttpControllerSelector(HttpConfiguration configuration)
+        public HttpNotFoundControllerSelector(HttpConfiguration configuration)
         : base(configuration)
         {
         }

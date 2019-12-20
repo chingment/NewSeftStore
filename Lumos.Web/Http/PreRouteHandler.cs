@@ -13,8 +13,8 @@ namespace Lumos.Web.Http
     {
         public static void HttpPreRoute(this HttpConfiguration config)
         {
-            config.Services.Replace(typeof(IHttpActionInvoker), new HttpWebApiControllerActionInvoker());
-            config.Services.Replace(typeof(IHttpControllerSelector), new HttpNotFoundDefaultHttpControllerSelector(config));
+            //config.Services.Replace(typeof(IHttpActionInvoker), new HttpWebApiControllerActionInvoker());
+            //config.Services.Replace(typeof(IHttpControllerSelector), new HttpNotFoundControllerSelector(config));
             config.Services.Replace(typeof(IHttpActionSelector), new HttpNotFoundControllerActionSelector());
         }
     }

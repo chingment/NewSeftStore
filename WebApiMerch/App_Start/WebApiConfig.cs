@@ -87,9 +87,6 @@ namespace WebApiMerch
     {
         public static void Register(HttpConfiguration config)
         {
-
-            PreRouteHandler.HttpPreRoute(config);
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -98,6 +95,9 @@ namespace WebApiMerch
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
+            config.HttpPreRoute();
 
 
             // 干掉XML序列化器

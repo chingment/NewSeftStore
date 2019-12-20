@@ -87,8 +87,6 @@ namespace WebApiStoreApp
         public static void Register(HttpConfiguration config)
         {
 
-            PreRouteHandler.HttpPreRoute(config);
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -98,6 +96,7 @@ namespace WebApiStoreApp
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.HttpPreRoute();
 
             // 干掉XML序列化器
             config.Formatters.Remove(config.Formatters.XmlFormatter);

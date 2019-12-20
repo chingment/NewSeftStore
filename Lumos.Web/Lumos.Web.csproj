@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Http\HttpNotFoundControllerActionSelector.cs" />
-    <Compile Include="Http\HttpNotFoundDefaultHttpControllerSelector.cs" />
+    <Compile Include="Http\HttpNotFoundControllerSelector.cs" />
     <Compile Include="Http\HttpWebApiControllerActionInvoker.cs" />
     <Compile Include="Http\MonitorLog.cs" />
     <Compile Include="Http\BaseController.cs" />
