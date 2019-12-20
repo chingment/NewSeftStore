@@ -97,6 +97,12 @@ namespace WebApiMerch
             );
 
 
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi2",
+                routeTemplate: "api/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
             config.HttpPreRoute();
 
 

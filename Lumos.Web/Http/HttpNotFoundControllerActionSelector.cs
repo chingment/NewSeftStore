@@ -22,16 +22,16 @@ namespace Lumos.Web.Http
             }
             catch (HttpResponseException ex)
             {
-                var code = ex.Response.StatusCode;
+                var httpStatusCode = ex.Response.StatusCode;
 
                 var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "请求异常");
-                if (code == HttpStatusCode.NotFound)
+                if (httpStatusCode == HttpStatusCode.NotFound)
                 {
                     result.Message = "无效请求";
                 }
-                else if (code == HttpStatusCode.MethodNotAllowed)
+                else if (httpStatusCode == HttpStatusCode.MethodNotAllowed)
                 {
-                    result.Message = "不支持该方式访问";
+                    result.Message = "方法不允许访问";
                 }
 
                 var httpResponseMessage = new HttpResponseMessage { Content = new StringContent(result.ToString(), Encoding.GetEncoding("UTF-8"), "application/json") };

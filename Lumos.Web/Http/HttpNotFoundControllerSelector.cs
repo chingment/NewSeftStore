@@ -26,15 +26,20 @@ namespace Lumos.Web.Http
             }
             catch (HttpResponseException ex)
             {
-                var code = ex.Response.StatusCode;
+                var httpStatusCode = ex.Response.StatusCode;
 
-                if (code == HttpStatusCode.NotFound || code == HttpStatusCode.MethodNotAllowed)
+                var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "请求异常");
+                if (httpStatusCode == HttpStatusCode.NotFound)
                 {
-                    var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "无效请求");
-
-                    var t = new HttpResponseMessage { Content = new StringContent(result.ToString(), Encoding.GetEncoding("UTF-8"), "application/json") };
-                    ex.Response.Content = t.Content;
+                    result.Message = "无效请求";
                 }
+                else if (httpStatusCode == HttpStatusCode.MethodNotAllowed)
+                {
+                    result.Message = "方法不允许访问";
+                }
+
+                var httpResponseMessage = new HttpResponseMessage { Content = new StringContent(result.ToString(), Encoding.GetEncoding("UTF-8"), "application/json") };
+                ex.Response.Content = httpResponseMessage.Content;
                 ex.Response.StatusCode = HttpStatusCode.OK;
                 throw;
             }
