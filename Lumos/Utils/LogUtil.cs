@@ -26,6 +26,16 @@ namespace Lumos
             LogicalThreadContext.Properties["trackid"] = trackid;
         }
 
+
+        public static void SetTrackId(string token)
+        {
+            if(string.IsNullOrEmpty(token))
+            {
+                token= Guid.NewGuid().ToString();
+            }
+
+            LogicalThreadContext.Properties["trackid"] = token;
+        }
         private static ILog GetLog()
         {
 

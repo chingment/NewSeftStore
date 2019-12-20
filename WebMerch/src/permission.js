@@ -22,20 +22,19 @@ router.beforeEach(async(to, from, next) => {
     // console.log('token: ' + token)
     var path = encodeURIComponent(window.location.href)
     if (token) {
-      if (store.getters.userInfo == null) { 
+      if (store.getters.userInfo == null) {
         await store.dispatch('own/getInfo').then((res) => {
           next({ ...to, replace: true })
         })
       }
-      
+
       await store.dispatch('own/checkPermission', '1', to.path).then((res) => {
-          if (res.code === 2401) {
-            next('/401')
-          } else {
-            next()
-          }
+        if (res.code === 2401) {
+          next('/401')
+        } else {
+          next()
+        }
       })
-      
 
       NProgress.done()
     } else {

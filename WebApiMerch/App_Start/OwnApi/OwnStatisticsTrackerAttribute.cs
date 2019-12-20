@@ -11,11 +11,18 @@ namespace WebApiMerch
 {
     public class OwnStatisticsTrackerAttribute : BaseStatisticsTrackerAttribute
     {
+        public override string CurrentUserId
+        {
+            get
+            {
+                return OwnApiRequest.TokenInfo.UserId;
+            }
+        }
         public override void OnActionExecuted(HttpActionExecutedContext actionContext)
         {
             base.OnActionExecuted(actionContext);
 
-            MqFactory.Global.PushAccessLog(GuidUtil.New(), null);
+            //MqFactory.Global.PushAccessLog(GuidUtil.New(), null);
         }
     }
 }

@@ -23,12 +23,12 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushAccessLog(string ticket, string content)
+        public void PushAccessLog(string ticket, AccessLogModel content)
         {
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.AccessLog;
             obj.Ticket = ticket;
-            obj.Content = new AccessLogModel { };
+            obj.Content = content;
             this.Push(obj);
         }
     }
