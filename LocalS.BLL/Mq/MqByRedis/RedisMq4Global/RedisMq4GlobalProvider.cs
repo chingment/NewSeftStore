@@ -22,5 +22,14 @@ namespace LocalS.BLL.Mq.MqByRedis
             obj.Content = new PayResultNotifyModel { PayPartner = payParner, From = from, Content = content };
             this.Push(obj);
         }
+
+        public void PushAccessLog(string ticket, string content)
+        {
+            var obj = new RedisMq4GlobalHandle();
+            obj.Type = MqMessageType.AccessLog;
+            obj.Ticket = ticket;
+            obj.Content = new AccessLogModel { };
+            this.Push(obj);
+        }
     }
 }

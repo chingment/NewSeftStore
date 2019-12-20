@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL.Mq
+namespace LocalS.BLL.Mq.MqMessageConentModel
 {
-    public enum MqMessageType
+    public class AccessLogModel
     {
-        Unknow = 0,
-        PayResultNotify = 2,
-        AccessLog = 3
+
     }
 }

@@ -7,6 +7,7 @@ namespace Lumos.Web.Http
     {
         public virtual string CurrentUserId { get; set; }
 
+
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             actionContext.Request.Headers.Add("CurrentUserId", this.CurrentUserId);

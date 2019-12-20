@@ -80,10 +80,6 @@ namespace WebApiStoreTerm
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;
                 var requestMethod = request.HttpMethod;
 
-                request.Headers.Add("CurrentUserId", "");
-
-                MonitorLog.OnActionExecuting(actionContext);
-
                 bool skipAuthorization = actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any();
                 if (skipAuthorization)
                 {
@@ -185,11 +181,6 @@ namespace WebApiStoreTerm
                 return;
             }
 
-        }
-
-        public override void OnActionExecuted(HttpActionExecutedContext actionContext)
-        {
-            MonitorLog.OnActionExecuted(actionContext);
         }
     }
 }
