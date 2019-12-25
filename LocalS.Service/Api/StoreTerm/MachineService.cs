@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 machine = new Machine();
                 machine.Id = GuidUtil.New();
-                machine.Name = rop.DeviceId;//默认名称为机器ID
+                machine.Name = "贩卖X1";//默认名称
                 machine.JPushRegId = rop.JPushRegId;
                 machine.DeviceId = rop.DeviceId;
                 machine.ImeiId = rop.ImeiId;
