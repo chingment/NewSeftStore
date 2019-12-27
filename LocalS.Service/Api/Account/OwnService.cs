@@ -468,6 +468,10 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "录入成功");
+
             return result;
         }
     }

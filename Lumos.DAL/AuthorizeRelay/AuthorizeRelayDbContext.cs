@@ -49,8 +49,10 @@ namespace Lumos.DbRelay
         public IDbSet<WxUserInfo> WxUserInfo { get; set; }
         public IDbSet<BackgroundJob> BackgroundJob { get; set; }
         public IDbSet<BackgroundJobLog> BackgroundJobLog { get; set; }
+        public IDbSet<SysUserFingerVein> SysUserFingerVein { get; set; }
+
         public AuthorizeRelayDbContext(string nameOrConnectionString)
-            : base(nameOrConnectionString)
+                : base(nameOrConnectionString)
         {
             // this.Configuration.ProxyCreationEnabled = false;
         }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lumos.DbRelay.Entity
+namespace Lumos.DbRelay
 {
     [Table("SysUserFingerVein")]
     public class SysUserFingerVein
@@ -14,7 +14,6 @@ namespace Lumos.DbRelay.Entity
         [Key]
         public string Id { get; set; }
         public string UserId { get; set; }
-        public string MerchId { get; set; }
         public string VeinData { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
