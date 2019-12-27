@@ -51,9 +51,6 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                machine.DeviceId = rop.DeviceId;
-                machine.ImeiId = rop.ImeiId;
-                machine.MacAddress = rop.MacAddress;
                 machine.JPushRegId = rop.JPushRegId;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
