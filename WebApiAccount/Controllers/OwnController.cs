@@ -29,18 +29,23 @@ namespace WebApiAccount.Controllers
         [HttpPost]
         public OwnApiHttpResponse Logout()
         {
-            IResult result = AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId,this.Token);
+            IResult result = AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, this.Token);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse CheckPermission([FromUri]RupOwnCheckPermission rup)
         {
-            IResult result = AccountServiceFactory.Own.CheckPermission(this.CurrentUserId, this.CurrentUserId,this.Token, rup);
+            IResult result = AccountServiceFactory.Own.CheckPermission(this.CurrentUserId, this.CurrentUserId, this.Token, rup);
             return new OwnApiHttpResponse(result);
         }
 
-
+        [HttpPost]
+        public OwnApiHttpResponse UploadFingerVeinData([FromUri]LocalS.Service.Api.Account.RopUploadFingerVeinData rop)
+        {
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
 
     }
 }

@@ -51,6 +51,7 @@ namespace Lumos.DbRelay
         public DateTime? MendTime { get; set; }
         public Enumeration.BelongSite BelongSite { get; set; }
         public int Depth { get; set; }
+        public int FingerVeinCount { get; set; }
 
     }
 }

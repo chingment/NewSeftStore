@@ -19,6 +19,7 @@ namespace LocalS.Service.Api.Account
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public int FingerVeinCount { get; set; }
         public List<MenuNode> Menus { get; set; }
 
         public List<RoleModel> Roles { get; set; }

@@ -74,6 +74,7 @@
     <Compile Include="Api\Account\RModels\RetOwnLoginByAccount.cs" />
     <Compile Include="Api\Account\RModels\RetOwnLoginByMinProgram.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByMinProgram.cs" />
+    <Compile Include="Api\Account\RModels\RopUploadFingerVeinData.cs" />
     <Compile Include="Api\Account\RModels\RopUserInfoChangePassword.cs" />
     <Compile Include="Api\Account\RModels\RopUserInfoSave.cs" />
     <Compile Include="Api\Account\RModels\RupOwnCheckPermission.cs" />

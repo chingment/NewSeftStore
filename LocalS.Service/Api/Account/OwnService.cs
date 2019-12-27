@@ -379,7 +379,7 @@ namespace LocalS.Service.Api.Account
             ret.Introduction = sysUser.Introduction;
             ret.Email = sysUser.Email;
             ret.PhoneNumber = sysUser.PhoneNumber;
-
+            ret.FingerVeinCount = sysUser.FingerVeinCount;
             switch (rup.WebSite)
             {
                 case "admin":
@@ -460,6 +460,13 @@ namespace LocalS.Service.Api.Account
                     break;
             }
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "检查成功");
+
+            return result;
+        }
+
+        public CustomJsonResult UploadFingerVeinData(string operater, string userId, RopUploadFingerVeinData rop)
+        {
+            var result = new CustomJsonResult();
 
             return result;
         }

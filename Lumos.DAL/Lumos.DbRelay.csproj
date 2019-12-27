@@ -87,6 +87,7 @@
     <Compile Include="Entity\SysRolePermission.cs" />
     <Compile Include="Entity\SysSmsSendHis.cs" />
     <Compile Include="Entity\SysUser.cs" />
+    <Compile Include="Entity\SysUserFingerVein.cs" />
     <Compile Include="Entity\SysUserLoginHis .cs" />
     <Compile Include="Entity\SysUserOrg.cs" />
     <Compile Include="Entity\SysUserRole.cs" />
