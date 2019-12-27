@@ -22,7 +22,7 @@ namespace Lumos.Web.Http
             {
                 var baseException = responseMessage.Exception.InnerExceptions[0];
 
-                var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "无效请求");
+                var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "系统错误");
 
                 if (baseException is TimeoutException)
                 {
