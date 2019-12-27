@@ -22,6 +22,9 @@ namespace Lumos.Web.Http
             {
                 var baseException = responseMessage.Exception.InnerExceptions[0];
 
+
+                LogUtil.Error("API调用出现异常", responseMessage.Exception);
+
                 var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "系统错误");
 
                 if (baseException is TimeoutException)
