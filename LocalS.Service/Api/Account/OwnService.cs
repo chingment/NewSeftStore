@@ -34,6 +34,24 @@ namespace LocalS.Service.Api.Account
         }
         public CustomJsonResult LoginByAccount(RopOwnLoginByAccount rop)
         {
+            if (rop.LoginWay == Enumeration.LoginWay.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
+            }
+
+            if (rop.LoginWay == Enumeration.LoginWay.StoreTerm)
+            {
+                if (rop.LoginPms == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,LoginPms值不能为空");
+                }
+
+                if (!rop.LoginPms.ContainsKey("machineId") || string.IsNullOrEmpty(rop.LoginPms["machineId"].ToString()))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少指定参数LoginPms.machineId");
+                }
+            }
+
             var result = new CustomJsonResult();
             var ret = new RetOwnLoginByAccount();
 
@@ -60,26 +78,69 @@ namespace LocalS.Service.Api.Account
             ret.Token = GuidUtil.New();
 
             var tokenInfo = new TokenInfo();
-
             tokenInfo.UserId = sysUser.Id;
 
-            switch (sysUser.BelongSite)
+
+            switch (rop.LoginWay)
             {
-                case Enumeration.BelongSite.Agent:
-                    var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
-                    if (agentUser != null)
+                case Enumeration.LoginWay.Website:
+                    #region Website
+
+                    switch (sysUser.BelongSite)
                     {
-                        tokenInfo.AgentId = agentUser.AgentId;
+                        case Enumeration.BelongSite.Agent:
+                            var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                            if (agentUser == null)
+                            {
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                            }
+
+                            tokenInfo.AgentId = agentUser.AgentId;
+
+                            break;
+                        case Enumeration.BelongSite.Merch:
+
+                            var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                            if (merchUser == null)
+                            {
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                            }
+
+                            tokenInfo.MerchId = merchUser.MerchId;
+
+                            break;
                     }
+
+
+                    #endregion
                     break;
-                case Enumeration.BelongSite.Merch:
-                    var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
-                    if (merchUser != null)
+                case Enumeration.LoginWay.StoreTerm:
+                    #region StoreTerm
+
+                    string machineId = rop.LoginPms["machineId"].ToString();
+                    var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                    if (machine == null)
                     {
-                        tokenInfo.MerchId = merchUser.MerchId;
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
                     }
+
+                    var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                    if (storeTermUser == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                    }
+
+                    if (machine.CurUseMerchId != storeTermUser.MerchId)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
+                    }
+                    ret.UserName = storeTermUser.UserName;
+                    ret.FullName = storeTermUser.FullName;
+                    #endregion
                     break;
             }
+
+
 
 
             LoginLog(sysUser.Id, sysUser.Id, Enumeration.LoginResult.Success, rop.LoginWay, rop.Ip, "", "登录成功");
@@ -194,6 +255,16 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
+        public CustomJsonResult LoginByFingerVein(RopOwnLoginByFingerVein rop)
+        {
+            var result = new CustomJsonResult();
+
+
+            LogUtil.Info("静指脉数据1：" + rop.VeinData);
+
+            return result;
+        }
+
         public List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)
         {
             List<MenuNode> menuNodes = new List<MenuNode>();
@@ -224,7 +295,6 @@ namespace LocalS.Service.Api.Account
             return menuNodes;
 
         }
-
 
         public List<RoleModel> GetRoles(Enumeration.BelongSite belongSite, string userId)
         {

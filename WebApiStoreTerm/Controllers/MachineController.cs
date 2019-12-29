@@ -24,19 +24,6 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse Login([FromBody]RopMachineLogin rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.Login(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse Logout([FromBody]RopMachineLogout rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.Logout(this.CurrentUserId, this.Token, rop);
-            return new OwnApiHttpResponse(result);
-        }
 
         [HttpPost]
         public OwnApiHttpResponse SendRunStatus([FromBody]RopMachineSendRunStatus rop)

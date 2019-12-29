@@ -24,5 +24,28 @@ namespace WebApiStoreTerm.Controllers
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public OwnApiHttpResponse LoginByFingerVein([FromBody]LocalS.Service.Api.Account.RopOwnLoginByFingerVein rop)
+        {
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByFingerVein(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse LoginByAccount([FromBody]LocalS.Service.Api.Account.RopOwnLoginByAccount rop)
+        {
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Logout([FromBody]LocalS.Service.Api.Account.RopOwnLogout rop)
+        {
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, this.Token);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

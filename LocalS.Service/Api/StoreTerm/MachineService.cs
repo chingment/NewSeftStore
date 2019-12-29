@@ -185,63 +185,52 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "更新成功");
         }
 
-        public CustomJsonResult Login(RopMachineLogin rop)
-        {
+        //public CustomJsonResult Login(RopMachineLogin rop)
+        //{
 
-            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+        //    var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 
-            if (machine == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
-            }
+        //    if (machine == null)
+        //    {
+        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+        //    }
 
-            var sysMerchantUser = CurrentDb.SysMerchUser.Where(m => m.UserName == rop.UserName).FirstOrDefault();
+        //    var sysMerchantUser = CurrentDb.SysMerchUser.Where(m => m.UserName == rop.UserName).FirstOrDefault();
 
-            if (sysMerchantUser == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户名不存在");
-            }
+        //    if (sysMerchantUser == null)
+        //    {
+        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户名不存在");
+        //    }
 
-            var isPasswordCorrect = PassWordHelper.VerifyHashedPassword(sysMerchantUser.PasswordHash, rop.Password);
+        //    var isPasswordCorrect = PassWordHelper.VerifyHashedPassword(sysMerchantUser.PasswordHash, rop.Password);
 
-            if (!isPasswordCorrect)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户密码错误");
-            }
+        //    if (!isPasswordCorrect)
+        //    {
+        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户密码错误");
+        //    }
 
-            if (sysMerchantUser.MerchId != machine.CurUseMerchId)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
-            }
+        //    if (sysMerchantUser.MerchId != machine.CurUseMerchId)
+        //    {
+        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
+        //    }
 
-            var ret = new RetMachineLogin();
+        //    var ret = new RetMachineLogin();
 
-            ret.Token = GuidUtil.New();
-            ret.UserName = sysMerchantUser.UserName;
-            ret.FullName = sysMerchantUser.FullName;
+        //    ret.Token = GuidUtil.New();
+        //    ret.UserName = sysMerchantUser.UserName;
+        //    ret.FullName = sysMerchantUser.FullName;
 
-            var tokenInfo = new TokenInfo();
-            tokenInfo.UserId = sysMerchantUser.Id;
-            tokenInfo.MerchId = sysMerchantUser.MerchId;
+        //    var tokenInfo = new TokenInfo();
+        //    tokenInfo.UserId = sysMerchantUser.Id;
+        //    tokenInfo.MerchId = sysMerchantUser.MerchId;
 
-            SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(3, 0, 0));
+        //    SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(3, 0, 0));
 
-            LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器管理后台");
+        //    LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器管理后台");
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
+        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
-        }
-
-        public CustomJsonResult Logout(string operater, string token, RopMachineLogout rop)
-        {
-
-            SSOUtil.Quit(token);
-
-            LogAction(operater, rop.MachineId, "logout", "退出机器管理后台");
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
-
-        }
+        //}
 
         public CustomJsonResult SendRunStatus(RopMachineSendRunStatus rop)
         {

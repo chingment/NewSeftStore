@@ -73,7 +73,9 @@
     <Compile Include="Api\Account\RModels\RetOwnGetInfo.cs" />
     <Compile Include="Api\Account\RModels\RetOwnLoginByAccount.cs" />
     <Compile Include="Api\Account\RModels\RetOwnLoginByMinProgram.cs" />
+    <Compile Include="Api\Account\RModels\RopOwnLoginByFingerVein.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByMinProgram.cs" />
+    <Compile Include="Api\Account\RModels\RopOwnLogout.cs" />
     <Compile Include="Api\Account\RModels\RopUploadFingerVeinData.cs" />
     <Compile Include="Api\Account\RModels\RopUserInfoChangePassword.cs" />
     <Compile Include="Api\Account\RModels\RopUserInfoSave.cs" />
@@ -307,15 +309,12 @@
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetMachineLogin.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPayStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetProductSkuSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopAppTraceLog.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogAction.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopMachineLogin.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopMachineLogout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineScanSlotsEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingTestPickupEventNotify.cs" />
