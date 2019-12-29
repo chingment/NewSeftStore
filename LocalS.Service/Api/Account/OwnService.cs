@@ -468,7 +468,14 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
-
+            var sysUserFingerVein = new SysUserFingerVein();
+            sysUserFingerVein.Id = GuidUtil.New();
+            sysUserFingerVein.UserId = userId;
+            sysUserFingerVein.VeinData = rop.VeinData;
+            sysUserFingerVein.CreateTime = DateTime.Now;
+            sysUserFingerVein.Creator = operater;
+            CurrentDb.SysUserFingerVein.Add(sysUserFingerVein);
+            CurrentDb.SaveChanges();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "录入成功");
 

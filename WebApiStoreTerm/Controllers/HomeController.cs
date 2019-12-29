@@ -100,15 +100,15 @@ namespace WebApiStoreTerm.Controllers
             string machineId = "000000000000000";
 
 
-            Dictionary<string, string> parames = new Dictionary<string, string>();
-            parames.Add("machineId", machineId.ToString());
-            parames.Add("key", "http%3A%2F%2Fqr.weibo.cn%2Fg%2F3iv86t");
-            string signStr = Signature.Compute("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1573793412, Signature.GetQueryData(parames));
+            //Dictionary<string, string> parames = new Dictionary<string, string>();
+            //parames.Add("machineId", machineId.ToString());
+            //parames.Add("key", "http%3A%2F%2Fqr.weibo.cn%2Fg%2F3iv86t");
+            //string signStr = Signature.Compute("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1573793412, Signature.GetQueryData(parames));
 
-            RopOrderReserve rop = new RopOrderReserve();
-            rop.MachineId = "000000000000000";
-            rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "0cea859026154bbd80c1e6f98d6d8853", Quantity = 2});
-            StoreTermServiceFactory.Order.Reserve(rop);
+            //RopOrderReserve rop = new RopOrderReserve();
+            //rop.MachineId = "000000000000000";
+            //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "0cea859026154bbd80c1e6f98d6d8853", Quantity = 2});
+            //StoreTermServiceFactory.Order.Reserve(rop);
 
             //model.Add("获取机器初始数据", MachineInitData(machineId));
             //model.Add("预定商品", OrderReserve(machineId));
@@ -119,6 +119,9 @@ namespace WebApiStoreTerm.Controllers
             //HttpUtil http = new HttpUtil();
 
             //http.HttpUploadFile(host+ "/Api/Machine/UpLoadLog", "d:\\a.txt");
+
+
+            OwnUploadFingerVeinData();
 
             return View(model);
         }
@@ -217,5 +220,35 @@ namespace WebApiStoreTerm.Controllers
         //    return respon_data4;
 
         //}
+
+        public string OwnUploadFingerVeinData()
+        {
+
+            LocalS.Service.Api.Account.RopUploadFingerVeinData pms = new LocalS.Service.Api.Account.RopUploadFingerVeinData();
+
+            byte[] s = new byte[5];
+            s[0] = 1;
+            s[1] = 0;
+            s[2] = 1;
+            s[3] = 0;
+            s[4] = 1;
+            pms.VeinData = s;
+
+
+            string a1 = JsonConvert.SerializeObject(pms);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Own/UploadFingerVeinData", a1, headers1);
+
+            return respon_data4;
+
+        }
     }
 }
