@@ -536,6 +536,8 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult UploadFingerVeinData(string operater, string userId, RopUploadFingerVeinData rop)
         {
+            LogUtil.Info("VeinData:" + rop.VeinData);
+
             var result = new CustomJsonResult();
 
             if (string.IsNullOrEmpty(rop.VeinData))

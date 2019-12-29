@@ -40,7 +40,7 @@ namespace Lumos.DbRelay
             Website = 1,
             AndroidApp = 2,
             IosApp = 3,
-            Wechat = 4,
+            WechatByMinPragrom = 4,
             StoreTerm = 5
         }
 
