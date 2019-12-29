@@ -8,6 +8,6 @@ namespace LocalS.Service.Api.Account
 {
     public class RopUploadFingerVeinData
     {
-        public string VeinData { get; set; }
+        public byte[] VeinData { get; set; }
     }
 }
