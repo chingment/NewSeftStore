@@ -468,10 +468,15 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
+            if (string.IsNullOrEmpty(rop.VeinData))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "静指脉数据为空");
+            }
+
             var sysUserFingerVein = new SysUserFingerVein();
             sysUserFingerVein.Id = GuidUtil.New();
             sysUserFingerVein.UserId = userId;
-            sysUserFingerVein.VeinData = rop.VeinData;
+            sysUserFingerVein.VeinData = Convert.FromBase64String(rop.VeinData);
             sysUserFingerVein.CreateTime = DateTime.Now;
             sysUserFingerVein.Creator = operater;
             CurrentDb.SysUserFingerVein.Add(sysUserFingerVein);

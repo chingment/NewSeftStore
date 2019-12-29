@@ -232,7 +232,7 @@ namespace WebApiStoreTerm.Controllers
             s[2] = 1;
             s[3] = 0;
             s[4] = 1;
-            pms.VeinData = s;
+            pms.VeinData = "dasdad";
 
 
             string a1 = JsonConvert.SerializeObject(pms);
