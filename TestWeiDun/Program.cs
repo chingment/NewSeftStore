@@ -24,7 +24,7 @@ namespace TestWeiDun
         public static extern IntPtr FV_EnumDevice(IntPtr devNameList);
 
         [DllImport("BioVein.Win32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr FV_MatchFeatureEx([MarshalAs(UnmanagedType.LPArray)] byte[] matchFeature, [MarshalAs(UnmanagedType.LPArray)] byte[] regFeature, int regCnt, [MarshalAs(UnmanagedType.LPArray)] byte[] aiFeature, int aiCnt, byte flag, byte securityLevel, UInt32 diff, UInt32 aiBufLen);
+        public static extern IntPtr FV_MatchFeatureEx([MarshalAs(UnmanagedType.LPArray)] byte[] matchFeature, [MarshalAs(UnmanagedType.LPArray)] byte[] regFeature, int regCnt, [MarshalAs(UnmanagedType.LPArray)] byte[] aiFeature, int aiCnt, byte flag, byte securityLevel, ref int diff, int aiBufLen);
 
 
 
@@ -38,10 +38,10 @@ namespace TestWeiDun
 
                 byte[] matchFeature = Convert.FromBase64String(s1);
                 byte[] regFeature = Convert.FromBase64String(s);
-                byte[] aiFeature = Convert.FromBase64String(s);
-                UInt32 diff = 0;
-                UInt32 aiBufLen = 0;
-                var ret = FV_MatchFeatureEx(matchFeature, regFeature, 3, aiFeature, 3, 0x03, 0x06, diff, aiBufLen);
+                byte[] aiFeature =new byte[512];
+                int diff = 0;
+                int aiBufLen = 0;
+                var ret = FV_MatchFeatureEx(matchFeature, regFeature, 3, aiFeature, 1, 0x03, 0x04,ref diff, aiBufLen);
                
                 //IntPtr intptr = System.Runtime.InteropServices.Marshal.AllocHGlobal(10);
 
