@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Account
 {
     public class OwnService : BaseDbContext
     {
-        [DllImport(@"BioVein.Win32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"BioVein.x64.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern int FV_MatchFeature([MarshalAs(UnmanagedType.LPArray)] byte[] featureDataMatch, [MarshalAs(UnmanagedType.LPArray)]  byte[] featureDataReg, byte RegCnt, byte flag, byte securityLevel, int[] diff, [MarshalAs(UnmanagedType.LPArray)] byte[] AIDataBuf, int[] AIDataLen);
 
 
@@ -318,7 +318,7 @@ namespace LocalS.Service.Api.Account
 
             if (!isMachSuccess)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未匹配到该静指脉，验证失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，静指脉验证失败");
             }
 
 
