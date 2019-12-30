@@ -655,6 +655,13 @@ namespace LocalS.Service.Api.Account
             CurrentDb.SysUserFingerVein.Add(sysUserFingerVein);
             CurrentDb.SaveChanges();
 
+            var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+            if (sysUser != null)
+            {
+                var fingerVeinCount = CurrentDb.SysUserFingerVein.Where(m => m.UserId == userId).Count();
+                sysUser.FingerVeinCount = fingerVeinCount;
+            }
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "录入成功");
 
             return result;
