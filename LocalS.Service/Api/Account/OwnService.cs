@@ -9,11 +9,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
+using System.Runtime.InteropServices;
 
 namespace LocalS.Service.Api.Account
 {
     public class OwnService : BaseDbContext
     {
+        [DllImport(@"BioVein.Win32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int FV_MatchFeature([MarshalAs(UnmanagedType.LPArray)] byte[] featureDataMatch, [MarshalAs(UnmanagedType.LPArray)]  byte[] featureDataReg, byte RegCnt, byte flag, byte securityLevel, int[] diff, [MarshalAs(UnmanagedType.LPArray)] byte[] AIDataBuf, int[] AIDataLen);
+
+
         private void LoginLog(string operater, string userId, Enumeration.LoginResult loginResult, Enumeration.LoginWay loginWay, string ip, string location, string description)
         {
             var userLoginHis = new SysUserLoginHis();
@@ -257,10 +262,104 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult LoginByFingerVein(RopOwnLoginByFingerVein rop)
         {
+
+            if (rop.LoginWay == Enumeration.LoginWay.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
+            }
+
+            if (rop.LoginWay == Enumeration.LoginWay.StoreTerm)
+            {
+                if (rop.LoginPms == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,LoginPms值不能为空");
+                }
+
+                if (!rop.LoginPms.ContainsKey("machineId") || string.IsNullOrEmpty(rop.LoginPms["machineId"].ToString()))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少指定参数LoginPms.machineId");
+                }
+            }
+
             var result = new CustomJsonResult();
 
+            var ret = new RetOwnLoginByAccount();
 
             LogUtil.Info("静指脉数据1：" + rop.VeinData);
+
+            string userId = "";
+            bool isMachSuccess = false;
+
+            try
+            {
+                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.ToList();
+                byte[] matchFeature = Convert.FromBase64String(rop.VeinData);
+                foreach (var sysUserFingerVein in sysUserFingerVeins)
+                {
+                    if (sysUserFingerVein.VeinData != null)
+                    {
+                        int[] diff2 = new int[1];
+                        byte[] AIDataBuf = new byte[matchFeature.Length];
+                        int[] AIDataLen = new int[1];
+                        var re1t = FV_MatchFeature(matchFeature, sysUserFingerVein.VeinData, (byte)0x03, (byte)0x03, (byte)4, diff2, AIDataBuf, AIDataLen);
+                        if (re1t == 0)
+                        {
+                            userId = sysUserFingerVein.UserId;
+                            isMachSuccess = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("静指脉匹配异常", ex);
+            }
+
+            if (!isMachSuccess)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未匹配到该静指脉，验证失败");
+            }
+
+
+            if (isMachSuccess)
+            {
+                var tokenInfo = new TokenInfo();
+                tokenInfo.UserId = userId;
+
+                switch (rop.LoginWay)
+                {
+                    case Enumeration.LoginWay.StoreTerm:
+                        #region StoreTerm
+
+                        string machineId = rop.LoginPms["machineId"].ToString();
+                        var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                        if (machine == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+                        }
+
+                        var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
+                        if (storeTermUser == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                        }
+
+                        if (machine.CurUseMerchId != storeTermUser.MerchId)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
+                        }
+                        ret.UserName = storeTermUser.UserName;
+                        ret.FullName = storeTermUser.FullName;
+                        #endregion
+                        break;
+                }
+
+
+                SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
+            }
 
             return result;
         }
