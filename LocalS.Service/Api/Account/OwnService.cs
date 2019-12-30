@@ -324,6 +324,8 @@ namespace LocalS.Service.Api.Account
 
             if (isMachSuccess)
             {
+                ret.Token = GuidUtil.New();
+
                 var tokenInfo = new TokenInfo();
                 tokenInfo.UserId = userId;
 
