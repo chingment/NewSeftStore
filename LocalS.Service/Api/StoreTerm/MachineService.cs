@@ -38,12 +38,16 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.Name = "贩卖X1";//默认名称
                 machine.JPushRegId = rop.JPushRegId;
                 machine.DeviceId = rop.DeviceId;
-                machine.ImeiId = rop.ImeiId;
+                machine.ImeiId = rop.ImeiId == null ? GuidUtil.New() : rop.ImeiId;
+                machine.MacAddress = rop.MacAddress == null ? GuidUtil.New() : rop.MacAddress;
                 machine.MainImgUrl = "http://file.17fanju.com/Upload/machine1.jpg";
-                machine.MacAddress = rop.MacAddress;
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
                 machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
+                machine.IsHiddenKind = false;
+                machine.KindRowCellSize = 3;
+                machine.CabinetId_1 = 0;
+                machine.CabinetName_1 = "1#机柜";
                 machine.CreateTime = DateTime.Now;
                 machine.Creator = GuidUtil.Empty();
                 CurrentDb.Machine.Add(machine);

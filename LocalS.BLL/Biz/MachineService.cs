@@ -62,6 +62,7 @@ namespace LocalS.BLL.Biz
                     model.StoreName = merchStore.Name;
                 }
             }
+
             return model;
         }
 
