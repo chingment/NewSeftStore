@@ -662,6 +662,8 @@ namespace LocalS.Service.Api.Account
                 sysUser.FingerVeinCount = fingerVeinCount;
             }
 
+            CurrentDb.SaveChanges();
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "录入成功");
 
             return result;
