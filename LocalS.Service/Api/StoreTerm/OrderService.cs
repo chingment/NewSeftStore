@@ -212,9 +212,9 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.ActionStatusCode = rop.ActionStatusCode;
                     orderPickupLog.ActionStatusName = rop.ActionStatusName;
                     orderPickupLog.IsPickupComplete = rop.IsPickupComplete;
+                    orderPickupLog.ImgId = rop.ImgId;
                     if (rop.IsPickupComplete)
                     {
-                        orderPickupLog.ImgUrlByCHK = "http://file.17fanju.com/upload/common/" + rop.UniqueId + ".jpg";
                         orderPickupLog.PickupUseTime = rop.PickupUseTime;
                         orderPickupLog.ActionRemark = "取货完成";
 

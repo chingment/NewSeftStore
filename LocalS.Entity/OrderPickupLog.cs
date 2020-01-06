@@ -26,6 +26,7 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public int PickupUseTime { get; set; }
         public bool IsPickupComplete { get; set; }
-        public string ImgUrlByCHK { get; set; }
+        public string ImgId { get; set; }
+
     }
 }

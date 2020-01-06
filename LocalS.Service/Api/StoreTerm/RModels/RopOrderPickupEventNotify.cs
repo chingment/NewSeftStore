@@ -21,5 +21,6 @@ namespace LocalS.Service.Api.StoreTerm
         public int PickupUseTime { get; set; }
 
         public bool IsPickupComplete { get; set; }
+        public string ImgId { get; set; }
     }
 }

@@ -181,10 +181,10 @@ namespace LocalS.Service.Api.Merch
                                 {
                                     string imgUrl = null;
                                     List<string> imgUrls = new List<string>();
-                                    if (!string.IsNullOrEmpty(orderPickupLog.ImgUrlByCHK))
+                                    if (!string.IsNullOrEmpty(orderPickupLog.ImgId))
                                     {
-                                        imgUrl = orderPickupLog.ImgUrlByCHK;
-                                        imgUrls.Add(orderPickupLog.ImgUrlByCHK);
+                                        imgUrl = orderPickupLog.ImgId;
+                                        imgUrls.Add(orderPickupLog.ImgId);
                                     }
 
                                     pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
@@ -295,10 +295,10 @@ namespace LocalS.Service.Api.Merch
                             {
                                 string imgUrl = null;
                                 List<string> imgUrls = new List<string>();
-                                if (!string.IsNullOrEmpty(orderPickupLog.ImgUrlByCHK))
+                                if (!string.IsNullOrEmpty(orderPickupLog.ImgId))
                                 {
-                                    imgUrl = orderPickupLog.ImgUrlByCHK;
-                                    imgUrls.Add(orderPickupLog.ImgUrlByCHK);
+                                    imgUrl = orderPickupLog.ImgId;
+                                    imgUrls.Add(orderPickupLog.ImgId);
                                 }
 
                                 pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
