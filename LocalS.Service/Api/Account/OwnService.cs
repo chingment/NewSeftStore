@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
 using System.Runtime.InteropServices;
+using LocalS.BLL.Biz;
 
 namespace LocalS.Service.Api.Account
 {
@@ -263,7 +264,9 @@ namespace LocalS.Service.Api.Account
         public CustomJsonResult LoginByFingerVein(RopOwnLoginByFingerVein rop)
         {
 
-            if (rop.LoginWay == Enumeration.LoginWay.Unknow)
+            string machineId = "";
+            string merchId = "";
+            if (rop.LoginWay != Enumeration.LoginWay.Unknow)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
             }
@@ -279,7 +282,28 @@ namespace LocalS.Service.Api.Account
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少指定参数LoginPms.machineId");
                 }
+                else
+                {
+                    machineId = rop.LoginPms["machineId"].ToString();
+                }
+
+                var machine = BizFactory.Machine.GetOne(machineId);
+                if (machine == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+                }
+
+                if (string.IsNullOrEmpty(machine.MerchId))
+                {
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
+                }
+
+                merchId = machine.MerchId;
             }
+
+
+
 
             var result = new CustomJsonResult();
 
@@ -292,7 +316,7 @@ namespace LocalS.Service.Api.Account
 
             try
             {
-                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.ToList();
+                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.MerchId == merchId).ToList();
                 byte[] matchFeature = Convert.FromBase64String(rop.VeinData);
                 foreach (var sysUserFingerVein in sysUserFingerVeins)
                 {
@@ -334,20 +358,13 @@ namespace LocalS.Service.Api.Account
                     case Enumeration.LoginWay.StoreTerm:
                         #region StoreTerm
 
-                        string machineId = rop.LoginPms["machineId"].ToString();
-                        var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
-                        if (machine == null)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
-                        }
-
                         var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
                         if (storeTermUser == null)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                         }
 
-                        if (machine.CurUseMerchId != storeTermUser.MerchId)
+                        if (merchId != storeTermUser.MerchId)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                         }
@@ -646,9 +663,22 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "静指脉数据为空");
             }
 
+            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+
+            if (machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+            }
+
+            if (string.IsNullOrEmpty(machine.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+            }
+
             var sysUserFingerVein = new SysUserFingerVein();
             sysUserFingerVein.Id = GuidUtil.New();
             sysUserFingerVein.UserId = userId;
+            sysUserFingerVein.MerchId = machine.MerchId;
             sysUserFingerVein.VeinData = Convert.FromBase64String(rop.VeinData);
             sysUserFingerVein.CreateTime = DateTime.Now;
             sysUserFingerVein.Creator = operater;

@@ -14,6 +14,8 @@ namespace Lumos.DbRelay
         [Key]
         public string Id { get; set; }
         public string UserId { get; set; }
+
+        public string MerchId { get; set; }
         [Column(TypeName = "image")]
         public byte[] VeinData { get; set; }
         public string Creator { get; set; }
