@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.Admin
                 user.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 user.Email = rop.Email;
                 user.PhoneNumber = rop.PhoneNumber;
-                user.BelongSite = Enumeration.BelongSite.Merch;
+                user.BelongType = Enumeration.BelongType.Merch;
                 user.IsDelete = false;
                 user.IsDisable = false;
                 user.IsMaster = true;

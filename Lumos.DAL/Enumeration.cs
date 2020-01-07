@@ -34,6 +34,16 @@ namespace Lumos.DbRelay
             Client = 5
         }
 
+        public enum BelongType
+        {
+            Unknow = 0,
+            Admin = 2,
+            Agent = 3,
+            Merch = 4,
+            Client = 5
+        }
+
+
         public enum LoginWay
         {
             Unknow = 0,

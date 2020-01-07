@@ -92,9 +92,9 @@ namespace LocalS.Service.Api.Account
                 case Enumeration.LoginWay.Website:
                     #region Website
 
-                    switch (sysUser.BelongSite)
+                    switch (sysUser.BelongType)
                     {
-                        case Enumeration.BelongSite.Agent:
+                        case Enumeration.BelongType.Agent:
                             var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                             if (agentUser == null)
                             {
@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.Account
                             tokenInfo.AgentId = agentUser.AgentId;
 
                             break;
-                        case Enumeration.BelongSite.Merch:
+                        case Enumeration.BelongType.Merch:
 
                             var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                             if (merchUser == null)
@@ -212,7 +212,7 @@ namespace LocalS.Service.Api.Account
                     sysClientUser.IsVip = false;
                     sysClientUser.CreateTime = DateTime.Now;
                     sysClientUser.Creator = sysClientUserId;
-                    sysClientUser.BelongSite = Enumeration.BelongSite.Client;
+                    sysClientUser.BelongType = Enumeration.BelongType.Client;
                     sysClientUser.MerchId = rop.MerchId;
                     CurrentDb.SysClientUser.Add(sysClientUser);
                     CurrentDb.SaveChanges();
@@ -265,7 +265,8 @@ namespace LocalS.Service.Api.Account
         {
 
             string machineId = "";
-            string merchId = "";
+            Enumeration.BelongType belongType = Enumeration.BelongType.Unknow;
+            string belongId = "";
             if (rop.LoginWay != Enumeration.LoginWay.Unknow)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
@@ -299,7 +300,8 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
                 }
 
-                merchId = machine.MerchId;
+                belongType = Enumeration.BelongType.Merch;
+                belongId = machine.MerchId;
             }
 
 
@@ -316,7 +318,7 @@ namespace LocalS.Service.Api.Account
 
             try
             {
-                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.MerchId == merchId).ToList();
+                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.BelongId == belongId && m.BelongType == belongType).ToList();
                 byte[] matchFeature = Convert.FromBase64String(rop.VeinData);
                 foreach (var sysUserFingerVein in sysUserFingerVeins)
                 {
@@ -364,7 +366,7 @@ namespace LocalS.Service.Api.Account
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                         }
 
-                        if (merchId != storeTermUser.MerchId)
+                        if (belongId != storeTermUser.MerchId)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                         }
@@ -678,7 +680,8 @@ namespace LocalS.Service.Api.Account
             var sysUserFingerVein = new SysUserFingerVein();
             sysUserFingerVein.Id = GuidUtil.New();
             sysUserFingerVein.UserId = userId;
-            sysUserFingerVein.MerchId = machine.MerchId;
+            sysUserFingerVein.BelongType = Enumeration.BelongType.Merch;
+            sysUserFingerVein.BelongId = machine.MerchId;
             sysUserFingerVein.VeinData = Convert.FromBase64String(rop.VeinData);
             sysUserFingerVein.CreateTime = DateTime.Now;
             sysUserFingerVein.Creator = operater;

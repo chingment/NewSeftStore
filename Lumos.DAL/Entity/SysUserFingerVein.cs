@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 
 namespace Lumos.DbRelay
 {
+
     [Table("SysUserFingerVein")]
     public class SysUserFingerVein
     {
         [Key]
         public string Id { get; set; }
         public string UserId { get; set; }
-
-        public string MerchId { get; set; }
+        public Enumeration.BelongType BelongType { get; set; }
+        public string BelongId { get; set; }
         [Column(TypeName = "image")]
         public byte[] VeinData { get; set; }
         public string Creator { get; set; }

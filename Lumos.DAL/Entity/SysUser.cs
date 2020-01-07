@@ -49,7 +49,7 @@ namespace Lumos.DbRelay
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-        public Enumeration.BelongSite BelongSite { get; set; }
+        public Enumeration.BelongType BelongType { get; set; }
         public int Depth { get; set; }
         public int FingerVeinCount { get; set; }
 

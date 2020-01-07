@@ -19,12 +19,12 @@ namespace LocalS.Service.Api.Account
 
             var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            switch(sysUser.BelongSite)
+            switch(sysUser.BelongType)
             {
-                case Lumos.DbRelay.Enumeration.BelongSite.Agent:
+                case Lumos.DbRelay.Enumeration.BelongType.Agent:
                     ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "商户代理系统", Url = "http://agent.ins-uplink.com/", ImgUrl = "http://file.17fanju.com/Upload/img_merch.png", Describe = "商家客户使用", });
                     break;
-                case Lumos.DbRelay.Enumeration.BelongSite.Admin:
+                case Lumos.DbRelay.Enumeration.BelongType.Admin:
                     ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "后台管理系统", Url = "http://admin.ins-uplink.com/", ImgUrl = "http://file.17fanju.com/Upload/img_admin.png", Describe = "后端用户，公司内部使用", });
                     break;
             }

@@ -45,7 +45,7 @@ namespace LocalS.Service.Api.InsApp
                 agentUser.SecurityStamp = GuidUtil.New();
                 agentUser.RegisterTime = DateTime.Now;
                 agentUser.IsDisable = false;
-                agentUser.BelongSite = Enumeration.BelongSite.Agent;
+                agentUser.BelongType = Enumeration.BelongType.Agent;
                 agentUser.CreateTime = DateTime.Now;
                 agentUser.Creator = agentUser.Id;
                 agentUser.AgentId = agent.Id;

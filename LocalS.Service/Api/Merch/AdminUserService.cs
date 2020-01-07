@@ -161,7 +161,7 @@ namespace LocalS.Service.Api.Merch
                 merchUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 merchUser.Email = rop.Email;
                 merchUser.PhoneNumber = rop.PhoneNumber;
-                merchUser.BelongSite = Enumeration.BelongSite.Agent;
+                merchUser.BelongType = Enumeration.BelongType.Agent;
                 merchUser.IsDelete = false;
                 merchUser.IsDisable = false;
                 merchUser.IsMaster = false;

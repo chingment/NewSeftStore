@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.Agent
                 agentUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 agentUser.Email = rop.Email;
                 agentUser.PhoneNumber = rop.PhoneNumber;
-                agentUser.BelongSite = Enumeration.BelongSite.Agent;
+                agentUser.BelongType = Enumeration.BelongType.Agent;
                 agentUser.IsDelete = false;
                 agentUser.IsDisable = false;
                 agentUser.IsMaster = false;
