@@ -267,7 +267,7 @@ namespace LocalS.Service.Api.Account
             string machineId = "";
             Enumeration.BelongType belongType = Enumeration.BelongType.Unknow;
             string belongId = "";
-            if (rop.LoginWay != Enumeration.LoginWay.Unknow)
+            if (rop.LoginWay == Enumeration.LoginWay.Unknow)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
             }
@@ -302,6 +302,10 @@ namespace LocalS.Service.Api.Account
 
                 belongType = Enumeration.BelongType.Merch;
                 belongId = machine.MerchId;
+            }
+            else
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂不支持");
             }
 
 
