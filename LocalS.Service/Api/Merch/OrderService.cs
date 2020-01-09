@@ -115,6 +115,15 @@ namespace LocalS.Service.Api.Merch
             return name;
         }
 
+        public string GetPickImgUrl(string imgId)
+        {
+            if (string.IsNullOrEmpty(imgId))
+                return null;
+
+
+            return string.Format("http://file.17fanju.com/upload/common/{0}.jpg", imgId);
+        }
+
         public CustomJsonResult GetList(string operater, string merchId, RupOrderGetList rup)
         {
             var result = new CustomJsonResult();
@@ -179,12 +188,11 @@ namespace LocalS.Service.Api.Merch
 
                                 foreach (var orderPickupLog in orderPickupLogs)
                                 {
-                                    string imgUrl = null;
+                                    string imgUrl = GetPickImgUrl(orderPickupLog.ImgId);
                                     List<string> imgUrls = new List<string>();
-                                    if (!string.IsNullOrEmpty(orderPickupLog.ImgId))
+                                    if (!string.IsNullOrEmpty(imgUrl))
                                     {
-                                        imgUrl = orderPickupLog.ImgId;
-                                        imgUrls.Add(orderPickupLog.ImgId);
+                                        imgUrls.Add(imgUrl);
                                     }
 
                                     pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
@@ -293,12 +301,11 @@ namespace LocalS.Service.Api.Merch
 
                             foreach (var orderPickupLog in orderPickupLogs)
                             {
-                                string imgUrl = null;
+                                string imgUrl = GetPickImgUrl(orderPickupLog.ImgId);
                                 List<string> imgUrls = new List<string>();
-                                if (!string.IsNullOrEmpty(orderPickupLog.ImgId))
+                                if (!string.IsNullOrEmpty(imgUrl))
                                 {
-                                    imgUrl = orderPickupLog.ImgId;
-                                    imgUrls.Add(orderPickupLog.ImgId);
+                                    imgUrls.Add(imgUrl);
                                 }
 
                                 pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
