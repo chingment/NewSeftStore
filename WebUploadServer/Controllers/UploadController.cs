@@ -28,7 +28,7 @@ namespace WebUploadServer.Controllers
             try
             {
                 string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
-                string roorPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
+                string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
 
                 log.Info("文件Count:" + request.Files.Count);
                 for (var i = 0; i < request.Files.Count; i++)
@@ -42,17 +42,38 @@ namespace WebUploadServer.Controllers
                     log.Info("文件名称:" + request.Form[i]);
                 }
 
-                string savePath = "/Upload/";
-                string uploadFolder = "common";
-                if (!string.IsNullOrEmpty(request.Form["folder"]))
+
+                string folder = "Common";                //默认保存在 Common 文件夹
+                string fileName = Guid.NewGuid().ToString();  //默认文件名称
+
+                if (request.Form["folder"] != null)
                 {
-                    uploadFolder = request.Form["folder"];
-                    log.Info("uploadFolder:" + uploadFolder);
+                    string l_folder = request.Form["folder"].ToString();
+                    if (!string.IsNullOrEmpty(l_folder))
+                    {
+                        folder = l_folder;
+                    }
                 }
 
-                savePath += uploadFolder;
+                log.Info("folder:" + folder);
 
-                DirectoryInfo dir = new DirectoryInfo(roorPath + "/" + savePath);
+                if (request.Form["fileName"] != null)
+                {
+                    string l_fileName = request.Form["fileName"].ToString();
+                    if (!string.IsNullOrEmpty(l_fileName))
+                    {
+                        fileName = l_fileName;
+                    }
+                }
+
+    
+                log.Info("fileName:" + fileName);
+            
+                string savePath = "/Upload/" + folder;
+
+                log.Info("savePath:" + savePath);
+
+                DirectoryInfo dir = new DirectoryInfo(rootPath + "/" + savePath);
                 if (!dir.Exists)
                 {
                     dir.Create();
@@ -65,15 +86,17 @@ namespace WebUploadServer.Controllers
                 }
                 if (fileData != null && fileData.Length > 0)
                 {
-                    string fileName = request.Files[0].FileName;
-                    log.Info("fileName:" + fileName);
+                    string extension = Path.GetExtension(request.Files[0].FileName);
+
+                    log.Info("extension:" + extension);
 
 
-                    string serverSavePath = roorPath + "/" + savePath + "/" + fileName;
-                    string domainSavePath = domain + "/" + savePath + "/" + fileName;
+                    string serverSavePath = rootPath + "/" + savePath + "/" + fileName + extension;
+                    string domainPathUrl = domain + "/" + savePath + "/" + fileName + extension;
 
                     log.Info("serverSavePath:" + serverSavePath);
-                    log.Info("domainSavePath:" + domainSavePath);
+                    log.Info("domainPathUrl:" + domainPathUrl);
+
                     FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
                     fs.Write(fileData, 0, fileData.Length);
                     fs.Flush();
@@ -81,7 +104,7 @@ namespace WebUploadServer.Controllers
 
                     r.Result = ResultType.Success;
                     r.Code = ResultCode.Success;
-                    r.Data = new { name = fileName, url = domainSavePath };
+                    r.Data = new { name = fileName, url = domainPathUrl };
                     r.Message = "上传成功";
                 }
             }

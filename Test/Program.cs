@@ -7,6 +7,7 @@ using Lumos;
 using Lumos.Redis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -52,6 +53,8 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            string extension = Path.GetExtension("Dsadad/dsada.jpg");
 
             MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPick);
 
