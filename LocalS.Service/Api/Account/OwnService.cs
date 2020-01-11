@@ -104,6 +104,8 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
             }
 
+            LogUtil.Info("AppID:" + rop.AppId);
+
             if (rop.AppId == AppId.STORETERM)
             {
                 if (rop.LoginPms == null)

@@ -72,7 +72,7 @@ export default {
       loginForm: {
         username: '',
         password: '',
-        loginWay: 1
+        redirectUrl:''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -106,6 +106,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          this.loginForm.redirectUrl=this.redirect
           this.$store.dispatch('own/loginByAccount', this.loginForm).then(() => {
             var path = this.redirect || '/'
             var p1 = changeURLArg(decodeURIComponent(path), 'token', getToken())

@@ -41,6 +41,8 @@ namespace WebApiAccount.Controllers
         public OwnApiHttpResponse LoginByAccount([FromBody]RopOwnLoginByAccountInWebSite rop)
         {
 
+            LogUtil.Info("RedirectUrl:" + rop.RedirectUrl);
+
             var myRop = new RopOwnLoginByAccount();
             myRop.UserName = rop.UserName;
             myRop.Password = rop.Password;
@@ -60,9 +62,9 @@ namespace WebApiAccount.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Logout([FromBody] RopOwnLogout rop)
+        public OwnApiHttpResponse Logout()
         {
-            IResult result = AccountServiceFactory.Own.Logout(rop.AppId, this.CurrentUserId, this.CurrentUserId, this.Token);
+            IResult result = AccountServiceFactory.Own.Logout("", this.CurrentUserId, this.CurrentUserId, this.Token);
             return new OwnApiHttpResponse(result);
         }
 
