@@ -204,7 +204,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, BLL.Mq.OperateLogType.Login, "登录成功");
+            MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -309,7 +309,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            MqFactory.Global.PushOperateLog(Enumeration.AppId.WechatByMinPragrom, wxUserInfo.Id, BLL.Mq.OperateLogType.Login, "登录成功");
+            MqFactory.Global.PushOperateLog(Enumeration.AppId.WechatByMinPragrom, wxUserInfo.Id, Enumeration.OperateType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -438,7 +438,7 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                MqFactory.Global.PushOperateLog(rop.AppId, userId, BLL.Mq.OperateLogType.Login, "登录成功");
+                MqFactory.Global.PushOperateLog(rop.AppId, userId, Enumeration.OperateType.Login, "登录成功");
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
             }
@@ -453,7 +453,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.Quit(token);
 
-            MqFactory.Global.PushOperateLog(appId, userId, BLL.Mq.OperateLogType.Logout, "退出成功");
+            MqFactory.Global.PushOperateLog(appId, userId, Enumeration.OperateType.Logout, "退出成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 

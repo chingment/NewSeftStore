@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lumos.DbRelay
 {
-   [Table("SysUserOperateLog")]
+    [Table("SysUserOperateLog")]
     public class SysUserOperateLog
     {
         [Key]
         public string Id { get; set; }
         public string UserId { get; set; }
-        public Enumeration.BelongSite BelongSite { get; set; }
+        public Enumeration.AppId AppId { get; set; }
         public Enumeration.OperateType OperateType { get; set; }
         [MaxLength(1024)]
         public string Remark { get; set; }

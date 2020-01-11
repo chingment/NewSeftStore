@@ -16,14 +16,6 @@ namespace Lumos.DbRelay
             Failure = 2,
             Exception = 3
         }
-
-        public enum UserStatus
-        {
-            Unknow = 0,
-            Normal = 1,
-            Disable = 2
-        }
-
         public enum BelongSite
         {
             Unknow = 0,
@@ -73,31 +65,11 @@ namespace Lumos.DbRelay
             Failure = 2
         }
 
-        public enum LoginResultTip
-        {
-            Unknow = 0,
-            VerifyPass = 1,
-            UserNotExist = 2,
-            UserPasswordIncorrect = 3,
-            UserDisabled = 4,
-            UserDeleted = 5,
-            UserAccessFailedMaxCount = 6
-        }
-
         public enum OperateType
         {
             Unknow = 0,
-            New = 1,
-            Update = 2,
-            Delete = 3,
-            Save = 4,
-            Submit = 5,
-            Pass = 6,
-            Reject = 7,
-            Refuse = 8,
-            Cancle = 9,
-            Serach = 101,
-            ExportExcel = 102
+            Login = 1,
+            Logout = 2
         }
 
         public enum SysOrgStatus

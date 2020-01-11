@@ -23,7 +23,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushOperateLog(Lumos.DbRelay.Enumeration.AppId appId, string operater, OperateLogType type, string remark)
+        public void PushOperateLog(Lumos.DbRelay.Enumeration.AppId appId, string operater, Lumos.DbRelay.Enumeration.OperateType type, string remark)
         {
             var content = new OperateLogModel();
             content.AppId = appId;

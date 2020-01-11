@@ -6,18 +6,11 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Mq
 {
-    public enum OperateLogType
-    {
-
-        Unknow = 0,
-        Login = 1,
-        Logout = 2
-    }
     public class OperateLogModel
     {
         public string Operater { get; set; }
         public Lumos.DbRelay.Enumeration.AppId AppId { get; set; }
-        public OperateLogType Type { get; set; }
+        public Lumos.DbRelay.Enumeration.OperateType Type { get; set; }
         public string Remark { get; set; }
     }
 }
