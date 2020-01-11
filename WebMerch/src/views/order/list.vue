@@ -44,7 +44,7 @@
         <template slot-scope="scope">
           <div v-for="(sellChannelDetail,index) in scope.row.sellChannelDetails" :key="index">
             <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
-            <table class="table-skus" style="width:600px">
+            <table class="table-skus" style="width:600px;table-layout:fixed;">
               <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
                 <td style="20%">
                   <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">

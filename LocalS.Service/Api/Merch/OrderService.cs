@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.Merch
                 return null;
 
 
-            return string.Format("http://file.17fanju.com/upload/common/{0}.jpg", imgId);
+            return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupOrderGetList rup)
