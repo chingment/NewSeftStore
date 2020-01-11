@@ -54,6 +54,17 @@ namespace Lumos.DbRelay
             StoreTerm = 5
         }
 
+        public enum AppId
+        {
+            Unknow = 0,
+            Account = 1,
+            Admin = 2,
+            Merch = 3,
+            Agent = 4,
+            WechatByMinPragrom = 5,
+            StoreTerm = 6
+        }
+
         public enum LoginResult
         {
 

@@ -78,9 +78,8 @@
     <Compile Include="Entity\SysMenuPermission.cs" />
     <Compile Include="Entity\SysAgentUser.cs" />
     <Compile Include="Entity\SysMerchUser.cs" />
-    <Compile Include="Entity\SysOperateHis.cs" />
+    <Compile Include="Entity\SysUserOperateLog.cs" />
     <Compile Include="Entity\SysOrg.cs" />
-    <Compile Include="Entity\SysPageAccessHis.cs" />
     <Compile Include="Entity\SysPermission.cs" />
     <Compile Include="Entity\SysRole.cs" />
     <Compile Include="Entity\SysRoleMenu.cs" />

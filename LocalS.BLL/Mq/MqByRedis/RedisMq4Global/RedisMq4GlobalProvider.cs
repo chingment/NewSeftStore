@@ -23,9 +23,10 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushOperateLog(string operater, OperateLogType type, string remark)
+        public void PushOperateLog(Lumos.DbRelay.Enumeration.AppId appId, string operater, OperateLogType type, string remark)
         {
             var content = new OperateLogModel();
+            content.AppId = appId;
             content.Operater = operater;
             content.Type = type;
             content.Remark = remark;

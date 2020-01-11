@@ -99,12 +99,12 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult LoginByAccount(RopOwnLoginByAccount rop)
         {
-            if (rop.LoginWay == Enumeration.LoginWay.Unknow)
+            if (rop.AppId == Enumeration.AppId.Unknow)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
             }
 
-            if (rop.LoginWay == Enumeration.LoginWay.StoreTerm)
+            if (rop.AppId == Enumeration.AppId.StoreTerm)
             {
                 if (rop.LoginPms == null)
                 {
@@ -124,19 +124,16 @@ namespace LocalS.Service.Api.Account
 
             if (sysUser == null)
             {
-                LoginLog("", "", Enumeration.LoginResult.Failure, rop.LoginWay, rop.Ip, "", "登录失败，账号不存在");
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号不存在");
             }
 
             if (!PassWordHelper.VerifyHashedPassword(sysUser.PasswordHash, rop.Password))
             {
-                LoginLog(sysUser.Id, sysUser.Id, Enumeration.LoginResult.Failure, rop.LoginWay, rop.Ip, "", "登录失败，密码不正确");
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，密码不正确");
             }
 
             if (sysUser.IsDisable)
             {
-                LoginLog(sysUser.Id, sysUser.Id, Enumeration.LoginResult.Failure, rop.LoginWay, rop.Ip, "", "登录失败，账号已被禁用");
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号已被禁用");
             }
 
@@ -146,9 +143,9 @@ namespace LocalS.Service.Api.Account
             tokenInfo.UserId = sysUser.Id;
 
 
-            switch (rop.LoginWay)
+            switch (rop.AppId)
             {
-                case Enumeration.LoginWay.Website:
+                case Enumeration.AppId.Merch:
                     #region Website
 
                     switch (sysUser.BelongType)
@@ -179,7 +176,7 @@ namespace LocalS.Service.Api.Account
 
                     #endregion
                     break;
-                case Enumeration.LoginWay.StoreTerm:
+                case Enumeration.AppId.StoreTerm:
                     #region StoreTerm
 
                     string machineId = rop.LoginPms["machineId"].ToString();
@@ -207,7 +204,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            MqFactory.Global.PushOperateLog(sysUser.Id, BLL.Mq.OperateLogType.Login, "登录成功");
+            MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, BLL.Mq.OperateLogType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -312,7 +309,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            MqFactory.Global.PushOperateLog(wxUserInfo.Id, BLL.Mq.OperateLogType.Login, "登录成功");
+            MqFactory.Global.PushOperateLog(Enumeration.AppId.WechatByMinPragrom, wxUserInfo.Id, BLL.Mq.OperateLogType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -325,12 +322,12 @@ namespace LocalS.Service.Api.Account
             string machineId = "";
             Enumeration.BelongType belongType = Enumeration.BelongType.Unknow;
             string belongId = "";
-            if (rop.LoginWay == Enumeration.LoginWay.Unknow)
+            if (rop.AppId == Enumeration.AppId.Unknow)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录方式");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
             }
 
-            if (rop.LoginWay == Enumeration.LoginWay.StoreTerm)
+            if (rop.AppId == Enumeration.AppId.StoreTerm)
             {
                 if (rop.LoginPms == null)
                 {
@@ -417,9 +414,9 @@ namespace LocalS.Service.Api.Account
                 var tokenInfo = new TokenInfo();
                 tokenInfo.UserId = userId;
 
-                switch (rop.LoginWay)
+                switch (rop.AppId)
                 {
-                    case Enumeration.LoginWay.StoreTerm:
+                    case Enumeration.AppId.StoreTerm:
                         #region StoreTerm
 
                         var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
@@ -441,7 +438,7 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                MqFactory.Global.PushOperateLog(userId, BLL.Mq.OperateLogType.Login, "登录成功");
+                MqFactory.Global.PushOperateLog(rop.AppId, userId, BLL.Mq.OperateLogType.Login, "登录成功");
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
             }
@@ -449,14 +446,14 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-        public CustomJsonResult Logout(string operater, string userId, string token)
+        public CustomJsonResult Logout(Enumeration.AppId appId, string operater, string userId, string token)
         {
             var result = new CustomJsonResult();
 
 
             SSOUtil.Quit(token);
 
-            MqFactory.Global.PushOperateLog(userId, BLL.Mq.OperateLogType.Logout, "退出成功");
+            MqFactory.Global.PushOperateLog(appId, userId, BLL.Mq.OperateLogType.Logout, "退出成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 
