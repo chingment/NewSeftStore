@@ -1,5 +1,5 @@
-﻿using LocalS.BLL.Mq.MqMessageConentModel;
-using LocalS.Entity;
+﻿using LocalS.Entity;
+using Lumos;
 using Lumos.Redis;
 using System;
 using System.Collections.Generic;
@@ -23,11 +23,16 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushAccessLog(string ticket, AccessLogModel content)
+        public void PushOperateLog(string operater, OperateLogType type, string remark)
         {
+            var content = new OperateLogModel();
+            content.Operater = operater;
+            content.Type = type;
+            content.Remark = remark;
+
             var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.AccessLog;
-            obj.Ticket = ticket;
+            obj.Type = MqMessageType.OperateLog;
+            obj.Ticket = GuidUtil.New();
             obj.Content = content;
             this.Push(obj);
         }

@@ -63,5 +63,12 @@ namespace LocalS.BLL.Biz
                 return new AppSoftwareService();
             }
         }
+        public static OperateLogService OperateLog
+        {
+            get
+            {
+                return new OperateLogService();
+            }
+        }
     }
 }

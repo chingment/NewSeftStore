@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using MyWeiXinSdk;
 using System.Runtime.InteropServices;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 
 namespace LocalS.Service.Api.Account
 {
@@ -19,6 +20,62 @@ namespace LocalS.Service.Api.Account
         [DllImport(@"BioVein.x64.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern int FV_MatchFeature([MarshalAs(UnmanagedType.LPArray)] byte[] featureDataMatch, [MarshalAs(UnmanagedType.LPArray)]  byte[] featureDataReg, byte RegCnt, byte flag, byte securityLevel, int[] diff, [MarshalAs(UnmanagedType.LPArray)] byte[] AIDataBuf, int[] AIDataLen);
 
+        private List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)
+        {
+            List<MenuNode> menuNodes = new List<MenuNode>();
+
+            var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite && m.Depth != 0).OrderBy(m => m.Priority).ToList();
+
+            if (belongSite == Enumeration.BelongSite.Admin || belongSite == Enumeration.BelongSite.Merch)
+            {
+                sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
+            }
+
+            foreach (var sysMenu in sysMenus)
+            {
+                MenuNode menuNode = new MenuNode();
+                menuNode.Id = sysMenu.Id;
+                menuNode.PId = sysMenu.PId;
+                menuNode.Path = sysMenu.Path;
+                menuNode.Name = sysMenu.Name;
+                menuNode.Icon = sysMenu.Icon;
+                menuNode.Title = sysMenu.Title;
+                menuNode.Component = sysMenu.Component;
+                menuNode.IsSidebar = sysMenu.IsSidebar;
+                menuNode.IsNavbar = sysMenu.IsNavbar;
+                menuNode.IsRouter = sysMenu.IsRouter;
+                menuNodes.Add(menuNode);
+            }
+
+            return menuNodes;
+
+        }
+        private List<RoleModel> GetRoles(Enumeration.BelongSite belongSite, string userId)
+        {
+            List<RoleModel> models = new List<RoleModel>();
+
+
+            var roleIds = CurrentDb.SysUserRole.Where(m => m.UserId == userId).Select(m => m.RoleId).ToArray();
+
+            if (roleIds == null || roleIds.Length == 0)
+            {
+                return models;
+            }
+
+            var roles = CurrentDb.SysRole.Where(m => belongSite == Enumeration.BelongSite.Merch && roleIds.Contains(m.Id)).ToList();
+
+            foreach (var role in roles)
+            {
+                RoleModel model = new RoleModel();
+                model.Id = role.Id;
+                model.Name = role.Name;
+
+                models.Add(model);
+            }
+
+            return models;
+
+        }
 
         private void LoginLog(string operater, string userId, Enumeration.LoginResult loginResult, Enumeration.LoginWay loginWay, string ip, string location, string description)
         {
@@ -38,6 +95,8 @@ namespace LocalS.Service.Api.Account
             CurrentDb.SysUserLoginHis.Add(userLoginHis);
             CurrentDb.SaveChanges();
         }
+
+
         public CustomJsonResult LoginByAccount(RopOwnLoginByAccount rop)
         {
             if (rop.LoginWay == Enumeration.LoginWay.Unknow)
@@ -146,12 +205,9 @@ namespace LocalS.Service.Api.Account
                     break;
             }
 
-
-
-
-            LoginLog(sysUser.Id, sysUser.Id, Enumeration.LoginResult.Success, rop.LoginWay, rop.Ip, "", "登录成功");
-
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+
+            MqFactory.Global.PushOperateLog(sysUser.Id, BLL.Mq.OperateLogType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -255,6 +311,8 @@ namespace LocalS.Service.Api.Account
             tokenInfo.UserId = wxUserInfo.ClientUserId;
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+
+            MqFactory.Global.PushOperateLog(wxUserInfo.Id, BLL.Mq.OperateLogType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -383,183 +441,28 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
+                MqFactory.Global.PushOperateLog(userId, BLL.Mq.OperateLogType.Login, "登录成功");
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
             }
 
             return result;
         }
 
-        public List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)
+        public CustomJsonResult Logout(string operater, string userId, string token)
         {
-            List<MenuNode> menuNodes = new List<MenuNode>();
+            var result = new CustomJsonResult();
 
-            var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite && m.Depth != 0).OrderBy(m => m.Priority).ToList();
 
-            if (belongSite == Enumeration.BelongSite.Admin || belongSite == Enumeration.BelongSite.Merch)
-            {
-                sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
-            }
+            SSOUtil.Quit(token);
 
-            foreach (var sysMenu in sysMenus)
-            {
-                MenuNode menuNode = new MenuNode();
-                menuNode.Id = sysMenu.Id;
-                menuNode.PId = sysMenu.PId;
-                menuNode.Path = sysMenu.Path;
-                menuNode.Name = sysMenu.Name;
-                menuNode.Icon = sysMenu.Icon;
-                menuNode.Title = sysMenu.Title;
-                menuNode.Component = sysMenu.Component;
-                menuNode.IsSidebar = sysMenu.IsSidebar;
-                menuNode.IsNavbar = sysMenu.IsNavbar;
-                menuNode.IsRouter = sysMenu.IsRouter;
-                menuNodes.Add(menuNode);
-            }
+            MqFactory.Global.PushOperateLog(userId, BLL.Mq.OperateLogType.Logout, "退出成功");
 
-            return menuNodes;
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 
+            return result;
         }
 
-        public List<RoleModel> GetRoles(Enumeration.BelongSite belongSite, string userId)
-        {
-            List<RoleModel> models = new List<RoleModel>();
-
-
-            var roleIds = CurrentDb.SysUserRole.Where(m => m.UserId == userId).Select(m => m.RoleId).ToArray();
-
-            if (roleIds == null || roleIds.Length == 0)
-            {
-                return models;
-            }
-
-            var roles = CurrentDb.SysRole.Where(m => belongSite == Enumeration.BelongSite.Merch && roleIds.Contains(m.Id)).ToList();
-
-            foreach (var role in roles)
-            {
-                RoleModel model = new RoleModel();
-                model.Id = role.Id;
-                model.Name = role.Name;
-
-                models.Add(model);
-            }
-
-            return models;
-
-        }
-        //private List<TreeNode> GetMenuTree(string id, List<SysMenu> sysMenus)
-        //{
-        //    List<TreeNode> treeNodes = new List<TreeNode>();
-
-        //    var p_sysMenus = sysMenus.Where(t => t.PId == id).ToList();
-
-        //    foreach (var p_sysMenu in p_sysMenus)
-        //    {
-        //        TreeNode treeNode = new TreeNode();
-        //        treeNode.Id = p_sysMenu.Id;
-        //        treeNode.PId = p_sysMenu.PId;
-        //        treeNode.Label = p_sysMenu.Title;
-        //        treeNode.Children.AddRange(GetMenuTree(treeNode.Id, sysMenus));
-        //        treeNodes.Add(treeNode);
-        //    }
-
-        //    return treeNodes;
-        //}
-
-        //public List<MenuNode> GetMenus(Enumeration.BelongSite belongSite)
-        //{
-        //    var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite).ToList();
-
-        //    var topMenu = sysMenus.Where(m => m.Dept == 0).FirstOrDefault();
-
-        //    return GetMenuTree(topMenu.Id, sysMenus);
-        //}
-        //private List<MenuNode> GetMenuTree(string id, List<SysMenu> sysMenus)
-        //{
-        //    List<MenuNode> menuNodes = new List<MenuNode>();
-
-        //    var p_sysMenus = sysMenus.Where(t => t.PId == id).ToList();
-
-
-        //    foreach (var p_sysMenu in p_sysMenus)
-        //    {
-        //        var menuNode = new MenuNode();
-        //        menuNode.Id = p_sysMenu.Id;
-        //        menuNode.PId = p_sysMenu.PId;
-        //        menuNode.Path = p_sysMenu.Path == "/home" ? "/" : p_sysMenu.Path;
-        //        menuNode.Component = null;
-        //        menuNode.IsSidebar = p_sysMenu.IsSidebar;
-        //        menuNode.IsNavbar = p_sysMenu.IsNavbar;
-        //        menuNode.Icon = p_sysMenu.Icon;
-        //        menuNode.Title = p_sysMenu.Title;
-        //        var children = (from c in sysMenus where c.PId == p_sysMenu.Id select c).ToList();
-        //        if (children.Count == 0)
-        //        {
-        //            if (p_sysMenu.Dept == 1)
-        //            {
-        //                menuNode.Name = null;
-        //                menuNode.IsNavbar = false;
-        //                menuNode.Children.Add(new MenuNode { Id = p_sysMenu.Id, PId = p_sysMenu.PId, IsNavbar = p_sysMenu.IsNavbar, IsSidebar = p_sysMenu.IsSidebar, Name = p_sysMenu.Name, Title = p_sysMenu.Title, Icon = p_sysMenu.Icon, Path = p_sysMenu.Path, Component = p_sysMenu.Component, Children = null });
-        //            }
-        //            else
-        //            {
-        //                menuNode.Children = null;
-        //                menuNode.Component = p_sysMenu.Component;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            menuNode.Name = null;
-        //            menuNode.Component = p_sysMenu.Component;
-        //            menuNode.Children.AddRange(GetMenuTree(p_sysMenu.Id, sysMenus));
-        //        }
-        //        menuNodes.Add(menuNode);
-        //    }
-
-        //    return menuNodes;
-        //}
-
-        //private List<MenuNode> GetMenus(Enumeration.BelongSite belongSite)
-        //{
-        //    var menus = new List<MenuNode>();
-
-        //    var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite).ToList();
-
-        //    var sysMenusDept1 = from c in sysMenus where c.Dept == 1 select c;
-
-        //    foreach (var sysMenuDept1 in sysMenusDept1)
-        //    {
-        //        var menu1 = new MenuNode();
-
-        //        menu1.Path = sysMenuDept1.Path == "/home" ? "/" : sysMenuDept1.Path;
-        //        menu1.Component = null;
-        //        menu1.Hidden = !sysMenuDept1.IsSidebar;
-        //        menu1.Meta = new MenuMeta { Title = sysMenuDept1.Title, Icon = sysMenuDept1.Icon };
-
-        //        var sysMenusDept2 = (from c in sysMenus where c.PId == sysMenuDept1.Id select c).ToList();
-
-        //        if (sysMenusDept2.Count == 0)
-        //        {
-        //            menu1.Name = null;
-        //            menu1.Meta = null;
-        //            menu1.Navbar = false;
-        //            menu1.Redirect = sysMenuDept1.Path;
-
-        //            menu1.Children.Add(new MenuChild { Navbar = sysMenuDept1.IsNavbar, Hidden = !sysMenuDept1.IsSidebar, Name = sysMenuDept1.Name, Path = sysMenuDept1.Path, Component = sysMenuDept1.Component, Meta = new MenuMeta { Title = sysMenuDept1.Title, Icon = sysMenuDept1.Icon } });
-        //        }
-        //        else
-        //        {
-        //            menu1.Name = sysMenuDept1.Name;
-        //            foreach (var sysMenuDept2 in sysMenusDept2)
-        //            {
-        //                menu1.Children.Add(new MenuChild { Navbar = sysMenuDept2.IsNavbar, Hidden = !sysMenuDept2.IsSidebar, Name = sysMenuDept2.Name, Path = sysMenuDept2.Path, Component = sysMenuDept2.Component, Meta = new MenuMeta { Title = sysMenuDept2.Title, Icon = sysMenuDept2.Icon } });
-        //            }
-        //        }
-
-        //        menus.Add(menu1);
-        //    }
-
-        //    return menus;
-        //}
         public CustomJsonResult GetInfo(string operater, string userId, RupOwnGetInfo rup)
         {
             var result = new CustomJsonResult();
@@ -596,18 +499,6 @@ namespace LocalS.Service.Api.Account
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-
-            return result;
-        }
-
-        public CustomJsonResult Logout(string operater, string userId, string token)
-        {
-            var result = new CustomJsonResult();
-
-
-            SSOUtil.Quit(token);
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 
             return result;
         }

@@ -1,5 +1,4 @@
-﻿using LocalS.BLL.Mq.MqMessageConentModel;
-using LocalS.DAL;
+﻿using LocalS.DAL;
 using LocalS.Entity;
 using Lumos;
 using Newtonsoft.Json.Linq;
@@ -35,8 +34,13 @@ namespace LocalS.BLL.Mq.MqByRedis
                         {
                             case MqMessageType.PayResultNotify:
                                 LogUtil.Info("PayResultNotify");
-                                PayResultNotifyModel t2 = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), t2.PayPartner, t2.From, t2.Content);
+                                var payResultNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), payResultNotifyModel.PayPartner, payResultNotifyModel.From, payResultNotifyModel.Content);
+                                break;
+                            case MqMessageType.OperateLog:
+                                LogUtil.Info("OperateLog");
+                                var operateLogModel = Newtonsoft.Json.JsonConvert.DeserializeObject<OperateLogModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.OperateLog.Add(operateLogModel);
                                 break;
                         }
 
