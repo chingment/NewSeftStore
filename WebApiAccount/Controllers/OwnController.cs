@@ -1,4 +1,5 @@
-﻿using LocalS.Service.Api.Account;
+﻿using LocalS.BLL;
+using LocalS.Service.Api.Account;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -12,27 +13,27 @@ namespace WebApiAccount.Controllers
     public class OwnController : OwnApiBaseController
     {
 
-        public Lumos.DbRelay.Enumeration.AppId GetAppIdByRedirectUrl(string url)
+        public string GetAppIdByRedirectUrl(string url)
         {
             if (string.IsNullOrEmpty(url))
-                return Lumos.DbRelay.Enumeration.AppId.Account;
+                return AppId.ACCOUNT;
 
             url = url.ToLower();
 
             if (url.IndexOf("admin.17fanju.com") > -1)
             {
-                return Lumos.DbRelay.Enumeration.AppId.Admin;
+                return AppId.ADMIN;
             }
             else if (url.IndexOf("merch.17fanju.com") > -1)
             {
-                return Lumos.DbRelay.Enumeration.AppId.Merch;
+                return AppId.MERCH;
             }
             else if (url.IndexOf("agent.17fanju.com") > -1)
             {
-                return Lumos.DbRelay.Enumeration.AppId.Agent;
+                return AppId.AGENT;
             }
 
-            return Lumos.DbRelay.Enumeration.AppId.Account;
+            return AppId.ACCOUNT;
         }
 
         [HttpPost]

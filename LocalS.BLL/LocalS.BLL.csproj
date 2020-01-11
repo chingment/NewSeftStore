@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppId.cs" />
     <Compile Include="BaseDbContext.cs" />
     <Compile Include="Biz\BackgroundJobProvider.cs" />
     <Compile Include="Biz\BizFactory.cs" />

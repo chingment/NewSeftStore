@@ -99,12 +99,12 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult LoginByAccount(RopOwnLoginByAccount rop)
         {
-            if (rop.AppId == Enumeration.AppId.Unknow)
+            if (string.IsNullOrEmpty(rop.AppId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
             }
 
-            if (rop.AppId == Enumeration.AppId.StoreTerm)
+            if (rop.AppId == AppId.STORETERM)
             {
                 if (rop.LoginPms == null)
                 {
@@ -143,63 +143,46 @@ namespace LocalS.Service.Api.Account
             tokenInfo.UserId = sysUser.Id;
 
 
-            switch (rop.AppId)
+            if (rop.AppId == AppId.MERCH)
             {
-                case Enumeration.AppId.Merch:
-                    #region Website
-
-                    switch (sysUser.BelongType)
-                    {
-                        case Enumeration.BelongType.Agent:
-                            var agentUser = CurrentDb.SysAgentUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
-                            if (agentUser == null)
-                            {
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
-                            }
-
-                            tokenInfo.AgentId = agentUser.AgentId;
-
-                            break;
-                        case Enumeration.BelongType.Merch:
-
-                            var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
-                            if (merchUser == null)
-                            {
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
-                            }
-
-                            tokenInfo.MerchId = merchUser.MerchId;
-
-                            break;
-                    }
+                #region MERCH
 
 
-                    #endregion
-                    break;
-                case Enumeration.AppId.StoreTerm:
-                    #region StoreTerm
+                var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                if (merchUser == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                }
 
-                    string machineId = rop.LoginPms["machineId"].ToString();
-                    var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
-                    if (machine == null)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
-                    }
+                tokenInfo.MerchId = merchUser.MerchId;
 
-                    var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
-                    if (storeTermUser == null)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
-                    }
 
-                    if (machine.CurUseMerchId != storeTermUser.MerchId)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
-                    }
-                    ret.UserName = storeTermUser.UserName;
-                    ret.FullName = storeTermUser.FullName;
-                    #endregion
-                    break;
+                #endregion
+            }
+            else if (rop.AppId == AppId.STORETERM)
+            {
+                #region STORETERM
+
+                string machineId = rop.LoginPms["machineId"].ToString();
+                var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                if (machine == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+                }
+
+                var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                if (storeTermUser == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                }
+
+                if (machine.CurUseMerchId != storeTermUser.MerchId)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
+                }
+                ret.UserName = storeTermUser.UserName;
+                ret.FullName = storeTermUser.FullName;
+                #endregion
             }
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
@@ -309,7 +292,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            MqFactory.Global.PushOperateLog(Enumeration.AppId.WechatByMinPragrom, wxUserInfo.Id, Enumeration.OperateType.Login, "登录成功");
+            MqFactory.Global.PushOperateLog(rop.AppId, wxUserInfo.Id, Enumeration.OperateType.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -322,12 +305,12 @@ namespace LocalS.Service.Api.Account
             string machineId = "";
             Enumeration.BelongType belongType = Enumeration.BelongType.Unknow;
             string belongId = "";
-            if (rop.AppId == Enumeration.AppId.Unknow)
+            if (string.IsNullOrEmpty(rop.AppId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
             }
 
-            if (rop.AppId == Enumeration.AppId.StoreTerm)
+            if (rop.AppId == AppId.STORETERM)
             {
                 if (rop.LoginPms == null)
                 {
@@ -414,25 +397,23 @@ namespace LocalS.Service.Api.Account
                 var tokenInfo = new TokenInfo();
                 tokenInfo.UserId = userId;
 
-                switch (rop.AppId)
+                if (rop.AppId == AppId.STORETERM)
                 {
-                    case Enumeration.AppId.StoreTerm:
-                        #region StoreTerm
+                    #region StoreTerm
 
-                        var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
-                        if (storeTermUser == null)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
-                        }
+                    var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
+                    if (storeTermUser == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                    }
 
-                        if (belongId != storeTermUser.MerchId)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
-                        }
-                        ret.UserName = storeTermUser.UserName;
-                        ret.FullName = storeTermUser.FullName;
-                        #endregion
-                        break;
+                    if (belongId != storeTermUser.MerchId)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
+                    }
+                    ret.UserName = storeTermUser.UserName;
+                    ret.FullName = storeTermUser.FullName;
+                    #endregion
                 }
 
 
@@ -446,7 +427,7 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-        public CustomJsonResult Logout(Enumeration.AppId appId, string operater, string userId, string token)
+        public CustomJsonResult Logout(string appId, string operater, string userId, string token)
         {
             var result = new CustomJsonResult();
 

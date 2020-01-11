@@ -3,7 +3,6 @@ using System;
 
 namespace Lumos.DbRelay
 {
-
     /// <summary>
     /// 系统的枚举
     /// </summary>
@@ -44,17 +43,6 @@ namespace Lumos.DbRelay
             IosApp = 3,
             WechatByMinPragrom = 4,
             StoreTerm = 5
-        }
-
-        public enum AppId
-        {
-            Unknow = 0,
-            Account = 1,
-            Admin = 2,
-            Merch = 3,
-            Agent = 4,
-            WechatByMinPragrom = 5,
-            StoreTerm = 6
         }
 
         public enum LoginResult
