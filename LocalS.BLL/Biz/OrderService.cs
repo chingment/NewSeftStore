@@ -223,6 +223,8 @@ namespace LocalS.BLL.Biz
 
                         foreach (var detailsChild in detail.Details)
                         {
+                            var productSku = bizProductSkus.Where(m => m.Id == detailsChild.ProductSkuId).FirstOrDefault();
+
                             var orderDetailsChild = new OrderDetailsChild();
                             orderDetailsChild.Id = GuidUtil.New();
                             orderDetailsChild.Sn = orderDetails.Sn + detail.Details.IndexOf(detailsChild).ToString();
@@ -238,8 +240,11 @@ namespace LocalS.BLL.Biz
                             orderDetailsChild.OrderDetailsSn = orderDetails.Sn;
                             orderDetailsChild.PrdProductSkuId = detailsChild.ProductSkuId;
                             orderDetailsChild.PrdProductId = detailsChild.ProductId;
-                            orderDetailsChild.PrdProductSkuName = detailsChild.ProductSkuName;
-                            orderDetailsChild.PrdProductSkuMainImgUrl = detailsChild.ProductSkuMainImgUrl;
+                            orderDetailsChild.PrdProductSkuName = productSku.Name;
+                            orderDetailsChild.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
+                            orderDetailsChild.PrdProductSkuSpecDes = productSku.SpecDes;
+                            orderDetailsChild.PrdProductSkuProducer = productSku.Producer;
+                            orderDetailsChild.PrdProductSkuBarCode = productSku.BarCode;
                             orderDetailsChild.SalePrice = detailsChild.SalePrice;
                             orderDetailsChild.SalePriceByVip = detailsChild.SalePriceByVip;
                             orderDetailsChild.Quantity = detailsChild.Quantity;
@@ -270,8 +275,11 @@ namespace LocalS.BLL.Biz
                                 orderDetailsChildSon.SlotId = detailsChildSon.SlotId;
                                 orderDetailsChildSon.PrdProductSkuId = detailsChildSon.ProductSkuId;
                                 orderDetailsChildSon.PrdProductId = orderDetailsChild.PrdProductId;
-                                orderDetailsChildSon.PrdProductSkuName = detailsChildSon.ProductSkuName;
-                                orderDetailsChildSon.PrdProductSkuMainImgUrl = detailsChildSon.ProductSkuMainImgUrl;
+                                orderDetailsChildSon.PrdProductSkuName = productSku.Name;
+                                orderDetailsChildSon.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
+                                orderDetailsChildSon.PrdProductSkuSpecDes = productSku.SpecDes;
+                                orderDetailsChildSon.PrdProductSkuProducer = productSku.Producer;
+                                orderDetailsChildSon.PrdProductSkuBarCode = productSku.BarCode;
                                 orderDetailsChildSon.SalePrice = detailsChildSon.SalePrice;
                                 orderDetailsChildSon.SalePriceByVip = detailsChildSon.SalePriceByVip;
                                 orderDetailsChildSon.Quantity = detailsChildSon.Quantity;
@@ -357,8 +365,6 @@ namespace LocalS.BLL.Biz
                                 detailChildSon.ReceptionMode = receptionMode;
                                 detailChildSon.ProductSkuId = productSku.Id;
                                 detailChildSon.ProductId = productSku.ProductId;
-                                detailChildSon.ProductSkuName = productSku.Name;
-                                detailChildSon.ProductSkuMainImgUrl = productSku.MainImgUrl;
                                 detailChildSon.SlotId = item.SlotId;
                                 detailChildSon.Quantity = 1;
                                 detailChildSon.SalePrice = productSku_Stocks[0].SalePrice;
@@ -429,8 +435,6 @@ namespace LocalS.BLL.Biz
                     detailChild.SellChannelRefId = detailChildGroup.SellChannelRefId;
                     detailChild.ProductSkuId = detailChildGroup.ProductSkuId;
                     detailChild.ProductId = detailChildSons.Where(m => m.SellChannelRefId == detailChildGroup.SellChannelRefId && m.ProductSkuId == detailChildGroup.ProductSkuId).First().ProductId;
-                    detailChild.ProductSkuName = detailChildSons.Where(m => m.SellChannelRefId == detailChildGroup.SellChannelRefId && m.ProductSkuId == detailChildGroup.ProductSkuId).First().ProductSkuName;
-                    detailChild.ProductSkuMainImgUrl = detailChildSons.Where(m => m.SellChannelRefId == detailChildGroup.SellChannelRefId && m.ProductSkuId == detailChildGroup.ProductSkuId).First().ProductSkuMainImgUrl;
                     detailChild.SalePrice = detailChildSons.Where(m => m.SellChannelRefId == detailChildGroup.SellChannelRefId && m.ProductSkuId == detailChildGroup.ProductSkuId).First().SalePrice;
                     detailChild.SalePriceByVip = detailChildSons.Where(m => m.SellChannelRefId == detailChildGroup.SellChannelRefId && m.ProductSkuId == detailChildGroup.ProductSkuId).First().SalePriceByVip;
                     detailChild.Quantity = detailChildSons.Where(m => m.SellChannelRefId == detailChildGroup.SellChannelRefId && m.ProductSkuId == detailChildGroup.ProductSkuId).Sum(m => m.Quantity);
@@ -452,8 +456,6 @@ namespace LocalS.BLL.Biz
                                                     c.Quantity,
                                                     c.SalePrice,
                                                     c.SalePriceByVip,
-                                                    c.ProductSkuMainImgUrl,
-                                                    c.ProductSkuName,
                                                     c.ChargeAmount,
                                                     c.DiscountAmount,
                                                     c.OriginalAmount
@@ -470,8 +472,6 @@ namespace LocalS.BLL.Biz
                         detailChildSon.ProductSkuId = detailChildSonGroup.ProductSkuId;
                         detailChildSon.SlotId = detailChildSonGroup.SlotId;
                         detailChildSon.Quantity = detailChildSonGroup.Quantity;
-                        detailChildSon.ProductSkuName = detailChildSonGroup.ProductSkuName;
-                        detailChildSon.ProductSkuMainImgUrl = detailChildSonGroup.ProductSkuMainImgUrl;
                         detailChildSon.SalePrice = detailChildSonGroup.SalePrice;
                         detailChildSon.SalePriceByVip = detailChildSonGroup.SalePriceByVip;
                         detailChildSon.OriginalAmount = detailChildSonGroup.OriginalAmount;
@@ -834,6 +834,7 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.RptOrderId = rptOrder.Id;
                         rptOrderDetailsChild.RptOrderDetailsId = rptOrderDetails.Id;
                         rptOrderDetailsChild.OrderId = order.Id;
+                        rptOrderDetailsChild.OrderSn = order.Sn;
                         rptOrderDetailsChild.MerchId = order.MerchId;
                         rptOrderDetailsChild.ClientUserId = order.ClientUserId;
                         rptOrderDetailsChild.StoreId = order.StoreId;
@@ -842,6 +843,9 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.PrdProductId = orderDetailsChild.PrdProductId;
                         rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
                         rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;
+                        rptOrderDetailsChild.PrdProductSkuBarCode = orderDetailsChild.PrdProductSkuBarCode;
+                        rptOrderDetailsChild.PrdProductSkuSpecDes = orderDetailsChild.PrdProductSkuSpecDes;
+                        rptOrderDetailsChild.PrdProductSkuProducer = orderDetailsChild.PrdProductSkuProducer;
                         rptOrderDetailsChild.TradeType = E_RptOrderTradeType.Pay;
                         rptOrderDetailsChild.TradeTime = order.PayedTime.Value;
                         rptOrderDetailsChild.TradeAmount = orderDetailsChild.ChargeAmount;

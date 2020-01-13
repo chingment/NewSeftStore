@@ -48,10 +48,7 @@ namespace LocalS.BLL.Biz
 
             public string ProductId { get; set; }
             public string ProductSkuId { get; set; }
-            public string ProductSkuName { get; set; }
-            public string ProductSkuMainImgUrl { get; set; }
             public decimal SalePrice { get; set; }
-
             public decimal SalePriceByVip { get; set; }
             public int Quantity { get; set; }
             public decimal OriginalAmount { get; set; }
@@ -71,8 +68,6 @@ namespace LocalS.BLL.Biz
             public int Quantity { get; set; }
             public string ProductId { get; set; }
             public string ProductSkuId { get; set; }
-            public string ProductSkuName { get; set; }
-            public string ProductSkuMainImgUrl { get; set; }
             public decimal SalePrice { get; set; }
             public decimal SalePriceByVip { get; set; }
             public decimal OriginalAmount { get; set; }

@@ -66,6 +66,8 @@ namespace LocalS.BLL
             productSkuInfoAndStockModel.DetailsDes = productSkuInfo.DetailsDes;
             productSkuInfoAndStockModel.BriefDes = productSkuInfo.BriefDes;
             productSkuInfoAndStockModel.SpecDes = productSkuInfo.SpecDes;
+            productSkuInfoAndStockModel.BarCode = productSkuInfo.BarCode;
+            productSkuInfoAndStockModel.Producer = productSkuInfo.Producer;
             productSkuInfoAndStockModel.Stocks = GetStock(merchId, productSkuId);
 
 

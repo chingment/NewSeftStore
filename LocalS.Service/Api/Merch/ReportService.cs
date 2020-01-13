@@ -1,8 +1,10 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using Lumos;
+using Lumos.DbRelay;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +41,17 @@ namespace LocalS.Service.Api.Merch
         {
 
             var result = new CustomJsonResult();
+
+
+            StringBuilder sql = new StringBuilder();
+            sql.Append(" select ");
+            sql.Append(" where 1=1 and SUBSTRING(UserName,1,1)!='m' and MerchantId='" + merchId + "' ");
+
+
+            sql.Append(" order by UserName asc  ");
+
+
+          //  DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject();
 
 
             return result;
