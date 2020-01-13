@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
@@ -69,7 +70,8 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            StoreTermServiceFactory.Machine.LogAction(operater, machine.Id, "GetCabinetSlots", "查看库存");
+            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machine.Id, "GetCabinetSlots", "查看库存");
+
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
@@ -85,11 +87,11 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品成功");
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品成功");
                 }
                 else
                 {
-                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品失败");
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品失败");
                 }
 
                 return result;
@@ -104,16 +106,16 @@ namespace LocalS.Service.Api.StoreTerm
 
                     if (result.Result == ResultType.Success)
                     {
-                        StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品成功");
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品成功");
                     }
                     else
                     {
-                        StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
                     }
                 }
                 else
                 {
-                    StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
                 }
 
                 return result;
@@ -208,11 +210,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果成功");
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果成功");
             }
             else
             {
-                StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果失败");
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果失败");
             }
 
             return result;
@@ -247,7 +249,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
             LogUtil.Info(message);
 
-            StoreTermServiceFactory.Machine.LogAction(operater, rop.MachineId, "TestPickup", message);
+            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "TestPickup", message);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 

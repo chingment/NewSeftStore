@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -236,7 +237,8 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                    StoreTermServiceFactory.Machine.LogAction(rop.MachineId, rop.MachineId, "OrderPickup", orderDetailsChildSon.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, orderDetailsChildSon.ClientUserId, rop.MachineId, "OrderPickup", orderDetailsChildSon.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
+
                 }
 
                 CurrentDb.SaveChanges();

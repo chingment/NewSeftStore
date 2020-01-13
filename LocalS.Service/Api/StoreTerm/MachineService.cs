@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
@@ -294,43 +295,11 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult ScanSlotsEventNotify(string operater, RopMachineScanSlotsEventNotify rop)
         {
 
-            LogAction(operater, rop.MachineId, "ScanSlots", rop.Remark);
+            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "ScanSlots", rop.Remark);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
-        public Task<bool> LogAction(string operater, string machineId, string action, string remark)
-        {
-            var task = Task.Run(() =>
-            {
-
-                var machine = BizFactory.Machine.GetOne(machineId);
-
-                var machineOperateLog = new MachineOperateLog();
-                machineOperateLog.Id = GuidUtil.New();
-
-                if (machine != null)
-                {
-                    machineOperateLog.MerchId = machine.MerchId;
-                    machineOperateLog.StoreId = machine.StoreId;
-                }
-
-                machineOperateLog.MachineId = machineId;
-                machineOperateLog.OperaterUserId = operater;
-                machineOperateLog.Action = action;
-                machineOperateLog.Remark = remark;
-                machineOperateLog.Creator = operater;
-                machineOperateLog.CreateTime = DateTime.Now;
-
-
-                CurrentDb.MachineOperateLog.Add(machineOperateLog);
-                CurrentDb.SaveChanges();
-
-                return true;
-            });
-
-            return task;
-        }
 
         public Task<bool> UpLoadTraceLog(RopAppTraceLog rop)
         {

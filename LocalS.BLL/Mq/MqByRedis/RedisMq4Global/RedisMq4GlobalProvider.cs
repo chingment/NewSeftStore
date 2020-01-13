@@ -23,13 +23,14 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushOperateLog(string appId, string operater, Lumos.DbRelay.Enumeration.OperateType type, string remark, object parms = null)
+        public void PushOperateLog(string appId, string operater, string machineId, string action, string remark, object parms = null)
         {
             var content = new OperateLogModel();
             content.AppId = appId;
             content.Operater = operater;
-            content.Type = type;
+            content.Action = action;
             content.Remark = remark;
+            content.MachineId = machineId;
             content.Parms = parms;
 
             var obj = new RedisMq4GlobalHandle();

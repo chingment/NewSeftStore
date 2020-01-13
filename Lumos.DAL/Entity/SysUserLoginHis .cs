@@ -12,6 +12,7 @@ namespace Lumos.DbRelay
         public string Id { get; set; }
         public string UserId { get; set; }
         public Enumeration.LoginWay LoginWay { get; set; }
+        public Enumeration.LoginFun LoginFun { get; set; }
         [MaxLength(128)]
         public string Ip { get; set; }
         [MaxLength(128)]
@@ -25,6 +26,8 @@ namespace Lumos.DbRelay
         public Enumeration.LoginResult Result { get; set; }
         [MaxLength(512)]
         public string Description { get; set; }
+        [MaxLength(512)]
+        public string RemarkByDev { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

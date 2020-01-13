@@ -9,8 +9,9 @@ namespace LocalS.BLL.Mq
     public class OperateLogModel
     {
         public string Operater { get; set; }
+        public string MachineId { get; set; }
         public string AppId { get; set; }
-        public Lumos.DbRelay.Enumeration.OperateType Type { get; set; }
+        public string Action { get; set; }
         public string Remark { get; set; }
         public object Parms { get; set; }
     }

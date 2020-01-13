@@ -12,7 +12,7 @@ namespace Lumos.DbRelay
         public string Id { get; set; }
         public string UserId { get; set; }
         public string AppId { get; set; }
-        public Enumeration.OperateType OperateType { get; set; }
+        public string Action { get; set; }
         [MaxLength(1024)]
         public string Remark { get; set; }
         public string Creator { get; set; }

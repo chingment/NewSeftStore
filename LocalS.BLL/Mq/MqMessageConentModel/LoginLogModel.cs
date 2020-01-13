@@ -14,6 +14,5 @@ namespace LocalS.BLL.Mq
         public Enumeration.LoginWay LoginWay { get; set; }
         public Enumeration.LoginFun LoginFun { get; set; }
         public string RemarkByDev { get; set; }
-        public string MachineId { get; set; }
     }
 }
