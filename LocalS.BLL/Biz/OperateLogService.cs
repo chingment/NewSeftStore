@@ -41,6 +41,7 @@ namespace LocalS.BLL.Biz
                             var userLoginHis = new SysUserLoginHis();
                             userLoginHis.Id = GuidUtil.New();
                             userLoginHis.UserId = rop.Operater;
+                            userLoginHis.AppId = rop.AppId;
                             userLoginHis.LoginAccount = loginLogModel.LoginAccount;
                             userLoginHis.LoginFun = loginLogModel.LoginFun;
                             userLoginHis.LoginWay = loginLogModel.LoginWay;
@@ -63,7 +64,7 @@ namespace LocalS.BLL.Biz
 
                 var machineOperateLog = new MachineOperateLog();
                 machineOperateLog.Id = GuidUtil.New();
-
+                machineOperateLog.AppId = rop.AppId;
                 if (machine != null)
                 {
                     machineOperateLog.MerchId = machine.MerchId;
