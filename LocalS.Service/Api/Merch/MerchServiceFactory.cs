@@ -87,5 +87,21 @@ namespace LocalS.Service.Api.Merch
                 return new AdSpaceService();
             }
         }
+
+        public static ReportService Report
+        {
+            get
+            {
+                return new ReportService();
+            }
+        }
+
+        public static LogService Log
+        {
+            get
+            {
+                return new LogService();
+            }
+        }
     }
 }
