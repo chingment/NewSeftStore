@@ -10,5 +10,7 @@ namespace LocalS.Service.Api.Merch
     {
         public string StoreId { get; set; }
         public string MachineId { get; set; }
+
+        public string[] TradeDateTimeArea { get; set; }
     }
 }

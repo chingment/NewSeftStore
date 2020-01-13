@@ -1183,5 +1183,43 @@ namespace LocalS.BLL.Biz
 
             return model;
         }
+
+        public string GetPayWayName(E_OrderPayWay payWay)
+        {
+            string str = "";
+            switch (payWay)
+            {
+                case E_OrderPayWay.Wechat:
+                    str = "微信支付";
+                    break;
+                case E_OrderPayWay.AliPay:
+                    str = "微信支付";
+                    break;
+                default:
+                    str = "未知";
+                    break;
+            }
+
+            return str;
+        }
+
+        public string GetTradeTypeName(E_RptOrderTradeType tradeTyp)
+        {
+            string str = "";
+            switch (tradeTyp)
+            {
+                case E_RptOrderTradeType.Pay:
+                    str = "交易";
+                    break;
+                case E_RptOrderTradeType.Refund:
+                    str = "退款";
+                    break;
+                default:
+                    str = "未知";
+                    break;
+            }
+
+            return str;
+        }
     }
 }

@@ -121,40 +121,62 @@ namespace LocalS.Service.Api.Merch
 
             var result = new CustomJsonResult();
 
+            if (rup.TradeDateTimeArea == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
+            }
+
+            if (rup.TradeDateTimeArea.Length != 2)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
+            }
+
+            LogUtil.Info("rup.TradeDateTimeArea[0]" + rup.TradeDateTimeArea[0]);
+            LogUtil.Info("rup.TradeDateTimeArea[1]" + rup.TradeDateTimeArea[1]);
+
+            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rup.TradeDateTimeArea[0]);
+
+            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rup.TradeDateTimeArea[1]);
 
             var query = (from u in CurrentDb.RptOrderDetailsChild
-                         where
-u.MerchId == merchId
-                         select new { u.StoreName, u.TradeTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.TradeAmount, u.TradeType, u.PayWay });
+                         where u.MerchId == merchId
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.TradeTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.TradeAmount, u.TradeType, u.PayWay });
 
+            if (!string.IsNullOrEmpty(rup.StoreId))
+            {
+                query = query.Where(m => m.StoreId == rup.StoreId);
+            }
+
+
+            query = query.Where(m => m.TradeTime >= tradeStartTime && m.TradeTime <= tradeEndTime);
 
             //var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
             List<object> olist = new List<object>();
 
-            //foreach (var sellChannelStock in sellChannelStocks)
-            //{
-            //    var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
-            //    if (productSku != null)
-            //    {
-            //        olist.Add(new
-            //        {
-            //            StoreName = machine.StoreName,
-            //            MachineName = machine.Name,
-            //            ProductSkuId = productSku.Id,
-            //            ProductSkuName = productSku.Name,
-            //            ProductSkuSpecDes = productSku.SpecDes,
-            //            ProductSkuBarCode = productSku.BarCode,
-            //            SlotId = sellChannelStock.SlotId,
-            //            SellQuantity = sellChannelStock.SellQuantity,
-            //            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-            //            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-            //            LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
-            //            SumQuantity = sellChannelStock.SumQuantity,
-            //            IsOffSell = sellChannelStock.IsOffSell
-            //        });
-            //    }
-            //}
+            var list = query.OrderByDescending(m => m.TradeTime).ToList();
+
+            foreach (var item in list)
+            {
+
+                olist.Add(new
+                {
+                    StoreName = item.StoreName,
+                    SellChannelRefName = item.SellChannelRefName,
+                    OrderSn = item.OrderSn,
+                    TradeTime = item.TradeTime.ToUnifiedFormatDateTime(),
+                    ProductSkuName = item.PrdProductSkuName,
+                    ProductSkuBarCode = item.PrdProductSkuBarCode,
+                    ProductSkuSpecDes = item.PrdProductSkuSpecDes,
+                    ProductSkuProducer = item.PrdProductSkuProducer,
+                    Quantity = item.Quantity,
+                    SalePrice = item.SalePrice,
+                    TradeAmount = item.TradeAmount,
+                    TradeType = BizFactory.Order.GetTradeTypeName(item.TradeType),
+                    PayWay = BizFactory.Order.GetPayWayName(item.PayWay)
+                });
+
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
 

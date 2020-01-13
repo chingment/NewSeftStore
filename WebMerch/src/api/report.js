@@ -16,6 +16,22 @@ export function machineStockGet(params) {
   })
 }
 
+export function productSkuDaySalesInit(params) {
+  return request({
+    url: '/report/ProductSkuDaySalesInit',
+    method: 'get',
+    params
+  })
+}
+
+export function productSkuDaySalesGet(params) {
+  return request({
+    url: '/report/ProductSkuDaySalesGet',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   machineStockInit: machineStockInit,
   machineStockGet: machineStockGet
