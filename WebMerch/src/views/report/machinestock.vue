@@ -57,7 +57,7 @@
       </el-table-column>
       <el-table-column label="商品编码" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productBarCode }}</span>
+          <span>{{ scope.row.productSkuBarCode }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品规格"  align="left" min-width="10%">
@@ -150,7 +150,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['店铺', '机器', '货道', '商品名称', '商品编码','商品规格','可售数量','锁定数量','实际数量']
-        const filterVal = ['storeName', 'machineName', 'slotId', 'productSkuName', 'productBarCode','productSkuSpecDes','sellQuantity','lockQuantity','sumQuantity']
+        const filterVal = ['storeName', 'machineName', 'slotId', 'productSkuName', 'productSkuBarCode','productSkuSpecDes','sellQuantity','lockQuantity','sumQuantity']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

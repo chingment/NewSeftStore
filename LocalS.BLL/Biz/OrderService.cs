@@ -840,12 +840,14 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.StoreId = order.StoreId;
                         rptOrderDetailsChild.StoreName = order.StoreName;
                         rptOrderDetailsChild.Quantity = orderDetailsChild.Quantity;
+                        rptOrderDetailsChild.UnitPrice = orderDetailsChild.SalePrice;
                         rptOrderDetailsChild.PrdProductId = orderDetailsChild.PrdProductId;
                         rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
                         rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;
                         rptOrderDetailsChild.PrdProductSkuBarCode = orderDetailsChild.PrdProductSkuBarCode;
                         rptOrderDetailsChild.PrdProductSkuSpecDes = orderDetailsChild.PrdProductSkuSpecDes;
                         rptOrderDetailsChild.PrdProductSkuProducer = orderDetailsChild.PrdProductSkuProducer;
+                        rptOrderDetailsChild.PayWay = order.PayWay;
                         rptOrderDetailsChild.TradeType = E_RptOrderTradeType.Pay;
                         rptOrderDetailsChild.TradeTime = order.PayedTime.Value;
                         rptOrderDetailsChild.TradeAmount = orderDetailsChild.ChargeAmount;

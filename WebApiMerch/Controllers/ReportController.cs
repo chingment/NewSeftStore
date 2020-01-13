@@ -24,5 +24,20 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Report.MachineStockGet(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse ProductSkuDaySalesInit()
+        {
+            IResult result = MerchServiceFactory.Report.ProductSkuDaySalesInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse ProductSkuDaySalesGet([FromUri]RupReportProductSkuDaySalesGet rup)
+        {
+            IResult result = MerchServiceFactory.Report.ProductSkuDaySalesGet(this.CurrentUserId, this.CurrentMerchId,rup);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

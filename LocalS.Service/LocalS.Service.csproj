@@ -188,6 +188,7 @@
     <Compile Include="Api\Merch\ReportService.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetReportMachineStockInit.cs" />
+    <Compile Include="Api\Merch\RModels\RetReportProductSkuDaySalesInit.cs" />
     <Compile Include="Api\Merch\RModels\RetRpt7DayGmvRl.cs" />
     <Compile Include="Api\Merch\RModels\RetAdSpaceInitRelease.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitDetailsOrders.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdSubjectGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupReportMachineStockGet.cs" />
+    <Compile Include="Api\Merch\RModels\RupReportProductSkuDaySalesGet.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageMachineGetMachineList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageProductGetProductList.cs" />

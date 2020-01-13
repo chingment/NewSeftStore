@@ -16,7 +16,7 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string StoreName { get; set; }
         public string OrderId { get; set; }
-        public string OrderSn{ get; set; }
+        public string OrderSn { get; set; }
         public string ClientUserId { get; set; }
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
@@ -25,6 +25,8 @@ namespace LocalS.Entity
         public string PrdProductSkuSpecDes { get; set; }
         public string PrdProductSkuProducer { get; set; }
         public int Quantity { get; set; }
+        public decimal SalePrice { get; set; }
+        public E_OrderPayWay PayWay { get; set; }
         public E_RptOrderTradeType TradeType { get; set; }
         public decimal TradeAmount { get; set; }
         public DateTime TradeTime { get; set; }
