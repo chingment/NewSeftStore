@@ -10,6 +10,8 @@ namespace LocalS.Service.Api.Account
     public class RopOwnLogout
     {
         public string AppId { get; set; }
+        public string Token { get; set; }
+        public Enumeration.LoginWay LoginWay { get; set; }
         public Dictionary<string, string> LoginPms { get; set; }
 
     }

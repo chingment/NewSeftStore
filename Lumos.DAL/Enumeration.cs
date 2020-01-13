@@ -39,18 +39,27 @@ namespace Lumos.DbRelay
         {
             Unknow = 0,
             Website = 1,
-            AndroidApp = 2,
-            IosApp = 3,
+            Android = 2,
+            Ios = 3,
             WechatByMinPragrom = 4,
-            StoreTerm = 5
+            Terminal = 5
+        }
+
+        public enum LoginFun
+        {
+            Unknow = 0,
+            Account = 1,
+            FingerVein = 2
         }
 
         public enum LoginResult
         {
 
             Unknow = 0,
-            Success = 1,
-            Failure = 2
+            LoginSuccess = 1,
+            LoginFailure = 2,
+            LogoutSuccess = 3,
+            LogoutFailure = 4
         }
 
         public enum OperateType

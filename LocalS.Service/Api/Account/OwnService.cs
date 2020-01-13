@@ -99,6 +99,8 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult LoginByAccount(RopOwnLoginByAccount rop)
         {
+            string machineId = "";
+
             if (string.IsNullOrEmpty(rop.AppId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
@@ -110,13 +112,19 @@ namespace LocalS.Service.Api.Account
             {
                 if (rop.LoginPms == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,LoginPms值不能为空");
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，缺少参数loginPms", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "缺少参数loginPms" });
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms");
                 }
 
                 if (!rop.LoginPms.ContainsKey("machineId") || string.IsNullOrEmpty(rop.LoginPms["machineId"].ToString()))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少指定参数LoginPms.machineId");
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，缺少参数loginPms.machineId", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "缺少参数loginPms.machineId" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms.machineId");
                 }
+
+                machineId = rop.LoginPms["machineId"].ToString();
+
             }
 
             var result = new CustomJsonResult();
@@ -126,16 +134,20 @@ namespace LocalS.Service.Api.Account
 
             if (sysUser == null)
             {
+                MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，账号不存在", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "账号不存在" });
+
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号不存在");
             }
 
             if (!PassWordHelper.VerifyHashedPassword(sysUser.PasswordHash, rop.Password))
             {
+                MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录失败，密码不正确", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "密码不正确" });
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，密码不正确");
             }
 
             if (sysUser.IsDisable)
             {
+                MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录失败，账号已被禁用", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表SysUser字段IsDisable:True" });
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号已被禁用");
             }
 
@@ -153,6 +165,8 @@ namespace LocalS.Service.Api.Account
                 var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                 if (merchUser == null)
                 {
+                    MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录失败，该用户不属于该站点", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表SysMerchUser字段Id:{0}，找不到", sysUser.Id) });
+
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
@@ -165,21 +179,41 @@ namespace LocalS.Service.Api.Account
             {
                 #region STORETERM
 
-                string machineId = rop.LoginPms["machineId"].ToString();
                 var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
                 if (machine == null)
                 {
+                    MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录失败，该机器未登记", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表Machine字段Id:0}，找不到", machineId) });
+
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+                }
+
+                if (string.IsNullOrEmpty(machine.CurUseMerchId))
+                {
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "录失败，该机器未绑定商家", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseMerchId，为空" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
+                }
+
+                if (string.IsNullOrEmpty(machine.CurUseStoreId))
+                {
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "录失败，该机器未绑定店铺", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseStoreId,为空" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定店铺");
                 }
 
                 var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                 if (storeTermUser == null)
                 {
+                    MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录失败，该用户不属于该站点", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表SysMerchUser字段Id:{0},找不到", sysUser.Id) });
+
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
                 if (machine.CurUseMerchId != storeTermUser.MerchId)
                 {
+                    MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "帐号与商户不对应", new LoginLogModel { MachineId = machineId, LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表Machine字段CurUseMerchId:{0}与表StoreTermUser字段MerchId:{1}", machine.CurUseMerchId, storeTermUser.MerchId) });
+
+
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                 }
                 ret.UserName = storeTermUser.UserName;
@@ -189,7 +223,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录成功");
+            MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录成功", new LoginLogModel { MachineId = machineId, LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -316,12 +350,16 @@ namespace LocalS.Service.Api.Account
             {
                 if (rop.LoginPms == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,LoginPms值不能为空");
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，缺少参数loginPms", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "登录失败，缺少参数loginPms" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms");
                 }
 
                 if (!rop.LoginPms.ContainsKey("machineId") || string.IsNullOrEmpty(rop.LoginPms["machineId"].ToString()))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少指定参数LoginPms.machineId");
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，缺少参数loginPms.machineId", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "登录失败，缺少参数loginPms.machineId" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms.machineId");
                 }
                 else
                 {
@@ -331,13 +369,23 @@ namespace LocalS.Service.Api.Account
                 var machine = BizFactory.Machine.GetOne(machineId);
                 if (machine == null)
                 {
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，该机器未登记", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表Machine字段Id:{0}，找不到", machineId) });
+
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
                 }
 
                 if (string.IsNullOrEmpty(machine.MerchId))
                 {
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，该机器未绑定商家", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseMerchId，为空" });
 
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
+                }
+
+                if (string.IsNullOrEmpty(machine.StoreId))
+                {
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，该机器未绑定店铺", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseStoreId，为空" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定店铺");
                 }
 
                 belongType = Enumeration.BelongType.Merch;
@@ -345,6 +393,8 @@ namespace LocalS.Service.Api.Account
             }
             else
             {
+                MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "暂不支持", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "暂不支持" });
+
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂不支持");
             }
 
@@ -388,12 +438,28 @@ namespace LocalS.Service.Api.Account
 
             if (!isMachSuccess)
             {
+                MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "静指脉验证失败", new LoginLogModel { MachineId = machineId, LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "静指脉验证失败" });
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，静指脉验证失败");
             }
 
 
             if (isMachSuccess)
             {
+                var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+
+                if (sysUser == null)
+                {
+                    MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，账号不存在", new LoginLogModel { MachineId = machineId, LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "账号不存在" });
+
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号不存在");
+                }
+
+                if (sysUser.IsDisable)
+                {
+                    MqFactory.Global.PushOperateLog(rop.AppId, sysUser.Id, Enumeration.OperateType.Login, "登录失败，账号已被禁用", new LoginLogModel { MachineId = machineId, LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表SysUser字段IsDisable:True" });
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号已被禁用");
+                }
+
                 ret.Token = GuidUtil.New();
 
                 var tokenInfo = new TokenInfo();
@@ -406,11 +472,16 @@ namespace LocalS.Service.Api.Account
                     var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
                     if (storeTermUser == null)
                     {
+                        MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "登录失败，该用户不属于该站点", new LoginLogModel { MachineId = machineId, LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表SysMerchUser字段Id:{0},找不到", userId) });
+
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                     }
 
                     if (belongId != storeTermUser.MerchId)
                     {
+
+                        MqFactory.Global.PushOperateLog(rop.AppId, GuidUtil.Empty(), Enumeration.OperateType.Login, "帐号与商户不对应", new LoginLogModel { MachineId = machineId, LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("belongId:{0}与SysMerchUser.MerchId:{1}不对应", belongId, storeTermUser.MerchId) });
+
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                     }
                     ret.UserName = storeTermUser.UserName;
@@ -421,7 +492,8 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                MqFactory.Global.PushOperateLog(rop.AppId, userId, Enumeration.OperateType.Login, "登录成功");
+                MqFactory.Global.PushOperateLog(rop.AppId, userId, Enumeration.OperateType.Login, "登录成功", new LoginLogModel { MachineId = machineId, LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
+
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
             }
@@ -429,14 +501,14 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-        public CustomJsonResult Logout(string appId, string operater, string userId, string token)
+        public CustomJsonResult Logout(string operater, string userId, RopOwnLogout rop)
         {
             var result = new CustomJsonResult();
 
 
-            SSOUtil.Quit(token);
+            SSOUtil.Quit(rop.Token);
 
-            MqFactory.Global.PushOperateLog(appId, userId, Enumeration.OperateType.Logout, "退出成功");
+            MqFactory.Global.PushOperateLog(rop.AppId, operater, Enumeration.OperateType.Logout, "退出成功", new LoginLogModel { LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 

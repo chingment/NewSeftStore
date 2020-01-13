@@ -43,7 +43,14 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Logout([FromBody]LocalS.Service.Api.Account.RopOwnLogout rop)
         {
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(rop.AppId, this.CurrentUserId, this.CurrentUserId, this.Token);
+            if(rop==null)
+            {
+                rop = new LocalS.Service.Api.Account.RopOwnLogout();
+            }
+
+            rop.Token = this.Token;
+
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

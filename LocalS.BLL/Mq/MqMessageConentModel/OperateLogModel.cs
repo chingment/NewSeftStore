@@ -12,5 +12,6 @@ namespace LocalS.BLL.Mq
         public string AppId { get; set; }
         public Lumos.DbRelay.Enumeration.OperateType Type { get; set; }
         public string Remark { get; set; }
+        public object Parms { get; set; }
     }
 }

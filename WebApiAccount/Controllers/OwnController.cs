@@ -62,9 +62,16 @@ namespace WebApiAccount.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Logout()
+        public OwnApiHttpResponse Logout([FromBody]RopOwnLogout rop)
         {
-            IResult result = AccountServiceFactory.Own.Logout("", this.CurrentUserId, this.CurrentUserId, this.Token);
+            if (rop == null)
+            {
+                rop = new RopOwnLogout();
+            }
+
+            rop.Token = this.Token;
+
+            IResult result = AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
