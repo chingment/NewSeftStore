@@ -840,7 +840,7 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.StoreId = order.StoreId;
                         rptOrderDetailsChild.StoreName = order.StoreName;
                         rptOrderDetailsChild.Quantity = orderDetailsChild.Quantity;
-                        rptOrderDetailsChild.UnitPrice = orderDetailsChild.SalePrice;
+                        rptOrderDetailsChild.SalePrice = orderDetailsChild.SalePrice;
                         rptOrderDetailsChild.PrdProductId = orderDetailsChild.PrdProductId;
                         rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
                         rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;
