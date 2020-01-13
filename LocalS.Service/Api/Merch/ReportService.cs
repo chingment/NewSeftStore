@@ -34,7 +34,8 @@ namespace LocalS.Service.Api.Merch
                 ret.Machines.Add(new MachineModel { Id = merchMachine.MachineId, Name = merchMachine.Name, StoreName = storeName });
             }
 
-            return result;
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public CustomJsonResult MachineStockGet(string operater, string merchId, RupReportMachineStockGet rup)
@@ -42,19 +43,45 @@ namespace LocalS.Service.Api.Merch
 
             var result = new CustomJsonResult();
 
+            if (string.IsNullOrEmpty(rup.MachineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择机器");
+            }
 
-            StringBuilder sql = new StringBuilder();
-            sql.Append(" select ");
-            sql.Append(" where 1=1 and SUBSTRING(UserName,1,1)!='m' and MerchantId='" + merchId + "' ");
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.SellChannelRefId == rup.MachineId).ToList();
 
+            var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
-            sql.Append(" order by UserName asc  ");
+            List<object> olist = new List<object>();
 
+            foreach (var sellChannelStock in sellChannelStocks)
+            {
+                var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+                if (productSku != null)
+                {
+                    olist.Add(new
+                    {
+                        StoreName = machine.StoreName,
+                        MachineName = machine.Name,
+                        ProductSkuId = productSku.Id,
+                        ProductSkuName = productSku.Name,
+                        ProductSkuSpecDes = productSku.SpecDes,
+                        ProductSkuBarCode = productSku.BarCode,
+                        SlotId = sellChannelStock.SlotId,
+                        SellQuantity = sellChannelStock.SellQuantity,
+                        WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                        WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                        LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
+                        SumQuantity = sellChannelStock.SumQuantity,
+                        IsOffSell = sellChannelStock.IsOffSell
+                    });
+                }
+            }
 
-          //  DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject();
-
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
 
             return result;
+
         }
     }
 }

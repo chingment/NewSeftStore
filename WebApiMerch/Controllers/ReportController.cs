@@ -19,7 +19,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse MachineStockGet(RupReportMachineStockGet rup)
+        public OwnApiHttpResponse MachineStockGet([FromUri]RupReportMachineStockGet rup)
         {
             IResult result = MerchServiceFactory.Report.MachineStockGet(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);

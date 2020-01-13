@@ -8,6 +8,11 @@ namespace LocalS.Service.Api.Merch
 {
     public class RetReportMachineStockInit
     {
+        public RetReportMachineStockInit()
+        {
+            this.Machines = new List<MachineModel>();
+        }
+
         public List<MachineModel> Machines { get; set; }
     }
 }
