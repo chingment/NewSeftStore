@@ -49,7 +49,7 @@ namespace WebApiAccount.Controllers
             myRop.Ip = rop.Ip;
             myRop.LoginPms = rop.LoginPms;
             myRop.AppId = GetAppIdByRedirectUrl(rop.RedirectUrl);
-
+            myRop.LoginWay = Lumos.DbRelay.Enumeration.LoginWay.Website;
             IResult result = AccountServiceFactory.Own.LoginByAccount(myRop);
             return new OwnApiHttpResponse(result);
         }

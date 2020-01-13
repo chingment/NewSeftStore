@@ -41,6 +41,7 @@ namespace LocalS.BLL.Biz
                             var userLoginHis = new SysUserLoginHis();
                             userLoginHis.Id = GuidUtil.New();
                             userLoginHis.UserId = rop.Operater;
+                            userLoginHis.LoginAccount = loginLogModel.LoginAccount;
                             userLoginHis.LoginFun = loginLogModel.LoginFun;
                             userLoginHis.LoginWay = loginLogModel.LoginWay;
                             userLoginHis.LoginTime = DateTime.Now;

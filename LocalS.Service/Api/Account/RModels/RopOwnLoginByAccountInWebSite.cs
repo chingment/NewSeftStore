@@ -14,5 +14,6 @@ namespace LocalS.Service.Api.Account
         public string RedirectUrl { get; set; }
 
         public Dictionary<string, string> LoginPms { get; set; }
+
     }
 }

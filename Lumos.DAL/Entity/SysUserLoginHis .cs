@@ -11,6 +11,8 @@ namespace Lumos.DbRelay
         [Key]
         public string Id { get; set; }
         public string UserId { get; set; }
+        public string AppId { get; set; }
+        public string LoginAccount { get; set; }
         public Enumeration.LoginWay LoginWay { get; set; }
         public Enumeration.LoginFun LoginFun { get; set; }
         [MaxLength(128)]
