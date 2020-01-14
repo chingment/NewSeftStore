@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using TongGuanPaySdk;
 using MyAlipaySdk;
+using System.Configuration;
 
 namespace LocalS.BLL.Biz
 {
@@ -1105,8 +1106,17 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.TongGuan;
                                 var tongGuanPay_PayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
 
+                                decimal chargeAmount = order.ChargeAmount;
+                                if (ConfigurationManager.AppSettings["custom:IsPayTest"] != null)
+                                {
+                                    if (ConfigurationManager.AppSettings["custom:IsPayTest"] == "true")
+                                    {
+                                        chargeAmount = 0.01m;
+                                    }
+                                }
 
-                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+
+                                var tongGuanPay_AllQrcodePay = SdkFactory.TongGuan.AllQrcodePay(tongGuanPay_PayInfoConfig, order.MerchId, order.StoreId, order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");

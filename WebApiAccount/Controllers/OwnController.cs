@@ -24,7 +24,7 @@ namespace WebApiAccount.Controllers
             {
                 return AppId.ADMIN;
             }
-            else if (url.IndexOf("merch.17fanju.com") > -1 || url.IndexOf("192.168.0.102") > -1)
+            else if (url.IndexOf("merch.17fanju.com") > -1 || url.IndexOf("192.168.43.108") > -1)
             {
                 return AppId.MERCH;
             }

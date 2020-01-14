@@ -2,8 +2,8 @@
   <div id="productsku_list" class="app-container">
     <div class="filter-container">
 
-      <el-row :gutter="12">
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+      <el-row :gutter="24">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-select v-model="listQuery.storeId" clearable placeholder="选择店铺" style="width: 100%">
             <el-option
               v-for="item in options_stores"
@@ -13,7 +13,7 @@
             />
           </el-select>
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :span="10" :xs="24" style="margin-bottom:20px">
 
  <el-date-picker
       v-model="listQuery.tradeDateTimeArea"
@@ -24,7 +24,7 @@
       end-placeholder="结束日期">
     </el-date-picker>
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :span="8" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
