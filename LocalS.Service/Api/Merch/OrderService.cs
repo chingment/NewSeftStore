@@ -348,11 +348,6 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
                 }
 
-                if (orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Completed && orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Exception)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当前流程不支持该操作");
-                }
-
                 if (orderDetailsChildSon.ExPickupIsHandled)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
@@ -440,6 +435,21 @@ namespace LocalS.Service.Api.Merch
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "标识成功");
                         break;
 
+                }
+
+                CurrentDb.SaveChanges();
+
+                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.ToList();
+                var orderDetailsChildSonsCompeleteCount = orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed || m.Status == E_OrderDetailsChildSonStatus.ExPickupSignTaked || m.Status == E_OrderDetailsChildSonStatus.ExPickupSignUnTaked).Count();
+                //判断全部订单都是已完成
+                if (orderDetailsChildSonsCompeleteCount == orderDetailsChildSons.Count)
+                {
+                    var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
+                    if (order != null)
+                    {
+                        order.Status = E_OrderStatus.Completed;
+                        order.CompletedTime = DateTime.Now;
+                    }
                 }
 
                 CurrentDb.SaveChanges();
