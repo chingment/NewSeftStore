@@ -105,7 +105,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotRemove", string.Format("货道:{0}删除货道，移除实际库存：{1}", slotId,sellChannelStock.SumQuantity));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotRemove", string.Format("货道:{0}删除货道，移除实际库存：{1}", slotId, sellChannelStock.SumQuantity));
                     }
 
                     var slot = new
@@ -594,7 +594,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult AdjustStockQuantity(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int version, int sumQuantity)
+        public CustomJsonResult AdjustStockQuantity(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null)
         {
             var result = new CustomJsonResult();
 
@@ -622,7 +622,14 @@ namespace LocalS.BLL.Biz
                 sellChannelStock.SumQuantity = sumQuantity;
                 sellChannelStock.SellQuantity = sumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
                 sellChannelStock.Version += 1;
-                sellChannelStock.MaxLimitSumQuantity = sumQuantity;//取最近一次为置满库存
+                if (maxQuantity == null)
+                {
+                    sellChannelStock.MaxLimitSumQuantity = sumQuantity;//取最近一次为置满库存
+                }
+                else
+                {
+                    sellChannelStock.MaxLimitSumQuantity = maxQuantity.Value;
+                }
 
                 var sellChannelStockLog = new SellChannelStockLog();
                 sellChannelStockLog.Id = GuidUtil.New();
@@ -658,7 +665,7 @@ namespace LocalS.BLL.Biz
                     SumQuantity = sellChannelStock.SumQuantity,
                     LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                     SellQuantity = sellChannelStock.SellQuantity,
-                    MaxQuantity = 10,
+                    MaxQuantity = sellChannelStock.MaxLimitSumQuantity,
                     Version = sellChannelStock.Version
                 };
 
