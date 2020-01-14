@@ -84,12 +84,30 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            string[] productSkuIds = null;
+            string[] productIds = null;
+            if (!string.IsNullOrEmpty(rup.Key))
+            {
+                var search = CacheServiceFactory.ProductSku.Search(merchId, "All", rup.Key);
+                if (search != null)
+                {
+                    productSkuIds = search.Select(m => m.Id).Distinct().ToArray();
+
+                    productIds = CurrentDb.PrdProductSku.Where(m => productSkuIds.Contains(m.Id)).Select(m => m.PrdProductId).Distinct().ToArray();
+                }
+            }
+
+
+
             var query = (from u in CurrentDb.PrdProduct
-                         where (rup.Name == null || u.Name.Contains(rup.Name))
-                         &&
+                         where
                          u.MerchId == merchId
                          select new { u.Id, u.Name, u.BriefDes, u.CreateTime, u.DisplayImgUrls });
 
+            if (productIds != null)
+            {
+                query = query.Where(m => productIds.Contains(m.Id));
+            }
 
             int total = query.Count();
 
@@ -114,7 +132,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var prdProductSku in prdProductSkus)
                 {
-                    list_Sku.Add(new { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, SpecDes = prdProductSku.SpecDes });
+                    list_Sku.Add(new { Id = prdProductSku.Id, CumCode = prdProductSku.CumCode, BarCode = prdProductSku.BarCode, SalePrice = prdProductSku.SalePrice, SpecDes = prdProductSku.SpecDes });
                 }
 
                 olist.Add(new

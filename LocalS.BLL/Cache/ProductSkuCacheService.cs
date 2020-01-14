@@ -103,6 +103,7 @@ namespace LocalS.BLL
                 prdProductSkuModel = new ProductSkuInfoModel();
                 prdProductSkuModel.Id = prdProductSkuByDb.Id;
                 prdProductSkuModel.BarCode = prdProductSkuByDb.BarCode;
+                prdProductSkuModel.CumCode = prdProductSkuByDb.CumCode;
                 prdProductSkuModel.PinYinIndex = prdProductSkuByDb.PinYinIndex;
                 prdProductSkuModel.ProductId = prdProductSkuByDb.PrdProductId;
                 prdProductSkuModel.Name = prdProductSkuByDb.Name.NullToEmpty();
@@ -125,6 +126,11 @@ namespace LocalS.BLL
                 if (!string.IsNullOrEmpty(prdProductSkuModel.Name))
                 {
                     RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSNA, prdProductSkuByDb.MerchId), prdProductSkuModel.Name, productSkuId, StackExchange.Redis.When.Always);
+                }
+
+                if (!string.IsNullOrEmpty(prdProductSkuModel.CumCode))
+                {
+                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSNA, prdProductSkuByDb.MerchId), prdProductSkuModel.CumCode, productSkuId, StackExchange.Redis.When.Always);
                 }
 
                 RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.P, prdProductSkuByDb.MerchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
@@ -183,6 +189,15 @@ namespace LocalS.BLL
                 }
             }
 
+            if (type == "CumCode" || type == "All")
+            {
+                var search_Scan_CumCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSCR, merchId), string.Format("{0}*", key));
+                foreach (var item in search_Scan_CumCode)
+                {
+                    productSkuIds.Add(item.Value);
+                }
+            }
+
             productSkuIds = productSkuIds.Distinct().ToList();
 
 
@@ -196,6 +211,7 @@ namespace LocalS.BLL
                     var searchModel = new ProductSkuInfoBySearchModel();
                     searchModel.Id = productSkuModel.Id;
                     searchModel.Name = productSkuModel.Name;
+                    searchModel.CumCode = productSkuModel.CumCode;
                     searchModel.BarCode = productSkuModel.BarCode;
                     searchModel.SpecDes = productSkuModel.SpecDes;
                     searchModel.MainImgUrl = ImgSet.Convert_S(productSkuModel.MainImgUrl);
@@ -214,6 +230,7 @@ namespace LocalS.BLL
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PSBR, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PSPY, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PSNA, merch.Id));
+                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PSCR, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.P, merch.Id));
             }
 

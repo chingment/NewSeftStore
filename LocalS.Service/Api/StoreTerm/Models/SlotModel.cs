@@ -10,6 +10,7 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string Id { get; set; }
         public string ProductSkuId { get; set; }
+        public string ProductSkuCumCode { get; set; }
         public string ProductSkuName { get; set; }
         public string ProductSkuMainImgUrl { get; set; }
         public string ProductSkuSpecDes { get; set; }

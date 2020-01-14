@@ -8,10 +8,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupPrdProductGetList : RupBaseGetList
     {
-        public string Name { get; set; }
-
-        public string SkuCode { get; set; }
-
-        public string BarCode { get; set; }
+        public string Key { get; set; }
     }
 }

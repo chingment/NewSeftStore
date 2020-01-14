@@ -4,6 +4,9 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
+      <el-form-item label="编码" prop="singleSkuCumCode">
+        <el-input v-model="form.singleSkuCumCode" />
+      </el-form-item>
       <el-form-item label="条形码" prop="singleSkuBarCode">
         <el-input v-model="form.singleSkuBarCode" />
       </el-form-item>
@@ -121,12 +124,14 @@ export default {
         detailsDes: '',
         briefDes: '',
         displayImgUrls: [],
+        singleSkuCumCode: '',
         singleSkuBarCode: '',
         singleSkuSalePrice: 0,
         singleSkuSpecDes: ''
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        singleSkuCumCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         singleSkuBarCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         // kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
@@ -193,7 +198,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           var skus = []
-          skus.push({ specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode })
+          skus.push({ specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
           var _form = {}
           _form.name = this.form.name
           _form.kindIds = this.form.kindIds

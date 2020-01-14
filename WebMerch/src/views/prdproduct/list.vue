@@ -2,9 +2,11 @@
   <div id="productsku_list" class="app-container">
     <div class="filter-container">
 
+
+
       <el-row :gutter="12">
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" style="width: 100%" placeholder="商品名称" va class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.key" style="width: 100%" placeholder="商品名称/编码/条形码/首拼音" va class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
         <el-col :span="8" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -15,6 +17,8 @@
           </el-button>
         </el-col>
       </el-row>
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
+
     </div>
     <el-table
       :key="listKey"
@@ -34,17 +38,27 @@
           <img :src="scope.row.mainImgUrl" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column label="名称" prop="name" align="left" min-width="20%">
+      <el-table-column label="名称"  align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="分类" prop="kindNames" align="left" min-width="30%">
+      <el-table-column label="编码"   min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skus[0].cumCode }}</span>
+        </template>
+      </el-table-column>
+            <el-table-column label="条形码"  align="left" min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skus[0].barCode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="isDesktop" label="分类" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="默认销售价" prop="skus" align="left" min-width="30%">
+      <el-table-column v-if="isDesktop" label="默认销售价" align="left" min-width="30%">
         <template slot-scope="{row}">
           <el-button type="text" @click="handleSalePrice(row)">{{ row.skus[0].salePrice }}</el-button>
 
