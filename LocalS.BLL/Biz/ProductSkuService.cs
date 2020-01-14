@@ -150,7 +150,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.SalePrice = productSku.SalePrice;
                         sellChannelStock.SalePriceByVip = productSku.SalePrice;
                         sellChannelStock.Version = 0;
-                        sellChannelStock.MaxLimitSumQuantity = 10;
+                        sellChannelStock.MaxQuantity = 10;
                         sellChannelStock.CreateTime = DateTime.Now;
                         sellChannelStock.Creator = GuidUtil.Empty();
                         CurrentDb.SellChannelStock.Add(sellChannelStock);
@@ -224,7 +224,7 @@ namespace LocalS.BLL.Biz
 
 
                             sellChannelStock.Version = -1;
-                            sellChannelStock.MaxLimitSumQuantity = 10;
+                            sellChannelStock.MaxQuantity = 10;
                             sellChannelStock.MendTime = DateTime.Now;
                             sellChannelStock.Mender = GuidUtil.Empty();
 
@@ -624,11 +624,11 @@ namespace LocalS.BLL.Biz
                 sellChannelStock.Version += 1;
                 if (maxQuantity == null)
                 {
-                    sellChannelStock.MaxLimitSumQuantity = sumQuantity;//取最近一次为置满库存
+                    sellChannelStock.MaxQuantity = sumQuantity;//取最近一次为置满库存
                 }
                 else
                 {
-                    sellChannelStock.MaxLimitSumQuantity = maxQuantity.Value;
+                    sellChannelStock.MaxQuantity = maxQuantity.Value;
                 }
 
                 var sellChannelStockLog = new SellChannelStockLog();
@@ -665,7 +665,7 @@ namespace LocalS.BLL.Biz
                     SumQuantity = sellChannelStock.SumQuantity,
                     LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                     SellQuantity = sellChannelStock.SellQuantity,
-                    MaxQuantity = sellChannelStock.MaxLimitSumQuantity,
+                    MaxQuantity = sellChannelStock.MaxQuantity,
                     Version = sellChannelStock.Version
                 };
 

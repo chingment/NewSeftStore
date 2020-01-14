@@ -63,7 +63,7 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
-                    slot.MaxQuantity = item.MaxLimitSumQuantity;
+                    slot.MaxQuantity = item.MaxQuantity;
                     slot.Version = item.Version;
                     ret.Slots.Add(item.SlotId, slot);
                 }

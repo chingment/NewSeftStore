@@ -21,6 +21,7 @@ namespace LocalS.Entity
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string PrdProductSkuName { get; set; }
+        public string PrdProductSkuCumCode { get; set; }
         public string PrdProductSkuBarCode { get; set; }
         public string PrdProductSkuSpecDes { get; set; }
         public string PrdProductSkuProducer { get; set; }

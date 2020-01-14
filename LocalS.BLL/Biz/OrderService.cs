@@ -246,6 +246,7 @@ namespace LocalS.BLL.Biz
                             orderDetailsChild.PrdProductSkuSpecDes = productSku.SpecDes;
                             orderDetailsChild.PrdProductSkuProducer = productSku.Producer;
                             orderDetailsChild.PrdProductSkuBarCode = productSku.BarCode;
+                            orderDetailsChild.PrdProductSkuCumCode = productSku.CumCode;
                             orderDetailsChild.SalePrice = detailsChild.SalePrice;
                             orderDetailsChild.SalePriceByVip = detailsChild.SalePriceByVip;
                             orderDetailsChild.Quantity = detailsChild.Quantity;
@@ -281,6 +282,7 @@ namespace LocalS.BLL.Biz
                                 orderDetailsChildSon.PrdProductSkuSpecDes = productSku.SpecDes;
                                 orderDetailsChildSon.PrdProductSkuProducer = productSku.Producer;
                                 orderDetailsChildSon.PrdProductSkuBarCode = productSku.BarCode;
+                                orderDetailsChildSon.PrdProductSkuCumCode = productSku.CumCode;
                                 orderDetailsChildSon.SalePrice = detailsChildSon.SalePrice;
                                 orderDetailsChildSon.SalePriceByVip = detailsChildSon.SalePriceByVip;
                                 orderDetailsChildSon.Quantity = detailsChildSon.Quantity;
@@ -846,6 +848,7 @@ namespace LocalS.BLL.Biz
                         rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
                         rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;
                         rptOrderDetailsChild.PrdProductSkuBarCode = orderDetailsChild.PrdProductSkuBarCode;
+                        rptOrderDetailsChild.PrdProductSkuCumCode = orderDetailsChild.PrdProductSkuCumCode;
                         rptOrderDetailsChild.PrdProductSkuSpecDes = orderDetailsChild.PrdProductSkuSpecDes;
                         rptOrderDetailsChild.PrdProductSkuProducer = orderDetailsChild.PrdProductSkuProducer;
                         rptOrderDetailsChild.PayWay = order.PayWay;

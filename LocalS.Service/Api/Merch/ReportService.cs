@@ -66,13 +66,15 @@ namespace LocalS.Service.Api.Merch
                         ProductSkuId = productSku.Id,
                         ProductSkuName = productSku.Name,
                         ProductSkuSpecDes = productSku.SpecDes,
-                        ProductSkuBarCode = productSku.BarCode,
+                        ProductSkuCumCode = productSku.CumCode,
                         SlotId = sellChannelStock.SlotId,
                         SellQuantity = sellChannelStock.SellQuantity,
                         WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                         WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                         LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
                         SumQuantity = sellChannelStock.SumQuantity,
+                        MaxQuantity = sellChannelStock.MaxQuantity,
+                        RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
                         IsOffSell = sellChannelStock.IsOffSell
                     });
                 }
@@ -140,7 +142,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.RptOrderDetailsChild
                          where u.MerchId == merchId
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.TradeTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.TradeAmount, u.TradeType, u.PayWay });
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.TradeTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.TradeAmount, u.TradeType, u.PayWay });
 
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
@@ -167,6 +169,7 @@ namespace LocalS.Service.Api.Merch
                     TradeTime = item.TradeTime.ToUnifiedFormatDateTime(),
                     ProductSkuName = item.PrdProductSkuName,
                     ProductSkuBarCode = item.PrdProductSkuBarCode,
+                    ProductSkuCumCode = item.PrdProductSkuCumCode,
                     ProductSkuSpecDes = item.PrdProductSkuSpecDes,
                     ProductSkuProducer = item.PrdProductSkuProducer,
                     Quantity = item.Quantity,

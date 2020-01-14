@@ -12,6 +12,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string BarCode { get; set; }
+        public string CumCode { get; set; }
         public string PinYinName { get; set; }
         public string PinYinIndex { get; set; }
         public string PrdProductId { get; set; }

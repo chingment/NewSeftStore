@@ -18,6 +18,7 @@ namespace LocalS.BLL
         public string Id { get; set; }
         public string ProductId { get; set; }
         public string BarCode { get; set; }
+        public string CumCode { get; set; }
         public string Producer { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }

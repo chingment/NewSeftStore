@@ -45,6 +45,8 @@ namespace LocalS.Service.Api.Merch
             public decimal SalePrice { get; set; }
 
             public string BarCode { get; set; }
+
+            public string CumCode { get; set; }
         }
 
         public List<TreeNode> Kinds { get; set; }
