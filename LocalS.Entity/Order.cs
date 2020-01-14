@@ -92,5 +92,10 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+
+        public bool IsHasEx { get; set; }
+        public DateTime? ExHappenTime { get; set; }
+        public bool ExIsHandleComplete { get; set; }
+        public DateTime? ExHandleTime { get; set; }
     }
 }

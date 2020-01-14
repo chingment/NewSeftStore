@@ -15,5 +15,7 @@ namespace LocalS.Service.Api.StoreApp
         public E_OrderStatus Status { get; set; }
 
         public E_AppCaller Caller { get; set; }
+
+        public bool IsHasEx { get; set; }
     }
 }

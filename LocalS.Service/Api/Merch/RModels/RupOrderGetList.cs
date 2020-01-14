@@ -20,5 +20,7 @@ namespace LocalS.Service.Api.Merch
         public string MachineId { get; set; }
 
         public string ClientUserId { get; set; }
+
+        public bool IsHasEx { get; set; }
     }
 }

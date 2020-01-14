@@ -20,7 +20,8 @@
           </el-select>
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-checkbox v-model="listQuery.isHasEx">异常未处理</el-checkbox>
+          <el-button class="filter-item" type="primary" icon="el-icon-search" style="margin-left:20px;" @click="handleFilter">
             查询
           </el-button>
         </el-col>
@@ -122,9 +123,14 @@
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" align="left" min-width="15%">
+      <el-table-column label="状态" prop="status" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.status.text }}</span>
+        </template>
+      </el-table-column>
+       <el-table-column label="异常？" prop="status" align="left" min-width="15%">
+        <template slot-scope="scope">
+          <span :class="'enable-status enable-status-'+scope.row.exStatus.value">{{ scope.row.exStatus.text }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="下单时间" prop="submitTime" align="left" min-width="15%">
@@ -325,7 +331,8 @@ export default {
         clientName: undefined,
         orderSn: undefined,
         storeId: undefined,
-        machineId: undefined
+        machineId: undefined,
+        isHasEx:false
       },
       dialogDetailsIsVisible: false,
       detailsLoading: false,

@@ -13,6 +13,44 @@ namespace LocalS.Service.Api.Merch
 {
     public class OrderService : BaseDbContext
     {
+        public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
+        {
+            var statusModel = new StatusModel();
+
+            if (isHasEx)
+            {
+                if (isHandleComplete)
+                {
+                    statusModel.Value = 0;
+                    statusModel.Text = "异常，已处理";
+                }
+                else
+                {
+                    statusModel.Value = 2;
+                    statusModel.Text = "异常，未处理";
+                }
+            }
+            else
+            {
+                statusModel.Value = 0;
+                statusModel.Text = "否";
+            }
+            //switch (status)
+            //{
+            //    case E_AdContentStatus.Normal:
+            //        statusModel.Value = 1;
+            //        statusModel.Text = "正常";
+            //        break;
+            //    case E_AdContentStatus.Deleted:
+            //        statusModel.Value = 2;
+            //        statusModel.Text = "已删除";
+            //        break;
+            //}
+
+
+            return statusModel;
+        }
+
         public StatusModel GetStatus(E_OrderStatus orderStatus)
         {
             var status = new StatusModel();
@@ -133,7 +171,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderSn == null || o.Sn.Contains(rup.OrderSn)) &&
                          o.MerchId == merchId
-                         select new { o.Sn, o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Sn, o.Id, o.SellChannelRefIds, o.StoreId, o.IsHasEx, o.ClientUserId, o.ExIsHandleComplete, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
             {
@@ -153,6 +191,11 @@ namespace LocalS.Service.Api.Merch
             if (!string.IsNullOrEmpty(rup.ClientUserId))
             {
                 query = query.Where(m => m.ClientUserId == rup.ClientUserId);
+            }
+
+            if (rup.IsHasEx)
+            {
+                query = query.Where(m => m.IsHasEx == true && m.ExIsHandleComplete == false);
             }
 
             int total = query.Count();
@@ -238,6 +281,7 @@ namespace LocalS.Service.Api.Merch
                     CreateTime = item.CreateTime,
                     Status = GetStatus(item.Status),
                     SourceName = GetSourceName(item.Source),
+                    ExStatus = GetExStatus(item.IsHasEx, item.ExIsHandleComplete),
                     SellChannelDetails = sellChannelDetails
                 });
             }
@@ -454,6 +498,8 @@ namespace LocalS.Service.Api.Merch
                     var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
                     if (order != null)
                     {
+                        order.ExIsHandleComplete = true;
+                        order.ExHappenTime = DateTime.Now;
                         order.Status = E_OrderStatus.Completed;
                         order.CompletedTime = DateTime.Now;
                         CurrentDb.SaveChanges();

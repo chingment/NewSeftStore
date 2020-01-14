@@ -176,6 +176,14 @@ namespace LocalS.Service.Api.StoreTerm
 
                     if (rop.Status == E_OrderDetailsChildSonStatus.Exception)
                     {
+                        var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
+                        if (order != null)
+                        {
+                            order.IsHasEx = true;
+                            order.ExHappenTime = DateTime.Now;
+                            CurrentDb.SaveChanges();
+                        }
+
                         foreach (var item in orderDetailsChildSons)
                         {
                             if (item.Status != E_OrderDetailsChildSonStatus.Completed && item.Status != E_OrderDetailsChildSonStatus.Canceled)
