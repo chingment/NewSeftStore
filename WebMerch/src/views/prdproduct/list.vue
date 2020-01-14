@@ -48,7 +48,7 @@
           <span>{{ scope.row.skus[0].cumCode }}</span>
         </template>
       </el-table-column>
-            <el-table-column label="条形码"  align="left" min-width="20%">
+            <el-table-column v-if="isDesktop" label="条形码"  align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.skus[0].barCode }}</span>
         </template>
