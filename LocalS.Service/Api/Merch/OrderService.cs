@@ -439,17 +439,35 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
 
-                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.ToList();
+                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
+                LogUtil.Info("orderDetailsChildSons：" + orderDetailsChildSons);
+
                 var orderDetailsChildSonsCompeleteCount = orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed || m.Status == E_OrderDetailsChildSonStatus.ExPickupSignTaked || m.Status == E_OrderDetailsChildSonStatus.ExPickupSignUnTaked).Count();
+
+                LogUtil.Info("orderDetailsChildSonsCompeleteCount：" + orderDetailsChildSonsCompeleteCount);
+
                 //判断全部订单都是已完成
                 if (orderDetailsChildSonsCompeleteCount == orderDetailsChildSons.Count)
                 {
+                    LogUtil.Info("orderDetailsChildSonsCompeleteCount：相等");
+
                     var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
                     if (order != null)
                     {
                         order.Status = E_OrderStatus.Completed;
                         order.CompletedTime = DateTime.Now;
+                        CurrentDb.SaveChanges();
+
+                        LogUtil.Info("orderDetailsChildSonsCompeleteCount：完成");
                     }
+                    else
+                    {
+                        LogUtil.Info("orderDetailsChildSonsCompeleteCount：订单未空");
+                    }
+                }
+                else
+                {
+                    LogUtil.Info("orderDetailsChildSonsCompeleteCount：不相等");
                 }
 
                 CurrentDb.SaveChanges();

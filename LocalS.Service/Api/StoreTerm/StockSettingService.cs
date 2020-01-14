@@ -63,7 +63,7 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
-                    slot.MaxLimitSumQuantity = item.MaxLimitSumQuantity;
+                    slot.MaxQuantity = item.MaxLimitSumQuantity;
                     slot.Version = item.Version;
                     ret.Slots.Add(item.SlotId, slot);
                 }
@@ -102,7 +102,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(GuidUtil.New(), machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity);
+                    result = BizFactory.ProductSku.AdjustStockQuantity(GuidUtil.New(), machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
 
                     if (result.Result == ResultType.Success)
                     {
