@@ -12,6 +12,7 @@ using MyWeiXinSdk;
 using System.Runtime.InteropServices;
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
+using System.Transactions;
 
 namespace LocalS.Service.Api.Account
 {
@@ -602,64 +603,68 @@ namespace LocalS.Service.Api.Account
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
-
-            var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
-            if (sysUser == null)
+            using (TransactionScope ts = new TransactionScope())
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户");
-            }
 
-            if (sysUser.FingerVeinCount > 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已录入");
-            }
-
-
-            bool isMachSuccess = false;
-            try
-            {
-                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.BelongId == machine.MerchId && m.BelongType == Enumeration.BelongType.Merch).ToList();
-                byte[] matchFeature = Convert.FromBase64String(rop.VeinData);
-                foreach (var item in sysUserFingerVeins)
+                var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+                if (sysUser == null)
                 {
-                    int[] diff2 = new int[1];
-                    byte[] AIDataBuf = new byte[matchFeature.Length];
-                    int[] AIDataLen = new int[1];
-                    var re1t = FV_MatchFeature(matchFeature, item.VeinData, (byte)0x03, (byte)0x03, (byte)4, diff2, AIDataBuf, AIDataLen);
-                    if (re1t == 0)
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户");
+                }
+
+                if (sysUser.FingerVeinCount > 0)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已录入");
+                }
+
+
+                bool isMachSuccess = false;
+                try
+                {
+                    var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.BelongId == machine.MerchId && m.BelongType == Enumeration.BelongType.Merch).ToList();
+                    byte[] matchFeature = Convert.FromBase64String(rop.VeinData);
+                    foreach (var item in sysUserFingerVeins)
                     {
-                        isMachSuccess = true;
-                        break;
+                        int[] diff2 = new int[1];
+                        byte[] AIDataBuf = new byte[matchFeature.Length];
+                        int[] AIDataLen = new int[1];
+                        var re1t = FV_MatchFeature(matchFeature, item.VeinData, (byte)0x03, (byte)0x03, (byte)4, diff2, AIDataBuf, AIDataLen);
+                        if (re1t == 0)
+                        {
+                            isMachSuccess = true;
+                            break;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    LogUtil.Error("静指脉匹配异常", ex);
+                }
+
+                if (isMachSuccess)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "采集失败，该静脉指信息已被上传");
+                }
+
+                var sysUserFingerVein = new SysUserFingerVein();
+                sysUserFingerVein.Id = GuidUtil.New();
+                sysUserFingerVein.UserId = userId;
+                sysUserFingerVein.BelongType = Enumeration.BelongType.Merch;
+                sysUserFingerVein.BelongId = machine.MerchId;
+                sysUserFingerVein.VeinData = Convert.FromBase64String(rop.VeinData);
+                sysUserFingerVein.CreateTime = DateTime.Now;
+                sysUserFingerVein.Creator = operater;
+                CurrentDb.SysUserFingerVein.Add(sysUserFingerVein);
+                CurrentDb.SaveChanges();
+
+                sysUser.FingerVeinCount = 1;
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "录入成功");
             }
-            catch (Exception ex)
-            {
-                LogUtil.Error("静指脉匹配异常", ex);
-            }
-
-            if (isMachSuccess)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "采集失败，该静脉指信息已被上传");
-            }
-
-            var sysUserFingerVein = new SysUserFingerVein();
-            sysUserFingerVein.Id = GuidUtil.New();
-            sysUserFingerVein.UserId = userId;
-            sysUserFingerVein.BelongType = Enumeration.BelongType.Merch;
-            sysUserFingerVein.BelongId = machine.MerchId;
-            sysUserFingerVein.VeinData = Convert.FromBase64String(rop.VeinData);
-            sysUserFingerVein.CreateTime = DateTime.Now;
-            sysUserFingerVein.Creator = operater;
-            CurrentDb.SysUserFingerVein.Add(sysUserFingerVein);
-            CurrentDb.SaveChanges();
-
-            sysUser.FingerVeinCount = 1;
-
-
-            CurrentDb.SaveChanges();
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "录入成功");
 
             return result;
         }
@@ -669,25 +674,29 @@ namespace LocalS.Service.Api.Account
 
             var result = new CustomJsonResult();
 
-            var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
-            if (sysUser == null)
+            using (TransactionScope ts = new TransactionScope())
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户");
+                var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+                if (sysUser == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户");
+                }
+
+                sysUser.FingerVeinCount = 0;
+
+
+                var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.UserId == userId).ToList();
+
+                foreach (var sysUserFingerVein in sysUserFingerVeins)
+                {
+                    CurrentDb.SysUserFingerVein.Remove(sysUserFingerVein);
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
             }
-
-            sysUser.FingerVeinCount = 0;
-
-
-            var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.UserId == userId).ToList();
-
-            foreach (var sysUserFingerVein in sysUserFingerVeins)
-            {
-                CurrentDb.SysUserFingerVein.Remove(sysUserFingerVein);
-            }
-
-            CurrentDb.SaveChanges();
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
 
             return result;
         }
