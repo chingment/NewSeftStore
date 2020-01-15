@@ -182,7 +182,7 @@ namespace LocalS.BLL
 
             if (type == "PinYinIndex" || type == "All")
             {
-                var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSPY, merchId), string.Format("{0}*", key));
+                var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSPY, merchId), string.Format("{0}*", key.ToUpper()));
                 foreach (var item in search_Scan_PinYinIndex)
                 {
                     productSkuIds.Add(item.Value);
@@ -193,6 +193,15 @@ namespace LocalS.BLL
             {
                 var search_Scan_CumCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSCR, merchId), string.Format("{0}*", key));
                 foreach (var item in search_Scan_CumCode)
+                {
+                    productSkuIds.Add(item.Value);
+                }
+            }
+
+            if (type == "Name" || type == "All")
+            {
+                var search_Scan_Name = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSNA, merchId), string.Format("*{0}*", key));
+                foreach (var item in search_Scan_Name)
                 {
                     productSkuIds.Add(item.Value);
                 }

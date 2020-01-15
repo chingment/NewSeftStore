@@ -105,6 +105,25 @@ namespace Lumos
             }
         }
 
+        public static bool IsEmpty(string strDate)
+        {
+            if (strDate == null)
+            {
+                return true;
+            }
+
+            strDate = strDate.Trim();
+
+            if (string.IsNullOrEmpty(strDate))
+            {
+                return true;
+            }
+
+            return false;
+
+
+        }
+
         public static DateTime? ConverToStartTime(string strDate)
         {
             DateTime? d = null;

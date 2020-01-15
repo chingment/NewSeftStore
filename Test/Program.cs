@@ -97,7 +97,7 @@ namespace Test
             //config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
             TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
             decimal amount = 0.01m;
-            tongGuanUtil.AllQrcodePay("6100054201911231627169359", amount.ToString("#0.00"), "自助商品", "867184037089830");
+            tongGuanUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
             //tongGuanUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
             ////tongGuanUtil.OrderQuery("6100054201910231627169351我");
             //Dictionary<string, string> dic = new Dictionary<string, string>();

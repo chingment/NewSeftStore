@@ -338,6 +338,7 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品名称不能为空");
             }
 
+
             //if (rop.KindIds == null || rop.KindIds.Count == 0)
             //{
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
@@ -366,12 +367,12 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var sku in rop.Skus)
                 {
-                    if (string.IsNullOrEmpty(sku.CumCode))
+                    if (CommonUtil.IsEmpty(sku.CumCode))
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码不能为空");
                     }
 
-                    var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.Id != sku.Id && m.CumCode == sku.CumCode).FirstOrDefault();
+                    var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.Id != sku.Id && m.CumCode == sku.CumCode).FirstOrDefault();
                     if (isExtitSkuCode != null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码已经存在");
