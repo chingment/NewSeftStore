@@ -614,7 +614,7 @@ namespace LocalS.Service.Api.Account
 
                 if (sysUser.FingerVeinCount > 0)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已录入");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已录入，请先删除");
                 }
 
 
