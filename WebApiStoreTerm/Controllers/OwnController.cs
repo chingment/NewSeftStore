@@ -17,9 +17,15 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public OwnApiHttpResponse UploadFingerVeinData([FromBody]LocalS.Service.Api.Account.RopUploadFingerVeinData rop)
+        {
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse DeleteFingerVeinData([FromBody]LocalS.Service.Api.Account.RopUploadFingerVeinData rop)
         {
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
@@ -33,6 +39,7 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public OwnApiHttpResponse LoginByAccount([FromBody]LocalS.Service.Api.Account.RopOwnLoginByAccount rop)
         {
