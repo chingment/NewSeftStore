@@ -25,9 +25,9 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse DeleteFingerVeinData([FromBody]LocalS.Service.Api.Account.RopUploadFingerVeinData rop)
+        public OwnApiHttpResponse DeleteFingerVeinData()
         {
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.DeleteFingerVeinData(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -50,7 +50,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Logout([FromBody]LocalS.Service.Api.Account.RopOwnLogout rop)
         {
-            if(rop==null)
+            if (rop == null)
             {
                 rop = new LocalS.Service.Api.Account.RopOwnLogout();
             }
