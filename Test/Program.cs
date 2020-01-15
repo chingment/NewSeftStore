@@ -89,15 +89,15 @@ namespace Test
 
             //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
 
-            //TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
-            //config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
-            //config.Account = "15712153755";
-            //config.Key = "bda1c3c86878b33258823d4d1dcc20ea";
-            ////config.Account = "13974747474";
-            ////config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
-            //TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
-            //decimal amount = 0.01m;
-            //tongGuanUtil.AllQrcodePay("6100054201911231627169359", amount.ToString("#0.00"), "自助商品", "867184037089830");
+            TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
+            config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
+            config.Account = "15675830166";
+            config.Key = "ffd50c4bf658b619c53e246926af8e48";
+            //config.Account = "13974747474";
+            //config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
+            TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
+            decimal amount = 0.01m;
+            tongGuanUtil.AllQrcodePay("6100054201911231627169359", amount.ToString("#0.00"), "自助商品", "867184037089830");
             //tongGuanUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
             ////tongGuanUtil.OrderQuery("6100054201910231627169351我");
             //Dictionary<string, string> dic = new Dictionary<string, string>();
