@@ -54,6 +54,12 @@ namespace Test
         static void Main(string[] args)
         {
 
+            List<string[]> s = new List<string[]>();
+            //s.Add
+//[[1],[1,7],[17],[17,21]]
+//            string[,] s = new string[2, 5];
+
+
             string extension = Path.GetExtension("Dsadad/dsada.jpg");
 
             MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPick);

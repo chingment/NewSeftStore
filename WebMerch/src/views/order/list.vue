@@ -4,10 +4,10 @@
 
       <el-row :gutter="12">
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col v-if="isShowClientUserNameInput" :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">
@@ -128,7 +128,7 @@
           <span>{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
-       <el-table-column label="异常？" prop="status" align="left" min-width="15%">
+      <el-table-column label="异常？" prop="status" align="left" min-width="15%">
         <template slot-scope="scope">
           <span :class="'enable-status enable-status-'+scope.row.exStatus.value">{{ scope.row.exStatus.text }}</span>
         </template>
@@ -332,7 +332,7 @@ export default {
         orderSn: undefined,
         storeId: undefined,
         machineId: undefined,
-        isHasEx:false
+        isHasEx: false
       },
       dialogDetailsIsVisible: false,
       detailsLoading: false,

@@ -3,6 +3,13 @@ export function getUrlParam(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ''])[1].replace(/\+/g, '%20')) || null
 }
 
+export function isEmpty(str) {
+  if (typeof str === 'undefined') { return true }
+  if (str === null) { return true }
+  if (str.length === 0) { return true }
+  return false
+}
+
 export function changeURLArg(url, arg, arg_val) {
   var pattern = arg + '=([^&]*)'
   var replaceText = arg + '=' + arg_val

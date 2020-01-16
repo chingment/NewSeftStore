@@ -8,11 +8,11 @@ export function machineStockInit(params) {
   })
 }
 
-export function machineStockGet(params) {
+export function machineStockGet(data) {
   return request({
     url: '/report/machineStockGet',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 

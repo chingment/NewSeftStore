@@ -10,7 +10,7 @@
 
       <el-row :gutter="12">
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" style="width: 100%" placeholder="机器名称" va class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.name" style="width: 100%" placeholder="机器名称" va class="filter-item" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

@@ -243,7 +243,7 @@
     <Compile Include="Api\Merch\RModels\RupPrdKindGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdSubjectGetList.cs" />
-    <Compile Include="Api\Merch\RModels\RupReportMachineStockGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReportMachineStockGet.cs" />
     <Compile Include="Api\Merch\RModels\RupReportProductSkuDaySalesGet.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageMachineGetMachineList.cs" />
@@ -355,6 +355,7 @@
     <Compile Include="UI\FsTemplateData.cs" />
     <Compile Include="UI\FsText.cs" />
     <Compile Include="UI\MenuNode.cs" />
+    <Compile Include="UI\OptionNode.cs" />
     <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>

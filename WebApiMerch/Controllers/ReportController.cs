@@ -18,10 +18,10 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse MachineStockGet([FromUri]RupReportMachineStockGet rup)
+        [HttpPost]
+        public OwnApiHttpResponse MachineStockGet([FromBody]RopReportMachineStockGet rop)
         {
-            IResult result = MerchServiceFactory.Report.MachineStockGet(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Report.MachineStockGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupReportMachineStockGet
+    public class RopReportMachineStockGet
     {
-        public string MachineId { get; set; }
+        public List<string[]> SellChannels { get; set; }
     }
 }

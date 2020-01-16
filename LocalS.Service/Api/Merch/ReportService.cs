@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
 using System;
@@ -19,64 +20,76 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportMachineStockInit();
 
-            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
 
-            foreach (var merchMachine in merchMachines)
+            foreach (var store in stores)
             {
-                string storeName = "未绑定店铺";
-                var machie = BizFactory.Machine.GetOne(merchMachine.MachineId);
-                if (!string.IsNullOrEmpty(machie.StoreName))
+                var optionsSellChannel = new OptionNode();
+
+                optionsSellChannel.Value = store.Id;
+                optionsSellChannel.Label = store.Name;
+
+                var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                if (storeMachines.Count > 0)
                 {
-                    storeName = machie.StoreName;
+                    optionsSellChannel.Children = new List<OptionNode>();
+
+                    foreach (var storeMachine in storeMachines)
+                    {
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
+                    }
+
+                    ret.OptionsSellChannels.Add(optionsSellChannel);
                 }
-
-                ret.Machines.Add(new MachineModel { Id = merchMachine.MachineId, Name = merchMachine.Name, StoreName = storeName });
             }
-
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult MachineStockGet(string operater, string merchId, RupReportMachineStockGet rup)
+        public CustomJsonResult MachineStockGet(string operater, string merchId, RopReportMachineStockGet rop)
         {
 
             var result = new CustomJsonResult();
 
-            if (string.IsNullOrEmpty(rup.MachineId))
+            if (rop.SellChannels == null || rop.SellChannels.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择机器");
             }
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.SellChannelRefId == rup.MachineId).ToList();
-
-            var machine = BizFactory.Machine.GetOne(rup.MachineId);
-
             List<object> olist = new List<object>();
 
-            foreach (var sellChannelStock in sellChannelStocks)
+            foreach (string[] sellChannel in rop.SellChannels)
             {
-                var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
-                if (productSku != null)
+                string sellChannelRefId = sellChannel[1];
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId).ToList();
+
+                var machineInfo = BizFactory.Machine.GetOne(sellChannelRefId);
+
+                foreach (var sellChannelStock in sellChannelStocks)
                 {
-                    olist.Add(new
+                    var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+                    if (productSku != null)
                     {
-                        StoreName = machine.StoreName,
-                        MachineName = machine.Name,
-                        ProductSkuId = productSku.Id,
-                        ProductSkuName = productSku.Name,
-                        ProductSkuSpecDes = productSku.SpecDes,
-                        ProductSkuCumCode = productSku.CumCode,
-                        SlotId = sellChannelStock.SlotId,
-                        SellQuantity = sellChannelStock.SellQuantity,
-                        WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-                        WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-                        LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
-                        SumQuantity = sellChannelStock.SumQuantity,
-                        MaxQuantity = sellChannelStock.MaxQuantity,
-                        RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
-                        IsOffSell = sellChannelStock.IsOffSell
-                    });
+                        olist.Add(new
+                        {
+                            StoreName = machineInfo.StoreName,
+                            MachineName = machineInfo.Name,
+                            ProductSkuId = productSku.Id,
+                            ProductSkuName = productSku.Name,
+                            ProductSkuSpecDes = productSku.SpecDes,
+                            ProductSkuCumCode = productSku.CumCode,
+                            SlotId = sellChannelStock.SlotId,
+                            SellQuantity = sellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                            LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
+                            SumQuantity = sellChannelStock.SumQuantity,
+                            MaxQuantity = sellChannelStock.MaxQuantity,
+                            RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
+                            IsOffSell = sellChannelStock.IsOffSell
+                        });
+                    }
                 }
             }
 

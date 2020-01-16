@@ -15,29 +15,26 @@
         </el-col>
         <el-col :span="10" :xs="24" style="margin-bottom:20px">
 
- <el-date-picker
-      v-model="listQuery.tradeDateTimeArea"
-      type="datetimerange"
-      range-separator="至"
-      value-format="yyyy-MM-dd HH:mm:ss"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期">
-    </el-date-picker>
+          <el-date-picker
+            v-model="listQuery.tradeDateTimeArea"
+            type="datetimerange"
+            range-separator="至"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
         </el-col>
         <el-col :span="8" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-         <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
-         导出
-        </el-button>
+          <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+            导出
+          </el-button>
         </el-col>
       </el-row>
       <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
     </div>
-     <FilenameOption v-model="filename" />
-      <AutoWidthOption v-model="autoWidth" />
-      <BookTypeOption v-model="bookType" />
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -46,7 +43,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="店铺"  align="left" :width="isDesktop==true?220:80">
+      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
@@ -56,17 +53,17 @@
           <span>{{ scope.row.sellChannelRefName }}</span>
         </template>
       </el-table-column>
-      <el-table-column  label="订单号"  align="left" min-width="10%">
+      <el-table-column label="订单号" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.orderSn }}</span>
         </template>
       </el-table-column>
-      <el-table-column  label="交易时间"  align="left" min-width="10%">
+      <el-table-column label="交易时间" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column  label="商品名称" align="left" min-width="10%">
+      <el-table-column label="商品名称" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.productSkuName }}</span>
         </template>
@@ -76,27 +73,27 @@
           <span>{{ scope.row.productSkuCumCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品规格"  align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.productSkuSpecDes }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="单价"  align="left" min-width="10%">
+      <el-table-column label="单价" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量"  align="left" min-width="10%">
+      <el-table-column label="数量" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总金额"  align="left" min-width="10%">
+      <el-table-column label="总金额" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付方式"  align="left" min-width="10%">
+      <el-table-column label="支付方式" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.payWay }}</span>
         </template>
@@ -106,11 +103,11 @@
 </template>
 
 <script>
-import { MessageBox } from 'element-ui'
-import { productSkuDaySalesInit,productSkuDaySalesGet } from '@/api/report'
+
+import { productSkuDaySalesInit, productSkuDaySalesGet } from '@/api/report'
 
 export default {
-  name: 'OrderList',
+  name: 'ProductSkuDaySales',
   props: {
   },
   data() {
@@ -125,7 +122,7 @@ export default {
       listTotal: 0,
       listQuery: {
         machineId: undefined,
-        tradeDateTimeArea:[],
+        tradeDateTimeArea: []
       },
       options_stores: [],
       isDesktop: this.$store.getters.isDesktop
@@ -139,9 +136,9 @@ export default {
   },
   methods: {
     init() {
-     // var dateNow= new Date()
+      // var dateNow= new Date()
 
-     // this.listQuery.tradeDateTimeArea=[dateNow,dateNow]         
+      // this.listQuery.tradeDateTimeArea=[dateNow,dateNow]
       productSkuDaySalesInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -149,19 +146,16 @@ export default {
         }
         this.loading = false
       })
-
     },
     _productSkuDaySalesGet() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       productSkuDaySalesGet(this.listQuery).then(res => {
-
         this.listData = res.data
         if (res.result === 1) {
-          //this.listData = res.data
-        }
-        else{
-            this.$message(res.message)
+          // this.listData = res.data
+        } else {
+          this.$message(res.message)
         }
         this.loading = false
       })
@@ -169,15 +163,15 @@ export default {
     handleFilter() {
     //   if(this.listQuery.machineId==null||this.listQuery.machineId==undefined||this.listQuery.machineId.length==0){
     //       this.$message('请选择机器')
-    //       return 
+    //       return
     //   }
       this._productSkuDaySalesGet()
     },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '机器', '订单号', '交易时间','商品名称', '商品编码','商品规格','单价','数量','总金额','支付方式']
-        const filterVal = ['storeName', 'sellChannelRefName', 'orderSn','tradeTime', 'productSkuName', 'productSkuCumCode','productSkuSpecDes','salePrice','quantity','tradeAmount','payWay']
+        const tHeader = ['店铺', '机器', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式']
+        const filterVal = ['storeName', 'sellChannelRefName', 'orderSn', 'tradeTime', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
