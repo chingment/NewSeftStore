@@ -5,11 +5,13 @@ using LocalS.Service.Api.Merch;
 using LocalS.Service.Api.StoreApp;
 using Lumos;
 using Lumos.Redis;
+using NPinyin;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -50,14 +52,55 @@ namespace Test
             return sb.ToString();
         }
 
+        public static string RemoveNotLetter(string title)
+        {
+            var listSign = new List<string> { "|", "'", ",", "&", ".", "!" };
+            var notLetter = Regex.Split(title, @"[a-zA-Z]/[0-9]", RegexOptions.IgnoreCase).Where(r => r.Trim() != string.Empty).ToList();
+            var newLetter = new List<string>();
+
+            for (int i = notLetter.Count - 1; i >= 0; i--)
+            {
+                if (notLetter[i].Trim().Length == 0)
+                {
+                    notLetter.RemoveAt(i);
+                    continue;
+                }
+
+                if (notLetter[i].Trim().Length > 1)
+                {
+                    for (int j = 0; j < notLetter[i].Trim().Length; j++)
+                    {
+                        newLetter.Add(notLetter[i].Trim().Substring(j, 1));
+                    }
+                    notLetter.RemoveAt(i);
+                }
+            }
+
+            notLetter.AddRange(newLetter);
+            foreach (string sign in notLetter)
+            {
+                if (sign.Trim().Length == 0) continue;
+
+                if (!listSign.Contains(sign.Trim()))
+                {
+                    title = title.Replace(sign.Trim(), "");
+                }
+            }
+            return title;
+        }
 
         static void Main(string[] args)
         {
 
+            string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
+            string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
+
+     
+
             List<string[]> s = new List<string[]>();
             //s.Add
-//[[1],[1,7],[17],[17,21]]
-//            string[,] s = new string[2, 5];
+            //[[1],[1,7],[17],[17,21]]
+            //            string[,] s = new string[2, 5];
 
 
             string extension = Path.GetExtension("Dsadad/dsada.jpg");
@@ -95,15 +138,15 @@ namespace Test
 
             //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
 
-            TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
-            config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
-            config.Account = "15675830166";
-            config.Key = "ffd50c4bf658b619c53e246926af8e48";
-            //config.Account = "13974747474";
-            //config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
-            TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
-            decimal amount = 0.01m;
-            tongGuanUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
+            //TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
+            //config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
+            //config.Account = "15675830166";
+            //config.Key = "ffd50c4bf658b619c53e246926af8e48";
+            ////config.Account = "13974747474";
+            ////config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
+            //TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
+            //decimal amount = 0.01m;
+            //tongGuanUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
             //tongGuanUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
             ////tongGuanUtil.OrderQuery("6100054201910231627169351我");
             //Dictionary<string, string> dic = new Dictionary<string, string>();

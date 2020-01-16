@@ -62,7 +62,7 @@ namespace LocalS.Service.Api.Merch
             foreach (string[] sellChannel in rop.SellChannels)
             {
                 string sellChannelRefId = sellChannel[1];
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId).ToList();
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId).OrderBy(m => m.SlotId).ToList();
 
                 var machineInfo = BizFactory.Machine.GetOne(sellChannelRefId);
 

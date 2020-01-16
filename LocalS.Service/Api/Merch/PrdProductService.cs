@@ -207,8 +207,8 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.Id = GuidUtil.New();
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name;
-                prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
-                prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
+                //prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
+                prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes;
@@ -356,8 +356,8 @@ namespace LocalS.Service.Api.Merch
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 prdProduct.Name = rop.Name;
-                prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
-                prdProduct.PinYinIndex = Pinyin.GetInitials(prdProduct.PinYinName, Encoding.GetEncoding("GB2312"));
+                //prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
+                prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.DetailsDes = rop.DetailsDes;
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();

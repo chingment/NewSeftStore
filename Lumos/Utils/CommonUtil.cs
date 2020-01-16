@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NPinyin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -185,6 +187,54 @@ namespace Lumos
                 }
             }
             return true;                                        //是，就返回True  
+        }
+
+        public static string GetNumberAlpha(string source)
+        {
+            string pattern = "[A-Za-z0-9]";
+            string strRet = "";
+            MatchCollection results = Regex.Matches(source, pattern);
+            foreach (var v in results)
+            {
+                strRet += v.ToString();
+            }
+            return strRet;
+        }
+
+        public static string GetPingYin(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return null;
+
+
+            string str1 = Pinyin.GetPinyin(str, Encoding.GetEncoding("GB2312"));
+            if (string.IsNullOrEmpty(str1))
+                return null;
+
+            str1 = GetNumberAlpha(str1);
+
+            if (!string.IsNullOrEmpty(str))
+                str1 = str1.ToUpper();
+
+            return str1;
+
+        }
+
+        public static string GetPingYinIndex(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return null;
+
+
+            string str1 = Pinyin.GetInitials(str);
+            if (string.IsNullOrEmpty(str1))
+                return null;
+
+            if (!string.IsNullOrEmpty(str))
+                str1 = str1.ToUpper();
+
+            return str1;
+
         }
     }
 }
