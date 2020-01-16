@@ -3,7 +3,7 @@
     <div class="filter-container">
 
       <el-row :gutter="24">
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-cascader
             v-model="listQuery.sellChannels"
             :props="optionsSellChannelsProps"
@@ -13,7 +13,7 @@
             style="width: 100%"
           />
         </el-col>
-        <el-col :span="10" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
 
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
@@ -22,9 +22,10 @@
             value-format="yyyy-MM-dd HH:mm:ss"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            style="width: 100%"
           />
         </el-col>
-        <el-col :span="8" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>

@@ -275,10 +275,10 @@
 
                     </el-timeline-item>
                   </el-timeline>
-                  <el-button slot="reference" style="margin-right:15px;">取货流程</el-button>
+                  <el-button slot="reference" style="margin-right:15px;">出货流程</el-button>
                 </el-popover>
-                <el-button v-if="pickupSku.exPickupIsHandled==false" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)">标记未取</el-button>
-                <el-button v-if="pickupSku.exPickupIsHandled==false" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button>
+                <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)">标记未取</el-button>
+                <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button>
               </td>
             </tr>
           </table>
@@ -288,7 +288,6 @@
         <el-button @click="dialogDetailsIsVisible = false">
           关闭
         </el-button>
-        <el-button type="primary" @click="refreshDetails(details.id)">刷新</el-button>
       </div>
     </el-dialog>
   </div>

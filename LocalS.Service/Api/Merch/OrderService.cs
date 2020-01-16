@@ -397,6 +397,10 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
                 }
 
+                if (orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Exception)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
+                }
 
                 E_OrderDetailsChildSonStatus old_Status = orderDetailsChildSon.Status;
 
