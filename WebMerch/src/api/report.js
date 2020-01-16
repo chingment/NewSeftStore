@@ -24,11 +24,11 @@ export function productSkuDaySalesInit(params) {
   })
 }
 
-export function productSkuDaySalesGet(params) {
+export function productSkuDaySalesGet(data) {
   return request({
     url: '/report/ProductSkuDaySalesGet',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 

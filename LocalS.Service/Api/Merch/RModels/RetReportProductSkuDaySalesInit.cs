@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Service.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +11,9 @@ namespace LocalS.Service.Api.Merch
     {
         public RetReportProductSkuDaySalesInit()
         {
-            this.Machines = new List<MachineModel>();
-            this.Stores = new List<StoreModel>();
+            this.OptionsSellChannels = new List<OptionNode>();
         }
 
-        public List<MachineModel> Machines { get; set; }
-
-        public List<StoreModel> Stores { get; set; }
+        public List<OptionNode> OptionsSellChannels { get; set; }
     }
 }

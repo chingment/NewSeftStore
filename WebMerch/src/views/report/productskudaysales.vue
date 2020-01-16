@@ -4,14 +4,14 @@
 
       <el-row :gutter="24">
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.storeId" clearable placeholder="选择店铺" style="width: 100%">
-            <el-option
-              v-for="item in options_stores"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+          <el-cascader
+            v-model="listQuery.sellChannels"
+            :props="optionsSellChannelsProps"
+            :options="optionsSellChannels"
+            placeholder="选择机器"
+            clearable
+            style="width: 100%"
+          />
         </el-col>
         <el-col :span="10" :xs="24" style="margin-bottom:20px">
 
@@ -121,10 +121,11 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        machineId: undefined,
+        sellChannels: [],
         tradeDateTimeArea: []
       },
-      options_stores: [],
+      optionsSellChannels: [],
+      optionsSellChannelsProps: { multiple: true, checkStrictly: false },
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -142,7 +143,7 @@ export default {
       productSkuDaySalesInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.options_stores = d.stores
+          this.optionsSellChannels = d.optionsSellChannels
         }
         this.loading = false
       })

@@ -32,8 +32,8 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse ProductSkuDaySalesGet([FromUri]RupReportProductSkuDaySalesGet rup)
+        [HttpPost]
+        public OwnApiHttpResponse ProductSkuDaySalesGet([FromBody]RopReportProductSkuDaySalesGet rup)
         {
             IResult result = MerchServiceFactory.Report.ProductSkuDaySalesGet(this.CurrentUserId, this.CurrentMerchId,rup);
             return new OwnApiHttpResponse(result);

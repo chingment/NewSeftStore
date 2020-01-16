@@ -107,64 +107,86 @@ namespace LocalS.Service.Api.Merch
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
+
             foreach (var store in stores)
             {
-                ret.Stores.Add(new StoreModel { Id = store.Id, Name = store.Name });
-            }
+                var optionsSellChannel = new OptionNode();
 
-            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
+                optionsSellChannel.Value = store.Id;
+                optionsSellChannel.Label = store.Name;
 
-
-            foreach (var merchMachine in merchMachines)
-            {
-                string storeName = "未绑定店铺";
-                var machie = BizFactory.Machine.GetOne(merchMachine.MachineId);
-                if (!string.IsNullOrEmpty(machie.StoreName))
+                var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                if (storeMachines.Count > 0)
                 {
-                    storeName = machie.StoreName;
-                }
+                    optionsSellChannel.Children = new List<OptionNode>();
 
-                ret.Machines.Add(new MachineModel { Id = merchMachine.MachineId, Name = merchMachine.Name, StoreName = storeName });
+                    foreach (var storeMachine in storeMachines)
+                    {
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
+                    }
+
+                    ret.OptionsSellChannels.Add(optionsSellChannel);
+                }
             }
+
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult ProductSkuDaySalesGet(string operater, string merchId, RupReportProductSkuDaySalesGet rup)
+        public CustomJsonResult ProductSkuDaySalesGet(string operater, string merchId, RopReportProductSkuDaySalesGet rop)
         {
 
             var result = new CustomJsonResult();
 
-            if (rup.TradeDateTimeArea == null)
+            if (rop.TradeDateTimeArea == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
             }
 
-            if (rup.TradeDateTimeArea.Length != 2)
+            if (rop.TradeDateTimeArea.Length != 2)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
             }
 
-            LogUtil.Info("rup.TradeDateTimeArea[0]" + rup.TradeDateTimeArea[0]);
-            LogUtil.Info("rup.TradeDateTimeArea[1]" + rup.TradeDateTimeArea[1]);
+            LogUtil.Info("rup.TradeDateTimeArea[0]" + rop.TradeDateTimeArea[0]);
+            LogUtil.Info("rup.TradeDateTimeArea[1]" + rop.TradeDateTimeArea[1]);
 
-            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rup.TradeDateTimeArea[0]);
+            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
 
-            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rup.TradeDateTimeArea[1]);
+            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]);
+
+
+            List<string> sellChannelRefIds = new List<string>();
+
+            if (rop.SellChannels != null)
+            {
+                foreach (var sellChannel in rop.SellChannels)
+                {
+                    if (sellChannel.Length == 2)
+                    {
+                        if (!string.IsNullOrEmpty(sellChannel[1]))
+                        {
+                            sellChannelRefIds.Add(sellChannel[1]);
+                        }
+                    }
+                }
+            }
+
 
             var query = (from u in CurrentDb.RptOrderDetailsChild
                          where u.MerchId == merchId
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.TradeTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.TradeAmount, u.TradeType, u.PayWay });
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.TradeTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.TradeAmount, u.TradeType, u.PayWay });
 
-            if (!string.IsNullOrEmpty(rup.StoreId))
-            {
-                query = query.Where(m => m.StoreId == rup.StoreId);
-            }
+
 
 
             query = query.Where(m => m.TradeTime >= tradeStartTime && m.TradeTime <= tradeEndTime);
 
+            if (sellChannelRefIds.Count > 0)
+            {
+                query = query.Where(m => sellChannelRefIds.Contains(m.SellChannelRefId));
+            }
             //var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
             List<object> olist = new List<object>();
