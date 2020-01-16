@@ -264,6 +264,20 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
+        public CustomJsonResult SendHeartbeatBag(RopMachineSendHeartbeatBag rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            var machine = CurrentDb.Machine.Where(m => m.ImeiId == rop.DeviceId || m.MacAddress == rop.DeviceId).FirstOrDefault();
+
+            if (machine != null)
+            {
+                machine.LastRequestTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+            return result;
+        }
 
         public CustomJsonResult CheckUpdate(RupMachineCheckUpdate rup)
         {

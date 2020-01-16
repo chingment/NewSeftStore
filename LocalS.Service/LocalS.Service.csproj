@@ -323,6 +323,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopAppTraceLog.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineLogAction.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineScanSlotsEventNotify.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopMachineSendHeartbeatBag.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingTestPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />

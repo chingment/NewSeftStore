@@ -33,6 +33,13 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse SendHeartbeatBag([FromBody]RopMachineSendHeartbeatBag rop)
+        {
+            IResult result = StoreTermServiceFactory.Machine.SendHeartbeatBag(rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
         {
