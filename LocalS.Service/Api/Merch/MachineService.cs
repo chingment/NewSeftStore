@@ -28,6 +28,14 @@ namespace LocalS.Service.Api.Merch
                 return new StatusModel(3, "未绑定店铺");
             }
 
+            if (lastRequestTime != null)
+            {
+                if ((DateTime.Now - lastRequestTime.Value).Minutes > 10)
+                {
+                    return new StatusModel(3, "机器离线");
+                }
+            }
+
             switch (runstatus)
             {
                 case E_MachineRunStatus.Running:
