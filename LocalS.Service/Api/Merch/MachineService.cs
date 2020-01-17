@@ -30,9 +30,9 @@ namespace LocalS.Service.Api.Merch
 
             if (lastRequestTime != null)
             {
-                if ((DateTime.Now - lastRequestTime.Value).Minutes > 10)
+                if ((DateTime.Now - lastRequestTime.Value).Minutes > 15)
                 {
-                    return new StatusModel(3, "机器离线");
+                    return new StatusModel(3, "离线");
                 }
             }
 
