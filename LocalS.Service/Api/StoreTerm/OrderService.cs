@@ -245,6 +245,10 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
+
+
+
+
                     MqFactory.Global.PushOperateLog(AppId.STORETERM, orderDetailsChildSon.ClientUserId, rop.MachineId, "OrderPickup", orderDetailsChildSon.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
 
                 }
