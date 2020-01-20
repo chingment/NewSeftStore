@@ -21,6 +21,29 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult GetTodaySummary(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var retRptTodaySummary = new RetRptTodaySummary();
+
+            StringBuilder sql = new StringBuilder();
+            sql.Append(" select COUNT(*) from dbo.[Order] where IsHasEx=1 and ExIsHandleComplete=0 and merchId='" + merchId + "' ");
+
+
+            int sumExWaitHandleCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql.ToString()).ToString());
+
+            retRptTodaySummary.SumExWaitHandleCount = sumExWaitHandleCount;
+
+
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", retRptTodaySummary);
+
+
+            return result;
+        }
+
         public CustomJsonResult Get7DayGmv(string operater, string merchId)
         {
             var result = new CustomJsonResult();
