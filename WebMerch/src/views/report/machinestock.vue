@@ -88,6 +88,7 @@
         </template>
       </el-table-column>
     </el-table>
+     <div class="remark-tip" style="line-height: 42px;" ><span class="sign">*注</span>：实时统计机器库存报表</div>
   </div>
 </template>
 

@@ -152,9 +152,9 @@ namespace LocalS.Service.Api.Merch
             LogUtil.Info("rup.TradeDateTimeArea[0]" + rop.TradeDateTimeArea[0]);
             LogUtil.Info("rup.TradeDateTimeArea[1]" + rop.TradeDateTimeArea[1]);
 
-            DateTime tradeStartTime = DateTime.Parse(rop.TradeDateTimeArea[0]);
+            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
 
-            DateTime tradeEndTime = DateTime.Parse(rop.TradeDateTimeArea[1]);
+            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]);
 
 
             List<string> sellChannelRefIds = new List<string>();
