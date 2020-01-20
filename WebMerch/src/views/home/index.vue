@@ -10,13 +10,13 @@
           </div>
           <div class="today-sum" style="height:200px;">
             <div class="it">
-              <div class="t1"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单</span></div>
+              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单</span></div>
             </div>
             <div class="it">
-              <div class="t1"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
+              <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
             </div>
             <div class="it">
-              <div class="t1"><span class="m3">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">异常订单</span></div>
+              <div class="t1" @click="sumExWaitHandleCountClick"><span class="m3">  {{ todaySummary.sumExWaitHandleCount }}</span><br> <span class="d1">异常订单</span></div>
             </div>
           </div>
         </el-card>
@@ -193,7 +193,8 @@ export default {
      _getTodaySummary: function() {
       getTodaySummary().then(res => {
         if (res.result === 1) {
-          //this.get7DayGmv = res.data.days
+           var d= res.data
+           this.todaySummary.sumExWaitHandleCount = d.sumExWaitHandleCount
           //this.todayGmv = res.data.days[0]
         }
       })
@@ -226,6 +227,19 @@ export default {
           this.todayStoreGmvRl = res.data.stores
         }
       })
+    },
+    sumExWaitHandleCountClick() {
+      this.$cookies.set('isHasEx',"1")
+      this.$router.push({
+        path: '/order/list'
+      })
+    },
+    todayGmvClick(){
+      this.$cookies.set('tradeStartTime',"2020-01-20")
+      this.$cookies.set('tradeEndTime',"2020-01-20")
+      this.$router.push({
+        path: '/order/list'
+      })
     }
   }
 }
@@ -248,7 +262,7 @@ export default {
 
     .t1{
       text-align: center;
-
+      cursor: pointer;
       .m1{
        font-size: 42px;
        line-height: 60px;

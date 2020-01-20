@@ -11,7 +11,7 @@ import '@/styles/index.scss' // global css
 import App from './views/App'
 import store from './store'
 import router from './router'
-
+import VueCookies from 'vue-cookies'
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -30,7 +30,7 @@ import '@/permission' // permission control
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
-
+Vue.use(VueCookies)
 Vue.config.productionTip = false
 
 new Vue({

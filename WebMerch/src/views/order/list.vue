@@ -297,7 +297,7 @@
 import { MessageBox } from 'element-ui'
 import { getList, getDetails, pickupExceptionHandle } from '@/api/order'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+import { getUrlParam } from '@/utils/commonUtil'
 export default {
   name: 'OrderList',
   components: { Pagination },
@@ -379,6 +379,15 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
+
+    var urlPrm_isHasEx= this.$cookies.get("isHasEx")
+     if(urlPrm_isHasEx ==="1"){
+        this.$cookies.remove("isHasEx")
+        this.listQuery.isHasEx = true
+     }
+     else{
+         this.listQuery.isHasEx = false
+     }
 
     this.listQuery.storeId = this.storeid
     this.listQuery.machineId = this.machineid

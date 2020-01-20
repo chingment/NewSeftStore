@@ -19,6 +19,15 @@ namespace WebApiMerch.Controllers
 
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetTodaySummary()
+        {
+            IResult result = MerchServiceFactory.Home.GetTodaySummary(this.CurrentUserId, this.CurrentMerchId);
+
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse Get7DayGmv()
         {
