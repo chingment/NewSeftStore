@@ -72,7 +72,8 @@ export default {
       loginForm: {
         username: '',
         password: '',
-        redirectUrl:''
+        redirectUrl: '',
+        appId: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -80,13 +81,15 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      appId: undefined
     }
   },
   watch: {
     $route: {
       handler: function(route) {
         this.redirect = route.query && route.query.redirect
+        this.appId = route.query && route.query.appId
       },
       immediate: true
     }
@@ -106,7 +109,10 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.loginForm.redirectUrl=this.redirect
+          this.loginForm.redirectUrl = this.redirect
+          this.loginForm.appId = this.appId
+          console.log(this.loginForm.redirectUrl)
+          console.log(this.loginForm.appId)
           this.$store.dispatch('own/loginByAccount', this.loginForm).then(() => {
             var path = this.redirect || '/'
             var p1 = changeURLArg(decodeURIComponent(path), 'token', getToken())

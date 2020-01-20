@@ -60,7 +60,7 @@ export default {
     async logout() {
       removeToken()
       var path = encodeURIComponent(window.location.href)
-      window.location.href = `${process.env.VUE_APP_LOGIN_URL}?logout=1&redirect=${path}`
+      window.location.href = `${process.env.VUE_APP_LOGIN_URL}?appId=${process.env.VUE_APP_ID}&logout=1&redirect=${path}`
     },
     getAvatar(avatar) {
       if (avatar == null) { return 'http://file.17fanju.com/Upload/Avatar_default.png' }

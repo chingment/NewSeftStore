@@ -12,8 +12,8 @@ namespace LocalS.Service.Api.Account
         public string Password { get; set; }
         public string Ip { get; set; }
         public string RedirectUrl { get; set; }
-
         public Dictionary<string, string> LoginPms { get; set; }
+        public string AppId { get; set; }
 
     }
 }

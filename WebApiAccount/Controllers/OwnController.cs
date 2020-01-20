@@ -13,29 +13,28 @@ namespace WebApiAccount.Controllers
     public class OwnController : OwnApiBaseController
     {
 
-        public string GetAppIdByRedirectUrl(string url)
+        public string FormatAppId(string appId)
         {
-            if (string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(appId))
                 return AppId.ACCOUNT;
 
-            url = url.ToLower();
+            appId = appId.ToLower();
 
-            if (url.IndexOf("admin.17fanju.com") > -1)
+            if (appId == AppId.ADMIN)
             {
                 return AppId.ADMIN;
             }
-            else if (url.IndexOf("merch.17fanju.com") > -1 || url.IndexOf("172.24.144.1") > -1)
+            else if (appId == AppId.MERCH)
             {
                 return AppId.MERCH;
             }
-            else if (url.IndexOf("agent.17fanju.com") > -1)
+            else if (appId == AppId.AGENT)
             {
                 return AppId.AGENT;
             }
 
             return AppId.ACCOUNT;
         }
-
         [HttpPost]
         [AllowAnonymous]
         public OwnApiHttpResponse LoginByAccount([FromBody]RopOwnLoginByAccountInWebSite rop)
@@ -48,7 +47,7 @@ namespace WebApiAccount.Controllers
             myRop.Password = rop.Password;
             myRop.Ip = rop.Ip;
             myRop.LoginPms = rop.LoginPms;
-            myRop.AppId = GetAppIdByRedirectUrl(rop.RedirectUrl);
+            myRop.AppId = FormatAppId(rop.AppId);
             myRop.LoginWay = Lumos.DbRelay.Enumeration.LoginWay.Website;
             IResult result = AccountServiceFactory.Own.LoginByAccount(myRop);
             return new OwnApiHttpResponse(result);

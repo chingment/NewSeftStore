@@ -23,9 +23,9 @@ const actions = {
   },
   // user login
   loginByAccount({ commit }, userInfo) {
-    const { username, password, redirectUrl } = userInfo
+    const { username, password, redirectUrl, appId } = userInfo
     return new Promise((resolve, reject) => {
-      loginByAccount({ username: username.trim(), password: password, redirectUrl: redirectUrl }).then(response => {
+      loginByAccount({ username: username.trim(), password: password, redirectUrl: redirectUrl, appId: appId }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
