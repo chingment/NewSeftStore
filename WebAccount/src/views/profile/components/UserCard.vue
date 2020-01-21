@@ -6,8 +6,8 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="userInfo.avatar" :height="'100px'" :width="'100px'" :hoverable="true">
-          <div></div>
+        <pan-thumb :image="getAvatar(userInfo.avatar)" :height="'100px'" :width="'100px'" :hoverable="true">
+          <div />
         </pan-thumb>
       </div>
       <div class="box-center">
@@ -46,6 +46,13 @@ export default {
           introduction: ''
         }
       }
+    }
+  },
+  methods: {
+    getAvatar(avatar) {
+      if (avatar == null) { return 'http://file.17fanju.com/Upload/Avatar_default.png' }
+
+      return avatar
     }
   }
 }

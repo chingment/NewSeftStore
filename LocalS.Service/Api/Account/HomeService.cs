@@ -19,16 +19,19 @@ namespace LocalS.Service.Api.Account
 
             var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            switch(sysUser.BelongType)
+            switch (sysUser.BelongType)
             {
                 case Lumos.DbRelay.Enumeration.BelongType.Agent:
-                    ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "商户代理系统", Url = "http://agent.ins-uplink.com/", ImgUrl = "http://file.17fanju.com/Upload/img_merch.png", Describe = "商家客户使用", });
+                    ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "商户代理系统", Url = "http://agent.17fanju.com/", ImgUrl = "http://file.17fanju.com/Upload/img_merch.png", Describe = "商家使用", });
+                    break;
+                case Lumos.DbRelay.Enumeration.BelongType.Merch:
+                    ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "商户运营系统", Url = "http://merch.17fanju.com/", ImgUrl = "http://file.17fanju.com/Upload/img_merch.png", Describe = "商家使用", });
                     break;
                 case Lumos.DbRelay.Enumeration.BelongType.Admin:
-                    ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "后台管理系统", Url = "http://admin.ins-uplink.com/", ImgUrl = "http://file.17fanju.com/Upload/img_admin.png", Describe = "后端用户，公司内部使用", });
+                    ret.Appcaltions.Add(new RetHomeGetIndexPageData._Appcaltion() { Name = "后台管理系统", Url = "http://admin.17fanju.com/", ImgUrl = "http://file.17fanju.com/Upload/img_admin.png", Describe = "后端用户，公司内部使用", });
                     break;
             }
-           
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;

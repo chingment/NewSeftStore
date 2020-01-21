@@ -18,6 +18,18 @@ namespace LocalS.Service.Api.Account
                 case Lumos.DbRelay.Enumeration.LoginWay.Website:
                     text = "网站";
                     break;
+                case Lumos.DbRelay.Enumeration.LoginWay.Android:
+                    text = "安卓";
+                    break;
+                case Lumos.DbRelay.Enumeration.LoginWay.Ios:
+                    text = "苹果";
+                    break;
+                case Lumos.DbRelay.Enumeration.LoginWay.Terminal:
+                    text = "终端设备";
+                    break;
+                case Lumos.DbRelay.Enumeration.LoginWay.WechatByMinPragrom:
+                    text = "小程序";
+                    break;
             }
             return text;
         }

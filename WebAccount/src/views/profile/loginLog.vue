@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-date-picker v-model="listQuery.startDate"  type="date" placeholder="开始日期" style="width: 200px;" />
+      <el-date-picker v-model="listQuery.startDate" type="date" placeholder="开始日期" style="width: 200px;" />
       -
-      <el-date-picker v-model="listQuery.endDate"  type="date" placeholder="结束日期" style="width: 200px;" />
+      <el-date-picker v-model="listQuery.endDate" type="date" placeholder="结束日期" style="width: 200px;" />
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -12,7 +12,6 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      border
       fit
       highlight-current-row
       style="width: 100%;"
