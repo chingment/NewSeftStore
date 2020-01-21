@@ -171,6 +171,7 @@ namespace LocalS.Service.Api.StoreTerm
                     CurrentDb.SaveChanges();
 
 
+
                     //如果某次取货异常 剩下所有取货都标识为订单取货异常
                     var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
 

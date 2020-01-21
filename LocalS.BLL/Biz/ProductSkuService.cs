@@ -323,11 +323,11 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可销库存：{0}，增加待取货库存：{0}，实际库存不变", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可销库存：{0}，增加待支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderReserveSuccess", string.Format("货道：{1},预定成功，未支付,减少可销库存：{0}，增加待取货库存：{0}，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderReserveSuccess", string.Format("货道：{1},预定成功，未支付,减少可销库存：{0}，增加待支付库存：{0}，实际库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -617,6 +617,8 @@ namespace LocalS.BLL.Biz
                     }
                 }
 
+                int oldSumQuantity = sellChannelStock.SumQuantity;
+
                 var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
 
                 sellChannelStock.SumQuantity = sumQuantity;
@@ -647,7 +649,7 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.ChangeQuantity = 0;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
-                sellChannelStockLog.RemarkByDev = "库存调整";
+                sellChannelStockLog.RemarkByDev = string.Format("库存调整,由{0}调整{1}", oldSumQuantity, sellChannelStock.SumQuantity);
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                 CurrentDb.SaveChanges();
                 ts.Complete();
