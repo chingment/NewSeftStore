@@ -99,13 +99,13 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = 0;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("删除货道，移除实际库存：{0}", sellChannelStock.SumQuantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("删除货道：{1}，移除实际库存：{0}", sellChannelStock.SumQuantity, slotId);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotRemove", string.Format("货道:{0}删除货道，移除实际库存：{1}", slotId, sellChannelStock.SumQuantity));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotRemove", string.Format("删除货道：{1}，移除实际库存：{0}", sellChannelStock.SumQuantity, slotId));
                     }
 
                     var slot = new
@@ -173,10 +173,10 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = 0;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = "初次录入货道";
+                        sellChannelStockLog.RemarkByDev = string.Format("初次录入货道：{0}", slotId);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("货道：{0}，初次录入货道", slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("初次录入货道：{0}", slotId));
                     }
                     else
                     {
