@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getTodaySummary(params) {
+  return request({
+    url: '/home/getTodaySummary',
+    method: 'get',
+    params
+  })
+}
+
 export function getProductSkuSaleRl(params) {
   return request({
     url: '/home/GetProductSkuSaleRl',
@@ -33,6 +41,7 @@ export function get7DayGmv(params) {
 }
 
 export default {
+  getTodaySummary: getTodaySummary,
   getProductSkuSaleRl: getProductSkuSaleRl,
   getStoreGmvRl: getStoreGmvRl,
   getTodayStoreGmvRl: getTodayStoreGmvRl,

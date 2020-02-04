@@ -17,9 +17,9 @@
 
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
-            type="datetimerange"
+            type="daterange"
             range-separator="至"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             style="width: 100%"
@@ -100,6 +100,8 @@
         </template>
       </el-table-column>
     </el-table>
+
+         <div class="remark-tip" style="line-height: 42px;" ><span class="sign">*注</span>：以商品单位维度来统计销售报表</div>
   </div>
 </template>
 

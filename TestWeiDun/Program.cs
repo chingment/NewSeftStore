@@ -42,11 +42,11 @@ namespace TestWeiDun
                 string s2 = "EREAMbWy3bb/////yo/YBBoAAAB5eW15eXl5eW15dXl5eXh5eXl5eXl1eXV4eSh4eXl5eXl5eHlteXkNeXl5eXl5KHl5bXl5eXl5eXl5eXl5eXlVbnl5eXl5BCgeeHl5AHl5eXledvFQTnl53IZ5mnl5eXmi8lDy8lB52XdeeK94KOzyCADy8fJ06nTcKCivUHl58gCi8vLy8gtReWx5eVx5KAMk8vIUdCh5eAR5eShyKHQEr3UNeXl5eXkoWV55ee56eXnreHl5r2t17m5OeXkodHl5ea+GefB6mnl53HV5eXkfctnyeJp5eGt5eXl5DQHYq3maeeV4eXl5eToAaZR56/KheXl5eXm1Am6CeU/weXJ5eXkECAQkfXlyeXl0eXl58XgBrnooeHl5d3l5yoYoU4t53Hl5eV55ylB463J5r/JTeSh5DfJseeqG5Rje8vICefJ0dgQY6V11DOXy8vJ4KOBQBNp4dnl5KPCGeQ0BfQTweWx5eXlkeSh5eVUooSh4eXl5fHlVeXl2rydpeXl5eW15dXl5eXl5dCh5eXl1KHp5eXlVeXZJeXkA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
                 List<string> userm = new List<string>();
                 userm.Add(s1);
-               userm.Add(s2);
+                userm.Add(s2);
 
 
                 byte[] regFeature = Convert.FromBase64String(s);
-                byte[] aiFeature =new byte[512];
+                byte[] aiFeature = new byte[512];
                 int diff = 0;
                 int aiBufLen = 0;
 
@@ -54,14 +54,14 @@ namespace TestWeiDun
                 {
                     byte[] matchFeature = Convert.FromBase64String(userm[i]);
 
-                  //  var ret = FV_MatchFeatureEx(matchFeature, regFeature, 3, aiFeature, 1, 0x03, 0x04, ref diff, aiBufLen);
+                    //  var ret = FV_MatchFeatureEx(matchFeature, regFeature, 3, aiFeature, 1, 0x03, 0x04, ref diff, aiBufLen);
 
                     int[] diff2 = new int[1];
                     byte[] AIDataBuf = new byte[matchFeature.Length];
                     int[] AIDataLen = new int[1];
-                   var   ret = FV_MatchFeature(matchFeature, regFeature, (byte)0x03, (byte)0x03, (byte)4, diff2, AIDataBuf, AIDataLen);
+                    var ret = FV_MatchFeature(matchFeature, regFeature, (byte)0x03, (byte)0x03, (byte)4, diff2, AIDataBuf, AIDataLen);
                 }
-               
+
                 //IntPtr intptr = System.Runtime.InteropServices.Marshal.AllocHGlobal(10);
 
                 // char[,] d = new char[10,64];

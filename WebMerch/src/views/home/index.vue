@@ -10,10 +10,13 @@
           </div>
           <div class="today-sum" style="height:200px;">
             <div class="it">
-              <div class="t1"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="m3">今日订单</span></div>
+              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单</span></div>
             </div>
             <div class="it">
-              <div class="t1"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="m3">今日营业额</span></div>
+              <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
+            </div>
+            <div class="it">
+              <div class="t1" @click="sumExWaitHandleCountClick"><span class="m3">  {{ todaySummary.sumExWaitHandleCount }}</span><br> <span class="d1">异常订单</span></div>
             </div>
           </div>
         </el-card>
@@ -155,12 +158,19 @@
 
 <script>
 
-import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv } from '@/api/home'
+import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv,getTodaySummary } from '@/api/home'
 
 export default {
 
   data() {
     return {
+      todaySummary:{
+        sumExWaitHandleCount:0,
+        todayGmvRl:{
+        sumCount: 0,
+        sumTradeAmount: 0
+       }
+      },
       todayGmv: {
         datef: '',
         sumCount: 0,
@@ -173,12 +183,22 @@ export default {
     }
   },
   created() {
+    this._getTodaySummary()
     this._get7DayGmv()
     this._getTodayStoreGmvRl()
     this._getProductSkuSaleRl()
     this._getStoreGmvRl()
   },
   methods: {
+     _getTodaySummary: function() {
+      getTodaySummary().then(res => {
+        if (res.result === 1) {
+           var d= res.data
+           this.todaySummary.sumExWaitHandleCount = d.sumExWaitHandleCount
+          //this.todayGmv = res.data.days[0]
+        }
+      })
+    },
     _get7DayGmv: function() {
       get7DayGmv().then(res => {
         if (res.result === 1) {
@@ -207,6 +227,19 @@ export default {
           this.todayStoreGmvRl = res.data.stores
         }
       })
+    },
+    sumExWaitHandleCountClick() {
+      this.$cookies.set('isHasEx',"1")
+      this.$router.push({
+        path: '/order/list'
+      })
+    },
+    todayGmvClick(){
+      this.$cookies.set('tradeStartTime',"2020-01-20")
+      this.$cookies.set('tradeEndTime',"2020-01-20")
+      this.$router.push({
+        path: '/order/list'
+      })
     }
   }
 }
@@ -229,7 +262,7 @@ export default {
 
     .t1{
       text-align: center;
-
+      cursor: pointer;
       .m1{
        font-size: 42px;
        line-height: 60px;
@@ -238,6 +271,12 @@ export default {
        .m2{
        font-size: 42px;
        color: #cf9236;
+         line-height: 60px;
+      }
+
+           .m3{
+       font-size: 42px;
+       color: #ff4949;
          line-height: 60px;
       }
     }

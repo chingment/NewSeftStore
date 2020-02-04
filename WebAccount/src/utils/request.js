@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { getUrlParam2 } from '@/utils/commonUtil'
 
 // create an axios instance
 const service = axios.create({
@@ -62,8 +63,12 @@ service.interceptors.response.use(
           type: 'warning'
         }).then(() => {
           store.dispatch('own/resetToken').then(() => {
-            var redirect = encodeURIComponent(window.location.href)
-            window.location.href = '/login?logout=2&redirect=' + redirect
+            var redirect = encodeURIComponent(getUrlParam2(window.location.href, 'redirect'))
+            var appId = encodeURIComponent(getUrlParam2(window.location.href, 'appId'))
+            // console.log('redirect:' + redirect)
+            // console.log('appId:' + appId)
+            // var redirect = encodeURIComponent(window.location.href)
+            window.location.href = '/login?appId=' + appId + '&logout=2&redirect=' + redirect
           })
         })
       }

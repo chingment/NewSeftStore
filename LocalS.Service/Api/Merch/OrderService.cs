@@ -504,6 +504,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         order.ExIsHandleComplete = true;
                         order.ExHappenTime = DateTime.Now;
+                        order.CompletedTime = DateTime.Now;
                         order.Status = E_OrderStatus.Completed;
                         order.CompletedTime = DateTime.Now;
                         CurrentDb.SaveChanges();

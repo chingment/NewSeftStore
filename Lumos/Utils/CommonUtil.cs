@@ -230,6 +230,8 @@ namespace Lumos
             if (string.IsNullOrEmpty(str1))
                 return null;
 
+            str1 = GetNumberAlpha(str1);
+
             if (!string.IsNullOrEmpty(str))
                 str1 = str1.ToUpper();
 

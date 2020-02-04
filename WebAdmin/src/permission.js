@@ -39,7 +39,7 @@ router.beforeEach(async(to, from, next) => {
       }
       NProgress.done()
     } else {
-      window.location.href = `${process.env.VUE_APP_LOGIN_URL}?logout=2&redirect=${path}`
+      window.location.href = `${process.env.VUE_APP_LOGIN_URL}?appId=${process.env.VUE_APP_ID}&logout=2&redirect=${path}`
       NProgress.done()
     }
   } else {

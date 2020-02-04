@@ -203,6 +203,7 @@
     <Compile Include="Api\Merch\RModels\RetPrdSubjectInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetRptProductSkuSaleRl.cs" />
     <Compile Include="Api\Merch\RModels\RetRptStoreGmvRl.cs" />
+    <Compile Include="Api\Merch\RModels\RetRptTodaySummary.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreGetProductSkuList.cs" />
     <Compile Include="Api\Merch\RModels\RetPrdProductInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetPrdProductInitEdit.cs" />

@@ -26,7 +26,7 @@
         <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
           <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
         </el-dialog>
-        <div class="remark-tip"><span class="sign">*注</span>：第一张默认为主图，可拖动改变图片顺便</div>
+        <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
@@ -122,17 +122,19 @@ export default {
         return false
       }
 
-      var imgtype = file.name.toLowerCase().split('.')[1]
-
-      if (imgtype !== 'png' && imgtype !== 'jpeg' && imgtype !== 'jpg') {
-        this.$message.error('上传图片只能是 jpg,png 格式!')
-        return false
-      }
+      const imgType = file.type
       const isLt4M = file.size / 1024 / 1024 < 4
-      if (!isLt4M) {
-        this.$message.error('上传图片大小不能超过 4MB!')
+      //  var a = isLt4M === true ? 'true' : 'false'
+      if (imgType !== 'image/jpeg' && imgType !== 'image/png' && imgType !== 'image/jpg') {
+        this.$message('图片格式仅支持(jpg,png)')
         return false
       }
+
+      if (!isLt4M) {
+        this.$message('图片大小不能超过4M')
+        return false
+      }
+
       return true
     },
     uploadCardCheckShow() {

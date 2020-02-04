@@ -27,7 +27,7 @@ namespace Lumos.Web.Http
                 var result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "请求异常");
                 if (httpStatusCode == HttpStatusCode.NotFound)
                 {
-                    result.Message = "无效请求";
+                    result.Message = "无效请求..";
                 }
                 else if (httpStatusCode == HttpStatusCode.MethodNotAllowed)
                 {

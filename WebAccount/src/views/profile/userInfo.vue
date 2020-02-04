@@ -4,14 +4,14 @@
       <el-row :gutter="20">
 
         <el-col :span="6" :xs="24">
-          <user-card :userInfo="userInfo" />
+          <user-card :user-info="userInfo" />
         </el-col>
 
         <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
               <el-tab-pane label="账户信息" name="account">
-                <account :userInfo="userInfo" />
+                <account :user-info="userInfo" />
               </el-tab-pane>
             </el-tabs>
           </el-card>

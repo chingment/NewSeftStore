@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :model="userInfo" :rules="rules" >
+  <el-form ref="form" :model="userInfo" :rules="rules">
     <el-form-item label="账号" style="margin-bottom: 0px">
       <div style="width:100%;display:inline-block">{{ userInfo.userName }}</div>
     </el-form-item>
@@ -10,14 +10,14 @@
       </div>
     </el-form-item>
     <el-form-item v-show="isOpenEditPassword" label="密码" prop="password">
-        <div style="display:flex;width:100%">
-          <div style="flex:1">
-            <el-input v-model="userInfo.password" type="password" />
-          </div>
-          <div style="width:50px;text-align: center;">
-            <span @click="openEditPassword()">取消</span>
-          </div>
+      <div style="display:flex;width:100%">
+        <div style="flex:1">
+          <el-input v-model="userInfo.password" type="password" />
         </div>
+        <div style="width:50px;text-align: center;">
+          <span @click="openEditPassword()">取消</span>
+        </div>
+      </div>
     </el-form-item>
     <el-form-item label="姓名" prop="fullName">
       <el-input v-model.trim="userInfo.fullName" />
@@ -36,16 +36,6 @@ import fromReg from '@/utils/formReg'
 import { MessageBox } from 'element-ui'
 import { save } from '@/api/userInfo'
 export default {
-  data() {
-    return {
-      isOpenEditPassword: false,
-      rules: {
-        password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
-        fullName: [{ required: true, message: '必填', trigger: 'change' }],
-        email: [{ required: false, message: '格式错误,eg:xxxx@xxx.xxx', trigger: 'change', pattern: fromReg.email }]
-      }
-    }
-  },
   props: {
     userInfo: {
       type: Object,
@@ -61,11 +51,21 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      isOpenEditPassword: false,
+      rules: {
+        password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
+        fullName: [{ required: true, message: '必填', trigger: 'change' }],
+        email: [{ required: false, message: '格式错误,eg:xxxx@xxx.xxx', trigger: 'change', pattern: fromReg.email }]
+      }
+    }
+  },
   methods: {
     openEditPassword() {
       if (this.isOpenEditPassword) {
         this.isOpenEditPassword = false
-        this.form.password = ''
+        this.userInfo.password = ''
         this.rules.password[0].required = false
       } else {
         this.isOpenEditPassword = true

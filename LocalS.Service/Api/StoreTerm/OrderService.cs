@@ -126,12 +126,12 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            if (order.Status != E_OrderStatus.Payed || order.Status != E_OrderStatus.Completed)
+            if (order.Status != E_OrderStatus.Payed)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetailsByPickup(order.Id, rup.MachineId));
+            // result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetailsByPickup(order.Id, rup.MachineId));
             return result;
         }
 
@@ -169,6 +169,7 @@ namespace LocalS.Service.Api.StoreTerm
                     orderDetailsChildSon.LastPickupActionStatusCode = rop.ActionStatusCode;
                     orderDetailsChildSon.Status = rop.Status;
                     CurrentDb.SaveChanges();
+
 
 
                     //如果某次取货异常 剩下所有取货都标识为订单取货异常
@@ -244,6 +245,10 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.CreateTime = DateTime.Now;
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
+
+
+
+
 
                     MqFactory.Global.PushOperateLog(AppId.STORETERM, orderDetailsChildSon.ClientUserId, rop.MachineId, "OrderPickup", orderDetailsChildSon.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
 
