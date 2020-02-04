@@ -12,6 +12,7 @@ namespace WebApiMerch.Controllers
     public class HomeController : OwnApiBaseController
     {
 
+
         [HttpGet]
         public OwnApiHttpResponse GetIndexPageData()
         {
@@ -19,6 +20,15 @@ namespace WebApiMerch.Controllers
 
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetIndexPageData()
+        {
+            IResult result = MerchServiceFactory.Home.GetIndexPageData(this.CurrentUserId, this.CurrentMerchId);
+
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse Get7DayGmv()
         {

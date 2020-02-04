@@ -1206,7 +1206,7 @@ namespace LocalS.BLL.Biz
                     str = "微信支付";
                     break;
                 case E_OrderPayWay.AliPay:
-                    str = "微信支付";
+                    str = "支付宝";
                     break;
                 default:
                     str = "未知";
