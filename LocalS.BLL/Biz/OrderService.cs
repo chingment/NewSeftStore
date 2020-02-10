@@ -773,6 +773,8 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderSn));
                 }
 
+
+
                 LogUtil.Info("orderSn2:" + orderSn);
 
                 order.PayWay = payWay;
@@ -884,7 +886,6 @@ namespace LocalS.BLL.Biz
                 foreach (var item in childSons)
                 {
                     BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
-
                 }
 
                 CurrentDb.SaveChanges();
