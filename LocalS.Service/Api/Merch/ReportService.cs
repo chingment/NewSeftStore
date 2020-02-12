@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.Merch
 
 
             var query = (from u in CurrentDb.OrderDetailsChildSon
-                         where u.MerchId == merchId
+                         where u.MerchId == merchId && (u.Status != Entity.E_OrderDetailsChildSonStatus.Submitted && u.Status != Entity.E_OrderDetailsChildSonStatus.Canceled)
                          select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.Status });
 
 
@@ -188,6 +188,11 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => sellChannelRefIds.Contains(m.SellChannelRefId));
             }
 
+            //if (rop.PickupStatus == "1")
+            //{
+            //    query = query.Where(m => m.Status == Entity.E_OrderDetailsChildSonStatus.Completed || m.Status == Entity.E_OrderDetailsChildSonStatus.ExPickupSignTaked);
+            //}
+
             //var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
             List<object> olist = new List<object>();
@@ -196,14 +201,14 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                string isPickup = "";
+                string pickupStatus = "";
                 if (item.Status == Entity.E_OrderDetailsChildSonStatus.Completed || item.Status == Entity.E_OrderDetailsChildSonStatus.ExPickupSignTaked)
                 {
-                    isPickup = "已取货";
+                    pickupStatus = "已取货";
                 }
                 else
                 {
-                    isPickup = "未取货";
+                    pickupStatus = "未取货";
                 }
 
                 olist.Add(new
@@ -211,7 +216,7 @@ namespace LocalS.Service.Api.Merch
                     StoreName = item.StoreName,
                     SellChannelRefName = item.SellChannelRefName,
                     OrderSn = item.OrderSn,
-                    PayedTime = item.PayedTime.ToUnifiedFormatDateTime(),
+                    TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     ProductSkuName = item.PrdProductSkuName,
                     ProductSkuBarCode = item.PrdProductSkuBarCode,
                     ProductSkuCumCode = item.PrdProductSkuCumCode,
@@ -219,9 +224,9 @@ namespace LocalS.Service.Api.Merch
                     ProductSkuProducer = item.PrdProductSkuProducer,
                     Quantity = item.Quantity,
                     SalePrice = item.SalePrice,
-                    ChargeAmount = item.ChargeAmount,
+                    TradeAmount = item.ChargeAmount,
                     PayWay = BizFactory.Order.GetPayWayName(item.PayWay),
-                    isPickup = isPickup
+                    PickupStatus = pickupStatus
                 });
 
             }

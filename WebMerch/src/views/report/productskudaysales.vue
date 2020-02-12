@@ -13,7 +13,7 @@
             style="width: 100%"
           />
         </el-col>
-        <el-col :span="10" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
             type="daterange"
@@ -24,6 +24,18 @@
             style="width: 100%"
           />
         </el-col>
+            <el-col :span="6" :xs="24" style="margin-bottom:20px">
+              <el-select v-model="listQuery.pickupStatus" clearable  placeholder="全部取货状态">
+    <el-option
+      v-for="item in optionsPickupStatus"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+        </el-col>
+
+
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
@@ -98,9 +110,14 @@
           <span>{{ scope.row.payWay }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="取货状态" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.pickupStatus }}</span>
+        </template>
+      </el-table-column>
     </el-table>
 
-         <div class="remark-tip" style="line-height: 42px;" ><span class="sign">*注</span>：以商品单位维度来统计销售报表</div>
+         <div class="remark-tip" style="line-height: 42px;font-size:14px;" ><span class="sign">*注</span>：以单个商品单位维度来统计销售报表</div>
   </div>
 </template>
 
@@ -126,6 +143,13 @@ export default {
         sellChannels: [],
         tradeDateTimeArea: []
       },
+      optionsPickupStatus: [{
+          value: '1',
+          label: '已取货'
+        }, {
+          value: '2',
+          label: '未取货'
+      }],
       optionsSellChannels: [],
       optionsSellChannelsProps: { multiple: true, checkStrictly: false },
       isDesktop: this.$store.getters.isDesktop
@@ -173,8 +197,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '机器', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式']
-        const filterVal = ['storeName', 'sellChannelRefName', 'orderSn', 'tradeTime', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay']
+        const tHeader = ['店铺', '机器', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式', '取货状态']
+        const filterVal = ['storeName', 'sellChannelRefName', 'orderSn', 'tradeTime', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay','pickupStatus']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

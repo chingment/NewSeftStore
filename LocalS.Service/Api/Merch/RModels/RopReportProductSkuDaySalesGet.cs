@@ -11,5 +11,7 @@ namespace LocalS.Service.Api.Merch
         public List<string[]> SellChannels { get; set; }
 
         public string[] TradeDateTimeArea { get; set; }
+
+        public string PickupStatus { get; set; }
     }
 }
