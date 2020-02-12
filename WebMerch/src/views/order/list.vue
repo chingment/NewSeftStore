@@ -54,7 +54,7 @@
                 <td style="15%">
                   {{ pickupSku.status.text }}
                 </td>
-                <td style="15%">
+                <td style="width:15%;text-align:center;">
                   <el-popover
                     v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
@@ -78,7 +78,7 @@
 
                       </el-timeline-item>
                     </el-timeline>
-                    <el-button slot="reference">取货流程</el-button>
+                      <el-link type="primary" slot="reference" style="margin-right:15px;">出货流程</el-link>
                   </el-popover>
 
                 </td>
@@ -123,7 +123,7 @@
           <span>{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="异常？" prop="status" align="left" min-width="15%">
+      <el-table-column label="异常？" prop="status" align="left" width="120">
         <template slot-scope="scope">
           <span :class="'enable-status enable-status-'+scope.row.exStatus.value">{{ scope.row.exStatus.text }}</span>
         </template>
@@ -483,6 +483,7 @@ export default {
           this.$message(res.message)
           if (res.result === 1) {
             _this.refreshDetails(order.id)
+            _this.getListData()
           }
         })
 

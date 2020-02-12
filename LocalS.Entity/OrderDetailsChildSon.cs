@@ -65,6 +65,7 @@ namespace LocalS.Entity
         public int LastPickupActionStatusCode { get; set; }
         public E_OrderDetailsChildSonStatus Status { get; set; }
         public bool ExPickupIsHandled { get; set; }
+        public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
         public string ExPickupHandleRemark { get; set; }
         public string Creator { get; set; }

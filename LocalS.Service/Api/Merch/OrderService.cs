@@ -405,34 +405,33 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
+                if (string.IsNullOrEmpty(rop.OrderId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单ID未空");
+                }
 
                 if (rop.DetailItems.Count == 0)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单待异常处理信息为空");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单异常处理信息为空");
                 }
 
                 var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.OrderId).FirstOrDefault();
 
                 if (order == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单找不到");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息找不到");
                 }
 
                 if (order.ExHandleTime != null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单异常已经处理");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理");
                 }
 
                 var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rop.OrderId && m.ExPickupIsHandled == false && m.Status == E_OrderDetailsChildSonStatus.Exception).ToList();
 
                 if (orderDetailsChildSons.Count == 0)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单找不到未处理的异常取货信息");
-                }
-
-                if (orderDetailsChildSons.Count != rop.DetailItems.Count)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单异常处理数据不相同");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不存在未处理的异常信息");
                 }
 
                 foreach (var orderDetailsChildSon in orderDetailsChildSons)
@@ -441,21 +440,23 @@ namespace LocalS.Service.Api.Merch
                     var detailItem = rop.DetailItems.Where(m => m.UniqueId == orderDetailsChildSon.Id).FirstOrDefault();
                     if (detailItem == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该异常取货信息");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
                     }
 
                     if (detailItem.PickupStatus != 1 && detailItem.PickupStatus != 2)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不能处理该异常状态");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.PickupStatus);
                     }
 
                     if (detailItem.PickupStatus == 1)
                     {
                         orderDetailsChildSon.ExPickupIsHandled = true;
+                        orderDetailsChildSon.ExPickupHandleTime = DateTime.Now;
                         orderDetailsChildSon.ExPickupHandleSign = E_OrderDetailsChildSonExPickupHandleSign.Taked;
                         orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.ExPickupSignTaked;
 
                         BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = GuidUtil.New();
                         orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
@@ -475,6 +476,7 @@ namespace LocalS.Service.Api.Merch
                     else if (detailItem.PickupStatus == 2)
                     {
                         orderDetailsChildSon.ExPickupIsHandled = true;
+                        orderDetailsChildSon.ExPickupHandleTime = DateTime.Now;
                         orderDetailsChildSon.ExPickupHandleSign = E_OrderDetailsChildSonExPickupHandleSign.UnTaked;
                         orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.ExPickupSignUnTaked;
 
@@ -504,8 +506,8 @@ namespace LocalS.Service.Api.Merch
                 order.Status = E_OrderStatus.Completed;
                 order.CompletedTime = DateTime.Now;
 
-                //CurrentDb.SaveChanges();
-                //ts.Complete();
+                CurrentDb.SaveChanges();
+                ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
             }
