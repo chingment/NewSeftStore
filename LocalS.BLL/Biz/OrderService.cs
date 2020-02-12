@@ -265,6 +265,7 @@ namespace LocalS.BLL.Biz
                                 orderDetailsChildSon.ClientUserId = rop.ClientUserId;
                                 orderDetailsChildSon.MerchId = store.MerchId;
                                 orderDetailsChildSon.StoreId = rop.StoreId;
+                                orderDetailsChildSon.StoreName = order.StoreName;
                                 orderDetailsChildSon.SellChannelRefType = detailsChildSon.SellChannelRefType;
                                 orderDetailsChildSon.SellChannelRefId = detailsChildSon.SellChannelRefId;
                                 orderDetailsChildSon.SellChannelRefName = orderDetailsChild.SellChannelRefName;
@@ -794,85 +795,16 @@ namespace LocalS.BLL.Biz
                     }
                 }
 
-                var rptOrder = new RptOrder();
-                rptOrder.Id = GuidUtil.New();
-                rptOrder.OrderId = order.Id;
-                rptOrder.OrderSn = order.Sn;
-                rptOrder.MerchId = order.MerchId;
-                rptOrder.StoreId = order.StoreId;
-                rptOrder.StoreName = order.StoreName;
-                rptOrder.ClientUserId = order.ClientUserId;
-                rptOrder.TradeType = E_RptOrderTradeType.Pay;
-                rptOrder.TradeAmount = order.ChargeAmount;
-                rptOrder.Quantity = order.Quantity;
-                rptOrder.TradeTime = order.PayedTime.Value;
-                CurrentDb.RptOrder.Add(rptOrder);
-
-
-                var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == order.Id).ToList();
-
-                foreach (var orderDetail in orderDetails)
-                {
-                    var rptOrderDetails = new RptOrderDetails();
-                    rptOrderDetails.Id = GuidUtil.New();
-                    rptOrderDetails.RptOrderId = rptOrder.Id;
-                    rptOrderDetails.OrderId = order.Id;
-                    rptOrderDetails.MerchId = order.MerchId;
-                    rptOrderDetails.ClientUserId = order.ClientUserId;
-                    rptOrderDetails.StoreId = order.StoreId;
-                    rptOrderDetails.StoreName = order.StoreName;
-                    rptOrderDetails.Quantity = orderDetail.Quantity;
-                    rptOrderDetails.TradeType = E_RptOrderTradeType.Pay;
-                    rptOrderDetails.TradeTime = order.PayedTime.Value;
-                    rptOrderDetails.TradeAmount = orderDetail.ChargeAmount;
-                    rptOrderDetails.SellChannelRefId = orderDetail.SellChannelRefId;
-                    rptOrderDetails.SellChannelRefName = orderDetail.SellChannelRefName;
-                    rptOrderDetails.SellChannelRefType = orderDetail.SellChannelRefType;
-                    CurrentDb.RptOrderDetails.Add(rptOrderDetails);
-
-                    var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderDetailsId == orderDetail.Id).ToList();
-
-                    foreach (var orderDetailsChild in orderDetailsChilds)
-                    {
-                        var rptOrderDetailsChild = new RptOrderDetailsChild();
-                        rptOrderDetailsChild.Id = GuidUtil.New();
-                        rptOrderDetailsChild.RptOrderId = rptOrder.Id;
-                        rptOrderDetailsChild.RptOrderDetailsId = rptOrderDetails.Id;
-                        rptOrderDetailsChild.OrderId = order.Id;
-                        rptOrderDetailsChild.OrderSn = order.Sn;
-                        rptOrderDetailsChild.MerchId = order.MerchId;
-                        rptOrderDetailsChild.ClientUserId = order.ClientUserId;
-                        rptOrderDetailsChild.StoreId = order.StoreId;
-                        rptOrderDetailsChild.StoreName = order.StoreName;
-                        rptOrderDetailsChild.Quantity = orderDetailsChild.Quantity;
-                        rptOrderDetailsChild.SalePrice = orderDetailsChild.SalePrice;
-                        rptOrderDetailsChild.PrdProductId = orderDetailsChild.PrdProductId;
-                        rptOrderDetailsChild.PrdProductSkuId = orderDetailsChild.PrdProductSkuId;
-                        rptOrderDetailsChild.PrdProductSkuName = orderDetailsChild.PrdProductSkuName;
-                        rptOrderDetailsChild.PrdProductSkuBarCode = orderDetailsChild.PrdProductSkuBarCode;
-                        rptOrderDetailsChild.PrdProductSkuCumCode = orderDetailsChild.PrdProductSkuCumCode;
-                        rptOrderDetailsChild.PrdProductSkuSpecDes = orderDetailsChild.PrdProductSkuSpecDes;
-                        rptOrderDetailsChild.PrdProductSkuProducer = orderDetailsChild.PrdProductSkuProducer;
-                        rptOrderDetailsChild.PayWay = order.PayWay;
-                        rptOrderDetailsChild.TradeType = E_RptOrderTradeType.Pay;
-                        rptOrderDetailsChild.TradeTime = order.PayedTime.Value;
-                        rptOrderDetailsChild.TradeAmount = orderDetailsChild.ChargeAmount;
-                        rptOrderDetailsChild.SellChannelRefId = orderDetailsChild.SellChannelRefId;
-                        rptOrderDetailsChild.SellChannelRefName = orderDetailsChild.SellChannelRefName;
-                        rptOrderDetailsChild.SellChannelRefType = orderDetailsChild.SellChannelRefType;
-                        CurrentDb.RptOrderDetailsChild.Add(rptOrderDetailsChild);
-                    }
-
-                }
-
 
                 var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == order.Id).ToList();
 
-                foreach (var item in orderDetailsChildSons)
+                foreach (var orderDetailsChildSon in orderDetailsChildSons)
                 {
-                    item.Status = E_OrderDetailsChildSonStatus.WaitPick;
-                    item.Mender = GuidUtil.Empty();
-                    item.MendTime = DateTime.Now;
+                    orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPick;
+                    orderDetailsChildSon.PayedTime = DateTime.Now;
+                    orderDetailsChildSon.PayWay = payWay;
+                    orderDetailsChildSon.Mender = GuidUtil.Empty();
+                    orderDetailsChildSon.MendTime = DateTime.Now;
                 }
 
                 var childSons = (
@@ -892,6 +824,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
                 Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
             }
 

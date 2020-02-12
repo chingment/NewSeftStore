@@ -37,6 +37,7 @@ namespace LocalS.Entity
         public string ClientUserId { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
+        public string StoreName { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public string SellChannelRefName { get; set; }
@@ -64,6 +65,8 @@ namespace LocalS.Entity
         public int LastPickupActionId { get; set; }
         public int LastPickupActionStatusCode { get; set; }
         public E_OrderDetailsChildSonStatus Status { get; set; }
+        public DateTime? PayedTime { get; set; }
+        public E_OrderPayWay PayWay { get; set; }
         public bool ExPickupIsHandled { get; set; }
         public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
