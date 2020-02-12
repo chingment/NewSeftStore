@@ -27,11 +27,6 @@
         </el-col>
       </el-row>
       <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
-      <!-- // <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      // <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      // <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-      //   查询
-      // </el-button> -->
     </div>
     <el-table
       :key="listKey"
@@ -44,8 +39,8 @@
       <el-table-column type="expand">
         <template slot-scope="scope">
           <div v-for="(sellChannelDetail,index) in scope.row.sellChannelDetails" :key="index">
-            <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
-            <table class="table-skus" style="width:600px;table-layout:fixed;">
+            <div> <i class="el-icon-place" /><span> {{ sellChannelDetail.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+            <table class="table-skus" style="width:100%;table-layout:fixed;">
               <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
                 <td style="20%">
                   <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
@@ -140,9 +135,15 @@
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="dialogDetailsOpen(row)">
+
+          <el-button v-if="row.canHandleEx" type="warning" size="mini" @click="dialogDetailsOpen(row)">
+            处理
+          </el-button>
+         <el-button v-else type="primary" size="mini" @click="dialogDetailsOpen(row)">
             查看
           </el-button>
+
+
         </template>
       </el-table-column>
     </el-table>
@@ -236,24 +237,24 @@
           </div>
         </div>
         <div v-for="(sellChannelDetail,index) in details.sellChannelDetails" :key="index">
-          <div><span>+ {{ sellChannelDetail.name }} -> </span></div>
-          <table class="table-skus" style="width:100%">
+          <div> <i class="el-icon-place" /><span> {{ sellChannelDetail.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+          <table class="table-skus" style="width:100%;table-layout:fixed;">
             <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
               <td style="width:10%">
                 <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="width:20%">
+              <td style="width:25%">
                 {{ pickupSku.name }}
               </td>
-              <td style="width:10%">
+              <td style="width:5%">
                 x {{ pickupSku.quantity }}
               </td>
-              <td style="width:10%">
+              <td style="width:15%;text-align:center;">
                 {{ pickupSku.status.text }}
               </td>
-              <td style="width:50%;text-align:right">
-                <el-popover
-                  v-if="pickupSku.pickupLogs.length>0"
+                <td style="width:15%;text-align:center;">
+                               <el-popover
+              
                   placement="right"
                   width="400"
                   trigger="click"
@@ -275,16 +276,27 @@
 
                     </el-timeline-item>
                   </el-timeline>
-                  <el-button slot="reference" style="margin-right:15px;">出货流程</el-button>
+                  <el-link type="primary" slot="reference" style="margin-right:15px;">出货流程</el-link>
                 </el-popover>
-                <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)">标记未取</el-button>
-                <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button>
+              </td>
+              <td style="width:200px">
+
+    <div v-if="pickupSku.status.value==6000" >
+    <el-radio v-model="pickupSku.pickupStatus" label="1" style="margin-right:5px;">已取</el-radio>
+    <el-radio v-model="pickupSku.pickupStatus" label="2" >未取</el-radio>
+    </div>
+                    <!-- v-if="pickupSku.pickupLogs.length>0" -->
+                <!-- <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)">标记未取</el-button>
+                <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button> -->
               </td>
             </tr>
           </table>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
+        <el-button v-if="details.canHandleEx" type="primary" @click="_handleExOrder(details)">
+          确认处理
+        </el-button>
         <el-button @click="dialogDetailsIsVisible = false">
           关闭
         </el-button>
@@ -295,7 +307,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetails, pickupExceptionHandle } from '@/api/order'
+import { getList, getDetails, pickupExceptionHandle, handleExOrder } from '@/api/order'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -437,6 +449,43 @@ export default {
         }
         this.detailsLoading = false
         this.dialogDetailsIsVisible = true
+      })
+    },
+    _handleExOrder(order){
+       var _this = this
+      
+       var detailItems=[]
+       for (var i = 0; i < order.sellChannelDetails.length; i++) { 
+          var s_detailItems=order.sellChannelDetails[i].detailItems
+          for (var j = 0; j < s_detailItems.length; j++) {  
+           if(s_detailItems[j].status.value==6000){
+              if(s_detailItems[j].pickupStatus==0){
+                  this.$message("处理前，请选择【"+s_detailItems[j].name+"】的取货状态 已取或未取")
+                  return
+              }
+              else{
+                detailItems.push({ id:s_detailItems[j].id,uniqueId:s_detailItems[j].uniqueId, pickupStatus:s_detailItems[j].pickupStatus})
+              }
+           }
+        }
+      } 
+
+      //this.$message(JSON.stringify(pickupSkus))
+    
+      MessageBox.confirm('确定要处理,慎重操作，会影响机器实际库存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'warning'
+      }).then(() => {
+        
+        handleExOrder({ orderId: order.id, detailItems: detailItems }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            _this.refreshDetails(order.id)
+          }
+        })
+
       })
     },
     signNotTake(orderId, pickupSku) {
