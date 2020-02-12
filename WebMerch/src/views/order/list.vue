@@ -3,13 +3,13 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" />
         </el-col>
-        <el-col v-if="isShowClientUserNameInput" :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col v-if="isShowClientUserNameInput" :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" />
         </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">
             <el-option
               v-for="item in options_status"
@@ -19,7 +19,7 @@
             />
           </el-select>
         </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-checkbox v-model="listQuery.isHasEx">异常未处理</el-checkbox>
           <el-button class="filter-item" type="primary" icon="el-icon-search" style="margin-left:20px;" @click="handleFilter">
             查询

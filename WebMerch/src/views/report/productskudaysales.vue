@@ -2,7 +2,7 @@
   <div id="productsku_list" class="app-container">
     <div class="filter-container">
 
-      <el-row :gutter="24">
+      <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-cascader
             v-model="listQuery.sellChannels"
@@ -13,8 +13,7 @@
             style="width: 100%"
           />
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
-
+        <el-col :span="10" :xs="24" style="margin-bottom:20px">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
             type="daterange"
@@ -29,7 +28,7 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-          <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+          <el-button :loading="downloadLoading" style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="handleDownload">
             导出
           </el-button>
         </el-col>
