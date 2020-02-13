@@ -800,7 +800,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var orderDetailsChildSon in orderDetailsChildSons)
                 {
-                    orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPick;
+                    orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPickup;
                     orderDetailsChildSon.PayedTime = DateTime.Now;
                     orderDetailsChildSon.PayWay = payWay;
                     orderDetailsChildSon.Mender = GuidUtil.Empty();
@@ -1116,7 +1116,7 @@ namespace LocalS.BLL.Biz
 
                     if (order.Status == E_OrderStatus.Payed)
                     {
-                        if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPick)
+                        if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.WaitPickup)
                         {
                             slot.IsAllowPickup = true;
                         }

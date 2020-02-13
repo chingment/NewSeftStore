@@ -206,9 +206,17 @@ namespace LocalS.Service.Api.Merch
                 {
                     pickupStatus = "已取货";
                 }
-                else
+                else if (item.Status == Entity.E_OrderDetailsChildSonStatus.ExPickupSignUnTaked)
                 {
                     pickupStatus = "未取货";
+                }
+                else if (item.Status == Entity.E_OrderDetailsChildSonStatus.Exception)
+                {
+                    pickupStatus = "取货异常待处理";
+                }
+                else
+                {
+                    pickupStatus = "待取货";
                 }
 
                 olist.Add(new

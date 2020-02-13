@@ -95,7 +95,7 @@ namespace Test
             string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
             string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
 
-     
+
 
             List<string[]> s = new List<string[]>();
             //s.Add
@@ -105,7 +105,7 @@ namespace Test
 
             string extension = Path.GetExtension("Dsadad/dsada.jpg");
 
-            MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPick);
+            MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPickupCmd);
 
             // { "status":100,"channelId":"WX","state":"4","settlementChannel":"038","payTime":"2019-12-08 17:00:43","payoffType":null,"lowOrderId":"6100054201910231627169351",
             //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易","payMoney":"0.01"

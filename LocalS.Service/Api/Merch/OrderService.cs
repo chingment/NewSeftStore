@@ -107,15 +107,15 @@ namespace LocalS.Service.Api.Merch
                 //    status.Value = 3000;
                 //    status.Text = "已支付";
                 //    break;
-                case E_OrderDetailsChildSonStatus.WaitPick:
+                case E_OrderDetailsChildSonStatus.WaitPickup:
                     status.Value = 3010;
                     status.Text = "待取货";
                     break;
-                case E_OrderDetailsChildSonStatus.SendPick:
+                case E_OrderDetailsChildSonStatus.SendPickupCmd:
                     status.Value = 3011;
                     status.Text = "取货中";
                     break;
-                case E_OrderDetailsChildSonStatus.Picking:
+                case E_OrderDetailsChildSonStatus.Pickuping:
                     status.Value = 3012;
                     status.Text = "取货中";
                     break;

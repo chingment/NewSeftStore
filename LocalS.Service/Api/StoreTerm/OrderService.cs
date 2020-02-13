@@ -232,7 +232,7 @@ namespace LocalS.Service.Api.StoreTerm
                     }
                     else
                     {
-                        if (rop.Status == E_OrderDetailsChildSonStatus.SendPick)
+                        if (rop.Status == E_OrderDetailsChildSonStatus.SendPickupCmd)
                         {
                             orderPickupLog.ActionRemark = "发送命令";
                         }
