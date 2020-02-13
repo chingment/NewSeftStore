@@ -71,9 +71,8 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
         public bool ExPickupIsHappen { get; set; }
-        public bool ExPickupHappenTime { get; set; }
+        public DateTime? ExPickupHappenTime { get; set; }
         public bool ExPickupIsHandle { get; set; }
         public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }

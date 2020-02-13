@@ -171,7 +171,6 @@ namespace LocalS.Service.Api.StoreTerm
                     CurrentDb.SaveChanges();
 
 
-
                     //如果某次取货异常 剩下所有取货都标识为订单取货异常
                     var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
 
@@ -190,6 +189,8 @@ namespace LocalS.Service.Api.StoreTerm
                             if (item.Status != E_OrderDetailsChildSonStatus.Completed && item.Status != E_OrderDetailsChildSonStatus.Canceled)
                             {
                                 item.Status = E_OrderDetailsChildSonStatus.Exception;
+                                item.ExPickupIsHappen = true;
+                                item.ExPickupHappenTime = DateTime.Now;
                                 CurrentDb.SaveChanges();
                             }
                         }
@@ -245,14 +246,11 @@ namespace LocalS.Service.Api.StoreTerm
                             orderPickupLog.ActionRemark = rop.ActionName + rop.ActionStatusName;
                         }
                     }
+
                     orderPickupLog.Remark = rop.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
-
-
-
-
 
                     MqFactory.Global.PushOperateLog(AppId.STORETERM, orderDetailsChildSon.ClientUserId, rop.MachineId, "OrderPickup", orderDetailsChildSon.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
 
