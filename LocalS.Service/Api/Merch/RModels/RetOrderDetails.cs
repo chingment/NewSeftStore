@@ -58,7 +58,7 @@ namespace LocalS.Service.Api.Merch
             public List<PickupLog> PickupLogs { get; set; }
             public int PickupStatus { get; set; }
 
-            public bool ExPickupIsHandled { get; set; }
+            public bool ExPickupIsHandle { get; set; }
         }
 
         public class PickupLog

@@ -180,7 +180,7 @@ namespace LocalS.Service.Api.StoreTerm
                         var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
                         if (order != null)
                         {
-                            order.IsHasEx = true;
+                            order.ExIsHappen = true;
                             order.ExHappenTime = DateTime.Now;
                             CurrentDb.SaveChanges();
                         }

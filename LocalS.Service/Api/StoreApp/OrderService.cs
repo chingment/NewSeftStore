@@ -344,7 +344,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
-                         select new { o.Id, o.Sn, o.StoreId, o.PickupCode, o.StoreName, o.Status, o.SubmittedTime, o.IsHasEx, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
+                         select new { o.Id, o.Sn, o.StoreId, o.PickupCode, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
              );
 
 

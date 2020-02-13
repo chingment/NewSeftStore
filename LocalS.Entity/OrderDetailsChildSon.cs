@@ -67,13 +67,15 @@ namespace LocalS.Entity
         public E_OrderDetailsChildSonStatus Status { get; set; }
         public DateTime? PayedTime { get; set; }
         public E_OrderPayWay PayWay { get; set; }
-        public bool ExPickupIsHandled { get; set; }
-        public DateTime? ExPickupHandleTime { get; set; }
-        public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
-        public string ExPickupHandleRemark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+
+        public bool ExPickupIsHappen { get; set; }
+        public bool ExPickupHappenTime { get; set; }
+        public bool ExPickupIsHandle { get; set; }
+        public DateTime? ExPickupHandleTime { get; set; }
+        public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
     }
 }
