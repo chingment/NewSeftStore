@@ -236,6 +236,10 @@ namespace LocalS.Service.Api.StoreTerm
                         {
                             orderPickupLog.ActionRemark = "发送命令";
                         }
+                        else if (rop.Status == E_OrderDetailsChildSonStatus.Exception)
+                        {
+                            orderPickupLog.ActionRemark = "发生异常";
+                        }
                         else
                         {
                             orderPickupLog.ActionRemark = rop.ActionName + rop.ActionStatusName;
