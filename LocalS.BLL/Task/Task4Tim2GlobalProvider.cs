@@ -82,6 +82,7 @@ namespace LocalS.BLL.Task
                                     switch (order.PayPartner)
                                     {
                                         case E_OrderPayPartner.Wx:
+                                            #region Wx
                                             switch (order.PayCaller)
                                             {
                                                 case E_OrderPayCaller.WxByNt:
@@ -93,8 +94,10 @@ namespace LocalS.BLL.Task
                                                     content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
                                                     break;
                                             }
+                                            #endregion
                                             break;
                                         case E_OrderPayPartner.Ali:
+                                            #region Ali
                                             switch (order.PayCaller)
                                             {
                                                 case E_OrderPayCaller.AliByNt:
@@ -102,8 +105,10 @@ namespace LocalS.BLL.Task
                                                     content = SdkFactory.AliPay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
                                                     break;
                                             }
+                                            #endregion
                                             break;
                                         case E_OrderPayPartner.Tg:
+                                            #region Tg
                                             switch (order.PayCaller)
                                             {
                                                 case E_OrderPayCaller.AggregatePayByNt:
@@ -111,23 +116,22 @@ namespace LocalS.BLL.Task
                                                     content = SdkFactory.TgPay.OrderQuery(tgPay_AppInfoConfig, order.Sn);
                                                     break;
                                             }
+                                            #endregion Tg
+                                            break;
+                                        case E_OrderPayPartner.Xrt:
+                                            #region Xrt
+
+                                            #endregion
                                             break;
                                     }
 
-                                    if (order.PayPartner != E_OrderPayPartner.Unknow)
-                                    {
-                                        LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
-                                        MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.OrderQuery, content);
-                                    }
+                                    LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
+                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.OrderQuery, content);
                                 }
                                 else
                                 {
-                                    //已过期，取消订单
-                                    var rt = BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
-                                    if (rt.Result == ResultType.Success)
-                                    {
-                                        LogUtil.Info(string.Format("订单号：{0},支付超时,取消订单，删除缓存", order.Sn));
-                                    }
+                                    LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Sn));
+                                    BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
                                 }
                                 #endregion 
                                 break;

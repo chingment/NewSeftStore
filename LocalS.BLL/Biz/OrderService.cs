@@ -709,7 +709,12 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
                 }
+                else if (payPartner == E_OrderPayPartner.Xrt)
+                {
 
+
+
+                }
 
                 if (isPaySuccess && !string.IsNullOrEmpty(orderSn))
                 {

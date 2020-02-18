@@ -59,6 +59,8 @@ namespace XrtPaySdk
             string responseString = webUtils.DoPost(requestUrl, str_PostData);
 
             LogUtil.Info(string.Format("XrtPaySdk-PostResult->{0}", responseString));
+
+
             T rsp = DeserializeToObject<T>(responseString);
             return rsp;
         }

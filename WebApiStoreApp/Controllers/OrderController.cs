@@ -78,10 +78,6 @@ namespace WebApiStoreApp.Controllers
                     MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Wx, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
-            catch (System.Exception ex)
-            {
-
-            }
             finally
             {
                 //微信支付异步返回结果
@@ -112,10 +108,6 @@ namespace WebApiStoreApp.Controllers
 
                     MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Ali, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
-            }
-            catch (System.Exception ex)
-            {
-
             }
             finally
             {
@@ -186,10 +178,6 @@ namespace WebApiStoreApp.Controllers
                     MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Tg, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
-            catch (System.Exception ex)
-            {
-
-            }
             finally
             {
                 rt = "SUCCESS";
@@ -218,13 +206,8 @@ namespace WebApiStoreApp.Controllers
 
                 if (!string.IsNullOrEmpty(content))
                 {
-
-                    //MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Tg, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Xrt, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
-            }
-            catch (System.Exception ex)
-            {
-
             }
             finally
             {
