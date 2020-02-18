@@ -952,7 +952,7 @@ namespace LocalS.BLL.Biz
                 switch (rop.PayPartner)
                 {
                     case E_OrderPayPartner.Wx:
-                        #region  Wechat
+                        #region  Wechat支付
                         switch (rop.PayCaller)
                         {
                             case E_OrderPayCaller.WxByNt:
@@ -1012,7 +1012,7 @@ namespace LocalS.BLL.Biz
                         #endregion 
                         break;
                     case E_OrderPayPartner.Ali:
-                        #region AliPay
+                        #region AliPay支付
                         switch (rop.PayCaller)
                         {
                             case E_OrderPayCaller.AliByNt:
@@ -1037,7 +1037,7 @@ namespace LocalS.BLL.Biz
                         #endregion
                         break;
                     case E_OrderPayPartner.Tg:
-                        #region 通莞支付
+                        #region Tg支付
 
                         var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(order.MerchId);
 
@@ -1068,10 +1068,12 @@ namespace LocalS.BLL.Biz
                     case E_OrderPayPartner.Xrt:
                         #region Xrt支付
 
+                        // todo 发布去掉
+                        chargeAmount = 0.01m;
+
                         var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
 
                         order.PayPartner = E_OrderPayPartner.Xrt;
-
 
 
                         switch (rop.PayCaller)

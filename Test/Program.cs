@@ -102,9 +102,9 @@ namespace Test
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
 
-            SdkFactory.XrtPay.WxPayBuildByNt(payInfo, "", "", "", "141903606228", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
-            SdkFactory.XrtPay.AliPayBuildByNt(payInfo, "", "", "", "141903606228", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
-
+            SdkFactory.XrtPay.WxPayBuildByNt(payInfo, "", "", "", "610010720200115143310361", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            //SdkFactory.XrtPay.AliPayBuildByNt(payInfo, "", "", "", "610010720200115143310361", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310361");
             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
             //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
 

@@ -150,5 +150,40 @@ namespace XrtPaySdk
 
             return requestResult;
         }
+
+        public OrderPayQueryRequestResult PayQuery(string out_trade_no)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic.Add("service", "unified.trade.query");
+            dic.Add("version", "");
+            dic.Add("charset", "");
+            dic.Add("sign_type", "");
+            dic.Add("mch_id", this.mch_id);
+            dic.Add("out_trade_no", out_trade_no);
+            dic.Add("device_info", "");
+            dic.Add("attach", "");
+            dic.Add("nonce_str", GetNonceStr());
+
+
+            dic.Add("sign", GetSign(dic));
+
+
+            Dictionary<string, string> post_dic = new Dictionary<string, string>();
+            foreach (var key in dic)
+            {
+                if (!string.IsNullOrEmpty(key.Value))
+                {
+                    post_dic.Add(key.Key, key.Value);
+                }
+            }
+
+            var request = new OrderPayQueryRequest(dic);
+
+            var requestResult = _api.DoPost(request);
+
+
+            return requestResult;
+        }
     }
 }

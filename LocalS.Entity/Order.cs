@@ -96,5 +96,6 @@ namespace LocalS.Entity
         public DateTime? ExHappenTime { get; set; }
         public bool ExIsHandle { get; set; }
         public DateTime? ExHandleTime { get; set; }
+        public bool IsTest { get; set; }
     }
 }

@@ -44,5 +44,26 @@ namespace LocalS.BLL
             return result;
 
         }
+
+        public PayResult PayQuery(XrtPayInfoConfg config, string order_sn)
+        {
+            var result = new PayResult();
+
+            XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
+
+
+            var xrtPayQueryResult = xrtPayUtil.PayQuery(order_sn);
+
+            if (xrtPayQueryResult.status == "0" && xrtPayQueryResult.result_code == "0")
+            {
+                if (xrtPayQueryResult.trade_state == "SUCCESS")
+                {
+                    result.IsPaySuccess = true;
+                }
+
+            }
+
+            return result;
+        }
     }
 }
