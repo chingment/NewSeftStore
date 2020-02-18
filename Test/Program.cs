@@ -1,4 +1,5 @@
-﻿using LocalS.BLL.Biz;
+﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
 using LocalS.Entity;
 using LocalS.Service.Api.Merch;
@@ -101,7 +102,8 @@ namespace Test
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
 
-            xrtPayUtil.WxPayBuildByNt("141903606228", "1", "测试支付", "", "127.0.0.1", "", "", "");
+            SdkFactory.XrtPay.WxPayBuildByNt(payInfo, "", "", "", "141903606228", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            SdkFactory.XrtPay.AliPayBuildByNt(payInfo, "", "", "", "141903606228", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
 
             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
             //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");

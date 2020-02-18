@@ -65,7 +65,7 @@ namespace XrtPaySdk
             return Guid.NewGuid().ToString().Replace("-", "");
         }
 
-        public WxNativePayRequestResult WxPayBuildByNt(string out_trade_no, string total_fee, string body, string attach, string create_ip, string time_start, string time_expire, string cashier)
+        public WxNativePayRequestResult WxPayBuildByNt(string out_trade_no, string total_fee, string body, string attach, string create_ip, string time_start, string time_expire)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -108,5 +108,47 @@ namespace XrtPaySdk
             return requestResult;
         }
 
+        public AliNativePayRequestResult AliPayBuildByNt(string out_trade_no, string total_fee, string body, string attach, string create_ip, string time_start, string time_expire)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic.Add("service", "pay.alipay.native");
+            dic.Add("version", "");
+            dic.Add("charset", "");
+            dic.Add("sign_type", "");
+            dic.Add("mch_id", this.mch_id);
+            dic.Add("out_trade_no", out_trade_no);
+            dic.Add("device_info", "");
+            dic.Add("body", body);
+            dic.Add("attach", "");
+            dic.Add("total_fee", total_fee);
+            dic.Add("mch_create_ip", create_ip);
+            dic.Add("notify_url", this.notifyUrl);
+            dic.Add("time_start", time_start);
+            dic.Add("time_expire", time_expire);
+            dic.Add("goods_tag", "");
+            dic.Add("product_id", "");
+            dic.Add("nonce_str", GetNonceStr());
+
+
+            dic.Add("sign", GetSign(dic));
+
+
+            Dictionary<string, string> post_dic = new Dictionary<string, string>();
+            foreach (var key in dic)
+            {
+                if (!string.IsNullOrEmpty(key.Value))
+                {
+                    post_dic.Add(key.Key, key.Value);
+                }
+            }
+
+            var request = new AliNativePayRequest(dic);
+
+            var requestResult = _api.DoPost(request);
+
+
+            return requestResult;
+        }
     }
 }

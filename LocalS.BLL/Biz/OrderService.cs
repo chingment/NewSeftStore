@@ -957,10 +957,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                order.PayPrepayId = wechatByNative_UnifiedOrder.PrepayId;
-                                order.PayQrCodeUrl = wechatByNative_UnifiedOrder.CodeUrl;
-
-                                var wechatByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var wechatByNative_PayParams = new { PayUrl = wechatByNative_UnifiedOrder.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByNative_PayParams);
                                 #endregion
@@ -994,8 +991,6 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                order.PayPrepayId = wechatByMp_UnifiedOrder.PrepayId;
-
                                 var pms = SdkFactory.Wx.GetJsApiPayParams(wechatByMp_AppInfoConfig, order.Id, order.Sn, wechatByMp_UnifiedOrder.PrepayId);
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
@@ -1022,9 +1017,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                order.PayQrCodeUrl = alipayByNative_UnifiedOrder.CodeUrl;
-
-                                var alipayByNative_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var alipayByNative_PayParams = new { PayUrl = alipayByNative_UnifiedOrder.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", alipayByNative_PayParams);
                                 #endregion
@@ -1061,9 +1054,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                order.PayQrCodeUrl = tgPay_AllQrcodePay.codeUrl;
-
-                                var tg_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var tg_AllQrcodePay_PayParams = new { PayUrl = tgPay_AllQrcodePay.codeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
@@ -1079,7 +1070,7 @@ namespace LocalS.BLL.Biz
 
                         var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
 
-                        order.PayPartner = E_OrderPayPartner.Tg;
+                        order.PayPartner = E_OrderPayPartner.Xrt;
 
                         switch (rop.PayCaller)
                         {
@@ -1095,18 +1086,16 @@ namespace LocalS.BLL.Biz
                                     }
                                 }
 
-                                var XrtPay_WxPayBuildResultByNt = SdkFactory.XrtPay.WxPayBuildByNt(xrtPayInfoConfig, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.WxPayBuildByNt(xrtPayInfoConfig, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
-                                if (string.IsNullOrEmpty(XrtPay_WxPayBuildResultByNt.CodeUrl))
+                                if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                order.PayQrCodeUrl = XrtPay_WxPayBuildResultByNt.CodeUrl;
+                                var xrtPay_WxPayBuildByNtResultParams = new { PayUrl = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
-                                var tgPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
-
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tgPay_AllQrcodePay_PayParams);
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
 
                                 #endregion
                                 break;

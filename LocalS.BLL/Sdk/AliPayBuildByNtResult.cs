@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class WxPayBuildResultByNt
+    public class AliPayBuildByNtResult
     {
         public string CodeUrl { get; set; }
+
     }
 }
