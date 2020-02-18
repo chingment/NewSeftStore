@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class WxPayBuidResultByNt
+    public class WxPayBuildResultByNt
     {
         public string CodeUrl { get; set; }
     }

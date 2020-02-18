@@ -107,7 +107,7 @@
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\TgPaySdkProvider.cs" />
-    <Compile Include="Sdk\WxPayBuidResultByNt.cs" />
+    <Compile Include="Sdk\WxPayBuildResultByNt.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />
     <Compile Include="Sdk\XtyPaySdkProvider.cs" />
     <Compile Include="Task\BaseProgram.cs" />
@@ -153,9 +153,9 @@
       <Project>{ec691c59-681a-405e-93cb-4fe65d1a3db4}</Project>
       <Name>MyPushSdk</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TongGuanPaySdk\TongGuanPaySdk.csproj">
+    <ProjectReference Include="..\TgPaySdk\TgPaySdk.csproj">
       <Project>{259e83da-5441-4911-b284-d524201329fc}</Project>
-      <Name>TongGuanPaySdk</Name>
+      <Name>TgPaySdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>

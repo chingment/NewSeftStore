@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TongGuanPaySdk
+namespace TgPaySdk
 {
-    public class OrderQueryRequest : IApiPostRequest<OrderQueryRequestResult>
+    public class AllQrcodePayRequest:IApiPostRequest<AllQrcodePayRequestResult>
     {
-        public OrderQueryRequest(Object postdata)
+        public AllQrcodePayRequest(Object postdata)
         {
             this.PostData = postdata;
         }
@@ -19,7 +19,7 @@ namespace TongGuanPaySdk
         {
             get
             {
-                return "/tgPosp/services/payApi/orderQuery";
+                return "/tgPosp/services/payApi/allQrcodePay";
             }
         }
     }

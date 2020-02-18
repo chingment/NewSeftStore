@@ -219,7 +219,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    //MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.TongGuan, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    //MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Tg, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             catch (System.Exception ex)

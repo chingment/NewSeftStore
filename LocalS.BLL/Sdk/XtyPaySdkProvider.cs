@@ -11,7 +11,7 @@ namespace LocalS.BLL
     public class XtyPaySdkProvider : IPaySdkProvider
     {
 
-        public WxPayBuidResultByNt WxPayBuildByNt(object config, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, OrderAttachModel attach, DateTime time_expire)
+        public WxPayBuildResultByNt WxPayBuildByNt(object config, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, OrderAttachModel attach, DateTime time_expire)
         {
             //XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
             //var ret = xrtPayUtil.WxPayByNt(orderSn, orderAmount.ToString("#0.00"), body, "", ip, "", time_expire.ToString("yyyyMMddHHmmss"), storeId);

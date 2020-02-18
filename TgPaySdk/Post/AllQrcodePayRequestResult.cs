@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TongGuanPaySdk
+namespace TgPaySdk
 {
-    public class OrderQueryRequestData:BaseRequestData
+    public class AllQrcodePayRequestResult:BaseRequestResult
     {
-        public string lowOrderId { get; set; }
+        public string codeUrl { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace TongGuanPaySdk
+namespace TgPaySdk
 {
     /// <summary>
     /// 文件元数据。

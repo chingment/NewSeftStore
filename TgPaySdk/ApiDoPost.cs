@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using Lumos;
 using Newtonsoft.Json;
 
-namespace TongGuanPaySdk
+namespace TgPaySdk
 {
 
     //http://tgjf.833006.biz
@@ -17,7 +17,7 @@ namespace TongGuanPaySdk
 
         public string GetSeviceUrl()
         {
-            return System.Configuration.ConfigurationManager.AppSettings["custom:TongGuanPayServerUrl"];
+            return System.Configuration.ConfigurationManager.AppSettings["custom:TgPayServerUrl"];
         }
         public ApiDoPost()
         {
@@ -32,11 +32,11 @@ namespace TongGuanPaySdk
             string requestUrl = GetSeviceUrl() + request.ApiUrl;
 
             WebUtils webUtils = new WebUtils();
-            LogUtil.Info(string.Format("TongGuanPaySdk-PostUrl->{0}", requestUrl));
-            LogUtil.Info(string.Format("TongGuanPaySdk-PostData->{0}", str_PostData));
+            LogUtil.Info(string.Format("TgPaySdk-PostUrl->{0}", requestUrl));
+            LogUtil.Info(string.Format("TgPaySdk-PostData->{0}", str_PostData));
             string responseString = webUtils.DoPost(requestUrl, str_PostData);
 
-            LogUtil.Info(string.Format("TongGuanPaySdk-PostResult->{0}", responseString));
+            LogUtil.Info(string.Format("TgPaySdk-PostResult->{0}", responseString));
             T rsp = JsonConvert.DeserializeObject<T>(responseString);
             return rsp;
         }

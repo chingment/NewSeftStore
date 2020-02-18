@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using TongGuanPaySdk;
+using TgPaySdk;
 using XrtPaySdk;
 
 namespace Test
@@ -149,17 +149,17 @@ namespace Test
 
             //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
 
-            //TongGuanPayInfoConfg config = new TongGuanPayInfoConfg();
+            //TgPayInfoConfg config = new TgPayInfoConfg();
             //config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
             //config.Account = "15675830166";
             //config.Key = "ffd50c4bf658b619c53e246926af8e48";
             ////config.Account = "13974747474";
             ////config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
-            //TongGuanUtil tongGuanUtil = new TongGuanUtil(config);
+            //TgUtil tgUtil = new TgUtil(config);
             //decimal amount = 0.01m;
-            //tongGuanUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
-            //tongGuanUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
-            ////tongGuanUtil.OrderQuery("6100054201910231627169351我");
+            //tgUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
+            //tgUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
+            ////tgUtil.OrderQuery("6100054201910231627169351我");
             //Dictionary<string, string> dic = new Dictionary<string, string>();
             //dic.Add("status", "100");
             //dic.Add("channelId", "WX");
@@ -172,7 +172,7 @@ namespace Test
             //dic.Add("payType", "0");
             //dic.Add("account", "13974747474");
             //dic.Add("message", "找不到交易");
-            //string c = tongGuanUtil.GetSign(dic);
+            //string c = tgUtil.GetSign(dic);
             //  api.OrderQuery("610005420191023162716933");
             //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
 

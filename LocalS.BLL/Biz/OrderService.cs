@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using TongGuanPaySdk;
+using TgPaySdk;
 using MyAlipaySdk;
 using System.Configuration;
 
@@ -1055,17 +1055,17 @@ namespace LocalS.BLL.Biz
                                     }
                                 }
 
-                                var tongGuanPay_AllQrcodePay = SdkFactory.TgPay.AllQrcodePay(tgPayInfoConfig, order.MerchId, order.StoreId, order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-                                if (string.IsNullOrEmpty(tongGuanPay_AllQrcodePay.codeUrl))
+                                var tgPay_AllQrcodePay = SdkFactory.TgPay.AllQrcodePay(tgPayInfoConfig, order.MerchId, order.StoreId, order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                if (string.IsNullOrEmpty(tgPay_AllQrcodePay.codeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                order.PayQrCodeUrl = tongGuanPay_AllQrcodePay.codeUrl;
+                                order.PayQrCodeUrl = tgPay_AllQrcodePay.codeUrl;
 
-                                var tongGuanPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var tg_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tongGuanPay_AllQrcodePay_PayParams);
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
                                 #endregion
                                 break;
@@ -1104,9 +1104,9 @@ namespace LocalS.BLL.Biz
 
                                 order.PayQrCodeUrl = XrtPay_WxPayBuildResultByNt.CodeUrl;
 
-                                var tongGuanPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var tgPay_AllQrcodePay_PayParams = new { PayUrl = order.PayQrCodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tongGuanPay_AllQrcodePay_PayParams);
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tgPay_AllQrcodePay_PayParams);
 
                                 #endregion
                                 break;

@@ -30,9 +30,9 @@ namespace LocalS.Entity
         public string AlipayMpAppPrivateSecret { get; set; }
         public string AlipayPublicSecret { get; set; }
         public string AlipayResultNotifyUrl { get; set; }
-        public string TongGuanPayAccount { get; set; }
-        public string TongGuanPayKey { get; set; }
-        public string TongGuanPayResultNotifyUrl { get; set; }
+        public string TgPayAccount { get; set; }
+        public string TgPayKey { get; set; }
+        public string TgPayResultNotifyUrl { get; set; }
 
         public string XrtPayMchId{ get; set; }
         public string XrtPayKey { get; set; }

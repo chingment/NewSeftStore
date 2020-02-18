@@ -10,7 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
 
-namespace TongGuanPaySdk
+namespace TgPaySdk
 {
     /// <summary>
     /// 网络工具类。

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
-using TongGuanPaySdk;
+using TgPaySdk;
 using XrtPaySdk;
 
 namespace LocalS.BLL.Biz
@@ -78,9 +78,9 @@ namespace LocalS.BLL.Biz
                 return null;
 
 
-            config.Account = merch.TongGuanPayAccount;
-            config.Key = merch.TongGuanPayKey;
-            config.PayResultNotifyUrl = merch.TongGuanPayResultNotifyUrl;
+            config.Account = merch.TgPayAccount;
+            config.Key = merch.TgPayKey;
+            config.PayResultNotifyUrl = merch.TgPayResultNotifyUrl;
 
             return config;
         }
