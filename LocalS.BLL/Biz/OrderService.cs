@@ -936,6 +936,15 @@ namespace LocalS.BLL.Biz
                 order.PayExpireTime = DateTime.Now.AddMinutes(5);
                 order.PayCaller = rop.PayCaller;
 
+                decimal chargeAmount = order.ChargeAmount;
+
+                if (ConfigurationManager.AppSettings["custom:IsPayTest"] != null)
+                {
+                    if (ConfigurationManager.AppSettings["custom:IsPayTest"] == "true")
+                    {
+                        chargeAmount = 0.01m;
+                    }
+                }
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
@@ -1039,15 +1048,6 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.AggregatePayByNt:
                                 #region AggregatePayByNt
 
-                                decimal chargeAmount = order.ChargeAmount;
-                                if (ConfigurationManager.AppSettings["custom:IsPayTest"] != null)
-                                {
-                                    if (ConfigurationManager.AppSettings["custom:IsPayTest"] == "true")
-                                    {
-                                        chargeAmount = 0.01m;
-                                    }
-                                }
-
                                 var tgPay_AllQrcodePay = SdkFactory.TgPay.AllQrcodePay(tgPayInfoConfig, order.MerchId, order.StoreId, order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tgPay_AllQrcodePay.codeUrl))
                                 {
@@ -1072,19 +1072,12 @@ namespace LocalS.BLL.Biz
 
                         order.PayPartner = E_OrderPayPartner.Xrt;
 
+
+
                         switch (rop.PayCaller)
                         {
-                            case E_OrderPayCaller.AggregatePayByNt:
-                                #region AggregatePayByNt
-
-                                decimal chargeAmount = order.ChargeAmount;
-                                if (ConfigurationManager.AppSettings["custom:IsPayTest"] != null)
-                                {
-                                    if (ConfigurationManager.AppSettings["custom:IsPayTest"] == "true")
-                                    {
-                                        chargeAmount = 0.01m;
-                                    }
-                                }
+                            case E_OrderPayCaller.WxByNt:
+                                #region WxByNt
 
                                 var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.WxPayBuildByNt(xrtPayInfoConfig, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
@@ -1096,6 +1089,22 @@ namespace LocalS.BLL.Biz
                                 var xrtPay_WxPayBuildByNtResultParams = new { PayUrl = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
+
+                                #endregion
+                                break;
+                            case E_OrderPayCaller.AliByNt:
+                                #region AliByNt
+
+                                var xrtPay_AliPayBuildByNtResult = SdkFactory.XrtPay.WxPayBuildByNt(xrtPayInfoConfig, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+
+                                if (string.IsNullOrEmpty(xrtPay_AliPayBuildByNtResult.CodeUrl))
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                }
+
+                                var xrtPay_AliPayBuildByNtResultParams = new { PayUrl = xrtPay_AliPayBuildByNtResult.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_AliPayBuildByNtResultParams);
 
                                 #endregion
                                 break;
