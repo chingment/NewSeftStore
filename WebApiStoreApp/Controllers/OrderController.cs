@@ -192,31 +192,13 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public HttpResponseMessage PayResultNotifyByXrt()
         {
-            string content = "";
-            string rt = "";
-            try
+            string content = GetRequestContent();
+            LogUtil.Info("接收支付结果:" + content);
+            if (!string.IsNullOrEmpty(content))
             {
-                var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-                Stream stream = myRequest.InputStream;
-                stream.Seek(0, SeekOrigin.Begin);
-
-                content = new StreamReader(stream).ReadToEnd();
-
-                LogUtil.Info("接收支付结果:" + content);
-
-                if (!string.IsNullOrEmpty(content))
-                {
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Xrt, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
-                }
+                MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Xrt, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
             }
-            finally
-            {
-                rt = "SUCCESS";
-
-            }
-
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(rt, Encoding.UTF8, "text/plain") };
-
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
         }
     }
 }

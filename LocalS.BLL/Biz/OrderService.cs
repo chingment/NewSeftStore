@@ -661,58 +661,43 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
-                        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<AllQrcodePayAsynNotifyResult>(content);
+                        var result = SdkFactory.TgPay.ConvertPayUrlNotifyResult(null, content);
                         if (result != null)
                         {
-                            if (result.state == "0")
-                            {
-                                isPaySuccess = true;
-                                orderSn = result.lowOrderId;
-                                payPartnerOrderSn = result.upOrderId;
-                                if (result.channelID == "WX")
-                                {
-                                    orderPayWay = E_OrderPayWay.Wechat;
-                                }
-                                if (result.channelID == "ZFB")
-                                {
-                                    orderPayWay = E_OrderPayWay.AliPay;
-                                }
-
-                            }
+                            isPaySuccess = true;
+                            orderSn = result.OrderSn;
+                            payPartnerOrderSn = result.PayPartnerOrderSn;
+                            orderPayWay = result.OrderPayWay;
                         }
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
                     {
-                        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderQueryRequestResult>(content);
+                        var result = SdkFactory.TgPay.ConvertPayQueryResult(null, content);
                         if (result != null)
                         {
-                            if (result.status == "100")
-                            {
-                                if (result.state == "0")
-                                {
-                                    isPaySuccess = true;
-                                    orderSn = result.lowOrderId;
-                                    payPartnerOrderSn = result.upOrderId;
-                                    if (result.channelID == "WX")
-                                    {
-                                        orderPayWay = E_OrderPayWay.Wechat;
-                                    }
-                                    if (result.channelID == "ZFB")
-                                    {
-                                        orderPayWay = E_OrderPayWay.AliPay;
-                                    }
-
-                                }
-                            }
+                            isPaySuccess = true;
+                            orderSn = result.OrderSn;
+                            payPartnerOrderSn = result.PayPartnerOrderSn;
+                            orderPayWay = result.OrderPayWay;
                         }
                     }
                     #endregion
                 }
                 else if (payPartner == E_OrderPayPartner.Xrt)
                 {
-
-
-
+                    #region 解释XRT支付协议
+                    if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    {
+                        var result = SdkFactory.XrtPay.ConvertPayUrlNotifyResult(null, content);
+                        if (result != null)
+                        {
+                            isPaySuccess = true;
+                            orderSn = result.OrderSn;
+                            payPartnerOrderSn = result.PayPartnerOrderSn;
+                            orderPayWay = result.OrderPayWay;
+                        }
+                    }
+                    #endregion
                 }
 
                 if (isPaySuccess)

@@ -12,7 +12,7 @@ namespace LocalS.BLL
         public readonly static string ADMIN = "admin.17fanju.com";
         public readonly static string MERCH = "merch.17fanju.com";
         public readonly static string AGENT = "agent.17fanju.com";
-        public readonly static string WXMINPRAGROM = "agent.17fanju.com";
+        public readonly static string WXMINPRAGROM = "mp.17fanju.com";
         public readonly static string STORETERM = "com.uplink.selfstore";
     }
 }

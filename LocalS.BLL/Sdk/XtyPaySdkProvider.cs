@@ -45,7 +45,7 @@ namespace LocalS.BLL
 
         }
 
-        public PayResult PayQuery(XrtPayInfoConfg config, string order_sn)
+        public PayQueryResult PayQuery(XrtPayInfoConfg config, string order_sn)
         {
             var result = new PayResult();
 
@@ -62,6 +62,13 @@ namespace LocalS.BLL
                 }
 
             }
+
+            return result;
+        }
+
+        public PayUrlNotifyResult ConvertPayUrlNotifyResult(XrtPayInfoConfg config, string content)
+        {
+            var result = new PayUrlNotifyResult();
 
             return result;
         }

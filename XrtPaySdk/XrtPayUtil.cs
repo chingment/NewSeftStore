@@ -186,6 +186,5 @@ namespace XrtPaySdk
             return requestResult;
         }
 
-
     }
 }

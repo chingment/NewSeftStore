@@ -3,6 +3,7 @@ using System.Web;
 using System.Configuration;
 using Lumos.Web.Http;
 using Lumos.Session;
+using System.IO;
 
 namespace WebApiStoreApp
 {
@@ -52,6 +53,27 @@ namespace WebApiStoreApp
             {
                 return this.TokenInfo.UserId;
             }
+        }
+
+        public string GetRequestContent()
+        {
+            string content = null;
+
+            try
+            {
+                var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                Stream stream = myRequest.InputStream;
+                stream.Seek(0, SeekOrigin.Begin);
+
+                content = new StreamReader(stream).ReadToEnd();
+            }
+            catch
+            {
+                content = null;
+            }
+
+            return content;
+
         }
     }
 }

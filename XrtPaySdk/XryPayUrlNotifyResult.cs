@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL
+namespace XrtPaySdk
 {
-    public class PayResult
+    public class XryPayUrlNotifyResult
     {
-        public bool IsPaySuccess { get; set; }
+
     }
 }

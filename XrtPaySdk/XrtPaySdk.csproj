@@ -65,6 +65,7 @@
     <Compile Include="Utils\WebUtils.cs" />
     <Compile Include="XrtPayInfoConfg.cs" />
     <Compile Include="XrtPayUtil.cs" />
+    <Compile Include="XryPayUrlNotifyResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lumos\Lumos.csproj">
