@@ -25,7 +25,6 @@ namespace LocalS.BLL.Biz
 
             return order;
         }
-
         private static readonly object lock_Reserve = new object();
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
@@ -716,10 +715,9 @@ namespace LocalS.BLL.Biz
 
                 }
 
-                if (isPaySuccess && !string.IsNullOrEmpty(orderSn))
+                if (isPaySuccess)
                 {
                     LogUtil.Info("解释支付协议结果，支付成功");
-
                     Dictionary<string, string> pms = new Dictionary<string, string>();
                     pms.Add("clientUserName", clientUserName);
 
@@ -1178,7 +1176,6 @@ namespace LocalS.BLL.Biz
 
             return model;
         }
-
         public string GetPayWayName(E_OrderPayWay payWay)
         {
             string str = "";
@@ -1197,7 +1194,6 @@ namespace LocalS.BLL.Biz
 
             return str;
         }
-
         public string GetTradeTypeName(E_RptOrderTradeType tradeTyp)
         {
             string str = "";
