@@ -107,6 +107,10 @@
       <Project>{259e83da-5441-4911-b284-d524201329fc}</Project>
       <Name>TongGuanPaySdk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XrtPaySdk\XrtPaySdk.csproj">
+      <Project>{27871c52-caca-4eca-bba8-6866022c8d91}</Project>
+      <Name>XrtPaySdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

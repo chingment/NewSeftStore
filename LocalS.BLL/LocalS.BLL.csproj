@@ -103,10 +103,13 @@
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sdk\AlipaySdkProvider.cs" />
+    <Compile Include="Sdk\AliPaySdkProvider.cs" />
+    <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
-    <Compile Include="Sdk\TongGuanSdkProvider.cs" />
+    <Compile Include="Sdk\TgPaySdkProvider.cs" />
+    <Compile Include="Sdk\WxPayBuidResultByNt.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />
+    <Compile Include="Sdk\XtyPaySdkProvider.cs" />
     <Compile Include="Task\BaseProgram.cs" />
     <Compile Include="Task\ITask.cs" />
     <Compile Include="Task\Launcher.cs" />
@@ -157,6 +160,10 @@
     <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>
       <Name>MyWeiXinSdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XrtPaySdk\XrtPaySdk.csproj">
+      <Project>{27871c52-caca-4eca-bba8-6866022c8d91}</Project>
+      <Name>XrtPaySdk</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

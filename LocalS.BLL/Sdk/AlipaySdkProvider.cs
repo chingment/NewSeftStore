@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class MyAlipaySdkProvider : BaseDbContext
+    public class AliPaySdkProvider : BaseDbContext
     {
         public UnifiedOrderResult UnifiedOrderByNative(AlipayAppInfoConfig config, string merchId,string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
         {

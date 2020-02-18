@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TongGuanPaySdk
+namespace XrtPaySdk
 {
-    public class TongGuanPayInfoConfg
+    public class XrtPayInfoConfg
     {
-        public string Account { get; set; }
+        public string Mch_id { get; set; }
+
         public string Key { get; set; }
+
         public string PayResultNotifyUrl { get; set; }
     }
 }

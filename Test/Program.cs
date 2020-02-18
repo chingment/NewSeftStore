@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using TongGuanPaySdk;
+using XrtPaySdk;
 
 namespace Test
 {
@@ -92,20 +93,30 @@ namespace Test
         static void Main(string[] args)
         {
 
-            string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
-            string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
+            XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
+
+            payInfo.Mch_id = "861440348168052";
+            payInfo.Key = "4991479F033B2F3A0326AC0653D84FEE";
+            payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByAlipay";
+
+            XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
+
+            xrtPayUtil.WxPayBuildByNt("141903606228", "1", "测试支付", "", "127.0.0.1", "", "", "");
+
+            //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
+            //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
 
 
 
-            List<string[]> s = new List<string[]>();
+            //List<string[]> s = new List<string[]>();
             //s.Add
             //[[1],[1,7],[17],[17,21]]
             //            string[,] s = new string[2, 5];
 
 
-            string extension = Path.GetExtension("Dsadad/dsada.jpg");
+            //string extension = Path.GetExtension("Dsadad/dsada.jpg");
 
-            MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPickupCmd);
+            //MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPickupCmd);
 
             // { "status":100,"channelId":"WX","state":"4","settlementChannel":"038","payTime":"2019-12-08 17:00:43","payoffType":null,"lowOrderId":"6100054201910231627169351",
             //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易","payMoney":"0.01"
@@ -122,15 +133,15 @@ namespace Test
             //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易",
             //"payMoney":"0.01","upOrderId":"91203600163013136384",
             //"payType":"0","account":"13974747474","openid":null,"openId":null}
-            List<PayOption> payOptions = new List<PayOption>();
+            //List<PayOption> payOptions = new List<PayOption>();
 
-            List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
-            payWay.Add(E_OrderPayWay.Wechat);
+            //List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
+            //payWay.Add(E_OrderPayWay.Wechat);
 
-            payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WechatByBuildQrCode, Partner = E_OrderPayPartner.Wechat, SupportWays = payWay });
-            payOptions.Add(new PayOption { Caller = E_OrderPayCaller.AlipayByBuildQrCode, Partner = E_OrderPayPartner.AliPay, SupportWays = payWay });
+            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WechatByBuildQrCode, Partner = E_OrderPayPartner.Wechat, SupportWays = payWay });
+            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.AlipayByBuildQrCode, Partner = E_OrderPayPartner.AliPay, SupportWays = payWay });
 
-            string a22 = payOptions.ToJsonString();
+            //string a22 = payOptions.ToJsonString();
 
 
             // [{"caller":10,"partner":1,"supportWays":[1]},{"caller":20,"partner":2,"supportWays":[2]}]
@@ -176,7 +187,7 @@ namespace Test
             //}
             //RedisManager.Db.HashScan("aaa", "a1*");
 
-            var s1 = new { a = 1, b = 2 };
+            // var s1 = new { a = 1, b = 2 };
             //.Db.HashSetAsync("aaa","a1xxx", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
             //RedisManager.Db.HashSetAsync("aaa", "a2ss", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
             //RedisManager.Db.HashSetAsync("aaa", "b2ww", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
@@ -184,25 +195,25 @@ namespace Test
 
             // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
 
-            bool a1 = CommonUtil.IsNumber("1312331333x13133123");
+            //bool a1 = CommonUtil.IsNumber("1312331333x13133123");
 
-            StringBuilder sql = new StringBuilder();
-            sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
-            for (int i = 0; i < 7; i++)
-            {
-                string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
+            //StringBuilder sql = new StringBuilder();
+            //sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
+            //for (int i = 0; i < 7; i++)
+            //{
+            //    string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
 
-                sql.Append(" select '" + datef + "' datef union");
-            }
-            sql.Remove(sql.Length - 5, 5);
+            //    sql.Append(" select '" + datef + "' datef union");
+            //}
+            //sql.Remove(sql.Length - 5, 5);
 
-            sql.Append(" ) a1 left join ");
-            sql.Append(" (    select datef, sum(sumCount),sum(sumTradeAmount) from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='d17df2252133478c99104180e8062230' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
-            sql.Append(" on  a1.datef=b1.datef  ");
-            sql.Append(" order by a1.datef desc  ");
+            //sql.Append(" ) a1 left join ");
+            //sql.Append(" (    select datef, sum(sumCount),sum(sumTradeAmount) from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='d17df2252133478c99104180e8062230' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
+            //sql.Append(" on  a1.datef=b1.datef  ");
+            //sql.Append(" order by a1.datef desc  ");
 
 
-            string a = sql.ToString();
+            //string a = sql.ToString();
 
             //sbyte[] orig = a(new byte[] { 0x82 });
 

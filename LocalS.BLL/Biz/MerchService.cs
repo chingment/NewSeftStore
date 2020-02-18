@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
 using TongGuanPaySdk;
+using XrtPaySdk;
 
 namespace LocalS.BLL.Biz
 {
@@ -67,10 +68,10 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
-        public TongGuanPayInfoConfg GetTongGuanPayInfoConfg(string merchId)
+        public TgPayInfoConfg GetTgPayInfoConfg(string merchId)
         {
 
-            var config = new TongGuanPayInfoConfg();
+            var config = new TgPayInfoConfg();
 
             var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
             if (merch == null)
@@ -80,6 +81,22 @@ namespace LocalS.BLL.Biz
             config.Account = merch.TongGuanPayAccount;
             config.Key = merch.TongGuanPayKey;
             config.PayResultNotifyUrl = merch.TongGuanPayResultNotifyUrl;
+
+            return config;
+        }
+
+        public XrtPayInfoConfg GetXrtPayInfoConfg(string merchId)
+        {
+            var config = new XrtPayInfoConfg();
+
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (merch == null)
+                return null;
+
+
+            config.Mch_id = merch.XrtPayMchId;
+            config.Key = merch.XrtPayKey;
+            config.PayResultNotifyUrl = merch.XrtPayResultNotifyUrl;
 
             return config;
         }

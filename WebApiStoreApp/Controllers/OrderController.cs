@@ -75,7 +75,7 @@ namespace WebApiStoreApp.Controllers
 
                 if (!string.IsNullOrEmpty(content))
                 {
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Wechat, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Wx, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             catch (System.Exception ex)
@@ -110,7 +110,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.AliPay, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Ali, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             catch (System.Exception ex)
@@ -183,7 +183,43 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.TongGuan, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Tg, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+            finally
+            {
+                rt = "SUCCESS";
+
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(rt, Encoding.UTF8, "text/plain") };
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public HttpResponseMessage PayResultNotifyByXrt()
+        {
+            string content = "";
+            string rt = "";
+            try
+            {
+                var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                Stream stream = myRequest.InputStream;
+                stream.Seek(0, SeekOrigin.Begin);
+
+                content = new StreamReader(stream).ReadToEnd();
+
+                LogUtil.Info("接收支付结果:" + content);
+
+                if (!string.IsNullOrEmpty(content))
+                {
+
+                    //MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.TongGuan, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             catch (System.Exception ex)

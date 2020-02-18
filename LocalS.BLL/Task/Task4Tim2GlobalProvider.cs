@@ -81,34 +81,34 @@ namespace LocalS.BLL.Task
                                     string content = "";
                                     switch (order.PayPartner)
                                     {
-                                        case E_OrderPayPartner.Wechat:
+                                        case E_OrderPayPartner.Wx:
                                             switch (order.PayCaller)
                                             {
-                                                case E_OrderPayCaller.WechatByBuildQrCode:
+                                                case E_OrderPayCaller.WxByNt:
                                                     var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                                     content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);
                                                     break;
-                                                case E_OrderPayCaller.WechatByMp:
+                                                case E_OrderPayCaller.WxByMp:
                                                     var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                                     content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             break;
-                                        case E_OrderPayPartner.AliPay:
+                                        case E_OrderPayPartner.Ali:
                                             switch (order.PayCaller)
                                             {
-                                                case E_OrderPayCaller.AlipayByBuildQrCode:
+                                                case E_OrderPayCaller.AliByNt:
                                                     var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Alipay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.AliPay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             break;
-                                        case E_OrderPayPartner.TongGuan:
+                                        case E_OrderPayPartner.Tg:
                                             switch (order.PayCaller)
                                             {
-                                                case E_OrderPayCaller.AggregatePayByBuildQrCode:
-                                                    var tongGuanByAllQrcodePay_AppInfoConfig = BizFactory.Merch.GetTongGuanPayInfoConfg(order.MerchId);
-                                                    content = SdkFactory.TongGuan.OrderQuery(tongGuanByAllQrcodePay_AppInfoConfig, order.Sn);
+                                                case E_OrderPayCaller.AggregatePayByNt:
+                                                    var tgPay_AppInfoConfig = BizFactory.Merch.GetTgPayInfoConfg(order.MerchId);
+                                                    content = SdkFactory.TgPay.OrderQuery(tgPay_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             break;

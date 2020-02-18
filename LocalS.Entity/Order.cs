@@ -31,20 +31,20 @@ namespace LocalS.Entity
     public enum E_OrderPayPartner
     {
         Unknow = 0,
-        Wechat = 1,//微信支付
-        AliPay = 2, //支付宝支付
-        TongGuan = 91 //通莞金服
+        Wx = 1,//微信支付
+        Ali = 2, //支付宝支付
+        Tg = 91, //通莞金服
+        Xrt = 92 //通莞金服
     }
 
     public enum E_OrderPayCaller
     {
         Unknow = 0,
-        WechatByBuildQrCode = 10, //微信方式生成二维码
-        WechatByPa = 11, //微信公众号发起支付
-        WechatByMp = 12, //微信小程序发起支付,
-        AlipayByBuildQrCode = 20, //支付宝方式生成二维码
-        AggregatePayByBuildQrCode = 90 //聚合方式生成二维码
-
+        WxByNt = 10, //微信方式生成二维码
+        WxByPa = 11, //微信公众号发起支付
+        WxByMp = 12, //微信小程序发起支付,
+        AliByNt = 20, //支付宝方式生成二维码
+        AggregatePayByNt = 90 //聚合方式生成二维码
     }
 
 

@@ -16,19 +16,27 @@ namespace LocalS.BLL
             }
         }
 
-        public static MyAlipaySdkProvider Alipay
+        public static AliPaySdkProvider AliPay
         {
             get
             {
-                return new MyAlipaySdkProvider();
+                return new AliPaySdkProvider();
             }
         }
 
-        public static TongGuanSdkProvider TongGuan
+        public static TgPaySdkProvider TgPay
         {
             get
             {
-                return new TongGuanSdkProvider();
+                return new TgPaySdkProvider();
+            }
+        }
+
+        public static XtyPaySdkProvider XrtPay
+        {
+            get
+            {
+                return new XtyPaySdkProvider();
             }
         }
 

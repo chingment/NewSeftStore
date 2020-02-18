@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{942C28E6-22AE-402F-AAF3-C936AC252164}"
 	ProjectSection(SolutionItems) = preProject
@@ -82,6 +82,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestKafkaConsumer", "TestKafkaConsumer\TestKafkaConsumer.csproj", "{D5A77DBE-0CB3-44F7-939D-B54A497B7EF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWeiDun", "TestWeiDun\TestWeiDun.csproj", "{B20AB3A3-42E1-4B4E-8EB1-E29E86C41529}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrtPaySdk", "XrtPaySdk\XrtPaySdk.csproj", "{27871C52-CACA-4ECA-BBA8-6866022C8D91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -441,6 +443,18 @@ Global
 		{B20AB3A3-42E1-4B4E-8EB1-E29E86C41529}.Release|x64.Build.0 = Release|x64
 		{B20AB3A3-42E1-4B4E-8EB1-E29E86C41529}.Release|x86.ActiveCfg = Release|x86
 		{B20AB3A3-42E1-4B4E-8EB1-E29E86C41529}.Release|x86.Build.0 = Release|x86
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Debug|x64.Build.0 = Debug|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Debug|x86.Build.0 = Debug|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Release|x64.ActiveCfg = Release|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Release|x64.Build.0 = Release|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Release|x86.ActiveCfg = Release|Any CPU
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -478,6 +492,7 @@ Global
 		{ADF5736D-21F9-423A-8C88-B5E8A309B797} = {6521CF52-B160-45A7-A185-FB3BCE4A34D2}
 		{D5A77DBE-0CB3-44F7-939D-B54A497B7EF5} = {6521CF52-B160-45A7-A185-FB3BCE4A34D2}
 		{B20AB3A3-42E1-4B4E-8EB1-E29E86C41529} = {6521CF52-B160-45A7-A185-FB3BCE4A34D2}
+		{27871C52-CACA-4ECA-BBA8-6866022C8D91} = {3BCB9416-6758-434E-9F81-67AE6DB4E087}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7679AC8E-76C6-48FD-923B-B6DD2F49F3B2}

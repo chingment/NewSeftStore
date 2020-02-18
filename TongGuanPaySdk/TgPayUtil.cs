@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TongGuanPaySdk
 {
-    public class TongGuanUtil
+    public class TgPayUtil
     {
         private ApiDoPost _api = new ApiDoPost();
         private string notifyUrl = "";
@@ -16,7 +16,7 @@ namespace TongGuanPaySdk
         private string key = "";
 
 
-        public TongGuanUtil(TongGuanPayInfoConfg config)
+        public TgPayUtil(TgPayInfoConfg config)
         {
             this.account = config.Account;
             this.key = config.Key;
@@ -71,13 +71,6 @@ namespace TongGuanPaySdk
             return s_output;
         }
 
-        public string GetStrMd5(string ConvertString)
-        {
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-            string t2 = BitConverter.ToString(md5.ComputeHash(UTF8Encoding.Default.GetBytes(ConvertString)));
-            t2 = t2.Replace("-", "");
-            return t2;
-        }
 
         public AllQrcodePayRequestResult AllQrcodePay(string lowOrderId, string payMoney, string body, string lowCashier)
         {
