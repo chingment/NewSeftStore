@@ -244,9 +244,17 @@
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TgPaySdk\TgPaySdk.csproj">
+      <Project>{259e83da-5441-4911-b284-d524201329fc}</Project>
+      <Name>TgPaySdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311a8-0485-4953-841e-35ca27eea436}</Project>
       <Name>MyWeiXinSdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XrtPaySdk\XrtPaySdk.csproj">
+      <Project>{27871c52-caca-4eca-bba8-6866022c8d91}</Project>
+      <Name>XrtPaySdk</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
