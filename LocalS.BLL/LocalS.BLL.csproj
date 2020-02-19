@@ -103,13 +103,12 @@
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sdk\AliPayBuildByNtResult.cs" />
     <Compile Include="Sdk\AliPaySdkProvider.cs" />
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\PayResult.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\TgPaySdkProvider.cs" />
-    <Compile Include="Sdk\WxPayBuildByNtResult.cs" />
+    <Compile Include="Sdk\PayBuildQrCodeResult.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />
     <Compile Include="Sdk\XtyPaySdkProvider.cs" />
     <Compile Include="Task\BaseProgram.cs" />

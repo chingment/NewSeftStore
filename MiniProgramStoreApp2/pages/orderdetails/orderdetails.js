@@ -42,8 +42,8 @@ Page({
 
     apiOrder.buildPayParams({
       orderId: orderId,
-      payWay: 1,
       payCaller: 12,
+      payPartner: 1
     }, {
         success: function (res) {
           if (res.result == 1) {

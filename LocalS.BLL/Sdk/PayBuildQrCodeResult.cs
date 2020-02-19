@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class AliPayBuildByNtResult
+    public class PayBuildQrCodeResult
     {
         public string CodeUrl { get; set; }
-
+        public string PrepayId { get; set; }
     }
 }

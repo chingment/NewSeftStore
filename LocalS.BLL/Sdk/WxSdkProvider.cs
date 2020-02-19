@@ -16,7 +16,7 @@ using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class WxSdkProvider : BaseDbContext
+    public class WxSdkProvider : BaseDbContext, IPaySdkProvider<WxAppInfoConfig>
     {
         private string AES_decrypt(string encryptedData, string iv, string sessionKey)
         {
@@ -120,27 +120,34 @@ namespace LocalS.BLL
 
         }
 
-        public UnifiedOrderResult UnifiedOrderByNative(WxAppInfoConfig config, string merchantId, string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
         {
 
-            var ret = new UnifiedOrderResult();
+            var result = new PayBuildQrCodeResult();
 
             TenpayUtil tenpayUtil = new TenpayUtil(config);
 
             UnifiedOrder unifiedOrder = new UnifiedOrder();
             unifiedOrder.openid = "";
-            unifiedOrder.out_trade_no = orderSn;//商户订单号
-            unifiedOrder.spbill_create_ip = ip;//终端IP
-            unifiedOrder.total_fee = Convert.ToInt32(orderAmount * 100);//标价金额
+            unifiedOrder.out_trade_no = order_sn;//商户订单号
+            unifiedOrder.spbill_create_ip = create_ip;//终端IP
+            unifiedOrder.total_fee = Convert.ToInt32(order_amount * 100);//标价金额
             unifiedOrder.body = body;//商品描述  
             unifiedOrder.trade_type = "NATIVE";
             unifiedOrder.time_expire = time_expire.ToString("yyyyMMddHHmmss");
             unifiedOrder.goods_tag = goods_tag;
-            unifiedOrder.attach = attach.ToJsonString();
 
-            ret = tenpayUtil.UnifiedOrder(unifiedOrder);
+            //unifiedOrder.attach = attach.ToJsonString();
 
-            return ret;
+            var ret = tenpayUtil.UnifiedOrder(unifiedOrder);
+
+            if (ret != null)
+            {
+                result.CodeUrl = ret.CodeUrl;
+                result.PrepayId = ret.PrepayId;
+            }
+
+            return result;
 
         }
 
@@ -296,7 +303,7 @@ namespace LocalS.BLL
             return OAuthApi.UploadMultimediaImage(this.GetApiAccessToken(config), imageUrl);
         }
 
-        public string OrderQuery(WxAppInfoConfig config, string orderSn)
+        public string PayQuery(WxAppInfoConfig config, string orderSn)
         {
             CustomJsonResult result = new CustomJsonResult();
             TenpayUtil tenpayUtil = new TenpayUtil(config);

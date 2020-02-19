@@ -87,11 +87,11 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_OrderPayCaller.WxByNt:
                                                     var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Wx.OrderQuery(wechatByNative_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.Wx.PayQuery(wechatByNative_AppInfoConfig, order.Sn);
                                                     break;
                                                 case E_OrderPayCaller.WxByMp:
                                                     var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Wx.OrderQuery(wechatByMp_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.Wx.PayQuery(wechatByMp_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             #endregion
@@ -102,7 +102,7 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_OrderPayCaller.AliByNt:
                                                     var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.AliPay.OrderQuery(alipayByNative_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.AliPay.PayQuery(alipayByNative_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             #endregion

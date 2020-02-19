@@ -6,36 +6,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lumos;
+using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class AliPaySdkProvider : BaseDbContext
+    public class AliPaySdkProvider : BaseDbContext, IPaySdkProvider<AlipayAppInfoConfig>
     {
-        public UnifiedOrderResult UnifiedOrderByNative(AlipayAppInfoConfig config, string merchId,string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(AlipayAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
         {
 
-            var ret = new UnifiedOrderResult();
+            var result = new PayBuildQrCodeResult();
 
             AlipayUtil alipayUtil = new AlipayUtil(config);
 
             UnifiedOrder unifiedOrder = new UnifiedOrder();
-            unifiedOrder.store_id = storeId;
-            unifiedOrder.out_trade_no = orderSn;//商户订单号
-            unifiedOrder.total_amount = orderAmount.ToF2Price();
+            unifiedOrder.store_id = store_id;
+            unifiedOrder.out_trade_no = order_sn;//商户订单号
+            unifiedOrder.total_amount = order_amount.ToF2Price();
             unifiedOrder.subject = body;//商品描述  
             unifiedOrder.timeout_express = "2m";
             //unifiedOrder.extend_params = attach.ToJsonString();
 
-            ret = alipayUtil.UnifiedOrder(unifiedOrder);
+            var ret = alipayUtil.UnifiedOrder(unifiedOrder);
+            if (ret != null)
+            {
+                result.CodeUrl = ret.CodeUrl;
+            }
 
 
 
-
-            return ret;
+            return result;
 
         }
 
-        public string OrderQuery(AlipayAppInfoConfig config, string orderSn)
+        public string PayQuery(AlipayAppInfoConfig config, string orderSn)
         {
             AlipayUtil alipayUtil = new AlipayUtil(config);
 

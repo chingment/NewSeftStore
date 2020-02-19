@@ -162,10 +162,7 @@ namespace XrtPaySdk
             dic.Add("sign_type", "");
             dic.Add("mch_id", this.mch_id);
             dic.Add("out_trade_no", out_trade_no);
-            dic.Add("device_info", "");
-            dic.Add("attach", "");
             dic.Add("nonce_str", GetNonceStr());
-
 
             dic.Add("sign", GetSign(dic));
 

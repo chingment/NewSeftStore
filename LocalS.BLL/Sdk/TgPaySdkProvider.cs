@@ -9,23 +9,28 @@ using TgPaySdk;
 
 namespace LocalS.BLL
 {
-    public class TgPaySdkProvider:IPaySdkProvider<TgPayInfoConfg>
+    public class TgPaySdkProvider : IPaySdkProvider<TgPayInfoConfg>
     {
-        public WxPayBuildByNtResult WxPayBuildByNt(TgPayInfoConfg config, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
-        {
-            return null;
-        }
 
-        public AliPayBuildByNtResult AliPayBuildByNt(TgPayInfoConfg config, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(TgPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
         {
-            return null;
-        }
+            var result = new PayBuildQrCodeResult();
 
-        public AllQrcodePayRequestResult AllQrcodePay(TgPayInfoConfg config, string merchId, string storeId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime time_expire)
-        {
+    
             TgPayUtil tgUtil = new TgPayUtil(config);
-            var ret = tgUtil.AllQrcodePay(orderSn, orderAmount.ToString("#0.00"), body, storeId);
-            return ret;
+
+            if (payCaller == E_OrderPayCaller.AggregatePayByNt)
+            {
+                var ret = tgUtil.AllQrcodePay(order_sn, order_amount.ToString("#0.00"), body, store_id);
+
+                if (ret != null)
+                {
+                    result.CodeUrl = ret.codeUrl;
+                }
+            }
+
+
+            return result;
         }
 
         public string PayQuery(TgPayInfoConfg config, string orderSn)

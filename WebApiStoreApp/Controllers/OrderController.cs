@@ -61,6 +61,8 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public HttpResponseMessage PayResultNotifyByWx()
         {
+            LogUtil.Info("PayResultNotifyByWx接收支付结果");
+
             string content = "";
             string rt = "";
             try

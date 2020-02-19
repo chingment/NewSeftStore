@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -12,35 +13,28 @@ namespace LocalS.BLL
     public class XtyPaySdkProvider : IPaySdkProvider<XrtPayInfoConfg>
     {
 
-        public WxPayBuildByNtResult WxPayBuildByNt(XrtPayInfoConfg config, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(XrtPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
         {
-            var result = new WxPayBuildByNtResult();
+            var result = new PayBuildQrCodeResult();
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
 
             string totelFee = Convert.ToInt32(order_amount * 100).ToString();
 
-            var wxPayBuildByNt = xrtPayUtil.WxPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.ToString("yyyyMMddHHmmss"));
+            if (payCaller == E_OrderPayCaller.WxByNt)
+            {
+                var wxPayBuildByNt = xrtPayUtil.WxPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.ToString("yyyyMMddHHmmss"));
 
-            if (wxPayBuildByNt.status == "0" && wxPayBuildByNt.result_code == "0")
-                result.CodeUrl = wxPayBuildByNt.code_url;
+                if (wxPayBuildByNt.status == "0" && wxPayBuildByNt.result_code == "0")
+                    result.CodeUrl = wxPayBuildByNt.code_url;
+            }
+            else if(payCaller== E_OrderPayCaller.AliByNt)
+            {
+                var aliPayBuildByNt = xrtPayUtil.AliPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.ToString("yyyyMMddHHmmss"));
 
-            return result;
-
-        }
-
-        public AliPayBuildByNtResult AliPayBuildByNt(XrtPayInfoConfg config, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
-        {
-            var result = new AliPayBuildByNtResult();
-
-            XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
-
-            string totelFee = Convert.ToInt32(order_amount * 100).ToString();
-
-            var wxPayBuildByNt = xrtPayUtil.AliPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.ToString("yyyyMMddHHmmss"));
-
-            if (wxPayBuildByNt.status == "0" && wxPayBuildByNt.result_code == "0")
-                result.CodeUrl = wxPayBuildByNt.code_url;
+                if (aliPayBuildByNt.status == "0" && aliPayBuildByNt.result_code == "0")
+                    result.CodeUrl = aliPayBuildByNt.code_url;
+            }
 
             return result;
 
@@ -81,6 +75,7 @@ namespace LocalS.BLL
         public PayResult Convert2PayResultByNotifyUrl(XrtPayInfoConfg config, string content)
         {
             var result = new PayResult();
+
 
             return result;
         }

@@ -4,6 +4,7 @@ using LocalS.BLL.Mq.MqByRedis;
 using LocalS.Entity;
 using LocalS.Service.Api.Merch;
 using LocalS.Service.Api.StoreApp;
+using log4net;
 using Lumos;
 using Lumos.Redis;
 using NPinyin;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -91,20 +93,24 @@ namespace Test
             return title;
         }
 
+        public static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+
         static void Main(string[] args)
         {
+            log.InfoFormat("程序开始");
 
             XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
 
             payInfo.Mch_id = "861440348168052";
             payInfo.Key = "4991479F033B2F3A0326AC0653D84FEE";
-            payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByAlipay";
+            payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
 
-            SdkFactory.XrtPay.WxPayBuildByNt(payInfo, "", "", "", "610010720200115143310361", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
-            //SdkFactory.XrtPay.AliPayBuildByNt(payInfo, "", "", "", "610010720200115143310361", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
-            SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310361");
+            SdkFactory.XrtPay.PayBuildQrCode(payInfo, E_OrderPayCaller.WxByNt, "", "", "", "610010720200115143310368", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            //SdkFactory.XrtPay.AliPayBuildByNt(payInfo, "", "", "", "610010720200115143310368", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310368");
             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
             //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
 

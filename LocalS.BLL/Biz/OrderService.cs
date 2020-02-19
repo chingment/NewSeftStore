@@ -833,7 +833,7 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.Wx;
                                 order.PayWay = E_OrderPayWay.Wechat;
                                 var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByNative(wechatByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var wechatByNative_UnifiedOrder = SdkFactory.Wx.PayBuildQrCode(wechatByNative_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -893,7 +893,7 @@ namespace LocalS.BLL.Biz
                                 order.PayPartner = E_OrderPayPartner.Ali;
                                 order.PayWay = E_OrderPayWay.AliPay;
                                 var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                                var alipayByNative_UnifiedOrder = SdkFactory.AliPay.UnifiedOrderByNative(alipayByNative_AppInfoConfig, order.MerchId, order.StoreId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var alipayByNative_UnifiedOrder = SdkFactory.AliPay.PayBuildQrCode(alipayByNative_AppInfoConfig, E_OrderPayCaller.AliByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -921,13 +921,13 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.AggregatePayByNt:
                                 #region AggregatePayByNt
 
-                                var tgPay_AllQrcodePay = SdkFactory.TgPay.AllQrcodePay(tgPayInfoConfig, order.MerchId, order.StoreId, order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
-                                if (string.IsNullOrEmpty(tgPay_AllQrcodePay.codeUrl))
+                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                if (string.IsNullOrEmpty(tgPay_AllQrcodePay.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var tg_AllQrcodePay_PayParams = new { PayUrl = tgPay_AllQrcodePay.codeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var tg_AllQrcodePay_PayParams = new { PayUrl = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
@@ -954,7 +954,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.WxByNt:
                                 #region WxByNt
 
-                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.WxPayBuildByNt(xrtPayInfoConfig, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
                                 {
@@ -970,7 +970,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.AliByNt:
                                 #region AliByNt
 
-                                var xrtPay_AliPayBuildByNtResult = SdkFactory.XrtPay.WxPayBuildByNt(xrtPayInfoConfig, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_AliPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_AliPayBuildByNtResult.CodeUrl))
                                 {
