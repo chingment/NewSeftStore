@@ -13,6 +13,11 @@ namespace LocalS.BLL
     public class XtyPaySdkProvider : IPaySdkProvider<XrtPayInfoConfg>
     {
 
+        public void PayBuildMpPayParms(XrtPayInfoConfg config, string openId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime? time_expire = null)
+        {
+
+        }
+
         public PayBuildQrCodeResult PayBuildQrCode(XrtPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
         {
             var result = new PayBuildQrCodeResult();

@@ -57,6 +57,8 @@
     <Compile Include="Post\BaseRequestResult.cs" />
     <Compile Include="Post\OrderPayQueryRequest.cs" />
     <Compile Include="Post\OrderPayQueryRequestResult.cs" />
+    <Compile Include="Post\WxJsPayRequest.cs" />
+    <Compile Include="Post\WxJsPayRequestResult.cs" />
     <Compile Include="Post\WxNativePayRequest.cs" />
     <Compile Include="Post\WxNativePayRequestResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
