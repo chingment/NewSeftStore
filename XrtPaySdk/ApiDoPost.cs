@@ -12,6 +12,8 @@ namespace XrtPaySdk
 {
     public class ApiDoPost
     {
+        private string responseString = null;
+
         public string GetSeviceUrl()
         {
             return System.Configuration.ConfigurationManager.AppSettings["custom:XrtPayServerUrl"];
@@ -21,6 +23,13 @@ namespace XrtPaySdk
 
         }
 
+        public string ResponseString
+        {
+            get
+            {
+                return responseString;
+            }
+        }
 
         public string ConvertXml(Dictionary<string, string> m_values)
         {
@@ -56,12 +65,15 @@ namespace XrtPaySdk
             WebUtils webUtils = new WebUtils();
             LogUtil.Info(string.Format("XrtPaySdk-PostUrl->{0}", requestUrl));
             LogUtil.Info(string.Format("XrtPaySdk-PostData->{0}", str_PostData));
-            string responseString = webUtils.DoPost(requestUrl, str_PostData);
+            string requestResult = webUtils.DoPost(requestUrl, str_PostData);
 
-            LogUtil.Info(string.Format("XrtPaySdk-PostResult->{0}", responseString));
+            this.responseString = requestResult;
+
+            LogUtil.Info(string.Format("XrtPaySdk-PostResult->{0}", requestResult));
 
 
-            T rsp = DeserializeToObject<T>(responseString);
+            T rsp = DeserializeToObject<T>(requestResult);
+
             return rsp;
         }
     }

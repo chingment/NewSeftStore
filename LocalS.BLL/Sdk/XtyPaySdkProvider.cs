@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace LocalS.BLL
 
         }
 
-        public PayQueryResult PayQuery(XrtPayInfoConfg config, string order_sn)
+        public string PayQuery(XrtPayInfoConfg config, string order_sn)
         {
             var result = new PayResult();
 
@@ -54,21 +55,32 @@ namespace LocalS.BLL
 
             var xrtPayQueryResult = xrtPayUtil.PayQuery(order_sn);
 
-            if (xrtPayQueryResult.status == "0" && xrtPayQueryResult.result_code == "0")
+            return xrtPayQueryResult;
+        }
+
+        public PayResult Convert2PayResultByPayQuery(XrtPayInfoConfg config, string content)
+        {
+            var result = new PayResult();
+
+            var obj_content = XmlUtil.DeserializeToObject<OrderPayQueryRequestResult>(content);
+            if (obj_content.status == "0" && obj_content.result_code == "0")
             {
-                if (xrtPayQueryResult.trade_state == "SUCCESS")
+                if (obj_content.trade_state == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
+                    result.OrderSn = obj_content.out_trade_no;
+                    result.PayPartnerOrderSn = obj_content.transaction_id;
                 }
 
             }
 
+
             return result;
         }
 
-        public PayUrlNotifyResult ConvertPayUrlNotifyResult(XrtPayInfoConfg config, string content)
+        public PayResult Convert2PayResultByNotifyUrl(XrtPayInfoConfg config, string content)
         {
-            var result = new PayUrlNotifyResult();
+            var result = new PayResult();
 
             return result;
         }

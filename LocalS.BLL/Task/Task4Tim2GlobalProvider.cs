@@ -113,7 +113,7 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_OrderPayCaller.AggregatePayByNt:
                                                     var tgPay_AppInfoConfig = BizFactory.Merch.GetTgPayInfoConfg(order.MerchId);
-                                                    content = SdkFactory.TgPay.OrderQuery(tgPay_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.TgPay.PayQuery(tgPay_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             #endregion Tg
@@ -121,12 +121,15 @@ namespace LocalS.BLL.Task
                                         case E_OrderPayPartner.Xrt:
                                             #region Xrt
 
+                                            var xrtPay_AppInfoConfig = BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
+                                            content = SdkFactory.XrtPay.PayQuery(xrtPay_AppInfoConfig, order.Sn);
+
                                             #endregion
                                             break;
                                     }
 
                                     LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
-                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.OrderQuery, content);
+                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.PayQuery, content);
                                 }
                                 else
                                 {

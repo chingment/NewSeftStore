@@ -14,6 +14,7 @@ namespace TgPaySdk
     //http://ipay.833006.net
     public class ApiDoPost
     {
+        string responseString = null;
 
         public string GetSeviceUrl()
         {
@@ -22,6 +23,14 @@ namespace TgPaySdk
         public ApiDoPost()
         {
 
+        }
+
+        public string ResponseString
+        {
+            get
+            {
+                return responseString;
+            }
         }
 
         public T DoPost<T>(IApiPostRequest<T> request)
@@ -34,10 +43,13 @@ namespace TgPaySdk
             WebUtils webUtils = new WebUtils();
             LogUtil.Info(string.Format("TgPaySdk-PostUrl->{0}", requestUrl));
             LogUtil.Info(string.Format("TgPaySdk-PostData->{0}", str_PostData));
-            string responseString = webUtils.DoPost(requestUrl, str_PostData);
+            string requestResult = webUtils.DoPost(requestUrl, str_PostData);
 
-            LogUtil.Info(string.Format("TgPaySdk-PostResult->{0}", responseString));
-            T rsp = JsonConvert.DeserializeObject<T>(responseString);
+
+            this.responseString = requestResult;
+
+            LogUtil.Info(string.Format("TgPaySdk-PostResult->{0}", requestResult));
+            T rsp = JsonConvert.DeserializeObject<T>(requestResult);
             return rsp;
         }
 

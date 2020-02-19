@@ -523,55 +523,20 @@ namespace LocalS.BLL.Biz
             LogUtil.Info("PayResultNotify");
             lock (lock_PayResultNotify)
             {
-                string orderSn = "";
-                string payPartnerOrderSn = "";
-                string clientUserName = "";
-                E_OrderPayWay orderPayWay = E_OrderPayWay.Unknow;
-                bool isPaySuccess = false;
+                var payResult = new PayResult();
+
                 if (payPartner == E_OrderPayPartner.Wx)
                 {
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信支付协议");
-                    orderPayWay = E_OrderPayWay.Wechat;
 
-                    var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
-                    if (dic.ContainsKey("out_trade_no"))
+                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
                     {
-                        orderSn = dic["out_trade_no"].ToString();
-                    }
-
-                    if (dic.ContainsKey("transaction_id"))
-                    {
-                        payPartnerOrderSn = dic["transaction_id"].ToString();
-                    }
-
-                    LogUtil.Info("解释微信支付协议，订单号：" + orderSn);
-
-
-                    if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
-                    {
-
-                        if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
-                        {
-                            string trade_state = dic["trade_state"].ToString();
-                            LogUtil.Info("解释微信支付协议，（trade_state）订单状态：" + trade_state);
-                            if (trade_state == "SUCCESS")
-                            {
-                                isPaySuccess = true;
-                            }
-                        }
+                        payResult = SdkFactory.Wx.Convert2PayResultByPayQuery(null, content);
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
-                        if (dic.ContainsKey("result_code"))
-                        {
-                            string result_code = dic["result_code"].ToString();
-                            LogUtil.Info("解释微信支付协议，（result_code）订单状态：" + result_code);
-                            if (result_code == "SUCCESS")
-                            {
-                                isPaySuccess = true;
-                            }
-                        }
+                        payResult = SdkFactory.Wx.Convert2PayResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
@@ -579,78 +544,14 @@ namespace LocalS.BLL.Biz
                 {
                     #region 解释支付宝支付协议
                     LogUtil.Info("解释支付宝支付协议");
-                    orderPayWay = E_OrderPayWay.AliPay;
 
-
-                    if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
+                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
                     {
-                        TradeQueryResult result = Newtonsoft.Json.JsonConvert.DeserializeObject<TradeQueryResult>(content);
-                        if (result != null)
-                        {
-
-                            var payResult = result.alipay_trade_query_response;
-                            if (payResult != null)
-                            {
-                                if (payResult.code == "10000")
-                                {
-                                    if (!string.IsNullOrEmpty(payResult.out_trade_no))
-                                    {
-                                        orderSn = payResult.out_trade_no;
-                                    }
-
-                                    if (!string.IsNullOrEmpty(payResult.trade_no))
-                                    {
-                                        payPartnerOrderSn = payResult.trade_no;
-                                    }
-
-                                    if (!string.IsNullOrEmpty(payResult.buyer_logon_id))
-                                    {
-                                        clientUserName = payResult.buyer_logon_id;
-                                    }
-
-                                    LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
-
-                                    if (payResult.trade_status == "TRADE_SUCCESS")
-                                    {
-                                        isPaySuccess = true;
-                                    }
-                                }
-                            }
-                        }
+                        payResult = SdkFactory.AliPay.Convert2PayResultByPayQuery(null, content);
                     }
                     else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
-                        var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
-
-                        if (dic.ContainsKey("out_trade_no"))
-                        {
-                            orderSn = dic["out_trade_no"].ToString();
-                        }
-
-                        if (dic.ContainsKey("trade_no"))
-                        {
-                            payPartnerOrderSn = dic["trade_no"].ToString();
-                        }
-
-                        LogUtil.Info("解释支付宝支付协议，订单号：" + orderSn);
-
-
-                        if (dic.ContainsKey("buyer_logon_id"))
-                        {
-                            clientUserName = dic["buyer_logon_id"];
-                        }
-
-
-                        if (dic.ContainsKey("trade_status"))
-                        {
-                            string trade_status = dic["trade_status"].ToString();
-                            LogUtil.Info("解释支付宝支付协议，（trade_status）订单状态：" + trade_status);
-                            if (trade_status == "TRADE_SUCCESS")
-                            {
-                                isPaySuccess = true;
-                            }
-                        }
-
+                        payResult = SdkFactory.AliPay.Convert2PayResultByNotifyUrl(null, content);
                     }
 
                     #endregion
@@ -659,61 +560,45 @@ namespace LocalS.BLL.Biz
                 {
                     #region 解释通莞支付协议
 
-                    if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
                     {
-                        var result = SdkFactory.TgPay.ConvertPayUrlNotifyResult(null, content);
-                        if (result != null)
-                        {
-                            isPaySuccess = true;
-                            orderSn = result.OrderSn;
-                            payPartnerOrderSn = result.PayPartnerOrderSn;
-                            orderPayWay = result.OrderPayWay;
-                        }
+                        payResult = SdkFactory.TgPay.Convert2PayResultByPayQuery(null, content);
                     }
-                    else if (from == E_OrderNotifyLogNotifyFrom.OrderQuery)
+
+                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
                     {
-                        var result = SdkFactory.TgPay.ConvertPayQueryResult(null, content);
-                        if (result != null)
-                        {
-                            isPaySuccess = true;
-                            orderSn = result.OrderSn;
-                            payPartnerOrderSn = result.PayPartnerOrderSn;
-                            orderPayWay = result.OrderPayWay;
-                        }
+                        payResult = SdkFactory.TgPay.Convert2PayResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
                 else if (payPartner == E_OrderPayPartner.Xrt)
                 {
                     #region 解释XRT支付协议
-                    if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
                     {
-                        var result = SdkFactory.XrtPay.ConvertPayUrlNotifyResult(null, content);
-                        if (result != null)
-                        {
-                            isPaySuccess = true;
-                            orderSn = result.OrderSn;
-                            payPartnerOrderSn = result.PayPartnerOrderSn;
-                            orderPayWay = result.OrderPayWay;
-                        }
+                        payResult = SdkFactory.XrtPay.Convert2PayResultByPayQuery(null, content);
+                    }
+                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    {
+                        payResult = SdkFactory.XrtPay.Convert2PayResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
 
-                if (isPaySuccess)
+                if (payResult.IsPaySuccess)
                 {
                     LogUtil.Info("解释支付协议结果，支付成功");
                     Dictionary<string, string> pms = new Dictionary<string, string>();
-                    pms.Add("clientUserName", clientUserName);
+                    pms.Add("clientUserName", payResult.ClientUserName);
 
-                    PaySuccess(operater, orderSn, orderPayWay, DateTime.Now, pms);
+                    PaySuccess(operater, payResult.OrderSn, payResult.OrderPayWay, DateTime.Now, pms);
                 }
 
 
                 var mod_OrderNotifyLog = new OrderNotifyLog();
                 mod_OrderNotifyLog.Id = GuidUtil.New();
 
-                var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+                var order = CurrentDb.Order.Where(m => m.Sn == payResult.OrderSn).FirstOrDefault();
 
                 if (order != null)
                 {
@@ -721,9 +606,9 @@ namespace LocalS.BLL.Biz
                     mod_OrderNotifyLog.OrderId = order.Id;
                 }
 
-                mod_OrderNotifyLog.OrderSn = orderSn;
+                mod_OrderNotifyLog.OrderSn = payResult.OrderSn;
                 mod_OrderNotifyLog.PayPartner = payPartner;
-                mod_OrderNotifyLog.PayPartnerOrderSn = payPartnerOrderSn;
+                mod_OrderNotifyLog.PayPartnerOrderSn = payResult.PayPartnerOrderSn;
                 mod_OrderNotifyLog.NotifyContent = content;
                 mod_OrderNotifyLog.NotifyFrom = from;
                 mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;

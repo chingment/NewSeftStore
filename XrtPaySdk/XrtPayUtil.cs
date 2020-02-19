@@ -22,6 +22,7 @@ namespace XrtPaySdk
             this.notifyUrl = config.PayResultNotifyUrl;
         }
 
+
         public static string GetMD5(string material)
         {
             if (string.IsNullOrEmpty(material))
@@ -151,7 +152,7 @@ namespace XrtPaySdk
             return requestResult;
         }
 
-        public OrderPayQueryRequestResult PayQuery(string out_trade_no)
+        public string PayQuery(string out_trade_no)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -182,8 +183,7 @@ namespace XrtPaySdk
 
             var requestResult = _api.DoPost(request);
 
-
-            return requestResult;
+            return _api.ResponseString;
         }
 
     }

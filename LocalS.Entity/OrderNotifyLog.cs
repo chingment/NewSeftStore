@@ -16,7 +16,7 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         NotifyUrl = 2,
-        OrderQuery = 3
+        PayQuery = 3
     }
 
     [Table("OrderNotifyLog")]

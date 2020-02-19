@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using LocalS.BLL;
 using LocalS.BLL.Biz;
 using Lumos;
+using LocalS.Entity;
 
 namespace LocalS.BLL
 {
@@ -363,6 +364,73 @@ namespace LocalS.BLL
                 return true;
             }
 
+        }
+
+        public PayResult Convert2PayResultByPayQuery(WxAppInfoConfig config, string content)
+        {
+            var result = new PayResult();
+
+            var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
+            if (dic.ContainsKey("out_trade_no"))
+            {
+                result.OrderSn = dic["out_trade_no"].ToString();
+            }
+
+            if (dic.ContainsKey("transaction_id"))
+            {
+                result.PayPartnerOrderSn = dic["transaction_id"].ToString();
+            }
+
+            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderSn);
+
+
+            if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
+            {
+                string trade_state = dic["trade_state"].ToString();
+                LogUtil.Info("解释微信支付协议，（trade_state）订单状态：" + trade_state);
+                if (trade_state == "SUCCESS")
+                {
+                    result.IsPaySuccess = true;
+                    result.OrderPayWay = E_OrderPayWay.Wechat;
+                }
+            }
+
+
+            return result;
+        }
+
+        public PayResult Convert2PayResultByNotifyUrl(WxAppInfoConfig config, string content)
+        {
+            var result = new PayResult();
+
+            var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
+
+            if (dic.ContainsKey("out_trade_no"))
+            {
+                result.OrderSn = dic["out_trade_no"].ToString();
+            }
+
+            if (dic.ContainsKey("transaction_id"))
+            {
+                result.PayPartnerOrderSn = dic["transaction_id"].ToString();
+            }
+
+            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderSn);
+
+
+
+            if (dic.ContainsKey("result_code"))
+            {
+                string result_code = dic["result_code"].ToString();
+                LogUtil.Info("解释微信支付协议，（result_code）订单状态：" + result_code);
+                if (result_code == "SUCCESS")
+                {
+                    result.IsPaySuccess = true;
+                    result.OrderPayWay = E_OrderPayWay.Wechat;
+                }
+            }
+
+            return result;
         }
 
         //public string OrderPayReFund(string comCode, string orderSn, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
