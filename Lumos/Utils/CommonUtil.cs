@@ -238,5 +238,36 @@ namespace Lumos
             return str1;
 
         }
+
+        public static string GetIpAddress(HttpRequestBase myRequest)
+        {
+            string userHostAddress = myRequest.ServerVariables["REMOTE_ADDR"];
+            if (string.IsNullOrEmpty(userHostAddress))
+            {
+                if (myRequest.ServerVariables["HTTP_VIA"] != null)
+                    userHostAddress = myRequest.ServerVariables["HTTP_X_FORWARDED_FOR"].ToString().Split(',')[0].Trim();
+            }
+            if (string.IsNullOrEmpty(userHostAddress))
+            {
+                userHostAddress = myRequest.UserHostAddress;
+            }
+
+            //最后判断获取是否成功，并检查IP地址的格式（检查其格式非常重要）
+            if (!string.IsNullOrEmpty(userHostAddress) && IsIP(userHostAddress))
+            {
+                return userHostAddress;
+            }
+            return "127.0.0.1";
+        }
+
+        /// <summary>
+        /// 检查IP地址格式
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns></returns>
+        public static bool IsIP(string ip)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(ip, @"^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$");
+        }
     }
 }

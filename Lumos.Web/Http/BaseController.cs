@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Web;
 using System.Web.Http;
 
 namespace Lumos.Web.Http
@@ -38,5 +39,13 @@ namespace Lumos.Web.Http
             return Json(type, content, null);
         }
         #endregion
+
+        public HttpRequestBase HttpRequest
+        {
+            get
+            {
+                return ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+            }
+        }
     }
 }

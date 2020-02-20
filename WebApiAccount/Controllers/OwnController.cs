@@ -45,7 +45,7 @@ namespace WebApiAccount.Controllers
             var myRop = new RopOwnLoginByAccount();
             myRop.UserName = rop.UserName;
             myRop.Password = rop.Password;
-            myRop.Ip = rop.Ip;
+            myRop.Ip = CommonUtil.GetIpAddress(this.HttpRequest);
             myRop.LoginPms = rop.LoginPms;
             myRop.AppId = FormatAppId(rop.AppId);
             myRop.LoginWay = Lumos.DbRelay.Enumeration.LoginWay.Website;

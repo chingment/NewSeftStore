@@ -96,7 +96,7 @@ namespace WebApiStoreApp
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            //config.HttpPreRoute();
+            config.HttpPreRoute();
 
             // 干掉XML序列化器
             config.Formatters.Remove(config.Formatters.XmlFormatter);

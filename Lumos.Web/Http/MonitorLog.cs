@@ -12,6 +12,7 @@ namespace Lumos.Web.Http
 {
     public static class MonitorLog
     {
+
         public static string GetPostData(Stream inputStream)
         {
             string s = "";
@@ -38,8 +39,9 @@ namespace Lumos.Web.Http
              {
                  var sb = new StringBuilder();
                  var myRequest = ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request;
+
                  sb.Append("Url: " + myRequest.RawUrl + Environment.NewLine);
-                 sb.Append("IP: " + CommonUtil.GetIP() + Environment.NewLine);
+                 sb.Append("IP: " + CommonUtil.GetIpAddress(myRequest) + Environment.NewLine);
                  sb.Append("Method: " + myRequest.HttpMethod + Environment.NewLine);
                  sb.Append("ContentType: " + myRequest.ContentType + Environment.NewLine);
 

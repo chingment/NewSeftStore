@@ -45,6 +45,7 @@ namespace LocalS.BLL.Biz
                             userLoginHis.LoginAccount = loginLogModel.LoginAccount;
                             userLoginHis.LoginFun = loginLogModel.LoginFun;
                             userLoginHis.LoginWay = loginLogModel.LoginWay;
+                            userLoginHis.Ip = loginLogModel.LoginIp;
                             userLoginHis.LoginTime = DateTime.Now;
                             userLoginHis.Result = loginLogModel.LoginResult;
                             userLoginHis.Description = rop.Remark;
