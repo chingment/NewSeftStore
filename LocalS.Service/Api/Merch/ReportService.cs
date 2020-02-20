@@ -244,5 +244,117 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
+
+
+        public CustomJsonResult OrderInit(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetReportProductSkuDaySalesInit();
+
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+
+
+            foreach (var store in stores)
+            {
+                var optionsSellChannel = new OptionNode();
+
+                optionsSellChannel.Value = store.Id;
+                optionsSellChannel.Label = store.Name;
+
+                var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                if (storeMachines.Count > 0)
+                {
+                    optionsSellChannel.Children = new List<OptionNode>();
+
+                    foreach (var storeMachine in storeMachines)
+                    {
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
+                    }
+
+                    ret.OptionsSellChannels.Add(optionsSellChannel);
+                }
+            }
+
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public CustomJsonResult OrderGet(string operater, string merchId, RopReporOrderGet rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            if (rop.TradeDateTimeArea == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
+            }
+
+            if (rop.TradeDateTimeArea.Length != 2)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
+            }
+
+            LogUtil.Info("rup.TradeDateTimeArea[0]" + rop.TradeDateTimeArea[0]);
+            LogUtil.Info("rup.TradeDateTimeArea[1]" + rop.TradeDateTimeArea[1]);
+
+            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
+
+            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]);
+
+
+            List<string> sellChannelRefIds = new List<string>();
+
+            if (rop.SellChannels != null)
+            {
+                foreach (var sellChannel in rop.SellChannels)
+                {
+                    if (sellChannel.Length == 2)
+                    {
+                        if (!string.IsNullOrEmpty(sellChannel[1]))
+                        {
+                            sellChannelRefIds.Add(sellChannel[1]);
+                        }
+                    }
+                }
+            }
+
+
+            var query = (from u in CurrentDb.Order
+                         where u.MerchId == merchId && (u.Status == Entity.E_OrderStatus.Payed || u.Status == Entity.E_OrderStatus.Completed)
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefIds, u.PayedTime, u.Sn, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
+
+            query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
+
+            if (sellChannelRefIds.Count > 0)
+            {
+                //query = query.Where(m => m.SellChannelRefIds.a(sellChannelRefIds));
+            }
+
+            List<object> olist = new List<object>();
+
+            var list = query.OrderByDescending(m => m.PayedTime).ToList();
+
+            foreach (var item in list)
+            {
+                olist.Add(new
+                {
+                    StoreName = item.StoreName,
+                    SellChannelRefNames = "",
+                    OrderSn = item.Sn,
+                    TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
+                    Quantity = item.Quantity,
+                    TradeAmount = item.ChargeAmount,
+                    PayWay = BizFactory.Order.GetPayWayName(item.PayWay)
+                });
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+
+            return result;
+
+        }
+
     }
 }

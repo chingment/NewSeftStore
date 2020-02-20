@@ -33,9 +33,23 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse ProductSkuDaySalesGet([FromBody]RopReportProductSkuDaySalesGet rup)
+        public OwnApiHttpResponse ProductSkuDaySalesGet([FromBody]RopReportProductSkuDaySalesGet rop)
         {
-            IResult result = MerchServiceFactory.Report.ProductSkuDaySalesGet(this.CurrentUserId, this.CurrentMerchId,rup);
+            IResult result = MerchServiceFactory.Report.ProductSkuDaySalesGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse OrderInit()
+        {
+            IResult result = MerchServiceFactory.Report.OrderInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse OrderGet([FromBody]RopReporOrderGet rop)
+        {
+            IResult result = MerchServiceFactory.Report.OrderGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
