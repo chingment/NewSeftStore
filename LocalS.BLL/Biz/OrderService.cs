@@ -136,7 +136,7 @@ namespace LocalS.BLL.Biz
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
                     order.PickupCode = RedisSnUtil.BuildPickupCode();
-
+                    order.IsTestMode = rop.IsTestMode;
                     if (order.PickupCode == null)
                     {
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
@@ -169,10 +169,20 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
 
+                    if (rop.IsTestMode)
+                    {
+                        order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
+                        order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
+                        order.ChargeAmount = 0.01m;
+                    }
+                    else
+                    {
+                        order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
+                        order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
+                        order.ChargeAmount = reserveDetails.Sum(m => m.ChargeAmount);
+                    }
 
-                    order.OriginalAmount = reserveDetails.Sum(m => m.OriginalAmount);
-                    order.DiscountAmount = reserveDetails.Sum(m => m.DiscountAmount);
-                    order.ChargeAmount = reserveDetails.Sum(m => m.ChargeAmount);
+
                     order.SellChannelRefIds = string.Join(",", reserveDetails.Select(m => m.SellChannelRefId).ToArray());
 
                     foreach (var detail in reserveDetails)
@@ -808,18 +818,6 @@ namespace LocalS.BLL.Biz
                 order.PayExpireTime = DateTime.Now.AddMinutes(5);
                 order.PayCaller = rop.PayCaller;
 
-                decimal chargeAmount = order.ChargeAmount;
-
-                if (ConfigurationManager.AppSettings["custom:IsPayTest"] != null)
-                {
-                    if (ConfigurationManager.AppSettings["custom:IsPayTest"] == "true")
-                    {
-                        chargeAmount = 0.01m;
-                    }
-                }
-
-                order.ChargeAmount = chargeAmount;
-
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
 
@@ -926,7 +924,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.AggregatePayByNt:
                                 #region AggregatePayByNt
 
-                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tgPay_AllQrcodePay.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -947,7 +945,6 @@ namespace LocalS.BLL.Biz
                         #region Xrt支付
 
                         // todo 发布去掉
-                        chargeAmount = 0.01m;
 
                         var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
 
@@ -959,7 +956,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.WxByNt:
                                 #region WxByNt
 
-                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
                                 {
@@ -975,7 +972,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.AliByNt:
                                 #region AliByNt
 
-                                var xrtPay_AliPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, chargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_AliPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_AliPayBuildByNtResult.CodeUrl))
                                 {

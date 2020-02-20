@@ -47,7 +47,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.StoreId = machine.StoreId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
             bizRop.SellChannelRefIds = new string[] { machine.Id };//指定机器
-
+            bizRop.IsTestMode = machine.IsTestMode;
             foreach (var productSku in rop.ProductSkus)
             {
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = E_ReceptionMode.Machine });

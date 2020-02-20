@@ -106,7 +106,7 @@ namespace LocalS.Entity
         public DateTime? ExHappenTime { get; set; }
         public bool ExIsHandle { get; set; }
         public DateTime? ExHandleTime { get; set; }
-        public bool IsTest { get; set; }
+        public bool IsTestMode { get; set; }
         public E_OrderPayStatus PayStatus { get; set; }
     }
 }

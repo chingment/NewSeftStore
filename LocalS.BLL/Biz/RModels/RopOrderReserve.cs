@@ -31,5 +31,7 @@ namespace LocalS.BLL.Biz
 
             public E_ReceptionMode ReceptionMode { get; set; }
         }
+
+        public bool IsTestMode { get; set; }
     }
 }
