@@ -133,6 +133,7 @@ namespace LocalS.BLL.Biz
                     order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
                     order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                     order.Status = E_OrderStatus.WaitPay;
+                    order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
                     order.PickupCode = RedisSnUtil.BuildPickupCode();
 
@@ -642,56 +643,54 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderSn));
                 }
 
-                if (order.Status != E_OrderStatus.WaitPay)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderSn));
-                }
-
-
-
-                LogUtil.Info("orderSn2:" + orderSn);
+                //if (order.Status != E_OrderStatus.WaitPay)
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderSn));
+                //}
 
                 order.PayWay = payWay;
-                order.Status = E_OrderStatus.Payed;
-                order.PayedTime = DateTime.Now;
-                order.MendTime = DateTime.Now;
-                order.Mender = operater;
+                order.PayStatus = E_OrderPayStatus.PaySuccess;
 
-                if (pms != null)
+                if (order.Status == E_OrderStatus.WaitPay)
                 {
-                    if (pms.ContainsKey("clientUserName"))
+                    order.Status = E_OrderStatus.Payed;
+
+                    if (pms != null)
                     {
-                        if (!string.IsNullOrEmpty(pms["clientUserName"]))
+                        if (pms.ContainsKey("clientUserName"))
                         {
-                            order.ClientUserName = pms["clientUserName"];
+                            if (!string.IsNullOrEmpty(pms["clientUserName"]))
+                            {
+                                order.ClientUserName = pms["clientUserName"];
+                            }
                         }
+                    }
+
+                    var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == order.Id).ToList();
+
+                    foreach (var orderDetailsChildSon in orderDetailsChildSons)
+                    {
+                        orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPickup;
+                        orderDetailsChildSon.PayedTime = DateTime.Now;
+                        orderDetailsChildSon.PayWay = payWay;
+                        orderDetailsChildSon.Mender = GuidUtil.Empty();
+                        orderDetailsChildSon.MendTime = DateTime.Now;
+                    }
+
+                    var childSons = (
+                        from q in orderDetailsChildSons
+                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
+                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
+
+                    foreach (var item in childSons)
+                    {
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
                 }
 
-
-                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == order.Id).ToList();
-
-                foreach (var orderDetailsChildSon in orderDetailsChildSons)
-                {
-                    orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPickup;
-                    orderDetailsChildSon.PayedTime = DateTime.Now;
-                    orderDetailsChildSon.PayWay = payWay;
-                    orderDetailsChildSon.Mender = GuidUtil.Empty();
-                    orderDetailsChildSon.MendTime = DateTime.Now;
-                }
-
-                var childSons = (
-                    from q in orderDetailsChildSons
-                    group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
-                    select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
-
-
-
-
-                foreach (var item in childSons)
-                {
-                    BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
-                }
+                order.PayedTime = DateTime.Now;
+                order.MendTime = DateTime.Now;
+                order.Mender = operater;
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -819,6 +818,8 @@ namespace LocalS.BLL.Biz
                     }
                 }
 
+                order.ChargeAmount = chargeAmount;
+
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
 
@@ -832,6 +833,7 @@ namespace LocalS.BLL.Biz
                                 #region WechatByNt
                                 order.PayPartner = E_OrderPayPartner.Wx;
                                 order.PayWay = E_OrderPayWay.Wechat;
+                                order.PayStatus = E_OrderPayStatus.Paying;
                                 var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                 var wechatByNative_UnifiedOrder = SdkFactory.Wx.PayBuildQrCode(wechatByNative_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
@@ -848,6 +850,7 @@ namespace LocalS.BLL.Biz
                                 #region WechatByMp
                                 order.PayPartner = E_OrderPayPartner.Wx;
                                 order.PayWay = E_OrderPayWay.Wechat;
+                                order.PayStatus = E_OrderPayStatus.Paying;
                                 var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
 
                                 if (wechatByMp_UserInfo == null)
@@ -892,6 +895,7 @@ namespace LocalS.BLL.Biz
                                 #region AlipayByNt
                                 order.PayPartner = E_OrderPayPartner.Ali;
                                 order.PayWay = E_OrderPayWay.AliPay;
+                                order.PayStatus = E_OrderPayStatus.Paying;
                                 var alipayByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
                                 var alipayByNative_UnifiedOrder = SdkFactory.AliPay.PayBuildQrCode(alipayByNative_AppInfoConfig, E_OrderPayCaller.AliByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(alipayByNative_UnifiedOrder.CodeUrl))
@@ -915,6 +919,7 @@ namespace LocalS.BLL.Biz
                         var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(order.MerchId);
 
                         order.PayPartner = E_OrderPayPartner.Tg;
+                        order.PayStatus = E_OrderPayStatus.Paying;
 
                         switch (rop.PayCaller)
                         {
@@ -947,7 +952,7 @@ namespace LocalS.BLL.Biz
                         var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
 
                         order.PayPartner = E_OrderPayPartner.Xrt;
-
+                        order.PayStatus = E_OrderPayStatus.Paying;
 
                         switch (rop.PayCaller)
                         {

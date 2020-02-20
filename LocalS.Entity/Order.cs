@@ -37,6 +37,16 @@ namespace LocalS.Entity
         Xrt = 92 //通莞金服
     }
 
+    public enum E_OrderPayStatus
+    {
+        Unknow = 0,
+        WaitPay = 1,
+        Paying = 2,
+        PaySuccess = 3,
+        NotPay = 4
+    }
+
+
     public enum E_OrderPayCaller
     {
         Unknow = 0,
@@ -97,5 +107,6 @@ namespace LocalS.Entity
         public bool ExIsHandle { get; set; }
         public DateTime? ExHandleTime { get; set; }
         public bool IsTest { get; set; }
+        public E_OrderPayStatus PayStatus { get; set; }
     }
 }
