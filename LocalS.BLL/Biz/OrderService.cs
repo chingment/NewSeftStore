@@ -682,6 +682,7 @@ namespace LocalS.BLL.Biz
                     {
                         orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.WaitPickup;
                         orderDetailsChildSon.PayedTime = DateTime.Now;
+                        orderDetailsChildSon.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderDetailsChildSon.PayWay = payWay;
                         orderDetailsChildSon.Mender = GuidUtil.Empty();
                         orderDetailsChildSon.MendTime = DateTime.Now;

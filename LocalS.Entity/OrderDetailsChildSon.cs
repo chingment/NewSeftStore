@@ -76,5 +76,7 @@ namespace LocalS.Entity
         public bool ExPickupIsHandle { get; set; }
         public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderDetailsChildSonExPickupHandleSign ExPickupHandleSign { get; set; }
+
+        public E_OrderPayStatus PayStatus { get; set; }
     }
 }
