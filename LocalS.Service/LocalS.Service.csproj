@@ -317,6 +317,7 @@
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RetOrderGetExOrder.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPayStatusQuery.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingTestPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupOrderGetExOrder.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupStockSettingCheckIsCanScanSlot.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />

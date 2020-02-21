@@ -276,5 +276,54 @@ namespace LocalS.Service.Api.StoreTerm
         }
 
 
+        public CustomJsonResult GetExOrder(RupOrderGetExOrder rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetOrderGetExOrder();
+
+            string orderId = "";
+
+            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+
+            ret.OrderId = order.Id;
+            ret.OrderSn = order.Sn;
+
+            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderId).ToList();
+
+            foreach (var orderDetailsChildSon in orderDetailsChildSons)
+            {
+                var productSku = new RetOrderGetExOrder.ProductSku();
+                productSku.Id = orderDetailsChildSon.PrdProductId;
+                productSku.UniqueId = orderDetailsChildSon.Id;
+                productSku.SlotId = orderDetailsChildSon.SlotId;
+                productSku.Quantity = orderDetailsChildSon.Quantity;
+                productSku.Name = orderDetailsChildSon.PrdProductSkuName;
+                productSku.MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl;
+
+                if (orderDetailsChildSon.Status == E_OrderDetailsChildSonStatus.Completed)
+                {
+                    productSku.CanHandle = false;
+                }
+                else
+                {
+                    productSku.CanHandle = true;
+                }
+
+                ret.ProductSkus.Add(productSku);
+            }
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public CustomJsonResult HandleExOrder(RupOrderGetExOrder rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetOrderGetExOrder();
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
     }
 }
