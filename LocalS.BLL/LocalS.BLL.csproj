@@ -95,6 +95,7 @@
     <Compile Include="Cache\Model\ProductSkuInfoModel.cs" />
     <Compile Include="Cache\Model\ProductSkuStockModel.cs" />
     <Compile Include="Cache\ProductSkuCacheService.cs" />
+    <Compile Include="Cache\StockCacheServicecs.cs" />
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\LoginLogModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\OperateLogModel.cs" />
