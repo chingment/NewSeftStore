@@ -15,5 +15,7 @@ namespace Lumos.Redis
         public static readonly string PSCR = "pscr:{0}";//商户所有商品ID-编码表 0：商户ID
         public static readonly string IRSN = "irsn";//SN序列号增长因子
         public static readonly string IRPC = "irpc";//取货码增长因子
+
+        public static readonly string STSLPRD = "stslprd:{1}";//店铺可售商品的集合
     }
 }
