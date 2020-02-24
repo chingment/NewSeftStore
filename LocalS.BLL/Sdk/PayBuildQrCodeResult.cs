@@ -9,6 +9,5 @@ namespace LocalS.BLL
     public class PayBuildQrCodeResult
     {
         public string CodeUrl { get; set; }
-        public string PrepayId { get; set; }
     }
 }

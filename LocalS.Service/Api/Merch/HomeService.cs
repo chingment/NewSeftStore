@@ -151,7 +151,7 @@ namespace LocalS.Service.Api.Merch
 
             var retRptProductSkuSaleRl = new RetRptProductSkuSaleRl();
 
-            StringBuilder sql = new StringBuilder("  select top 10 prdProductSkuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderDetailsChildSon WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' group by PrdProductSkuName order by sumQuantity desc ");
+            StringBuilder sql = new StringBuilder("  select top 10 prdProductSkuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderSubChildUnique WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' group by PrdProductSkuName order by sumQuantity desc ");
 
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)

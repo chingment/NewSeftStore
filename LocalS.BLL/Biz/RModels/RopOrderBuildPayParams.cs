@@ -20,5 +20,7 @@ namespace LocalS.BLL.Biz
         public E_OrderPayCaller PayCaller { get; set; }
 
         public E_OrderPayPartner PayPartner { get; set; }
+
+        public string CreateIp { get; set; }
     }
 }

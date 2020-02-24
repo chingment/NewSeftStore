@@ -272,6 +272,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.OrderId = rop.OrderId;
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
+            bizRop.CreateIp = rop.CreateIp;
             return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
         }
 

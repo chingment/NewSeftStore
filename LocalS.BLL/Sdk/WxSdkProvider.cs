@@ -89,21 +89,22 @@ namespace LocalS.BLL
 
         }
 
-        public UnifiedOrderResult UnifiedOrderByJsApi(WxAppInfoConfig config, string openId, string orderSn, decimal orderAmount, string goods_tag, string ip, string body, OrderAttachModel attach, DateTime? time_expire = null)
+        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(WxAppInfoConfig config, string merch_id, string store_id, string machine_id, string open_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
+            var result = new PayBuildWxJsPayInfoResult();
 
             var ret = new UnifiedOrderResult();
 
             TenpayUtil tenpayUtil = new TenpayUtil(config);
 
             UnifiedOrder unifiedOrder = new UnifiedOrder();
-            unifiedOrder.openid = openId;
-            unifiedOrder.out_trade_no = orderSn;//商户订单号
-            unifiedOrder.spbill_create_ip = "192.168.1.1";//终端IP
-            unifiedOrder.total_fee = Convert.ToInt32(orderAmount * 100);//标价金额
+            unifiedOrder.openid = open_id;
+            unifiedOrder.out_trade_no = order_sn;//商户订单号
+            unifiedOrder.spbill_create_ip = create_ip;//终端IP
+            unifiedOrder.total_fee = Convert.ToInt32(order_amount * 100);//标价金额
             unifiedOrder.body = body;//商品描述  
             unifiedOrder.trade_type = "JSAPI";
-            unifiedOrder.attach = attach.ToJsonString();
+            //unifiedOrder.attach = attach.ToJsonString();
             if (time_expire != null)
             {
                 unifiedOrder.time_expire = time_expire.Value.ToString("yyyyMMddHHmmss");
@@ -116,11 +117,30 @@ namespace LocalS.BLL
 
             ret = tenpayUtil.UnifiedOrder(unifiedOrder);
 
-            return ret;
+            if (ret != null)
+            {
+
+                var pms = SdkFactory.Wx.GetJsApiPayParams(config, ret.PrepayId);
+                if (pms != null)
+                {
+                    result = new PayBuildWxJsPayInfoResult();
+                    result.NonceStr = pms.nonceStr;
+                    result.Package = pms.package;
+                    result.PaySign = pms.paySign;
+                    result.PrepayId = pms.prepayId;
+                    result.SignType = pms.signType;
+                    result.Timestamp = pms.timestamp;
+                }
+
+            }
+
+
+
+            return result;
 
         }
 
-        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
         {
 
             var result = new PayBuildQrCodeResult();
@@ -134,7 +154,10 @@ namespace LocalS.BLL
             unifiedOrder.total_fee = Convert.ToInt32(order_amount * 100);//标价金额
             unifiedOrder.body = body;//商品描述  
             unifiedOrder.trade_type = "NATIVE";
-            unifiedOrder.time_expire = time_expire.ToString("yyyyMMddHHmmss");
+            if (time_expire != null)
+            {
+                unifiedOrder.time_expire = time_expire.Value.ToString("yyyyMMddHHmmss");
+            }
             unifiedOrder.goods_tag = goods_tag;
 
             //unifiedOrder.attach = attach.ToJsonString();
@@ -144,7 +167,6 @@ namespace LocalS.BLL
             if (ret != null)
             {
                 result.CodeUrl = ret.CodeUrl;
-                result.PrepayId = ret.PrepayId;
             }
 
             return result;
@@ -247,9 +269,9 @@ namespace LocalS.BLL
             return new CustomJsonResult<JsApiConfigParams>(ResultType.Success, ResultCode.Success, "", parms);
         }
 
-        public JsApiPayParams GetJsApiPayParams(WxAppInfoConfig config, string orderId, string orderSn, string prepayId)
+        public JsApiPayParams GetJsApiPayParams(WxAppInfoConfig config, string prepayId)
         {
-            JsApiPayParams parms = new JsApiPayParams(config.AppId, config.PayKey, prepayId, orderId, orderSn);
+            JsApiPayParams parms = new JsApiPayParams(config.AppId, config.PayKey, prepayId);
 
             return parms;
         }

@@ -16,9 +16,6 @@ namespace MyWeiXinSdk
         private string _paySign = "";
         private string _prepayId = "";
 
-        //扩展属性
-        private string _orderSn = "";
-        private string _orderId = "0";
         public string appId
         {
             get
@@ -67,23 +64,7 @@ namespace MyWeiXinSdk
             }
         }
 
-        public string OrderSn
-        {
-            get
-            {
-                return _orderSn;
-            }
-        }
-
-        public string OrderId
-        {
-            get
-            {
-                return _orderId;
-            }
-        }
-
-        public string PrepayId
+        public string prepayId
         {
             get
             {
@@ -91,10 +72,8 @@ namespace MyWeiXinSdk
             }
         }
 
-        public JsApiPayParams(string appId, string key, string prepay_id, string orderId, string orderSn)
+        public JsApiPayParams(string appId, string key, string prepay_id)
         {
-            _orderSn = orderSn;
-            _orderId = orderId;
             _appId = appId;
 
             SortedDictionary<string, object> sParams = new SortedDictionary<string, object>();

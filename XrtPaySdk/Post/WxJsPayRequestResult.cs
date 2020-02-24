@@ -8,8 +8,8 @@ using System.Xml.Serialization;
 namespace XrtPaySdk
 {
     [XmlRoot("xml")]
-    public class WxJsPayRequestResult
+    public class WxJsPayRequestResult: BaseRequestResult
     {
-
+        public string pay_info { get; set; }
     }
 }

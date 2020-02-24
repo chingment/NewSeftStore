@@ -53,6 +53,8 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse BuildPayParams([FromBody]RopOrderBuildPayParams rop)
         {
+            rop.CreateIp = Lumos.CommonUtil.GetIpAddress(this.HttpRequest);
+
             IResult result = StoreAppServiceFactory.Order.BuildPayParams(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
@@ -205,6 +207,6 @@ namespace WebApiStoreApp.Controllers
 
 
 
-   
+
     }
 }

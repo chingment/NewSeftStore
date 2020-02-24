@@ -12,7 +12,7 @@ namespace LocalS.BLL
     public class TgPaySdkProvider : IPaySdkProvider<TgPayInfoConfg>
     {
 
-        public PayBuildQrCodeResult PayBuildQrCode(TgPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(TgPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire=null)
         {
             var result = new PayBuildQrCodeResult();
 

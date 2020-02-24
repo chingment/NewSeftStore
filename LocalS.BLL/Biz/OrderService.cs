@@ -187,7 +187,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var buildOrderSub in buildOrderSubs)
                     {
-                        var orderSub= new OrderSub();
+                        var orderSub = new OrderSub();
                         orderSub.Id = GuidUtil.New();
                         orderSub.Sn = order.Sn + buildOrderSubs.IndexOf(buildOrderSub).ToString();
                         orderSub.ClientUserId = rop.ClientUserId;
@@ -821,7 +821,7 @@ namespace LocalS.BLL.Biz
                                 order.PayStatus = E_OrderPayStatus.Paying;
                                 var wechatByNative_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
                                 var wechatByNative_UnifiedOrder = SdkFactory.Wx.PayBuildQrCode(wechatByNative_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
-                                if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.PrepayId))
+                                if (string.IsNullOrEmpty(wechatByNative_UnifiedOrder.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
@@ -854,16 +854,17 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = order.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wechatByMp_UnifiedOrder = SdkFactory.Wx.UnifiedOrderByJsApi(wechatByMp_AppInfoConfig, wechatByMp_UserInfo.OpenId, order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", orderAttach, order.PayExpireTime.Value);
+                                var wechatByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wechatByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wechatByMp_UserInfo.OpenId, order.Sn, 0.01m, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
 
-                                if (string.IsNullOrEmpty(wechatByMp_UnifiedOrder.PrepayId))
+                                if (string.IsNullOrEmpty(wechatByMp_PayBuildWxJsPayInfo.PrepayId))
                                 {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
                                 }
 
-                                var pms = SdkFactory.Wx.GetJsApiPayParams(wechatByMp_AppInfoConfig, order.Id, order.Sn, wechatByMp_UnifiedOrder.PrepayId);
+                                wechatByMp_PayBuildWxJsPayInfo.OrderId = order.Id;
+                                wechatByMp_PayBuildWxJsPayInfo.OrderSn = order.Sn;
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pms);
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByMp_PayBuildWxJsPayInfo);
                                 #endregion
                                 break;
                             default:
