@@ -15,7 +15,7 @@ namespace LocalS.Entity
         public string UniqueId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string SlotId { get; set; }
-        public E_OrderSubDetailUnitStatus Status { get; set; }
+        public E_OrderPickupStatus Status { get; set; }
         public int ActionId { get; set; }
         public string ActionName { get; set; }
         public int ActionStatusCode { get; set; }

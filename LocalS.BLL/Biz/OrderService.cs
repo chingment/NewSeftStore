@@ -288,7 +288,7 @@ namespace LocalS.BLL.Biz
                                 orderSubChildUnit.ChargeAmount = buildOrderSubChidUnit.ChargeAmount;
                                 orderSubChildUnit.Creator = operater;
                                 orderSubChildUnit.CreateTime = DateTime.Now;
-                                orderSubChildUnit.Status = E_OrderSubDetailUnitStatus.WaitPay;
+                                orderSubChildUnit.Status = E_OrderPickupStatus.WaitPay;
                                 CurrentDb.OrderSubChildUnit.Add(orderSubChildUnit);
                             }
 
@@ -666,7 +666,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderSubChildUnit in orderSubChildUnits)
                     {
-                        orderSubChildUnit.Status = E_OrderSubDetailUnitStatus.WaitPickup;
+                        orderSubChildUnit.Status = E_OrderPickupStatus.WaitPickup;
                         orderSubChildUnit.PayedTime = DateTime.Now;
                         orderSubChildUnit.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderSubChildUnit.PayWay = payWay;
@@ -761,7 +761,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in orderSubChildUnits)
                     {
-                        item.Status = E_OrderSubDetailUnitStatus.Canceled;
+                        item.Status = E_OrderPickupStatus.Canceled;
                         item.Mender = GuidUtil.Empty();
                         item.MendTime = DateTime.Now;
                     }
@@ -1010,7 +1010,7 @@ namespace LocalS.BLL.Biz
 
                 var l_orderSubChildUnits = orderSubChildUnits.Where(m => m.OrderSubChildId == orderSubChild.Id && m.PrdProductSkuId == orderSubChild.PrdProductSkuId).ToList();
 
-                sku.QuantityBySuccess = l_orderSubChildUnits.Where(m => m.Status == E_OrderSubDetailUnitStatus.Completed).Count();
+                sku.QuantityBySuccess = l_orderSubChildUnits.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
 
                 foreach (var orderSubChildUnit in l_orderSubChildUnits)
                 {
@@ -1021,7 +1021,7 @@ namespace LocalS.BLL.Biz
 
                     if (order.Status == E_OrderStatus.Payed)
                     {
-                        if (orderSubChildUnit.Status == E_OrderSubDetailUnitStatus.WaitPickup)
+                        if (orderSubChildUnit.Status == E_OrderPickupStatus.WaitPickup)
                         {
                             slot.IsAllowPickup = true;
                         }

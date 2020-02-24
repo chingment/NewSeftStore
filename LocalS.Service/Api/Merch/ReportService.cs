@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.Merch
 
 
             var query = (from u in CurrentDb.OrderSubChildUnit
-                         where u.MerchId == merchId && (u.Status != Entity.E_OrderSubDetailUnitStatus.Submitted && u.Status != Entity.E_OrderSubDetailUnitStatus.Canceled)
+                         where u.MerchId == merchId && (u.Status != Entity.E_OrderPickupStatus.Submitted && u.Status != Entity.E_OrderPickupStatus.Canceled)
                          select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.Status });
 
 
@@ -202,15 +202,15 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
                 string pickupStatus = "";
-                if (item.Status == Entity.E_OrderSubDetailUnitStatus.Completed || item.Status == Entity.E_OrderSubDetailUnitStatus.ExPickupSignTaked)
+                if (item.Status == Entity.E_OrderPickupStatus.Completed || item.Status == Entity.E_OrderPickupStatus.ExPickupSignTaked)
                 {
                     pickupStatus = "已取货";
                 }
-                else if (item.Status == Entity.E_OrderSubDetailUnitStatus.ExPickupSignUnTaked)
+                else if (item.Status == Entity.E_OrderPickupStatus.ExPickupSignUnTaked)
                 {
                     pickupStatus = "未取货";
                 }
-                else if (item.Status == Entity.E_OrderSubDetailUnitStatus.Exception)
+                else if (item.Status == Entity.E_OrderPickupStatus.Exception)
                 {
                     pickupStatus = "取货异常待处理";
                 }

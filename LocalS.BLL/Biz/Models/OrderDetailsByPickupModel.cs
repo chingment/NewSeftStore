@@ -36,7 +36,7 @@ namespace LocalS.BLL.Biz
         {
             public string UniqueId { get; set; }
             public string SlotId { get; set; }
-            public E_OrderSubDetailUnitStatus Status { get; set; }
+            public E_OrderPickupStatus Status { get; set; }
             public bool IsAllowPickup { get; set; }
         }
     }

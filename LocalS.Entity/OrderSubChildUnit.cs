@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
 
-    public enum E_OrderSubDetailUnitStatus
+    public enum E_OrderPickupStatus
     {
         Unknow = 0,
         Submitted = 1000,
@@ -21,7 +21,7 @@ namespace LocalS.Entity
         ExPickupSignUnTaked = 6011
     }
 
-    public enum E_OrderSubDetailUnitExPickupHandleSign
+    public enum E_OrderExPickupHandleSign
     {
         Unknow = 0,
         Taked = 1,
@@ -64,7 +64,7 @@ namespace LocalS.Entity
         public decimal ChargeAmount { get; set; }
         public int LastPickupActionId { get; set; }
         public int LastPickupActionStatusCode { get; set; }
-        public E_OrderSubDetailUnitStatus Status { get; set; }
+        public E_OrderPickupStatus Status { get; set; }
         public DateTime? PayedTime { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public string Creator { get; set; }
@@ -75,7 +75,7 @@ namespace LocalS.Entity
         public DateTime? ExPickupHappenTime { get; set; }
         public bool ExPickupIsHandle { get; set; }
         public DateTime? ExPickupHandleTime { get; set; }
-        public E_OrderSubDetailUnitExPickupHandleSign ExPickupHandleSign { get; set; }
+        public E_OrderExPickupHandleSign ExPickupHandleSign { get; set; }
 
         public E_OrderPayStatus PayStatus { get; set; }
     }

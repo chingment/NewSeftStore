@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.StoreTerm
                     //如果某次取货异常 剩下所有取货都标识为订单取货异常
                     var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderId == orderSubChildUnit.OrderId).ToList();
 
-                    if (rop.Status == E_OrderSubDetailUnitStatus.Exception)
+                    if (rop.Status == E_OrderPickupStatus.Exception)
                     {
                         var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnit.OrderId).FirstOrDefault();
                         if (order != null)
@@ -186,9 +186,9 @@ namespace LocalS.Service.Api.StoreTerm
 
                         foreach (var item in orderSubChildUnits)
                         {
-                            if (item.Status != E_OrderSubDetailUnitStatus.Completed && item.Status != E_OrderSubDetailUnitStatus.Canceled)
+                            if (item.Status != E_OrderPickupStatus.Completed && item.Status != E_OrderPickupStatus.Canceled)
                             {
-                                item.Status = E_OrderSubDetailUnitStatus.Exception;
+                                item.Status = E_OrderPickupStatus.Exception;
                                 item.ExPickupIsHappen = true;
                                 item.ExPickupHappenTime = DateTime.Now;
                                 CurrentDb.SaveChanges();
@@ -197,7 +197,7 @@ namespace LocalS.Service.Api.StoreTerm
                     }
 
 
-                    var orderDetailsChildSonsCompeleteCount = orderSubChildUnits.Where(m => m.Status == E_OrderSubDetailUnitStatus.Completed).Count();
+                    var orderDetailsChildSonsCompeleteCount = orderSubChildUnits.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
                     //判断全部订单都是已完成
                     if (orderDetailsChildSonsCompeleteCount == orderSubChildUnits.Count)
                     {
@@ -233,11 +233,11 @@ namespace LocalS.Service.Api.StoreTerm
                     }
                     else
                     {
-                        if (rop.Status == E_OrderSubDetailUnitStatus.SendPickupCmd)
+                        if (rop.Status == E_OrderPickupStatus.SendPickupCmd)
                         {
                             orderPickupLog.ActionRemark = "发送命令";
                         }
-                        else if (rop.Status == E_OrderSubDetailUnitStatus.Exception)
+                        else if (rop.Status == E_OrderPickupStatus.Exception)
                         {
                             orderPickupLog.ActionRemark = "发生异常";
                         }
@@ -301,7 +301,7 @@ namespace LocalS.Service.Api.StoreTerm
                 productSku.Name = orderSubChildUnit.PrdProductSkuName;
                 productSku.MainImgUrl = orderSubChildUnit.PrdProductSkuMainImgUrl;
 
-                if (orderSubChildUnit.Status == E_OrderSubDetailUnitStatus.Completed)
+                if (orderSubChildUnit.Status == E_OrderPickupStatus.Completed)
                 {
                     productSku.CanHandle = false;
                 }
