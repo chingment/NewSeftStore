@@ -75,13 +75,14 @@ namespace XrtPaySdk
             dic.Add("charset", "");
             dic.Add("sign_type", "");
             dic.Add("mch_id", this.mch_id);
+            dic.Add("is_raw","1");
             dic.Add("out_trade_no", out_trade_no);
             dic.Add("device_info", "");
             dic.Add("body", body);
             dic.Add("sub_openid", sub_openid);
             dic.Add("sub_appid", sub_appid);
             dic.Add("attach", "");
-            dic.Add("total_fee", total_fee);
+            dic.Add("total_fee", total_fee); 
             dic.Add("mch_create_ip", create_ip);
             dic.Add("notify_url", this.notifyUrl);
             dic.Add("time_start", time_start);

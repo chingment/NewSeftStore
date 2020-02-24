@@ -317,13 +317,15 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult HandleExOrder(RupOrderGetExOrder rup)
+        public CustomJsonResult HandleExOrder(RopOrderHandleOrder rop)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetOrderGetExOrder();
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }
 }

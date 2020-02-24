@@ -329,6 +329,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopMachineScanSlotsEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineSendHeartbeatBag.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopOrderHandleOrder.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingTestPickupEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderGetExOrder.cs" />

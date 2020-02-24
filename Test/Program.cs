@@ -102,8 +102,8 @@ namespace Test
 
             XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
 
-            payInfo.Mch_id = "861440348168052";
-            payInfo.Key = "4991479F033B2F3A0326AC0653D84FEE";
+            payInfo.Mch_id = "86144035999J054";
+            payInfo.Key = "FBC8B4396940E0969048767F53CB649A";
             payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
