@@ -28,8 +28,8 @@ namespace LocalS.Entity
         UnTaked = 2
     }
 
-    [Table("OrderSubChildUnit")]
-    public class OrderSubChildUnit
+    [Table("OrderSubChildUnique")]
+    public class OrderSubChildUnique
     {
         [Key]
         public string Id { get; set; }

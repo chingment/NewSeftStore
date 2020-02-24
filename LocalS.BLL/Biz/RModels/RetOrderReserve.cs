@@ -40,7 +40,7 @@ namespace LocalS.BLL.Biz
         {
             public Child()
             {
-                this.Units = new List<Unit>();
+                this.Uniques = new List<Unique>();
                 this.SlotStock = new List<SlotStock>();
             }
             public E_SellChannelRefType SellChannelRefType { get; set; }
@@ -54,12 +54,12 @@ namespace LocalS.BLL.Biz
             public decimal OriginalAmount { get; set; }
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
-            public List<Unit> Units { get; set; }
+            public List<Unique> Uniques { get; set; }
 
             public List<SlotStock> SlotStock { get; set; }
         }
 
-        public class Unit
+        public class Unique
         {
             public string Id { get; set; }
             public E_SellChannelRefType SellChannelRefType { get; set; }

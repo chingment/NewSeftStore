@@ -141,14 +141,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetOrderPickupStatusQuery();
 
-            var orderSubChildUnit = CurrentDb.OrderSubChildUnit.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
+            var orderSubChildUnique = CurrentDb.OrderSubChildUnique.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
 
-            if (orderSubChildUnit != null)
+            if (orderSubChildUnique != null)
             {
-                ret.ProductSkuId = orderSubChildUnit.PrdProductId;
-                ret.SlotId = orderSubChildUnit.SlotId;
-                ret.UniqueId = orderSubChildUnit.Id;
-                ret.Status = orderSubChildUnit.Status;
+                ret.ProductSkuId = orderSubChildUnique.PrdProductId;
+                ret.SlotId = orderSubChildUnique.SlotId;
+                ret.UniqueId = orderSubChildUnique.Id;
+                ret.Status = orderSubChildUnique.Status;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             }
@@ -162,21 +162,21 @@ namespace LocalS.Service.Api.StoreTerm
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var orderSubChildUnit = CurrentDb.OrderSubChildUnit.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
-                if (orderSubChildUnit != null)
+                var orderSubChildUnique = CurrentDb.OrderSubChildUnique.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
+                if (orderSubChildUnique != null)
                 {
-                    orderSubChildUnit.LastPickupActionId = rop.ActionId;
-                    orderSubChildUnit.LastPickupActionStatusCode = rop.ActionStatusCode;
-                    orderSubChildUnit.Status = rop.Status;
+                    orderSubChildUnique.LastPickupActionId = rop.ActionId;
+                    orderSubChildUnique.LastPickupActionStatusCode = rop.ActionStatusCode;
+                    orderSubChildUnique.Status = rop.Status;
                     CurrentDb.SaveChanges();
 
 
                     //如果某次取货异常 剩下所有取货都标识为订单取货异常
-                    var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderId == orderSubChildUnit.OrderId).ToList();
+                    var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderSubChildUnique.OrderId).ToList();
 
                     if (rop.Status == E_OrderPickupStatus.Exception)
                     {
-                        var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnit.OrderId).FirstOrDefault();
+                        var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
                         if (order != null)
                         {
                             order.ExIsHappen = true;
@@ -184,7 +184,7 @@ namespace LocalS.Service.Api.StoreTerm
                             CurrentDb.SaveChanges();
                         }
 
-                        foreach (var item in orderSubChildUnits)
+                        foreach (var item in orderSubChildUniques)
                         {
                             if (item.Status != E_OrderPickupStatus.Completed && item.Status != E_OrderPickupStatus.Canceled)
                             {
@@ -197,11 +197,11 @@ namespace LocalS.Service.Api.StoreTerm
                     }
 
 
-                    var orderDetailsChildSonsCompeleteCount = orderSubChildUnits.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
+                    var orderDetailsChildSonsCompeleteCount = orderSubChildUniques.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
                     //判断全部订单都是已完成
-                    if (orderDetailsChildSonsCompeleteCount == orderSubChildUnits.Count)
+                    if (orderDetailsChildSonsCompeleteCount == orderSubChildUniques.Count)
                     {
-                        var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnit.OrderId).FirstOrDefault();
+                        var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
                         if (order != null)
                         {
                             order.Status = E_OrderStatus.Completed;
@@ -211,12 +211,12 @@ namespace LocalS.Service.Api.StoreTerm
 
                     var orderPickupLog = new OrderPickupLog();
                     orderPickupLog.Id = GuidUtil.New();
-                    orderPickupLog.OrderId = orderSubChildUnit.OrderId;
+                    orderPickupLog.OrderId = orderSubChildUnique.OrderId;
                     orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                     orderPickupLog.SellChannelRefId = rop.MachineId;
                     orderPickupLog.UniqueId = rop.UniqueId;
-                    orderPickupLog.PrdProductSkuId = orderSubChildUnit.PrdProductSkuId;
-                    orderPickupLog.SlotId = orderSubChildUnit.SlotId;
+                    orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
+                    orderPickupLog.SlotId = orderSubChildUnique.SlotId;
                     orderPickupLog.Status = rop.Status;
                     orderPickupLog.ActionId = rop.ActionId;
                     orderPickupLog.ActionName = rop.ActionName;
@@ -229,7 +229,7 @@ namespace LocalS.Service.Api.StoreTerm
                         orderPickupLog.PickupUseTime = rop.PickupUseTime;
                         orderPickupLog.ActionRemark = "取货完成";
 
-                        BizFactory.ProductSku.OperateStockQuantity(rop.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(rop.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                     }
                     else
                     {
@@ -252,7 +252,7 @@ namespace LocalS.Service.Api.StoreTerm
                     orderPickupLog.Creator = rop.MachineId;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                    MqFactory.Global.PushOperateLog(AppId.STORETERM, orderSubChildUnit.ClientUserId, rop.MachineId, "OrderPickup", orderSubChildUnit.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, orderSubChildUnique.ClientUserId, rop.MachineId, "OrderPickup", orderSubChildUnique.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
 
                 }
 
@@ -289,19 +289,19 @@ namespace LocalS.Service.Api.StoreTerm
             ret.OrderId = order.Id;
             ret.OrderSn = order.Sn;
 
-            var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderId == orderId).ToList();
+            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId).ToList();
 
-            foreach (var orderSubChildUnit in orderSubChildUnits)
+            foreach (var orderSubChildUnique in orderSubChildUniques)
             {
                 var productSku = new RetOrderGetExOrder.ProductSku();
-                productSku.Id = orderSubChildUnit.PrdProductId;
-                productSku.UniqueId = orderSubChildUnit.Id;
-                productSku.SlotId = orderSubChildUnit.SlotId;
-                productSku.Quantity = orderSubChildUnit.Quantity;
-                productSku.Name = orderSubChildUnit.PrdProductSkuName;
-                productSku.MainImgUrl = orderSubChildUnit.PrdProductSkuMainImgUrl;
+                productSku.Id = orderSubChildUnique.PrdProductId;
+                productSku.UniqueId = orderSubChildUnique.Id;
+                productSku.SlotId = orderSubChildUnique.SlotId;
+                productSku.Quantity = orderSubChildUnique.Quantity;
+                productSku.Name = orderSubChildUnique.PrdProductSkuName;
+                productSku.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
 
-                if (orderSubChildUnit.Status == E_OrderPickupStatus.Completed)
+                if (orderSubChildUnique.Status == E_OrderPickupStatus.Completed)
                 {
                     productSku.CanHandle = false;
                 }

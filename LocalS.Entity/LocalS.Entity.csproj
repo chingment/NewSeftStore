@@ -64,7 +64,7 @@
     <Compile Include="Order.cs" />
     <Compile Include="OrderSub.cs" />
     <Compile Include="OrderSubChild.cs" />
-    <Compile Include="OrderSubChildUnit.cs" />
+    <Compile Include="OrderSubChildUnique.cs" />
     <Compile Include="OrderNotifyLog.cs" />
     <Compile Include="OrderPickupLog.cs" />
     <Compile Include="PrdProduct.cs" />

@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            var query = (from u in CurrentDb.OrderSubChildUnit
+            var query = (from u in CurrentDb.OrderSubChildUnique
                          where u.MerchId == merchId && (u.Status != Entity.E_OrderPickupStatus.Submitted && u.Status != Entity.E_OrderPickupStatus.Canceled)
                          select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.Status });
 
