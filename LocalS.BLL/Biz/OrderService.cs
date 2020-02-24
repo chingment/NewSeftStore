@@ -193,6 +193,7 @@ namespace LocalS.BLL.Biz
                         orderDetails.ClientUserId = rop.ClientUserId;
                         orderDetails.MerchId = store.MerchId;
                         orderDetails.StoreId = rop.StoreId;
+                        orderDetails.StoreName = store.Name;
                         orderDetails.SellChannelRefType = detail.SellChannelRefType;
                         orderDetails.SellChannelRefId = detail.SellChannelRefId;
                         switch (detail.SellChannelRefType)
