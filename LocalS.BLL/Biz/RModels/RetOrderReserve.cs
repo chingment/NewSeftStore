@@ -21,11 +21,11 @@ namespace LocalS.BLL.Biz
 
 
 
-    public class OrderReserveDetail
+    public class BuildOrderSub
     {
-        public OrderReserveDetail()
+        public BuildOrderSub()
         {
-            this.Details = new List<DetailChild>();
+            this.Childs = new List<Child>();
         }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
@@ -33,14 +33,14 @@ namespace LocalS.BLL.Biz
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
-        public List<DetailChild> Details { get; set; }
+        public List<Child> Childs { get; set; }
 
         public E_ReceptionMode ReceptionMode { get; set; }
-        public class DetailChild
+        public class Child
         {
-            public DetailChild()
+            public Child()
             {
-                this.Details = new List<DetailChildSon>();
+                this.Units = new List<Unit>();
                 this.SlotStock = new List<SlotStock>();
             }
             public E_SellChannelRefType SellChannelRefType { get; set; }
@@ -54,12 +54,12 @@ namespace LocalS.BLL.Biz
             public decimal OriginalAmount { get; set; }
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
-            public List<DetailChildSon> Details { get; set; }
+            public List<Unit> Units { get; set; }
 
             public List<SlotStock> SlotStock { get; set; }
         }
 
-        public class DetailChildSon
+        public class Unit
         {
             public string Id { get; set; }
             public E_SellChannelRefType SellChannelRefType { get; set; }

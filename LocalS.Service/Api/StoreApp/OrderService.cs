@@ -148,9 +148,9 @@ namespace LocalS.Service.Api.StoreApp
 
                 store = BizFactory.Store.GetOne(order.StoreId);
 
-                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderId == rop.OrderId).ToList();
+                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == rop.OrderId).ToList();
 
-                foreach (var item in orderDetailsChilds)
+                foreach (var item in orderSubChilds)
                 {
                     var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
                     orderConfirmSkuModel.Id = item.PrdProductSkuId;
@@ -374,18 +374,18 @@ namespace LocalS.Service.Api.StoreApp
                 model.ChargeAmount = item.ChargeAmount.ToF2Price();
 
 
-                var orderDetails = CurrentDb.OrderDetails.Where(c => c.OrderId == item.Id).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(c => c.OrderId == item.Id).ToList();
 
-                foreach (var orderDetail in orderDetails)
+                foreach (var orderSub in orderSubs)
                 {
                     var block = new FsBlock();
 
-                    block.Tag.Name = new FsText(orderDetail.SellChannelRefName, "");
+                    block.Tag.Name = new FsText(orderSub.SellChannelRefName, "");
 
 
                     if (item.Status == E_OrderStatus.Payed)
                     {
-                        if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
+                        if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
                             block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
                             block.Qrcode = new FsQrcode { Code = item.PickupCode, Url = "http://file.17fanju.com/Upload/product/a055a033-d6c4-4fb1-b5a7-155579d1179b_O.jpg" };
@@ -393,9 +393,9 @@ namespace LocalS.Service.Api.StoreApp
                         }
                     }
 
-                    var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderDetailsId == orderDetail.Id).ToList();
+                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
-                    foreach (var orderDetailsChild in orderDetailsChilds)
+                    foreach (var orderSubChild in orderSubChilds)
                     {
 
                         var field = new FsTemplateData();
@@ -404,11 +404,11 @@ namespace LocalS.Service.Api.StoreApp
 
                         var sku = new FsTemplateData.TmplOrderSku();
 
-                        sku.Id = orderDetailsChild.Id;
-                        sku.Name = orderDetailsChild.PrdProductSkuName;
-                        sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
-                        sku.Quantity = orderDetailsChild.Quantity.ToString();
-                        sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
+                        sku.Id = orderSubChild.Id;
+                        sku.Name = orderSubChild.PrdProductSkuName;
+                        sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
+                        sku.Quantity = orderSubChild.Quantity.ToString();
+                        sku.ChargeAmount = orderSubChild.ChargeAmount.ToF2Price();
 
 
                         field.Value = sku;
@@ -485,27 +485,27 @@ namespace LocalS.Service.Api.StoreApp
             ret.FieldBlocks.Add(fsBlockByField);
 
 
-            var orderDetails = CurrentDb.OrderDetails.Where(c => c.OrderId == order.Id).ToList();
+            var orderSubs = CurrentDb.OrderSub.Where(c => c.OrderId == order.Id).ToList();
 
 
-            foreach (var orderDetail in orderDetails)
+            foreach (var orderSub in orderSubs)
             {
                 var block = new FsBlock();
 
-                block.Tag.Name = new FsText(orderDetail.SellChannelRefName, "");
+                block.Tag.Name = new FsText(orderSub.SellChannelRefName, "");
 
                 if (order.Status == E_OrderStatus.Payed)
                 {
-                    if (orderDetail.SellChannelRefType == E_SellChannelRefType.Machine)
+                    if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                     {
                         block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
                     }
                 }
 
 
-                var orderDetailsChilds = CurrentDb.OrderDetailsChild.Where(m => m.OrderDetailsId == orderDetail.Id).ToList();
+                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
-                foreach (var orderDetailsChild in orderDetailsChilds)
+                foreach (var orderSubChild in orderSubChilds)
                 {
 
                     var data = new FsTemplateData();
@@ -514,11 +514,11 @@ namespace LocalS.Service.Api.StoreApp
 
                     var sku = new FsTemplateData.TmplOrderSku();
 
-                    sku.Id = orderDetailsChild.Id;
-                    sku.Name = orderDetailsChild.PrdProductSkuName;
-                    sku.MainImgUrl = orderDetailsChild.PrdProductSkuMainImgUrl;
-                    sku.Quantity = orderDetailsChild.Quantity.ToString();
-                    sku.ChargeAmount = orderDetailsChild.ChargeAmount.ToF2Price();
+                    sku.Id = orderSubChild.Id;
+                    sku.Name = orderSubChild.PrdProductSkuName;
+                    sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
+                    sku.Quantity = orderSubChild.Quantity.ToString();
+                    sku.ChargeAmount = orderSubChild.ChargeAmount.ToF2Price();
 
 
                     data.Value = sku;

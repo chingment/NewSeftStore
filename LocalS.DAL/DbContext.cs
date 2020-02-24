@@ -37,9 +37,9 @@ namespace LocalS.DAL
         public IDbSet<AdSpace> AdSpace { get; set; }
         public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }
         public IDbSet<Order> Order { get; set; }
-        public IDbSet<OrderDetails> OrderDetails { get; set; }
-        public IDbSet<OrderDetailsChild> OrderDetailsChild { get; set; }
-        public IDbSet<OrderDetailsChildSon> OrderDetailsChildSon { get; set; }
+        public IDbSet<OrderSub> OrderSub { get; set; }
+        public IDbSet<OrderSubChild> OrderSubChild { get; set; }
+        public IDbSet<OrderSubChildUnit> OrderSubChildUnit { get; set; }
         public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Machine> Machine { get; set; }

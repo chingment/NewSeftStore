@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
-    [Table("OrderDetails")]
-    public class OrderDetails
+    [Table("OrderSub")]
+    public class OrderSub
     {
         [Key]
         public string Id { get; set; }

@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string MachineId { get; set; }
         public string UniqueId { get; set; }
-        public E_OrderDetailsChildSonStatus Status { get; set; }
+        public E_OrderSubDetailUnitStatus Status { get; set; }
         public int ActionId { get; set; }
         public string ActionName { get; set; }
         public int ActionStatusCode { get; set; }

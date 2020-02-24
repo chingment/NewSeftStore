@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("OrderDetailsChild")]
-    public class OrderDetailsChild
+    [Table("OrderSubChild")]
+    public class OrderSubChild
     {
         [Key]
         public string Id { get; set; }
@@ -18,8 +18,8 @@ namespace LocalS.Entity
         public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
         public string OrderSn { get; set; }
-        public string OrderDetailsId { get; set; }
-        public string OrderDetailsSn { get; set; }
+        public string OrderSubId { get; set; }
+        public string OrderSubSn { get; set; }
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string PrdProductSkuName { get; set; }

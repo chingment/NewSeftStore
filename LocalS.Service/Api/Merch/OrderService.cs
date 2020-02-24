@@ -89,17 +89,17 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
-        public StatusModel GetSonStatus(E_OrderDetailsChildSonStatus orderStatus)
+        public StatusModel GetSonStatus(E_OrderSubDetailUnitStatus orderStatus)
         {
             var status = new StatusModel();
 
             switch (orderStatus)
             {
-                case E_OrderDetailsChildSonStatus.Submitted:
+                case E_OrderSubDetailUnitStatus.Submitted:
                     status.Value = 1000;
                     status.Text = "已提交";
                     break;
-                case E_OrderDetailsChildSonStatus.WaitPay:
+                case E_OrderSubDetailUnitStatus.WaitPay:
                     status.Value = 2000;
                     status.Text = "待支付";
                     break;
@@ -107,35 +107,35 @@ namespace LocalS.Service.Api.Merch
                 //    status.Value = 3000;
                 //    status.Text = "已支付";
                 //    break;
-                case E_OrderDetailsChildSonStatus.WaitPickup:
+                case E_OrderSubDetailUnitStatus.WaitPickup:
                     status.Value = 3010;
                     status.Text = "待取货";
                     break;
-                case E_OrderDetailsChildSonStatus.SendPickupCmd:
+                case E_OrderSubDetailUnitStatus.SendPickupCmd:
                     status.Value = 3011;
                     status.Text = "取货中";
                     break;
-                case E_OrderDetailsChildSonStatus.Pickuping:
+                case E_OrderSubDetailUnitStatus.Pickuping:
                     status.Value = 3012;
                     status.Text = "取货中";
                     break;
-                case E_OrderDetailsChildSonStatus.Completed:
+                case E_OrderSubDetailUnitStatus.Completed:
                     status.Value = 4000;
                     status.Text = "已完成";
                     break;
-                case E_OrderDetailsChildSonStatus.Canceled:
+                case E_OrderSubDetailUnitStatus.Canceled:
                     status.Value = 5000;
                     status.Text = "已取消";
                     break;
-                case E_OrderDetailsChildSonStatus.Exception:
+                case E_OrderSubDetailUnitStatus.Exception:
                     status.Value = 6000;
                     status.Text = "异常未处理";
                     break;
-                case E_OrderDetailsChildSonStatus.ExPickupSignTaked:
+                case E_OrderSubDetailUnitStatus.ExPickupSignTaked:
                     status.Value = 6010;
                     status.Text = "异常已处理，标记为已取货";
                     break;
-                case E_OrderDetailsChildSonStatus.ExPickupSignUnTaked:
+                case E_OrderSubDetailUnitStatus.ExPickupSignUnTaked:
                     status.Value = 6011;
                     status.Text = "异常已处理，标记为未取货";
                     break;
@@ -143,9 +143,9 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
-        public int GetPickupStatus(E_OrderDetailsChildSonStatus orderStatus)
+        public int GetPickupStatus(E_OrderSubDetailUnitStatus orderStatus)
         {
-            if (orderStatus == E_OrderDetailsChildSonStatus.Completed)
+            if (orderStatus == E_OrderSubDetailUnitStatus.Completed)
                 return 1;
 
             return 0;
@@ -226,22 +226,22 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == item.Id).ToList();
+                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).ToList();
 
                 List<object> sellChannelDetails = new List<object>();
-                foreach (var orderDetail in orderDetails)
+                foreach (var orderDetail in orderSub)
                 {
                     List<object> pickupSkus = new List<object>();
                     switch (orderDetail.SellChannelRefType)
                     {
                         case E_SellChannelRefType.Machine:
 
-                            var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == item.Id).ToList();
+                            var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderId == item.Id).ToList();
 
 
-                            foreach (var orderDetailsChildSon in orderDetailsChildSons)
+                            foreach (var orderSubChildUnit in orderSubChildUnits)
                             {
-                                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderDetailsChildSon.Id).OrderByDescending(m => m.CreateTime).ToList();
+                                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChildUnit.Id).OrderByDescending(m => m.CreateTime).ToList();
 
                                 List<object> pickupLogs = new List<object>();
 
@@ -259,13 +259,13 @@ namespace LocalS.Service.Api.Merch
 
                                 pickupSkus.Add(new
                                 {
-                                    Id = orderDetailsChildSon.PrdProductSkuId,
-                                    MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
-                                    UniqueId = orderDetailsChildSon.Id,
-                                    ExPickupIsHandle = orderDetailsChildSon.ExPickupIsHandle,
-                                    Name = orderDetailsChildSon.PrdProductSkuName,
-                                    Quantity = orderDetailsChildSon.Quantity,
-                                    Status = GetSonStatus(orderDetailsChildSon.Status),
+                                    Id = orderSubChildUnit.PrdProductSkuId,
+                                    MainImgUrl = orderSubChildUnit.PrdProductSkuMainImgUrl,
+                                    UniqueId = orderSubChildUnit.Id,
+                                    ExPickupIsHandle = orderSubChildUnit.ExPickupIsHandle,
+                                    Name = orderSubChildUnit.PrdProductSkuName,
+                                    Quantity = orderSubChildUnit.Quantity,
+                                    Status = GetSonStatus(orderSubChildUnit.Status),
                                     PickupLogs = pickupLogs
                                 });
                             }
@@ -338,25 +338,25 @@ namespace LocalS.Service.Api.Merch
             ret.CanHandleEx = GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
 
 
-            var orderDetails = CurrentDb.OrderDetails.Where(m => m.OrderId == order.Id).ToList();
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
 
             List<RetOrderDetails.SellChannelDetail> sellChannelDetails = new List<RetOrderDetails.SellChannelDetail>();
-            foreach (var orderDetail in orderDetails)
+            foreach (var orderSub in orderSubs)
             {
                 var sellChannelDetail = new RetOrderDetails.SellChannelDetail();
 
-                switch (orderDetail.SellChannelRefType)
+                switch (orderSub.SellChannelRefType)
                 {
                     case E_SellChannelRefType.Machine:
                         sellChannelDetail.Type = E_SellChannelRefType.Machine;
-                        sellChannelDetail.Name = orderDetail.SellChannelRefName;
+                        sellChannelDetail.Name = orderSub.SellChannelRefName;
                         sellChannelDetail.DetailType = 1;
 
-                        var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderDetailsId == orderDetail.Id).ToList();
+                        var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderSubId == orderSub.Id).ToList();
                         var pickupSkus = new List<RetOrderDetails.PickupSku>();
-                        foreach (var orderDetailsChildSon in orderDetailsChildSons)
+                        foreach (var orderSubDetailUnit in orderSubChildUnits)
                         {
-                            var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderDetailsChildSon.Id).OrderByDescending(m => m.CreateTime).ToList();
+                            var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubDetailUnit.Id).OrderByDescending(m => m.CreateTime).ToList();
 
                             List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
 
@@ -374,13 +374,13 @@ namespace LocalS.Service.Api.Merch
 
                             sellChannelDetail.DetailItems.Add(new RetOrderDetails.PickupSku
                             {
-                                Id = orderDetailsChildSon.PrdProductSkuId,
-                                ExPickupIsHandle = orderDetailsChildSon.ExPickupIsHandle,
-                                UniqueId = orderDetailsChildSon.Id,
-                                MainImgUrl = orderDetailsChildSon.PrdProductSkuMainImgUrl,
-                                Name = orderDetailsChildSon.PrdProductSkuName,
-                                Quantity = orderDetailsChildSon.Quantity,
-                                Status = GetSonStatus(orderDetailsChildSon.Status),
+                                Id = orderSubDetailUnit.PrdProductSkuId,
+                                ExPickupIsHandle = orderSubDetailUnit.ExPickupIsHandle,
+                                UniqueId = orderSubDetailUnit.Id,
+                                MainImgUrl = orderSubDetailUnit.PrdProductSkuMainImgUrl,
+                                Name = orderSubDetailUnit.PrdProductSkuName,
+                                Quantity = orderSubDetailUnit.Quantity,
+                                Status = GetSonStatus(orderSubDetailUnit.Status),
                                 PickupLogs = pickupLogs,
                                 PickupStatus = 0
                             });
@@ -431,17 +431,17 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理");
                 }
 
-                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == rop.OrderId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.Status == E_OrderDetailsChildSonStatus.Exception).ToList();
+                var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderId == rop.OrderId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.Status == E_OrderSubDetailUnitStatus.Exception).ToList();
 
-                if (orderDetailsChildSons.Count == 0)
+                if (orderSubChildUnits.Count == 0)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不存在未处理的异常信息");
                 }
 
-                foreach (var orderDetailsChildSon in orderDetailsChildSons)
+                foreach (var orderSubChildUnit in orderSubChildUnits)
                 {
 
-                    var detailItem = rop.DetailItems.Where(m => m.UniqueId == orderDetailsChildSon.Id).FirstOrDefault();
+                    var detailItem = rop.DetailItems.Where(m => m.UniqueId == orderSubChildUnit.Id).FirstOrDefault();
                     if (detailItem == null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
@@ -454,22 +454,22 @@ namespace LocalS.Service.Api.Merch
 
                     if (detailItem.PickupStatus == 1)
                     {
-                        orderDetailsChildSon.ExPickupIsHandle = true;
-                        orderDetailsChildSon.ExPickupHandleTime = DateTime.Now;
-                        orderDetailsChildSon.ExPickupHandleSign = E_OrderDetailsChildSonExPickupHandleSign.Taked;
-                        orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.ExPickupSignTaked;
+                        orderSubChildUnit.ExPickupIsHandle = true;
+                        orderSubChildUnit.ExPickupHandleTime = DateTime.Now;
+                        orderSubChildUnit.ExPickupHandleSign = E_OrderSubDetailUnitExPickupHandleSign.Taked;
+                        orderSubChildUnit.Status = E_OrderSubDetailUnitStatus.ExPickupSignTaked;
 
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = GuidUtil.New();
-                        orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                        orderPickupLog.OrderId = orderSubChildUnit.OrderId;
                         orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                        orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
-                        orderPickupLog.UniqueId = orderDetailsChildSon.Id;
-                        orderPickupLog.PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId;
-                        orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
-                        orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                        orderPickupLog.SellChannelRefId = orderSubChildUnit.SellChannelRefId;
+                        orderPickupLog.UniqueId = orderSubChildUnit.Id;
+                        orderPickupLog.PrdProductSkuId = orderSubChildUnit.PrdProductSkuId;
+                        orderPickupLog.SlotId = orderSubChildUnit.SlotId;
+                        orderPickupLog.Status = E_OrderSubDetailUnitStatus.Completed;
                         orderPickupLog.IsPickupComplete = true;
                         orderPickupLog.ActionRemark = "人为标识已取货";
                         orderPickupLog.Remark = "";
@@ -479,22 +479,22 @@ namespace LocalS.Service.Api.Merch
                     }
                     else if (detailItem.PickupStatus == 2)
                     {
-                        orderDetailsChildSon.ExPickupIsHandle = true;
-                        orderDetailsChildSon.ExPickupHandleTime = DateTime.Now;
-                        orderDetailsChildSon.ExPickupHandleSign = E_OrderDetailsChildSonExPickupHandleSign.UnTaked;
-                        orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.ExPickupSignUnTaked;
+                        orderSubChildUnit.ExPickupIsHandle = true;
+                        orderSubChildUnit.ExPickupHandleTime = DateTime.Now;
+                        orderSubChildUnit.ExPickupHandleSign = E_OrderSubDetailUnitExPickupHandleSign.UnTaked;
+                        orderSubChildUnit.Status = E_OrderSubDetailUnitStatus.ExPickupSignUnTaked;
 
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = GuidUtil.New();
-                        orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                        orderPickupLog.OrderId = orderSubChildUnit.OrderId;
                         orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                        orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
-                        orderPickupLog.UniqueId = orderDetailsChildSon.Id;
-                        orderPickupLog.PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId;
-                        orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
-                        orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                        orderPickupLog.SellChannelRefId = orderSubChildUnit.SellChannelRefId;
+                        orderPickupLog.UniqueId = orderSubChildUnit.Id;
+                        orderPickupLog.PrdProductSkuId = orderSubChildUnit.PrdProductSkuId;
+                        orderPickupLog.SlotId = orderSubChildUnit.SlotId;
+                        orderPickupLog.Status = E_OrderSubDetailUnitStatus.Completed;
                         orderPickupLog.IsPickupComplete = false;
                         orderPickupLog.ActionRemark = "人为标识未取货";
                         orderPickupLog.Remark = "";
@@ -525,24 +525,24 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var orderDetailsChildSon = CurrentDb.OrderDetailsChildSon.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
+                var orderSubChildUnit = CurrentDb.OrderSubChildUnit.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
 
-                if (orderDetailsChildSon == null)
+                if (orderSubChildUnit == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
                 }
 
-                if (orderDetailsChildSon.ExPickupIsHandle)
+                if (orderSubChildUnit.ExPickupIsHandle)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
                 }
 
-                if (orderDetailsChildSon.Status != E_OrderDetailsChildSonStatus.Exception)
+                if (orderSubChildUnit.Status != E_OrderSubDetailUnitStatus.Exception)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
                 }
 
-                E_OrderDetailsChildSonStatus old_Status = orderDetailsChildSon.Status;
+                E_OrderSubDetailUnitStatus old_Status = orderSubChildUnit.Status;
 
 
                 var orderPickupLog = new OrderPickupLog();
@@ -550,22 +550,22 @@ namespace LocalS.Service.Api.Merch
                 switch (rop.HandleMethod)
                 {
                     case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
-                        orderDetailsChildSon.ExPickupIsHandle = true;
-                        orderDetailsChildSon.ExPickupHandleSign = E_OrderDetailsChildSonExPickupHandleSign.Taked;
-                        orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.ExPickupSignTaked;
+                        orderSubChildUnit.ExPickupIsHandle = true;
+                        orderSubChildUnit.ExPickupHandleSign = E_OrderSubDetailUnitExPickupHandleSign.Taked;
+                        orderSubChildUnit.Status = E_OrderSubDetailUnitStatus.ExPickupSignTaked;
 
-                        if (old_Status == E_OrderDetailsChildSonStatus.Exception)
+                        if (old_Status == E_OrderSubDetailUnitStatus.Exception)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                             orderPickupLog.Id = GuidUtil.New();
-                            orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                            orderPickupLog.OrderId = orderSubChildUnit.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
+                            orderPickupLog.SellChannelRefId = orderSubChildUnit.SellChannelRefId;
                             orderPickupLog.UniqueId = rop.UniqueId;
-                            orderPickupLog.PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId;
-                            orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
-                            orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                            orderPickupLog.PrdProductSkuId = orderSubChildUnit.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderSubChildUnit.SlotId;
+                            orderPickupLog.Status = E_OrderSubDetailUnitStatus.Completed;
                             orderPickupLog.IsPickupComplete = true;
                             orderPickupLog.ActionRemark = "人为标识已取货";
                             orderPickupLog.Remark = rop.Remark;
@@ -577,21 +577,21 @@ namespace LocalS.Service.Api.Merch
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "标识成功");
                         break;
                     case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
-                        orderDetailsChildSon.ExPickupIsHandle = true;
-                        orderDetailsChildSon.ExPickupHandleSign = E_OrderDetailsChildSonExPickupHandleSign.UnTaked;
-                        orderDetailsChildSon.Status = E_OrderDetailsChildSonStatus.ExPickupSignUnTaked;
-                        if (old_Status == E_OrderDetailsChildSonStatus.Completed)
+                        orderSubChildUnit.ExPickupIsHandle = true;
+                        orderSubChildUnit.ExPickupHandleSign = E_OrderSubDetailUnitExPickupHandleSign.UnTaked;
+                        orderSubChildUnit.Status = E_OrderSubDetailUnitStatus.ExPickupSignUnTaked;
+                        if (old_Status == E_OrderSubDetailUnitStatus.Completed)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                             orderPickupLog.Id = GuidUtil.New();
-                            orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                            orderPickupLog.OrderId = orderSubChildUnit.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
+                            orderPickupLog.SellChannelRefId = orderSubChildUnit.SellChannelRefId;
                             orderPickupLog.UniqueId = rop.UniqueId;
-                            orderPickupLog.PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId;
-                            orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
-                            orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                            orderPickupLog.PrdProductSkuId = orderSubChildUnit.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderSubChildUnit.SlotId;
+                            orderPickupLog.Status = E_OrderSubDetailUnitStatus.Completed;
                             orderPickupLog.IsPickupComplete = false;
                             orderPickupLog.ActionRemark = "人为标识未取货";
                             orderPickupLog.Remark = rop.Remark;
@@ -599,18 +599,18 @@ namespace LocalS.Service.Api.Merch
                             orderPickupLog.Creator = operater;
                             CurrentDb.OrderPickupLog.Add(orderPickupLog);
                         }
-                        else if (old_Status == E_OrderDetailsChildSonStatus.Exception)
+                        else if (old_Status == E_OrderSubDetailUnitStatus.Exception)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderDetailsChildSon.MerchId, orderDetailsChildSon.StoreId, orderDetailsChildSon.SellChannelRefId, orderDetailsChildSon.SlotId, orderDetailsChildSon.PrdProductSkuId, 1);
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                             orderPickupLog.Id = GuidUtil.New();
-                            orderPickupLog.OrderId = orderDetailsChildSon.OrderId;
+                            orderPickupLog.OrderId = orderSubChildUnit.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderDetailsChildSon.SellChannelRefId;
+                            orderPickupLog.SellChannelRefId = orderSubChildUnit.SellChannelRefId;
                             orderPickupLog.UniqueId = rop.UniqueId;
-                            orderPickupLog.PrdProductSkuId = orderDetailsChildSon.PrdProductSkuId;
-                            orderPickupLog.SlotId = orderDetailsChildSon.SlotId;
-                            orderPickupLog.Status = E_OrderDetailsChildSonStatus.Completed;
+                            orderPickupLog.PrdProductSkuId = orderSubChildUnit.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderSubChildUnit.SlotId;
+                            orderPickupLog.Status = E_OrderSubDetailUnitStatus.Completed;
                             orderPickupLog.IsPickupComplete = false;
                             orderPickupLog.ActionRemark = "人为标识未取货";
                             orderPickupLog.Remark = rop.Remark;
@@ -627,19 +627,19 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
 
-                var orderDetailsChildSons = CurrentDb.OrderDetailsChildSon.Where(m => m.OrderId == orderDetailsChildSon.OrderId).ToList();
-                LogUtil.Info("orderDetailsChildSons：" + orderDetailsChildSons);
+                var orderSubChildUnits = CurrentDb.OrderSubChildUnit.Where(m => m.OrderId == orderSubChildUnit.OrderId).ToList();
+                LogUtil.Info("orderDetailsChildSons：" + orderSubChildUnits);
 
-                var orderDetailsChildSonsCompeleteCount = orderDetailsChildSons.Where(m => m.Status == E_OrderDetailsChildSonStatus.Completed || m.Status == E_OrderDetailsChildSonStatus.ExPickupSignTaked || m.Status == E_OrderDetailsChildSonStatus.ExPickupSignUnTaked).Count();
+                var orderDetailsChildSonsCompeleteCount = orderSubChildUnits.Where(m => m.Status == E_OrderSubDetailUnitStatus.Completed || m.Status == E_OrderSubDetailUnitStatus.ExPickupSignTaked || m.Status == E_OrderSubDetailUnitStatus.ExPickupSignUnTaked).Count();
 
                 LogUtil.Info("orderDetailsChildSonsCompeleteCount：" + orderDetailsChildSonsCompeleteCount);
 
                 //判断全部订单都是已完成
-                if (orderDetailsChildSonsCompeleteCount == orderDetailsChildSons.Count)
+                if (orderDetailsChildSonsCompeleteCount == orderSubChildUnits.Count)
                 {
                     LogUtil.Info("orderDetailsChildSonsCompeleteCount：相等");
 
-                    var order = CurrentDb.Order.Where(m => m.Id == orderDetailsChildSon.OrderId).FirstOrDefault();
+                    var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnit.OrderId).FirstOrDefault();
                     if (order != null)
                     {
                         order.ExIsHandle = true;
