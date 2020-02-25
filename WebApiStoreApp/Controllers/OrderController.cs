@@ -22,6 +22,13 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse PayOptions(RupOrderPayOptions rup)
+        {
+            IResult result = StoreAppServiceFactory.Order.PayOptions(this.CurrentUserId, this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpPost]
         public OwnApiHttpResponse Reserve([FromBody]RopOrderReserve rop)
         {
@@ -110,7 +117,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Ali, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Zfb, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -204,9 +211,5 @@ namespace WebApiStoreApp.Controllers
             }
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
         }
-
-
-
-
     }
 }

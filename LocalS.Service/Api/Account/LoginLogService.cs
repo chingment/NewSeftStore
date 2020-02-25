@@ -27,8 +27,8 @@ namespace LocalS.Service.Api.Account
                 case Lumos.DbRelay.Enumeration.LoginWay.Terminal:
                     text = "终端设备";
                     break;
-                case Lumos.DbRelay.Enumeration.LoginWay.WechatByMinPragrom:
-                    text = "小程序";
+                case Lumos.DbRelay.Enumeration.LoginWay.Wxmp:
+                    text = "微信小程序";
                     break;
             }
             return text;

@@ -18,21 +18,21 @@ namespace LocalS.Entity
         Unknow = 0,
         Machine = 1,
         Api = 2,
-        WechatMiniProgram = 3
+        Wxmp = 3
     }
 
     public enum E_OrderPayWay
     {
         Unknow = 0,
-        Wechat = 1,//微信支付
-        AliPay = 2 //支付宝支付
+        Wx = 1,//微信支付
+        Zfb = 2 //支付宝支付
     }
 
     public enum E_OrderPayPartner
     {
         Unknow = 0,
         Wx = 1,//微信支付
-        Ali = 2, //支付宝支付
+        Zfb = 2, //支付宝支付
         Tg = 91, //通莞金服
         Xrt = 92 //通莞金服
     }
@@ -53,7 +53,7 @@ namespace LocalS.Entity
         WxByNt = 10, //微信方式生成二维码
         WxByPa = 11, //微信公众号发起支付
         WxByMp = 12, //微信小程序发起支付,
-        AliByNt = 20, //支付宝方式生成二维码
+        ZfbByNt = 20, //支付宝方式生成二维码
         AggregatePayByNt = 90 //聚合方式生成二维码
     }
 

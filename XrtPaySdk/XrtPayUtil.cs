@@ -156,7 +156,7 @@ namespace XrtPaySdk
             return requestResult;
         }
 
-        public AliNativePayRequestResult AliPayBuildByNt(string out_trade_no, string total_fee, string body, string attach, string create_ip, string time_start, string time_expire)
+        public AliNativePayRequestResult ZfbPayBuildByNt(string out_trade_no, string total_fee, string body, string attach, string create_ip, string time_start, string time_expire)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 

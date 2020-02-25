@@ -50,20 +50,20 @@ namespace LocalS.BLL.Biz
         //    return config;
         //}
 
-        public AlipayAppInfoConfig GetAlipayMpAppInfoConfig(string merchId)
+        public ZfbAppInfoConfig GetZfbMpAppInfoConfig(string merchId)
         {
 
-            var config = new AlipayAppInfoConfig();
+            var config = new ZfbAppInfoConfig();
 
             var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
             if (merch == null)
                 return null;
 
 
-            config.AppId = merch.AlipayMpAppId;
-            config.AppPrivateKey = merch.AlipayMpAppPrivateSecret;
-            config.AlipayPublicKey = merch.AlipayPublicSecret;
-            config.PayResultNotifyUrl = merch.AlipayResultNotifyUrl;
+            config.AppId = merch.ZfbMpAppId;
+            config.AppPrivateKey = merch.ZfbMpAppPrivateSecret;
+            config.ZfbPublicKey = merch.ZfbPublicSecret;
+            config.PayResultNotifyUrl = merch.ZfbResultNotifyUrl;
 
             return config;
         }

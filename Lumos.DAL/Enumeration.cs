@@ -41,7 +41,7 @@ namespace Lumos.DbRelay
             Website = 1,
             Android = 2,
             Ios = 3,
-            WechatByMinPragrom = 4,
+            Wxmp = 4,
             Terminal = 5
         }
 

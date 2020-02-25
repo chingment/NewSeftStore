@@ -73,6 +73,7 @@
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\OrderDetailsByPickupModel.cs" />
+    <Compile Include="Biz\Models\PayOptionModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineHomeBannerModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineProdcutSkuStockModel.cs" />
@@ -104,7 +105,7 @@
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sdk\AliPaySdkProvider.cs" />
+    <Compile Include="Sdk\ZfbSdkProvider.cs" />
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\PayBuildWxJsPayInfoResult.cs" />
     <Compile Include="Sdk\PayResult.cs" />

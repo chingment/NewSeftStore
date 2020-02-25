@@ -419,7 +419,7 @@ namespace LocalS.BLL
                 if (trade_state == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderPayWay = E_OrderPayWay.Wechat;
+                    result.OrderPayWay = E_OrderPayWay.Wx;
                 }
             }
 
@@ -454,7 +454,7 @@ namespace LocalS.BLL
                 if (result_code == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderPayWay = E_OrderPayWay.Wechat;
+                    result.OrderPayWay = E_OrderPayWay.Wx;
                 }
             }
 

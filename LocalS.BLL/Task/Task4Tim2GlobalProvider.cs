@@ -86,23 +86,23 @@ namespace LocalS.BLL.Task
                                             switch (order.PayCaller)
                                             {
                                                 case E_OrderPayCaller.WxByNt:
-                                                    var wechatByNative_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Wx.PayQuery(wechatByNative_AppInfoConfig, order.Sn);
+                                                    var wxByNt_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                                    content = SdkFactory.Wx.PayQuery(wxByNt_AppInfoConfig, order.Sn);
                                                     break;
                                                 case E_OrderPayCaller.WxByMp:
-                                                    var wechatByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Wx.PayQuery(wechatByMp_AppInfoConfig, order.Sn);
+                                                    var wxByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                                    content = SdkFactory.Wx.PayQuery(wxByMp_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             #endregion
                                             break;
-                                        case E_OrderPayPartner.Ali:
+                                        case E_OrderPayPartner.Zfb:
                                             #region Ali
                                             switch (order.PayCaller)
                                             {
-                                                case E_OrderPayCaller.AliByNt:
-                                                    var alipayByNative_AppInfoConfig = BizFactory.Merch.GetAlipayMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.AliPay.PayQuery(alipayByNative_AppInfoConfig, order.Sn);
+                                                case E_OrderPayCaller.ZfbByNt:
+                                                    var zfbByNt_AppInfoConfig = BizFactory.Merch.GetZfbMpAppInfoConfig(order.MerchId);
+                                                    content = SdkFactory.Zfb.PayQuery(zfbByNt_AppInfoConfig, order.Sn);
                                                     break;
                                             }
                                             #endregion

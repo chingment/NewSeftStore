@@ -159,7 +159,7 @@ namespace LocalS.Service.Api.Merch
                 case E_OrderSource.Api:
                     name = "开放接口";
                     break;
-                case E_OrderSource.WechatMiniProgram:
+                case E_OrderSource.Wxmp:
                     name = "微信小程序";
                     break;
                 case E_OrderSource.Machine:

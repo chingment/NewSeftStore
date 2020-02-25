@@ -10,14 +10,14 @@ using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class AliPaySdkProvider : BaseDbContext, IPaySdkProvider<AlipayAppInfoConfig>
+    public class ZfbSdkProvider : BaseDbContext, IPaySdkProvider<ZfbAppInfoConfig>
     {
-        public PayBuildQrCodeResult PayBuildQrCode(AlipayAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildQrCodeResult PayBuildQrCode(ZfbAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
 
             var result = new PayBuildQrCodeResult();
 
-            AlipayUtil alipayUtil = new AlipayUtil(config);
+            ZfbUtil zfbUtil = new ZfbUtil(config);
 
             UnifiedOrder unifiedOrder = new UnifiedOrder();
             unifiedOrder.store_id = store_id;
@@ -27,7 +27,7 @@ namespace LocalS.BLL
             unifiedOrder.timeout_express = "2m";
             //unifiedOrder.extend_params = attach.ToJsonString();
 
-            var ret = alipayUtil.UnifiedOrder(unifiedOrder);
+            var ret = zfbUtil.UnifiedOrder(unifiedOrder);
             if (ret != null)
             {
                 result.CodeUrl = ret.CodeUrl;
@@ -39,16 +39,16 @@ namespace LocalS.BLL
 
         }
 
-        public string PayQuery(AlipayAppInfoConfig config, string orderSn)
+        public string PayQuery(ZfbAppInfoConfig config, string orderSn)
         {
-            AlipayUtil alipayUtil = new AlipayUtil(config);
+            ZfbUtil zfbUtil = new ZfbUtil(config);
 
 
-            return alipayUtil.OrderQuery(orderSn);
+            return zfbUtil.OrderQuery(orderSn);
         }
 
 
-        public PayResult Convert2PayResultByPayQuery(AlipayAppInfoConfig config, string content)
+        public PayResult Convert2PayResultByPayQuery(ZfbAppInfoConfig config, string content)
         {
             var result = new PayResult();
 
@@ -81,7 +81,7 @@ namespace LocalS.BLL
                         if (payResult.trade_status == "TRADE_SUCCESS")
                         {
                             result.IsPaySuccess = true;
-                            result.OrderPayWay = Entity.E_OrderPayWay.AliPay;
+                            result.OrderPayWay = Entity.E_OrderPayWay.Zfb;
                         }
                     }
                 }
@@ -90,7 +90,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayResult Convert2PayResultByNotifyUrl(AlipayAppInfoConfig config, string content)
+        public PayResult Convert2PayResultByNotifyUrl(ZfbAppInfoConfig config, string content)
         {
             var result = new PayResult();
 
@@ -122,7 +122,7 @@ namespace LocalS.BLL
                 if (trade_status == "TRADE_SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderPayWay = Entity.E_OrderPayWay.AliPay;
+                    result.OrderPayWay = Entity.E_OrderPayWay.Zfb;
                 }
             }
 

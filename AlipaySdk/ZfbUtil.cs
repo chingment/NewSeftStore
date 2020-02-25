@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace MyAlipaySdk
 {
-    public class AlipayUtil
+    public class ZfbUtil
     {
-        private AlipayAppInfoConfig _config = null;
+        private ZfbAppInfoConfig _config = null;
         private IAopClient _client = null;
-        public AlipayUtil(AlipayAppInfoConfig config)
+        public ZfbUtil(ZfbAppInfoConfig config)
         {
             this._config = config;
 
@@ -28,7 +28,7 @@ namespace MyAlipaySdk
             //请求和签名使用的字符编码格式，支持GBK和UTF-8
             string CHARSET = "UTF-8";
             //支付宝公钥，由支付宝生成     到蚂蚁金服复制
-            string ALIPAY_PUBLIC_KEY = _config.AlipayPublicKey;// "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB";
+            string ALIPAY_PUBLIC_KEY = _config.ZfbPublicKey;// "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB";
             _client = new DefaultAopClient(URL, APPID, APP_PRIVATE_KEY, FORMAT, "1.0", "RSA2", ALIPAY_PUBLIC_KEY, CHARSET, false);
             //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称如：
 
@@ -98,5 +98,5 @@ namespace MyAlipaySdk
             AlipayTradeQueryResponse response = _client.Execute(request);
             return response.Body;
         }
-}
+    }
 }

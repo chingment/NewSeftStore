@@ -16,11 +16,11 @@ namespace LocalS.BLL
             }
         }
 
-        public static AliPaySdkProvider AliPay
+        public static ZfbSdkProvider Zfb
         {
             get
             {
-                return new AliPaySdkProvider();
+                return new ZfbSdkProvider();
             }
         }
 

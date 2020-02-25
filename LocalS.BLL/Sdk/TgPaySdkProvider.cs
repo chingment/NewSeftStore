@@ -56,11 +56,11 @@ namespace LocalS.BLL
                         result.PayPartnerOrderSn = obt_content.upOrderId;
                         if (obt_content.channelID == "WX")
                         {
-                            result.OrderPayWay = E_OrderPayWay.Wechat;
+                            result.OrderPayWay = E_OrderPayWay.Wx;
                         }
                         if (obt_content.channelID == "ZFB")
                         {
-                            result.OrderPayWay = E_OrderPayWay.AliPay;
+                            result.OrderPayWay = E_OrderPayWay.Zfb;
                         }
 
                     }
@@ -84,11 +84,11 @@ namespace LocalS.BLL
                     result.PayPartnerOrderSn = obj_content.upOrderId;
                     if (obj_content.channelID == "WX")
                     {
-                        result.OrderPayWay = E_OrderPayWay.Wechat;
+                        result.OrderPayWay = E_OrderPayWay.Wx;
                     }
                     if (obj_content.channelID == "ZFB")
                     {
-                        result.OrderPayWay = E_OrderPayWay.AliPay;
+                        result.OrderPayWay = E_OrderPayWay.Zfb;
                     }
 
                 }

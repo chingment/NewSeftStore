@@ -26,10 +26,10 @@ namespace LocalS.Entity
         public string WxPaAppSecret { get; set; }
         public string WxMpAppId { get; set; }
         public string WxMpAppSecret { get; set; }
-        public string AlipayMpAppId { get; set; }
-        public string AlipayMpAppPrivateSecret { get; set; }
-        public string AlipayPublicSecret { get; set; }
-        public string AlipayResultNotifyUrl { get; set; }
+        public string ZfbMpAppId { get; set; }
+        public string ZfbMpAppPrivateSecret { get; set; }
+        public string ZfbPublicSecret { get; set; }
+        public string ZfbResultNotifyUrl { get; set; }
         public string TgPayAccount { get; set; }
         public string TgPayKey { get; set; }
         public string TgPayResultNotifyUrl { get; set; }
@@ -41,7 +41,8 @@ namespace LocalS.Entity
         /// <summary>
         /// 终端机器，构建生成二维码的选项，1：，微信，2：支付宝，3：银联，4：京东钱包，5：掌上生活，9：聚合支付，当不是使用聚合支付 99：聚合一码 不显示
         /// </summary>
-        public string TerminalPayOptions { get; set; }
+        public string TermAppPayOptions { get; set; }
+        public string WxmpAppPayOptions { get; set; }
         //public string WxMpPayOptions { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

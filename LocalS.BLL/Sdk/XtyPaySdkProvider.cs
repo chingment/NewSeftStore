@@ -59,12 +59,12 @@ namespace LocalS.BLL
                 if (wxPayBuildByNt.status == "0" && wxPayBuildByNt.result_code == "0")
                     result.CodeUrl = wxPayBuildByNt.code_url;
             }
-            else if (payCaller == E_OrderPayCaller.AliByNt)
+            else if (payCaller == E_OrderPayCaller.ZfbByNt)
             {
-                var aliPayBuildByNt = xrtPayUtil.AliPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.Value.ToString("yyyyMMddHHmmss"));
+                var zfbBuildByNt = xrtPayUtil.ZfbPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.Value.ToString("yyyyMMddHHmmss"));
 
-                if (aliPayBuildByNt.status == "0" && aliPayBuildByNt.result_code == "0")
-                    result.CodeUrl = aliPayBuildByNt.code_url;
+                if (zfbBuildByNt.status == "0" && zfbBuildByNt.result_code == "0")
+                    result.CodeUrl = zfbBuildByNt.code_url;
             }
 
             return result;

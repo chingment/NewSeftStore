@@ -338,6 +338,24 @@ namespace LocalS.Service.Api.StoreApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
+        public CustomJsonResult PayOptions(string operater, string clientUserId, RupOrderPayOptions rup)
+        {
+            var result = new CustomJsonResult();
+
+            switch (rup.CallerApp)
+            {
+                case E_CallerApp.Wxmp:
+                    var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == clientUserId).FirstOrDefault();
+                    if (wxUserInfo != null)
+                    {
+
+                    }
+                    break;
+            }
+
+            return result;
+        }
+
         public CustomJsonResult List(string operater, string clientUserId, RupOrderList rup)
         {
             var result = new CustomJsonResult();
