@@ -148,10 +148,10 @@ namespace Test
             //List<PayOption> payOptions = new List<PayOption>();
 
             //List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
-            //payWay.Add(E_OrderPayWay.Wechat);
+            //payWay.Add(E_OrderPayWay.Wx);
 
-            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WechatByBuildQrCode, Partner = E_OrderPayPartner.Wechat, SupportWays = payWay });
-            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.AlipayByBuildQrCode, Partner = E_OrderPayPartner.AliPay, SupportWays = payWay });
+            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WxByBuildQrCode, Partner = E_OrderPayPartner.Wx, SupportWays = payWay });
+            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.ZfbByBuildQrCode, Partner = E_OrderPayPartner.Zfb, SupportWays = payWay });
 
             //string a22 = payOptions.ToJsonString();
 
@@ -249,7 +249,7 @@ namespace Test
 
             //RopOrderReserve rop = new RopOrderReserve();
 
-            //rop.Source = LocalS.Entity.E_OrderSource.WechatMiniProgram;
+            //rop.Source = LocalS.Entity.E_OrderSource.Wxmp;
             //rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "2b239e36688e4910adffe36848921015", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });

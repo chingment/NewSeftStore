@@ -126,45 +126,6 @@ namespace WebApiStoreApp.Controllers
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(rt, Encoding.UTF8, "text/plain") };
-
-            //var dicXml = MyWeiXinSdk.CommonUtil.ToDictionary(content);
-
-            //if (!dicXml.ContainsKey("appid"))
-            //{
-            //    LogUtil.Warn("查找不到appid");
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            //}
-
-            //string str_attach = dicXml["attach"].ToString();
-
-            //if (string.IsNullOrEmpty(str_attach))
-            //{
-            //    LogUtil.Warn("attach 不符合格式");
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            //}
-
-            //var obj_attach = Newtonsoft.Json.JsonConvert.DeserializeObject<LocalS.BLL.Biz.OrderAttachModel>(str_attach);
-
-            //WxAppInfoConfig appInfo = null;
-
-            //switch (obj_attach.PayCaller)
-            //{
-            //    case E_OrderPayCaller.WechatByNative:
-            //        appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(obj_attach.MerchId);
-            //        break;
-            //    case E_OrderPayCaller.WechatByMp:
-            //        appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(obj_attach.MerchId);
-            //        break;
-            //    case E_OrderPayCaller.WechatByPa:
-            //        appInfo = LocalS.BLL.Biz.BizFactory.Merch.GetWxPaAppInfoConfig(obj_attach.MerchId);
-            //        break;
-            //}
-
-            //if (!SdkFactory.Wx.CheckPayNotifySign(appInfo, xml))
-            //{
-            //    LogUtil.Warn("支付通知结果签名验证失败");
-            //    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("", Encoding.UTF8, "text/plain") };
-            //}
         }
 
         [AllowAnonymous]

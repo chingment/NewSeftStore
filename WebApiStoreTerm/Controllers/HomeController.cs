@@ -210,7 +210,7 @@ namespace WebApiStoreTerm.Controllers
 
         //    RopOrderPayUrlBuild pms = new RopOrderPayUrlBuild();
         //    pms.MachineId = machineId;
-        //    pms.PayWay = PayWay.Wechat;
+        //    pms.PayWay = PayWay.Wx;
         //    pms.OrderId = orderId;
 
 
