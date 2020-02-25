@@ -94,8 +94,6 @@ namespace LocalS.Entity
         public E_OrderPayWay PayWay { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
         public DateTime? PayExpireTime { get; set; }
-        public string PickupCode { get; set; }
-        public DateTime? PickupCodeExpireTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

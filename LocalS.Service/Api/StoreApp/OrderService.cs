@@ -344,7 +344,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
-                         select new { o.Id, o.Sn, o.StoreId, o.PickupCode, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
+                         select new { o.Id, o.Sn, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
              );
 
 
@@ -387,8 +387,8 @@ namespace LocalS.Service.Api.StoreApp
                     {
                         if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
-                            block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
-                            block.Qrcode = new FsQrcode { Code = item.PickupCode, Url = "http://file.17fanju.com/Upload/product/a055a033-d6c4-4fb1-b5a7-155579d1179b_O.jpg" };
+                            block.Tag.Desc = new FsField("取货码", "", orderSub.PickupCode, "#f18d00");
+                            block.Qrcode = new FsQrcode { Code = orderSub.PickupCode, Url = "http://file.17fanju.com/Upload/product/a055a033-d6c4-4fb1-b5a7-155579d1179b_O.jpg" };
 
                         }
                     }
@@ -498,7 +498,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                     {
-                        block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
+                        block.Tag.Desc = new FsField("取货码", "", orderSub.PickupCode, "#f18d00");
                     }
                 }
 

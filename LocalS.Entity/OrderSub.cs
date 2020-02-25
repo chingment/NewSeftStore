@@ -19,6 +19,8 @@ namespace LocalS.Entity
         public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
         public string OrderSn { get; set; }
+        public string PickupCode { get; set; }
+        public DateTime? PickupCodeExpireTime { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }

@@ -106,10 +106,13 @@ namespace Test
             payInfo.Key = "FBC8B4396940E0969048767F53CB649A";
             payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
 
-            XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
+
+            //BizFactory.Order.BuildPayParams(GuidUtil.Empty(),new LocalS.BLL.Biz.RopOrderBuildPayParams {   })
+
+            //XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
             //wx969a817779af7b53
             //ooHy45d93BhpXkDlyE-mdpHdE_Hs
-            xrtPayUtil.WxPayBuildByJs("wx969a817779af7b53", "ooHy45d93BhpXkDlyE-mdpHdE_Hs", "610010720200115143310372", "1", "测试支付", "", "127.0.0.1", "", DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss"));
+            //xrtPayUtil.WxPayBuildByJs("wx969a817779af7b53", "ooHy45d93BhpXkDlyE-mdpHdE_Hs", "610010720200115143310372", "1", "测试支付", "", "127.0.0.1", "", DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss"));
             //SdkFactory.XrtPay.PayBuildQrCode(payInfo, E_OrderPayCaller.WxByNt, "", "", "", "610010720200115143310369", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
             //SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310368");
             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");

@@ -134,13 +134,8 @@ namespace LocalS.BLL.Biz
                     order.Status = E_OrderStatus.WaitPay;
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
-                    order.PickupCode = RedisSnUtil.BuildPickupCode();
                     order.IsTestMode = rop.IsTestMode;
 
-                    if (order.PickupCode == null)
-                    {
-                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
-                    }
 
                     order.SubmittedTime = DateTime.Now;
                     order.PayExpireTime = DateTime.Now.AddSeconds(300);
@@ -214,6 +209,12 @@ namespace LocalS.BLL.Biz
                         orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
                         orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
                         orderSub.Quantity = buildOrderSub.Quantity;
+                        orderSub.PickupCode = RedisSnUtil.BuildPickupCode();
+                        if (orderSub.PickupCode == null)
+                        {
+                            return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
+                        }
+
                         orderSub.Creator = operater;
                         orderSub.CreateTime = DateTime.Now;
                         CurrentDb.OrderSub.Add(orderSub);
