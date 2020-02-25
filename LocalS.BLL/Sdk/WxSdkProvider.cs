@@ -127,7 +127,6 @@ namespace LocalS.BLL
                     result.NonceStr = pms.nonceStr;
                     result.Package = pms.package;
                     result.PaySign = pms.paySign;
-                    result.PrepayId = pms.prepayId;
                     result.SignType = pms.signType;
                     result.Timestamp = pms.timestamp;
                 }

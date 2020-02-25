@@ -109,8 +109,8 @@ namespace Test
             XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
             //wx969a817779af7b53
             //ooHy45d93BhpXkDlyE-mdpHdE_Hs
-            //xrtPayUtil.WxPayBuildByJs("wx969a817779af7b53", "ooHy45d93BhpXkDlyE-mdpHdE_Hs", "610010720200115143310371", "1", "测试支付", "", "127.0.0.1", "", DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss"));
-            SdkFactory.XrtPay.PayBuildQrCode(payInfo, E_OrderPayCaller.WxByNt, "", "", "", "610010720200115143310369", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            xrtPayUtil.WxPayBuildByJs("wx969a817779af7b53", "ooHy45d93BhpXkDlyE-mdpHdE_Hs", "610010720200115143310372", "1", "测试支付", "", "127.0.0.1", "", DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss"));
+            //SdkFactory.XrtPay.PayBuildQrCode(payInfo, E_OrderPayCaller.WxByNt, "", "", "", "610010720200115143310369", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
             //SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310368");
             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
             //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");

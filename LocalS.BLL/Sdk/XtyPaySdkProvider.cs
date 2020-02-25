@@ -13,10 +13,33 @@ namespace LocalS.BLL
     public class XtyPaySdkProvider : IPaySdkProvider<XrtPayInfoConfg>
     {
 
-        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfoResult(XrtPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string open_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(XrtPayInfoConfg config, string merch_id, string store_id, string app_id, string open_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
             var result = new PayBuildWxJsPayInfoResult();
 
+            XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
+
+            string totelFee = Convert.ToInt32(order_amount * 100).ToString();
+
+            var xrtWxPayBuildByJsResult = xrtPayUtil.WxPayBuildByJs(app_id, open_id, order_sn, totelFee, body, "", create_ip, "", time_expire.Value.ToString("yyyyMMddHHmmss"));
+
+            if (xrtWxPayBuildByJsResult.status == "0" && xrtWxPayBuildByJsResult.result_code == "0")
+            {
+                if (!string.IsNullOrEmpty(xrtWxPayBuildByJsResult.pay_info))
+                {
+
+                    Dictionary<string, string> dic = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(xrtWxPayBuildByJsResult.pay_info);
+
+                    result.AppId = dic["appId"];
+                    result.NonceStr = dic["nonceStr"];
+                    result.Timestamp = dic["timeStamp"];
+                    result.Package = dic["package"];
+                    result.SignType = dic["signType"];
+                    result.PaySign = dic["paySign"];
+                }
+
+
+            }
 
             return result;
         }

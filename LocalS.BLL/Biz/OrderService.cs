@@ -856,7 +856,7 @@ namespace LocalS.BLL.Biz
 
                                 var wechatByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wechatByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wechatByMp_UserInfo.OpenId, order.Sn, 0.01m, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
 
-                                if (string.IsNullOrEmpty(wechatByMp_PayBuildWxJsPayInfo.PrepayId))
+                                if (string.IsNullOrEmpty(wechatByMp_PayBuildWxJsPayInfo.Package))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
                                 }
@@ -954,6 +954,37 @@ namespace LocalS.BLL.Biz
                                 var xrtPay_WxPayBuildByNtResultParams = new { PayUrl = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
+
+                                #endregion
+                                break;
+                            case E_OrderPayCaller.WxByMp:
+                                #region WxByMp
+
+                                order.PayPartner = E_OrderPayPartner.Wx;
+                                order.PayWay = E_OrderPayWay.Wechat;
+                                order.PayStatus = E_OrderPayStatus.Paying;
+                                var wechatByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
+
+                                if (wechatByMp_UserInfo == null)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
+                                }
+
+                                orderAttach.MerchId = order.MerchId;
+                                orderAttach.StoreId = order.StoreId;
+                                orderAttach.PayCaller = rop.PayCaller;
+
+                                var wechatByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, order.MerchId, order.StoreId, "", "", wechatByMp_UserInfo.OpenId, order.Sn, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+
+                                if (string.IsNullOrEmpty(wechatByMp_PayBuildWxJsPayInfo.Package))
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
+                                }
+
+                                wechatByMp_PayBuildWxJsPayInfo.OrderId = order.Id;
+                                wechatByMp_PayBuildWxJsPayInfo.OrderSn = order.Sn;
+
+                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wechatByMp_PayBuildWxJsPayInfo);
 
                                 #endregion
                                 break;
