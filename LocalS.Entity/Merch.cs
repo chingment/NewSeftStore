@@ -34,7 +34,7 @@ namespace LocalS.Entity
         public string TgPayKey { get; set; }
         public string TgPayResultNotifyUrl { get; set; }
 
-        public string XrtPayMchId{ get; set; }
+        public string XrtPayMchId { get; set; }
         public string XrtPayKey { get; set; }
         public string XrtPayResultNotifyUrl { get; set; }
 
@@ -42,6 +42,7 @@ namespace LocalS.Entity
         /// 终端机器，构建生成二维码的选项，1：，微信，2：支付宝，3：银联，4：京东钱包，5：掌上生活，9：聚合支付，当不是使用聚合支付 99：聚合一码 不显示
         /// </summary>
         public string TerminalPayOptions { get; set; }
+        //public string WxMpPayOptions { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

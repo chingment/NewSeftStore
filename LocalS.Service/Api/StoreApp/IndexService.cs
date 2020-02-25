@@ -72,7 +72,6 @@ namespace LocalS.Service.Api.StoreApp
                 }
             }
 
-
             ret.PdArea = pdAreaModel;
 
             result = new CustomJsonResult<RetIndexPageData>(ResultType.Success, ResultCode.Success, "", ret);
