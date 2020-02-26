@@ -13,7 +13,7 @@ namespace LocalS.BLL
     public class XtyPaySdkProvider : IPaySdkProvider<XrtPayInfoConfg>
     {
 
-        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(XrtPayInfoConfg config, string merch_id, string store_id, string app_id, string open_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(XrtPayInfoConfg config, string merch_id, string store_id, string machine_id, string app_id, string open_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
             var result = new PayBuildWxJsPayInfoResult();
 
@@ -107,6 +107,17 @@ namespace LocalS.BLL
         {
             var result = new PayResult();
 
+            var obj_content = XmlUtil.DeserializeToObject<OrderPayUrlNotifyResult>(content);
+            if (obj_content.status == "0" && obj_content.result_code == "0")
+            {
+                if (obj_content.pay_result == 0)
+                {
+                    result.IsPaySuccess = true;
+                    result.OrderSn = obj_content.out_trade_no;
+                    result.PayPartnerOrderSn = obj_content.transaction_id;
+                }
+
+            }
 
             return result;
         }

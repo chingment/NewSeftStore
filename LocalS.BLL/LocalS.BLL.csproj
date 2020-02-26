@@ -81,6 +81,7 @@
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />
     <Compile Include="Biz\RModels\RetBackgroundJobGetDetails.cs" />
+    <Compile Include="Biz\RModels\RetOrderBuildPayOptions.cs" />
     <Compile Include="Biz\RModels\RetOrderDetails.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Biz\RModels\RopBackgroundJobEdit.cs" />
     <Compile Include="Biz\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
+    <Compile Include="Biz\RModels\RupOrderBuildPayOptions.cs" />
     <Compile Include="Biz\StoreService.cs" />
     <Compile Include="Biz\AppSoftwareService.cs" />
     <Compile Include="Cache\CacheServiceFactory.cs" />

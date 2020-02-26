@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.StoreApp
             string url = "";
             switch (caller)
             {
-                case E_AppCaller.MinProgram:
+                case E_AppCaller.Wxmp:
                     url = string.Format("/pages/orderdetails/orderdetails?id={0}", orderid);
                     break;
             }

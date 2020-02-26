@@ -33,6 +33,7 @@ namespace LocalS.BLL.Biz
             model.IsDelete = store.IsDelete;
             model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();
             model.SellMachineIds = merchMachines.Where(m => m.IsStopUse == false).Select(m => m.MachineId).ToArray();
+            model.IsTestMode = store.IsTestMode;
             return model;
         }
 
@@ -60,6 +61,7 @@ namespace LocalS.BLL.Biz
                 model.IsDelete = store.IsDelete;
                 model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();
                 model.SellMachineIds = merchMachines.Where(m => m.IsStopUse == false).Select(m => m.MachineId).ToArray();
+                model.IsTestMode = store.IsTestMode;
                 models.Add(model);
 
             }

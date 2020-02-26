@@ -246,7 +246,7 @@ function wxRequest(opts) {
     _url += "&"
   }
 
-  _url += "appId=" + config.appId + "&token=" + storeage.getAccessToken()
+  _url += "appId=" + config.appId + "&merchId=" + config.merchId+"&token=" + storeage.getAccessToken()
 
   if (!isNullOrEmpty(_urlParams)) {
     _url += "&"

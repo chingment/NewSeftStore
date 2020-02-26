@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RopOrderBuildPayParams
+    public class RupOrderBuildPayOptions
     {
+        public E_AppCaller AppCaller { get; set; }
         public string AppId { get; set; }
-        public string OrderId { get; set; }
-        public E_OrderPayCaller PayCaller { get; set; }
-        public E_OrderPayPartner PayPartner { get; set; }
-        public string CreateIp { get; set; }
+        public string MerchId { get; set; }
     }
 }

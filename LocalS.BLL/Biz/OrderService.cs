@@ -164,6 +164,9 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
 
+
+                    LogUtil.Info("IsTestMode:" + rop.IsTestMode);
+
                     if (rop.IsTestMode)
                     {
                         order.OriginalAmount = buildOrderSubs.Sum(m => m.OriginalAmount);
@@ -975,7 +978,7 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = order.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, order.MerchId, order.StoreId, "", "", wxByMp_UserInfo.OpenId, order.Sn, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.AppId, wxByMp_UserInfo.OpenId, order.Sn, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {
@@ -1019,6 +1022,48 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
             }
+
+            return result;
+        }
+
+        public CustomJsonResult BuildPayOptions(string operater, RupOrderBuildPayOptions rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetOrderBuildPayOptions();
+
+            switch (rup.AppCaller)
+            {
+                case E_AppCaller.Wxmp:
+                    var merch = CurrentDb.Merch.Where(m => m.Id == rup.MerchId).FirstOrDefault();
+                    if (merch != null)
+                    {
+                        var options = merch.WxmpAppPayOptions.ToJsonObject<List<PayOption>>();
+                        if (options != null)
+                        {
+                            foreach (var option in options)
+                            {
+                                var my_option = new RetOrderBuildPayOptions.Option();
+                                my_option.PayCaller = option.Caller;
+                                my_option.PayPartner = option.Partner;
+                                my_option.PaySupportWays = option.SupportWays;
+                                switch (option.Caller)
+                                {
+                                    case E_OrderPayCaller.WxByMp:
+                                        my_option.IsSelect = true;
+                                        my_option.Title = "微信支付";
+                                        my_option.Desc = "快捷支付";
+                                        break;
+                                }
+
+                                ret.Options.Add(my_option);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
             return result;
         }

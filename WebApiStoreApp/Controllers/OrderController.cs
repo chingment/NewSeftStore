@@ -22,13 +22,6 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse PayOptions(RupOrderPayOptions rup)
-        {
-            IResult result = StoreAppServiceFactory.Order.PayOptions(this.CurrentUserId, this.CurrentUserId, rup);
-            return new OwnApiHttpResponse(result);
-        }
-
         [HttpPost]
         public OwnApiHttpResponse Reserve([FromBody]RopOrderReserve rop)
         {
@@ -63,6 +56,13 @@ namespace WebApiStoreApp.Controllers
             rop.CreateIp = Lumos.CommonUtil.GetIpAddress(this.HttpRequest);
 
             IResult result = StoreAppServiceFactory.Order.BuildPayParams(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse BuildPayOptions([FromUri]RupOrderBuildPayOptions rup)
+        {
+            IResult result = StoreAppServiceFactory.Order.BuildPayOptions(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 

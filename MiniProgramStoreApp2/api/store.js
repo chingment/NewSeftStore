@@ -8,7 +8,6 @@ function list(urlParams, requestHandler) {
   lumos.getJson({
     url: config.apiUrl.storeList,
     urlParams: {
-      merchId: config.merchId,
       lat: urlParams.lat,
       lng: urlParams.lng
     },

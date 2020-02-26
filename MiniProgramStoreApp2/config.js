@@ -28,6 +28,7 @@ var config = {
     orderConfirm: `${host}/Order/Confirm`,
     orderReserve: `${host}/Order/Reserve`,
     orderBuildPayParams: `${host}/Order/BuildPayParams`,
+    orderBuildPayOptions: `${host}/Order/BuildPayOptions`,
     orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
     orderDetails: `${host}/Order/Details`,

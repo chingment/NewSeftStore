@@ -19,6 +19,7 @@ namespace LocalS.Entity
     public enum E_AppCaller
     {
         Unknow = 0,
-        MinProgram = 1
+        Wxmp = 1,
+        Term = 2
     }
 }

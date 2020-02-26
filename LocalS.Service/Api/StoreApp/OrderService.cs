@@ -56,7 +56,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.ClientUserId = clientUserId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
             bizRop.SellChannelRefIds = store.SellMachineIds;//不指定机器
-
+            bizRop.IsTestMode = store.IsTestMode;
             //todo 判断机器状态 才能下单
 
             foreach (var productSku in rop.ProductSkus)
@@ -338,22 +338,14 @@ namespace LocalS.Service.Api.StoreApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
-        public CustomJsonResult PayOptions(string operater, string clientUserId, RupOrderPayOptions rup)
+        public CustomJsonResult BuildPayOptions(string operater, string clientUserId, RupOrderBuildPayOptions rup)
         {
-            var result = new CustomJsonResult();
-
-            switch (rup.CallerApp)
-            {
-                case E_CallerApp.Wxmp:
-                    var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == clientUserId).FirstOrDefault();
-                    if (wxUserInfo != null)
-                    {
-
-                    }
-                    break;
-            }
-
-            return result;
+            LocalS.BLL.Biz.RupOrderBuildPayOptions bizRup = new LocalS.BLL.Biz.RupOrderBuildPayOptions();
+            bizRup.AppCaller = rup.AppCaller;
+            bizRup.AppId = rup.AppId;
+            bizRup.MerchId = rup.MerchId;
+            bizRup.ClientUserId = clientUserId;
+            return BLL.Biz.BizFactory.Order.BuildPayOptions(operater, bizRup);
         }
 
         public CustomJsonResult List(string operater, string clientUserId, RupOrderList rup)
@@ -563,6 +555,7 @@ namespace LocalS.Service.Api.StoreApp
         public CustomJsonResult BuildPayParams(string operater, string clientUserId, RopOrderBuildPayParams rop)
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
+            bizRop.AppId = rop.AppId;
             bizRop.OrderId = rop.OrderId;
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;

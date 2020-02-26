@@ -23,5 +23,7 @@ namespace LocalS.BLL.Biz
         public bool IsOpen { get; set; }
 
         public List<ImgSet> DisplayImgUrls { get; set; }
+
+        public bool IsTestMode { get; set; }
     }
 }

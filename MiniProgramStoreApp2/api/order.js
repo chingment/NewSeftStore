@@ -67,11 +67,23 @@ function buildPayParams(params, requestHandler) {
   })
 }
 
+function buildPayOptions(urlParams, requestHandler) {
+
+  lumos.getJson({
+    url: config.apiUrl.orderBuildPayOptions,
+    urlParams: urlParams,
+    success: function (res) {
+      requestHandler.success(res)
+    }
+  })
+}
+
 module.exports = {
   confirm: confirm,
   reserve: reserve,
   list: list,
   details: details,
   cancle: cancle,
-  buildPayParams: buildPayParams
+  buildPayParams: buildPayParams,
+  buildPayOptions: buildPayOptions
 }
