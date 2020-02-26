@@ -15,6 +15,11 @@ Page({
    */
   data: {
     tag: "productdetails",
+    payOption: {
+      title: '支付方式',
+      options: []
+    },
+    curSelPayOption: null
   },
 
   /**
@@ -37,13 +42,33 @@ Page({
         fail: function () { }
       })
 
+    this.buildPayOptions()
   },
   goPay: function () {
 
+    var _this=this;
+
+    for (var i = 0; i < _this.data.payOption.options.length; i++) {
+      if (_this.data.payOption.options[i].isSelect == true) {
+        _this.data.curSelPayOption = _this.data.payOption.options[i]
+        break
+      }
+    }
+
+
+
+    if (_this.data.curSelPayOption == undefined || _this.data.curSelPayOption == null) {
+      toast.show({
+        title: '未选择支付方式'
+      })
+      return
+    }
+
+
     apiOrder.buildPayParams({
       orderId: orderId,
-      payCaller: 12,
-      payPartner: 1
+      payCaller: _this.data.curSelPayOption.payCaller,
+      payPartner: _this.data.curSelPayOption.payPartner
     }, {
         success: function (res) {
           if (res.result == 1) {
@@ -76,6 +101,21 @@ Page({
         },
         fail: function () { }
       })
+  },
+  buildPayOptions: function () {
+    var _self = this
+    apiOrder.buildPayOptions({
+      appCaller: 1
+    }, {
+        success: function (res) {
+          if (res.result == 1) {
+            _self.setData({ payOption: res.data })
+
+          }
+        },
+        fail: function () { }
+      })
+
   }
 
 })

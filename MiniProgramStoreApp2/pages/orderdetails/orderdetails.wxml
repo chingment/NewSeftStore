@@ -81,6 +81,27 @@
 </view>
 <view class="line-space"></view>
 
+<view class="its-a fieldBlock">
+    <block wx:for="{{payOption.options}}"  wx:key="caller" >
+      <view class="it">
+        <view class="it-l">
+        <view class="icon">
+        <image class="img" style="width:38px;height:38px" src='/content/default/images/paycaller_{{item.payCaller}}.png'></image>
+        </view>
+        </view>
+        <view class="it-m">
+          <view class="it-ml w100">
+            <text class="txt">{{item.title}}</text>
+          </view>
+          <view class="it-mr flex1">
+            <text class="txt">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+</view>
+
+<view class="line-space"></view>
 
 <view class="its-a fieldBlock">
   <block wx:for="{{fieldBlocks}}" wx:for-item="fieldBlock" wx:key="list" >

@@ -108,7 +108,7 @@ namespace LocalS.BLL
             var result = new PayResult();
 
             var obj_content = XmlUtil.DeserializeToObject<OrderPayUrlNotifyResult>(content);
-            if (obj_content.status == "0" && obj_content.result_code == "0")
+            if (obj_content.status == "0")
             {
                 if (obj_content.pay_result == 0)
                 {
