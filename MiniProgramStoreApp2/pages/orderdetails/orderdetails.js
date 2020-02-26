@@ -78,7 +78,7 @@ Page({
               'timeStamp': data.timestamp,
               'nonceStr': data.nonceStr,
               'package': data.package,
-              'signType': 'MD5',
+              'signType': data.signType,
               'paySign': data.paySign,
               'success': function (res) {
                 wx.redirectTo({
