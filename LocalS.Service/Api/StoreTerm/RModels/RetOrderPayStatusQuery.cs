@@ -11,11 +11,10 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RetOrderPayStatusQuery
     {
-        public string OrderId { get; set; }
-        public string OrderSn { get; set; }
+        public string Id { get; set; }
+        public string Sn { get; set; }
         public E_OrderStatus Status { get; set; }
-
-        public OrderDetailsByPickupModel OrderDetails { get; set; }
+        public List<OrderProductSkuByPickupModel> ProductSkus { get; set; }
 
     }
 }

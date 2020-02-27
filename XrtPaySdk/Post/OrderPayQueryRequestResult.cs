@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 
 namespace XrtPaySdk
 {
+    [XmlRoot]
     public class OrderPayQueryRequestResult : BaseRequestResult
     {
         public string trade_state { get; set; }

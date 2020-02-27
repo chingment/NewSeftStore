@@ -1067,32 +1067,29 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public OrderDetailsByPickupModel GetOrderDetailsByPickup(string orderId, string machineId)
+        public List<OrderProductSkuByPickupModel> GetOrderProductSkuByPickup(string orderId, string machineId)
         {
-            var model = new OrderDetailsByPickupModel();
+            var models = new List<OrderProductSkuByPickupModel>();
             var order = BizFactory.Order.GetOne(orderId);
             var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId).ToList();
 
-            model.OrderId = order.Id;
-            model.OrderSn = order.Sn;
-
             foreach (var orderSubChild in orderSubChilds)
             {
-                var sku = new OrderDetailsByPickupModel.ProductSku();
-                sku.Id = orderSubChild.PrdProductSkuId;
-                sku.Name = orderSubChild.PrdProductSkuName;
-                sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
-                sku.Quantity = orderSubChild.Quantity;
+                var model = new OrderProductSkuByPickupModel();
+                model.Id = orderSubChild.PrdProductSkuId;
+                model.Name = orderSubChild.PrdProductSkuName;
+                model.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
+                model.Quantity = orderSubChild.Quantity;
 
 
                 var l_orderSubChildUniques = orderSubChildUniques.Where(m => m.OrderSubChildId == orderSubChild.Id && m.PrdProductSkuId == orderSubChild.PrdProductSkuId).ToList();
 
-                sku.QuantityBySuccess = l_orderSubChildUniques.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
+                model.QuantityBySuccess = l_orderSubChildUniques.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
 
                 foreach (var orderSubChildUnique in l_orderSubChildUniques)
                 {
-                    var slot = new OrderDetailsByPickupModel.Slot();
+                    var slot = new OrderProductSkuByPickupModel.Slot();
                     slot.UniqueId = orderSubChildUnique.Id;
                     slot.SlotId = orderSubChildUnique.SlotId;
                     slot.Status = orderSubChildUnique.Status;
@@ -1105,13 +1102,13 @@ namespace LocalS.BLL.Biz
                         }
                     }
 
-                    sku.Slots.Add(slot);
+                    model.Slots.Add(slot);
                 }
 
-                model.ProductSkus.Add(sku);
+                models.Add(model);
             }
 
-            return model;
+            return models;
         }
         public string GetPayWayName(E_OrderPayWay payWay)
         {

@@ -88,12 +88,12 @@ namespace LocalS.Service.Api.StoreTerm
             if (ret_Biz.Data != null)
             {
                 ret.Data = new RetOrderPayStatusQuery();
-                ret.Data.OrderId = ret_Biz.Data.OrderId;
-                ret.Data.OrderSn = ret_Biz.Data.OrderSn;
+                ret.Data.Id = ret_Biz.Data.OrderId;
+                ret.Data.Sn = ret_Biz.Data.OrderSn;
                 ret.Data.Status = ret_Biz.Data.Status;
                 if (ret_Biz.Data.Status == E_OrderStatus.Payed)
                 {
-                    ret.Data.OrderDetails = BizFactory.Order.GetOrderDetailsByPickup(rup.OrderId, rup.MachineId);
+                    ret.Data.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(rup.OrderId, rup.MachineId);
                 }
             }
 
@@ -126,7 +126,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            result= new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单"); 
+            result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
             //if (order.Status != E_OrderStatus.Payed)
             //{
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
