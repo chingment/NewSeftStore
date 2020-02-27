@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.Account
                 case Lumos.DbRelay.Enumeration.LoginWay.Ios:
                     text = "苹果";
                     break;
-                case Lumos.DbRelay.Enumeration.LoginWay.Terminal:
+                case Lumos.DbRelay.Enumeration.LoginWay.Term:
                     text = "终端设备";
                     break;
                 case Lumos.DbRelay.Enumeration.LoginWay.Wxmp:

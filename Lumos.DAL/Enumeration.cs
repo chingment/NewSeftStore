@@ -42,7 +42,7 @@ namespace Lumos.DbRelay
             Android = 2,
             Ios = 3,
             Wxmp = 4,
-            Terminal = 5
+            Term = 5
         }
 
         public enum LoginFun
