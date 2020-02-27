@@ -70,6 +70,10 @@
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\Models\BannerModel.cs" />
+    <Compile Include="Biz\Models\MachineEventBaseModel.cs" />
+    <Compile Include="Biz\Models\MachineEventByHeartbeatBagModel.cs" />
+    <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />
+    <Compile Include="Biz\Models\MachineEventByScanSlotsModel.cs" />
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\OrderDetailsByPickupModel.cs" />
@@ -101,6 +105,7 @@
     <Compile Include="Cache\StockCacheServicecs.cs" />
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\LoginLogModel.cs" />
+    <Compile Include="Mq\MqMessageConentModel\MachineEventNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\OperateLogModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />

@@ -1,4 +1,5 @@
-﻿using LocalS.Entity;
+﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
 using System;
@@ -37,6 +38,20 @@ namespace LocalS.BLL.Mq.MqByRedis
             obj.Type = MqMessageType.OperateLog;
             obj.Ticket = GuidUtil.New();
             obj.Content = content;
+            this.Push(obj);
+        }
+
+        public void PushMachineEventNotify(string operater, string machineId, E_MachineEventType type, object content)
+        {
+            var _content = new MachineEventNotifyModel();
+            _content.MachineId = machineId;
+            _content.Type = type;
+            _content.Content = content;
+            _content.Operater = operater;
+            var obj = new RedisMq4GlobalHandle();
+            obj.Type = MqMessageType.MachineEventNotify;
+            obj.Ticket = GuidUtil.New();
+            obj.Content = _content;
             this.Push(obj);
         }
     }

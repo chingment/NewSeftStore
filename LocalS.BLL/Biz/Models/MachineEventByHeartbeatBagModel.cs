@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.StoreTerm
+namespace LocalS.BLL.Biz
 {
-    public class RopMachineScanSlotsEventNotify
+    public class MachineEventByHeartbeatBagModel : MachineEventBaseModel
     {
-        public string MachineId { get; set; }
-
-        public int Status { get; set; }
-
+        public string Status { get; set; }
         public string Remark { get; set; }
     }
 }

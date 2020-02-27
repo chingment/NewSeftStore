@@ -14,7 +14,8 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string OperateUserId { get; set; }
-        public string Action { get; set; }
+        public int EventCode { get; set; }
+        public string EventName { get; set; }
         public string Remark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

@@ -51,14 +51,6 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse PickupEventNotify([FromBody]RopOrderPickupEventNotify rop)
-        {
-            IResult result = StoreTermServiceFactory.Order.PickupEventNotify(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-
         public OwnApiHttpResponse GetExOrder([FromUri]RupOrderGetExOrder rup)
         {
             IResult result = StoreTermServiceFactory.Order.GetExOrder(rup);

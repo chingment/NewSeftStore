@@ -221,38 +221,36 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
+        //public CustomJsonResult TestPickupEventNotify(string operater, RopStockSettingTestPickupEventNotify rop)
+        //{
+        //    var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
+        //    string productSkuId = "";
+        //    string productSkuName = "";
+        //    if (!string.IsNullOrEmpty(rop.ProductSkuId))
+        //    {
+        //        var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.MerchId, rop.ProductSkuId);
+        //        if (bizProduct != null)
+        //        {
+        //            productSkuId = bizProduct.Id;
+        //            productSkuName = bizProduct.Name;
+        //        }
+        //    }
 
-        public CustomJsonResult TestPickupEventNotify(string operater, RopStockSettingTestPickupEventNotify rop)
-        {
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+        //    string message = "";
+        //    if (rop.IsPickupComplete)
+        //    {
+        //        message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4},取货完成，用时：{5}", productSkuId, productSkuName, rop.SlotId, rop.ActionId, rop.ActionName, rop.PickupUseTime);
+        //    }
+        //    else
+        //    {
+        //        message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4}，状态({5})：{6}", productSkuId, productSkuName, rop.SlotId, rop.ActionId, rop.ActionName, rop.ActionStatusCode, rop.ActionStatusName);
+        //    }
+        //    LogUtil.Info(message);
 
-            string productSkuId = "";
-            string productSkuName = "";
-            if (!string.IsNullOrEmpty(rop.ProductSkuId))
-            {
-                var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.MerchId, rop.ProductSkuId);
-                if (bizProduct != null)
-                {
-                    productSkuId = bizProduct.Id;
-                    productSkuName = bizProduct.Name;
-                }
-            }
-
-            string message = "";
-            if (rop.IsPickupComplete)
-            {
-                message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4},取货完成，用时：{5}", productSkuId, productSkuName, rop.SlotId, rop.ActionId, rop.ActionName, rop.PickupUseTime);
-            }
-            else
-            {
-                message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4}，状态({5})：{6}", productSkuId, productSkuName, rop.SlotId, rop.ActionId, rop.ActionName, rop.ActionStatusCode, rop.ActionStatusName);
-            }
-            LogUtil.Info(message);
-
-            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "TestPickup", message);
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-        }
+        //    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "TestPickup", message);
+        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        //}
 
     }
 }

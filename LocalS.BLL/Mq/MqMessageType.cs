@@ -10,6 +10,7 @@ namespace LocalS.BLL.Mq
     {
         Unknow = 0,
         PayResultNotify = 2,
-        OperateLog = 3
+        OperateLog = 3,
+        MachineEventNotify = 4
     }
 }

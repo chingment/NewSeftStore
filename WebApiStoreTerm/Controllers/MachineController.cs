@@ -24,21 +24,6 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
-        [HttpPost]
-        public OwnApiHttpResponse SendRunStatus([FromBody]RopMachineSendRunStatus rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.SendRunStatus(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse SendHeartbeatBag([FromBody]RopMachineSendHeartbeatBag rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.SendHeartbeatBag(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
@@ -72,13 +57,6 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse ScanSlotsEventNotify([FromBody]RopMachineScanSlotsEventNotify rop)
-        {
-            IResult result = StoreTermServiceFactory.Machine.ScanSlotsEventNotify(this.CurrentUserId, rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
         public OwnApiHttpResponse UploadImg(RopMachineUploadImg rop)
         {
 
@@ -87,6 +65,13 @@ namespace WebApiStoreTerm.Controllers
             LogUtil.Info("进入UploadImg.Type:" + rop.Type);
             LogUtil.Info("进入UploadImg.Extension:" + rop.Extension);
             IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse EventNotify(RopMachineEventNotify rop)
+        {
+            IResult result = StoreTermServiceFactory.Machine.EventNotify(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

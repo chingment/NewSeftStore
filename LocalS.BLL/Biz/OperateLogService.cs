@@ -74,7 +74,7 @@ namespace LocalS.BLL.Biz
 
                 machineOperateLog.MachineId = rop.MachineId;
                 machineOperateLog.OperateUserId = rop.Operater;
-                machineOperateLog.Action = rop.Action;
+                machineOperateLog.EventName = rop.Action;
                 machineOperateLog.Remark = rop.Remark;
                 machineOperateLog.Creator = rop.Operater;
                 machineOperateLog.CreateTime = DateTime.Now;

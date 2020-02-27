@@ -17,8 +17,6 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class MachineService : BaseDbContext
     {
-
-
         public CustomJsonResult InitData(RopMachineInitData rop)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -190,95 +188,6 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "更新成功");
         }
 
-        //public CustomJsonResult Login(RopMachineLogin rop)
-        //{
-
-        //    var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-
-        //    if (machine == null)
-        //    {
-        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
-        //    }
-
-        //    var sysMerchantUser = CurrentDb.SysMerchUser.Where(m => m.UserName == rop.UserName).FirstOrDefault();
-
-        //    if (sysMerchantUser == null)
-        //    {
-        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户名不存在");
-        //    }
-
-        //    var isPasswordCorrect = PassWordHelper.VerifyHashedPassword(sysMerchantUser.PasswordHash, rop.Password);
-
-        //    if (!isPasswordCorrect)
-        //    {
-        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败,用户密码错误");
-        //    }
-
-        //    if (sysMerchantUser.MerchId != machine.CurUseMerchId)
-        //    {
-        //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
-        //    }
-
-        //    var ret = new RetMachineLogin();
-
-        //    ret.Token = GuidUtil.New();
-        //    ret.UserName = sysMerchantUser.UserName;
-        //    ret.FullName = sysMerchantUser.FullName;
-
-        //    var tokenInfo = new TokenInfo();
-        //    tokenInfo.UserId = sysMerchantUser.Id;
-        //    tokenInfo.MerchId = sysMerchantUser.MerchId;
-
-        //    SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(3, 0, 0));
-
-        //    LogAction(sysMerchantUser.Id, rop.MachineId, "login", "登录机器管理后台");
-
-        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
-
-        //}
-
-        public CustomJsonResult SendRunStatus(RopMachineSendRunStatus rop)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-
-            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-
-            if (machine != null)
-            {
-                switch (rop.Status)
-                {
-                    case "running":
-                        machine.RunStatus = E_MachineRunStatus.Running;
-                        machine.LastRequestTime = DateTime.Now;
-                        break;
-                    case "setting":
-                        machine.RunStatus = E_MachineRunStatus.Setting;
-                        machine.LastRequestTime = DateTime.Now;
-                        break;
-                }
-
-                CurrentDb.SaveChanges();
-            }
-
-            return result;
-        }
-
-        public CustomJsonResult SendHeartbeatBag(RopMachineSendHeartbeatBag rop)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            var machine = CurrentDb.Machine.Where(m => m.ImeiId == rop.DeviceId || m.MacAddress == rop.DeviceId).FirstOrDefault();
-
-            if (machine != null)
-            {
-                machine.LastRequestTime = DateTime.Now;
-                CurrentDb.SaveChanges();
-            }
-
-            return result;
-        }
-
         public CustomJsonResult CheckUpdate(RupMachineCheckUpdate rup)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -304,16 +213,6 @@ namespace LocalS.Service.Api.StoreTerm
             LogUtil.Info("CheckUpdateCheckUpdate:5");
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
         }
-
-
-        public CustomJsonResult ScanSlotsEventNotify(string operater, RopMachineScanSlotsEventNotify rop)
-        {
-
-            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "ScanSlots", rop.Remark);
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-        }
-
 
         public Task<bool> UpLoadTraceLog(RopAppTraceLog rop)
         {
@@ -446,6 +345,13 @@ namespace LocalS.Service.Api.StoreTerm
             });
 
             return task;
+        }
+
+        public CustomJsonResult EventNotify(string operater, RopMachineEventNotify rop)
+        {
+            BizFactory.Machine.EventNotify(operater, rop.MachineId, rop.Type, rop.Content);
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }
 }

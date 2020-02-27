@@ -42,6 +42,11 @@ namespace LocalS.BLL.Mq.MqByRedis
                                 var operateLogModel = Newtonsoft.Json.JsonConvert.DeserializeObject<OperateLogModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
                                 BLL.Biz.BizFactory.OperateLog.Add(operateLogModel);
                                 break;
+                            case MqMessageType.MachineEventNotify:
+                                LogUtil.Info("MachineEventNotify");
+                                var machineEventNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<MachineEventNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.Machine.EventHandle(machineEventNotifyModel);
+                                break;
                         }
 
                         LogUtil.Info(string.Format("消息队列处理消息类型：{0},处理结束,内容：{1}", this.Type, this.Content.ToJsonString()));
