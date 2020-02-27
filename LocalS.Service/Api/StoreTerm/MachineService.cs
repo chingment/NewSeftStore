@@ -349,7 +349,7 @@ namespace LocalS.Service.Api.StoreTerm
 
         public CustomJsonResult EventNotify(string operater, RopMachineEventNotify rop)
         {
-            BizFactory.Machine.EventNotify(operater, rop.MachineId, rop.Type, rop.Content);
+            BizFactory.Machine.EventNotify(operater, rop.AppId, rop.MachineId, rop.Type, rop.Content);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }

@@ -41,9 +41,10 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushMachineEventNotify(string operater, string machineId, E_MachineEventType type, object content)
+        public void PushMachineEventNotify(string operater,string appId, string machineId, E_MachineEventType type, object content)
         {
             var _content = new MachineEventNotifyModel();
+            _content.AppId = appId;
             _content.MachineId = machineId;
             _content.Type = type;
             _content.Content = content;

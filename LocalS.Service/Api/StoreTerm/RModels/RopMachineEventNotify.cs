@@ -9,6 +9,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopMachineEventNotify
     {
+        public string AppId { get; set; }
         public string DeviceId { get; set; }
         public string MachineId { get; set; }
         public object Content { get; set; }
