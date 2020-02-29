@@ -319,6 +319,7 @@
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderGetExOrder.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RetOrderSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPayStatusQuery.cs" />

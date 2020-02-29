@@ -119,20 +119,27 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
-            var order = CurrentDb.OrderSub.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
 
-            if (order == null)
+            if (orderSub == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
-            //if (order.Status != E_OrderStatus.Payed)
+            //result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
+
+            //if (orderSub.Status != E_OrderStatus.Payed)
             //{
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
             //}
 
-            // result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", BizFactory.Order.GetOrderDetailsByPickup(order.Id, rup.MachineId));
+            RetOrderSearch ret = new RetOrderSearch();
+
+            ret.Id = orderSub.OrderId;
+            ret.Sn = orderSub.OrderSn;
+            ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(orderSub.OrderId, rup.MachineId);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
         }
 
