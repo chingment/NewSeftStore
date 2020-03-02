@@ -27,6 +27,7 @@ namespace LocalS.Service.Api.StoreTerm
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
         public List<PayOption> PayOptions { get; set; }
+        public bool IsOpenChkCamera { get; set; }
 
     }
 }

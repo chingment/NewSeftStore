@@ -89,6 +89,8 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.IsHiddenKind = machineInfo.IsHiddenKind;
             ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
             ret.Machine.PayOptions = machineInfo.PayOptions;
+            ret.Machine.IsOpenChkCamera = machineInfo.IsOpenChkCamera;
+
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
             ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);

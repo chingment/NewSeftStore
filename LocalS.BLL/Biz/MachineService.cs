@@ -47,6 +47,7 @@ namespace LocalS.BLL.Biz
             model.IsHiddenKind = machine.IsHiddenKind;
             model.KindRowCellSize = machine.KindRowCellSize;
             model.IsTestMode = machine.IsTestMode;
+            model.IsOpenChkCamera = machine.IsOpenChkCamera;
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 

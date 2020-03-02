@@ -36,5 +36,7 @@ namespace LocalS.BLL.Biz
         public List<PayOption> PayOptions { get; set; }
 
         public bool IsTestMode { get; set; }
+
+        public bool IsOpenChkCamera { get; set; }
     }
 }
