@@ -51,11 +51,11 @@ service.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (res.result === 1 || res.result === 2) {
       if (res.result === 2) {
-        Message({
-          message: res.message || 'Error',
-          type: 'error',
-          duration: 5 * 1000
-        })
+        // Message({
+        //   message: res.message || 'Error',
+        //   type: 'error',
+        //   duration: 5 * 1000
+        // })
 
         if (res.code === 5000) {
           // to re-login

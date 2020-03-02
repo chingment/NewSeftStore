@@ -35,5 +35,5 @@ export function handleExOrder(data) {
 export default {
   getList: getList,
   getDetails: getDetails,
-  handleExOrder:handleExOrder
+  handleExOrder: handleExOrder
 }

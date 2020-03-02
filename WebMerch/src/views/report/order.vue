@@ -25,17 +25,6 @@
           />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.pickupStatus" clearable placeholder="全部取货状态">
-            <el-option
-              v-for="item in optionsPickupStatus"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -61,7 +50,7 @@
       </el-table-column>
       <el-table-column v-if="isDesktop" label="销售渠道" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.sellChannelRefName }}</span>
+          <span>{{ scope.row.sellChannelRefNames }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单号" align="left" min-width="10%">
@@ -72,26 +61,6 @@
       <el-table-column label="交易时间" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="商品名称" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.productSkuName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="商品编码" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.productSkuCumCode }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.productSkuSpecDes }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="单价" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="left" min-width="10%">
@@ -109,29 +78,25 @@
           <span>{{ scope.row.payWay }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="取货状态" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.pickupStatus }}</span>
-        </template>
-      </el-table-column>
     </el-table>
 
-    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：以单个商品单位维度来统计销售报表</div>
+    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：以订单单位维度来统计销售报表</div>
   </div>
 </template>
 
 <script>
 
-import { productSkuDaySalesInit, productSkuDaySalesGet } from '@/api/report'
+import { orderInit, orderGet } from '@/api/report'
+
 export default {
-  name: 'ProductSkuDaySales',
+  name: 'Order',
   props: {
   },
   data() {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '商品销售报表',
+      filename: '订单销售报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
@@ -141,16 +106,6 @@ export default {
         sellChannels: [],
         tradeDateTimeArea: []
       },
-      optionsPickupStatus: [{
-        value: '1',
-        label: '待取货'
-      }, {
-        value: '2',
-        label: '未取货'
-      }, {
-        value: '3',
-        label: '已取货'
-      }],
       optionsSellChannels: [],
       optionsSellChannelsProps: { multiple: true, checkStrictly: false },
       isDesktop: this.$store.getters.isDesktop
@@ -160,11 +115,11 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.init()
+    this._init()
   },
   methods: {
-    init() {
-      productSkuDaySalesInit().then(res => {
+    _init() {
+      orderInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsSellChannels = d.optionsSellChannels
@@ -172,10 +127,10 @@ export default {
         this.loading = false
       })
     },
-    _productSkuDaySalesGet() {
+    _get() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      productSkuDaySalesGet(this.listQuery).then(res => {
+      orderGet(this.listQuery).then(res => {
         this.listData = res.data
         if (res.result === 1) {
           // this.listData = res.data
@@ -186,13 +141,13 @@ export default {
       })
     },
     handleFilter() {
-      this._productSkuDaySalesGet()
+      this._get()
     },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '销售渠道', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式', '取货状态']
-        const filterVal = ['storeName', 'sellChannelRefName', 'orderSn', 'tradeTime', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay', 'pickupStatus']
+        const tHeader = ['店铺', '销售渠道', '订单号', '交易时间', '数量', '总金额', '支付方式']
+        const filterVal = ['storeName', 'sellChannelRefNames', 'orderSn', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

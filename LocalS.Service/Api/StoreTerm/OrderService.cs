@@ -156,7 +156,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.ProductSkuId = orderSubChildUnique.PrdProductId;
                 ret.SlotId = orderSubChildUnique.SlotId;
                 ret.UniqueId = orderSubChildUnique.Id;
-                ret.Status = orderSubChildUnique.Status;
+                ret.Status = orderSubChildUnique.PickupStatus;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             }
@@ -310,7 +310,7 @@ namespace LocalS.Service.Api.StoreTerm
                 productSku.Name = orderSubChildUnique.PrdProductSkuName;
                 productSku.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
 
-                if (orderSubChildUnique.Status == E_OrderPickupStatus.Completed)
+                if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked)
                 {
                     productSku.CanHandle = false;
                 }

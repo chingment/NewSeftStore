@@ -32,7 +32,27 @@ export function productSkuDaySalesGet(data) {
   })
 }
 
+export function orderInit(params) {
+  return request({
+    url: '/report/OrderInit',
+    method: 'get',
+    params
+  })
+}
+
+export function orderGet(data) {
+  return request({
+    url: '/report/OrderGet',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   machineStockInit: machineStockInit,
-  machineStockGet: machineStockGet
+  machineStockGet: machineStockGet,
+  productSkuDaySalesInit: productSkuDaySalesInit,
+  productSkuDaySalesGet: productSkuDaySalesGet,
+  orderInit: orderInit,
+  orderGet: orderGet
 }

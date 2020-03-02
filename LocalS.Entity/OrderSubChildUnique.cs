@@ -10,11 +10,11 @@ namespace LocalS.Entity
         Unknow = 0,
         Submitted = 1000,
         WaitPay = 2000,
-        //Payed = 3000,
+        Payed = 3000,
         WaitPickup = 3010,
         SendPickupCmd = 3011,
         Pickuping = 3012,
-        Completed = 4000,
+        Taked = 4000,
         Canceled = 5000,
         Exception = 6000,
         ExPickupSignTaked = 6010,
@@ -64,7 +64,6 @@ namespace LocalS.Entity
         public decimal ChargeAmount { get; set; }
         public int LastPickupActionId { get; set; }
         public int LastPickupActionStatusCode { get; set; }
-        public E_OrderPickupStatus Status { get; set; }
         public DateTime? PayedTime { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public string Creator { get; set; }
@@ -76,7 +75,7 @@ namespace LocalS.Entity
         public bool ExPickupIsHandle { get; set; }
         public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderExPickupHandleSign ExPickupHandleSign { get; set; }
-
         public E_OrderPayStatus PayStatus { get; set; }
+        public E_OrderPickupStatus PickupStatus { get; set; }
     }
 }

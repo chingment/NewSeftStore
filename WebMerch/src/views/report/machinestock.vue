@@ -8,7 +8,7 @@
             v-model="listQuery.sellChannels"
             :props="optionsSellChannelsProps"
             :options="optionsSellChannels"
-            placeholder="选择机器"
+            placeholder="选择销售渠道"
             clearable
             style="width: 100%"
           />
@@ -37,7 +37,7 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="机器" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="销售渠道" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.machineName }}</span>
         </template>
@@ -88,14 +88,13 @@
         </template>
       </el-table-column>
     </el-table>
-     <div class="remark-tip" style="line-height: 42px;font-size:14px;" ><span class="sign">*注</span>：实时统计机器库存报表</div>
+    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：实时统计机器库存报表</div>
   </div>
 </template>
 
 <script>
 
 import { machineStockInit, machineStockGet } from '@/api/report'
-import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'MachineStock',
   data() {
@@ -154,7 +153,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '机器', '货道', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
+        const tHeader = ['店铺', '销售渠道', '货道', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
         const filterVal = ['storeName', 'machineName', 'slotId', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
@@ -167,15 +166,6 @@ export default {
         })
         this.downloadLoading = false
       })
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
     }
   }
 }

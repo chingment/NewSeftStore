@@ -294,7 +294,7 @@ namespace LocalS.BLL.Biz
                                 orderSubChildUnique.ChargeAmount = buildOrderSubChidUnique.ChargeAmount;
                                 orderSubChildUnique.Creator = operater;
                                 orderSubChildUnique.CreateTime = DateTime.Now;
-                                orderSubChildUnique.Status = E_OrderPickupStatus.WaitPay;
+                                orderSubChildUnique.PickupStatus = E_OrderPickupStatus.WaitPay;
                                 CurrentDb.OrderSubChildUnique.Add(orderSubChildUnique);
                             }
 
@@ -676,7 +676,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var oderSubChildUnique in oderSubChildUniques)
                     {
-                        oderSubChildUnique.Status = E_OrderPickupStatus.WaitPickup;
+                        oderSubChildUnique.PickupStatus = E_OrderPickupStatus.WaitPickup;
                         oderSubChildUnique.PayedTime = DateTime.Now;
                         oderSubChildUnique.PayStatus = E_OrderPayStatus.PaySuccess;
                         oderSubChildUnique.PayWay = payWay;
@@ -771,7 +771,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in orderSubChildUniques)
                     {
-                        item.Status = E_OrderPickupStatus.Canceled;
+                        item.PickupStatus = E_OrderPickupStatus.Canceled;
                         item.Mender = GuidUtil.Empty();
                         item.MendTime = DateTime.Now;
                     }
@@ -1091,18 +1091,18 @@ namespace LocalS.BLL.Biz
 
                 var l_orderSubChildUniques = orderSubChildUniques.Where(m => m.OrderSubChildId == orderSubChild.Id && m.PrdProductSkuId == orderSubChild.PrdProductSkuId).ToList();
 
-                model.QuantityBySuccess = l_orderSubChildUniques.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
+                model.QuantityBySuccess = l_orderSubChildUniques.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
 
                 foreach (var orderSubChildUnique in l_orderSubChildUniques)
                 {
                     var slot = new OrderProductSkuByPickupModel.Slot();
                     slot.UniqueId = orderSubChildUnique.Id;
                     slot.SlotId = orderSubChildUnique.SlotId;
-                    slot.Status = orderSubChildUnique.Status;
+                    slot.Status = orderSubChildUnique.PickupStatus;
 
                     if (order.Status == E_OrderStatus.Payed)
                     {
-                        if (orderSubChildUnique.Status == E_OrderPickupStatus.WaitPickup)
+                        if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.WaitPickup)
                         {
                             slot.IsAllowPickup = true;
                         }

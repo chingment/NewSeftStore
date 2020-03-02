@@ -253,7 +253,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     orderSubChildUnique.LastPickupActionId = pickupModel.ActionId;
                                     orderSubChildUnique.LastPickupActionStatusCode = pickupModel.ActionStatusCode;
-                                    orderSubChildUnique.Status = pickupModel.Status;
+                                    orderSubChildUnique.PickupStatus = pickupModel.Status;
                                     CurrentDb.SaveChanges();
 
 
@@ -272,9 +272,9 @@ namespace LocalS.BLL.Biz
 
                                         foreach (var item in orderSubChildUniques)
                                         {
-                                            if (item.Status != E_OrderPickupStatus.Completed && item.Status != E_OrderPickupStatus.Canceled)
+                                            if (item.PickupStatus != E_OrderPickupStatus.Taked && item.PickupStatus != E_OrderPickupStatus.Canceled)
                                             {
-                                                item.Status = E_OrderPickupStatus.Exception;
+                                                item.PickupStatus = E_OrderPickupStatus.Exception;
                                                 item.ExPickupIsHappen = true;
                                                 item.ExPickupHappenTime = DateTime.Now;
                                                 CurrentDb.SaveChanges();
@@ -283,7 +283,7 @@ namespace LocalS.BLL.Biz
                                     }
 
 
-                                    var orderDetailsChildSonsCompeleteCount = orderSubChildUniques.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
+                                    var orderDetailsChildSonsCompeleteCount = orderSubChildUniques.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
                                     //判断全部订单都是已完成
                                     if (orderDetailsChildSonsCompeleteCount == orderSubChildUniques.Count)
                                     {

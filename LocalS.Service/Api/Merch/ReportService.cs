@@ -175,8 +175,8 @@ namespace LocalS.Service.Api.Merch
 
 
             var query = (from u in CurrentDb.OrderSubChildUnique
-                         where u.MerchId == merchId && (u.Status != Entity.E_OrderPickupStatus.Submitted && u.Status != Entity.E_OrderPickupStatus.Canceled)
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.Status });
+                         where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
 
 
@@ -188,10 +188,22 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => sellChannelRefIds.Contains(m.SellChannelRefId));
             }
 
-            //if (rop.PickupStatus == "1")
-            //{
-            //    query = query.Where(m => m.Status == Entity.E_OrderDetailsChildSonStatus.Completed || m.Status == Entity.E_OrderDetailsChildSonStatus.ExPickupSignTaked);
-            //}
+            if (rop.PickupStatus == "1")
+            {
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Payed
+                || m.PickupStatus == Entity.E_OrderPickupStatus.WaitPickup
+                || m.PickupStatus == Entity.E_OrderPickupStatus.SendPickupCmd
+                || m.PickupStatus == Entity.E_OrderPickupStatus.Pickuping
+                || m.PickupStatus == Entity.E_OrderPickupStatus.Exception);
+            }
+            else if (rop.PickupStatus == "2")
+            {
+                query = query.Where(m=>m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignUnTaked);
+            }
+            else if (rop.PickupStatus == "3")
+            {
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Taked || m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignTaked);
+            }
 
             //var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
@@ -202,15 +214,15 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
                 string pickupStatus = "";
-                if (item.Status == Entity.E_OrderPickupStatus.Completed || item.Status == Entity.E_OrderPickupStatus.ExPickupSignTaked)
+                if (item.PickupStatus == Entity.E_OrderPickupStatus.Taked || item.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignTaked)
                 {
                     pickupStatus = "已取货";
                 }
-                else if (item.Status == Entity.E_OrderPickupStatus.ExPickupSignUnTaked)
+                else if (item.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignUnTaked)
                 {
                     pickupStatus = "未取货";
                 }
-                else if (item.Status == Entity.E_OrderPickupStatus.Exception)
+                else if (item.PickupStatus == Entity.E_OrderPickupStatus.Exception)
                 {
                     pickupStatus = "取货异常待处理";
                 }
