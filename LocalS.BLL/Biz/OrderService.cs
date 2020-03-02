@@ -181,8 +181,7 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    order.SellChannelRefIds = string.Join(",", buildOrderSubs.Select(m => m.SellChannelRefId).ToArray());
-
+                    List<SellChannelRefModel> sellChannelRefModels = new List<Biz.SellChannelRefModel>();
                     foreach (var buildOrderSub in buildOrderSubs)
                     {
                         var orderSub = new OrderSub();
@@ -198,7 +197,7 @@ namespace LocalS.BLL.Biz
                         switch (buildOrderSub.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
-                                orderSub.SellChannelRefName = "【机器自提】 " + BizFactory.Merch.GetMachineName(order.MerchId, buildOrderSub.SellChannelRefId);
+                                orderSub.SellChannelRefName = "[机器]" + BizFactory.Merch.GetMachineName(order.MerchId, buildOrderSub.SellChannelRefId);
                                 orderSub.SellChannelRefType = E_SellChannelRefType.Machine;
                                 orderSub.SellChannelRefId = buildOrderSub.SellChannelRefId;
                                 orderSub.Receiver = null;
@@ -221,6 +220,9 @@ namespace LocalS.BLL.Biz
                         orderSub.Creator = operater;
                         orderSub.CreateTime = DateTime.Now;
                         CurrentDb.OrderSub.Add(orderSub);
+
+                        sellChannelRefModels.Add(new SellChannelRefModel { Id = orderSub.SellChannelRefId, Type = orderSub.SellChannelRefType, Name = orderSub.SellChannelRefName });
+
 
                         foreach (var buildOrderSubChid in buildOrderSub.Childs)
                         {
@@ -302,6 +304,10 @@ namespace LocalS.BLL.Biz
                             }
                         }
                     }
+
+
+                    order.SellChannelRefIds = string.Join(",", sellChannelRefModels.Select(m => m.Id).ToArray());
+                    order.SellChannelRefNames = string.Join(",", sellChannelRefModels.Select(m => m.Name).ToArray());
 
                     CurrentDb.Order.Add(order);
                     CurrentDb.SaveChanges();

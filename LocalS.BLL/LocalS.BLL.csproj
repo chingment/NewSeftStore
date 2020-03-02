@@ -78,6 +78,7 @@
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\OrderDetailsByPickupModel.cs" />
     <Compile Include="Biz\Models\PayOptionModel.cs" />
+    <Compile Include="Biz\Models\SellChannelRefModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineHomeBannerModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineProdcutSkuStockModel.cs" />

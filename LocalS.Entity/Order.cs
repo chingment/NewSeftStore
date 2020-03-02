@@ -77,6 +77,7 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string StoreName { get; set; }
         public string SellChannelRefIds { get; set; }
+        public string SellChannelRefNames { get; set; }
         public string CouponIds { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
