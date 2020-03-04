@@ -27,23 +27,21 @@
         <view class="block-tag">
 
           <view class="tag-name">
-
             <view class="content">
               <text class="txt">{{block.tag.name.content}}</text>
             </view>
-
           </view>
           <view class="tag-desc">
             <view class="content">
               <text class="t">{{block.tag.desc.title.content}}</text>
               <text class="c" style="color:{{block.tag.desc.value.color}}">{{block.tag.desc.value.content}}</text>
             </view>
-
           </view>
         </view>
+
+        <canvas wx:if="{{block.qrcode.code!=null&&block.qrcode.code!=''}}" style="width: 150px; height: 150px;margin:1rem auto 0 auto;" canvas-id="qrcode-{{index}}"></canvas>
+
         <view class="block-field">
-
-
           <view class="its-odcskus">
             <block wx:for="{{block.data}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
               <view class="it">

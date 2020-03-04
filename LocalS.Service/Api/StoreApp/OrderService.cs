@@ -512,6 +512,7 @@ namespace LocalS.Service.Api.StoreApp
                     }
                 }
 
+                block.Qrcode = new FsQrcode { Code = orderSub.PickupCode, Remark = "", Url = "" };
 
                 var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
