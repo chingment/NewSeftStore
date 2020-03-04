@@ -41,6 +41,8 @@
   margin-right: 0.5rem;
 }
 
+
+
 .it-buttons {
   display: flex;
   justify-content: flex-end;
@@ -102,6 +104,20 @@
 
 .block-tag > .tag-desc .t {
   margin-right: 0.2rem;
+}
+
+.block-qrcode .qrimg{
+width: 150px;
+ height: 150px;
+ margin:.5rem auto 0 auto;
+}
+
+.block-qrcode .remark{
+margin: auto;
+display: block;
+text-align: center;
+line-height: 1.2rem;
+margin-top: .2rem
 }
 
 .its-odcskus {
