@@ -17,7 +17,7 @@ namespace LocalS.BLL.Biz
         public string StoreId { get; set; }
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
-        public string HelpTip { get; set; }
+        public string CsrHelpTip { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string JPushRegId { get; set; }

@@ -48,8 +48,8 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
+        public string CsrHelpTip { get; set; }
     }
 }

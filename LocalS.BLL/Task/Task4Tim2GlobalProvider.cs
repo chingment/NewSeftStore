@@ -196,6 +196,8 @@ namespace LocalS.BLL.Task
             machine.ExIsHas = true;
 
             CurrentDb.SaveChanges();
+
+            Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
         }
     }
 }

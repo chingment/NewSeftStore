@@ -82,6 +82,8 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.StoreName = machineInfo.StoreName;
             ret.Machine.CsrQrCode = machineInfo.CsrQrCode;
             ret.Machine.CsrPhoneNumber = machineInfo.CsrPhoneNumber;
+            ret.Machine.CsrHelpTip = machineInfo.CsrHelpTip;
+
             ret.Machine.CabinetId_1 = machineInfo.CabinetId_1;
             ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
             ret.Machine.CabinetRowColLayout_1 = machineInfo.CabinetRowColLayout_1;

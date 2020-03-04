@@ -19,7 +19,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string LogoImgUrl { get; set; }
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
-        public string HelpTip { get; set; }
+        public string CsrHelpTip { get; set; }
         public int CabinetId_1 { get; set; }
         public string CabinetName_1 { get; set; }
         public int[] CabinetRowColLayout_1 { get; set; }

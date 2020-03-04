@@ -59,6 +59,8 @@ namespace LocalS.BLL.Biz
                 model.MerchName = merch.Name;
                 model.CsrQrCode = merch.CsrQrCode;
                 model.CsrPhoneNumber = merch.CsrPhoneNumber;
+                model.CsrHelpTip = merch.CsrHelpTip;
+
                 model.PayOptions = merch.TermAppPayOptions.ToJsonObject<List<PayOption>>();
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
@@ -327,6 +329,8 @@ namespace LocalS.BLL.Biz
                                     order.ExHappenTime = DateTime.Now;
 
                                     machine.ExIsHas = true;
+
+                                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
                                 }
                                 else
                                 {
