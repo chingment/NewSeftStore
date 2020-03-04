@@ -92,6 +92,7 @@ namespace LocalS.Entity
         public string CancelReason { get; set; }
         public string CancelOperator { get; set; }
         public E_OrderPayPartner PayPartner { get; set; }
+        public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
         public DateTime? PayExpireTime { get; set; }
@@ -104,6 +105,5 @@ namespace LocalS.Entity
         public bool ExIsHandle { get; set; }
         public DateTime? ExHandleTime { get; set; }
         public bool IsTestMode { get; set; }
-        public E_OrderPayStatus PayStatus { get; set; }
     }
 }

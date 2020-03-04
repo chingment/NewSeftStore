@@ -191,7 +191,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.OrderId = order.Id;
             ret.OrderSn = order.Sn;
 
-            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId).ToList();
+            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == rup.MachineId).ToList();
 
             foreach (var orderSubChildUnique in orderSubChildUniques)
             {
@@ -222,10 +222,6 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult HandleExOrder(RopOrderHandleOrder rop)
         {
             var result = new CustomJsonResult();
-
-
-
-
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }

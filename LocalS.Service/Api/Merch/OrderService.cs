@@ -499,6 +499,7 @@ namespace LocalS.Service.Api.Merch
                 order.Status = E_OrderStatus.Completed;
                 order.CompletedTime = DateTime.Now;
 
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

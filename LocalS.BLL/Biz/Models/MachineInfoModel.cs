@@ -10,7 +10,6 @@ namespace LocalS.BLL.Biz
     public class MachineInfoModel
     {
         public string Id { get; set; }
-
         public string DeviceId { get; set; }
         public string Name { get; set; }
         public string LogoImgUrl { get; set; }
@@ -34,9 +33,8 @@ namespace LocalS.BLL.Biz
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
         public List<PayOption> PayOptions { get; set; }
-
         public bool IsTestMode { get; set; }
-
         public bool IsOpenChkCamera { get; set; }
+        public bool ExIsHas { get; set; }
     }
 }

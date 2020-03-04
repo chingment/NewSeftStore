@@ -314,8 +314,7 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-
-                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, Sn = order.Sn, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
 
                     ret.OrderId = order.Id;
                     ret.OrderSn = order.Sn;
@@ -657,6 +656,7 @@ namespace LocalS.BLL.Biz
 
                 order.PayWay = payWay;
                 order.PayStatus = E_OrderPayStatus.PaySuccess;
+                order.PayedTime = DateTime.Now;
 
                 if (order.Status == E_OrderStatus.WaitPay)
                 {
@@ -677,8 +677,9 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderSub in orderSubs)
                     {
-                        orderSub.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderSub.PayWay = payWay;
+                        orderSub.PayStatus = E_OrderPayStatus.PaySuccess;
+                        orderSub.PayedTime = DateTime.Now;
                         orderSub.Mender = GuidUtil.Empty();
                         orderSub.MendTime = DateTime.Now;
                     }
@@ -686,8 +687,9 @@ namespace LocalS.BLL.Biz
                     var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
                     foreach (var orderSubChild in orderSubChilds)
                     {
-                        orderSubChild.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderSubChild.PayWay = payWay;
+                        orderSubChild.PayStatus = E_OrderPayStatus.PaySuccess;
+                        orderSubChild.PayedTime = DateTime.Now;
                         orderSubChild.Mender = GuidUtil.Empty();
                         orderSubChild.MendTime = DateTime.Now;
                     }
@@ -696,10 +698,10 @@ namespace LocalS.BLL.Biz
 
                     foreach (var oderSubChildUnique in oderSubChildUniques)
                     {
-                        oderSubChildUnique.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                        oderSubChildUnique.PayedTime = DateTime.Now;
-                        oderSubChildUnique.PayStatus = E_OrderPayStatus.PaySuccess;
                         oderSubChildUnique.PayWay = payWay;
+                        oderSubChildUnique.PayStatus = E_OrderPayStatus.PaySuccess;
+                        oderSubChildUnique.PayedTime = DateTime.Now;
+                        oderSubChildUnique.PickupStatus = E_OrderPickupStatus.WaitPickup;
                         oderSubChildUnique.Mender = GuidUtil.Empty();
                         oderSubChildUnique.MendTime = DateTime.Now;
                     }
@@ -715,7 +717,6 @@ namespace LocalS.BLL.Biz
                     }
                 }
 
-                order.PayedTime = DateTime.Now;
                 order.MendTime = DateTime.Now;
                 order.Mender = operater;
 

@@ -36,10 +36,9 @@ namespace LocalS.Entity
         /// 是否触发过取货
         /// </summary>
         public bool PickupIsTrg { get; set; }
-
         public DateTime? PickupTrgTime { get; set; }
-
         public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
+        public DateTime? PayedTime { get; set; }
     }
 }

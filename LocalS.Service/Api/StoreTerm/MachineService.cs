@@ -91,7 +91,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.PayOptions = machineInfo.PayOptions;
             ret.Machine.IsOpenChkCamera = machineInfo.IsOpenChkCamera;
             ret.Machine.MaxBuyNumber = 10;
-
+            ret.Machine.ExIsHas = machineInfo.ExIsHas;
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
             ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);

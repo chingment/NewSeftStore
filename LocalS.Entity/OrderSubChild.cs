@@ -40,5 +40,6 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
+        public DateTime? PayedTime { get; set; }
     }
 }

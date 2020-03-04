@@ -28,8 +28,8 @@ namespace LocalS.Service.Api.StoreTerm
         public int KindRowCellSize { get; set; }
         public List<PayOption> PayOptions { get; set; }
         public bool IsOpenChkCamera { get; set; }
-
         public int MaxBuyNumber { get; set; }
+        public bool ExIsHas { get; set; }
 
     }
 }

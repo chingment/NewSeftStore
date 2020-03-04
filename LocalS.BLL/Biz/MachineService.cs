@@ -49,6 +49,7 @@ namespace LocalS.BLL.Biz
             model.KindRowCellSize = machine.KindRowCellSize;
             model.IsTestMode = machine.IsTestMode;
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
+            model.ExIsHas = machine.ExIsHas;
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 
@@ -284,7 +285,7 @@ namespace LocalS.BLL.Biz
 
                                     int timoutM = orderSub.Quantity * 5;
 
-                                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, orderSub.Id, DateTime.Now.AddMinutes(timoutM), orderSub);
+                                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, orderSub.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = orderSub.OrderId, OrderSubId = orderSub.Id, MachineId = orderSub.SellChannelRefId });
                                 }
 
                                 foreach (var orderSubChildUnique in orderSubChildUniques)
@@ -297,10 +298,11 @@ namespace LocalS.BLL.Biz
                                                 && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception
                                                 && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
                                                 && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-
+                                            {
                                                 orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Exception;
-                                            orderSubChildUnique.ExPickupIsHappen = true;
-                                            orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                                                orderSubChildUnique.ExPickupIsHappen = true;
+                                                orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                                            }
                                         }
                                     }
                                     else
@@ -323,6 +325,8 @@ namespace LocalS.BLL.Biz
                                 {
                                     order.ExIsHappen = true;
                                     order.ExHappenTime = DateTime.Now;
+
+                                    machine.ExIsHas = true;
                                 }
                                 else
                                 {

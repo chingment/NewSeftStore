@@ -73,7 +73,7 @@ namespace LocalS.BLL.Task
                             case Task4TimType.Order2CheckPay:
                                 LogUtil.Info(string.Format("开始执行订单查询,时间：{0}", DateTime.Now));
                                 #region 检查支付状态
-                                var order = m.Data.ToJsonObject<Order>();
+                                var order = m.Data.ToJsonObject<Order2CheckPayModel>();
                                 LogUtil.Info(string.Format("查询订单号：{0}", order.Sn));
                                 //判断支付过期时间
                                 if (m.ExpireTime.AddMinutes(1) >= DateTime.Now)
@@ -142,11 +142,11 @@ namespace LocalS.BLL.Task
                                 break;
                             case Task4TimType.Order2CheckPickupTimeout:
                                 #region 检查订单是否取货超时
-                                var orderSub = m.Data.ToJsonObject<OrderSub>();
-
-
-                                Order2CheckPickupTimeout();
-
+                                var orderSub2CheckPickupTimeoutModel = m.Data.ToJsonObject<OrderSub2CheckPickupTimeoutModel>();
+                                if (m.ExpireTime.AddMinutes(1) <= DateTime.Now)
+                                {
+                                    Order2CheckPickupTimeout(orderSub2CheckPickupTimeoutModel);
+                                }
                                 #endregion
                                 break;
 
@@ -169,15 +169,33 @@ namespace LocalS.BLL.Task
             public object Data { get; set; }
         }
 
-
-        private void Order2CheckPay(Order order)
+        private void Order2CheckPickupTimeout(OrderSub2CheckPickupTimeoutModel model)
         {
+            var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
+            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == model.OrderId).ToList();
 
-        }
+            foreach (var orderSubChildUnique in orderSubChildUniques)
+            {
+                if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked
+                    && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception
+                    && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                    && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                {
 
-        private void Order2CheckPickupTimeout()
-        {
+                    orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Exception;
+                    orderSubChildUnique.ExPickupIsHappen = true;
+                    orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                }
+            }
 
+            order.ExIsHappen = true;
+            order.ExHappenTime = DateTime.Now;
+
+            machine.ExIsHas = true;
+
+            CurrentDb.SaveChanges();
         }
     }
 }
