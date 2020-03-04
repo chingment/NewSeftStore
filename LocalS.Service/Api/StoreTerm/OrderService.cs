@@ -126,17 +126,21 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            //result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
+            if (orderSub.PayStatus != E_OrderPayStatus.PaySuccess)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未支付");
+            }
 
-            //if (orderSub.Status != E_OrderStatus.Payed)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效订单");
-            //}
+            if (orderSub.PickupIsTrg)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经取货");
+            }
 
             RetOrderSearch ret = new RetOrderSearch();
 
             ret.Id = orderSub.OrderId;
             ret.Sn = orderSub.OrderSn;
+
             ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(orderSub.OrderId, rup.MachineId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -164,116 +168,6 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        //public CustomJsonResult PickupEventNotify(RopOrderPickupEventNotify rop)
-        //{
-        //    CustomJsonResult result = new CustomJsonResult();
-
-        //    using (TransactionScope ts = new TransactionScope())
-        //    {
-        //        var orderSubChildUnique = CurrentDb.OrderSubChildUnique.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
-        //        if (orderSubChildUnique != null)
-        //        {
-        //            orderSubChildUnique.LastPickupActionId = rop.ActionId;
-        //            orderSubChildUnique.LastPickupActionStatusCode = rop.ActionStatusCode;
-        //            orderSubChildUnique.Status = rop.Status;
-        //            CurrentDb.SaveChanges();
-
-
-        //            //如果某次取货异常 剩下所有取货都标识为订单取货异常
-        //            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderSubChildUnique.OrderId).ToList();
-
-        //            if (rop.Status == E_OrderPickupStatus.Exception)
-        //            {
-        //                var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
-        //                if (order != null)
-        //                {
-        //                    order.ExIsHappen = true;
-        //                    order.ExHappenTime = DateTime.Now;
-        //                    CurrentDb.SaveChanges();
-        //                }
-
-        //                foreach (var item in orderSubChildUniques)
-        //                {
-        //                    if (item.Status != E_OrderPickupStatus.Completed && item.Status != E_OrderPickupStatus.Canceled)
-        //                    {
-        //                        item.Status = E_OrderPickupStatus.Exception;
-        //                        item.ExPickupIsHappen = true;
-        //                        item.ExPickupHappenTime = DateTime.Now;
-        //                        CurrentDb.SaveChanges();
-        //                    }
-        //                }
-        //            }
-
-
-        //            var orderDetailsChildSonsCompeleteCount = orderSubChildUniques.Where(m => m.Status == E_OrderPickupStatus.Completed).Count();
-        //            //判断全部订单都是已完成
-        //            if (orderDetailsChildSonsCompeleteCount == orderSubChildUniques.Count)
-        //            {
-        //                var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
-        //                if (order != null)
-        //                {
-        //                    order.Status = E_OrderStatus.Completed;
-        //                    order.CompletedTime = DateTime.Now;
-        //                }
-        //            }
-
-        //            var orderPickupLog = new OrderPickupLog();
-        //            orderPickupLog.Id = GuidUtil.New();
-        //            orderPickupLog.OrderId = orderSubChildUnique.OrderId;
-        //            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-        //            orderPickupLog.SellChannelRefId = rop.MachineId;
-        //            orderPickupLog.UniqueId = rop.UniqueId;
-        //            orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-        //            orderPickupLog.SlotId = orderSubChildUnique.SlotId;
-        //            orderPickupLog.Status = rop.Status;
-        //            orderPickupLog.ActionId = rop.ActionId;
-        //            orderPickupLog.ActionName = rop.ActionName;
-        //            orderPickupLog.ActionStatusCode = rop.ActionStatusCode;
-        //            orderPickupLog.ActionStatusName = rop.ActionStatusName;
-        //            orderPickupLog.IsPickupComplete = rop.IsPickupComplete;
-        //            orderPickupLog.ImgId = rop.ImgId;
-        //            if (rop.IsPickupComplete)
-        //            {
-        //                orderPickupLog.PickupUseTime = rop.PickupUseTime;
-        //                orderPickupLog.ActionRemark = "取货完成";
-
-        //                BizFactory.ProductSku.OperateStockQuantity(rop.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
-        //            }
-        //            else
-        //            {
-        //                if (rop.Status == E_OrderPickupStatus.SendPickupCmd)
-        //                {
-        //                    orderPickupLog.ActionRemark = "发送命令";
-        //                }
-        //                else if (rop.Status == E_OrderPickupStatus.Exception)
-        //                {
-        //                    orderPickupLog.ActionRemark = "发生异常";
-        //                }
-        //                else
-        //                {
-        //                    orderPickupLog.ActionRemark = rop.ActionName + rop.ActionStatusName;
-        //                }
-        //            }
-
-        //            orderPickupLog.Remark = rop.Remark;
-        //            orderPickupLog.CreateTime = DateTime.Now;
-        //            orderPickupLog.Creator = rop.MachineId;
-        //            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-
-        //            MqFactory.Global.PushOperateLog(AppId.STORETERM, orderSubChildUnique.ClientUserId, rop.MachineId, "OrderPickup", orderSubChildUnique.PrdProductSkuName + "," + orderPickupLog.ActionRemark);
-
-        //        }
-
-        //        CurrentDb.SaveChanges();
-        //        ts.Complete();
-
-        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-
-        //    }
-
-        //    return result;
-        //}
-
         public CustomJsonResult BuildPayParams(RopOrderBuildPayParams rop)
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
@@ -283,7 +177,6 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.CreateIp = rop.CreateIp;
             return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
         }
-
 
         public CustomJsonResult GetExOrder(RupOrderGetExOrder rup)
         {

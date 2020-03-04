@@ -218,7 +218,6 @@
     <Compile Include="Api\Merch\RModels\RopMachineEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEditStock.cs" />
     <Compile Include="Api\Merch\RModels\RopOrderHandleExOrder.cs" />
-    <Compile Include="Api\Merch\RModels\RopOrderPickupExceptionHandle.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindSort.cs" />

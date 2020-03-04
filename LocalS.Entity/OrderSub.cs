@@ -32,5 +32,14 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+        /// <summary>
+        /// 是否触发过取货
+        /// </summary>
+        public bool PickupIsTrg { get; set; }
+
+        public DateTime? PickupTrgTime { get; set; }
+
+        public E_OrderPayStatus PayStatus { get; set; }
+        public E_OrderPayWay PayWay { get; set; }
     }
 }

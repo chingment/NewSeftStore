@@ -216,7 +216,7 @@ namespace LocalS.BLL.Biz
                         {
                             return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
                         }
-
+                        orderSub.PayStatus = E_OrderPayStatus.WaitPay;
                         orderSub.Creator = operater;
                         orderSub.CreateTime = DateTime.Now;
                         CurrentDb.OrderSub.Add(orderSub);
@@ -255,6 +255,7 @@ namespace LocalS.BLL.Biz
                             orderSubChild.OriginalAmount = buildOrderSubChid.OriginalAmount;
                             orderSubChild.DiscountAmount = buildOrderSubChid.DiscountAmount;
                             orderSubChild.ChargeAmount = buildOrderSubChid.ChargeAmount;
+                            orderSubChild.PayStatus = E_OrderPayStatus.WaitPay;
                             orderSubChild.Creator = operater;
                             orderSubChild.CreateTime = DateTime.Now;
                             CurrentDb.OrderSubChild.Add(orderSubChild);
@@ -672,6 +673,25 @@ namespace LocalS.BLL.Biz
                         }
                     }
 
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+
+                    foreach (var orderSub in orderSubs)
+                    {
+                        orderSub.PayStatus = E_OrderPayStatus.PaySuccess;
+                        orderSub.PayWay = payWay;
+                        orderSub.Mender = GuidUtil.Empty();
+                        orderSub.MendTime = DateTime.Now;
+                    }
+
+                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
+                    foreach (var orderSubChild in orderSubChilds)
+                    {
+                        orderSubChild.PayStatus = E_OrderPayStatus.PaySuccess;
+                        orderSubChild.PayWay = payWay;
+                        orderSubChild.Mender = GuidUtil.Empty();
+                        orderSubChild.MendTime = DateTime.Now;
+                    }
+
                     var oderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id).ToList();
 
                     foreach (var oderSubChildUnique in oderSubChildUniques)
@@ -1031,7 +1051,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult BuildPayOptions(string operater, RupOrderBuildPayOptions rup)
         {
             var result = new CustomJsonResult();
@@ -1076,9 +1095,9 @@ namespace LocalS.BLL.Biz
         public List<OrderProductSkuByPickupModel> GetOrderProductSkuByPickup(string orderId, string machineId)
         {
             var models = new List<OrderProductSkuByPickupModel>();
-            var order = BizFactory.Order.GetOne(orderId);
+            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
             var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
-            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId).ToList();
+            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
 
             foreach (var orderSubChild in orderSubChilds)
             {
@@ -1088,10 +1107,9 @@ namespace LocalS.BLL.Biz
                 model.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
                 model.Quantity = orderSubChild.Quantity;
 
-
                 var l_orderSubChildUniques = orderSubChildUniques.Where(m => m.OrderSubChildId == orderSubChild.Id && m.PrdProductSkuId == orderSubChild.PrdProductSkuId).ToList();
 
-                model.QuantityBySuccess = l_orderSubChildUniques.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
+                model.QuantityBySuccess = l_orderSubChildUniques.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked).Count();
 
                 foreach (var orderSubChildUnique in l_orderSubChildUniques)
                 {
@@ -1100,11 +1118,14 @@ namespace LocalS.BLL.Biz
                     slot.SlotId = orderSubChildUnique.SlotId;
                     slot.Status = orderSubChildUnique.PickupStatus;
 
-                    if (order.Status == E_OrderStatus.Payed)
+                    if (orderSubChildUnique.PayStatus == E_OrderPayStatus.PaySuccess)
                     {
-                        if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.WaitPickup)
+                        if (!orderSub.PickupIsTrg)
                         {
-                            slot.IsAllowPickup = true;
+                            if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.WaitPickup)
+                            {
+                                slot.IsAllowPickup = true;
+                            }
                         }
                     }
 
@@ -1126,24 +1147,6 @@ namespace LocalS.BLL.Biz
                     break;
                 case E_OrderPayWay.Zfb:
                     str = "支付宝";
-                    break;
-                default:
-                    str = "未知";
-                    break;
-            }
-
-            return str;
-        }
-        public string GetTradeTypeName(E_RptOrderTradeType tradeTyp)
-        {
-            string str = "";
-            switch (tradeTyp)
-            {
-                case E_RptOrderTradeType.Pay:
-                    str = "交易";
-                    break;
-                case E_RptOrderTradeType.Refund:
-                    str = "退款";
                     break;
                 default:
                     str = "未知";

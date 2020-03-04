@@ -89,11 +89,11 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
-        public StatusModel GetSonStatus(E_OrderPickupStatus orderStatus)
+        public StatusModel GetPickupStatus(E_OrderPickupStatus pickupStatus)
         {
             var status = new StatusModel();
 
-            switch (orderStatus)
+            switch (pickupStatus)
             {
                 case E_OrderPickupStatus.Submitted:
                     status.Value = 1000;
@@ -143,14 +143,6 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
-        public int GetPickupStatus(E_OrderPickupStatus orderStatus)
-        {
-            if (orderStatus == E_OrderPickupStatus.Taked)
-                return 1;
-
-            return 0;
-        }
-
         public string GetSourceName(E_OrderSource orderSource)
         {
             string name = "";
@@ -173,8 +165,6 @@ namespace LocalS.Service.Api.Merch
         {
             if (string.IsNullOrEmpty(imgId))
                 return null;
-
-
             return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
         }
 
@@ -265,7 +255,7 @@ namespace LocalS.Service.Api.Merch
                                     ExPickupIsHandle = prderSubChildUnique.ExPickupIsHandle,
                                     Name = prderSubChildUnique.PrdProductSkuName,
                                     Quantity = prderSubChildUnique.Quantity,
-                                    Status = GetSonStatus(prderSubChildUnique.PickupStatus),
+                                    Status = GetPickupStatus(prderSubChildUnique.PickupStatus),
                                     PickupLogs = pickupLogs
                                 });
                             }
@@ -380,7 +370,7 @@ namespace LocalS.Service.Api.Merch
                                 MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl,
                                 Name = orderSubChildUnique.PrdProductSkuName,
                                 Quantity = orderSubChildUnique.Quantity,
-                                Status = GetSonStatus(orderSubChildUnique.PickupStatus),
+                                Status = GetPickupStatus(orderSubChildUnique.PickupStatus),
                                 PickupLogs = pickupLogs,
                                 PickupStatus = 0
                             });
@@ -396,7 +386,6 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
-
 
         public CustomJsonResult HandleExOrder(string operater, string merchId, RopOrderHandleExOrder rop)
         {
@@ -519,154 +508,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult PickupExceptionHandle(string operater, string merchId, RopOrderPickupExceptionHandle rop)
-        {
-            var result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var orderSubChildUnique = CurrentDb.OrderSubChildUnique.Where(m => m.Id == rop.UniqueId).FirstOrDefault();
-
-                if (orderSubChildUnique == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该取货物品");
-                }
-
-                if (orderSubChildUnique.ExPickupIsHandle)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经标识过");
-                }
-
-                if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
-                }
-
-                E_OrderPickupStatus old_Status = orderSubChildUnique.PickupStatus;
-
-
-                var orderPickupLog = new OrderPickupLog();
-
-                switch (rop.HandleMethod)
-                {
-                    case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignTaked:
-                        orderSubChildUnique.ExPickupIsHandle = true;
-                        orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
-                        orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
-
-                        if (old_Status == E_OrderPickupStatus.Exception)
-                        {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
-
-                            orderPickupLog.Id = GuidUtil.New();
-                            orderPickupLog.OrderId = orderSubChildUnique.OrderId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
-                            orderPickupLog.UniqueId = rop.UniqueId;
-                            orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-                            orderPickupLog.SlotId = orderSubChildUnique.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.Taked;
-                            orderPickupLog.IsPickupComplete = true;
-                            orderPickupLog.ActionRemark = "人为标识已取货";
-                            orderPickupLog.Remark = rop.Remark;
-                            orderPickupLog.CreateTime = DateTime.Now;
-                            orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-                        }
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "标识成功");
-                        break;
-                    case RopOrderPickupExceptionHandle.ExceptionHandleMethod.SignUnTaked:
-                        orderSubChildUnique.ExPickupIsHandle = true;
-                        orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
-                        orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
-                        if (old_Status == E_OrderPickupStatus.Taked)
-                        {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
-
-                            orderPickupLog.Id = GuidUtil.New();
-                            orderPickupLog.OrderId = orderSubChildUnique.OrderId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
-                            orderPickupLog.UniqueId = rop.UniqueId;
-                            orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-                            orderPickupLog.SlotId = orderSubChildUnique.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.Taked;
-                            orderPickupLog.IsPickupComplete = false;
-                            orderPickupLog.ActionRemark = "人为标识未取货";
-                            orderPickupLog.Remark = rop.Remark;
-                            orderPickupLog.CreateTime = DateTime.Now;
-                            orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-                        }
-                        else if (old_Status == E_OrderPickupStatus.Exception)
-                        {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
-
-                            orderPickupLog.Id = GuidUtil.New();
-                            orderPickupLog.OrderId = orderSubChildUnique.OrderId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
-                            orderPickupLog.UniqueId = rop.UniqueId;
-                            orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-                            orderPickupLog.SlotId = orderSubChildUnique.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.Taked;
-                            orderPickupLog.IsPickupComplete = false;
-                            orderPickupLog.ActionRemark = "人为标识未取货";
-                            orderPickupLog.Remark = rop.Remark;
-                            orderPickupLog.CreateTime = DateTime.Now;
-                            orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-                        }
-
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "标识成功");
-                        break;
-
-                }
-
-                CurrentDb.SaveChanges();
-
-                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderSubChildUnique.OrderId).ToList();
-                LogUtil.Info("orderDetailsChildSons：" + orderSubChildUniques.Count);
-
-                var orderDetailsChildSonsCompeleteCount = orderSubChildUniques.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked).Count();
-
-                LogUtil.Info("orderDetailsChildSonsCompeleteCount：" + orderDetailsChildSonsCompeleteCount);
-
-                //判断全部订单都是已完成
-                if (orderDetailsChildSonsCompeleteCount == orderSubChildUniques.Count)
-                {
-                    LogUtil.Info("orderDetailsChildSonsCompeleteCount：相等");
-
-                    var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
-                    if (order != null)
-                    {
-                        order.ExIsHandle = true;
-                        order.ExHandleTime = DateTime.Now;
-                        order.CompletedTime = DateTime.Now;
-                        order.Status = E_OrderStatus.Completed;
-                        order.CompletedTime = DateTime.Now;
-                        CurrentDb.SaveChanges();
-
-                        LogUtil.Info("orderDetailsChildSonsCompeleteCount：完成");
-                    }
-                    else
-                    {
-                        LogUtil.Info("orderDetailsChildSonsCompeleteCount：订单未空");
-                    }
-                }
-                else
-                {
-                    LogUtil.Info("orderDetailsChildSonsCompeleteCount：不相等");
-                }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-            }
-
-
-            return result;
-        }
+     
     }
 }

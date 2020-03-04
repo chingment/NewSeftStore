@@ -30,6 +30,7 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+
         [HttpPost]
         public OwnApiHttpResponse BuildPayParams([FromBody]RopOrderBuildPayParams rop)
         {

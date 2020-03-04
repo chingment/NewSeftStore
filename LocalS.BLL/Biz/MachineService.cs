@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Mq;
+using LocalS.BLL.Task;
 using LocalS.Entity;
 using Lumos;
 using MyPushSdk;
@@ -205,7 +206,7 @@ namespace LocalS.BLL.Biz
                 machine.LastRequestTime = DateTime.Now;
 
                 string eventName = "";
-                string eventRemark = "";
+                StringBuilder eventRemark = new StringBuilder("");
 
                 switch (model.Type)
                 {
@@ -218,11 +219,11 @@ namespace LocalS.BLL.Biz
                             switch (heartbeatBagModel.Status)
                             {
                                 case "running":
-                                    eventRemark = "正常";
+                                    eventRemark.Append("正常");
                                     machine.RunStatus = E_MachineRunStatus.Running;
                                     break;
                                 case "setting":
-                                    eventRemark = "维护中";
+                                    eventRemark.Append("维护中");
                                     machine.RunStatus = E_MachineRunStatus.Setting;
                                     break;
                             }
@@ -236,7 +237,7 @@ namespace LocalS.BLL.Biz
                         var scanSlotsModel = model.Content.ToJsonObject<MachineEventByScanSlotsModel>();
                         if (scanSlotsModel != null)
                         {
-                            eventRemark = scanSlotsModel.Remark;
+                            eventRemark.Append(scanSlotsModel.Remark);
                         }
                         #endregion
                         break;
@@ -247,131 +248,136 @@ namespace LocalS.BLL.Biz
                         var pickupModel = model.Content.ToJsonObject<MachineEventByPickupModel>();
                         if (pickupModel != null)
                         {
+                            if (pickupModel.IsTest)
+                            {
+                                eventRemark.Append("[测试]");
+                            }
+
+                            var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, pickupModel.ProductSkuId);
+                            if (bizProduct == null)
+                            {
+                                eventRemark.Append("商品:无");
+                            }
+                            else
+                            {
+                                eventRemark.Append("商品:" + bizProduct.Name);
+                            }
+
+                            eventRemark.Append(string.Format(",货槽:{0},当前动作:{1},状态:{2}", pickupModel.SlotId, pickupModel.ActionName, pickupModel.ActionStatusName));
+
+                            if (pickupModel.IsPickupComplete)
+                            {
+                                eventRemark.Append(string.Format(",取货完成,用时:{0}", pickupModel.PickupUseTime));
+                            }
+
                             if (!pickupModel.IsTest)
                             {
-                                var orderSubChildUnique = CurrentDb.OrderSubChildUnique.Where(m => m.Id == pickupModel.UniqueId).FirstOrDefault();
-                                if (orderSubChildUnique != null)
+                                var order = CurrentDb.Order.Where(m => m.Id == pickupModel.OrderId).FirstOrDefault();
+                                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == pickupModel.OrderId && m.SellChannelRefId == machine.Id && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
+                                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == pickupModel.OrderId).ToList();
+
+                                //是否触发过取货
+                                if (orderSub.PickupTrgTime == null)
                                 {
-                                    orderSubChildUnique.LastPickupActionId = pickupModel.ActionId;
-                                    orderSubChildUnique.LastPickupActionStatusCode = pickupModel.ActionStatusCode;
-                                    orderSubChildUnique.PickupStatus = pickupModel.Status;
-                                    CurrentDb.SaveChanges();
+                                    orderSub.PickupIsTrg = true;
+                                    orderSub.PickupTrgTime = DateTime.Now;
 
+                                    int timoutM = orderSub.Quantity * 5;
 
-                                    //如果某次取货异常 剩下所有取货都标识为订单取货异常
-                                    var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderSubChildUnique.OrderId).ToList();
+                                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, orderSub.Id, DateTime.Now.AddMinutes(timoutM), orderSub);
+                                }
 
+                                foreach (var orderSubChildUnique in orderSubChildUniques)
+                                {
                                     if (pickupModel.Status == E_OrderPickupStatus.Exception)
                                     {
-                                        var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
-                                        if (order != null)
+                                        if (orderSubChildUnique.PayStatus == E_OrderPayStatus.PaySuccess)
                                         {
-                                            order.ExIsHappen = true;
-                                            order.ExHappenTime = DateTime.Now;
-                                            CurrentDb.SaveChanges();
-                                        }
+                                            if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked
+                                                && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception
+                                                && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                                                && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
 
-                                        foreach (var item in orderSubChildUniques)
+                                                orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Exception;
+                                            orderSubChildUnique.ExPickupIsHappen = true;
+                                            orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (orderSubChildUnique.Id == pickupModel.UniqueId)
                                         {
-                                            if (item.PickupStatus != E_OrderPickupStatus.Taked && item.PickupStatus != E_OrderPickupStatus.Canceled)
+                                            orderSubChildUnique.LastPickupActionId = pickupModel.ActionId;
+                                            orderSubChildUnique.LastPickupActionStatusCode = pickupModel.ActionStatusCode;
+                                            orderSubChildUnique.PickupStatus = pickupModel.Status;
+
+                                            if (pickupModel.Status == E_OrderPickupStatus.Taked)
                                             {
-                                                item.PickupStatus = E_OrderPickupStatus.Exception;
-                                                item.ExPickupIsHappen = true;
-                                                item.ExPickupHappenTime = DateTime.Now;
-                                                CurrentDb.SaveChanges();
+                                                BizFactory.ProductSku.OperateStockQuantity(model.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                                             }
                                         }
                                     }
+                                }
 
-
+                                if (pickupModel.Status == E_OrderPickupStatus.Exception)
+                                {
+                                    order.ExIsHappen = true;
+                                    order.ExHappenTime = DateTime.Now;
+                                }
+                                else
+                                {
                                     var orderDetailsChildSonsCompeleteCount = orderSubChildUniques.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
                                     //判断全部订单都是已完成
                                     if (orderDetailsChildSonsCompeleteCount == orderSubChildUniques.Count)
                                     {
-                                        var order = CurrentDb.Order.Where(m => m.Id == orderSubChildUnique.OrderId).FirstOrDefault();
-                                        if (order != null)
-                                        {
-                                            order.Status = E_OrderStatus.Completed;
-                                            order.CompletedTime = DateTime.Now;
-                                        }
-                                    }
+                                        order.Status = E_OrderStatus.Completed;
+                                        order.CompletedTime = DateTime.Now;
 
-                                    var orderPickupLog = new OrderPickupLog();
-                                    orderPickupLog.Id = GuidUtil.New();
-                                    orderPickupLog.OrderId = orderSubChildUnique.OrderId;
-                                    orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                                    orderPickupLog.SellChannelRefId = model.MachineId;
-                                    orderPickupLog.UniqueId = pickupModel.UniqueId;
-                                    orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-                                    orderPickupLog.SlotId = orderSubChildUnique.SlotId;
-                                    orderPickupLog.Status = pickupModel.Status;
-                                    orderPickupLog.ActionId = pickupModel.ActionId;
-                                    orderPickupLog.ActionName = pickupModel.ActionName;
-                                    orderPickupLog.ActionStatusCode = pickupModel.ActionStatusCode;
-                                    orderPickupLog.ActionStatusName = pickupModel.ActionStatusName;
-                                    orderPickupLog.IsPickupComplete = pickupModel.IsPickupComplete;
-                                    orderPickupLog.ImgId = pickupModel.ImgId;
-                                    if (pickupModel.IsPickupComplete)
+                                        Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
+                                    }
+                                }
+
+                                var orderPickupLog = new OrderPickupLog();
+                                orderPickupLog.Id = GuidUtil.New();
+                                orderPickupLog.OrderId = pickupModel.OrderId;
+                                orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                                orderPickupLog.SellChannelRefId = model.MachineId;
+                                orderPickupLog.UniqueId = pickupModel.UniqueId;
+                                orderPickupLog.PrdProductSkuId = pickupModel.ProductSkuId;
+                                orderPickupLog.SlotId = pickupModel.SlotId;
+                                orderPickupLog.Status = pickupModel.Status;
+                                orderPickupLog.ActionId = pickupModel.ActionId;
+                                orderPickupLog.ActionName = pickupModel.ActionName;
+                                orderPickupLog.ActionStatusCode = pickupModel.ActionStatusCode;
+                                orderPickupLog.ActionStatusName = pickupModel.ActionStatusName;
+                                orderPickupLog.IsPickupComplete = pickupModel.IsPickupComplete;
+                                orderPickupLog.ImgId = pickupModel.ImgId;
+
+                                if (pickupModel.IsPickupComplete)
+                                {
+                                    orderPickupLog.PickupUseTime = pickupModel.PickupUseTime;
+                                    orderPickupLog.ActionRemark = "取货完成";
+                                }
+                                else
+                                {
+                                    if (pickupModel.Status == E_OrderPickupStatus.SendPickupCmd)
                                     {
-                                        orderPickupLog.PickupUseTime = pickupModel.PickupUseTime;
-                                        orderPickupLog.ActionRemark = "取货完成";
-                                        BizFactory.ProductSku.OperateStockQuantity(model.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                        orderPickupLog.ActionRemark = "发送命令";
+                                    }
+                                    else if (pickupModel.Status == E_OrderPickupStatus.Exception)
+                                    {
+                                        orderPickupLog.ActionRemark = "发生异常";
                                     }
                                     else
                                     {
-                                        if (pickupModel.Status == E_OrderPickupStatus.SendPickupCmd)
-                                        {
-                                            orderPickupLog.ActionRemark = "发送命令";
-                                        }
-                                        else if (pickupModel.Status == E_OrderPickupStatus.Exception)
-                                        {
-                                            orderPickupLog.ActionRemark = "发生异常";
-                                        }
-                                        else
-                                        {
-                                            orderPickupLog.ActionRemark = pickupModel.ActionName + pickupModel.ActionStatusName;
-                                        }
+                                        orderPickupLog.ActionRemark = pickupModel.ActionName + pickupModel.ActionStatusName;
                                     }
-
-                                    orderPickupLog.Remark = pickupModel.Remark;
-                                    orderPickupLog.CreateTime = DateTime.Now;
-                                    orderPickupLog.Creator = model.MachineId;
-                                    CurrentDb.OrderPickupLog.Add(orderPickupLog);
-                                }
-                            }
-
-                            if (string.IsNullOrEmpty(pickupModel.ProductSkuId))
-                            {
-                                if (pickupModel.IsPickupComplete)
-                                {
-                                    eventRemark = string.Format("商品:无,货槽:{0},当前动作({1}):{2},状态({3}):{4},取货完成,用时:{5}", pickupModel.SlotId, pickupModel.ActionId, pickupModel.ActionName, pickupModel.ActionStatusCode, pickupModel.ActionStatusName, pickupModel.PickupUseTime);
-                                }
-                                else
-                                {
-                                    eventRemark = string.Format("商品:无,货槽:{0},当前动作({1}):{2},状态({3}):{4}", pickupModel.SlotId, pickupModel.ActionId, pickupModel.ActionName, pickupModel.ActionStatusCode, pickupModel.ActionStatusName);
-                                }
-                            }
-                            else
-                            {
-
-                                string productSkuId = "";
-                                string productSkuName = "";
-
-                                var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, pickupModel.ProductSkuId);
-                                if (bizProduct != null)
-                                {
-                                    productSkuId = bizProduct.Id;
-                                    productSkuName = bizProduct.Name;
                                 }
 
-                                if (pickupModel.IsPickupComplete)
-                                {
-                                    eventRemark = string.Format("商品({0}):{1},货槽:{1},当前动作({3}):{4},状态({5}):{6},取货完成,用时:{7}", productSkuId, productSkuName, pickupModel.SlotId, pickupModel.ActionId, pickupModel.ActionName, pickupModel.ActionStatusCode, pickupModel.ActionStatusName, pickupModel.PickupUseTime);
-                                }
-                                else
-                                {
-                                    eventRemark = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4},状态({5}):{6}", productSkuId, productSkuName, pickupModel.SlotId, pickupModel.ActionId, pickupModel.ActionName, pickupModel.ActionStatusCode, pickupModel.ActionStatusName);
-                                }
+                                orderPickupLog.Remark = pickupModel.Remark;
+                                orderPickupLog.CreateTime = DateTime.Now;
+                                orderPickupLog.Creator = model.MachineId;
+                                CurrentDb.OrderPickupLog.Add(orderPickupLog);
                             }
                         }
 
@@ -388,11 +394,10 @@ namespace LocalS.BLL.Biz
                 machineOperateLog.OperateUserId = model.Operater;
                 machineOperateLog.EventCode = (int)model.Type;
                 machineOperateLog.EventName = eventName;
-                machineOperateLog.Remark = eventRemark;
+                machineOperateLog.Remark = eventRemark.ToString();
                 machineOperateLog.Creator = model.Operater;
                 machineOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MachineOperateLog.Add(machineOperateLog);
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
             }

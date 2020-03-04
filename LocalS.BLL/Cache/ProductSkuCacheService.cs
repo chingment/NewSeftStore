@@ -87,6 +87,9 @@ namespace LocalS.BLL
 
         public ProductSkuInfoModel GetInfo(string merchId, string productSkuId)
         {
+            if (string.IsNullOrEmpty(productSkuId))
+                return null;
+
             var prdProductSkuModel = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.P, merchId), productSkuId);
 
             //如商品信息从缓存取不到，读取数据库信息加载

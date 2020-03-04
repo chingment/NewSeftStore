@@ -31,12 +31,5 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Order.HandleExOrder(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
-
-        [HttpPost]
-        public OwnApiHttpResponse PickupExceptionHandle([FromBody]RopOrderPickupExceptionHandle rop)
-        {
-            IResult result = MerchServiceFactory.Order.PickupExceptionHandle(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
     }
 }

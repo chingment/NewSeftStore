@@ -14,7 +14,8 @@ namespace LocalS.BLL.Task
     public enum Task4TimType
     {
         Unknow = 0,
-        Order2CheckPay = 1
+        Order2CheckPay = 1,
+        Order2CheckPickupTimeout = 2
     }
 
     public class Task4Tim2GlobalProvider : BaseDbContext, IJob
@@ -65,12 +66,12 @@ namespace LocalS.BLL.Task
                 LogUtil.Info(string.Format("共有{0}条记录需要检查状态", lists.Count));
                 if (lists.Count > 0)
                 {
-                    LogUtil.Info(string.Format("开始执行订单查询,时间：{0}", DateTime.Now));
                     foreach (var m in lists)
                     {
                         switch (m.Type)
                         {
                             case Task4TimType.Order2CheckPay:
+                                LogUtil.Info(string.Format("开始执行订单查询,时间：{0}", DateTime.Now));
                                 #region 检查支付状态
                                 var order = m.Data.ToJsonObject<Order>();
                                 LogUtil.Info(string.Format("查询订单号：{0}", order.Sn));
@@ -136,12 +137,21 @@ namespace LocalS.BLL.Task
                                     LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Sn));
                                     BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
                                 }
-                                #endregion 
+                                #endregion
+                                LogUtil.Info(string.Format("结束执行订单查询,时间:{0}", DateTime.Now));
                                 break;
+                            case Task4TimType.Order2CheckPickupTimeout:
+                                #region 检查订单是否取货超时
+                                var orderSub = m.Data.ToJsonObject<OrderSub>();
+
+
+                                Order2CheckPickupTimeout();
+
+                                #endregion
+                                break;
+
                         }
                     }
-
-                    LogUtil.Info(string.Format("结束执行订单查询,时间:{0}", DateTime.Now));
                 }
             }
             catch (Exception ex)
@@ -157,6 +167,17 @@ namespace LocalS.BLL.Task
             public Task4TimType Type { get; set; }
             public DateTime ExpireTime { get; set; }
             public object Data { get; set; }
+        }
+
+
+        private void Order2CheckPay(Order order)
+        {
+
+        }
+
+        private void Order2CheckPickupTimeout()
+        {
+
         }
     }
 }
