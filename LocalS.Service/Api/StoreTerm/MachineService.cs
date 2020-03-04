@@ -90,6 +90,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
             ret.Machine.PayOptions = machineInfo.PayOptions;
             ret.Machine.IsOpenChkCamera = machineInfo.IsOpenChkCamera;
+            ret.Machine.MaxBuyNumber = 10;
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);

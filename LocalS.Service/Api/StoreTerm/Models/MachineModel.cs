@@ -29,5 +29,7 @@ namespace LocalS.Service.Api.StoreTerm
         public List<PayOption> PayOptions { get; set; }
         public bool IsOpenChkCamera { get; set; }
 
+        public int MaxBuyNumber { get; set; }
+
     }
 }
