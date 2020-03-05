@@ -4,10 +4,10 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderSn" placeholder="订单号" va style="width: 100%" class="filter-item" />
+          <el-input v-model="listQuery.orderSn" clearable placeholder="订单号" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col v-if="isShowClientUserNameInput" :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.clientUserName" placeholder="下单用户" va style="width: 100%" class="filter-item" />
+          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">

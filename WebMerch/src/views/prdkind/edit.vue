@@ -5,7 +5,7 @@
         {{ form.pName }}
       </el-form-item>
       <el-form-item label="名称" prop="name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />

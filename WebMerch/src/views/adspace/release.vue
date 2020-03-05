@@ -5,7 +5,7 @@
         {{ temp.adSpaceName }}
       </el-form-item>
       <el-form-item label="标题" prop="title">
-        <el-input v-model="form.title" />
+        <el-input v-model="form.title" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />

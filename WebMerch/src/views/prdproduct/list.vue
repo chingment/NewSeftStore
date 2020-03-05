@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.key" style="width: 100%" placeholder="商品名称/编码/条形码/首拼音" va class="filter-item" />
+          <el-input v-model="listQuery.key" clearable style="width: 100%" placeholder="商品名称/编码/条形码/首拼音" va class="filter-item" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

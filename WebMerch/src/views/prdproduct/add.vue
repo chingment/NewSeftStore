@@ -2,13 +2,13 @@
   <div id="productsku_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="编码" prop="singleSkuCumCode">
-        <el-input v-model="form.singleSkuCumCode" />
+        <el-input v-model="form.singleSkuCumCode" clearable />
       </el-form-item>
       <el-form-item label="条形码" prop="singleSkuBarCode">
-        <el-input v-model="form.singleSkuBarCode" />
+        <el-input v-model="form.singleSkuBarCode" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
@@ -55,7 +55,7 @@
 
       </el-form-item>
       <el-form-item label="规格" prop="singleSkuSpecDes">
-        <el-input v-model="form.singleSkuSpecDes" />
+        <el-input v-model="form.singleSkuSpecDes" clearable />
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
