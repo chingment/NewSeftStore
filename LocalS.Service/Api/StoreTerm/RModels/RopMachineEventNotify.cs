@@ -14,5 +14,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string MachineId { get; set; }
         public object Content { get; set; }
         public E_MachineEventType Type { get; set; }
+        public double Lat { get; set; }
+        public double Lng { get; set; }
     }
 }

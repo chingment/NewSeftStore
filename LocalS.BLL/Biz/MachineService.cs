@@ -187,9 +187,9 @@ namespace LocalS.BLL.Biz
         }
 
 
-        public CustomJsonResult EventNotify(string operater, string appId, string machineId, E_MachineEventType type, object content)
+        public CustomJsonResult EventNotify(string operater, string appId, string machineId, double lat, double lng, E_MachineEventType type, object content)
         {
-            MqFactory.Global.PushMachineEventNotify(operater, appId, machineId, type, content);
+            MqFactory.Global.PushMachineEventNotify(operater, appId, machineId, lat, lng, type, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
@@ -206,7 +206,15 @@ namespace LocalS.BLL.Biz
                 if (machine == null)
                     return;
 
+                if (model.Lat > 0 && model.Lng > 0)
+                {
+
+                    machine.Lat = (float)model.Lat;
+                    machine.Lng = (float)model.Lng;
+                }
+
                 machine.LastRequestTime = DateTime.Now;
+
 
                 string eventName = "";
                 StringBuilder eventRemark = new StringBuilder("");
