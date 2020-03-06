@@ -70,6 +70,7 @@
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\Models\BannerModel.cs" />
+    <Compile Include="Biz\Models\CabinetInfoModel.cs" />
     <Compile Include="Biz\Models\MachineEventBaseModel.cs" />
     <Compile Include="Biz\Models\MachineEventByHeartbeatBagModel.cs" />
     <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />

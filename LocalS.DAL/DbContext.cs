@@ -43,6 +43,7 @@ namespace LocalS.DAL
         public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Machine> Machine { get; set; }
+        public IDbSet<MachineCabinet> MachineCabinet { get; set; }
         public IDbSet<MachineOperateLog> MachineOperateLog { get; set; }
         public IDbSet<MachineBindLog> MachineBindLog { get; set; }
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }

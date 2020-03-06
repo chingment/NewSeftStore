@@ -51,6 +51,18 @@ namespace LocalS.BLL.Biz
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
             model.ExIsHas = machine.ExIsHas;
 
+            var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).ToList();
+
+            foreach (var machineCabinet in machineCabinets)
+            {
+                var cabinet = new CabinetInfoModel();
+                cabinet.Id = machineCabinet.CabinetId;
+                cabinet.Name = machineCabinet.CabinetName;
+                cabinet.RowColLayout = GetLayout(machineCabinet.RowColLayout);
+                cabinet.PendantRows = GetPendantRows(machineCabinet.PendantRows);
+                model.Cabinets.Add(cabinet);
+            }
+
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 
             if (merch != null)

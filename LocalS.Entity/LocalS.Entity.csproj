@@ -58,6 +58,7 @@
     <Compile Include="Ins\InsCarPlateNoSearchHis.cs" />
     <Compile Include="Agent.cs" />
     <Compile Include="Machine.cs" />
+    <Compile Include="MachineCabinet.cs" />
     <Compile Include="MachineOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />

@@ -30,6 +30,6 @@ namespace LocalS.Service.Api.StoreTerm
         public bool IsOpenChkCamera { get; set; }
         public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
-
+        public List<CabinetInfoModel> Cabinets { get; set; }
     }
 }

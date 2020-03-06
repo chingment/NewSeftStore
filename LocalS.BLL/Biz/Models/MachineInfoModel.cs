@@ -9,6 +9,11 @@ namespace LocalS.BLL.Biz
 {
     public class MachineInfoModel
     {
+        public MachineInfoModel()
+        {
+
+        }
+
         public string Id { get; set; }
         public string DeviceId { get; set; }
         public string Name { get; set; }
@@ -25,6 +30,7 @@ namespace LocalS.BLL.Biz
         public string CabinetName_1 { get; set; }
         public int[] CabinetRowColLayout_1 { get; set; }
         public int[] CabinetPendantRows_1 { get; set; }
+
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }
@@ -36,5 +42,7 @@ namespace LocalS.BLL.Biz
         public bool IsTestMode { get; set; }
         public bool IsOpenChkCamera { get; set; }
         public bool ExIsHas { get; set; }
+
+        public List<CabinetInfoModel> Cabinets { get; set; }
     }
 }

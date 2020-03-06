@@ -88,6 +88,9 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
             ret.Machine.CabinetRowColLayout_1 = machineInfo.CabinetRowColLayout_1;
             ret.Machine.CabinetPendantRows_1 = machineInfo.CabinetPendantRows_1;
+
+            ret.Machine.Cabinets = machineInfo.Cabinets;
+
             ret.Machine.IsHiddenKind = machineInfo.IsHiddenKind;
             ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
             ret.Machine.PayOptions = machineInfo.PayOptions;
