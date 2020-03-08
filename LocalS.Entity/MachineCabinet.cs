@@ -11,9 +11,9 @@ namespace LocalS.Entity
         [MaxLength(128)]
         public string MachineId { get; set; }
         /// <summary>
-        /// 开头命令规则 
-        /// DSX01N01:代表德尚机器 X01 代表机器型号 N01 代表主柜 N02 代表副柜
-        /// ZSX01N01:代表中顺机器 X01 代表机器型号 N01 代表主柜 N02 代表副柜
+        /// 命名命令规则  用于发起取货调用方式解释
+        /// DSX01N01:DS代表德尚机器 X01 代表机器型号 N01 代表主柜 N02 代表副柜
+        /// ZSX01N01:ZS代表中顺机器 X01 代表机器型号 N01 代表主柜 N02 代表副柜
         /// </summary>
         public string CabinetId { get; set; }
         public string CabinetName { get; set; }
