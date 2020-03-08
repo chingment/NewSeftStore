@@ -45,8 +45,6 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
                 machine.IsHiddenKind = false;
                 machine.KindRowCellSize = 3;
-                machine.CabinetId_1 = 0;
-                machine.CabinetName_1 = "1#机柜";
                 machine.CreateTime = DateTime.Now;
                 machine.Creator = GuidUtil.Empty();
                 CurrentDb.Machine.Add(machine);

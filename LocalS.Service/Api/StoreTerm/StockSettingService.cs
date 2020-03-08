@@ -91,7 +91,7 @@ namespace LocalS.Service.Api.StoreTerm
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
 
-                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -106,7 +106,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -145,16 +145,23 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 
-                if (string.IsNullOrEmpty(machine.CabinetRowColLayout_1))
+                var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).FirstOrDefault();
+
+                if (cabinet == null)
                 {
-                    machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未配置机柜，请联系管理员");
+                }
+
+                if (string.IsNullOrEmpty(cabinet.RowColLayout))
+                {
+                    cabinet.RowColLayout = string.Join(",", rop.CabinetRowColLayout);
                 }
                 else
                 {
                     List<string> cabinetPendantRows = new List<string>();
-                    if (!string.IsNullOrEmpty(machine.CabinetPendantRows_1))
+                    if (!string.IsNullOrEmpty(cabinet.PendantRows))
                     {
-                        cabinetPendantRows = machine.CabinetPendantRows_1.Split(',').ToList();
+                        cabinetPendantRows = cabinet.PendantRows.Split(',').ToList();
                     }
 
                     List<string> slotIds = new List<string>();
@@ -172,7 +179,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                     var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rop.MachineId).ToList();
 
-                    var oldCabinetRowColLayout = machine.CabinetRowColLayout_1.Split(',');
+                    var oldCabinetRowColLayout = cabinet.RowColLayout.Split(',');
 
                     for (int i = 0; i < oldCabinetRowColLayout.Length; i++)
                     {
@@ -198,14 +205,14 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    machine.CabinetRowColLayout_1 = string.Join(",", rop.CabinetRowColLayout);
+                    cabinet.RowColLayout = string.Join(",", rop.CabinetRowColLayout);
 
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
                         LogUtil.Info("Remove.SlotId:" + removeSellChannelStock.SlotId);
 
-                        BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+                        BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
                     }
 
                 }
