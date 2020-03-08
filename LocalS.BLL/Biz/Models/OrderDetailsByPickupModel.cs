@@ -25,6 +25,7 @@ namespace LocalS.BLL.Biz
         public class Slot
         {
             public string UniqueId { get; set; }
+            public string CabinetId { get; set; }
             public string SlotId { get; set; }
             public E_OrderPickupStatus Status { get; set; }
             public bool IsAllowPickup { get; set; }

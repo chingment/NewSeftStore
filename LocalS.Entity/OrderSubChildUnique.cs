@@ -47,6 +47,7 @@ namespace LocalS.Entity
         public string OrderSubSn { get; set; }
         public string OrderSubChildId { get; set; }
         public string OrderSubChildSn { get; set; }
+        public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }

@@ -278,6 +278,7 @@ namespace LocalS.BLL.Biz
                                 orderSubChildUnique.OrderSubSn = orderSub.Sn;
                                 orderSubChildUnique.OrderSubChildId = orderSubChild.Id;
                                 orderSubChildUnique.OrderSubChildSn = orderSubChild.Sn;
+                                orderSubChildUnique.CabinetId = buildOrderSubChidUnique.CabinetId;
                                 orderSubChildUnique.SlotId = buildOrderSubChidUnique.SlotId;
                                 orderSubChildUnique.PrdProductSkuId = buildOrderSubChidUnique.ProductSkuId;
                                 orderSubChildUnique.PrdProductId = orderSubChild.PrdProductId;
@@ -1121,6 +1122,7 @@ namespace LocalS.BLL.Biz
                 {
                     var slot = new OrderProductSkuByPickupModel.Slot();
                     slot.UniqueId = orderSubChildUnique.Id;
+                    slot.CabinetId = orderSubChildUnique.CabinetId;
                     slot.SlotId = orderSubChildUnique.SlotId;
                     slot.Status = orderSubChildUnique.PickupStatus;
 
