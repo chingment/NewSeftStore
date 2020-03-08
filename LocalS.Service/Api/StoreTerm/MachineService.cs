@@ -179,18 +179,6 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "更新失败，找不到机器信息");
             }
 
-            switch (rop.DataType)
-            {
-                case 1:
-                    break;
-            }
-
-            //machine.Lat = rop.Lat;
-            //machine.Lng = rop.Lng;
-
-
-
-
             CurrentDb.SaveChanges();
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "更新成功");

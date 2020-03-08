@@ -89,6 +89,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SellQuantity = sellChannelStock.SellQuantity;
@@ -163,6 +164,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -198,6 +200,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                             sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                             sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                            sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                             sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                             sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                             sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -236,6 +239,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.StoreId = sellChannelStock.StoreId;
                             sellChannelStockLog2.SellChannelRefId = sellChannelStock.SellChannelRefId;
                             sellChannelStockLog2.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                            sellChannelStockLog2.CabinetId = sellChannelStock.CabinetId;
                             sellChannelStockLog2.SlotId = sellChannelStock.SlotId;
                             sellChannelStockLog2.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                             sellChannelStockLog2.SumQuantity = sellChannelStock.SumQuantity;
@@ -314,6 +318,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -355,6 +360,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -396,6 +402,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -438,6 +445,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -480,6 +488,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -522,6 +531,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -568,6 +578,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                         sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                         sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                        sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                         sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                         sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                         sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;
@@ -646,6 +657,7 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.StoreId = sellChannelStock.StoreId;
                 sellChannelStockLog.SellChannelRefId = sellChannelStock.SellChannelRefId;
                 sellChannelStockLog.SellChannelRefType = sellChannelStock.SellChannelRefType;
+                sellChannelStockLog.CabinetId = sellChannelStock.CabinetId;
                 sellChannelStockLog.SlotId = sellChannelStock.SlotId;
                 sellChannelStockLog.PrdProductSkuId = sellChannelStock.PrdProductSkuId;
                 sellChannelStockLog.SumQuantity = sellChannelStock.SumQuantity;

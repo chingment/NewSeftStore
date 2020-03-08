@@ -154,6 +154,7 @@ namespace LocalS.BLL
                 productSkuStockModel.StoreId = sellChannelStock.StoreId;
                 productSkuStockModel.RefType = sellChannelStock.SellChannelRefType;
                 productSkuStockModel.RefId = sellChannelStock.SellChannelRefId;
+                productSkuStockModel.CabinetId = sellChannelStock.CabinetId;
                 productSkuStockModel.SlotId = sellChannelStock.SlotId;
                 productSkuStockModel.SumQuantity = sellChannelStock.SumQuantity;
                 productSkuStockModel.LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;

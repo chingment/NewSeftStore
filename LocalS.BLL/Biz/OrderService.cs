@@ -375,6 +375,7 @@ namespace LocalS.BLL.Biz
                                 buildOrderSubUnique.ReceptionMode = receptionMode;
                                 buildOrderSubUnique.ProductSkuId = productSku.Id;
                                 buildOrderSubUnique.ProductId = productSku.ProductId;
+                                buildOrderSubUnique.CabinetId = item.CabinetId;
                                 buildOrderSubUnique.SlotId = item.SlotId;
                                 buildOrderSubUnique.Quantity = 1;
                                 buildOrderSubUnique.SalePrice = productSku_Stocks[0].SalePrice;
@@ -462,6 +463,7 @@ namespace LocalS.BLL.Biz
                                                     c.SellChannelRefType,
                                                     c.SellChannelRefId,
                                                     c.ProductSkuId,
+                                                    c.CabinetId,
                                                     c.SlotId,
                                                     c.Quantity,
                                                     c.SalePrice,
@@ -480,6 +482,7 @@ namespace LocalS.BLL.Biz
                         orderSubDetailUnit.SellChannelRefId = detailChildSonGroup.SellChannelRefId;
                         orderSubDetailUnit.ReceptionMode = detailChildSonGroup.ReceptionMode;
                         orderSubDetailUnit.ProductSkuId = detailChildSonGroup.ProductSkuId;
+                        orderSubDetailUnit.CabinetId = detailChildSonGroup.CabinetId;
                         orderSubDetailUnit.SlotId = detailChildSonGroup.SlotId;
                         orderSubDetailUnit.Quantity = detailChildSonGroup.Quantity;
                         orderSubDetailUnit.SalePrice = detailChildSonGroup.SalePrice;
@@ -500,6 +503,7 @@ namespace LocalS.BLL.Biz
                                                c.SellChannelRefType,
                                                c.SellChannelRefId,
                                                c.ProductSkuId,
+                                               c.CabinetId,
                                                c.SlotId
                                            }).Distinct().ToList();
 
@@ -510,6 +514,7 @@ namespace LocalS.BLL.Biz
                         slotStock.SellChannelRefType = slotStockGroup.SellChannelRefType;
                         slotStock.SellChannelRefId = slotStockGroup.SellChannelRefId;
                         slotStock.ProductSkuId = slotStockGroup.ProductSkuId;
+                        slotStock.CabinetId = slotStockGroup.CabinetId;
                         slotStock.SlotId = slotStockGroup.SlotId;
                         slotStock.Quantity = buildOrderSubUniques.Where(m => m.SellChannelRefType == slotStockGroup.SellChannelRefType && m.SellChannelRefId == slotStockGroup.SellChannelRefId && m.ProductSkuId == slotStockGroup.ProductSkuId && m.SlotId == slotStockGroup.SlotId).Sum(m => m.Quantity);
                         orderSubChild.SlotStock.Add(slotStock);
