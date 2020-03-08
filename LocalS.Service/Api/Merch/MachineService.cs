@@ -187,8 +187,13 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
+            var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == machineId && m.CabinetId == cabinetId).FirstOrDefault();
 
-            if (machine.CabinetRowColLayout_1 == null || machine.CabinetRowColLayout_1.Length == 0)
+            if (cabinet == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未配置机柜，请联系管理员");
+            }
+            if (string.IsNullOrEmpty(cabinet.RowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
             }
@@ -199,14 +204,16 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            int rowsLength = machine.CabinetRowColLayout_1.Length;
+            int[] cabinetRowColLayout = LocalS.BLL.Biz.MachineService.GetLayout(cabinet.RowColLayout);
+
+            int rowsLength = cabinetRowColLayout.Length;
 
             for (int i = rowsLength - 1; i >= 0; i--)
             {
                 SlotRowModel row = new SlotRowModel();
                 row.No = i;
 
-                int cols = machine.CabinetRowColLayout_1[i];
+                int cols = cabinetRowColLayout[i];
 
                 for (int j = 0; j < cols; j++)
                 {

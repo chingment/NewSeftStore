@@ -37,10 +37,6 @@ namespace LocalS.BLL.Biz
             model.MainImgUrl = machine.MainImgUrl;
             model.LogoImgUrl = machine.LogoImgUrl;
             model.JPushRegId = machine.JPushRegId;
-            model.CabinetId_1 = machine.CabinetId_1;
-            model.CabinetName_1 = machine.CabinetName_1;
-            model.CabinetRowColLayout_1 = GetLayout(machine.CabinetRowColLayout_1);
-            model.CabinetPendantRows_1 = GetPendantRows(machine.CabinetPendantRows_1);
             model.RunStatus = machine.RunStatus;
             model.LastRequestTime = machine.LastRequestTime;
             model.AppVersion = machine.AppVersionName;
@@ -149,7 +145,7 @@ namespace LocalS.BLL.Biz
             //PushService.SendPaySuccess(machine.JPushRegId, content);
         }
 
-        private static int[] GetLayout(string str)
+        public static int[] GetLayout(string str)
         {
             int[] layout = null;
 
@@ -181,7 +177,7 @@ namespace LocalS.BLL.Biz
             return layout;
         }
 
-        private static int[] GetPendantRows(string str)
+        public static int[] GetPendantRows(string str)
         {
 
             int[] layout = null;

@@ -37,13 +37,20 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            if (machine.CabinetRowColLayout_1 == null || machine.CabinetRowColLayout_1.Length == 0)
+            var cabinet = CurrentDb.MachineCabinet.Where(m => m.CabinetId == rup.CabinetId && m.IsUse == true).FirstOrDefault();
+
+            if (cabinet == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未配置对应的机柜，请联系管理员");
+            }
+
+            if (string.IsNullOrEmpty(cabinet.RowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未识别到行列布局，请点击扫描按钮");
             }
 
-            ret.RowColLayout = machine.CabinetRowColLayout_1;
-            ret.PendantRows = machine.CabinetPendantRows_1;
+            ret.RowColLayout = BLL.Biz.MachineService.GetLayout(cabinet.RowColLayout);
+            ret.PendantRows = BLL.Biz.MachineService.GetPendantRows(cabinet.PendantRows);
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rup.MachineId).ToList();
 

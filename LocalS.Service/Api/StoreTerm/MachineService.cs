@@ -83,14 +83,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CsrQrCode = machineInfo.CsrQrCode;
             ret.Machine.CsrPhoneNumber = machineInfo.CsrPhoneNumber;
             ret.Machine.CsrHelpTip = machineInfo.CsrHelpTip;
-
-            ret.Machine.CabinetId_1 = machineInfo.CabinetId_1;
-            ret.Machine.CabinetName_1 = machineInfo.CabinetName_1;
-            ret.Machine.CabinetRowColLayout_1 = machineInfo.CabinetRowColLayout_1;
-            ret.Machine.CabinetPendantRows_1 = machineInfo.CabinetPendantRows_1;
-
             ret.Machine.Cabinets = machineInfo.Cabinets;
-
             ret.Machine.IsHiddenKind = machineInfo.IsHiddenKind;
             ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
             ret.Machine.PayOptions = machineInfo.PayOptions;
