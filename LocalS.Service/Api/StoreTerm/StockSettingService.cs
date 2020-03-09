@@ -37,7 +37,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            var cabinet = CurrentDb.MachineCabinet.Where(m => m.CabinetId == rup.CabinetId && m.IsUse == true).FirstOrDefault();
+            var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rup.MachineId && m.CabinetId == rup.CabinetId && m.IsUse == true).FirstOrDefault();
 
             if (cabinet == null)
             {
@@ -52,7 +52,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.RowColLayout = BLL.Biz.MachineService.GetLayout(cabinet.RowColLayout);
             ret.PendantRows = BLL.Biz.MachineService.GetPendantRows(cabinet.PendantRows);
 
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rup.MachineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)
             {

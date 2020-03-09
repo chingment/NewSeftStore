@@ -89,20 +89,22 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
                 var machine = BizFactory.Machine.GetOne(item.MachineId);
-
-                olist.Add(new
+                if (machine != null)
                 {
-                    Id = item.MachineId,
-                    Name = item.Name,
-                    MainImgUrl = machine.MainImgUrl,
-                    AppVersion = machine.AppVersion,
-                    CtrlSdkVersion = machine.CtrlSdkVersion,
-                    Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
-                    LastRequestTime = machine.LastRequestTime,
-                    CreateTime = item.CreateTime,
-                    StoreId = machine.StoreId,
-                    StoreName = string.IsNullOrEmpty(machine.StoreId) ? "未绑定店铺" : machine.StoreName
-                });
+                    olist.Add(new
+                    {
+                        Id = item.MachineId,
+                        Name = item.Name,
+                        MainImgUrl = machine.MainImgUrl,
+                        AppVersion = machine.AppVersion,
+                        CtrlSdkVersion = machine.CtrlSdkVersion,
+                        Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
+                        LastRequestTime = machine.LastRequestTime,
+                        CreateTime = item.CreateTime,
+                        StoreId = machine.StoreId,
+                        StoreName = string.IsNullOrEmpty(machine.StoreId) ? "未绑定店铺" : machine.StoreName
+                    });
+                }
             }
 
 
@@ -200,7 +202,7 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.CabinetId == cabinetId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId).ToList();
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
@@ -217,7 +219,7 @@ namespace LocalS.Service.Api.Merch
 
                 for (int j = 0; j < cols; j++)
                 {
-                    var slotId = string.Format("n{0}r{1}c{2}", cabinetId, i, j);
+                    var slotId = string.Format("r{0}c{1}", i, j);
 
                     var col = new SlotColModel();
                     col.No = j;

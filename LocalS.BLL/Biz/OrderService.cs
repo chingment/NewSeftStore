@@ -302,7 +302,7 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in buildOrderSubChid.SlotStock)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserveSuccess, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserveSuccess, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.CabinetId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
                             }
                         }
                     }
@@ -714,12 +714,12 @@ namespace LocalS.BLL.Biz
 
                     var childSons = (
                         from q in oderSubChildUniques
-                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
-                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
+                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.CabinetId, q.SlotId, q.SellChannelRefId } into b
+                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.CabinetId, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
                 }
 
@@ -805,13 +805,13 @@ namespace LocalS.BLL.Biz
 
                     var childSons = (
                         from q in orderSubChildUniques
-                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.SlotId, q.SellChannelRefId } into b
-                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
+                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.CabinetId, q.SlotId, q.SellChannelRefId } into b
+                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.CabinetId, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
 
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle, order.MerchId, order.StoreId, item.SellChannelRefId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
 
                     CurrentDb.SaveChanges();

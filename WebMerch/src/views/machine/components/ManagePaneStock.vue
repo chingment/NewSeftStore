@@ -10,6 +10,16 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+          <el-select v-model="listQuery.cabinetId" clearable placeholder="选择机柜" style="width: 100%">
+            <el-option
+              v-for="item in options_cabinets"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.productSkuName" style="width: 100%" placeholder="商品名称" class="filter-item" />
         </el-col>
@@ -20,7 +30,7 @@
         </el-col>
       </el-row>
     </div>
-   <el-button  style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" ></el-button>
+    <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
     <!-- <vueSeamlessScroll :data="listData3" :class-option="classOption3" class="warp2 demo4">
       <span
         slot="left-switch"
@@ -183,6 +193,10 @@ export default {
         slotId: '',
         version: 0
       },
+      options_cabinets: [{
+        value: 'dsx01n01',
+        label: '主柜'
+      }],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -207,7 +221,6 @@ export default {
       var id = getUrlParam('id')
       this.loading = true
       this.listQuery.machineId = id
-      this.listQuery.cabinetId = '0'
       initManageStock({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -238,28 +251,29 @@ export default {
       })
     },
     handleFilter() {
-      var search = this.listQuery.productSkuName
-      var l_listData = this.listData
-      for (var i = 0; i < l_listData.length; i++) {
-        for (var j = 0; j < l_listData[i].cols.length; j++) {
-          if (search !== undefined && search != null && search.length > 0) {
-            if (l_listData[i].cols[j].name == null) {
-              l_listData[i].cols[j].isShow = false
-            } else {
-              if (l_listData[i].cols[j].name.search(search) !== -1) {
-                console.log(l_listData[i].cols[j].name)
-                l_listData[i].cols[j].isShow = true
-              } else {
-                l_listData[i].cols[j].isShow = false
-              }
-            }
-          } else {
-            l_listData[i].cols[j].isShow = true
-          }
-        }
-      }
-      this.listData = []
-      this.listData = l_listData
+      this.getListData(this.listQuery)
+      // var search = this.listQuery.productSkuName
+      // var l_listData = this.listData
+      // for (var i = 0; i < l_listData.length; i++) {
+      //   for (var j = 0; j < l_listData[i].cols.length; j++) {
+      //     if (search !== undefined && search != null && search.length > 0) {
+      //       if (l_listData[i].cols[j].name == null) {
+      //         l_listData[i].cols[j].isShow = false
+      //       } else {
+      //         if (l_listData[i].cols[j].name.search(search) !== -1) {
+      //           console.log(l_listData[i].cols[j].name)
+      //           l_listData[i].cols[j].isShow = true
+      //         } else {
+      //           l_listData[i].cols[j].isShow = false
+      //         }
+      //       }
+      //     } else {
+      //       l_listData[i].cols[j].isShow = true
+      //     }
+      //   }
+      // }
+      // this.listData = []
+      // this.listData = l_listData
     },
     dialogEditOpen(productSku) {
       this.dialogEditIsVisible = true

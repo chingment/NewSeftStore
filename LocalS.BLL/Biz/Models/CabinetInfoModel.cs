@@ -10,7 +10,7 @@ namespace LocalS.BLL.Biz
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public int[] RowColLayout { get; set; }
+        public object RowColLayout { get; set; }
         public int[] PendantRows { get; set; }
     }
 }

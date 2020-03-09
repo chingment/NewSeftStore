@@ -10,6 +10,11 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class MachineModel
     {
+        public MachineModel()
+        {
+            this.Cabinets = new Dictionary<string, CabinetInfoModel>();
+        }
+
         public string Id { get; set; }
         public string Name { get; set; }
 
@@ -20,16 +25,12 @@ namespace LocalS.Service.Api.StoreTerm
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
         public string CsrHelpTip { get; set; }
-        public int CabinetId_1 { get; set; }
-        public string CabinetName_1 { get; set; }
-        public int[] CabinetRowColLayout_1 { get; set; }
-        public int[] CabinetPendantRows_1 { get; set; }
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
         public List<PayOption> PayOptions { get; set; }
         public bool IsOpenChkCamera { get; set; }
         public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
-        public List<CabinetInfoModel> Cabinets { get; set; }
+        public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
     }
 }

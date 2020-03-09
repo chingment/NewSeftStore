@@ -56,7 +56,7 @@ namespace LocalS.BLL.Biz
                 cabinet.Name = machineCabinet.CabinetName;
                 cabinet.RowColLayout = GetLayout(machineCabinet.RowColLayout);
                 cabinet.PendantRows = GetPendantRows(machineCabinet.PendantRows);
-                model.Cabinets.Add(cabinet);
+                model.Cabinets.Add(cabinet.Id, cabinet);
             }
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
@@ -333,7 +333,7 @@ namespace LocalS.BLL.Biz
 
                                             if (pickupModel.Status == E_OrderPickupStatus.Taked)
                                             {
-                                                BizFactory.ProductSku.OperateStockQuantity(model.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                                BizFactory.ProductSku.OperateStockQuantity(model.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                                             }
                                         }
                                     }

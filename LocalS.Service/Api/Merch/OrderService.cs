@@ -448,7 +448,7 @@ namespace LocalS.Service.Api.Merch
                         orderSubChildUnit.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
                         orderSubChildUnit.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
 
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.CabinetId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = GuidUtil.New();
@@ -473,7 +473,7 @@ namespace LocalS.Service.Api.Merch
                         orderSubChildUnit.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
                         orderSubChildUnit.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
 
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.CabinetId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
 
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = GuidUtil.New();
@@ -509,6 +509,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-     
+
     }
 }

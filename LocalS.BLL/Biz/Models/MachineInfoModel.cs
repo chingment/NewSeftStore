@@ -11,7 +11,7 @@ namespace LocalS.BLL.Biz
     {
         public MachineInfoModel()
         {
-
+            this.Cabinets = new Dictionary<string, CabinetInfoModel>();
         }
 
         public string Id { get; set; }
@@ -43,6 +43,6 @@ namespace LocalS.BLL.Biz
         public bool IsOpenChkCamera { get; set; }
         public bool ExIsHas { get; set; }
 
-        public List<CabinetInfoModel> Cabinets { get; set; }
+        public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
     }
 }
