@@ -200,6 +200,7 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
             }
 
+
             List<object> olist = new List<object>();
 
             var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.CabinetId == cabinetId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId).ToList();
