@@ -9,10 +9,7 @@ namespace LocalS.Service.Api.StoreTerm
     public class RopStockSettingSaveCabinetRowColLayout
     {
         public string MachineId { get; set; }
-
         public string CabinetId { get; set; }
-        public int[] CabinetRowColLayout { get; set; }
-
-
+        public string CabinetRowColLayout { get; set; }
     }
 }

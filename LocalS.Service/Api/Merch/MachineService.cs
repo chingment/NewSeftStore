@@ -206,7 +206,7 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            int[] cabinetRowColLayout = LocalS.BLL.Biz.MachineService.GetLayout(cabinet.RowColLayout);
+            int[] cabinetRowColLayout = LocalS.BLL.Biz.MachineService.GetLayout("");
 
             int rowsLength = cabinetRowColLayout.Length;
 

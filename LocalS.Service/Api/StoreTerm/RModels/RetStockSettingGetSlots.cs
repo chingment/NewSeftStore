@@ -14,9 +14,7 @@ namespace LocalS.Service.Api.StoreTerm
             this.Slots = new Dictionary<string, SlotModel>();
         }
 
-        public int[] RowColLayout { get; set; }
-
-        public int[] PendantRows { get; set; }
+        public string RowColLayout { get; set; }
 
         public Dictionary<string, SlotModel> Slots { get; set; }
     }

@@ -54,8 +54,7 @@ namespace LocalS.BLL.Biz
                 var cabinet = new CabinetInfoModel();
                 cabinet.Id = machineCabinet.CabinetId;
                 cabinet.Name = machineCabinet.CabinetName;
-                cabinet.RowColLayout = GetLayout(machineCabinet.RowColLayout);
-                cabinet.PendantRows = GetPendantRows(machineCabinet.PendantRows);
+                cabinet.RowColLayout = machineCabinet.RowColLayout;
                 model.Cabinets.Add(cabinet.Id, cabinet);
             }
 

@@ -49,8 +49,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未识别到行列布局，请点击扫描按钮");
             }
 
-            ret.RowColLayout = BLL.Biz.MachineService.GetLayout(cabinet.RowColLayout);
-            ret.PendantRows = BLL.Biz.MachineService.GetPendantRows(cabinet.PendantRows);
+            ret.RowColLayout = cabinet.RowColLayout;
 
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
 
@@ -90,7 +89,6 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-
                 var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
@@ -136,58 +134,87 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
-            if (rop.CabinetRowColLayout == null || rop.CabinetRowColLayout.Length == 0)
+            if (string.IsNullOrEmpty(rop.CabinetRowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道结果为空，上传失败");
             }
 
+            switch (rop.CabinetId)
+            {
+                case "dsx01n01":
+                    result = SaveCabinetRowColLayoutByDS(operater, rop);
+                    break;
+                default:
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释柜子布局失败");
+                    break;
+            }
+
+            if (result.Result == ResultType.Success)
+            {
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果成功");
+            }
+            else
+            {
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果失败");
+            }
+
+            return result;
+        }
+
+        private CustomJsonResult SaveCabinetRowColLayoutByDS(string operater, RopStockSettingSaveCabinetRowColLayout rop)
+        {
+            var result = new CustomJsonResult();
+
             using (TransactionScope ts = new TransactionScope())
             {
+                CabinetRowColLayoutByDSModel newRowColLayout = rop.CabinetRowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                if (newRowColLayout == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，解释新布局格式错误");
+                }
+
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-
                 var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).FirstOrDefault();
-
                 if (cabinet == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未配置机柜，请联系管理员");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，机器未配置机柜，请联系管理员");
                 }
 
-                if (string.IsNullOrEmpty(cabinet.RowColLayout))
+                CabinetRowColLayoutByDSModel oldRowColLayout = null;
+                if (!string.IsNullOrEmpty(cabinet.RowColLayout))
                 {
-                    cabinet.RowColLayout = string.Join(",", rop.CabinetRowColLayout);
-                }
-                else
-                {
-                    List<string> cabinetPendantRows = new List<string>();
-                    if (!string.IsNullOrEmpty(cabinet.PendantRows))
+                    oldRowColLayout = cabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                    if (oldRowColLayout == null)
                     {
-                        cabinetPendantRows = cabinet.PendantRows.Split(',').ToList();
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，解释旧布局格式错误");
                     }
+                }
 
+                newRowColLayout.PendantRows = cabinet.PendantRows.ToJsonObject<List<int>>();//将固定的挂件行赋值给新的布局
+
+                //旧布局代表有数据需要检测
+                if (oldRowColLayout.Rows != null)
+                {
                     List<string> slotIds = new List<string>();
-                    for (int i = 0; i < rop.CabinetRowColLayout.Length; i++)
+                    for (int i = 0; i < newRowColLayout.Rows.Count; i++)
                     {
-                        int colLength = rop.CabinetRowColLayout[i];
-
+                        int colLength = newRowColLayout.Rows[i];
                         for (var j = 0; j < colLength; j++)
                         {
-                            string slotId = string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j);
-                            LogUtil.Info("All.slotId:" + slotId);
+                            string slotId = string.Format("r{0}c{1}", i, j);
                             slotIds.Add(slotId);
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rop.MachineId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
 
-                    var oldCabinetRowColLayout = cabinet.RowColLayout.Split(',');
-
-                    for (int i = 0; i < oldCabinetRowColLayout.Length; i++)
+                    for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                     {
-                        int colLength = int.Parse(oldCabinetRowColLayout[i]);
+                        int colLength = oldRowColLayout.Rows[i];
 
                         for (var j = 0; j < colLength; j++)
                         {
-                            string slotId = string.Format("n{0}r{1}c{2}", rop.CabinetId, i, j);
+                            string slotId = string.Format("r{0}c{1}", i, j);
 
                             var sellChannelStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                             if (sellChannelStock != null)
@@ -204,67 +231,23 @@ namespace LocalS.Service.Api.StoreTerm
                             }
                         }
                     }
-
-                    cabinet.RowColLayout = string.Join(",", rop.CabinetRowColLayout);
-
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        LogUtil.Info("Remove.SlotId:" + removeSellChannelStock.SlotId);
-
                         BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
                     }
-
                 }
+
+                cabinet.RowColLayout = newRowColLayout.ToJsonString();
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功");
-            }
-
-            if (result.Result == ResultType.Success)
-            {
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果成功");
-            }
-            else
-            {
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果失败");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功", new { RowColLayout = cabinet.RowColLayout });
             }
 
             return result;
         }
-
-        //public CustomJsonResult TestPickupEventNotify(string operater, RopStockSettingTestPickupEventNotify rop)
-        //{
-        //    var machine = BizFactory.Machine.GetOne(rop.MachineId);
-
-        //    string productSkuId = "";
-        //    string productSkuName = "";
-        //    if (!string.IsNullOrEmpty(rop.ProductSkuId))
-        //    {
-        //        var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.MerchId, rop.ProductSkuId);
-        //        if (bizProduct != null)
-        //        {
-        //            productSkuId = bizProduct.Id;
-        //            productSkuName = bizProduct.Name;
-        //        }
-        //    }
-
-        //    string message = "";
-        //    if (rop.IsPickupComplete)
-        //    {
-        //        message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4},取货完成，用时：{5}", productSkuId, productSkuName, rop.SlotId, rop.ActionId, rop.ActionName, rop.PickupUseTime);
-        //    }
-        //    else
-        //    {
-        //        message = string.Format("商品({0}):{1},货槽:{2},当前动作({3}):{4}，状态({5})：{6}", productSkuId, productSkuName, rop.SlotId, rop.ActionId, rop.ActionName, rop.ActionStatusCode, rop.ActionStatusName);
-        //    }
-        //    LogUtil.Info(message);
-
-        //    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "TestPickup", message);
-        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-        //}
 
     }
 }
