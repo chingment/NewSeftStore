@@ -159,45 +159,28 @@ namespace LocalS.Service.Api.StoreTerm
             return productKindModels;
         }
 
-        public CustomJsonResult UpdateInfo(RopMachineUpdateInfo rop)
-        {
-            var result = new CustomJsonResult();
-
-            var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-
-            if (machine == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "更新失败，找不到机器信息");
-            }
-
-            CurrentDb.SaveChanges();
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "更新成功");
-        }
-
         public CustomJsonResult CheckUpdate(RupMachineCheckUpdate rup)
         {
             CustomJsonResult result = new CustomJsonResult();
-            LogUtil.Info("CheckUpdateCheckUpdate");
+
             var appSoftware = CurrentDb.AppSoftware.Where(m => m.AppId == rup.AppId && m.AppApiKey == rup.AppKey).FirstOrDefault();
             if (appSoftware == null)
             {
-                LogUtil.Info("CheckUpdateCheckUpdate:1");
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
-            LogUtil.Info("CheckUpdateCheckUpdate:2");
+
             if (string.IsNullOrEmpty(appSoftware.VersionName))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
-            LogUtil.Info("CheckUpdateCheckUpdate:3");
+
             if (string.IsNullOrEmpty(appSoftware.ApkDownloadUrl))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
-            LogUtil.Info("CheckUpdateCheckUpdate:4");
+
             var model = new { versionCode = appSoftware.VersionCode, versionName = appSoftware.VersionName, apkDownloadUrl = appSoftware.ApkDownloadUrl };
-            LogUtil.Info("CheckUpdateCheckUpdate:5");
+
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
         }
 
