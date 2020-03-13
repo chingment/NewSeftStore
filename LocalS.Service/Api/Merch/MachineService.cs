@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.Entity;
+using LocalS.Service.UI;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -177,6 +178,21 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetMachineInitManageStock();
 
+            var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == machineId && m.IsUse).ToList();
+
+
+            foreach (var machineCabinet in machineCabinets)
+            {
+                var optionNode = new OptionNode();
+
+                optionNode.Value = machineCabinet.CabinetId;
+                optionNode.Label = machineCabinet.CabinetName;
+
+                ret.OptionsCabinets.Add(optionNode);
+
+            }
+
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
@@ -189,13 +205,13 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
-            var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == machineId && m.CabinetId == cabinetId).FirstOrDefault();
+            var machineCabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == machineId && m.CabinetId == cabinetId).FirstOrDefault();
 
-            if (cabinet == null)
+            if (machineCabinet == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未配置机柜，请联系管理员");
             }
-            if (string.IsNullOrEmpty(cabinet.RowColLayout))
+            if (string.IsNullOrEmpty(machineCabinet.RowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "识别不到机器列数");
             }
@@ -207,49 +223,117 @@ namespace LocalS.Service.Api.Merch
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
-            int[] cabinetRowColLayout = LocalS.BLL.Biz.MachineService.GetLayout("");
 
-            int rowsLength = cabinetRowColLayout.Length;
-
-            for (int i = rowsLength - 1; i >= 0; i--)
+            switch (cabinetId)
             {
-                SlotRowModel row = new SlotRowModel();
-                row.No = i;
-
-                int cols = cabinetRowColLayout[i];
-
-                for (int j = 0; j < cols; j++)
-                {
-                    var slotId = string.Format("r{0}c{1}", i, j);
-
-                    var col = new SlotColModel();
-                    col.No = j;
-                    col.SlotId = slotId;
-
-                    var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
-                    if (slotStock != null)
+                case "dsx01n01":
+                    #region zsx01n01
+                    var dsCabinetRowColLayout = machineCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                    if (dsCabinetRowColLayout != null)
                     {
-                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
-                        if (bizProductSku != null)
+                        int rowsLength = dsCabinetRowColLayout.Rows.Count;
+
+                        for (int i = rowsLength - 1; i >= 0; i--)
                         {
-                            col.ProductSkuId = bizProductSku.Id;
-                            col.Name = bizProductSku.Name;
-                            col.MainImgUrl = bizProductSku.MainImgUrl;
-                            col.SumQuantity = slotStock.SumQuantity;
-                            col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
-                            col.SellQuantity = slotStock.SellQuantity;
-                            col.MaxQuantity = 10;
-                            col.SalePrice = slotStock.SalePrice;
-                            col.IsOffSell = slotStock.IsOffSell;
-                            col.Version = slotStock.Version;
+                            SlotRowModel row = new SlotRowModel();
+                            row.No = i;
+
+                            int cols = dsCabinetRowColLayout.Rows[i];
+                            for (int j = 0; j < cols; j++)
+                            {
+                                var slotId = string.Format("r{0}c{1}", i, j);
+
+                                var col = new SlotColModel();
+                                col.No = j;
+                                col.SlotId = slotId;
+
+                                var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
+                                if (slotStock != null)
+                                {
+                                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
+                                    if (bizProductSku != null)
+                                    {
+                                        col.ProductSkuId = bizProductSku.Id;
+                                        col.Name = bizProductSku.Name;
+                                        col.MainImgUrl = bizProductSku.MainImgUrl;
+                                        col.SumQuantity = slotStock.SumQuantity;
+                                        col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
+                                        col.SellQuantity = slotStock.SellQuantity;
+                                        col.MaxQuantity = 10;
+                                        col.SalePrice = slotStock.SalePrice;
+                                        col.IsOffSell = slotStock.IsOffSell;
+                                        col.Version = slotStock.Version;
+                                    }
+                                }
+
+                                row.Cols.Add(col);
+                            }
+
+                            rows.Add(row);
                         }
                     }
+                    #endregion
+                    break;
+                case "zsx01n01":
+                    #region zsx01n01
+                    var zsCabinetRowColLayout = machineCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByZSModel>();
+                    if (zsCabinetRowColLayout != null)
+                    {
+                        if (zsCabinetRowColLayout.Rows != null)
+                        {
+                            int rowsLength = zsCabinetRowColLayout.Rows.Count;
+                            LogUtil.Info("rowsLength：" + rowsLength);
 
-                    row.Cols.Add(col);
-                }
+                            for (int i = 0; i < rowsLength; i++)
+                            {
+                                if (zsCabinetRowColLayout.Rows[i].Cols != null)
+                                {
+                                    SlotRowModel row = new SlotRowModel();
+                                    row.No = i;
 
-                rows.Add(row);
+                                    int cols = zsCabinetRowColLayout.Rows[i].Cols.Count;
+                                    LogUtil.Info("cols.length：" + cols);
+                                    for (int j = 0; j < cols; j++)
+                                    {
+
+                                        var slotId = zsCabinetRowColLayout.Rows[i].Cols[j].Id;
+
+                                        var col = new SlotColModel();
+                                        col.No = j;
+                                        col.SlotId = slotId;
+
+                                        var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
+                                        if (slotStock != null)
+                                        {
+                                            var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
+                                            if (bizProductSku != null)
+                                            {
+                                                col.ProductSkuId = bizProductSku.Id;
+                                                col.Name = bizProductSku.Name;
+                                                col.MainImgUrl = bizProductSku.MainImgUrl;
+                                                col.SumQuantity = slotStock.SumQuantity;
+                                                col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
+                                                col.SellQuantity = slotStock.SellQuantity;
+                                                col.MaxQuantity = 10;
+                                                col.SalePrice = slotStock.SalePrice;
+                                                col.IsOffSell = slotStock.IsOffSell;
+                                                col.Version = slotStock.Version;
+                                            }
+                                        }
+
+                                        row.Cols.Add(col);
+                                    }
+
+                                    rows.Add(row);
+                                }
+                            }
+                        }
+                    }
+                    #endregion
+                    break;
             }
+
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", rows);
 
@@ -262,7 +346,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, merchId, machine.StoreId, rop.MachineId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, merchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
 
             return result;
         }

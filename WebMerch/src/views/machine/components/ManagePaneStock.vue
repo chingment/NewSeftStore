@@ -49,7 +49,7 @@
 
     <div class="rows">
 
-      <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
+      <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')" style="max-width: 400px;">
         <template v-for="(col,cindex) in row.cols">
           <div v-show="col.isShow" :key="cindex" class="col">
 
@@ -224,6 +224,8 @@ export default {
       initManageStock({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
+
+          this.options_cabinets = d.optionsCabinets
         }
         this.loading = false
       })

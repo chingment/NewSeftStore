@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL.Biz.Models
+namespace LocalS.BLL.Biz
 {
     public class CabinetRowColLayoutByZSModel
     {

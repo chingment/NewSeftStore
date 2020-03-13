@@ -108,7 +108,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(GuidUtil.New(), machine.MerchId, machine.StoreId, rop.MachineId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
+                    result = BizFactory.ProductSku.AdjustStockQuantity(GuidUtil.New(), machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
 
                     if (result.Result == ResultType.Success)
                     {

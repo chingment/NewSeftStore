@@ -613,17 +613,17 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult AdjustStockQuantity(string operater, string merchId, string storeId, string machineId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null)
+        public CustomJsonResult AdjustStockQuantity(string operater, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null)
         {
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.PrdProductSkuId == productSkuId && m.SlotId == slotId).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.PrdProductSkuId == productSkuId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
-                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("货道：{0},保存失败，找不到该数据", slotId));
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("机柜：{0},货道：{1},保存失败，找不到该数据", cabinetId, slotId));
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，找不到该数据");
                 }
 
@@ -631,7 +631,7 @@ namespace LocalS.BLL.Biz
                 {
                     if (sellChannelStock.Version != version)
                     {
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("货道：{0},保存失败，数据已经被更改", slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("机柜：{0},货道：{1},保存失败，数据已经被更改", cabinetId, slotId));
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，数据已经被更改，请刷新页面再尝试");
                     }
                 }
@@ -675,12 +675,13 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("货道：{0},库存调整数量为：{1}", slotId, sumQuantity));
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("机柜：{0},货道：{1},库存调整数量为：{2}", cabinetId, slotId, sumQuantity));
 
 
                 var slot = new
                 {
                     Id = slotId,
+                    CabinetId = cabinetId,
                     ProductSkuId = bizProductSku.Id,
                     ProductSkuName = bizProductSku.Name,
                     ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
