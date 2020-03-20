@@ -176,10 +176,11 @@ namespace WebUploadServer.Controllers
                     fs.Flush();
                     fs.Close();
 
+                    string originalPath = domain + originalSavePath;
                     if (isBuildms)
                     {
                         System.Drawing.Image originalImage = System.Drawing.Image.FromFile(serverOriginalSavePath);
-                        image.OriginalPath = domain + originalSavePath;
+                        image.OriginalPath = originalPath;
                         image.OriginalWidth = originalImage.Width;
                         image.OriginalHeight = originalImage.Height;
 
@@ -198,7 +199,7 @@ namespace WebUploadServer.Controllers
                         originalImage.Dispose();
                     }
 
-                    r.Data = new { name = fileName, url = image.OriginalPath };
+                    r.Data = new { name = fileName, url = originalPath };
                     r.Message = "上传成功";
                     r.Result = ResultType.Success;
                 }
