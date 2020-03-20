@@ -59,6 +59,7 @@ namespace LocalS.BLL.Biz
                 cabinet.RowColLayout = machineCabinet.RowColLayout;
                 cabinet.Priority = machineCabinet.Priority;
                 cabinet.FixSlotQuantity = machineCabinet.FixSlotQuantity;
+                cabinet.ComId = machineCabinet.ComId;
                 model.Cabinets.Add(cabinet.Id, cabinet);
             }
 
