@@ -112,7 +112,7 @@ namespace LocalS.BLL
                 prdProductSkuModel.Name = prdProductSkuByDb.Name.NullToEmpty();
                 prdProductSkuModel.DisplayImgUrls = prdProductDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 prdProductSkuModel.MainImgUrl = ImgSet.GetMain_O(prdProductDb.DisplayImgUrls);
-                prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.NullToEmpty();
+                prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.ToJsonObject<List<ImgSet>>();
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
 

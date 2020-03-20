@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.Merch
 
         public List<ImgSet> DisplayImgUrls { get; set; }
 
-        public string DetailsDes { get; set; }
+        public List<ImgSet> DetailsDes { get; set; }
 
         public string BriefDes { get; set; }
 

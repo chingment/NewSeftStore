@@ -98,6 +98,9 @@ namespace WebUploadServer.Controllers
                 {
                     fileData = binaryReader.ReadBytes(request.Files[0].ContentLength);
                 }
+
+                string uploadFolder = "common";
+                bool isBuildms = true;
                 if (fileData != null && fileData.Length > 0)
                 {
                     ImageUpload image = new ImageUpload();
@@ -106,7 +109,36 @@ namespace WebUploadServer.Controllers
                     string imageSign = "";
 
                     string fileName = request.Files[0].FileName;
-                    string uploadFolder = "common";
+
+                    if (request.Form["folder"] != null)
+                    {
+                        string l_folder = request.Form["folder"].ToString();
+                        if (!string.IsNullOrEmpty(l_folder))
+                        {
+                            uploadFolder = l_folder;
+                        }
+                    }
+
+                    if (request.Form["isBuildms"] != null)
+                    {
+                        string l_folder = request.Form["isBuildms"].ToLower();
+                        if (l_folder == "true")
+                        {
+                            isBuildms = true;
+                        }
+                        else
+                        {
+                            isBuildms = false;
+                        }
+                    }
+                    else
+                    {
+                        isBuildms = false;
+                    }
+
+
+                    LogUtil.Info("uploadFolder:" + uploadFolder + ",isBuildms:" + isBuildms);
+
                     string savefolder = GetUploadPath(uploadFolder);
                     string extension = Path.GetExtension(fileName).ToLower();
                     string yyyyMMddhhmmssfff = Guid.NewGuid().ToString().Replace("-", "");
@@ -144,26 +176,28 @@ namespace WebUploadServer.Controllers
                     fs.Flush();
                     fs.Close();
 
-                    System.Drawing.Image originalImage = System.Drawing.Image.FromFile(serverOriginalSavePath);
-                    image.OriginalPath = domain + originalSavePath;
-                    image.OriginalWidth = originalImage.Width;
-                    image.OriginalHeight = originalImage.Height;
-
-                    if (GreateMiniImageModel(serverOriginalSavePath, serverBigSavePath, bigImgSize[0], bigImgSize[1]))
+                    if (isBuildms)
                     {
-                        image.BigPath = domain + bigSavePath;
-                        image.BigWidth = bigImgSize[0];
-                        image.BigHeight = bigImgSize[1];
-                    }
-                    if (GreateMiniImageModel(serverOriginalSavePath, serverSmallSavePath, smallImgSize[0], smallImgSize[1]))
-                    {
-                        image.SmallPath = domain + smallSavePath;
-                        image.SmallWidth = smallImgSize[0];
-                        image.SmallHeight = smallImgSize[1];
+                        System.Drawing.Image originalImage = System.Drawing.Image.FromFile(serverOriginalSavePath);
+                        image.OriginalPath = domain + originalSavePath;
+                        image.OriginalWidth = originalImage.Width;
+                        image.OriginalHeight = originalImage.Height;
+
+                        if (GreateMiniImageModel(serverOriginalSavePath, serverBigSavePath, bigImgSize[0], bigImgSize[1]))
+                        {
+                            image.BigPath = domain + bigSavePath;
+                            image.BigWidth = bigImgSize[0];
+                            image.BigHeight = bigImgSize[1];
+                        }
+                        if (GreateMiniImageModel(serverOriginalSavePath, serverSmallSavePath, smallImgSize[0], smallImgSize[1]))
+                        {
+                            image.SmallPath = domain + smallSavePath;
+                            image.SmallWidth = smallImgSize[0];
+                            image.SmallHeight = smallImgSize[1];
+                        }
+                        originalImage.Dispose();
                     }
 
-
-                    originalImage.Dispose();
                     r.Data = new { name = fileName, url = image.OriginalPath };
                     r.Message = "上传成功";
                     r.Result = ResultType.Success;

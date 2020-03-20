@@ -47,7 +47,7 @@ namespace LocalS.BLL.Biz
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
             model.ExIsHas = machine.ExIsHas;
 
-            var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).ToList();
+            var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
 
             foreach (var machineCabinet in machineCabinets)
             {
@@ -55,6 +55,8 @@ namespace LocalS.BLL.Biz
                 cabinet.Id = machineCabinet.CabinetId;
                 cabinet.Name = machineCabinet.CabinetName;
                 cabinet.RowColLayout = machineCabinet.RowColLayout;
+                cabinet.Priority = machineCabinet.Priority;
+                cabinet.FixSlotQuantity = machineCabinet.FixSlotQuantity;
                 model.Cabinets.Add(cabinet.Id, cabinet);
             }
 

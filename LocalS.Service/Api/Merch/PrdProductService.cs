@@ -211,7 +211,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
-                prdProduct.DetailsDes = rop.DetailsDes;
+                prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
@@ -305,7 +305,7 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.Id = prdProduct.Id;
                 ret.Name = prdProduct.Name;
-                ret.DetailsDes = prdProduct.DetailsDes;
+                ret.DetailsDes = prdProduct.DetailsDes.ToJsonObject<List<ImgSet>>();
                 ret.BriefDes = prdProduct.BriefDes;
                 ret.KindIds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdKindId).ToList();
                 ret.SubjectIds = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdSubjectId).ToList();
@@ -359,7 +359,7 @@ namespace LocalS.Service.Api.Merch
                 //prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.BriefDes = rop.BriefDes;
-                prdProduct.DetailsDes = rop.DetailsDes;
+                prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.Mender = operater;
                 prdProduct.MendTime = DateTime.Now;

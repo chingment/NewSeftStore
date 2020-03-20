@@ -22,7 +22,7 @@ namespace LocalS.Service.Api.Merch
 
         public decimal SalePrice { get; set; }
 
-        public string DetailsDes { get; set; }
+        public List<ImgSet> DetailsDes { get; set; }
 
         public string BriefDes { get; set; }
 

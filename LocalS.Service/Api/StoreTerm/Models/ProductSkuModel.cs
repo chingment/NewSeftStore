@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
-        public string DetailsDes { get; set; }
+        public List<ImgSet> DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }

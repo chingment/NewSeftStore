@@ -254,7 +254,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.RemarkByDev = string.Format("变换货道，实际库存：{0}", sellChannelStock.SumQuantity);
                             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("货道：{1}，变换货道，实际库存：{0}", slotId, sellChannelStock.SumQuantity));
+                            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("货道：{1}，变换货道，实际库存：{0}", sellChannelStock.SumQuantity, slotId));
                         }
 
                     }

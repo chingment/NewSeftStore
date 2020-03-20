@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.Merch
         public string Name { get; set; }
         public string SimpleCode { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
-        public string DetailsDes { get; set; }
+        public List<ImgSet> DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public List<string> KindIds { get; set; }
         public List<string> SubjectIds

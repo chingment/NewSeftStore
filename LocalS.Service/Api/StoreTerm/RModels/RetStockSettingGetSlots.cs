@@ -16,6 +16,8 @@ namespace LocalS.Service.Api.StoreTerm
 
         public string RowColLayout { get; set; }
 
+        public int FixSlotQuantity { get; set; }
+
         public Dictionary<string, SlotModel> Slots { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace LocalS.BLL
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
-        public string DetailsDes { get; set; }
+        public List<ImgSet> DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public string SpecDes { get; set; }
         public List<ProductSkuStockModel> Stocks { get; set; }

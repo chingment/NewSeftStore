@@ -13,22 +13,23 @@
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
-          ref="uploadImg"
+          ref="uploadImgByDisplayImgUrls"
           v-model="form.displayImgUrls"
           :action="uploadImgServiceUrl"
+          :data="uploadImgPmsByByDisplayImgUrls"
           list-type="picture-card"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :on-preview="handlePreview"
-          :before-upload="handleBeforeUpload"
-          :file-list="uploadImglist"
+          :on-success="handleSuccessByDisplayImgUrls"
+          :on-remove="handleRemoveByDisplayImgUrls"
+          :on-error="handleErrorByDisplayImgUrls"
+          :on-preview="handlePreviewByDisplayImgUrls"
+          :before-upload="handleBeforeUploadByDisplayImgUrls"
+          :file-list="uploadImglistByDisplayImgUrls"
           :limit="4"
         >
           <i class="el-icon-plus" />
         </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDisplayImgUrls">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt="">
         </el-dialog>
         <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
       </el-form-item>
@@ -60,8 +61,30 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
       </el-form-item>
-      <el-form-item label="商品详情" style="max-width:1000px">
-        <Editor id="tinymce" v-model="form.detailsDes" :init="tinymce_init" />
+      <el-form-item label="详情图片" prop="detailsDes">
+
+        <el-input :value="form.detailsDes.toString()" style="display:none" />
+        <el-upload
+          ref="uploadImgByDetailsDes"
+          v-model="form.detailsDes"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :on-success="handleSuccessByDetailsDes"
+          :on-remove="handleRemoveByDetailsDes"
+          :on-error="handleErrorByDetailsDes"
+          :on-preview="handlePreviewByDetailsDes"
+          :before-upload="handleBeforeUploadByDetailsDes"
+          :file-list="uploadImglistByDetailsDes"
+          :data="uploadImgPmsByByDetailsDes"
+          :limit="4"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDetailsDes">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt="">
+        </el-dialog>
+        <div class="remark-tip"><span class="sign">*注</span>：图片不超过4M；可拖动改变图片顺序</div>
+
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -79,42 +102,10 @@ import { goBack, treeselectNormalizer } from '@/utils/commonUtil'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-import tinymce from 'tinymce/tinymce'
-import Editor from '@tinymce/tinymce-vue'
-import 'tinymce/themes/silver/theme'
-
-import 'tinymce/plugins/image'// 插入上传图片插件
-import 'tinymce/plugins/media'// 插入视频插件
-import 'tinymce/plugins/table'// 插入表格插件
-import 'tinymce/plugins/link' // 超链接插件
-import 'tinymce/plugins/code' // 代码块插件
-import 'tinymce/plugins/lists'// 列表插件
-import 'tinymce/plugins/contextmenu' // 右键菜单插件
-import 'tinymce/plugins/wordcount' // 字数统计插件
-import 'tinymce/plugins/colorpicker' // 选择颜色插件
-import 'tinymce/plugins/textcolor' // 文本颜色插件
-import 'tinymce/plugins/fullscreen' // 全屏
-import 'tinymce/plugins/help'
-import 'tinymce/plugins/charmap'
-import 'tinymce/plugins/paste'
-import 'tinymce/plugins/print'
-import 'tinymce/plugins/preview'
-import 'tinymce/plugins/hr'
-import 'tinymce/plugins/anchor'
-import 'tinymce/plugins/pagebreak'
-import 'tinymce/plugins/spellchecker'
-import 'tinymce/plugins/searchreplace'
-import 'tinymce/plugins/visualblocks'
-import 'tinymce/plugins/visualchars'
-import 'tinymce/plugins/insertdatetime'
-import 'tinymce/plugins/nonbreaking'
-import 'tinymce/plugins/autosave'
-import 'tinymce/plugins/fullpage'
-import 'tinymce/plugins/toc'
 import Sortable from 'sortablejs'
 
 export default {
-  components: { Treeselect, Editor },
+  components: { Treeselect },
   data() {
     return {
       loading: false,
@@ -122,7 +113,7 @@ export default {
         name: '',
         kindIds: [],
         subjectIds: [],
-        detailsDes: '',
+        detailsDes: [],
         briefDes: '',
         displayImgUrls: [],
         singleSkuCumCode: '',
@@ -138,43 +129,27 @@ export default {
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
+        briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }],
+        detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }]
       },
-      uploadImglist: [],
-      uploadImgPreImgDialogUrl: '',
-      uploadImgPreImgDialogVisible: false,
+      uploadImglistByDisplayImgUrls: [],
+      uploadImgPmsByByDisplayImgUrls: { folder: 'product', isBuildms: 'true' },
+      uploadImgPreImgDialogUrlByDisplayImgUrls: '',
+      uploadImgPreImgDialogVisibleByDisplayImgUrls: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+      uploadImglistByDetailsDes: [],
+      uploadImgPreImgDialogUrlByDetailsDes: '',
+      uploadImgPreImgDialogVisibleByDetailsDes: false,
+      uploadImgPmsByByDetailsDes: { folder: 'product', isBuildms: 'false' },
       treeselect_kind_normalizer: treeselectNormalizer,
       treeselect_kind_options: [],
       treeselect_subject_normalizer: treeselectNormalizer,
-      treeselect_subject_options: [],
-      tinymce_init: {
-        language_url: '/static/tinymce/langs/zh_CN.js', // 语言包的路径
-        language: 'zh_CN', // 语言
-        height: 430,
-        skin_url: '/static/tinymce/skins/ui/oxide',
-        images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-        menubar: false, // 隐藏最上方menu菜单
-        browser_spellcheck: true, // 拼写检查
-        branding: false, // 去水印
-        statusbar: false, // 隐藏编辑器底部的状态栏
-        elementpath: false, // 禁用下角的当前标签路径
-        paste_data_images: true, // 允许粘贴图像
-        plugins: 'lists image media table wordcount code fullscreen help  toc fullpage autosave nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak link charmap paste print preview hr anchor',
-        toolbar: [
-          'newdocument undo redo | formatselect visualaid|cut copy paste selectall| bold italic underline strikethrough |codeformat blockformats| superscript subscript  | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent |  removeformat ',
-          'code  bullist numlist | lists image media table link |fullscreen help toc fullpage restoredraft nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak anchor charmap  pastetext print preview hr'
-        ],
-        images_upload_handler: (blobInfo, success, failure) => {
-          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
-          success(img)
-        }
-      }
+      treeselect_subject_options: []
     }
   },
   mounted() {
-    tinymce.init({})
-    this.setUploadImgSort()
+    this.setUploadImgSortByDisplayImgUrls()
+    this.setUploadImgSortByDetailsDes()
   },
   created() {
     this.init()
@@ -223,33 +198,32 @@ export default {
         }
       })
     },
-    getdisplayImgUrls(fileList) {
-      var _displayImgUrls = []
+    handleGetDisplayImgUrls(fileList) {
+      var _imgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _imgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _displayImgUrls
+      return _imgUrls
     },
-    handleRemove(file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+    handleRemoveByDisplayImgUrls(file, fileList) {
+      this.uploadImglistByDisplayImgUrls = fileList
+      this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
-    handleSuccess(response, file, fileList) {
-      console.log('a1:' + JSON.stringify(fileList))
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+    handleSuccessByDisplayImgUrls(response, file, fileList) {
+      this.uploadImglistByDisplayImgUrls = fileList
+      this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
-    handleError(errs, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+    handleErrorByDisplayImgUrls(errs, file, fileList) {
+      this.uploadImglistByDisplayImgUrls = fileList
+      this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
-    handlePreview(file) {
+    handlePreviewByDisplayImgUrls(file) {
       this.uploadImgPreImgDialogUrl = file.url
       this.uploadImgPreImgDialogVisible = true
     },
-    handleBeforeUpload(file) {
+    handleBeforeUploadByDisplayImgUrls(file) {
       const imgType = file.type
       const isLt4M = file.size / 1024 / 1024 < 4
       //  var a = isLt4M === true ? 'true' : 'false'
@@ -265,9 +239,9 @@ export default {
 
       return true
     },
-    setUploadImgSort() {
+    setUploadImgSortByDisplayImgUrls() {
       var _this = this
-      const $ul = _this.$refs.uploadImg.$el.querySelectorAll('.el-upload-list')[0]
+      const $ul = _this.$refs.uploadImgByDisplayImgUrls.$el.querySelectorAll('.el-upload-list')[0]
       new Sortable($ul, {
         onUpdate: function(event) {
         // 修改items数据顺序
@@ -284,10 +258,79 @@ export default {
             $ul.insertBefore($li, $oldLi.nextSibling)
           }
           // 更新items数组
-          var item = _this.uploadImglist.splice(oldIndex, 1)
-          _this.uploadImglist.splice(newIndex, 0, item[0])
+          var item = _this.uploadImglistByDisplayImgUrls.splice(oldIndex, 1)
+          _this.uploadImglistByDisplayImgUrls.splice(newIndex, 0, item[0])
 
-          _this.form.displayImgUrls = _this.getdisplayImgUrls(_this.uploadImglist)
+          _this.form.displayImgUrls = _this.handleGetDisplayImgUrls(_this.uploadImglistByDisplayImgUrls)
+        // 下一个tick就会走patch更新
+        },
+        animation: 150
+      })
+    },
+    handleGetDetailsDes(fileList) {
+      var _imgUrls = []
+      for (var i = 0; i < fileList.length; i++) {
+        if (fileList[i].status === 'success') {
+          _imgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+        }
+      }
+      return _imgUrls
+    },
+    handleRemoveByDetailsDes(file, fileList) {
+      this.uploadImglistByDetailsDes = fileList
+      this.form.detailsDes = this.handleGetDetailsDes(fileList)
+    },
+    handleSuccessByDetailsDes(response, file, fileList) {
+      this.uploadImglistByDetailsDes = fileList
+      this.form.detailsDes = this.handleGetDetailsDes(fileList)
+    },
+    handleErrorByDetailsDes(errs, file, fileList) {
+      this.uploadImglistByDetailsDes = fileList
+      this.form.detailsDes = this.handleGetDetailsDes(fileList)
+    },
+    handlePreviewByDetailsDes(file) {
+      this.uploadImgPreImgDialogUrlByDetailsDes = file.url
+      this.uploadImgPreImgDialogVisibleByDetailsDes = true
+    },
+    handleBeforeUploadByDetailsDes(file) {
+      const imgType = file.type
+      const isLt4M = file.size / 1024 / 1024 < 4
+      //  var a = isLt4M === true ? 'true' : 'false'
+      if (imgType !== 'image/jpeg' && imgType !== 'image/png' && imgType !== 'image/jpg') {
+        this.$message('图片格式仅支持(jpg,png)')
+        return false
+      }
+
+      if (!isLt4M) {
+        this.$message('图片大小不能超过4M')
+        return false
+      }
+
+      return true
+    },
+    setUploadImgSortByDetailsDes() {
+      var _this = this
+      const $ul = _this.$refs.uploadImgByDetailsDes.$el.querySelectorAll('.el-upload-list')[0]
+      new Sortable($ul, {
+        onUpdate: function(event) {
+        // 修改items数据顺序
+          var newIndex = event.newIndex
+          var oldIndex = event.oldIndex
+          var $li = $ul.children[newIndex]
+          var $oldLi = $ul.children[oldIndex]
+          // 先删除移动的节点
+          $ul.removeChild($li)
+          // 再插入移动的节点到原有节点，还原了移动的操作
+          if (newIndex > oldIndex) {
+            $ul.insertBefore($li, $oldLi)
+          } else {
+            $ul.insertBefore($li, $oldLi.nextSibling)
+          }
+          // 更新items数组
+          var item = _this.uploadImglistByDetailsDes.splice(oldIndex, 1)
+          _this.uploadImglistByDetailsDes.splice(newIndex, 0, item[0])
+
+          _this.form.detailsDes = _this.handleGetDisplayImgUrls(_this.uploadImglistByDetailsDes)
         // 下一个tick就会走patch更新
         },
         animation: 150
