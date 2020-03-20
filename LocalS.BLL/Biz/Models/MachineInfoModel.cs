@@ -42,7 +42,8 @@ namespace LocalS.BLL.Biz
         public bool IsTestMode { get; set; }
         public bool IsOpenChkCamera { get; set; }
         public bool ExIsHas { get; set; }
-
+        public bool IsUseSanCtrl { get; set; }
+        public bool IsUseFingerVeinCtrl { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
     }
 }

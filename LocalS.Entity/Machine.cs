@@ -50,6 +50,8 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public bool IsTestMode { get; set; }
         public bool IsOpenChkCamera { get; set; }
+        public bool IsUseSanCtrl { get; set; }
+        public bool IsUseFingerVeinCtrl { get; set; }
         public bool ExIsHas { get; set; }
     }
 }

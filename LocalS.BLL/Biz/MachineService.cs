@@ -45,6 +45,8 @@ namespace LocalS.BLL.Biz
             model.KindRowCellSize = machine.KindRowCellSize;
             model.IsTestMode = machine.IsTestMode;
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
+            model.IsUseFingerVeinCtrl = machine.IsUseFingerVeinCtrl;
+            model.IsUseSanCtrl = machine.IsUseSanCtrl;
             model.ExIsHas = machine.ExIsHas;
 
             var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
