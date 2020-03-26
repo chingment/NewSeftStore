@@ -45,8 +45,6 @@ namespace LocalS.BLL.Biz
             model.KindRowCellSize = machine.KindRowCellSize;
             model.IsTestMode = machine.IsTestMode;
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
-            model.IsUseFingerVeinCtrl = machine.IsUseFingerVeinCtrl;
-            model.IsUseSanCtrl = machine.IsUseSanCtrl;
             model.ExIsHas = machine.ExIsHas;
 
             var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
@@ -62,6 +60,18 @@ namespace LocalS.BLL.Biz
                 cabinet.ComId = machineCabinet.ComId;
                 model.Cabinets.Add(cabinet.Id, cabinet);
             }
+
+            if (machine.IsUseFingerVeinCtrl)
+            {
+                model.FingerVeinCtrl.IsUse = true;
+            }
+
+            if (machine.IsUseSanCtrl)
+            {
+                model.ScanCtrl.IsUse = true;
+                model.ScanCtrl.ComId = machine.SanCtrlComId;
+            }
+
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 

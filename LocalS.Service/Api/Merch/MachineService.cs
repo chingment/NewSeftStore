@@ -275,6 +275,7 @@ namespace LocalS.Service.Api.Merch
                     #endregion
                     break;
                 case "zsx01n01":
+                case "zsx01n02":
                     #region zsx01n01
                     var zsCabinetRowColLayout = machineCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByZSModel>();
                     if (zsCabinetRowColLayout != null)

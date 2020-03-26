@@ -73,6 +73,7 @@
     <Compile Include="Biz\Models\CabinetInfoModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByDSModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByZSModel.cs" />
+    <Compile Include="Biz\Models\FingerVeinCtrlModel.cs" />
     <Compile Include="Biz\Models\MachineEventBaseModel.cs" />
     <Compile Include="Biz\Models\MachineEventByHeartbeatBagModel.cs" />
     <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\OrderDetailsByPickupModel.cs" />
     <Compile Include="Biz\Models\PayOptionModel.cs" />
+    <Compile Include="Biz\Models\ScanCtrlModel.cs" />
     <Compile Include="Biz\Models\SellChannelRefModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineHomeBannerModel.cs" />

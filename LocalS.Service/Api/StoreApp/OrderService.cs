@@ -509,7 +509,7 @@ namespace LocalS.Service.Api.StoreApp
                     if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                     {
                         block.Tag.Desc = new FsField("取货码", "", orderSub.PickupCode, "#f18d00");
-                        block.Qrcode = new FsQrcode { Code = orderSub.PickupCode, Remark = string.Format("（ 用于机器({0})扫码取货 ）", orderSub.SellChannelRefName), Url = "" };
+                        block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(orderSub.PickupCode), Remark = "扫码取货", Url = "" };
                     }
                 }
 
@@ -562,5 +562,6 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.CreateIp = rop.CreateIp;
             return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
+
     }
 }

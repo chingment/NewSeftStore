@@ -101,15 +101,17 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
-            string a = Convert.ToString(15, 2);
-            XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
+            BizFactory.Order.BuildQrcode2PickupCode("31231232");
 
-            payInfo.Mch_id = "86144035999J054";
-            payInfo.Key = "FBC8B4396940E0969048767F53CB649A";
-            payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
+            //string a = Convert.ToString(15, 2);
+            //XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
 
-            RopAppTraceLog a1 = new RopAppTraceLog();
-            string aa = a1.ToJsonString();
+            //payInfo.Mch_id = "86144035999J054";
+            //payInfo.Key = "FBC8B4396940E0969048767F53CB649A";
+            //payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
+
+            //RopAppTraceLog a1 = new RopAppTraceLog();
+            //string aa = a1.ToJsonString();
             //BizFactory.Order.BuildPayParams(GuidUtil.Empty(),new LocalS.BLL.Biz.RopOrderBuildPayParams {   })
 
             //XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);

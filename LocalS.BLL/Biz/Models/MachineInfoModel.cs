@@ -12,6 +12,8 @@ namespace LocalS.BLL.Biz
         public MachineInfoModel()
         {
             this.Cabinets = new Dictionary<string, CabinetInfoModel>();
+            this.ScanCtrl = new ScanCtrlModel();
+            this.FingerVeinCtrl = new FingerVeinCtrlModel();
         }
 
         public string Id { get; set; }
@@ -26,10 +28,6 @@ namespace LocalS.BLL.Biz
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string JPushRegId { get; set; }
-        //public int CabinetId_1 { get; set; }
-        //public string CabinetName_1 { get; set; }
-        //public int[] CabinetRowColLayout_1 { get; set; }
-        //public int[] CabinetPendantRows_1 { get; set; }
 
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
@@ -42,8 +40,8 @@ namespace LocalS.BLL.Biz
         public bool IsTestMode { get; set; }
         public bool IsOpenChkCamera { get; set; }
         public bool ExIsHas { get; set; }
-        public bool IsUseSanCtrl { get; set; }
-        public bool IsUseFingerVeinCtrl { get; set; }
+        public ScanCtrlModel ScanCtrl { get; set; }
+        public FingerVeinCtrlModel FingerVeinCtrl { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
     }
 }

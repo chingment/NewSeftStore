@@ -119,6 +119,11 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
+            if (rup.PickupCode.IndexOf("fanju://pickupcode") > -1)
+            {
+                rup.PickupCode = BizFactory.Order.DecodeQrcode2PickupCode(rup.PickupCode);
+            }
+
             var orderSub = CurrentDb.OrderSub.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
 
             if (orderSub == null)
