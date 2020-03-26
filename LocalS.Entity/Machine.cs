@@ -47,6 +47,5 @@ namespace LocalS.Entity
         public string SanCtrlComId { get; set; }
         public bool IsUseFingerVeinCtrl { get; set; }
         public bool ExIsHas { get; set; }
-
     }
 }
