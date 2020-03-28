@@ -370,7 +370,7 @@ namespace LocalS.BLL.Biz
                                     {
                                         order.Status = E_OrderStatus.Completed;
                                         order.CompletedTime = DateTime.Now;
-
+                                        order.ExIsHappen = false;
                                         Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
                                     }
                                 }
