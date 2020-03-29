@@ -343,12 +343,16 @@ namespace LocalS.BLL.Biz
                                         {
                                             orderSubChildUnique.LastPickupActionId = pickupModel.ActionId;
                                             orderSubChildUnique.LastPickupActionStatusCode = pickupModel.ActionStatusCode;
-                                            orderSubChildUnique.PickupStatus = pickupModel.Status;
 
                                             if (pickupModel.Status == E_OrderPickupStatus.Taked)
                                             {
-                                                BizFactory.ProductSku.OperateStockQuantity(model.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                                if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                                {
+                                                    BizFactory.ProductSku.OperateStockQuantity(model.MachineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                                }
                                             }
+
+                                            orderSubChildUnique.PickupStatus = pickupModel.Status;
                                         }
                                     }
                                 }
