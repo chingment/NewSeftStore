@@ -20,6 +20,7 @@ namespace LocalS.BLL.Biz
             sysUserOperateLog.Id = GuidUtil.New();
             sysUserOperateLog.UserId = rop.Operater;
             sysUserOperateLog.EventCode = rop.EventCode;
+            sysUserOperateLog.EventName = EventCode.GetEventName(rop.EventCode);
             sysUserOperateLog.AppId = rop.AppId;
             sysUserOperateLog.Remark = rop.Remark;
             sysUserOperateLog.CreateTime = DateTime.Now;

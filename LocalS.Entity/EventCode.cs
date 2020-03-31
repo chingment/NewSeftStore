@@ -13,18 +13,18 @@ namespace LocalS.Entity
         public const string HeartbeatBag = "HeartbeatBag";
         public const string ScanSlots = "ScanSlots";
         public const string Pickup = "Pickup";
+        public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
+        public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
+        public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
+        public const string MachineSaveCabinetRowColLayout = "MachineSaveCabinetRowColLayout";
         public const string AdjustStockQuantity = "AdjustStockQuantity";
+        public const string AdjustStockSalePrice = "AdjustStockSalePrice";
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         public const string OrderPickupOneManMadeSignNotTakeByComplete = "OrderPickupOneManMadeSignNotTakeByComplete";
         public const string OrderPickupOneSysMadeSignTake = "OrderPickupOneSysMadeSignTake";
         public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
         public const string OrderCancle = "OrderCancle";
         public const string OrderReserveSuccess = "OrderReserveSuccess";
-        public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
-        public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
-        public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
-        public const string MachineSaveCabinetRowColLayout = "MachineSaveCabinetRowColLayout";
-        public const string AdjustStockSalePrice = "AdjustStockSalePrice";
 
         public static string GetEventName(string eventCode)
         {
@@ -49,6 +49,9 @@ namespace LocalS.Entity
                 case EventCode.AdjustStockQuantity:
                     name = "商品库存调整";
                     break;
+                case EventCode.AdjustStockSalePrice:
+                    name = "商品价格调整";
+                    break;
                 case EventCode.MachineCabinetSlotSave:
                     name = "商品货道保存";
                     break;
@@ -60,6 +63,9 @@ namespace LocalS.Entity
                     break;
                 case EventCode.OrderCancle:
                     name = "订单取消";
+                    break;
+                case EventCode.OrderReserveSuccess:
+                    name = "订单预定成功";
                     break;
                 case EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete:
                     name = "未完成，人工标识未取";
