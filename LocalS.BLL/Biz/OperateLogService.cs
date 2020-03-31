@@ -19,7 +19,7 @@ namespace LocalS.BLL.Biz
             var sysUserOperateLog = new SysUserOperateLog();
             sysUserOperateLog.Id = GuidUtil.New();
             sysUserOperateLog.UserId = rop.Operater;
-            sysUserOperateLog.Action = rop.Action;
+            sysUserOperateLog.EventCode = rop.EventCode;
             sysUserOperateLog.AppId = rop.AppId;
             sysUserOperateLog.Remark = rop.Remark;
             sysUserOperateLog.CreateTime = DateTime.Now;
@@ -27,7 +27,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
             CurrentDb.SaveChanges();
 
-            switch (rop.Action)
+            switch (rop.EventCode)
             {
                 case "Login":
                 case "Logout":
@@ -63,24 +63,24 @@ namespace LocalS.BLL.Biz
             {
                 var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-                var machineOperateLog = new MachineOperateLog();
-                machineOperateLog.Id = GuidUtil.New();
-                machineOperateLog.AppId = rop.AppId;
+                var merchOperateLog = new MerchOperateLog();
+                merchOperateLog.Id = GuidUtil.New();
+                merchOperateLog.AppId = rop.AppId;
                 if (machine != null)
                 {
-                    machineOperateLog.MerchId = machine.MerchId;
-                    machineOperateLog.StoreId = machine.StoreId;
+                    merchOperateLog.MerchId = machine.MerchId;
+                    merchOperateLog.StoreId = machine.StoreId;
                 }
 
-                machineOperateLog.MachineId = rop.MachineId;
-                machineOperateLog.OperateUserId = rop.Operater;
-                machineOperateLog.EventName = rop.Action;
-                machineOperateLog.Remark = rop.Remark;
-                machineOperateLog.Creator = rop.Operater;
-                machineOperateLog.CreateTime = DateTime.Now;
+                merchOperateLog.MachineId = rop.MachineId;
+                merchOperateLog.OperateUserId = rop.Operater;
+                merchOperateLog.EventCode = rop.EventCode;
+                merchOperateLog.Remark = rop.Remark;
+                merchOperateLog.Creator = rop.Operater;
+                merchOperateLog.CreateTime = DateTime.Now;
 
 
-                CurrentDb.MachineOperateLog.Add(machineOperateLog);
+                CurrentDb.MerchOperateLog.Add(merchOperateLog);
                 CurrentDb.SaveChanges();
             }
 

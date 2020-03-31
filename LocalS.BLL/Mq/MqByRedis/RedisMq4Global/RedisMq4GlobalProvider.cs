@@ -24,12 +24,12 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushOperateLog(string appId, string operater, string machineId, string action, string remark, object parms = null)
+        public void PushOperateLog(string appId, string operater, string machineId, string eventCode, string remark, object parms = null)
         {
             var content = new OperateLogModel();
             content.AppId = appId;
             content.Operater = operater;
-            content.Action = action;
+            content.EventCode = eventCode;
             content.Remark = remark;
             content.MachineId = machineId;
             content.Parms = parms;
@@ -41,12 +41,12 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushMachineEventNotify(string operater,string appId, string machineId, double lat, double lng, E_MachineEventType type, object content)
+        public void PushMachineEventNotify(string operater, string appId, string machineId, double lat, double lng, string eventCode,object content)
         {
             var _content = new MachineEventNotifyModel();
             _content.AppId = appId;
             _content.MachineId = machineId;
-            _content.Type = type;
+            _content.EventCode = eventCode;
             _content.Content = content;
             _content.Operater = operater;
             var obj = new RedisMq4GlobalHandle();

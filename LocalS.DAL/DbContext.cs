@@ -44,7 +44,7 @@ namespace LocalS.DAL
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Machine> Machine { get; set; }
         public IDbSet<MachineCabinet> MachineCabinet { get; set; }
-        public IDbSet<MachineOperateLog> MachineOperateLog { get; set; }
+        public IDbSet<MerchOperateLog> MerchOperateLog { get; set; }
         public IDbSet<MachineBindLog> MachineBindLog { get; set; }
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
         //public IDbSet<RptOrder> RptOrder { get; set; }

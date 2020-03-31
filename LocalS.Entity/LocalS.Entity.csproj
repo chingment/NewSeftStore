@@ -52,6 +52,7 @@
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />
     <Compile Include="Enumeration.cs" />
+    <Compile Include="EventCode.cs" />
     <Compile Include="Ins\InsCarCompanyRule.cs" />
     <Compile Include="Ins\InsCarModelInfo.cs" />
     <Compile Include="Ins\InsCarPlateNoInfo.cs" />
@@ -59,7 +60,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="Machine.cs" />
     <Compile Include="MachineCabinet.cs" />
-    <Compile Include="MachineOperateLog.cs" />
+    <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />
     <Compile Include="Order.cs" />

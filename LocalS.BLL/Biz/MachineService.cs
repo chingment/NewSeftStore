@@ -12,14 +12,6 @@ using System.Transactions;
 
 namespace LocalS.BLL.Biz
 {
-    public enum E_MachineEventType
-    {
-        Unknow = 0,
-        SendHeartbeatBag = 1,
-        Pickup = 2,
-        ScanSlots = 3
-    }
-
     public class MachineService : BaseDbContext
     {
         public MachineInfoModel GetOne(string id)
@@ -209,12 +201,11 @@ namespace LocalS.BLL.Biz
         }
 
 
-        public CustomJsonResult EventNotify(string operater, string appId, string machineId, double lat, double lng, E_MachineEventType type, object content)
+        public CustomJsonResult EventNotify(string operater, string appId, string machineId, double lat, double lng, string eventCode, object content)
         {
-            MqFactory.Global.PushMachineEventNotify(operater, appId, machineId, lat, lng, type, content);
+            MqFactory.Global.PushMachineEventNotify(operater, appId, machineId, lat, lng, eventCode, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-
 
         public void EventHandle(MachineEventNotifyModel model)
         {
@@ -241,9 +232,9 @@ namespace LocalS.BLL.Biz
                 string eventName = "";
                 StringBuilder eventRemark = new StringBuilder("");
 
-                switch (model.Type)
+                switch (model.EventCode)
                 {
-                    case E_MachineEventType.SendHeartbeatBag:
+                    case EventCode.HeartbeatBag:
                         #region SendHeartbeatBag 发送心跳包
                         eventName = "发送心跳包";
                         var heartbeatBagModel = model.Content.ToJsonObject<MachineEventByHeartbeatBagModel>();
@@ -263,7 +254,7 @@ namespace LocalS.BLL.Biz
                         }
                         #endregion
                         break;
-                    case E_MachineEventType.ScanSlots:
+                    case EventCode.ScanSlots:
                         #region ScanSlots 扫描货道
                         eventName = "扫描货道";
 
@@ -274,7 +265,7 @@ namespace LocalS.BLL.Biz
                         }
                         #endregion
                         break;
-                    case E_MachineEventType.Pickup:
+                    case EventCode.Pickup:
                         #region Pickup 商品取货
                         eventName = "商品取货";
 
@@ -427,19 +418,19 @@ namespace LocalS.BLL.Biz
                         break;
                 }
 
-                var machineOperateLog = new MachineOperateLog();
-                machineOperateLog.Id = GuidUtil.New();
-                machineOperateLog.AppId = model.AppId;
-                machineOperateLog.MerchId = machine.CurUseMerchId;
-                machineOperateLog.StoreId = machine.CurUseStoreId;
-                machineOperateLog.MachineId = model.MachineId;
-                machineOperateLog.OperateUserId = model.Operater;
-                machineOperateLog.EventCode = (int)model.Type;
-                machineOperateLog.EventName = eventName;
-                machineOperateLog.Remark = eventRemark.ToString();
-                machineOperateLog.Creator = model.Operater;
-                machineOperateLog.CreateTime = DateTime.Now;
-                CurrentDb.MachineOperateLog.Add(machineOperateLog);
+                var merchOperateLog = new MerchOperateLog();
+                merchOperateLog.Id = GuidUtil.New();
+                merchOperateLog.AppId = model.AppId;
+                merchOperateLog.MerchId = machine.CurUseMerchId;
+                merchOperateLog.StoreId = machine.CurUseStoreId;
+                merchOperateLog.MachineId = model.MachineId;
+                merchOperateLog.OperateUserId = model.Operater;
+                merchOperateLog.EventCode = model.EventCode;
+                merchOperateLog.EventName = eventName;
+                merchOperateLog.Remark = eventRemark.ToString();
+                merchOperateLog.Creator = model.Operater;
+                merchOperateLog.CreateTime = DateTime.Now;
+                CurrentDb.MerchOperateLog.Add(merchOperateLog);
                 CurrentDb.SaveChanges();
                 ts.Complete();
             }
