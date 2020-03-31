@@ -75,6 +75,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.MachineId = rop.MachineId;
                 merchOperateLog.OperateUserId = rop.Operater;
                 merchOperateLog.EventCode = rop.EventCode;
+                merchOperateLog.EventName = EventCode.GetEventName(rop.EventCode);
                 merchOperateLog.Remark = rop.Remark;
                 merchOperateLog.Creator = rop.Operater;
                 merchOperateLog.CreateTime = DateTime.Now;

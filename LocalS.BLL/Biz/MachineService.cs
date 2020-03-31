@@ -221,22 +221,18 @@ namespace LocalS.BLL.Biz
 
                 if (model.Lat > 0 && model.Lng > 0)
                 {
-
                     machine.Lat = (float)model.Lat;
                     machine.Lng = (float)model.Lng;
                 }
 
                 machine.LastRequestTime = DateTime.Now;
 
-
-                string eventName = "";
                 StringBuilder eventRemark = new StringBuilder("");
 
                 switch (model.EventCode)
                 {
                     case EventCode.HeartbeatBag:
                         #region SendHeartbeatBag 发送心跳包
-                        eventName = "发送心跳包";
                         var heartbeatBagModel = model.Content.ToJsonObject<MachineEventByHeartbeatBagModel>();
                         if (heartbeatBagModel != null)
                         {
@@ -256,8 +252,6 @@ namespace LocalS.BLL.Biz
                         break;
                     case EventCode.ScanSlots:
                         #region ScanSlots 扫描货道
-                        eventName = "扫描货道";
-
                         var scanSlotsModel = model.Content.ToJsonObject<MachineEventByScanSlotsModel>();
                         if (scanSlotsModel != null)
                         {
@@ -267,8 +261,6 @@ namespace LocalS.BLL.Biz
                         break;
                     case EventCode.Pickup:
                         #region Pickup 商品取货
-                        eventName = "商品取货";
-
                         var pickupModel = model.Content.ToJsonObject<MachineEventByPickupModel>();
                         if (pickupModel != null)
                         {
@@ -426,7 +418,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.MachineId = model.MachineId;
                 merchOperateLog.OperateUserId = model.Operater;
                 merchOperateLog.EventCode = model.EventCode;
-                merchOperateLog.EventName = eventName;
+                merchOperateLog.EventName =EventCode.GetEventName(model.EventCode);
                 merchOperateLog.Remark = eventRemark.ToString();
                 merchOperateLog.Creator = model.Operater;
                 merchOperateLog.CreateTime = DateTime.Now;
