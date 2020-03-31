@@ -93,11 +93,11 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品成功");
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineCabinetSlotSave, "移除货道商品成功");
                 }
                 else
                 {
-                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "移除货道商品失败");
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineCabinetSlotSave, "移除货道商品失败");
                 }
 
                 return result;
@@ -112,16 +112,16 @@ namespace LocalS.Service.Api.StoreTerm
 
                     if (result.Result == ResultType.Success)
                     {
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品成功");
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineCabinetSlotSave, "保存货道商品成功");
                     }
                     else
                     {
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineCabinetSlotSave, "保存货道商品失败");
                     }
                 }
                 else
                 {
-                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetSlot", "保存货道商品失败");
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineCabinetSlotSave, "保存货道商品失败");
                 }
 
                 return result;
@@ -151,11 +151,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果成功");
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineSaveCabinetRowColLayout, "保存柜子货道扫描结果成功");
             }
             else
             {
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, "SaveCabinetRowColLayout", "保存柜子货道扫描结果失败");
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, rop.MachineId, EventCode.MachineSaveCabinetRowColLayout, "保存柜子货道扫描结果失败");
             }
 
             return result;

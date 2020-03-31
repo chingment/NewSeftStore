@@ -17,10 +17,14 @@ namespace LocalS.Entity
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         public const string OrderPickupOneManMadeSignNotTakeByComplete = "OrderPickupOneManMadeSignNotTakeByComplete";
         public const string OrderPickupOneSysMadeSignTake = "OrderPickupOneSysMadeSignTake";
+        public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
         public const string OrderCancle = "OrderCancle";
         public const string OrderReserveSuccess = "OrderReserveSuccess";
-        public const string MachineSlotSave = "MachineSlotSave";
-        public const string MachineSlotRemove = "MachineSlotRemove";
+        public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
+        public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
+        public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
+        public const string MachineSaveCabinetRowColLayout = "MachineSaveCabinetRowColLayout";
+        public const string AdjustStockSalePrice = "AdjustStockSalePrice";
 
         public static string GetEventName(string eventCode)
         {
@@ -45,11 +49,14 @@ namespace LocalS.Entity
                 case EventCode.AdjustStockQuantity:
                     name = "商品库存调整";
                     break;
-                case EventCode.MachineSlotSave:
+                case EventCode.MachineCabinetSlotSave:
                     name = "商品货道保存";
                     break;
-                case EventCode.MachineSlotRemove:
+                case EventCode.MachineCabinetSlotRemove:
                     name = "商品货道移除";
+                    break;
+                case EventCode.MachineCabinetGetSlots:
+                    name = "查看商品货道";
                     break;
                 case EventCode.OrderCancle:
                     name = "订单取消";

@@ -76,7 +76,7 @@ namespace LocalS.BLL.Biz
                         int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                         if (lockQuantity > 0)
                         {
-                            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotRemove", string.Format("货道:{0}删除失败，存在有预定数量不能删除", slotId));
+                            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.MachineCabinetSlotSave, string.Format("货道:{0}删除失败，存在有预定数量不能删除", slotId));
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                         }
 
@@ -106,7 +106,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotRemove", string.Format("删除货道：{1}，移除实际库存：{0}", sellChannelStock.SumQuantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.MachineCabinetSlotSave, string.Format("删除货道：{1}，移除实际库存：{0}", sellChannelStock.SumQuantity, slotId));
                     }
 
                     var slot = new
@@ -179,7 +179,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("初次录入货道：{0}", slotId);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("初次录入货道：{0}", slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.MachineCabinetSlotSave, string.Format("初次录入货道：{0}", slotId));
                     }
                     else
                     {
@@ -190,7 +190,7 @@ namespace LocalS.BLL.Biz
                             if (lockQuantity > 0)
                             {
 
-                                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("货道：{0}，删除失败，存在有预定数量不能删除", slotId));
+                                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.MachineCabinetSlotRemove, string.Format("货道：{0}，删除失败，存在有预定数量不能删除", slotId));
 
                                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                             }
@@ -254,7 +254,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.RemarkByDev = string.Format("变换货道，实际库存：{0}", sellChannelStock.SumQuantity);
                             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "MachineSlotSave", string.Format("货道：{1}，变换货道，实际库存：{0}", sellChannelStock.SumQuantity, slotId));
+                            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.MachineCabinetSlotSave, string.Format("货道：{1}，变换货道，实际库存：{0}", sellChannelStock.SumQuantity, slotId));
                         }
 
                     }
@@ -334,7 +334,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderReserveSuccess", string.Format("货道：{1},预定成功，未支付,减少可销库存：{0}，增加待支付库存：{0}，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderReserveSuccess, string.Format("货道：{1},预定成功，未支付,减少可销库存：{0}，增加待支付库存：{0}，实际库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -375,7 +375,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，增加可销售库存：{0},减少未支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderCancle", string.Format("货道：{1},未支付，取消订单，增加可销售库存：{0},减少未支付库存：{0}，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderCancle, string.Format("货道：{1},未支付，取消订单，增加可销售库存：{0},减少未支付库存：{0}，实际库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -418,7 +418,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderCancle", string.Format("货道：{1},成功支付，减少待支付库存：{0}，增加待取货库存：{0},可售库存不变，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderCancle, string.Format("货道：{1},成功支付，减少待支付库存：{0}，增加待取货库存：{0},可售库存不变，实际库存不变", quantity, slotId));
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
                         #endregion
@@ -460,7 +460,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0},减少待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderPickupOneSysMadeSignTake", string.Format("货道：{1},成功取货，减少实际库存：{0},减少待取货库存：{0}，可售库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("货道：{1},成功取货，减少实际库存：{0},减少待取货库存：{0}，可售库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -503,7 +503,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去实际库存：{0}，减去待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderPickupOneManMadeSignTakeByNotComplete", string.Format("货道：{1},人为标记为取货成功，减去实际库存：{0}，减去待取货库存：{0}，可售库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, string.Format("货道：{1},人为标记为取货成功，减去实际库存：{0}，减去待取货库存：{0}，可售库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -547,7 +547,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderPickupOneManMadeSignNotTakeByComplete", string.Format("货道：{1},系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{0}，增加实际库存：{0}", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByComplete, string.Format("货道：{1},系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{0}，增加实际库存：{0}", quantity, slotId));
 
                         LogUtil.Info("bizProductSku.productSkuId22:");
 
@@ -594,7 +594,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "OrderPickupOneManMadeSignNotTakeByNotComplete", string.Format("货道：{1},人为标记未取货成功，恢复可售库存：{0},减去待取货库存：{0},实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("货道：{1},人为标记未取货成功，恢复可售库存：{0},减去待取货库存：{0},实际库存不变", quantity, slotId));
 
 
                         #endregion
@@ -675,7 +675,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockQuantity", string.Format("机柜：{0},货道：{1},库存调整数量为：{2}", cabinetId, slotId, sumQuantity));
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0},货道：{1},库存调整数量为：{2}", cabinetId, slotId, sumQuantity));
 
 
                 var slot = new
@@ -727,7 +727,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (string machineId in machineIds)
                 {
-                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, "AdjustStockSalePrice", string.Format("商品：{0}，调整价格为：{1}", productSkuId, salePrice));
+                    MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.AdjustStockSalePrice, string.Format("商品：{0}，调整价格为：{1}", productSkuId, salePrice));
                 }
 
 
