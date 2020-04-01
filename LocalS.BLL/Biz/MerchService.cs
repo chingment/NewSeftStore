@@ -101,6 +101,18 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
+
+        public string GetMerchName(string merchId)
+        {
+
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+
+            if (merch == null)
+                return null;
+
+            return merch.Name;
+        }
+
         public string GetMachineName(string merchId, string machineId)
         {
             string machineName = "";
@@ -115,13 +127,24 @@ namespace LocalS.BLL.Biz
         public string GetClientName(string merchId, string clientUserId)
         {
             string clientUserName = "匿名";
-            var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            var clientUser = CurrentDb.SysUser.Where(m => m.Id == clientUserId).FirstOrDefault();
             if (clientUser != null)
             {
                 clientUserName = clientUser.NickName;
             }
 
             return clientUserName;
+        }
+
+        public string GetStoreName(string merchId, string storeId)
+        {
+
+            var store = CurrentDb.Store.Where(m => m.Id == storeId && m.MerchId == merchId).FirstOrDefault();
+
+            if (store == null)
+                return null;
+
+            return store.Name;
         }
     }
 }

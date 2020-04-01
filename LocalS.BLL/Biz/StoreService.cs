@@ -10,6 +10,7 @@ namespace LocalS.BLL.Biz
     public class StoreService : BaseDbContext
     {
 
+
         public StoreInfoModel GetOne(string id)
         {
             var model = new StoreInfoModel();
@@ -36,7 +37,6 @@ namespace LocalS.BLL.Biz
             model.IsTestMode = store.IsTestMode;
             return model;
         }
-
 
         public List<StoreInfoModel> GetAll(string merchId)
         {

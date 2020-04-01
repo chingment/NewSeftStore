@@ -43,6 +43,11 @@ namespace LocalS.BLL.Biz
         {
             using (TransactionScope ts = new TransactionScope())
             {
+                string merchName = BizFactory.Merch.GetMerchName(merchId);
+                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
                 var sysUserOperateLog = new SysUserOperateLog();
                 sysUserOperateLog.Id = GuidUtil.New();
                 sysUserOperateLog.UserId = operater;
@@ -72,14 +77,17 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SysUserLoginHis.Add(userLoginHis);
                 CurrentDb.SaveChanges();
 
-
                 var merchOperateLog = new MerchOperateLog();
                 merchOperateLog.Id = GuidUtil.New();
                 merchOperateLog.AppId = appId;
                 merchOperateLog.MerchId = merchId;
+                merchOperateLog.MerchName = merchName;
                 merchOperateLog.StoreId = storeId;
+                merchOperateLog.StoreName = storeName;
                 merchOperateLog.MachineId = machineId;
+                merchOperateLog.MachineName= machineName;
                 merchOperateLog.OperateUserId = operater;
+                merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                 merchOperateLog.Remark = eventRemark;
@@ -96,6 +104,11 @@ namespace LocalS.BLL.Biz
         {
             using (TransactionScope ts = new TransactionScope())
             {
+                string merchName = BizFactory.Merch.GetMerchName(merchId);
+                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
                 var sysUserOperateLog = new SysUserOperateLog();
                 sysUserOperateLog.Id = GuidUtil.New();
                 sysUserOperateLog.UserId = operater;
@@ -129,9 +142,13 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.Id = GuidUtil.New();
                 merchOperateLog.AppId = appId;
                 merchOperateLog.MerchId = merchId;
+                merchOperateLog.MerchName = merchName;
                 merchOperateLog.StoreId = storeId;
+                merchOperateLog.StoreName = storeName;
                 merchOperateLog.MachineId = machineId;
+                merchOperateLog.MachineName = machineName;
                 merchOperateLog.OperateUserId = operater;
+                merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                 merchOperateLog.Remark = eventRemark;
@@ -148,6 +165,11 @@ namespace LocalS.BLL.Biz
         {
             using (TransactionScope ts = new TransactionScope())
             {
+                string merchName = BizFactory.Merch.GetMerchName(merchId);
+                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
                 var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
 
                 if (machine == null)
@@ -171,9 +193,13 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.Id = GuidUtil.New();
                 merchOperateLog.AppId = appId;
                 merchOperateLog.MerchId = merchId;
+                merchOperateLog.MerchName = merchName;
                 merchOperateLog.StoreId = storeId;
+                merchOperateLog.StoreName = storeName;
                 merchOperateLog.MachineId = machineId;
+                merchOperateLog.MachineName = machineName;
                 merchOperateLog.OperateUserId = operater;
+                merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                 merchOperateLog.Remark = eventRemark;
@@ -192,6 +218,11 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
+                string merchName = BizFactory.Merch.GetMerchName(merchId);
+                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
                 var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
 
 
@@ -346,9 +377,13 @@ namespace LocalS.BLL.Biz
                     merchOperateLog.Id = GuidUtil.New();
                     merchOperateLog.AppId = appId;
                     merchOperateLog.MerchId = merchId;
+                    merchOperateLog.MerchName = merchName;
                     merchOperateLog.StoreId = storeId;
+                    merchOperateLog.StoreName = storeName;
                     merchOperateLog.MachineId = machineId;
+                    merchOperateLog.MachineName = machineName;
                     merchOperateLog.OperateUserId = operater;
+                    merchOperateLog.OperateUserName = operaterUserName;
                     merchOperateLog.EventCode = eventCode;
                     merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                     merchOperateLog.Remark = remark.ToString();
