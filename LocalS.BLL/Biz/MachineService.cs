@@ -95,15 +95,12 @@ namespace LocalS.BLL.Biz
             return model;
         }
 
-
         public List<BannerModel> GetHomeBanners(string id)
         {
             var bannerModels = new List<BannerModel>();
 
             var machine = BizFactory.Machine.GetOne(id);
 
-            LogUtil.Info("MerchId：" + machine.MerchId);
-            LogUtil.Info("BelongId：" + id);
             var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == machine.MerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
 
             if (adContentIds != null && adContentIds.Length > 0)
@@ -150,56 +147,6 @@ namespace LocalS.BLL.Biz
             //var content = new { orderId = orderId, orderSn = orderSn, status = E_OrderStatus.Payed, OrderDetails = orderDetails };
             //PushService.SendPaySuccess(machine.JPushRegId, content);
         }
-
-        public static int[] GetLayout(string str)
-        {
-            int[] layout = null;
-
-            if (string.IsNullOrEmpty(str))
-            {
-                return null;
-            }
-
-            try
-            {
-                string[] data = str.Split(',');
-                if (data.Length > 0)
-                {
-
-                    layout = new int[data.Length];
-
-                    for (int i = 0; i < data.Length; i++)
-                    {
-                        layout[i] = int.Parse(data[i]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-
-
-            return layout;
-        }
-
-        public static int[] GetPendantRows(string str)
-        {
-
-            int[] layout = null;
-
-            try
-            {
-                string[] sNums = str.Split(',');
-                layout = Array.ConvertAll(sNums, int.Parse);
-                return layout;
-            }
-            catch (Exception ex)
-            {
-                return layout;
-            }
-        }
-
 
         public CustomJsonResult EventNotify(string operater, string appId, string machineId, double lat, double lng, string eventCode, object content)
         {
@@ -369,6 +316,7 @@ namespace LocalS.BLL.Biz
                                 orderPickupLog.SellChannelRefId = model.MachineId;
                                 orderPickupLog.UniqueId = pickupModel.UniqueId;
                                 orderPickupLog.PrdProductSkuId = pickupModel.ProductSkuId;
+                                orderPickupLog.CabinetId = pickupModel.CabinetId;
                                 orderPickupLog.SlotId = pickupModel.SlotId;
                                 orderPickupLog.Status = pickupModel.Status;
                                 orderPickupLog.ActionId = pickupModel.ActionId;
