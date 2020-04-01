@@ -85,7 +85,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.StoreId = storeId;
                 merchOperateLog.StoreName = storeName;
                 merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName= machineName;
+                merchOperateLog.MachineName = machineName;
                 merchOperateLog.OperateUserId = operater;
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
@@ -299,6 +299,19 @@ namespace LocalS.BLL.Biz
                                     if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
                                         BizFactory.ProductSku.OperateStockQuantity(machineId, OperateStockType.OrderPickupOneSysMadeSignTake, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                    }
+                                }
+
+                                if (orderSubChildUnique.PickupStartTime == null)
+                                {
+                                    orderSubChildUnique.PickupStartTime = DateTime.Now;
+                                }
+
+                                if (model.IsPickupComplete)
+                                {
+                                    if (orderSubChildUnique.PickupEndTime == null)
+                                    {
+                                        orderSubChildUnique.PickupEndTime = DateTime.Now;
                                     }
                                 }
 

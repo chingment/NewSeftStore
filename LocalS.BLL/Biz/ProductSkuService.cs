@@ -157,8 +157,6 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.Creator = GuidUtil.Empty();
                         CurrentDb.SellChannelStock.Add(sellChannelStock);
 
-
-
                         var sellChannelStockLog = new SellChannelStockLog();
                         sellChannelStockLog.Id = GuidUtil.New();
                         sellChannelStockLog.MerchId = sellChannelStock.MerchId;

@@ -226,7 +226,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         case E_SellChannelRefType.Machine:
 
-                            var prderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == item.Id).ToList();
+                            var prderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
 
                             foreach (var prderSubChildUnique in prderSubChildUniques)

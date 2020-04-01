@@ -78,5 +78,8 @@ namespace LocalS.Entity
         public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderExPickupHandleSign ExPickupHandleSign { get; set; }
         public E_OrderPickupStatus PickupStatus { get; set; }
+
+        public DateTime? PickupStartTime { get; set; }
+        public DateTime? PickupEndTime { get; set; }
     }
 }

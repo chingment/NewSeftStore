@@ -253,7 +253,7 @@
               </td>
               <td style="width:15%;text-align:center;">
                 <el-popover
-
+                  v-if="pickupSku.pickupLogs.length>0"
                   placement="right"
                   width="400"
                   trigger="click"
