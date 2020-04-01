@@ -77,7 +77,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machine.Id, "GetCabinetSlots", "查看库存");
+            MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machine.Id, EventCode.MachineCabinetGetSlots, "查看库存");
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
