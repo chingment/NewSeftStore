@@ -24,7 +24,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushOperateLog(string appId, string operater, string machineId, string eventCode, string remark, object parms = null)
+        public void PushOperateLog(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string remark, object parms = null)
         {
             var content = new OperateLogModel();
             content.AppId = appId;
@@ -41,7 +41,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushMachineEventNotify(string operater, string appId, string machineId, double lat, double lng, string eventCode,object content)
+        public void PushMachineEventNotify(string operater, string appId, string machineId, double lat, double lng, string eventCode, object content)
         {
             var _content = new MachineEventNotifyModel();
             _content.AppId = appId;
