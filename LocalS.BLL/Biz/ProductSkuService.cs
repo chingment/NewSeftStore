@@ -330,11 +330,11 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可销库存：{0}，增加待支付库存：{0}，实际库存不变", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可售库存：{0}，增加待支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderReserveSuccess, string.Format("货道：{1},预定成功，未支付,减少可销库存：{0}，增加待支付库存：{0}，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderReserveSuccess, string.Format("货道：{1},预定成功，未支付,减少可售库存：{0}，增加待支付库存：{0}，实际库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -372,10 +372,10 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，增加可销售库存：{0},减少未支付库存：{0}，实际库存不变", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，增加可售库存：{0}，减少未支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderCancle, string.Format("货道：{1},未支付，取消订单，增加可销售库存：{0},减少未支付库存：{0}，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderCancle, string.Format("货道：{1},未支付，取消订单，增加可售库存：{0},减少未支付库存：{0}，实际库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -414,11 +414,11 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("成功支付，减少待支付库存：{0}，增加待取货库存：{0},可售库存不变，实际库存不变", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("成功支付，待取货，减少待支付库存：{0}，增加待取货库存：{0}，可售库存不变，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderCancle, string.Format("货道：{1},成功支付，减少待支付库存：{0}，增加待取货库存：{0},可售库存不变，实际库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderCancle, string.Format("货道：{1},成功支付，待取货，减少待支付库存：{0}，增加待取货库存：{0}，可售库存不变，实际库存不变", quantity, slotId));
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
                         #endregion
@@ -457,10 +457,10 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.ChangeQuantity = quantity;
                         sellChannelStockLog.Creator = operater;
                         sellChannelStockLog.CreateTime = DateTime.Now;
-                        sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0},减少待取货库存：{0}，可售库存不变", quantity);
+                        sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0}，减少待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("货道：{1},成功取货，减少实际库存：{0},减少待取货库存：{0}，可售库存不变", quantity, slotId));
+                        MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("货道：{1},成功取货，减少实际库存：{0}，减少待取货库存：{0}，可售库存不变", quantity, slotId));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -669,13 +669,13 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.ChangeQuantity = 0;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
-                sellChannelStockLog.RemarkByDev = string.Format("库存调整,由{0}调整{1}", oldSumQuantity, sellChannelStock.SumQuantity);
+                sellChannelStockLog.RemarkByDev = string.Format("库存调整，由{0}调整{1}", oldSumQuantity, sellChannelStock.SumQuantity);
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0},货道：{1},库存调整数量为：{2}", cabinetId, slotId, sumQuantity));
+                MqFactory.Global.PushOperateLog(AppId.STORETERM, operater, machineId, EventCode.AdjustStockQuantity, string.Format("库存调整数量为：{0}", sumQuantity));
 
 
                 var slot = new
