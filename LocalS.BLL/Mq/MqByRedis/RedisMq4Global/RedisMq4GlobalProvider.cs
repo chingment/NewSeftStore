@@ -24,36 +24,25 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushOperateLog(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string remark, object parms = null)
+        public CustomJsonResult PushEventNotify(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, object eventContent = null)
         {
-            var content = new OperateLogModel();
+            var content = new EventNotifyModel();
             content.AppId = appId;
             content.Operater = operater;
-            content.EventCode = eventCode;
-            content.Remark = remark;
+            content.MerchId = merchId;
+            content.StoreId = storeId;
             content.MachineId = machineId;
-            content.Parms = parms;
+            content.EventCode = eventCode;
+            content.EventRemark = eventRemark;
+            content.EventContent = eventContent;
 
             var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.OperateLog;
+            obj.Type = MqMessageType.EventNotify;
             obj.Ticket = GuidUtil.New();
             obj.Content = content;
             this.Push(obj);
-        }
 
-        public void PushMachineEventNotify(string operater, string appId, string machineId, double lat, double lng, string eventCode, object content)
-        {
-            var _content = new MachineEventNotifyModel();
-            _content.AppId = appId;
-            _content.MachineId = machineId;
-            _content.EventCode = eventCode;
-            _content.Content = content;
-            _content.Operater = operater;
-            var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.MachineEventNotify;
-            obj.Ticket = GuidUtil.New();
-            obj.Content = _content;
-            this.Push(obj);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }
 }

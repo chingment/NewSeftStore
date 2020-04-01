@@ -37,15 +37,10 @@ namespace LocalS.BLL.Mq.MqByRedis
                                 var payResultNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
                                 BLL.Biz.BizFactory.Order.PayResultNotify(GuidUtil.Empty(), payResultNotifyModel.PayPartner, payResultNotifyModel.From, payResultNotifyModel.Content);
                                 break;
-                            case MqMessageType.OperateLog:
-                                LogUtil.Info("OperateLog");
-                                var operateLogModel = Newtonsoft.Json.JsonConvert.DeserializeObject<OperateLogModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.OperateLog.Add(operateLogModel);
-                                break;
-                            case MqMessageType.MachineEventNotify:
-                                LogUtil.Info("MachineEventNotify");
-                                var machineEventNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<MachineEventNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.Machine.EventHandle(machineEventNotifyModel);
+                            case MqMessageType.EventNotify:
+                                LogUtil.Info("EventNotify");
+                                var eventNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<EventNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.OperateLog.EventNotifyHandle(eventNotifyModel);
                                 break;
                         }
 
