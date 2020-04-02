@@ -89,7 +89,6 @@ namespace LocalS.BLL.Biz
             }
         }
 
-
         private void EventHandleByLogin(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, LoginLogModel model)
         {
             using (TransactionScope ts = new TransactionScope())
@@ -141,7 +140,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = eventRemark;
+                merchOperateLog.Remark = string.Format("用户：{0}，{1}", operaterUserName, eventRemark);
                 merchOperateLog.Creator = operater;
                 merchOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MerchOperateLog.Add(merchOperateLog);
@@ -202,7 +201,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = eventRemark;
+                merchOperateLog.Remark = string.Format("用户：{0}，{1}", operaterUserName, eventRemark);
                 merchOperateLog.Creator = operater;
                 merchOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MerchOperateLog.Add(merchOperateLog);
@@ -231,12 +230,15 @@ namespace LocalS.BLL.Biz
                 switch (model.Status)
                 {
                     case "running":
-                        eventRemark = "正常";
+                        eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineName);
                         machine.RunStatus = E_MachineRunStatus.Running;
                         break;
                     case "setting":
-                        eventRemark = "维护中";
+                        eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineName);
                         machine.RunStatus = E_MachineRunStatus.Setting;
+                        break;
+                    default:
+                        eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineName);
                         break;
                 }
 
@@ -458,7 +460,7 @@ namespace LocalS.BLL.Biz
                     merchOperateLog.OperateUserName = operaterUserName;
                     merchOperateLog.EventCode = eventCode;
                     merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                    merchOperateLog.Remark = remark.ToString();
+                    merchOperateLog.Remark = string.Format("店铺：{0}，机器 ：{1},{2}",storeName,machineName,remark.ToString());
                     merchOperateLog.Creator = operater;
                     merchOperateLog.CreateTime = DateTime.Now;
                     CurrentDb.MerchOperateLog.Add(merchOperateLog);
