@@ -101,7 +101,36 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
-            BizFactory.Order.BuildQrcode2PickupCode("31231232");
+
+
+            if ("昨天" == "明天")
+            {
+                Console.WriteLine("今天就是周五");
+            }
+
+            Console.WriteLine("今天是周几");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //BizFactory.Order.BuildQrcode2PickupCode("31231232");
 
             //string a = Convert.ToString(15, 2);
             //XrtPayInfoConfg payInfo = new XrtPayInfoConfg();

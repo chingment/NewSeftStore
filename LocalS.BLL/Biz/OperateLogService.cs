@@ -36,8 +36,59 @@ namespace LocalS.BLL.Biz
                     var pickupModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
                     EventHandleByPickup(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, pickupModel);
                     break;
+                default:
+                    EventHandle(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark);
+                    break;
             }
         }
+
+        private void EventHandle(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark)
+        {
+            using (TransactionScope ts = new TransactionScope())
+            {
+                string merchName = BizFactory.Merch.GetMerchName(merchId);
+                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
+                if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
+                {
+                    var sysUserOperateLog = new SysUserOperateLog();
+                    sysUserOperateLog.Id = GuidUtil.New();
+                    sysUserOperateLog.UserId = operater;
+                    sysUserOperateLog.EventCode = eventCode;
+                    sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
+                    sysUserOperateLog.AppId = appId;
+                    sysUserOperateLog.Remark = eventRemark;
+                    sysUserOperateLog.CreateTime = DateTime.Now;
+                    sysUserOperateLog.Creator = operater;
+                    CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
+                    CurrentDb.SaveChanges();
+                }
+
+                var merchOperateLog = new MerchOperateLog();
+                merchOperateLog.Id = GuidUtil.New();
+                merchOperateLog.AppId = appId;
+                merchOperateLog.MerchId = merchId;
+                merchOperateLog.MerchName = merchName;
+                merchOperateLog.StoreId = storeId;
+                merchOperateLog.StoreName = storeName;
+                merchOperateLog.MachineId = machineId;
+                merchOperateLog.MachineName = machineName;
+                merchOperateLog.OperateUserId = operater;
+                merchOperateLog.OperateUserName = operaterUserName;
+                merchOperateLog.EventCode = eventCode;
+                merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+                merchOperateLog.Remark = eventRemark;
+                merchOperateLog.Creator = operater;
+                merchOperateLog.CreateTime = DateTime.Now;
+                CurrentDb.MerchOperateLog.Add(merchOperateLog);
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+            }
+        }
+
 
         private void EventHandleByLogin(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, LoginLogModel model)
         {
@@ -246,12 +297,20 @@ namespace LocalS.BLL.Biz
                     remark.Append("商品:" + bizProduct.Name);
                 }
 
-                remark.Append(string.Format(",货道:{0},当前动作:{1},状态:{2}", model.SlotId, model.ActionName, model.ActionStatusName));
-
-                if (model.IsPickupComplete)
+                if (model.Status == E_OrderPickupStatus.SendPickupCmd)
                 {
-                    remark.Append(string.Format(",取货完成,用时:{0}", model.PickupUseTime));
+                    remark.Append(string.Format(",货道:{0},发送命令", model.SlotId));
                 }
+                else
+                {
+                    remark.Append(string.Format(",货道:{0},当前动作:{1},状态:{2}", model.SlotId, model.ActionName, model.ActionStatusName));
+
+                    if (model.IsPickupComplete)
+                    {
+                        remark.Append(string.Format(",取货完成,用时:{0}", model.PickupUseTime));
+                    }
+                }
+
 
                 if (!model.IsTest)
                 {
