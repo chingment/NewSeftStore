@@ -44,5 +44,10 @@ namespace LocalS.BLL.Mq.MqByRedis
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
+
+        public CustomJsonResult PushEventNotify(string operater, string appId, string machineId, string eventCode, string eventRemark, object eventContent = null)
+        {
+            return PushEventNotify(operater, appId, machineId, eventCode, eventRemark, eventContent);
+        }
     }
 }

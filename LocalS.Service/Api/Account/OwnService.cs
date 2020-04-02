@@ -88,8 +88,6 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未指定登录应用");
             }
 
-            LogUtil.Info("AppID:" + rop.AppId);
-
             if (rop.AppId == AppId.STORETERM)
             {
                 if (rop.LoginPms == null)
@@ -121,6 +119,7 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号不存在");
             }
 
+
             if (!PassWordHelper.VerifyHashedPassword(sysUser.PasswordHash, rop.Password))
             {
                 MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "登录失败，密码不正确", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "密码不正确" });
@@ -143,7 +142,6 @@ namespace LocalS.Service.Api.Account
             {
                 #region MERCH
 
-
                 var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                 if (merchUser == null)
                 {
@@ -153,6 +151,9 @@ namespace LocalS.Service.Api.Account
                 }
 
                 tokenInfo.MerchId = merchUser.MerchId;
+
+
+                MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
 
                 #endregion
@@ -171,14 +172,14 @@ namespace LocalS.Service.Api.Account
 
                 if (string.IsNullOrEmpty(machine.CurUseMerchId))
                 {
-                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "录失败，该机器未绑定商家", new LoginLogModel { LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseMerchId，为空" });
+                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machineId, EventCode.Login, "登录失败，该机器未绑定商家", new LoginLogModel { LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseMerchId，为空" });
 
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
                 }
 
                 if (string.IsNullOrEmpty(machine.CurUseStoreId))
                 {
-                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "录失败，该机器未绑定店铺", new LoginLogModel { LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseStoreId,为空" });
+                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machineId, EventCode.Login, "录失败，该机器未绑定店铺", new LoginLogModel { LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "表Machine字段CurUseStoreId,为空" });
 
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定店铺");
                 }
@@ -186,26 +187,27 @@ namespace LocalS.Service.Api.Account
                 var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                 if (storeTermUser == null)
                 {
-                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "登录失败，该用户不属于该站点", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表SysMerchUser字段Id:{0},找不到", sysUser.Id) });
+                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machineId, EventCode.Login, "登录失败，该用户不属于该站点", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表SysMerchUser字段Id:{0},找不到", sysUser.Id) });
 
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
                 if (machine.CurUseMerchId != storeTermUser.MerchId)
                 {
-                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "帐号与商户不对应", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表Machine字段CurUseMerchId:{0}与表StoreTermUser字段MerchId:{1}", machine.CurUseMerchId, storeTermUser.MerchId) });
-
+                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machineId, EventCode.Login, "帐号与商户不对应", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表Machine字段CurUseMerchId:{0}与表StoreTermUser字段MerchId:{1}", machine.CurUseMerchId, storeTermUser.MerchId) });
 
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                 }
+
+                MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
+
+
                 ret.UserName = storeTermUser.UserName;
                 ret.FullName = storeTermUser.FullName;
                 #endregion
             }
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
-
-            MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
