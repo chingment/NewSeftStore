@@ -342,7 +342,7 @@ namespace LocalS.Service.Api.Merch
                         sellChannelDetail.Name = orderSub.SellChannelRefName;
                         sellChannelDetail.DetailType = 1;
 
-                        var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
+                        var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
                         var pickupSkus = new List<RetOrderDetails.PickupSku>();
                         foreach (var orderSubChildUnique in orderSubChildUniques)
                         {
