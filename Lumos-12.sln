@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{942C28E6-22AE-402F-AAF3-C936AC252164}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lumos", "Lumos", "{B7FB5067-15AE-4A89-83B5-47314967E6CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{3C8179FC-093D-45D3-A92F-4AB64C2C8A81}"
+	ProjectSection(SolutionItems) = preProject
+		TestWeiDun\Program.cs = TestWeiDun\Program.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{C4D00A02-7646-4B0F-A1E8-6E32EECA404A}"
 EndProject
