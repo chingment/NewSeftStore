@@ -33,7 +33,7 @@
         {{ temp.id }}
       </el-form-item>
       <el-form-item label="机器名称" prop="name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="机器Logo">
 

@@ -16,6 +16,7 @@
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :machineid="id" /></el-tab-pane>
       <el-tab-pane label="库存信息" name="tabStock"><manage-pane-stock :machineid="id" /></el-tab-pane>
       <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order :machineid="id" /></el-tab-pane>
+      <el-tab-pane label="控制中心" name="tabControlCenter"><manage-pane-control-center :machineid="id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -24,9 +25,10 @@ import { initManage } from '@/api/machine'
 import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStock from './components/ManagePaneStock'
+import managePaneControlCenter from './components/ManagePaneControlCenter'
 import managePaneOrder from '@/views/order/list'
 export default {
-  components: { managePaneBaseInfo, managePaneStock, managePaneOrder },
+  components: { managePaneBaseInfo, managePaneStock, managePaneOrder, managePaneControlCenter },
   data() {
     return {
       activeName: 'tabBaseInfo',
