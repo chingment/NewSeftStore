@@ -183,52 +183,5 @@ namespace LocalS.Service.Api.StoreTerm
             return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
         }
 
-        public CustomJsonResult GetExOrder(RupOrderGetExOrder rup)
-        {
-            var result = new CustomJsonResult();
-
-            var ret = new RetOrderGetExOrder();
-
-            string orderId = "";
-
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
-
-            ret.OrderId = order.Id;
-            ret.OrderSn = order.Sn;
-
-            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == rup.MachineId).ToList();
-
-            foreach (var orderSubChildUnique in orderSubChildUniques)
-            {
-                var productSku = new RetOrderGetExOrder.ProductSku();
-                productSku.Id = orderSubChildUnique.PrdProductId;
-                productSku.UniqueId = orderSubChildUnique.Id;
-                productSku.SlotId = orderSubChildUnique.SlotId;
-                productSku.Quantity = orderSubChildUnique.Quantity;
-                productSku.Name = orderSubChildUnique.PrdProductSkuName;
-                productSku.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
-
-                if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked)
-                {
-                    productSku.CanHandle = false;
-                }
-                else
-                {
-                    productSku.CanHandle = true;
-                }
-
-                ret.ProductSkus.Add(productSku);
-            }
-
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-        }
-
-        public CustomJsonResult HandleExOrder(RopOrderHandleOrder rop)
-        {
-            var result = new CustomJsonResult();
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-        }
     }
 }

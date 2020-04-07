@@ -312,6 +312,7 @@
     <Compile Include="Api\StoreApp\RModels\RupStoreList.cs" />
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />
+    <Compile Include="Api\StoreTerm\ControlService.cs" />
     <Compile Include="Api\StoreTerm\MachineService.cs" />
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
@@ -319,7 +320,7 @@
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetOrderGetExOrder.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RetMachineGetRunExHandleItems.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
@@ -332,7 +333,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderHandleOrder.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RupOrderGetExOrder.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupMachineGetRunExHandleItems.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUpdateInfo.cs" />

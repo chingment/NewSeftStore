@@ -50,9 +50,16 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse EventNotify(RopMachineEventNotify rop)
+        public OwnApiHttpResponse EventNotify([FromBody]RopMachineEventNotify rop)
         {
             IResult result = StoreTermServiceFactory.Machine.EventNotify(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
+        public OwnApiHttpResponse GetRunExHandleItems([FromUri]RupMachineGetRunExHandleItems rup)
+        {
+            IResult result = StoreTermServiceFactory.Machine.GetRunExHandleItems(this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

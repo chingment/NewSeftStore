@@ -40,5 +40,10 @@ namespace LocalS.Entity
         public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public DateTime? PayedTime { get; set; }
+
+        public bool ExIsHappen { get; set; }
+        public DateTime? ExHappenTime { get; set; }
+        public bool ExIsHandle { get; set; }
+        public DateTime? ExHandleTime { get; set; }
     }
 }

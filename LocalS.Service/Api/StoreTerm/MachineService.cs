@@ -319,9 +319,57 @@ namespace LocalS.Service.Api.StoreTerm
 
         public CustomJsonResult EventNotify(string operater, RopMachineEventNotify rop)
         {
-            BizFactory.Machine.EventNotify(operater, rop.AppId, rop.MachineId,rop.EventCode, rop.Content);
+            BizFactory.Machine.EventNotify(operater, rop.AppId, rop.MachineId, rop.EventCode, rop.Content);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        }
+
+
+        public CustomJsonResult GetRunExHandleItems(string operater, RupMachineGetRunExHandleItems rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetMachineGetRunExHandleItems();
+
+
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
+
+            foreach (var orderSub in orderSubs)
+            {
+                var exOrderModel = new RetMachineGetRunExHandleItems.Order();
+
+                exOrderModel.OrderId = orderSub.OrderId;
+                exOrderModel.OrderSn = orderSub.OrderSn;
+
+                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
+
+                foreach (var orderSubChildUnique in orderSubChildUniques)
+                {
+                    var productSku = new RetMachineGetRunExHandleItems.ProductSku();
+                    productSku.Id = orderSubChildUnique.PrdProductId;
+                    productSku.UniqueId = orderSubChildUnique.Id;
+                    productSku.SlotId = orderSubChildUnique.SlotId;
+                    productSku.Quantity = orderSubChildUnique.Quantity;
+                    productSku.Name = orderSubChildUnique.PrdProductSkuName;
+                    productSku.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
+
+                    if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked)
+                    {
+                        productSku.CanHandle = false;
+                    }
+                    else
+                    {
+                        productSku.CanHandle = true;
+                    }
+
+                    exOrderModel.ProductSkus.Add(productSku);
+                }
+
+                ret.ExOrders.Add(exOrderModel);
+            }
+
+
+            return result;
         }
     }
 }

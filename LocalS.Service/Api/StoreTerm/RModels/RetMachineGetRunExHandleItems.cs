@@ -6,17 +6,24 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RetOrderGetExOrder
+    public class RetMachineGetRunExHandleItems
     {
-        public RetOrderGetExOrder()
+        public RetMachineGetRunExHandleItems()
         {
-            this.ProductSkus = new List<ProductSku>();
+            this.ExOrders = new List<Order>();
         }
-        public string OrderId { get; set; }
 
-        public string OrderSn { get; set; }
+        public List<Order> ExOrders { get; set; }
 
-        public List<ProductSku> ProductSkus { get; set; }
+        public class Order
+        {
+            public string OrderId { get; set; }
+
+            public string OrderSn { get; set; }
+
+            public List<ProductSku> ProductSkus { get; set; }
+
+        }
 
         public class ProductSku
         {

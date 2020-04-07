@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupOrderGetExOrder
+    public class RupMachineGetRunExHandleItems
     {
         public string MachineId { get; set; }
     }

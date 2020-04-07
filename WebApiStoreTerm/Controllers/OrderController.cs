@@ -51,17 +51,5 @@ namespace WebApiStoreTerm.Controllers
             IResult result = StoreTermServiceFactory.Order.PickupStatusQuery(rup);
             return new OwnApiHttpResponse(result);
         }
-
-        public OwnApiHttpResponse GetExOrder([FromUri]RupOrderGetExOrder rup)
-        {
-            IResult result = StoreTermServiceFactory.Order.GetExOrder(rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-        public OwnApiHttpResponse HandleExOrder([FromBody]RopOrderHandleOrder rop)
-        {
-            IResult result = StoreTermServiceFactory.Order.HandleExOrder(rop);
-            return new OwnApiHttpResponse(result);
-        }
     }
 }
