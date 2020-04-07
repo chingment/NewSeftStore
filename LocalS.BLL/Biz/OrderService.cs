@@ -1166,7 +1166,6 @@ namespace LocalS.BLL.Biz
             return str;
         }
 
-
         public string BuildQrcode2PickupCode(string pickupCode)
         {
             string encode_qrcode = PickupCodeEncode(pickupCode);

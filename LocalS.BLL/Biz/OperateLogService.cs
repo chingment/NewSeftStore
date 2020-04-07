@@ -402,6 +402,9 @@ namespace LocalS.BLL.Biz
                         order.ExIsHappen = true;
                         order.ExHappenTime = DateTime.Now;
 
+                        orderSub.ExIsHappen = true;
+                        orderSub.ExHappenTime = DateTime.Now;
+
                         machine.ExIsHas = true;
 
                         Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
