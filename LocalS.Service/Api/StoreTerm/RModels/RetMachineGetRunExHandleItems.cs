@@ -17,9 +17,14 @@ namespace LocalS.Service.Api.StoreTerm
 
         public class Order
         {
-            public string OrderId { get; set; }
+            public Order()
+            {
+                this.ProductSkus = new List<ProductSku>();
+            }
 
-            public string OrderSn { get; set; }
+            public string Id { get; set; }
+
+            public string Sn { get; set; }
 
             public List<ProductSku> ProductSkus { get; set; }
 

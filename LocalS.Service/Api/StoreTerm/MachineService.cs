@@ -338,8 +338,8 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 var exOrderModel = new RetMachineGetRunExHandleItems.Order();
 
-                exOrderModel.OrderId = orderSub.OrderId;
-                exOrderModel.OrderSn = orderSub.OrderSn;
+                exOrderModel.Id = orderSub.OrderId;
+                exOrderModel.Sn = orderSub.OrderSn;
 
                 var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
@@ -369,7 +369,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            return result;
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
     }
 }

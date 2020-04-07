@@ -56,7 +56,7 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
+        [HttpGet]
         public OwnApiHttpResponse GetRunExHandleItems([FromUri]RupMachineGetRunExHandleItems rup)
         {
             IResult result = StoreTermServiceFactory.Machine.GetRunExHandleItems(this.CurrentUserId, rup);
