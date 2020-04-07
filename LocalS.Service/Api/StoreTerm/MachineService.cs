@@ -345,24 +345,24 @@ namespace LocalS.Service.Api.StoreTerm
 
                 foreach (var orderSubChildUnique in orderSubChildUniques)
                 {
-                    var productSku = new RetMachineGetRunExHandleItems.ProductSku();
-                    productSku.Id = orderSubChildUnique.PrdProductId;
-                    productSku.UniqueId = orderSubChildUnique.Id;
-                    productSku.SlotId = orderSubChildUnique.SlotId;
-                    productSku.Quantity = orderSubChildUnique.Quantity;
-                    productSku.Name = orderSubChildUnique.PrdProductSkuName;
-                    productSku.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
+                    var orderDetailItem = new RetMachineGetRunExHandleItems.OrderDetailItem();
+                    orderDetailItem.ProductId = orderSubChildUnique.PrdProductId;
+                    orderDetailItem.UniqueId = orderSubChildUnique.Id;
+                    orderDetailItem.SlotId = orderSubChildUnique.SlotId;
+                    orderDetailItem.Quantity = orderSubChildUnique.Quantity;
+                    orderDetailItem.Name = orderSubChildUnique.PrdProductSkuName;
+                    orderDetailItem.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
 
                     if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked)
                     {
-                        productSku.CanHandle = false;
+                        orderDetailItem.CanHandle = false;
                     }
                     else
                     {
-                        productSku.CanHandle = true;
+                        orderDetailItem.CanHandle = true;
                     }
 
-                    exOrderModel.ProductSkus.Add(productSku);
+                    exOrderModel.DetailItems.Add(orderDetailItem);
                 }
 
                 ret.ExOrders.Add(exOrderModel);
@@ -370,6 +370,106 @@ namespace LocalS.Service.Api.StoreTerm
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+
+        public CustomJsonResult HandleRunExItems(string operater, RopMachineHandleRunExItems rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                foreach (var exOrder in rop.ExOrders)
+                {
+                    var order = CurrentDb.Order.Where(m => m.Id == exOrder.Id).FirstOrDefault();
+
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == exOrder.Id).ToList();
+
+                    var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == exOrder.Id).ToList();
+
+                    foreach (var orderSubChildUnique in orderSubChildUniques)
+                    {
+                        var detailItem = exOrder.DetailItems.Where(m => m.UniqueId == orderSubChildUnique.Id).FirstOrDefault();
+
+                        if (detailItem == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
+                        }
+
+                        if (detailItem.PickupStatus != 1 && detailItem.PickupStatus != 2)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.PickupStatus);
+                        }
+
+                        if (detailItem.PickupStatus == 1)
+                        {
+                            orderSubChildUnique.ExPickupIsHandle = true;
+                            orderSubChildUnique.ExPickupHandleTime = DateTime.Now;
+                            orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
+                            orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
+
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+
+                            var orderPickupLog = new OrderPickupLog();
+                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.OrderId = orderSubChildUnique.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
+                            orderPickupLog.UniqueId = orderSubChildUnique.Id;
+                            orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderSubChildUnique.SlotId;
+                            orderPickupLog.Status = E_OrderPickupStatus.Taked;
+                            orderPickupLog.IsPickupComplete = true;
+                            orderPickupLog.ActionRemark = "人为标识已取货";
+                            orderPickupLog.Remark = "";
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
+                        }
+                        else if (detailItem.PickupStatus == 2)
+                        {
+                            orderSubChildUnique.ExPickupIsHandle = true;
+                            orderSubChildUnique.ExPickupHandleTime = DateTime.Now;
+                            orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
+                            orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
+
+                            BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+
+                            var orderPickupLog = new OrderPickupLog();
+                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.OrderId = orderSubChildUnique.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
+                            orderPickupLog.UniqueId = orderSubChildUnique.Id;
+                            orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
+                            orderPickupLog.SlotId = orderSubChildUnique.SlotId;
+                            orderPickupLog.Status = E_OrderPickupStatus.Taked;
+                            orderPickupLog.IsPickupComplete = false;
+                            orderPickupLog.ActionRemark = "人为标识未取货";
+                            orderPickupLog.Remark = "";
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
+                        }
+                    }
+                }
+
+
+                var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+
+                machine.ExIsHas = false;
+                machine.Mender = operater;
+                machine.MendTime = DateTime.Now;
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息");
+
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }
 }

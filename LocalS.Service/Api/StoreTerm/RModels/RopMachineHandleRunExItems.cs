@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RetMachineGetRunExHandleItems
+    public class RopMachineHandleRunExItems
     {
-        public RetMachineGetRunExHandleItems()
+
+        public RopMachineHandleRunExItems()
         {
             this.ExOrders = new List<Order>();
         }
+
+        public string MachineId { get; set; }
 
         public List<Order> ExOrders { get; set; }
 
@@ -23,22 +26,15 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             public string Id { get; set; }
-            public string Sn { get; set; }
-            public string SubId { get; set; }
-            public string SubSn { get; set; }
+
             public List<OrderDetailItem> DetailItems { get; set; }
 
         }
 
         public class OrderDetailItem
         {
-            public string ProductId { get; set; }
-            public string MainImgUrl { get; set; }
-            public string Name { get; set; }
-            public int Quantity { get; set; }
             public string UniqueId { get; set; }
-            public string SlotId { get; set; }
-            public bool CanHandle { get; set; }
+            public int PickupStatus { get; set; }
         }
     }
 }

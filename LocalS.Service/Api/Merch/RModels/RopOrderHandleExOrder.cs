@@ -19,7 +19,6 @@ namespace LocalS.Service.Api.Merch
 
         public class DetailItem
         {
-            public string Id { get; set; }
             public string UniqueId { get; set; }
             public int PickupStatus { get; set; }
         }

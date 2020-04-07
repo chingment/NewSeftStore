@@ -17,6 +17,7 @@ namespace LocalS.Entity
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
         public const string MachineSaveCabinetRowColLayout = "MachineSaveCabinetRowColLayout";
+        public const string MachineHandleRunEx= "MachineHandleRunEx";
         public const string AdjustStockQuantity = "AdjustStockQuantity";
         public const string AdjustStockSalePrice = "AdjustStockSalePrice";
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
