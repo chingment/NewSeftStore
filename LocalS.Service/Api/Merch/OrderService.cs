@@ -450,7 +450,7 @@ namespace LocalS.Service.Api.Merch
                         orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
                         orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
 
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnit.MerchId, orderSubChildUnit.StoreId, orderSubChildUnit.SellChannelRefId, orderSubChildUnit.CabinetId, orderSubChildUnit.SlotId, orderSubChildUnit.PrdProductSkuId, 1);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
 
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = GuidUtil.New();
