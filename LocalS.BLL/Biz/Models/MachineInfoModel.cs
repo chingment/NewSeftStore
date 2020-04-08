@@ -43,5 +43,7 @@ namespace LocalS.BLL.Biz
         public ScanCtrlModel ScanCtrl { get; set; }
         public FingerVeinCtrlModel FingerVeinCtrl { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
+        public string MstCtrl { get; set; }
+        public string OstCtrl { get; set; }
     }
 }

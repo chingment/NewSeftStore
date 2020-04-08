@@ -395,43 +395,40 @@ namespace LocalS.Service.Api.Merch
             {
                 if (string.IsNullOrEmpty(rop.OrderId))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单ID未空");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单ID不能为空");
                 }
 
                 if (rop.DetailItems.Count == 0)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单异常处理信息为空");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单要处理的信息为空");
+                }
+                else
+                {
                 }
 
-                var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.OrderId).FirstOrDefault();
 
+                var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.OrderId).FirstOrDefault();
                 if (order == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息找不到");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息不存在");
                 }
 
                 if (!order.ExIsHappen)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常订单");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
                 }
 
                 if (order.ExIsHandle)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理完毕");
                 }
 
                 var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
                 var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == rop.OrderId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
-                if (orderSubChildUniques.Count == 0)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不存在未处理的异常信息");
-                }
-
                 foreach (var orderSubChildUnique in orderSubChildUniques)
                 {
-
                     var detailItem = rop.DetailItems.Where(m => m.UniqueId == orderSubChildUnique.Id).FirstOrDefault();
                     if (detailItem == null)
                     {

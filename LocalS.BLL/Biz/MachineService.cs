@@ -38,6 +38,8 @@ namespace LocalS.BLL.Biz
             model.IsTestMode = machine.IsTestMode;
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
             model.ExIsHas = machine.ExIsHas;
+            model.OstCtrl = machine.OstCtrl;
+            model.MstCtrl = machine.MstCtrl;
 
             var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
 

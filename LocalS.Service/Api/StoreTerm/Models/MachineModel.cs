@@ -34,5 +34,8 @@ namespace LocalS.Service.Api.StoreTerm
         public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
+
+        public string MstCtrl { get; set; }
+        public string OstCtrl { get; set; }
     }
 }

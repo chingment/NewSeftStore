@@ -1183,8 +1183,8 @@ namespace LocalS.BLL.Biz
             return pickupCode;
         }
 
-        const string PickupCode_KEY_64 = "VavicApp";//注意了，是8个字符，64位
-        const string PickupCode_IV_64 = "VavicApp";
+        private const string PickupCode_KEY_64 = "VavicApp";//注意了，是8个字符，64位
+        private const string PickupCode_IV_64 = "VavicApp";
         private string PickupCodeEncode(string data)
         {
             byte[] byKey = System.Text.ASCIIEncoding.ASCII.GetBytes(PickupCode_KEY_64);
