@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RetOrderSearch
+    public class RetOrderSearchByPickupCode
     {
         public string Id { get; set; }
         public string Sn { get; set; }

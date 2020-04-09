@@ -1169,22 +1169,22 @@ namespace LocalS.BLL.Biz
         public string BuildQrcode2PickupCode(string pickupCode)
         {
             string encode_qrcode = PickupCodeEncode(pickupCode);
-            string buildqrcode = "fanju://pickupcode_" + encode_qrcode;
+            string buildqrcode = "fanju:pickupcode@v2=" + encode_qrcode;
             return buildqrcode;
         }
 
         public string DecodeQrcode2PickupCode(string buildqrcode)
         {
 
-            if (buildqrcode.IndexOf("fanju://pickupcode") < 0)
+            if (buildqrcode.IndexOf("fanju:pickupcode@v2=") < 0)
                 return null;
 
-            string pickupCode = PickupCodeDecode(buildqrcode.Split('_')[1]);
+            string pickupCode = PickupCodeDecode(buildqrcode.Split('=')[1]);
             return pickupCode;
         }
 
-        private const string PickupCode_KEY_64 = "VavicApp";//注意了，是8个字符，64位
-        private const string PickupCode_IV_64 = "VavicApp";
+        private const string PickupCode_KEY_64 = "VavicXbv";//注意了，是8个字符，64位
+        private const string PickupCode_IV_64 = "VavicXbv";
         private string PickupCodeEncode(string data)
         {
             byte[] byKey = System.Text.ASCIIEncoding.ASCII.GetBytes(PickupCode_KEY_64);

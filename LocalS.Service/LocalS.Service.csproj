@@ -321,7 +321,7 @@
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineGetRunExHandleItems.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RetOrderSearch.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RetOrderSearchByPickupCode.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPayStatusQuery.cs" />
@@ -344,7 +344,7 @@
     <Compile Include="Api\StoreTerm\RModels\RupProductSkuSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupStockSettingGetCabinetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineInitData.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RupOrderSearch.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RupOrderSearchByPickupCode.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPayStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\StockSettingService.cs" />

@@ -110,7 +110,7 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        public CustomJsonResult Search(RupOrderSearch rup)
+        public CustomJsonResult SearchByPickupCode(RupOrderSearchByPickupCode rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -119,12 +119,21 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
-            if (rup.PickupCode.IndexOf("fanju://pickupcode") > -1)
+            string pickupCode = "";
+            if (rup.PickupCode.IndexOf("fanju:pickupcode@v1=") > -1)
             {
-                rup.PickupCode = BizFactory.Order.DecodeQrcode2PickupCode(rup.PickupCode);
+                pickupCode = rup.PickupCode.Split('=')[1];
+            }
+            else if (rup.PickupCode.IndexOf("fanju:pickupcode@v2=") > -1)
+            {
+                pickupCode = BizFactory.Order.DecodeQrcode2PickupCode(rup.PickupCode);
+            }
+            else
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
-            var orderSub = CurrentDb.OrderSub.Where(m => m.PickupCode == rup.PickupCode).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.PickupCode == pickupCode).FirstOrDefault();
 
             if (orderSub == null)
             {
@@ -141,7 +150,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经取货");
             }
 
-            RetOrderSearch ret = new RetOrderSearch();
+            var ret = new RetOrderSearchByPickupCode();
 
             ret.Id = orderSub.OrderId;
             ret.Sn = orderSub.OrderSn;
