@@ -327,8 +327,8 @@ namespace LocalS.Service.Api.Merch
             ret.Status = GetStatus(order.Status);
             ret.SourceName = GetSourceName(order.Source);
             ret.CanHandleEx = GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
-
-
+            ret.ExHandleRemark = order.ExHandleRemark;
+            ret.ExIsHappen = order.ExIsHappen;
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
 
             List<RetOrderDetails.SellChannelDetail> sellChannelDetails = new List<RetOrderDetails.SellChannelDetail>();
@@ -373,7 +373,7 @@ namespace LocalS.Service.Api.Merch
                                 Quantity = orderSubChildUnique.Quantity,
                                 Status = GetPickupStatus(orderSubChildUnique.PickupStatus),
                                 PickupLogs = pickupLogs,
-                                PickupStatus = 0
+                                SignStatus = 0
                             });
                         }
 
@@ -503,7 +503,7 @@ namespace LocalS.Service.Api.Merch
                 order.Status = E_OrderStatus.Completed;
                 order.CompletedTime = DateTime.Now;
 
- 
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

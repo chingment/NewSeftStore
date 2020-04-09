@@ -281,13 +281,25 @@
               <td style="width:200px">
 
                 <div v-if="pickupSku.status.value==6000">
-                  <el-radio v-model="pickupSku.pickupStatus" label="1" style="margin-right:5px;">已取</el-radio>
-                  <el-radio v-model="pickupSku.pickupStatus" label="2">未取</el-radio>
+                  <el-radio v-model="pickupSku.signStatus" label="1" style="margin-right:5px;">已取</el-radio>
+                  <el-radio v-model="pickupSku.signStatus" label="2">未取</el-radio>
                 </div>
 
               </td>
             </tr>
           </table>
+        </div>
+
+        <div v-if="details.exIsHappen">
+          <div class="row-title clearfix">
+            <div class="pull-left"> <h5> 异常处理备注</h5>
+            </div>
+          </div>
+
+          <el-input v-if="details.canHandleEx" v-model="details.exHandleRemark" type="textarea" maxlength="200" show-word-limit />
+
+          <p v-else>{{ details.exHandleRemark }}</p>
+
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -305,8 +317,8 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { getList, getDetails, handleExOrder } from '@/api/order'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getUrlParam } from '@/utils/commonUtil'
+import Pagination from '@/components/Pagination'
+import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'OrderList',
   components: { Pagination },
@@ -355,6 +367,7 @@ export default {
         chargeAmount: '',
         submitTime: '',
         status: { text: '' },
+        exHandleRemark: '',
         details: undefined
       },
       options_status: [{
@@ -450,22 +463,25 @@ export default {
     _handleExOrder(order) {
       var _this = this
 
+      if (isEmpty(order.exHandleRemark)) {
+        this.$message('请输入备注')
+        return
+      }
+
       var uniqueItems = []
       for (var i = 0; i < order.sellChannelDetails.length; i++) {
         var s_detailItems = order.sellChannelDetails[i].detailItems
         for (var j = 0; j < s_detailItems.length; j++) {
           if (s_detailItems[j].status.value === 6000) {
-            if (s_detailItems[j].pickupStatus === 0) {
+            if (s_detailItems[j].signStatus === 0) {
               this.$message('处理前，请选择【' + s_detailItems[j].name + '】的取货状态 已取或未取')
               return
             } else {
-              uniqueItems.push({ id: s_detailItems[j].id, uniqueId: s_detailItems[j].uniqueId, pickupStatus: s_detailItems[j].pickupStatus })
+              uniqueItems.push({ id: s_detailItems[j].id, uniqueId: s_detailItems[j].uniqueId, signStatus: s_detailItems[j].signStatus })
             }
           }
         }
       }
-
-      // this.$message(JSON.stringify(pickupSkus))
 
       MessageBox.confirm('确定要处理,慎重操作，会影响机器实际库存', '提示', {
         confirmButtonText: '确定',
@@ -474,7 +490,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.detailsLoading = true
-        handleExOrder({ id: order.id, uniqueItems: uniqueItems }).then(res => {
+        handleExOrder({ id: order.id, uniqueItems: uniqueItems, remark: order.exHandleRemark }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             _this.refreshDetails(order.id)

@@ -29,6 +29,10 @@ namespace LocalS.Service.Api.Merch
         public string SourceName { get; set; }
 
         public bool CanHandleEx { get; set; }
+
+        public string ExHandleRemark { get; set; }
+
+        public bool ExIsHappen { get; set; }
         public List<SellChannelDetail> SellChannelDetails { get; set; }
         public class SellChannelDetail
         {
@@ -56,8 +60,7 @@ namespace LocalS.Service.Api.Merch
             public int Quantity { get; set; }
             public StatusModel Status { get; set; }
             public List<PickupLog> PickupLogs { get; set; }
-            public int PickupStatus { get; set; }
-
+            public int SignStatus { get; set; }
             public bool ExPickupIsHandle { get; set; }
         }
 
