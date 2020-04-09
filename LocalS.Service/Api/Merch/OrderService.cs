@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -393,21 +394,17 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (string.IsNullOrEmpty(rop.OrderId))
+                if (string.IsNullOrEmpty(rop.Id))
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单ID不能为空");
                 }
 
-                if (rop.DetailItems.Count == 0)
+                if (rop.UniqueItems.Count == 0)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单要处理的信息为空");
                 }
-                else
-                {
-                }
 
-
-                var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.OrderId).FirstOrDefault();
+                var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.Id).FirstOrDefault();
                 if (order == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息不存在");
@@ -423,24 +420,25 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理完毕");
                 }
 
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
-                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == rop.OrderId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.Id && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
+
+                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == rop.Id && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
                 foreach (var orderSubChildUnique in orderSubChildUniques)
                 {
-                    var detailItem = rop.DetailItems.Where(m => m.UniqueId == orderSubChildUnique.Id).FirstOrDefault();
+                    var detailItem = rop.UniqueItems.Where(m => m.UniqueId == orderSubChildUnique.Id).FirstOrDefault();
                     if (detailItem == null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
                     }
 
-                    if (detailItem.PickupStatus != 1 && detailItem.PickupStatus != 2)
+                    if (detailItem.SignStatus != 1 && detailItem.SignStatus != 2)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.PickupStatus);
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.SignStatus);
                     }
 
-                    if (detailItem.PickupStatus == 1)
+                    if (detailItem.SignStatus == 1)
                     {
                         orderSubChildUnique.ExPickupIsHandle = true;
                         orderSubChildUnique.ExPickupHandleTime = DateTime.Now;
@@ -465,7 +463,7 @@ namespace LocalS.Service.Api.Merch
                         orderPickupLog.Creator = operater;
                         CurrentDb.OrderPickupLog.Add(orderPickupLog);
                     }
-                    else if (detailItem.PickupStatus == 2)
+                    else if (detailItem.SignStatus == 2)
                     {
                         orderSubChildUnique.ExPickupIsHandle = true;
                         orderSubChildUnique.ExPickupHandleTime = DateTime.Now;
@@ -500,13 +498,16 @@ namespace LocalS.Service.Api.Merch
 
                 order.ExIsHandle = true;
                 order.ExHandleTime = DateTime.Now;
+                order.ExHandleRemark = rop.Remark;
                 order.CompletedTime = DateTime.Now;
                 order.Status = E_OrderStatus.Completed;
                 order.CompletedTime = DateTime.Now;
 
-
+ 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, order.MerchId, order.StoreId, "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号:{0},备注:{1}", order.Sn, order.ExHandleRemark));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
             }

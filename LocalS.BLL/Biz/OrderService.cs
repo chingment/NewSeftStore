@@ -1108,6 +1108,10 @@ namespace LocalS.BLL.Biz
             var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
             var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
 
+            LogUtil.Info("orderId:" + orderId);
+            LogUtil.Info("machineId:" + machineId);
+            LogUtil.Info("orderSubChilds.Count:" + orderSubChilds.Count);
+            LogUtil.Info("orderSubChildUniques.Count:" + orderSubChildUniques.Count);
             foreach (var orderSubChild in orderSubChilds)
             {
                 var model = new OrderProductSkuByPickupModel();
@@ -1169,17 +1173,16 @@ namespace LocalS.BLL.Biz
         public string BuildQrcode2PickupCode(string pickupCode)
         {
             string encode_qrcode = PickupCodeEncode(pickupCode);
-            string buildqrcode = "fanju:pickupcode@v2=" + encode_qrcode;
+            string buildqrcode = "pickupcode@v2:" + encode_qrcode;
             return buildqrcode;
         }
 
         public string DecodeQrcode2PickupCode(string buildqrcode)
         {
-
-            if (buildqrcode.IndexOf("fanju:pickupcode@v2=") < 0)
+            if (buildqrcode.IndexOf("pickupcode@v2:") < 0)
                 return null;
 
-            string pickupCode = PickupCodeDecode(buildqrcode.Split('=')[1]);
+            string pickupCode = PickupCodeDecode(buildqrcode.Split(':')[1]);
             return pickupCode;
         }
 

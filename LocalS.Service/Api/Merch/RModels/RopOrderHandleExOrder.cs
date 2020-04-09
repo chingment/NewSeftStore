@@ -10,17 +10,16 @@ namespace LocalS.Service.Api.Merch
     {
         public RopOrderHandleExOrder()
         {
-            this.DetailItems = new List<DetailItem>();
+            this.UniqueItems = new List<UniqueItem>();
         }
 
-        public string OrderId { get; set; }
-
-        public List<DetailItem> DetailItems { get; set; }
-
-        public class DetailItem
+        public string Id { get; set; }
+        public List<UniqueItem> UniqueItems { get; set; }
+        public string Remark { get; set; }
+        public class UniqueItem
         {
             public string UniqueId { get; set; }
-            public int PickupStatus { get; set; }
+            public int SignStatus { get; set; }
         }
 
     }

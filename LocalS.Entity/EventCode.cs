@@ -26,7 +26,7 @@ namespace LocalS.Entity
         public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
         public const string OrderCancle = "OrderCancle";
         public const string OrderReserveSuccess = "OrderReserveSuccess";
-
+        public const string OrderHandleExOrder = "OrderHandleExOrder";
         public static string GetEventName(string eventCode)
         {
             string name = "";

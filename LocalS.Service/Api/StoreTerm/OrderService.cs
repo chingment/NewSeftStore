@@ -120,11 +120,11 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             string pickupCode = "";
-            if (rup.PickupCode.IndexOf("fanju:pickupcode@v1=") > -1)
+            if (rup.PickupCode.IndexOf("pickupcode@v1:") > -1)
             {
-                pickupCode = rup.PickupCode.Split('=')[1];
+                pickupCode = rup.PickupCode.Split(':')[1];
             }
-            else if (rup.PickupCode.IndexOf("fanju:pickupcode@v2=") > -1)
+            else if (rup.PickupCode.IndexOf("pickupcode@v2:") > -1)
             {
                 pickupCode = BizFactory.Order.DecodeQrcode2PickupCode(rup.PickupCode);
             }
@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
 
-            var orderSub = CurrentDb.OrderSub.Where(m => m.PickupCode == pickupCode).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.PickupCode == pickupCode).FirstOrDefault();
 
             if (orderSub == null)
             {

@@ -284,9 +284,7 @@
                   <el-radio v-model="pickupSku.pickupStatus" label="1" style="margin-right:5px;">已取</el-radio>
                   <el-radio v-model="pickupSku.pickupStatus" label="2">未取</el-radio>
                 </div>
-                <!-- v-if="pickupSku.pickupLogs.length>0" -->
-                <!-- <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="danger" style="margin-right:15px;" @click="signNotTake(details.id,pickupSku)">标记未取</el-button>
-                <el-button v-if="pickupSku.exPickupIsHandled==false&&pickupSku.status.value==6000" type="success" style="margin-left:0px;margin-right:15px;" @click="signTake(details.id,pickupSku)">标记已取</el-button> -->
+
               </td>
             </tr>
           </table>
@@ -306,7 +304,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetails, pickupExceptionHandle, handleExOrder } from '@/api/order'
+import { getList, getDetails, handleExOrder } from '@/api/order'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -452,16 +450,16 @@ export default {
     _handleExOrder(order) {
       var _this = this
 
-      var detailItems = []
+      var uniqueItems = []
       for (var i = 0; i < order.sellChannelDetails.length; i++) {
         var s_detailItems = order.sellChannelDetails[i].detailItems
         for (var j = 0; j < s_detailItems.length; j++) {
-          if (s_detailItems[j].status.value == 6000) {
-            if (s_detailItems[j].pickupStatus == 0) {
+          if (s_detailItems[j].status.value === 6000) {
+            if (s_detailItems[j].pickupStatus === 0) {
               this.$message('处理前，请选择【' + s_detailItems[j].name + '】的取货状态 已取或未取')
               return
             } else {
-              detailItems.push({ id: s_detailItems[j].id, uniqueId: s_detailItems[j].uniqueId, pickupStatus: s_detailItems[j].pickupStatus })
+              uniqueItems.push({ id: s_detailItems[j].id, uniqueId: s_detailItems[j].uniqueId, pickupStatus: s_detailItems[j].pickupStatus })
             }
           }
         }
@@ -476,7 +474,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.detailsLoading = true
-        handleExOrder({ orderId: order.id, detailItems: detailItems }).then(res => {
+        handleExOrder({ id: order.id, uniqueItems: uniqueItems }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             _this.refreshDetails(order.id)
@@ -484,38 +482,6 @@ export default {
           }
 
           this.detailsLoading = false
-        })
-      })
-    },
-    signNotTake(orderId, pickupSku) {
-      var _this = this
-      MessageBox.confirm('确定要标记【' + pickupSku.name + '】<span style="color:#F56C6C">未取</span>,慎重操作，会影响机器实际库存', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        dangerouslyUseHTMLString: true,
-        type: 'warning'
-      }).then(() => {
-        pickupExceptionHandle({ uniqueId: pickupSku.uniqueId, handleMethod: 2, remark: '' }).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            _this.refreshDetails(orderId)
-          }
-        })
-      })
-    },
-    signTake(orderId, pickupSku) {
-      var _this = this
-      MessageBox.confirm('确定要标记【' + pickupSku.name + '】<span style="color:#67C23A">已取</span>,慎重操作，会影响机器实际库存', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        dangerouslyUseHTMLString: true,
-        type: 'warning'
-      }).then(() => {
-        pickupExceptionHandle({ uniqueId: pickupSku.uniqueId, handleMethod: 1, remark: '' }).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            _this.refreshDetails(orderId)
-          }
         })
       })
     }
@@ -529,5 +495,9 @@ export default {
   td{
     border: 0px  !important;
   }
+
+  .el-form-item {
+    margin-bottom: 10px;
+}
 }
 </style>

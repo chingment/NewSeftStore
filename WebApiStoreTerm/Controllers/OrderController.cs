@@ -39,7 +39,7 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse SearchByPickCode([FromUri]RupOrderSearchByPickupCode rup)
+        public OwnApiHttpResponse SearchByPickupCode([FromUri]RupOrderSearchByPickupCode rup)
         {
             IResult result = StoreTermServiceFactory.Order.SearchByPickupCode(rup);
             return new OwnApiHttpResponse(result);

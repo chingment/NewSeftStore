@@ -11,30 +11,29 @@ namespace LocalS.Service.Api.StoreTerm
 
         public RopMachineHandleRunExItems()
         {
-            this.ExOrders = new List<Order>();
+            this.Orders = new List<Order>();
         }
 
         public string MachineId { get; set; }
-
-        public List<Order> ExOrders { get; set; }
-
+        public string Rermark { get; set; }
+        public List<Order> Orders { get; set; }
         public class Order
         {
             public Order()
             {
-                this.DetailItems = new List<OrderDetailItem>();
+                this.UniqueItems = new List<OrderUniqueItem>();
             }
 
             public string Id { get; set; }
 
-            public List<OrderDetailItem> DetailItems { get; set; }
-
+            public List<OrderUniqueItem> UniqueItems { get; set; }
         }
 
-        public class OrderDetailItem
+
+        public class OrderUniqueItem
         {
             public string UniqueId { get; set; }
-            public int PickupStatus { get; set; }
+            public int SignStatus { get; set; }
         }
     }
 }
