@@ -505,7 +505,6 @@ namespace LocalS.Service.Api.Merch
                 order.ExIsHandle = true;
                 order.ExHandleTime = DateTime.Now;
                 order.ExHandleRemark = rop.Remark;
-                order.CompletedTime = DateTime.Now;
                 order.Status = E_OrderStatus.Completed;
                 order.CompletedTime = DateTime.Now;
 

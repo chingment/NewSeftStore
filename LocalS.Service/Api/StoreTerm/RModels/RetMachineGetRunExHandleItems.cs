@@ -10,11 +10,12 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public RetMachineGetRunExHandleItems()
         {
+            this.ExReasons = new List<ExReason>();
             this.ExOrders = new List<Order>();
         }
 
+        public List<ExReason> ExReasons { get; set; }
         public List<Order> ExOrders { get; set; }
-
         public class Order
         {
             public Order()
@@ -38,6 +39,14 @@ namespace LocalS.Service.Api.StoreTerm
             public string SlotId { get; set; }
             public bool CanHandle { get; set; }
             public int SignStatus { get; set; }
+        }
+
+        public class ExReason
+        {
+
+            public string Id { get; set; }
+            public string Title { get; set; }
+            public bool IsChecked { get; set; }
         }
     }
 }

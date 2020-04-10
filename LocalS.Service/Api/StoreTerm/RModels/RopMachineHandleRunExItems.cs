@@ -11,11 +11,15 @@ namespace LocalS.Service.Api.StoreTerm
 
         public RopMachineHandleRunExItems()
         {
-            this.Orders = new List<Order>();
+            this.ExOrders = new List<Order>();
+            this.ExReasons = new List<ExReason>();
         }
 
         public string MachineId { get; set; }
-        public List<Order> Orders { get; set; }
+        public List<Order> ExOrders { get; set; }
+
+        public List<ExReason> ExReasons { get; set; }
+
         public string Rermark { get; set; }
         public class Order
         {
@@ -29,11 +33,16 @@ namespace LocalS.Service.Api.StoreTerm
             public List<OrderUniqueItem> UniqueItems { get; set; }
         }
 
-
         public class OrderUniqueItem
         {
             public string UniqueId { get; set; }
             public int SignStatus { get; set; }
+        }
+
+        public class ExReason
+        {
+            public string Id { get; set; }
+            public string Title { get; set; }
         }
     }
 }

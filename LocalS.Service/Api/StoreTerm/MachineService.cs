@@ -334,6 +334,9 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetMachineGetRunExHandleItems();
 
+            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "1", Title = "App异常退出" });
+            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "2", Title = "机器出现故障" });
+            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "3", Title = "未知原因" });
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
@@ -383,7 +386,7 @@ namespace LocalS.Service.Api.StoreTerm
             using (TransactionScope ts = new TransactionScope())
             {
 
-                foreach (var order in rop.Orders)
+                foreach (var order in rop.ExOrders)
                 {
                     var l_order = CurrentDb.Order.Where(m => m.Id == order.Id).FirstOrDefault();
 
@@ -466,7 +469,7 @@ namespace LocalS.Service.Api.StoreTerm
                         {
                             orderSub.ExIsHandle = true;
                             orderSub.ExHandleTime = DateTime.Now;
- 
+
                         }
                     }
 
@@ -475,6 +478,8 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         l_order.ExIsHandle = true;
                         l_order.ExHandleTime = DateTime.Now;
+                        l_order.CompletedTime = DateTime.Now;
+                        l_order.Status = E_OrderStatus.Completed;
                     }
 
                     CurrentDb.SaveChanges();
@@ -489,7 +494,9 @@ namespace LocalS.Service.Api.StoreTerm
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                //MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息");
+                var reason = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
+
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息，原因:" + reason);
 
             }
 
