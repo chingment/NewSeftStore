@@ -24,8 +24,6 @@ namespace LocalS.Service.Api.StoreTerm
 
             public string Id { get; set; }
             public string Sn { get; set; }
-            public string SubId { get; set; }
-            public string SubSn { get; set; }
             public List<OrderDetailItem> DetailItems { get; set; }
 
         }
@@ -39,6 +37,7 @@ namespace LocalS.Service.Api.StoreTerm
             public string UniqueId { get; set; }
             public string SlotId { get; set; }
             public bool CanHandle { get; set; }
+            public int SignStatus { get; set; }
         }
     }
 }

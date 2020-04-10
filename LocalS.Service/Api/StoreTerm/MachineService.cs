@@ -355,7 +355,7 @@ namespace LocalS.Service.Api.StoreTerm
                     orderDetailItem.Quantity = orderSubChildUnique.Quantity;
                     orderDetailItem.Name = orderSubChildUnique.PrdProductSkuName;
                     orderDetailItem.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
-
+                    orderDetailItem.SignStatus = 0;
                     if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked)
                     {
                         orderDetailItem.CanHandle = false;
@@ -466,7 +466,7 @@ namespace LocalS.Service.Api.StoreTerm
                         {
                             orderSub.ExIsHandle = true;
                             orderSub.ExHandleTime = DateTime.Now;
-                            orderSub.ExHandleRemark = order.Rermark;
+ 
                         }
                     }
 
@@ -479,8 +479,6 @@ namespace LocalS.Service.Api.StoreTerm
 
                     CurrentDb.SaveChanges();
                 }
-
-
 
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 

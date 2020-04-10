@@ -239,10 +239,16 @@ namespace LocalS.Service.Api.Merch
                                 foreach (var orderPickupLog in orderPickupLogs)
                                 {
                                     string imgUrl = GetPickImgUrl(orderPickupLog.ImgId);
+                                    string imgUrl2 = GetPickImgUrl(orderPickupLog.ImgId2);
                                     List<string> imgUrls = new List<string>();
                                     if (!string.IsNullOrEmpty(imgUrl))
                                     {
                                         imgUrls.Add(imgUrl);
+                                    }
+
+                                    if (!string.IsNullOrEmpty(imgUrl2))
+                                    {
+                                        imgUrls.Add(imgUrl2);
                                     }
 
                                     pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });

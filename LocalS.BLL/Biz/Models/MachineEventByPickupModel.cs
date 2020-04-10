@@ -23,6 +23,7 @@ namespace LocalS.BLL.Biz
         public int PickupUseTime { get; set; }
         public bool IsPickupComplete { get; set; }
         public string ImgId { get; set; }
+        public string ImgId2 { get; set; }
         public bool IsTest { get; set; }
         public string Remark { get; set; }
     }

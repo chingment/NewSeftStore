@@ -28,6 +28,6 @@ namespace LocalS.Entity
         public int PickupUseTime { get; set; }
         public bool IsPickupComplete { get; set; }
         public string ImgId { get; set; }
-
+        public string ImgId2 { get; set; }
     }
 }

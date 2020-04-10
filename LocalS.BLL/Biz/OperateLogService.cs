@@ -438,6 +438,7 @@ namespace LocalS.BLL.Biz
                     orderPickupLog.ActionStatusName = model.ActionStatusName;
                     orderPickupLog.IsPickupComplete = model.IsPickupComplete;
                     orderPickupLog.ImgId = model.ImgId;
+                    orderPickupLog.ImgId2 = model.ImgId2;
 
                     if (model.IsPickupComplete)
                     {
