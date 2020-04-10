@@ -15,7 +15,6 @@ namespace LocalS.Service.Api.StoreTerm
         }
 
         public string MachineId { get; set; }
-        public string Rermark { get; set; }
         public List<Order> Orders { get; set; }
         public class Order
         {
@@ -27,6 +26,8 @@ namespace LocalS.Service.Api.StoreTerm
             public string Id { get; set; }
 
             public List<OrderUniqueItem> UniqueItems { get; set; }
+
+            public string Rermark { get; set; }
         }
 
 

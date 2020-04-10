@@ -387,8 +387,6 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     var l_order = CurrentDb.Order.Where(m => m.Id == order.Id).FirstOrDefault();
 
-                    var l_orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
-
                     var l_orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id).ToList();
 
                     foreach (var orderSubChildUnique in l_orderSubChildUniques)
@@ -456,7 +454,32 @@ namespace LocalS.Service.Api.StoreTerm
                             CurrentDb.OrderPickupLog.Add(orderPickupLog);
                         }
                     }
+
+
+                    var orderSubIds = l_orderSubChildUniques.Select(m => m.OrderSubId).ToArray();
+
+                    var l_orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+
+                    foreach (var orderSub in l_orderSubs)
+                    {
+                        if (orderSubIds.Contains(orderSub.Id))
+                        {
+                            orderSub.ExIsHandle = true;
+                            orderSub.ExHandleTime = DateTime.Now;
+                            orderSub.ExHandleRemark = order.Rermark;
+                        }
+                    }
+
+                    int hasNoHandleEx = l_orderSubs.Where(m => m.ExIsHappen == true && m.ExIsHandle == false).Count();
+                    if (hasNoHandleEx == 0)
+                    {
+                        l_order.ExIsHandle = true;
+                        l_order.ExHandleTime = DateTime.Now;
+                    }
+
+                    CurrentDb.SaveChanges();
                 }
+
 
 
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
@@ -472,7 +495,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             }
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
         }
     }
 }
