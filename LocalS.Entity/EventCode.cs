@@ -77,6 +77,9 @@ namespace LocalS.Entity
                 case EventCode.OrderPickupOneSysMadeSignTake:
                     name = "系统标识已取";
                     break;
+                case EventCode.MachineHandleRunEx:
+                    name = "机器异常处理";
+                    break;
             }
 
             return name;

@@ -142,6 +142,20 @@ namespace LocalS.BLL
             return prdProductSkuModel;
         }
 
+
+        public string GetName(string merchId, string productSkuId)
+        {
+            var productSkuName = "未知";
+
+            var bizProductSku = GetInfo(merchId, productSkuId);
+            if (bizProductSku != null)
+            {
+                productSkuName = bizProductSku.Name;
+            }
+
+            return productSkuName;
+        }
+
         public List<ProductSkuStockModel> GetStock(string merchId, string productSkuId)
         {
             var productSkuStockModels = new List<ProductSkuStockModel>();

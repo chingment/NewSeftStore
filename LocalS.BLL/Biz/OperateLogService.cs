@@ -308,24 +308,24 @@ namespace LocalS.BLL.Biz
                 var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, model.ProductSkuId);
                 if (bizProduct == null)
                 {
-                    remark.Append("商品:无");
+                    remark.Append("商品：无");
                 }
                 else
                 {
-                    remark.Append("商品:" + bizProduct.Name);
+                    remark.Append("商品：" + bizProduct.Name);
                 }
 
                 if (model.Status == E_OrderPickupStatus.SendPickupCmd)
                 {
-                    remark.Append(string.Format(",货道:{0},发送命令", model.SlotId));
+                    remark.Append(string.Format("，机柜：{0}，货道：{1}，发送命令", model.CabinetId, model.SlotId));
                 }
                 else
                 {
-                    remark.Append(string.Format(",货道:{0},当前动作:{1},状态:{2}", model.SlotId, model.ActionName, model.ActionStatusName));
+                    remark.Append(string.Format("，货道：{0}，货道：{1}，当前动作：{1}，状态：{2}", model.CabinetId, model.SlotId, model.ActionName, model.ActionStatusName));
 
                     if (model.IsPickupComplete)
                     {
-                        remark.Append(string.Format(",取货完成,用时:{0}", model.PickupUseTime));
+                        remark.Append(string.Format("，取货完成，用时：{0}", model.PickupUseTime));
                     }
                 }
 

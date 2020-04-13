@@ -130,11 +130,25 @@ namespace LocalS.BLL.Biz
             var clientUser = CurrentDb.SysUser.Where(m => m.Id == clientUserId).FirstOrDefault();
             if (clientUser != null)
             {
-                clientUserName = clientUser.NickName;
+                if (!string.IsNullOrEmpty(clientUser.FullName))
+                {
+                    return clientUser.FullName;
+                }
+
+                if (!string.IsNullOrEmpty(clientUser.NickName))
+                {
+                    return clientUser.NickName;
+                }
+
+                if (!string.IsNullOrEmpty(clientUser.UserName))
+                {
+                    return clientUser.UserName;
+                }
             }
 
             return clientUserName;
         }
+
 
         public string GetStoreName(string merchId, string storeId)
         {
