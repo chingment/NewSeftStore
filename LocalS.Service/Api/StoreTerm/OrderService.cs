@@ -53,7 +53,7 @@ namespace LocalS.Service.Api.StoreTerm
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = E_ReceptionMode.Machine });
             }
 
-            var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(machine.MerchId, bizRop);
+            var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(GuidUtil.Empty(), bizRop);
 
             if (bizResult.Result == ResultType.Success)
             {

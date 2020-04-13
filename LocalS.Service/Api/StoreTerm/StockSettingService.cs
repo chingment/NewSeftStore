@@ -89,7 +89,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -104,11 +104,11 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateSlot(GuidUtil.New(), OperateSlotType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, OperateSlotType.MachineSlotSave, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(GuidUtil.New(), machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
+                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
 
                     if (result.Result == ResultType.Success)
                     {
