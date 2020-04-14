@@ -176,6 +176,15 @@ namespace LocalS.BLL.Task
             var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
             var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == model.OrderId).ToList();
 
+
+
+            if (orderSub != null)
+            {
+                orderSub.ExIsHappen = true;
+                orderSub.ExHappenTime = DateTime.Now;
+            }
+
+
             foreach (var orderSubChildUnique in orderSubChildUniques)
             {
                 if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked
