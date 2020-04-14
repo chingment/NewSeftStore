@@ -427,7 +427,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1},商品：{2},成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity));
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
                         #endregion
@@ -602,7 +602,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3},减去待取货库存：{3},实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
 
 
                         #endregion
