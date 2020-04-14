@@ -488,10 +488,18 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
+            string userName = null;
+
+            var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+            if (sysUser != null)
+            {
+                userName = sysUser.UserName;
+
+            }
 
             SSOUtil.Quit(rop.Token);
 
-            MqFactory.Global.PushEventNotify(operater, rop.AppId, "", "", "", EventCode.Logout, "退出成功", new LoginLogModel { LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
+            MqFactory.Global.PushEventNotify(operater, rop.AppId, "", "", "", EventCode.Logout, "退出成功", new LoginLogModel { LoginAccount = userName, LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 
@@ -512,24 +520,27 @@ namespace LocalS.Service.Api.Account
             ret.Email = sysUser.Email;
             ret.PhoneNumber = sysUser.PhoneNumber;
             ret.FingerVeinCount = sysUser.FingerVeinCount;
-            switch (rup.WebSite)
+            if (rup != null)
             {
-                case "admin":
-                    ret.Menus = GetMenus(Enumeration.BelongSite.Admin, userId);
-                    ret.Roles = GetRoles(Enumeration.BelongSite.Admin, userId);
-                    break;
-                case "agent":
-                    ret.Menus = GetMenus(Enumeration.BelongSite.Agent, userId);
-                    ret.Roles = GetRoles(Enumeration.BelongSite.Agent, userId);
-                    break;
-                case "account":
-                    ret.Menus = GetMenus(Enumeration.BelongSite.Account, userId);
-                    ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
-                    break;
-                case "merch":
-                    ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId);
-                    ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
-                    break;
+                switch (rup.WebSite)
+                {
+                    case "admin":
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Admin, userId);
+                        ret.Roles = GetRoles(Enumeration.BelongSite.Admin, userId);
+                        break;
+                    case "agent":
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Agent, userId);
+                        ret.Roles = GetRoles(Enumeration.BelongSite.Agent, userId);
+                        break;
+                    case "account":
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Account, userId);
+                        ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
+                        break;
+                    case "merch":
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId);
+                        ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
+                        break;
+                }
             }
 
 

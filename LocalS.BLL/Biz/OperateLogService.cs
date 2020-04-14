@@ -154,7 +154,7 @@ namespace LocalS.BLL.Biz
                 }
                 else
                 {
-                    merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}，", model.LoginAccount, eventRemark, storeName, machineName);
+                    merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}", model.LoginAccount, eventRemark, storeName, machineName);
                 }
 
                 merchOperateLog.Creator = operater;
@@ -319,13 +319,12 @@ namespace LocalS.BLL.Biz
                 {
                     remark.Append(string.Format("，机柜：{0}，货道：{1}，发送命令", model.CabinetId, model.SlotId));
                 }
-                if (model.Status == E_OrderPickupStatus.Exception)
+                else if (model.Status == E_OrderPickupStatus.Exception)
                 {
-                    remark.Append(string.Format("，机柜：{0}，货道：{1}，发生异常,原因：{2}", model.CabinetId, model.SlotId, model.Remark));
+                    remark.Append(string.Format("，机柜：{0}，货道：{1}，发生异常，原因：{2}", model.CabinetId, model.SlotId, model.Remark));
                 }
                 else
                 {
-
                     remark.Append(string.Format("，机柜：{0}，货道：{1}，当前动作：{1}，状态：{2}", model.CabinetId, model.SlotId, model.ActionName, model.ActionStatusName));
 
                     if (model.IsPickupComplete)
