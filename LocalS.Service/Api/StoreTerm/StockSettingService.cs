@@ -90,16 +90,6 @@ namespace LocalS.Service.Api.StoreTerm
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
                 var result = BizFactory.ProductSku.OperateSlot(operater, OperateSlotType.MachineSlotRemove, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
-
-                if (result.Result == ResultType.Success)
-                {
-                    MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，移除成功", rop.CabinetId, rop.Id));
-                }
-                else
-                {
-                    MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，移除失败", rop.CabinetId, rop.Id));
-                }
-
                 return result;
             }
             else
@@ -110,18 +100,6 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     result = BizFactory.ProductSku.AdjustStockQuantity(operater, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
 
-                    if (result.Result == ResultType.Success)
-                    {
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，保存成功", rop.CabinetId, rop.Id));
-                    }
-                    else
-                    {
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，保存失败", rop.CabinetId, rop.Id));
-                    }
-                }
-                else
-                {
-                    MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，保存失败", rop.CabinetId, rop.Id));
                 }
 
                 return result;

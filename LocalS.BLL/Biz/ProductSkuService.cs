@@ -132,8 +132,6 @@ namespace LocalS.BLL.Biz
                     var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
                     if (sellChannelStock == null)
                     {
-
-
                         sellChannelStock = new SellChannelStock();
                         sellChannelStock.Id = GuidUtil.New();
                         sellChannelStock.MerchId = merchId;
@@ -177,7 +175,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("初次录入货道：{0}", slotId);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，初次录入", cabinetId, slotId));
+                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，初次录入", cabinetId, slotId, bizProductSku.Name));
                     }
                     else
                     {
@@ -188,7 +186,7 @@ namespace LocalS.BLL.Biz
                             if (lockQuantity > 0)
                             {
 
-                                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotRemove, string.Format("机柜：{0}，货道：{1}，删除失败，存在有预定数量不能删除", cabinetId, slotId));
+                                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotRemove, string.Format("机柜：{0}，货道：{1}，商品：{2}，货道删除失败，存在有预定数量不能删除", cabinetId, slotId, bizProductSku.Name));
 
                                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                             }
@@ -210,7 +208,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog.ChangeQuantity = 0;
                             sellChannelStockLog.Creator = operater;
                             sellChannelStockLog.CreateTime = DateTime.Now;
-                            sellChannelStockLog.RemarkByDev = string.Format("货道被替换，移除实际库存：{0}", sellChannelStock.SumQuantity);
+                            sellChannelStockLog.RemarkByDev = string.Format("货道商品被替换，移除实际库存：{0}", sellChannelStock.SumQuantity);
                             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
                             sellChannelStock.PrdProductId = bizProductSku.ProductId;

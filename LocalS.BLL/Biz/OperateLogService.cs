@@ -150,11 +150,11 @@ namespace LocalS.BLL.Biz
 
                 if (string.IsNullOrEmpty(machineId))
                 {
-                    merchOperateLog.Remark = string.Format("账号：{0}，{1},进入站点：{2}", model.LoginAccount, eventRemark, appId);
+                    merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入站点：{2}", model.LoginAccount, eventRemark, appId);
                 }
                 else
                 {
-                    merchOperateLog.Remark = string.Format("账号：{0}，{1},进入店铺：{2}，机器：{3}，", model.LoginAccount, eventRemark, storeName, machineName);
+                    merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}，", model.LoginAccount, eventRemark, storeName, machineName);
                 }
 
                 merchOperateLog.Creator = operater;

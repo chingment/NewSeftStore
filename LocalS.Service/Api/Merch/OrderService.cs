@@ -512,7 +512,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, order.MerchId, order.StoreId, "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号:{0},备注:{1}", order.Sn, order.ExHandleRemark));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, order.MerchId, order.StoreId, "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号：{0}，备注：{1}", order.Sn, order.ExHandleRemark));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
             }
