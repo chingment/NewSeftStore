@@ -496,7 +496,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 var reason = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
 
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息，原因:" + reason);
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + reason);
 
             }
 

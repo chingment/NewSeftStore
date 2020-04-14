@@ -67,7 +67,7 @@ namespace LocalS.BLL.Biz
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
+
 
                 if (type == OperateSlotType.MachineSlotRemove)
                 {
@@ -75,6 +75,8 @@ namespace LocalS.BLL.Biz
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                     if (sellChannelStock != null)
                     {
+                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, sellChannelStock.PrdProductSkuId);
+
                         int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                         if (lockQuantity > 0)
                         {
@@ -130,6 +132,7 @@ namespace LocalS.BLL.Biz
                 {
                     #region MachineSlotSave
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
+                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, productSkuId);
                     var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
                     if (sellChannelStock == null)
                     {
