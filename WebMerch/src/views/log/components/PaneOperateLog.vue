@@ -4,7 +4,10 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.userName" clearable style="width: 100%" placeholder="用户名" class="filter-item" />
+          <el-input v-model="listQuery.operateUserName" clearable style="width: 100%" placeholder="操作人" class="filter-item" />
+        </el-col>
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.eventName" clearable style="width: 100%" placeholder="事件" class="filter-item" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -32,22 +35,22 @@
           <span>{{ scope.row.operateUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作域" align="left" min-width="15%">
+      <el-table-column label="应用" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span>{{ scope.row.operateObjectName }}</span>
+          <span>{{ scope.row.appName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="行为" align="left" min-width="10%">
+      <el-table-column label="事件" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.eventName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="备注" align="left" min-width="50%">
+      <el-table-column v-if="isDesktop" label="备注" align="left" min-width="45%">
         <template slot-scope="scope">
           <span>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="操作时间" prop="createTime" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="操作时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>
@@ -74,7 +77,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        userName: undefined
+        operateUserName: undefined,
+        eventName: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }

@@ -137,7 +137,7 @@ namespace LocalS.BLL.Biz
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
                     order.IsTestMode = rop.IsTestMode;
-
+                    order.AppId = rop.AppId;
 
                     order.SubmittedTime = DateTime.Now;
                     order.PayExpireTime = DateTime.Now.AddSeconds(300);
@@ -813,7 +813,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle,order.AppId, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle, order.AppId, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
 
                     CurrentDb.SaveChanges();

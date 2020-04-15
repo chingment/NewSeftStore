@@ -51,6 +51,7 @@ namespace LocalS.Service.Api.StoreApp
 
             CustomJsonResult result = new CustomJsonResult();
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
+            bizRop.AppId = AppId.WXMINPRAGROM;
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;

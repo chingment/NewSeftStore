@@ -80,7 +80,7 @@ namespace LocalS.BLL.Biz
                         int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                         if (lockQuantity > 0)
                         {
-                            MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道:{1}，删除失败，存在有预定数量不能删除", cabinetId, slotId));
+                            MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道:{1}，删除失败，存在有预定数量不能删除", cabinetId, slotId));
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                         }
 
@@ -110,7 +110,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，删除成功，移除实际库存：{3}", cabinetId, slotId, bizProductSku.Name, sellChannelStock.SumQuantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，删除成功，移除实际库存：{3}", cabinetId, slotId, bizProductSku.Name, sellChannelStock.SumQuantity));
                     }
 
                     var slot = new
@@ -179,7 +179,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("初次录入货道：{0}", slotId);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，初次录入", cabinetId, slotId, bizProductSku.Name));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，初次录入", cabinetId, slotId, bizProductSku.Name));
                     }
                     else
                     {
@@ -190,7 +190,7 @@ namespace LocalS.BLL.Biz
                             if (lockQuantity > 0)
                             {
 
-                                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotRemove, string.Format("机柜：{0}，货道：{1}，商品：{2}，货道删除失败，存在有预定数量不能删除", cabinetId, slotId, bizProductSku.Name));
+                                MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotRemove, string.Format("机柜：{0}，货道：{1}，商品：{2}，货道删除失败，存在有预定数量不能删除", cabinetId, slotId, bizProductSku.Name));
 
                                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                             }
@@ -254,7 +254,7 @@ namespace LocalS.BLL.Biz
                             sellChannelStockLog2.RemarkByDev = string.Format("变换货道，实际库存：{0}", sellChannelStock.SumQuantity);
                             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                            MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜，{0}，货道：{1}，变换货道，实际库存：{2}", cabinetId, slotId, sellChannelStock.SumQuantity));
+                            MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜，{0}，货道：{1}，变换货道，实际库存：{2}", cabinetId, slotId, sellChannelStock.SumQuantity));
                         }
 
                     }
@@ -739,7 +739,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (string machineId in machineIds)
                 {
-                    MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.AdjustStockSalePrice, string.Format("商品：{0}，调整价格为：{1}", productSkuId, salePrice));
+                    MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.AdjustStockSalePrice, string.Format("商品：{0}，调整价格为：{1}", productSkuId, salePrice));
                 }
 
 

@@ -29,8 +29,22 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.MerchOperateLog
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.StoreName, u.MachineName, u.OperateUserName, u.EventName, u.Remark, u.CreateTime });
+                         select new { u.Id, u.StoreName, u.MachineName, u.OperateUserName, u.EventName, u.Remark, u.CreateTime, u.AppId });
 
+            if (!string.IsNullOrEmpty(rup.EventName))
+            {
+                query = query.Where(m => m.EventName == rup.EventName);
+            }
+
+            if (!string.IsNullOrEmpty(rup.OperateUserName))
+            {
+                query = query.Where(m => m.OperateUserName.Contains(rup.OperateUserName));
+            }
+
+            if (!string.IsNullOrEmpty(rup.Remark))
+            {
+                query = query.Where(m => m.Remark.Contains(rup.Remark));
+            }
 
             int total = query.Count();
 
@@ -52,6 +66,7 @@ namespace LocalS.Service.Api.Merch
                     OperateUserName = item.OperateUserName,
                     EventName = item.EventName,
                     Remark = item.Remark,
+                    AppName = AppId.GetName(item.AppId),
                     CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
                 });
             }

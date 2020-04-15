@@ -43,6 +43,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
+            bizRop.AppId = AppId.STORETERM;
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;
             bizRop.SellChannelRefType = E_SellChannelRefType.Machine;

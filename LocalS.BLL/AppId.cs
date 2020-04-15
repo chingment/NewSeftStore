@@ -8,11 +8,40 @@ namespace LocalS.BLL
 {
     public static class AppId
     {
-        public readonly static string ACCOUNT = "account.17fanju.com";
-        public readonly static string ADMIN = "admin.17fanju.com";
-        public readonly static string MERCH = "merch.17fanju.com";
-        public readonly static string AGENT = "agent.17fanju.com";
-        public readonly static string WXMINPRAGROM = "mp.17fanju.com";
-        public readonly static string STORETERM = "com.uplink.selfstore";
+        public const string ACCOUNT = "account.17fanju.com";
+        public const string ADMIN = "admin.17fanju.com";
+        public const string MERCH = "merch.17fanju.com";
+        public const string AGENT = "agent.17fanju.com";
+        public const string WXMINPRAGROM = "mp.17fanju.com";
+        public const string STORETERM = "com.uplink.selfstore";
+
+
+        public static string GetName(string appId)
+        {
+            string name = "";
+            switch (appId)
+            {
+                case AppId.ACCOUNT:
+                    name = "个人中心";
+                    break;
+                case AppId.MERCH:
+                    name = "商户运营系统";
+                    break;
+                case AppId.AGENT:
+                    name = "商户代理系统";
+                    break;
+                case AppId.ADMIN:
+                    name = "后台管理系统";
+                    break;
+                case AppId.WXMINPRAGROM:
+                    name = "小程序";
+                    break;
+                case AppId.STORETERM:
+                    name = "终端设备";
+                    break;
+            }
+
+            return name;
+        }
     }
 }
