@@ -305,27 +305,33 @@ namespace LocalS.BLL.Biz
                     remark.Append("[测试]");
                 }
 
+                string productSkuName = "";
                 var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, model.ProductSkuId);
                 if (bizProduct == null)
                 {
-                    remark.Append("商品：无");
+                    productSkuName = "无";
                 }
                 else
                 {
-                    remark.Append("商品：" + bizProduct.Name);
+                    productSkuName = bizProduct.Name;
+                }
+
+                if (model.IsTest)
+                {
+                    productSkuName = "[测试]" + productSkuName;
                 }
 
                 if (model.Status == E_OrderPickupStatus.SendPickupCmd)
                 {
-                    remark.Append(string.Format("，机柜：{0}，货道：{1}，发送命令", model.CabinetId, model.SlotId));
+                    remark.Append("发送命令");
                 }
                 else if (model.Status == E_OrderPickupStatus.Exception)
                 {
-                    remark.Append(string.Format("，机柜：{0}，货道：{1}，发生异常，原因：{2}", model.CabinetId, model.SlotId, model.Remark));
+                    remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
                 }
                 else
                 {
-                    remark.Append(string.Format("，机柜：{0}，货道：{1}，当前动作：{1}，状态：{2}", model.CabinetId, model.SlotId, model.ActionName, model.ActionStatusName));
+                    remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
 
                     if (model.IsPickupComplete)
                     {
@@ -484,7 +490,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, remark.ToString());
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId, remark.ToString());
                 merchOperateLog.Creator = operater;
                 merchOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MerchOperateLog.Add(merchOperateLog);

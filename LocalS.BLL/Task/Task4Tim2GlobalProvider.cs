@@ -7,6 +7,7 @@ using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace LocalS.BLL.Task
 {
@@ -171,42 +172,52 @@ namespace LocalS.BLL.Task
 
         private void Order2CheckPickupTimeout(OrderSub2CheckPickupTimeoutModel model)
         {
-            var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
-            var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
-            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == model.OrderId).ToList();
-
-
-
-            if (orderSub != null)
+            using (TransactionScope ts = new TransactionScope())
             {
-                orderSub.ExIsHappen = true;
-                orderSub.ExHappenTime = DateTime.Now;
-            }
+                var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
+                var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
+                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
+                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
-
-            foreach (var orderSubChildUnique in orderSubChildUniques)
-            {
-                if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked
-                    && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception
-                    && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                    && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                if (orderSub != null)
                 {
-
-                    orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Exception;
-                    orderSubChildUnique.ExPickupIsHappen = true;
-                    orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                    orderSub.ExIsHappen = true;
+                    orderSub.ExHappenTime = DateTime.Now;
                 }
+
+                if (orderSubChildUniques.Count > 0)
+                {
+                    foreach (var orderSubChildUnique in orderSubChildUniques)
+                    {
+                        if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked
+                            && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception
+                            && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                            && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                        {
+
+                            orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Exception;
+                            orderSubChildUnique.ExPickupIsHappen = true;
+                            orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                        }
+                    }
+                }
+
+                if (order != null)
+                {
+                    order.ExIsHappen = true;
+                    order.ExHappenTime = DateTime.Now;
+                }
+
+                //if (machine != null)
+                //{
+                //    machine.ExIsHas = true;
+                //}
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
             }
-
-            order.ExIsHappen = true;
-            order.ExHappenTime = DateTime.Now;
-
-            machine.ExIsHas = true;
-
-            CurrentDb.SaveChanges();
-
-            Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
         }
     }
 }
