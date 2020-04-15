@@ -299,12 +299,6 @@ namespace LocalS.BLL.Biz
 
                 StringBuilder remark = new StringBuilder("");
 
-
-                if (model.IsTest)
-                {
-                    remark.Append("[测试]");
-                }
-
                 string productSkuName = "";
                 var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, model.ProductSkuId);
                 if (bizProduct == null)
