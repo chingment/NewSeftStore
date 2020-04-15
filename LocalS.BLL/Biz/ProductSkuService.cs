@@ -60,7 +60,7 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public CustomJsonResult OperateSlot(string operater, OperateSlotType type, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId)
+        public CustomJsonResult OperateSlot(string operater, OperateSlotType operateType, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId)
         {
             var result = new CustomJsonResult();
 
@@ -69,7 +69,7 @@ namespace LocalS.BLL.Biz
 
 
 
-                if (type == OperateSlotType.MachineSlotRemove)
+                if (operateType == OperateSlotType.MachineSlotRemove)
                 {
                     #region MachineSlotRemove
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
@@ -128,7 +128,7 @@ namespace LocalS.BLL.Biz
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
                     #endregion MachineSlotRemove
                 }
-                else if (type == OperateSlotType.MachineSlotSave)
+                else if (operateType == OperateSlotType.MachineSlotSave)
                 {
                     #region MachineSlotSave
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
@@ -287,7 +287,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStockQuantity(string operater, OperateStockType type, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
+        public CustomJsonResult OperateStockQuantity(string operater, OperateStockType operateType, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
 
@@ -304,7 +304,7 @@ namespace LocalS.BLL.Biz
 
                 SellChannelStock sellChannelStock = null;
                 SellChannelStockLog sellChannelStockLog = null;
-                switch (type)
+                switch (operateType)
                 {
                     case OperateStockType.OrderReserveSuccess:
                         #region OrderReserve
@@ -343,7 +343,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("预定成功，未支付，减少可售库存：{0}，增加待支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderReserveSuccess, string.Format("机柜：{0}，货道：{1}，商品：{2}，预定成功，未支付，减少可售库存：{3}，增加待支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderReserveSuccess, string.Format("机柜：{0}，货道：{1}，商品：{2}，预定成功，未支付，减少可售库存：{3}，增加待支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -384,7 +384,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("未支付，取消订单，增加可售库存：{0}，减少未支付库存：{0}，实际库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，未支付，取消订单，增加可售库存：{3}，减少未支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，未支付，取消订单，增加可售库存：{3}，减少未支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -427,7 +427,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity));
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
                         #endregion
@@ -469,7 +469,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("成功取货，减少实际库存：{0}，减少待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功取货，减少实际库存：{3}，减少待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功取货，减少实际库存：{3}，减少待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -512,7 +512,7 @@ namespace LocalS.BLL.Biz
                         sellChannelStockLog.RemarkByDev = string.Format("人为标记为取货成功，减去实际库存：{0}，减去待取货库存：{0}，可售库存不变", quantity);
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记为取货成功，减去实际库存：{3}，减去待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记为取货成功，减去实际库存：{3}，减去待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity));
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -556,7 +556,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
 
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{3}，增加实际库存：{3}", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{3}，增加实际库存：{3}", cabinetId, slotId, productSkuName, quantity));
 
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
@@ -602,7 +602,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
 
 
                         #endregion
@@ -621,7 +621,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult AdjustStockQuantity(string operater, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null)
+        public CustomJsonResult AdjustStockQuantity(string operater, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null)
         {
             var result = new CustomJsonResult();
 
@@ -633,7 +633,7 @@ namespace LocalS.BLL.Biz
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.PrdProductSkuId == productSkuId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
-                    MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，保存失败，找不到该数据", cabinetId, slotId, productSkuName));
+                    MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，保存失败，找不到该数据", cabinetId, slotId, productSkuName));
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，找不到该数据");
                 }
 
@@ -641,7 +641,7 @@ namespace LocalS.BLL.Biz
                 {
                     if (sellChannelStock.Version != version)
                     {
-                        MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，保存失败，数据已经被更改", cabinetId, slotId, productSkuName));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，保存失败，数据已经被更改", cabinetId, slotId, productSkuName));
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，数据已经被更改，请刷新页面再尝试");
                     }
                 }
@@ -685,7 +685,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, merchId, storeId, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，库存调整数量为：{3}", cabinetId, slotId, productSkuName, sumQuantity));
+                MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.AdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，库存调整数量为：{3}", cabinetId, slotId, productSkuName, sumQuantity));
 
 
                 var slot = new
@@ -714,7 +714,7 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public CustomJsonResult AdjustStockSalePrice(string operater, string merchId, string storeId, string productSkuId, decimal salePrice, bool isOffSell)
+        public CustomJsonResult AdjustStockSalePrice(string operater, string appId, string merchId, string storeId, string productSkuId, decimal salePrice, bool isOffSell)
         {
             var result = new CustomJsonResult();
 

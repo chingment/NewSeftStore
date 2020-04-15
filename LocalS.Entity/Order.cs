@@ -106,5 +106,7 @@ namespace LocalS.Entity
         public DateTime? ExHandleTime { get; set; }
         public string ExHandleRemark { get; set; }
         public bool IsTestMode { get; set; }
+
+        public string AppId { get; set; }
     }
 }

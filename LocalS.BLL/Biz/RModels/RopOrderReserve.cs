@@ -14,6 +14,7 @@ namespace LocalS.BLL.Biz
             this.ProductSkus = new List<ProductSku>();
         }
 
+        public string AppId { get; set; }
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }
         public E_OrderSource Source { get; set; }

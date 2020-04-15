@@ -304,7 +304,7 @@ namespace LocalS.BLL.Biz
 
                             foreach (var slotStock in buildOrderSubChid.SlotStock)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserveSuccess, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.CabinetId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, slotStock.SellChannelRefId, slotStock.CabinetId, slotStock.SlotId, slotStock.ProductSkuId, slotStock.Quantity);
                             }
                         }
                     }
@@ -721,7 +721,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPaySuccess, order.AppId, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
                 }
 
@@ -813,7 +813,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in childSons)
                     {
-                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderCancle,order.AppId, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
                     }
 
                     CurrentDb.SaveChanges();
