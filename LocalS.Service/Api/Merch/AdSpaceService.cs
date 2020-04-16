@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -206,6 +207,8 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.AdSpaceRelease, string.Format("发布广告（{0}）成功", rop.Title));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
 
@@ -246,6 +249,9 @@ namespace LocalS.Service.Api.Merch
                         BizFactory.Machine.SendUpdateHomeBanners(adContentBelong.BelongId);
                     }
                 }
+
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", adContent.Title));
 
             }
 

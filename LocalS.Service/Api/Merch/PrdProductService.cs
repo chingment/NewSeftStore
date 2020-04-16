@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -283,6 +284,8 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
@@ -438,6 +441,8 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdProductEdit, string.Format("保存商品（{0}）信息成功", rop.Name));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }

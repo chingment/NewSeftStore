@@ -17,7 +17,7 @@ namespace LocalS.Entity
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
         public const string MachineSaveCabinetRowColLayout = "MachineSaveCabinetRowColLayout";
-        public const string MachineHandleRunEx= "MachineHandleRunEx";
+        public const string MachineHandleRunEx = "MachineHandleRunEx";
         public const string AdjustStockQuantity = "AdjustStockQuantity";
         public const string AdjustStockSalePrice = "AdjustStockSalePrice";
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
@@ -27,6 +27,23 @@ namespace LocalS.Entity
         public const string OrderCancle = "OrderCancle";
         public const string OrderReserveSuccess = "OrderReserveSuccess";
         public const string OrderHandleExOrder = "OrderHandleExOrder";
+
+        public const string StockChangeLog = "SellStockChangeLog";
+
+        public const string AdminUserAdd = "AdminUserAdd";
+        public const string AdminUserEdit = "AdminUserEdit";
+        public const string AdSpaceRelease = "AdSpaceRelease";
+        public const string AdSpaceDeleteAdContent = "AdSpaceDeleteAdContent";
+        public const string MachineEdit = "MachineEdit";
+        public const string PrdKindAdd = "PrdKindAdd";
+        public const string PrdKindEdit = "PrdKindEdit";
+        public const string PrdKindDelete = "PrdKindDelete";
+        public const string PrdProductAdd = "PrdProductAdd";
+        public const string PrdProductEdit = "PrdProductEdit";
+        public const string StoreAdd = "StoreAdd";
+        public const string StoreEdit = "StoreEdit";
+        public const string StoreAddMachine = "StoreAddMachine";
+        public const string StoreRemoveMachine = "StoreRemoveMachine";
         public static string GetEventName(string eventCode)
         {
             string name = "";
@@ -79,6 +96,45 @@ namespace LocalS.Entity
                     break;
                 case EventCode.MachineHandleRunEx:
                     name = "机器异常处理";
+                    break;
+                case EventCode.AdminUserAdd:
+                    name = "新建管理账号";
+                    break;
+                case EventCode.AdminUserEdit:
+                    name = "保存管理账号信息";
+                    break;
+                case EventCode.AdSpaceRelease:
+                    name = "广告发布";
+                    break;
+                case EventCode.AdSpaceDeleteAdContent:
+                    name = "广告删除";
+                    break;
+                case EventCode.MachineEdit:
+                    name = "保存机器信息";
+                    break;
+                case EventCode.PrdKindAdd:
+                    name = "新建商品分类";
+                    break;
+                case EventCode.PrdKindEdit:
+                    name = "保存商品分类信息";
+                    break;
+                case EventCode.PrdProductAdd:
+                    name = "新建商品";
+                    break;
+                case EventCode.PrdProductEdit:
+                    name = "保存商品信息";
+                    break;
+                case EventCode.StoreAdd:
+                    name = "新建店铺";
+                    break;
+                case EventCode.StoreEdit:
+                    name = "保存店铺信息";
+                    break;
+                case EventCode.StoreAddMachine:
+                    name = "机器绑定店铺";
+                    break;
+                case EventCode.StoreRemoveMachine:
+                    name = "机器解绑店铺";
                     break;
             }
 

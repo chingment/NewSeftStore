@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -114,6 +115,9 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.Store.Add(store);
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             }
@@ -166,6 +170,9 @@ namespace LocalS.Service.Api.Merch
                 store.Mender = operater;
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreEdit, string.Format("保存店铺（{0}）信息成功", rop.Name));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
             return result;
@@ -258,6 +265,9 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被使用");
                 }
 
+                var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+
+
                 machine.CurUseStoreId = rop.StoreId;
                 machine.Mender = operater;
                 machine.MendTime = DateTime.Now;
@@ -280,6 +290,9 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAddMachine, string.Format("机器（{0}）绑定店铺（{1}）成功", merchMachine.Name, store.Name));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
             }
             return result;
@@ -313,6 +326,8 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被移除");
                 }
 
+                var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+
                 var machineBindLog = new MachineBindLog();
                 machineBindLog.Id = GuidUtil.New();
                 machineBindLog.MachineId = rop.MachineId;
@@ -333,6 +348,7 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.Mender = operater;
                 merchMachine.MendTime = DateTime.Now;
 
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreRemoveMachine, string.Format("机器（{0}）解绑店铺（{1}）成功", merchMachine.Name, store.Name));
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

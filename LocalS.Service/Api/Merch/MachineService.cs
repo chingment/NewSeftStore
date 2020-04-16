@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -347,7 +348,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater,AppId.MERCH, merchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.MERCH, merchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
 
             return result;
         }
@@ -371,7 +372,11 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.Mender = operater;
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.Name));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
             }
 
             if (result.Result == ResultType.Success)

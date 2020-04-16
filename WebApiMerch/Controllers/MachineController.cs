@@ -53,7 +53,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopMachineEdit rop)
         {
