@@ -484,7 +484,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId, remark.ToString());
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId,productSkuName, remark.ToString());
                 merchOperateLog.Creator = operater;
                 merchOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MerchOperateLog.Add(merchOperateLog);
