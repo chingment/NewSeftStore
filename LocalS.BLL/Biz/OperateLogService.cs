@@ -495,7 +495,6 @@ namespace LocalS.BLL.Biz
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
             string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
-
             if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
             {
                 var sysUserOperateLog = new SysUserOperateLog();
@@ -539,6 +538,8 @@ namespace LocalS.BLL.Biz
 
             if (model != null)
             {
+                var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, model.PrdProductSkuId);
+
                 var sellChannelStockLog = new SellChannelStockLog();
                 sellChannelStockLog.Id = GuidUtil.New();
                 sellChannelStockLog.MerchId = merchId;
@@ -550,28 +551,44 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
                 sellChannelStockLog.CabinetId = model.CabinetId;
                 sellChannelStockLog.SlotId = model.SlotId;
+                sellChannelStockLog.PrdProductId = productSku.ProductId;
                 sellChannelStockLog.PrdProductSkuId = model.PrdProductSkuId;
+                sellChannelStockLog.PrdProductSkuName = productSku.Name;
                 sellChannelStockLog.SellQuantity = model.SellQuantity;
                 sellChannelStockLog.WaitPayLockQuantity = model.WaitPayLockQuantity;
                 sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;
                 sellChannelStockLog.SumQuantity = model.SumQuantity;
-                sellChannelStockLog.ChangeType = model.ChangeType;
+                sellChannelStockLog.EventCode = model.EventCode;
+                sellChannelStockLog.EventName = EventCode.GetEventName(model.EventCode); 
                 sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
                 if (string.IsNullOrEmpty(machineId))
                 {
                     sellChannelStockLog.Remark = eventRemark;
-                    sellChannelStockLog.RemarkByDev = eventRemark;
                 }
                 else
                 {
                     sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
-                    sellChannelStockLog.RemarkByDev = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
                 }
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                 CurrentDb.SaveChanges();
             }
         }
+
+
+
+        //public static string GetStockChangeTpyeName(E_SellChannelStockLogChangeTpye type)
+        //{
+        //    string name = "";
+
+        //    switch (type)
+        //    {
+        //        case E_SellChannelStockLogChangeTpye.
+        //    }
+
+        //    return name;
+
+        //}
     }
 }

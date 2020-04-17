@@ -93,8 +93,12 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SellChannelStockLog
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.PrdProductSkuName, u.StoreName, u.SellChannelRefName, u.ChangeType, u.ChangeTypeName, u.ChangeQuantity, u.RemarkByDev, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+                         select new { u.Id, u.PrdProductSkuName, u.StoreName, u.SellChannelRefName, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
+            if (!string.IsNullOrEmpty(rup.ProductSkuName))
+            {
+                query = query.Where(m => m.PrdProductSkuName.Contains(rup.ProductSkuName));
+            }
 
             int total = query.Count();
 
@@ -114,13 +118,14 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     ProductSkuName = item.PrdProductSkuName,
                     SellChannelRefName = item.SellChannelRefName,
-                    ChangeTypeName = item.ChangeTypeName,
+                    EventCode = item.EventCode,
+                    EventName = item.EventName,
                     ChangeQuantity = item.ChangeQuantity,
                     SellQuantity = item.SellQuantity,
                     WaitPayLockQuantity = item.WaitPayLockQuantity,
                     WaitPickupLockQuantity = item.WaitPickupLockQuantity,
                     SumQuantity = item.SumQuantity,
-                    Remark = item.RemarkByDev,
+                    Remark = item.Remark,
                     CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
                 });
             }

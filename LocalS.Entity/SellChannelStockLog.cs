@@ -37,8 +37,8 @@ namespace LocalS.Entity
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public string SellChannelRefName { get; set; }
-        public E_SellChannelStockLogChangeTpye ChangeType { get; set; }
-        public string ChangeTypeName { get; set; }
+        public string EventCode { get; set; }
+        public string EventName { get; set; }
         public int ChangeQuantity { get; set; }
         public int SumQuantity { get; set; }
         public int WaitPayLockQuantity { get; set; }
@@ -47,6 +47,5 @@ namespace LocalS.Entity
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Remark { get; set; }
-        public string RemarkByDev { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace LocalS.Entity
         public const string HeartbeatBag = "HeartbeatBag";
         public const string ScanSlots = "ScanSlots";
         public const string Pickup = "Pickup";
+        public const string MachineCabinetSlotInit = "MachineCabinetSlotInit";
+        public const string MachineCabinetSlotReplace = "MachineCabinetSlotReplace";
         public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
         public const string MachineCabinetSlotAdjustStockQuantity = "MachineCabinetSlotAdjustStockQuantity";
@@ -25,6 +27,7 @@ namespace LocalS.Entity
         public const string OrderPickupOneSysMadeSignTake = "OrderPickupOneSysMadeSignTake";
         public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
         public const string OrderCancle = "OrderCancle";
+        public const string OrderPaySuccess = "OrderPaySuccess";
         public const string OrderReserveSuccess = "OrderReserveSuccess";
         public const string OrderHandleExOrder = "OrderHandleExOrder";
         public const string AdminUserAdd = "AdminUserAdd";
@@ -81,6 +84,9 @@ namespace LocalS.Entity
                     break;
                 case EventCode.OrderReserveSuccess:
                     name = "订单预定成功";
+                    break;
+                case EventCode.OrderPaySuccess:
+                    name = "订单支付成功";
                     break;
                 case EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete:
                     name = "未完成，人工标识未取";

@@ -97,7 +97,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove,
+                            EventCode = EventCode.MachineCabinetSlotRemove,
                             ChangeQuantity = sellChannelStock.SumQuantity
                         };
 
@@ -165,7 +165,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = 0,
                             WaitPickupLockQuantity = 0,
                             SumQuantity = 0,
-                            ChangeType = E_SellChannelStockLogChangeTpye.SlotInit,
+                            EventCode = EventCode.MachineCabinetSlotSave,
                             ChangeQuantity = 0
                         };
 
@@ -201,7 +201,7 @@ namespace LocalS.BLL.Biz
                                 WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                                 WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                                 SumQuantity = sellChannelStock.SumQuantity,
-                                ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove,
+                                EventCode = EventCode.MachineCabinetSlotRemove,
                                 ChangeQuantity = sellChannelStock.SumQuantity
                             };
 
@@ -237,7 +237,7 @@ namespace LocalS.BLL.Biz
                                 WaitPayLockQuantity = 0,
                                 WaitPickupLockQuantity = 0,
                                 SumQuantity = 0,
-                                ChangeType = E_SellChannelStockLogChangeTpye.SlotInit,
+                                EventCode = EventCode.MachineCabinetSlotInit,
                                 ChangeQuantity = 0
                             };
 
@@ -317,7 +317,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderReserveSuccess,
+                            EventCode = EventCode.OrderReserveSuccess,
                             ChangeQuantity = quantity
                         };
 
@@ -359,7 +359,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderCancle,
+                            EventCode = EventCode.OrderCancle,
                             ChangeQuantity = quantity
                         };
 
@@ -399,12 +399,12 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderPaySuccess,
+                            EventCode = EventCode.OrderPaySuccess,
                             ChangeQuantity = quantity
                         };
 
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPaySuccess, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -441,7 +441,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneSysMadeSignTake,
+                            EventCode = EventCode.OrderPickupOneSysMadeSignTake,
                             ChangeQuantity = quantity
                         };
 
@@ -484,7 +484,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignTakeByNotComplete,
+                            EventCode = EventCode.OrderPickupOneManMadeSignTakeByNotComplete,
                             ChangeQuantity = quantity
                         };
 
@@ -527,7 +527,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignNotTakeByComplete,
+                            EventCode = EventCode.OrderPickupOneManMadeSignNotTakeByComplete,
                             ChangeQuantity = quantity
                         };
 
@@ -568,7 +568,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
-                            ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignNotTakeByNotComplete,
+                            EventCode = EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete,
                             ChangeQuantity = quantity
                         };
 
@@ -579,9 +579,6 @@ namespace LocalS.BLL.Biz
                         #endregion
                         break;
                 }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
             }
 
             if (result.Result == ResultType.Success)
@@ -652,7 +649,7 @@ namespace LocalS.BLL.Biz
                     WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
                     WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                     SumQuantity = sellChannelStock.SumQuantity,
-                    ChangeType = E_SellChannelStockLogChangeTpye.SlotEdit,
+                    EventCode = EventCode.MachineCabinetSlotAdjustStockQuantity,
                     ChangeQuantity = 0
                 };
 

@@ -17,11 +17,12 @@ namespace LocalS.BLL.Mq
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public string SellChannelRefName { get; set; }
-        public E_SellChannelStockLogChangeTpye ChangeType { get; set; }
+        public string EventCode { get; set; }
         public int ChangeQuantity { get; set; }
         public int SumQuantity { get; set; }
         public int WaitPayLockQuantity { get; set; }
         public int WaitPickupLockQuantity { get; set; }
         public int SellQuantity { get; set; }
+
     }
 }
