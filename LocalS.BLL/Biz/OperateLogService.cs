@@ -559,7 +559,16 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;
-                sellChannelStockLog.RemarkByDev = eventRemark;
+                if (string.IsNullOrEmpty(machineId))
+                {
+                    sellChannelStockLog.Remark = eventRemark;
+                    sellChannelStockLog.RemarkByDev = eventRemark;
+                }
+                else
+                {
+                    sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+                    sellChannelStockLog.RemarkByDev = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+                }
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                 CurrentDb.SaveChanges();
             }

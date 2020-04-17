@@ -46,6 +46,7 @@ namespace LocalS.Entity
         public int SellQuantity { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
+        public string Remark { get; set; }
         public string RemarkByDev { get; set; }
     }
 }
