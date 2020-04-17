@@ -64,8 +64,6 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
-            List<SellChannelStockChangeModel> eventContent = new List<SellChannelStockChangeModel>();
-
             using (TransactionScope ts = new TransactionScope())
             {
                 if (operateType == OperateSlotType.MachineSlotRemove)
@@ -86,7 +84,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        var eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -101,7 +99,7 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove,
                             ChangeQuantity = sellChannelStock.SumQuantity
-                        });
+                        };
 
                         MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，删除成功，移除实际库存：{3}", cabinetId, slotId, produtSkuName, sellChannelStock.SumQuantity), eventContent);
                     }
@@ -154,7 +152,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        var eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -169,7 +167,7 @@ namespace LocalS.BLL.Biz
                             SumQuantity = 0,
                             ChangeType = E_SellChannelStockLogChangeTpye.SlotInit,
                             ChangeQuantity = 0
-                        });
+                        };
 
 
                         MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，初次录入", cabinetId, slotId, bizProductSku.Name));
@@ -189,7 +187,8 @@ namespace LocalS.BLL.Biz
 
                             var oldBizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, sellChannelStock.PrdProductSkuId);
 
-                            eventContent.Add(new SellChannelStockChangeModel
+                            int oldSumQuantity = sellChannelStock.SumQuantity;
+                            var oldEventContent = new SellChannelStockChangeModel
                             {
                                 MerchId = sellChannelStock.MerchId,
                                 StoreId = sellChannelStock.StoreId,
@@ -204,8 +203,7 @@ namespace LocalS.BLL.Biz
                                 SumQuantity = sellChannelStock.SumQuantity,
                                 ChangeType = E_SellChannelStockLogChangeTpye.SlotRemove,
                                 ChangeQuantity = sellChannelStock.SumQuantity
-                            });
-
+                            };
 
                             sellChannelStock.PrdProductId = bizProductSku.ProductId;
                             sellChannelStock.PrdProductSkuId = productSkuId;
@@ -220,8 +218,13 @@ namespace LocalS.BLL.Biz
                             sellChannelStock.MaxQuantity = 10;
                             sellChannelStock.MendTime = DateTime.Now;
                             sellChannelStock.Mender = operater;
+                            CurrentDb.SaveChanges();
+                            ts.Complete();
 
-                            eventContent.Add(new SellChannelStockChangeModel
+
+                            MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品变换，删除商品：{2}，删除数量：{3}，替换成商品：{4}", cabinetId, slotId, oldBizProductSku.Name, oldSumQuantity, bizProductSku.Name), oldEventContent);
+
+                            var newEeventContent = new SellChannelStockChangeModel
                             {
                                 MerchId = sellChannelStock.MerchId,
                                 StoreId = sellChannelStock.StoreId,
@@ -236,16 +239,14 @@ namespace LocalS.BLL.Biz
                                 SumQuantity = 0,
                                 ChangeType = E_SellChannelStockLogChangeTpye.SlotInit,
                                 ChangeQuantity = 0
-                            });
+                            };
 
 
-                            MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜，{0}，货道：{1}，商品变换，原来商品：{2}，替换成商品：{3}", cabinetId, slotId, oldBizProductSku, bizProductSku.Name));
+                            MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品变换，原来商品：{2}，替换成商品：{3}", cabinetId, slotId, oldBizProductSku.Name, bizProductSku.Name), newEeventContent);
                         }
 
                     }
 
-                    CurrentDb.SaveChanges();
-                    ts.Complete();
 
                     var slot = new
                     {
@@ -281,7 +282,7 @@ namespace LocalS.BLL.Biz
 
                 var productSkuName = CacheServiceFactory.ProductSku.GetName(merchId, productSkuId);
 
-                List<SellChannelStockChangeModel> eventContent = new List<SellChannelStockChangeModel>();
+                SellChannelStockChangeModel eventContent = new SellChannelStockChangeModel();
                 SellChannelStock sellChannelStock = null;
                 switch (operateType)
                 {
@@ -303,7 +304,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -318,10 +319,10 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderReserveSuccess,
                             ChangeQuantity = quantity
-                        });
+                        };
 
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderReserveSuccess, string.Format("机柜：{0}，货道：{1}，商品：{2}，预定成功，未支付，减少可售库存：{3}，增加待支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderReserveSuccess, string.Format("机柜：{0}，货道：{1}，商品：{2}，预定成功，未支付，减少可售库存：{3}，增加待支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -345,7 +346,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -360,9 +361,9 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderCancle,
                             ChangeQuantity = quantity
-                        });
+                        };
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，未支付，取消订单，增加可售库存：{3}，减少未支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，未支付，取消订单，增加可售库存：{3}，减少未支付库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
@@ -385,7 +386,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -400,10 +401,10 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderPaySuccess,
                             ChangeQuantity = quantity
-                        });
+                        };
 
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderCancle, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功支付，待取货，减少待支付库存：{3}，增加待取货库存：{3}，可售库存不变，实际库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -427,7 +428,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -442,10 +443,10 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneSysMadeSignTake,
                             ChangeQuantity = quantity
-                        });
+                        };
 
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功取货，减少实际库存：{3}，减少待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("机柜：{0}，货道：{1}，商品：{2}，成功取货，减少实际库存：{3}，减少待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -470,7 +471,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -485,10 +486,10 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignTakeByNotComplete,
                             ChangeQuantity = quantity
-                        });
+                        };
 
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记为取货成功，减去实际库存：{3}，减去待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记为取货成功，减去实际库存：{3}，减去待取货库存：{3}，可售库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -513,7 +514,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -528,9 +529,9 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignNotTakeByComplete,
                             ChangeQuantity = quantity
-                        });
+                        };
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{3}，增加实际库存：{3}", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，系统已经标识出货成功，但实际未取货成功，人为标记未取货成功，增加可售库存：{3}，增加实际库存：{3}", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -554,7 +555,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        eventContent.Add(new SellChannelStockChangeModel
+                        eventContent = new SellChannelStockChangeModel
                         {
                             MerchId = sellChannelStock.MerchId,
                             StoreId = sellChannelStock.StoreId,
@@ -569,9 +570,9 @@ namespace LocalS.BLL.Biz
                             SumQuantity = sellChannelStock.SumQuantity,
                             ChangeType = E_SellChannelStockLogChangeTpye.OrderPickupOneManMadeSignNotTakeByNotComplete,
                             ChangeQuantity = quantity
-                        });
+                        };
 
-                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity));
+                        MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, productSkuName, quantity), eventContent);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
 
@@ -597,7 +598,7 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                List<SellChannelStockChangeModel> eventContent = new List<SellChannelStockChangeModel>();
+                SellChannelStockChangeModel eventContent = new SellChannelStockChangeModel();
 
                 var productSkuName = CacheServiceFactory.ProductSku.GetName(merchId, productSkuId);
 
@@ -638,7 +639,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                eventContent.Add(new SellChannelStockChangeModel
+                eventContent = new SellChannelStockChangeModel
                 {
                     MerchId = sellChannelStock.MerchId,
                     StoreId = sellChannelStock.StoreId,
@@ -653,10 +654,10 @@ namespace LocalS.BLL.Biz
                     SumQuantity = sellChannelStock.SumQuantity,
                     ChangeType = E_SellChannelStockLogChangeTpye.SlotEdit,
                     ChangeQuantity = 0
-                });
+                };
 
 
-                MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotAdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，库存数量将{3}调整成{4}", cabinetId, slotId, productSkuName, oldSumQuantity, sumQuantity));
+                MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotAdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，库存数量将{3}调整成{4}", cabinetId, slotId, productSkuName, oldSumQuantity, sumQuantity), eventContent);
 
                 var slot = new
                 {

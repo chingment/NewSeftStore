@@ -45,7 +45,8 @@ namespace LocalS.BLL.Biz
                 case EventCode.OrderPickupOneManMadeSignTakeByNotComplete:
                 case EventCode.OrderCancle:
                 case EventCode.OrderReserveSuccess:
-     
+                    var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
+                    EventHandleByStockChangeLog(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
                     break;
                 default:
                     EventHandle(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark);
@@ -55,240 +56,222 @@ namespace LocalS.BLL.Biz
 
         private void EventHandle(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark)
         {
-            using (TransactionScope ts = new TransactionScope())
+            string merchName = BizFactory.Merch.GetMerchName(merchId);
+            string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
+            if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
             {
-                string merchName = BizFactory.Merch.GetMerchName(merchId);
-                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
-                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
-
-                if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
-                {
-                    var sysUserOperateLog = new SysUserOperateLog();
-                    sysUserOperateLog.Id = GuidUtil.New();
-                    sysUserOperateLog.UserId = operater;
-                    sysUserOperateLog.EventCode = eventCode;
-                    sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
-                    sysUserOperateLog.AppId = appId;
-                    sysUserOperateLog.Remark = eventRemark;
-                    sysUserOperateLog.CreateTime = DateTime.Now;
-                    sysUserOperateLog.Creator = operater;
-                    CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
-                    CurrentDb.SaveChanges();
-                }
-
-                var merchOperateLog = new MerchOperateLog();
-                merchOperateLog.Id = GuidUtil.New();
-                merchOperateLog.AppId = appId;
-                merchOperateLog.MerchId = merchId;
-                merchOperateLog.MerchName = merchName;
-                merchOperateLog.StoreId = storeId;
-                merchOperateLog.StoreName = storeName;
-                merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName = machineName;
-                merchOperateLog.OperateUserId = operater;
-                merchOperateLog.OperateUserName = operaterUserName;
-                merchOperateLog.EventCode = eventCode;
-                merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                if (string.IsNullOrEmpty(machineId))
-                {
-                    merchOperateLog.Remark = eventRemark;
-                }
-                else
-                {
-                    merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
-                }
-                merchOperateLog.Creator = operater;
-                merchOperateLog.CreateTime = DateTime.Now;
-                CurrentDb.MerchOperateLog.Add(merchOperateLog);
+                var sysUserOperateLog = new SysUserOperateLog();
+                sysUserOperateLog.Id = GuidUtil.New();
+                sysUserOperateLog.UserId = operater;
+                sysUserOperateLog.EventCode = eventCode;
+                sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
+                sysUserOperateLog.AppId = appId;
+                sysUserOperateLog.Remark = eventRemark;
+                sysUserOperateLog.CreateTime = DateTime.Now;
+                sysUserOperateLog.Creator = operater;
+                CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
                 CurrentDb.SaveChanges();
-
-                ts.Complete();
             }
+
+            var merchOperateLog = new MerchOperateLog();
+            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.AppId = appId;
+            merchOperateLog.MerchId = merchId;
+            merchOperateLog.MerchName = merchName;
+            merchOperateLog.StoreId = storeId;
+            merchOperateLog.StoreName = storeName;
+            merchOperateLog.MachineId = machineId;
+            merchOperateLog.MachineName = machineName;
+            merchOperateLog.OperateUserId = operater;
+            merchOperateLog.OperateUserName = operaterUserName;
+            merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+            if (string.IsNullOrEmpty(machineId))
+            {
+                merchOperateLog.Remark = eventRemark;
+            }
+            else
+            {
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+            }
+            merchOperateLog.Creator = operater;
+            merchOperateLog.CreateTime = DateTime.Now;
+            CurrentDb.MerchOperateLog.Add(merchOperateLog);
+            CurrentDb.SaveChanges();
+
         }
 
         private void EventHandleByLogin(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, LoginLogModel model)
         {
-            using (TransactionScope ts = new TransactionScope())
+            string merchName = BizFactory.Merch.GetMerchName(merchId);
+            string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
+            var sysUserOperateLog = new SysUserOperateLog();
+            sysUserOperateLog.Id = GuidUtil.New();
+            sysUserOperateLog.UserId = operater;
+            sysUserOperateLog.EventCode = eventCode;
+            sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
+            sysUserOperateLog.AppId = appId;
+            sysUserOperateLog.Remark = eventRemark;
+            sysUserOperateLog.CreateTime = DateTime.Now;
+            sysUserOperateLog.Creator = operater;
+            CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
+            CurrentDb.SaveChanges();
+
+            var userLoginHis = new SysUserLoginHis();
+            userLoginHis.Id = GuidUtil.New();
+            userLoginHis.UserId = operater;
+            userLoginHis.AppId = appId;
+            userLoginHis.LoginAccount = model.LoginAccount;
+            userLoginHis.LoginFun = model.LoginFun;
+            userLoginHis.LoginWay = model.LoginWay;
+            userLoginHis.Ip = model.LoginIp;
+            userLoginHis.LoginTime = DateTime.Now;
+            userLoginHis.Result = model.LoginResult;
+            userLoginHis.Description = eventRemark;
+            userLoginHis.RemarkByDev = model.RemarkByDev;
+            userLoginHis.CreateTime = DateTime.Now;
+            userLoginHis.Creator = operater;
+            CurrentDb.SysUserLoginHis.Add(userLoginHis);
+            CurrentDb.SaveChanges();
+
+            var merchOperateLog = new MerchOperateLog();
+            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.AppId = appId;
+            merchOperateLog.MerchId = merchId;
+            merchOperateLog.MerchName = merchName;
+            merchOperateLog.StoreId = storeId;
+            merchOperateLog.StoreName = storeName;
+            merchOperateLog.MachineId = machineId;
+            merchOperateLog.MachineName = machineName;
+            merchOperateLog.OperateUserId = operater;
+            merchOperateLog.OperateUserName = operaterUserName;
+            merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+
+            if (string.IsNullOrEmpty(machineId))
             {
-                string merchName = BizFactory.Merch.GetMerchName(merchId);
-                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
-                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
-
-                var sysUserOperateLog = new SysUserOperateLog();
-                sysUserOperateLog.Id = GuidUtil.New();
-                sysUserOperateLog.UserId = operater;
-                sysUserOperateLog.EventCode = eventCode;
-                sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
-                sysUserOperateLog.AppId = appId;
-                sysUserOperateLog.Remark = eventRemark;
-                sysUserOperateLog.CreateTime = DateTime.Now;
-                sysUserOperateLog.Creator = operater;
-                CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
-                CurrentDb.SaveChanges();
-
-                var userLoginHis = new SysUserLoginHis();
-                userLoginHis.Id = GuidUtil.New();
-                userLoginHis.UserId = operater;
-                userLoginHis.AppId = appId;
-                userLoginHis.LoginAccount = model.LoginAccount;
-                userLoginHis.LoginFun = model.LoginFun;
-                userLoginHis.LoginWay = model.LoginWay;
-                userLoginHis.Ip = model.LoginIp;
-                userLoginHis.LoginTime = DateTime.Now;
-                userLoginHis.Result = model.LoginResult;
-                userLoginHis.Description = eventRemark;
-                userLoginHis.RemarkByDev = model.RemarkByDev;
-                userLoginHis.CreateTime = DateTime.Now;
-                userLoginHis.Creator = operater;
-                CurrentDb.SysUserLoginHis.Add(userLoginHis);
-                CurrentDb.SaveChanges();
-
-                var merchOperateLog = new MerchOperateLog();
-                merchOperateLog.Id = GuidUtil.New();
-                merchOperateLog.AppId = appId;
-                merchOperateLog.MerchId = merchId;
-                merchOperateLog.MerchName = merchName;
-                merchOperateLog.StoreId = storeId;
-                merchOperateLog.StoreName = storeName;
-                merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName = machineName;
-                merchOperateLog.OperateUserId = operater;
-                merchOperateLog.OperateUserName = operaterUserName;
-                merchOperateLog.EventCode = eventCode;
-                merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-
-                if (string.IsNullOrEmpty(machineId))
-                {
-                    merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入站点：{2}", model.LoginAccount, eventRemark, appId);
-                }
-                else
-                {
-                    merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}", model.LoginAccount, eventRemark, storeName, machineName);
-                }
-
-                merchOperateLog.Creator = operater;
-                merchOperateLog.CreateTime = DateTime.Now;
-                CurrentDb.MerchOperateLog.Add(merchOperateLog);
-                CurrentDb.SaveChanges();
-
-                ts.Complete();
+                merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入站点：{2}", model.LoginAccount, eventRemark, appId);
             }
+            else
+            {
+                merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}", model.LoginAccount, eventRemark, storeName, machineName);
+            }
+
+            merchOperateLog.Creator = operater;
+            merchOperateLog.CreateTime = DateTime.Now;
+            CurrentDb.MerchOperateLog.Add(merchOperateLog);
+            CurrentDb.SaveChanges();
         }
 
         private void EventHandleByLogout(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, LoginLogModel model)
         {
-            using (TransactionScope ts = new TransactionScope())
-            {
-                string merchName = BizFactory.Merch.GetMerchName(merchId);
-                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
-                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+            string merchName = BizFactory.Merch.GetMerchName(merchId);
+            string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
-                var sysUserOperateLog = new SysUserOperateLog();
-                sysUserOperateLog.Id = GuidUtil.New();
-                sysUserOperateLog.UserId = operater;
-                sysUserOperateLog.EventCode = eventCode;
-                sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
-                sysUserOperateLog.AppId = appId;
-                sysUserOperateLog.Remark = eventRemark;
-                sysUserOperateLog.CreateTime = DateTime.Now;
-                sysUserOperateLog.Creator = operater;
-                CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
-                CurrentDb.SaveChanges();
+            var sysUserOperateLog = new SysUserOperateLog();
+            sysUserOperateLog.Id = GuidUtil.New();
+            sysUserOperateLog.UserId = operater;
+            sysUserOperateLog.EventCode = eventCode;
+            sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
+            sysUserOperateLog.AppId = appId;
+            sysUserOperateLog.Remark = eventRemark;
+            sysUserOperateLog.CreateTime = DateTime.Now;
+            sysUserOperateLog.Creator = operater;
+            CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
+            CurrentDb.SaveChanges();
 
-                var userLoginHis = new SysUserLoginHis();
-                userLoginHis.Id = GuidUtil.New();
-                userLoginHis.UserId = operater;
-                userLoginHis.AppId = appId;
-                userLoginHis.LoginAccount = model.LoginAccount;
-                userLoginHis.LoginFun = model.LoginFun;
-                userLoginHis.LoginWay = model.LoginWay;
-                userLoginHis.Ip = model.LoginIp;
-                userLoginHis.LoginTime = DateTime.Now;
-                userLoginHis.Result = model.LoginResult;
-                userLoginHis.Description = eventRemark;
-                userLoginHis.RemarkByDev = model.RemarkByDev;
-                userLoginHis.CreateTime = DateTime.Now;
-                userLoginHis.Creator = operater;
-                CurrentDb.SysUserLoginHis.Add(userLoginHis);
-                CurrentDb.SaveChanges();
+            var userLoginHis = new SysUserLoginHis();
+            userLoginHis.Id = GuidUtil.New();
+            userLoginHis.UserId = operater;
+            userLoginHis.AppId = appId;
+            userLoginHis.LoginAccount = model.LoginAccount;
+            userLoginHis.LoginFun = model.LoginFun;
+            userLoginHis.LoginWay = model.LoginWay;
+            userLoginHis.Ip = model.LoginIp;
+            userLoginHis.LoginTime = DateTime.Now;
+            userLoginHis.Result = model.LoginResult;
+            userLoginHis.Description = eventRemark;
+            userLoginHis.RemarkByDev = model.RemarkByDev;
+            userLoginHis.CreateTime = DateTime.Now;
+            userLoginHis.Creator = operater;
+            CurrentDb.SysUserLoginHis.Add(userLoginHis);
+            CurrentDb.SaveChanges();
 
-                var merchOperateLog = new MerchOperateLog();
-                merchOperateLog.Id = GuidUtil.New();
-                merchOperateLog.AppId = appId;
-                merchOperateLog.MerchId = merchId;
-                merchOperateLog.MerchName = merchName;
-                merchOperateLog.StoreId = storeId;
-                merchOperateLog.StoreName = storeName;
-                merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName = machineName;
-                merchOperateLog.OperateUserId = operater;
-                merchOperateLog.OperateUserName = operaterUserName;
-                merchOperateLog.EventCode = eventCode;
-                merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = string.Format("账号：{0}，{1}", model.LoginAccount, eventRemark);
-                merchOperateLog.Creator = operater;
-                merchOperateLog.CreateTime = DateTime.Now;
-                CurrentDb.MerchOperateLog.Add(merchOperateLog);
-                CurrentDb.SaveChanges();
-
-                ts.Complete();
-            }
+            var merchOperateLog = new MerchOperateLog();
+            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.AppId = appId;
+            merchOperateLog.MerchId = merchId;
+            merchOperateLog.MerchName = merchName;
+            merchOperateLog.StoreId = storeId;
+            merchOperateLog.StoreName = storeName;
+            merchOperateLog.MachineId = machineId;
+            merchOperateLog.MachineName = machineName;
+            merchOperateLog.OperateUserId = operater;
+            merchOperateLog.OperateUserName = operaterUserName;
+            merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+            merchOperateLog.Remark = string.Format("账号：{0}，{1}", model.LoginAccount, eventRemark);
+            merchOperateLog.Creator = operater;
+            merchOperateLog.CreateTime = DateTime.Now;
+            CurrentDb.MerchOperateLog.Add(merchOperateLog);
+            CurrentDb.SaveChanges();
         }
 
         private void EventHandleByHeartbeatBag(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, MachineEventByHeartbeatBagModel model)
         {
-            using (TransactionScope ts = new TransactionScope())
+            string merchName = BizFactory.Merch.GetMerchName(merchId);
+            string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+
+            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+
+            if (machine == null)
+                return;
+
+            machine.LastRequestTime = DateTime.Now;
+
+            switch (model.Status)
             {
-                string merchName = BizFactory.Merch.GetMerchName(merchId);
-                string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
-                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
-
-                var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
-
-                if (machine == null)
-                    return;
-
-                machine.LastRequestTime = DateTime.Now;
-
-                switch (model.Status)
-                {
-                    case "running":
-                        eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineName);
-                        machine.RunStatus = E_MachineRunStatus.Running;
-                        break;
-                    case "setting":
-                        eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineName);
-                        machine.RunStatus = E_MachineRunStatus.Setting;
-                        break;
-                    default:
-                        eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineName);
-                        break;
-                }
-
-                var merchOperateLog = new MerchOperateLog();
-                merchOperateLog.Id = GuidUtil.New();
-                merchOperateLog.AppId = appId;
-                merchOperateLog.MerchId = merchId;
-                merchOperateLog.MerchName = merchName;
-                merchOperateLog.StoreId = storeId;
-                merchOperateLog.StoreName = storeName;
-                merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName = machineName;
-                merchOperateLog.OperateUserId = operater;
-                merchOperateLog.OperateUserName = operaterUserName;
-                merchOperateLog.EventCode = eventCode;
-                merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = eventRemark;
-                merchOperateLog.Creator = operater;
-                merchOperateLog.CreateTime = DateTime.Now;
-                CurrentDb.MerchOperateLog.Add(merchOperateLog);
-                CurrentDb.SaveChanges();
-                ts.Complete();
+                case "running":
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineName);
+                    machine.RunStatus = E_MachineRunStatus.Running;
+                    break;
+                case "setting":
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineName);
+                    machine.RunStatus = E_MachineRunStatus.Setting;
+                    break;
+                default:
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineName);
+                    break;
             }
+
+            var merchOperateLog = new MerchOperateLog();
+            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.AppId = appId;
+            merchOperateLog.MerchId = merchId;
+            merchOperateLog.MerchName = merchName;
+            merchOperateLog.StoreId = storeId;
+            merchOperateLog.StoreName = storeName;
+            merchOperateLog.MachineId = machineId;
+            merchOperateLog.MachineName = machineName;
+            merchOperateLog.OperateUserId = operater;
+            merchOperateLog.OperateUserName = operaterUserName;
+            merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+            merchOperateLog.Remark = eventRemark;
+            merchOperateLog.Creator = operater;
+            merchOperateLog.CreateTime = DateTime.Now;
+            CurrentDb.MerchOperateLog.Add(merchOperateLog);
+            CurrentDb.SaveChanges();
         }
 
         private void EventHandleByPickup(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, MachineEventByPickupModel model)
@@ -495,7 +478,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId,productSkuName, remark.ToString());
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId, productSkuName, remark.ToString());
                 merchOperateLog.Creator = operater;
                 merchOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MerchOperateLog.Add(merchOperateLog);
@@ -506,6 +489,80 @@ namespace LocalS.BLL.Biz
         }
 
 
+        private void EventHandleByStockChangeLog(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
+        {
+            string merchName = BizFactory.Merch.GetMerchName(merchId);
+            string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
+            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
+            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
+            if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
+            {
+                var sysUserOperateLog = new SysUserOperateLog();
+                sysUserOperateLog.Id = GuidUtil.New();
+                sysUserOperateLog.UserId = operater;
+                sysUserOperateLog.EventCode = eventCode;
+                sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
+                sysUserOperateLog.AppId = appId;
+                sysUserOperateLog.Remark = eventRemark;
+                sysUserOperateLog.CreateTime = DateTime.Now;
+                sysUserOperateLog.Creator = operater;
+                CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
+                CurrentDb.SaveChanges();
+            }
+
+            var merchOperateLog = new MerchOperateLog();
+            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.AppId = appId;
+            merchOperateLog.MerchId = merchId;
+            merchOperateLog.MerchName = merchName;
+            merchOperateLog.StoreId = storeId;
+            merchOperateLog.StoreName = storeName;
+            merchOperateLog.MachineId = machineId;
+            merchOperateLog.MachineName = machineName;
+            merchOperateLog.OperateUserId = operater;
+            merchOperateLog.OperateUserName = operaterUserName;
+            merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+            if (string.IsNullOrEmpty(machineId))
+            {
+                merchOperateLog.Remark = eventRemark;
+            }
+            else
+            {
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+            }
+            merchOperateLog.Creator = operater;
+            merchOperateLog.CreateTime = DateTime.Now;
+            CurrentDb.MerchOperateLog.Add(merchOperateLog);
+            CurrentDb.SaveChanges();
+
+            if (model != null)
+            {
+                var sellChannelStockLog = new SellChannelStockLog();
+                sellChannelStockLog.Id = GuidUtil.New();
+                sellChannelStockLog.MerchId = merchId;
+                sellChannelStockLog.MerchName = merchName;
+                sellChannelStockLog.StoreId = storeId;
+                sellChannelStockLog.StoreName = storeName;
+                sellChannelStockLog.SellChannelRefId = model.SellChannelRefId;
+                sellChannelStockLog.SellChannelRefName = machineName;
+                sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
+                sellChannelStockLog.CabinetId = model.CabinetId;
+                sellChannelStockLog.SlotId = model.SlotId;
+                sellChannelStockLog.PrdProductSkuId = model.PrdProductSkuId;
+                sellChannelStockLog.SellQuantity = model.SellQuantity;
+                sellChannelStockLog.WaitPayLockQuantity = model.WaitPayLockQuantity;
+                sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;
+                sellChannelStockLog.SumQuantity = model.SumQuantity;
+                sellChannelStockLog.ChangeType = model.ChangeType;
+                sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
+                sellChannelStockLog.Creator = operater;
+                sellChannelStockLog.CreateTime = DateTime.Now;
+                sellChannelStockLog.RemarkByDev = eventRemark;
+                CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+                CurrentDb.SaveChanges();
+            }
+        }
     }
 }
