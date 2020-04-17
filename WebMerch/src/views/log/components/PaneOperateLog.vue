@@ -40,6 +40,11 @@
           <span>{{ scope.row.appName }}</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="isDesktop" label="时间" prop="createTime" align="left" min-width="15%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="事件" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.eventName }}</span>
@@ -48,11 +53,6 @@
       <el-table-column v-if="isDesktop" label="备注" align="left" min-width="45%">
         <template slot-scope="scope">
           <span>{{ scope.row.remark }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="操作时间" prop="createTime" align="left" min-width="15%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
     </el-table>

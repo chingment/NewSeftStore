@@ -158,18 +158,18 @@
 
 <script>
 
-import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv,getTodaySummary } from '@/api/home'
+import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary } from '@/api/home'
 
 export default {
 
   data() {
     return {
-      todaySummary:{
-        sumExWaitHandleCount:0,
-        todayGmvRl:{
-        sumCount: 0,
-        sumTradeAmount: 0
-       }
+      todaySummary: {
+        sumExWaitHandleCount: 0,
+        todayGmvRl: {
+          sumCount: 0,
+          sumTradeAmount: 0
+        }
       },
       todayGmv: {
         datef: '',
@@ -190,12 +190,12 @@ export default {
     this._getStoreGmvRl()
   },
   methods: {
-     _getTodaySummary: function() {
+    _getTodaySummary: function() {
       getTodaySummary().then(res => {
         if (res.result === 1) {
-           var d= res.data
-           this.todaySummary.sumExWaitHandleCount = d.sumExWaitHandleCount
-          //this.todayGmv = res.data.days[0]
+          var d = res.data
+          this.todaySummary.sumExWaitHandleCount = d.sumExWaitHandleCount
+          // this.todayGmv = res.data.days[0]
         }
       })
     },
@@ -229,14 +229,14 @@ export default {
       })
     },
     sumExWaitHandleCountClick() {
-      this.$cookies.set('isHasEx',"1")
+      this.$cookies.set('isHasEx', '1')
       this.$router.push({
         path: '/order/list'
       })
     },
-    todayGmvClick(){
-      this.$cookies.set('tradeStartTime',"2020-01-20")
-      this.$cookies.set('tradeEndTime',"2020-01-20")
+    todayGmvClick() {
+      this.$cookies.set('tradeStartTime', '2020-01-20')
+      this.$cookies.set('tradeEndTime', '2020-01-20')
       this.$router.push({
         path: '/order/list'
       })

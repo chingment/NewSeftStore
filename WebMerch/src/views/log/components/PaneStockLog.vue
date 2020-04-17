@@ -37,12 +37,12 @@
           <span>{{ scope.row.sellChannelRefName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="操作时间" prop="createTime" align="left" min-width="15%">
+      <el-table-column v-if="isDesktop" label="时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作类型" align="left" min-width="15%">
+      <el-table-column label="事件" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.eventName }}</span>
         </template>
