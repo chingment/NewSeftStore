@@ -36,6 +36,17 @@ namespace LocalS.BLL.Biz
                     var pickupModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
                     EventHandleByPickup(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, pickupModel);
                     break;
+                case EventCode.MachineCabinetSlotSave:
+                case EventCode.MachineCabinetSlotRemove:
+                case EventCode.MachineCabinetSlotAdjustStockQuantity:
+                case EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete:
+                case EventCode.OrderPickupOneManMadeSignNotTakeByComplete:
+                case EventCode.OrderPickupOneSysMadeSignTake:
+                case EventCode.OrderPickupOneManMadeSignTakeByNotComplete:
+                case EventCode.OrderCancle:
+                case EventCode.OrderReserveSuccess:
+     
+                    break;
                 default:
                     EventHandle(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark);
                     break;
@@ -493,5 +504,8 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
             }
         }
+
+
+
     }
 }

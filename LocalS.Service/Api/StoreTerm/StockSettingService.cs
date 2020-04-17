@@ -111,7 +111,7 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult SaveCabinetRowColLayout(string operater, RopStockSettingSaveCabinetRowColLayout rop)
         {
             var result = new CustomJsonResult();
-
+            var machine = BizFactory.Machine.GetOne(rop.MachineId);
             if (string.IsNullOrEmpty(rop.CabinetRowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道结果为空，上传失败");
@@ -129,11 +129,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, "", "", rop.MachineId, EventCode.MachineSaveCabinetRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId));
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId));
             }
             else
             {
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, "", "", rop.MachineId, EventCode.MachineSaveCabinetRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId));
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId));
             }
 
             return result;

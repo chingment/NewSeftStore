@@ -15,11 +15,11 @@ namespace LocalS.Entity
         public const string Pickup = "Pickup";
         public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
+        public const string MachineCabinetSlotAdjustStockQuantity = "MachineCabinetSlotAdjustStockQuantity";
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
-        public const string MachineSaveCabinetRowColLayout = "MachineSaveCabinetRowColLayout";
+        public const string MachineCabinetSaveRowColLayout = "MachineCabinetSaveRowColLayout";
+        public const string MachineAdjustStockSalePrice = "MachineAdjustStockSalePrice";
         public const string MachineHandleRunEx = "MachineHandleRunEx";
-        public const string AdjustStockQuantity = "AdjustStockQuantity";
-        public const string AdjustStockSalePrice = "AdjustStockSalePrice";
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         public const string OrderPickupOneManMadeSignNotTakeByComplete = "OrderPickupOneManMadeSignNotTakeByComplete";
         public const string OrderPickupOneSysMadeSignTake = "OrderPickupOneSysMadeSignTake";
@@ -27,9 +27,6 @@ namespace LocalS.Entity
         public const string OrderCancle = "OrderCancle";
         public const string OrderReserveSuccess = "OrderReserveSuccess";
         public const string OrderHandleExOrder = "OrderHandleExOrder";
-
-        public const string StockChangeLog = "SellStockChangeLog";
-
         public const string AdminUserAdd = "AdminUserAdd";
         public const string AdminUserEdit = "AdminUserEdit";
         public const string AdSpaceRelease = "AdSpaceRelease";
@@ -64,10 +61,10 @@ namespace LocalS.Entity
                 case EventCode.Pickup:
                     name = "商品取货";
                     break;
-                case EventCode.AdjustStockQuantity:
+                case EventCode.MachineCabinetSlotAdjustStockQuantity:
                     name = "商品库存调整";
                     break;
-                case EventCode.AdjustStockSalePrice:
+                case EventCode.MachineAdjustStockSalePrice:
                     name = "商品价格调整";
                     break;
                 case EventCode.MachineCabinetSlotSave:
