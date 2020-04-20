@@ -137,5 +137,55 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+        public CustomJsonResult GetListByRelStock(string operater, string merchId, RupLogGetListByRelStock rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.SellChannelStockLog
+                         where
+                         u.MerchId == merchId && u.PrdProductSkuId == rup.ProductSkuId &&
+                         u.StoreId == rup.StoreId &&
+                         u.SellChannelRefId == rup.SellChannelRefId
+                         select new { u.Id, u.PrdProductSkuName, u.StoreName, u.SellChannelRefName, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    ProductSkuName = item.PrdProductSkuName,
+                    SellChannelRefName = item.SellChannelRefName,
+                    EventCode = item.EventCode,
+                    EventName = item.EventName,
+                    ChangeQuantity = item.ChangeQuantity,
+                    SellQuantity = item.SellQuantity,
+                    WaitPayLockQuantity = item.WaitPayLockQuantity,
+                    WaitPickupLockQuantity = item.WaitPickupLockQuantity,
+                    SumQuantity = item.SumQuantity,
+                    Remark = item.Remark,
+                    CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
     }
 }

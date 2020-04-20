@@ -650,7 +650,7 @@ namespace LocalS.BLL.Biz
                     WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                     SumQuantity = sellChannelStock.SumQuantity,
                     EventCode = EventCode.MachineCabinetSlotAdjustStockQuantity,
-                    ChangeQuantity = 0
+                    ChangeQuantity = sellChannelStock.SumQuantity - oldSumQuantity
                 };
 
 

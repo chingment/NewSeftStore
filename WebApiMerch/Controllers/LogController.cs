@@ -38,5 +38,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Log.GetListByStock(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetListByRelStock([FromUri]RupLogGetListByRelStock rup)
+        {
+            IResult result = MerchServiceFactory.Log.GetListByRelStock(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

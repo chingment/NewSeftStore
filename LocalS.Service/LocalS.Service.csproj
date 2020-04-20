@@ -240,6 +240,7 @@
     <Compile Include="Api\Merch\RModels\RupClientDetailsOrdersGetOrderList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByOperate.cs" />
+    <Compile Include="Api\Merch\RModels\RupLogGetListByRelStock.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByStock.cs" />
     <Compile Include="Api\Merch\RModels\RupMachineGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupMachineGetStocks.cs" />
