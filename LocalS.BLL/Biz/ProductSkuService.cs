@@ -98,7 +98,7 @@ namespace LocalS.BLL.Biz
                             WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = sellChannelStock.SumQuantity,
                             EventCode = EventCode.MachineCabinetSlotRemove,
-                            ChangeQuantity = sellChannelStock.SumQuantity
+                            ChangeQuantity = -sellChannelStock.SumQuantity
                         };
 
                         MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，删除成功，移除实际库存：{3}", cabinetId, slotId, produtSkuName, sellChannelStock.SumQuantity), eventContent);
