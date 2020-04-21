@@ -88,8 +88,10 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.IsOpenChkCamera = machineInfo.IsOpenChkCamera;
             ret.Machine.MaxBuyNumber = 10;
             ret.Machine.ExIsHas = machineInfo.ExIsHas;
-            ret.Machine.OstCtrl = machineInfo.OstCtrl;
-            ret.Machine.MstCtrl = machineInfo.MstCtrl;
+            ret.Machine.OstVern = machineInfo.OstVern;
+            ret.Machine.MstVern = machineInfo.MstVern;
+            ret.Machine.ScanCtrl = machineInfo.ScanCtrl;
+            ret.Machine.FingerVeinCtrl = machineInfo.FingerVeinCtrl;
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);

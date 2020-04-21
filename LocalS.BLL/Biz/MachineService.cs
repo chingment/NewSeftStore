@@ -38,8 +38,8 @@ namespace LocalS.BLL.Biz
             model.IsTestMode = machine.IsTestMode;
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
             model.ExIsHas = machine.ExIsHas;
-            model.OstCtrl = machine.OstCtrl;
-            model.MstCtrl = machine.MstCtrl;
+            model.OstVern = machine.OstCtrl;
+            model.MstVern = machine.MstCtrl;
 
             var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
 
@@ -55,16 +55,14 @@ namespace LocalS.BLL.Biz
                 model.Cabinets.Add(cabinet.Id, cabinet);
             }
 
-            if (machine.IsUseFingerVeinCtrl)
-            {
-                model.FingerVeinCtrl.IsUse = true;
-            }
 
-            if (machine.IsUseSanCtrl)
-            {
-                model.ScanCtrl.IsUse = true;
-                model.ScanCtrl.ComId = machine.SanCtrlComId;
-            }
+            model.FingerVeinCtrl.Id = "FV";
+            model.FingerVeinCtrl.IsUse = machine.IsUseFingerVeinCtrl;
+
+            model.ScanCtrl.Id = "SC";
+            model.ScanCtrl.IsUse = machine.IsUseSanCtrl;
+            model.ScanCtrl.ComId = machine.SanCtrlComId;
+
 
 
             var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();

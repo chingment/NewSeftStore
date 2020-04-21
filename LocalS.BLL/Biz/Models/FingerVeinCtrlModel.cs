@@ -8,6 +8,7 @@ namespace LocalS.BLL.Biz
 {
     public class FingerVeinCtrlModel
     {
+        public string Id { get; set; }
         public bool IsUse { get; set; }
     }
 }

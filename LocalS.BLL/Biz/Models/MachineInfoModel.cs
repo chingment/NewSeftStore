@@ -28,7 +28,6 @@ namespace LocalS.BLL.Biz
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string JPushRegId { get; set; }
-
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }
@@ -40,10 +39,10 @@ namespace LocalS.BLL.Biz
         public bool IsTestMode { get; set; }
         public bool IsOpenChkCamera { get; set; }
         public bool ExIsHas { get; set; }
+        public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
+        public string MstVern{ get; set; }
+        public string OstVern { get; set; }
         public ScanCtrlModel ScanCtrl { get; set; }
         public FingerVeinCtrlModel FingerVeinCtrl { get; set; }
-        public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
-        public string MstCtrl { get; set; }
-        public string OstCtrl { get; set; }
     }
 }

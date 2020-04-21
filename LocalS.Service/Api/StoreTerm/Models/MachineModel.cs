@@ -12,6 +12,9 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public MachineModel()
         {
+            this.PayOptions = new List<PayOption>();
+            this.ScanCtrl = new ScanCtrlModel();
+            this.FingerVeinCtrl = new FingerVeinCtrlModel();
             this.Cabinets = new Dictionary<string, CabinetInfoModel>();
         }
 
@@ -30,12 +33,12 @@ namespace LocalS.Service.Api.StoreTerm
         public List<PayOption> PayOptions { get; set; }
         public bool IsOpenChkCamera { get; set; }
         public bool IsUseFingerVeinCtrl { get; set; }
-        public bool IsUseSanCtrl { get; set; }
         public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
-
-        public string MstCtrl { get; set; }
-        public string OstCtrl { get; set; }
+        public ScanCtrlModel ScanCtrl { get; set; }
+        public FingerVeinCtrlModel FingerVeinCtrl { get; set; }
+        public string MstVern { get; set; }
+        public string OstVern { get; set; }
     }
 }
