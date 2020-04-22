@@ -92,6 +92,7 @@
     <Compile Include="Api\Admin\RModels\RetSysMenuInitEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopMerchMachineBindOffMerch.cs" />
     <Compile Include="Api\Admin\RModels\RopMerchMachineBindOnMerch.cs" />
+    <Compile Include="Api\Admin\RModels\RopMerchMachineEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuAdd.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopSysMenuSort.cs" />

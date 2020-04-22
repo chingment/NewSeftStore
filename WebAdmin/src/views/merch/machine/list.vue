@@ -49,13 +49,16 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-if="row.merchId==null" type="primary" size="mini" width="100" @click="_dialogBindOnMerchOpen(row)">
+          <el-button v-if="row.merchId==null" type="success" size="mini" width="100" @click="_dialogBindOnMerchOpen(row)">
             绑定
           </el-button>
           <el-button v-if="row.merchId!=null" type="warning" size="mini" width="100" @click="_bindOffMerch(row)">
             解绑
+          </el-button>
+          <el-button type="primary" size="mini" width="100" @click="_dialogEditOpen(row)">
+            设置
           </el-button>
         </template>
       </el-table-column>
@@ -83,6 +86,139 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="机器信息" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'800px':'90%'">
+      <div v-loading="dialogEditLoading">
+
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>基本信息</h5>
+          </div>
+        </div>
+
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="机器编码:" class="postInfo-container-item">
+                    {{ details.id }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="设备编码:" class="postInfo-container-item">
+                    {{ details.deviceId }}
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="ImeiId:" class="postInfo-container-item">
+                    {{ details.imeiId }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="物理地址:" class="postInfo-container-item">
+                    {{ details.macAddress }}
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="App版本:" class="postInfo-container-item">
+                    {{ details.appVersionName }}
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="控制版本:" class="postInfo-container-item">
+                    {{ details.ctrlSdkVersionCode }}
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+
+            </div>
+          </el-col>
+        </el-form>
+
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>购物界面</h5>
+          </div>
+        </div>
+
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="显示分类:" class="postInfo-container-item">
+                    <el-checkbox v-model="checked">是</el-checkbox>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="每行显示:" class="postInfo-container-item">
+                    <el-input-number v-model="num" :min="1" :max="10" label="描述文字" />
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+            </div>
+          </el-col>
+        </el-form>
+
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>摄像头</h5>
+          </div>
+        </div>
+
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="人脸:" class="postInfo-container-item">
+                    <el-checkbox v-model="checked">打开</el-checkbox>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="取货口:" class="postInfo-container-item">
+                    <el-checkbox v-model="checked">打开</el-checkbox>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="机柜:" class="postInfo-container-item">
+                    <el-checkbox v-model="checked">打开</el-checkbox>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+            </div>
+          </el-col>
+        </el-form>
+
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>扩展设备</h5>
+          </div>
+        </div>
+
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="_edit(details)">
+          保存
+        </el-button>
+        <el-button @click="dialogEditIsVisible = false">
+          关闭
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,6 +242,8 @@ export default {
         name: undefined
       },
       dialogBindOnMerchIsVisible: false,
+      dialogEditIsVisible: false,
+      dialogEditLoading: false,
       formByBindOnMerch: {
         merchiId: '',
         machineId: ''
@@ -117,6 +255,28 @@ export default {
       },
       formSelectMerchs: [
       ],
+      details: {
+        id: '',
+        name: '',
+        imeiId: '',
+        macAddress: '',
+        deviceId: '',
+        appVersionCode: '',
+        appVersionName: '',
+        ctrlSdkVersionCode: '',
+        kndIsHidden: false,
+        kindRowCellSize: 0,
+        isTestMode: false,
+        cameraByChkIsUse: false,
+        cameraByJgIsUse: false,
+        cameraByRlIsUse: false,
+        exIsHas: false,
+        sannerIsUse: false,
+        sannerComId: '',
+        fingerVeinnerIsUse: false,
+        mstVern: '',
+        ostVern: ''
+      },
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -186,6 +346,9 @@ export default {
           }
         })
       })
+    },
+    _dialogEditOpen() {
+      this.dialogEditIsVisible = true
     }
   }
 }

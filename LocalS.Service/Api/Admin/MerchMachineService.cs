@@ -111,6 +111,31 @@ namespace LocalS.Service.Api.Admin
             return result;
         }
 
+        public CustomJsonResult Edit(string operater, RopMerchMachineEdit rop)
+        {
+            var result = new CustomJsonResult();
+
+            var machine = CurrentDb.Machine.Where(m => m.Id == rop.Id).FirstOrDefault();
+
+            machine.CameraByChkIsUse = rop.CameraByChkIsUse;
+            machine.CameraByJgIsUse = rop.CameraByJgIsUse;
+            machine.CameraByRlIsUse = rop.CameraByRlIsUse;
+            machine.ExIsHas = rop.ExIsHas;
+            machine.SannerIsUse = rop.SannerIsUse;
+            machine.SannerComId = rop.SannerComId;
+            machine.FingerVeinnerIsUse = rop.FingerVeinnerIsUse;
+            machine.MstVern = rop.MstVern;
+            machine.OstVern = rop.OstVern;
+            machine.KindIsHidden = rop.KindIsHidden;
+            machine.KindRowCellSize = rop.KindRowCellSize;
+
+            CurrentDb.SaveChanges();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+        }
 
         public CustomJsonResult BindOnMerch(string operater, RopMerchMachineBindOnMerch rop)
         {

@@ -30,10 +30,10 @@
 
     <el-form v-show="isEdit" ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="地址" prop="name">
-        <el-input v-model="form.address" />
+        <el-input v-model="form.address" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
@@ -57,7 +57,7 @@
         <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
-        <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
+        <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
       </el-form-item>
       <el-form-item label="开启营业">
         <el-switch v-model="form.isOpen" />
