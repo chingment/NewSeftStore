@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderSn" clearable placeholder="订单号" va style="width: 100%" class="filter-item" />
+          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col v-if="isShowClientUserNameInput" :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
@@ -88,9 +88,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="订单号" prop="sn" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
-          <span>{{ scope.row.sn }}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="20%">
@@ -166,7 +166,7 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label-width="80px" label="订单编号:" class="postInfo-container-item">
-                    {{ details.sn }}
+                    {{ details.id }}
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -349,7 +349,7 @@ export default {
         page: 1,
         limit: 10,
         clientName: undefined,
-        orderSn: undefined,
+        orderId: undefined,
         storeId: undefined,
         machineId: undefined,
         isHasEx: false
