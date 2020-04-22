@@ -33,7 +33,7 @@ namespace LocalS.Service.Api.StoreTerm
             if (machine == null)
             {
                 machine = new Machine();
-                machine.Id = GuidUtil.New();
+                machine.Id = RedisSnUtil.BuildMachineId();
                 machine.Name = "贩卖X1";//默认名称
                 machine.JPushRegId = rop.JPushRegId;
                 machine.DeviceId = rop.DeviceId;

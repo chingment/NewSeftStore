@@ -75,6 +75,43 @@ namespace LocalS.Service.Api.Admin
         }
 
 
+        public CustomJsonResult InitEdit(string operater, RupMerchMachineInitEdit rup)
+        {
+            var result = new CustomJsonResult();
+
+            var machine = CurrentDb.Machine.Where(m => m.Id == rup.Id).FirstOrDefault();
+
+
+            var data = new
+            {
+                Id = machine.Id,
+                Name = machine.Name,
+                ImeiId = machine.ImeiId,
+                MacAddress = machine.MacAddress,
+                DeviceId = machine.DeviceId,
+                AppVersionCode = machine.AppVersionCode,
+                AppVersionName = machine.AppVersionName,
+                CtrlSdkVersionCode = machine.CtrlSdkVersionCode,
+                KindIsHidden = machine.KindIsHidden,
+                KindRowCellSize = machine.KindRowCellSize,
+                IsTestMode = machine.IsTestMode,
+                CameraByChkIsUse = machine.CameraByChkIsUse,
+                CameraByJgIsUse = machine.CameraByJgIsUse,
+                CameraByRlIsUse = machine.CameraByRlIsUse,
+                ExIsHas = machine.ExIsHas,
+                SannerIsUse = machine.SannerIsUse,
+                SannerComId = machine.SannerComId,
+                FingerVeinnerIsUse = machine.FingerVeinnerIsUse,
+                MstVern = machine.MstVern,
+                OstVern = machine.OstVern
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", data);
+
+            return result;
+        }
+
+
         public CustomJsonResult BindOnMerch(string operater, RopMerchMachineBindOnMerch rop)
         {
             CustomJsonResult result = new CustomJsonResult();

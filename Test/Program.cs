@@ -101,6 +101,7 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
+            string a = RedisSnUtil.BuildMachineId();
 
 
             if ("昨天" == "明天")

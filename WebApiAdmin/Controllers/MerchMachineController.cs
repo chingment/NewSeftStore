@@ -25,6 +25,13 @@ namespace WebApiAdmin.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse InitEdit([FromUri]RupMerchMachineInitEdit rup)
+        {
+            IResult result = AdminServiceFactory.MerchMachine.InitEdit(this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpPost]
         public OwnApiHttpResponse BindOffMerch([FromBody]RopMerchMachineBindOffMerch rop)
         {

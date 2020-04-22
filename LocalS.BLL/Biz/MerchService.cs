@@ -149,7 +149,6 @@ namespace LocalS.BLL.Biz
             return clientUserName;
         }
 
-
         public string GetStoreName(string merchId, string storeId)
         {
 

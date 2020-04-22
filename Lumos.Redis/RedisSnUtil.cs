@@ -22,7 +22,7 @@ namespace Lumos.Redis
             {
                 try
                 {
-                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IRSN, 1);
+                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_SN, 1);
 
                     return (int)incr;
 
@@ -36,8 +36,6 @@ namespace Lumos.Redis
             }
 
         }
-
-
 
         public static string Build(RedisSnType snType, string userId)
         {
@@ -65,6 +63,17 @@ namespace Lumos.Redis
             return sn;
         }
 
+        public static string BuildMachineId()
+        {
+            string prefix = "";
+            ThreadSafeRandom ran = new ThreadSafeRandom();
+            var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_MACHINEID, 1);
+            string part1 = DateTime.Now.ToString("yyyyMMdd");
+            string part2 = incr.ToString().PadLeft(4, '0');
+            string sn = prefix + part1 + part2;
+            return sn;
+        }
+
 
         public static string BuildPickupCode()
         {
@@ -72,7 +81,7 @@ namespace Lumos.Redis
             {
                 ThreadSafeRandom rd = new ThreadSafeRandom();
                 int part1 = rd.Next(100, 999);
-                var incr = RedisManager.Db.StringIncrement(RedisKeyS.IRPC, 1);
+                var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_PICKCODE, 1);
 
                 string part2 = incr.ToString().PadLeft(5, '0');
                 ThreadSafeRandom ran = new ThreadSafeRandom();
