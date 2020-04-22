@@ -13,8 +13,8 @@ namespace LocalS.Service.Api.StoreTerm
         public MachineModel()
         {
             this.PayOptions = new List<PayOption>();
-            this.ScanCtrl = new ScanCtrlModel();
-            this.FingerVeinCtrl = new FingerVeinCtrlModel();
+            this.Scanner = new ScannerModel();
+            this.FingerVeinner = new FingerVeinnerModel();
             this.Cabinets = new Dictionary<string, CabinetInfoModel>();
         }
 
@@ -36,8 +36,8 @@ namespace LocalS.Service.Api.StoreTerm
         public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
-        public ScanCtrlModel ScanCtrl { get; set; }
-        public FingerVeinCtrlModel FingerVeinCtrl { get; set; }
+        public ScannerModel Scanner { get; set; }
+        public FingerVeinnerModel FingerVeinner { get; set; }
         public string MstVern { get; set; }
         public string OstVern { get; set; }
     }

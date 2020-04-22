@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class ScanCtrlModel
+    public class FingerVeinnerModel
     {
         public string Id { get; set; }
-        public string ComId { get; set; }
         public bool IsUse { get; set; }
     }
 }

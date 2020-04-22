@@ -12,8 +12,8 @@ namespace LocalS.BLL.Biz
         public MachineInfoModel()
         {
             this.Cabinets = new Dictionary<string, CabinetInfoModel>();
-            this.ScanCtrl = new ScanCtrlModel();
-            this.FingerVeinCtrl = new FingerVeinCtrlModel();
+            this.Scanner = new ScannerModel();
+            this.FingerVeinner = new FingerVeinnerModel();
         }
 
         public string Id { get; set; }
@@ -42,7 +42,7 @@ namespace LocalS.BLL.Biz
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
         public string MstVern{ get; set; }
         public string OstVern { get; set; }
-        public ScanCtrlModel ScanCtrl { get; set; }
-        public FingerVeinCtrlModel FingerVeinCtrl { get; set; }
+        public ScannerModel Scanner { get; set; }
+        public FingerVeinnerModel FingerVeinner { get; set; }
     }
 }

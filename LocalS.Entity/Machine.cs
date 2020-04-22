@@ -43,11 +43,11 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public bool IsTestMode { get; set; }
         public bool IsOpenChkCamera { get; set; }
-        public bool IsUseSanCtrl { get; set; }
-        public string SanCtrlComId { get; set; }
-        public bool IsUseFingerVeinCtrl { get; set; }
+        public bool SannerIsUse { get; set; }
+        public string SannerComId { get; set; }
+        public bool FingerVeinnerIsUse { get; set; }
         public bool ExIsHas { get; set; }
-        public string MstCtrl { get; set; } //门所在主控
-        public string OstCtrl { get; set; } //系统在主控
+        public string MstVern { get; set; } //门所在主控商
+        public string OstVern { get; set; } //系统在主控商
     }
 }

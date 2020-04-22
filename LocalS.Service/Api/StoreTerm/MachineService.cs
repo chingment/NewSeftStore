@@ -90,8 +90,8 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.ExIsHas = machineInfo.ExIsHas;
             ret.Machine.OstVern = machineInfo.OstVern;
             ret.Machine.MstVern = machineInfo.MstVern;
-            ret.Machine.ScanCtrl = machineInfo.ScanCtrl;
-            ret.Machine.FingerVeinCtrl = machineInfo.FingerVeinCtrl;
+            ret.Machine.Scanner = machineInfo.Scanner;
+            ret.Machine.FingerVeinner = machineInfo.FingerVeinner;
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);

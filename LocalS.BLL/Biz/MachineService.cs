@@ -38,8 +38,8 @@ namespace LocalS.BLL.Biz
             model.IsTestMode = machine.IsTestMode;
             model.IsOpenChkCamera = machine.IsOpenChkCamera;
             model.ExIsHas = machine.ExIsHas;
-            model.OstVern = machine.OstCtrl;
-            model.MstVern = machine.MstCtrl;
+            model.OstVern = machine.OstVern;
+            model.MstVern = machine.MstVern;
 
             var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
 
@@ -56,12 +56,12 @@ namespace LocalS.BLL.Biz
             }
 
 
-            model.FingerVeinCtrl.Id = "FV";
-            model.FingerVeinCtrl.IsUse = machine.IsUseFingerVeinCtrl;
+            model.FingerVeinner.Id = "FV";
+            model.FingerVeinner.IsUse = machine.FingerVeinnerIsUse;
 
-            model.ScanCtrl.Id = "SC";
-            model.ScanCtrl.IsUse = machine.IsUseSanCtrl;
-            model.ScanCtrl.ComId = machine.SanCtrlComId;
+            model.Scanner.Id = "SC";
+            model.Scanner.IsUse = machine.SannerIsUse;
+            model.Scanner.ComId = machine.SannerComId;
 
 
 
