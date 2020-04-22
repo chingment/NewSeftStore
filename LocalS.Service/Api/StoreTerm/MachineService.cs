@@ -43,7 +43,7 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
                 machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
-                machine.IsHiddenKind = false;
+                machine.KindIsHidden = false;
                 machine.KindRowCellSize = 3;
                 machine.CreateTime = DateTime.Now;
                 machine.Creator = GuidUtil.Empty();
@@ -82,10 +82,12 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.CsrPhoneNumber = machineInfo.CsrPhoneNumber;
             ret.Machine.CsrHelpTip = machineInfo.CsrHelpTip;
             ret.Machine.Cabinets = machineInfo.Cabinets;
-            ret.Machine.IsHiddenKind = machineInfo.IsHiddenKind;
+            ret.Machine.IsHiddenKind = machineInfo.KindIsHidden;
             ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
             ret.Machine.PayOptions = machineInfo.PayOptions;
-            ret.Machine.IsOpenChkCamera = machineInfo.IsOpenChkCamera;
+            ret.Machine.CameraByChkIsUse = machine.CameraByChkIsUse;
+            ret.Machine.CameraByJgIsUse = machine.CameraByJgIsUse;
+            ret.Machine.CameraByRlIsUse = machine.CameraByRlIsUse;
             ret.Machine.MaxBuyNumber = 10;
             ret.Machine.ExIsHas = machineInfo.ExIsHas;
             ret.Machine.OstVern = machineInfo.OstVern;

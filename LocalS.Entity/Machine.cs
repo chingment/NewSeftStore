@@ -35,14 +35,16 @@ namespace LocalS.Entity
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }
         public string CtrlSdkVersionCode { get; set; }
-        public bool IsHiddenKind { get; set; }
-        public int KindRowCellSize { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
         public bool IsTestMode { get; set; }
-        public bool IsOpenChkCamera { get; set; }
+        public bool KindIsHidden { get; set; }
+        public int KindRowCellSize { get; set; }
+        public bool CameraByChkIsUse { get; set; }
+        public bool CameraByJgIsUse { get; set; }
+        public bool CameraByRlIsUse { get; set; }
         public bool SannerIsUse { get; set; }
         public string SannerComId { get; set; }
         public bool FingerVeinnerIsUse { get; set; }

@@ -33,10 +33,12 @@ namespace LocalS.BLL.Biz
             model.LastRequestTime = machine.LastRequestTime;
             model.AppVersion = machine.AppVersionName;
             model.CtrlSdkVersion = machine.CtrlSdkVersionCode;
-            model.IsHiddenKind = machine.IsHiddenKind;
+            model.KindIsHidden = machine.KindIsHidden;
             model.KindRowCellSize = machine.KindRowCellSize;
             model.IsTestMode = machine.IsTestMode;
-            model.IsOpenChkCamera = machine.IsOpenChkCamera;
+            model.CameraByChkIsUse = machine.CameraByChkIsUse;
+            model.CameraByJgIsUse = machine.CameraByJgIsUse;
+            model.CameraByRlIsUse = machine.CameraByRlIsUse;
             model.ExIsHas = machine.ExIsHas;
             model.OstVern = machine.OstVern;
             model.MstVern = machine.MstVern;

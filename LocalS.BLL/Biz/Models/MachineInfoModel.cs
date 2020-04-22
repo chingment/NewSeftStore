@@ -33,11 +33,13 @@ namespace LocalS.BLL.Biz
         public E_MachineRunStatus RunStatus { get; set; }
         public string AppVersion { get; set; }
         public string CtrlSdkVersion { get; set; }
-        public bool IsHiddenKind { get; set; }
+        public bool KindIsHidden { get; set; }
         public int KindRowCellSize { get; set; }
         public List<PayOption> PayOptions { get; set; }
         public bool IsTestMode { get; set; }
-        public bool IsOpenChkCamera { get; set; }
+        public bool CameraByChkIsUse { get; set; }
+        public bool CameraByJgIsUse { get; set; }
+        public bool CameraByRlIsUse { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
         public string MstVern{ get; set; }

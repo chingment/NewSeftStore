@@ -31,8 +31,9 @@ namespace LocalS.Service.Api.StoreTerm
         public bool IsHiddenKind { get; set; }
         public int KindRowCellSize { get; set; }
         public List<PayOption> PayOptions { get; set; }
-        public bool IsOpenChkCamera { get; set; }
-        public bool IsUseFingerVeinCtrl { get; set; }
+        public bool CameraByChkIsUse { get; set; }
+        public bool CameraByJgIsUse { get; set; }
+        public bool CameraByRlIsUse { get; set; }
         public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetInfoModel> Cabinets { get; set; }
