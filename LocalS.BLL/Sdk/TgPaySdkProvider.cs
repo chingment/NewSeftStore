@@ -33,10 +33,10 @@ namespace LocalS.BLL
             return result;
         }
 
-        public string PayQuery(TgPayInfoConfg config, string orderSn)
+        public string PayQuery(TgPayInfoConfg config, string orderId)
         {
             TgPayUtil tgUtil = new TgPayUtil(config);
-            string ret = tgUtil.OrderQuery(orderSn);
+            string ret = tgUtil.OrderQuery(orderId);
             return ret;
         }
 
@@ -52,8 +52,8 @@ namespace LocalS.BLL
                     if (obt_content.state == "0")
                     {
                         result.IsPaySuccess = true;
-                        result.OrderSn = obt_content.lowOrderId;
-                        result.PayPartnerOrderSn = obt_content.upOrderId;
+                        result.OrderId = obt_content.lowOrderId;
+                        result.PayPartnerOrderId = obt_content.upOrderId;
                         if (obt_content.channelID == "WX")
                         {
                             result.OrderPayWay = E_OrderPayWay.Wx;
@@ -80,8 +80,8 @@ namespace LocalS.BLL
                 if (obj_content.state == "0")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderSn = obj_content.lowOrderId;
-                    result.PayPartnerOrderSn = obj_content.upOrderId;
+                    result.OrderId = obj_content.lowOrderId;
+                    result.PayPartnerOrderId = obj_content.upOrderId;
                     if (obj_content.channelID == "WX")
                     {
                         result.OrderPayWay = E_OrderPayWay.Wx;

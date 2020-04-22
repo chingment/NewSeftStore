@@ -39,12 +39,12 @@ namespace LocalS.BLL
 
         }
 
-        public string PayQuery(ZfbAppInfoConfig config, string orderSn)
+        public string PayQuery(ZfbAppInfoConfig config, string orderId)
         {
             ZfbUtil zfbUtil = new ZfbUtil(config);
 
 
-            return zfbUtil.OrderQuery(orderSn);
+            return zfbUtil.OrderQuery(orderId);
         }
 
 
@@ -63,12 +63,12 @@ namespace LocalS.BLL
                     {
                         if (!string.IsNullOrEmpty(payResult.out_trade_no))
                         {
-                            result.OrderSn = payResult.out_trade_no;
+                            result.OrderId = payResult.out_trade_no;
                         }
 
                         if (!string.IsNullOrEmpty(payResult.trade_no))
                         {
-                            result.PayPartnerOrderSn = payResult.trade_no;
+                            result.PayPartnerOrderId = payResult.trade_no;
                         }
 
                         if (!string.IsNullOrEmpty(payResult.buyer_logon_id))
@@ -76,7 +76,7 @@ namespace LocalS.BLL
                             result.ClientUserName = payResult.buyer_logon_id;
                         }
 
-                        LogUtil.Info("解释支付宝支付协议，订单号：" + result.OrderSn);
+                        LogUtil.Info("解释支付宝支付协议，订单号：" + result.OrderId);
 
                         if (payResult.trade_status == "TRADE_SUCCESS")
                         {
@@ -98,15 +98,15 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("out_trade_no"))
             {
-                result.OrderSn = dic["out_trade_no"].ToString();
+                result.OrderId = dic["out_trade_no"].ToString();
             }
 
             if (dic.ContainsKey("trade_no"))
             {
-                result.PayPartnerOrderSn = dic["trade_no"].ToString();
+                result.PayPartnerOrderId = dic["trade_no"].ToString();
             }
 
-            LogUtil.Info("解释支付宝支付协议，订单号：" + result.OrderSn);
+            LogUtil.Info("解释支付宝支付协议，订单号：" + result.OrderId);
 
 
             if (dic.ContainsKey("buyer_logon_id"))

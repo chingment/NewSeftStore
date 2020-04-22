@@ -349,7 +349,6 @@ namespace LocalS.Service.Api.StoreTerm
                 var exOrderModel = new RetMachineGetRunExHandleItems.Order();
 
                 exOrderModel.Id = orderSub.OrderId;
-                exOrderModel.Sn = orderSub.OrderSn;
 
                 var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
 

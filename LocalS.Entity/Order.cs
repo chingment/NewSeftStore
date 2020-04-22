@@ -70,7 +70,6 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
-        public string Sn { get; set; }
         public string ClientUserId { get; set; }
         public string ClientUserName { get; set; }
         public string MerchId { get; set; }

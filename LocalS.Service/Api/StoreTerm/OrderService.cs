@@ -60,7 +60,6 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 RetOrderReserve ret = new RetOrderReserve();
                 ret.OrderId = bizResult.Data.OrderId;
-                ret.OrderSn = bizResult.Data.OrderSn;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
@@ -90,7 +89,6 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 ret.Data = new RetOrderPayStatusQuery();
                 ret.Data.Id = ret_Biz.Data.OrderId;
-                ret.Data.Sn = ret_Biz.Data.OrderSn;
                 ret.Data.Status = ret_Biz.Data.Status;
                 if (ret_Biz.Data.Status == E_OrderStatus.Payed)
                 {
@@ -154,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
             var ret = new RetOrderSearchByPickupCode();
 
             ret.Id = orderSub.OrderId;
-            ret.Sn = orderSub.OrderSn;
+  
 
             ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(orderSub.OrderId, rup.MachineId);
 

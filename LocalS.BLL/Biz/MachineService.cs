@@ -142,11 +142,11 @@ namespace LocalS.BLL.Biz
             PushService.SendUpdateMachineHomeLogo(machine.JPushRegId, content);
         }
 
-        public void SendPaySuccess(string id, string orderId, string orderSn)
+        public void SendPaySuccess(string id, string orderId)
         {
             //var machine = BizFactory.Machine.GetOne(id);
             //var orderDetails = BizFactory.Order.GetOrderDetailsByPickup(orderId, id);
-            //var content = new { orderId = orderId, orderSn = orderSn, status = E_OrderStatus.Payed, OrderDetails = orderDetails };
+            //var content = new { orderId = orderId,status = E_OrderStatus.Payed, OrderDetails = orderDetails };
             //PushService.SendPaySuccess(machine.JPushRegId, content);
         }
 

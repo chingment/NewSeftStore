@@ -125,8 +125,7 @@ namespace LocalS.BLL.Biz
                     var buildOrderSubs = BuildOrderSubs(rop.ProductSkus, bizProductSkus);
 
                     var order = new Order();
-                    order.Id = GuidUtil.New();
-                    order.Sn = RedisSnUtil.Build(RedisSnType.Order, store.MerchId);
+                    order.Id = RedisSnUtil.Build(RedisSnType.Order);
                     order.MerchId = store.MerchId;
                     order.StoreId = rop.StoreId;
                     order.StoreName = store.Name;
@@ -187,8 +186,7 @@ namespace LocalS.BLL.Biz
                     foreach (var buildOrderSub in buildOrderSubs)
                     {
                         var orderSub = new OrderSub();
-                        orderSub.Id = GuidUtil.New();
-                        orderSub.Sn = order.Sn + buildOrderSubs.IndexOf(buildOrderSub).ToString();
+                        orderSub.Id = order.Id + buildOrderSubs.IndexOf(buildOrderSub).ToString();
                         orderSub.ClientUserId = rop.ClientUserId;
                         orderSub.MerchId = store.MerchId;
                         orderSub.StoreId = rop.StoreId;
@@ -208,7 +206,6 @@ namespace LocalS.BLL.Biz
                                 break;
                         }
                         orderSub.OrderId = order.Id;
-                        orderSub.OrderSn = order.Sn;
                         orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
                         orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
                         orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
@@ -231,8 +228,7 @@ namespace LocalS.BLL.Biz
                             var productSku = bizProductSkus.Where(m => m.Id == buildOrderSubChid.ProductSkuId).FirstOrDefault();
 
                             var orderSubChild = new OrderSubChild();
-                            orderSubChild.Id = GuidUtil.New();
-                            orderSubChild.Sn = orderSub.Sn + buildOrderSub.Childs.IndexOf(buildOrderSubChid).ToString();
+                            orderSubChild.Id = orderSub.Id + buildOrderSub.Childs.IndexOf(buildOrderSubChid).ToString();
                             orderSubChild.ClientUserId = rop.ClientUserId;
                             orderSubChild.MerchId = store.MerchId;
                             orderSubChild.StoreId = rop.StoreId;
@@ -240,9 +236,7 @@ namespace LocalS.BLL.Biz
                             orderSubChild.SellChannelRefId = buildOrderSubChid.SellChannelRefId;
                             orderSubChild.SellChannelRefName = orderSub.SellChannelRefName;
                             orderSubChild.OrderId = order.Id;
-                            orderSubChild.OrderSn = order.Sn;
                             orderSubChild.OrderSubId = orderSub.Id;
-                            orderSubChild.OrderSubSn = orderSub.Sn;
                             orderSubChild.PrdProductSkuId = buildOrderSubChid.ProductSkuId;
                             orderSubChild.PrdProductId = buildOrderSubChid.ProductId;
                             orderSubChild.PrdProductSkuName = productSku.Name;
@@ -265,8 +259,7 @@ namespace LocalS.BLL.Biz
                             foreach (var buildOrderSubChidUnique in buildOrderSubChid.Uniques)
                             {
                                 var orderSubChildUnique = new OrderSubChildUnique();
-                                orderSubChildUnique.Id = GuidUtil.New();
-                                orderSubChildUnique.Sn = orderSubChild.Sn + buildOrderSubChid.Uniques.IndexOf(buildOrderSubChidUnique);
+                                orderSubChildUnique.Id = orderSubChild.Id + buildOrderSubChid.Uniques.IndexOf(buildOrderSubChidUnique);
                                 orderSubChildUnique.ClientUserId = rop.ClientUserId;
                                 orderSubChildUnique.MerchId = store.MerchId;
                                 orderSubChildUnique.StoreId = rop.StoreId;
@@ -275,11 +268,8 @@ namespace LocalS.BLL.Biz
                                 orderSubChildUnique.SellChannelRefId = buildOrderSubChidUnique.SellChannelRefId;
                                 orderSubChildUnique.SellChannelRefName = orderSubChild.SellChannelRefName;
                                 orderSubChildUnique.OrderId = order.Id;
-                                orderSubChildUnique.OrderSn = order.Sn;
                                 orderSubChildUnique.OrderSubId = orderSub.Id;
-                                orderSubChildUnique.OrderSubSn = orderSub.Sn;
                                 orderSubChildUnique.OrderSubChildId = orderSubChild.Id;
-                                orderSubChildUnique.OrderSubChildSn = orderSubChild.Sn;
                                 orderSubChildUnique.CabinetId = buildOrderSubChidUnique.CabinetId;
                                 orderSubChildUnique.SlotId = buildOrderSubChidUnique.SlotId;
                                 orderSubChildUnique.PrdProductSkuId = buildOrderSubChidUnique.ProductSkuId;
@@ -317,10 +307,9 @@ namespace LocalS.BLL.Biz
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, Sn = order.Sn, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
+                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
 
                     ret.OrderId = order.Id;
-                    ret.OrderSn = order.Sn;
                     ret.ChargeAmount = order.ChargeAmount.ToF2Price();
 
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
@@ -606,24 +595,15 @@ namespace LocalS.BLL.Biz
                     Dictionary<string, string> pms = new Dictionary<string, string>();
                     pms.Add("clientUserName", payResult.ClientUserName);
 
-                    PaySuccess(operater, payResult.OrderSn, payResult.OrderPayWay, DateTime.Now, pms);
+                    PaySuccess(operater, payResult.OrderId, payResult.OrderPayWay, DateTime.Now, pms);
                 }
 
 
                 var mod_OrderNotifyLog = new OrderNotifyLog();
                 mod_OrderNotifyLog.Id = GuidUtil.New();
-
-                var order = CurrentDb.Order.Where(m => m.Sn == payResult.OrderSn).FirstOrDefault();
-
-                if (order != null)
-                {
-                    mod_OrderNotifyLog.MerchId = order.MerchId;
-                    mod_OrderNotifyLog.OrderId = order.Id;
-                }
-
-                mod_OrderNotifyLog.OrderSn = payResult.OrderSn;
+                mod_OrderNotifyLog.OrderId = payResult.OrderId;
                 mod_OrderNotifyLog.PayPartner = payPartner;
-                mod_OrderNotifyLog.PayPartnerOrderSn = payResult.PayPartnerOrderSn;
+                mod_OrderNotifyLog.PayPartnerOrderId = payResult.PayPartnerOrderId;
                 mod_OrderNotifyLog.NotifyContent = content;
                 mod_OrderNotifyLog.NotifyFrom = from;
                 mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
@@ -637,29 +617,29 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string orderSn, E_OrderPayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
+        public CustomJsonResult PaySuccess(string operater, string orderId, E_OrderPayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                LogUtil.Info("orderSn:" + orderSn);
+                LogUtil.Info("orderId:" + orderId);
 
-                var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+                var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
                 if (order == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderSn));
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderId));
                 }
 
                 if (order.Status == E_OrderStatus.Payed || order.Status == E_OrderStatus.Completed)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderSn));
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderId));
                 }
 
                 //if (order.Status != E_OrderStatus.WaitPay)
                 //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderSn));
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderId));
                 //}
 
                 order.PayWay = payWay;
@@ -733,7 +713,7 @@ namespace LocalS.BLL.Biz
 
                 Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", orderSn));
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", order.Id));
             }
 
             return result;
@@ -752,7 +732,6 @@ namespace LocalS.BLL.Biz
             var ret = new RetPayResultQuery();
 
             ret.OrderId = order.Id;
-            ret.OrderSn = order.Sn;
             ret.Status = order.Status;
 
             result = new CustomJsonResult<RetPayResultQuery>(ResultType.Success, ResultCode.Success, "", ret);
@@ -859,7 +838,7 @@ namespace LocalS.BLL.Biz
                                 order.PayWay = E_OrderPayWay.Wx;
                                 order.PayStatus = E_OrderPayStatus.Paying;
                                 var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wx_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -893,7 +872,7 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = order.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.OpenId, order.Sn, 0.01m, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.OpenId, order.Id, 0.01m, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {
@@ -901,7 +880,6 @@ namespace LocalS.BLL.Biz
                                 }
 
                                 wxByMp_PayBuildWxJsPayInfo.OrderId = order.Id;
-                                wxByMp_PayBuildWxJsPayInfo.OrderSn = order.Sn;
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
                                 #endregion
@@ -922,7 +900,7 @@ namespace LocalS.BLL.Biz
                                 order.PayWay = E_OrderPayWay.Zfb;
                                 order.PayStatus = E_OrderPayStatus.Paying;
                                 var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(order.MerchId);
-                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_OrderPayCaller.ZfbByNt, order.MerchId, order.StoreId, "", order.Sn, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_OrderPayCaller.ZfbByNt, order.MerchId, order.StoreId, "", order.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -951,7 +929,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.AggregatePayByNt:
                                 #region AggregatePayByNt
 
-                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tgPay_AllQrcodePay.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -983,7 +961,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.WxByNt:
                                 #region WxByNt
 
-                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
                                 {
@@ -1013,7 +991,7 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = order.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.AppId, wxByMp_UserInfo.OpenId, order.Sn, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.AppId, wxByMp_UserInfo.OpenId, order.Id, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {
@@ -1021,7 +999,7 @@ namespace LocalS.BLL.Biz
                                 }
 
                                 wxByMp_PayBuildWxJsPayInfo.OrderId = order.Id;
-                                wxByMp_PayBuildWxJsPayInfo.OrderSn = order.Sn;
+
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
 
@@ -1030,7 +1008,7 @@ namespace LocalS.BLL.Biz
                             case E_OrderPayCaller.ZfbByNt:
                                 #region ZfbByNt
 
-                                var xrtPay_ZfbByNtBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Sn, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_ZfbByNtBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_ZfbByNtBuildByNtResult.CodeUrl))
                                 {

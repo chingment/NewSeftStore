@@ -16,7 +16,6 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string StoreName { get; set; }
         public string OrderId { get; set; }
-        public string OrderSn { get; set; }
         public string ClientUserId { get; set; }
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }

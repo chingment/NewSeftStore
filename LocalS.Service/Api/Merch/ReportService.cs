@@ -176,7 +176,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.OrderSubChildUnique
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderSn, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
 
 
@@ -198,7 +198,7 @@ namespace LocalS.Service.Api.Merch
             }
             else if (rop.PickupStatus == "2")
             {
-                query = query.Where(m=>m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignUnTaked);
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignUnTaked);
             }
             else if (rop.PickupStatus == "3")
             {
@@ -235,7 +235,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     StoreName = item.StoreName,
                     SellChannelRefName = item.SellChannelRefName,
-                    OrderSn = item.OrderSn,
+                    OrderId = item.OrderId,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     ProductSkuName = item.PrdProductSkuName,
                     ProductSkuBarCode = item.PrdProductSkuBarCode,
@@ -334,7 +334,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_OrderPayStatus.PaySuccess
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefIds, u.SellChannelRefNames, u.PayedTime, u.Sn, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
+                         select new { u.Id, u.StoreName, u.StoreId, u.SellChannelRefIds, u.SellChannelRefNames, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
@@ -353,7 +353,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     StoreName = item.StoreName,
                     SellChannelRefNames = item.SellChannelRefNames,
-                    OrderSn = item.Sn,
+                    OrderId = item.Id,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     Quantity = item.Quantity,
                     TradeAmount = item.ChargeAmount,

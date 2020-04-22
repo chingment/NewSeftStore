@@ -324,11 +324,11 @@ namespace LocalS.BLL
             return OAuthApi.UploadMultimediaImage(this.GetApiAccessToken(config), imageUrl);
         }
 
-        public string PayQuery(WxAppInfoConfig config, string orderSn)
+        public string PayQuery(WxAppInfoConfig config, string orderId)
         {
             CustomJsonResult result = new CustomJsonResult();
             TenpayUtil tenpayUtil = new TenpayUtil(config);
-            string xml = tenpayUtil.OrderQuery(orderSn);
+            string xml = tenpayUtil.OrderQuery(orderId);
 
             return xml;
         }
@@ -401,15 +401,15 @@ namespace LocalS.BLL
             var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
             if (dic.ContainsKey("out_trade_no"))
             {
-                result.OrderSn = dic["out_trade_no"].ToString();
+                result.OrderId = dic["out_trade_no"].ToString();
             }
 
             if (dic.ContainsKey("transaction_id"))
             {
-                result.PayPartnerOrderSn = dic["transaction_id"].ToString();
+                result.PayPartnerOrderId = dic["transaction_id"].ToString();
             }
 
-            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderSn);
+            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderId);
 
 
             if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
@@ -435,15 +435,15 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("out_trade_no"))
             {
-                result.OrderSn = dic["out_trade_no"].ToString();
+                result.OrderId = dic["out_trade_no"].ToString();
             }
 
             if (dic.ContainsKey("transaction_id"))
             {
-                result.PayPartnerOrderSn = dic["transaction_id"].ToString();
+                result.PayPartnerOrderId = dic["transaction_id"].ToString();
             }
 
-            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderSn);
+            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderId);
 
 
 
@@ -461,12 +461,12 @@ namespace LocalS.BLL
             return result;
         }
 
-        //public string OrderPayReFund(string comCode, string orderSn, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
+        //public string OrderPayReFund(string comCode, string orderId, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
         //{
         //    wxConfig = GetWxConfig(comCode);
         //    CustomJsonResult result = new CustomJsonResult();
         //    TenpayUtil tenpayUtil = new TenpayUtil(wxConfig);
-        //    string out_trade_no = orderSn;
+        //    string out_trade_no = orderId;
         //    string out_refund_no = orderReFundSn;
         //    string total_fee = Convert.ToInt32(totalFee * 100).ToString();
         //    string refund_fee = Convert.ToInt32(refundFee * 100).ToString();

@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupClientDetailsOrdersGetOrderList : RupBaseGetList
     {
-        public string OrderSn { get; set; }
+        public string OrderId { get; set; }
 
         public string ClientUserId{ get; set; }
     }

@@ -10,7 +10,6 @@ namespace LocalS.BLL.Task
     public class Order2CheckPayModel
     {
         public string Id { get; set; }
-        public string Sn { get; set; }
         public string MerchId { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
         public E_OrderPayPartner PayPartner { get; set; }

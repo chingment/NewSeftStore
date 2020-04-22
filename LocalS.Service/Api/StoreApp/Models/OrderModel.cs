@@ -18,8 +18,6 @@ namespace LocalS.Service.Api.StoreApp
         }
         public string Id { get; set; }
 
-        public string Sn { get; set; }
-
         public FsTag Tag { get; set; }
 
         public List<FsBlock> Blocks { get; set; }

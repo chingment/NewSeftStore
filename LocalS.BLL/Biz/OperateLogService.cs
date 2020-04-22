@@ -373,7 +373,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
-                                        BizFactory.ProductSku.OperateStockQuantity(machineId, OperateStockType.OrderPickupOneSysMadeSignTake, appId, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneSysMadeSignTake, appId, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                                     }
                                 }
 
@@ -559,7 +559,7 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;
                 sellChannelStockLog.SumQuantity = model.SumQuantity;
                 sellChannelStockLog.EventCode = model.EventCode;
-                sellChannelStockLog.EventName = EventCode.GetEventName(model.EventCode); 
+                sellChannelStockLog.EventName = EventCode.GetEventName(model.EventCode);
                 sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
                 sellChannelStockLog.Creator = operater;
                 sellChannelStockLog.CreateTime = DateTime.Now;

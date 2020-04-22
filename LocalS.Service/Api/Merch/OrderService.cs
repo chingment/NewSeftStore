@@ -176,9 +176,9 @@ namespace LocalS.Service.Api.Merch
             var query = (from o in CurrentDb.Order
                          where (rup.ClientUserName == null || o.ClientUserName.Contains(rup.ClientUserName))
                          &&
-                         (rup.OrderSn == null || o.Sn.Contains(rup.OrderSn)) &&
+                         (rup.OrderId == null || o.Id.Contains(rup.OrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Sn, o.Id, o.SellChannelRefIds, o.StoreId, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Id, o.SellChannelRefIds, o.StoreId, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
             {
@@ -282,7 +282,6 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.Id,
-                    Sn = item.Sn,
                     ClientUserName = item.ClientUserName,
                     ClientUserId = item.ClientUserId,
                     StoreName = item.StoreName,
@@ -320,7 +319,6 @@ namespace LocalS.Service.Api.Merch
             }
 
             ret.Id = order.Id;
-            ret.Sn = order.Sn;
             ret.ClientUserName = order.ClientUserName;
             ret.ClientUserId = order.ClientUserId;
             ret.StoreName = order.StoreName;
@@ -512,7 +510,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, order.MerchId, order.StoreId, "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号：{0}，备注：{1}", order.Sn, order.ExHandleRemark));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, order.MerchId, order.StoreId, "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号：{0}，备注：{1}", order.Id, order.ExHandleRemark));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
             }

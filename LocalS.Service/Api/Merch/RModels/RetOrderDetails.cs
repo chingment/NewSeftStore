@@ -15,7 +15,6 @@ namespace LocalS.Service.Api.Merch
         }
 
         public string Id { get; set; }
-        public string Sn { get; set; }
         public string ClientUserName { get; set; }
         public string ClientUserId { get; set; }
         public string StoreName { get; set; }

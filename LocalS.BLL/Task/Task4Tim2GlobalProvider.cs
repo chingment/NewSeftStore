@@ -75,7 +75,7 @@ namespace LocalS.BLL.Task
                                 LogUtil.Info(string.Format("开始执行订单查询,时间：{0}", DateTime.Now));
                                 #region 检查支付状态
                                 var order = m.Data.ToJsonObject<Order2CheckPayModel>();
-                                LogUtil.Info(string.Format("查询订单号：{0}", order.Sn));
+                                LogUtil.Info(string.Format("查询订单号：{0}", order.Id));
                                 //判断支付过期时间
                                 if (m.ExpireTime.AddMinutes(1) >= DateTime.Now)
                                 {
@@ -89,11 +89,11 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_OrderPayCaller.WxByNt:
                                                     var wxByNt_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Wx.PayQuery(wxByNt_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.Wx.PayQuery(wxByNt_AppInfoConfig, order.Id);
                                                     break;
                                                 case E_OrderPayCaller.WxByMp:
                                                     var wxByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Wx.PayQuery(wxByMp_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.Wx.PayQuery(wxByMp_AppInfoConfig, order.Id);
                                                     break;
                                             }
                                             #endregion
@@ -104,7 +104,7 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_OrderPayCaller.ZfbByNt:
                                                     var zfbByNt_AppInfoConfig = BizFactory.Merch.GetZfbMpAppInfoConfig(order.MerchId);
-                                                    content = SdkFactory.Zfb.PayQuery(zfbByNt_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.Zfb.PayQuery(zfbByNt_AppInfoConfig, order.Id);
                                                     break;
                                             }
                                             #endregion
@@ -115,7 +115,7 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_OrderPayCaller.AggregatePayByNt:
                                                     var tgPay_AppInfoConfig = BizFactory.Merch.GetTgPayInfoConfg(order.MerchId);
-                                                    content = SdkFactory.TgPay.PayQuery(tgPay_AppInfoConfig, order.Sn);
+                                                    content = SdkFactory.TgPay.PayQuery(tgPay_AppInfoConfig, order.Id);
                                                     break;
                                             }
                                             #endregion Tg
@@ -124,18 +124,18 @@ namespace LocalS.BLL.Task
                                             #region Xrt
 
                                             var xrtPay_AppInfoConfig = BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
-                                            content = SdkFactory.XrtPay.PayQuery(xrtPay_AppInfoConfig, order.Sn);
+                                            content = SdkFactory.XrtPay.PayQuery(xrtPay_AppInfoConfig, order.Id);
 
                                             #endregion
                                             break;
                                     }
 
-                                    LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Sn, content));
+                                    LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Id, content));
                                     MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.PayQuery, content);
                                 }
                                 else
                                 {
-                                    LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Sn));
+                                    LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Id));
                                     BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
                                 }
                                 #endregion

@@ -26,9 +26,8 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string OrderId { get; set; }
-        public string OrderSn { get; set; }
         public E_OrderPayPartner PayPartner { get; set; }
-        public string PayPartnerOrderSn { get; set; }
+        public string PayPartnerOrderId { get; set; }
         public E_OrderNotifyLogNotifyType NotifyType { get; set; }
         public E_OrderNotifyLogNotifyFrom NotifyFrom { get; set; }
         public string NotifyContent { get; set; }

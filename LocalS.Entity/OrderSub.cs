@@ -9,7 +9,6 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
-        public string Sn { get; set; }
         public string ClientUserId { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
@@ -18,7 +17,6 @@ namespace LocalS.Entity
         public string SellChannelRefId { get; set; }
         public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
-        public string OrderSn { get; set; }
         public string PickupCode { get; set; }
         public DateTime? PickupCodeExpireTime { get; set; }
         public string Receiver { get; set; }

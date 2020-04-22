@@ -24,7 +24,6 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             public string Id { get; set; }
-            public string Sn { get; set; }
             public List<OrderDetailItem> DetailItems { get; set; }
 
         }

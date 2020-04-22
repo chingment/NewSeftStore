@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.Merch
 
         public string StoreId { get; set; }
 
-        public string OrderSn { get; set; }
+        public string OrderId { get; set; }
 
         public E_OrderStatus OrderStauts { get; set; }
 

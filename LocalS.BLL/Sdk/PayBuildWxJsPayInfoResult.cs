@@ -15,6 +15,5 @@ namespace LocalS.BLL
         public string SignType { get; set; }
         public string PaySign { get; set; }
         public string OrderId { get; set; }
-        public string OrderSn { get; set; }
     }
 }

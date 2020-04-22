@@ -71,7 +71,6 @@ namespace LocalS.Service.Api.StoreApp
             {
                 RetOrderReserve ret = new RetOrderReserve();
                 ret.OrderId = bizResult.Data.OrderId;
-                ret.OrderSn = bizResult.Data.OrderSn;
                 ret.ChargeAmount = bizResult.Data.ChargeAmount;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
@@ -355,7 +354,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
-                         select new { o.Id, o.Sn, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
+                         select new { o.Id, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
              );
 
 
@@ -377,7 +376,7 @@ namespace LocalS.Service.Api.StoreApp
                 var model = new OrderModel();
 
                 model.Id = item.Id;
-                model.Sn = item.Sn;
+
                 model.Tag.Name = new FsText(item.StoreName, "");
 
 
@@ -476,7 +475,7 @@ namespace LocalS.Service.Api.StoreApp
 
             fsBlockByField.Tag.Name = new FsText("订单信息", "");
 
-            fsBlockByField.Data.Add(new FsField("订单编号", "", order.Sn, ""));
+            fsBlockByField.Data.Add(new FsField("订单编号", "", order.Id, ""));
             fsBlockByField.Data.Add(new FsField("创建时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
             if (order.PayedTime != null)
             {

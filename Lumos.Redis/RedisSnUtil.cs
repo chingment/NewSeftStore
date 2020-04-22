@@ -37,7 +37,7 @@ namespace Lumos.Redis
 
         }
 
-        public static string Build(RedisSnType snType, string userId)
+        public static string Build(RedisSnType snType)
         {
 
             string prefix = "";

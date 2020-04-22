@@ -93,8 +93,8 @@ namespace LocalS.BLL
                 if (obj_content.trade_state == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderSn = obj_content.out_trade_no;
-                    result.PayPartnerOrderSn = obj_content.transaction_id;
+                    result.OrderId = obj_content.out_trade_no;
+                    result.PayPartnerOrderId = obj_content.transaction_id;
                 }
 
             }
@@ -113,8 +113,8 @@ namespace LocalS.BLL
                 if (obj_content.pay_result == 0)
                 {
                     result.IsPaySuccess = true;
-                    result.OrderSn = obj_content.out_trade_no;
-                    result.PayPartnerOrderSn = obj_content.transaction_id;
+                    result.OrderId = obj_content.out_trade_no;
+                    result.PayPartnerOrderId = obj_content.transaction_id;
                 }
 
             }

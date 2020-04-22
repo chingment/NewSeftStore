@@ -103,7 +103,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult DetailsOrdersGetOrderList(string operater, string merchId, RupClientDetailsOrdersGetOrderList rup)
         {
             var result = new CustomJsonResult();
-            return MerchServiceFactory.Order.GetList(operater, merchId, new RupOrderGetList { ClientUserId = rup.ClientUserId, OrderSn = rup.OrderSn });
+            return MerchServiceFactory.Order.GetList(operater, merchId, new RupOrderGetList { ClientUserId = rup.ClientUserId, OrderId = rup.OrderId });
         }
     }
 }
