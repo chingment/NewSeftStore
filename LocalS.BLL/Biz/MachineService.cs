@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Mq;
+using LocalS.BLL.Push;
 using LocalS.BLL.Task;
 using LocalS.Entity;
 using Lumos;
@@ -119,27 +120,37 @@ namespace LocalS.BLL.Biz
             return bannerModels;
         }
 
-        public void SendUpdateProductSkuStock(string id, UpdateMachineProdcutSkuStockModel updateProdcutSkuStock)
+        public void SendUpdateProductSkuStock(string operater, string appId, string merchId, string machineId, UpdateMachineProdcutSkuStockModel updateProdcutSkuStock)
         {
-            if (updateProdcutSkuStock != null)
-            {
-                var machine = BizFactory.Machine.GetOne(id);
-                PushService.SendUpdateProductSkuStock(machine.JPushRegId, updateProdcutSkuStock);
-            }
+            PushService.SendUpdateProductSkuStock(operater, appId, merchId, machineId, updateProdcutSkuStock);
         }
 
-        public void SendUpdateHomeBanners(string id)
+        public void SendUpdateHomeBanners(string operater, string appId, string merchId, string machineId)
         {
-            var machine = BizFactory.Machine.GetOne(id);
-            var banners = BizFactory.Machine.GetHomeBanners(id);
-            PushService.SendUpdateMachineHomeBanners(machine.JPushRegId, banners);
+            var banners = BizFactory.Machine.GetHomeBanners(machineId);
+            PushService.SendUpdateMachineHomeBanners(operater, appId, merchId, machineId, banners);
         }
 
-        public void SendUpdateHomeLogo(string id, string logoImgUrl)
+        public void SendUpdateHomeLogo(string operater, string appId, string merchId, string machineId, string logoImgUrl)
         {
-            var machine = BizFactory.Machine.GetOne(id);
             var content = new { url = logoImgUrl };
-            PushService.SendUpdateMachineHomeLogo(machine.JPushRegId, content);
+            PushService.SendUpdateMachineHomeLogo(operater, appId, merchId, machineId, content);
+        }
+
+        public CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string machineId)
+        {
+            return PushService.SendRebootSys(operater, appId, merchId, machineId);
+        }
+
+        public CustomJsonResult SendShutdownSys(string operater, string appId, string merchId, string machineId)
+        {
+            return PushService.SendShutdownSys(operater, appId, merchId, machineId);
+        }
+
+        public CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string machineId, int status, string helpTips)
+        {
+            var content = new { status = status, helpTips };
+            return PushService.SendSetSysStatus(operater, appId, merchId, machineId, content);
         }
 
         public void SendPaySuccess(string id, string orderId)

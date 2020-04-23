@@ -218,6 +218,9 @@
     <Compile Include="Api\Merch\RModels\RopAdSpaceRelease.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEditStock.cs" />
+    <Compile Include="Api\Merch\RModels\RopMachineRebootSys.cs" />
+    <Compile Include="Api\Merch\RModels\RopMachineSetSysStatus.cs" />
+    <Compile Include="Api\Merch\RModels\RopMachineShutdownSys.cs" />
     <Compile Include="Api\Merch\RModels\RopOrderHandleExOrder.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdKindEdit.cs" />

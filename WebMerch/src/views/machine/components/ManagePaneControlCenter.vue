@@ -4,19 +4,55 @@
       <div class="title"><span>系统相关</span>
       </div>
       <div class="content">
-
-        <el-button type="primary">重启系统</el-button>
-        <el-button type="primary">设置状态</el-button>
+        <el-button type="primary" @click="onOpenDalogSeutStatus">设置状态</el-button>
+        <el-button type="primary" @click="onRebootSys">重启系统</el-button>
+        <el-button type="primary" @click="onShutDownSys">关闭系统</el-button>
       </div>
     </div>
+
+    <el-dialog title="设置状态" :visible.sync="dialogSetStatusIsVisible" :width="isDesktop==true?'800px':'90%'">
+      <div>
+
+        <el-form ref="form" :model="formByStatus" label-width="80px">
+          <el-form-item label="机器编码" prop="userName">
+            <span>{{ formByStatus.machineId }}</span>
+          </el-form-item>
+          <el-form-item label="状态" prop="password">
+            <el-radio v-model="formByStatus.status" label="1">正常</el-radio>
+            <el-radio v-model="formByStatus.status" label="2">维护中</el-radio>
+          </el-form-item>
+          <el-form-item label="描述" prop="helpTip">
+            <el-input v-model="formByStatus.helpTip" type="textarea" :rows="5" />
+          </el-form-item>
+        </el-form>
+
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="onSetSatausSys()">
+          确定
+        </el-button>
+        <el-button @click="dialogSetStatusIsVisible = false">
+          关闭
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 
+import { MessageBox } from 'element-ui'
+import { getUrlParam } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneBaseInfo',
   data() {
     return {
+      dialogSetStatusIsVisible: false,
+      isDesktop: this.$store.getters.isDesktop,
+      formByStatus: {
+        machineId: '',
+        status: 0,
+        helpTip: '机器设备正在维护中'
+      }
     }
   },
   watch: {
@@ -32,7 +68,29 @@ export default {
   },
   methods: {
     init() {
+      var id = getUrlParam('id')
+      this.formByStatus.machineId = id
+    },
+    onRebootSys() {
+      MessageBox.confirm('确定要重启系统', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
 
+      })
+    },
+    onShutDownSys() {
+      MessageBox.confirm('确定要关闭系统', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+
+      })
+    },
+    onOpenDalogSeutStatus() {
+      this.dialogSetStatusIsVisible = true
     }
   }
 }

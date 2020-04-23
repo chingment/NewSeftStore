@@ -44,6 +44,16 @@ namespace LocalS.Entity
         public const string StoreEdit = "StoreEdit";
         public const string StoreAddMachine = "StoreAddMachine";
         public const string StoreRemoveMachine = "StoreRemoveMachine";
+
+        public const string MCmdUpdateProductSkuStock = "mcmd:update:ProductSkuStock";
+        public const string MCmdUpdateHomeBanners = "mcmd:update:HomeBanners";
+        public const string MCmdUpdateHomeLogo = "mcmd:update:HomeLogo";
+        public const string MCmdRebootSys = "mcmd:rebootSys";
+        public const string MCmdShutdownSys = "mcmd:shutdownSys";
+        public const string MCmdSetSysStatus = "mcmd:setSysStatus";
+        public const string MCmdPaySuccess = "mcmd:paySuccess";
+
+
         public static string GetEventName(string eventCode)
         {
             string name = "";

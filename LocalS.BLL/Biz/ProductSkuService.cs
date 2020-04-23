@@ -34,7 +34,7 @@ namespace LocalS.BLL.Biz
     public class ProductSkuService : BaseDbContext
     {
 
-        private void SendUpdateProductSkuStock(string merchId, string storeId, string[] machineIds, string productSkuId)
+        private void SendUpdateProductSkuStock(string operater, string appId, string merchId, string storeId, string[] machineIds, string productSkuId)
         {
             if (machineIds != null)
             {
@@ -54,7 +54,7 @@ namespace LocalS.BLL.Biz
                         updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
                         updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                         updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
-                        BizFactory.Machine.SendUpdateProductSkuStock(machineId, updateProdcutSkuStock);
+                        BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, machineId, updateProdcutSkuStock);
                     }
                 }
             }
@@ -583,7 +583,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                SendUpdateProductSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
+                SendUpdateProductSkuStock(operater, appId, merchId, storeId, new string[] { machineId }, productSkuId);
             }
 
             return result;
@@ -675,7 +675,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                SendUpdateProductSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
+                SendUpdateProductSkuStock(operater, appId, merchId, storeId, new string[] { machineId }, productSkuId);
             }
 
             return result;
@@ -717,7 +717,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                SendUpdateProductSkuStock(merchId, storeId, machineIds, productSkuId);
+                SendUpdateProductSkuStock(operater, appId, merchId, storeId, machineIds, productSkuId);
             }
 
             return result;

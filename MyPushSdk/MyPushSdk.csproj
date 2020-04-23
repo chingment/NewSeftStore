@@ -47,7 +47,6 @@
     <Compile Include="IPushService.cs" />
     <Compile Include="JgPushService\JgPushService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PushService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

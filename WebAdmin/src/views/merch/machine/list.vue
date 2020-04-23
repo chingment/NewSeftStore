@@ -159,7 +159,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="OST:" class="postInfo-container-item">
-                    <el-select v-model="details.ostvern" clearable size="mini" placeholder="请选择">
+                    <el-select v-model="details.ostVern" clearable size="mini" placeholder="请选择">
                       <el-option
                         v-for="item in options_ost"
                         :key="item.value"
@@ -171,7 +171,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="MST:" class="postInfo-container-item">
-                    <el-select v-model="details.mst" size="mini" placeholder="请选择">
+                    <el-select v-model="details.mstVern" clearable size="mini" placeholder="请选择">
                       <el-option
                         v-for="item in options_mst"
                         :key="item.value"
@@ -255,11 +255,22 @@
                   <el-form-item label-width="80px" label="扫描器:" class="postInfo-container-item">
                     <el-checkbox v-model="details.sannerIsUse">使用</el-checkbox>
                   </el-form-item>
+                  <el-form-item
+                    label-width="80px"
+                    label="端口:"
+                    class="postInfo-container-item"
+                    style="display: block;
+    float: left;
+    width: 200px;"
+                  >
+                    <el-input v-model="details.sannerComId" placeholder="" size="mini" />
+                  </el-form-item>
+
                 </el-col>
               </el-row>
 
               <el-row>
-                <el-col :span="8">
+                <el-col :span="24">
                   <el-form-item label-width="80px" label="静脉指:" class="postInfo-container-item">
                     <el-checkbox v-model="details.fingerVeinnerIsUse">使用</el-checkbox>
                   </el-form-item>
@@ -342,7 +353,7 @@ export default {
         value: 'SX',
         label: '四信'
       }, {
-        value: 'YC',
+        value: 'YS',
         label: '亿晟'
       }],
       options_mst: [{

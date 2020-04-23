@@ -8,7 +8,7 @@
             v-model="listQuery.sellChannels"
             :props="optionsSellChannelsProps"
             :options="optionsSellChannels"
-            placeholder="选择销售渠道"
+            placeholder="选择销售渠道s"
             clearable
             style="width: 100%"
           />

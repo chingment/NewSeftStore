@@ -119,7 +119,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
         public CustomJsonResult InitManage(string operater, string merchId, string machineId)
         {
             var ret = new RetMachineInitManage();
@@ -381,11 +380,39 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendUpdateHomeLogo(rop.Id, rop.LogoImgUrl);
+                BizFactory.Machine.SendUpdateHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
             }
 
             return result;
         }
 
+
+
+        public CustomJsonResult RebootSys(string operater, string merchId, RopMachineRebootSys rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            result = BizFactory.Machine.SendRebootSys(operater, AppId.MERCH, merchId, rop.Id);
+
+            return result;
+        }
+
+        public CustomJsonResult ShutdownSys(string operater, string merchId, RopMachineShutdownSys rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            result = BizFactory.Machine.SendShutdownSys(operater, AppId.MERCH, merchId, rop.Id);
+
+            return result;
+        }
+
+        public CustomJsonResult SetSysStatus(string operater, string merchId, RopMachineSetSysStatus rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            result = BizFactory.Machine.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTips);
+
+            return result;
+        }
     }
 }

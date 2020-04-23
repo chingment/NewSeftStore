@@ -60,5 +60,26 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse RebootSys([FromBody]RopMachineRebootSys rop)
+        {
+            IResult result = MerchServiceFactory.Machine.RebootSys(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse ShutdownSys([FromBody]RopMachineShutdownSys rop)
+        {
+            IResult result = MerchServiceFactory.Machine.ShutdownSys(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SetSysStatus([FromBody]RopMachineSetSysStatus rop)
+        {
+            IResult result = MerchServiceFactory.Machine.SetSysStatus(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

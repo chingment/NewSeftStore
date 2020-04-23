@@ -218,7 +218,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     foreach (var belongId in rop.BelongIds)
                     {
-                        BizFactory.Machine.SendUpdateHomeBanners(belongId);
+                        BizFactory.Machine.SendUpdateHomeBanners(operater, AppId.MERCH, merchId, belongId);
                     }
                 }
             }
@@ -246,7 +246,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     if (adContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
                     {
-                        BizFactory.Machine.SendUpdateHomeBanners(adContentBelong.BelongId);
+                        BizFactory.Machine.SendUpdateHomeBanners(operater, AppId.MERCH, merchId, adContentBelong.BelongId);
                     }
                 }
 
