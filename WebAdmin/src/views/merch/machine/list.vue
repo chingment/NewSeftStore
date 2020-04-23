@@ -149,6 +149,45 @@
         </el-form>
 
         <div class="row-title clearfix">
+          <div class="pull-left"> <h5>控制源</h5>
+          </div>
+        </div>
+
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="OST:" class="postInfo-container-item">
+                    <el-select v-model="details.ostvern" clearable size="mini" placeholder="请选择">
+                      <el-option
+                        v-for="item in options_ost"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="MST:" class="postInfo-container-item">
+                    <el-select v-model="details.mst" size="mini" placeholder="请选择">
+                      <el-option
+                        v-for="item in options_mst"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-form>
+
+        <div class="row-title clearfix">
           <div class="pull-left"> <h5>购物界面</h5>
           </div>
         </div>
@@ -159,13 +198,13 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="显示分类:" class="postInfo-container-item">
-                    <el-checkbox v-model="checked">是</el-checkbox>
+                    <el-checkbox v-model="details.kindIsHidden">是</el-checkbox>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="每行显示:" class="postInfo-container-item">
-                    <el-input-number v-model="num" :min="1" :max="10" label="描述文字" />
+                    <el-input-number v-model="details.kindRowCellSize" size="mini" :min="1" :max="5" label="每行显示" />
                   </el-form-item>
                 </el-col>
 
@@ -185,21 +224,20 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label-width="80px" label="人脸:" class="postInfo-container-item">
-                    <el-checkbox v-model="checked">打开</el-checkbox>
+                    <el-checkbox v-model="details.cameraByRlIsUse">使用</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label-width="80px" label="取货口:" class="postInfo-container-item">
-                    <el-checkbox v-model="checked">打开</el-checkbox>
+                    <el-checkbox v-model="details.cameraByChkIsUse">使用</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label-width="80px" label="机柜:" class="postInfo-container-item">
-                    <el-checkbox v-model="checked">打开</el-checkbox>
+                    <el-checkbox v-model="details.cameraByJgIsUse">使用</el-checkbox>
                   </el-form-item>
                 </el-col>
               </el-row>
-
             </div>
           </el-col>
         </el-form>
@@ -208,6 +246,29 @@
           <div class="pull-left"> <h5>扩展设备</h5>
           </div>
         </div>
+
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label-width="80px" label="扫描器:" class="postInfo-container-item">
+                    <el-checkbox v-model="details.sannerIsUse">使用</el-checkbox>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label-width="80px" label="静脉指:" class="postInfo-container-item">
+                    <el-checkbox v-model="details.fingerVeinnerIsUse">使用</el-checkbox>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+            </div>
+          </el-col>
+        </el-form>
 
       </div>
       <div slot="footer" class="dialog-footer">
@@ -224,7 +285,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initGetList, getList, bindOffMerch, bindOnMerch } from '@/api/merchmachine'
+import { initGetList, getList, bindOffMerch, bindOnMerch, initEdit } from '@/api/merchmachine'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -277,6 +338,20 @@ export default {
         mstVern: '',
         ostVern: ''
       },
+      options_ost: [{
+        value: 'SX',
+        label: '四信'
+      }, {
+        value: 'YC',
+        label: '亿晟'
+      }],
+      options_mst: [{
+        value: 'DS',
+        label: '德尚'
+      }, {
+        value: 'ZS',
+        label: '中顺'
+      }],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -347,8 +422,17 @@ export default {
         })
       })
     },
-    _dialogEditOpen() {
-      this.dialogEditIsVisible = true
+    _dialogEditOpen(row) {
+      this.dialogEditLoading = true
+      initEdit({ id: row.id }).then(res => {
+        if (res.result === 1) {
+          this.details = res.data
+        } else {
+          this.$message(res.message)
+        }
+        this.dialogEditLoading = false
+        this.dialogEditIsVisible = true
+      })
     }
   }
 }

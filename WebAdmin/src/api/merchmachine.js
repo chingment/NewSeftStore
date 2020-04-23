@@ -8,6 +8,14 @@ export function initGetList(params) {
   })
 }
 
+export function initEdit(params) {
+  return request({
+    url: '/merchmachine/initEdit',
+    method: 'get',
+    params
+  })
+}
+
 export function getList(params) {
   return request({
     url: '/merchmachine/getlist',

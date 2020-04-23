@@ -361,6 +361,7 @@ namespace LocalS.Service.Api.StoreTerm
                     orderDetailItem.Quantity = orderSubChildUnique.Quantity;
                     orderDetailItem.Name = orderSubChildUnique.PrdProductSkuName;
                     orderDetailItem.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
+                    orderDetailItem.Status = BizFactory.Order.GetPickupStatus(orderSubChildUnique.PickupStatus);
                     orderDetailItem.SignStatus = 0;
                     if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked)
                     {

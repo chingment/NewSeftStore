@@ -14,160 +14,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class OrderService : BaseDbContext
     {
-        public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
-        {
-            var statusModel = new StatusModel();
-
-            if (isHasEx)
-            {
-                if (isHandleComplete)
-                {
-                    statusModel.Value = 0;
-                    statusModel.Text = "异常，已处理";
-                }
-                else
-                {
-                    statusModel.Value = 2;
-                    statusModel.Text = "异常，未处理";
-                }
-            }
-            else
-            {
-                statusModel.Value = 0;
-                statusModel.Text = "否";
-            }
-            //switch (status)
-            //{
-            //    case E_AdContentStatus.Normal:
-            //        statusModel.Value = 1;
-            //        statusModel.Text = "正常";
-            //        break;
-            //    case E_AdContentStatus.Deleted:
-            //        statusModel.Value = 2;
-            //        statusModel.Text = "已删除";
-            //        break;
-            //}
-
-
-            return statusModel;
-        }
-
-        public bool GetCanHandleEx(bool isHappen, bool isHandle)
-        {
-            if (isHappen && isHandle == false)
-                return true;
-
-            return false;
-        }
-
-        public StatusModel GetStatus(E_OrderStatus orderStatus)
-        {
-            var status = new StatusModel();
-
-            switch (orderStatus)
-            {
-                case E_OrderStatus.Submitted:
-                    status.Value = 1000;
-                    status.Text = "已提交";
-                    break;
-                case E_OrderStatus.WaitPay:
-                    status.Value = 2000;
-                    status.Text = "待支付";
-                    break;
-                case E_OrderStatus.Payed:
-                    status.Value = 3000;
-                    status.Text = "已支付";
-                    break;
-                case E_OrderStatus.Completed:
-                    status.Value = 4000;
-                    status.Text = "已完成";
-                    break;
-                case E_OrderStatus.Canceled:
-                    status.Value = 5000;
-                    status.Text = "已取消";
-                    break;
-            }
-            return status;
-        }
-
-        public StatusModel GetPickupStatus(E_OrderPickupStatus pickupStatus)
-        {
-            var status = new StatusModel();
-
-            switch (pickupStatus)
-            {
-                case E_OrderPickupStatus.Submitted:
-                    status.Value = 1000;
-                    status.Text = "已提交";
-                    break;
-                case E_OrderPickupStatus.WaitPay:
-                    status.Value = 2000;
-                    status.Text = "待支付";
-                    break;
-                //case E_OrderDetailsChildSonStatus.Payed:
-                //    status.Value = 3000;
-                //    status.Text = "已支付";
-                //    break;
-                case E_OrderPickupStatus.WaitPickup:
-                    status.Value = 3010;
-                    status.Text = "待取货";
-                    break;
-                case E_OrderPickupStatus.SendPickupCmd:
-                    status.Value = 3011;
-                    status.Text = "取货中";
-                    break;
-                case E_OrderPickupStatus.Pickuping:
-                    status.Value = 3012;
-                    status.Text = "取货中";
-                    break;
-                case E_OrderPickupStatus.Taked:
-                    status.Value = 4000;
-                    status.Text = "已完成";
-                    break;
-                case E_OrderPickupStatus.Canceled:
-                    status.Value = 5000;
-                    status.Text = "已取消";
-                    break;
-                case E_OrderPickupStatus.Exception:
-                    status.Value = 6000;
-                    status.Text = "异常未处理";
-                    break;
-                case E_OrderPickupStatus.ExPickupSignTaked:
-                    status.Value = 6010;
-                    status.Text = "异常已处理，标记为已取货";
-                    break;
-                case E_OrderPickupStatus.ExPickupSignUnTaked:
-                    status.Value = 6011;
-                    status.Text = "异常已处理，标记为未取货";
-                    break;
-            }
-            return status;
-        }
-
-        public string GetSourceName(E_OrderSource orderSource)
-        {
-            string name = "";
-            switch (orderSource)
-            {
-                case E_OrderSource.Api:
-                    name = "开放接口";
-                    break;
-                case E_OrderSource.Wxmp:
-                    name = "微信小程序";
-                    break;
-                case E_OrderSource.Machine:
-                    name = "终端机器";
-                    break;
-            }
-            return name;
-        }
-
-        public string GetPickImgUrl(string imgId)
-        {
-            if (string.IsNullOrEmpty(imgId))
-                return null;
-            return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
-        }
 
         public CustomJsonResult GetList(string operater, string merchId, RupOrderGetList rup)
         {
@@ -238,8 +84,8 @@ namespace LocalS.Service.Api.Merch
 
                                 foreach (var orderPickupLog in orderPickupLogs)
                                 {
-                                    string imgUrl = GetPickImgUrl(orderPickupLog.ImgId);
-                                    string imgUrl2 = GetPickImgUrl(orderPickupLog.ImgId2);
+                                    string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+                                    string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
                                     List<string> imgUrls = new List<string>();
                                     if (!string.IsNullOrEmpty(imgUrl))
                                     {
@@ -262,7 +108,7 @@ namespace LocalS.Service.Api.Merch
                                     ExPickupIsHandle = prderSubChildUnique.ExPickupIsHandle,
                                     Name = prderSubChildUnique.PrdProductSkuName,
                                     Quantity = prderSubChildUnique.Quantity,
-                                    Status = GetPickupStatus(prderSubChildUnique.PickupStatus),
+                                    Status = BizFactory.Order.GetPickupStatus(prderSubChildUnique.PickupStatus),
                                     PickupLogs = pickupLogs
                                 });
                             }
@@ -291,10 +137,10 @@ namespace LocalS.Service.Api.Merch
                     OriginalAmount = item.OriginalAmount.ToF2Price(),
                     Quantity = item.Quantity,
                     CreateTime = item.CreateTime,
-                    Status = GetStatus(item.Status),
-                    SourceName = GetSourceName(item.Source),
-                    ExStatus = GetExStatus(item.ExIsHappen, item.ExIsHandle),
-                    CanHandleEx = GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
+                    Status = BizFactory.Order.GetStatus(item.Status),
+                    SourceName = BizFactory.Order.GetSourceName(item.Source),
+                    ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
+                    CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
                     SellChannelDetails = sellChannelDetails
                 });
             }
@@ -328,9 +174,9 @@ namespace LocalS.Service.Api.Merch
             ret.OriginalAmount = order.OriginalAmount.ToF2Price();
             ret.Quantity = order.Quantity;
             ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
-            ret.Status = GetStatus(order.Status);
-            ret.SourceName = GetSourceName(order.Source);
-            ret.CanHandleEx = GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
+            ret.Status = BizFactory.Order.GetStatus(order.Status);
+            ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
+            ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
             ret.ExHandleRemark = order.ExHandleRemark;
             ret.ExIsHappen = order.ExIsHappen;
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
@@ -357,7 +203,7 @@ namespace LocalS.Service.Api.Merch
 
                             foreach (var orderPickupLog in orderPickupLogs)
                             {
-                                string imgUrl = GetPickImgUrl(orderPickupLog.ImgId);
+                                string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
                                 List<string> imgUrls = new List<string>();
                                 if (!string.IsNullOrEmpty(imgUrl))
                                 {
@@ -375,7 +221,7 @@ namespace LocalS.Service.Api.Merch
                                 MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl,
                                 Name = orderSubChildUnique.PrdProductSkuName,
                                 Quantity = orderSubChildUnique.Quantity,
-                                Status = GetPickupStatus(orderSubChildUnique.PickupStatus),
+                                Status = BizFactory.Order.GetPickupStatus(orderSubChildUnique.PickupStatus),
                                 PickupLogs = pickupLogs,
                                 SignStatus = 0
                             });

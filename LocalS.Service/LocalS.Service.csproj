@@ -178,7 +178,6 @@
     <Compile Include="Api\Merch\Models\Rpt7DayGmvRlModel.cs" />
     <Compile Include="Api\Merch\Models\RptProductSkuSaleRlModel.cs" />
     <Compile Include="Api\Merch\Models\RptStoreGmvRlModel.cs" />
-    <Compile Include="Api\Merch\Models\StatusModel.cs" />
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\OrderService.cs" />
