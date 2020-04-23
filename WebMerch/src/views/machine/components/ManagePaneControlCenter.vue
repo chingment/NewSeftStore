@@ -42,10 +42,12 @@
 
 import { MessageBox } from 'element-ui'
 import { getUrlParam } from '@/utils/commonUtil'
+import { rebootSys, shutdownSys, setSysStatus } from '@/api/machine'
 export default {
   name: 'ManagePaneBaseInfo',
   data() {
     return {
+      machineId: '',
       dialogSetStatusIsVisible: false,
       isDesktop: this.$store.getters.isDesktop,
       formByStatus: {
@@ -69,6 +71,7 @@ export default {
   methods: {
     init() {
       var id = getUrlParam('id')
+      this.machineId = id
       this.formByStatus.machineId = id
     },
     onRebootSys() {
@@ -77,7 +80,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        rebootSys({ id: this.machineId }).then(res => {
+          this.$message(res.message)
+        })
       })
     },
     onShutDownSys() {
@@ -86,11 +91,24 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        shutdownSys({ id: this.machineId }).then(res => {
+          this.$message(res.message)
+        })
       })
     },
     onOpenDalogSeutStatus() {
       this.dialogSetStatusIsVisible = true
+    },
+    onSetSysStatus() {
+      MessageBox.confirm('确定要保存桩体', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        setSysStatus({ id: this.machineId }).then(res => {
+          this.$message(res.message)
+        })
+      })
     }
   }
 }

@@ -8,6 +8,7 @@ using LocalS.Service.Api.StoreTerm;
 using log4net;
 using Lumos;
 using Lumos.Redis;
+using MyPushSdk;
 using NPinyin;
 using System;
 using System.Collections.Generic;
@@ -103,6 +104,10 @@ namespace Test
 
             string a = RedisSnUtil.BuildMachineId();
 
+           IPushService pushService = new JgPushService();
+
+            pushService.Send("1104a8979234f30c8c2", "dasdsada", "das");
+        //BizFactory.Machine.SendRebootSys(GuidUtil.Empty(), AppId.MERCH, "d17df2252133478c99104180e8062230", "202004220011");
 
             if ("昨天" == "明天")
             {

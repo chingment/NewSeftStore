@@ -56,6 +56,30 @@ export function manageStockEditStock(data) {
   })
 }
 
+export function rebootSys(data) {
+  return request({
+    url: '/machine/rebootSys',
+    method: 'post',
+    data
+  })
+}
+
+export function shutdownSys(data) {
+  return request({
+    url: '/machine/shutdownSys',
+    method: 'post',
+    data
+  })
+}
+
+export function setSysStatus(data) {
+  return request({
+    url: '/machine/setSysStatus',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   edit: edit,
@@ -63,5 +87,8 @@ export default {
   initManageBaseInfo: initManageBaseInfo,
   initManageStock: initManageStock,
   manageStockGetStocks: manageStockGetStocks,
-  manageStockEditStock: manageStockEditStock
+  manageStockEditStock: manageStockEditStock,
+  rebootSys: rebootSys,
+  shutdownSys: shutdownSys,
+  setSysStatus: setSysStatus
 }
