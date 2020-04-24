@@ -147,18 +147,17 @@ namespace LocalS.BLL.Biz
             return PushService.SendShutdownSys(operater, appId, merchId, machineId);
         }
 
-        public CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string machineId, int status, string helpTips)
+        public CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string machineId, int status, string helpTip)
         {
-            var content = new { status = status, helpTips };
+            var content = new { status = status, helpTip = helpTip };
             return PushService.SendSetSysStatus(operater, appId, merchId, machineId, content);
         }
 
-        public void SendPaySuccess(string id, string orderId)
+        public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)
         {
-            //var machine = BizFactory.Machine.GetOne(id);
-            //var orderDetails = BizFactory.Order.GetOrderDetailsByPickup(orderId, id);
-            //var content = new { orderId = orderId,status = E_OrderStatus.Payed, OrderDetails = orderDetails };
-            //PushService.SendPaySuccess(machine.JPushRegId, content);
+            var orderDetails = BizFactory.Order.GetOrderProductSkuByPickup(orderId, machineId);
+            var content = new { orderId = orderId, status = E_OrderStatus.Payed, orderDetails = orderDetails };
+            return PushService.SendPaySuccess(operater, appId, merchId, machineId, content);
         }
 
         public CustomJsonResult EventNotify(string operater, string appId, string machineId, string eventCode, object content)

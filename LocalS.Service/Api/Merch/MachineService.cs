@@ -410,7 +410,7 @@ namespace LocalS.Service.Api.Merch
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Machine.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTips);
+            result = BizFactory.Machine.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
 
             return result;
         }

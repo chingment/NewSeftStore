@@ -12,6 +12,6 @@ namespace LocalS.Service.Api.Merch
 
         public int Status { get; set; }
 
-        public string HelpTips { get; set; }
+        public string HelpTip { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div id="machine_controlcenter" v-loading="loading" class="app-container">
+  <div id="machine_controlcenter" class="app-container">
     <div class="pane-ctl">
       <div class="title"><span>系统相关</span>
       </div>
@@ -13,22 +13,22 @@
     <el-dialog title="设置状态" :visible.sync="dialogSetStatusIsVisible" :width="isDesktop==true?'800px':'90%'">
       <div>
 
-        <el-form ref="form" :model="formByStatus" label-width="80px">
-          <el-form-item label="机器编码" prop="userName">
-            <span>{{ formByStatus.machineId }}</span>
+        <el-form ref="formBySetSysStatus" :model="formBySetSysStatus" :rules="formBySetSysStatusRules" label-width="80px">
+          <el-form-item label="机器编码">
+            <span>{{ machineId }}</span>
           </el-form-item>
-          <el-form-item label="状态" prop="password">
-            <el-radio v-model="formByStatus.status" label="1">正常</el-radio>
-            <el-radio v-model="formByStatus.status" label="2">维护中</el-radio>
+          <el-form-item label="状态" prop="status">
+            <el-radio v-model="formBySetSysStatus.status" label="1">正常</el-radio>
+            <el-radio v-model="formBySetSysStatus.status" label="2">维护中</el-radio>
           </el-form-item>
           <el-form-item label="描述" prop="helpTip">
-            <el-input v-model="formByStatus.helpTip" type="textarea" :rows="5" />
+            <el-input v-model="formBySetSysStatus.helpTip" type="textarea" :rows="5" />
           </el-form-item>
         </el-form>
 
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onSetSatausSys()">
+        <el-button type="primary" @click="onSetSysStatus()">
           确定
         </el-button>
         <el-button @click="dialogSetStatusIsVisible = false">
@@ -50,10 +50,13 @@ export default {
       machineId: '',
       dialogSetStatusIsVisible: false,
       isDesktop: this.$store.getters.isDesktop,
-      formByStatus: {
-        machineId: '',
-        status: 0,
+      formBySetSysStatus: {
+        status: undefined,
         helpTip: '机器设备正在维护中'
+      },
+      formBySetSysStatusRules: {
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+        helpTip: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }]
       }
     }
   },
@@ -72,7 +75,6 @@ export default {
     init() {
       var id = getUrlParam('id')
       this.machineId = id
-      this.formByStatus.machineId = id
     },
     onRebootSys() {
       MessageBox.confirm('确定要重启系统', '提示', {
@@ -97,17 +99,24 @@ export default {
       })
     },
     onOpenDalogSeutStatus() {
+      this.formBySetSysStatus.status = undefined
+      this.formBySetSysStatus.helpTip = '机器设备正在维护中'
       this.dialogSetStatusIsVisible = true
     },
     onSetSysStatus() {
-      MessageBox.confirm('确定要保存桩体', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        setSysStatus({ id: this.machineId }).then(res => {
-          this.$message(res.message)
-        })
+      this.$refs['formBySetSysStatus'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要设置状态', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            setSysStatus({ id: this.machineId, status: this.formBySetSysStatus.status, helpTip: this.formBySetSysStatus.helpTip }).then(res => {
+              this.$message(res.message)
+              this.dialogSetStatusIsVisible = false
+            })
+          })
+        }
       })
     }
   }
