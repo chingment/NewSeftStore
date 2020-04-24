@@ -56,24 +56,31 @@ namespace LocalS.BLL.Push
             return result;
         }
 
-        public static CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string machineId)
+        public static CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string machineId)
         {
             var result = new CustomJsonResult();
-            result = Send(operater, appId, merchId, machineId, EventCode.MCmdRebootSys, "重启系统");
+            result = Send(operater, appId, merchId, machineId, EventCode.MCmdSysReboot, "重启系统");
             return result;
         }
 
-        public static CustomJsonResult SendShutdownSys(string operater, string appId, string merchId, string machineId)
+        public static CustomJsonResult SendSysShutdown(string operater, string appId, string merchId, string machineId)
         {
             var result = new CustomJsonResult();
-            result = Send(operater, appId, merchId, machineId, EventCode.MCmdShutdownSys, "关闭系统");
+            result = Send(operater, appId, merchId, machineId, EventCode.MCmdSysShutdown, "关闭系统");
             return result;
         }
 
-        public static CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendSysSetStatus(string operater, string appId, string merchId, string machineId, object content)
         {
             var result = new CustomJsonResult();
-            result = Send(operater, appId, merchId, machineId, EventCode.MCmdSetSysStatus, content);
+            result = Send(operater, appId, merchId, machineId, EventCode.MCmdSysSetStatus, content);
+            return result;
+        }
+
+        public static CustomJsonResult SendDsx01OpenPickupDoor(string operater, string appId, string merchId, string machineId)
+        {
+            var result = new CustomJsonResult();
+            result = Send(operater, appId, merchId, machineId, EventCode.MCmdDsx01OpenPickupDoor, "打开取货门");
             return result;
         }
 
@@ -83,6 +90,15 @@ namespace LocalS.BLL.Push
             result = Send(operater, appId, merchId, machineId, EventCode.MCmdPaySuccess, content);
             return result;
         }
+
+        public static CustomJsonResult QueryMsgPushResult(string operater, string appId, string merchId, string machineId, string messageId)
+        {
+            var result = new CustomJsonResult();
+            var machine = BizFactory.Machine.GetOne(machineId);
+            result = pushService.QueryMsgPushResult(machine.JPushRegId, messageId);
+            return result;
+        }
+
 
     }
 }

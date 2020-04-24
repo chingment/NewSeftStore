@@ -102,12 +102,13 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
-            string a = RedisSnUtil.BuildMachineId();
+            SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
+            ///string a = RedisSnUtil.BuildMachineId();
 
-           IPushService pushService = new JgPushService();
+            ///IPushService pushService = new JgPushService();
 
-            pushService.Send("1104a8979234f30c8c2", "dasdsada", "das");
-        //BizFactory.Machine.SendRebootSys(GuidUtil.Empty(), AppId.MERCH, "d17df2252133478c99104180e8062230", "202004220011");
+            //pushService.Send("1104a8979234f30c8c2", "dasdsada", "das");
+            //BizFactory.Machine.SendRebootSys(GuidUtil.Empty(), AppId.MERCH, "d17df2252133478c99104180e8062230", "202004220011");
 
             if ("昨天" == "明天")
             {

@@ -388,29 +388,48 @@ namespace LocalS.Service.Api.Merch
 
 
 
-        public CustomJsonResult RebootSys(string operater, string merchId, RopMachineRebootSys rop)
+        public CustomJsonResult SysReboot(string operater, string merchId, RopMachineRebootSys rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Machine.SendRebootSys(operater, AppId.MERCH, merchId, rop.Id);
+            result = BizFactory.Machine.SendSysReboot(operater, AppId.MERCH, merchId, rop.Id);
 
             return result;
         }
 
-        public CustomJsonResult ShutdownSys(string operater, string merchId, RopMachineShutdownSys rop)
+        public CustomJsonResult SysShutdown(string operater, string merchId, RopMachineShutdownSys rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Machine.SendShutdownSys(operater, AppId.MERCH, merchId, rop.Id);
+            result = BizFactory.Machine.SendSysShutdown(operater, AppId.MERCH, merchId, rop.Id);
 
             return result;
         }
 
-        public CustomJsonResult SetSysStatus(string operater, string merchId, RopMachineSetSysStatus rop)
+        public CustomJsonResult SysSetStatus(string operater, string merchId, RopMachineSetSysStatus rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Machine.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
+            result = BizFactory.Machine.SendSysSetStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
+
+            return result;
+        }
+
+        public CustomJsonResult Dsx01OpenPickupDoor(string operater, string merchId, RopMachineShutdownSys rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            result = BizFactory.Machine.SendDsx01OpenPickupDoor(operater, AppId.MERCH, merchId, rop.Id);
+
+            return result;
+        }
+
+
+        public CustomJsonResult QueryMsgPushResult(string operater, string merchId, RopMachineQueryMsgPushResult rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            result = BizFactory.Machine.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.MachineId, rop.MessageId);
 
             return result;
         }

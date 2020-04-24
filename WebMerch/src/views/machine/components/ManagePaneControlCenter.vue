@@ -4,34 +4,42 @@
       <div class="title"><span>系统相关</span>
       </div>
       <div class="content">
-        <el-button type="primary" @click="onOpenDalogSeutStatus">设置状态</el-button>
-        <el-button type="primary" @click="onRebootSys">重启系统</el-button>
-        <el-button type="primary" @click="onShutDownSys">关闭系统</el-button>
+        <el-button type="primary" @click="onOpenDialogSysSetStatus">设置状态</el-button>
+        <el-button type="primary" @click="onSysReboot">重启系统</el-button>
+        <el-button type="primary" @click="onSysShutDown">关闭系统</el-button>
       </div>
     </div>
 
-    <el-dialog title="设置状态" :visible.sync="dialogSetStatusIsVisible" :width="isDesktop==true?'800px':'90%'">
+    <div class="pane-ctl">
+      <div class="title"><span>DS设备相关</span>
+      </div>
+      <div class="content">
+        <el-button type="primary" @click="onDsx01OpenPickupDoor">打开设备取货门</el-button>
+      </div>
+    </div>
+
+    <el-dialog title="设置状态" :visible.sync="dialogSysSetStatusIsVisible" :width="isDesktop==true?'800px':'90%'">
       <div>
 
-        <el-form ref="formBySetSysStatus" :model="formBySetSysStatus" :rules="formBySetSysStatusRules" label-width="80px">
+        <el-form ref="formBySysSetStatus" :model="formBySysSetStatus" :rules="formBySysSetStatusRules" label-width="80px">
           <el-form-item label="机器编码">
             <span>{{ machineId }}</span>
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-radio v-model="formBySetSysStatus.status" label="1">正常</el-radio>
-            <el-radio v-model="formBySetSysStatus.status" label="2">维护中</el-radio>
+            <el-radio v-model="formBySysSetStatus.status" label="1">正常</el-radio>
+            <el-radio v-model="formBySysSetStatus.status" label="2">维护中</el-radio>
           </el-form-item>
           <el-form-item label="描述" prop="helpTip">
-            <el-input v-model="formBySetSysStatus.helpTip" type="textarea" :rows="5" />
+            <el-input v-model="formBySysSetStatus.helpTip" type="textarea" :rows="5" />
           </el-form-item>
         </el-form>
 
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onSetSysStatus()">
+        <el-button type="primary" @click="onSysSetStatus()">
           确定
         </el-button>
-        <el-button @click="dialogSetStatusIsVisible = false">
+        <el-button @click="dialogSysSetStatusIsVisible = false">
           关闭
         </el-button>
       </div>
@@ -42,19 +50,20 @@
 
 import { MessageBox } from 'element-ui'
 import { getUrlParam } from '@/utils/commonUtil'
-import { rebootSys, shutdownSys, setSysStatus } from '@/api/machine'
+import { sysReboot, sysShutdown, sysSetStatus, queryMsgPushResult, dsx01OpenPickupDoor } from '@/api/machine'
+
 export default {
   name: 'ManagePaneBaseInfo',
   data() {
     return {
       machineId: '',
-      dialogSetStatusIsVisible: false,
+      dialogSysSetStatusIsVisible: false,
       isDesktop: this.$store.getters.isDesktop,
-      formBySetSysStatus: {
+      formBySysSetStatus: {
         status: undefined,
         helpTip: '机器设备正在维护中'
       },
-      formBySetSysStatusRules: {
+      formBySysSetStatusRules: {
         status: [{ required: true, message: '请选择状态', trigger: 'change' }],
         helpTip: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }]
       }
@@ -76,48 +85,106 @@ export default {
       var id = getUrlParam('id')
       this.machineId = id
     },
-    onRebootSys() {
-      MessageBox.confirm('确定要重启系统', '提示', {
+    onSysReboot() {
+      MessageBox.confirm('确定要重启系统？请确保机器在空闲状态中，否则会影响机器正常运行！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        rebootSys({ id: this.machineId }).then(res => {
-          this.$message(res.message)
+        sysReboot({ id: this.machineId }).then(res => {
+          if (res.result === 1) {
+            this.onQueryMsgStatus(res.data.messageId)
+          } else {
+            this.$message(res.message)
+          }
         })
       })
     },
-    onShutDownSys() {
-      MessageBox.confirm('确定要关闭系统', '提示', {
+    onSysShutDown() {
+      MessageBox.confirm('确定要关闭系统？关闭系统需要人工前往机器开启！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        shutdownSys({ id: this.machineId }).then(res => {
-          this.$message(res.message)
+        sysShutdown({ id: this.machineId }).then(res => {
+          if (res.result === 1) {
+            this.onQueryMsgStatus(res.data.messageId)
+          } else {
+            this.$message(res.message)
+          }
         })
       })
     },
-    onOpenDalogSeutStatus() {
-      this.formBySetSysStatus.status = undefined
-      this.formBySetSysStatus.helpTip = '机器设备正在维护中'
-      this.dialogSetStatusIsVisible = true
+    onOpenDialogSysSetStatus() {
+      this.formBySysSetStatus.status = undefined
+      this.formBySysSetStatus.helpTip = '机器设备正在维护中'
+      this.dialogSysSetStatusIsVisible = true
     },
-    onSetSysStatus() {
-      this.$refs['formBySetSysStatus'].validate((valid) => {
+    onSysSetStatus() {
+      this.$refs['formBySysSetStatus'].validate((valid) => {
         if (valid) {
-          MessageBox.confirm('确定要设置状态', '提示', {
+          MessageBox.confirm('确定要设置状态？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            setSysStatus({ id: this.machineId, status: this.formBySetSysStatus.status, helpTip: this.formBySetSysStatus.helpTip }).then(res => {
-              this.$message(res.message)
-              this.dialogSetStatusIsVisible = false
+            sysSetStatus({ id: this.machineId, status: this.formBySysSetStatus.status, helpTip: this.formBySysSetStatus.helpTip }).then(res => {
+              if (res.result === 1) {
+                this.dialogSysSetStatusIsVisible = false
+                this.onQueryMsgStatus(res.data.messageId)
+              } else {
+                this.$message(res.message)
+              }
             })
           })
         }
       })
+    },
+    onDsx01OpenPickupDoor() {
+      MessageBox.confirm('确定要打开设备型号DSX01的取货门', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        dsx01OpenPickupDoor({ id: this.machineId }).then(res => {
+          if (res.result === 1) {
+            this.onQueryMsgStatus(res.data.messageId)
+          } else {
+            this.$message(res.message)
+          }
+        })
+      })
+    },
+    onQueryMsgStatus(msgId) {
+      var _this = this
+      const loading = _this.$loading({
+        lock: true,
+        text: '正常处理中，请耐心等候，大概需要10秒',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+
+      var timeout = null
+      var interval = window.setInterval(function() {
+        queryMsgPushResult({ machineId: _this.machineId, messageId: msgId }).then(res => {
+          if (res.result === 1) {
+            loading.close()
+            _this.$message(res.message)
+            if (timeout != null) {
+              window.clearInterval(interval)
+              window.clearTimeout(timeout)
+            }
+          }
+        })
+      }, 1000)
+
+      timeout = window.setTimeout(() => {
+        loading.close()
+        window.clearInterval(interval)
+        queryMsgPushResult({ machineId: _this.machineId, messageId: msgId }).then(res => {
+          _this.$message(res.message)
+        })
+      }, 10000)
     }
   }
 }

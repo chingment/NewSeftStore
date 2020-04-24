@@ -461,6 +461,36 @@ namespace LocalS.BLL
             return result;
         }
 
+
+        public void GiftvoucherActivityNotifyPick(string body, string opendId, string orderSn, string pickAddress, string pickCode, string productskusName, DateTime lastPickTime, string url)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + opendId + "\",");
+            sb.Append("\"template_id\":\"M_D_LQGahaalSEt44QI22GY5ihB4zfusTYnvJrnNvN0\",");
+            sb.Append("\"url\":\"" + url + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + body + "。\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + orderSn + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + productskusName + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword3\":{ \"value\":\"" + pickAddress + "\",\"color\":\"#FF3030\" },");
+            sb.Append("\"keyword4\":{ \"value\":\"" + pickCode + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"请您在" + lastPickTime + "前去取货，否则取货码将会失效，谢谢。\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxAppInfoConfig config = new WxAppInfoConfig();
+            config.AppId = "wxc6e80f8c575cf3f5";
+            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+
+            string access_token = GetApiAccessToken(config);
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(access_token, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            c.DoPost(templateSend);
+        }
+
+
         //public string OrderPayReFund(string comCode, string orderId, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
         //{
         //    wxConfig = GetWxConfig(comCode);

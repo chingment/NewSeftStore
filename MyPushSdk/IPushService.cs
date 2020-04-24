@@ -11,5 +11,7 @@ namespace MyPushSdk
     public interface IPushService
     {
         CustomJsonResult Send(string registrationid, string cmd, object content);
+
+        CustomJsonResult QueryMsgPushResult(string registrationid, string msgId);
     }
 }

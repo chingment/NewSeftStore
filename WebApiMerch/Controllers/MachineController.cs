@@ -1,4 +1,5 @@
-﻿using LocalS.Service.Api.Merch;
+﻿using LocalS.BLL;
+using LocalS.Service.Api.Merch;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -61,23 +62,41 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse RebootSys([FromBody]RopMachineRebootSys rop)
+        public OwnApiHttpResponse SysReboot([FromBody]RopMachineRebootSys rop)
         {
-            IResult result = MerchServiceFactory.Machine.RebootSys(this.CurrentUserId, this.CurrentMerchId, rop);
+            //SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
+
+            IResult result = MerchServiceFactory.Machine.SysReboot(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse ShutdownSys([FromBody]RopMachineShutdownSys rop)
+        public OwnApiHttpResponse SysShutdown([FromBody]RopMachineShutdownSys rop)
         {
-            IResult result = MerchServiceFactory.Machine.ShutdownSys(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Machine.SysShutdown(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SetSysStatus([FromBody]RopMachineSetSysStatus rop)
+        public OwnApiHttpResponse SysSetStatus([FromBody]RopMachineSetSysStatus rop)
         {
-            IResult result = MerchServiceFactory.Machine.SetSysStatus(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Machine.SysSetStatus(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
+
+        [HttpPost]
+        public OwnApiHttpResponse Dsx01OpenPickupDoor([FromBody]RopMachineShutdownSys rop)
+        {
+            IResult result = MerchServiceFactory.Machine.Dsx01OpenPickupDoor(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse QueryMsgPushResult([FromBody]RopMachineQueryMsgPushResult rop)
+        {
+            IResult result = MerchServiceFactory.Machine.QueryMsgPushResult(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

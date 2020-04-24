@@ -18,12 +18,7 @@ namespace MyPushSdk
 
     public class JgPushQuqeryResult
     {
-        public string android_received { get; set; }
-        public string ios_apns_received { get; set; }
-        public string ios_apns_sent { get; set; }
-        public string ios_msg_received { get; set; }
-        public string msg_id { get; set; }
-        public string wp_mpns_sent { get; set; }
+        public int status { get; set; }
     }
 
     public class JgPushService : IPushService
@@ -84,53 +79,15 @@ namespace MyPushSdk
 
                 var response = client.SendPush(pushPayload);
 
-                //"{\"sendno\":\"0\",\"msg_id\":\"9007254936655942\"}"
-
-                //List<string> a = new List<string>();
-                //a.Add("9007254792504437");
-                //var sss = client.Report.GetMessageReport(a);
-
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    //if (response.Content != null)
-                    //{
-                    //    System.Threading.Thread.Sleep(2000);
+                    var jgPushResult = response.Content.ToJsonObject<JgPushResult>();
 
-                    //    var jgPushResult = response.Content.ToJsonObject<JgPushResult>();
-                    //    if (jgPushResult != null)
-                    //    {
-                    //        List<string> msgIds = new List<string>();
-                    //        msgIds.Add(jgPushResult.msg_id);
-
-                    //        var jgReportResult = client.Report.GetMessageReport(msgIds);
-                    //        if (jgReportResult != null)
-                    //        {
-                    //            if (!string.IsNullOrEmpty(jgReportResult.Content))
-                    //            {
-                    //                //[{"android_received":null,"ios_apns_received":null,"ios_apns_sent":null,"ios_msg_received":null,"msg_id":"47287851766226406","wp_mpns_sent":null}]
-
-                    //                var jgPushQuqeryResult = jgReportResult.Content.ToJsonObject<List<JgPushQuqeryResult>>();
-
-                    //                if (jgPushQuqeryResult != null)
-                    //                {
-                    //                    var obj = jgPushQuqeryResult.Where(m => m.msg_id == jgPushResult.msg_id).FirstOrDefault();
-
-                    //                    if (obj.android_received != null)
-                    //                    {
-                    //                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "推送成功");
-                    //                        return result;
-                    //                    }
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送成功");
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功", new { messageId = jgPushResult.msg_id });
                 }
                 else
                 {
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送失败");
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");
                 }
             }
             catch (Exception ex)
@@ -139,6 +96,51 @@ namespace MyPushSdk
             }
 
             //todo 查询 var response = client.Report.GetMessageSendStatus() 推送状态
+            return result;
+        }
+
+        public CustomJsonResult QueryMsgPushResult(string registrationid, string msgId)
+        {
+            var result = new CustomJsonResult();
+
+            List<string> registrationids = new List<string>();
+            registrationids.Add(registrationid);
+
+            var jgReportResult = client.Report.GetMessageSendStatus(msgId, registrationids, null);
+            if (jgReportResult != null)
+            {
+                if (!string.IsNullOrEmpty(jgReportResult.Content))
+                {
+                    LogUtil.Info("推送结果：" + jgReportResult.Content);
+                    //{ "1104a8979234f30c8c2":{ "status":0} }
+                    //[{"android_received":null,"ios_apns_received":null,"ios_apns_sent":null,"ios_msg_received":null,"msg_id":"47287851766226406","wp_mpns_sent":null}]
+
+                    var jgPushQuqeryResult = jgReportResult.Content.ToJsonObject<Dictionary<string, JgPushQuqeryResult>>();
+
+                    if (jgPushQuqeryResult.ContainsKey(registrationid))
+                    {
+                        int status = jgPushQuqeryResult[registrationid].status;
+
+                        if (status == 0)
+                        {
+                            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "推送成功");
+                            return result;
+                        }
+                    }
+                    //if (jgPushQuqeryResult != null)
+                    //{
+                    //    var obj = jgPushQuqeryResult.Where(m => m.msg_id == msgId).FirstOrDefault();
+                    //    if (obj.android_received != null)
+                    //    {
+                    //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "推送成功", obj);
+                    //        return result;
+                    //    }
+                    //}
+                }
+            }
+
+
+            result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "推送失败");
             return result;
         }
     }

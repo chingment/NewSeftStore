@@ -239,14 +239,27 @@ namespace LocalS.BLL.Biz
 
             machine.LastRequestTime = DateTime.Now;
 
+            bool isLog = false;
             switch (model.Status)
             {
                 case "running":
                     eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineName);
+
+                    if (machine.RunStatus != E_MachineRunStatus.Running)
+                    {
+                        isLog = true;
+                    }
+
                     machine.RunStatus = E_MachineRunStatus.Running;
                     break;
                 case "setting":
                     eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineName);
+
+                    if (machine.RunStatus != E_MachineRunStatus.Setting)
+                    {
+                        isLog = true;
+                    }
+
                     machine.RunStatus = E_MachineRunStatus.Setting;
                     break;
                 default:
@@ -254,24 +267,27 @@ namespace LocalS.BLL.Biz
                     break;
             }
 
-            var merchOperateLog = new MerchOperateLog();
-            merchOperateLog.Id = GuidUtil.New();
-            merchOperateLog.AppId = appId;
-            merchOperateLog.MerchId = merchId;
-            merchOperateLog.MerchName = merchName;
-            merchOperateLog.StoreId = storeId;
-            merchOperateLog.StoreName = storeName;
-            merchOperateLog.MachineId = machineId;
-            merchOperateLog.MachineName = machineName;
-            merchOperateLog.OperateUserId = operater;
-            merchOperateLog.OperateUserName = operaterUserName;
-            merchOperateLog.EventCode = eventCode;
-            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-            merchOperateLog.Remark = eventRemark;
-            merchOperateLog.Creator = operater;
-            merchOperateLog.CreateTime = DateTime.Now;
-            CurrentDb.MerchOperateLog.Add(merchOperateLog);
-            CurrentDb.SaveChanges();
+            if (isLog)
+            {
+                var merchOperateLog = new MerchOperateLog();
+                merchOperateLog.Id = GuidUtil.New();
+                merchOperateLog.AppId = appId;
+                merchOperateLog.MerchId = merchId;
+                merchOperateLog.MerchName = merchName;
+                merchOperateLog.StoreId = storeId;
+                merchOperateLog.StoreName = storeName;
+                merchOperateLog.MachineId = machineId;
+                merchOperateLog.MachineName = machineName;
+                merchOperateLog.OperateUserId = operater;
+                merchOperateLog.OperateUserName = operaterUserName;
+                merchOperateLog.EventCode = eventCode;
+                merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+                merchOperateLog.Remark = eventRemark;
+                merchOperateLog.Creator = operater;
+                merchOperateLog.CreateTime = DateTime.Now;
+                CurrentDb.MerchOperateLog.Add(merchOperateLog);
+                CurrentDb.SaveChanges();
+            }
         }
 
         private void EventHandleByPickup(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, MachineEventByPickupModel model)
@@ -487,7 +503,6 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
             }
         }
-
 
         private void EventHandleByStockChangeLog(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
         {

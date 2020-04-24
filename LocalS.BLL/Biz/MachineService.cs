@@ -137,20 +137,30 @@ namespace LocalS.BLL.Biz
             PushService.SendUpdateMachineHomeLogo(operater, appId, merchId, machineId, content);
         }
 
-        public CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string machineId)
+        public CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string machineId)
         {
-            return PushService.SendRebootSys(operater, appId, merchId, machineId);
+            return PushService.SendSysReboot(operater, appId, merchId, machineId);
         }
 
-        public CustomJsonResult SendShutdownSys(string operater, string appId, string merchId, string machineId)
+        public CustomJsonResult SendSysShutdown(string operater, string appId, string merchId, string machineId)
         {
-            return PushService.SendShutdownSys(operater, appId, merchId, machineId);
+            return PushService.SendSysShutdown(operater, appId, merchId, machineId);
         }
 
-        public CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string machineId, int status, string helpTip)
+        public CustomJsonResult SendSysSetStatus(string operater, string appId, string merchId, string machineId, int status, string helpTip)
         {
             var content = new { status = status, helpTip = helpTip };
-            return PushService.SendSetSysStatus(operater, appId, merchId, machineId, content);
+            return PushService.SendSysSetStatus(operater, appId, merchId, machineId, content);
+        }
+
+        public CustomJsonResult SendDsx01OpenPickupDoor(string operater, string appId, string merchId, string machineId)
+        {
+            return PushService.SendDsx01OpenPickupDoor(operater, appId, merchId, machineId);
+        }
+
+        public CustomJsonResult QueryMsgPushResult(string operater, string appId, string merchId, string machineId, string messageId)
+        {
+            return PushService.QueryMsgPushResult(operater, appId, merchId, machineId, messageId);
         }
 
         public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)

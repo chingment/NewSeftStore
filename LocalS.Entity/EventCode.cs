@@ -48,10 +48,11 @@ namespace LocalS.Entity
         public const string MCmdUpdateProductSkuStock = "mcmd:update:ProductSkuStock";
         public const string MCmdUpdateHomeBanners = "mcmd:update:HomeBanners";
         public const string MCmdUpdateHomeLogo = "mcmd:update:HomeLogo";
-        public const string MCmdRebootSys = "mcmd:rebootSys";
-        public const string MCmdShutdownSys = "mcmd:shutdownSys";
-        public const string MCmdSetSysStatus = "mcmd:setSysStatus";
-        public const string MCmdPaySuccess = "mcmd:paySuccess";
+        public const string MCmdSysReboot = "mcmd:sys:Reboot";
+        public const string MCmdSysShutdown = "mcmd:sys:Shutdown";
+        public const string MCmdSysSetStatus = "mcmd:sys:SetStatus";
+        public const string MCmdDsx01OpenPickupDoor = "mcmd:dsx01:OpenPickupDoor";
+        public const string MCmdPaySuccess = "mcmd:pay:Success";
 
 
         public static string GetEventName(string eventCode)

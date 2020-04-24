@@ -56,25 +56,41 @@ export function manageStockEditStock(data) {
   })
 }
 
-export function rebootSys(data) {
+export function sysReboot(data) {
   return request({
-    url: '/machine/rebootSys',
+    url: '/machine/sysReboot',
     method: 'post',
     data
   })
 }
 
-export function shutdownSys(data) {
+export function sysShutdown(data) {
   return request({
-    url: '/machine/shutdownSys',
+    url: '/machine/sysShutdown',
     method: 'post',
     data
   })
 }
 
-export function setSysStatus(data) {
+export function sysSetStatus(data) {
   return request({
-    url: '/machine/setSysStatus',
+    url: '/machine/sysSetStatus',
+    method: 'post',
+    data
+  })
+}
+
+export function queryMsgPushResult(data) {
+  return request({
+    url: '/machine/queryMsgPushResult',
+    method: 'post',
+    data
+  })
+}
+
+export function dsx01OpenPickupDoor(data) {
+  return request({
+    url: '/machine/dsx01OpenPickupDoor',
     method: 'post',
     data
   })
@@ -88,7 +104,9 @@ export default {
   initManageStock: initManageStock,
   manageStockGetStocks: manageStockGetStocks,
   manageStockEditStock: manageStockEditStock,
-  rebootSys: rebootSys,
-  shutdownSys: shutdownSys,
-  setSysStatus: setSysStatus
+  sysReboot: sysReboot,
+  sysShutdown: sysShutdown,
+  sysSetStatus: sysSetStatus,
+  queryMsgPushResult: queryMsgPushResult,
+  dsx01OpenPickupDoor: dsx01OpenPickupDoor
 }
