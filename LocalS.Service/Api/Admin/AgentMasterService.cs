@@ -2,6 +2,7 @@
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,11 +122,11 @@ namespace LocalS.Service.Api.Admin
             using (TransactionScope ts = new TransactionScope())
             {
 
-                string agentId = GuidUtil.New();
+                string agentId = IdWorker.Build(IdType.NewGuid);
 
                 var user = new SysAgentUser();
-                user.Id = GuidUtil.New();
-                user.PId = GuidUtil.Empty();
+                user.Id = IdWorker.Build(IdType.NewGuid);
+                user.PId = IdWorker.Build(IdType.EmptyGuid);
                 user.UserName = rop.UserName;
                 user.FullName = rop.FullName;
                 user.PasswordHash = PassWordHelper.HashPassword(rop.Password);

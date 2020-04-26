@@ -3,6 +3,7 @@ using LocalS.BLL.Task;
 using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,10 +62,10 @@ namespace LocalS.BLL.Biz
             string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
-            if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
+            if (!string.IsNullOrEmpty(operater) && operater != IdWorker.Build(IdType.EmptyGuid))
             {
                 var sysUserOperateLog = new SysUserOperateLog();
-                sysUserOperateLog.Id = GuidUtil.New();
+                sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
                 sysUserOperateLog.UserId = operater;
                 sysUserOperateLog.EventCode = eventCode;
                 sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
@@ -77,7 +78,7 @@ namespace LocalS.BLL.Biz
             }
 
             var merchOperateLog = new MerchOperateLog();
-            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             merchOperateLog.AppId = appId;
             merchOperateLog.MerchId = merchId;
             merchOperateLog.MerchName = merchName;
@@ -113,7 +114,7 @@ namespace LocalS.BLL.Biz
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var sysUserOperateLog = new SysUserOperateLog();
-            sysUserOperateLog.Id = GuidUtil.New();
+            sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             sysUserOperateLog.UserId = operater;
             sysUserOperateLog.EventCode = eventCode;
             sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
@@ -125,7 +126,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
 
             var userLoginHis = new SysUserLoginHis();
-            userLoginHis.Id = GuidUtil.New();
+            userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
             userLoginHis.UserId = operater;
             userLoginHis.AppId = appId;
             userLoginHis.LoginAccount = model.LoginAccount;
@@ -142,7 +143,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
 
             var merchOperateLog = new MerchOperateLog();
-            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             merchOperateLog.AppId = appId;
             merchOperateLog.MerchId = merchId;
             merchOperateLog.MerchName = merchName;
@@ -179,7 +180,7 @@ namespace LocalS.BLL.Biz
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var sysUserOperateLog = new SysUserOperateLog();
-            sysUserOperateLog.Id = GuidUtil.New();
+            sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             sysUserOperateLog.UserId = operater;
             sysUserOperateLog.EventCode = eventCode;
             sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
@@ -191,7 +192,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
 
             var userLoginHis = new SysUserLoginHis();
-            userLoginHis.Id = GuidUtil.New();
+            userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
             userLoginHis.UserId = operater;
             userLoginHis.AppId = appId;
             userLoginHis.LoginAccount = model.LoginAccount;
@@ -208,7 +209,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
 
             var merchOperateLog = new MerchOperateLog();
-            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             merchOperateLog.AppId = appId;
             merchOperateLog.MerchId = merchId;
             merchOperateLog.MerchName = merchName;
@@ -273,7 +274,7 @@ namespace LocalS.BLL.Biz
             if (isLog)
             {
                 var merchOperateLog = new MerchOperateLog();
-                merchOperateLog.Id = GuidUtil.New();
+                merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
                 merchOperateLog.AppId = appId;
                 merchOperateLog.MerchId = merchId;
                 merchOperateLog.MerchName = merchName;
@@ -441,7 +442,7 @@ namespace LocalS.BLL.Biz
                     }
 
                     var orderPickupLog = new OrderPickupLog();
-                    orderPickupLog.Id = GuidUtil.New();
+                    orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                     orderPickupLog.OrderId = model.OrderId;
                     orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                     orderPickupLog.SellChannelRefId = machineId;
@@ -486,7 +487,7 @@ namespace LocalS.BLL.Biz
                 }
 
                 var merchOperateLog = new MerchOperateLog();
-                merchOperateLog.Id = GuidUtil.New();
+                merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
                 merchOperateLog.AppId = appId;
                 merchOperateLog.MerchId = merchId;
                 merchOperateLog.MerchName = merchName;
@@ -515,10 +516,10 @@ namespace LocalS.BLL.Biz
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
             string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
-            if (!string.IsNullOrEmpty(operater) && operater != GuidUtil.Empty())
+            if (!string.IsNullOrEmpty(operater) && operater != IdWorker.Build(IdType.EmptyGuid))
             {
                 var sysUserOperateLog = new SysUserOperateLog();
-                sysUserOperateLog.Id = GuidUtil.New();
+                sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
                 sysUserOperateLog.UserId = operater;
                 sysUserOperateLog.EventCode = eventCode;
                 sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
@@ -531,7 +532,7 @@ namespace LocalS.BLL.Biz
             }
 
             var merchOperateLog = new MerchOperateLog();
-            merchOperateLog.Id = GuidUtil.New();
+            merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             merchOperateLog.AppId = appId;
             merchOperateLog.MerchId = merchId;
             merchOperateLog.MerchName = merchName;
@@ -562,7 +563,7 @@ namespace LocalS.BLL.Biz
                 var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, model.PrdProductSkuId);
 
                 var sellChannelStockLog = new SellChannelStockLog();
-                sellChannelStockLog.Id = GuidUtil.New();
+                sellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
                 sellChannelStockLog.MerchId = merchId;
                 sellChannelStockLog.MerchName = merchName;
                 sellChannelStockLog.StoreId = storeId;

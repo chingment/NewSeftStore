@@ -3,6 +3,7 @@ using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,12 +142,12 @@ namespace LocalS.Service.Api.Admin
             {
 
 
-                string merchId = GuidUtil.New();
+                string merchId = IdWorker.Build(IdType.NewGuid);
 
                 var user = new SysMerchUser();
-                user.Id = GuidUtil.New();
+                user.Id = IdWorker.Build(IdType.NewGuid);
                 user.MerchId = merchId;
-                user.PId = GuidUtil.Empty();
+                user.PId = IdWorker.Build(IdType.EmptyGuid);
                 user.UserName = rop.UserName;
                 user.FullName = rop.FullName;
                 user.PasswordHash = PassWordHelper.HashPassword(rop.Password);
@@ -179,13 +180,13 @@ namespace LocalS.Service.Api.Admin
                 }
 
 
-                CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = sysRole.Id, UserId = user.Id, Creator = operater, CreateTime = DateTime.Now });
+                CurrentDb.SysUserRole.Add(new SysUserRole { Id = IdWorker.Build(IdType.NewGuid), RoleId = sysRole.Id, UserId = user.Id, Creator = operater, CreateTime = DateTime.Now });
 
 
                 var sysOrg = new SysOrg();
-                sysOrg.Id = GuidUtil.New();
+                sysOrg.Id = IdWorker.Build(IdType.NewGuid);
                 sysOrg.Name = "根组织";
-                sysOrg.PId = GuidUtil.Empty();
+                sysOrg.PId = IdWorker.Build(IdType.EmptyGuid);
                 sysOrg.BelongSite = Enumeration.BelongSite.Merch;
                 sysOrg.ReferenceId = merch.Id;
                 sysOrg.IsDelete = false;
@@ -196,7 +197,7 @@ namespace LocalS.Service.Api.Admin
                 CurrentDb.SysOrg.Add(sysOrg);
 
                 var sysUserOrg = new SysUserOrg();
-                sysUserOrg.Id = GuidUtil.New();
+                sysUserOrg.Id = IdWorker.Build(IdType.NewGuid);
                 sysUserOrg.OrgId = sysOrg.Id;
                 sysUserOrg.UserId = user.Id;
                 sysUserOrg.CreateTime = DateTime.Now;
@@ -206,10 +207,10 @@ namespace LocalS.Service.Api.Admin
 
 
                 var prdKind = new PrdKind();
-                prdKind.Id = GuidUtil.New();
+                prdKind.Id = IdWorker.Build(IdType.NewGuid);
                 prdKind.MerchId = merchId;
                 prdKind.Name = "我的品类";
-                prdKind.PId = GuidUtil.Empty();
+                prdKind.PId = IdWorker.Build(IdType.EmptyGuid);
                 prdKind.Depth = 0;
                 prdKind.Priority = 0;
                 prdKind.IsDelete = false;
@@ -219,8 +220,8 @@ namespace LocalS.Service.Api.Admin
 
 
                 var prdSubject = new PrdSubject();
-                prdSubject.Id = GuidUtil.New();
-                prdSubject.PId = GuidUtil.Empty();
+                prdSubject.Id = IdWorker.Build(IdType.NewGuid);
+                prdSubject.PId = IdWorker.Build(IdType.EmptyGuid);
                 prdSubject.MerchId = merchId;
                 prdSubject.Name = "我的栏目";
 

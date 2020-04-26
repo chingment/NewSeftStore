@@ -38,7 +38,7 @@ namespace LocalS.BLL.Mq.MqByRedis
 
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.EventNotify;
-            obj.Ticket = GuidUtil.New();
+            obj.Ticket = IdWorker.Build(IdType.NewGuid);
             obj.Content = content;
             this.Push(obj);
 

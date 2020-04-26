@@ -2,6 +2,7 @@
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,10 +117,10 @@ namespace LocalS.Service.Api.Admin
                 }
 
                 var sysRole = new SysRole();
-                sysRole.Id = GuidUtil.New();
+                sysRole.Id = IdWorker.Build(IdType.NewGuid);
                 sysRole.Name = rop.Name;
                 sysRole.Description = rop.Description;
-                sysRole.PId = GuidUtil.Empty();
+                sysRole.PId = IdWorker.Build(IdType.EmptyGuid);
                 sysRole.BelongSite = belongSite;
                 sysRole.Dept = 0;
                 sysRole.CreateTime = DateTime.Now;
@@ -130,7 +131,7 @@ namespace LocalS.Service.Api.Admin
                 {
                     foreach (var menuId in rop.MenuIds)
                     {
-                        CurrentDb.SysRoleMenu.Add(new SysRoleMenu { Id = GuidUtil.New(), RoleId = sysRole.Id, MenuId = menuId, Creator = operater, CreateTime = DateTime.Now });
+                        CurrentDb.SysRoleMenu.Add(new SysRoleMenu { Id = IdWorker.Build(IdType.NewGuid), RoleId = sysRole.Id, MenuId = menuId, Creator = operater, CreateTime = DateTime.Now });
                     }
                 }
 
@@ -200,7 +201,7 @@ namespace LocalS.Service.Api.Admin
                 {
                     foreach (var menuId in rop.MenuIds)
                     {
-                        CurrentDb.SysRoleMenu.Add(new SysRoleMenu { Id = GuidUtil.New(), RoleId = rop.Id, MenuId = menuId, Creator = operater, CreateTime = DateTime.Now });
+                        CurrentDb.SysRoleMenu.Add(new SysRoleMenu { Id = IdWorker.Build(IdType.NewGuid), RoleId = rop.Id, MenuId = menuId, Creator = operater, CreateTime = DateTime.Now });
                     }
                 }
 

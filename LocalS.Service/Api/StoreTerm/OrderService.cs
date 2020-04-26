@@ -54,7 +54,7 @@ namespace LocalS.Service.Api.StoreTerm
                 bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = E_ReceptionMode.Machine });
             }
 
-            var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(GuidUtil.Empty(), bizRop);
+            var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), bizRop);
 
             if (bizResult.Result == ResultType.Success)
             {
@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult result = new CustomJsonResult();
 
 
-            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(GuidUtil.Empty(), rop.OrderId, rop.Reason);
+            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.Reason);
 
             return result;
         }
@@ -188,7 +188,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             bizRop.CreateIp = rop.CreateIp;
-            return BLL.Biz.BizFactory.Order.BuildPayParams(GuidUtil.Empty(), bizRop);
+            return BLL.Biz.BizFactory.Order.BuildPayParams(IdWorker.Build(IdType.EmptyGuid), bizRop);
         }
 
     }

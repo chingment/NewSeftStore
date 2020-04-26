@@ -2,6 +2,7 @@
 using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,7 +136,7 @@ namespace LocalS.Service.Api.StoreApp
                                 if (clientCart == null)
                                 {
                                     clientCart = new ClientCart();
-                                    clientCart.Id = GuidUtil.New();
+                                    clientCart.Id = IdWorker.Build(IdType.NewGuid);
                                     clientCart.ClientUserId = clientUserId;
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;

@@ -22,7 +22,7 @@ namespace WebApiMerch
         {
             base.OnActionExecuted(actionContext);
 
-            //MqFactory.Global.PushAccessLog(GuidUtil.New(), null);
+            //MqFactory.Global.PushAccessLog(IdWorker.Build(IdType.NewGuid), null);
         }
     }
 }

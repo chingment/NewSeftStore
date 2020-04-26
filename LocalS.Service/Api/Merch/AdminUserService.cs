@@ -5,6 +5,7 @@ using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using Lumos.Session;
 using System;
 using System.Collections.Generic;
@@ -104,7 +105,7 @@ namespace LocalS.Service.Api.Merch
         public List<TreeNode> GetOrgTree(string merchId)
         {
             var sysOrgs = CurrentDb.SysOrg.Where(m => m.ReferenceId == merchId && m.BelongSite == Enumeration.BelongSite.Merch).OrderBy(m => m.Priority).ToList();
-            return GetOrgTree(GuidUtil.Empty(), sysOrgs);
+            return GetOrgTree(IdWorker.Build(IdType.EmptyGuid), sysOrgs);
         }
 
         public List<TreeNode> GetRoleTree()
@@ -158,7 +159,7 @@ namespace LocalS.Service.Api.Merch
             using (TransactionScope ts = new TransactionScope())
             {
                 var merchUser = new SysMerchUser();
-                merchUser.Id = GuidUtil.New();
+                merchUser.Id = IdWorker.Build(IdType.NewGuid);
                 merchUser.UserName = rop.UserName;
                 merchUser.FullName = rop.FullName;
                 merchUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
@@ -181,7 +182,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = merchUser.Id, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = IdWorker.Build(IdType.NewGuid), RoleId = roleId, UserId = merchUser.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }
@@ -257,7 +258,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = IdWorker.Build(IdType.NewGuid), RoleId = roleId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }

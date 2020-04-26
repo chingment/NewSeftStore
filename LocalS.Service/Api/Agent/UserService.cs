@@ -2,6 +2,7 @@
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using Lumos.Session;
 using System;
 using System.Collections.Generic;
@@ -150,7 +151,7 @@ namespace LocalS.Service.Api.Agent
                 var pAgentUser = CurrentDb.SysAgentUser.Where(m => m.Id == operater).FirstOrDefault();
 
                 var agentUser = new SysAgentUser();
-                agentUser.Id = GuidUtil.New();
+                agentUser.Id = IdWorker.Build(IdType.NewGuid);
                 agentUser.PId = pAgentUser.Id;
                 agentUser.UserName = rop.UserName;
                 agentUser.FullName = rop.FullName;

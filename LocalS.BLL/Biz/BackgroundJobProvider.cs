@@ -2,6 +2,7 @@
 using LocalS.BLL.Task;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,7 @@ namespace LocalS.BLL.Biz
             }
 
             var backgroundJob = new BackgroundJob();
-            backgroundJob.Id = GuidUtil.New();
+            backgroundJob.Id = IdWorker.Build(IdType.NewGuid);
             backgroundJob.Name = rop.Name;
             backgroundJob.AssemblyName = rop.AssemblyName;
             backgroundJob.ClassName = rop.ClassName;
@@ -115,7 +116,7 @@ namespace LocalS.BLL.Biz
         public void WriteLog(string operater, string backgroundJobId, string jobName, DateTime executionTime, decimal executionDuration, string runLog)
         {
             var backgroundJobLog = new BackgroundJobLog();
-            backgroundJobLog.Id = GuidUtil.New();
+            backgroundJobLog.Id = IdWorker.Build(IdType.NewGuid);
             backgroundJobLog.BackgroundJobId = backgroundJobId;
             backgroundJobLog.JobName = jobName;
             backgroundJobLog.ExecutionTime = executionTime;

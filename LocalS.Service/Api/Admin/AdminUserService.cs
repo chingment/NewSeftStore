@@ -2,6 +2,7 @@
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +120,7 @@ namespace LocalS.Service.Api.Admin
         public List<TreeNode> GetOrgTree()
         {
             var sysOrgs = CurrentDb.SysOrg.Where(m => m.BelongSite == Enumeration.BelongSite.Admin).OrderBy(m => m.Priority).ToList();
-            return GetOrgTree(GuidUtil.Empty(), sysOrgs);
+            return GetOrgTree(IdWorker.Build(IdType.EmptyGuid), sysOrgs);
         }
 
         public List<TreeNode> GetRoleTree()
@@ -173,7 +174,7 @@ namespace LocalS.Service.Api.Admin
             using (TransactionScope ts = new TransactionScope())
             {
                 var user = new SysAdminUser();
-                user.Id = GuidUtil.New();
+                user.Id = IdWorker.Build(IdType.NewGuid);
                 user.UserName = rop.UserName;
                 user.FullName = rop.FullName;
                 user.PasswordHash = PassWordHelper.HashPassword(rop.Password);
@@ -192,7 +193,7 @@ namespace LocalS.Service.Api.Admin
                 {
                     foreach (var orgId in rop.OrgIds)
                     {
-                        CurrentDb.SysUserOrg.Add(new SysUserOrg { Id = GuidUtil.New(), OrgId = orgId, UserId = user.Id, Creator = operater, CreateTime = DateTime.Now });
+                        CurrentDb.SysUserOrg.Add(new SysUserOrg { Id = IdWorker.Build(IdType.NewGuid), OrgId = orgId, UserId = user.Id, Creator = operater, CreateTime = DateTime.Now });
                     }
                 }
 
@@ -202,7 +203,7 @@ namespace LocalS.Service.Api.Admin
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = user.Id, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = IdWorker.Build(IdType.NewGuid), RoleId = roleId, UserId = user.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }
@@ -278,7 +279,7 @@ namespace LocalS.Service.Api.Admin
                 {
                     foreach (var orgId in rop.OrgIds)
                     {
-                        CurrentDb.SysUserOrg.Add(new SysUserOrg { Id = GuidUtil.New(), OrgId = orgId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
+                        CurrentDb.SysUserOrg.Add(new SysUserOrg { Id = IdWorker.Build(IdType.NewGuid), OrgId = orgId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
                     }
                 }
 
@@ -297,7 +298,7 @@ namespace LocalS.Service.Api.Admin
                     {
                         if (!string.IsNullOrEmpty(roleId))
                         {
-                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = GuidUtil.New(), RoleId = roleId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
+                            CurrentDb.SysUserRole.Add(new SysUserRole { Id = IdWorker.Build(IdType.NewGuid), RoleId = roleId, UserId = rop.Id, Creator = operater, CreateTime = DateTime.Now });
                         }
                     }
                 }

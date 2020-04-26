@@ -2,6 +2,7 @@
 using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -157,7 +158,7 @@ namespace LocalS.Service.Api.Admin
                 if (merchMachine == null)
                 {
                     merchMachine = new MerchMachine();
-                    merchMachine.Id = GuidUtil.New();
+                    merchMachine.Id = IdWorker.Build(IdType.NewGuid);
                     merchMachine.Name = machine.Name;
                     merchMachine.MerchId = rop.MerchId;
                     merchMachine.MachineId = rop.MachineId;
@@ -181,7 +182,7 @@ namespace LocalS.Service.Api.Admin
 
 
                 var machineBindLog = new MachineBindLog();
-                machineBindLog.Id = GuidUtil.New();
+                machineBindLog.Id = IdWorker.Build(IdType.NewGuid);
                 machineBindLog.MachineId = rop.MachineId;
                 machineBindLog.MerchId = rop.MerchId;
                 machineBindLog.StoreId = null;
@@ -219,7 +220,7 @@ namespace LocalS.Service.Api.Admin
                 }
 
                 var machineBindLog = new MachineBindLog();
-                machineBindLog.Id = GuidUtil.New();
+                machineBindLog.Id = IdWorker.Build(IdType.NewGuid);
                 machineBindLog.MachineId = rop.MachineId;
                 machineBindLog.MerchId = machine.CurUseMerchId;
                 machineBindLog.StoreId = machine.CurUseStoreId;

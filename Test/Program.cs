@@ -116,7 +116,7 @@ namespace Test
             ///IPushService pushService = new JgPushService();
 
             //pushService.Send("1104a8979234f30c8c2", "dasdsada", "das");
-            //BizFactory.Machine.SendRebootSys(GuidUtil.Empty(), AppId.MERCH, "d17df2252133478c99104180e8062230", "202004220011");
+            //BizFactory.Machine.SendRebootSys(IdWorker.Build(IdType.EmptyGuid), AppId.MERCH, "d17df2252133478c99104180e8062230", "202004220011");
 
             if ("昨天" == "明天")
             {
@@ -156,7 +156,7 @@ namespace Test
 
             //RopAppTraceLog a1 = new RopAppTraceLog();
             //string aa = a1.ToJsonString();
-            //BizFactory.Order.BuildPayParams(GuidUtil.Empty(),new LocalS.BLL.Biz.RopOrderBuildPayParams {   })
+            //BizFactory.Order.BuildPayParams(IdWorker.Build(IdType.EmptyGuid),new LocalS.BLL.Biz.RopOrderBuildPayParams {   })
 
             //XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
             //wx969a817779af7b53
@@ -302,7 +302,7 @@ namespace Test
             //rop.StoreId = "21ae9399b1804dbc9ddd3c29e8b5c670";
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "2b239e36688e4910adffe36848921015", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
-            //var result = StoreAppServiceFactory.Order.Reserve(GuidUtil.Empty(), "e170b69479c14804a38b089dac040740", rop);
+            //var result = StoreAppServiceFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), "e170b69479c14804a38b089dac040740", rop);
             //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
         }
 

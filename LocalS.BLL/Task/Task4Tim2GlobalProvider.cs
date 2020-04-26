@@ -131,12 +131,12 @@ namespace LocalS.BLL.Task
                                     }
 
                                     LogUtil.Info(string.Format("订单号：{0},查询支付结果文件:{1}", order.Id, content));
-                                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), order.PayPartner, E_OrderNotifyLogNotifyFrom.PayQuery, content);
+                                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.EmptyGuid), order.PayPartner, E_OrderNotifyLogNotifyFrom.PayQuery, content);
                                 }
                                 else
                                 {
                                     LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Id));
-                                    BizFactory.Order.Cancle(GuidUtil.Empty(), order.Id, "订单支付有效时间过期");
+                                    BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), order.Id, "订单支付有效时间过期");
                                 }
                                 #endregion
                                 LogUtil.Info(string.Format("结束执行订单查询,时间:{0}", DateTime.Now));

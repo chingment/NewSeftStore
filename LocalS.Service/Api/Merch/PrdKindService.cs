@@ -3,6 +3,7 @@ using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +118,7 @@ namespace LocalS.Service.Api.Merch
                 }
 
                 var productKind = new PrdKind();
-                productKind.Id = GuidUtil.New();
+                productKind.Id = IdWorker.Build(IdType.NewGuid);
                 productKind.PId = rop.PId;
                 productKind.Name = rop.Name;
                 productKind.IconImgUrl = rop.IconImgUrl;

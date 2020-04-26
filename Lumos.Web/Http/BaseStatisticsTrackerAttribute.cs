@@ -1,4 +1,5 @@
-﻿using System.Web.Http.Controllers;
+﻿using System;
+using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
 namespace Lumos.Web.Http
@@ -11,7 +12,7 @@ namespace Lumos.Web.Http
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             actionContext.Request.Headers.Add("CurrentUserId", this.CurrentUserId);
-            actionContext.Request.Headers.Add("RequestGuid", GuidUtil.New());
+            actionContext.Request.Headers.Add("RequestGuid", Guid.NewGuid().ToString().Replace("-", ""));
             MonitorLog.OnActionExecuting(actionContext);
         }
 

@@ -2,6 +2,7 @@
 using log4net;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
@@ -101,12 +102,12 @@ namespace LocalS.BLL.Task
                 }
                 else
                 {
-                    BizFactory.BackgroundJob.WriteLog(GuidUtil.New(), jobInfo.Id, jobInfo.Name, DateTime.Now, 0, jobInfo.AssemblyName + jobInfo.ClassName + "无效，无法启动该任务");
+                    BizFactory.BackgroundJob.WriteLog(IdWorker.Build(IdType.NewGuid), jobInfo.Id, jobInfo.Name, DateTime.Now, 0, jobInfo.AssemblyName + jobInfo.ClassName + "无效，无法启动该任务");
                 }
             }
             else
             {
-                BizFactory.BackgroundJob.WriteLog(GuidUtil.New(), jobInfo.Id, jobInfo.Name, DateTime.Now, 0, jobInfo.CronExpression + "不是正确的Cron表达式,无法启动该任务");
+                BizFactory.BackgroundJob.WriteLog(IdWorker.Build(IdType.NewGuid), jobInfo.Id, jobInfo.Name, DateTime.Now, 0, jobInfo.CronExpression + "不是正确的Cron表达式,无法启动该任务");
             }
         }
 
@@ -156,14 +157,14 @@ namespace LocalS.BLL.Task
                             break;
                         case E_BackgroundJobStatus.Starting:
                             ScheduleJob(scheduler, job);
-                            BizFactory.BackgroundJob.SetStatus(GuidUtil.New(), job.Id, E_BackgroundJobStatus.Runing);
+                            BizFactory.BackgroundJob.SetStatus(IdWorker.Build(IdType.NewGuid), job.Id, E_BackgroundJobStatus.Runing);
                             break;
                         case E_BackgroundJobStatus.Runing:
                             ScheduleJob(scheduler, job);
                             break;
                         case E_BackgroundJobStatus.Stoping:
                             DeleteJob(scheduler, jobKey);
-                            BizFactory.BackgroundJob.SetStatus(GuidUtil.New(), job.Id, E_BackgroundJobStatus.Stoped);
+                            BizFactory.BackgroundJob.SetStatus(IdWorker.Build(IdType.NewGuid), job.Id, E_BackgroundJobStatus.Stoped);
                             break;
                     }
                 }

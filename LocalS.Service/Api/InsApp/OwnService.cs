@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,10 +40,10 @@ namespace LocalS.Service.Api.InsApp
             if (agentUser == null)
             {
                 agentUser = new SysAgentUser();
-                agentUser.Id = GuidUtil.New();
-                agentUser.UserName = GuidUtil.New();
+                agentUser.Id = IdWorker.Build(IdType.NewGuid);
+                agentUser.UserName = IdWorker.Build(IdType.NewGuid);
                 agentUser.PasswordHash = PassWordHelper.HashPassword("Caskujn");
-                agentUser.SecurityStamp = GuidUtil.New();
+                agentUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
                 agentUser.RegisterTime = DateTime.Now;
                 agentUser.IsDisable = false;
                 agentUser.BelongType = Enumeration.BelongType.Agent;

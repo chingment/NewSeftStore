@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace LocalS.Service.Api.StoreApp
             if (l_userDeliveryAddress == null)
             {
                 l_userDeliveryAddress = new ClientDeliveryAddress();
-                l_userDeliveryAddress.Id = GuidUtil.New();
+                l_userDeliveryAddress.Id = IdWorker.Build(IdType.NewGuid);
                 l_userDeliveryAddress.ClientUserId = clientUserId;
                 l_userDeliveryAddress.Consignee = rop.Consignee;
                 l_userDeliveryAddress.PhoneNumber = rop.PhoneNumber;

@@ -2,6 +2,7 @@
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +116,7 @@ namespace LocalS.Service.Api.Admin
                 }
 
                 var sysMenu = new SysMenu();
-                sysMenu.Id = GuidUtil.New();
+                sysMenu.Id = IdWorker.Build(IdType.NewGuid);
                 sysMenu.Name = rop.Name;
                 sysMenu.Title = rop.Title;
                 sysMenu.Icon = rop.Icon;

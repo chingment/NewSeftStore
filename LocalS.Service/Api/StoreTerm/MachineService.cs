@@ -33,12 +33,12 @@ namespace LocalS.Service.Api.StoreTerm
             if (machine == null)
             {
                 machine = new Machine();
-                machine.Id = RedisSnUtil.BuildMachineId();
+                machine.Id = IdWorker.Build(IdType.MachineId);
                 machine.Name = "贩卖X1";//默认名称
                 machine.JPushRegId = rop.JPushRegId;
                 machine.DeviceId = rop.DeviceId;
-                machine.ImeiId = rop.ImeiId == null ? GuidUtil.New() : rop.ImeiId;
-                machine.MacAddress = rop.MacAddress == null ? GuidUtil.New() : rop.MacAddress;
+                machine.ImeiId = rop.ImeiId == null ? IdWorker.Build(IdType.NewGuid) : rop.ImeiId;
+                machine.MacAddress = rop.MacAddress == null ? IdWorker.Build(IdType.NewGuid) : rop.MacAddress;
                 machine.MainImgUrl = "http://file.17fanju.com/Upload/machine1.jpg";
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;
@@ -46,7 +46,7 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.KindIsHidden = false;
                 machine.KindRowCellSize = 3;
                 machine.CreateTime = DateTime.Now;
-                machine.Creator = GuidUtil.Empty();
+                machine.Creator = IdWorker.Build(IdType.EmptyGuid);
                 CurrentDb.Machine.Add(machine);
                 CurrentDb.SaveChanges();
             }
@@ -57,7 +57,7 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.AppVersionName = rop.AppVersionName;
                 machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
                 machine.MendTime = DateTime.Now;
-                machine.Mender = GuidUtil.Empty();
+                machine.Mender = IdWorker.Build(IdType.EmptyGuid);
                 CurrentDb.SaveChanges();
             }
 
@@ -140,7 +140,7 @@ namespace LocalS.Service.Api.StoreTerm
 
 
             var prdKindModelByAll = new ProductKindModel();
-            prdKindModelByAll.Id = GuidUtil.Empty();
+            prdKindModelByAll.Id = IdWorker.Build(IdType.EmptyGuid);
             prdKindModelByAll.Name = "全部";
             prdKindModelByAll.Childs = sellChannelStocks.Select(m => m.PrdProductSkuId).Distinct().ToList();
             productKindModels.Add(prdKindModelByAll);
@@ -200,7 +200,7 @@ namespace LocalS.Service.Api.StoreTerm
                     foreach (var pa in rop.appActions)
                     {
                         var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
                         appTraceLog.AppTraceType = E_AppTraceType.Action;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
@@ -220,7 +220,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.AppActionType = pa.action_type;
                         appTraceLog.AppActionDesc = pa.action_desc;
                         appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = GuidUtil.Empty();
+                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
 
                         CurrentDb.AppTraceLog.Add(appTraceLog);
                         CurrentDb.SaveChanges();
@@ -229,7 +229,7 @@ namespace LocalS.Service.Api.StoreTerm
                     foreach (var pa in rop.pages)
                     {
                         var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
                         appTraceLog.AppTraceType = E_AppTraceType.Page;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
@@ -251,7 +251,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.PageEndTime = pa.page_end_time;
 
                         appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = GuidUtil.Empty();
+                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
 
                         CurrentDb.AppTraceLog.Add(appTraceLog);
                         CurrentDb.SaveChanges();
@@ -260,7 +260,7 @@ namespace LocalS.Service.Api.StoreTerm
                     foreach (var ev in rop.events)
                     {
                         var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
                         appTraceLog.AppTraceType = E_AppTraceType.Event;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
@@ -281,7 +281,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.EventActionTime = ev.action_time;
 
                         appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = GuidUtil.Empty();
+                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
 
                         CurrentDb.AppTraceLog.Add(appTraceLog);
                         CurrentDb.SaveChanges();
@@ -290,7 +290,7 @@ namespace LocalS.Service.Api.StoreTerm
                     foreach (var ev in rop.exceptionInfos)
                     {
                         var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = GuidUtil.New();
+                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
                         appTraceLog.AppTraceType = E_AppTraceType.Exception;
                         appTraceLog.AppId = rop.device.appinfo.appId;
                         appTraceLog.AppVersion = rop.device.appinfo.appVersion;
@@ -311,7 +311,7 @@ namespace LocalS.Service.Api.StoreTerm
                         appTraceLog.ExceptionPhoneModel = ev.phoneModel;
 
                         appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = GuidUtil.Empty();
+                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
 
                         CurrentDb.AppTraceLog.Add(appTraceLog);
                         CurrentDb.SaveChanges();
@@ -422,7 +422,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                             }
                             var orderPickupLog = new OrderPickupLog();
-                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = orderSubChildUnique.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                             orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
@@ -450,7 +450,7 @@ namespace LocalS.Service.Api.StoreTerm
                             }
 
                             var orderPickupLog = new OrderPickupLog();
-                            orderPickupLog.Id = GuidUtil.New();
+                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = orderSubChildUnique.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                             orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;

@@ -2,6 +2,7 @@
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +115,7 @@ namespace LocalS.Service.Api.Merch
                 }
 
                 var prdSubject = new PrdSubject();
-                prdSubject.Id = GuidUtil.New();
+                prdSubject.Id = IdWorker.Build(IdType.NewGuid);
                 prdSubject.PId = rop.PId;
                 prdSubject.Name = rop.Name;
                 prdSubject.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();

@@ -10,6 +10,7 @@ using LocalS.Service.Api.StoreApp;
 using LocalS.Entity;
 using MyWeiXinSdk;
 using LocalS.BLL.Mq;
+using Lumos.Redis;
 
 namespace WebApiStoreApp.Controllers
 {
@@ -86,7 +87,7 @@ namespace WebApiStoreApp.Controllers
 
                 if (!string.IsNullOrEmpty(content))
                 {
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Wx, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_OrderPayPartner.Wx, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -117,7 +118,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Zfb, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_OrderPayPartner.Zfb, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -147,7 +148,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Tg, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_OrderPayPartner.Tg, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -168,7 +169,7 @@ namespace WebApiStoreApp.Controllers
             LogUtil.Info("接收支付结果:" + content);
             if (!string.IsNullOrEmpty(content))
             {
-                MqFactory.Global.PushPayResultNotify(GuidUtil.New(), E_OrderPayPartner.Xrt, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
+                MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_OrderPayPartner.Xrt, E_OrderNotifyLogNotifyFrom.NotifyUrl, content);
             }
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
         }

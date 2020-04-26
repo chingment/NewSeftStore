@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using MyPushSdk;
 using System;
 using System.Collections.Generic;
@@ -128,7 +129,7 @@ namespace LocalS.BLL.Biz
                     if (sellChannelStock == null)
                     {
                         sellChannelStock = new SellChannelStock();
-                        sellChannelStock.Id = GuidUtil.New();
+                        sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
                         sellChannelStock.MerchId = merchId;
                         sellChannelStock.StoreId = storeId;
                         sellChannelStock.SellChannelRefType = E_SellChannelRefType.Machine;

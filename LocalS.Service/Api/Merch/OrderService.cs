@@ -3,6 +3,7 @@ using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -301,7 +302,7 @@ namespace LocalS.Service.Api.Merch
                         }
 
                         var orderPickupLog = new OrderPickupLog();
-                        orderPickupLog.Id = GuidUtil.New();
+                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         orderPickupLog.OrderId = orderSubChildUnique.OrderId;
                         orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                         orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
@@ -329,7 +330,7 @@ namespace LocalS.Service.Api.Merch
                         }
 
                         var orderPickupLog = new OrderPickupLog();
-                        orderPickupLog.Id = GuidUtil.New();
+                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         orderPickupLog.OrderId = orderSubChildUnique.OrderId;
                         orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                         orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;

@@ -4,13 +4,15 @@ using System.Linq;
 
 namespace Lumos.Redis
 {
-    public enum RedisSnType
+    public enum IdType
     {
         Unknow = 0,
-        Order = 1,
-        OrderPickCode = 2
+        OrderId = 1,
+        MachineId = 2,
+        NewGuid = 3,
+        EmptyGuid = 4
     }
-    public class RedisSnUtil
+    public class IdWorker
     {
 
         private static readonly object lock_GetIncrNum = new object();
@@ -37,43 +39,39 @@ namespace Lumos.Redis
 
         }
 
-        public static string Build(RedisSnType snType)
+        public static string Build(IdType snType)
         {
+            string id = "";
 
             string prefix = "";
-
+            string part1 = "";
+            string part2 = "";
+            ThreadSafeRandom ran = new ThreadSafeRandom();
             switch (snType)
             {
-                case RedisSnType.Order:
+                case IdType.OrderId:
                     prefix = "61";
+                    string part0 = ran.Next(100, 999).ToString();
+                    part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    part2 = GetIncrNum().ToString().PadLeft(5, '0');
+                    id = prefix + part2 + part1 + part0;
                     break;
-                case RedisSnType.OrderPickCode:
+                case IdType.MachineId:
+                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_MACHINEID, 1);
+                    part1 = DateTime.Now.ToString("yyyyMMdd");
+                    part2 = incr.ToString().PadLeft(4, '0');
+                    id = prefix + part1 + part2;
                     break;
-
+                case IdType.NewGuid:
+                    id = Guid.NewGuid().ToString().Replace("-", ""); ;
+                    break;
+                case IdType.EmptyGuid:
+                    id = Guid.Empty.ToString().Replace("-", "");
+                    break;
             }
 
-            ThreadSafeRandom ran = new ThreadSafeRandom();
-
-
-            string part0 = ran.Next(100, 999).ToString();
-            string part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
-            string part2 = GetIncrNum().ToString().PadLeft(5, '0');
-
-            string sn = prefix + part2 + part1 + part0;
-            return sn;
+            return id;
         }
-
-        public static string BuildMachineId()
-        {
-            string prefix = "";
-            ThreadSafeRandom ran = new ThreadSafeRandom();
-            var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_MACHINEID, 1);
-            string part1 = DateTime.Now.ToString("yyyyMMdd");
-            string part2 = incr.ToString().PadLeft(4, '0');
-            string sn = prefix + part1 + part2;
-            return sn;
-        }
-
 
         public static string BuildPickupCode()
         {

@@ -4,6 +4,7 @@ using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
+using Lumos.Redis;
 using NPinyin;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ namespace LocalS.Service.Api.Merch
         public List<TreeNode> GetKindTree(string merchId)
         {
             var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
-            return GetKindTree(GuidUtil.Empty(), prdKinds);
+            return GetKindTree(IdWorker.Build(IdType.EmptyGuid), prdKinds);
         }
 
         private List<TreeNode> GetSubjectTree(string id, List<PrdSubject> productSubjects)
@@ -78,7 +79,7 @@ namespace LocalS.Service.Api.Merch
         public List<TreeNode> GetSubjectTree(string merchId)
         {
             var prdSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
-            return GetSubjectTree(GuidUtil.Empty(), prdSubjects);
+            return GetSubjectTree(IdWorker.Build(IdType.EmptyGuid), prdSubjects);
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupPrdProductGetList rup)
@@ -205,7 +206,7 @@ namespace LocalS.Service.Api.Merch
 
 
                 var prdProduct = new PrdProduct();
-                prdProduct.Id = GuidUtil.New();
+                prdProduct.Id = IdWorker.Build(IdType.NewGuid);
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name;
                 //prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
@@ -231,7 +232,7 @@ namespace LocalS.Service.Api.Merch
                     }
 
                     var prdProductSku = new PrdProductSku();
-                    prdProductSku.Id = GuidUtil.New();
+                    prdProductSku.Id = IdWorker.Build(IdType.NewGuid);
                     prdProductSku.MerchId = prdProduct.MerchId;
                     prdProductSku.PrdProductId = prdProduct.Id;
                     prdProductSku.BarCode = sku.BarCode;
@@ -255,7 +256,7 @@ namespace LocalS.Service.Api.Merch
                     foreach (var kindId in rop.KindIds)
                     {
                         var productSkuKind = new PrdProductKind();
-                        productSkuKind.Id = GuidUtil.New();
+                        productSkuKind.Id = IdWorker.Build(IdType.NewGuid);
                         productSkuKind.PrdKindId = kindId;
                         productSkuKind.PrdProductId = prdProduct.Id;
                         productSkuKind.Creator = operater;
@@ -271,7 +272,7 @@ namespace LocalS.Service.Api.Merch
                     foreach (var subjectId in rop.SubjectIds)
                     {
                         var productSkuSubject = new PrdProductSubject();
-                        productSkuSubject.Id = GuidUtil.New();
+                        productSkuSubject.Id = IdWorker.Build(IdType.NewGuid);
                         productSkuSubject.PrdSubjectId = subjectId;
                         productSkuSubject.PrdProductId = prdProduct.Id;
                         productSkuSubject.Creator = operater;
@@ -408,7 +409,7 @@ namespace LocalS.Service.Api.Merch
                     foreach (var kindId in rop.KindIds)
                     {
                         var prdProductKind = new PrdProductKind();
-                        prdProductKind.Id = GuidUtil.New();
+                        prdProductKind.Id = IdWorker.Build(IdType.NewGuid);
                         prdProductKind.PrdKindId = kindId;
                         prdProductKind.PrdProductId = prdProduct.Id;
                         prdProductKind.Creator = operater;
@@ -430,7 +431,7 @@ namespace LocalS.Service.Api.Merch
                     foreach (var subjectId in rop.SubjectIds)
                     {
                         var prdProductSubject = new PrdProductSubject();
-                        prdProductSubject.Id = GuidUtil.New();
+                        prdProductSubject.Id = IdWorker.Build(IdType.NewGuid);
                         prdProductSubject.PrdSubjectId = subjectId;
                         prdProductSubject.PrdProductId = prdProduct.Id;
                         prdProductSubject.Creator = operater;

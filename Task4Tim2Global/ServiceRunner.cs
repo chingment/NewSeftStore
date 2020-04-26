@@ -1,6 +1,7 @@
 ﻿using Common.Logging;
 using LocalS.BLL.Task;
 using Lumos;
+using Lumos.Redis;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -32,7 +33,7 @@ namespace Task4Tim2Global
         {
 
             Type mainJobType = typeof(ManagerJob);
-            string mainJobId = GuidUtil.Empty();
+            string mainJobId = IdWorker.Build(IdType.EmptyGuid);
             string mainJobGroup = string.Format("{0}Group", mainJobId);
 
             JobKey jobKey = new JobKey(mainJobId, mainJobGroup);

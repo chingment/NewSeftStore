@@ -3,6 +3,7 @@ using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -176,7 +177,7 @@ namespace LocalS.Service.Api.Merch
                 LogUtil.Info("adSpace.Id)" + adSpace.Id);
                 var adSpaceContent = new AdContent();
 
-                adSpaceContent.Id = GuidUtil.New();
+                adSpaceContent.Id = IdWorker.Build(IdType.NewGuid);
                 adSpaceContent.AdSpaceId = rop.AdSpaceId;
                 adSpaceContent.MerchId = merchId;
                 adSpaceContent.Priority = 0;
@@ -192,7 +193,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     LogUtil.Info("belongId.Id)" + belongId);
                     var adSpaceContentBelong = new AdContentBelong();
-                    adSpaceContentBelong.Id = GuidUtil.New();
+                    adSpaceContentBelong.Id = IdWorker.Build(IdType.NewGuid);
                     adSpaceContentBelong.MerchId = adSpaceContent.MerchId;
                     adSpaceContentBelong.AdSpaceId = adSpaceContent.AdSpaceId;
                     adSpaceContentBelong.AdContentId = adSpaceContent.Id;

@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL.Biz;
 using Lumos;
+using Lumos.Redis;
 using Quartz;
 using System;
 
@@ -19,7 +20,7 @@ namespace LocalS.BLL.Task
 
         public void JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException)
         {
-            string BackgroundJobId = GuidUtil.New();
+            string BackgroundJobId = IdWorker.Build(IdType.NewGuid);
 
 
             BackgroundJobId = context.JobDetail.Key.Name;
@@ -59,7 +60,7 @@ namespace LocalS.BLL.Task
                 LogContent = LogContent + " EX:" + jobException.ToString();
             }
 
-            BizFactory.BackgroundJob.UpdateInfo(GuidUtil.New(), BackgroundJobId, JobName, FireTimeUtc, NextFireTimeUtc, TotalSeconds, LogContent);
+            BizFactory.BackgroundJob.UpdateInfo(IdWorker.Build(IdType.NewGuid), BackgroundJobId, JobName, FireTimeUtc, NextFireTimeUtc, TotalSeconds, LogContent);
         }
 
         public string Name

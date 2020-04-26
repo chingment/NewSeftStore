@@ -280,7 +280,7 @@ namespace LocalS.BLL.Biz
                     var buildOrderSubs = BuildOrderSubs(rop.ProductSkus, bizProductSkus);
 
                     var order = new Order();
-                    order.Id = RedisSnUtil.Build(RedisSnType.Order);
+                    order.Id = IdWorker.Build(IdType.OrderId);
                     order.MerchId = store.MerchId;
                     order.StoreId = rop.StoreId;
                     order.StoreName = store.Name;
@@ -365,7 +365,7 @@ namespace LocalS.BLL.Biz
                         orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
                         orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
                         orderSub.Quantity = buildOrderSub.Quantity;
-                        orderSub.PickupCode = RedisSnUtil.BuildPickupCode();
+                        orderSub.PickupCode = IdWorker.BuildPickupCode();
                         if (orderSub.PickupCode == null)
                         {
                             return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
@@ -516,7 +516,7 @@ namespace LocalS.BLL.Biz
                             if (reservedQuantity != needReserveQuantity)
                             {
                                 var buildOrderSubUnique = new BuildOrderSub.Unique();
-                                buildOrderSubUnique.Id = GuidUtil.New();
+                                buildOrderSubUnique.Id = IdWorker.Build(IdType.NewGuid);
                                 buildOrderSubUnique.SellChannelRefType = item.RefType;
                                 buildOrderSubUnique.SellChannelRefId = item.RefId;
                                 buildOrderSubUnique.ReceptionMode = receptionMode;
@@ -755,7 +755,7 @@ namespace LocalS.BLL.Biz
 
 
                 var mod_OrderNotifyLog = new OrderNotifyLog();
-                mod_OrderNotifyLog.Id = GuidUtil.New();
+                mod_OrderNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
                 mod_OrderNotifyLog.OrderId = payResult.OrderId;
                 mod_OrderNotifyLog.PayPartner = payPartner;
                 mod_OrderNotifyLog.PayPartnerOrderId = payResult.PayPartnerOrderId;
@@ -823,7 +823,7 @@ namespace LocalS.BLL.Biz
                         orderSub.PayWay = payWay;
                         orderSub.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderSub.PayedTime = DateTime.Now;
-                        orderSub.Mender = GuidUtil.Empty();
+                        orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
                         orderSub.MendTime = DateTime.Now;
                     }
 
@@ -833,7 +833,7 @@ namespace LocalS.BLL.Biz
                         orderSubChild.PayWay = payWay;
                         orderSubChild.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderSubChild.PayedTime = DateTime.Now;
-                        orderSubChild.Mender = GuidUtil.Empty();
+                        orderSubChild.Mender = IdWorker.Build(IdType.EmptyGuid);
                         orderSubChild.MendTime = DateTime.Now;
                     }
 
@@ -845,7 +845,7 @@ namespace LocalS.BLL.Biz
                         oderSubChildUnique.PayStatus = E_OrderPayStatus.PaySuccess;
                         oderSubChildUnique.PayedTime = DateTime.Now;
                         oderSubChildUnique.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                        oderSubChildUnique.Mender = GuidUtil.Empty();
+                        oderSubChildUnique.Mender = IdWorker.Build(IdType.EmptyGuid);
                         oderSubChildUnique.MendTime = DateTime.Now;
                     }
 
@@ -925,7 +925,7 @@ namespace LocalS.BLL.Biz
                 if (order.Status != E_OrderStatus.Payed && order.Status != E_OrderStatus.Completed)
                 {
                     order.Status = E_OrderStatus.Canceled;
-                    order.Mender = GuidUtil.Empty();
+                    order.Mender = IdWorker.Build(IdType.EmptyGuid);
                     order.MendTime = DateTime.Now;
                     order.CanceledTime = DateTime.Now;
                     order.CancelReason = cancelReason;
@@ -935,7 +935,7 @@ namespace LocalS.BLL.Biz
                     foreach (var item in orderSubChildUniques)
                     {
                         item.PickupStatus = E_OrderPickupStatus.Canceled;
-                        item.Mender = GuidUtil.Empty();
+                        item.Mender = IdWorker.Build(IdType.EmptyGuid);
                         item.MendTime = DateTime.Now;
                     }
 

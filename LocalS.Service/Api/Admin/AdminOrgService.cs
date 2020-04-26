@@ -2,6 +2,7 @@
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,12 +100,12 @@ namespace LocalS.Service.Api.Admin
                 }
 
                 var sysOrg = new SysOrg();
-                sysOrg.Id = GuidUtil.New();
+                sysOrg.Id = IdWorker.Build(IdType.NewGuid);
                 sysOrg.Name = rop.Name;
                 sysOrg.Description = rop.Description;
                 sysOrg.PId = rop.PId;
                 sysOrg.BelongSite = Enumeration.BelongSite.Admin;
-                sysOrg.ReferenceId = GuidUtil.Empty();
+                sysOrg.ReferenceId = IdWorker.Build(IdType.EmptyGuid);
                 sysOrg.Depth = 0;
                 sysOrg.CreateTime = DateTime.Now;
                 sysOrg.Creator = operater;
