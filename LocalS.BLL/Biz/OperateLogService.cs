@@ -591,19 +591,5 @@ namespace LocalS.BLL.Biz
             }
         }
 
-
-
-        //public static string GetStockChangeTpyeName(E_SellChannelStockLogChangeTpye type)
-        //{
-        //    string name = "";
-
-        //    switch (type)
-        //    {
-        //        case E_SellChannelStockLogChangeTpye.
-        //    }
-
-        //    return name;
-
-        //}
     }
 }
