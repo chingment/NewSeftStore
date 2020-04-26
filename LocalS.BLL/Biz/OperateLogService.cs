@@ -40,12 +40,12 @@ namespace LocalS.BLL.Biz
                 case EventCode.MachineCabinetSlotSave:
                 case EventCode.MachineCabinetSlotRemove:
                 case EventCode.MachineCabinetSlotAdjustStockQuantity:
-                case EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete:
-                case EventCode.OrderPickupOneManMadeSignNotTakeByComplete:
-                case EventCode.OrderPickupOneSysMadeSignTake:
-                case EventCode.OrderPickupOneManMadeSignTakeByNotComplete:
-                case EventCode.OrderCancle:
-                case EventCode.OrderReserveSuccess:
+                case EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete:
+                case EventCode.StockOrderPickupOneManMadeSignNotTakeByComplete:
+                case EventCode.StockOrderPickupOneSysMadeSignTake:
+                case EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete:
+                case EventCode.StockOrderCancle:
+                case EventCode.StockOrderReserveSuccess:
                     var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
                     EventHandleByStockChangeLog(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
                     break;

@@ -464,6 +464,8 @@ namespace LocalS.BLL.Biz
 
                     Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
 
+                    MqFactory.Global.PushEventNotify(operater, rop.AppId, order.MerchId, order.StoreId, "", EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", order.Id));
+
                     ret.OrderId = order.Id;
                     ret.ChargeAmount = order.ChargeAmount.ToF2Price();
 
@@ -867,6 +869,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
                 Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
+                MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", order.Id));
             }
@@ -954,6 +957,8 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
+
+                    MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", order.Id));
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }

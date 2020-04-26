@@ -8,9 +8,9 @@ namespace LocalS.Entity
 {
     public static class EventCode
     {
-        [EventCodeRemark("I", "登录")]
+        [EventCodeRemark("I", "系统登录")]
         public const string Login = "Login";
-        [EventCodeRemark("I", "退出")]
+        [EventCodeRemark("I", "系统退出")]
         public const string Logout = "Logout";
         [EventCodeRemark("I", "心跳包")]
         public const string HeartbeatBag = "HeartbeatBag";
@@ -18,15 +18,15 @@ namespace LocalS.Entity
         public const string ScanSlots = "ScanSlots";
         [EventCodeRemark("I", "机器商品取货")]
         public const string Pickup = "Pickup";
-        [EventCodeRemark("I", "机器货道商品初始化")]
+        [EventCodeRemark("I", "库存改变-机器货道商品初始化")]
         public const string MachineCabinetSlotInit = "MachineCabinetSlotInit";
-        [EventCodeRemark("I", "机器货道商品替换")]
+        [EventCodeRemark("I", "库存改变-机器货道商品替换")]
         public const string MachineCabinetSlotReplace = "MachineCabinetSlotReplace";
-        [EventCodeRemark("I", "机器货道商品保存")]
+        [EventCodeRemark("I", "库存改变-机器货道商品保存")]
         public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
-        [EventCodeRemark("I", "机器货道商品移除")]
+        [EventCodeRemark("I", "库存改变-机器货道商品移除")]
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
-        [EventCodeRemark("I", "机器货道商品调整库存数量")]
+        [EventCodeRemark("I", "库存改变-机器货道商品调整库存数量")]
         public const string MachineCabinetSlotAdjustStockQuantity = "MachineCabinetSlotAdjustStockQuantity";
         [EventCodeRemark("I", "机器货道商品库存查看")]
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
@@ -36,14 +36,21 @@ namespace LocalS.Entity
         public const string MachineAdjustStockSalePrice = "MachineAdjustStockSalePrice";
         [EventCodeRemark("I", "机器处理运行异常信息")]
         public const string MachineHandleRunEx = "MachineHandleRunEx";
-        [EventCodeRemark("I", "订单商品取货未完成人工标记未取状态")]
-        public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
-        [EventCodeRemark("I", "订单商品取货已完成人工标记未取状态")]
-        public const string OrderPickupOneManMadeSignNotTakeByComplete = "OrderPickupOneManMadeSignNotTakeByComplete";
-        [EventCodeRemark("I", "订单商品取货系统标记已取")]
-        public const string OrderPickupOneSysMadeSignTake = "OrderPickupOneSysMadeSignTake";
-        [EventCodeRemark("I", "订单商品取货未取货完成系统标记已取")]
-        public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
+        [EventCodeRemark("I", "库存改变-订单商品取货未完成人工标记未取状态")]
+        public const string StockOrderPickupOneManMadeSignNotTakeByNotComplete = "StockOrderPickupOneManMadeSignNotTakeByNotComplete";
+        [EventCodeRemark("I", "库存改变-订单商品取货已完成人工标记未取状态")]
+        public const string StockOrderPickupOneManMadeSignNotTakeByComplete = "StockOrderPickupOneManMadeSignNotTakeByComplete";
+        [EventCodeRemark("I", "库存改变-订单商品取货系统标记已取")]
+        public const string StockOrderPickupOneSysMadeSignTake = "StockOrderPickupOneSysMadeSignTake";
+        [EventCodeRemark("I", "库存改变-订单商品取货未取货完成系统标记已取")]
+        public const string StockOrderPickupOneManMadeSignTakeByNotComplete = "StockOrderPickupOneManMadeSignTakeByNotComplete";
+        [EventCodeRemark("I", "库存改变-订单取消")]
+        public const string StockOrderCancle = "StockOrderCancle";
+        [EventCodeRemark("I", "库存改变-订单支付成功")]
+        public const string StockOrderPaySuccess = "StockOrderPaySuccess";
+        [EventCodeRemark("I", "库存改变-订单预定成功")]
+        public const string StockOrderReserveSuccess = "StockOrderReserveSuccess";
+
         [EventCodeRemark("I", "订单取消")]
         public const string OrderCancle = "OrderCancle";
         [EventCodeRemark("I", "订单支付成功")]
