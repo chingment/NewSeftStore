@@ -87,21 +87,21 @@ namespace LocalS.Entity
         [EventCodeRemark("A", "店铺移除机器")]
         public const string StoreRemoveMachine = "StoreRemoveMachine";
         [EventCodeRemark("B", "发送更新机器库存信息命令")]
-        public const string MCmdUpdateProductSkuStock = "mcmd:update:ProductSkuStock";
+        public const string MCmdUpdateProductSkuStock = "MCmdUpdateProductSkuStock";
         [EventCodeRemark("C", "发送更新机器首页广告")]
-        public const string MCmdUpdateHomeBanners = "mcmd:update:HomeBanners";
+        public const string MCmdUpdateHomeBanners = "MCmdUpdateHomeBanners";
         [EventCodeRemark("C", "发送更新机器LOGO")]
-        public const string MCmdUpdateHomeLogo = "mcmd:update:HomeLogo";
+        public const string MCmdUpdateHomeLogo = "MCmdUpdateHomeLogo";
         [EventCodeRemark("A", "发送重启系统命令")]
-        public const string MCmdSysReboot = "mcmd:sys:Reboot";
+        public const string MCmdSysReboot = "MCmdSysReboot";
         [EventCodeRemark("A", "发送关闭系统命令")]
-        public const string MCmdSysShutdown = "mcmd:sys:Shutdown";
+        public const string MCmdSysShutdown = "MCmdSysShutdown";
         [EventCodeRemark("A", "发送设置系统状态命令")]
-        public const string MCmdSysSetStatus = "mcmd:sys:SetStatus";
+        public const string MCmdSysSetStatus = "MCmdSysSetStatus";
         [EventCodeRemark("A", "发送打开DSX01设备取货门命令")]
-        public const string MCmdDsx01OpenPickupDoor = "mcmd:dsx01:OpenPickupDoor";
+        public const string MCmdDsx01OpenPickupDoor = "MCmdDsx01OpenPickupDoor";
         [EventCodeRemark("C", "发送支付成功命令")]
-        public const string MCmdPaySuccess = "mcmd:pay:Success";
+        public const string MCmdPaySuccess = "MCmdPaySuccess";
 
         public static string GetEventName(string eventCode)
         {

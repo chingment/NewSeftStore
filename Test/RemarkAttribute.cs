@@ -65,7 +65,7 @@ namespace System
         public static string GetCnName(this String em)
         {
 
-
+         
             Type type2 = em.GetType();
          
             var atts=typeof(TestA).GetField("Login").GetCustomAttributes(typeof(RemarkAttribute), false);
