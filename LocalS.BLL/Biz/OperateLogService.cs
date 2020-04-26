@@ -313,7 +313,7 @@ namespace LocalS.BLL.Biz
                 machine.LastRequestTime = DateTime.Now;
 
                 StringBuilder remark = new StringBuilder("");
-
+                string eventLevel = "A";
                 string productSkuName = "";
                 var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, model.ProductSkuId);
                 if (bizProduct == null)
@@ -332,24 +332,31 @@ namespace LocalS.BLL.Biz
 
                 if (model.Status == E_OrderPickupStatus.SendPickupCmd)
                 {
+                    eventLevel = "A";
                     remark.Append("发送命令");
                 }
                 else if (model.Status == E_OrderPickupStatus.Exception)
                 {
+                    eventLevel = "A";
                     remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
                 }
                 else
                 {
+                    eventLevel = "D";
                     remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
 
                     if (model.IsPickupComplete)
                     {
+                        eventLevel = "A";
                         remark.Append(string.Format("，取货完成，用时：{0}", model.PickupUseTime));
                     }
                 }
 
-
-                if (!model.IsTest)
+                if (model.IsTest)
+                {
+                    eventLevel = "D";//测试全改为D
+                }
+                else
                 {
                     var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
                     var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == machine.Id && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
@@ -498,7 +505,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserId = operater;
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
-                merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
+                merchOperateLog.EventLevel = eventLevel;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                 merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId, productSkuName, remark.ToString());
                 merchOperateLog.Creator = operater;

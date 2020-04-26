@@ -8,100 +8,99 @@ namespace LocalS.Entity
 {
     public static class EventCode
     {
-        [EventCodeRemark("I", "系统登录")]
+        [EventCodeRemark("A", "系统登录")]
         public const string Login = "Login";
-        [EventCodeRemark("I", "系统退出")]
+        [EventCodeRemark("A", "系统退出")]
         public const string Logout = "Logout";
-        [EventCodeRemark("I", "心跳包")]
+        [EventCodeRemark("A", "心跳包")]
         public const string HeartbeatBag = "HeartbeatBag";
-        [EventCodeRemark("I", "机器扫描货道")]
+        [EventCodeRemark("A", "机器扫描货道")]
         public const string ScanSlots = "ScanSlots";
-        [EventCodeRemark("I", "机器商品取货")]
+        [EventCodeRemark("A", "机器商品取货")]
         public const string Pickup = "Pickup";
-        [EventCodeRemark("I", "库存改变-机器货道商品初始化")]
+        [EventCodeRemark("A", "库存改变-机器货道商品初始化")]
         public const string MachineCabinetSlotInit = "MachineCabinetSlotInit";
-        [EventCodeRemark("I", "库存改变-机器货道商品替换")]
+        [EventCodeRemark("A", "库存改变-机器货道商品替换")]
         public const string MachineCabinetSlotReplace = "MachineCabinetSlotReplace";
-        [EventCodeRemark("I", "库存改变-机器货道商品保存")]
+        [EventCodeRemark("A", "库存改变-机器货道商品保存")]
         public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
-        [EventCodeRemark("I", "库存改变-机器货道商品移除")]
+        [EventCodeRemark("A", "库存改变-机器货道商品移除")]
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
-        [EventCodeRemark("I", "库存改变-机器货道商品调整库存数量")]
+        [EventCodeRemark("A", "库存改变-机器货道商品调整库存数量")]
         public const string MachineCabinetSlotAdjustStockQuantity = "MachineCabinetSlotAdjustStockQuantity";
-        [EventCodeRemark("I", "机器货道商品库存查看")]
+        [EventCodeRemark("A", "机器货道商品库存查看")]
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
-        [EventCodeRemark("I", "机器货道保存扫成结果")]
+        [EventCodeRemark("A", "机器货道保存扫成结果")]
         public const string MachineCabinetSaveRowColLayout = "MachineCabinetSaveRowColLayout";
-        [EventCodeRemark("I", "机器货道商品调整价格")]
+        [EventCodeRemark("A", "机器货道商品调整价格")]
         public const string MachineAdjustStockSalePrice = "MachineAdjustStockSalePrice";
-        [EventCodeRemark("I", "机器处理运行异常信息")]
+        [EventCodeRemark("A", "机器处理运行异常信息")]
         public const string MachineHandleRunEx = "MachineHandleRunEx";
-        [EventCodeRemark("I", "库存改变-订单商品取货未完成人工标记未取状态")]
+        [EventCodeRemark("B", "库存改变-订单商品取货未完成人工标记未取状态")]
         public const string StockOrderPickupOneManMadeSignNotTakeByNotComplete = "StockOrderPickupOneManMadeSignNotTakeByNotComplete";
-        [EventCodeRemark("I", "库存改变-订单商品取货已完成人工标记未取状态")]
+        [EventCodeRemark("B", "库存改变-订单商品取货已完成人工标记未取状态")]
         public const string StockOrderPickupOneManMadeSignNotTakeByComplete = "StockOrderPickupOneManMadeSignNotTakeByComplete";
-        [EventCodeRemark("I", "库存改变-订单商品取货系统标记已取")]
+        [EventCodeRemark("B", "库存改变-订单商品取货系统标记已取")]
         public const string StockOrderPickupOneSysMadeSignTake = "StockOrderPickupOneSysMadeSignTake";
-        [EventCodeRemark("I", "库存改变-订单商品取货未取货完成系统标记已取")]
+        [EventCodeRemark("B", "库存改变-订单商品取货未取货完成系统标记已取")]
         public const string StockOrderPickupOneManMadeSignTakeByNotComplete = "StockOrderPickupOneManMadeSignTakeByNotComplete";
-        [EventCodeRemark("I", "库存改变-订单取消")]
+        [EventCodeRemark("B", "库存改变-订单取消")]
         public const string StockOrderCancle = "StockOrderCancle";
-        [EventCodeRemark("I", "库存改变-订单支付成功")]
+        [EventCodeRemark("B", "库存改变-订单支付成功")]
         public const string StockOrderPaySuccess = "StockOrderPaySuccess";
-        [EventCodeRemark("I", "库存改变-订单预定成功")]
+        [EventCodeRemark("B", "库存改变-订单预定成功")]
         public const string StockOrderReserveSuccess = "StockOrderReserveSuccess";
-
-        [EventCodeRemark("I", "订单取消")]
+        [EventCodeRemark("A", "订单取消")]
         public const string OrderCancle = "OrderCancle";
-        [EventCodeRemark("I", "订单支付成功")]
+        [EventCodeRemark("A", "订单支付成功")]
         public const string OrderPaySuccess = "OrderPaySuccess";
-        [EventCodeRemark("I", "订单预定成功")]
+        [EventCodeRemark("A", "订单预定成功")]
         public const string OrderReserveSuccess = "OrderReserveSuccess";
-        [EventCodeRemark("I", "订单异常处理")]
+        [EventCodeRemark("A", "订单异常处理")]
         public const string OrderHandleExOrder = "OrderHandleExOrder";
-        [EventCodeRemark("I", "新增管理账号信息")]
+        [EventCodeRemark("A", "新增管理账号信息")]
         public const string AdminUserAdd = "AdminUserAdd";
-        [EventCodeRemark("I", "修改管理账号信息")]
+        [EventCodeRemark("A", "修改管理账号信息")]
         public const string AdminUserEdit = "AdminUserEdit";
-        [EventCodeRemark("I", "发布广告")]
+        [EventCodeRemark("A", "发布广告")]
         public const string AdSpaceRelease = "AdSpaceRelease";
-        [EventCodeRemark("I", "删除广告")]
+        [EventCodeRemark("A", "删除广告")]
         public const string AdSpaceDeleteAdContent = "AdSpaceDeleteAdContent";
-        [EventCodeRemark("I", "保存机器信息")]
+        [EventCodeRemark("A", "保存机器信息")]
         public const string MachineEdit = "MachineEdit";
-        [EventCodeRemark("I", "新增商品分类信息")]
+        [EventCodeRemark("A", "新增商品分类信息")]
         public const string PrdKindAdd = "PrdKindAdd";
-        [EventCodeRemark("I", "修改商品分类信息")]
+        [EventCodeRemark("A", "修改商品分类信息")]
         public const string PrdKindEdit = "PrdKindEdit";
-        [EventCodeRemark("I", "删除商品分类信息")]
+        [EventCodeRemark("A", "删除商品分类信息")]
         public const string PrdKindDelete = "PrdKindDelete";
-        [EventCodeRemark("I", "新增商品信息")]
+        [EventCodeRemark("A", "新增商品信息")]
         public const string PrdProductAdd = "PrdProductAdd";
-        [EventCodeRemark("I", "修改商品信息")]
+        [EventCodeRemark("A", "修改商品信息")]
         public const string PrdProductEdit = "PrdProductEdit";
-        [EventCodeRemark("I", "新增店铺信息")]
+        [EventCodeRemark("A", "新增店铺信息")]
         public const string StoreAdd = "StoreAdd";
-        [EventCodeRemark("I", "修改店铺信息")]
+        [EventCodeRemark("A", "修改店铺信息")]
         public const string StoreEdit = "StoreEdit";
-        [EventCodeRemark("I", "店铺绑定机器")]
+        [EventCodeRemark("A", "店铺绑定机器")]
         public const string StoreAddMachine = "StoreAddMachine";
-        [EventCodeRemark("I", "店铺移除机器")]
+        [EventCodeRemark("A", "店铺移除机器")]
         public const string StoreRemoveMachine = "StoreRemoveMachine";
-        [EventCodeRemark("I", "发送更新机器库存信息命令")]
+        [EventCodeRemark("B", "发送更新机器库存信息命令")]
         public const string MCmdUpdateProductSkuStock = "mcmd:update:ProductSkuStock";
-        [EventCodeRemark("I", "发送更新机器首页广告")]
+        [EventCodeRemark("C", "发送更新机器首页广告")]
         public const string MCmdUpdateHomeBanners = "mcmd:update:HomeBanners";
-        [EventCodeRemark("I", "发送更新机器LOGO")]
+        [EventCodeRemark("C", "发送更新机器LOGO")]
         public const string MCmdUpdateHomeLogo = "mcmd:update:HomeLogo";
-        [EventCodeRemark("I", "发送重启系统命令")]
+        [EventCodeRemark("A", "发送重启系统命令")]
         public const string MCmdSysReboot = "mcmd:sys:Reboot";
-        [EventCodeRemark("I", "发送关闭系统命令")]
+        [EventCodeRemark("A", "发送关闭系统命令")]
         public const string MCmdSysShutdown = "mcmd:sys:Shutdown";
-        [EventCodeRemark("I", "发送设置系统状态命令")]
+        [EventCodeRemark("A", "发送设置系统状态命令")]
         public const string MCmdSysSetStatus = "mcmd:sys:SetStatus";
-        [EventCodeRemark("I", "发送打开DSX01设备取货门命令")]
+        [EventCodeRemark("A", "发送打开DSX01设备取货门命令")]
         public const string MCmdDsx01OpenPickupDoor = "mcmd:dsx01:OpenPickupDoor";
-        [EventCodeRemark("I", "发送支付成功命令")]
+        [EventCodeRemark("C", "发送支付成功命令")]
         public const string MCmdPaySuccess = "mcmd:pay:Success";
 
         public static string GetEventName(string eventCode)

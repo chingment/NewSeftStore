@@ -29,6 +29,8 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.MerchOperateLog
                          where
                          u.MerchId == merchId
+                         &&
+                         u.EventLevel == "A"
                          select new { u.Id, u.StoreName, u.MachineName, u.OperateUserName, u.EventName, u.Remark, u.CreateTime, u.AppId });
 
             if (!string.IsNullOrEmpty(rup.EventName))
