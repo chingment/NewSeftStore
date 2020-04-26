@@ -89,6 +89,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
             merchOperateLog.EventName = EventCode.GetEventName(eventCode);
+            merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
             if (string.IsNullOrEmpty(machineId))
             {
                 merchOperateLog.Remark = eventRemark;
@@ -152,6 +153,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
             merchOperateLog.EventName = EventCode.GetEventName(eventCode);
 
             if (string.IsNullOrEmpty(machineId))
@@ -217,6 +219,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
             merchOperateLog.EventName = EventCode.GetEventName(eventCode);
             merchOperateLog.Remark = string.Format("账号：{0}，{1}", model.LoginAccount, eventRemark);
             merchOperateLog.Creator = operater;
@@ -281,6 +284,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserId = operater;
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
+                merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                 merchOperateLog.Remark = eventRemark;
                 merchOperateLog.Creator = operater;
@@ -493,6 +497,7 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.OperateUserId = operater;
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
+                merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
                 merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId, productSkuName, remark.ToString());
                 merchOperateLog.Creator = operater;
@@ -537,6 +542,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
+            merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
             merchOperateLog.EventName = EventCode.GetEventName(eventCode);
             if (string.IsNullOrEmpty(machineId))
             {
