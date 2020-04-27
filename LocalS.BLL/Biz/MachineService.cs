@@ -170,10 +170,10 @@ namespace LocalS.BLL.Biz
             return PushService.SendPaySuccess(operater, appId, merchId, machineId, content);
         }
 
-        public CustomJsonResult EventNotify(string operater, string appId, string machineId, string eventCode, object content)
+        public CustomJsonResult EventNotify(string operater, string appId, string machineId, string eventCode, string eventRemark, object content)
         {
             var machine = BizFactory.Machine.GetOne(machineId);
-            MqFactory.Global.PushEventNotify(operater, appId, machine.MerchId, machine.StoreId, machineId, eventCode, "", content);
+            MqFactory.Global.PushEventNotify(operater, appId, machine.MerchId, machine.StoreId, machineId, eventCode, eventRemark, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }
