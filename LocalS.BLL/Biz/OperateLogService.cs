@@ -45,6 +45,7 @@ namespace LocalS.BLL.Biz
                 case EventCode.StockOrderPickupOneSysMadeSignTake:
                 case EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete:
                 case EventCode.StockOrderCancle:
+                case EventCode.StockOrderPaySuccess:
                 case EventCode.StockOrderReserveSuccess:
                     var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
                     EventHandleByStockChangeLog(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
