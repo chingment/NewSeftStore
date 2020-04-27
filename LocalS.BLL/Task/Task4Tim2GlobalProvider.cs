@@ -155,6 +155,9 @@ namespace LocalS.BLL.Task
                         }
                     }
                 }
+
+                //定时生成库存报表
+                BuildSellChannelStockDateReport();
             }
             catch (Exception ex)
             {
@@ -222,7 +225,6 @@ namespace LocalS.BLL.Task
         }
 
 
-
         public void BuildSellChannelStockDateReport()
         {
             try
@@ -234,11 +236,28 @@ namespace LocalS.BLL.Task
 
                 foreach (var merch in merchs)
                 {
-                    var hisRecordCount = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merch.Id && m.StockDate == stockDate).Count();
-                    if (hisRecordCount == 0)
+
+                    DateTime? buildStockRptDate = null;
+                    try
                     {
-                        string sql = "INSERT INTO SellChannelStockDateHis(Id, MerchId, StoreId, SellChannelRefType, SellChannelRefId,CabinetId, SlotId, PrdProductId, PrdProductSkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, SalePriceByVip, IsOffSell, MaxQuantity,[Version],StockDate, Creator, CreateTime)select LOWER(REPLACE(LTRIM(NEWID()), '-', '')), MerchId, StoreId, SellChannelRefType, SellChannelRefId,CabinetId, SlotId, PrdProductId, PrdProductSkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, SalePriceByVip, IsOffSell, MaxQuantity,[Version],'" + stockDate + "', '00000000000000000000000000000000', getdate()  from SellChannelStock where merchId='" + merch.Id + "' ";
-                        int rows = DatabaseFactory.GetIDBOptionBySql().ExecuteSql(sql);
+                        buildStockRptDate = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd ") + merch.BuildStockRptDate);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    if (buildStockRptDate != null)
+                    {
+                        if (DateTime.Now > buildStockRptDate)
+                        {
+                            var hisRecordCount = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merch.Id && m.StockDate == stockDate).Count();
+                            if (hisRecordCount == 0)
+                            {
+                                string sql = "INSERT INTO SellChannelStockDateHis(Id, MerchId, StoreId, SellChannelRefType, SellChannelRefId,CabinetId, SlotId, PrdProductId, PrdProductSkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, SalePriceByVip, IsOffSell, MaxQuantity,[Version],StockDate, Creator, CreateTime)select LOWER(REPLACE(LTRIM(NEWID()), '-', '')), MerchId, StoreId, SellChannelRefType, SellChannelRefId,CabinetId, SlotId, PrdProductId, PrdProductSkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, SalePriceByVip, IsOffSell, MaxQuantity,[Version],'" + stockDate + "', '00000000000000000000000000000000', getdate()  from SellChannelStock where merchId='" + merch.Id + "' ";
+                                int rows = DatabaseFactory.GetIDBOptionBySql().ExecuteSql(sql);
+                            }
+                        }
                     }
                 }
             }

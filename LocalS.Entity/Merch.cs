@@ -51,5 +51,7 @@ namespace LocalS.Entity
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
         public string CsrHelpTip { get; set; }
+
+        public string BuildStockRptDate { get; set; }
     }
 }

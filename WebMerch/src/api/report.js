@@ -16,6 +16,22 @@ export function machineStockGet(data) {
   })
 }
 
+export function machineStockDateHisInit(params) {
+  return request({
+    url: '/report/machineStockDateHisInit',
+    method: 'get',
+    params
+  })
+}
+
+export function machineStockDateHisGet(data) {
+  return request({
+    url: '/report/machineStockDateHisGet',
+    method: 'post',
+    data
+  })
+}
+
 export function productSkuDaySalesInit(params) {
   return request({
     url: '/report/ProductSkuDaySalesInit',
@@ -54,5 +70,7 @@ export default {
   productSkuDaySalesInit: productSkuDaySalesInit,
   productSkuDaySalesGet: productSkuDaySalesGet,
   orderInit: orderInit,
-  orderGet: orderGet
+  orderGet: orderGet,
+  machineStockDateHisInit: machineStockDateHisInit,
+  machineStockDateHisGet: machineStockDateHisGet
 }

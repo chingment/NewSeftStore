@@ -99,6 +99,96 @@ namespace LocalS.Service.Api.Merch
 
         }
 
+        public CustomJsonResult MachineStockDateHisInit(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetReportMachineStockInit();
+
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+
+
+            foreach (var store in stores)
+            {
+                var optionsSellChannel = new OptionNode();
+
+                optionsSellChannel.Value = store.Id;
+                optionsSellChannel.Label = store.Name;
+
+                var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                if (storeMachines.Count > 0)
+                {
+                    optionsSellChannel.Children = new List<OptionNode>();
+
+                    foreach (var storeMachine in storeMachines)
+                    {
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
+                    }
+
+                    ret.OptionsSellChannels.Add(optionsSellChannel);
+                }
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public CustomJsonResult MachineStockDateHisGet(string operater, string merchId, RopReportMachineStockDateHisGet rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            if (rop.SellChannels == null || rop.SellChannels.Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择机器");
+            }
+
+            if (string.IsNullOrEmpty(rop.StockDate))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择日期");
+            }
+
+            List<object> olist = new List<object>();
+
+            foreach (string[] sellChannel in rop.SellChannels)
+            {
+                string sellChannelRefId = sellChannel[1];
+                var sellChannelStocks = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merchId && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId && m.StockDate == rop.StockDate).OrderBy(m => m.SlotId).ToList();
+
+                var machineInfo = BizFactory.Machine.GetOne(sellChannelRefId);
+
+                foreach (var sellChannelStock in sellChannelStocks)
+                {
+                    var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+                    if (productSku != null)
+                    {
+                        olist.Add(new
+                        {
+                            StoreName = machineInfo.StoreName,
+                            MachineName = machineInfo.Name,
+                            ProductSkuId = productSku.Id,
+                            ProductSkuName = productSku.Name,
+                            ProductSkuSpecDes = productSku.SpecDes,
+                            ProductSkuCumCode = productSku.CumCode,
+                            SlotId = sellChannelStock.SlotId,
+                            SellQuantity = sellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                            LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
+                            SumQuantity = sellChannelStock.SumQuantity,
+                            MaxQuantity = sellChannelStock.MaxQuantity,
+                            RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
+                            IsOffSell = sellChannelStock.IsOffSell
+                        });
+                    }
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+
+            return result;
+
+        }
+
         public CustomJsonResult ProductSkuDaySalesInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
@@ -256,7 +346,6 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
-
 
         public CustomJsonResult OrderInit(string operater, string merchId)
         {

@@ -14,6 +14,16 @@
           />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
+          <el-date-picker
+            v-model="listQuery.stockDate"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期"
+            style="width: 100%"
+          />
+        </el-col>
+
+        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -94,7 +104,7 @@
 
 <script>
 
-import { machineStockInit, machineStockGet } from '@/api/report'
+import { machineStockDateHisInit, machineStockDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'MachineStock',
@@ -102,14 +112,15 @@ export default {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '机器实时库存报表',
+      filename: '机器历史库存报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
       listData: null,
       listTotal: 0,
       listQuery: {
-        sellChannels: []
+        sellChannels: [],
+        stockDate: undefined
       },
       optionsSellChannels: [],
       optionsSellChannelsProps: { multiple: true, checkStrictly: false },
@@ -124,7 +135,7 @@ export default {
   },
   methods: {
     init() {
-      machineStockInit().then(res => {
+      machineStockDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsSellChannels = d.optionsSellChannels
@@ -135,7 +146,7 @@ export default {
     _machineStockGet() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      machineStockGet(this.listQuery).then(res => {
+      machineStockDateHisGet(this.listQuery).then(res => {
         if (res.result === 1) {
           this.listData = res.data
         } else {
@@ -170,7 +181,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename,
+          filename: this.filename + '(' + this.listQuery.stockDate + ')',
           autoWidth: this.autoWidth,
           bookType: this.bookType
         })
