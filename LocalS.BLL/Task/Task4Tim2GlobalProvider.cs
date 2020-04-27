@@ -2,6 +2,7 @@
 using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
+using Lumos.DbRelay;
 using Lumos.Redis;
 using Quartz;
 using System;
@@ -217,6 +218,34 @@ namespace LocalS.BLL.Task
                 ts.Complete();
 
                 Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
+            }
+        }
+
+
+
+        public void BuildSellChannelStockDateReport()
+        {
+            try
+            {
+                var merchs = CurrentDb.Merch.ToList();
+                string stockDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+                List<SellChannelStockDateHis> sellChannelStockDateHiss = new List<SellChannelStockDateHis>();
+
+                foreach (var merch in merchs)
+                {
+                    var hisRecordCount = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merch.Id && m.StockDate == stockDate).Count();
+                    if (hisRecordCount == 0)
+                    {
+                        string sql = "INSERT INTO SellChannelStockDateHis(Id, MerchId, StoreId, SellChannelRefType, SellChannelRefId,CabinetId, SlotId, PrdProductId, PrdProductSkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, SalePriceByVip, IsOffSell, MaxQuantity,[Version],StockDate, Creator, CreateTime)select LOWER(REPLACE(LTRIM(NEWID()), '-', '')), MerchId, StoreId, SellChannelRefType, SellChannelRefId,CabinetId, SlotId, PrdProductId, PrdProductSkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, SalePriceByVip, IsOffSell, MaxQuantity,[Version],'" + stockDate + "', '00000000000000000000000000000000', getdate()  from SellChannelStock where merchId='" + merch.Id + "' ";
+                        int rows = DatabaseFactory.GetIDBOptionBySql().ExecuteSql(sql);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("处理生成日库存报表失败", ex);
+
             }
         }
     }

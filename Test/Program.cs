@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
+using LocalS.BLL.Task;
 using LocalS.Entity;
 using LocalS.Service.Api.Merch;
 using LocalS.Service.Api.StoreApp;
@@ -103,12 +104,14 @@ namespace Test
             log.InfoFormat("程序开始");
 
             //TestA a = new TestA();
-           // a.MaA = "dasd";
+            // a.MaA = "dasd";
 
+            Task4Tim2GlobalProvider a = new Task4Tim2GlobalProvider();
+            a.BuildSellChannelStockDateReport();
 
           //  string b = a.Ma.GetCnName();
-           // string c = a.MaA.GetCnName();
-           string c = EventCode.GetEventLevel(EventCode.Login);
+          // string c = a.MaA.GetCnName();
+            string c = EventCode.GetEventLevel(EventCode.Login);
             string c1 = EventCode.GetEventName(EventCode.Login);
             SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
             ///string a = RedisSnUtil.BuildMachineId();

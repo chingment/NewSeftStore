@@ -83,6 +83,7 @@
     <Compile Include="RptOrderDetails.cs" />
     <Compile Include="RptOrderDetailsChild.cs" />
     <Compile Include="SellChannel.cs" />
+    <Compile Include="SellChannelStockDateHis.cs" />
     <Compile Include="Store.cs" />
     <Compile Include="SellChannelStock.cs" />
     <Compile Include="SellChannelStockLog.cs" />
