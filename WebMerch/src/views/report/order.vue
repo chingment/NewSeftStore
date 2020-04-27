@@ -39,6 +39,7 @@
       :key="listKey"
       v-loading="loading"
       :data="listData"
+      show-summary
       fit
       highlight-current-row
       style="width: 100%;"
@@ -63,12 +64,12 @@
           <span>{{ scope.row.tradeTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" align="left" min-width="10%">
+      <el-table-column label="数量" align="left" prop="quantity" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总金额" align="left" min-width="10%">
+      <el-table-column label="总金额" align="left" prop="tradeAmount" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeAmount }}</span>
         </template>
@@ -87,7 +88,7 @@
 <script>
 
 import { orderInit, orderGet } from '@/api/report'
-
+import { parseTime } from '@/utils'
 export default {
   name: 'Order',
   props: {
@@ -142,6 +143,15 @@ export default {
     },
     handleFilter() {
       this._get()
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     },
     handleDownload() {
       this.downloadLoading = true

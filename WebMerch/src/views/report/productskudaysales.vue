@@ -49,6 +49,7 @@
     <el-table
       :key="listKey"
       v-loading="loading"
+      show-summary
       :data="listData"
       fit
       highlight-current-row
@@ -94,12 +95,12 @@
           <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" align="left" min-width="10%">
+      <el-table-column label="数量" align="left" prop="quantity" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总金额" align="left" min-width="10%">
+      <el-table-column label="总金额" align="left" prop="tradeAmount" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeAmount }}</span>
         </template>
@@ -123,6 +124,7 @@
 <script>
 
 import { productSkuDaySalesInit, productSkuDaySalesGet } from '@/api/report'
+import { parseTime } from '@/utils'
 export default {
   name: 'ProductSkuDaySales',
   props: {
@@ -171,6 +173,15 @@ export default {
         }
         this.loading = false
       })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     },
     _productSkuDaySalesGet() {
       this.loading = true
