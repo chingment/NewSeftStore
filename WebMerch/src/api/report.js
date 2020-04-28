@@ -32,17 +32,17 @@ export function machineStockDateHisGet(data) {
   })
 }
 
-export function productSkuDaySalesInit(params) {
+export function productSkuSalesDateHisInit(params) {
   return request({
-    url: '/report/ProductSkuDaySalesInit',
+    url: '/report/productSkuSalesDateHisInit',
     method: 'get',
     params
   })
 }
 
-export function productSkuDaySalesGet(data) {
+export function productSkuSalesDateHisGet(data) {
   return request({
-    url: '/report/ProductSkuDaySalesGet',
+    url: '/report/productSkuSalesDateHisGet',
     method: 'post',
     data
   })
@@ -67,8 +67,8 @@ export function orderSalesDateHisGet(data) {
 export default {
   machineStockRealDataInit: machineStockRealDataInit,
   machineStockRealDataGet: machineStockRealDataGet,
-  productSkuDaySalesInit: productSkuDaySalesInit,
-  productSkuDaySalesGet: productSkuDaySalesGet,
+  productSkuSalesDateHisInit: productSkuSalesDateHisInit,
+  productSkuSalesDateHisGet: productSkuSalesDateHisGet,
   orderSalesDateHisInit: orderSalesDateHisInit,
   orderSalesDateHisGet: orderSalesDateHisGet,
   machineStockDateHisInit: machineStockDateHisInit,

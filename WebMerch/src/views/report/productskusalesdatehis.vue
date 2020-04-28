@@ -123,7 +123,7 @@
 
 <script>
 
-import { productSkuDaySalesInit, productSkuDaySalesGet } from '@/api/report'
+import { productSkuSalesDateHisInit, productSkuSalesDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ProductSkuDaySales',
@@ -162,11 +162,11 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.init()
+    this._init()
   },
   methods: {
-    init() {
-      productSkuDaySalesInit().then(res => {
+    _init() {
+      productSkuSalesDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsSellChannels = d.optionsSellChannels
@@ -183,10 +183,10 @@ export default {
         }
       }))
     },
-    _productSkuDaySalesGet() {
+    _get() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      productSkuDaySalesGet(this.listQuery).then(res => {
+      productSkuSalesDateHisGet(this.listQuery).then(res => {
         this.listData = res.data
         if (res.result === 1) {
           // this.listData = res.data
@@ -197,7 +197,7 @@ export default {
       })
     },
     handleFilter() {
-      this._productSkuDaySalesGet()
+      this._get()
     },
     handleDownload() {
       this.downloadLoading = true

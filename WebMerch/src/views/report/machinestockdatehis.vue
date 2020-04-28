@@ -137,10 +137,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.init()
+    this._init()
   },
   methods: {
-    init() {
+    _init() {
       machineStockDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -149,7 +149,7 @@ export default {
         this.loading = false
       })
     },
-    _machineStockGet() {
+    _get() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       machineStockDateHisGet(this.listQuery).then(res => {
@@ -166,7 +166,7 @@ export default {
         this.$message('请选择机器')
         return
       }
-      this._machineStockGet()
+      this._get()
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

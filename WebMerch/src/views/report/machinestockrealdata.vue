@@ -94,7 +94,7 @@
 
 <script>
 
-import { machineStockInit, machineStockGet } from '@/api/report'
+import { machineStockRealDataInit, machineStockRealDataGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'MachineStock',
@@ -120,11 +120,11 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.init()
+    this._init()
   },
   methods: {
-    init() {
-      machineStockInit().then(res => {
+    _init() {
+      machineStockRealDataInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsSellChannels = d.optionsSellChannels
@@ -132,10 +132,10 @@ export default {
         this.loading = false
       })
     },
-    _machineStockGet() {
+    _get() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      machineStockGet(this.listQuery).then(res => {
+      machineStockRealDataGet(this.listQuery).then(res => {
         if (res.result === 1) {
           this.listData = res.data
         } else {
@@ -149,7 +149,7 @@ export default {
         this.$message('请选择机器')
         return
       }
-      this._machineStockGet()
+      this._get()
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
