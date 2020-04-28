@@ -87,7 +87,7 @@
 
 <script>
 
-import { orderInit, orderGet } from '@/api/report'
+import { orderSalesDateHisInit, orderSalesDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'Order',
@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     _init() {
-      orderInit().then(res => {
+      orderSalesDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsSellChannels = d.optionsSellChannels
@@ -131,7 +131,7 @@ export default {
     _get() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      orderGet(this.listQuery).then(res => {
+      orderSalesDateHisGet(this.listQuery).then(res => {
         this.listData = res.data
         if (res.result === 1) {
           // this.listData = res.data

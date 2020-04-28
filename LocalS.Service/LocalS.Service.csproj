@@ -188,8 +188,8 @@
     <Compile Include="Api\Merch\PrdSubjectService.cs" />
     <Compile Include="Api\Merch\ReportService.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
-    <Compile Include="Api\Merch\RModels\RetReportMachineStockInit.cs" />
-    <Compile Include="Api\Merch\RModels\RetReportProductSkuDaySalesInit.cs" />
+    <Compile Include="Api\Merch\RModels\RetReportMachineStockRealDataInit.cs" />
+    <Compile Include="Api\Merch\RModels\RetReportProductSkuSalesDateHisInit.cs" />
     <Compile Include="Api\Merch\RModels\RetRpt7DayGmvRl.cs" />
     <Compile Include="Api\Merch\RModels\RetAdSpaceInitRelease.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitDetailsOrders.cs" />
@@ -231,7 +231,7 @@
     <Compile Include="Api\Merch\RModels\RopPrdSubjectAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdSubjectEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdSubjectSort.cs" />
-    <Compile Include="Api\Merch\RModels\RopReporOrderGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddMachine.cs" />
@@ -254,8 +254,8 @@
     <Compile Include="Api\Merch\RModels\RupPrdKindGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdSubjectGetList.cs" />
-    <Compile Include="Api\Merch\RModels\RopReportMachineStockGet.cs" />
-    <Compile Include="Api\Merch\RModels\RopReportProductSkuDaySalesGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageMachineGetMachineList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageProductGetProductList.cs" />

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetReportProductSkuDaySalesInit
+    public class RetReportProductSkuSalesDateHisInit
     {
-        public RetReportProductSkuDaySalesInit()
+        public RetReportProductSkuSalesDateHisInit()
         {
             this.OptionsSellChannels = new List<OptionNode>();
         }

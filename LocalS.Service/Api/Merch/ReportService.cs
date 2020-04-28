@@ -14,11 +14,11 @@ namespace LocalS.Service.Api.Merch
 {
     public class ReportService : BaseDbContext
     {
-        public CustomJsonResult MachineStockInit(string operater, string merchId)
+        public CustomJsonResult MachineStockRealDataInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportMachineStockInit();
+            var ret = new RetReportMachineStockRealDataInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
@@ -47,7 +47,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult MachineStockGet(string operater, string merchId, RopReportMachineStockGet rop)
+        public CustomJsonResult MachineStockRealDataGet(string operater, string merchId, RopReportMachineStockRealDataGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -103,7 +103,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportMachineStockInit();
+            var ret = new RetReportMachineStockRealDataInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
@@ -189,11 +189,11 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult ProductSkuDaySalesInit(string operater, string merchId)
+        public CustomJsonResult ProductSkuSalesDateHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportProductSkuDaySalesInit();
+            var ret = new RetReportProductSkuSalesDateHisInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
@@ -224,7 +224,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult ProductSkuDaySalesGet(string operater, string merchId, RopReportProductSkuDaySalesGet rop)
+        public CustomJsonResult ProductSkuSalesDateHisGet(string operater, string merchId, RopReportProductSkuSalesDateHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -347,11 +347,11 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult OrderInit(string operater, string merchId)
+        public CustomJsonResult OrderSalesDateHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportProductSkuDaySalesInit();
+            var ret = new RetReportProductSkuSalesDateHisInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
@@ -382,7 +382,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult OrderGet(string operater, string merchId, RopReporOrderGet rop)
+        public CustomJsonResult OrderSalesDateHisGet(string operater, string merchId, RopReporOrderSalesDateHisGet rop)
         {
 
             var result = new CustomJsonResult();

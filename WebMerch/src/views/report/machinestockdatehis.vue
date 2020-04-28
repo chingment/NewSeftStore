@@ -20,6 +20,7 @@
             value-format="yyyy-MM-dd"
             placeholder="选择日期"
             style="width: 100%"
+            :picker-options="datePickerOptionsStockDate"
           />
         </el-col>
 
@@ -124,6 +125,11 @@ export default {
       },
       optionsSellChannels: [],
       optionsSellChannelsProps: { multiple: true, checkStrictly: false },
+      datePickerOptionsStockDate: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        }
+      },
       isDesktop: this.$store.getters.isDesktop
     }
   },

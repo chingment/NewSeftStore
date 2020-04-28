@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopReportMachineStockGet
+    public class RopReporOrderSalesDateHisGet
     {
         public List<string[]> SellChannels { get; set; }
+
+        public string[] TradeDateTimeArea { get; set; }
     }
 }

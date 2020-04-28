@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
-export function machineStockInit(params) {
+export function machineStockRealDataInit(params) {
   return request({
-    url: '/report/machineStockInit',
+    url: '/report/machineStockRealDataInit',
     method: 'get',
     params
   })
 }
 
-export function machineStockGet(data) {
+export function machineStockRealDataGet(data) {
   return request({
-    url: '/report/machineStockGet',
+    url: '/report/machineStockRealDataGet',
     method: 'post',
     data
   })
@@ -48,29 +48,29 @@ export function productSkuDaySalesGet(data) {
   })
 }
 
-export function orderInit(params) {
+export function orderSalesDateHisInit(params) {
   return request({
-    url: '/report/OrderInit',
+    url: '/report/orderSalesDateHisInit',
     method: 'get',
     params
   })
 }
 
-export function orderGet(data) {
+export function orderSalesDateHisGet(data) {
   return request({
-    url: '/report/OrderGet',
+    url: '/report/orderSalesDateHisGet',
     method: 'post',
     data
   })
 }
 
 export default {
-  machineStockInit: machineStockInit,
-  machineStockGet: machineStockGet,
+  machineStockRealDataInit: machineStockRealDataInit,
+  machineStockRealDataGet: machineStockRealDataGet,
   productSkuDaySalesInit: productSkuDaySalesInit,
   productSkuDaySalesGet: productSkuDaySalesGet,
-  orderInit: orderInit,
-  orderGet: orderGet,
+  orderSalesDateHisInit: orderSalesDateHisInit,
+  orderSalesDateHisGet: orderSalesDateHisGet,
   machineStockDateHisInit: machineStockDateHisInit,
   machineStockDateHisGet: machineStockDateHisGet
 }
