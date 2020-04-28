@@ -12,26 +12,6 @@ using System.Transactions;
 
 namespace LocalS.BLL.Biz
 {
-
-    public enum OperateSlotType
-    {
-        Unknow = 0,
-        MachineSlotRemove = 1,
-        MachineSlotSave = 2
-    }
-
-    public enum OperateStockType
-    {
-        Unknow = 0,
-        OrderReserveSuccess = 11,
-        OrderCancle = 12,
-        OrderPaySuccess = 13,
-        OrderPickupOneSysMadeSignTake = 15,
-        OrderPickupOneManMadeSignTakeByNotComplete = 16,
-        OrderPickupOneManMadeSignNotTakeByComplete = 17,
-        OrderPickupOneManMadeSignNotTakeByNotComplete = 18
-    }
-
     public class ProductSkuService : BaseDbContext
     {
 
@@ -61,13 +41,13 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public CustomJsonResult OperateSlot(string operater, OperateSlotType operateType, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId)
+        public CustomJsonResult OperateSlot(string operater, string operateEvent, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId)
         {
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (operateType == OperateSlotType.MachineSlotRemove)
+                if (operateEvent == EventCode.MachineCabinetSlotRemove)
                 {
                     #region MachineSlotRemove
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
@@ -120,7 +100,7 @@ namespace LocalS.BLL.Biz
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
                     #endregion MachineSlotRemove
                 }
-                else if (operateType == OperateSlotType.MachineSlotSave)
+                else if (operateEvent == EventCode.MachineCabinetSlotSave)
                 {
                     #region MachineSlotSave
                     SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
@@ -274,7 +254,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStockQuantity(string operater, OperateStockType operateType, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
+        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
 
@@ -285,9 +265,9 @@ namespace LocalS.BLL.Biz
 
                 SellChannelStockChangeModel eventContent = new SellChannelStockChangeModel();
                 SellChannelStock sellChannelStock = null;
-                switch (operateType)
+                switch (operateEvent)
                 {
-                    case OperateStockType.OrderReserveSuccess:
+                    case EventCode.StockOrderReserveSuccess:
                         #region OrderReserve
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
@@ -329,7 +309,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case OperateStockType.OrderCancle:
+                    case EventCode.StockOrderCancle:
                         #region OrderCancle
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
@@ -369,7 +349,7 @@ namespace LocalS.BLL.Biz
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                         #endregion
                         break;
-                    case OperateStockType.OrderPaySuccess:
+                    case EventCode.StockOrderPaySuccess:
                         #region OrderPaySuccess
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
@@ -411,7 +391,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case OperateStockType.OrderPickupOneSysMadeSignTake:
+                    case EventCode.StockOrderPickupOneSysMadeSignTake:
                         #region OrderPaySuccess
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
@@ -453,7 +433,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete:
+                    case EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete:
                         #region OrderPickupOneManMadeSignTakeByNotComplete
 
 
@@ -496,7 +476,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case OperateStockType.OrderPickupOneManMadeSignNotTakeByComplete:
+                    case EventCode.StockOrderPickupOneManMadeSignNotTakeByComplete:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
 
@@ -538,7 +518,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete:
+                    case EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();

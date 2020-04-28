@@ -419,7 +419,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                             if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                             }
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -446,7 +446,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                             if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                             }
 
                             var orderPickupLog = new OrderPickupLog();

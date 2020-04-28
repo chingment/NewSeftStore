@@ -402,7 +402,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
-                                        BizFactory.ProductSku.OperateStockQuantity(operater, OperateStockType.OrderPickupOneSysMadeSignTake, appId, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
                                     }
                                 }
 

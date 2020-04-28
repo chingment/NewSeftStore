@@ -89,12 +89,12 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, OperateSlotType.MachineSlotRemove, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
                 return result;
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, OperateSlotType.MachineSlotSave, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -212,7 +212,7 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), OperateSlotType.MachineSlotRemove, AppId.STORETERM, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+                        BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, AppId.STORETERM, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
                     }
                 }
 
