@@ -70,9 +70,10 @@
                         {{ activity.content }}
                         <br>
                         <el-image
-                          v-if="activity.imgUrl!==null"
-                          style="width: 100px; height: 100px"
-                          :src="activity.imgUrl"
+                          v-for="(url, k) in activity.imgUrls"
+                          :key="k"
+                          style="width: 80px; height: 80px;margin-right:5px;"
+                          :src="url"
                           :preview-src-list="activity.imgUrls"
                         />
 
@@ -267,9 +268,10 @@
                       {{ activity.content }}
                       <br>
                       <el-image
-                        v-if="activity.imgUrl!==null"
-                        style="width: 100px; height: 100px"
-                        :src="activity.imgUrl"
+                        v-for="(url, k) in activity.imgUrls"
+                        :key="k"
+                        style="width: 80px; height: 80px;margin-right:5px;"
+                        :src="url"
                         :preview-src-list="activity.imgUrls"
                       />
 

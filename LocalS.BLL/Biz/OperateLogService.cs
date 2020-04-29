@@ -490,7 +490,7 @@ namespace LocalS.BLL.Biz
 
                     orderPickupLog.Remark = model.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
-                    orderPickupLog.Creator = machineId;
+                    orderPickupLog.Creator = operater;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
                 }
 
