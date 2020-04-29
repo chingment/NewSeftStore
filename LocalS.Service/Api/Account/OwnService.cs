@@ -151,7 +151,7 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
-                tokenInfo.MerchId = merchUser.MerchId;
+                tokenInfo.BelongId = merchUser.MerchId;
 
 
                 MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
@@ -496,7 +496,15 @@ namespace LocalS.Service.Api.Account
             {
                 userName = sysUser.UserName;
 
+                //switch (sysUser.BelongType)
+                //{
+                //    case Enumeration.BelongType.Merch:
+
+                //        break;
+                //}
             }
+
+
 
             SSOUtil.Quit(rop.Token);
 

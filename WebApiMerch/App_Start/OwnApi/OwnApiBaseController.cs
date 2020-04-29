@@ -68,7 +68,7 @@ namespace WebApiMerch
         {
             get
             {
-                return OwnApiRequest.TokenInfo.MerchId;
+                return OwnApiRequest.TokenInfo.BelongId;
             }
 
         }

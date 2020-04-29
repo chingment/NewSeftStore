@@ -6,8 +6,6 @@ namespace Lumos.Session
     public class TokenInfo
     {
         public string UserId { get; set; }
-        public string AgentId { get; set; }
-
-        public string MerchId { get; set; }
+        public string BelongId { get; set; }
     }
 }

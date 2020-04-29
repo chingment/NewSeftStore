@@ -81,5 +81,13 @@ namespace WebApiAccount
                 return this.TokenInfo.UserId;
             }
         }
+
+        public string BelongId
+        {
+            get
+            {
+                return this.TokenInfo.BelongId;
+            }
+        }
     }
 }
