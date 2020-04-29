@@ -71,6 +71,10 @@
     <Folder Include="DotNet\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Lumos.DAL\Lumos.DbRelay.csproj">
+      <Project>{0E039414-2A2E-48B4-8DB7-C4346106FA68}</Project>
+      <Name>Lumos.DbRelay</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
       <Project>{c165e6a0-dd43-4aa1-94b1-d4bf5420a80d}</Project>
       <Name>Lumos.Redis</Name>
