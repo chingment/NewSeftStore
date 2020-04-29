@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.Account
                 }
 
                 tokenInfo.BelongId = merchUser.MerchId;
-
+                tokenInfo.BelongType = Enumeration.BelongType.Merch;
 
                 MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
@@ -448,6 +448,8 @@ namespace LocalS.Service.Api.Account
 
                 var tokenInfo = new TokenInfo();
                 tokenInfo.UserId = userId;
+                tokenInfo.BelongId = belongId;
+                tokenInfo.BelongType = belongType;
 
                 if (rop.AppId == AppId.STORETERM)
                 {

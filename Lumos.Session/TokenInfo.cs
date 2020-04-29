@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Lumos.DbRelay;
 
 namespace Lumos.Session
 {
@@ -7,5 +7,7 @@ namespace Lumos.Session
     {
         public string UserId { get; set; }
         public string BelongId { get; set; }
+
+        public Enumeration.BelongType BelongType { get; set; }
     }
 }
