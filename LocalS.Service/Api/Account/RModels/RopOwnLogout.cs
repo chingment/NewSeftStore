@@ -14,5 +14,7 @@ namespace LocalS.Service.Api.Account
         public Enumeration.LoginWay LoginWay { get; set; }
         public Dictionary<string, string> LoginPms { get; set; }
 
+        public string BelongId { get; set; }
+
     }
 }

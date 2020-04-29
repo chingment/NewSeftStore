@@ -137,7 +137,7 @@ namespace LocalS.Service.Api.Account
 
             var tokenInfo = new TokenInfo();
             tokenInfo.UserId = sysUser.Id;
-
+            tokenInfo.UserName = sysUser.UserName;
 
             if (rop.AppId == AppId.MERCH)
             {
@@ -151,6 +151,8 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
+
+          
                 tokenInfo.BelongId = merchUser.MerchId;
                 tokenInfo.BelongType = Enumeration.BelongType.Merch;
 
@@ -448,6 +450,7 @@ namespace LocalS.Service.Api.Account
 
                 var tokenInfo = new TokenInfo();
                 tokenInfo.UserId = userId;
+                tokenInfo.UserName = sysUser.UserName;
                 tokenInfo.BelongId = belongId;
                 tokenInfo.BelongType = belongType;
 
@@ -493,24 +496,19 @@ namespace LocalS.Service.Api.Account
 
             string userName = null;
 
+
             var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
             if (sysUser != null)
             {
                 userName = sysUser.UserName;
 
-                //switch (sysUser.BelongType)
-                //{
-                //    case Enumeration.BelongType.Merch:
-
-                //        break;
-                //}
             }
 
 
 
             SSOUtil.Quit(rop.Token);
 
-            MqFactory.Global.PushEventNotify(operater, rop.AppId, "", "", "", EventCode.Logout, "退出成功", new LoginLogModel { LoginAccount = userName, LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
+            MqFactory.Global.PushEventNotify(operater, rop.AppId, rop.BelongId, "", "", EventCode.Logout, "退出成功", new LoginLogModel { LoginAccount = userName, LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 
