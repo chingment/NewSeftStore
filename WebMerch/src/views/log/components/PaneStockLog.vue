@@ -57,14 +57,62 @@
           <span>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作" fixed="right" align="center" width="100" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+
+          <el-button type="primary" size="mini" @click="dialogRelStockOpen(row)">
+            相关记录
+          </el-button>
+
+        </template>
+      </el-table-column>>
     </el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+
+    <el-dialog title="相关记录" :visible.sync="dialogRelStockIsVisible" :width="isDesktop==true?'800px':'90%'">
+      <div v-loading="dialogRelStockLoading">
+
+        <el-table
+          :key=" dialogRelStockListKey"
+          v-loading="dialogRelStockLoading"
+          :data="dialogRelStockListData"
+          fit
+          highlight-current-row
+          style="width: 100%;"
+        >
+          <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+            <template slot-scope="scope">
+              <span>{{ scope.$index+1 }} </span>
+            </template>
+          </el-table-column>
+          <el-table-column v-if="isDesktop" label="时间" prop="createTime" align="left" min-width="15%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.createTime }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column v-if="isDesktop" label="备注" align="left" min-width="35%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.remark }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <pagination v-show="dialogRelStockListTotal>0" :total="dialogRelStockListTotal" :page.sync="dialogRelStockListQuery.page" :limit.sync="dialogRelStockListQuery.limit" @pagination="getListDataByRelStock" />
+
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogRelStockIsVisible = false">
+          关闭
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getListByStock } from '@/api/log'
+import { getListByStock, getListByRelStock } from '@/api/log'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -72,6 +120,15 @@ export default {
   components: { Pagination },
   data() {
     return {
+      dialogRelStockIsVisible: false,
+      dialogRelStockLoading: false,
+      dialogRelStockListKey: 0,
+      dialogRelStockListData: null,
+      dialogRelStockListTotal: 0,
+      dialogRelStockListQuery: {
+        page: 1,
+        limit: 10
+      },
       loading: false,
       listKey: 0,
       listData: null,
@@ -106,6 +163,28 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getListData()
+    },
+    getListDataByRelStock() {
+      getListByRelStock(this.dialogRelStockListQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.dialogRelStockListData = d.items
+          this.dialogRelStockListTotal = d.total
+        }
+        this.dialogRelStockLoading = false
+      })
+    },
+    dialogRelStockOpen(row) {
+      this.dialogRelStockIsVisible = true
+      this.dialogRelStockLoading = true
+
+      this.dialogRelStockListQuery.productSkuId = row.productSkuId
+      this.dialogRelStockListQuery.storeId = row.storeId
+      this.dialogRelStockListQuery.sellChannelRefId = row.sellChannelRefId
+      this.dialogRelStockListQuery.cabinetId = row.cabinetId
+      this.dialogRelStockListQuery.slotId = row.slotId
+
+      this.getListDataByRelStock()
     }
   }
 }

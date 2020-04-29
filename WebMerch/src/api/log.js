@@ -31,9 +31,19 @@ export function getListByStock(params) {
     params
   })
 }
+
+export function getListByRelStock(params) {
+  return request({
+    url: '/log/getListByRelStock',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   initListByOperate: initListByOperate,
   getListByOperate: getListByOperate,
   initListByStock: initListByStock,
-  getListByStock: getListByStock
+  getListByStock: getListByStock,
+  getListByRelStock: getListByRelStock
 }

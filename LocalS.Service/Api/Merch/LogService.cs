@@ -95,7 +95,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SellChannelStockLog
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.PrdProductSkuName, u.StoreName, u.SellChannelRefName, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+                         select new { u.Id, u.PrdProductSkuId, u.PrdProductSkuName, u.StoreId, u.StoreName, u.SellChannelRefId, u.CabinetId, u.SlotId, u.SellChannelRefName, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
             if (!string.IsNullOrEmpty(rup.ProductSkuName))
             {
@@ -118,8 +118,13 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.Id,
+                    StoreId = item.StoreId,
+                    ProductSkuId = item.PrdProductSkuId,
                     ProductSkuName = item.PrdProductSkuName,
+                    SellChannelRefId = item.SellChannelRefId,
                     SellChannelRefName = item.SellChannelRefName,
+                    CabinetId = item.CabinetId,
+                    SlotId = item.SlotId,
                     EventCode = item.EventCode,
                     EventName = item.EventName,
                     ChangeQuantity = item.ChangeQuantity,

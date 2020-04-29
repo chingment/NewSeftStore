@@ -11,7 +11,8 @@ namespace LocalS.Service.Api.Merch
         public string ProductSkuId { get; set; }
         public string StoreId { get; set; }
         public string SellChannelRefId { get; set; }
-
+        public string CabinetId { get; set; }
+        public string SlotId { get; set; }
 
     }
 }
