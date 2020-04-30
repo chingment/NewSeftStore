@@ -91,10 +91,12 @@ namespace LocalS.Entity
         public string CancelReason { get; set; }
         public string CancelOperator { get; set; }
         public E_OrderPayPartner PayPartner { get; set; }
+        public string PayPartnerOrderId { get; set; }
         public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
         public DateTime? PayExpireTime { get; set; }
+
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

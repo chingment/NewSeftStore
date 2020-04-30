@@ -139,6 +139,7 @@ namespace LocalS.Service.Api.Account
             tokenInfo.UserId = sysUser.Id;
             tokenInfo.UserName = sysUser.UserName;
 
+
             if (rop.AppId == AppId.MERCH)
             {
                 #region MERCH
@@ -209,6 +210,8 @@ namespace LocalS.Service.Api.Account
                 ret.FullName = storeTermUser.FullName;
                 #endregion
             }
+
+
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
 

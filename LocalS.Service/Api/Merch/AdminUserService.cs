@@ -277,5 +277,13 @@ namespace LocalS.Service.Api.Merch
 
 
         }
+
+
+        public SysMerchUser GetInfo(string userId)
+        {
+            SysMerchUser sysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            return sysMerchUser;
+        }
     }
 }

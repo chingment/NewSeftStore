@@ -752,7 +752,7 @@ namespace LocalS.BLL.Biz
                     Dictionary<string, string> pms = new Dictionary<string, string>();
                     pms.Add("clientUserName", payResult.ClientUserName);
 
-                    PaySuccess(operater, payResult.OrderId, payResult.OrderPayWay, DateTime.Now, pms);
+                    PaySuccess(operater, payResult.OrderId, payResult.PayPartnerOrderId, payResult.OrderPayWay, DateTime.Now, pms);
                 }
 
 
@@ -774,7 +774,7 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string orderId, E_OrderPayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
+        public CustomJsonResult PaySuccess(string operater, string orderId, string payPartnerOrderId, E_OrderPayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -802,6 +802,7 @@ namespace LocalS.BLL.Biz
                 order.PayWay = payWay;
                 order.PayStatus = E_OrderPayStatus.PaySuccess;
                 order.PayedTime = DateTime.Now;
+                order.PayPartnerOrderId = payPartnerOrderId;
 
                 if (order.Status == E_OrderStatus.WaitPay)
                 {

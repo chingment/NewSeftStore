@@ -7,6 +7,7 @@ using Lumos;
 using System.Web.Http;
 using Lumos.Web.Http;
 using Lumos.Session;
+using LocalS.Service.Api.Merch;
 
 namespace WebApiMerch
 {
@@ -49,6 +50,24 @@ namespace WebApiMerch
                     OwnApiHttpResult result = new OwnApiHttpResult(ResultType.Failure, ResultCode.NeedLogin, "token 已经超时");
                     actionContext.Response = new OwnApiHttpResponse(result);
                     return;
+                }
+
+
+                if (string.IsNullOrEmpty(tokenInfo.BelongId))
+                {
+                    var merchUser = MerchServiceFactory.AdminUser.GetInfo(tokenInfo.UserId);
+                    if (merchUser == null)
+                    {
+                        OwnApiHttpResult result = new OwnApiHttpResult(ResultType.Failure, ResultCode.NeedLogin, "没有权限访问该系统");
+                        actionContext.Response = new OwnApiHttpResponse(result);
+                        return;
+                    }
+
+                    tokenInfo.BelongId = merchUser.MerchId;
+                    tokenInfo.BelongType = Lumos.DbRelay.Enumeration.BelongType.Merch;
+
+                    SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
+
                 }
 
                 base.OnActionExecuting(actionContext);
