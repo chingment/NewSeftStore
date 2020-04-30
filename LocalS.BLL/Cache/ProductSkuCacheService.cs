@@ -263,21 +263,9 @@ namespace LocalS.BLL
 
             foreach (var merch in merchs)
             {
-                var prdProducts = CurrentDb.PrdProduct.Where(m => m.MerchId == merch.Id).ToList();
-                foreach (var prdProduct in prdProducts)
-                {
-                    prdProduct.PinYinName = prdProduct.Name;
-                    prdProduct.PinYinIndex= CommonUtil.GetPingYinIndex(prdProduct.Name);
-                    CurrentDb.SaveChanges();
-                }
-
                 var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
                 foreach (var productSku in productSkus)
                 {
-                    productSku.PinYinName = productSku.Name;
-                    productSku.PinYinIndex = CommonUtil.GetPingYinIndex(productSku.Name);
-                    CurrentDb.SaveChanges();
-
                     GetInfo(merch.Id, productSku.Id);
                 }
             }
