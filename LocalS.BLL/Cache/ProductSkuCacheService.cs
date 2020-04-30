@@ -133,7 +133,7 @@ namespace LocalS.BLL
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.CumCode))
                 {
-                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSNA, prdProductSkuByDb.MerchId), prdProductSkuModel.CumCode, productSkuId, StackExchange.Redis.When.Always);
+                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSCR, prdProductSkuByDb.MerchId), prdProductSkuModel.CumCode, productSkuId, StackExchange.Redis.When.Always);
                 }
 
                 RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.P, prdProductSkuByDb.MerchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);
@@ -191,7 +191,7 @@ namespace LocalS.BLL
 
             if (type == "BarCode" || type == "All")
             {
-                var search_Scan_BarCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSBR, merchId), string.Format("{0}*", key));
+                var search_Scan_BarCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSBR, merchId), string.Format("*{0}*", key.ToUpper()));
                 foreach (var item in search_Scan_BarCode)
                 {
                     productSkuIds.Add(item.Value);
@@ -200,7 +200,7 @@ namespace LocalS.BLL
 
             if (type == "PinYinIndex" || type == "All")
             {
-                var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSPY, merchId), string.Format("{0}*", key.ToUpper()));
+                var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSPY, merchId), string.Format("*{0}*", key.ToUpper()));
                 foreach (var item in search_Scan_PinYinIndex)
                 {
                     productSkuIds.Add(item.Value);
@@ -209,7 +209,7 @@ namespace LocalS.BLL
 
             if (type == "CumCode" || type == "All")
             {
-                var search_Scan_CumCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSCR, merchId), string.Format("{0}*", key));
+                var search_Scan_CumCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PSCR, merchId), string.Format("*{0}*", key.ToUpper()));
                 foreach (var item in search_Scan_CumCode)
                 {
                     productSkuIds.Add(item.Value);
