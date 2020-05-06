@@ -931,6 +931,7 @@ namespace LocalS.BLL.Biz
                     order.Status = E_OrderStatus.Canceled;
                     order.Mender = IdWorker.Build(IdType.EmptyGuid);
                     order.MendTime = DateTime.Now;
+                    order.CancelOperator = operater;
                     order.CanceledTime = DateTime.Now;
                     order.CancelReason = cancelReason;
 

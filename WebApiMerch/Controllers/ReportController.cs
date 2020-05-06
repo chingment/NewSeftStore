@@ -69,5 +69,19 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse StoreSalesDateHisInit()
+        {
+            IResult result = MerchServiceFactory.Report.StoreSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse StoreSalesDateHisGet([FromBody]RopReporOrderSalesDateHisGet rop)
+        {
+            IResult result = MerchServiceFactory.Report.StoreSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

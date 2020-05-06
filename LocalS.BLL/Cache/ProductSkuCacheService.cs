@@ -118,12 +118,12 @@ namespace LocalS.BLL
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.BarCode))
                 {
-                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSBR, prdProductSkuByDb.MerchId), prdProductSkuModel.BarCode, productSkuId, StackExchange.Redis.When.Always);
+                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSBR, prdProductSkuByDb.MerchId), prdProductSkuModel.BarCode.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
                 }
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.PinYinIndex))
                 {
-                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSPY, prdProductSkuByDb.MerchId), prdProductSkuModel.PinYinIndex, productSkuId, StackExchange.Redis.When.Always);
+                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSPY, prdProductSkuByDb.MerchId), prdProductSkuModel.PinYinIndex.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
                 }
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.Name))
@@ -133,7 +133,7 @@ namespace LocalS.BLL
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.CumCode))
                 {
-                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSCR, prdProductSkuByDb.MerchId), prdProductSkuModel.CumCode, productSkuId, StackExchange.Redis.When.Always);
+                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PSCR, prdProductSkuByDb.MerchId), prdProductSkuModel.CumCode.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
                 }
 
                 RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.P, prdProductSkuByDb.MerchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(prdProductSkuModel), StackExchange.Redis.When.Always);

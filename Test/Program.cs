@@ -8,6 +8,7 @@ using LocalS.Service.Api.StoreApp;
 using LocalS.Service.Api.StoreTerm;
 using log4net;
 using Lumos;
+using Lumos.DbRelay;
 using Lumos.Redis;
 using MyPushSdk;
 using NPinyin;
@@ -102,6 +103,30 @@ namespace Test
         static void Main(string[] args)
         {
             log.InfoFormat("程序开始");
+
+
+
+            StringBuilder sql = new StringBuilder(" select StoreName,SumCount ");
+
+            sql.Append(" SumComplete,(SumCount-SumComplete) as SumNoComplete, ");
+            sql.Append(" SumEx,SumExHandle,(SumEx-SumExHandle) as SumExNoHandle,  ");
+            sql.Append(" SumQuantity,SumChargeAmount,SumRefundAmount,(SumChargeAmount-SumRefundAmount) as SumAmount,PayWayByWx,PayWayByZfb ");
+            sql.Append("  from (  ");
+            sql.Append(" select StoreId,StoreName,COUNT(Id) as SumCount, ");
+            sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,");
+            sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle, ");
+            sql.Append(" SUM(Quantity) as SumQuantity, ");
+            sql.Append(" SUM(ChargeAmount)as SumChargeAmount, ");
+            sql.Append(" SUM(RefundAmount) as SumRefundAmount , ");
+            sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx, ");
+            sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb, ");
+            sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete  ");
+            sql.Append("  from [Order]  a where PayStatus=3 and MerchId='d17df2252133478c99104180e8062230'   ");
+            sql.Append("  group by StoreId,StoreName ) tb  order by SumChargeAmount desc  ");
+
+
+
+            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
 
             //TestA a = new TestA();
             // a.MaA = "dasd";

@@ -81,6 +81,8 @@ namespace LocalS.Entity
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
+        public decimal RefundAmount { get; set; }
+        public string RefundOperator { get; set; }
         public int Quantity { get; set; }
         public DateTime? SubmittedTime { get; set; }
         public DateTime? PayedTime { get; set; }

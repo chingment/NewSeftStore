@@ -429,7 +429,7 @@ namespace LocalS.Service.Api.Merch
 
             if (sellChannelRefIds.Count > 0)
             {
-                //query = query.Where(m => m.SellChannelRefIds.a(sellChannelRefIds));
+                // query = query.Where(m => m.SellChannelRefIds.Contains(sellChannelRefIds));
             }
 
             List<object> olist = new List<object>();
@@ -451,6 +451,85 @@ namespace LocalS.Service.Api.Merch
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+
+            return result;
+
+        }
+
+        public CustomJsonResult StoreSalesDateHisInit(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetReportProductSkuSalesDateHisInit();
+
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+
+
+            foreach (var store in stores)
+            {
+                var optionsSellChannel = new OptionNode();
+
+                optionsSellChannel.Value = store.Id;
+                optionsSellChannel.Label = store.Name;
+
+                var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                if (storeMachines.Count > 0)
+                {
+                    optionsSellChannel.Children = new List<OptionNode>();
+
+                    foreach (var storeMachine in storeMachines)
+                    {
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
+                    }
+
+                    ret.OptionsSellChannels.Add(optionsSellChannel);
+                }
+            }
+
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public CustomJsonResult StoreSalesDateHisGet(string operater, string merchId, RopReporOrderSalesDateHisGet rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            //if (rop.TradeDateTimeArea == null)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
+            //}
+
+            //if (rop.TradeDateTimeArea.Length != 2)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
+            //}
+
+
+            StringBuilder sql = new StringBuilder(" select StoreName,SumCount as SumCount,  ");
+
+            sql.Append(" SumComplete,(SumCount-SumComplete) as SumNoComplete, ");
+            sql.Append(" SumEx,SumExHandle,(SumEx-SumExHandle) as SumExNoHandle,  ");
+            sql.Append(" SumQuantity,SumChargeAmount,SumRefundAmount,(SumChargeAmount-SumRefundAmount) as SumAmount,PayWayByWx,PayWayByZfb ");
+            sql.Append("  from (  ");
+            sql.Append(" select StoreId,StoreName,COUNT(Id) as SumCount, ");
+            sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,");
+            sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle, ");
+            sql.Append(" SUM(Quantity) as SumQuantity, ");
+            sql.Append(" SUM(ChargeAmount)as SumChargeAmount, ");
+            sql.Append(" SUM(RefundAmount) as SumRefundAmount , ");
+            sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx, ");
+            sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb, ");
+            sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete  ");
+            sql.Append("  from [Order]  a where PayStatus=3 and MerchId='" + merchId + "'   ");
+            sql.Append("  group by StoreId,StoreName ) tb  order by SumChargeAmount desc  ");
+
+
+            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", dtData);
 
             return result;
 
