@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace LocalS.Service.Api.StoreApp
     public class RopOrderCancle
     {
         public string Id { get; set; }
+
     }
 }

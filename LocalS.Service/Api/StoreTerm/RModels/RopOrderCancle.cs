@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string OrderId { get; set; }
 
         public string Reason { get; set; }
+
+        public E_OrderCancleType CancleType { get; set; }
     }
 }

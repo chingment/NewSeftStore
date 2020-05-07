@@ -4,16 +4,6 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-cascader
-            v-model="listQuery.sellChannels"
-            :props="optionsSellChannelsProps"
-            :options="optionsSellChannels"
-            placeholder="选择销售渠道"
-            clearable
-            style="width: 100%"
-          />
-        </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
             type="daterange"
@@ -44,54 +34,54 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="店铺" align="left">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="总订单数" align="left" min-width="10%">
+      <el-table-column label="总订单数" align="left" prop="sumCount">
         <template slot-scope="scope">
           <span>{{ scope.row.sumCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已完成" align="left" min-width="10%">
+      <el-table-column label="已完成" align="left" prop="sumComplete">
         <template slot-scope="scope">
           <span>{{ scope.row.sumComplete }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="未完成" align="left" min-width="10%">
+      <el-table-column label="未完成" align="left" prop="sumNoComplete">
         <template slot-scope="scope">
           <span>{{ scope.row.sumNoComplete }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="异常" align="left" prop="quantity" min-width="10%">
+      <el-table-column label="异常" align="left" prop="sumEx">
         <template slot-scope="scope">
           <span>{{ scope.row.sumEx }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品数量" align="left" prop="tradeAmount" min-width="10%">
+      <el-table-column label="商品数量" align="left" prop="sumQuantity">
         <template slot-scope="scope">
           <span>{{ scope.row.sumQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" align="left" min-width="10%">
+      <el-table-column label="支付金额" align="left" prop="sumChargeAmount">
         <template slot-scope="scope">
           <span>{{ scope.row.sumChargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款金额" align="left" min-width="10%">
+      <el-table-column label="退款金额" align="left" prop="sumRefundAmount">
         <template slot-scope="scope">
           <span>{{ scope.row.sumRefundAmount }}</span>
         </template>
       </el-table-column>
-     <el-table-column label="合计金额" align="left" min-width="10%">
+      <el-table-column label="合计金额" align="left" prop="sumAmount">
         <template slot-scope="scope">
           <span>{{ scope.row.sumAmount }}</span>
         </template>
       </el-table-column>
     </el-table>
 
-    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：以订单单位维度来统计销售报表</div>
+    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：以店铺单位维度来统计销售报表</div>
   </div>
 </template>
 
@@ -107,7 +97,7 @@ export default {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '订单销售报表',
+      filename: '店铺销售概况报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
@@ -126,10 +116,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this._init()
+    this._initData()
   },
   methods: {
-    _init() {
+    _initData() {
       storeSalesDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -166,8 +156,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '销售渠道', '订单号', '交易时间', '数量', '总金额', '支付方式']
-        const filterVal = ['storeName', 'sellChannelRefNames', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
+        const tHeader = ['店铺', '总订单数', '已完成', '未完成', '异常', '商品数量', '支付金额', '退款金额', '合计金额']
+        const filterVal = ['storeName', 'sumCount', 'sumNoComplete', 'sumNoComplete', 'sumEx', 'sumQuantity', 'sumChargeAmount', 'sumRefundAmount', 'sumAmount']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

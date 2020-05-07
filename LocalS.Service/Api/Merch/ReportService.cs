@@ -496,35 +496,48 @@ namespace LocalS.Service.Api.Merch
 
             var result = new CustomJsonResult();
 
-            //if (rop.TradeDateTimeArea == null)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
-            //}
+            if (rop.TradeDateTimeArea == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
+            }
 
-            //if (rop.TradeDateTimeArea.Length != 2)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
-            //}
+            if (rop.TradeDateTimeArea.Length != 2)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
+            }
+
+            string tradeStartTime = DateTime.Parse(CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+
+            string tradeEndTime = DateTime.Parse(CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
 
 
-            StringBuilder sql = new StringBuilder(" select StoreName,SumCount as SumCount,  ");
-
-            sql.Append(" SumComplete,(SumCount-SumComplete) as SumNoComplete, ");
-            sql.Append(" SumEx,SumExHandle,(SumEx-SumExHandle) as SumExNoHandle,  ");
-            sql.Append(" SumQuantity,SumChargeAmount,SumRefundAmount,(SumChargeAmount-SumRefundAmount) as SumAmount,PayWayByWx,PayWayByZfb ");
-            sql.Append("  from (  ");
-            sql.Append(" select StoreId,StoreName,COUNT(Id) as SumCount, ");
-            sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,");
-            sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle, ");
-            sql.Append(" SUM(Quantity) as SumQuantity, ");
-            sql.Append(" SUM(ChargeAmount)as SumChargeAmount, ");
-            sql.Append(" SUM(RefundAmount) as SumRefundAmount , ");
-            sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx, ");
-            sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb, ");
-            sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete  ");
-            sql.Append("  from [Order]  a where PayStatus=3 and MerchId='" + merchId + "'   ");
-            sql.Append("  group by StoreId,StoreName ) tb  order by SumChargeAmount desc  ");
-
+            StringBuilder sql = new StringBuilder(" select tb1.id as StoreId, tb1.Name as StoreName,  ");
+            sql.Append(" IsNull(SumCount,0) as SumCount,");
+            sql.Append(" IsNull(SumComplete,0) as SumComplete, ");
+            sql.Append(" IsNull((SumCount-SumComplete),0) as SumNoComplete, ");
+            sql.Append(" IsNull(SumEx,0) as SumEx,  ");
+            sql.Append(" IsNull(SumExHandle,0) as SumExHandle,");
+            sql.Append(" IsNull((SumEx-SumExHandle),0) as SumExNoHandle, ");
+            sql.Append(" IsNull(SumQuantity,0) as SumQuantity, ");
+            sql.Append(" IsNull(SumChargeAmount,0) as SumChargeAmount, ");
+            sql.Append(" IsNull(SumRefundAmount,0) as SumRefundAmount, ");
+            sql.Append(" IsNull((SumChargeAmount-SumRefundAmount),0) as SumAmount, ");
+            sql.Append(" IsNull(PayWayByWx,0) as PayWayByWx, ");
+            sql.Append(" IsNull(PayWayByZfb,0) as PayWayByZfb ");
+            sql.Append(" from Store tb1 left join (  ");
+            sql.Append(" select StoreId,   ");
+            sql.Append(" COUNT(Id) as SumCount,  ");
+            sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,  ");
+            sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle,  ");
+            sql.Append(" SUM(Quantity) as SumQuantity,  ");
+            sql.Append(" SUM(ChargeAmount)as SumChargeAmount,  ");
+            sql.Append(" SUM(RefundAmount) as SumRefundAmount ,  ");
+            sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx,  ");
+            sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb,  ");
+            sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete   ");
+            sql.Append(" from [Order]  a where PayStatus=3 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  group by StoreId )   ");
+            sql.Append(" tb on tb1.Id=tb.StoreId  where MerchId='" + merchId + "'  order by SumChargeAmount desc  ");
+         
 
             var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
 

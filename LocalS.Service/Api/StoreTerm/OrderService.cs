@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult result = new CustomJsonResult();
 
 
-            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.Reason);
+            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.CancleType, rop.Reason);
 
             return result;
         }
@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
             var ret = new RetOrderSearchByPickupCode();
 
             ret.Id = orderSub.OrderId;
-  
+
 
             ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(orderSub.OrderId, rup.MachineId);
 

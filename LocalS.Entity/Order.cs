@@ -43,9 +43,17 @@ namespace LocalS.Entity
         WaitPay = 1,
         Paying = 2,
         PaySuccess = 3,
-        NotPay = 4
+        PayCancle = 4,
+        PayTimeout = 5
     }
 
+
+    public enum E_OrderCancleType
+    {
+        Unknow = 0,
+        PayCancle = 1,
+        PayTimeout = 2
+    }
 
     public enum E_OrderPayCaller
     {

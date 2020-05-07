@@ -137,7 +137,7 @@ namespace LocalS.BLL.Task
                                 else
                                 {
                                     LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Id));
-                                    BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), order.Id, "订单支付有效时间过期");
+                                    BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), order.Id, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
                                 }
                                 #endregion
                                 LogUtil.Info(string.Format("结束执行订单查询,时间:{0}", DateTime.Now));

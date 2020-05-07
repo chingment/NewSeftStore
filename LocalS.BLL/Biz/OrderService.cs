@@ -897,7 +897,7 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public CustomJsonResult Cancle(string operater, string orderId, string cancelReason)
+        public CustomJsonResult Cancle(string operater, string orderId, E_OrderCancleType cancleType, string cancelReason)
         {
             var result = new CustomJsonResult();
 
@@ -934,6 +934,15 @@ namespace LocalS.BLL.Biz
                     order.CancelOperator = operater;
                     order.CanceledTime = DateTime.Now;
                     order.CancelReason = cancelReason;
+
+                    if (cancleType == E_OrderCancleType.PayCancle)
+                    {
+                        order.PayStatus = E_OrderPayStatus.PayCancle;
+                    }
+                    else if (cancleType == E_OrderCancleType.PayTimeout)
+                    {
+                        order.PayStatus = E_OrderPayStatus.PayTimeout;
+                    }
 
                     var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id).ToList();
 

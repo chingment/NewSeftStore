@@ -549,7 +549,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Cancle(string operater, string clientUserId, RopOrderCancle rop)
         {
-            return BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id, "用户取消");
+            return BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id, E_OrderCancleType.PayCancle, "用户取消");
         }
 
         public CustomJsonResult BuildPayParams(string operater, string clientUserId, RopOrderBuildPayParams rop)
