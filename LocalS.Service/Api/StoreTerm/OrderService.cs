@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult result = new CustomJsonResult();
 
 
-            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.CancleType, rop.Reason);
+            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.Type, rop.Reason);
 
             return result;
         }

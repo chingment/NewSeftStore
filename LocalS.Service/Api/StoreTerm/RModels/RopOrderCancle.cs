@@ -14,6 +14,6 @@ namespace LocalS.Service.Api.StoreTerm
 
         public string Reason { get; set; }
 
-        public E_OrderCancleType CancleType { get; set; }
+        public E_OrderCancleType Type { get; set; }
     }
 }
