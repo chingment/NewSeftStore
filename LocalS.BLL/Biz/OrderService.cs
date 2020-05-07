@@ -929,7 +929,7 @@ namespace LocalS.BLL.Biz
                 if (order.Status != E_OrderStatus.Payed && order.Status != E_OrderStatus.Completed)
                 {
                     order.Status = E_OrderStatus.Canceled;
-                    order.Mender = IdWorker.Build(IdType.EmptyGuid);
+                    order.Mender = operater;
                     order.MendTime = DateTime.Now;
                     order.CancelOperator = operater;
                     order.CanceledTime = DateTime.Now;
@@ -944,13 +944,58 @@ namespace LocalS.BLL.Biz
                         order.PayStatus = E_OrderPayStatus.PayTimeout;
                     }
 
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+
+                    foreach (var orderSub in orderSubs)
+                    {
+                        orderSub.Mender = operater;
+                        orderSub.MendTime = DateTime.Now;
+
+                        if (cancleType == E_OrderCancleType.PayCancle)
+                        {
+                            orderSub.PayStatus = E_OrderPayStatus.PayCancle;
+                        }
+                        else if (cancleType == E_OrderCancleType.PayTimeout)
+                        {
+                            orderSub.PayStatus = E_OrderPayStatus.PayTimeout;
+                        }
+                    }
+
+                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
+
+                    foreach (var orderSubChild in orderSubChilds)
+                    {
+                        orderSubChild.Mender = operater;
+                        orderSubChild.MendTime = DateTime.Now;
+
+                        if (cancleType == E_OrderCancleType.PayCancle)
+                        {
+                            orderSubChild.PayStatus = E_OrderPayStatus.PayCancle;
+                        }
+                        else if (cancleType == E_OrderCancleType.PayTimeout)
+                        {
+                            orderSubChild.PayStatus = E_OrderPayStatus.PayTimeout;
+                        }
+
+                    }
+
+
                     var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id).ToList();
 
-                    foreach (var item in orderSubChildUniques)
+                    foreach (var orderSubChildUnique in orderSubChildUniques)
                     {
-                        item.PickupStatus = E_OrderPickupStatus.Canceled;
-                        item.Mender = IdWorker.Build(IdType.EmptyGuid);
-                        item.MendTime = DateTime.Now;
+                        orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Canceled;
+                        orderSubChildUnique.Mender = operater;
+                        orderSubChildUnique.MendTime = DateTime.Now;
+
+                        if (cancleType == E_OrderCancleType.PayCancle)
+                        {
+                            orderSubChildUnique.PayStatus = E_OrderPayStatus.PayCancle;
+                        }
+                        else if (cancleType == E_OrderCancleType.PayTimeout)
+                        {
+                            orderSubChildUnique.PayStatus = E_OrderPayStatus.PayTimeout;
+                        }
                     }
 
                     var childSons = (
