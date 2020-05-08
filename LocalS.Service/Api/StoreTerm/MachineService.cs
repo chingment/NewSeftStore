@@ -389,6 +389,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             using (TransactionScope ts = new TransactionScope())
             {
+                var reason = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
 
                 foreach (var order in rop.ExOrders)
                 {
@@ -480,6 +481,7 @@ namespace LocalS.Service.Api.StoreTerm
                         {
                             orderSub.ExIsHandle = true;
                             orderSub.ExHandleTime = DateTime.Now;
+                            orderSub.ExHandleRemark = reason;
 
                         }
                     }
@@ -505,7 +507,6 @@ namespace LocalS.Service.Api.StoreTerm
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                var reason = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
 
                 MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + reason);
 
