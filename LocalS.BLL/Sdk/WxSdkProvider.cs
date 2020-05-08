@@ -259,6 +259,11 @@ namespace LocalS.BLL
             return OAuthApi.GetUserInfoByApiToken(this.GetApiAccessToken(config), openId);
         }
 
+        public List<string> GetUserOpenIds(WxAppInfoConfig config)
+        {
+            return OAuthApi.GetUserOpenIds(this.GetApiAccessToken(config));
+        }
+
         public CustomJsonResult<JsApiConfigParams> GetJsApiConfigParams(WxAppInfoConfig config, string url)
         {
             string jsApiTicket = GetJsApiTicket(config);

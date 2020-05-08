@@ -142,6 +142,7 @@
     <Compile Include="Task\Task4Factory.cs" />
     <Compile Include="Task\Task4Mq2GlobalProvder.cs" />
     <Compile Include="Task\Task4Tim2GlobalProvider.cs" />
+    <Compile Include="Task\Task4Tim2WxUpdateUsersInfoProvider.cs" />
     <Compile Include="YbInsUtil.cs" />
   </ItemGroup>
   <ItemGroup>

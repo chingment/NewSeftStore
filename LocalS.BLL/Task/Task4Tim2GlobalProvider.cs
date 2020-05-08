@@ -224,7 +224,6 @@ namespace LocalS.BLL.Task
             }
         }
 
-
         public void BuildSellChannelStockDateReport()
         {
             try
