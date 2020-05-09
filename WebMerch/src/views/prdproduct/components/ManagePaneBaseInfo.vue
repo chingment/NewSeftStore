@@ -51,7 +51,9 @@
         <el-input v-model="form.singleSkuSalePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
-        <div class="remark-tip"><span class="sign">*注</span>：该价格作为默认销售价，若更改可在编辑-》在售店铺里修改</div>
+
+        <el-checkbox v-model="form.isUnityUpdateSalePrice">立即统一更新</el-checkbox>
+        <div class="remark-tip" style="line-height:24px;"><span class="sign">*注</span>：该价格作为默认销售价，单独修改店铺价格可点击在售店铺里更新 或 统一修改可勾选立即统一更新</div>
       </el-form-item>
       <el-form-item label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" clearable />
@@ -116,7 +118,8 @@ export default {
         singleSkuCumCode: '',
         singleSkuBarCode: '',
         singleSkuSalePrice: 0,
-        singleSkuSpecDes: ''
+        singleSkuSpecDes: '',
+        isUnityUpdateSalePrice: false
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -242,8 +245,8 @@ export default {
       this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
     handlePreviewByDisplayImgUrls(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
+      this.uploadImgPreImgDialogUrlByDisplayImgUrls = file.url
+      this.uploadImgPreImgDialogVisibleByDisplayImgUrls = true
     },
     handleBeforeUploadByDisplayImgUrls(file) {
       const imgType = file.type
