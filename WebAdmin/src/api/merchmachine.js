@@ -16,6 +16,14 @@ export function initEdit(params) {
   })
 }
 
+export function edit(data) {
+  return request({
+    url: '/merchmachine/edit',
+    method: 'post',
+    data
+  })
+}
+
 export function getList(params) {
   return request({
     url: '/merchmachine/getlist',

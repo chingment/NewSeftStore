@@ -53,7 +53,7 @@ namespace LocalS.BLL.Biz
                 cabinet.Name = machineCabinet.CabinetName;
                 cabinet.RowColLayout = machineCabinet.RowColLayout;
                 cabinet.Priority = machineCabinet.Priority;
-                cabinet.FixSlotQuantity = machineCabinet.FixSlotQuantity;
+                cabinet.SlotMaxQuantity = machineCabinet.SlotMaxQuantity;
                 cabinet.ComId = machineCabinet.ComId;
                 model.Cabinets.Add(cabinet.Id, cabinet);
             }

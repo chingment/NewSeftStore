@@ -50,7 +50,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             ret.RowColLayout = cabinet.RowColLayout;
-            ret.FixSlotQuantity = cabinet.FixSlotQuantity;
+            ret.SlotMaxQuantity = cabinet.SlotMaxQuantity;
             var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)

@@ -64,7 +64,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="_getList" />
 
     <el-dialog title="绑定商户" :visible.sync="dialogBindOnMerchIsVisible" width="800px">
       <el-form ref="formByBindOnMerch" :model="formByBindOnMerch" :rules="rulesByBindOnMerch" label-position="left" label-width="80px">
@@ -214,6 +214,49 @@
         </el-form>
 
         <div class="row-title clearfix">
+          <div class="pull-left"> <h5>机柜</h5>
+          </div>
+        </div>
+        <el-table
+          :key="listKey"
+          :data="details.cabinets"
+          fit
+          highlight-current-row
+          style="width: 100%;"
+        >
+          <el-table-column label="编号" prop="id" align="left" min-width="20%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.id }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="名称" prop="name" align="left" min-width="20%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="端口" prop="comId" align="left" min-width="20%">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.comId" placeholder="" size="mini" style="width:100px" />
+            </template>
+          </el-table-column>
+          <el-table-column label="货道最大库存量" prop="slotMaxQuantity" align="left" min-width="20%">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.slotMaxQuantity" placeholder="" size="mini" style="width:100px" />
+            </template>
+          </el-table-column>
+          <el-table-column label="挂件所在行" prop="pendantRows" align="left" min-width="20%">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.pendantRows" placeholder="" size="mini" style="width:100px" />
+            </template>
+          </el-table-column>
+          <el-table-column label="使用" prop="isUse" align="left" min-width="20%">
+            <template slot-scope="scope">
+              <el-checkbox v-model="scope.row.isUse">使用</el-checkbox>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div class="row-title clearfix">
           <div class="pull-left"> <h5>摄像头</h5>
           </div>
         </div>
@@ -296,7 +339,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initGetList, getList, bindOffMerch, bindOnMerch, initEdit } from '@/api/merchmachine'
+import { initGetList, getList, bindOffMerch, bindOnMerch, initEdit, edit } from '@/api/merchmachine'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -370,10 +413,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this._init()
+    this._initData()
   },
   methods: {
-    _init() {
+    _initData() {
       this.loading = true
       initGetList().then(res => {
         if (res.result === 1) {
@@ -443,6 +486,20 @@ export default {
         }
         this.dialogEditLoading = false
         this.dialogEditIsVisible = true
+      })
+    },
+    _edit() {
+      MessageBox.confirm('确定要保存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        edit(this.details).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+
+          }
+        })
       })
     }
   }

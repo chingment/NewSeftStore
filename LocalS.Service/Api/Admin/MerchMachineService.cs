@@ -82,6 +82,14 @@ namespace LocalS.Service.Api.Admin
 
             var machine = CurrentDb.Machine.Where(m => m.Id == rup.Id).FirstOrDefault();
 
+            var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == rup.Id).ToList();
+
+            List<object> cabinets = new List<object>();
+
+            foreach (var machineCabinet in machineCabinets)
+            {
+                cabinets.Add(new { Id = machineCabinet.CabinetId, Name = machineCabinet.CabinetName, ComId = machineCabinet.ComId, IsUse = machineCabinet.IsUse, PendantRows = machineCabinet.PendantRows, SlotMaxQuantity = machineCabinet.SlotMaxQuantity });
+            }
 
             var data = new
             {
@@ -104,7 +112,8 @@ namespace LocalS.Service.Api.Admin
                 SannerComId = machine.SannerComId,
                 FingerVeinnerIsUse = machine.FingerVeinnerIsUse,
                 MstVern = machine.MstVern,
-                OstVern = machine.OstVern
+                OstVern = machine.OstVern,
+                Cabinets = cabinets
             };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", data);
@@ -117,6 +126,7 @@ namespace LocalS.Service.Api.Admin
             var result = new CustomJsonResult();
 
             var machine = CurrentDb.Machine.Where(m => m.Id == rop.Id).FirstOrDefault();
+
 
             machine.CameraByChkIsUse = rop.CameraByChkIsUse;
             machine.CameraByJgIsUse = rop.CameraByJgIsUse;
@@ -131,6 +141,22 @@ namespace LocalS.Service.Api.Admin
             machine.KindRowCellSize = rop.KindRowCellSize;
 
             CurrentDb.SaveChanges();
+
+            foreach (var cabinet in rop.Cabinets)
+            {
+                var machineCabinet = CurrentDb.MachineCabinet.Where(m => m.CabinetId == cabinet.Id && m.MachineId == rop.Id).FirstOrDefault();
+                if (machineCabinet != null)
+                {
+                    machineCabinet.ComId = cabinet.ComId;
+                    machineCabinet.IsUse = cabinet.IsUse;
+                    machineCabinet.SlotMaxQuantity = cabinet.SlotMaxQuantity;
+                    machineCabinet.PendantRows = cabinet.PendantRows;
+
+                    CurrentDb.SaveChanges();
+                }
+
+            }
+
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
