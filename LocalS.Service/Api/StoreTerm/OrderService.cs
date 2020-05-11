@@ -117,6 +117,7 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效取货码");
             }
+            LogUtil.Info("PickupCode:" + rup.PickupCode);
 
             string pickupCode = "";
             if (rup.PickupCode.IndexOf("pickupcode@v1:") > -1)
