@@ -353,14 +353,13 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
-
+            List<SellChannelStock> sellChannelStocks = null;
 
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 prdProduct.Name = rop.Name;
-                //prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
@@ -394,6 +393,19 @@ namespace LocalS.Service.Api.Merch
                         prdProductSku.SalePrice = sku.SalePrice;
                         prdProductSku.Mender = operater;
                         prdProductSku.MendTime = DateTime.Now;
+
+
+                        //统一修改销售价格
+                        if (rop.IsUnifyUpdateSalePrice)
+                        {
+                            sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId).ToList();
+                            foreach (var sellChannelStock in sellChannelStocks)
+                            {
+                                sellChannelStock.SalePrice = sku.SalePrice;
+                                sellChannelStock.Mender = operater;
+                                sellChannelStock.MendTime = DateTime.Now;
+                            }
+                        }
                     }
                 }
 
@@ -440,6 +452,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -448,11 +461,40 @@ namespace LocalS.Service.Api.Merch
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
+
+
             if (result.Result == ResultType.Success)
             {
                 for (var i = 0; i < rop.Skus.Count; i++)
                 {
                     CacheServiceFactory.ProductSku.Update(merchId, rop.Skus[i].Id);
+
+                    if (sellChannelStocks != null)
+                    {
+                        var storeMachines = (from m in sellChannelStocks where m.SellChannelRefType == E_SellChannelRefType.Machine select new { m.StoreId, m.SellChannelRefId }).Distinct();
+                        foreach (var storeMachine in storeMachines)
+                        {
+                            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeMachine.StoreId, new string[] { storeMachine.SellChannelRefId }, rop.Skus[i].Id);
+                            if (bizProductSku != null)
+                            {
+                                if (bizProductSku.Stocks != null)
+                                {
+                                    if (bizProductSku.Stocks.Count > 0)
+                                    {
+                                        var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
+                                        updateProdcutSkuStock.Id = bizProductSku.Id;
+                                        updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                                        updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                                        updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                                        updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
+                                        updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                                        updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                                        BizFactory.Machine.SendUpdateProductSkuStock(operater, AppId.MERCH, merchId, storeMachine.SellChannelRefId, updateProdcutSkuStock);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

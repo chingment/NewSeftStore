@@ -52,7 +52,7 @@
           <template slot="prepend">￥</template>
         </el-input>
 
-        <el-checkbox v-model="form.isUnityUpdateSalePrice">立即统一更新</el-checkbox>
+        <el-checkbox v-model="form.isUnifyUpdateSalePrice">立即统一更新</el-checkbox>
         <div class="remark-tip" style="line-height:24px;"><span class="sign">*注</span>：该价格作为默认销售价，单独修改店铺价格可点击在售店铺里更新 或 统一修改可勾选立即统一更新</div>
       </el-form-item>
       <el-form-item label="规格" prop="singleSkuSpecDes">
@@ -119,7 +119,7 @@ export default {
         singleSkuBarCode: '',
         singleSkuSalePrice: 0,
         singleSkuSpecDes: '',
-        isUnityUpdateSalePrice: false
+        isUnifyUpdateSalePrice: false
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -197,6 +197,7 @@ export default {
           _form.detailsDes = this.form.detailsDes
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
+          _form.isUnifyUpdateSalePrice = this.form.isUnifyUpdateSalePrice
           _form.skus = skus
 
           MessageBox.confirm('确定要保存', '提示', {
