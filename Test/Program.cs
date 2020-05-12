@@ -105,10 +105,10 @@ namespace Test
             log.InfoFormat("程序开始");
 
             BizFactory.Order.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
+            
 
 
-
-             StringBuilder sql = new StringBuilder(" select StoreName,SumCount ");
+            StringBuilder sql = new StringBuilder(" select StoreName,SumCount ");
 
             sql.Append(" SumComplete,(SumCount-SumComplete) as SumNoComplete, ");
             sql.Append(" SumEx,SumExHandle,(SumEx-SumExHandle) as SumExNoHandle,  ");
