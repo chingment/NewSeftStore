@@ -428,6 +428,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
                                 orderPickupLog.UniqueId = orderSubChildUnique.Id;
                                 orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
+                                orderPickupLog.CabinetId = orderSubChildUnique.CabinetId;
                                 orderPickupLog.SlotId = orderSubChildUnique.SlotId;
                                 orderPickupLog.Status = E_OrderPickupStatus.Taked;
                                 orderPickupLog.IsPickupComplete = true;
@@ -457,6 +458,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
                                 orderPickupLog.UniqueId = orderSubChildUnique.Id;
                                 orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
+                                orderPickupLog.CabinetId = orderSubChildUnique.CabinetId;
                                 orderPickupLog.SlotId = orderSubChildUnique.SlotId;
                                 orderPickupLog.Status = E_OrderPickupStatus.Taked;
                                 orderPickupLog.IsPickupComplete = false;
