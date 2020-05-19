@@ -104,6 +104,9 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
+
+            //string[] arr="A/S/B".Split('X')
+
             BizFactory.Order.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
             
 

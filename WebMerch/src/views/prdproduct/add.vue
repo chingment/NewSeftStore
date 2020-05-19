@@ -4,10 +4,10 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="编码" prop="singleSkuCumCode">
+      <el-form-item v-show="!isOpenAddMultiSpecs" label="编码" prop="singleSkuCumCode">
         <el-input v-model="form.singleSkuCumCode" clearable />
       </el-form-item>
-      <el-form-item label="条形码" prop="singleSkuBarCode">
+      <el-form-item v-show="!isOpenAddMultiSpecs" label="条形码" prop="singleSkuBarCode">
         <el-input v-model="form.singleSkuBarCode" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
@@ -47,7 +47,12 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="默认销售价" prop="singleSkuSalePrice">
+
+      <el-form-item label="开启多规格">
+        <el-checkbox v-model="isOpenAddMultiSpecs" />
+      </el-form-item>
+
+      <el-form-item v-show="!isOpenAddMultiSpecs" label="默认销售价" prop="singleSkuSalePrice">
         <el-input v-model="form.singleSkuSalePrice" style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
@@ -55,8 +60,121 @@
         <div class="remark-tip"><span class="sign">*注</span>：该价格作为默认销售价，若更改可在编辑-》在售店铺里修改</div>
 
       </el-form-item>
-      <el-form-item label="规格" prop="singleSkuSpecDes">
+      <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" clearable />
+      </el-form-item>
+
+      <el-form-item v-show="isOpenAddMultiSpecs" style="max-width:1000px">
+
+        <div style="display:flex">
+          <div style="min-width:50px;">规格：</div>
+          <div style="flex:1;">
+            <el-tag
+              v-for="item in multiSpecsItems"
+              :key="item.name"
+              closable
+              :disable-transitions="false"
+              @close="multiSpecsHandleClose(item)"
+            >
+              {{ item.name }}
+            </el-tag>
+            <el-input
+              v-if="multiSpecsInputVisible"
+              ref="saveTagInput"
+              v-model="multiSpecsInputValue"
+              class="input-new-tag"
+              size="small"
+              @keyup.enter.native="multiSpecsHandleInputConfirm"
+              @blur="multiSpecsHandleInputConfirm"
+            />
+            <el-button v-else class="button-new-tag" size="small" @click="multiSpecsShowInput">+ 添加新规格</el-button>
+          </div>
+        </div>
+        <div
+          v-for="(item,i) in multiSpecsItems"
+          :key="item.name"
+          style="display:flex"
+        >
+          <div style="min-width:50px;"> {{ item.name }}：</div>
+
+          <div style="flex:1;">
+            <el-tag
+              v-for="value in item.values"
+              :key="value"
+              type="success"
+              closable
+              :disable-transitions="false"
+              @close="multiSpecsValueHandleClose(item,value)"
+            >
+              {{ value }}
+            </el-tag>
+            <el-input
+              v-if="item.inputVisible"
+              :id="'saveTagInput'+i"
+              v-model="item.inputValue"
+              class="input-new-tag"
+              size="small"
+              @keyup.enter.native="multiSpecsValueHandleInputConfirm(item)"
+              @blur="multiSpecsValueHandleInputConfirm(item)"
+            />
+            <el-button v-else class="button-new-tag" size="small" @click="multiSpecsValueShowInput(item,'saveTagInput'+i)">+ 添加新项</el-button>
+          </div>
+
+        </div>
+
+        <table class="list-tb" cellpadding="0" cellspacing="0">
+          <thead>
+            <tr>
+              <th
+                v-for="item in multiSpecsItems"
+                v-show="item.values.length>0"
+
+                :key="item.name"
+              >
+                {{ item.name }}
+              </th>
+              <th style="width:150px">
+                编码
+              </th>
+              <th style="width:150px">
+                条形码
+              </th>
+              <th style="width:150px">
+                价格
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(item,x) in multiSpecsSkuResult"
+              :key="x"
+            >
+              <td
+                v-for="(spec,y) in item.specDes"
+                :key="y"
+              >
+                {{ spec }}
+              </td>
+              <td>
+                <el-tooltip :content="item.cumCode" placement="top">
+                  <el-input v-model="item.cumCode" clearable style="width:90%" />
+                </el-tooltip>
+              </td>
+              <td>
+                <el-tooltip :content="item.barCode" placement="top">
+                  <el-input v-model="item.barCode" clearable style="width:90%" />
+                </el-tooltip>
+              </td>
+              <td>
+                <el-tooltip :content="item.salePrice" placement="top">
+                  <el-input v-model="item.salePrice" clearable style="width:90%" />
+                </el-tooltip>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
@@ -109,6 +227,7 @@ export default {
   data() {
     return {
       loading: false,
+      isOpenAddMultiSpecs: false,
       form: {
         name: '',
         kindIds: [],
@@ -144,7 +263,32 @@ export default {
       treeselect_kind_normalizer: treeselectNormalizer,
       treeselect_kind_options: [],
       treeselect_subject_normalizer: treeselectNormalizer,
-      treeselect_subject_options: []
+      treeselect_subject_options: [],
+      multiSpecsItems: [],
+      multiSpecsInputVisible: false,
+      multiSpecsInputValue: '',
+      multiSpecsSkuArray: [],
+      multiSpecsSkuList: [],
+      multiSpecsSkuResult: []
+    }
+  },
+  watch: {
+    isOpenAddMultiSpecs(val, oldVal) {
+      if (val) {
+        this.rules.singleSkuCumCode[0].required = false
+        this.rules.singleSkuBarCode[0].required = false
+        this.form.singleSkuSalePrice = 0.01
+        this.rules.singleSkuSalePrice[0].required = false
+        this.rules.singleSkuSpecDes[0].required = false
+      } else {
+        this.rules.singleSkuCumCode[0].required = true
+        this.rules.singleSkuBarCode[0].required = true
+        this.form.singleSkuSalePrice = 0
+        this.rules.singleSkuSalePrice[0].required = true
+        this.rules.singleSkuSpecDes[0].required = true
+      }
+
+      console.log('inputVal = ' + val + ' , oldValue = ' + oldVal)
     }
   },
   mounted() {
@@ -171,18 +315,33 @@ export default {
     },
     onSubmit() {
       console.log(JSON.stringify(this.form))
+
       this.$refs['form'].validate((valid) => {
         if (valid) {
           var skus = []
-          skus.push({ specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
+
+          if (this.isOpenAddMultiSpecs) {
+            this.multiSpecsSkuResult.forEach(item => {
+              skus.push({ specDes: item.specDes.join('/'), salePrice: item.salePrice, barCode: item.barCode, cumCode: item.cumCode })
+            })
+          } else {
+            skus.push({ specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
+          }
+
+          if (skus.length <= 0) {
+            this.$message('至少填写一个商品')
+            return false
+          }
+
           var _form = {}
           _form.name = this.form.name
           _form.kindIds = this.form.kindIds
           _form.detailsDes = this.form.detailsDes
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
+          _form.specItems = this.multiSpecsItems
           _form.skus = skus
-
+          console.log(JSON.stringify(_form))
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -335,6 +494,120 @@ export default {
         },
         animation: 150
       })
+    },
+    multiSpecsHandleClose(item) {
+      var index = this.multiSpecsItems.indexOf(item)
+      this.multiSpecsItems.splice(index, 1)
+      this.buildCombination()
+    },
+    multiSpecsShowInput() {
+      this.multiSpecsInputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    multiSpecsHandleInputConfirm() {
+      var _this = this
+      var newItemName = _this.multiSpecsInputValue
+
+      var isHasSame = false
+      if (_this.multiSpecsItems != null) {
+        _this.multiSpecsItems.forEach(item => {
+          if (item.name === newItemName) {
+            isHasSame = true
+          }
+        })
+      }
+
+      if (isHasSame) {
+        _this.$message('已存在相同规格')
+        return false
+      }
+
+      if (newItemName) {
+        this.multiSpecsItems.push({ name: newItemName, values: [], inputVisible: false, inputValue: '' })
+      }
+      this.multiSpecsInputVisible = false
+      this.multiSpecsInputValue = ''
+      this.buildCombination()
+    },
+    multiSpecsValueHandleClose(item, val) {
+      var item_index = this.multiSpecsItems.indexOf(item)
+      var val_index = this.multiSpecsItems[item_index].values.indexOf(val)
+      this.multiSpecsItems[item_index].values.splice(val_index, 1)
+      this.buildCombination()
+    },
+    multiSpecsValueShowInput(item, id) {
+      var item_index = this.multiSpecsItems.indexOf(item)
+      this.multiSpecsItems[item_index].inputVisible = true
+      this.$nextTick(_ => {
+        document.querySelector('#' + id).focus()
+      })
+    },
+    multiSpecsValueHandleInputConfirm(item) {
+      var _this = this
+      var index = this.multiSpecsItems.indexOf(item)
+      var values = this.multiSpecsItems[index].values
+      var newItemValue = item.inputValue
+
+      var isHasSame = false
+      if (values != null) {
+        values.forEach(val => {
+          if (val === newItemValue) {
+            isHasSame = true
+          }
+        })
+      }
+
+      if (isHasSame) {
+        _this.$message('已存在相同规格值')
+        return false
+      }
+
+      if (newItemValue) {
+        this.multiSpecsItems[index].values.push(newItemValue)
+      }
+      this.multiSpecsItems[index].inputVisible = false
+      this.multiSpecsItems[index].inputValue = ''
+
+      this.buildCombination()
+    },
+    getSkuData(skuArr = [], i, list) {
+      for (let j = 0; j < list[i].length; j++) {
+        if (i < list.length - 1) {
+          skuArr[i] = list[i][j]
+          this.getSkuData(skuArr, i + 1, list) // 递归循环
+        } else {
+          this.multiSpecsSkuList.push([...skuArr, list[i][j]]) // 扩展运算符，连接两个数组
+        }
+      }
+    },
+    buildCombination() {
+      // var checkList = [
+      //   { name: '尺码', list: ['X', 'L'] },
+      //   { name: '颜色', list: ['红色'] },
+      //   { name: '图案', list: ['圆'] }
+      // ]
+
+      this.multiSpecsSkuArray = []
+      this.multiSpecsSkuList = []
+      // 将选中的规格组合成一个大数组 [[1, 2], [a, b]...]
+      this.multiSpecsItems.forEach(element => {
+        element.values.length > 0 ? this.multiSpecsSkuArray.push(element.values) : ''
+      })
+      // 勾选了规格，才调用方法
+      if (this.multiSpecsSkuArray.length > 0) {
+        this.getSkuData([], 0, this.multiSpecsSkuArray)
+      }
+
+      var multiSpecs = []
+
+      for (let x = 0; x < this.multiSpecsSkuList.length; x++) {
+        multiSpecs.push({ specDes: this.multiSpecsSkuList[x], salesPrice: 0, cumCode: '', barCode: '' })
+      }
+
+      this.multiSpecsSkuResult = multiSpecs
+      console.log(this.multiSpecsSkuResult)
     }
   }
 }
@@ -356,6 +629,22 @@ export default {
 .el-upload-list >>> .el-tag {
   cursor: pointer;
 }
+
+   .el-tag {
+    margin-right: 10px;
+  }
+  .button-new-tag {
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-right: 10px;
+    vertical-align: bottom;
+  }
+
 }
 </style>
 

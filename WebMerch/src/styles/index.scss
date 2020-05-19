@@ -239,3 +239,60 @@ border-color: #97a8be;
   }
 
 
+/*table  start*/
+table.list-tb {
+  /*border-style: none;
+border-color: inherit;
+border-width: 0;
+border-collapse: collapse;
+font-size: 9.2pt;
+background-color: White;
+text-align: left;
+margin-right: 0px;*/
+  table-layout: fixed;
+  width: 100%;
+  background-color: #e6e7e8;
+  border: 1px solid #e1e6eb;
+}
+
+table.list-tb > thead {
+  font-weight: bold;
+  color: Black;
+  /*padding-left: 3px;*/
+  /*padding-top: 3px;*/
+  padding: 3px;
+}
+
+table.list-tb > thead > tr > th {
+  border: 0px;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 42px;
+  height: 42px;
+  padding: 0px;
+  padding-left: 3px;
+  color: #5f6468;
+  font-weight: 300;
+  text-align: left;
+}
+
+table.list-tb > tbody > tr {
+  height: 20px;
+  padding: 2px;
+}
+
+table.list-tb > tbody > tr > td {
+  border: 0px;
+  padding-left: 3px;
+  cursor: default;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 32px;
+  line-height: 21px;
+  background-color: #fff;
+  border-top: 1px solid #e1e6eb;
+  word-break: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+}

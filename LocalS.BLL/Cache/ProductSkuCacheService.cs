@@ -115,6 +115,7 @@ namespace LocalS.BLL
                 prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.ToJsonObject<List<ImgSet>>();
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
+                prdProductSkuModel.ProductSpecItems = prdProductDb.SpecItems.ToJsonObject<List<Object>>();
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.BarCode))
                 {

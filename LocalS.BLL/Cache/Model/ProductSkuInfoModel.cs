@@ -15,6 +15,7 @@ namespace LocalS.BLL
         public string Producer { get; set; }
         public string PinYinIndex { get; set; }
         public string ProductId { get; set; }
+        public List<Object> ProductSpecItems { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }

@@ -215,6 +215,16 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
                 prdProduct.BriefDes = rop.BriefDes;
+
+
+                if (rop.SpecItems != null)
+                {
+                    if (rop.SpecItems.Count > 0)
+                    {
+                        prdProduct.SpecItems = rop.SpecItems.Where(m => m.Values.Count > 0).ToJsonString();
+                    }
+                }
+
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
 
@@ -225,7 +235,12 @@ namespace LocalS.Service.Api.Merch
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码不能为空");
                     }
 
-                    var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.CumCode == sku.CumCode).FirstOrDefault();
+                    if (sku.SalePrice <= 0)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品价格必须大于0");
+                    }
+
+                    var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.CumCode == sku.CumCode).FirstOrDefault();
                     if (isExtitSkuCode != null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码已经存在");
@@ -237,7 +252,6 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.PrdProductId = prdProduct.Id;
                     prdProductSku.BarCode = sku.BarCode;
                     prdProductSku.CumCode = sku.CumCode;
-                    prdProductSku.PinYinName = prdProduct.PinYinName;
                     prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                     prdProductSku.Name = prdProduct.Name;
                     prdProductSku.SpecDes = sku.SpecDes;
@@ -245,6 +259,7 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;
                     CurrentDb.PrdProductSku.Add(prdProductSku);
+                    CurrentDb.SaveChanges();
 
                     sku.Id = prdProductSku.Id;
                 }
@@ -385,7 +400,6 @@ namespace LocalS.Service.Api.Merch
                     if (prdProductSku != null)
                     {
                         prdProductSku.Name = rop.Name;
-                        prdProductSku.PinYinName = prdProduct.PinYinName;
                         prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                         prdProductSku.CumCode = sku.CumCode;
                         prdProductSku.BarCode = sku.BarCode;

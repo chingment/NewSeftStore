@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,11 @@ namespace System
             string rt = null;
             try
             {
-                rt = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                var setting = new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                };
+                rt = Newtonsoft.Json.JsonConvert.SerializeObject(obj, setting);
             }
             catch
             {
@@ -35,6 +40,7 @@ namespace System
 
             try
             {
+
                 T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Newtonsoft.Json.JsonConvert.SerializeObject(s));
 
                 return t;
