@@ -153,7 +153,7 @@
                 v-for="(spec,y) in item.specDes"
                 :key="y"
               >
-                {{ spec }}
+                {{ spec.value }}
               </td>
               <td>
                 <el-tooltip :content="item.cumCode" placement="top">
@@ -322,14 +322,14 @@ export default {
 
           if (this.isOpenAddMultiSpecs) {
             this.multiSpecsSkuResult.forEach(item => {
-              skus.push({ specDes: item.specDes.join('/'), salePrice: item.salePrice, barCode: item.barCode, cumCode: item.cumCode })
+              skus.push({ specDes: item.specDes, salePrice: item.salePrice, barCode: item.barCode, cumCode: item.cumCode })
             })
           } else {
-            skus.push({ specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
+            skus.push({ specDes: [{ name: '单规格', value: this.form.singleSkuSpecDes }], salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
           }
 
           if (skus.length <= 0) {
-            this.$message('至少填写一个商品')
+            this.$message('至少录入一个规格                                                                                                                                                                                                                                                                                                                                                   商品')
             return false
           }
 
@@ -601,10 +601,20 @@ export default {
       }
 
       var multiSpecs = []
+      for (var j = 0; j < this.multiSpecsSkuList.length; j++) {
+        var arr_spec_desc = this.multiSpecsSkuList[j]
+        var ll_spec_desc = []
+        for (var k = 0; k < arr_spec_desc.length; k++) {
+          ll_spec_desc.push({ name: this.multiSpecsItems[k].name, value: arr_spec_desc[k] })
+        }
 
-      for (let x = 0; x < this.multiSpecsSkuList.length; x++) {
-        multiSpecs.push({ specDes: this.multiSpecsSkuList[x], salesPrice: 0, cumCode: '', barCode: '' })
+        multiSpecs.push({ specDes: ll_spec_desc, salesPrice: 0, cumCode: '', barCode: '' })
       }
+
+      // var multiSpecs = []
+      // for (let x = 0; x < this.multiSpecsSkuList.length; x++) {
+      //   multiSpecs.push({ specDes: this.multiSpecsSkuList[x], salesPrice: 0, cumCode: '', barCode: '' })
+      // }
 
       this.multiSpecsSkuResult = multiSpecs
       console.log(this.multiSpecsSkuResult)

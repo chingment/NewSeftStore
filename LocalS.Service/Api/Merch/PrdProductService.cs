@@ -176,6 +176,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+
         public CustomJsonResult Add(string operater, string merchId, RopPrdProductAdd rop)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -203,13 +204,10 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-
-
                 var prdProduct = new PrdProduct();
                 prdProduct.Id = IdWorker.Build(IdType.NewGuid);
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name;
-                //prdProduct.PinYinName = Pinyin.ConvertEncoding(prdProduct.Name, Encoding.UTF8, Encoding.GetEncoding("GB2312"));
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
@@ -254,7 +252,7 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.CumCode = sku.CumCode;
                     prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                     prdProductSku.Name = prdProduct.Name;
-                    prdProductSku.SpecDes = sku.SpecDes;
+                    prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
                     prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;
@@ -336,7 +334,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var prdProductSku in prdProductSkus)
                 {
-                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, SpecDes = prdProductSku.SpecDes });
+                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, SpecDes = prdProductSku.SpecDes.ToJsonObject<List<object>>() });
                 }
             }
 
@@ -403,7 +401,13 @@ namespace LocalS.Service.Api.Merch
                         prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
                         prdProductSku.CumCode = sku.CumCode;
                         prdProductSku.BarCode = sku.BarCode;
-                        prdProductSku.SpecDes = sku.SpecDes;
+                        prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
+
+                        if (string.IsNullOrEmpty(prdProductSku.SpecDes))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品规格不能为空");
+                        }
+
                         prdProductSku.SalePrice = sku.SalePrice;
                         prdProductSku.Mender = operater;
                         prdProductSku.MendTime = DateTime.Now;

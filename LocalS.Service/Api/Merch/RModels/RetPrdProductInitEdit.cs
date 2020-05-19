@@ -40,7 +40,7 @@ namespace LocalS.Service.Api.Merch
         public class Sku
         {
             public string Id { get; set; }
-            public string SpecDes { get; set; }
+            public List<Object> SpecDes { get; set; }
 
             public decimal SalePrice { get; set; }
 

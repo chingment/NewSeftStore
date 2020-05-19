@@ -172,7 +172,7 @@ export default {
           this.form.singleSkuBarCode = d.skus[0].barCode
           this.form.singleSkuCumCode = d.skus[0].cumCode
           this.form.singleSkuSalePrice = d.skus[0].salePrice
-          this.form.singleSkuSpecDes = d.skus[0].specDes
+          this.form.singleSkuSpecDes = d.skus[0].specDes[0].value
 
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
@@ -189,7 +189,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           var skus = []
-          skus.push({ id: this.form.singleSkuId, specDes: this.form.singleSkuSpecDes, salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
+          skus.push({ id: this.form.singleSkuId, specDes: [{ name: '单规格', value: this.form.singleSkuSpecDes }], salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
           var _form = {}
           _form.id = this.form.id
           _form.name = this.form.name

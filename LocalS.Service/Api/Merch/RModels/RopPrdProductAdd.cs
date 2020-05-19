@@ -34,10 +34,18 @@ namespace LocalS.Service.Api.Merch
             public string Id { get; set; }
             public string CumCode { get; set; }
             public string BarCode { get; set; }
-            public string SpecDes { get; set; }
-
+            public List<SpecDes> SpecDes { get; set; }
             public decimal SalePrice { get; set; }
+
+
         }
+
+        public class SpecDes
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+        }
+
         public class SpecItem
         {
             public SpecItem()
