@@ -267,6 +267,14 @@ namespace LocalS.BLL
                 var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
                 foreach (var productSku in productSkus)
                 {
+
+                    //List<object> a = new List<object>();
+
+                    //a.Add(new { name = "单规格", value = productSku.SpecDes });
+
+                    //productSku.SpecDes = a.ToJsonString();
+                    //CurrentDb.SaveChanges();
+
                     GetInfo(merch.Id, productSku.Id);
                 }
             }

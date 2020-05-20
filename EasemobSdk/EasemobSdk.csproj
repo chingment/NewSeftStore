@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{259E83DA-5441-4911-B284-D524201329FC}</ProjectGuid>
+    <ProjectGuid>{86FCA40D-88CD-4CA0-8218-107704CA76FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TongGuanPaySdk</RootNamespace>
-    <AssemblyName>TgPaySdk</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>EasemobSdk</RootNamespace>
+    <AssemblyName>EasemobSdk</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,11 +33,11 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net465\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -49,20 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiDoPost.cs" />
+    <Compile Include="ApiDoRequest.cs" />
     <Compile Include="IApiPostRequest.cs" />
-    <Compile Include="Post\AllQrcodePayAsynNotifyResult.cs" />
-    <Compile Include="Post\AllQrcodePayRequest.cs" />
-    <Compile Include="Post\AllQrcodePayRequestData.cs" />
-    <Compile Include="Post\AllQrcodePayRequestResult.cs" />
-    <Compile Include="Post\BaseRequestData.cs" />
-    <Compile Include="Post\BaseRequestResult.cs" />
-    <Compile Include="Post\OrderQueryRequest.cs" />
-    <Compile Include="Post\OrderQueryRequestData.cs" />
-    <Compile Include="Post\OrderQueryRequestResult.cs" />
+    <Compile Include="Post\TokenRequest.cs" />
+    <Compile Include="Post\TokenResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TgPayUtil.cs" />
-    <Compile Include="TgPayInfoConfg.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\FileItem.cs" />
     <Compile Include="Utils\WebUtils.cs" />

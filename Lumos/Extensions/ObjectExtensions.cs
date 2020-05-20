@@ -35,20 +35,31 @@ namespace System
 
         public static T ToJsonObject<T>(this Object s)
         {
+
             if (s == null)
                 return default(T);
 
             try
             {
+                if (s is String)
+                {
+                    T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(s.ToString());
 
-                T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Newtonsoft.Json.JsonConvert.SerializeObject(s));
+                    return t;
+                }
+                else
+                {
+                    T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Newtonsoft.Json.JsonConvert.SerializeObject(s));
 
-                return t;
+                    return t;
+                }
+
             }
             catch
             {
                 return default(T);
             }
+
         }
     }
 }

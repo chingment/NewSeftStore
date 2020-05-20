@@ -176,6 +176,18 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public string GetSkuSpecCombineName(string productName, List<SpecDes> specDess)
+        {
+            string str_Spec = "";
+            foreach (var spec in specDess)
+            {
+                str_Spec += spec.Value + " ";
+            }
+
+            string name = productName + " " + str_Spec.Trim2();
+
+            return name;
+        }
 
         public CustomJsonResult Add(string operater, string merchId, RopPrdProductAdd rop)
         {
@@ -207,12 +219,12 @@ namespace LocalS.Service.Api.Merch
                 var prdProduct = new PrdProduct();
                 prdProduct.Id = IdWorker.Build(IdType.NewGuid);
                 prdProduct.MerchId = merchId;
-                prdProduct.Name = rop.Name;
+                prdProduct.Name = rop.Name.Trim2();
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
-                prdProduct.BriefDes = rop.BriefDes;
+                prdProduct.BriefDes = rop.BriefDes.Trim2();
 
 
                 if (rop.SpecItems != null)
@@ -248,10 +260,10 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.Id = IdWorker.Build(IdType.NewGuid);
                     prdProductSku.MerchId = prdProduct.MerchId;
                     prdProductSku.PrdProductId = prdProduct.Id;
-                    prdProductSku.BarCode = sku.BarCode;
-                    prdProductSku.CumCode = sku.CumCode;
-                    prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
-                    prdProductSku.Name = prdProduct.Name;
+                    prdProductSku.BarCode = sku.BarCode.Trim2();
+                    prdProductSku.CumCode = sku.CumCode.Trim2();
+                    prdProductSku.Name = GetSkuSpecCombineName(prdProduct.Name, sku.SpecDes);
+                    prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
                     prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
                     prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
@@ -330,12 +342,13 @@ namespace LocalS.Service.Api.Merch
                 ret.Kinds = GetKindTree(merchId);
                 ret.Subjects = GetSubjectTree(merchId);
 
-                var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).ToList();
+                var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).OrderBy(m => m.SpecDes).ToList();
 
                 foreach (var prdProductSku in prdProductSkus)
                 {
                     ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, SpecDes = prdProductSku.SpecDes.ToJsonObject<List<object>>() });
                 }
+
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -397,8 +410,8 @@ namespace LocalS.Service.Api.Merch
                     var prdProductSku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (prdProductSku != null)
                     {
-                        prdProductSku.Name = rop.Name;
-                        prdProductSku.PinYinIndex = prdProduct.PinYinIndex;
+                        prdProductSku.Name = GetSkuSpecCombineName(prdProduct.Name, prdProductSku.SpecDes.ToJsonObject<List<SpecDes>>());
+                        prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
                         prdProductSku.CumCode = sku.CumCode;
                         prdProductSku.BarCode = sku.BarCode;
                         prdProductSku.SpecDes = sku.SpecDes.ToJsonString();

@@ -8,22 +8,7 @@ namespace System
 {
     public static class StringExtensions
     {
-        public static string ToSearchString(this string s)
-        {
-
-            if (s == null)
-                return "";
-
-            s = s.Trim();
-            if (s.Length > 1000)
-            {
-                s = s.Substring(0, 1000);
-            }
-
-            return s.ToString();
-        }
-
-        public static string NullToEmpty(this object s)
+        public static string NullToEmpty(this string s)
         {
             if (s == null)
             {
@@ -35,40 +20,14 @@ namespace System
             }
         }
 
-        public static string NullStringToNullObject(this object s)
+        public static string Trim2(this string s)
         {
-            if (s == null)
+            if (!string.IsNullOrEmpty(s))
             {
-                return null;
+                return s.ToString().Trim();
             }
-            else
-            {
-                if (s.ToString().Trim().ToUpper() == "NULL")
-                    return null;
 
-                return s.ToString();
-            }
+            return s;
         }
-
-        public static T ToJsonObject<T>(this string s)
-        {
-            if (s == null)
-                return default(T);
-
-            if (string.IsNullOrEmpty(s))
-                return default(T);
-
-            try
-            {
-                T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(s);
-
-                return t;
-            }
-            catch
-            {
-                return default(T);
-            }
-        }
-
     }
 }

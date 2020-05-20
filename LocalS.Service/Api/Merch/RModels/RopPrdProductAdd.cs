@@ -7,6 +7,24 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
+    public class SpecDes
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class SpecItem
+    {
+        public SpecItem()
+        {
+            this.Values = new List<string>();
+        }
+
+        public string Name { get; set; }
+        public List<string> Values { get; set; }
+    }
+
+
     public class RopPrdProductAdd
     {
         public RopPrdProductAdd()
@@ -38,23 +56,6 @@ namespace LocalS.Service.Api.Merch
             public decimal SalePrice { get; set; }
 
 
-        }
-
-        public class SpecDes
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-        }
-
-        public class SpecItem
-        {
-            public SpecItem()
-            {
-                this.Values = new List<string>();
-            }
-
-            public string Name { get; set; }
-            public List<string> Values { get; set; }
         }
     }
 }

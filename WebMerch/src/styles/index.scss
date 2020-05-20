@@ -251,8 +251,6 @@ text-align: left;
 margin-right: 0px;*/
   table-layout: fixed;
   width: 100%;
-  background-color: #e6e7e8;
-  border: 1px solid #e1e6eb;
 }
 
 table.list-tb > thead {
@@ -273,6 +271,7 @@ table.list-tb > thead > tr > th {
   padding-left: 3px;
   color: #5f6468;
   font-weight: 300;
+  border-bottom: 1px solid #e1e6eb;
   text-align: left;
 }
 
@@ -290,7 +289,7 @@ table.list-tb > tbody > tr > td {
   height: 32px;
   line-height: 21px;
   background-color: #fff;
-  border-top: 1px solid #e1e6eb;
+  border-bottom: 1px solid #e1e6eb;
   word-break: break-word;
   word-wrap: break-word;
   white-space: normal;

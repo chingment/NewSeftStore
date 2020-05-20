@@ -98,6 +98,7 @@ export default {
             this.$message(res.message)
           }
         })
+      }).catch(() => {
       })
     },
     onSysShutDown() {
@@ -113,6 +114,7 @@ export default {
             this.$message(res.message)
           }
         })
+      }).catch(() => {
       })
     },
     onOpenDialogSysSetStatus() {
@@ -136,6 +138,7 @@ export default {
                 this.$message(res.message)
               }
             })
+          }).catch(() => {
           })
         }
       })
@@ -153,6 +156,7 @@ export default {
             this.$message(res.message)
           }
         })
+      }).catch(() => {
       })
     },
     onQueryMsgStatus(msgId) {

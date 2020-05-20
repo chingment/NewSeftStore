@@ -1,4 +1,5 @@
-﻿using LocalS.BLL;
+﻿using EasemobSdk;
+using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
 using LocalS.BLL.Task;
@@ -103,6 +104,12 @@ namespace Test
         static void Main(string[] args)
         {
             log.InfoFormat("程序开始");
+
+            EasemobSdk.ApiDoRequest api = new EasemobSdk.ApiDoRequest();
+
+            TokenRequest apiAccessToken = new TokenRequest("client_credentials", "YXA6bQh4SdXsSDq3_RNy3hRoRw", "YXA6gV8I7B64QvVlU3xQrzt6aI2CK5w");
+
+            var apiAccessTokenResult = api.DoPost(apiAccessToken);
 
 
             //string[] arr="A/S/B".Split('X')

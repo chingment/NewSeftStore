@@ -152,6 +152,7 @@ export default {
                 this.init()
               }
             })
+          }).catch(() => {
           })
         }
       })

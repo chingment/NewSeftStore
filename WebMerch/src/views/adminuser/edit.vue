@@ -111,6 +111,7 @@ export default {
                 goBack(this)
               }
             })
+          }).catch(() => {
           })
         }
       })

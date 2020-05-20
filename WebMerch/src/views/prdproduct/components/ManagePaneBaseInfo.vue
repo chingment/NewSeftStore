@@ -4,12 +4,6 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="编码" prop="singleSkuCumCode">
-        <el-input v-model="form.singleSkuCumCode" clearable />
-      </el-form-item>
-      <el-form-item label="条形码" prop="singleSkuBarCode">
-        <el-input v-model="form.singleSkuBarCode" clearable />
-      </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
@@ -47,17 +41,65 @@
           no-children-text=""
         />
       </el-form-item>
-      <el-form-item label="默认销售价" prop="singleSkuSalePrice">
-        <el-input v-model="form.singleSkuSalePrice" style="width:160px">
-          <template slot="prepend">￥</template>
-        </el-input>
 
-        <el-checkbox v-model="form.isUnifyUpdateSalePrice">立即统一更新</el-checkbox>
-        <div class="remark-tip" style="line-height:24px;"><span class="sign">*注</span>：该价格作为默认销售价，单独修改店铺价格可点击在售店铺里更新 或 统一修改可勾选立即统一更新</div>
+      <el-form-item label="SKU列表" style="max-width:1000px">
+
+        <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新店铺销售价</el-checkbox>
+        <div class="remark-tip" style="line-height:24px;"><span class="sign">*注</span>：勾选后，SKU列表里的价格会统一更新店铺的销售价格，不勾选只作参考价格</div>
+
+        <table class="list-tb" cellpadding="0" cellspacing="0">
+          <thead>
+            <tr>
+              <th>
+                规格
+              </th>
+              <th style="width:150px">
+                编码
+              </th>
+              <th style="width:150px">
+                条形码
+              </th>
+              <th style="width:150px">
+                价格
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(item,x) in form.skus"
+              :key="x"
+            >
+              <td>
+                <span
+                  v-for="(specDes,y) in item.specDes"
+                  :key="y"
+                >
+                  {{ specDes.value }}
+
+                </span>
+              </td>
+              <td>
+                <el-tooltip :content="item.cumCode" placement="top">
+                  <el-input v-model="item.cumCode" clearable style="width:90%" />
+                </el-tooltip>
+              </td>
+              <td>
+                <el-tooltip :content="item.barCode" placement="top">
+                  <el-input v-model="item.barCode" clearable style="width:90%" />
+                </el-tooltip>
+              </td>
+              <td>
+                <el-tooltip :content="item.salePrice" placement="top">
+                  <el-input v-model="item.salePrice" clearable style="width:90%" />
+                </el-tooltip>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
       </el-form-item>
-      <el-form-item label="规格" prop="singleSkuSpecDes">
-        <el-input v-model="form.singleSkuSpecDes" clearable />
-      </el-form-item>
+
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" maxlength="200" clearable />
       </el-form-item>
@@ -115,20 +157,13 @@ export default {
         detailsDes: [],
         briefDes: '',
         displayImgUrls: [],
-        singleSkuCumCode: '',
-        singleSkuBarCode: '',
-        singleSkuSalePrice: 0,
-        singleSkuSpecDes: '',
-        isUnifyUpdateSalePrice: false
+        isUnifyUpdateSalePrice: false,
+        skus: []
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        singleSkuCumCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        singleSkuBarCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         // kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
-        singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
-        singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }]
       },
       treeselect_kind_normalizer: treeselectNormalizer,
@@ -167,13 +202,7 @@ export default {
           this.form.detailsDes = d.detailsDes
           this.form.briefDes = d.briefDes
           this.form.displayImgUrls = d.displayImgUrls
-
-          this.form.singleSkuId = d.skus[0].id
-          this.form.singleSkuBarCode = d.skus[0].barCode
-          this.form.singleSkuCumCode = d.skus[0].cumCode
-          this.form.singleSkuSalePrice = d.skus[0].salePrice
-          this.form.singleSkuSpecDes = d.skus[0].specDes[0].value
-
+          this.form.skus = d.skus
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
           this.treeselect_subject_options = d.subjects
@@ -188,8 +217,6 @@ export default {
     onSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          var skus = []
-          skus.push({ id: this.form.singleSkuId, specDes: [{ name: '单规格', value: this.form.singleSkuSpecDes }], salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
           var _form = {}
           _form.id = this.form.id
           _form.name = this.form.name
@@ -198,7 +225,7 @@ export default {
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
           _form.isUnifyUpdateSalePrice = this.form.isUnifyUpdateSalePrice
-          _form.skus = skus
+          _form.skus = this.form.skus
 
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',

@@ -314,8 +314,6 @@ export default {
 
     },
     onSubmit() {
-      console.log(JSON.stringify(this.form))
-
       this.$refs['form'].validate((valid) => {
         if (valid) {
           var skus = []
@@ -353,6 +351,7 @@ export default {
                 goBack(this)
               }
             })
+          }).catch(() => {
           })
         }
       })

@@ -154,6 +154,7 @@ export default {
                 this.init()
               }
             })
+          }).catch(() => {
           })
         }
       })
@@ -170,6 +171,7 @@ export default {
             this.init()
           }
         })
+      }).catch(() => {
       })
     },
     handleViewStock(row) {

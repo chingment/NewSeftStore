@@ -307,6 +307,7 @@ export default {
                 this.getListData(this.listQuery)
               }
             })
+          }).catch(() => {
           })
         }
       })
