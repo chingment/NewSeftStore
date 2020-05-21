@@ -53,13 +53,13 @@
               <th>
                 规格
               </th>
-              <th style="width:150px">
+              <th style="width:180px">
                 编码
               </th>
-              <th style="width:150px">
+              <th style="width:180px">
                 条形码
               </th>
-              <th style="width:150px">
+              <th style="width:100px">
                 价格
               </th>
             </tr>
@@ -79,19 +79,17 @@
                 </span>
               </td>
               <td>
-                <el-tooltip :content="item.cumCode" placement="top">
-                  <el-input v-model="item.cumCode" clearable style="width:90%" />
-                </el-tooltip>
+                <el-input v-model="item.cumCode" clearable style="width:90%" />
               </td>
               <td>
-                <el-tooltip :content="item.barCode" placement="top">
-                  <el-input v-model="item.barCode" clearable style="width:90%" />
-                </el-tooltip>
+
+                <el-input v-model="item.barCode" clearable style="width:90%" />
+
               </td>
               <td>
-                <el-tooltip :content="item.salePrice" placement="top">
-                  <el-input v-model="item.salePrice" clearable style="width:90%" />
-                </el-tooltip>
+
+                <el-input v-model="item.salePrice" clearable style="width:90%" />
+
               </td>
             </tr>
           </tbody>
@@ -139,7 +137,7 @@
 import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
-import { goBack, getUrlParam, treeselectNormalizer } from '@/utils/commonUtil'
+import { goBack, getUrlParam, treeselectNormalizer, strLen, isMoney } from '@/utils/commonUtil'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -217,6 +215,29 @@ export default {
     onSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          for (var i = 0; i < this.form.skus.length; i++) {
+            var strName = '规格 '
+
+            for (var j = 0; j < this.form.skus[i].specDes.length; j++) {
+              strName += this.form.skus[i].specDes[j].value + ' '
+            }
+
+            if (strLen(this.form.skus[i].cumCode) <= 0 || strLen(this.form.skus[i].cumCode) > 30) {
+              this.$message(strName + '的编码不能为空，且不能超过30个字符')
+              return false
+            }
+
+            if (strLen(this.form.skus[i].barCode) > 30) {
+              this.$message(strName + '的条形码不能超过30个字符')
+              return false
+            }
+
+            if (!isMoney(this.form.skus[i].salePrice)) {
+              this.$message(strName + '的价格格式必须为:xx.xx,eg: 88.88')
+              return false
+            }
+          }
+
           var _form = {}
           _form.id = this.form.id
           _form.name = this.form.name
@@ -234,9 +255,6 @@ export default {
           }).then(() => {
             edit(_form).then(res => {
               this.$message(res.message)
-              if (res.result === 1) {
-                goBack(this)
-              }
             })
           })
         }

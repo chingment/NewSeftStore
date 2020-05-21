@@ -250,6 +250,11 @@ namespace LocalS.Service.Api.Merch
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品价格必须大于0");
                     }
 
+                    if (sku.SpecDes == null || sku.SpecDes.Count <= 0)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品规格不能为空");
+                    }
+
                     var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.CumCode == sku.CumCode).FirstOrDefault();
                     if (isExtitSkuCode != null)
                     {
@@ -264,7 +269,7 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.CumCode = sku.CumCode.Trim2();
                     prdProductSku.Name = GetSkuSpecCombineName(prdProduct.Name, sku.SpecDes);
                     prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
-                    prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
+                    prdProductSku.SpecDes = sku.SpecDes.OrderBy(m => m.Name).ToList().ToJsonString();
                     prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;

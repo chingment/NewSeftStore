@@ -216,7 +216,7 @@
 import { MessageBox } from 'element-ui'
 import { add, initAdd } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
-import { goBack, treeselectNormalizer } from '@/utils/commonUtil'
+import { goBack, treeselectNormalizer, strLen, isMoney } from '@/utils/commonUtil'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -319,15 +319,37 @@ export default {
           var skus = []
 
           if (this.isOpenAddMultiSpecs) {
-            this.multiSpecsSkuResult.forEach(item => {
-              skus.push({ specDes: item.specDes, salePrice: item.salePrice, barCode: item.barCode, cumCode: item.cumCode })
-            })
+            var _skus = this.multiSpecsSkuResult
+            for (var i = 0; i < _skus.length; i++) {
+              var strName = '规格 '
+
+              for (var j = 0; j < _skus[i].specDes.length; j++) {
+                strName += _skus[i].specDes[j].value + ' '
+              }
+
+              if (strLen(_skus[i].cumCode) <= 0 || strLen(_skus[i].cumCode) > 30) {
+                this.$message(strName + '的编码不能为空，且不能超过30个字符')
+                return false
+              }
+
+              if (strLen(_skus[i].barCode) > 30) {
+                this.$message(strName + '的条形码不能超过30个字符')
+                return false
+              }
+
+              if (!isMoney(_skus[i].salePrice)) {
+                this.$message(strName + '的价格格式必须为:xx.xx,eg: 88.88')
+                return false
+              }
+
+              skus.push({ specDes: _skus[i].specDes, salePrice: _skus[i].salePrice, barCode: _skus[i].barCode, cumCode: _skus[i].cumCode })
+            }
           } else {
             skus.push({ specDes: [{ name: '单规格', value: this.form.singleSkuSpecDes }], salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
           }
 
           if (skus.length <= 0) {
-            this.$message('至少录入一个规格                                                                                                                                                                                                                                                                                                                                                   商品')
+            this.$message('至少录入一个规格商品')
             return false
           }
 

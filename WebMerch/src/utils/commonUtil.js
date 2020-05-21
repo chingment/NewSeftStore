@@ -81,3 +81,36 @@ function treeGetNodeByDepth(tree, depth, nodes) {
     }
   }
 }
+
+export function strLen(str) {
+  var len = 0
+
+  if (str != null) {
+    str = str.replace(/(^\s*)|(\s*$)/g, '')
+  }
+
+  for (var i = 0; i < str.length; i++) {
+    var c = str.charCodeAt(i)
+    // 单字节加1
+    if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
+      len++
+    } else {
+      len += 2
+    }
+  }
+  return len
+}
+
+export function isMoney(str) {
+  if (str == null) return false
+  if (typeof str === 'undefined') return false
+
+  // str = str.replace(/(^\s*)|(\s*$)/g, '')
+
+  var reg = /^(-?\d+)(\.\d{1,2})?$/
+  if (reg.test(str)) {
+    return true
+  } else {
+    return false
+  }
+}
