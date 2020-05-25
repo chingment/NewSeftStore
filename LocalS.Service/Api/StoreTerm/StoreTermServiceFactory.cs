@@ -40,5 +40,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
+        public static ImService ImService
+        {
+            get
+            {
+                return new ImService();
+            }
+        }
+
     }
 }

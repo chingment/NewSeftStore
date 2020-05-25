@@ -320,6 +320,7 @@
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />
     <Compile Include="Api\StoreTerm\ControlService.cs" />
+    <Compile Include="Api\StoreTerm\ImService.cs" />
     <Compile Include="Api\StoreTerm\MachineService.cs" />
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
@@ -336,6 +337,7 @@
     <Compile Include="Api\StoreTerm\RModels\RetOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetProductSkuSearch.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopAppTraceLog.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopImServiceSeats.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineHandleRunExItems.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />

@@ -41,5 +41,9 @@ namespace LocalS.Service.Api.StoreTerm
         public FingerVeinnerModel FingerVeinner { get; set; }
         public string MstVern { get; set; }
         public string OstVern { get; set; }
+        public string ImPartner { get; set; }
+        public string ImUserName { get; set; }
+        public string ImPassword { get; set; }
     }
+
 }

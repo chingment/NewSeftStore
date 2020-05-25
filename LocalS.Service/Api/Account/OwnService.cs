@@ -629,6 +629,7 @@ namespace LocalS.Service.Api.Account
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
+
             using (TransactionScope ts = new TransactionScope())
             {
 

@@ -13,9 +13,9 @@ namespace WebApiStoreTerm.Controllers
     public class ImServiceController : OwnApiBaseController
     {
         [HttpPost]
-        public OwnApiHttpResponse UsersByIdle([FromBody]RopMachineInitData rop)
+        public OwnApiHttpResponse Seats([FromBody]RopImServiceSeats rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.InitData(rop);
+            IResult result = StoreTermServiceFactory.ImService.Seats(rop);
             return new OwnApiHttpResponse(result);
         }
     }

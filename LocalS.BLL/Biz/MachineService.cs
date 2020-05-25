@@ -43,6 +43,9 @@ namespace LocalS.BLL.Biz
             model.ExIsHas = machine.ExIsHas;
             model.OstVern = machine.OstVern;
             model.MstVern = machine.MstVern;
+            model.ImPartner = machine.ImPartner;
+            model.ImUserName = machine.ImUserName;
+            model.ImPassword = machine.ImPassword;
 
             var machineCabinets = CurrentDb.MachineCabinet.Where(m => m.MachineId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
 

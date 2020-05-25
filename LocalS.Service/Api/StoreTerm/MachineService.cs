@@ -94,6 +94,9 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.MstVern = machineInfo.MstVern;
             ret.Machine.Scanner = machineInfo.Scanner;
             ret.Machine.FingerVeinner = machineInfo.FingerVeinner;
+            ret.Machine.ImPartner = machineInfo.ImPartner;
+            ret.Machine.ImUserName = machineInfo.ImUserName;
+            ret.Machine.ImPassword = machineInfo.ImPassword;
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
