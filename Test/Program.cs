@@ -107,9 +107,20 @@ namespace Test
 
             EasemobSdk.ApiDoRequest api = new EasemobSdk.ApiDoRequest();
 
-            TokenRequest apiAccessToken = new TokenRequest("client_credentials", "YXA6bQh4SdXsSDq3_RNy3hRoRw", "YXA6gV8I7B64QvVlU3xQrzt6aI2CK5w");
+            TokenRequest tokenRequest = new TokenRequest("client_credentials", "YXA6bQh4SdXsSDq3_RNy3hRoRw", "YXA6gV8I7B64QvVlU3xQrzt6aI2CK5w");
 
-            var apiAccessTokenResult = api.DoPost(apiAccessToken);
+            var apiAccessTokenResult = api.DoPost(tokenRequest);
+
+            if (apiAccessTokenResult.Result == ResultType.Success)
+            {
+
+                RegisterUserRequest registerUserRequest = new RegisterUserRequest("15989287032", "123456", "邱");
+
+                api.setAccessToken(apiAccessTokenResult.Data.Access_token);
+
+                var registerUserRequestResult = api.DoPost(registerUserRequest);
+
+            }
 
 
             //string[] arr="A/S/B".Split('X')

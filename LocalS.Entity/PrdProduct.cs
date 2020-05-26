@@ -19,6 +19,8 @@ namespace LocalS.Entity
         public string DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public string SpecItems { get; set; }
+        public bool IsTrgVideoService { get; set; }
+        public string CharTags { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime? MendTime { get; set; }

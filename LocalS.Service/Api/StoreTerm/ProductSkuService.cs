@@ -49,7 +49,8 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                     productSkuModel.DetailsDes = bizProductSku.DetailsDes;
                     productSkuModel.BriefDes = bizProductSku.BriefDes;
                     productSkuModel.SpecDes = bizProductSku.SpecDes;
-
+                    productSkuModel.IsTrgVideoService = bizProductSku.IsTrgVideoService;
+                    productSkuModel.CharTags = bizProductSku.CharTags;
                     if (bizProductSku.Stocks != null)
                     {
                         if (bizProductSku.Stocks.Count > 0)

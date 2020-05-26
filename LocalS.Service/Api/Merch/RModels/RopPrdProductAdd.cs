@@ -43,8 +43,9 @@ namespace LocalS.Service.Api.Merch
         {
             get; set;
         }
+        public bool IsTrgVideoService { get; set; }
+        public List<string> CharTags { get; set; }
         public List<Sku> Skus { get; set; }
-
         public List<SpecItem> SpecItems { get; set; }
 
         public class Sku

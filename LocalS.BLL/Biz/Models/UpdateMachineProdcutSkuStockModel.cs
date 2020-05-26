@@ -15,5 +15,7 @@ namespace LocalS.BLL.Biz
         public int SumQuantity { get; set; }
         public int LockQuantity { get; set; }
         public int SellQuantity { get; set; }
+
+        public bool IsTrgVideoService { get; set; }
     }
 }

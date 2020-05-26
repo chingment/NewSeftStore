@@ -42,6 +42,30 @@
         />
       </el-form-item>
 
+      <el-form-item label="音视频咨询">
+        <el-checkbox v-model="form.isTrgVideoService" />
+      </el-form-item>
+      <el-form-item label="特色标签" prop="charTags">
+        <el-tag
+          v-for="tag in form.charTags"
+          :key="tag"
+          closable
+          :disable-transitions="false"
+          @close="charTagsHandleClose(tag)"
+        >
+          {{ tag }}
+        </el-tag>
+        <el-input
+          v-if="charTagsInputVisible"
+          ref="saveTagInput"
+          v-model="charTagsInputValue"
+          class="input-new-tag"
+          size="small"
+          @keyup.enter.native="charTagsHandleInputConfirm"
+          @blur="charTagsHandleInputConfirm"
+        />
+        <el-button v-else class="button-new-tag" size="small" @click="charTagsShowInput">+ 添加</el-button>
+      </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
 
         <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新店铺销售价</el-checkbox>
@@ -137,7 +161,7 @@
 import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
-import { goBack, getUrlParam, treeselectNormalizer, strLen, isMoney } from '@/utils/commonUtil'
+import { getUrlParam, treeselectNormalizer, strLen, isMoney } from '@/utils/commonUtil'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -153,6 +177,8 @@ export default {
         kindIds: [],
         subjectIds: [],
         detailsDes: [],
+        charTags: [],
+        isTrgVideoService: false,
         briefDes: '',
         displayImgUrls: [],
         isUnifyUpdateSalePrice: false,
@@ -162,7 +188,8 @@ export default {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         // kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
-        detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }]
+        detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }],
+        charTags: [{ type: 'array', required: false, message: '不能超过5个', max: 3 }]
       },
       treeselect_kind_normalizer: treeselectNormalizer,
       treeselect_kind_options: [],
@@ -176,7 +203,9 @@ export default {
       uploadImglistByDetailsDes: [],
       uploadImgPreImgDialogUrlByDetailsDes: '',
       uploadImgPreImgDialogVisibleByDetailsDes: false,
-      uploadImgPmsByByDetailsDes: { folder: 'product', isBuildms: 'false' }
+      uploadImgPmsByByDetailsDes: { folder: 'product', isBuildms: 'false' },
+      charTagsInputVisible: false,
+      charTagsInputValue: ''
     }
   },
   mounted() {
@@ -201,6 +230,8 @@ export default {
           this.form.briefDes = d.briefDes
           this.form.displayImgUrls = d.displayImgUrls
           this.form.skus = d.skus
+          this.form.isTrgVideoService = d.isTrgVideoService
+          this.form.charTags = typeof d.charTags === 'undefined' ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
           this.treeselect_subject_options = d.subjects
@@ -246,6 +277,8 @@ export default {
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
           _form.isUnifyUpdateSalePrice = this.form.isUnifyUpdateSalePrice
+          _form.charTags = this.form.charTags
+          _form.isTrgVideoService = this.form.isTrgVideoService
           _form.skus = this.form.skus
 
           MessageBox.confirm('确定要保存', '提示', {
@@ -406,6 +439,26 @@ export default {
         },
         animation: 150
       })
+    },
+    charTagsHandleClose(tag) {
+      this.form.charTags.splice(this.form.charTags.indexOf(tag), 1)
+    },
+    charTagsShowInput() {
+      this.charTagsInputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    charTagsHandleInputConfirm() {
+      const inputValue = this.charTagsInputValue
+
+      if (inputValue && this.form.charTags.length <= 2) {
+        this.form.charTags.push(inputValue)
+      } else {
+        this.$message('最多输入3个特色标签')
+      }
+      this.charTagsInputVisible = false
+      this.charTagsInputValue = ''
     }
   }
 }
@@ -427,6 +480,22 @@ export default {
 .el-upload-list >>> .el-tag {
   cursor: pointer;
 }
+
+   .el-tag {
+    margin-right: 10px;
+  }
+  .button-new-tag {
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-right: 10px;
+    vertical-align: bottom;
+  }
+
 }
 
 </style>

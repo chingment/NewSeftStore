@@ -30,7 +30,8 @@ namespace LocalS.Service.Api.Merch
         public string BriefDes { get; set; }
 
         public List<string> KindIds { get; set; }
-
+        public List<string> CharTags { get; set; }
+        public bool IsTrgVideoService { get; set; }
         public List<string> SubjectIds
         {
             get; set;

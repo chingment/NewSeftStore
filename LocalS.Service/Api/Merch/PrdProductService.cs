@@ -225,7 +225,8 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
                 prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
                 prdProduct.BriefDes = rop.BriefDes.Trim2();
-
+                prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
+                prdProduct.CharTags = rop.CharTags.ToJsonString();
 
                 if (rop.SpecItems != null)
                 {
@@ -343,10 +344,11 @@ namespace LocalS.Service.Api.Merch
                 ret.BriefDes = prdProduct.BriefDes;
                 ret.KindIds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdKindId).ToList();
                 ret.SubjectIds = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdSubjectId).ToList();
+                ret.CharTags = prdProduct.CharTags.ToJsonObject<List<string>>();
                 ret.DisplayImgUrls = prdProduct.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 ret.Kinds = GetKindTree(merchId);
                 ret.Subjects = GetSubjectTree(merchId);
-
+                ret.IsTrgVideoService = prdProduct.IsTrgVideoService;
                 var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).OrderBy(m => m.SpecDes).ToList();
 
                 foreach (var prdProductSku in prdProductSkus)
@@ -395,6 +397,8 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
+                prdProduct.CharTags = rop.CharTags.ToJsonString();
                 prdProduct.Mender = operater;
                 prdProduct.MendTime = DateTime.Now;
 
@@ -525,6 +529,7 @@ namespace LocalS.Service.Api.Merch
                                         updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
                                         updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                                         updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                                        updateProdcutSkuStock.IsTrgVideoService = bizProductSku.IsTrgVideoService;
                                         BizFactory.Machine.SendUpdateProductSkuStock(operater, AppId.MERCH, merchId, storeMachine.SellChannelRefId, updateProdcutSkuStock);
                                     }
                                 }

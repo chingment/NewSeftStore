@@ -48,6 +48,30 @@
         />
       </el-form-item>
 
+      <el-form-item label="音视频咨询">
+        <el-checkbox v-model="form.isTrgVideoService" />
+      </el-form-item>
+      <el-form-item label="特色标签" prop="charTags">
+        <el-tag
+          v-for="tag in form.charTags"
+          :key="tag"
+          closable
+          :disable-transitions="false"
+          @close="charTagsHandleClose(tag)"
+        >
+          {{ tag }}
+        </el-tag>
+        <el-input
+          v-if="charTagsInputVisible"
+          ref="saveTagInput"
+          v-model="charTagsInputValue"
+          class="input-new-tag"
+          size="small"
+          @keyup.enter.native="charTagsHandleInputConfirm"
+          @blur="charTagsHandleInputConfirm"
+        />
+        <el-button v-else class="button-new-tag" size="small" @click="charTagsShowInput">+ 添加</el-button>
+      </el-form-item>
       <el-form-item label="开启多规格">
         <el-checkbox v-model="isOpenAddMultiSpecs" />
       </el-form-item>
@@ -233,7 +257,9 @@ export default {
         kindIds: [],
         subjectIds: [],
         detailsDes: [],
+        charTags: [],
         briefDes: '',
+        isTrgVideoService: false,
         displayImgUrls: [],
         singleSkuCumCode: '',
         singleSkuBarCode: '',
@@ -249,7 +275,8 @@ export default {
         singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
         singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }],
-        detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }]
+        detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }],
+        charTags: [{ type: 'array', required: false, message: '不能超过5个', max: 3 }]
       },
       uploadImglistByDisplayImgUrls: [],
       uploadImgPmsByByDisplayImgUrls: { folder: 'product', isBuildms: 'true' },
@@ -269,7 +296,9 @@ export default {
       multiSpecsInputValue: '',
       multiSpecsSkuArray: [],
       multiSpecsSkuList: [],
-      multiSpecsSkuResult: []
+      multiSpecsSkuResult: [],
+      charTagsInputVisible: false,
+      charTagsInputValue: ''
     }
   },
   watch: {
@@ -360,6 +389,8 @@ export default {
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
           _form.specItems = this.multiSpecsItems
+          _form.charTags = this.form.charTags
+          _form.isTrgVideoService = this.form.isTrgVideoService
           _form.skus = skus
           console.log(JSON.stringify(_form))
           MessageBox.confirm('确定要保存', '提示', {
@@ -639,6 +670,26 @@ export default {
 
       this.multiSpecsSkuResult = multiSpecs
       console.log(this.multiSpecsSkuResult)
+    },
+    charTagsHandleClose(tag) {
+      this.form.charTags.splice(this.form.charTags.indexOf(tag), 1)
+    },
+    charTagsShowInput() {
+      this.charTagsInputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    charTagsHandleInputConfirm() {
+      const inputValue = this.charTagsInputValue
+
+      if (inputValue && this.form.charTags.length <= 2) {
+        this.form.charTags.push(inputValue)
+      } else {
+        this.$message('最多输入3个特色标签')
+      }
+      this.charTagsInputVisible = false
+      this.charTagsInputValue = ''
     }
   }
 }

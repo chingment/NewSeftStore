@@ -1,4 +1,4 @@
-﻿using Lumos;
+﻿                     using Lumos;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,6 +31,14 @@ namespace EasemobSdk
             }
         }
 
+
+        private string _accessToken = null;
+        public void setAccessToken(string accessToken)
+        {
+            _accessToken = accessToken;
+        }
+
+
         public CustomJsonResult<T> DoPost<T>(IApiPostRequest<T> request)
         {
             var result = new CustomJsonResult<T>();
@@ -42,8 +50,9 @@ namespace EasemobSdk
                 WebUtils webUtils = new WebUtils();
                 LogUtil.Info(string.Format("EasemobSdk-PostUrl->{0}", requestUrl));
                 LogUtil.Info(string.Format("EasemobSdk-PostData->{0}", request.PostData));
-                var response = webUtils.DoPost(requestUrl, request.PostData);
-                if (response == null)
+                webUtils.setAccessToken(_accessToken);
+                var doPost = webUtils.DoPost(requestUrl, request.PostData);
+                if (doPost == null)
                 {
                     result.Result = ResultType.Failure;
                     result.Code = ResultCode.Failure;
@@ -51,22 +60,18 @@ namespace EasemobSdk
                     return result;
                 }
 
-                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                if (doPost.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     result.Result = ResultType.Failure;
                     result.Code = ResultCode.Failure;
-                    result.Message = "请求数据失败：" + response.StatusCode;
+                    result.Message = "请求数据失败：" + doPost.StatusCode;
                     return result;
                 }
 
-                Encoding encoding = webUtils.GetResponseEncoding(response);
+                this.responseString = doPost.ResponseString;
 
-                string responseStr = webUtils.GetResponseAsString(response, encoding);
-
-                this.responseString = responseStr;
-
-                LogUtil.Info(string.Format("EasemobSdk-PostResult->{0}", responseStr));
-                T data = JsonConvert.DeserializeObject<T>(responseStr);
+                LogUtil.Info(string.Format("EasemobSdk-PostResult->{0}", responseString));
+                T data = JsonConvert.DeserializeObject<T>(responseString);
 
                 result.Result = ResultType.Success;
                 result.Code = ResultCode.Success;

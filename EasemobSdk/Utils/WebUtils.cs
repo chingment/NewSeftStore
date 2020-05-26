@@ -53,10 +53,24 @@ namespace EasemobSdk
             return true;
         }
 
-        public HttpWebResponse DoPost(string url, string postdata)
+        private string _accessToken = null;
+        public void setAccessToken(string accessToken)
         {
+            _accessToken = accessToken;
+        }
 
-            HttpWebRequest req = GetWebRequest("http://a1.easemob.com/1106200520157173/selfstore/token", "POST", null);
+        public DoPostResult DoPost(string url, string postdata)
+        {
+            var doPostResult = new DoPostResult();
+
+            Dictionary<string, string> headerParams = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(_accessToken))
+            {
+                headerParams.Add("Authorization", "Bearer  " + _accessToken);
+            }
+
+            HttpWebRequest req = GetWebRequest(url, "POST", headerParams);
             req.ContentType = "application/json";
             req.Accept = "application/json";
 
@@ -65,15 +79,35 @@ namespace EasemobSdk
             reqStream.Write(postData, 0, postData.Length);
             reqStream.Close();
 
-            HttpWebResponse rsp = (HttpWebResponse)req.GetResponse();
 
-            //return rsp;
+            HttpWebResponse rsp = null;
+            try
+            {
+                rsp = (HttpWebResponse)req.GetResponse();
 
-            //Encoding encoding = GetResponseEncoding(rsp);
-            //string result = GetResponseAsString(rsp, encoding);
+                doPostResult.StatusCode = rsp.StatusCode;
+                Encoding encoding = GetResponseEncoding(rsp);
+                string result = GetResponseAsString(rsp, encoding);
+                doPostResult.ResponseString = result;
+            }
+            catch (WebException e)
+            {
+                doPostResult.StatusCode = HttpStatusCode.BadRequest;
 
-            //rsp.StatusCode== HttpStatusCode.OK
-            return rsp;
+                using (WebResponse response = e.Response)
+                {
+                    rsp = (HttpWebResponse)response;
+                    using (Stream data = response.GetResponseStream())
+                    using (var reader = new StreamReader(data))
+                    {
+                        string result = reader.ReadToEnd();
+
+                        doPostResult.ResponseString = result;
+                    }
+                }
+            }
+
+            return doPostResult;
         }
 
         public HttpWebRequest GetWebRequest(string url, string method, IDictionary<string, string> headerParams)

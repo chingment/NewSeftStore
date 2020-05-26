@@ -35,6 +35,7 @@ namespace LocalS.BLL.Biz
                         updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
                         updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                         updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                        updateProdcutSkuStock.IsTrgVideoService = bizProductSku.IsTrgVideoService;
                         BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, machineId, updateProdcutSkuStock);
                     }
                 }

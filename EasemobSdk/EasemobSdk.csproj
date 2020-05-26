@@ -49,7 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiDoRequest.cs" />
+    <Compile Include="ErrorResult.cs" />
+    <Compile Include="Utils\DoPostResult.cs" />
     <Compile Include="IApiPostRequest.cs" />
+    <Compile Include="Post\RegisterUserRequest.cs" />
+    <Compile Include="Post\RegisterUserResult.cs" />
     <Compile Include="Post\TokenRequest.cs" />
     <Compile Include="Post\TokenResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

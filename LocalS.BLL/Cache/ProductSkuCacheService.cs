@@ -69,8 +69,8 @@ namespace LocalS.BLL
             productSkuInfoAndStockModel.BarCode = productSkuInfo.BarCode;
             productSkuInfoAndStockModel.Producer = productSkuInfo.Producer;
             productSkuInfoAndStockModel.Stocks = GetStock(merchId, productSkuId);
-
-
+            productSkuInfoAndStockModel.IsTrgVideoService = productSkuInfo.IsTrgVideoService;
+            productSkuInfoAndStockModel.CharTags = productSkuInfo.CharTags;
             return productSkuInfoAndStockModel;
         }
 
@@ -116,6 +116,8 @@ namespace LocalS.BLL
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
                 prdProductSkuModel.ProductSpecItems = prdProductDb.SpecItems.ToJsonObject<List<Object>>();
+                prdProductSkuModel.IsTrgVideoService = prdProductDb.IsTrgVideoService;
+                prdProductSkuModel.CharTags = prdProductDb.CharTags.ToJsonObject<List<string>>();
 
                 if (!string.IsNullOrEmpty(prdProductSkuModel.BarCode))
                 {
