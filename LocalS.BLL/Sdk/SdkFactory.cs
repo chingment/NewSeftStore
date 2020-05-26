@@ -40,5 +40,13 @@ namespace LocalS.BLL
             }
         }
 
+        public static EasemobSdkProvider Easemob
+        {
+            get
+            {
+                return new EasemobSdkProvider();
+            }
+        }
+
     }
 }

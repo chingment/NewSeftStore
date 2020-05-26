@@ -25,6 +25,8 @@ namespace LocalS.Service.Api.Admin
         public bool KindIsHidden { get; set; }
         public int KindRowCellSize { get; set; }
 
+        public bool ImIsUse { get; set; }
+
         public List<Cabinet> Cabinets { get; set; }
 
         public class Cabinet

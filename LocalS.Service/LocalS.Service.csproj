@@ -375,6 +375,10 @@
     <Folder Include="Api\Admin\Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EasemobSdk\EasemobSdk.csproj">
+      <Project>{86fca40d-88cd-4ca0-8218-107704ca76fd}</Project>
+      <Name>EasemobSdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LocalS.BLL\LocalS.BLL.csproj">
       <Project>{15d7ce8c-a100-4d87-a1c2-d76339e78ad6}</Project>
       <Name>LocalS.BLL</Name>

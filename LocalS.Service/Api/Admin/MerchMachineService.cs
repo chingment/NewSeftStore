@@ -113,7 +113,8 @@ namespace LocalS.Service.Api.Admin
                 FingerVeinnerIsUse = machine.FingerVeinnerIsUse,
                 MstVern = machine.MstVern,
                 OstVern = machine.OstVern,
-                Cabinets = cabinets
+                Cabinets = cabinets,
+                ImIsUse = machine.ImIsUse
             };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", data);
@@ -125,41 +126,61 @@ namespace LocalS.Service.Api.Admin
         {
             var result = new CustomJsonResult();
 
-            var machine = CurrentDb.Machine.Where(m => m.Id == rop.Id).FirstOrDefault();
 
-
-            machine.CameraByChkIsUse = rop.CameraByChkIsUse;
-            machine.CameraByJgIsUse = rop.CameraByJgIsUse;
-            machine.CameraByRlIsUse = rop.CameraByRlIsUse;
-            machine.ExIsHas = rop.ExIsHas;
-            machine.SannerIsUse = rop.SannerIsUse;
-            machine.SannerComId = rop.SannerComId;
-            machine.FingerVeinnerIsUse = rop.FingerVeinnerIsUse;
-            machine.MstVern = rop.MstVern;
-            machine.OstVern = rop.OstVern;
-            machine.KindIsHidden = rop.KindIsHidden;
-            machine.KindRowCellSize = rop.KindRowCellSize;
-
-            CurrentDb.SaveChanges();
-
-            foreach (var cabinet in rop.Cabinets)
+            using (TransactionScope ts = new TransactionScope())
             {
-                var machineCabinet = CurrentDb.MachineCabinet.Where(m => m.CabinetId == cabinet.Id && m.MachineId == rop.Id).FirstOrDefault();
-                if (machineCabinet != null)
-                {
-                    machineCabinet.ComId = cabinet.ComId;
-                    machineCabinet.IsUse = cabinet.IsUse;
-                    machineCabinet.SlotMaxQuantity = cabinet.SlotMaxQuantity;
-                    machineCabinet.PendantRows = cabinet.PendantRows;
+                var machine = CurrentDb.Machine.Where(m => m.Id == rop.Id).FirstOrDefault();
 
-                    CurrentDb.SaveChanges();
+                machine.CameraByChkIsUse = rop.CameraByChkIsUse;
+                machine.CameraByJgIsUse = rop.CameraByJgIsUse;
+                machine.CameraByRlIsUse = rop.CameraByRlIsUse;
+                machine.ExIsHas = rop.ExIsHas;
+                machine.SannerIsUse = rop.SannerIsUse;
+                machine.SannerComId = rop.SannerComId;
+                machine.FingerVeinnerIsUse = rop.FingerVeinnerIsUse;
+                machine.MstVern = rop.MstVern;
+                machine.OstVern = rop.OstVern;
+                machine.KindIsHidden = rop.KindIsHidden;
+                machine.KindRowCellSize = rop.KindRowCellSize;
+                machine.ImIsUse = rop.ImIsUse;
+
+                if (machine.ImIsUse)
+                {
+                    if (string.IsNullOrEmpty(machine.ImUserName))
+                    {
+                        machine.ImPartner = "Em";
+                        machine.ImUserName = string.Format("MH_{0}", machine.Id);
+                        machine.ImPassword = "1a2b3c4d";
+
+                        var var1 = SdkFactory.Easemob.RegisterUser(machine.ImUserName, machine.ImPassword, machine.Id);
+                        if (var1.Result != ResultType.Success)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，音频服务存在问题");
+                        }
+                    }
                 }
 
+                foreach (var cabinet in rop.Cabinets)
+                {
+                    var machineCabinet = CurrentDb.MachineCabinet.Where(m => m.CabinetId == cabinet.Id && m.MachineId == rop.Id).FirstOrDefault();
+                    if (machineCabinet != null)
+                    {
+                        machineCabinet.ComId = cabinet.ComId;
+                        machineCabinet.IsUse = cabinet.IsUse;
+                        machineCabinet.SlotMaxQuantity = cabinet.SlotMaxQuantity;
+                        machineCabinet.PendantRows = cabinet.PendantRows;
+
+                        CurrentDb.SaveChanges();
+                    }
+
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
             }
-
-
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }

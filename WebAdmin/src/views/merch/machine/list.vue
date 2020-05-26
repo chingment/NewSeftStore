@@ -159,7 +159,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="OST:" class="postInfo-container-item">
-                    <el-select v-model="details.ostVern" clearable size="mini" placeholder="请选择">
+                    <el-select v-model="details.ostVern" style="width:100px;" clearable size="mini" placeholder="请选择">
                       <el-option
                         v-for="item in options_ost"
                         :key="item.value"
@@ -171,7 +171,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="MST:" class="postInfo-container-item">
-                    <el-select v-model="details.mstVern" clearable size="mini" placeholder="请选择">
+                    <el-select v-model="details.mstVern" style="width:100px;" clearable size="mini" placeholder="请选择">
                       <el-option
                         v-for="item in options_mst"
                         :key="item.value"
@@ -204,7 +204,7 @@
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="每行显示:" class="postInfo-container-item">
-                    <el-input-number v-model="details.kindRowCellSize" size="mini" :min="1" :max="5" label="每行显示" />
+                    <el-input-number v-model="details.kindRowCellSize" style="width:100px;" size="mini" :min="1" :max="5" label="每行显示" />
                   </el-form-item>
                 </el-col>
 
@@ -213,6 +213,25 @@
           </el-col>
         </el-form>
 
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>服务</h5>
+          </div>
+        </div>
+
+        <el-form class="form-container" style="display:flex">
+          <el-col :span="24">
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="音视频:" class="postInfo-container-item">
+                    <el-checkbox v-model="details.imIsUse">是</el-checkbox>
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+            </div>
+          </el-col>
+        </el-form>
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>机柜</h5>
           </div>
@@ -295,20 +314,24 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label-width="80px" label="扫描器:" class="postInfo-container-item">
+                  <el-form-item
+                    label-width="80px"
+                    label="扫描器:"
+                    class="postInfo-container-item"
+                    style="width:120px;display: block;float: left;"
+                  >
                     <el-checkbox v-model="details.sannerIsUse">使用</el-checkbox>
                   </el-form-item>
                   <el-form-item
                     label-width="80px"
                     label="端口:"
                     class="postInfo-container-item"
-                    style="display: block;
+                    style="display: block; float:left;
     float: left;
     width: 200px;"
                   >
                     <el-input v-model="details.sannerComId" placeholder="" size="mini" />
                   </el-form-item>
-
                 </el-col>
               </el-row>
 
@@ -389,6 +412,7 @@ export default {
         sannerIsUse: false,
         sannerComId: '',
         fingerVeinnerIsUse: false,
+        imIsUse: false,
         mstVern: '',
         ostVern: ''
       },

@@ -51,6 +51,8 @@ namespace LocalS.Entity
         public bool ExIsHas { get; set; }
         public string MstVern { get; set; } //门所在主控商
         public string OstVern { get; set; } //系统在主控商
+
+        public bool ImIsUse { get; set; }
         public string ImPartner { get; set; }
         public string ImUserName { get; set; }
         public string ImPassword { get; set; }

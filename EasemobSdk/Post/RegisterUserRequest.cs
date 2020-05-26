@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasemobSdk
 {
-    public class RegisterUserRequest : IApiPostRequest<TokenResult>
+    public class RegisterUserRequest : IApiPostRequest<RegisterUserResult>
     {
         private string _postData = null;
 
