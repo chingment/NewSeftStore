@@ -56,7 +56,7 @@ namespace LocalS.Service.Api.Merch
 
             if (rop.StoreIds == null || rop.StoreIds.Count == 0)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择机器");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择店铺");
             }
 
             List<object> olist = new List<object>();
@@ -141,7 +141,7 @@ namespace LocalS.Service.Api.Merch
 
             if (rop.StoreIds == null || rop.StoreIds.Count == 0)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择机器");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择店铺");
             }
 
             if (string.IsNullOrEmpty(rop.StockDate))
@@ -231,13 +231,14 @@ namespace LocalS.Service.Api.Merch
 
             if (rop.TradeDateTimeArea == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择日期");
             }
 
             if (rop.TradeDateTimeArea.Length != 2)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择日期");
             }
+
 
             LogUtil.Info("rup.TradeDateTimeArea[0]" + rop.TradeDateTimeArea[0]);
             LogUtil.Info("rup.TradeDateTimeArea[1]" + rop.TradeDateTimeArea[1]);
@@ -247,11 +248,16 @@ namespace LocalS.Service.Api.Merch
             DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]);
 
 
+            //if ((tradeEndTime.Value - tradeStartTime.Value).Days > 60)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "日期范围不能超过60天");
+            //}
+
 
             var query = (from u in CurrentDb.OrderSubChildUnique
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime)
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -304,7 +310,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     StoreName = item.StoreName,
-                    SellChannelRefName = item.SellChannelRefName,
+                    SellChannelRefName = item.SellChannelRefId,
                     OrderId = item.OrderId,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     ProductSkuName = item.PrdProductSkuName,
@@ -390,7 +396,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_OrderPayStatus.PaySuccess
-                         select new { u.Id, u.StoreName, u.StoreId, u.SellChannelRefIds, u.SellChannelRefNames, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
+                         select new { u.Id, u.StoreName, u.StoreId, u.SellChannelRefNames, u.SellChannelRefIds, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 

@@ -96,7 +96,7 @@ namespace LocalS.Service.Api.Merch
                     olist.Add(new
                     {
                         Id = item.MachineId,
-                        Name = item.Name,
+                        Name = item.MachineId,
                         MainImgUrl = machine.MainImgUrl,
                         AppVersion = machine.AppVersion,
                         CtrlSdkVersion = machine.CtrlSdkVersion,
@@ -128,13 +128,23 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var merchMachine in merchMachines)
             {
+
+                string name = string.Format("{0} [{1}]", merchMachine.MachineId, "未绑定店铺");
+
+                if (!string.IsNullOrEmpty(merchMachine.CurUseStoreId))
+                {
+                    var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
+
+                    name = string.Format("{0} [{1}]", merchMachine.MachineId, store.Name);
+                }
+
                 if (merchMachine.MachineId == machineId)
                 {
                     ret.CurMachine.Id = merchMachine.MachineId;
-                    ret.CurMachine.Name = merchMachine.Name;
+                    ret.CurMachine.Name = name;
                 }
 
-                ret.Machines.Add(new MachineModel { Id = merchMachine.MachineId, Name = merchMachine.Name });
+                ret.Machines.Add(new MachineModel { Id = merchMachine.MachineId, Name = name });
             }
 
 

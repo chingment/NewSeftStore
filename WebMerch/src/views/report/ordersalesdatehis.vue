@@ -141,6 +141,10 @@ export default {
       })
     },
     handleFilter() {
+      if (this.listQuery.tradeDateTimeArea.length === 0) {
+        this.$message('请选择日期范围')
+        return
+      }
       this._getData()
     },
     formatJson(filterVal, jsonData) {

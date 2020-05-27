@@ -20,6 +20,7 @@ namespace LocalS.Entity
         [MaxLength(128)]
         public string Name { get; set; }
         public string ImeiId { get; set; }
+        public string CharTags { get; set; }
         public string DeviceId { get; set; }
         public string MainImgUrl { get; set; }
         [MaxLength(128)]

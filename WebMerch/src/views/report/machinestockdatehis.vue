@@ -5,7 +5,7 @@
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
 
-          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店ss铺" style="width: 100%">
+          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
             <el-option
               v-for="item in optionsStores"
               :key="item.value"
@@ -163,7 +163,7 @@ export default {
     },
     handleFilter() {
       if (this.listQuery.storeIds.length === 0) {
-        this.$message('请选择机器')
+        this.$message('请选择店铺')
         return
       }
       this._getData()

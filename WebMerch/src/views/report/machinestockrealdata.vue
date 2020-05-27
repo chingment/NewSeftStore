@@ -147,7 +147,7 @@ export default {
     },
     handleFilter() {
       if (this.listQuery.storeIds.length === 0) {
-        this.$message('请选择机器')
+        this.$message('请选择店铺')
         return
       }
       this._getData()
