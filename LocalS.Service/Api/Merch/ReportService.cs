@@ -250,11 +250,13 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.OrderSubChildUnique
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
-                         &&
-                        rop.StoreIds.Contains(u.StoreId)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime)
                          select new { u.StoreName, u.StoreId, u.SellChannelRefName, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
+            if (rop.StoreIds != null && rop.StoreIds.Count > 0)
+            {
+                query = query.Where(u => rop.StoreIds.Contains(u.StoreId));
+            }
 
             if (rop.PickupStatus == "1")
             {
@@ -388,12 +390,14 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_OrderPayStatus.PaySuccess
-                         &&
-                          rop.StoreIds.Contains(u.StoreId)
                          select new { u.Id, u.StoreName, u.StoreId, u.SellChannelRefIds, u.SellChannelRefNames, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
+            if (rop.StoreIds != null && rop.StoreIds.Count > 0)
+            {
+                query = query.Where(u => rop.StoreIds.Contains(u.StoreId));
+            }
 
             List<object> olist = new List<object>();
 
