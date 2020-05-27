@@ -352,14 +352,13 @@ namespace LocalS.BLL.Biz
                         switch (buildOrderSub.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
-                                orderSub.SellChannelRefName = "[机器]" + BizFactory.Merch.GetMachineName(order.MerchId, buildOrderSub.SellChannelRefId);
-                                orderSub.SellChannelRefType = E_SellChannelRefType.Machine;
-                                orderSub.SellChannelRefId = buildOrderSub.SellChannelRefId;
+                                orderSub.SellChannelRefName = "[机器]" + buildOrderSub.SellChannelRefId;
                                 orderSub.Receiver = null;
                                 orderSub.ReceiverPhone = null;
                                 orderSub.ReceptionAddress = store.Address;
                                 break;
                         }
+
                         orderSub.OrderId = order.Id;
                         orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
                         orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
