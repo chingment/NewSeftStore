@@ -4,14 +4,15 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-cascader
-            v-model="listQuery.sellChannels"
-            :props="optionsSellChannelsProps"
-            :options="optionsSellChannels"
-            placeholder="选择销售渠道"
-            clearable
-            style="width: 100%"
-          />
+
+          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
+            <el-option
+              v-for="item in optionsStores"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-date-picker
@@ -140,7 +141,7 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        sellChannels: [],
+        storeIds: [],
         tradeDateTimeArea: []
       },
       optionsPickupStatus: [{
@@ -153,8 +154,7 @@ export default {
         value: '3',
         label: '已取货'
       }],
-      optionsSellChannels: [],
-      optionsSellChannelsProps: { multiple: true, checkStrictly: false },
+      optionsStores: [],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -162,14 +162,14 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this._init()
+    this._initData()
   },
   methods: {
-    _init() {
+    _initData() {
       productSkuSalesDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.optionsSellChannels = d.optionsSellChannels
+          this.optionsStores = d.optionsStores
         }
         this.loading = false
       })
@@ -183,11 +183,11 @@ export default {
         }
       }))
     },
-    _get() {
+    _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       productSkuSalesDateHisGet(this.listQuery).then(res => {
-        this.listData = res.data
+        this.listData = res.data == null ? [] : res.data
         if (res.result === 1) {
           // this.listData = res.data
         } else {
@@ -197,7 +197,7 @@ export default {
       })
     },
     handleFilter() {
-      this._get()
+      this._getData()
     },
     handleDownload() {
       this.downloadLoading = true

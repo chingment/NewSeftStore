@@ -8,6 +8,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopReportMachineStockRealDataGet
     {
-        public List<string[]> SellChannels { get; set; }
+        public List<string> StoreIds { get; set; }
     }
 }

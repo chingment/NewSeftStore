@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopReportProductSkuSalesDateHisGet
     {
-        public List<string[]> SellChannels { get; set; }
+        public List<string> StoreIds { get; set; }
 
         public string[] TradeDateTimeArea { get; set; }
 

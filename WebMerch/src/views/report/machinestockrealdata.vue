@@ -4,14 +4,16 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-cascader
-            v-model="listQuery.sellChannels"
-            :props="optionsSellChannelsProps"
-            :options="optionsSellChannels"
-            placeholder="选择销售渠道"
-            clearable
-            style="width: 100%"
-          />
+
+          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
+            <el-option
+              v-for="item in optionsStores"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -22,7 +24,7 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="_ge(listQuery)" />
     </div>
     <el-table
       :key="listKey"
@@ -109,10 +111,9 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        sellChannels: []
+        storeIds: []
       },
-      optionsSellChannels: [],
-      optionsSellChannelsProps: { multiple: true, checkStrictly: false },
+      optionsStores: [],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -120,19 +121,19 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this._init()
+    this._initData()
   },
   methods: {
-    _init() {
+    _initData() {
       machineStockRealDataInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.optionsSellChannels = d.optionsSellChannels
+          this.optionsStores = d.optionsStores
         }
         this.loading = false
       })
     },
-    _get() {
+    _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       machineStockRealDataGet(this.listQuery).then(res => {
@@ -145,11 +146,11 @@ export default {
       })
     },
     handleFilter() {
-      if (this.listQuery.sellChannels.length === 0) {
+      if (this.listQuery.storeIds.length === 0) {
         this.$message('请选择机器')
         return
       }
-      this._get()
+      this._getData()
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

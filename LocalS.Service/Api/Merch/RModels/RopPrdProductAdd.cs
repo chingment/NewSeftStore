@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +8,6 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class SpecDes
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-    }
-
-    public class SpecItem
-    {
-        public SpecItem()
-        {
-            this.Values = new List<string>();
-        }
-
-        public string Name { get; set; }
-        public List<string> Values { get; set; }
-    }
 
 
     public class RopPrdProductAdd

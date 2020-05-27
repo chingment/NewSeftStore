@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.Merch
     {
         public RetReportProductSkuSalesDateHisInit()
         {
-            this.OptionsSellChannels = new List<OptionNode>();
+            this.OptionsStores = new List<OptionNode>();
         }
 
-        public List<OptionNode> OptionsSellChannels { get; set; }
+        public List<OptionNode> OptionsStores { get; set; }
     }
 }

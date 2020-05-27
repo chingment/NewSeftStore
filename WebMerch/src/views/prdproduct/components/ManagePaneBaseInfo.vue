@@ -231,7 +231,7 @@ export default {
           this.form.displayImgUrls = d.displayImgUrls
           this.form.skus = d.skus
           this.form.isTrgVideoService = d.isTrgVideoService
-          this.form.charTags = typeof d.charTags === 'undefined' ? [] : d.charTags
+          this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
           this.treeselect_subject_options = d.subjects

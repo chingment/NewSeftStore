@@ -133,6 +133,7 @@
     <Compile Include="Sdk\PayBuildQrCodeResult.cs" />
     <Compile Include="Sdk\WxSdkProvider.cs" />
     <Compile Include="Sdk\XtyPaySdkProvider.cs" />
+    <Compile Include="SpecDes.cs" />
     <Compile Include="Task\BaseProgram.cs" />
     <Compile Include="Task\ITask.cs" />
     <Compile Include="Task\Launcher.cs" />

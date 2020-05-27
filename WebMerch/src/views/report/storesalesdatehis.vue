@@ -101,14 +101,11 @@ export default {
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
-      listData: null,
+      listData: [],
       listTotal: 0,
       listQuery: {
-        sellChannels: [],
         tradeDateTimeArea: []
       },
-      optionsSellChannels: [],
-      optionsSellChannelsProps: { multiple: true, checkStrictly: false },
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -123,12 +120,11 @@ export default {
       storeSalesDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.optionsSellChannels = d.optionsSellChannels
         }
         this.loading = false
       })
     },
-    _get() {
+    _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       storeSalesDateHisGet(this.listQuery).then(res => {
@@ -142,7 +138,7 @@ export default {
       })
     },
     handleFilter() {
-      this._get()
+      this._getData()
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
