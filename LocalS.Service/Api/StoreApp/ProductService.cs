@@ -43,18 +43,6 @@ namespace LocalS.Service.Api.StoreApp
                      .SelectMany(t => t.g.Select(b => b)
                      .Zip(Enumerable.Range(1, t.count), (j, i) => new { j.PrdProductId, j.PrdProductSkuId, rn = i })).Where(m => m.rn == 1); ;
 
-            //var query = (from m in CurrentDb.SellChannelStock
-            //             where m.MerchId == "2f54b8f1edb7492b8e1f377baf13c5fa"
-            //             && m.StoreId == "a21fb0d24ddd4e2193bdd115e20d525f"
-            //             && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine
-            //            SellChannelStock.OrderBy(x => x.PrdProductId).GroupBy(x => x.PrdProductId)
-
-            //.Select(g => new { g, count = g.Count() })
-            //.SelectMany(t => t.g.Select(b => b).Zip(Enumerable.Range(1, t.count), (j, i) => new { j.PrdProductId, j.PrdProductSkuId, rn = i }));
-
-
-            //.OrderBy(x => x.PrdProductId).GroupBy(x => x.PrdProductId).SelectMany(t => t.Select((b, i) => new { b, i })).Select(m => m.b)
-
             if (!string.IsNullOrEmpty(kindId))
             {
                 query = query.Where(p => (from d in CurrentDb.PrdProductKind
