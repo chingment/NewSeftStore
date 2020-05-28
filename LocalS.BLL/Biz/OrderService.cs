@@ -226,14 +226,14 @@ namespace LocalS.BLL.Biz
                 {
                     RetOrderReserve ret = new RetOrderReserve();
 
-                    List<ProductSkuInfoAndStockModel> bizProductSkus = new List<BLL.ProductSkuInfoAndStockModel>();
+                    List<ProductSkuInfoModel> bizProductSkus = new List<BLL.ProductSkuInfoModel>();
 
                     #region 检查可售商品信息是否符合实际环境
                     List<string> warn_tips = new List<string>();
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, rop.StoreId, machineIdsByValid.ToArray(), productSku.Id);
+                        var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(store.MerchId, rop.StoreId, machineIdsByValid.ToArray(), productSku.Id);
 
                         if (bizProductSku == null)
                         {
@@ -476,7 +476,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        private List<BuildOrderSub> BuildOrderSubs(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoAndStockModel> productSkus)
+        private List<BuildOrderSub> BuildOrderSubs(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoModel> productSkus)
         {
             List<BuildOrderSub> buildOrderSubs = new List<BuildOrderSub>();
 

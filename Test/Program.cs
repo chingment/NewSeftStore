@@ -105,22 +105,26 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
-            EasemobSdk.ApiDoRequest api = new EasemobSdk.ApiDoRequest();
 
-            TokenRequest tokenRequest = new TokenRequest("client_credentials", "YXA6bQh4SdXsSDq3_RNy3hRoRw", "YXA6gV8I7B64QvVlU3xQrzt6aI2CK5w");
 
-            var apiAccessTokenResult = api.DoPost(tokenRequest);
+            StoreAppServiceFactory.Product.GetProducts(0, int.MaxValue, "21ae9399b1804dbc9ddd3c29e8b5c670", null);
 
-            if (apiAccessTokenResult.Result == ResultType.Success)
-            {
+            //EasemobSdk.ApiDoRequest api = new EasemobSdk.ApiDoRequest();
 
-                RegisterUserRequest registerUserRequest = new RegisterUserRequest("15989287032", "123456", "邱");
+            //TokenRequest tokenRequest = new TokenRequest("client_credentials", "YXA6bQh4SdXsSDq3_RNy3hRoRw", "YXA6gV8I7B64QvVlU3xQrzt6aI2CK5w");
 
-                api.setAccessToken(apiAccessTokenResult.Data.Access_token);
+            //var apiAccessTokenResult = api.DoPost(tokenRequest);
 
-                var registerUserRequestResult = api.DoPost(registerUserRequest);
+            //if (apiAccessTokenResult.Result == ResultType.Success)
+            //{
 
-            }
+            //    RegisterUserRequest registerUserRequest = new RegisterUserRequest("15989287032", "123456", "邱");
+
+            //    api.setAccessToken(apiAccessTokenResult.Data.Access_token);
+
+            //    var registerUserRequestResult = api.DoPost(registerUserRequest);
+
+            //}
 
 
             //string[] arr="A/S/B".Split('X')
@@ -175,7 +179,6 @@ namespace Test
             }
 
             Console.WriteLine("今天是周几");
-
 
 
 

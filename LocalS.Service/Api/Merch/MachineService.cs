@@ -260,20 +260,17 @@ namespace LocalS.Service.Api.Merch
                                 var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                                 if (slotStock != null)
                                 {
-                                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
-                                    if (bizProductSku != null)
-                                    {
-                                        col.ProductSkuId = bizProductSku.Id;
-                                        col.Name = bizProductSku.Name;
-                                        col.MainImgUrl = bizProductSku.MainImgUrl;
-                                        col.SumQuantity = slotStock.SumQuantity;
-                                        col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
-                                        col.SellQuantity = slotStock.SellQuantity;
-                                        col.MaxQuantity = 10;
-                                        col.SalePrice = slotStock.SalePrice;
-                                        col.IsOffSell = slotStock.IsOffSell;
-                                        col.Version = slotStock.Version;
-                                    }
+                                    var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, slotStock.PrdProductSkuId);
+                                    col.ProductSkuId = bizProductSku.Id;
+                                    col.Name = bizProductSku.Name;
+                                    col.MainImgUrl = bizProductSku.MainImgUrl;
+                                    col.SumQuantity = slotStock.SumQuantity;
+                                    col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
+                                    col.SellQuantity = slotStock.SellQuantity;
+                                    col.MaxQuantity = 10;
+                                    col.SalePrice = slotStock.SalePrice;
+                                    col.IsOffSell = slotStock.IsOffSell;
+                                    col.Version = slotStock.Version;
                                 }
 
                                 row.Cols.Add(col);
@@ -316,20 +313,19 @@ namespace LocalS.Service.Api.Merch
                                         var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                                         if (slotStock != null)
                                         {
-                                            var bizProductSku = CacheServiceFactory.ProductSku.GetInfo(merchId, slotStock.PrdProductSkuId);
-                                            if (bizProductSku != null)
-                                            {
-                                                col.ProductSkuId = bizProductSku.Id;
-                                                col.Name = bizProductSku.Name;
-                                                col.MainImgUrl = bizProductSku.MainImgUrl;
-                                                col.SumQuantity = slotStock.SumQuantity;
-                                                col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
-                                                col.SellQuantity = slotStock.SellQuantity;
-                                                col.MaxQuantity = 10;
-                                                col.SalePrice = slotStock.SalePrice;
-                                                col.IsOffSell = slotStock.IsOffSell;
-                                                col.Version = slotStock.Version;
-                                            }
+                                            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, slotStock.PrdProductSkuId);
+
+                                            col.ProductSkuId = bizProductSku.Id;
+                                            col.Name = bizProductSku.Name;
+                                            col.MainImgUrl = bizProductSku.MainImgUrl;
+                                            col.SumQuantity = slotStock.SumQuantity;
+                                            col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
+                                            col.SellQuantity = slotStock.SellQuantity;
+                                            col.MaxQuantity = 10;
+                                            col.SalePrice = slotStock.SalePrice;
+                                            col.IsOffSell = slotStock.IsOffSell;
+                                            col.Version = slotStock.Version;
+
                                         }
 
                                         row.Cols.Add(col);

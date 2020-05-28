@@ -37,7 +37,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();
@@ -97,7 +97,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
             }
 
 
-            ret.ProductSkus = CacheServiceFactory.ProductSku.Search(machine.MerchId, "All", rup.Key);
+            ret.ProductSkus = CacheServiceFactory.Product.Search(machine.MerchId, "All", rup.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

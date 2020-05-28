@@ -68,28 +68,27 @@ namespace LocalS.Service.Api.Merch
             {
                 var machineInfo = BizFactory.Machine.GetOne(sellChannelStock.SellChannelRefId);
 
-                var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
-                if (productSku != null)
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+
+                olist.Add(new
                 {
-                    olist.Add(new
-                    {
-                        StoreName = machineInfo.StoreName,
-                        MachineName = machineInfo.Name,
-                        ProductSkuId = productSku.Id,
-                        ProductSkuName = productSku.Name,
-                        ProductSkuSpecDes = SpecDes.GetDescribe(productSku.SpecDes),
-                        ProductSkuCumCode = productSku.CumCode,
-                        SlotId = sellChannelStock.SlotId,
-                        SellQuantity = sellChannelStock.SellQuantity,
-                        WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-                        WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-                        LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
-                        SumQuantity = sellChannelStock.SumQuantity,
-                        MaxQuantity = sellChannelStock.MaxQuantity,
-                        RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
-                        IsOffSell = sellChannelStock.IsOffSell
-                    });
-                }
+                    StoreName = machineInfo.StoreName,
+                    MachineName = machineInfo.Name,
+                    ProductSkuId = bizProductSku.Id,
+                    ProductSkuName = bizProductSku.Name,
+                    ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
+                    ProductSkuCumCode = bizProductSku.CumCode,
+                    SlotId = sellChannelStock.SlotId,
+                    SellQuantity = sellChannelStock.SellQuantity,
+                    WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                    WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                    LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
+                    SumQuantity = sellChannelStock.SumQuantity,
+                    MaxQuantity = sellChannelStock.MaxQuantity,
+                    RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
+                    IsOffSell = sellChannelStock.IsOffSell
+                });
+
             }
 
 
@@ -156,28 +155,26 @@ namespace LocalS.Service.Api.Merch
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var machineInfo = BizFactory.Machine.GetOne(sellChannelStock.SellChannelRefId);
-                var productSku = CacheServiceFactory.ProductSku.GetInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
-                if (productSku != null)
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+                olist.Add(new
                 {
-                    olist.Add(new
-                    {
-                        StoreName = machineInfo.StoreName,
-                        MachineName = machineInfo.Name,
-                        ProductSkuId = productSku.Id,
-                        ProductSkuName = productSku.Name,
-                        ProductSkuSpecDes = SpecDes.GetDescribe(productSku.SpecDes),
-                        ProductSkuCumCode = productSku.CumCode,
-                        SlotId = sellChannelStock.SlotId,
-                        SellQuantity = sellChannelStock.SellQuantity,
-                        WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-                        WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-                        LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
-                        SumQuantity = sellChannelStock.SumQuantity,
-                        MaxQuantity = sellChannelStock.MaxQuantity,
-                        RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
-                        IsOffSell = sellChannelStock.IsOffSell
-                    });
-                }
+                    StoreName = machineInfo.StoreName,
+                    MachineName = machineInfo.Name,
+                    ProductSkuId = bizProductSku.Id,
+                    ProductSkuName = bizProductSku.Name,
+                    ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
+                    ProductSkuCumCode = bizProductSku.CumCode,
+                    SlotId = sellChannelStock.SlotId,
+                    SellQuantity = sellChannelStock.SellQuantity,
+                    WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                    WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                    LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
+                    SumQuantity = sellChannelStock.SumQuantity,
+                    MaxQuantity = sellChannelStock.MaxQuantity,
+                    RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
+                    IsOffSell = sellChannelStock.IsOffSell
+                });
+
             }
 
 

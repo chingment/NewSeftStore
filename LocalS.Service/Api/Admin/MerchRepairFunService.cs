@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Admin
             var result = new CustomJsonResult();
 
 
-            CacheServiceFactory.ProductSku.ReLoad();
+            CacheServiceFactory.Product.ReLoad();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "执行成功");
 

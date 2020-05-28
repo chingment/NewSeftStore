@@ -270,7 +270,8 @@
     <Compile Include="Api\StoreApp\Models\OrderConfirmProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmSubtotalItemModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
-    <Compile Include="Api\StoreApp\Models\ProductModel.cs" />
+    <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />
+    <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RetPersonalPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetProductKindPageData.cs" />

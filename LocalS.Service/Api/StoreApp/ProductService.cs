@@ -22,20 +22,38 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public PageEntity<ProductModel> GetProducts(int pageIndex, int pageSize, string storeId, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string kindId)
         {
-            var pageEntiy = new PageEntity<ProductModel>();
+            var pageEntiy = new PageEntity<ProductSkuModel>();
 
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
 
             var store = BizFactory.Store.GetOne(storeId);
 
-            var query = (from m in CurrentDb.SellChannelStock
-                         where m.MerchId == store.MerchId
-                         && store.SellMachineIds.Contains(m.SellChannelRefId)
+            var query = CurrentDb.SellChannelStock.Where(m =>
+                m.MerchId == store.MerchId
+                         && m.StoreId == storeId
                          && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine
-                         select new { m.PrdProductId }).Distinct();
+
+                ).AsEnumerable()
+                     .OrderBy(x => x.Id)
+                     .GroupBy(x => x.PrdProductId)
+                     .Select(g => new { g, count = g.Count() })
+                     .SelectMany(t => t.g.Select(b => b)
+                     .Zip(Enumerable.Range(1, t.count), (j, i) => new { j.PrdProductId, j.PrdProductSkuId, rn = i })).Where(m => m.rn == 1); ;
+
+            //var query = (from m in CurrentDb.SellChannelStock
+            //             where m.MerchId == "2f54b8f1edb7492b8e1f377baf13c5fa"
+            //             && m.StoreId == "a21fb0d24ddd4e2193bdd115e20d525f"
+            //             && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine
+            //            SellChannelStock.OrderBy(x => x.PrdProductId).GroupBy(x => x.PrdProductId)
+
+            //.Select(g => new { g, count = g.Count() })
+            //.SelectMany(t => t.g.Select(b => b).Zip(Enumerable.Range(1, t.count), (j, i) => new { j.PrdProductId, j.PrdProductSkuId, rn = i }));
+
+
+            //.OrderBy(x => x.PrdProductId).GroupBy(x => x.PrdProductId).SelectMany(t => t.Select((b, i) => new { b, i })).Select(m => m.b)
 
             if (!string.IsNullOrEmpty(kindId))
             {
@@ -53,35 +71,29 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var prdProductSkuIds = CurrentDb.SellChannelStock.Where(m => m.MerchId == store.MerchId
-                && store.SellMachineIds.Contains(m.SellChannelRefId)
-                && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine && m.PrdProductId == item.PrdProductId
-                ).Select(m => m.PrdProductSkuId).Distinct().ToList();
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(store.MerchId, storeId, store.SellMachineIds, item.PrdProductSkuId);
 
-                if (prdProductSkuIds.Count > 0)
+                var productSkuModel = new ProductSkuModel();
+
+                productSkuModel.Id = item.PrdProductSkuId;
+                productSkuModel.ProductId = item.PrdProductId;
+                productSkuModel.Name = bizProductSku.Name;
+                productSkuModel.MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
+                productSkuModel.BriefDes = bizProductSku.BriefDes;
+                productSkuModel.CharTags = bizProductSku.CharTags;
+                productSkuModel.SpecDes = bizProductSku.SpecDes;
+                productSkuModel.SpecItems = bizProductSku.SpecItems;
+                productSkuModel.SpecIdx= bizProductSku.SpecIdx;
+                if (bizProductSku.Stocks != null)
                 {
-                    var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.SellMachineIds, prdProductSkuIds[0]);
-                    if (bizProductSku != null)
+                    if (bizProductSku.Stocks.Count > 0)
                     {
-                        var productModel = new ProductModel();
-                        productModel.Id = item.PrdProductId;
-                        productModel.Name = bizProductSku.Name;
-                        productModel.MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
-                        productModel.BriefDes = bizProductSku.BriefDes;
-                        productModel.CharTags = bizProductSku.CharTags;
-                        productModel.SpecItems = bizProductSku.SpecItems;
-                        if (bizProductSku.Stocks.Count > 0)
-                        {
-                            //productModel.RefSkuId = bizProductSku.Id;
-                            //productModel.IsShowPrice = false;
-                            //productModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                            //productModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
-                            //productModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                        productSkuModel.IsShowPrice = false;
+                        productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                        productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                        productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
 
-                            //productModel.SpecSkus.Add();
-
-                            pageEntiy.Items.Add(productModel);
-                        }
+                        pageEntiy.Items.Add(productSkuModel);
                     }
                 }
             }
@@ -94,30 +106,23 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            //var store = BizFactory.Store.GetOne(rup.StoreId);
-            //var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(store.MerchId, store.Id, store.SellMachineIds, rup.ProductId);
-            //if (bizProductSku != null)
-            //{
-            //    var productSkuModel = new ProductModel();
-            //    productSkuModel.Id = bizProductSku.Id;
-            //    productSkuModel.ProductId = bizProductSku.ProductId;
-            //    productSkuModel.Name = bizProductSku.Name;
-            //    productSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
-            //    productSkuModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
-            //    productSkuModel.DetailsDes = bizProductSku.DetailsDes;
-            //    productSkuModel.BriefDes = bizProductSku.BriefDes;
-            //    productSkuModel.SpecDes = bizProductSku.SpecDes;
+            var store = BizFactory.Store.GetOne(rup.StoreId);
+            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
+            if (bizProductSku != null)
+            {
+                var productSkuDetailsModel = new ProductSkuDetailsModel();
+                productSkuDetailsModel.Id = bizProductSku.Id;
+                productSkuDetailsModel.ProductId = bizProductSku.ProductId;
+                productSkuDetailsModel.Name = bizProductSku.Name;
+                productSkuDetailsModel.MainImgUrl = bizProductSku.MainImgUrl;
+                productSkuDetailsModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
+                productSkuDetailsModel.DetailsDes = bizProductSku.DetailsDes;
+                productSkuDetailsModel.BriefDes = bizProductSku.BriefDes;
+                productSkuDetailsModel.SpecItems = bizProductSku.SpecItems;
+                productSkuDetailsModel.SpecIdx = bizProductSku.SpecIdx;
 
-            //    if (bizProductSku.Stocks.Count > 0)
-            //    {
-            //        productSkuModel.IsShowPrice = false;
-            //        productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-            //        productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
-            //        productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-            //    }
-
-            //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuModel);
-            //}
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuDetailsModel);
+            }
 
             return result;
         }

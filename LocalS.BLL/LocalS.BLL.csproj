@@ -107,12 +107,11 @@
     <Compile Include="Biz\StoreService.cs" />
     <Compile Include="Biz\AppSoftwareService.cs" />
     <Compile Include="Cache\CacheServiceFactory.cs" />
-    <Compile Include="Cache\Model\ProductSkuInfoAndStockModel.cs" />
+    <Compile Include="Cache\Model\ProductInfoModel.cs" />
     <Compile Include="Cache\Model\ProductSkuInfoBySearchModel.cs" />
     <Compile Include="Cache\Model\ProductSkuInfoModel.cs" />
     <Compile Include="Cache\Model\ProductSkuStockModel.cs" />
-    <Compile Include="Cache\ProductSkuCacheService.cs" />
-    <Compile Include="Cache\StockCacheServicecs.cs" />
+    <Compile Include="Cache\ProductCacheService.cs" />
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\EventNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\LoginLogModel.cs" />

@@ -15,17 +15,17 @@ namespace LocalS.BLL
         public string Producer { get; set; }
         public string PinYinIndex { get; set; }
         public string ProductId { get; set; }
-        public List<Object> ProductSpecItems { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public List<ImgSet> DetailsDes { get; set; }
+
+        public List<SpecDes> SpecDes { get; set; }
         public string BriefDes { get; set; }
         public List<SpecItem> SpecItems { get; set; }
-        public List<SpecDes> SpecDes { get; set; }
         public string SpecIdx { get; set; }
         public bool IsTrgVideoService { get; set; }
-
         public List<string> CharTags { get; set; }
+        public List<ProductSkuStockModel> Stocks { get; set; }
     }
 }

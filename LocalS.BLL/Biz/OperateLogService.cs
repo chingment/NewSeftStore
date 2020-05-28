@@ -316,19 +316,10 @@ namespace LocalS.BLL.Biz
                 StringBuilder remark = new StringBuilder("");
                 string eventLevel = "A";
                 string productSkuName = "";
-                var bizProduct = CacheServiceFactory.ProductSku.GetInfo(machine.CurUseMerchId, model.ProductSkuId);
-                if (bizProduct == null)
-                {
-                    productSkuName = "无";
-                }
-                else
-                {
-                    productSkuName = bizProduct.Name;
-                }
-
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.ProductSkuId);
                 if (model.IsTest)
                 {
-                    productSkuName = "[测试]" + productSkuName;
+                    productSkuName = "[测试]" + bizProductSku.Name;
                 }
 
                 if (model.Status == E_OrderPickupStatus.SendPickupCmd)
@@ -568,7 +559,7 @@ namespace LocalS.BLL.Biz
 
             if (model != null)
             {
-                var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, model.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, model.PrdProductSkuId);
 
                 var sellChannelStockLog = new SellChannelStockLog();
                 sellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -581,9 +572,9 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
                 sellChannelStockLog.CabinetId = model.CabinetId;
                 sellChannelStockLog.SlotId = model.SlotId;
-                sellChannelStockLog.PrdProductId = productSku.ProductId;
+                sellChannelStockLog.PrdProductId = bizProductSku.ProductId;
                 sellChannelStockLog.PrdProductSkuId = model.PrdProductSkuId;
-                sellChannelStockLog.PrdProductSkuName = productSku.Name;
+                sellChannelStockLog.PrdProductSkuName = bizProductSku.Name;
                 sellChannelStockLog.SellQuantity = model.SellQuantity;
                 sellChannelStockLog.WaitPayLockQuantity = model.WaitPayLockQuantity;
                 sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;

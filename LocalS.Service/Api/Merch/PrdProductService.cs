@@ -90,7 +90,7 @@ namespace LocalS.Service.Api.Merch
             string[] productIds = null;
             if (!string.IsNullOrEmpty(rup.Key))
             {
-                var search = CacheServiceFactory.ProductSku.Search(merchId, "All", rup.Key);
+                var search = CacheServiceFactory.Product.Search(merchId, "All", rup.Key);
                 if (search != null)
                 {
                     productSkuIds = search.Select(m => m.Id).Distinct().ToArray();
@@ -326,7 +326,7 @@ namespace LocalS.Service.Api.Merch
             {
                 for (var i = 0; i < rop.Skus.Count; i++)
                 {
-                    CacheServiceFactory.ProductSku.Update(merchId, rop.Skus[i].Id);
+                    CacheServiceFactory.Product.Update(merchId, rop.Skus[i].Id);
                 }
             }
 
@@ -508,14 +508,14 @@ namespace LocalS.Service.Api.Merch
             {
                 for (var i = 0; i < rop.Skus.Count; i++)
                 {
-                    CacheServiceFactory.ProductSku.Update(merchId, rop.Skus[i].Id);
+                    CacheServiceFactory.Product.Update(merchId, rop.Skus[i].Id);
 
                     if (sellChannelStocks != null)
                     {
                         var storeMachines = (from m in sellChannelStocks where m.SellChannelRefType == E_SellChannelRefType.Machine select new { m.StoreId, m.SellChannelRefId }).Distinct();
                         foreach (var storeMachine in storeMachines)
                         {
-                            var bizProductSku = CacheServiceFactory.ProductSku.GetInfoAndStock(merchId, storeMachine.StoreId, new string[] { storeMachine.SellChannelRefId }, rop.Skus[i].Id);
+                            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, storeMachine.StoreId, new string[] { storeMachine.SellChannelRefId }, rop.Skus[i].Id);
                             if (bizProductSku != null)
                             {
                                 if (bizProductSku.Stocks != null)
@@ -564,7 +564,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var productSku = CacheServiceFactory.ProductSku.GetInfo(merchId, item.PrdProductSkuId);
+                var productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.PrdProductSkuId);
                 var store = BizFactory.Store.GetOne(item.StoreId);
                 olist.Add(new
                 {
