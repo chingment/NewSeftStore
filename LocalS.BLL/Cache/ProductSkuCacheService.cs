@@ -115,7 +115,8 @@ namespace LocalS.BLL
                 prdProductSkuModel.MainImgUrl = ImgSet.GetMain_O(prdProductDb.DisplayImgUrls);
                 prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.ToJsonObject<List<ImgSet>>();
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
-                prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
+                prdProductSkuModel.SpecItems = prdProductDb.SpecItems.ToJsonObject<List<SpecItem>>();
+                prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.ToJsonObject<List<SpecDes>>();
                 prdProductSkuModel.SpecIdx = prdProductSkuByDb.SpecIdx;
                 prdProductSkuModel.ProductSpecItems = prdProductDb.SpecItems.ToJsonObject<List<Object>>();
                 prdProductSkuModel.IsTrgVideoService = prdProductDb.IsTrgVideoService;
@@ -245,7 +246,7 @@ namespace LocalS.BLL
                     searchModel.Name = productSkuModel.Name;
                     searchModel.CumCode = productSkuModel.CumCode;
                     searchModel.BarCode = productSkuModel.BarCode;
-                    searchModel.SpecDes = productSkuModel.SpecDes;
+                    searchModel.SpecDes = SpecDes.GetDescribe(productSkuModel.SpecDes);
                     searchModel.MainImgUrl = ImgSet.Convert_S(productSkuModel.MainImgUrl);
                     searchModels.Add(searchModel);
                 }

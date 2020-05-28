@@ -395,7 +395,7 @@ namespace LocalS.BLL.Biz
                             orderSubChild.PrdProductId = buildOrderSubChid.ProductId;
                             orderSubChild.PrdProductSkuName = productSku.Name;
                             orderSubChild.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
-                            orderSubChild.PrdProductSkuSpecDes = productSku.SpecDes;
+                            orderSubChild.PrdProductSkuSpecDes = productSku.SpecDes.ToJsonString();
                             orderSubChild.PrdProductSkuProducer = productSku.Producer;
                             orderSubChild.PrdProductSkuBarCode = productSku.BarCode;
                             orderSubChild.PrdProductSkuCumCode = productSku.CumCode;
@@ -430,7 +430,7 @@ namespace LocalS.BLL.Biz
                                 orderSubChildUnique.PrdProductId = orderSubChild.PrdProductId;
                                 orderSubChildUnique.PrdProductSkuName = productSku.Name;
                                 orderSubChildUnique.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
-                                orderSubChildUnique.PrdProductSkuSpecDes = productSku.SpecDes;
+                                orderSubChildUnique.PrdProductSkuSpecDes = orderSubChild.PrdProductSkuSpecDes;
                                 orderSubChildUnique.PrdProductSkuProducer = productSku.Producer;
                                 orderSubChildUnique.PrdProductSkuBarCode = productSku.BarCode;
                                 orderSubChildUnique.PrdProductSkuCumCode = productSku.CumCode;

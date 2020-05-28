@@ -25,6 +25,23 @@ namespace LocalS.BLL
             {
                 var items = str.ToJsonObject<List<SpecDes>>();
 
+                return GetDescribe(items);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return values;
+        }
+
+        public static string GetDescribe(List<SpecDes> items)
+        {
+
+            string values = "";
+
+            try
+            {
                 if (items != null)
                 {
                     foreach (var item in items)
@@ -64,6 +81,17 @@ namespace LocalS.BLL
     public class SpecItemValue
     {
         public string Name { get; set; }
+    }
+
+    public class SpecSku
+    {
+        public string SkuId { get; set; }
+        public string SpecIdx { get; set; }
+        public bool IsShowPrice { get; set; }
+        public decimal ShowPrice { get; set; }
+        public decimal SalePrice { get; set; }
+        public decimal SalePriceByVip { get; set; }
+        public bool IsOffSell { get; set; }
     }
 
 }

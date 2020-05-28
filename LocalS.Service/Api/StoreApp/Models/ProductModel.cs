@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -8,24 +9,14 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-
-    public class PrdKindModel
+    public class ProductModel
     {
-        public PrdKindModel()
-        {
-            this.List = new PageEntity<ProductModel>();
-        }
-
         public string Id { get; set; }
-
         public string Name { get; set; }
-
         public string MainImgUrl { get; set; }
-
-        public bool Selected { get; set; }
-
-        public PageEntity<ProductModel> List { get; set; }
-
-
+        public string BriefDes { get; set; }
+        public List<string> CharTags { get; set; }
+        public List<SpecItem> SpecItems { get; set; }
+        public List<SpecSku> SpecSkus { get; set; }
     }
 }

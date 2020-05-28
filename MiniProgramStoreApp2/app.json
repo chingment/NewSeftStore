@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/testsku/testsku",
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",
@@ -16,7 +15,8 @@
     "pages/operate/operate",
     "pages/notopen/notopen",
     "pages/test/test",
-    "pages/orderdetails/orderdetails"
+    "pages/orderdetails/orderdetails",
+    "pages/testsku/testsku"
   ],
   "window": {
     "backgroundTextStyle": "light",

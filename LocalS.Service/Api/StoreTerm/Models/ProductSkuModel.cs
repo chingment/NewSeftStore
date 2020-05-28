@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
