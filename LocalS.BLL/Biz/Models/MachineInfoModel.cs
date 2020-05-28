@@ -47,6 +47,7 @@ namespace LocalS.BLL.Biz
         public ScannerModel Scanner { get; set; }
         public FingerVeinnerModel FingerVeinner { get; set; }
 
+        public bool ImIsUse { get; set; }
         public string ImPartner { get; set; }
         public string ImUserName { get; set; }
         public string ImPassword { get; set; }

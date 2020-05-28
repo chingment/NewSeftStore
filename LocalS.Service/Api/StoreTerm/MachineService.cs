@@ -94,6 +94,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.MstVern = machineInfo.MstVern;
             ret.Machine.Scanner = machineInfo.Scanner;
             ret.Machine.FingerVeinner = machineInfo.FingerVeinner;
+            ret.Machine.ImIsUse = machineInfo.ImIsUse;
             ret.Machine.ImPartner = machineInfo.ImPartner;
             ret.Machine.ImUserName = machineInfo.ImUserName;
             ret.Machine.ImPassword = machineInfo.ImPassword;

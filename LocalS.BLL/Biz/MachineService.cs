@@ -43,6 +43,8 @@ namespace LocalS.BLL.Biz
             model.ExIsHas = machine.ExIsHas;
             model.OstVern = machine.OstVern;
             model.MstVern = machine.MstVern;
+
+            model.ImIsUse = machine.ImIsUse;
             model.ImPartner = machine.ImPartner;
             model.ImUserName = machine.ImUserName;
             model.ImPassword = machine.ImPassword;
