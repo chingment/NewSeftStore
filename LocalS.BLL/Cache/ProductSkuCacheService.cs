@@ -66,6 +66,7 @@ namespace LocalS.BLL
             productSkuInfoAndStockModel.DetailsDes = productSkuInfo.DetailsDes;
             productSkuInfoAndStockModel.BriefDes = productSkuInfo.BriefDes;
             productSkuInfoAndStockModel.SpecDes = productSkuInfo.SpecDes;
+            productSkuInfoAndStockModel.SpecIdx = productSkuInfo.SpecIdx;
             productSkuInfoAndStockModel.BarCode = productSkuInfo.BarCode;
             productSkuInfoAndStockModel.Producer = productSkuInfo.Producer;
             productSkuInfoAndStockModel.Stocks = GetStock(merchId, productSkuId);
@@ -115,6 +116,7 @@ namespace LocalS.BLL
                 prdProductSkuModel.DetailsDes = prdProductDb.DetailsDes.ToJsonObject<List<ImgSet>>();
                 prdProductSkuModel.BriefDes = prdProductDb.BriefDes.NullToEmpty();
                 prdProductSkuModel.SpecDes = prdProductSkuByDb.SpecDes.NullToEmpty();
+                prdProductSkuModel.SpecIdx = prdProductSkuByDb.SpecIdx;
                 prdProductSkuModel.ProductSpecItems = prdProductDb.SpecItems.ToJsonObject<List<Object>>();
                 prdProductSkuModel.IsTrgVideoService = prdProductDb.IsTrgVideoService;
                 prdProductSkuModel.CharTags = prdProductDb.CharTags.ToJsonObject<List<string>>();

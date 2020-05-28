@@ -232,7 +232,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     if (rop.SpecItems.Count > 0)
                     {
-                        prdProduct.SpecItems = rop.SpecItems.Where(m => m.Values.Count > 0).ToJsonString();
+                        prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
                     }
                 }
 
@@ -271,6 +271,7 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.Name = GetSkuSpecCombineName(prdProduct.Name, sku.SpecDes);
                     prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
                     prdProductSku.SpecDes = sku.SpecDes.OrderBy(m => m.Name).ToList().ToJsonString();
+                    prdProductSku.SpecIdx = string.Join(",", sku.SpecDes.Select(m => m.Value));
                     prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;

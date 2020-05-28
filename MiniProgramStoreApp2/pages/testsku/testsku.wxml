@@ -1,0 +1,25 @@
+<view id="vmsimulatedDATA">
+
+  <view class='productConten'>
+
+    <view class="productDelcom" wx:for="{{simulatedDATA.specifications}}" wx:for-index='n' wx:for-item="ProductItem">
+
+      <view class='p'>{{ProductItem.name}}</view>
+
+      <ul class="productFooterlist clearfix">
+
+        <li wx:for="{{ProductItem.item}}" wx:for-item="oItem" bindtap="specificationBtn" data-show="{{oItem.isShow}}" class="{{oItem.isShow?'':'noneActive'}} {{subIndex[n] == index?'productActive':''}}" data-ol="{{subIndex[n]}}" data-name="{{oItem.name}}" data-n="{{n}}" data-index="{{index}}">{{oItem.name}}</li>
+
+      </ul>
+
+    </view>
+
+  </view>
+
+  <view wx:if="{{boxArr.id}}">
+
+    {{boxArr.id+'--'+boxArr.price}}
+
+  </view>
+
+</view>

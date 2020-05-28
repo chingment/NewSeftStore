@@ -54,11 +54,16 @@ namespace LocalS.BLL
     {
         public SpecItem()
         {
-            this.Values = new List<string>();
+            this.Value = new List<SpecItemValue>();
         }
 
         public string Name { get; set; }
-        public List<string> Values { get; set; }
+        public List<SpecItemValue> Value { get; set; }
+    }
+
+    public class SpecItemValue
+    {
+        public string Name { get; set; }
     }
 
 }

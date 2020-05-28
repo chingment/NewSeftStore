@@ -28,7 +28,7 @@ namespace LocalS.BLL
         public List<string> CharTags { get; set; }
         public string BriefDes { get; set; }
         public string SpecDes { get; set; }
-
+        public string SpecIdx { get; set; }
         public bool IsTrgVideoService { get; set; }
         public List<ProductSkuStockModel> Stocks { get; set; }
     }

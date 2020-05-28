@@ -123,14 +123,14 @@
 
           <div style="flex:1;">
             <el-tag
-              v-for="value in item.values"
-              :key="value"
+              v-for="value in item.value"
+              :key="value.name"
               type="success"
               closable
               :disable-transitions="false"
               @close="multiSpecsValueHandleClose(item,value)"
             >
-              {{ value }}
+              {{ value.name }}
             </el-tag>
             <el-input
               v-if="item.inputVisible"
@@ -151,9 +151,8 @@
             <tr>
               <th
                 v-for="item in multiSpecsItems"
-                v-show="item.values.length>0"
-
-                :key="item.name"
+                v-show="item.value.length>0"
+                :key="item.name "
               >
                 {{ item.name }}
               </th>
@@ -576,8 +575,8 @@ export default {
         return false
       }
 
-      if (newItemName) {
-        this.multiSpecsItems.push({ name: newItemName, values: [], inputVisible: false, inputValue: '' })
+      if (strLen(newItemName) > 0) {
+        this.multiSpecsItems.push({ name: newItemName, value: [], inputVisible: false, inputValue: '' })
       }
       this.multiSpecsInputVisible = false
       this.multiSpecsInputValue = ''
@@ -585,8 +584,8 @@ export default {
     },
     multiSpecsValueHandleClose(item, val) {
       var item_index = this.multiSpecsItems.indexOf(item)
-      var val_index = this.multiSpecsItems[item_index].values.indexOf(val)
-      this.multiSpecsItems[item_index].values.splice(val_index, 1)
+      var val_index = this.multiSpecsItems[item_index].value.indexOf(val)
+      this.multiSpecsItems[item_index].value.splice(val_index, 1)
       this.buildCombination()
     },
     multiSpecsValueShowInput(item, id) {
@@ -599,13 +598,13 @@ export default {
     multiSpecsValueHandleInputConfirm(item) {
       var _this = this
       var index = this.multiSpecsItems.indexOf(item)
-      var values = this.multiSpecsItems[index].values
+      var itemValues = this.multiSpecsItems[index].value
       var newItemValue = item.inputValue
 
       var isHasSame = false
-      if (values != null) {
-        values.forEach(val => {
-          if (val === newItemValue) {
+      if (itemValues != null) {
+        itemValues.forEach(_val => {
+          if (_val.name === newItemValue) {
             isHasSame = true
           }
         })
@@ -616,9 +615,12 @@ export default {
         return false
       }
 
-      if (newItemValue) {
-        this.multiSpecsItems[index].values.push(newItemValue)
+      if (strLen(newItemValue) > 0) {
+        this.multiSpecsItems[index].value.push({ name: newItemValue })
       }
+
+      console.log(JSON.stringify(this.multiSpecsItems))
+
       this.multiSpecsItems[index].inputVisible = false
       this.multiSpecsItems[index].inputValue = ''
 
@@ -645,7 +647,7 @@ export default {
       this.multiSpecsSkuList = []
       // 将选中的规格组合成一个大数组 [[1, 2], [a, b]...]
       this.multiSpecsItems.forEach(element => {
-        element.values.length > 0 ? this.multiSpecsSkuArray.push(element.values) : ''
+        element.value.length > 0 ? this.multiSpecsSkuArray.push(element.value) : ''
       })
       // 勾选了规格，才调用方法
       if (this.multiSpecsSkuArray.length > 0) {
@@ -657,7 +659,7 @@ export default {
         var arr_spec_desc = this.multiSpecsSkuList[j]
         var ll_spec_desc = []
         for (var k = 0; k < arr_spec_desc.length; k++) {
-          ll_spec_desc.push({ name: this.multiSpecsItems[k].name, value: arr_spec_desc[k] })
+          ll_spec_desc.push({ name: this.multiSpecsItems[k].name, value: arr_spec_desc[k].name })
         }
 
         multiSpecs.push({ specDes: ll_spec_desc, salesPrice: 0, cumCode: '', barCode: '' })
@@ -669,7 +671,7 @@ export default {
       // }
 
       this.multiSpecsSkuResult = multiSpecs
-      console.log(this.multiSpecsSkuResult)
+      console.log(JSON.stringify(this.multiSpecsSkuResult))
     },
     charTagsHandleClose(tag) {
       this.form.charTags.splice(this.form.charTags.indexOf(tag), 1)
