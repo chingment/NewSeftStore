@@ -277,8 +277,6 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.CreateTime = DateTime.Now;
                     CurrentDb.PrdProductSku.Add(prdProductSku);
                     CurrentDb.SaveChanges();
-
-                    sku.Id = prdProductSku.Id;
                 }
 
                 if (rop.KindIds != null)
@@ -320,14 +318,6 @@ namespace LocalS.Service.Api.Merch
                 MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
-
-            if (result.Result == ResultType.Success)
-            {
-                for (var i = 0; i < rop.Skus.Count; i++)
-                {
-                    CacheServiceFactory.Product.Update(merchId, rop.Skus[i].Id);
-                }
             }
 
             return result;
