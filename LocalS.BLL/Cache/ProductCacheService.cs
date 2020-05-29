@@ -49,9 +49,7 @@ namespace LocalS.BLL
 
             var productSkuStocks = new List<ProductSkuStockModel>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId &&
-             m.StoreId == storeId && sellChannelRefIds.Contains(m.SellChannelRefId) &&
-             m.PrdProductSkuId == productSkuId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && sellChannelRefIds.Contains(m.SellChannelRefId) && m.PrdProductSkuId == productSkuId).ToList();
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
@@ -74,21 +72,6 @@ namespace LocalS.BLL
 
             return productSkuInfo;
         }
-
-        //public ProductInfoModel GetInfo(string merchId, string productId)
-        //{
-        //    var productByCache = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.PRD_INF, merchId), productSkuByDb.PrdProductId);
-
-        //    var prdProductDb = CurrentDb.PrdProduct.Where(m => m.Id == prdProductSkuByDb.PrdProductId).FirstOrDefault();
-
-        //    if (prdProductDb == null)
-        //    {
-        //        isFindInBbIsNull = true;
-        //    }
-
-        //    return productByCache;
-
-        //}
 
         public ProductSkuInfoModel GetSkuInfo(string merchId, string productSkuId)
         {
@@ -167,19 +150,6 @@ namespace LocalS.BLL
             }
 
             return productSkuByCache;
-        }
-
-        public string GetName(string merchId, string productSkuId)
-        {
-            var productSkuName = "未知";
-
-            var bizProductSku = GetSkuInfo(merchId, productSkuId);
-            if (bizProductSku != null)
-            {
-                productSkuName = bizProductSku.Name;
-            }
-
-            return productSkuName;
         }
 
         public List<ProductSkuInfoBySearchModel> Search(string merchId, string type, string key)
