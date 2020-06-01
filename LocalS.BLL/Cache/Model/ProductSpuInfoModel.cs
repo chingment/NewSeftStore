@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class ProductInfoModel
+    public class ProductSpuInfoModel
     {
+        public ProductSpuInfoModel()
+        {
+            this.DisplayImgUrls = new List<ImgSet>();
+            this.DetailsDes = new List<ImgSet>();
+            this.SpecItems = new List<SpecItem>();
+            this.SkuSpecIdxs = new List<SkuSpecIdx>();
+            this.CharTags = new List<string>();
+        }
         public string Id { get; set; }
         public string Producer { get; set; }
         public string PinYinIndex { get; set; }
@@ -20,6 +28,13 @@ namespace LocalS.BLL
         public List<SpecItem> SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
         public List<string> CharTags { get; set; }
-        public List<ProductSkuStockModel> Stocks { get; set; }
+        public List<SkuSpecIdx> SkuSpecIdxs { get; set; }
+
+        public class SkuSpecIdx
+        {
+            public string SkuId { get; set; }
+
+            public string SpecIdx { get; set; }
+        }
     }
 }

@@ -15,6 +15,11 @@ namespace LocalS.Service.Api.StoreApp
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public string BriefDes { get; set; }
+        public bool IsShowPrice { get; set; }
+        public decimal SalePrice { get; set; }
+        public decimal SalePriceByVip { get; set; }
+        public decimal ShowPrice { get; set; }
+        public bool IsOffSell { get; set; }
         public List<string> CharTags { get; set; }
         public List<SpecItem> SpecItems { get; set; }
         public string SpecIdx { get; set; }

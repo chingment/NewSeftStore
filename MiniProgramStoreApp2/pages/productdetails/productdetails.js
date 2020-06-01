@@ -1,7 +1,6 @@
 const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
-const wxparse = require("../../components/wxParse/wxParse.js")
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
 const app = getApp()
@@ -35,12 +34,6 @@ Page({
               productSku: res.data,
               cart: storeage.getCart()
             })
-
-            var detailsDes = res.data.detailsDes
-            if (detailsDes==null){
-              detailsDes=""
-            }
-            wxparse.wxParse('dkcontent', 'html', detailsDes, _this, 0);
           }
         },
         fail: function () { }

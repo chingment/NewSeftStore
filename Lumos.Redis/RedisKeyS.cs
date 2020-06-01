@@ -8,7 +8,7 @@ namespace Lumos.Redis
 {
     public static class RedisKeyS
     {
-        public static readonly string PRD_INF = "prd_inf:{0}";//商户所有商品 0：商户ID
+        public static readonly string PRD_SPU_INF = "prd_spu_inf:{0}";//商户所有商品 0：商户ID
         public static readonly string PRD_SKU_INF = "prd_sku_inf:{0}";//商户所有商品 0：商户ID
         public static readonly string PRD_SKU_SBR = "prd_sku_sbr:{0}";//商户所有商品ID-条形码映射表 0：商户ID
         public static readonly string PRD_SKU_SPY = "prd_sku_spy:{0}";//商户所有商品ID-拼音映射表 0：商户ID

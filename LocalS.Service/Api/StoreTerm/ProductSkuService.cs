@@ -37,7 +37,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     var productSkuModel = new ProductSkuModel();

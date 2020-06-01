@@ -59,7 +59,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(store.MerchId, storeId, store.SellMachineIds, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, storeId, store.SellMachineIds, item.PrdProductSkuId);
 
                 var productSkuModel = new ProductSkuModel();
 
@@ -95,7 +95,7 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
-            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
+            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
             if (bizProductSku != null)
             {
                 var productSkuDetailsModel = new ProductSkuDetailsModel();
@@ -108,6 +108,17 @@ namespace LocalS.Service.Api.StoreApp
                 productSkuDetailsModel.BriefDes = bizProductSku.BriefDes;
                 productSkuDetailsModel.SpecItems = bizProductSku.SpecItems;
                 productSkuDetailsModel.SpecIdx = bizProductSku.SpecIdx;
+                if (bizProductSku.Stocks != null)
+                {
+                    if (bizProductSku.Stocks.Count > 0)
+                    {
+                        productSkuDetailsModel.IsShowPrice = false;
+                        productSkuDetailsModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                        productSkuDetailsModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                        productSkuDetailsModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                    }
+                }
+
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuDetailsModel);
             }

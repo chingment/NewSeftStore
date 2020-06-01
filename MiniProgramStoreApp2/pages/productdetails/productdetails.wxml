@@ -1,56 +1,62 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 <view class="details">
-<view class="details-main" >
-  <swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-    <block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="{{index}}">
-      <swiper-item>
-        <image src="{{item.url}}"></image>
-      </swiper-item>
-    </block>
-  </swiper>
+	<view class="details-main">
+		<swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
+			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="{{index}}">
+				<swiper-item>
+					<image src="{{item.url}}"></image>
+				</swiper-item>
+			</block>
+		</swiper>
 
-  <scroll-view scroll-y="true">
-    <view class="details-info">
-      <view class="details-info1">
-        <view class='container'>
-          <view class="item-name">
-            <text class="name" >{{productSku.name}}</text>
-          </view>
-          <view class="item-briefIntro font-gray">
-            <text class="briefIntro">{{productSku.briefDes}}</text>
-          </view>
-          <view class="item-price">
-            <text class="unitPrice">{{productSku.salePrice}}</text>
-            <text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
-          </view>
-        </view>
-      </view>
-      <view class="details-info2">
-        <import src="../../components/wxParse/wxParse.wxml" />
-        <view style='height:100vh'>
-          <template is="wxParse" data="{{wxParseData:dkcontent.nodes}}" />
-        </view>
+		<scroll-view scroll-y="true">
+			<view class="details-info">
+				<view class="details-info1">
+					<view class='container'>
+						<view class="item-name">
+							<text class="name" >{{productSku.name}}</text>
+						</view>
+						<view class="item-briefIntro font-gray">
+							<text class="briefIntro">{{productSku.briefDes}}</text>
+						</view>
+						<view class="item-price">
+							<text class="unitPrice">{{productSku.salePrice}}</text>
+							<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
+						</view>
+					</view>
+				</view>
+				<view class="details-info2">
 
-      </view>
-    </view>
-  </scroll-view>
+					<view style='height:100vh'>
 
+						<block wx:if="{{productSku.detailsDes!=null}}" >
+							<block wx:for-items="{{productSku.detailsDes}}" wx:for-item="item" wx:key="{{index}}">
+								<image src="{{item.url}}" style="width:100%;height:100%;" ></image>
+							</block>
+
+						</block>
+					</view>
+
+				</view>
+			</view>
+		</scroll-view>
+
+	</view>
+	<view class="details-nav">
+		<view bindtap="goHome" class="item-home">
+			<image src="/content/default/images/home.png" />
+		</view>
+		<view bindtap="goCart" class="item-cart">
+			<view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
+			<image src="/content/default/images/cart.png" />
+		</view>
+		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}' data-reply-skuid="{{productSku.id}}">
+			<text>加入购物车</text>
+		</view>
+		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}">
+			<text>立即购买</text>
+		</view>
+	</view>
 </view>
-<view class="details-nav">
-  <view bindtap="goHome" class="item-home">
-    <image src="/content/default/images/home.png" />
-  </view>
-  <view bindtap="goCart" class="item-cart">
-    <view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
-    <image src="/content/default/images/cart.png" />
-  </view>
-  <view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'   data-reply-skuid="{{productSku.id}}">
-    <text>加入购物车</text>
-  </view>
-  <view  bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}" >
-    <text>立即购买</text>
-  </view>
-</view>
-</view>
-<cart id="cart"  ></cart>
+<cart id="cart"></cart>

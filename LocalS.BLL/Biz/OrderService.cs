@@ -233,7 +233,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(store.MerchId, rop.StoreId, machineIdsByValid.ToArray(), productSku.Id);
+                        var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, machineIdsByValid.ToArray(), productSku.Id);
 
                         if (bizProductSku == null)
                         {

@@ -13,37 +13,93 @@ namespace LocalS.BLL
 {
     public class ProductCacheService : BaseDbContext
     {
-        public void Update(string merchId, string productSkuId)
+        public void RemoveSpuInfo(string merchId, string productId)
         {
-            var prdProductSkuModel = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuId);
-            if (prdProductSkuModel != null)
+            var productSpuInfoModel = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productId);
+            if (productSpuInfoModel != null)
             {
-                if (!string.IsNullOrEmpty(prdProductSkuModel.BarCode))
-                {
-                    RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SBR, merchId), prdProductSkuModel.BarCode);
-                }
 
-                if (!string.IsNullOrEmpty(prdProductSkuModel.PinYinIndex))
+                var skuSpecIdxs = productSpuInfoModel.SkuSpecIdxs;
+                if (skuSpecIdxs != null && skuSpecIdxs.Count > 0)
                 {
-                    RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SPY, merchId), prdProductSkuModel.PinYinIndex);
-                }
+                    foreach (var skuSpecIdx in skuSpecIdxs)
+                    {
+                        var productSkuInfoModel = GetSkuInfo(merchId, skuSpecIdx.SkuId);
 
-                if (!string.IsNullOrEmpty(prdProductSkuModel.Name))
-                {
-                    RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SNA, merchId), prdProductSkuModel.Name);
-                }
+                        if (productSkuInfoModel != null)
+                        {
+                            if (!string.IsNullOrEmpty(productSkuInfoModel.BarCode))
+                            {
+                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SBR, merchId), productSkuInfoModel.BarCode);
+                            }
 
-                if (!string.IsNullOrEmpty(prdProductSkuModel.CumCode))
-                {
-                    RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), prdProductSkuModel.CumCode);
+                            if (!string.IsNullOrEmpty(productSkuInfoModel.PinYinIndex))
+                            {
+                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SPY, merchId), productSkuInfoModel.PinYinIndex);
+                            }
+
+                            if (!string.IsNullOrEmpty(productSkuInfoModel.Name))
+                            {
+                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SNA, merchId), productSkuInfoModel.Name);
+                            }
+
+                            if (!string.IsNullOrEmpty(productSkuInfoModel.CumCode))
+                            {
+                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), productSkuInfoModel.CumCode);
+                            }
+
+                            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productSkuInfoModel.Id);
+                        }
+                    }
                 }
             }
 
-            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuId);
-            GetSkuInfo(merchId, productSkuId);
+            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId);
         }
 
-        public ProductSkuInfoModel GetSkuInfo(string merchId, string storeId, string[] sellChannelRefIds, string productSkuId)
+        private ProductSpuInfoModel GetSpuInfo(string merchId, string productId)
+        {
+            var productSpuByCache = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId);
+
+            if (productSpuByCache == null)
+            {
+                productSpuByCache = new ProductSpuInfoModel();
+                productSpuByCache.Id = productId;
+
+                var prdProductDb = CurrentDb.PrdProduct.Where(m => m.Id == productId).FirstOrDefault();
+
+                if (prdProductDb != null)
+                {
+                    productSpuByCache.PinYinIndex = prdProductDb.PinYinIndex;
+                    productSpuByCache.Name = prdProductDb.Name.NullToEmpty();
+                    productSpuByCache.DisplayImgUrls = prdProductDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
+                    productSpuByCache.MainImgUrl = prdProductDb.MainImgUrl;
+                    productSpuByCache.DetailsDes = prdProductDb.DetailsDes.ToJsonObject<List<ImgSet>>();
+                    productSpuByCache.BriefDes = prdProductDb.BriefDes.NullToEmpty();
+                    productSpuByCache.SpecItems = prdProductDb.SpecItems.ToJsonObject<List<SpecItem>>();
+                    productSpuByCache.CharTags = prdProductDb.CharTags.ToJsonObject<List<string>>();
+                    productSpuByCache.IsTrgVideoService = prdProductDb.IsTrgVideoService;
+
+                    var productSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == productId).ToList();
+
+                    foreach (var productSku in productSkus)
+                    {
+                        productSpuByCache.SkuSpecIdxs.Add(new ProductSpuInfoModel.SkuSpecIdx { SkuId = productSku.Id, SpecIdx = productSku.SpecIdx });
+                    }
+                }
+
+                var setting = new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                };
+
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productId, Newtonsoft.Json.JsonConvert.SerializeObject(productSpuByCache, setting), StackExchange.Redis.When.Always);
+            }
+
+            return productSpuByCache;
+        }
+
+        public ProductSkuInfoModel GetSkuStock(string merchId, string storeId, string[] sellChannelRefIds, string productSkuId)
         {
             var productSkuInfo = GetSkuInfo(merchId, productSkuId);
 
@@ -79,30 +135,13 @@ namespace LocalS.BLL
             //判断商品信息在缓存数据库是否存在，不存在则加载数据到缓存中
             if (productSkuByCache == null)
             {
-                bool isFindInBbIsNull = false;
-                PrdProduct prdProductDb = null;
+                productSkuByCache = new ProductSkuInfoModel();
+                productSkuByCache.Id = productSkuId;
                 var productSkuByDb = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
-                if (productSkuByDb == null)
+                if (productSkuByDb != null)
                 {
-                    isFindInBbIsNull = true;
-                }
-                else
-                {
-                    prdProductDb = CurrentDb.PrdProduct.Where(m => m.Id == productSkuByDb.PrdProductId).FirstOrDefault();
-                }
+                    var productSpuByCache = GetSpuInfo(merchId, productSkuByDb.PrdProductId);
 
-                if (prdProductDb == null)
-                {
-                    isFindInBbIsNull = true;
-                }
-
-                if (isFindInBbIsNull)
-                {
-                    productSkuByCache = new ProductSkuInfoModel();
-                    productSkuByCache.Id = productSkuId;
-                }
-                else
-                {
                     productSkuByCache = new ProductSkuInfoModel();
                     productSkuByCache.Id = productSkuByDb.Id;
                     productSkuByCache.BarCode = productSkuByDb.BarCode;
@@ -110,15 +149,15 @@ namespace LocalS.BLL
                     productSkuByCache.PinYinIndex = productSkuByDb.PinYinIndex;
                     productSkuByCache.ProductId = productSkuByDb.PrdProductId;
                     productSkuByCache.Name = productSkuByDb.Name.NullToEmpty();
-                    productSkuByCache.DisplayImgUrls = prdProductDb.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                    productSkuByCache.MainImgUrl = prdProductDb.MainImgUrl;
-                    productSkuByCache.DetailsDes = prdProductDb.DetailsDes.ToJsonObject<List<ImgSet>>();
-                    productSkuByCache.BriefDes = prdProductDb.BriefDes.NullToEmpty();
-                    productSkuByCache.SpecItems = prdProductDb.SpecItems.ToJsonObject<List<SpecItem>>();
+                    productSkuByCache.DisplayImgUrls = productSpuByCache.DisplayImgUrls;
+                    productSkuByCache.MainImgUrl = productSpuByCache.MainImgUrl;
+                    productSkuByCache.DetailsDes = productSpuByCache.DetailsDes;
+                    productSkuByCache.BriefDes = productSpuByCache.BriefDes;
+                    productSkuByCache.SpecItems = productSpuByCache.SpecItems;
+                    productSkuByCache.CharTags = productSpuByCache.CharTags;
                     productSkuByCache.SpecDes = productSkuByDb.SpecDes.ToJsonObject<List<SpecDes>>();
                     productSkuByCache.SpecIdx = productSkuByDb.SpecIdx;
-                    productSkuByCache.IsTrgVideoService = prdProductDb.IsTrgVideoService;
-                    productSkuByCache.CharTags = prdProductDb.CharTags.ToJsonObject<List<string>>();
+                    productSkuByCache.IsTrgVideoService = productSpuByCache.IsTrgVideoService;
 
                     if (!string.IsNullOrEmpty(productSkuByCache.BarCode))
                     {

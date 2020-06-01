@@ -496,16 +496,16 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
+                CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
+
                 for (var i = 0; i < rop.Skus.Count; i++)
                 {
-                    CacheServiceFactory.Product.Update(merchId, rop.Skus[i].Id);
-
                     if (sellChannelStocks != null)
                     {
                         var storeMachines = (from m in sellChannelStocks where m.SellChannelRefType == E_SellChannelRefType.Machine select new { m.StoreId, m.SellChannelRefId }).Distinct();
                         foreach (var storeMachine in storeMachines)
                         {
-                            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, storeMachine.StoreId, new string[] { storeMachine.SellChannelRefId }, rop.Skus[i].Id);
+                            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeMachine.StoreId, new string[] { storeMachine.SellChannelRefId }, rop.Skus[i].Id);
                             if (bizProductSku != null)
                             {
                                 if (bizProductSku.Stocks != null)
