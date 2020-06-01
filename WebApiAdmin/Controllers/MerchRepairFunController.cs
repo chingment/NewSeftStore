@@ -14,7 +14,7 @@ namespace WebApiAdmin.Controllers
         [HttpPost]
         public OwnApiHttpResponse ReLoadProductSkuCache()
         {
-            IResult result = AdminServiceFactory.MerchRepairFun.ReLoadProductSkuCache(this.CurrentUserId);
+            IResult result = AdminServiceFactory.MerchRepairFun.ReLoadProductCache(this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
     }

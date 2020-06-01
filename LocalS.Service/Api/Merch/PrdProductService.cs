@@ -214,6 +214,12 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少上传一张商品图片");
             }
 
+            if (rop.SpecItems == null || rop.SpecItems.Where(m => m.Value.Count > 0).ToList().Count == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少录入一种规格");
+            }
+
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = new PrdProduct();
@@ -227,15 +233,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.BriefDes = rop.BriefDes.Trim2();
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
-
-                if (rop.SpecItems != null)
-                {
-                    if (rop.SpecItems.Count > 0)
-                    {
-                        prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
-                    }
-                }
-
+                prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
 

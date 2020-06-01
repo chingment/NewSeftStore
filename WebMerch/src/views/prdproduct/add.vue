@@ -381,6 +381,11 @@ export default {
             return false
           }
 
+          if (this.multiSpecsItems === null || this.multiSpecsItems.length === 0) {
+            this.multiSpecsItems = []
+            this.multiSpecsItems.push({ name: '单规格', value: [{ 'name': this.form.singleSkuSpecDes }] })
+          }
+
           var _form = {}
           _form.name = this.form.name
           _form.kindIds = this.form.kindIds

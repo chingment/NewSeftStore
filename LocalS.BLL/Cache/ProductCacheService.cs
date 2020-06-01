@@ -93,7 +93,7 @@ namespace LocalS.BLL
                     ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
                 };
 
-                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productId, Newtonsoft.Json.JsonConvert.SerializeObject(productSpuByCache, setting), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId, Newtonsoft.Json.JsonConvert.SerializeObject(productSpuByCache, setting), StackExchange.Redis.When.Always);
             }
 
             return productSpuByCache;
@@ -273,17 +273,33 @@ namespace LocalS.BLL
 
             foreach (var merch in merchs)
             {
+
                 var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
                 foreach (var productSku in productSkus)
                 {
 
-                    var specDes = productSku.ToJsonObject<List<SpecDes>>();
-                    if (specDes != null)
+                    if (productSku.SpecDes != null)
                     {
 
-                        productSku.SpecIdx = string.Join(",", specDes.OrderBy(m => m.Name).Select(m => m.Value));
+                        if (productSku.SpecDes.IndexOf("单规格") > -1)
+                        {
+                            var product = CurrentDb.PrdProduct.Where(m => m.Id == productSku.PrdProductId).FirstOrDefault();
+                            if (product != null)
+                            {
+                                List<object> o = new List<object>();
+                                List<object> o1 = new List<object>();
+                                o1.Add(new { name = productSku.SpecIdx });
+                                o.Add(new { name = "单规格", value = o1 });
+                                product.SpecItems = o.ToJsonString();
+                            }
 
-                        CurrentDb.SaveChanges();
+                            CurrentDb.SaveChanges();
+
+                        }
+
+
+
+
                     }
 
                     GetSkuInfo(merch.Id, productSku.Id);
