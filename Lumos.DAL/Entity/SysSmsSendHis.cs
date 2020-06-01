@@ -5,6 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lumos.DbRelay
 {
+    public enum E_SmsSendResult
+    {
+        Unknow = 0,
+        Success = 1,
+        Failure = 2,
+        Exception = 3
+    }
+
     [Table("SysSmsSendHis")]
     public class SysSmsSendHis
     {
@@ -40,7 +48,7 @@ namespace Lumos.DbRelay
 
         public DateTime CreateTime { get; set; }
 
-        public Enumeration.SmsSendResult Result { get; set; }
+        public E_SmsSendResult Result { get; set; }
 
     }
 }

@@ -57,8 +57,6 @@
     <Compile Include="BouncyCastle.cs" />
     <Compile Include="Extensions\DateTimeUtil.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
-    <Compile Include="Extensions\HtmlExtensions.cs" />
-    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="RSAForJava.cs" />

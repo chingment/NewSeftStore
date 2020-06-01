@@ -4,13 +4,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lumos.DbRelay
 {
+
+    public enum E_WxAutoReplyType
+    {
+        Unknow = 0,
+        Subscribe = 1,
+        Keyword = 2,
+        MenuClick = 3,
+        NotKeyword = 4
+    }
+
     [Table("WxAutoReply")]
     public class WxAutoReply
     {
         [Key]
         public string Id { get; set; }
 
-        public Enumeration.WxAutoReplyType Type { get; set; }
+        public E_WxAutoReplyType Type { get; set; }
 
         public string Keyword { get; set; }
 

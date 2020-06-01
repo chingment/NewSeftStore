@@ -4,6 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lumos.DbRelay
 {
+    public enum E_SysOrgStatus
+    {
+
+        Unknow = 0,
+        Valid = 1,
+        Invalid = 2
+    }
+
     [Table("SysOrg")]
     public class SysOrg
     {
@@ -18,7 +26,7 @@ namespace Lumos.DbRelay
         [MaxLength(512)]
         public string Description { get; set; }
         public bool IsDelete { get; set; }
-        public Enumeration.SysOrgStatus Status { get; set; }
+        public E_SysOrgStatus Status { get; set; }
 
         public Enumeration.BelongSite BelongSite { get; set; }
 

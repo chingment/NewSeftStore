@@ -8,13 +8,6 @@ namespace Lumos.DbRelay
     /// </summary>
     public partial class Enumeration
     {
-        public enum SmsSendResult
-        {
-            Unknow = 0,
-            Success = 1,
-            Failure = 2,
-            Exception = 3
-        }
         public enum BelongSite
         {
             Unknow = 0,
@@ -60,30 +53,6 @@ namespace Lumos.DbRelay
             LoginFailure = 2,
             LogoutSuccess = 3,
             LogoutFailure = 4
-        }
-
-        public enum OperateType
-        {
-            Unknow = 0,
-            Login = 1,
-            Logout = 2
-        }
-
-        public enum SysOrgStatus
-        {
-
-            Unknow = 0,
-            Valid = 1,
-            Invalid = 2
-        }
-
-        public enum WxAutoReplyType
-        {
-            Unknow = 0,
-            Subscribe = 1,
-            Keyword = 2,
-            MenuClick = 3,
-            NotKeyword = 4
         }
     }
 }

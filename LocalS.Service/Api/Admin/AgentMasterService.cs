@@ -142,7 +142,7 @@ namespace LocalS.Service.Api.Admin
                 user.CreateTime = DateTime.Now;
                 user.RegisterTime = DateTime.Now;
                 user.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
-                user.YbInsureSign = YbInsUtil.GetSign(user.Id, user.Id, user.PhoneNumber, user.FullName);
+                //user.YbInsureSign = YbInsUtil.GetSign(user.Id, user.Id, user.PhoneNumber, user.FullName);
 
                 CurrentDb.SysAgentUser.Add(user);
 
@@ -210,7 +210,7 @@ namespace LocalS.Service.Api.Admin
 
                 if (string.IsNullOrEmpty(user.YbInsureSign))
                 {
-                    user.YbInsureSign = YbInsUtil.GetSign(user.Id, user.Id, user.PhoneNumber, user.FullName);
+                    //user.YbInsureSign = YbInsUtil.GetSign(user.Id, user.Id, user.PhoneNumber, user.FullName);
                 }
 
                 CurrentDb.SaveChanges();
