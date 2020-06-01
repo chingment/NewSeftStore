@@ -77,7 +77,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.Id, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId));
+            MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId));
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);

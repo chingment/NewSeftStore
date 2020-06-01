@@ -513,7 +513,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ts.Complete();
 
 
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, machine.Id, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + reason);
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + reason);
 
             }
 
