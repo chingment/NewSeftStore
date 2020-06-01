@@ -140,8 +140,6 @@ namespace LocalS.Service.Api.Account
                 var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
                 if (merchUser == null)
                 {
-                    MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, "", "", machineId, EventCode.Login, "登录失败，该用户不属于该站点", new LoginLogModel { LoginAccount = rop.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = string.Format("表SysMerchUser字段Id:{0}，找不到", sysUser.Id) });
-
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
@@ -362,8 +360,6 @@ namespace LocalS.Service.Api.Account
             }
             else
             {
-                MqFactory.Global.PushEventNotify(IdWorker.Build(IdType.EmptyGuid), rop.AppId, "", "", machineId, EventCode.Login, "暂不支持", new LoginLogModel { LoginAccount = "", LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginFailure, LoginWay = rop.LoginWay, RemarkByDev = "暂不支持" });
-
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂不支持");
             }
 

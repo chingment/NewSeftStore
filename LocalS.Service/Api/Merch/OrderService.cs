@@ -371,7 +371,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, order.MerchId, "", "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号：{0}，备注：{1}", order.Id, order.ExHandleRemark));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.OrderHandleExOrder, string.Format("处理异常订单号：{0}，备注：{1}", order.Id, order.ExHandleRemark));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
             }
