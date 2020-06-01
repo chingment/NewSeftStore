@@ -270,8 +270,8 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.CumCode = sku.CumCode.Trim2();
                     prdProductSku.Name = GetSkuSpecCombineName(prdProduct.Name, sku.SpecDes);
                     prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
-                    prdProductSku.SpecDes = sku.SpecDes.OrderBy(m => m.Name).ToList().ToJsonString();
-                    prdProductSku.SpecIdx = string.Join(",", sku.SpecDes.Select(m => m.Value));
+                    prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
+                    prdProductSku.SpecIdx = string.Join(",", sku.SpecDes.OrderBy(m => m.Name).Select(m => m.Value));
                     prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;

@@ -178,14 +178,14 @@ namespace LocalS.BLL
                     {
                         RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), productSkuByCache.CumCode.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
                     }
-
-                    var setting = new JsonSerializerSettings
-                    {
-                        ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                    };
-
-                    RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuByCache, setting), StackExchange.Redis.When.Always);
                 }
+
+                var setting = new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                };
+
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuByCache, setting), StackExchange.Redis.When.Always);
             }
 
             return productSkuByCache;
@@ -268,6 +268,7 @@ namespace LocalS.BLL
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SNA, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_INF, merch.Id));
+                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SPU_INF, merch.Id));
             }
 
             foreach (var merch in merchs)
@@ -276,12 +277,14 @@ namespace LocalS.BLL
                 foreach (var productSku in productSkus)
                 {
 
-                    //List<object> a = new List<object>();
+                    var specDes = productSku.ToJsonObject<List<SpecDes>>();
+                    if (specDes != null)
+                    {
 
-                    //a.Add(new { name = "单规格", value = productSku.SpecDes });
+                        productSku.SpecIdx = string.Join(",", specDes.OrderBy(m => m.Name).Select(m => m.Value));
 
-                    //productSku.SpecDes = a.ToJsonString();
-                    //CurrentDb.SaveChanges();
+                        CurrentDb.SaveChanges();
+                    }
 
                     GetSkuInfo(merch.Id, productSku.Id);
                 }
