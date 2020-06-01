@@ -25,5 +25,6 @@ namespace LocalS.Service.Api.StoreApp
         public string SpecIdx { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public List<ImgSet> DetailsDes { get; set; }
+        public List<SpecIdxSku> SpecIdxSkus { get; set; }
     }
 }

@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
+
+    public class SpecIdxSku
+    {
+        public string SkuId { get; set; }
+
+        public string SpecIdx { get; set; }
+    }
+
     public class ProductSpuInfoModel
     {
         public ProductSpuInfoModel()
@@ -14,7 +22,7 @@ namespace LocalS.BLL
             this.DisplayImgUrls = new List<ImgSet>();
             this.DetailsDes = new List<ImgSet>();
             this.SpecItems = new List<SpecItem>();
-            this.SkuSpecIdxs = new List<SkuSpecIdx>();
+            this.SpecIdxSkus = new List<SpecIdxSku>();
             this.CharTags = new List<string>();
         }
         public string Id { get; set; }
@@ -28,13 +36,6 @@ namespace LocalS.BLL
         public List<SpecItem> SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
         public List<string> CharTags { get; set; }
-        public List<SkuSpecIdx> SkuSpecIdxs { get; set; }
-
-        public class SkuSpecIdx
-        {
-            public string SkuId { get; set; }
-
-            public string SpecIdx { get; set; }
-        }
+        public List<SpecIdxSku> SpecIdxSkus { get; set; }
     }
 }

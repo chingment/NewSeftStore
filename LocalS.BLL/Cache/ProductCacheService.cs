@@ -19,12 +19,12 @@ namespace LocalS.BLL
             if (productSpuInfoModel != null)
             {
 
-                var skuSpecIdxs = productSpuInfoModel.SkuSpecIdxs;
-                if (skuSpecIdxs != null && skuSpecIdxs.Count > 0)
+                var specIdxSkus = productSpuInfoModel.SpecIdxSkus;
+                if (specIdxSkus != null && specIdxSkus.Count > 0)
                 {
-                    foreach (var skuSpecIdx in skuSpecIdxs)
+                    foreach (var specIdxSku in specIdxSkus)
                     {
-                        var productSkuInfoModel = GetSkuInfo(merchId, skuSpecIdx.SkuId);
+                        var productSkuInfoModel = GetSkuInfo(merchId, specIdxSku.SkuId);
 
                         if (productSkuInfoModel != null)
                         {
@@ -84,7 +84,7 @@ namespace LocalS.BLL
 
                     foreach (var productSku in productSkus)
                     {
-                        productSpuByCache.SkuSpecIdxs.Add(new ProductSpuInfoModel.SkuSpecIdx { SkuId = productSku.Id, SpecIdx = productSku.SpecIdx });
+                        productSpuByCache.SpecIdxSkus.Add(new SpecIdxSku { SkuId = productSku.Id, SpecIdx = productSku.SpecIdx });
                     }
                 }
 
@@ -157,6 +157,8 @@ namespace LocalS.BLL
                     productSkuByCache.CharTags = productSpuByCache.CharTags;
                     productSkuByCache.SpecDes = productSkuByDb.SpecDes.ToJsonObject<List<SpecDes>>();
                     productSkuByCache.SpecIdx = productSkuByDb.SpecIdx;
+                    productSkuByCache.SpecIdxSkus = productSpuByCache.SpecIdxSkus;
+              
                     productSkuByCache.IsTrgVideoService = productSpuByCache.IsTrgVideoService;
 
                     if (!string.IsNullOrEmpty(productSkuByCache.BarCode))
@@ -273,35 +275,9 @@ namespace LocalS.BLL
 
             foreach (var merch in merchs)
             {
-
                 var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
                 foreach (var productSku in productSkus)
                 {
-
-                    if (productSku.SpecDes != null)
-                    {
-
-                        if (productSku.SpecDes.IndexOf("单规格") > -1)
-                        {
-                            var product = CurrentDb.PrdProduct.Where(m => m.Id == productSku.PrdProductId).FirstOrDefault();
-                            if (product != null)
-                            {
-                                List<object> o = new List<object>();
-                                List<object> o1 = new List<object>();
-                                o1.Add(new { name = productSku.SpecIdx });
-                                o.Add(new { name = "单规格", value = o1 });
-                                product.SpecItems = o.ToJsonString();
-                            }
-
-                            CurrentDb.SaveChanges();
-
-                        }
-
-
-
-
-                    }
-
                     GetSkuInfo(merch.Id, productSku.Id);
                 }
             }

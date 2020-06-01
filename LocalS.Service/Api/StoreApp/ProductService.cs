@@ -108,6 +108,7 @@ namespace LocalS.Service.Api.StoreApp
                 productSkuDetailsModel.BriefDes = bizProductSku.BriefDes;
                 productSkuDetailsModel.SpecItems = bizProductSku.SpecItems;
                 productSkuDetailsModel.SpecIdx = bizProductSku.SpecIdx;
+                productSkuDetailsModel.SpecIdxSkus = bizProductSku.SpecIdxSkus;
                 if (bizProductSku.Stocks != null)
                 {
                     if (bizProductSku.Stocks.Count > 0)
