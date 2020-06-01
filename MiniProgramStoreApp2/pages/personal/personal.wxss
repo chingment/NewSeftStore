@@ -104,13 +104,13 @@
   font-size: 24rpx;
 }
 
-.item-logintip{
+.item-logintip {
   height: 1.6rem;
   line-height: 1.6rem;
 }
 
-.item-logingo{
- height:1rem;
-  line-height:1rem;
+.item-logingo {
+  height: 1rem;
+  line-height: 1rem;
   font-size: .8rem;
 }

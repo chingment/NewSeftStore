@@ -3,7 +3,7 @@
 <view class="details">
 	<view class="details-main">
 		<swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="{{index}}">
+			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="index">
 				<swiper-item>
 					<image src="{{item.url}}"></image>
 				</swiper-item>
@@ -16,6 +16,25 @@
 					<view class='container'>
 						<view class="item-name">
 							<text class="name" >{{productSku.name}}</text>
+						</view>
+						<view class="item-specsel">
+
+
+							<view class="specItem" wx:for="{{productSku.specItems}}" wx:for-index='n' wx:for-item="specItem" wx:key="x" >
+
+								      <view class='p'>{{specItem.name}}</view>
+
+								      <ul class="specItemValue clearfix">
+
+									        <li wx:for="{{specItem.value}}" wx:for-item="oItem" bindtap="specificationBtn" data-show="{{oItem.isShow}}" class="{{oItem.isShow?'':'noneActive'}} {{specSubIndex[n] == oItem.name?'productActive':''}}" data-ol="{{specSubIndex[n]}}" data-name="{{oItem.name}}" data-n="{{n}}" data-index="{{index}}">
+									
+									{{index}}
+									{{oItem.name}}</li>
+
+									      </ul>
+
+								    </view>
+
 						</view>
 						<view class="item-briefIntro font-gray">
 							<text class="briefIntro">{{productSku.briefDes}}</text>
@@ -30,9 +49,9 @@
 
 					<view style='height:100vh'>
 
-						<block wx:if="{{productSku.detailsDes!=null}}" >
-							<block wx:for-items="{{productSku.detailsDes}}" wx:for-item="item" wx:key="{{index}}">
-								<image src="{{item.url}}" style="width:100%;height:100%;" ></image>
+						<block wx:if="{{productSku.detailsDes!=null}}">
+							<block wx:for-items="{{productSku.detailsDes}}" wx:for-item="item" wx:key="index">
+								<image src="{{item.url}}" style="width:100%;height:100%;"></image>
 							</block>
 
 						</block>

@@ -72,7 +72,7 @@
     <view class="pdArea">
       <view class="ct">
         <view class="its-pdArea">
-          <block wx:for-items="{{pdArea.tabs}}" wx:for-item="tab" wx:key="{{index}}">
+          <block wx:for-items="{{pdArea.tabs}}" wx:for-item="tab" wx:key="index">
             <view class="it">
               <view class="it-a1">
                 <view class="title">

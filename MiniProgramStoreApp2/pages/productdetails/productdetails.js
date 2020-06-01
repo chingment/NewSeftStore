@@ -12,7 +12,11 @@ Page({
    */
   data: {
     tag: "productdetails",
-    isShowCart:false
+    isShowCart:false,
+    specSelectArr: [], //存放被选中的值
+    specShopItemInfo: {}, //存放要和选中的值进行匹配的数据
+    specSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
+    specBoxArr: {}
   },
 
   /**
@@ -30,9 +34,50 @@ Page({
     }, {
         success: function (res) {
           if (res.result == 1) {
+
+
+           var productSku=res.data        
+
+
+            var specIdxSkus = productSku.specIdxSkus
+        
+            var specShopItemInfo = _this.data.specShopItemInfo
+        
+            var specItems = productSku.specItems
+        
+            for (var i in specIdxSkus) {
+        
+              specShopItemInfo[specIdxSkus[i].specIdx] =
+        
+              specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
+        
+            }
+        
+            console.log(JSON.stringify(specShopItemInfo))
+        
+            for (var i = 0; i < specItems.length; i++) {
+        
+              for (var o = 0; o < specItems[i].value.length; o++) {
+        
+                specItems[i].value[o].isShow = true
+        
+              }
+        
+            }
+        
+            console.log(JSON.stringify(specItems))
+        
+            productSku.specItems = specItems
+           
+            var specSubIndex=productSku.specIdx.split(',')
+           
+              
+
+
             _this.setData({
-              productSku: res.data,
-              cart: storeage.getCart()
+              productSku: productSku,
+              cart: storeage.getCart(),
+              specSubIndex:["罐装","250ML"]
             })
           }
         },
@@ -119,6 +164,127 @@ Page({
         // success
       },
     })
+  },
+  specificationBtn(e) {
+
+    var n = e.currentTarget.dataset.n
+
+    var index = e.currentTarget.dataset.index
+
+    var item = e.currentTarget.dataset.name
+
+    var self = this;
+
+    var specSelectArr = self.data.specSelectArr
+
+    var specSubIndex = self.data.specSubIndex
+
+    var specBoxArr = self.data.specBoxArr
+
+    var specShopItemInfo = self.data.specShopItemInfo
+
+    if (specSelectArr[n] != item) {
+
+      specSelectArr[n] = item;
+
+      specSubIndex[n] = index;
+
+    } else {
+
+      // self.selectArr[n] = "";
+
+      // self.subIndex[n] = -1; //去掉选中的颜色
+
+    }
+
+    self.checkItem();
+
+    var arr = specShopItemInfo[specSelectArr];
+
+    if (arr) {
+
+      specBoxArr.id = arr.id;
+
+      specBoxArr.price = arr.price;
+
+    }
+
+    self.setData({
+
+      specSelectArr: specSelectArr, specSubIndex: specSubIndex, specBoxArr: specBoxArr, specShopItemInfo: specShopItemInfo
+
+    })
+
+    console.log(specBoxArr)
+
+  },
+
+  checkItem() {
+
+    var self = this;
+
+    var productSku = self.data.productSku
+
+    var option = self.data.productSku.specItems;
+
+    var result = []; //定义数组存储被选中的值
+
+    for (var i in option) {
+
+      result[i] = self.data.specSelectArr[i] ? self.data.specSelectArr[i] : "";
+
+    }
+
+    console.log(JSON.stringify(result))
+
+    for (var i in option) {
+
+      var last = result[i]; //把选中的值存放到字符串last去
+
+      for (var k in option[i].item) {
+
+        result[i] = option[i].item[k].name; //赋值，存在直接覆盖，不存在往里面添加name值
+
+        option[i].item[k].isShow = self.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
+
+      }
+
+      result[i] = last; //还原，目的是记录点下去那个值，避免下一次执行循环时避免被覆盖
+
+    }
+
+    productSku.specItems = option
+
+    self.setData({
+
+      productSku: productSku
+
+    })
+
+  },
+
+  isMay(result) {
+
+    for (var i in result) {
+
+      if (result[i] == "") {
+
+        return true; //如果数组里有为空的值，那直接返回true
+
+      }
+
+    }
+
+    return !this.data.specShopItemInfo[result] ?
+
+      false :
+
+      this.data.specShopItemInfo[result].stock == 0 ?
+
+        false :
+
+        true; //匹配选中的数据的库存，若不为空返回true反之返回false
+
   }
 
 })

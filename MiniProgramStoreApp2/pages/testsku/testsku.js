@@ -4,7 +4,7 @@ Page({
 
     simulatedDATA: {
 
-      difference: [{
+       specIdxSkus: [{
 
         id: "19",
 
@@ -12,7 +12,7 @@ Page({
 
         stock: "19",
 
-        difference: "红色,x"
+        specIdx: "红色,x"
 
       },
 
@@ -24,7 +24,7 @@ Page({
 
         stock: "29",
 
-        difference: "白色,x"
+        specIdx: "白色,x"
 
       },
 
@@ -36,7 +36,7 @@ Page({
 
         stock: "10",
 
-        difference: "黑色,x"
+        specIdx: "黑色,x"
 
       },
 
@@ -48,7 +48,7 @@ Page({
 
         stock: "10",
 
-        difference: "黑色,xl"
+        specIdx: "黑色,xl"
 
       },
 
@@ -60,17 +60,17 @@ Page({
 
         stock: "10",
 
-        difference: "白色,xl"
+        specIdx: "白色,xl"
 
       }
 
       ],
 
-      specifications: [{
+      specItems: [{
 
         name: "颜色",
 
-        item: [{
+        value: [{
 
           name: "白色"
 
@@ -96,7 +96,7 @@ Page({
 
         name: "尺码",
 
-        item: [{
+        value: [{
 
           name: "x"
 
@@ -115,18 +115,10 @@ Page({
       ]
 
     },
-
-    selectArr: [], //存放被选中的值
-
-    shopItemInfo: {}, //存放要和选中的值进行匹配的数据
-
-    subIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
-
-    content: "",
-
-    specifications: '',
-
-    boxArr: {},
+    specSelectArr: [], //存放被选中的值
+    specShopItemInfo: {}, //存放要和选中的值进行匹配的数据
+    specSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
+    specBoxArr: {},
 
   },
 
@@ -136,43 +128,43 @@ Page({
 
     var simulatedDATA = self.data.simulatedDATA
 
-    var difference = self.data.simulatedDATA.difference
+    var specIdxSkus = self.data.simulatedDATA.specIdxSkus
 
-    var shopItemInfo = self.data.shopItemInfo
+    var specShopItemInfo = self.data.specShopItemInfo
 
-    var specifications = self.data.simulatedDATA.specifications
+    var specItems = self.data.simulatedDATA.specItems
 
-    for (var i in difference) {
+    for (var i in specIdxSkus) {
 
-      shopItemInfo[difference[i].difference] =
+      specShopItemInfo[specIdxSkus[i].specIdx] =
 
-        difference[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
+      specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
 
     }
 
-    console.log(JSON.stringify(shopItemInfo))
+    console.log(JSON.stringify(specShopItemInfo))
 
-    for (var i = 0; i < specifications.length; i++) {
+    for (var i = 0; i < specItems.length; i++) {
 
-      for (var o = 0; o < specifications[i].item.length; o++) {
+      for (var o = 0; o < specItems[i].value.length; o++) {
 
-        specifications[i].item[o].isShow = true
+        specItems[i].value[o].isShow = true
 
       }
 
     }
 
-    console.log(JSON.stringify(specifications))
+    console.log(JSON.stringify(specItems))
 
-    simulatedDATA.specifications = specifications
+    simulatedDATA.specItems = specItems
 
     self.setData({
 
       simulatedDATA: simulatedDATA,
 
-      shopItemInfo: shopItemInfo,
+      specShopItemInfo: specShopItemInfo,
 
-      specifications: specifications
+      specItems: specItems
 
     })
 
@@ -194,19 +186,19 @@ Page({
 
     var self = this;
 
-    var selectArr = self.data.selectArr
+    var specSelectArr = self.data.specSelectArr
 
-    var subIndex = self.data.subIndex
+    var specSubIndex = self.data.specSubIndex
 
-    var boxArr = self.data.boxArr
+    var specBoxArr = self.data.specBoxArr
 
-    var shopItemInfo = self.data.shopItemInfo
+    var specShopItemInfo = self.data.specShopItemInfo
 
-    if (selectArr[n] != item) {
+    if (specSelectArr[n] != item) {
 
-      selectArr[n] = item;
+      specSelectArr[n] = item;
 
-      subIndex[n] = index;
+      specSubIndex[n] = index;
 
     } else {
 
@@ -218,23 +210,25 @@ Page({
 
     self.checkItem();
 
-    var arr = shopItemInfo[selectArr];
+    console.log("dasdasddd:"+specSelectArr)
+
+    var arr = specShopItemInfo[specSelectArr];
 
     if (arr) {
 
-      boxArr.id = arr.id;
+      specBoxArr.id = arr.id;
 
-      boxArr.price = arr.price;
+      specBoxArr.price = arr.price;
 
     }
 
     self.setData({
 
-      selectArr: selectArr, subIndex: subIndex, boxArr: boxArr, shopItemInfo: shopItemInfo
+      specSelectArr: specSelectArr, specSubIndex: specSubIndex, specBoxArr: specBoxArr, specShopItemInfo: specShopItemInfo
 
     })
 
-    console.log(boxArr)
+    console.log(specBoxArr)
 
   },
 
@@ -244,13 +238,13 @@ Page({
 
     var simulatedDATA = self.data.simulatedDATA
 
-    var option = self.data.simulatedDATA.specifications;
+    var option = self.data.simulatedDATA.specItems;
 
     var result = []; //定义数组存储被选中的值
 
     for (var i in option) {
 
-      result[i] = self.data.selectArr[i] ? self.data.selectArr[i] : "";
+      result[i] = self.data.specSelectArr[i] ? self.data.specSelectArr[i] : "";
 
     }
 
@@ -272,7 +266,7 @@ Page({
 
     }
 
-    simulatedDATA.specifications = option
+    simulatedDATA.specItems = option
 
     self.setData({
 
@@ -294,11 +288,11 @@ Page({
 
     }
 
-    return !this.data.shopItemInfo[result] ?
+    return !this.data.specShopItemInfo[result] ?
 
       false :
 
-      this.data.shopItemInfo[result].stock == 0 ?
+      this.data.specShopItemInfo[result].stock == 0 ?
 
         false :
 

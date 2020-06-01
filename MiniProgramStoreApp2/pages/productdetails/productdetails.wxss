@@ -125,3 +125,42 @@ swiper-item image {
   position:absolute;
   font-size: 20rpx;
 }
+
+
+
+.specItem {
+  padding: 5px 0px;
+  color: #323232;
+  font-size: 12px;
+  display: flex;
+}
+
+.specItem .p {
+  padding: 0px 0;
+  font-size: 14px;
+}
+
+.specItemValue li {
+  border: 1px solid #f4f4f4;
+  border-radius: 2px;
+  color: #606060;
+  text-align: center;
+  float: left;
+  min-width: 30px;
+  margin-right: 5px;
+  padding: 2px 5px;
+  margin-bottom: 5px;
+}
+
+.specItemValue  li.productActive {
+  background-color: #c41e3a;
+  color: #fff;
+  border: 1px solid #c41e3a;
+}
+
+.specItemValue  li.noneActive {
+  background-color: #ccc;
+  opacity: 0.4;
+  color: #000;
+  pointer-events: none;
+}
