@@ -14,14 +14,33 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
+            var ret = new RetImServiceSeats();
 
-            List<object> objs = new List<object>();
+            var imSeatModel = new ImSeatModel();
+            imSeatModel.UserId = "1";
+            imSeatModel.UserName = "张医生";
+            imSeatModel.Avatar = "http://file.17fanju.com/Upload/Avatar_default.png";
+            imSeatModel.BriefDes = "又多年";
+            imSeatModel.CharTags.Add("特约专家");
+            imSeatModel.CharTags.Add("医疗服务");
+            imSeatModel.ImUserName = "adadasda";
+            imSeatModel.ImStatus = "idle";
 
+            ret.Seats.Add(imSeatModel);
 
-            objs.Add(new { name = "", avatar = "http://file.17fanju.com/Upload/Avatar_default.png", imUserName = "", imPassword = "", tags = "", briefDes = "", imStatus = "" });
-            objs.Add(new { name = "", avatar = "http://file.17fanju.com/Upload/Avatar_default.png", imUserName = "", imPassword = "", tags = "", briefDes = "", imStatus = "" });
+            var imSeatModel2 = new ImSeatModel();
+            imSeatModel2.UserId = "2";
+            imSeatModel2.UserName = "黄之风";
+            imSeatModel2.Avatar = "http://file.17fanju.com/Upload/Avatar_default.png";
+            imSeatModel2.BriefDes = "又多年";
+            imSeatModel2.CharTags.Add("中医院");
+            imSeatModel2.CharTags.Add("营养治疗师");
+            imSeatModel2.ImUserName = "adadasda";
+            imSeatModel2.ImStatus = "busy";
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "机器未登记", objs);
+            ret.Seats.Add(imSeatModel);
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "机器未登记", ret);
         }
     }
 }
