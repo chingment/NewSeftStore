@@ -670,11 +670,6 @@ export default {
         multiSpecs.push({ specDes: ll_spec_desc, salesPrice: 0, cumCode: '', barCode: '' })
       }
 
-      // var multiSpecs = []
-      // for (let x = 0; x < this.multiSpecsSkuList.length; x++) {
-      //   multiSpecs.push({ specDes: this.multiSpecsSkuList[x], salesPrice: 0, cumCode: '', barCode: '' })
-      // }
-
       this.multiSpecsSkuResult = multiSpecs
       console.log(JSON.stringify(this.multiSpecsSkuResult))
     },

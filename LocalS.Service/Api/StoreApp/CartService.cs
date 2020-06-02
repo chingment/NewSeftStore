@@ -128,6 +128,11 @@ namespace LocalS.Service.Api.StoreApp
 
                                 var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.SellMachineIds, item.Id);
 
+                                if (bizProductSku == null || bizProductSku.Stocks == null || bizProductSku.Stocks.Count == 0)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品已经售完");
+                                }
+
                                 if (bizProductSku.Stocks[0].IsOffSell)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品已下架");

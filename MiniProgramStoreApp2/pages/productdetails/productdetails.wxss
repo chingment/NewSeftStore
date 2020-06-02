@@ -7,8 +7,14 @@ swiper {
   height: 500rpx;
 }
 
-swiper-item image {
+.swiper-img{
+  display: flex;
+  justify-content:center;
   width: 100%;
+  height: 100%;
+}
+
+.swiper-img image{
   height: 100%;
 }
 
@@ -153,9 +159,9 @@ swiper-item image {
 }
 
 .specItemValue  li.productActive {
-  background-color: #c41e3a;
+  background-color: #ffb101;
   color: #fff;
-  border: 1px solid #c41e3a;
+  border: 1px solid #ffb101;
 }
 
 .specItemValue  li.noneActive {

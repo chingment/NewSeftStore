@@ -25,5 +25,14 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public OwnApiHttpResponse SkuStockInfo([FromUri]RupProductDetails rup)
+        {
+            var result = StoreAppServiceFactory.Product.SkuStockInfo(this.CurrentUserId, this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

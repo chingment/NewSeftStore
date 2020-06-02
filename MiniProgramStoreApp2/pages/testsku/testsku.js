@@ -154,7 +154,8 @@ Page({
 
     }
 
-    console.log(JSON.stringify(specItems))
+    console.log("specItems："+JSON.stringify(specItems))
+    console.log("specShopItemInfo:"+JSON.stringify(specShopItemInfo))
 
     simulatedDATA.specItems = specItems
 
@@ -210,7 +211,6 @@ Page({
 
     self.checkItem();
 
-    console.log("dasdasddd:"+specSelectArr)
 
     var arr = specShopItemInfo[specSelectArr];
 
@@ -222,13 +222,19 @@ Page({
 
     }
 
+
+    console.log("specSelectArr:"+specSelectArr)
+    console.log("specSubIndex:"+JSON.stringify(specSubIndex))
+    console.log("specBoxArr:"+JSON.stringify(specBoxArr))
+    console.log("specShopItemInfo:"+JSON.stringify(specShopItemInfo))
+
     self.setData({
 
       specSelectArr: specSelectArr, specSubIndex: specSubIndex, specBoxArr: specBoxArr, specShopItemInfo: specShopItemInfo
 
     })
 
-    console.log(specBoxArr)
+   
 
   },
 

@@ -53,7 +53,7 @@ Page({
         
             }
         
-            console.log(JSON.stringify(specShopItemInfo))
+
         
             for (var i = 0; i < specItems.length; i++) {
         
@@ -65,19 +65,15 @@ Page({
         
             }
         
-            console.log(JSON.stringify(specItems))
-        
+
             productSku.specItems = specItems
            
-            var specSubIndex=productSku.specIdx.split(',')
-           
-              
-
 
             _this.setData({
               productSku: productSku,
               cart: storeage.getCart(),
-              specSubIndex:["罐装","250ML"]
+              specShopItemInfo:specShopItemInfo,
+              specSubIndex:productSku.specIdx.split(',')
             })
           }
         },
@@ -150,7 +146,7 @@ Page({
       return
     }
     
-    var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
+    var skuId = _this.data.productSku.id //对应页面data-reply-index
     var productSkus = []
     productSkus.push({
       cartId: 0,
@@ -175,7 +171,7 @@ Page({
 
     var self = this;
 
-    var specSelectArr = self.data.specSelectArr
+    var productSku = self.data.productSku
 
     var specSubIndex = self.data.specSubIndex
 
@@ -183,11 +179,11 @@ Page({
 
     var specShopItemInfo = self.data.specShopItemInfo
 
-    if (specSelectArr[n] != item) {
+    if (specSubIndex[n] != item) {
 
-      specSelectArr[n] = item;
+      specSubIndex[n] = item;
 
-      specSubIndex[n] = index;
+      specSubIndex[n] = item;
 
     } else {
 
@@ -199,23 +195,43 @@ Page({
 
     self.checkItem();
 
-    var arr = specShopItemInfo[specSelectArr];
+    var arr = specShopItemInfo[specSubIndex];
 
+    //选中修改当前SKU.ID
     if (arr) {
 
-      specBoxArr.id = arr.id;
+      productSku.id = arr.skuId;
+      productSku.specIdx = arr.specIdx;
+      
+      apiProduct.skuStockInfo({
+        storeId: ownRequest.getCurrentStoreId(),
+        skuId: arr.skuId
+      }, {
+          success: function (res) {
 
-      specBoxArr.price = arr.price;
+            var d=res.data
+
+            productSku.name=d.name
+            productSku.isOffSell=d.isOffSell
+            productSku.salePrice=d.salePrice
+            productSku.isShowPrice=d.isShowPrice
+            productSku.salePriceByVip=d.salePriceByVip
+            productSku.sellQuantity=d.sellQuantity
+
+            console.log("arr:"+JSON.stringify(arr))
+            console.log("specSubIndex:"+JSON.stringify(specSubIndex))
+            console.log("specShopItemInfo:"+JSON.stringify(specShopItemInfo))
+            self.setData({
+              productSku:productSku,
+              specSubIndex: specSubIndex,
+              specShopItemInfo: specShopItemInfo
+        
+            })
+
+          }
+        })
 
     }
-
-    self.setData({
-
-      specSelectArr: specSelectArr, specSubIndex: specSubIndex, specBoxArr: specBoxArr, specShopItemInfo: specShopItemInfo
-
-    })
-
-    console.log(specBoxArr)
 
   },
 
@@ -235,7 +251,6 @@ Page({
 
     }
 
-    console.log(JSON.stringify(result))
 
     for (var i in option) {
 

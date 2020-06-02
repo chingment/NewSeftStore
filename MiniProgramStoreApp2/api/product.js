@@ -25,7 +25,19 @@ function details(urlParams, requestHandler) {
   })
 }
 
+function skuStockInfo(urlParams, requestHandler) {
+
+  lumos.getJson({
+    url: config.apiUrl.productSkuStockInfo,
+    urlParams: urlParams,
+    success: function (res) {
+      requestHandler.success(res)
+    }
+  })
+}
+
 module.exports = {
   list: list,
-  details: details
+  details: details,
+  skuStockInfo:skuStockInfo
 }

@@ -20,6 +20,7 @@ var config = {
     cartPageData: `${host}/Cart/PageData`,
     productList: `${host}/Product/List`,
     productDetails: `${host}/Product/Details`,
+    productSkuStockInfo: `${host}/Product/SkuStockInfo`,
     deliveryAddressEdit: `${host}/DeliveryAddress/Edit`,
     deliveryAddressMy: `${host}/DeliveryAddress/My`,
     couponMy: `${host}/Coupon/My`,

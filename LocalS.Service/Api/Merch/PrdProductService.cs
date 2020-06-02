@@ -269,7 +269,7 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.Name = GetSkuSpecCombineName(prdProduct.Name, sku.SpecDes);
                     prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
                     prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
-                    prdProductSku.SpecIdx = string.Join(",", sku.SpecDes.OrderBy(m => m.Name).Select(m => m.Value));
+                    prdProductSku.SpecIdx = string.Join(",", sku.SpecDes.Select(m => m.Value));
                     prdProductSku.SalePrice = sku.SalePrice;
                     prdProductSku.Creator = operater;
                     prdProductSku.CreateTime = DateTime.Now;
@@ -375,8 +375,6 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
-            List<SellChannelStock> sellChannelStocks = null;
-
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
@@ -412,13 +410,6 @@ namespace LocalS.Service.Api.Merch
                         prdProductSku.PinYinIndex = CommonUtil.GetPingYinIndex(prdProductSku.Name);
                         prdProductSku.CumCode = sku.CumCode;
                         prdProductSku.BarCode = sku.BarCode;
-                        prdProductSku.SpecDes = sku.SpecDes.ToJsonString();
-
-                        if (string.IsNullOrEmpty(prdProductSku.SpecDes))
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品规格不能为空");
-                        }
-
                         prdProductSku.SalePrice = sku.SalePrice;
                         prdProductSku.Mender = operater;
                         prdProductSku.MendTime = DateTime.Now;
@@ -427,7 +418,7 @@ namespace LocalS.Service.Api.Merch
                         //统一修改销售价格
                         if (rop.IsUnifyUpdateSalePrice)
                         {
-                            sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId).ToList();
+                            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.PrdProductSkuId == prdProductSku.Id).ToList();
                             foreach (var sellChannelStock in sellChannelStocks)
                             {
                                 sellChannelStock.SalePrice = sku.SalePrice;
@@ -491,38 +482,29 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-
             if (result.Result == ResultType.Success)
             {
                 CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
 
-                for (var i = 0; i < rop.Skus.Count; i++)
+                var sellChannelStocks = (from m in CurrentDb.SellChannelStock where m.MerchId == merchId && m.PrdProductId == rop.Id select new { m.StoreId, m.SellChannelRefId, m.PrdProductSkuId }).Distinct();
+
+                foreach (var sellChannelStock in sellChannelStocks)
                 {
-                    if (sellChannelStocks != null)
+                    var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, sellChannelStock.StoreId, new string[] { sellChannelStock.SellChannelRefId }, sellChannelStock.PrdProductSkuId);
+                    if (bizProductSku.Stocks != null)
                     {
-                        var storeMachines = (from m in sellChannelStocks where m.SellChannelRefType == E_SellChannelRefType.Machine select new { m.StoreId, m.SellChannelRefId }).Distinct();
-                        foreach (var storeMachine in storeMachines)
+                        if (bizProductSku.Stocks.Count > 0)
                         {
-                            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeMachine.StoreId, new string[] { storeMachine.SellChannelRefId }, rop.Skus[i].Id);
-                            if (bizProductSku != null)
-                            {
-                                if (bizProductSku.Stocks != null)
-                                {
-                                    if (bizProductSku.Stocks.Count > 0)
-                                    {
-                                        var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
-                                        updateProdcutSkuStock.Id = bizProductSku.Id;
-                                        updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                                        updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                                        updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
-                                        updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
-                                        updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
-                                        updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
-                                        updateProdcutSkuStock.IsTrgVideoService = bizProductSku.IsTrgVideoService;
-                                        BizFactory.Machine.SendUpdateProductSkuStock(operater, AppId.MERCH, merchId, storeMachine.SellChannelRefId, updateProdcutSkuStock);
-                                    }
-                                }
-                            }
+                            var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
+                            updateProdcutSkuStock.Id = bizProductSku.Id;
+                            updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
+                            updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
+                            updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
+                            updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
+                            updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                            updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
+                            updateProdcutSkuStock.IsTrgVideoService = bizProductSku.IsTrgVideoService;
+                            BizFactory.Machine.SendUpdateProductSkuStock(operater, AppId.MERCH, merchId, sellChannelStock.SellChannelRefId, updateProdcutSkuStock);
                         }
                     }
                 }
