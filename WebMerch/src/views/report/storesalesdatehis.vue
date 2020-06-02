@@ -129,7 +129,12 @@ export default {
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       storeSalesDateHisGet(this.listQuery).then(res => {
         this.listData = res.data
+
         if (res.result === 1) {
+          if (this.listData === null || this.listData.length === 0) {
+            this.$message('查询不到对应条件的数据')
+          }
+
           // this.listData = res.data
         } else {
           this.$message(res.message)

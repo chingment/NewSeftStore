@@ -15,7 +15,7 @@ namespace LocalS.BLL
     {
         public void RemoveSpuInfo(string merchId, string productId)
         {
-            var productSpuInfoModel = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productId);
+            var productSpuInfoModel = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId);
             if (productSpuInfoModel != null)
             {
 
@@ -48,7 +48,7 @@ namespace LocalS.BLL
                                 RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), productSkuInfoModel.CumCode);
                             }
 
-                            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productSkuInfoModel.Id);
+                            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuInfoModel.Id);
                         }
                     }
                 }
@@ -105,7 +105,6 @@ namespace LocalS.BLL
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var productSkuStock = new ProductSkuStockModel();
-                productSkuStock.StoreId = sellChannelStock.StoreId;
                 productSkuStock.RefType = sellChannelStock.SellChannelRefType;
                 productSkuStock.RefId = sellChannelStock.SellChannelRefId;
                 productSkuStock.CabinetId = sellChannelStock.CabinetId;
@@ -260,15 +259,13 @@ namespace LocalS.BLL
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_INF, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SPU_INF, merch.Id));
-            }
 
-            foreach (var merch in merchs)
-            {
                 var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
                 foreach (var productSku in productSkus)
                 {
                     GetSkuInfo(merch.Id, productSku.Id);
                 }
+
             }
         }
     }

@@ -139,6 +139,10 @@ export default {
       machineStockRealDataGet(this.listQuery).then(res => {
         if (res.result === 1) {
           this.listData = res.data
+
+          if (this.listData === null || this.listData.length === 0) {
+            this.$message('查询不到对应条件的数据')
+          }
         } else {
           this.$message(res.message)
         }

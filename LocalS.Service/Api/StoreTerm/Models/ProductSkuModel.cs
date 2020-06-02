@@ -10,6 +10,8 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ProductSkuModel
     {
+        private bool _isOffSell = true;
+
         public string Id { get; set; }
         public string ProductId { get; set; }
         public string Name { get; set; }
@@ -22,9 +24,18 @@ namespace LocalS.Service.Api.StoreTerm
         public decimal ShowPrice { get; set; }
         public bool IsShowPrice { get; set; }
         public string SpecDes { get; set; }
-        public bool IsOffSell { get; set; }
-        public int SumQuantity { get; set; }
-        public int LockQuantity { get; set; }
+        public bool IsOffSell
+        {
+            get
+            {
+                return _isOffSell;
+            }
+            set
+            {
+                _isOffSell = value;
+            }
+        }
+
         public int SellQuantity { get; set; }
         public bool IsTrgVideoService { get; set; }
 
