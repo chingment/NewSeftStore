@@ -293,10 +293,6 @@ namespace Test
              //RedisManager.Db.HashScan("aaa", "a1*");
 
              // var s1 = new { a = 1, b = 2 };
-             //.Db.HashSetAsync("aaa","a1xxx", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
-             //RedisManager.Db.HashSetAsync("aaa", "a2ss", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
-             //RedisManager.Db.HashSetAsync("aaa", "b2ww", Newtonsoft.Json.JsonConvert.SerializeObject(s1), StackExchange.Redis.When.Always);
-
 
              // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
 
@@ -347,7 +343,7 @@ namespace Test
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "2b239e36688e4910adffe36848921015", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
             //var result = StoreAppServiceFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), "e170b69479c14804a38b089dac040740", rop);
-            //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(result));
+;
         }
 
         private static sbyte[] SendCmd(sbyte[] frameCmd, sbyte[] frameCmdParms)

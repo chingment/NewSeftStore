@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Lumos;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,8 @@ namespace System
             string rt = null;
             try
             {
-                var setting = new JsonSerializerSettings
-                {
-                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                };
-                rt = Newtonsoft.Json.JsonConvert.SerializeObject(obj, setting);
+
+                rt = JsonConvertUtil.SerializeObject(obj);
             }
             catch
             {

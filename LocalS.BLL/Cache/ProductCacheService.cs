@@ -88,12 +88,7 @@ namespace LocalS.BLL
                     }
                 }
 
-                var setting = new JsonSerializerSettings
-                {
-                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                };
-
-                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId, Newtonsoft.Json.JsonConvert.SerializeObject(productSpuByCache, setting), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId, JsonConvertUtil.SerializeObject(productSpuByCache), StackExchange.Redis.When.Always);
             }
 
             return productSpuByCache;
@@ -158,7 +153,6 @@ namespace LocalS.BLL
                     productSkuByCache.SpecDes = productSkuByDb.SpecDes.ToJsonObject<List<SpecDes>>();
                     productSkuByCache.SpecIdx = productSkuByDb.SpecIdx;
                     productSkuByCache.SpecIdxSkus = productSpuByCache.SpecIdxSkus;
-              
                     productSkuByCache.IsTrgVideoService = productSpuByCache.IsTrgVideoService;
 
                     if (!string.IsNullOrEmpty(productSkuByCache.BarCode))
@@ -182,12 +176,7 @@ namespace LocalS.BLL
                     }
                 }
 
-                var setting = new JsonSerializerSettings
-                {
-                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                };
-
-                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuId, Newtonsoft.Json.JsonConvert.SerializeObject(productSkuByCache, setting), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuId, JsonConvertUtil.SerializeObject(productSkuByCache), StackExchange.Redis.When.Always);
             }
 
             return productSkuByCache;
