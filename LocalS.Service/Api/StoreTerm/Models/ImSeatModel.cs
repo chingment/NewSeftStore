@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreTerm
         }
 
         public string UserId { get; set; }
-        public string UserName { get; set; }
+        public string NickName { get; set; }
         public string Avatar { get; set; }
         public List<string> CharTags { get; set; }
         public string BriefDes { get; set; }

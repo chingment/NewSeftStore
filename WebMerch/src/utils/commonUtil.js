@@ -85,6 +85,9 @@ function treeGetNodeByDepth(tree, depth, nodes) {
 export function strLen(str) {
   var len = 0
 
+  if (typeof str === 'undefined') return 0
+
+  if (str === null) return 0
   if (str != null) {
     str = str.replace(/(^\s*)|(\s*$)/g, '')
   }

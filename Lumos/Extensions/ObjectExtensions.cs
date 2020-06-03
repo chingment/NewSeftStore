@@ -20,12 +20,16 @@ namespace System
             string rt = null;
             try
             {
-
                 rt = JsonConvertUtil.SerializeObject(obj);
             }
             catch
             {
 
+            }
+
+            if (rt == "[]" || rt == "{}")
+            {
+                rt = null;
             }
 
             return rt;
