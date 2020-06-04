@@ -58,26 +58,26 @@ page {
 }
 
 .line-space {
-  height: 0.6rem;
+  height: 21rpx;
   background-color: #f4f4f4;
 }
 
 .col-nav {
-  padding: 0px 16px;
+  padding: 0 0;
 }
 
 .col-nav-item {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #f8f8f8;
-  padding: 5px 0px 5px 0px;
+  border-bottom: 1rpx solid #f8f8f8;
+  padding: 8rpx 0 8rpx 0;
 }
 
 .col-nav-item:last-child {
-  border-bottom: 0px;
+  border-bottom: 0;
 }
 
-.col-nav-item > view {
+.col-nav-item>view {
   height: 70rpx;
   display: inline-block;
   overflow: hidden;
@@ -116,25 +116,32 @@ page {
   margin-left: 8rpx;
 }
 
-.btn-noboder{ border: none;background: none; }
-.btn-noboder::after{ border: none;background: none; }
+.btn-noboder {
+  border: none;
+  background: none;
+}
+
+.btn-noboder::after {
+  border: none;
+  background: none;
+}
 
 .its-form {
-  padding: 0px 16px;
+  padding: 0 24rpx;
 }
 
-.its-form .ct> .it {
+.its-form .ct>.it {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #f8f8f8;
-  padding: 5px 0px 5px 0px;
+  border-bottom: 1rpx solid #f8f8f8;
+  padding: 8rpx 0 8rpx 0;
 }
 
-.its-form .ct >it:last-child {
-  border-bottom: 0px;
+.its-form .ct>it:last-child {
+  border-bottom: 0;
 }
 
-.its-form > .it-m {
+.its-form>.it-m {
   flex: 1;
   line-height: 64rpx;
 }
@@ -171,14 +178,14 @@ page {
   right: 0;
   z-index: 1;
   width: 100%;
-  height: 3.044rem;
-  line-height: 3.044rem;
-  border-top: 1px #dbdbdb solid;
+  height: 104rpx;
+  line-height: 104rpx;
+  border-top: 1rpx #dbdbdb solid;
   overflow: hidden;
   text-align: center;
   color: #fff;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 38rpx;
   border-radius: 0;
 }
 
@@ -190,12 +197,13 @@ page {
   display: block;
 }
 
-.hide, .hidden {
+.hide,
+.hidden {
   display: none;
 }
 
 .pd-com {
-  padding: 0 0.8rem;
+  padding: 0 18rpx;
 }
 
 /*showToast*/
@@ -264,34 +272,34 @@ page {
   width: 50%;
   box-sizing: border-box;
   text-align: center;
-  padding: 0.5rem 0;
-  overflow:hidden;
+  padding: 14rpx 0;
+  overflow: hidden;
 }
 
 .prd-list-1 .it-0 {
-  padding-left: 20px;
-  padding-right: 10px;
+  padding-left: 20rpx;
+  padding-right: 10rpx;
 }
 
 .prd-list-1 .it-1 {
-  padding-left: 10px;
-  padding-right: 20px;
+  padding-left: 10rpx;
+  padding-right: 20rpx;
 }
 
 .prd-list-1 .imgurl {
   text-align: center;
-  height: 7rem;
-  width: 7rem;
+  height: 220rpx;
+  width: 220rpx;
   margin: auto;
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 .prd-list-1 .name {
   width: 100%;
-  height: 1.2rem;
-  line-height: 1.2rem;
-  font-size: 1rem;
+  height: 44rpx;
+  line-height: 44rpx;
+  font-size: 32rpx;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -304,9 +312,9 @@ page {
 
 .prd-list-1 .briefInfo {
   width: 100%;
-  height: 1.2rem;
-  line-height: 1.2rem;
-  font-size: 0.8rem;
+  height: 42rpx;
+  line-height: 42rpx;
+  font-size: 24rpx;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -326,18 +334,18 @@ page {
 }
 
 .prd-list-1 .saleprice {
-  height: 2rem;
-  line-height: 2rem;
-  font-size: 1.2rem;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-size: 42rpx;
   display: inline-block;
   color: #ffb101;
 }
 
 .prd-list-1 .showprice {
-  margin-left: 0.3rem;
-  height: 2rem;
-  line-height: 2rem;
-  font-size: 0.8rem;
+  margin-left: 10rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-size: 32rpx;
   display: inline-block;
   text-decoration: line-through;
 }
@@ -347,14 +355,14 @@ page {
   text-align: right;
   align-items: center;
   justify-content: center;
-  height: 2rem;
-  line-height: 2rem;
+  height: 62rpx;
+  line-height: 62rpx;
   display: flex;
 }
 
 .prd-list-1 .increase {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 50rpx;
+  height: 50rpx;
 }
 
 
@@ -371,33 +379,33 @@ page {
   width: 100%;
   box-sizing: border-box;
   text-align: center;
-  padding: 0.5rem 0;
-  overflow:hidden;
+  padding: 14rpx 0;
+  overflow: hidden;
 }
 
-.prd-list-2  .it-left{
-   width: 6rem;
+.prd-list-2 .it-left {
+  width: 160rpx;
 
 }
 
-.prd-list-2  .it-right{
-   flex: 1;
+.prd-list-2 .it-right {
+  flex: 1;
 }
 
-.prd-list-2  .it-left .imgurl {
+.prd-list-2 .it-left .imgurl {
   text-align: center;
-  height: 5rem;
-  width: 5rem;
+  height: 155rpx;
+  width: 155rpx;
   margin: auto;
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 .prd-list-2 .name {
   width: 100%;
-  height: 1.2rem;
-  line-height: 1.2rem;
-  font-size: 1rem;
+  height: 44rpx;
+  line-height: 44rpx;
+  font-size: 32rpx;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -410,9 +418,9 @@ page {
 
 .prd-list-2 .briefInfo {
   width: 100%;
-  height: 1.2rem;
-  line-height: 1.2rem;
-  font-size: 0.8rem;
+  height: 42rpx;
+  line-height: 42rpx;
+  font-size: 24rpx;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -432,18 +440,18 @@ page {
 }
 
 .prd-list-2 .saleprice {
-  height: 2rem;
-  line-height: 2rem;
-  font-size: 1.2rem;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-size: 42rpx;
   display: inline-block;
   color: #ffb101;
 }
 
 .prd-list-2 .showprice {
-  margin-left: 0.3rem;
-  height: 2rem;
-  line-height: 2rem;
-  font-size: 0.8rem;
+  margin-left: 10rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-size: 32rpx;
   display: inline-block;
   text-decoration: line-through;
 }
@@ -453,14 +461,14 @@ page {
   text-align: right;
   align-items: center;
   justify-content: center;
-  height: 2rem;
-  line-height: 2rem;
+  height: 62rpx;
+  line-height: 62rpx;
   display: flex;
 }
 
 .prd-list-2 .increase {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 50rpx;
+  height: 50rpx;
 }
 
 /*col-its-a*/
@@ -475,8 +483,8 @@ page {
 
 .its-a .it-l {
   border-bottom-width: 0;
-  width: 60px;
-  margin-right: 0.8rem;
+  width: 130rpx;
+  margin-right: 12rpx;
 }
 
 .its-a .it-l .icon {
@@ -486,35 +494,35 @@ page {
   display: flex;
 }
 
-.its-a  .it-l .icon .img {
+.its-a .it-l .icon .img {
   width: 48px;
   height: 48px;
   border-radius: 48px;
 }
 
-.its-a  .isDefault {
+.its-a .isDefault {
   overflow: hidden;
   text-align: left;
-  height: 1.2rem;
-  line-height: 1.2rem;
-  font-size: 0.6rem;
+  height: 38rpx;
+  line-height: 38rpx;
+  font-size: 21rpx;
   border: 1rpx solid #f18d00;
   color: #f18d00;
-  padding: 1px 3px;
+  padding: 1rpx 6rpx;
 }
 
-.its-a  .it-m {
-  border-bottom: 1px solid #f6f6f6;
+.its-a .it-m {
+  border-bottom: 1rpx solid #f6f6f6;
   flex: 1;
   display: flex;
 }
 
-.its-a  .it-ml {
+.its-a .it-ml {
   flex: 1;
 }
 
-.its-a  .it-mr {
-  width: 100px;
+.its-a .it-mr {
+  width: 80rpx;
   overflow: hidden;
   flex: none;
   text-align: right;
@@ -523,8 +531,8 @@ page {
   justify-content: flex-end;
 }
 
-.its-a  .it-r {
-  width: 20px;
+.its-a .it-r {
+  width: 120rpx;
   overflow: hidden;
   text-align: right;
   flex: none;
@@ -538,19 +546,20 @@ page {
   justify-content: flex-end;
 }
 
-.its-a  .it-r .icon  .img-nav-right {
-  width: 0.4rem;
-  height: 0.56rem;
+.its-a .it-r .icon .img-nav-right {
+  width: 10rpx;
+  height: 18rpx;
 }
 
 .its-a .it-r .icon .img-nav-edit {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 42rpx;
+  height: 42rpx;
 }
 
-.its-a  .it-l .txt-h1, .its-a  .it-ml .txt-h1 {
-  height: 1.8rem;
-  line-height: 2.1rem;
+.its-a .it-l .txt-h1,
+.its-a .it-ml .txt-h1 {
+  height: 60rpx;
+  line-height: 60rpx;
   text-align: left;
   display: block;
   color: #333;
@@ -559,19 +568,19 @@ page {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  font-size: 1rem;
+  font-size: 36rpx;
 }
 
 .its-a .it-selected .it-ml .txt-h1 {
   color: #f18d00;
 }
 
-.its-a  .it-ml  .txt-h2 {
-  height: 1.6rem;
-  line-height: 1.6rem;
+.its-a .it-ml .txt-h2 {
+  height: 40rpx;
+  line-height: 40rpx;
   display: block;
   text-align: left;
-  font-size: 0.8rem;
+  font-size: 26rpx;
   color: #999;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -582,11 +591,11 @@ page {
 
 .its-a .it-ml .txt {
   color: #333;
-  height: 3rem;
-  line-height: 3rem;
+  height: 120rpx;
+  line-height: 120rpx;
+  font-size: 28rpx;
+  padding-right: 5rpx;
   text-align: left;
-  font-size: 0.8rem;
-  padding-right: 0.2rem;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -595,16 +604,16 @@ page {
 }
 
 .its-a .it-mr .txt {
-  height: 3rem;
-  line-height: 3rem;
+  height: 120rpx;
+  line-height: 120rpx;
   text-align: right;
   display: block;
   font-weight: bold;
-  font-size: 0.8rem;
-  padding-right: 0.2rem;
+  font-size: 28rpx;
+  padding-right: 5rpx;
 }
 
-.its-a  .it:last-child  .it-m {
+.its-a .it:last-child .it-m {
   border-bottom-width: 0;
 }
 
@@ -618,8 +627,6 @@ page {
 }
 
 .tabbar-scroll {
-  /* position: fixed;
-    height: 2rem; */
   top: 0;
   z-index: 9999;
   background: #fff;
@@ -627,23 +634,23 @@ page {
 }
 
 .tabbar-items {
-  height: 2rem;
-  line-height: 2rem;
+  height: 62rpx;
+  line-height: 62rpx;
   width: 1900px;
   transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1);
   transition-duration: 0ms;
 }
 
 .tabbar-items .item {
-  height: 2rem;
-  line-height: 1.8rem;
-  width: 100px;
+  height: 62rpx;
+  line-height: 58rpx;
+  width: 100rpx;
   float: left;
   display: block;
   overflow: hidden;
   background: #fff;
   text-align: center;
-  font-size: 1rem;
+  font-size: 32rpx;
   z-index: 999;
 }
 
@@ -657,31 +664,28 @@ page {
 
 .tabbar-items .item-seleced .seleced-bottom {
   display: block;
-  width: 2rem;
+  width: 100rpx;
   text-align: center;
   background: #ffb101;
   box-shadow: 0px 2px 3px rgba(255, 176, 0, 0.55);
-  border-radius: 3px;
-  height: 2px;
+  border-radius: 3rpx;
+  height: 3rpx;
   margin: auto;
 }
 
-.tabbar-contents {
-  /* margin-top: 2rem; */
-}
 
 .list-emptytips {
   text-align: center;
-  margin-top: 3rem;
+  margin-top: 100rpx;
 }
 
 .list-emptytips .img {
-  width: 5rem;
-  height: 3.8rem;
+  width: 158rpx;
+  height: 142rpx;
 }
 
 .list-emptytips text {
-  font-size: 0.8rem;
+  font-size: 28rpx;
   color: #9d9d9d;
 }
 
@@ -705,25 +709,19 @@ page {
   border-radius: 0px;
 }
 
-.login-box{
+.login-box {}
 
-}
-.login-box .logo{
-  width: 10rem;
-  height: 10rem;
+.login-box .logo {
+  width: 320rpx;
+  height: 320rpx;
   margin: auto;
 
 }
 
-.login-box .btn-login{
+.login-box .btn-login {
   color: #fff;
-  margin: 0 1rem;
+  margin: 0 30rpx;
 }
-
-
-
-
-
 
 .isselloff-bg {
   position: fixed;
@@ -734,25 +732,26 @@ page {
   height: 100%;
 }
 
-.isOffSell-box{
-height:100%;
-width:100%;
-background: rgba(208,208,208, 0.5);
-position:absolute;
-display:flex;
-overflow:hidden;
-justify-content: center;
-align-items: center;
+.isOffSell-box {
+  height: 100%;
+  width: 100%;
+  background: rgba(208, 208, 208, 0.5);
+  position: absolute;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
 }
+
 /*水平居中必备样式*/
 
 .isOffSell-tip {
   display: inline-block;
-  padding: .2rem .5rem;
-  font-size: .6rem;
+  padding: 16rpx 14rpx;
+  font-size: 21rpx;
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
-  border-radius: .2rem;
+  border-radius: 14rpx;
   text-align: center;
-  line-height:.6rem;
+  line-height: 21rpx;
 }

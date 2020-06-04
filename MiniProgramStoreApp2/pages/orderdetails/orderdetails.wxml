@@ -101,9 +101,9 @@
           </view>
         </view>
 
-        <view class="it-r" style="width:1.8rem">
+        <view class="it-r" style="width:80rpx">
           <view class="icon">
-            <image class="img" style="width:1.2rem;height:1.2rem" src='/content/default/images/{{item.selected==false?"checkedoff":"checkedon"}}.png'></image>
+            <image class="img" style="width:48rpx;height:48rpx" src='/content/default/images/{{item.selected==false?"checkedoff":"checkedon"}}.png'></image>
           </view>
         </view>
 

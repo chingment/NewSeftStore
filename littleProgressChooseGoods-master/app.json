@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/kaidan/choose-goods/choose-goods",
     "pages/index/index",
+    "pages/kaidan/choose-goods/choose-goods",
     "pages/user-center/index/index",
     "pages/kaidan/confirm-order/confirm-order"
   ],

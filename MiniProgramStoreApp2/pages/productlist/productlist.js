@@ -127,16 +127,27 @@ Page({
     }
 
 
-    var wHeight = wx.getSystemInfoSync().windowHeight;
-    _this.setData({
-      scrollHeight: wHeight - util.rem2px(deHeight)
-    });
 
     _this.setData({
       tabs: tabs,
       tabsSliderIndex: tabsSliderIndex,
       cart: storeage.getCart()
     })
+
+    wx.createSelectorQuery().selectAll('.tabbar-items').boundingClientRect(function (rect) {
+      var wHeight = wx.getSystemInfoSync().windowHeight;
+
+      var height=0
+      if(typeof rect!='undefined'&&rect.length>0){
+        height=rect[0].height
+      }
+
+      _this.setData({
+        scrollHeight: wHeight -height
+      });
+  }).exec()
+
+    
 
     getList(_this)
 

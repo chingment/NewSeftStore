@@ -99,7 +99,7 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
-    var wHeight = wx.getSystemInfoSync().windowHeight;
+   
     var status = options.status == undefined ? "" : options.status
 
 
@@ -115,9 +115,15 @@ Page({
 
     _this.setData({
       tabsSliderIndex: _tabsSliderIndex,
-      tabs: _this.data.tabs,
-      scrollHeight: wHeight - util.rem2px(2)
+      tabs: _this.data.tabs
     })
+
+    wx.createSelectorQuery().selectAll('.tabbar-items').boundingClientRect(function (rect) {
+      var wHeight = wx.getSystemInfoSync().windowHeight;
+      _this.setData({
+        scrollHeight: wHeight - rect[0].height
+      });
+  }).exec()
 
     getList(_this)
 

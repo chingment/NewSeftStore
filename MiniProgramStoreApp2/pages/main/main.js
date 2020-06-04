@@ -84,12 +84,9 @@ Page({
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
+    
 
     var currentStore = ownRequest.getCurrentStore()
-    var wHeight = wx.getSystemInfoSync().windowHeight;
-    _self.setData({
-      tabBarContentHeight: wHeight - util.rem2px(3.044)
-    });
     wx.setNavigationBarTitle({
       title: _self.data.tabBar[0].navTitle
     })
@@ -126,6 +123,12 @@ Page({
         fail: function () { }
       })
 
+      wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
+        var wHeight = wx.getSystemInfoSync().windowHeight;
+        _self.setData({
+          tabBarContentHeight: wHeight - rect[0].height
+        });
+    }).exec() 
 
   },
   onShow: function () {

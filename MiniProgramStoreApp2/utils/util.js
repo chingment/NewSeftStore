@@ -32,28 +32,8 @@ function throttle(fn, gapTime) {
   }
 }
 
-function rem2px(rem) {
-  var size = 0;
-
-  var wHidth = wx.getSystemInfoSync().windowWidth;
- 
-
-  if (wHidth >= 360 & wHidth < 414) {
-    size = wHidth / 23 * rem
-  }
-  else if (wHidth >= 414) {
-    size = wHidth / 26 * rem
-  }
-  else {
-    size = wHidth / 26 * rem
-  }
-
-
-  return size
-}
 
 module.exports = {
   formatTime: formatTime,
-  throttle: throttle,
-  rem2px: rem2px
+  throttle: throttle
 }

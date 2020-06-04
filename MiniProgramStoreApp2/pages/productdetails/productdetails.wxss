@@ -27,8 +27,7 @@ swiper {
 .details-info1 .item-name {
   font-weight: bold;
   font-size: 38rpx;
-  height: 82rpx;
-  line-height: 82rpx;
+  line-height: 56rpx;
 }
 
 .details-info1 .item-briefIntro {

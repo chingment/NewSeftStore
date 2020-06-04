@@ -97,26 +97,26 @@ Page({
     })
   },
   onShow() {
-    let loginInfo = wx.getStorageSync('loginInfo')
-    if (!loginInfo) {
-      // 显示登录模态框
-      this.setData({
-        showLoginModal: true
-      })
-      wx.hideTabBar()
-    } else if (loginInfo.createType === 1) {
-      // 显示完善信息模态框
-      this.setData({
-        showPerfectInfoModal: true
-      })
-      wx.hideTabBar()
-    } else {
-      // 隐藏完善信息模态框
-      this.setData({
-        showPerfectInfoModal: false
-      })
-      wx.showTabBar()
-    }
+    // let loginInfo = wx.getStorageSync('loginInfo')
+    // if (!loginInfo) {
+    //   // 显示登录模态框
+    //   this.setData({
+    //     showLoginModal: true
+    //   })
+    //   wx.hideTabBar()
+    // } else if (loginInfo.createType === 1) {
+    //   // 显示完善信息模态框
+    //   this.setData({
+    //     showPerfectInfoModal: true
+    //   })
+    //   wx.hideTabBar()
+    // } else {
+    //   // 隐藏完善信息模态框
+    //   this.setData({
+    //     showPerfectInfoModal: false
+    //   })
+    //   wx.showTabBar()
+    // }
   },
   onShareAppMessage(res) {
     return util.shareAppMessage(res)

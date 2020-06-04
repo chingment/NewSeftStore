@@ -19,9 +19,9 @@ page{
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 3.044rem;
+  height: 104rpx;
   overflow: hidden;
-  border-top: 1px #dbdbdb solid;
+  border-top: 1rpx #dbdbdb solid;
   background: #fff;
 }
 
@@ -42,12 +42,12 @@ page{
   text-align: center;
   overflow: hidden;
   position: relative;
-  padding: 0.4rem 0rem 0.4rem 0rem;
+  padding: 15rpx 0 15rpx 0;
 }
 
 .main-tabbar>.nav .icon {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 48rpx;
+  height: 48rpx;
   display: inline-block;
 }
 
@@ -58,21 +58,21 @@ page{
 
 .main-tabbar>.nav  .title {
   color: #8a8a8a;
-  height: 0.844rem;
-  line-height: 0.844rem;
-  font-size: 0.7rem;
+  height: 22rpx;
+  line-height: 22rpx;
+  font-size: 21rpx;
 }
 
 .main-tabbar>.nav  .number {
-  font-size: 0.6rem;
-  width: 1.6rem;
-  height: 1.1rem;
-  line-height: 1.1rem;
-  border-radius: 1.2rem;
+  font-size: 21rpx;
+  width: 50rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  border-radius: 50rpx;
   background-color: #f00;
   color: #fff;
   position: absolute;
-  right: 1rem;
+  right: 30rpx;
   z-index: 999;
-  top: 0.2rem;
+  top: 10rpx;
 }
