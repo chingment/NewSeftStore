@@ -10,7 +10,7 @@
   align-items: center;
   display: flex;
   padding: 0.3rem 0;
-  border-bottom: 3px solid #f8f8f8;
+  border-bottom: 3rpx solid #f8f8f8;
 }
 
 .it-tag > .tag-name {
@@ -107,7 +107,7 @@
 .its-odcskus .it {
   display: flex;
   flex-direction: row;
-  border-bottom: 3px solid #f8f8f8;
+  border-bottom: 3rpx solid #f8f8f8;
   padding: 5px 0px;
 }
 
@@ -165,7 +165,7 @@
 }
 
 .its-odcskus .name {
-  font-size: 0.9rem;
+  font-size: 28rpx;
 }
 
 .its-odcskus .quantity {

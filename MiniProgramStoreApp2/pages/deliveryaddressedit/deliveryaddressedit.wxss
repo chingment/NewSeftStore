@@ -52,7 +52,7 @@
   text-align: center;
   position: relative;
   font-size: 32rpx;
-  border-bottom: 1px solid #F3F3F3;
+  border-bottom: 3rpx solid #F3F3F3;
 }
 .area2-close-wrap{
   width: 28rpx;
@@ -69,7 +69,7 @@
 .area2-sub-header{
   height: 80rpx;
   line-height: 80rpx;
-  border-bottom: 1px solid #F3F3F3;
+  border-bottom: 3rpx solid #F3F3F3;
   display: flex;
   justify-content: flex-start;
   align-items: center;

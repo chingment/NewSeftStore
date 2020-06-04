@@ -72,7 +72,7 @@
 }
 
 .its-odcskus .name {
-  font-size: 30rpx;
+  font-size: 28rpx;
 }
 
 .its-odcskus .quantity {
