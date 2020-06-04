@@ -87,7 +87,7 @@ background: #ececec
 .its-blocks >.it>.it-skus >.it>.it-content {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #f8f8f8;
+  border-bottom: 3rpx solid #f8f8f8;
   padding: 10px 0px;
   line-height: 3.8rem;
   height: 3.8rem;
@@ -192,7 +192,7 @@ background: #ececec
   bottom: 0rem;
   background: #fff;
   display: flex;
-  border-top: 1px solid #f8f8f8;
+  border-top: 3rpx solid #f8f8f8;
   line-height: 2.8rem;
   height: 2.8rem;
 }

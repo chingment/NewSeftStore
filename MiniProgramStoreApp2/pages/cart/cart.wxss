@@ -3,66 +3,66 @@
 .cart-blocks {
   padding: 0;
   margin: 0;
-  margin-bottom: 3rem;
-  padding-bottom: 3rem;
+  margin-bottom: 10rpx;
+  padding-bottom: 10rpx;
 }
 
 .its-blocks>.it {
-  padding: 0 0.5rem;
+  padding: 0 10rpx;
 }
 
 .its-blocks >.it>.it-tag {
-  height: 1.3rem;
-  line-height: 1.3rem;
+  height: 40rpx;
+  line-height: 40rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: left;
-  padding: .3rem 0;
+  padding: 5rpx 0;
 }
 
 .its-blocks >.it>.it-tag .icon {
-  margin-right: 0.3rem;
-  width: 1.1rem;
-  height: 1.1rem;
+  margin-right: 10rpx;
+  width: 38rpx;
+  height: 38rpx;
 }
 
 .its-blocks >.it>.it-tag .name {
-  font-size: 0.9rem;
+  font-size: 26rpx;
   color: #000;
 }
 
 .its-blocks >.it>.it-tag .more {
-  width: 0.4rem;
-  height: 0.56rem;
-  margin-left: 0.3rem;
+  width: 12rpx;
+  height: 16rpx;  
+  margin-left: 10rpx;
 }
 
 .its-blocks >.it>.it-skus >.it>.it-content {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #f8f8f8;
-  padding: 10px 0px;
-  line-height: 3.8rem;
-  height: 3.8rem;
+  border-bottom: 3rpx solid #f8f8f8;
+  padding: 20rpx 0;
+  line-height: 128rpx;
+  height: 128rpx;
   align-items: center;
   justify-content: center;
 }
 
-.its-blocks >.it>.it-skus >.it>.it-content:last-child {
-  border-bottom: 0px;
+.its-blocks >.it>.it-skus >.it:last-child >.it-content{
+  border-bottom: 0rpx;
 }
 
 .its-blocks >.it>.it-skus >.it> .it-content>.it-l {
-  width: 2.2rem;
+  width: 80rpx;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
 
 .its-blocks >.it>.it-skus >.it>.it-content>.it-l .img {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 42rpx;
+  height: 42rpx;
 }
 
 .its-blocks >.it>.it-skus >.it>.it-content>.it-m {
@@ -71,8 +71,9 @@
 
 .its-blocks >.it>.it-skus >.it>.it-content>.it-m>.it-ml {
   float: left;
-  width: 3.8rem;
-  height: 3.8rem;
+  width: 128rpx;
+  height: 128rpx;
+  display: flex;
 }
 
 .its-blocks >.it>.it-skus >.it>.it-content>.it-m>.it-ml .img {
@@ -85,22 +86,22 @@
 }
 
 .its-blocks >.it>.it-skus >.it>.it-content>.it-r {
-  width: 5rem;
+  width: 200rpx;
   display: flex;
   align-items: center;
 }
 
 .its-blocks >.it>.it-skus >.it>.it-content>.it-r .img {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 52rpx;
+  height: 52rpx;
 }
 
 .its-blocks .skuname {
-  min-height: 1.1rem;
-  max-height: 2.2rem;
-  line-height: 1rem;
-  font-size: 0.8rem;
-  padding-top: 10px;
+  min-height: 40rpx;
+  max-height:  80rpx;
+  line-height: 40rpx;
+  font-size: 32rpx;
+  padding-top: 10rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -111,15 +112,15 @@
 
 .its-blocks .sumprice {
   display: block;
-  font-size: 0.9rem;
-  height: 1.6rem;
-  line-height: 1.6rem;
+  font-size: 32rpx;
+  height: 40rpx;
+  line-height: 40rpx;
 }
 
 .its-blocks .quantity {
-  width: 1.8rem;
-  font-size: 0.8rem;
-  line-height: 3.2rem;
+  width: 50rpx;
+  font-size: 28rpx;
+  line-height: 120rpx;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -143,29 +144,29 @@
 .cart-bottom {
   width: 100%;
   position: absolute;
-  bottom: 0rem;
+  bottom: 0;
   background: #fff;
   display: flex;
-  border-top: 1px solid #f8f8f8;
-  line-height: 2.8rem;
-  height: 2.8rem;
+  border-top: 3rpx solid #f8f8f8;
+  height: 80rpx;
+  line-height: 80rpx;
 }
 
 .cart-bottom .it-l {
-  margin-left: 0.5rem;
+  margin-left: 22rpx;
   flex: 1;
-  font-size: 0.8rem;
+  font-size: 30rpx;
 }
 
 .cart-bottom .it-m {
   flex: 1;
-  font-size: 1rem;
+  font-size: 36rpx;
 }
 
 .cart-bottom .it-r {
   position: relative;
-  font-size: 1.2rem;
-  width: 8rem;
+  font-size: 32rpx;
+  width: 200rpx;
   text-align: center;
   color: #fff;
 }
@@ -176,7 +177,6 @@
   justify-content: space-between;
   width: 100%;
   overflow: hidden;
-  height: 4.8rem;
 }
 
 .it-content {

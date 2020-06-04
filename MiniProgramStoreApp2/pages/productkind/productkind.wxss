@@ -7,15 +7,15 @@
 
 .kind-left-navbar {
 
-  width: 6rem;
+  width: 200rpx;
   height: 100%;
-  font-size: .8rem;
+  font-size: 32rpx;
   border-right: 1px #dbdbdb solid;
 }
 
 .kind-left-navbar .it {
-  height: 2.5rem;
-  line-height: 2.5rem;
+  height: 80rpx;
+  line-height:  80rpx;
   text-align: center;
 }
 
@@ -25,65 +25,13 @@
 
 .kind-left-navbar-selected {
 
-  font-size: .9rem;
+  font-size: 34rpx;
 }
 
 .kind-right-content {
   flex: 1;
   height: 100%;
 }
-
-.kind-lv1-imgbox {
-  margin-left: .1rem;
-  margin-right: .1rem;
-  text-align: center;
-}
-
-.kind-lv1-imgurl {
-  height: 3.6rem;
-  width: 90%;
-}
-
-.kind-lv1-name {
-  text-align: center;
-  width: 100%;
-  display: block;
-  font-size: .8rem;
-  height: 1.2rem;
-  line-height: 1.2rem
-}
-
-.kind-lv2-list {
-  position: relative;
-  overflow: hidden;
-}
-
-.kind-lv2-item {
-  position: relative;
-  float: left;
-  padding: 10px 20px;
-  width: 33.33333333%;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-}
-
-.kind-lv2-imgurl {
-  width: 4rem;
-  height: 4rem;
-  display: block;
-}
-
-.kind-lv2-name {
-  width: 4rem;
-  height: 1.2rem;
-  font-size: 0.8rem;
-  line-height: 1.2rem;
-  text-align: center;
-  display: block;
-}
-
-
 
 .nomore-tip{
   text-align: center;

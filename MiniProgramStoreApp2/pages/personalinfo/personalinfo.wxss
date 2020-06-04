@@ -12,13 +12,13 @@ view{
 }
 .item{
     position: relative;
-    border-top: 2rpx solid #eee;
+    border-top: 3rpx solid #eee;
     height: 120rpx;
     line-height: 120rpx;
     overflow: hidden;
 }
 .item:last-child{
-    border-bottom: 2rpx solid #eee;
+    border-bottom: 3rpx solid #eee;
 }
 .inner{
     position: absolute;

@@ -34,7 +34,7 @@ page {
 }
 
 .border-b2-main {
-  border-bottom: 2rpx solid #f18d00;
+  border-bottom: 3rpx solid #f18d00;
 }
 
 .border-main {
@@ -69,7 +69,7 @@ page {
 .col-nav-item {
   display: flex;
   flex-direction: row;
-  border-bottom: 1rpx solid #f8f8f8;
+  border-bottom: 3rpx solid #f8f8f8;
   padding: 8rpx 0 8rpx 0;
 }
 
@@ -133,7 +133,7 @@ page {
 .its-form .ct>.it {
   display: flex;
   flex-direction: row;
-  border-bottom: 1rpx solid #f8f8f8;
+  border-bottom: 3rpx solid #f8f8f8;
   padding: 8rpx 0 8rpx 0;
 }
 
@@ -180,7 +180,7 @@ page {
   width: 100%;
   height: 104rpx;
   line-height: 104rpx;
-  border-top: 1rpx #dbdbdb solid;
+  border-top: 3rpx #dbdbdb solid;
   overflow: hidden;
   text-align: center;
   color: #fff;
@@ -512,7 +512,7 @@ page {
 }
 
 .its-a .it-m {
-  border-bottom: 1rpx solid #f6f6f6;
+  border-bottom: 3rpx solid #f6f6f6;
   flex: 1;
   display: flex;
 }
@@ -522,7 +522,7 @@ page {
 }
 
 .its-a .it-mr {
-  width: 80rpx;
+  width: 120rpx;
   overflow: hidden;
   flex: none;
   text-align: right;
@@ -532,7 +532,7 @@ page {
 }
 
 .its-a .it-r {
-  width: 120rpx;
+  width: 20rpx;
   overflow: hidden;
   text-align: right;
   flex: none;
