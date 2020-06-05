@@ -7,25 +7,13 @@ function getAccessonToken() {
 }
 
 function getCurrentStoreId() {
-  var store = storeage.getCurrentStore();
-  return store.id
+  var id = storeage.getCurrentStoreId();
+  return id
 }
 
-function getCurrentStore() {
-  var store = storeage.getCurrentStore();
-  if (store == "") {
-    store = {
-      id: "",
-      name: "未选择店铺"
-    }
-  } else {
-    store = storeage.getCurrentStore()
-  }
-  return store
-}
 
-function setCurrentStore(store) {
-  storeage.setCurrentStore(store)
+function setCurrentStoreId(id) {
+  storeage.setCurrentStoreId(id)
 }
 
 function isLogin() {
@@ -64,8 +52,8 @@ function getReturnUrl() {
 
 
 function isSelectedStore(isGoSelect) {
-  var store = getCurrentStore()
-  if (store.id == "") {
+  var storeId = getCurrentStoreId()
+  if (storeId == "") {
 //    console.log("ownRequest.isSelectedStore->>>当前店铺id为空，未选择店铺")
     isGoSelect = isGoSelect == undefined ? false : isGoSelect
     if (isGoSelect) {
@@ -82,8 +70,7 @@ function isSelectedStore(isGoSelect) {
 module.exports = {
   goLogin: goLogin,
   getCurrentStoreId: getCurrentStoreId,
-  setCurrentStore: setCurrentStore,
-  getCurrentStore: getCurrentStore,
+  setCurrentStoreId: setCurrentStoreId,
   isSelectedStore: isSelectedStore,
   isLogin: isLogin,
   getReturnUrl: getReturnUrl

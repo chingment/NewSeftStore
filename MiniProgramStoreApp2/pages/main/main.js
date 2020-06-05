@@ -53,6 +53,9 @@ Page({
       number: 0
     }],
     index: {
+      store:{
+        name:""
+      },
       banner: {
         imgs: [],
         currentSwiper: 0,
@@ -86,7 +89,6 @@ Page({
     }
     
 
-    var currentStore = ownRequest.getCurrentStore()
     wx.setNavigationBarTitle({
       title: _self.data.tabBar[0].navTitle
     })

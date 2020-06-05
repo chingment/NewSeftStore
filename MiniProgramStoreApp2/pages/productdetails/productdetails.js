@@ -26,11 +26,13 @@ Page({
   onLoad: function (options) {
     var _this = this
     var skuId = options.skuId == undefined ? "0" : options.skuId
-    var storeId = options.storeId == undefined ? "" : options.storeId
+    var storeId = options.storeId == undefined ? undefined : options.storeId
 
-    if(storeId==""){
+    if(storeId==undefined){
       storeId=ownRequest.getCurrentStoreId()
     }
+
+    ownRequest.setCurrentStoreId(storeId)
 
     _this.setData({storeId:storeId})
 

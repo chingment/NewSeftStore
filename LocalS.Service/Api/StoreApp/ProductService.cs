@@ -95,6 +95,7 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
+
             var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
 
             var productSkuDetailsModel = new ProductSkuDetailsModel();

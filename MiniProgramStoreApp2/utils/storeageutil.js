@@ -45,12 +45,12 @@ function setAccessToken(accesstoken) {
   wx.setStorageSync(key_accesstoken, accesstoken)
 }
 
-function getCurrentStore() {
-  return wx.getStorageSync(key_store) || []
+function getCurrentStoreId() {
+  return wx.getStorageSync(key_store) || undefined
 }
 
-function setCurrentStore(store) {
-  wx.setStorageSync(key_store, store)
+function setCurrentStoreId(id) {
+  wx.setStorageSync(key_store, id)
 }
 
 function setMainTabbarIndex(index) {
@@ -78,8 +78,8 @@ module.exports = {
   setCart: setCart,
   setAccessToken: setAccessToken,
   getAccessToken: getAccessToken,
-  getCurrentStore: getCurrentStore,
-  setCurrentStore: setCurrentStore,
+  getCurrentStoreId: getCurrentStoreId,
+  setCurrentStoreId: setCurrentStoreId,
   setMainTabbarIndex: setMainTabbarIndex,
   getMainTabbarIndex: getMainTabbarIndex,
   getOpenId: getOpenId,

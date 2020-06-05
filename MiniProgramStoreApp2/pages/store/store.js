@@ -22,7 +22,7 @@ Page({
           if (res.result == 1) {
             _this.setData({
               list: res.data,
-              currentStore: ownRequest.getCurrentStore()
+              currentStoreId: ownRequest.getCurrentStoreId()
             })
           }
         },
@@ -42,7 +42,7 @@ Page({
   },
   selectStore: function (e) {
     var store = e.currentTarget.dataset.replyStore
-    ownRequest.setCurrentStore(store);
+    ownRequest.setCurrentStoreId(store.id);
     wx.reLaunch({
       url: ownRequest.getReturnUrl()
     })

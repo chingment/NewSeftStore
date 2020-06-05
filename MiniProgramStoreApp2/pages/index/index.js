@@ -13,9 +13,8 @@ Component({
       observer: function(newVal, oldVal, changedPath) {
 
         var _self = this
-        var currentStore = ownRequest.getCurrentStore()
         _self.setData({
-          currentStore: currentStore,
+          currentStore: newVal.store,
           banner: newVal.banner,
           pdArea: newVal.pdArea
         })
