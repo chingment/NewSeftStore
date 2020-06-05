@@ -3,6 +3,7 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
+const config = require('../../config');
 const app = getApp()
 
 Page({
@@ -312,6 +313,38 @@ Page({
         false :
 
         true; //匹配选中的数据的库存，若不为空返回true反之返回false
+
+  },
+  onShareAppMessage: function( options ){
+    var _this = this;
+　　// 设置转发内容
+　　var shareObj = {
+　　　　title:_this.data.productSku.name ,
+　　　　path: '/pages/productdetails/productdetails?skuId='+_this.data.productSku.id+'&storeId='+ownRequest.getCurrentStoreId()+"&merchId="+config.merchId, // 默认是当前页面，必须是以‘/’开头的完整路径
+　　　　imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
+　　　　success: function(res){　 // 转发成功之后的回调　　　　　
+　　　　　　if(res.errMsg == 'shareAppMessage:ok'){
+　　　　　　}
+　　　　},
+　　　　fail: function(){　// 转发失败之后的回调
+　　　　　　if(res.errMsg == 'shareAppMessage:fail cancel'){
+　　　　　　　　// 用户取消转发
+　　　　　　}else if(res.errMsg == 'shareAppMessage:fail'){
+　　　　　　　　// 转发失败，其中 detail message 为详细失败信息
+　　　　　　}
+　　　　},
+　　　　complete: function(){
+　　　　　　// 转发结束之后的回调（转发成不成功都会执行）
+　　　　}
+　　};
+　　// 来自页面内的按钮的转发
+　　if( options.from == 'button' ){
+　　　　var dataid = options.target.dataset; //上方data-id=shareBtn设置的值
+　　　　// 此处可以修改 shareObj 中的内容
+　　　　shareObj.path = '/pages/btnname/btnname?id='+dataid.id;
+　　}
+　　// 返回shareObj
+　　return shareObj;
 
   }
 
