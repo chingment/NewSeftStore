@@ -50,7 +50,7 @@
               <text class="title">我的订单</text>
             </view>
             <view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=0000" class='item-right' style="width:100rpx" >
-              <text style="color:#c3c3c3">全部</text>
+              <text style="color:#292929">全部</text>
               <image src='/content/default/images/col_nav_right.png'></image>
             </view>
           </view>

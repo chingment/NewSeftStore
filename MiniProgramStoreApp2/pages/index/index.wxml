@@ -1,6 +1,6 @@
 <scroll-view scroll-y="true" style="height:{{height}}px;">
 
-  <view class="st-index">
+  <view class="st-index pd-com">
     <navigator class="store" url="/pages/store/store" hover-class="none">
       <view class="icon">
         <image class="img" src="/content/default/images/store_address.png"></image>

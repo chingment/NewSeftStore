@@ -1,4 +1,4 @@
-<view class="it block">
+<view class="it block pd-com">
 
   <view class="it-tag">
     <view class="tag-name">
@@ -114,7 +114,7 @@
   <view class="line-space"></view>
 </block>
 
-<view class="its-a fieldBlock">
+<view class="its-a fieldBlock pd-com">
   <block wx:for="{{fieldBlocks}}" wx:for-item="fieldBlock" wx:key="list">
 
     <block wx:for="{{fieldBlock.data}}" wx:for-item="item" wx:key="list">

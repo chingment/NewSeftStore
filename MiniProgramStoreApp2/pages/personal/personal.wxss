@@ -102,15 +102,17 @@
   display: block;
   text-align: center;
   font-size: 24rpx;
+  color: #676767;
 }
 
 .item-logintip {
   height: 32rpx;
   line-height: 32rpx;
+  font-size: 28rpx;
 }
 
 .item-logingo {
   height: 50rpx;
   line-height: 50rpx;
-  font-size: 42rpx;
+  font-size: 32rpx;
 }

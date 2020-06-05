@@ -9,11 +9,13 @@ Component({
     initdata: {
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
+
         var _self = this
         _self.setData({
           isLogin: ownRequest.isLogin(),
           userInfo: newVal.userInfo
         })
+
       }
     },
     height: {

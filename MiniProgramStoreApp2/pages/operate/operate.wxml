@@ -1,6 +1,6 @@
 
 
-<view id="block_area">
+<view id="block_area" class="pd-com" >
 
   <block wx:if="{{!result.isComplete}}">
     <view class="operate-check">

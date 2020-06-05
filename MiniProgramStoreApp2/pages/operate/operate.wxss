@@ -1,41 +1,38 @@
-.operate-result {
-  padding: 0 1rem;
-}
 
 .operate-result .imgbox {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 100rpx;
 }
 
 .operate-result .imgbox .img {
-  width: 100px;
-  height: 100px;
+  width: 200rpx;
+  height: 200rpx;
   display: inline-block;
 }
 
 .operate-result .it-message {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 10rpx;
 }
 
 .operate-result .it-message .txt {
-  font-size: 1.2rem;
-  line-height: 3rem;
+  font-size: 28rpx;
+  line-height: 28rpx;
   color: #ff6c8d;
 }
 
 .operate-result .it-remarks {
-  margin-top: 1rem;
+  margin-top: 10rpx;
 }
 
 .operate-result .it-remarks .txt {
-  font-size: 0.9rem;
-  line-height: 1.4rem;
+  font-size: 26rpx;
+  line-height: 26rpx;
 }
 
 .operate-result .it-btns {
   display: flex;
-  padding: 10px 0px;
+  padding: 20rpx 0;
 }
 
 .operate-result .it-btns .btnbox {
@@ -44,16 +41,16 @@
 }
 
 .operate-result .btn {
-  border: 1px solid #000;
-  border-radius: 18px;
-  padding: 4px 20px;
+  border: 3rpx solid #000;
+  border-radius: 12rpx;
+  padding: 14rpx 42rpx;
   display: inline-block;
-  font-size: 14px;
-  line-height: 1.1rem;
+  font-size: 24rpx;
+  line-height: 24rpx;
 }
 
 .operate-check .it-message {
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 21rpx;
   color: #333;
 }

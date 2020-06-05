@@ -532,7 +532,7 @@ page {
 }
 
 .its-a .it-r {
-  width: 20rpx;
+  width: 42rpx;
   overflow: hidden;
   text-align: right;
   flex: none;
