@@ -31,13 +31,13 @@
   height: 200rpx;
 }
 
-.personal-userinfo .item-right image {
+.personal-userinfo .item-right .img {
   width: 120rpx;
   height: 120rpx;
   border-radius: 100px;
 }
 
-.personal-userinfo .item-nickname {
+ .personal-userinfo .item-nickname {
   height: 62rpx;
   line-height: 62rpx;
 }
@@ -46,12 +46,13 @@
   padding: 5px 0px;
 }
 
-.personal-userinfo .item-isvip image {
+.personal-userinfo .item-isvip .img {
   width: 118rpx;
   height: 30rpx;
 }
 
-.personal-userinfo .item-novip .txt {
+
+ .personal-userinfo .item-novip .txt {
   font-size: 21rpx;
   color: #9d9d9d;
 }
@@ -61,14 +62,15 @@
   line-height: 48rpx;
 }
 
-.personal-userinfo .item-phone image {
+.personal-userinfo .item-phone .img {
   height: 32rpx;
   width: 21rpx;
   float: left;
   display: block;
 }
 
-.personal-userinfo .item-phone text {
+
+.personal-userinfo .item-phone .txt {
   height: 28rpx;
   line-height: 30rpx;
   width: 120rpx;
@@ -115,4 +117,4 @@
   height: 50rpx;
   line-height: 50rpx;
   font-size: 32rpx;
-}
+}  

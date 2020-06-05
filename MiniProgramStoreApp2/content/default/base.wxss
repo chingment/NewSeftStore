@@ -644,13 +644,13 @@ page {
 .tabbar-items .item {
   height: 62rpx;
   line-height: 58rpx;
-  width: 100rpx;
   float: left;
   display: block;
   overflow: hidden;
   background: #fff;
   text-align: center;
   font-size: 32rpx;
+  padding: 0 10rpx;
   z-index: 999;
 }
 

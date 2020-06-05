@@ -3,9 +3,9 @@
 
 <block wx:if="{{tabs.length>1}}">
   <scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{100*tabsSliderIndex}}">
-    <view style="width:{{tabs.length*100}}px;" class="tabbar-items">
+    <view style="width:{{tabs.length*200}}px;" class="tabbar-items">
       <view class="container">
-        <block wx:for-items="{{tabs}}" wx:for-item="item" wx:key="{{index}}">
+        <block wx:for-items="{{tabs}}" wx:for-item="item" wx:key="index">
           <view id="{{index}}" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
             <view class="title">{{item.name}}</view>
             <view class='seleced-bottom'></view>
@@ -18,7 +18,7 @@
 
 
 <swiper class="tabbar-contents" bindchange="swiperSwitchTab" current="{{tabsSliderIndex}}" duration="300" style="height:{{scrollHeight}}px">
-  <block wx:for="{{tabs}}" wx:for-index="index" wx:for-item="tab" wx:key="list">
+  <block wx:for="{{tabs}}" wx:for-index="index" wx:for-item="tab" wx:key="_index">
     <swiper-item class="item">
       <scroll-view scroll-top="{{tab.scrollTop}}" scroll-y="true" data-reply-index="{{index}}" style="height:{{scrollHeight}}px" bindscrolltolower="loadMore" bindscrolltoupper="refesh" bindscroll="scroll">
 

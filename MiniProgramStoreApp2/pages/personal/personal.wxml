@@ -1,133 +1,133 @@
 <scroll-view scroll-y="true" style="height:{{height}}px;">
-  <view class='st-personal'>
-    <view class="container">
-      <view class='personal-userinfo'>
-        <view class='item-left'>
-          <view class="container">
+	<view class='st-personal'>
+		<view class="container">
+			<view class='personal-userinfo'>
+				<view class='item-left'>
+					<view class="container">
 
-            <block wx:if="{{isLogin}}">
-              <view class='item-nickname'>
-                <text>{{userInfo.nickName}}</text>
-              </view>
-              <view wx:if="{{userInfo.isVip}}" class='item-isvip'>
-                <image src='/content/default/images/member.png'></image>
-              </view>
-              <view wx:else class='item-novip'>
-                <text class='txt'>普通用户</text>
-              </view>
-              <view wx:if="{{userInfo.phoneNumber!=null}}" class='item-phone'>
-                <image src='/content/default/images/icon_phone.png'></image>
-                <text>{{userInfo.phoneNumber}}</text>
-              </view>
-            </block>
-            <block wx:else>
-              <view class='item-logintip' bindtap="goLogin">
-                <text>未登陆</text>
-              </view>
-              <view class='item-logingo' bindtap="goLogin">
-                <text class='txt'>点击登录账号</text>
-              </view>
-            </block>
-          </view>
-        </view>
-        <view class='item-right'>
-          <block wx:if="{{isLogin}}">
-            <image src='{{userInfo.avatar}}'></image>
-          </block>
-          <block wx:else>
-            <image src='/content/default/images/avaner_default.png'></image>
-          </block>
+						<block wx:if="{{isLogin}}">
+							<view class='item-nickname'>
+								<text>{{userInfo.nickName}}</text>
+							</view>
+							<view wx:if="{{userInfo.isVip}}" class='item-isvip'>
+								<image class="img" src='/content/default/images/member.png'></image>
+							</view>
+							<view wx:else class='item-novip'>
+								<text class='txt'>普通用户</text>
+							</view>
+							<view wx:if="{{userInfo.phoneNumber!=null}}" class='item-phone'>
+								<image class="img" src='/content/default/images/icon_phone.png'></image>
+								<text class="txt">{{userInfo.phoneNumber}}</text>
+							</view>
+						</block>
+						<block wx:else>
+							<view class='item-logintip' bindtap="goLogin">
+								<text>未登陆</text>
+							</view>
+							<view class='item-logingo' bindtap="goLogin">
+								<text class='txt'>点击登录账号</text>
+							</view>
+						</block>
+					</view>
+				</view>
+				<view class='item-right'>
+					<block wx:if="{{isLogin}}">
+						<image class="img" src='{{userInfo.avatar}}'></image>
+					</block>
+					<block wx:else>
+						<image  class="img" src='/content/default/images/avaner_default.png'></image>
+					</block>
 
-        </view>
-      </view>
-      <view class="col-nav">
-        <view class="container">
-          <view class="col-nav-item" hover-class="none">
-            <view class="item-left">
-              <image src='/content/default/images/col_nav_icon_order.png'></image>
-            </view>
-            <view class="item-middle">
-              <text class="title">我的订单</text>
-            </view>
-            <view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=0000" class='item-right' style="width:100rpx" >
-              <text style="color:#292929">全部</text>
-              <image src='/content/default/images/col_nav_right.png'></image>
-            </view>
-          </view>
-        </view>
-      </view>
-      <view class='personal-orderstatus'>
-        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000" class="item" hover-class="none">
-          <image class='item-img' src='/content/default/images/order_status_waitpay.png'></image>
-          <text class='item-title'>待支付</text>
-        </div>
-        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000" class="item" hover-class="none">
-          <image class='item-img' src='/content/default/images/order_status_pickup.png'></image>
-          <text class='item-title'>待取货</text>
-        </div>
-        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000" class="item" hover-class="none">
-          <image class='item-img' src='/content/default/images/order_status_complete.png'></image>
-          <text class='item-title'>已完成</text>
-        </div>
-        <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000" class="item" hover-class="none">
-          <image class='item-img' src='/content/default/images/order_status_cancel.png'></image>
-          <text class='item-title'>已失效</text>
-        </div>
-      </view>
-  <view class="col-nav">
-    <view class="container">
-      <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
-        <view class="item-left">
-          <image src='/content/default/images/col_nav_icon_coupon.png'></image>
-        </view>
-        <view class="item-middle">
-          <text class="title">我的优惠卷</text>
-        </view>
-        <view class='item-right'>
-          <image src='/content/default/images/col_nav_right.png'></image>
-        </view>
-      </div>
+				</view>
+			</view>
+			<view class="col-nav">
+				<view class="container">
+					<view class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_order.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">我的订单</text>
+						</view>
+						<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=0000" class='item-right' style="width:100rpx">
+							<text style="color:#292929">全部</text>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class='personal-orderstatus'>
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000" class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/order_status_waitpay.png'></image>
+					<text class='item-title'>待支付</text>
+				</div>
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000" class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/order_status_pickup.png'></image>
+					<text class='item-title'>待取货</text>
+				</div>
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000" class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/order_status_complete.png'></image>
+					<text class='item-title'>已完成</text>
+				</div>
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000" class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/order_status_cancel.png'></image>
+					<text class='item-title'>已失效</text>
+				</div>
+			</view>
+			<view class="col-nav">
+				<view class="container">
+					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_coupon.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">我的优惠卷</text>
+						</view>
+						<view class='item-right'>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</div>
 
-      <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item" hover-class="none">
-        <view class="item-left">
-          <image src='/content/default/images/col_nav_icon_personalinfo.png'></image>
-        </view>
-        <view class="item-middle">
-          <text class="title">个人信息</text>
-        </view>
-        <view class='item-right'>
-          <image src='/content/default/images/col_nav_right.png'></image>
-        </view>
-      </div>
+					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_personalinfo.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">个人信息</text>
+						</view>
+						<view class='item-right'>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</div>
 
-      <div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
-        <view class="item-left">
-          <image src='/content/default/images/col_nav_icon_address.png'></image>
-        </view>
-        <view class="item-middle">
-          <text class="title">地址管理</text>
-        </view>
-        <view class='item-right'>
-          <image src='/content/default/images/col_nav_right.png'></image>
-        </view>
-      </div>
+					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_address.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">地址管理</text>
+						</view>
+						<view class='item-right'>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</div>
 
-      <button class="btn-noboder col-nav-item" hover-class="none" open-type="contact">
-        <view class="item-left">
-          <image src='/content/default/images/col_nav_icon_service.png'></image>
-        </view>
-        <view class="item-middle">
-          <text class="title">联系客服</text>
-        </view>
-        <view class='item-right'>
-          <image src='/content/default/images/col_nav_right.png'></image>
-        </view>
-      </button>
+					<button class="btn-noboder col-nav-item" hover-class="none" open-type="contact">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_service.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">联系客服</text>
+						</view>
+						<view class='item-right'>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</button>
 
-    </view>
-  </view>
+				</view>
+			</view>
 
-    </view>
-  </view>
+		</view>
+	</view>
 
 </scroll-view>

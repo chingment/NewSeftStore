@@ -84,7 +84,7 @@
 <view class="line-space"></view>
 
 <block wx:if="{{status==2000}}">
-  <view class="its-a fieldBlock">
+  <view class="its-a fieldBlock pd-com">
     <block wx:for="{{payOption.options}}" wx:key="caller">
       <view class="it">
         <view class="it-l">

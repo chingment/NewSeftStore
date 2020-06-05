@@ -16,7 +16,8 @@ Page({
     specSelectArr: [], //存放被选中的值
     specShopItemInfo: {}, //存放要和选中的值进行匹配的数据
     specSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
-    specBoxArr: {}
+    specBoxArr: {},
+    storeId:null
   },
 
   /**
@@ -25,11 +26,21 @@ Page({
   onLoad: function (options) {
     var _this = this
     var skuId = options.skuId == undefined ? "0" : options.skuId
+    var storeId = options.storeId == undefined ? "" : options.storeId
 
-    //app.changeData("main", { cart: cart })
+    if(storeId==""){
+      storeId=ownRequest.getCurrentStoreId()
+    }
+
+    _this.setData({storeId:storeId})
+
+    var cart={ count:0}
+    if(ownRequest.isLogin()){
+       cart=storeage.getCart()
+    }
 
     apiProduct.details({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: storeId,
       skuId: skuId
     }, {
         success: function (res) {
@@ -71,7 +82,7 @@ Page({
 
             _this.setData({
               productSku: productSku,
-              cart: storeage.getCart(),
+              cart:cart,
               specShopItemInfo:specShopItemInfo,
               specSubIndex:productSku.specIdx.split(',')
             })
@@ -204,7 +215,7 @@ Page({
       productSku.specIdx = arr.specIdx;
       
       apiProduct.skuStockInfo({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: self.data.storeId,
         skuId: arr.skuId
       }, {
           success: function (res) {
