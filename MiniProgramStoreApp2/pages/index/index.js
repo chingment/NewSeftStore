@@ -1,3 +1,4 @@
+const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
@@ -14,6 +15,7 @@ Component({
 
         var _self = this
         _self.setData({
+          singleStore: typeof config.singleStore == undefined?false:config.singleStore ,
           currentStore: newVal.store,
           banner: newVal.banner,
           pdArea: newVal.pdArea

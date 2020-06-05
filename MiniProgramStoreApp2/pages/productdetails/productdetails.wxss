@@ -26,14 +26,15 @@ swiper {
 
 .details-info1 .item-name {
   font-weight: bold;
-  font-size: 38rpx;
-  line-height: 56rpx;
+  font-size: 36rpx;
+  line-height: 42rpx;
+  padding-top: 18rpx;
 }
 
 .details-info1 .item-briefIntro {
   font-size: 28rpx;
-  height: 42rpx;
-  line-height: 42rpx;
+  height: 60rpx;
+  line-height: 60rpx;
 }
 
 .details-info1 .item-price {

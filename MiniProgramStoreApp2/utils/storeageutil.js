@@ -1,3 +1,7 @@
+
+
+const config = require('../config')
+
 const key_productkind = "key_productkind"
 const key_cart = "key_cart"
 const key_accesstoken = "key_accesstoken"
@@ -46,6 +50,15 @@ function setAccessToken(accesstoken) {
 }
 
 function getCurrentStoreId() {
+
+  if( typeof config.storeId != 'undefined'){
+if(config.storeId!=''){
+   return config.storeId
+}
+  }
+
+  console.log("storeId:"+wx.getStorageSync(key_store))
+
   return wx.getStorageSync(key_store) || undefined
 }
 

@@ -97,7 +97,7 @@
 }
 
 .its-blocks .skuname {
-  min-height: 40rpx;
+  min-height: 80rpx;
   max-height:  80rpx;
   line-height: 40rpx;
   font-size: 28rpx;
@@ -115,6 +115,7 @@
   font-size: 32rpx;
   height: 40rpx;
   line-height: 40rpx;
+  color: #f18d00;
 }
 
 .its-blocks .quantity {

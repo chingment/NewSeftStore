@@ -22,7 +22,7 @@ Page({
           if (res.result == 1) {
             _this.setData({
               list: res.data,
-              currentStoreId: ownRequest.getCurrentStoreId()
+              currentStoreId: ownRequest.getCurrentStoreId()==undefined?'':ownRequest.getCurrentStoreId()
             })
           }
         },

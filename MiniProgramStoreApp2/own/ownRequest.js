@@ -53,7 +53,7 @@ function getReturnUrl() {
 
 function isSelectedStore(isGoSelect) {
   var storeId = getCurrentStoreId()
-  if (storeId == "") {
+  if (storeId== undefined|| storeId==null||storeId == "") {
 //    console.log("ownRequest.isSelectedStore->>>当前店铺id为空，未选择店铺")
     isGoSelect = isGoSelect == undefined ? false : isGoSelect
     if (isGoSelect) {
