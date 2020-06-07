@@ -64,6 +64,13 @@ Component({
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
 
+         // 滚动数据配置
+    var searchtips = [
+      "商品搜索",
+      "汽水",
+    ];
+
+    newVal["searchtips"]=searchtips;
         var _self = this
         _self.setData(newVal)
       }

@@ -37,3 +37,47 @@
   text-align: center;
   color: #dbdbdb;
 }
+
+
+
+/* 滚动 */
+
+.searchbox {
+  position: relative;
+  overflow: hidden;
+  height: 80rpx;
+  background-color: white;
+  border-bottom: solid #f8f8f8 1px;
+  padding: 20rpx;
+}
+
+.searchbox-ct{
+  display: flex;
+  background: #dbdbdb;
+  border-radius: 38rpx;
+  height: 80rpx;
+  padding: 0 30rpx;
+}
+.searchbox-icon {
+  align-items: center;
+  display: flex;
+}
+
+.searchbox-tips{
+  flex: 1;
+  padding-left: 15rpx;
+}
+
+.searchbox-tips .swiperitem {
+  height: 100%;
+}
+
+.searchbox-tips .swiperview .wx-swiper-dots {
+  display: none;
+}
+
+.searchbox-tips .swiper-txt {
+  font-size: 30rpx;
+  color: #b0b0b0;
+  line-height: 88rpx;
+}

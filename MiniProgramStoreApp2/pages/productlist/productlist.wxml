@@ -2,11 +2,11 @@
 <template is="showToast" data="{{showToast: showToast}}" />
 
 <block wx:if="{{tabs.length>1}}">
-  <scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{100*tabsSliderIndex}}">
-    <view style="width:{{tabs.length*200}}px;" class="tabbar-items">
+  <scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{80*tabsSliderIndex}}">
+    <view style="width:{{tabs.length*80}}px;" class="tabbar-items">
       <view class="container">
         <block wx:for-items="{{tabs}}" wx:for-item="item" wx:key="index">
-          <view id="{{index}}" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
+          <view id="{{index}}" style="width:80px" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
             <view class="title">{{item.name}}</view>
             <view class='seleced-bottom'></view>
           </view>

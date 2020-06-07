@@ -656,6 +656,8 @@ page {
 
 .tabbar-items .item .title {
   display: block;
+  overflow: hidden;
+  height: 60rpx;
 }
 
 .tabbar-items .item-seleced .title {

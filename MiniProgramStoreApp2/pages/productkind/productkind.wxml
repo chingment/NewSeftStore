@@ -1,47 +1,65 @@
+<view class="searchbox">
+	<view class="searchbox-ct">
+
+   <view class="searchbox-icon" >
+    <image src="/content/default/images/icon_search_box.png" style="width:32px;height:32px;"></image>
+   </view>
+    <view class="searchbox-tips">
+      <swiper class="swiperitem"  autoplay="true" vertical="true" >
+        <block wx:for="{{searchtips}}">
+          <swiper-item>
+            <text class="swiper-txt">{{item}}</text>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+	</view>
+</view>
+
 <scroll-view scroll-y="true" style="height:{{height}}px;">
-  <view class='st-kind'>
-    <scroll-view class='kind-left-navbar' scroll-y="true">
-      <block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">
-        <view class="it {{ tab.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{tabsIndex}}" bindtap="itemClick">{{tab.name}}
-        </view>
-      </block>
-    </scroll-view>
+	<view class='st-kind'>
+		<scroll-view class='kind-left-navbar' scroll-y="true">
+			<block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">
+				<view class="it {{ tab.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{tabsIndex}}" bindtap="itemClick">{{tab.name}}
+				</view>
+			</block>
+		</scroll-view>
 
-    <block wx:for="{{tabs}}" wx:for-index="tabIndex" wx:for-item="tab" wx:key="tabIndex">
-      <scroll-view class='kind-right-content {{tab.selected==true ? "":"hidden" }}' data-reply-index="{{tabIndex}}" scroll-y="true" bindscrolltolower="productLoadMore" bindscrolltoupper="productRefesh">
+		<block wx:for="{{tabs}}" wx:for-index="tabIndex" wx:for-item="tab" wx:key="tabIndex">
+			<scroll-view class='kind-right-content {{tab.selected==true ? "":"hidden" }}' data-reply-index="{{tabIndex}}" scroll-y="true" bindscrolltolower="productLoadMore" bindscrolltoupper="productRefesh">
 
-        <view class="prd-list-2">
-          <block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
-            <view class='it'>
-              <view class="it-left">
-                <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
-                  <view wx:if="{{item.isOffSell}}" class="isOffSell-box">
-                        <view class="isOffSell-tip">已下架</view>
-                 </view>
-                  <image class="img" src="{{item.mainImgUrl}}"></image>
-                </navigator>
-              </view>
-              <view class="it-right">
-                <text class="name font-gray">{{item.name}}</text>
-                <text class="briefInfo font-gray">{{item.briefDes}}</text>
-                <view class="area2">
-                  <view class="price">
-                    <text class="saleprice font-black">{{item.salePrice}}</text>
-                    <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
-                  </view>
-                  <view class="operate">
-                    <image  wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </block>
-        </view>
+				<view class="prd-list-2">
+					<block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
+						<view class='it'>
+							<view class="it-left">
+								<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+									<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+										<view class="isOffSell-tip">已下架</view>
+									</view>
+									<image class="img" src="{{item.mainImgUrl}}"></image>
+								</navigator>
+							</view>
+							<view class="it-right">
+								<text class="name font-gray">{{item.name}}</text>
+								<text class="briefInfo font-gray">{{item.briefDes}}</text>
+								<view class="area2">
+									<view class="price">
+										<text class="saleprice font-black">{{item.salePrice}}</text>
+										<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
+									</view>
+									<view class="operate">
+										<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+									</view>
+								</view>
+							</view>
+						</view>
+					</block>
+				</view>
 
-        
-        <view class="nomore-tip" wx:if="{{tab.list.pageCount-1==tab.list.pageIndex}}" > 没有更多商品了哟......</view>
 
-      </scroll-view>
-    </block>
-  </view>
+				<view class="nomore-tip" wx:if="{{tab.list.pageCount-1==tab.list.pageIndex}}"> 没有更多商品了哟......</view>
+
+			</scroll-view>
+		</block>
+	</view>
 </scroll-view>
