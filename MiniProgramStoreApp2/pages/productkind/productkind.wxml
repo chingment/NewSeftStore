@@ -1,8 +1,7 @@
-<view class="searchbox">
+<view  id="searchbox" class="searchbox cl1" >
 	<view class="searchbox-ct">
-
    <view class="searchbox-icon" >
-    <image src="/content/default/images/icon_search_box.png" style="width:32px;height:32px;"></image>
+    <image class="img" src="/content/default/images/icon_search_box.png" ></image>
    </view>
     <view class="searchbox-tips">
       <swiper class="swiperitem"  autoplay="true" vertical="true" >
@@ -16,7 +15,7 @@
 	</view>
 </view>
 
-<scroll-view scroll-y="true" style="height:{{height}}px;">
+<scroll-view scroll-y="true" style="height:{{scrollHeight}}px;">
 	<view class='st-kind'>
 		<scroll-view class='kind-left-navbar' scroll-y="true">
 			<block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">

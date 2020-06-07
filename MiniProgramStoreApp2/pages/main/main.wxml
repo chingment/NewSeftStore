@@ -1,17 +1,18 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
+
 <view class='main-tabbar'>
   <view class="content" style="height:{{tabBarContentHeight}}px;overflow: hidden;">
     <view class="ct">
       <view class="its">
-          <page-index initdata="{{index}}" height="{{tabBarContentHeight}}" class='it {{tabBar[0].selected==false?"hidden":""}}' data-reply-index="{{0}}" data-reply-name="{{tabBar[0].name}}"></page-index>
-          <page-productkind initdata="{{productKind}}" height="{{tabBarContentHeight}}" class='it {{tabBar[1].selected==false?"hidden":""}}' data-reply-index="{{1}}" data-reply-name="{{tabBar[1].name}}"></page-productkind>
-          <page-cart initdata="{{cart}}" height="{{tabBarContentHeight}}" style="overflow:hidden" class='it {{tabBar[2].selected==false?"hidden":""}}' data-reply-index="{{2}}" data-reply-name="{{tabBar[2].name}}"></page-cart>
-          <page-personal initdata="{{personal}}" height="{{tabBarContentHeight}}" class='it {{tabBar[3].selected==false?"hidden":""}}' data-reply-index="{{3}}" data-reply-name="{{tabBar[3].name}}"></page-personal>
+          <page-index id="{{tabBar[0].id}}" initdata="{{index}}" height="{{tabBarContentHeight}}" class='it {{tabBar[0].selected==false?"hidden":""}}' data-reply-index="{{0}}" data-reply-name="{{tabBar[0].name}}"></page-index>
+          <page-productkind id="{{tabBar[1].id}}"  initdata="{{productKind}}" height="{{tabBarContentHeight}}" class='it {{tabBar[1].selected==false?"hidden":""}}' data-reply-index="{{1}}" data-reply-name="{{tabBar[1].name}}"></page-productkind>
+          <page-cart id="{{tabBar[2].id}}" initdata="{{cart}}" height="{{tabBarContentHeight}}" style="overflow:hidden" class='it {{tabBar[2].selected==false?"hidden":""}}' data-reply-index="{{2}}" data-reply-name="{{tabBar[2].name}}"></page-cart>
+          <page-personal id="{{tabBar[3].id}}" initdata="{{personal}}" height="{{tabBarContentHeight}}" class='it {{tabBar[3].selected==false?"hidden":""}}' data-reply-index="{{3}}" data-reply-name="{{tabBar[3].name}}"></page-personal>
       </view>
     </view>
   </view>
-  <view class="main-tabbar-nav nav">
+  <view class="main-tabbar-nav nav cl1">
     <view class="ct">
       <view class="its">
         <block wx:for="{{tabBar}}" wx:for-index="index" wx:for-item="item" wx:key="tabBar">

@@ -63,7 +63,7 @@ Component({
     initdata: {
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
-
+        var _self = this
          // 滚动数据配置
     var searchtips = [
       "商品搜索",
@@ -71,7 +71,6 @@ Component({
     ];
 
     newVal["searchtips"]=searchtips;
-        var _self = this
         _self.setData(newVal)
       }
     },
@@ -141,6 +140,29 @@ Component({
 
       console.log("productLoadMore.index:" + index)
       getList(_this)
+    },
+    onShow(){
+      console.log("onShow")
+
+
+      var _this=this;
+
+      setTimeout(function () {
+      const query = wx.createSelectorQuery().in(_this)
+      query.select('.searchbox').boundingClientRect(function (rect) {
+        var height=_this.data.height-rect.height
+        console.log("_self.lenght1:"+JSON.stringify(rect))
+        
+        console.log("_self.lenght2:"+_this.data.height)
+        //var height=_self.height-rect.length;
+        //console.log("rect.lenght:"+height)
+  
+        _this.data["scrollHeight"]=height
+        _this.setData(_this.data)
+
+    }).exec()
+      },1)
+
     }
   }
 })

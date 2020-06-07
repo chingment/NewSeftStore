@@ -40,6 +40,9 @@ Component({
       wx.navigateTo({
         url: url
       })
+    },
+    onShow(){
+      console.log("onShow")
     }
   }
 })

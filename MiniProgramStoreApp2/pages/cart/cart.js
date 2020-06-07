@@ -223,6 +223,9 @@ Component({
     },
     goLogin: function (e) {
       ownRequest.goLogin()
+    },
+    onShow(){
+      console.log("onShow")
     }
   }
 })

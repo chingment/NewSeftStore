@@ -75,6 +75,9 @@ Component({
         })
       }
 
+    },
+    onShow(){
+      console.log("onShow")
     }
   }
 })

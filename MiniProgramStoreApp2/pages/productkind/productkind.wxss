@@ -6,11 +6,10 @@
 }
 
 .kind-left-navbar {
-
   width: 200rpx;
   height: 100%;
-  font-size: 32rpx;
-  border-right: 1px #dbdbdb solid;
+  font-size: 28rpx;
+  background: #F0F0F5;
 }
 
 .kind-left-navbar .it {
@@ -25,7 +24,8 @@
 
 .kind-left-navbar-selected {
 
-  font-size: 34rpx;
+  font-size: 30rpx;
+  background: #fff;
 }
 
 .kind-right-content {
@@ -45,22 +45,28 @@
 .searchbox {
   position: relative;
   overflow: hidden;
-  height: 80rpx;
+  height: 60rpx;
   background-color: white;
-  border-bottom: solid #f8f8f8 1px;
   padding: 20rpx;
+  border-bottom: 3rpx solid #F0F0F5;
+  border-top: 3rpx solid #F0F0F5;
 }
 
 .searchbox-ct{
   display: flex;
-  background: #dbdbdb;
+  background: #F0F0F5;
   border-radius: 38rpx;
-  height: 80rpx;
+  height: 60rpx;
   padding: 0 30rpx;
 }
 .searchbox-icon {
   align-items: center;
   display: flex;
+}
+
+.searchbox-icon .img{
+width:42rpx;
+height:42rpx;
 }
 
 .searchbox-tips{
@@ -77,7 +83,7 @@
 }
 
 .searchbox-tips .swiper-txt {
-  font-size: 30rpx;
+  font-size: 24rpx;
   color: #b0b0b0;
-  line-height: 88rpx;
+  line-height: 60rpx;
 }

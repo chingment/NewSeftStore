@@ -16,6 +16,7 @@ Page({
     tabBarContentHeight: 0,
     name: "index",
     tabBar: [{
+      id:"cp_index",
       name: "index",
       pagePath: "/pages/index/index.wxml",
       iconPath: "/content/default/images/home.png",
@@ -25,6 +26,7 @@ Page({
       selected: true,
       number: 0
     }, {
+      id:"cp_productkind",
       name: "productkind",
       pagePath: "/pages/productkind/productkind.wxml",
       iconPath: "/content/default/images/kind.png",
@@ -34,6 +36,7 @@ Page({
       selected: false,
       number: 0
     }, {
+      id:"cp_cart",
       name: "cart",
       pagePath: "/pages/cart/cart.wxml",
       iconPath: "/content/default/images/cart.png",
@@ -43,6 +46,7 @@ Page({
       selected: false,
       number: 0
     }, {
+      id:"cp_personal",
       name: "personal",
       pagePath: "/pages/personal/personal.wxml",
       iconPath: "/content/default/images/personal.png",
@@ -132,6 +136,24 @@ Page({
         });
     }).exec() 
 
+  //   wx.createSelectorQuery().select('.searchbox').boundingClientRect(function (rect) {
+  //     console.log("_self."+JSON.stringify(rect))
+  // }).exec() 
+
+//     　setTimeout(function () {
+//     var query= _self.selectComponent("#cp_productkind").createSelectorQuery()
+//     query.select('.searchbox').boundingClientRect(function (rect) {
+//       console.log("_self.lenght1:"+JSON.stringify(rect))
+//     }
+//       //console.log("_self.lenght2:"+rect[0].height)
+//       //var height=_self.height-rect.length;
+//       //console.log("rect.lenght:"+height)
+
+//       //newVal["contentHeight"]=height
+//   ).exec()
+// }, 3000)
+  
+
   },
   onShow: function () {
     if (!ownRequest.isSelectedStore(true)) {
@@ -143,12 +165,16 @@ Page({
     var tabBar = _self.data.tabBar;
     for (var i = 0; i < tabBar.length; i++) {
       if (i == index) {
+
         tabBar[i].selected = true
         //设置页面标题
         wx.setNavigationBarTitle({
           title: tabBar[i].navTitle
         })
-
+        
+        let cp = this.selectComponent('#'+ tabBar[i].id);
+        cp.onShow()
+        
         storeage.setMainTabbarIndex(index)
       } else {
         tabBar[i].selected = false
@@ -162,5 +188,6 @@ Page({
     var _self = this
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     this.setMainTabBar(index)
-  }
+  },
+  
 })
