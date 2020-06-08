@@ -119,7 +119,7 @@ Component({
     },
     searchClick:function(e){
       wx.navigateTo({
-        url: '/pages/productsearch/productsearch'
+        url: '/pages/search/search'
       })
     },
     productLoadMore: function(e) {

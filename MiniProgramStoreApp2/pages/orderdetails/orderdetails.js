@@ -29,8 +29,6 @@ Page({
     var _this = this
     orderId = options.id == undefined ? "" : options.id
 
-    //app.changeData("main", { cart: cart })
-
     apiOrder.details({
       id: orderId
     }, {

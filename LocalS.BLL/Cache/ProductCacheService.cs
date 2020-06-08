@@ -183,8 +183,10 @@ namespace LocalS.BLL
 
         public List<ProductSkuInfoBySearchModel> Search(string merchId, string type, string key)
         {
-
             List<ProductSkuInfoBySearchModel> searchModels = new List<ProductSkuInfoBySearchModel>();
+
+            if (string.IsNullOrEmpty(key))
+                return searchModels;
 
             List<RedisValue> productSkuIds = new List<RedisValue>();
 

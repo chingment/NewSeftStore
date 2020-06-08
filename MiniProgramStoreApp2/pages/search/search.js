@@ -1,4 +1,7 @@
-// pages/productsearch/productsearch.js
+const apiSearch = require('../../api/search.js')
+const storeage = require('../../utils/storeageutil.js')
+const ownRequest = require('../../own/ownRequest.js')
+
 Page({
 
   /**
@@ -82,5 +85,20 @@ Page({
     wx.navigateBack({
       complete: (res) => {},
     })
+  },
+  bindKeyInput: function (e) {
+    var val = e.detail.value
+    console.log(val)
+
+    apiSearch.tobeSearch({
+      storeId:ownRequest.getCurrentStoreId(),
+      key: val
+    }, {
+      success: function(res) {
+       
+      },
+      fail: function() {}
+    })
+
   }
 })

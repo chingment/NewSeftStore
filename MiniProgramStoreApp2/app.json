@@ -5,7 +5,6 @@
     "pages/store/store",
     "pages/productlist/productlist",
     "pages/productdetails/productdetails",
-    "pages/productsearch/productsearch",
     "pages/deliveryaddress/deliveryaddress",
     "pages/deliveryaddressedit/deliveryaddressedit",
     "pages/orderconfirm/orderconfirm",
@@ -17,7 +16,8 @@
     "pages/notopen/notopen",
     "pages/test/test",
     "pages/orderdetails/orderdetails",
-    "pages/testsku/testsku"
+    "pages/testsku/testsku",
+    "pages/search/search"
   ],
   "window": {
     "backgroundTextStyle": "light",

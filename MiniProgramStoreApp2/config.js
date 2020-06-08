@@ -36,7 +36,8 @@ var config = {
     orderCancle: `${host}/Order/Cancle`,
     orderDetails: `${host}/Order/Details`,
     kindPageData: `${host}/Kind/PageData`,
-    personalPageData: `${host}/Personal/PageData`
+    personalPageData: `${host}/Personal/PageData`,
+    tobeSearch: `${host}/Search/TobeSearch`,
   }
 
 };

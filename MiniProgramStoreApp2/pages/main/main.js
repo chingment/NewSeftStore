@@ -81,10 +81,6 @@ Page({
       sumPriceBySelected: 0
     }
   },
-  changeData: function (data) {
-    var _self = this;
-    _self.setData(data)
-  },
   onLoad: function (options) {
     var _self = this;
     console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)

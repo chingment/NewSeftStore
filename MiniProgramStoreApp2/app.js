@@ -1,5 +1,3 @@
-const storeage = require('/utils/storeageutil.js')
-
 //app.js
 App({
   onLaunch: function() {
@@ -47,14 +45,6 @@ App({
     userInfo: null,
     mainTabBarIndex:0
   },
-  changeData: function(tag, data) {
-    var pages = getCurrentPages();
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i].data.tag == tag) {
-        pages[i].changeData(data)
-      }
-    }
-  },
   mainTabBarSetNumber(index, num) {
     var pages = getCurrentPages();
     for (var i = 0; i < pages.length; i++) {
@@ -90,7 +80,6 @@ App({
             }, 1)
 
             _this.globalData.mainTabBarIndex=index
-           // storeage.setMainTabbarIndex(index)
             
           } else {
             tabBar[j].selected = false
