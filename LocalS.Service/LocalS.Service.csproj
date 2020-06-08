@@ -272,6 +272,7 @@
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RetPersonalPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetProductKindPageData.cs" />
@@ -291,6 +292,8 @@
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildPayOptions.cs" />
     <Compile Include="Api\StoreApp\RModels\RupPersonalPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductKindPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupSearchTobeSearch.cs" />
+    <Compile Include="Api\StoreApp\SearchService.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />
     <Compile Include="Api\StoreApp\CouponService.cs" />

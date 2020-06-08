@@ -16,7 +16,7 @@ Page({
     tabBarContentHeight: 0,
     name: "index",
     tabBar: [{
-      id:"cp_index",
+      id: "cp_index",
       name: "index",
       pagePath: "/pages/index/index.wxml",
       iconPath: "/content/default/images/home.png",
@@ -26,7 +26,7 @@ Page({
       selected: true,
       number: 0
     }, {
-      id:"cp_productkind",
+      id: "cp_productkind",
       name: "productkind",
       pagePath: "/pages/productkind/productkind.wxml",
       iconPath: "/content/default/images/kind.png",
@@ -36,7 +36,7 @@ Page({
       selected: false,
       number: 0
     }, {
-      id:"cp_cart",
+      id: "cp_cart",
       name: "cart",
       pagePath: "/pages/cart/cart.wxml",
       iconPath: "/content/default/images/cart.png",
@@ -46,7 +46,7 @@ Page({
       selected: false,
       number: 0
     }, {
-      id:"cp_personal",
+      id: "cp_personal",
       name: "personal",
       pagePath: "/pages/personal/personal.wxml",
       iconPath: "/content/default/images/personal.png",
@@ -57,8 +57,8 @@ Page({
       number: 0
     }],
     index: {
-      store:{
-        name:""
+      store: {
+        name: ""
       },
       banner: {
         imgs: [],
@@ -87,72 +87,50 @@ Page({
   },
   onLoad: function (options) {
     var _self = this;
-    console.log("getMainTabbarIndex():" +storeage.getMainTabbarIndex())
+    console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
-    
 
-    wx.setNavigationBarTitle({
-      title: _self.data.tabBar[0].navTitle
-    })
-
-    // this.setMainTabBar(storeage.getMainTabbarIndex())
+    app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
 
     apiGlobal.dataSet({
       storeId: ownRequest.getCurrentStoreId(),
       datetime: util.formatTime(new Date())
     }, {
-        success: function (res) {
-          if (res.result == 1) {
-            var index = res.data.index
-            var productKind = res.data.productKind
-            var cart = res.data.cart
-            var personal = res.data.personal
+      success: function (res) {
+        if (res.result == 1) {
+          var index = res.data.index
+          var productKind = res.data.productKind
+          var cart = res.data.cart
+          var personal = res.data.personal
 
-            if (personal.userInfo== null) {
-              storeage.setAccessToken(null)
-            }
-
-            _self.setData({
-              isLogin: ownRequest.isLogin(),
-              index: index,
-              productKind: productKind,
-              cart: cart,
-              personal: personal
-            })
-
-            storeage.setProductKind(productKind)
-            storeage.setCart(cart)
+          if (personal.userInfo == null) {
+            storeage.setAccessToken(null)
           }
-        },
-        fail: function () { }
-      })
 
-      wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
-        var wHeight = wx.getSystemInfoSync().windowHeight;
-        _self.setData({
-          tabBarContentHeight: wHeight - rect[0].height
-        });
-    }).exec() 
+          _self.setData({
+            isLogin: ownRequest.isLogin(),
+            index: index,
+            productKind: productKind,
+            cart: cart,
+            personal: personal
+          })
 
-  //   wx.createSelectorQuery().select('.searchbox').boundingClientRect(function (rect) {
-  //     console.log("_self."+JSON.stringify(rect))
-  // }).exec() 
+          storeage.setProductKind(productKind)
+          storeage.setCart(cart)
+        }
+      },
+      fail: function () { }
+    })
 
-//     　setTimeout(function () {
-//     var query= _self.selectComponent("#cp_productkind").createSelectorQuery()
-//     query.select('.searchbox').boundingClientRect(function (rect) {
-//       console.log("_self.lenght1:"+JSON.stringify(rect))
-//     }
-//       //console.log("_self.lenght2:"+rect[0].height)
-//       //var height=_self.height-rect.length;
-//       //console.log("rect.lenght:"+height)
+    wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
+      var wHeight = wx.getSystemInfoSync().windowHeight;
+      _self.setData({
+        tabBarContentHeight: wHeight - rect[0].height
+      });
+    }).exec()
 
-//       //newVal["contentHeight"]=height
-//   ).exec()
-// }, 3000)
-  
 
   },
   onShow: function () {
@@ -160,34 +138,10 @@ Page({
       return
     }
   },
-  setMainTabBar:function(index){
-    var _self = this
-    var tabBar = _self.data.tabBar;
-    for (var i = 0; i < tabBar.length; i++) {
-      if (i == index) {
-
-        tabBar[i].selected = true
-        //设置页面标题
-        wx.setNavigationBarTitle({
-          title: tabBar[i].navTitle
-        })
-        
-        let cp = this.selectComponent('#'+ tabBar[i].id);
-        cp.onShow()
-        
-        storeage.setMainTabbarIndex(index)
-      } else {
-        tabBar[i].selected = false
-      }
-    }
-    this.setData({
-      tabBar: tabBar
-    })
-  },
   mainTabBarItemClick(e) {
     var _self = this
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
-    this.setMainTabBar(index)
+    app.mainTabBarSwitch(index)
   },
-  
+
 })

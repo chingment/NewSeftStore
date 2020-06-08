@@ -225,7 +225,7 @@ Component({
       ownRequest.goLogin()
     },
     onShow(){
-      console.log("onShow")
+      console.log("cart.onShow")
     }
   }
 })

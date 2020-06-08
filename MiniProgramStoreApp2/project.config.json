@@ -84,6 +84,13 @@
 					"pathName": "pages/testsku/testsku",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "商品搜索",
+					"pathName": "pages/productsearch/productsearch",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

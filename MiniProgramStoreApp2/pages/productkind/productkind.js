@@ -67,7 +67,7 @@ Component({
          // 滚动数据配置
     var searchtips = [
       "商品搜索",
-      "汽水",
+      "热销商品",
     ];
 
     newVal["searchtips"]=searchtips;
@@ -117,6 +117,11 @@ Component({
           fail: function () { }
         })
     },
+    searchClick:function(e){
+      wx.navigateTo({
+        url: '/pages/productsearch/productsearch'
+      })
+    },
     productLoadMore: function(e) {
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
@@ -142,16 +147,19 @@ Component({
       getList(_this)
     },
     onShow(){
-      console.log("onShow")
+      console.log("productKind.onShow")
 
 
       var _this=this;
 
-      setTimeout(function () {
+  //    setTimeout(function () {
       const query = wx.createSelectorQuery().in(_this)
       query.select('.searchbox').boundingClientRect(function (rect) {
-        var height=_this.data.height-rect.height
+
         console.log("_self.lenght1:"+JSON.stringify(rect))
+
+        var height=_this.data.height-rect.height
+     
         
         console.log("_self.lenght2:"+_this.data.height)
         //var height=_self.height-rect.length;
@@ -161,7 +169,7 @@ Component({
         _this.setData(_this.data)
 
     }).exec()
-      },1)
+     // },1)
 
     }
   }

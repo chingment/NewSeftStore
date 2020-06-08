@@ -95,6 +95,14 @@ namespace LocalS.Service.Api.StoreApp
                 return new OperateService();
             }
         }
-  
+
+        public static SearchService Search
+        {
+            get
+            {
+                return new SearchService();
+            }
+        }
+
     }
 }

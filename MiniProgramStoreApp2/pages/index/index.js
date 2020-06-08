@@ -77,7 +77,7 @@ Component({
 
     },
     onShow(){
-      console.log("onShow")
+      console.log("index.onShow")
     }
   }
 })

@@ -1,0 +1,76 @@
+/* 自定义顶部栏高度 */
+.nav {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.nav-ct {
+  display: flex;
+}
+
+.nav-goback {
+  align-items: center;
+  display: flex;
+  padding-left: 20rpx;
+  width: 50rpx;
+}
+
+.nav-goback .img {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.nav-searchbox{
+ align-items: center;
+ display: flex;
+ width: 60%;
+}
+
+.searchbox{
+  display: flex;
+  background: #F0F0F5;
+  border-radius: 38rpx;
+  height: 58rpx;
+  padding: 0 30rpx;
+  width: 100%;
+}
+
+.searchbox-icon {
+  align-items: center;
+  display: flex;
+}
+
+.searchbox-icon .img{
+width:42rpx;
+height:42rpx;
+}
+
+.searchbox-ipt{
+  flex: 1;
+  padding-left: 15rpx;
+}
+
+.searchbox-ipt .swiperitem {
+  height: 100%;
+}
+
+.searchbox-ipt .swiperview .wx-swiper-dots {
+  display: none;
+}
+
+.searchbox-ipt .swiper-txt {
+  font-size: 24rpx;
+  color: #b0b0b0;
+  line-height: 60rpx;
+}
+
+.searchbox-ipt .ipt {
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+  letter-spacing: 0px;
+}

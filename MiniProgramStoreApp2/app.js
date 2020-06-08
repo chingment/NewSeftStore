@@ -1,3 +1,5 @@
+const storeage = require('/utils/storeageutil.js')
+
 //app.js
 App({
   onLaunch: function() {
@@ -42,7 +44,8 @@ App({
     //console.log("App.onShow")
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    mainTabBarIndex:0
   },
   changeData: function(tag, data) {
     var pages = getCurrentPages();
@@ -64,6 +67,7 @@ App({
     }
   },
   mainTabBarSwitch: function(index) {
+    var _this=this
     var pages = getCurrentPages();
     var isHasMain=false;
     for (var i = 0; i < pages.length; i++) {
@@ -73,6 +77,7 @@ App({
           delta: pages.length
         })
         var tabBar = pages[i].data.tabBar;
+      
         for (var j = 0; j < tabBar.length; j++) {
           if (j == index) {
             tabBar[j].selected = true
@@ -81,7 +86,12 @@ App({
               wx.setNavigationBarTitle({
                 title: s.navTitle
               })
-            }, 1000)
+              
+            }, 1)
+
+            _this.globalData.mainTabBarIndex=index
+           // storeage.setMainTabbarIndex(index)
+            
           } else {
             tabBar[j].selected = false
           }
@@ -89,6 +99,10 @@ App({
         pages[i].setData({
           tabBar: tabBar
         })
+
+        
+        let cp = pages[i].selectComponent('#' + tabBar[index].id);
+        cp.onShow()
       }
     }
 

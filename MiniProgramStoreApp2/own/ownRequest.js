@@ -46,7 +46,7 @@ function getReturnUrl() {
     }
     url = url.substring(0, url.length - 1)
   }
-  // console.log("ownRequest.getReturnUrl->>>" + url)
+  console.log("ownRequest.getReturnUrl->>>" + url)
   return url;
 }
 

@@ -5,6 +5,7 @@
     "pages/store/store",
     "pages/productlist/productlist",
     "pages/productdetails/productdetails",
+    "pages/productsearch/productsearch",
     "pages/deliveryaddress/deliveryaddress",
     "pages/deliveryaddressedit/deliveryaddressedit",
     "pages/orderconfirm/orderconfirm",

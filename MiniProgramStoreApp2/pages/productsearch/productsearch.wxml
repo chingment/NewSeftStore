@@ -1,0 +1,27 @@
+<view>
+	<view class='nav' style='height:{{navH}}px'>
+		<view class="nav-ct" style='margin-top:{{statusBarHeight}}px;height:{{navH-statusBarHeight}}px'>
+			<view class="nav-goback" bindtap="navGoBackClick"  >
+				<image class="img" src="/content/default/images/arrow_navback.png"></image>
+			</view>
+			<view class='nav-searchbox'>
+
+        <view class="searchbox" >
+				<view class="searchbox-icon">
+					<image class="img" src="/content/default/images/icon_search_box.png"></image>
+				</view>
+				<view class="searchbox-ipt">
+					<input class="ipt" placeholder="搜索"  />
+				</view>
+      </view>
+
+
+			</view>
+		</view>
+	</view>
+	<scroll-view style='height:calc(100vh - {{navH}}px)' scroll-y>
+		<view>
+			<view>当前位置信息：</view>
+		</view>
+	</scroll-view>
+</view>

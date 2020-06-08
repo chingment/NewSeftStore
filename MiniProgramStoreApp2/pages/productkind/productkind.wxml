@@ -1,11 +1,11 @@
-<view  id="searchbox" class="searchbox cl1" >
+<view  id="searchbox" class="searchbox cl1" bindtap="searchClick" >
 	<view class="searchbox-ct">
    <view class="searchbox-icon" >
     <image class="img" src="/content/default/images/icon_search_box.png" ></image>
    </view>
     <view class="searchbox-tips">
       <swiper class="swiperitem"  autoplay="true" vertical="true" >
-        <block wx:for="{{searchtips}}">
+        <block wx:for="{{searchtips}}"  wx:key="index" >
           <swiper-item>
             <text class="swiper-txt">{{item}}</text>
           </swiper-item>

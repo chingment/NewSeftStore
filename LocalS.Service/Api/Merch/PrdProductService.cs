@@ -375,6 +375,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品图片不能为空");
             }
 
+            //先删除缓存
+
+            CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
@@ -484,8 +488,6 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
-
                 var sellChannelStocks = (from m in CurrentDb.SellChannelStock where m.MerchId == merchId && m.PrdProductId == rop.Id select new { m.StoreId, m.SellChannelRefId, m.PrdProductSkuId }).Distinct();
 
                 foreach (var sellChannelStock in sellChannelStocks)
