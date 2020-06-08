@@ -1,27 +1,47 @@
 <view>
 	<view class='nav' style='height:{{navH}}px'>
 		<view class="nav-ct" style='margin-top:{{statusBarHeight}}px;height:{{navH-statusBarHeight}}px'>
-			<view class="nav-goback" bindtap="navGoBackClick"  >
+			<view class="nav-goback" bindtap="navGoBackClick">
 				<image class="img" src="/content/default/images/arrow_navback.png"></image>
 			</view>
 			<view class='nav-searchbox'>
 
-        <view class="searchbox" >
-				<view class="searchbox-icon">
-					<image class="img" src="/content/default/images/icon_search_box.png"></image>
+				<view class="searchbox">
+					<view class="searchbox-icon">
+						<image class="img" src="/content/default/images/icon_search_box.png"></image>
+					</view>
+					<view class="searchbox-ipt">
+						<input class="ipt" bindinput="bindKeyInput" placeholder="搜索" />
+					</view>
 				</view>
-				<view class="searchbox-ipt">
-					<input class="ipt" bindinput="bindKeyInput" placeholder="搜索"  />
-				</view>
-      </view>
-
 
 			</view>
 		</view>
 	</view>
 	<scroll-view style='height:calc(100vh - {{navH}}px)' scroll-y>
-		<view>
-			<view>当前位置信息：</view>
+
+		<view class="pd-com">
+			<view class="its-a">
+				<block wx:for="{{searchResult.productSkus}}" wx:for-item="item" wx:key="index">
+					<view class="it">
+						<view class="it-l hide">
+							<view class="icon">
+								<image class="img" src='/content/default/images/list_icon_withdraw.png'></image>
+							</view>
+						</view>
+						<view class="it-m">
+							<view class="it-ml">
+								<text class="txt-search">{{item.name}}</text>
+							</view>
+						</view>
+						<view class="it-r">
+							<view class='icon'>
+								<image class="img-nav-left-top" src='/content/default/images/arrow_left_top.png'></image>
+							</view>
+						</view>
+					</view>
+				</block>
+			</view>
 		</view>
 	</scroll-view>
 </view>

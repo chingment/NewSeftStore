@@ -551,6 +551,11 @@ page {
   height: 18rpx;
 }
 
+.its-a .it-r .icon .img-nav-left-top {
+  width: 22rpx;
+  height: 22rpx;
+}
+
 .its-a .it-r .icon .img-nav-edit {
   width: 42rpx;
   height: 42rpx;
@@ -570,6 +575,22 @@ page {
   -webkit-box-orient: vertical;
   font-size: 30rpx;
 }
+
+.its-a .it-ml .txt-search{
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: left;
+  display: block;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  font-size: 24rpx;
+  
+}
+
 
 .its-a .it-selected .it-ml .txt-h1 {
   color: #f18d00;

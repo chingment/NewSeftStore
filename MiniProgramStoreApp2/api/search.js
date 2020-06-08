@@ -6,6 +6,7 @@ function tobeSearch(urlParams, requestHandler) {
   lumos.getJson({
     url: config.apiUrl.tobeSearch,
     urlParams: urlParams,
+    isShowLoading:false,
     success: function (res) {
       requestHandler.success(res)
     }

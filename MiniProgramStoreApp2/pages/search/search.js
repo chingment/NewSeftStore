@@ -8,7 +8,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    navH:40
+    navH:40,
+    statusBarHeight:0,
+    searchResult:{
+      productSkus:[]
+    }
   },
 
   /**
@@ -19,13 +23,13 @@ Page({
     wx.getSystemInfo({
       success: res => {
         //导航高度
-        var statusBarHeight=res.statusBarHeight;
-        var navHeight = statusBarHeight + 46;
+        var statusBarHeight=res.statusBarHeight
+        var navHeight = statusBarHeight + 46
      
-        _this.setData({
-           statusBarHeight:statusBarHeight, 
-           navH:navHeight
-          })
+        _this.data.statusBarHeight=statusBarHeight
+        _this.data.navH=navHeight
+
+        _this.setData( _this.data)
       }, fail(err) {
         console.log(err);
       }
@@ -87,6 +91,7 @@ Page({
     })
   },
   bindKeyInput: function (e) {
+    var _this=this
     var val = e.detail.value
     console.log(val)
 
@@ -95,7 +100,10 @@ Page({
       key: val
     }, {
       success: function(res) {
-       
+        if (res.result == 1) {
+          _this.data.searchResult=res.data
+          _this.setData(_this.data)
+        }
       },
       fail: function() {}
     })
