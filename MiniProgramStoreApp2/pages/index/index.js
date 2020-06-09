@@ -76,8 +76,21 @@ Component({
       }
 
     },
+    goSelectStore:function(e){
+ 
+      var _this=this
+
+      if(_this.data.singleStore)
+       return
+
+      wx.navigateTo({
+        url: '/pages/store/store',
+      })
+    },
     onShow(){
       console.log("index.onShow")
+
+
     }
   }
 })

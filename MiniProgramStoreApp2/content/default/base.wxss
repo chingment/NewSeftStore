@@ -778,3 +778,28 @@ page {
   text-align: center;
   line-height: 21rpx;
 }
+
+.radio-grp{
+ padding: 10rpx 0;
+ display: flex;
+}
+
+.radio-item{
+  display: flex;
+  align-items: center;
+  float: left
+}
+
+.radio-item:first-child{
+  margin-right: 12rpx;
+}
+
+.radio-item .img{
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 10rpx;
+}
+
+.radio-item .txt{
+  font-size: 28rpx;
+}

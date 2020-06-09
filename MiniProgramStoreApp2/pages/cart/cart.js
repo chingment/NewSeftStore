@@ -14,7 +14,7 @@ Component({
       observer: function (newVal, oldVal, changedPath) {
         var _this = this
         _this.setData({
-          scrollHeight:500,
+          scrollHeight: 500,
           isLogin: ownRequest.isLogin(),
           blocks: newVal.blocks,
           count: newVal.count,
@@ -65,18 +65,18 @@ Component({
           operate: operate,
           productSkus: operateProductSkus
         }, {
-            success: function (res) {
-              if (res.result == 1) {
-                
-              }
-              else {
-                toast.show({
-                  title: res.message
-                })
-              }
-            },
-            fail: function () { }
-          })
+          success: function (res) {
+            if (res.result == 1) {
+
+            }
+            else {
+              toast.show({
+                title: res.message
+              })
+            }
+          },
+          fail: function () { }
+        })
       }
 
       if (operate == 4) {
@@ -94,7 +94,7 @@ Component({
       } else {
         _operate()
       }
-    },1000),
+    }, 1000),
     immeBuy: function (e) {
       var _this = this
 
@@ -169,9 +169,9 @@ Component({
           X: startX,
           Y: startY
         }, {
-            X: touchMoveX,
-            Y: touchMoveY
-          });
+          X: touchMoveX,
+          Y: touchMoveY
+        });
 
       for (var i = 0; i < _this.data.blocks.length; i++) {
         for (var j = 0; j < _this.data.blocks[i].productSkus.length; j++) {
@@ -214,28 +214,31 @@ Component({
       return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
 
     },
-    getPageData:function(e){
-      var self=this
+    getPageData: function (e) {
+      var self = this
       apiCart.pageData({
-        success: function (res) { 
-          self.setData({initdata:res.data})
+        success: function (res) {
+          self.setData({ initdata: res.data })
         }
       })
     },
     goLogin: function (e) {
       ownRequest.goLogin()
     },
-    onShow(){
+    onShow() {
       console.log("cart.onShow")
-      var _this=this
+      var _this = this
       const query = wx.createSelectorQuery().in(_this)
       query.select('.cart-bottom').boundingClientRect(function (rect) {
+        if (rect != null) {
+          if (rect.height != null) {
+            var height = _this.data.height - rect.height
+            _this.data["scrollHeight"] = height
+            _this.setData(_this.data)
+          }
+        }
 
-        var height=_this.data.height-rect.height
-        _this.data["scrollHeight"]=height
-        _this.setData(_this.data)
-
-    }).exec()
+      }).exec()
 
     }
   }

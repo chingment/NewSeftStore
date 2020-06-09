@@ -36,6 +36,7 @@
 .nomore-tip{
   text-align: center;
   color: #dbdbdb;
+  font-size: 24rpx;
 }
 
 

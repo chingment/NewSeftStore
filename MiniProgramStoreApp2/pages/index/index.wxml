@@ -1,125 +1,141 @@
 <scroll-view scroll-y="true" style="height:{{height}}px;">
 
-  <view class="st-index pd-com"  >
-    <navigator class="store" wx:if="{{!singleStore}}" url="/pages/store/store" hover-class="none">
-      <view class="icon">
-        <image class="img" src="/content/default/images/store_address.png"></image>
-      </view>
-      <view class="title">
-        <text class="txt">{{currentStore.name}}</text>
-      </view>
-      <view class="more">
-        <image class="img" src="/content/default/images/arro_down.png"></image>
-      </view>
-    </navigator>
-    <view class="banner">
-      <view class="ct">
-        <block wx:if="{{banner.imgs.length>0}}">
-          <swiper class="its-swiper" autoplay="true" interval="2000" duration="500" circular="true" indicator-dots="true">
-            <block wx:for="{{banner.imgs}}" wx:key="item">
-              <swiper-item class="it">
-                <image lazy-load class="img" src="{{item.url}}"></image>
-              </swiper-item>
-            </block>
-          </swiper>
-          <!-- <view class="its-dot">
+	<view class="st-index pd-com">
+
+
+		<view style="height:61rpx">
+			<view class="store" bindtap="goSelectStore">
+				<image class="icon-img" src="/content/default/images/store_address.png"></image>
+				<text class="title">{{currentStore.name}}</text>
+				<image wx:if="{{!singleStore}}" class="more-img" src="/content/default/images/arro_down.png"></image>
+			</view>
+
+			<view class="buyfun">
+				<view class="radio-grp">
+					<view class="radio-item">
+						<image class="img" src="/content/default/images/radio_on.png"></image>
+						<text class="txt">线下机器</text>
+					</view>
+					<view class="radio-item">
+						<image class="img" src="/content/default/images/radio_off.png"></image>
+						<text class="txt">线上商城</text>
+					</view>
+				</view>
+			</view>
+		</view>
+
+
+
+
+
+		<view class="banner">
+			<view class="ct">
+				<block wx:if="{{banner.imgs.length>0}}">
+					<swiper class="its-swiper" autoplay="true" interval="2000" duration="500" circular="true" indicator-dots="true">
+						<block wx:for="{{banner.imgs}}" wx:key="item">
+							<swiper-item class="it">
+								<image lazy-load class="img" src="{{item.url}}"></image>
+							</swiper-item>
+						</block>
+					</swiper>
+					<!-- <view class="its-dot">
             <block wx:for="{{banner.imgs}}" wx:key="item">
               <view class="it{{index == banner.currentSwiper ? ' it-active' : ''}}"></view>
             </block>
           </view> -->
-        </block>
-      </view>
-    </view>
+				</block>
+			</view>
+		</view>
 
-    <view class="fc">
-      <view class="ct">
-        <view class='its-fc'>
-          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-            <view class="icon">
-              <image class='img' src='/content/default/images/index-fc-newuser.png'></image>
-            </view>
-            <view class="title">
-              <text class='txt'> 新人专享</text>
-            </view>
-          </navigator>
-          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-            <view class="icon">
-              <image class='img' src='/content/default/images/index-fc-seckill.png'></image>
-            </view>
-            <view class="title">
-              <text class='txt'>限时秒杀</text>
-            </view>
-          </navigator>
-          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-            <view class="icon">
-              <image class='img' src='/content/default/images/index-fc-member.png'></image>
-            </view>
-            <view class="title">
-              <text class='txt'>会员专区</text>
-            </view>
-          </navigator>
-          <navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-            <view class="icon">
-              <image class='img' src='/content/default/images/index-fc-coupon.png'></image>
-            </view>
-            <view class="title">
-              <text class='txt'>优惠券</text>
-            </view>
-          </navigator>
-        </view>
-      </view>
-    </view>
-    <view class="pdArea">
-      <view class="ct">
-        <view class="its-pdArea">
-          <block wx:for-items="{{pdArea.tabs}}" wx:for-item="tab" wx:key="index">
-            <view class="it">
-              <view class="it-a1">
-                <view class="title">
-                  <text class='txt'>{{tab.name}}</text>
-                </view>
-                <navigator class='more' url="/pages/productlist/productlist?kindId={{tab.id}}" hover-class="none">
-                  <view class="title">
-                    <text class="txt">更多优选</text>
-                  </view>
-                  <view class="icon">
-                    <image class='img' src='/content/default/images/col_nav_right.png'></image>
-                  </view>
-                </navigator>
-              </view>
-              <view class='it-a2'>
-                <image class="img" src="{{tab.mainImgUrl}}"></image>
-              </view>
-              <view class="it-a3 prd-list-1">
-                <block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+		<view class="fc">
+			<view class="ct">
+				<view class='its-fc'>
+					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						<view class="icon">
+							<image class='img' src='/content/default/images/index-fc-newuser.png'></image>
+						</view>
+						<view class="title">
+							<text class='txt'> 新人专享</text>
+						</view>
+					</navigator>
+					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						<view class="icon">
+							<image class='img' src='/content/default/images/index-fc-seckill.png'></image>
+						</view>
+						<view class="title">
+							<text class='txt'>限时秒杀</text>
+						</view>
+					</navigator>
+					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						<view class="icon">
+							<image class='img' src='/content/default/images/index-fc-member.png'></image>
+						</view>
+						<view class="title">
+							<text class='txt'>会员专区</text>
+						</view>
+					</navigator>
+					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						<view class="icon">
+							<image class='img' src='/content/default/images/index-fc-coupon.png'></image>
+						</view>
+						<view class="title">
+							<text class='txt'>优惠券</text>
+						</view>
+					</navigator>
+				</view>
+			</view>
+		</view>
+		<view class="pdArea">
+			<view class="ct">
+				<view class="its-pdArea">
+					<block wx:for-items="{{pdArea.tabs}}" wx:for-item="tab" wx:key="index">
+						<view class="it">
+							<view class="it-a1">
+								<view class="title">
+									<text class='txt'>{{tab.name}}</text>
+								</view>
+								<navigator class='more' url="/pages/productlist/productlist?kindId={{tab.id}}" hover-class="none">
+									<view class="title">
+										<text class="txt">更多优选</text>
+									</view>
+									<view class="icon">
+										<image class='img' src='/content/default/images/col_nav_right.png'></image>
+									</view>
+								</navigator>
+							</view>
+							<view class='it-a2'>
+								<image class="img" src="{{tab.mainImgUrl}}"></image>
+							</view>
+							<view class="it-a3 prd-list-1">
+								<block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 
-                  <view class='it it-{{index%2}}'>
+									<view class='it it-{{index%2}}'>
 
-                    <navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
-                      <view wx:if="{{item.isOffSell}}" class="isOffSell-box">
-                        <view class="isOffSell-tip">已下架</view>
-                      </view>
-                      <image lazy-load class="img" src="{{item.mainImgUrl}}"></image>
-                    </navigator>
-                    <text class="name font-gray">{{item.name}}</text>
-                    <text class="briefInfo font-gray">{{item.briefDes}}</text>
-                    <view class="area2">
-                      <view class="price">
-                        <text class="saleprice">{{item.salePrice}}</text>
-                        <text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
-                      </view>
-                      <view class="operate">
-                        <image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
-                      </view>
-                    </view>
+										<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+											<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+												<view class="isOffSell-tip">已下架</view>
+											</view>
+											<image lazy-load class="img" src="{{item.mainImgUrl}}"></image>
+										</navigator>
+										<text class="name font-gray">{{item.name}}</text>
+										<text class="briefInfo font-gray">{{item.briefDes}}</text>
+										<view class="area2">
+											<view class="price">
+												<text class="saleprice">{{item.salePrice}}</text>
+												<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
+											</view>
+											<view class="operate">
+												<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+											</view>
+										</view>
 
-                  </view>
-                </block>
-              </view>
-            </view>
-          </block>
-        </view>
-      </view>
-    </view>
-  </view>
+									</view>
+								</block>
+							</view>
+						</view>
+					</block>
+				</view>
+			</view>
+		</view>
+	</view>
 </scroll-view>

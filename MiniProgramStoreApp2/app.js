@@ -101,8 +101,5 @@ App({
         url: '/pages/main/main'
       })
     }
-  },
-  mainTabBarOnShow:function(index){
-
   }
 })
