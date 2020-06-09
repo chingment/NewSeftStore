@@ -65,7 +65,7 @@ namespace LocalS.Service.Api.StoreApp
                 tab.Id = prdKind.Id;
                 tab.Name = prdKind.Name;
                 tab.MainImgUrl = prdKind.MainImgUrl;
-                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, prdKind.Id);
+                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, prdKind.Id);
                 if (tab.List.Items.Count > 0)
                 {
                     pdAreaModel.Tabs.Add(tab);

@@ -22,4 +22,11 @@ namespace LocalS.Entity
         Wxmp = 1,
         Term = 2
     }
+
+    public enum E_ShopMode
+    {
+        Unknow = 0,
+        Machine = 1,
+        Mall = 2
+    }
 }

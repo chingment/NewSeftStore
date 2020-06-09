@@ -107,7 +107,7 @@ namespace Test
 
 
 
-            StoreAppServiceFactory.Product.GetProducts(0, int.MaxValue, "21ae9399b1804dbc9ddd3c29e8b5c670", null);
+            StoreAppServiceFactory.Product.GetProducts(0, int.MaxValue, "21ae9399b1804dbc9ddd3c29e8b5c670", E_ShopMode.Machine, null);
 
             //EasemobSdk.ApiDoRequest api = new EasemobSdk.ApiDoRequest();
 
@@ -130,7 +130,7 @@ namespace Test
             //string[] arr="A/S/B".Split('X')
 
             BizFactory.Order.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
-            
+
 
 
             StringBuilder sql = new StringBuilder(" select StoreName,SumCount ");
@@ -161,8 +161,8 @@ namespace Test
             Task4Tim2GlobalProvider a = new Task4Tim2GlobalProvider();
             a.BuildSellChannelStockDateReport();
 
-          //  string b = a.Ma.GetCnName();
-          // string c = a.MaA.GetCnName();
+            //  string b = a.Ma.GetCnName();
+            // string c = a.MaA.GetCnName();
             string c = EventCode.GetEventLevel(EventCode.Login);
             string c1 = EventCode.GetEventName(EventCode.Login);
             SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
@@ -189,148 +189,148 @@ namespace Test
 
 
 
-             //BizFactory.Order.BuildQrcode2PickupCode("31231232");
+            //BizFactory.Order.BuildQrcode2PickupCode("31231232");
 
-             //string a = Convert.ToString(15, 2);
-             //XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
+            //string a = Convert.ToString(15, 2);
+            //XrtPayInfoConfg payInfo = new XrtPayInfoConfg();
 
-             //payInfo.Mch_id = "86144035999J054";
-             //payInfo.Key = "FBC8B4396940E0969048767F53CB649A";
-             //payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
+            //payInfo.Mch_id = "86144035999J054";
+            //payInfo.Key = "FBC8B4396940E0969048767F53CB649A";
+            //payInfo.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx";
 
-             //RopAppTraceLog a1 = new RopAppTraceLog();
-             //string aa = a1.ToJsonString();
-             //BizFactory.Order.BuildPayParams(IdWorker.Build(IdType.EmptyGuid),new LocalS.BLL.Biz.RopOrderBuildPayParams {   })
+            //RopAppTraceLog a1 = new RopAppTraceLog();
+            //string aa = a1.ToJsonString();
+            //BizFactory.Order.BuildPayParams(IdWorker.Build(IdType.EmptyGuid),new LocalS.BLL.Biz.RopOrderBuildPayParams {   })
 
-             //XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
-             //wx969a817779af7b53
-             //ooHy45d93BhpXkDlyE-mdpHdE_Hs
-             //xrtPayUtil.WxPayBuildByJs("wx969a817779af7b53", "ooHy45d93BhpXkDlyE-mdpHdE_Hs", "610010720200115143310372", "1", "测试支付", "", "127.0.0.1", "", DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss"));
-             //SdkFactory.XrtPay.PayBuildQrCode(payInfo, E_OrderPayCaller.WxByNt, "", "", "", "610010720200115143310369", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
-             //SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310368");
-             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
-             //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
-
-
-
-             //List<string[]> s = new List<string[]>();
-             //s.Add
-             //[[1],[1,7],[17],[17,21]]
-             //            string[,] s = new string[2, 5];
-
-
-             //string extension = Path.GetExtension("Dsadad/dsada.jpg");
-
-             //MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPickupCmd);
-
-             // { "status":100,"channelId":"WX","state":"4","settlementChannel":"038","payTime":"2019-12-08 17:00:43","payoffType":null,"lowOrderId":"6100054201910231627169351",
-             //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易","payMoney":"0.01"
-             //    ,"upOrderId":"91203600163013136384","payType":"0","account":"13974747474","openid":null,"openId":null}
-
-             //  15589D446B76FD679E3A6D7D34FF9A56
-             //{"status":100,
-             //"channelId":"WX",
-             //"state":"4",
-             //"settlementChannel":"038",
-             //"payTime":"2019-12-08 17:00:43",
-             //"payoffType":null,
-             //"lowOrderId": "6100054201910231627169351",
-             //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易",
-             //"payMoney":"0.01","upOrderId":"91203600163013136384",
-             //"payType":"0","account":"13974747474","openid":null,"openId":null}
-             //List<PayOption> payOptions = new List<PayOption>();
-
-             //List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
-             //payWay.Add(E_OrderPayWay.Wx);
-
-             //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WxByBuildQrCode, Partner = E_OrderPayPartner.Wx, SupportWays = payWay });
-             //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.ZfbByBuildQrCode, Partner = E_OrderPayPartner.Zfb, SupportWays = payWay });
-
-             //string a22 = payOptions.ToJsonString();
-
-
-             // [{"caller":10,"partner":1,"supportWays":[1]},{"caller":20,"partner":2,"supportWays":[2]}]
-
-
-             //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
-
-             //TgPayInfoConfg config = new TgPayInfoConfg();
-             //config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
-             //config.Account = "15675830166";
-             //config.Key = "ffd50c4bf658b619c53e246926af8e48";
-             ////config.Account = "13974747474";
-             ////config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
-             //TgUtil tgUtil = new TgUtil(config);
-             //decimal amount = 0.01m;
-             //tgUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
-             //tgUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
-             ////tgUtil.OrderQuery("6100054201910231627169351我");
-             //Dictionary<string, string> dic = new Dictionary<string, string>();
-             //dic.Add("status", "100");
-             //dic.Add("channelId", "WX");
-             //dic.Add("state", "4");
-             //dic.Add("settlementChannel", "038");
-             //dic.Add("payTime", "2019-12-08 17:00:43");
-             //dic.Add("lowOrderId", "6100054201910231627169351");
-             //dic.Add("payMoney", "0.01");
-             //dic.Add("upOrderId", "91203600163013136384");
-             //dic.Add("payType", "0");
-             //dic.Add("account", "13974747474");
-             //dic.Add("message", "找不到交易");
-             //string c = tgUtil.GetSign(dic);
-             //  api.OrderQuery("610005420191023162716933");
-             //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
-
-             //string s23 = System.Web.HttpUtility.UrlDecode("%7B%22appinfo%22%3A%7B%22appChannel%22%3A%22com.uplink.selfstore%22%2C%22appId%22%3A%221%22%2C%22appVersion%22%3A%221.0.0.0%22%7D%2C%22deviceinfo%22%3A%7B%22deviceDensity%22%3A%221.0%22%2C%22deviceId%22%3A%224675a39a-d9b5-420b-bca5-45b767346088%22%2C%22deviceLocale%22%3A%22en%22%2C%22deviceMacAddr%22%3A%2202%3A00%3A00%3A00%3A00%3A00%22%2C%22deviceModel%22%3A%22Android+SDK+built+for+x86%22%2C%22deviceOsVersion%22%3A%227.1%22%2C%22devicePlatform%22%3A%22Android%22%2C%22deviceScreen%22%3A%221080*1872%22%7D%2C%22networkinfo%22%3A%7B%22ipAddr%22%3A%22fe80%3A%3A5054%3Aff%3Afe12%3A3456%25eth0%22%2C%22wifi%22%3Afalse%7D%7D");
-             //string s = UrlEncode1("http://demo.api.term.17fanju.com");
-             //var b = RedisManager.Db.HashScan("aaa", "a1*");
-             //var b1 = b.ToList();
-
-             //foreach (var b2 in b1)
-             //{
-             //    string b3 = b2.Name;
-             //}
-             //RedisManager.Db.HashScan("aaa", "a1*");
-
-             // var s1 = new { a = 1, b = 2 };
-
-             // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
-
-             //bool a1 = CommonUtil.IsNumber("1312331333x13133123");
-
-             //StringBuilder sql = new StringBuilder();
-             //sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
-             //for (int i = 0; i < 7; i++)
-             //{
-             //    string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
-
-             //    sql.Append(" select '" + datef + "' datef union");
-             //}
-             //sql.Remove(sql.Length - 5, 5);
-
-             //sql.Append(" ) a1 left join ");
-             //sql.Append(" (    select datef, sum(sumCount),sum(sumTradeAmount) from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='d17df2252133478c99104180e8062230' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
-             //sql.Append(" on  a1.datef=b1.datef  ");
-             //sql.Append(" order by a1.datef desc  ");
-
-
-             //string a = sql.ToString();
-
-             //sbyte[] orig = a(new byte[] { 0x82 });
+            //XrtPayUtil xrtPayUtil = new XrtPayUtil(payInfo);
+            //wx969a817779af7b53
+            //ooHy45d93BhpXkDlyE-mdpHdE_Hs
+            //xrtPayUtil.WxPayBuildByJs("wx969a817779af7b53", "ooHy45d93BhpXkDlyE-mdpHdE_Hs", "610010720200115143310372", "1", "测试支付", "", "127.0.0.1", "", DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss"));
+            //SdkFactory.XrtPay.PayBuildQrCode(payInfo, E_OrderPayCaller.WxByNt, "", "", "", "610010720200115143310369", 0.01m, "", "127.0.0.1", "测试支付", DateTime.Now.AddMinutes(5));
+            //SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310368");
+            //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
+            //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
 
 
 
-             //SendCmd(orig, new sbyte[] { 0x1 });
-             //for (int i = 0; i < 1000; i++)
-             //{
-             //    string threadName = "thread " + i;
-             //    int secondsToWait = 2 + 2 * i;
-             //    var t = new Thread(new ThreadStart(DoWork));
-             //    t.Start();
+            //List<string[]> s = new List<string[]>();
+            //s.Add
+            //[[1],[1,7],[17],[17,21]]
+            //            string[,] s = new string[2, 5];
 
-             //}
 
-             Console.ReadLine();
+            //string extension = Path.GetExtension("Dsadad/dsada.jpg");
+
+            //MerchServiceFactory.Order.GetSonStatus(E_OrderDetailsChildSonStatus.SendPickupCmd);
+
+            // { "status":100,"channelId":"WX","state":"4","settlementChannel":"038","payTime":"2019-12-08 17:00:43","payoffType":null,"lowOrderId":"6100054201910231627169351",
+            //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易","payMoney":"0.01"
+            //    ,"upOrderId":"91203600163013136384","payType":"0","account":"13974747474","openid":null,"openId":null}
+
+            //  15589D446B76FD679E3A6D7D34FF9A56
+            //{"status":100,
+            //"channelId":"WX",
+            //"state":"4",
+            //"settlementChannel":"038",
+            //"payTime":"2019-12-08 17:00:43",
+            //"payoffType":null,
+            //"lowOrderId": "6100054201910231627169351",
+            //"sign":"D20589C3F539B0FC9D2BC4A48B6426A5","message":"找不到交易",
+            //"payMoney":"0.01","upOrderId":"91203600163013136384",
+            //"payType":"0","account":"13974747474","openid":null,"openId":null}
+            //List<PayOption> payOptions = new List<PayOption>();
+
+            //List<E_OrderPayWay> payWay = new List<E_OrderPayWay>();
+            //payWay.Add(E_OrderPayWay.Wx);
+
+            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.WxByBuildQrCode, Partner = E_OrderPayPartner.Wx, SupportWays = payWay });
+            //payOptions.Add(new PayOption { Caller = E_OrderPayCaller.ZfbByBuildQrCode, Partner = E_OrderPayPartner.Zfb, SupportWays = payWay });
+
+            //string a22 = payOptions.ToJsonString();
+
+
+            // [{"caller":10,"partner":1,"supportWays":[1]},{"caller":20,"partner":2,"supportWays":[2]}]
+
+
+            //  [{"caller":90,"partner":91,"supportWays":[2,1]}]
+
+            //TgPayInfoConfg config = new TgPayInfoConfg();
+            //config.PayResultNotifyUrl = "http://api.m.17fanju.com/Api/Order/PayResultNotifyByTg";
+            //config.Account = "15675830166";
+            //config.Key = "ffd50c4bf658b619c53e246926af8e48";
+            ////config.Account = "13974747474";
+            ////config.Key = "5f61d7f65b184d19a1e006bc9bfb6b2f";
+            //TgUtil tgUtil = new TgUtil(config);
+            //decimal amount = 0.01m;
+            //tgUtil.AllQrcodePay("6100054201911231627169353", amount.ToString("#0.00"), "自助商品", "867184037089830");
+            //tgUtil.AllQrcodePay("6100054201911231627169357", "0.01", "自助商品", "867184037089830");
+            ////tgUtil.OrderQuery("6100054201910231627169351我");
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+            //dic.Add("status", "100");
+            //dic.Add("channelId", "WX");
+            //dic.Add("state", "4");
+            //dic.Add("settlementChannel", "038");
+            //dic.Add("payTime", "2019-12-08 17:00:43");
+            //dic.Add("lowOrderId", "6100054201910231627169351");
+            //dic.Add("payMoney", "0.01");
+            //dic.Add("upOrderId", "91203600163013136384");
+            //dic.Add("payType", "0");
+            //dic.Add("account", "13974747474");
+            //dic.Add("message", "找不到交易");
+            //string c = tgUtil.GetSign(dic);
+            //  api.OrderQuery("610005420191023162716933");
+            //PushService.SendUpdateMachineHomeLogo("1104a89792cdeb53a97", "dsad");
+
+            //string s23 = System.Web.HttpUtility.UrlDecode("%7B%22appinfo%22%3A%7B%22appChannel%22%3A%22com.uplink.selfstore%22%2C%22appId%22%3A%221%22%2C%22appVersion%22%3A%221.0.0.0%22%7D%2C%22deviceinfo%22%3A%7B%22deviceDensity%22%3A%221.0%22%2C%22deviceId%22%3A%224675a39a-d9b5-420b-bca5-45b767346088%22%2C%22deviceLocale%22%3A%22en%22%2C%22deviceMacAddr%22%3A%2202%3A00%3A00%3A00%3A00%3A00%22%2C%22deviceModel%22%3A%22Android+SDK+built+for+x86%22%2C%22deviceOsVersion%22%3A%227.1%22%2C%22devicePlatform%22%3A%22Android%22%2C%22deviceScreen%22%3A%221080*1872%22%7D%2C%22networkinfo%22%3A%7B%22ipAddr%22%3A%22fe80%3A%3A5054%3Aff%3Afe12%3A3456%25eth0%22%2C%22wifi%22%3Afalse%7D%7D");
+            //string s = UrlEncode1("http://demo.api.term.17fanju.com");
+            //var b = RedisManager.Db.HashScan("aaa", "a1*");
+            //var b1 = b.ToList();
+
+            //foreach (var b2 in b1)
+            //{
+            //    string b3 = b2.Name;
+            //}
+            //RedisManager.Db.HashScan("aaa", "a1*");
+
+            // var s1 = new { a = 1, b = 2 };
+
+            // var s = CabineRowColLayoutModel.Convert("4,2,3,4,7");
+
+            //bool a1 = CommonUtil.IsNumber("1312331333x13133123");
+
+            //StringBuilder sql = new StringBuilder();
+            //sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
+            //for (int i = 0; i < 7; i++)
+            //{
+            //    string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
+
+            //    sql.Append(" select '" + datef + "' datef union");
+            //}
+            //sql.Remove(sql.Length - 5, 5);
+
+            //sql.Append(" ) a1 left join ");
+            //sql.Append(" (    select datef, sum(sumCount),sum(sumTradeAmount) from ( select CONVERT(varchar(100),TradeTime, 23) datef,count(*) as sumCount ,sum(TradeAmount) as sumTradeAmount from RptOrder   where  merchId='d17df2252133478c99104180e8062230' and DateDiff(dd, TradeTime, getdate()) <= 7  group by TradeTime ) tb  group by datef ) b1 ");
+            //sql.Append(" on  a1.datef=b1.datef  ");
+            //sql.Append(" order by a1.datef desc  ");
+
+
+            //string a = sql.ToString();
+
+            //sbyte[] orig = a(new byte[] { 0x82 });
+
+
+
+            //SendCmd(orig, new sbyte[] { 0x1 });
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    string threadName = "thread " + i;
+            //    int secondsToWait = 2 + 2 * i;
+            //    var t = new Thread(new ThreadStart(DoWork));
+            //    t.Start();
+
+            //}
+
+            Console.ReadLine();
         }
 
         public static void DoWork()
@@ -343,7 +343,7 @@ namespace Test
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "ec2209ac9a3f4cc5b45d928c96b80287", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
             //rop.ProductSkus.Add(new RopOrderReserve.ProductSku { Id = "2b239e36688e4910adffe36848921015", Quantity = 2, ReceptionMode = LocalS.Entity.E_ReceptionMode.Machine });
             //var result = StoreAppServiceFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), "e170b69479c14804a38b089dac040740", rop);
-;
+            ;
         }
 
         private static sbyte[] SendCmd(sbyte[] frameCmd, sbyte[] frameCmdParms)

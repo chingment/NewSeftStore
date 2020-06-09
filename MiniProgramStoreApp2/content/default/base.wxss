@@ -803,3 +803,11 @@ page {
 .radio-item .txt{
   font-size: 28rpx;
 }
+
+.radio-item .txt-on{
+  color: #f18d00;
+}
+
+.radio-item .txt-off{
+  color: #9d9d9d;
+}

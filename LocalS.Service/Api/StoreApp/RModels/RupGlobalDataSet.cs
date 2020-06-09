@@ -9,5 +9,6 @@ namespace LocalS.Service.Api.StoreApp
     public class RupGlobalDataSet
     {
         public string StoreId { get; set; }
+
     }
 }

@@ -24,7 +24,7 @@
   height: 23rpx;
 }
 
-.buyfun{
+.shopmode{
   float:right;
   display: flex;
   align-items: center;
@@ -32,6 +32,7 @@
   justify-items: center;
   height: 100%;
 }
+
 
 .banner {
   height: auto;

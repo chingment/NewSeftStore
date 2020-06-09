@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,14 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, rup.KindId);
+            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, rup.ShopMode, rup.KindId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntiy);
 
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, E_ShopMode shopMode, string kindId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 

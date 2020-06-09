@@ -10,23 +10,17 @@
 				<image wx:if="{{!singleStore}}" class="more-img" src="/content/default/images/arro_down.png"></image>
 			</view>
 
-			<view class="buyfun">
+			<view class="shopmode">
 				<view class="radio-grp">
-					<view class="radio-item">
-						<image class="img" src="/content/default/images/radio_on.png"></image>
-						<text class="txt">线下机器</text>
-					</view>
-					<view class="radio-item">
-						<image class="img" src="/content/default/images/radio_off.png"></image>
-						<text class="txt">线上商城</text>
-					</view>
+					<block wx:for="{{shopModes}}" wx:for-item="item" wx:key="index">
+						<view class="radio-item" bindtap="switchShopMode" data-reply-shopmodeid="{{item.id}}" >
+							<image class="img" src='/content/default/images/{{item.selected==false?"radio_off":"radio_on"}}.png'></image>
+							<text class='txt {{item.selected==false?"txt-off":"txt-on"}}'>{{item.name}}</text>
+						</view>
+					</block>
 				</view>
 			</view>
 		</view>
-
-
-
-
 
 		<view class="banner">
 			<view class="ct">

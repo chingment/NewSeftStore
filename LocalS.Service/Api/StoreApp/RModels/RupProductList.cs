@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         public int PageSize { get; set; }
         public string KindId { get; set; }
         public string SubjectId { get; set; }
+        public E_ShopMode ShopMode { get; set; }
         public string Name { get; set; }
     }
 }

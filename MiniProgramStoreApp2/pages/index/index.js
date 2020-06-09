@@ -12,9 +12,21 @@ Component({
     initdata: {
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
-
+        console.log("index.initdata")
         var _this = this
         _this.setData({
+          shopModes:[
+            {
+              id:1,
+              name:"线下机器",
+              selected:true
+            },
+            {
+              id:2,
+              name:"线上商城",
+              selected:false
+            }
+          ],
           singleStore: typeof config.storeId == undefined?false:true ,
           currentStore: newVal.store,
           banner: newVal.banner,
@@ -86,6 +98,26 @@ Component({
       wx.navigateTo({
         url: '/pages/store/store',
       })
+    },
+    switchShopMode:function(e){
+      var _this=this
+      var shopModeId = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
+      console.log("shopModeId:"+shopModeId)
+
+
+      var shopModes=_this.data.shopModes
+
+      for(var i=0;i<shopModes.length;i++){
+        if(shopModes[i].id==shopModeId){
+          shopModes[i].selected=true
+        }
+        else{
+          shopModes[i].selected=false
+        }
+      }
+
+      _this.setData({shopModes:shopModes})
+
     },
     onShow(){
       console.log("index.onShow")
