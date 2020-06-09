@@ -1053,7 +1053,7 @@ namespace LocalS.BLL.Biz
                                 order.PayWay = E_OrderPayWay.Wx;
                                 order.PayStatus = E_OrderPayStatus.Paying;
                                 var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wx_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -1087,7 +1087,7 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = order.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.OpenId, order.Id, 0.01m, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.OpenId, order.Id, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {

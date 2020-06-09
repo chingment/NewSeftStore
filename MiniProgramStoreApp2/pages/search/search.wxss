@@ -54,23 +54,9 @@ height:42rpx;
   padding-left: 15rpx;
 }
 
-.searchbox-ipt .swiperitem {
-  height: 100%;
-}
-
-.searchbox-ipt .swiperview .wx-swiper-dots {
-  display: none;
-}
-
-.searchbox-ipt .swiper-txt {
-  font-size: 24rpx;
-  color: #b0b0b0;
-  line-height: 60rpx;
-}
-
 .searchbox-ipt .ipt {
-  height: 30px;
-  line-height: 30px;
+  height: 58rpx;
+  line-height: 58rpx;
   text-align: left;
   letter-spacing: 0px;
 }

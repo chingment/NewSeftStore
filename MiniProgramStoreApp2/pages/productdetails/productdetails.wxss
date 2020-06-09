@@ -146,8 +146,9 @@ swiper {
 .specItem .specItemName {
   font-size: 28rpx;
   display: block;
-  height: 38rpx;
-  line-height: 38rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-weight: 800;
 
 }
 
@@ -162,9 +163,9 @@ swiper {
   text-align: center;
   float: left;
   min-width: 30rpx;
-  margin-right: 16rpx;
-  padding: 5rpx 10rpx;
-  font-size: 26rpx;
+  margin-right: 24rpx;
+  padding: 6rpx 12rpx;
+  font-size: 24rpx;
 }
 
 .specItemValue  li.productActive {

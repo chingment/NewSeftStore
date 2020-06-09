@@ -1,4 +1,5 @@
 const config = require('../../config')
+const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
@@ -27,7 +28,7 @@ Component({
               selected:false
             }
           ],
-          singleStore: typeof config.storeId == undefined?false:true ,
+          singleStore: typeof config.storeId == "undefined"?false:true ,
           currentStore: newVal.store,
           banner: newVal.banner,
           pdArea: newVal.pdArea
@@ -97,7 +98,7 @@ Component({
       var shopModeId = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
       console.log("shopModeId:"+shopModeId)
 
-
+  
       var shopModes=_this.data.shopModes
 
       for(var i=0;i<shopModes.length;i++){
@@ -109,7 +110,11 @@ Component({
         }
       }
 
-      _this.setData({shopModes:shopModes})
+      toast.show({
+        title: '暂时没开通线上商城'
+      })
+
+     // _this.setData({shopModes:shopModes})
 
     },
     onShow(){
