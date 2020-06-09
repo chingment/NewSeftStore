@@ -21,12 +21,12 @@
 	<scroll-view style='height:calc(100vh - {{navH}}px)' scroll-y>
 
 		<view class="pd-com">
-			<view class="its-a">
+			<view class="its-skus">
 				<block wx:for="{{searchResult.productSkus}}" wx:for-item="item" wx:key="index">
-					<view class="it">
-						<view class="it-l hide">
+				    <navigator class='it' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+						<view class="it-l">
 							<view class="icon">
-								<image class="img" src='/content/default/images/list_icon_withdraw.png'></image>
+								<image class="img" src='{{item.mainImgUrl}}'></image>
 							</view>
 						</view>
 						<view class="it-m">
@@ -39,7 +39,7 @@
 								<image class="img-nav-left-top" src='/content/default/images/arrow_left_top.png'></image>
 							</view>
 						</view>
-					</view>
+					</navigator>
 				</block>
 			</view>
 		</view>

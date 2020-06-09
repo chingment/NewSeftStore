@@ -2,7 +2,7 @@
   <view class="ct" style="height:100%;position:relative">
 
     <block wx:if="{{blocks.length>0}}">
-      <scroll-view scroll-y="true" style="height:{{height}}px;">
+      <scroll-view scroll-y="true" style="height:{{scrollHeight}}px;">
         <view class="cart-blocks its-blocks">
           <block wx:for="{{blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
             <view class="it">

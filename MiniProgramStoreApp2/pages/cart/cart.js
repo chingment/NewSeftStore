@@ -14,6 +14,7 @@ Component({
       observer: function (newVal, oldVal, changedPath) {
         var _this = this
         _this.setData({
+          scrollHeight:500,
           isLogin: ownRequest.isLogin(),
           blocks: newVal.blocks,
           count: newVal.count,
@@ -226,6 +227,16 @@ Component({
     },
     onShow(){
       console.log("cart.onShow")
+      var _this=this
+      const query = wx.createSelectorQuery().in(_this)
+      query.select('.cart-bottom').boundingClientRect(function (rect) {
+
+        var height=_this.data.height-rect.height
+        _this.data["scrollHeight"]=height
+        _this.setData(_this.data)
+
+    }).exec()
+
     }
   }
 })
