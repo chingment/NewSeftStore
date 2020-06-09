@@ -81,42 +81,42 @@ Page({
     }
   },
   onLoad: function (options) {
-     var _this = this;
-    // console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
-    // if (!ownRequest.isSelectedStore(true)) {
-    //   return
-    // }
+    var _this = this;
+    console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
+    if (!ownRequest.isSelectedStore(true)) {
+      return
+    }
 
-    // app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
+    app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
 
-    // apiGlobal.dataSet({
-    //   storeId: ownRequest.getCurrentStoreId(),
-    //   datetime: util.formatTime(new Date())
-    // }, {
-    //   success: function (res) {
-    //     if (res.result == 1) {
-    //       var index = res.data.index
-    //       var productKind = res.data.productKind
-    //       var cart = res.data.cart
-    //       var personal = res.data.personal
+    apiGlobal.dataSet({
+      storeId: ownRequest.getCurrentStoreId(),
+      datetime: util.formatTime(new Date())
+    }, {
+      success: function (res) {
+        if (res.result == 1) {
+          var index = res.data.index
+          var productKind = res.data.productKind
+          var cart = res.data.cart
+          var personal = res.data.personal
 
-    //       if (personal.userInfo == null) {
-    //         storeage.setAccessToken(null)
-    //       }
+          if (personal.userInfo == null) {
+            storeage.setAccessToken(null)
+          }
 
-    //       _this.setData({
-    //         index: index,
-    //         productKind: productKind,
-    //         cart: cart,
-    //         personal: personal
-    //       })
+          _this.setData({
+            index: index,
+            productKind: productKind,
+            cart: cart,
+            personal: personal
+          })
 
-    //       storeage.setProductKind(productKind)
-    //       storeage.setCart(cart)
-    //     }
-    //   },
-    //   fail: function () { }
-    // })
+          storeage.setProductKind(productKind)
+          storeage.setCart(cart)
+        }
+      },
+      fail: function () { }
+    })
 
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;

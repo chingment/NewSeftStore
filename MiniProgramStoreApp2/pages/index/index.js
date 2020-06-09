@@ -43,13 +43,6 @@ Component({
     
   },
   methods: {
-    topBannerSwiperChange: function(e) {
-      var _this = this
-      _this.data.banner.currentSwiper = e.detail.current;
-      _this.setData({
-        banner: _this.data.banner
-      })
-    },
     addToCart: function(e) {
       var _this = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
@@ -122,6 +115,7 @@ Component({
     onShow(){
       console.log("index.onShow")
 
+      //this.getPageData()
 
     }
   }
