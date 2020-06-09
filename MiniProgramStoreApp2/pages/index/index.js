@@ -13,9 +13,9 @@ Component({
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
 
-        var _self = this
-        _self.setData({
-          singleStore: typeof config.singleStore == undefined?false:config.singleStore ,
+        var _this = this
+        _this.setData({
+          singleStore: typeof config.storeId == undefined?false:true ,
           currentStore: newVal.store,
           banner: newVal.banner,
           pdArea: newVal.pdArea
@@ -32,14 +32,14 @@ Component({
   },
   methods: {
     topBannerSwiperChange: function(e) {
-      var _self = this
-      _self.data.banner.currentSwiper = e.detail.current;
-      this.setData({
-        banner: _self.data.banner
+      var _this = this
+      _this.data.banner.currentSwiper = e.detail.current;
+      _this.setData({
+        banner: _this.data.banner
       })
     },
     addToCart: function(e) {
-      var _self = this
+      var _this = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
       var productSkus = new Array();
       productSkus.push({

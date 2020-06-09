@@ -10,8 +10,8 @@ Component({
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
 
-        var _self = this
-        _self.setData({
+        var _this = this
+        _this.setData({
           isLogin: ownRequest.isLogin(),
           userInfo: newVal.userInfo
         })

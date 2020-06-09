@@ -103,9 +103,9 @@ Page({
     this.selectComponent("#cart").open()
   },
   addToCart: function (e) {
-    var _self = this
+    var _this = this
 
-    if (_self.data.productSku.isOffSell) {
+    if (_this.data.productSku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })

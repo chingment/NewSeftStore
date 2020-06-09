@@ -11,7 +11,7 @@
 						<image class="img" src="/content/default/images/icon_search_box.png"></image>
 					</view>
 					<view class="searchbox-ipt">
-						<input class="ipt" bindinput="bindKeyInput" placeholder="搜索" />
+						<input class="ipt" focus='{searchInputFocus}'  bindinput="bindKeyInput" confirm-type="search" placeholder="搜索" />
 					</view>
 				</view>
 

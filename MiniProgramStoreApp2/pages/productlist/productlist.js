@@ -238,7 +238,7 @@ Page({
   },
   addToCart: function(e) {
 
-    var _self = this
+    var _this = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
 
     var productSkus = new Array();

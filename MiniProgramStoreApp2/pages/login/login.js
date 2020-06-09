@@ -25,7 +25,7 @@ Page({
           //   success: function (res) {
           //     console.log(JSON.stringify(res))
           //     //"errMsg":"getUserInfo:ok"
-          //     that.login(storeage.getOpenId(), '', res.iv, res.encryptedData)
+          //     _this.login(storeage.getOpenId(), '', res.iv, res.encryptedData)
           //     // console.log( JSON.stringify(res))
           //     // wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
           //     //   url: ownRequest.getReturnUrl()

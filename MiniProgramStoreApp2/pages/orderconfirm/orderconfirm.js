@@ -232,13 +232,13 @@ Page({
       })
   },
   buildPayOptions: function(){
-    var _self = this
+    var _this = this
     apiOrder.buildPayOptions({
       appCaller: 1
     }, {
         success: function (res) {
           if (res.result == 1) {
-            _self.setData({ payOption:res.data})
+            _this.setData({ payOption:res.data})
             
           }
         },

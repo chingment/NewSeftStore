@@ -10,6 +10,7 @@ Page({
   data: {
     navH:40,
     statusBarHeight:0,
+    searchInputFocus: false,
     searchResult:{
       productSkus:[]
     }

@@ -178,8 +178,8 @@ Page({
   },
   // 滑动切换tab
   bindChange: function (e) {
-    var that = this;
-    that.setData({
+    var _this = this;
+    _this.setData({
       currentTab: e.detail.current + 1
     });
   },

@@ -82,7 +82,7 @@ Page({
     }
   },
   onLoad: function (options) {
-    var _self = this;
+    var _this = this;
     console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
     if (!ownRequest.isSelectedStore(true)) {
       return
@@ -105,7 +105,7 @@ Page({
             storeage.setAccessToken(null)
           }
 
-          _self.setData({
+          _this.setData({
             isLogin: ownRequest.isLogin(),
             index: index,
             productKind: productKind,
@@ -122,7 +122,7 @@ Page({
 
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
-      _self.setData({
+      _this.setData({
         tabBarContentHeight: wHeight - rect[0].height
       });
     }).exec()
@@ -130,12 +130,16 @@ Page({
 
   },
   onShow: function () {
+    var _this = this
+    var curMainTabBar=_this.data.tabBar[app.globalData.mainTabBarIndex]
+    _this.selectComponent('#' + curMainTabBar.id).onShow();
+
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
   },
   mainTabBarItemClick(e) {
-    var _self = this
+    var _this = this
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     app.mainTabBarSwitch(index)
   },

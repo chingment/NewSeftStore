@@ -25,9 +25,9 @@ Component({
   },
   methods: {
     open: function (e) {
-      // 用that取代this，防止不必要的情况发生
-      var that = this;
-      if (!that.data.show) {
+
+      var _this = this;
+      if (!_this.data.show) {
         // 创建一个动画实例
         var animation = wx.createAnimation({
           // 动画持续时间
@@ -36,11 +36,11 @@ Component({
           timingFunction: 'linear'
         })
         // 将该变量赋值给当前动画
-        that.animation = animation
+        _this.animation = animation
         // 先在y轴偏移，然后用step()完成一个动画
         animation.translateY(500).step()
         // 用setData改变当前动画
-        that.setData({
+        _this.setData({
           // 通过export()方法导出数据
           animationData: animation.export(),
           // 改变view里面的Wx：if
@@ -49,7 +49,7 @@ Component({
         // 设置setTimeout来改变y轴偏移量，实现有感觉的滑动
         setTimeout(function () {
           animation.translateY(0).step()
-          that.setData({
+          _this.setData({
             animationData: animation.export()
           })
         }, 400)
@@ -57,34 +57,34 @@ Component({
 
 
 
-      that.setData({ cart: storeage.getCart() })
+      _this.setData({ cart: storeage.getCart() })
 
 
     },
     _close: function (e) {
-      var that = this;
+      var _this = this;
       var animation = wx.createAnimation({
         duration: 500,
         timingFunction: 'linear'
       })
-      that.animation = animation
+      _this.animation = animation
       animation.translateY(500).step()
-      that.setData({
+      _this.setData({
         animationData: animation.export()
       });
 
       setTimeout(function () {
-        that.setData({
+        _this.setData({
           show: false
         })
       }, 500)
     },
     _itemOperate(e) {
-      var _self = this
+      var _this = this
       var pIndex = e.currentTarget.dataset.replyPindex
       var cIndex = e.currentTarget.dataset.replyCindex
       var operate = e.currentTarget.dataset.replyOperate
-      var productSku = _self.data.cart.blocks[pIndex].productSkus[cIndex];
+      var productSku = _this.data.cart.blocks[pIndex].productSkus[cIndex];
 
       switch (operate) {
         case "1":
@@ -114,7 +114,7 @@ Component({
             success: function (res) {
               if(res.result==1)
               {
-                _self.setData({ cart: storeage.getCart() })
+                _this.setData({ cart: storeage.getCart() })
               }
               else{
                 toast.show({

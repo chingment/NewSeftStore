@@ -12,8 +12,8 @@ Component({
     initdata: {
       type: Object,
       observer: function (newVal, oldVal, changedPath) {
-        var _self = this
-        _self.setData({
+        var _this = this
+        _this.setData({
           isLogin: ownRequest.isLogin(),
           blocks: newVal.blocks,
           count: newVal.count,
@@ -31,13 +31,13 @@ Component({
   methods: {
     itemOperate: util.throttle(function (e) {
 
-      var _self = this
+      var _this = this
       var pIndex = e.currentTarget.dataset.replyPindex
       var cIndex = e.currentTarget.dataset.replyCindex
       var operate = e.currentTarget.dataset.replyOperate
 
 
-      var productSku = _self.data.blocks[pIndex].productSkus[cIndex];
+      var productSku = _this.data.blocks[pIndex].productSkus[cIndex];
 
       switch (operate) {
         case "1":

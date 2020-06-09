@@ -63,7 +63,7 @@ Component({
     initdata: {
       type: Object,
       observer: function(newVal, oldVal, changedPath) {
-        var _self = this
+        var _this = this
          // 滚动数据配置
     var searchtips = [
       "商品搜索",
@@ -71,7 +71,7 @@ Component({
     ];
 
     newVal["searchtips"]=searchtips;
-        _self.setData(newVal)
+    _this.setData(newVal)
       }
     },
     height: {
@@ -82,9 +82,9 @@ Component({
   methods: {
     itemClick(e) {
 
-      var _self = this
+      var _this = this
       var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
-      var tabs = _self.data.tabs;
+      var tabs = _this.data.tabs;
       for (var i = 0; i < tabs.length; i++) {
         if (i == index) {
           tabs[i].selected = true
@@ -92,11 +92,11 @@ Component({
           tabs[i].selected = false
         }
       }
-      _self.data.tabs = tabs
-      this.setData(_self.data)
+      _this.data.tabs = tabs
+      _this.setData(_this.data)
     },
     addToCart: function (e) {
-      var _self = this
+      var _this = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
       var productSkus = new Array();
       productSkus.push({
@@ -156,15 +156,7 @@ Component({
       const query = wx.createSelectorQuery().in(_this)
       query.select('.searchbox').boundingClientRect(function (rect) {
 
-        console.log("_self.lenght1:"+JSON.stringify(rect))
-
         var height=_this.data.height-rect.height
-     
-        
-        console.log("_self.lenght2:"+_this.data.height)
-        //var height=_self.height-rect.length;
-        //console.log("rect.lenght:"+height)
-  
         _this.data["scrollHeight"]=height
         _this.setData(_this.data)
 

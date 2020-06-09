@@ -53,6 +53,7 @@ App({
         pages[i].setData({
           tabBar: pages[i].data.tabBar
         })
+        break;
       }
     }
   },
@@ -100,5 +101,8 @@ App({
         url: '/pages/main/main'
       })
     }
+  },
+  mainTabBarOnShow:function(index){
+
   }
 })
