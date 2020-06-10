@@ -9,14 +9,14 @@
     <view class="ct pd-com">
       <view class="its-a">
         <view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}">
-          <view class="it-l" style="width:auto" >
+          <view class="it-l"  >
             <text class='txt-h1'>{{item.deliveryAddress.consignee}}</text>
             <text class="txt-h2 isDefault" wx:if="{{item.deliveryAddress.isDefault}}">{{item.deliveryAddress.defaultText}}</text>
           </view>
           <view class="it-m">
             <view class="it-ml">
               <text class='txt-h1 bold'>{{item.deliveryAddress.phoneNumber}}</text>
-              <text class='txt-h2'>{{item.deliveryAddress.area}} {{item.deliveryAddress.address}}</text>
+              <text class='txt-h2'>{{item.deliveryAddress.areaName}} {{item.deliveryAddress.address}}</text>
             </view>
           </view>
           <view class='it-r' bindtap="goSelect" wx:if="{{item.deliveryAddress.canSelectElse}}">
