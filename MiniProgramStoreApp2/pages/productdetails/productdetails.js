@@ -182,7 +182,7 @@ Page({
     })
   },
   specificationBtn(e) {
-    var _self = this;
+    var _this = this;
     var n = e.currentTarget.dataset.n
 
     var index = e.currentTarget.dataset.index
@@ -191,13 +191,13 @@ Page({
 
 
 
-    var productSku = _self.data.productSku
+    var productSku = _this.data.productSku
 
-    var specSubIndex = _self.data.specSubIndex
+    var specSubIndex = _this.data.specSubIndex
 
-    var specBoxArr = _self.data.specBoxArr
+    var specBoxArr = _this.data.specBoxArr
 
-    var specShopItemInfo = _self.data.specShopItemInfo
+    var specShopItemInfo = _this.data.specShopItemInfo
 
     if (specSubIndex[n] != item) {
 
@@ -213,7 +213,7 @@ Page({
 
     }
 
-    _self.checkItem();
+    _this.checkItem();
 
     var arr = specShopItemInfo[specSubIndex];
 
@@ -224,7 +224,7 @@ Page({
       productSku.specIdx = arr.specIdx;
 
       apiProduct.skuStockInfo({
-        storeId: _self.data.storeId,
+        storeId: _this.data.storeId,
         skuId: arr.skuId,
         shopMode: _this.data.shopMode
       }, {
@@ -242,7 +242,7 @@ Page({
           console.log("arr:" + JSON.stringify(arr))
           console.log("specSubIndex:" + JSON.stringify(specSubIndex))
           console.log("specShopItemInfo:" + JSON.stringify(specShopItemInfo))
-          _self.setData({
+          _this.setData({
             productSku: productSku,
             specSubIndex: specSubIndex,
             specShopItemInfo: specShopItemInfo
@@ -258,17 +258,17 @@ Page({
 
   checkItem() {
 
-    var _self = this;
+    var _this = this;
 
-    var productSku = _self.data.productSku
+    var productSku = _this.data.productSku
 
-    var option = _self.data.productSku.specItems;
+    var option = _this.data.productSku.specItems;
 
     var result = []; //定义数组存储被选中的值
 
     for (var i in option) {
 
-      result[i] = _self.data.specSelectArr[i] ? _self.data.specSelectArr[i] : "";
+      result[i] = _this.data.specSelectArr[i] ? _this.data.specSelectArr[i] : "";
 
     }
 
@@ -281,7 +281,7 @@ Page({
 
         result[i] = option[i].item[k].name; //赋值，存在直接覆盖，不存在往里面添加name值
 
-        option[i].item[k].isShow = self.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
+        option[i].item[k].isShow = _this.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
 
       }
 
@@ -291,7 +291,7 @@ Page({
 
     productSku.specItems = option
 
-    _self.setData({
+    _this.setData({
 
       productSku: productSku
 
@@ -300,7 +300,7 @@ Page({
   },
 
   isMay(result) {
-
+    var _this=this
     for (var i in result) {
 
       if (result[i] == "") {
@@ -311,11 +311,11 @@ Page({
 
     }
 
-    return !this.data.specShopItemInfo[result] ?
+    return !_this.data.specShopItemInfo[result] ?
 
       false :
 
-      this.data.specShopItemInfo[result].stock == 0 ?
+      _this.data.specShopItemInfo[result].stock == 0 ?
 
         false :
 

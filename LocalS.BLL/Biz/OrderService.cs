@@ -206,22 +206,6 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "店铺已暂停营业", null);
                 }
 
-                List<string> machineIdsByValid = new List<string>();
-
-                foreach (var sellChannelRefId in rop.SellChannelRefIds)
-                {
-                    var machine = BizFactory.Machine.GetOne(sellChannelRefId);
-                    if (machine.RunStatus == E_MachineRunStatus.Running)
-                    {
-                        machineIdsByValid.Add(machine.Id);
-                    }
-                }
-
-                if (machineIdsByValid.Count == 0)
-                {
-                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "该店铺未配置售货机", null);
-                }
-
                 using (TransactionScope ts = new TransactionScope())
                 {
                     RetOrderReserve ret = new RetOrderReserve();
@@ -233,7 +217,25 @@ namespace LocalS.BLL.Biz
 
                     foreach (var productSku in rop.ProductSkus)
                     {
-                        var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, machineIdsByValid.ToArray(), productSku.Id);
+                        string[] sellChannelRefIds = new string[] { };
+
+                        if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
+                        {
+                            if (productSku.ReceptionMode == E_SellChannelRefType.Mall)
+                            {
+                                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                            }
+                            else if (productSku.ReceptionMode == E_SellChannelRefType.Machine)
+                            {
+                                sellChannelRefIds = store.SellMachineIds;
+                            }
+                        }
+                        else
+                        {
+                            sellChannelRefIds = productSku.SellChannelRefIds;
+                        }
+
+                        var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
 
                         if (bizProductSku == null)
                         {
@@ -445,6 +447,9 @@ namespace LocalS.BLL.Biz
                                 orderSubChildUnique.PickupStatus = E_OrderPickupStatus.WaitPay;
                                 CurrentDb.OrderSubChildUnique.Add(orderSubChildUnique);
                             }
+
+
+                            LogUtil.Info("SlotStock:" + buildOrderSubChid.SlotStock.ToJsonString());
 
                             foreach (var slotStock in buildOrderSubChid.SlotStock)
                             {

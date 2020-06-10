@@ -108,7 +108,18 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
+
+            string[] sellChannelRefIds = new string[] { };
+            if (rup.ShopMode == E_SellChannelRefType.Mall)
+            {
+                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+            }
+            else if (rup.ShopMode == E_SellChannelRefType.Machine)
+            {
+                sellChannelRefIds = store.SellMachineIds;
+            }
+
+            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, sellChannelRefIds, rup.SkuId);
 
             var productSkuDetailsModel = new ProductSkuDetailsModel();
             productSkuDetailsModel.Id = bizProductSku.Id;
@@ -143,7 +154,18 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
-            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.SellMachineIds, rup.SkuId);
+
+            string[] sellChannelRefIds = new string[] { };
+            if (rup.ShopMode == E_SellChannelRefType.Mall)
+            {
+                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+            }
+            else if (rup.ShopMode == E_SellChannelRefType.Machine)
+            {
+                sellChannelRefIds = store.SellMachineIds;
+            }
+
+            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, sellChannelRefIds, rup.SkuId);
 
             bool isOffSell = true;
             bool isShowPrice = false;

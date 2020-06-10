@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,7 @@ namespace LocalS.Service.Api.StoreApp
         public string SkuId { get; set; }
 
         public string StoreId { get; set; }
+
+        public E_SellChannelRefType ShopMode { get; set; }
     }
 }

@@ -18,8 +18,6 @@ namespace LocalS.BLL.Biz
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }
         public E_OrderSource Source { get; set; }
-        public E_SellChannelRefType SellChannelRefType { get; set; }
-        public string[] SellChannelRefIds { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }
@@ -29,8 +27,8 @@ namespace LocalS.BLL.Biz
             public string CartId { get; set; }
             public string Id { get; set; }
             public int Quantity { get; set; }
-
             public E_SellChannelRefType ReceptionMode { get; set; }
+            public string[] SellChannelRefIds { get; set; }
         }
 
         public bool IsTestMode { get; set; }

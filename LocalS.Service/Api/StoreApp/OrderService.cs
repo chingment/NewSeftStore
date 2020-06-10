@@ -55,8 +55,6 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
-            bizRop.SellChannelRefType = E_SellChannelRefType.Machine;
-            bizRop.SellChannelRefIds = store.SellMachineIds;//不指定机器
             bizRop.IsTestMode = store.IsTestMode;
             //todo 判断机器状态 才能下单
 
