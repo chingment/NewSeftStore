@@ -21,7 +21,10 @@ namespace LocalS.BLL.Push
 
             var machine = BizFactory.Machine.GetOne(machineId);
 
-            result = pushService.Send(machine.JPushRegId, cmd, content);
+            if (machine != null)
+            {
+                result = pushService.Send(machine.JPushRegId, cmd, content);
+            }
 
             if (result.Result == ResultType.Success)
             {

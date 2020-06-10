@@ -15,14 +15,14 @@ namespace LocalS.BLL.Biz
     public class ProductSkuService : BaseDbContext
     {
 
-        private void SendUpdateProductSkuStock(string operater, string appId, string merchId, string storeId, string[] machineIds, string productSkuId)
+        private void SendUpdateProductSkuStock(string operater, string appId, string merchId, string storeId, string[] sellChannelRefIds, string productSkuId)
         {
-            if (machineIds != null)
+            if (sellChannelRefIds != null)
             {
-                foreach (var machineId in machineIds)
+                foreach (var sellChannelRefId in sellChannelRefIds)
                 {
 
-                    var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { machineId }, productSkuId);
+                    var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { sellChannelRefId }, productSkuId);
 
                     if (bizProductSku != null)
                     {
@@ -36,7 +36,7 @@ namespace LocalS.BLL.Biz
                         updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                         updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
                         updateProdcutSkuStock.IsTrgVideoService = bizProductSku.IsTrgVideoService;
-                        BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, machineId, updateProdcutSkuStock);
+                        BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, sellChannelRefId, updateProdcutSkuStock);
                     }
                 }
             }
@@ -271,7 +271,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderReserveSuccess:
                         #region OrderReserve
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == sellChannelRefId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -313,7 +313,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderCancle:
                         #region OrderCancle
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == sellChannelRefId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -353,7 +353,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderPaySuccess:
                         #region OrderPaySuccess
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == sellChannelRefId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == sellChannelRefId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -361,7 +361,16 @@ namespace LocalS.BLL.Biz
                         }
 
                         sellChannelStock.WaitPayLockQuantity -= quantity;
-                        sellChannelStock.WaitPickupLockQuantity += quantity;
+
+                        if (sellChannelStock.SellChannelRefType == E_SellChannelRefType.Machine)
+                        {
+                            sellChannelStock.WaitPickupLockQuantity += quantity;
+                        }
+                        else if (sellChannelStock.SellChannelRefType == E_SellChannelRefType.Mall)
+                        {
+                            sellChannelStock.SumQuantity -= quantity;
+                        }
+
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
@@ -565,7 +574,14 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                SendUpdateProductSkuStock(operater, appId, merchId, storeId, new string[] { sellChannelRefId }, productSkuId);
+                try
+                {
+                    SendUpdateProductSkuStock(operater, appId, merchId, storeId, new string[] { sellChannelRefId }, productSkuId);
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
 
             return result;
