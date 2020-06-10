@@ -180,7 +180,7 @@ namespace LocalS.BLL.Task
             {
                 var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
+                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId).FirstOrDefault();
                 var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
                 if (orderSub != null)

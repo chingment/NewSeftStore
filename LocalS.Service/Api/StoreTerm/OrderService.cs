@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             LogUtil.Info("PickupCode2=>>" + pickupCode);
 
-            var orderSub = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.PickupCode == pickupCode).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.PickupCode == pickupCode).FirstOrDefault();
 
             if (orderSub == null)
             {

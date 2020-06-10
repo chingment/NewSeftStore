@@ -140,7 +140,7 @@ namespace LocalS.Service.Api.StoreTerm
             var productKindModels = new List<ProductKindModel>();
 
             var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == machineId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId  && m.SellChannelRefId == machineId).ToList();
 
 
             var prdKindModelByAll = new ProductKindModel();
@@ -346,7 +346,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "2", Title = "机器出现故障" });
             ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "3", Title = "未知原因" });
 
-            var orderSubs = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
             foreach (var orderSub in orderSubs)
             {

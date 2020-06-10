@@ -351,7 +351,7 @@ namespace LocalS.BLL.Biz
                 else
                 {
                     var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-                    var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == machine.Id && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
+                    var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == machine.Id).FirstOrDefault();
                     var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == model.OrderId).ToList();
 
                     //是否触发过取货

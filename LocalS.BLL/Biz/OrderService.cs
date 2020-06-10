@@ -1336,9 +1336,9 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
         public List<OrderProductSkuByPickupModel> GetOrderProductSkuByPickup(string orderId, string machineId)
         {
             var models = new List<OrderProductSkuByPickupModel>();
-            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).FirstOrDefault();
-            var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
-            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId ).FirstOrDefault();
+            var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).ToList();
+            var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).ToList();
 
             LogUtil.Info("orderId:" + orderId);
             LogUtil.Info("machineId:" + machineId);

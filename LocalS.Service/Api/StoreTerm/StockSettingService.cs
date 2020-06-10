@@ -51,7 +51,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             ret.RowColLayout = cabinet.RowColLayout;
             ret.SlotMaxQuantity = cabinet.SlotMaxQuantity;
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId  && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)
             {
@@ -184,7 +184,7 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.SellChannelRefId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId  && m.SellChannelRefId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
 
                     for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                     {
