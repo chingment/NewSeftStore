@@ -64,14 +64,11 @@ namespace LocalS.Service.Api.StoreApp
 
                 switch (receptionMode)
                 {
-                    case E_ReceptionMode.Express:
-                        carBlock.TagName = "快递外送";
+                    case E_SellChannelRefType.Mall:
+                        carBlock.TagName = "线上商城";
                         break;
-                    case E_ReceptionMode.SelfTake:
-                        carBlock.TagName = "店内自取";
-                        break;
-                    case E_ReceptionMode.Machine:
-                        carBlock.TagName = "机器自提";
+                    case E_SellChannelRefType.Machine:
+                        carBlock.TagName = "线下机器自提";
                         break;
                 }
 
@@ -109,6 +106,12 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach (var item in rop.ProductSkus)
                     {
+
+                        if (item.ReceptionMode == E_SellChannelRefType.Unknow)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoSelectShopMode, "未选择购物方式");
+                        }
+
                         var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
 
                         switch (rop.Operate)

@@ -31,6 +31,7 @@ var getList = function(_this) {
     pageSize: 10,
     kindId: kindId,
     subjectId: subjectId,
+    shopMode:app.globalData.currentShopMode,
     name: ""
   }, {
     success: function(res) {
@@ -246,7 +247,7 @@ Page({
       id: skuId,
       quantity: 1,
       selected: true,
-      receptionMode: 3
+      receptionMode: app.globalData.currentShopMode
     });
 
     apiCart.operate({

@@ -490,29 +490,15 @@ namespace LocalS.BLL.Biz
 
                 foreach (var reserveDetail in l_reserveDetails)
                 {
-                    E_SellChannelRefType channelType = E_SellChannelRefType.Unknow;
-                    switch (receptionMode)
-                    {
-                        //case E_ReceptionMode.Express:
-                        //    channelType = E_SellChannelRefType.Express;
-                        //    break;
-                        //case E_ReceptionMode.SelfTake:
-                        //    channelType = E_SellChannelRefType.SelfTake;
-                        //    break;
-                        case E_ReceptionMode.Machine:
-                            channelType = E_SellChannelRefType.Machine;
-                            break;
-
-                    }
                     var productSku = productSkus.Where(m => m.Id == reserveDetail.Id).FirstOrDefault();
 
-                    var productSku_Stocks = productSku.Stocks.Where(m => m.RefType == channelType).ToList();
+                    var productSku_Stocks = productSku.Stocks.Where(m => m.RefType == reserveDetail.ReceptionMode).ToList();
 
                     foreach (var item in productSku_Stocks)
                     {
                         for (var i = 0; i < item.SellQuantity; i++)
                         {
-                            int reservedQuantity = buildOrderSubUniques.Where(m => m.ProductSkuId == reserveDetail.Id && m.SellChannelRefType == channelType).Sum(m => m.Quantity);//已订的数量
+                            int reservedQuantity = buildOrderSubUniques.Where(m => m.ProductSkuId == reserveDetail.Id && m.SellChannelRefType == reserveDetail.ReceptionMode).Sum(m => m.Quantity);//已订的数量
                             int needReserveQuantity = reserveDetail.Quantity;//需要订的数量
                             if (reservedQuantity != needReserveQuantity)
                             {

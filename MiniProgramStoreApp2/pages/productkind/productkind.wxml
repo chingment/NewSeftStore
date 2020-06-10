@@ -55,7 +55,6 @@
 					</block>
 				</view>
 
-
 				<view class="nomore-tip" wx:if="{{tab.list.pageCount-1==tab.list.pageIndex}}"> 没有更多商品了哟......</view>
 
 			</scroll-view>

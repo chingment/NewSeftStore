@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         public int PageSize { get; set; }
         public string KindId { get; set; }
         public string SubjectId { get; set; }
-        public E_ShopMode ShopMode { get; set; }
+        public E_SellChannelRefType ShopMode { get; set; }
         public string Name { get; set; }
     }
 }

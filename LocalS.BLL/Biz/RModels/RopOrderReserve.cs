@@ -30,7 +30,7 @@ namespace LocalS.BLL.Biz
             public string Id { get; set; }
             public int Quantity { get; set; }
 
-            public E_ReceptionMode ReceptionMode { get; set; }
+            public E_SellChannelRefType ReceptionMode { get; set; }
         }
 
         public bool IsTestMode { get; set; }

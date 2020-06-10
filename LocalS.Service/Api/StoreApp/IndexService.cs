@@ -23,10 +23,10 @@ namespace LocalS.Service.Api.StoreApp
 
 
 
-            ret.ShopModes.Add(new ShopModeModel { Id = E_ShopMode.Machine, Name = "线下机器", Selected = false });
-            ret.ShopModes.Add(new ShopModeModel { Id = E_ShopMode.Mall, Name = "线上商城", Selected = false });
+            ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Machine, Name = "线下机器", Selected = false });
+            ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Mall, Name = "线上商城", Selected = false });
 
-            if (rup.ShopMode == E_ShopMode.Unknow)
+            if (rup.ShopMode == E_SellChannelRefType.Unknow)
             {
                 ret.ShopModes[0].Selected = true;
             }
@@ -34,6 +34,9 @@ namespace LocalS.Service.Api.StoreApp
             {
                 ret.ShopModes.Where(m => m.Id == rup.ShopMode).First().Selected = true;
             }
+
+
+            rup.ShopMode = ret.ShopModes.Where(m => m.Selected == true).First().Id;
 
 
             var store = BizFactory.Store.GetOne(rup.StoreId);

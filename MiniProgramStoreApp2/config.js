@@ -13,11 +13,11 @@ var config = {
   appId: `wx969a817779af7b53`,
   merchId: `d17df2252133478c99104180e8062230`,
   //storeId: '21ae9399b1804dbc9ddd3c29e8b5c670',
-  shopMode:[1,2],
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     globalDataSet: `${host}/Global/DataSet`,
     indexPageData: `${host}/Index/PageData`,
+    productKindPageData:`${host}/ProductKind/PageData`,
     cartOperate: `${host}/Cart/Operate`,
     cartPageData: `${host}/Cart/PageData`,
     productList: `${host}/Product/List`,

@@ -23,7 +23,7 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, E_ShopMode shopMode, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, E_SellChannelRefType shopMode, string kindId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 
@@ -32,10 +32,20 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(storeId);
 
+            string[] sellChannelRefIds = new string[] { };
+            if (shopMode == E_SellChannelRefType.Mall)
+            {
+                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+            }
+            else if (shopMode == E_SellChannelRefType.Machine)
+            {
+                sellChannelRefIds = store.SellMachineIds;
+            }
+
             var query = CurrentDb.SellChannelStock.Where(m =>
                 m.MerchId == store.MerchId
                          && m.StoreId == storeId
-                         && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine
+                         && m.SellChannelRefType == shopMode
 
                 ).AsEnumerable()
                      .OrderBy(x => x.Id)
@@ -60,7 +70,8 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, storeId, store.SellMachineIds, item.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, storeId, sellChannelRefIds, item.PrdProductSkuId);
+
 
                 var productSkuModel = new ProductSkuModel();
 

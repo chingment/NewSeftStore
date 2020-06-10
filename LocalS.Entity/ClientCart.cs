@@ -15,15 +15,6 @@ namespace LocalS.Entity
         Deleted = 4
     }
 
-    public enum E_ReceptionMode
-    {
-        Unknow = 0,
-        Express = 1,
-        SelfTake = 2,
-        Machine = 3,
-
-    }
-
     [Table("ClientCart")]
     public class ClientCart
     {
@@ -41,6 +32,6 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public bool Selected { get; set; }
         public E_ClientCartStatus Status { get; set; }
-        public E_ReceptionMode ReceptionMode { get; set; }
+        public E_SellChannelRefType ReceptionMode { get; set; }
     }
 }

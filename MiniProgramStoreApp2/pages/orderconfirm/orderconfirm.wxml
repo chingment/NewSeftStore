@@ -51,6 +51,8 @@
     </view>
     <view class="line-space"></view>
     
+  <view class="line-space"></view>
+  </block>
 
 <view class="its-a fieldBlock pd-com">
     <block wx:for="{{payOption.options}}"  wx:key="caller" >
@@ -78,9 +80,10 @@
       </view>
     </block>
 </view>
-  <view class="line-space"></view>
-  </block>
+
+
 </view>
+
 
 
 

@@ -13,12 +13,13 @@ Page({
    */
   data: {
     tag: "productdetails",
-    isShowCart:false,
+    isShowCart: false,
     specSelectArr: [], //存放被选中的值
     specShopItemInfo: {}, //存放要和选中的值进行匹配的数据
     specSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
     specBoxArr: {},
-    storeId:null
+    storeId: null,
+    shopMode: null
   },
 
   /**
@@ -28,78 +29,85 @@ Page({
     var _this = this
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
+    var shopMode = options.shopMode == undefined ? undefined : options.shopMode
 
-    if(storeId==undefined){
-      storeId=ownRequest.getCurrentStoreId()
+    if (storeId == undefined) {
+      storeId = ownRequest.getCurrentStoreId()
     }
+
+    if (shopMode == undefined) {
+      shopMode = app.globalData.currentShopMode
+    }
+
+    app.globalData.currentShopMode = shopMode
 
     ownRequest.setCurrentStoreId(storeId)
 
-    _this.setData({storeId:storeId})
+    _this.setData({
+      storeId: storeId,
+      shopMode: shopMode
+    })
 
-    var cart={ count:0}
-    if(ownRequest.isLogin()){
-       cart=storeage.getCart()
+    var cart = {
+      count: 0
+    }
+    if (ownRequest.isLogin()) {
+      cart = storeage.getCart()
     }
 
     apiProduct.details({
       storeId: storeId,
-      skuId: skuId
+      skuId: skuId,
+      shopMode: shopMode
     }, {
-        success: function (res) {
-          if (res.result == 1) {
+      success: function (res) {
+        if (res.result == 1) {
 
+          var productSku = res.data
 
-           var productSku=res.data        
+          var specIdxSkus = productSku.specIdxSkus
 
+          var specShopItemInfo = _this.data.specShopItemInfo
 
-            var specIdxSkus = productSku.specIdxSkus
-        
-            var specShopItemInfo = _this.data.specShopItemInfo
-        
-            var specItems = productSku.specItems
-        
-            for (var i in specIdxSkus) {
-        
-              specShopItemInfo[specIdxSkus[i].specIdx] =
-        
-              specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
-        
-            }
-        
+          var specItems = productSku.specItems
 
-        
-            for (var i = 0; i < specItems.length; i++) {
-        
-              for (var o = 0; o < specItems[i].value.length; o++) {
-        
-                specItems[i].value[o].isShow = true
-        
-              }
-        
-            }
-        
+          for (var i in specIdxSkus) {
 
-            productSku.specItems = specItems
-           
+            specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
 
-            _this.setData({
-              productSku: productSku,
-              cart:cart,
-              specShopItemInfo:specShopItemInfo,
-              specSubIndex:productSku.specIdx.split(',')
-            })
           }
-        },
-        fail: function () { }
-      })
+
+
+
+          for (var i = 0; i < specItems.length; i++) {
+
+            for (var o = 0; o < specItems[i].value.length; o++) {
+
+              specItems[i].value[o].isShow = true
+
+            }
+
+          }
+
+
+          productSku.specItems = specItems
+
+
+          _this.setData({
+            productSku: productSku,
+            cart: cart,
+            specShopItemInfo: specShopItemInfo,
+            specSubIndex: productSku.specIdx.split(',')
+          })
+        }
+      },
+      fail: function () { }
+    })
   },
   goHome: function (e) {
     app.mainTabBarSwitch(0)
   },
   goCart: function (e) {
-    //app.mainTabBarSwitch(2)
-
     this.selectComponent("#cart").open()
   },
   addToCart: function (e) {
@@ -119,7 +127,7 @@ Page({
       id: skuId,
       quantity: 1,
       selected: true,
-      receptionMode: 3
+      receptionMode: _this.data.shopMode
     });
 
     apiCart.operate({
@@ -127,30 +135,28 @@ Page({
       operate: 2,
       productSkus: productSkus
     }, {
-        success: function (res) {
-            if(res.result==1)
-            {
+      success: function (res) {
+        if (res.result == 1) {
 
-            }
-            else{
-              toast.show({
-                title: res.message
-              })
-            }
-        },
-        fail: function () {
-
+        } else {
+          toast.show({
+            title: res.message
+          })
         }
-      })
+      },
+      fail: function () {
+
+      }
+    })
 
   },
 
   immeBuy: function (e) {
     var _this = this
 
-    if(_this.data.productSku.isOffSell){
+    if (_this.data.productSku.isOffSell) {
       toast.show({
-        title:'商品已下架'
+        title: '商品已下架'
       })
       return
     }
@@ -159,14 +165,14 @@ Page({
       ownRequest.goLogin()
       return
     }
-    
+
     var skuId = _this.data.productSku.id //对应页面data-reply-index
     var productSkus = []
     productSkus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
-      receptionMode: 3
+      receptionMode: _this.data.shopMode
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
@@ -176,22 +182,22 @@ Page({
     })
   },
   specificationBtn(e) {
-
+    var _self = this;
     var n = e.currentTarget.dataset.n
 
     var index = e.currentTarget.dataset.index
 
     var item = e.currentTarget.dataset.name
 
-    var self = this;
 
-    var productSku = self.data.productSku
 
-    var specSubIndex = self.data.specSubIndex
+    var productSku = _self.data.productSku
 
-    var specBoxArr = self.data.specBoxArr
+    var specSubIndex = _self.data.specSubIndex
 
-    var specShopItemInfo = self.data.specShopItemInfo
+    var specBoxArr = _self.data.specBoxArr
+
+    var specShopItemInfo = _self.data.specShopItemInfo
 
     if (specSubIndex[n] != item) {
 
@@ -207,7 +213,7 @@ Page({
 
     }
 
-    self.checkItem();
+    _self.checkItem();
 
     var arr = specShopItemInfo[specSubIndex];
 
@@ -216,34 +222,35 @@ Page({
 
       productSku.id = arr.skuId;
       productSku.specIdx = arr.specIdx;
-      
+
       apiProduct.skuStockInfo({
-        storeId: self.data.storeId,
-        skuId: arr.skuId
+        storeId: _self.data.storeId,
+        skuId: arr.skuId,
+        shopMode: _this.data.shopMode
       }, {
-          success: function (res) {
+        success: function (res) {
 
-            var d=res.data
+          var d = res.data
 
-            productSku.name=d.name
-            productSku.isOffSell=d.isOffSell
-            productSku.salePrice=d.salePrice
-            productSku.isShowPrice=d.isShowPrice
-            productSku.salePriceByVip=d.salePriceByVip
-            productSku.sellQuantity=d.sellQuantity
+          productSku.name = d.name
+          productSku.isOffSell = d.isOffSell
+          productSku.salePrice = d.salePrice
+          productSku.isShowPrice = d.isShowPrice
+          productSku.salePriceByVip = d.salePriceByVip
+          productSku.sellQuantity = d.sellQuantity
 
-            console.log("arr:"+JSON.stringify(arr))
-            console.log("specSubIndex:"+JSON.stringify(specSubIndex))
-            console.log("specShopItemInfo:"+JSON.stringify(specShopItemInfo))
-            self.setData({
-              productSku:productSku,
-              specSubIndex: specSubIndex,
-              specShopItemInfo: specShopItemInfo
-        
-            })
+          console.log("arr:" + JSON.stringify(arr))
+          console.log("specSubIndex:" + JSON.stringify(specSubIndex))
+          console.log("specShopItemInfo:" + JSON.stringify(specShopItemInfo))
+          _self.setData({
+            productSku: productSku,
+            specSubIndex: specSubIndex,
+            specShopItemInfo: specShopItemInfo
 
-          }
-        })
+          })
+
+        }
+      })
 
     }
 
@@ -251,17 +258,17 @@ Page({
 
   checkItem() {
 
-    var self = this;
+    var _self = this;
 
-    var productSku = self.data.productSku
+    var productSku = _self.data.productSku
 
-    var option = self.data.productSku.specItems;
+    var option = _self.data.productSku.specItems;
 
     var result = []; //定义数组存储被选中的值
 
     for (var i in option) {
 
-      result[i] = self.data.specSelectArr[i] ? self.data.specSelectArr[i] : "";
+      result[i] = _self.data.specSelectArr[i] ? _self.data.specSelectArr[i] : "";
 
     }
 
@@ -284,7 +291,7 @@ Page({
 
     productSku.specItems = option
 
-    self.setData({
+    _self.setData({
 
       productSku: productSku
 
@@ -315,36 +322,35 @@ Page({
         true; //匹配选中的数据的库存，若不为空返回true反之返回false
 
   },
-  onShareAppMessage: function( options ){
+  onShareAppMessage: function (options) {
     var _this = this;
-　　// 设置转发内容
-　　var shareObj = {
-　　　　title:_this.data.productSku.name ,
-　　　　path: '/pages/productdetails/productdetails?skuId='+_this.data.productSku.id+'&storeId='+ownRequest.getCurrentStoreId()+"&merchId="+config.merchId, // 默认是当前页面，必须是以‘/’开头的完整路径
-　　　　imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
-　　　　success: function(res){　 // 转发成功之后的回调　　　　　
-　　　　　　if(res.errMsg == 'shareAppMessage:ok'){
-　　　　　　}
-　　　　},
-　　　　fail: function(){　// 转发失败之后的回调
-　　　　　　if(res.errMsg == 'shareAppMessage:fail cancel'){
-　　　　　　　　// 用户取消转发
-　　　　　　}else if(res.errMsg == 'shareAppMessage:fail'){
-　　　　　　　　// 转发失败，其中 detail message 为详细失败信息
-　　　　　　}
-　　　　},
-　　　　complete: function(){
-　　　　　　// 转发结束之后的回调（转发成不成功都会执行）
-　　　　}
-　　};
-　　// 来自页面内的按钮的转发
-　　if( options.from == 'button' ){
-　　　　var dataid = options.target.dataset; //上方data-id=shareBtn设置的值
-　　　　// 此处可以修改 shareObj 中的内容
-　　　　shareObj.path = '/pages/btnname/btnname?id='+dataid.id;
-　　}
-　　// 返回shareObj
-　　return shareObj;
+    // 设置转发内容
+    var shareObj = {
+      title: _this.data.productSku.name,
+      path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + app.globalData.currentShopMode + '&storeId=' + ownRequest.getCurrentStoreId() + "&merchId=" + config.merchId, // 默认是当前页面，必须是以‘/’开头的完整路径
+      imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
+      success: function (res) { // 转发成功之后的回调　　　　　
+        if (res.errMsg == 'shareAppMessage:ok') { }
+      },
+      fail: function () { // 转发失败之后的回调
+        if (res.errMsg == 'shareAppMessage:fail cancel') {
+          // 用户取消转发
+        } else if (res.errMsg == 'shareAppMessage:fail') {
+          // 转发失败，其中 detail message 为详细失败信息
+        }
+      },
+      complete: function () {
+        // 转发结束之后的回调（转发成不成功都会执行）
+      }
+    };
+    // 来自页面内的按钮的转发
+    if (options.from == 'button') {
+      var dataid = options.target.dataset; //上方data-id=shareBtn设置的值
+      // 此处可以修改 shareObj 中的内容
+      shareObj.path = '/pages/btnname/btnname?id=' + dataid.id;
+    }
+    // 返回shareObj
+    return shareObj;
 
   }
 

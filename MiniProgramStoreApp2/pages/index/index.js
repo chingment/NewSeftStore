@@ -3,7 +3,7 @@ const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
-
+const app = getApp()
 Component({
   options: {
     addGlobalClass: true,
@@ -45,7 +45,7 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        receptionMode: 3
+        receptionMode: app.globalData.currentShopMode
       });
 
       apiCart.operate({
@@ -64,18 +64,29 @@ Component({
       if (ownRequest.getCurrentStoreId() != undefined) {
         apiIndex.pageData({
           storeId: ownRequest.getCurrentStoreId(),
-          shopMode: _this.data.shopMode
+          shopMode: app.globalData.currentShopMode
         }, {
           success: function (res) {
 
-            var d = res.data
-            _this.setData({
-              shopModes: d.shopModes,
-              singleStore: typeof config.storeId == "undefined" ? false : true,
-              currentStore: d.store,
-              banner: d.banner,
-              pdArea: d.pdArea
-            })
+            if (res.result === 1) {
+              var d = res.data
+
+              d.shopModes.forEach(function(item, index){
+                if(item.selected){
+                  app.globalData.currentShopMode=item.id
+                }
+              })
+
+
+
+              _this.setData({
+                shopModes: d.shopModes,
+                singleStore: typeof config.storeId == "undefined" ? false : true,
+                currentStore: d.store,
+                banner: d.banner,
+                pdArea: d.pdArea
+              })
+            }
 
           }
         })
@@ -98,7 +109,7 @@ Component({
       var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
       console.log("shopModeId:" + shopMode)
 
-      _this.setData({ shopMode: shopMode })
+      app.globalData.currentShopMode = shopMode
 
       this.getPageData()
 

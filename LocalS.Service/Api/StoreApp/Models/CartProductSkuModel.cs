@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.StoreApp
         public int Quantity { get; set; }
         public bool Selected { get; set; }
         public decimal SumPrice { get; set; }
-        public E_ReceptionMode ReceptionMode { get; set; }
+        public E_SellChannelRefType ReceptionMode { get; set; }
 
     }
 }

@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public List<CartProductSkuModel> ProductSkus { get; set; }
 
-        public E_ReceptionMode ReceptionMode { get; set; }
+        public E_SellChannelRefType ReceptionMode { get; set; }
 
     }
 }

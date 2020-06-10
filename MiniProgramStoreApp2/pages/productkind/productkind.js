@@ -1,8 +1,10 @@
 const ownRequest = require('../../own/ownRequest.js')
+const apiKind = require('../../api/kind.js')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
+const app = getApp()
 
-var getList = function(_this) {
+var getList = function (_this) {
   var currentTab;
   var currentTabIndex = -1;
   for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -26,9 +28,10 @@ var getList = function(_this) {
     pageIndex: pageIndex,
     pageSize: pageSize,
     kindId: kindId,
+    shopMode: app.globalData.currentShopMode,
     name: ""
   }, {
-    success: function(res) {
+    success: function (res) {
       if (res.result == 1) {
         var d = res.data
         var items
@@ -49,7 +52,7 @@ var getList = function(_this) {
         })
       }
     },
-    fail: function() {}
+    fail: function () { }
   })
 
 }
@@ -62,23 +65,17 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function(newVal, oldVal, changedPath) {
+      observer: function (newVal, oldVal, changedPath) {
         var _this = this
-         // 滚动数据配置
-    var searchtips = [
-      "商品搜索",
-      "热销商品",
-    ];
-
-    newVal["searchtips"]=searchtips;
-    _this.setData(newVal)
       }
     },
     height: {
       type: Number
     }
   },
-  data: {},
+  data: {
+    currentShopMode: 0
+  },
   methods: {
     itemClick(e) {
 
@@ -111,18 +108,18 @@ Component({
         operate: 2,
         productSkus: productSkus
       }, {
-          success: function (res) {
+        success: function (res) {
 
-          },
-          fail: function () { }
-        })
+        },
+        fail: function () { }
+      })
     },
-    searchClick:function(e){
+    searchClick: function (e) {
       wx.navigateTo({
         url: '/pages/search/search'
       })
     },
-    productLoadMore: function(e) {
+    productLoadMore: function (e) {
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
       console.log("productLoadMore.index:" + index)
@@ -137,7 +134,7 @@ Component({
         getList(_this)
       }
     },
-    productRefesh: function(e) {
+    productRefesh: function (e) {
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
 
@@ -146,22 +143,55 @@ Component({
       console.log("productLoadMore.index:" + index)
       getList(_this)
     },
-    onShow(){
+    getPageData: function () {
+      var _this = this
+
+      if (ownRequest.getCurrentStoreId() != undefined) {
+        apiKind.pageData({
+          storeId: ownRequest.getCurrentStoreId(),
+          shopMode: app.globalData.currentShopMode
+        }, {
+          success: function (res) {
+
+            if (res.result === 1) {
+              var d = res.data
+              var searchtips = [
+                "商品搜索",
+                "热销商品",
+              ];
+
+
+              _this.setData({
+                searchtips: searchtips,
+                tabs: d.tabs
+              })
+
+            }
+          }
+        })
+      }
+
+    },
+    onShow() {
       console.log("productKind.onShow")
+      var _this = this;
 
+      if (_this.data.currentShopMode != app.globalData.currentShopMode) {
+        _this.setData({
+          currentShopMode:app.globalData.currentShopMode
+        })
+        _this.getPageData()
+      }
 
-      var _this=this;
-
-  //    setTimeout(function () {
       const query = wx.createSelectorQuery().in(_this)
       query.select('.searchbox').boundingClientRect(function (rect) {
 
-        var height=_this.data.height-rect.height
-        _this.data["scrollHeight"]=height
+        var height = _this.data.height - rect.height
+        _this.data["scrollHeight"] = height
         _this.setData(_this.data)
 
-    }).exec()
-     // },1)
+      }).exec()
+
 
     }
   }

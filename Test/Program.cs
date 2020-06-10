@@ -107,7 +107,7 @@ namespace Test
 
 
 
-            StoreAppServiceFactory.Product.GetProducts(0, int.MaxValue, "21ae9399b1804dbc9ddd3c29e8b5c670", E_ShopMode.Machine, null);
+            StoreAppServiceFactory.Product.GetProducts(0, int.MaxValue, "21ae9399b1804dbc9ddd3c29e8b5c670", E_SellChannelRefType.Machine, null);
 
             //EasemobSdk.ApiDoRequest api = new EasemobSdk.ApiDoRequest();
 

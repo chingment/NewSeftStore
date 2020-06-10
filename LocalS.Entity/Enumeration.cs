@@ -23,10 +23,4 @@ namespace LocalS.Entity
         Term = 2
     }
 
-    public enum E_ShopMode
-    {
-        Unknow = 0,
-        Machine = 1,
-        Mall = 2
-    }
 }
