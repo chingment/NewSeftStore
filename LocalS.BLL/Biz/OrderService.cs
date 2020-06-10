@@ -265,6 +265,7 @@ namespace LocalS.BLL.Biz
                                     }
                                     else
                                     {
+                                        bizProductSku.ReceptionMode = productSku.ReceptionMode;
                                         bizProductSkus.Add(bizProductSku);
                                     }
                                 }
@@ -279,7 +280,13 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
+
+                    LogUtil.Info("rop.ProductSkus:" + rop.ProductSkus.ToJsonString());
+                    LogUtil.Info("rop.bizProductSkus:" + bizProductSkus.ToJsonString());
+
                     var buildOrderSubs = BuildOrderSubs(rop.ProductSkus, bizProductSkus);
+
+                    LogUtil.Info("SlotStock.buildOrderSubs:" + buildOrderSubs.ToJsonString());
 
                     var order = new Order();
                     order.Id = IdWorker.Build(IdType.OrderId);
@@ -490,7 +497,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        private List<BuildOrderSub> BuildOrderSubs(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoModel> productSkus)
+        public List<BuildOrderSub> BuildOrderSubs(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoModel> productSkus)
         {
             List<BuildOrderSub> buildOrderSubs = new List<BuildOrderSub>();
 
@@ -504,7 +511,8 @@ namespace LocalS.BLL.Biz
 
                 foreach (var reserveDetail in l_reserveDetails)
                 {
-                    var productSku = productSkus.Where(m => m.Id == reserveDetail.Id).FirstOrDefault();
+                    var productSku = productSkus.Where(m => m.Id == reserveDetail.Id && m.ReceptionMode == receptionMode).FirstOrDefault();
+
 
                     var productSku_Stocks = productSku.Stocks.Where(m => m.RefType == reserveDetail.ReceptionMode).ToList();
 
@@ -960,6 +968,10 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
                     }
 
                     var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
+                    var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id).ToList();
+
+
 
                     foreach (var orderSub in orderSubs)
                     {
@@ -974,55 +986,66 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
                         {
                             orderSub.PayStatus = E_OrderPayStatus.PayTimeout;
                         }
+
+                        var l_orderSubChilds = orderSubChilds.Where(m => m.OrderSubId == orderSub.Id).ToList();
+
+                        foreach (var orderSubChild in l_orderSubChilds)
+                        {
+                            orderSubChild.Mender = operater;
+                            orderSubChild.MendTime = DateTime.Now;
+
+                            if (cancleType == E_OrderCancleType.PayCancle)
+                            {
+                                orderSubChild.PayStatus = E_OrderPayStatus.PayCancle;
+                            }
+                            else if (cancleType == E_OrderCancleType.PayTimeout)
+                            {
+                                orderSubChild.PayStatus = E_OrderPayStatus.PayTimeout;
+                            }
+
+
+                            if (orderSubChild.SellChannelRefType == E_SellChannelRefType.Machine)
+                            {
+                                var l_orderSubChildUniques = orderSubChildUniques.Where(m => m.OrderSubChildId == orderSubChild.Id).ToList();
+
+                                foreach (var orderSubChildUnique in l_orderSubChildUniques)
+                                {
+                                    orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Canceled;
+                                    orderSubChildUnique.Mender = operater;
+                                    orderSubChildUnique.MendTime = DateTime.Now;
+
+                                    if (cancleType == E_OrderCancleType.PayCancle)
+                                    {
+                                        orderSubChildUnique.PayStatus = E_OrderPayStatus.PayCancle;
+                                    }
+                                    else if (cancleType == E_OrderCancleType.PayTimeout)
+                                    {
+                                        orderSubChildUnique.PayStatus = E_OrderPayStatus.PayTimeout;
+                                    }
+                                }
+
+                                var childSons = (
+    from q in orderSubChildUniques
+    group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.CabinetId, q.SlotId, q.SellChannelRefId } into b
+    select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.CabinetId, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
+
+
+                                foreach (var item in childSons)
+                                {
+                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
+                                }
+                            }
+                            else if (orderSubChild.SellChannelRefType == E_SellChannelRefType.Mall)
+                            {
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, SellChannelStock.MallSellChannelRefId, "0", "0", orderSubChild.PrdProductSkuId, orderSubChild.Quantity);
+                            }
+
+                        }
+
                     }
 
-                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
-
-                    foreach (var orderSubChild in orderSubChilds)
-                    {
-                        orderSubChild.Mender = operater;
-                        orderSubChild.MendTime = DateTime.Now;
-
-                        if (cancleType == E_OrderCancleType.PayCancle)
-                        {
-                            orderSubChild.PayStatus = E_OrderPayStatus.PayCancle;
-                        }
-                        else if (cancleType == E_OrderCancleType.PayTimeout)
-                        {
-                            orderSubChild.PayStatus = E_OrderPayStatus.PayTimeout;
-                        }
-
-                    }
 
 
-                    var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id).ToList();
-
-                    foreach (var orderSubChildUnique in orderSubChildUniques)
-                    {
-                        orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Canceled;
-                        orderSubChildUnique.Mender = operater;
-                        orderSubChildUnique.MendTime = DateTime.Now;
-
-                        if (cancleType == E_OrderCancleType.PayCancle)
-                        {
-                            orderSubChildUnique.PayStatus = E_OrderPayStatus.PayCancle;
-                        }
-                        else if (cancleType == E_OrderCancleType.PayTimeout)
-                        {
-                            orderSubChildUnique.PayStatus = E_OrderPayStatus.PayTimeout;
-                        }
-                    }
-
-                    var childSons = (
-                        from q in orderSubChildUniques
-                        group q by new { q.PrdProductSkuId, q.Quantity, q.SellChannelRefType, q.CabinetId, q.SlotId, q.SellChannelRefId } into b
-                        select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRefType, b.Key.CabinetId, b.Key.SlotId, Quantity = b.Sum(c => c.Quantity) }).ToList();
-
-
-                    foreach (var item in childSons)
-                    {
-                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, item.SellChannelRefId, item.CabinetId, item.SlotId, item.PrdProductSkuId, item.Quantity);
-                    }
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
