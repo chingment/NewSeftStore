@@ -272,6 +272,7 @@
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RetPersonalPageData.cs" />

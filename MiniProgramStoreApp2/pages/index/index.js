@@ -12,39 +12,32 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function(newVal, oldVal, changedPath) {
+      observer: function (newVal, oldVal, changedPath) {
         console.log("index.initdata")
         var _this = this
-        _this.setData({
-          shopModes:[
-            {
-              id:1,
-              name:"线下机器",
-              selected:true
-            },
-            {
-              id:2,
-              name:"线上商城",
-              selected:false
-            }
-          ],
-          singleStore: typeof config.storeId == "undefined"?false:true ,
-          currentStore: newVal.store,
-          banner: newVal.banner,
-          pdArea: newVal.pdArea
-        })
+
+        _this.getPageData()
+        // _this.setData({
+        //   shopModes:newVal.shopModes,
+        //   singleStore: typeof config.storeId == "undefined"?false:true ,
+        //   currentStore: newVal.store,
+        //   banner: newVal.banner,
+        //   pdArea: newVal.pdArea
+        // })
       }
     },
     height: {
       type: Number
     }
   },
-  data: {},
-  ready: function() {
-    
+  data: {
+    shopMode: 0
+  },
+  ready: function () {
+
   },
   methods: {
-    addToCart: function(e) {
+    addToCart: function (e) {
       var _this = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
       var productSkus = new Array();
@@ -60,65 +53,59 @@ Component({
         operate: 2,
         productSkus: productSkus
       }, {
-        success: function(res) {
+        success: function (res) {
 
         },
-        fail: function() {}
+        fail: function () { }
       })
     },
-    getPageData: function() {
+    getPageData: function () {
+      var _this = this
       if (ownRequest.getCurrentStoreId() != undefined) {
-        var self = this
         apiIndex.pageData({
-          storeId: ownRequest.getCurrentStoreId()
+          storeId: ownRequest.getCurrentStoreId(),
+          shopMode: _this.data.shopMode
         }, {
-          success: function(res) {
+          success: function (res) {
 
-            self.setData({
-              initdata: res.data
+            var d = res.data
+            _this.setData({
+              shopModes: d.shopModes,
+              singleStore: typeof config.storeId == "undefined" ? false : true,
+              currentStore: d.store,
+              banner: d.banner,
+              pdArea: d.pdArea
             })
+
           }
         })
       }
 
     },
-    goSelectStore:function(e){
- 
-      var _this=this
+    goSelectStore: function (e) {
 
-      if(_this.data.singleStore)
-       return
+      var _this = this
+
+      if (_this.data.singleStore)
+        return
 
       wx.navigateTo({
         url: '/pages/store/store',
       })
     },
-    switchShopMode:function(e){
-      var _this=this
-      var shopModeId = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
-      console.log("shopModeId:"+shopModeId)
+    switchShopMode: function (e) {
+      var _this = this
+      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
+      console.log("shopModeId:" + shopMode)
 
-  
-      var shopModes=_this.data.shopModes
+      _this.setData({ shopMode: shopMode })
 
-      for(var i=0;i<shopModes.length;i++){
-        if(shopModes[i].id==shopModeId){
-          shopModes[i].selected=true
-        }
-        else{
-          shopModes[i].selected=false
-        }
-      }
-
-      toast.show({
-        title: '暂时没开通线上商城'
-      })
-
-     // _this.setData({shopModes:shopModes})
+      this.getPageData()
 
     },
-    onShow(){
+    onShow() {
       console.log("index.onShow")
+
 
       //this.getPageData()
 

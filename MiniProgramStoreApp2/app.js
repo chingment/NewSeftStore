@@ -43,7 +43,8 @@ App({
   },
   globalData: {
     userInfo: null,
-    mainTabBarIndex:0
+    mainTabBarIndex:0,
+    currentShopMode:0
   },
   mainTabBarSetNumber(index, num) {
     var pages = getCurrentPages();
