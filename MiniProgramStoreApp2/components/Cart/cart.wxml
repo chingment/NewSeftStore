@@ -14,7 +14,7 @@
               <block wx:for="{{cart.blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
                 <view class="it">
                   <view class="it-tag">
-                    <image class="icon img" src='/content/default/images/cart_channel{{item.receptionMode}}.png'></image>
+                    <image class="icon img" src='/content/default/images/cart_channel{{item.shopMode}}.png'></image>
                     <text class="name">{{item.tagName}}</text>
                     <image class="more img" src='/content/default/images/col_nav_right.png'></image>
                   </view>

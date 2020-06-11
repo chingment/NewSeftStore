@@ -137,7 +137,7 @@ Page({
   unifiedOrder: function (e) {
     var _this = this
     for (var i = 0; i < _this.data.block.length; i++) {
-      if (_this.data.block[i].receptionMode == 1) {
+      if (_this.data.block[i].shopMode == 1) {
         if (_this.data.block[i].deliveryAddress.id == "") {
           toast.show({
             title: '请选择快寄地址'

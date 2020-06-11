@@ -127,7 +127,7 @@ Page({
       id: skuId,
       quantity: 1,
       selected: true,
-      receptionMode: _this.data.shopMode
+      shopMode: _this.data.shopMode
     });
 
     apiCart.operate({
@@ -172,7 +172,7 @@ Page({
       cartId: 0,
       id: skuId,
       quantity: 1,
-      receptionMode: _this.data.shopMode
+      shopMode: _this.data.shopMode
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),

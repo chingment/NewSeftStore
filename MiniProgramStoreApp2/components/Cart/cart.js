@@ -101,7 +101,7 @@ Component({
         id: productSku.id,
         quantity: 1,
         selected: productSku.selected,
-        receptionMode: productSku.receptionMode
+        shopMode : productSku.shopMode
       });
 
       function _operate() {
@@ -156,7 +156,7 @@ Component({
               cartId: blocks[i].productSkus[j].cartId,
               id: blocks[i].productSkus[j].id,
               quantity: blocks[i].productSkus[j].quantity,
-              receptionMode: blocks[i].productSkus[j].receptionMode
+              shopMode: blocks[i].productSkus[j].shopMode
             })
           }
         }

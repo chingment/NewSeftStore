@@ -49,7 +49,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.IsTestMode = machine.IsTestMode;
             foreach (var productSku in rop.ProductSkus)
             {
-                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = E_SellChannelRefType.Machine,SellChannelRefIds= new string[] { machine.Id } });
+                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine,SellChannelRefIds= new string[] { machine.Id } });
             }
 
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), bizRop);

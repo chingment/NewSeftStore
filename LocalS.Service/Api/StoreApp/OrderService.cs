@@ -60,7 +60,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var productSku in rop.ProductSkus)
             {
-                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ReceptionMode = productSku.ReceptionMode });
+                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = productSku.ShopMode });
             }
 
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(operater, bizRop);
@@ -188,13 +188,13 @@ namespace LocalS.Service.Api.StoreApp
 
             var orderBlock = new List<OrderBlockModel>();
 
-            var skus_Express = skus.Where(m => m.ReceptionMode == E_SellChannelRefType.Mall).ToList();
+            var skus_Express = skus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
             if (skus_Express.Count > 0)
             {
                 var orderBlock_Express = new OrderBlockModel();
                 orderBlock_Express.TagName = "快递商品";
                 orderBlock_Express.Skus = skus_Express;
-                orderBlock_Express.ReceptionMode = E_SellChannelRefType.Mall;
+                orderBlock_Express.ShopMode = E_SellChannelRefType.Mall;
                 var shippingAddressModel = new DeliveryAddressModel();
                 shippingAddressModel.CanSelectElse = true;
                 var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
@@ -223,13 +223,13 @@ namespace LocalS.Service.Api.StoreApp
             }
 
         
-            var skus_Machine = skus.Where(m => m.ReceptionMode == E_SellChannelRefType.Machine).ToList();
+            var skus_Machine = skus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
             if (skus_Machine.Count > 0)
             {
                 var orderBlock_Machine = new OrderBlockModel();
                 orderBlock_Machine.TagName = "自提商品";
                 orderBlock_Machine.Skus = skus_Machine;
-                orderBlock_Machine.ReceptionMode = E_SellChannelRefType.Machine;
+                orderBlock_Machine.ShopMode = E_SellChannelRefType.Machine;
                 var shippingAddressModel = new DeliveryAddressModel();
                 shippingAddressModel.Id = null;
                 shippingAddressModel.Consignee = "店铺名称";

@@ -45,7 +45,7 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        receptionMode: app.globalData.currentShopMode
+        shopMode: app.globalData.currentShopMode
       });
 
       apiCart.operate({

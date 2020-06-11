@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
         }
 
         public string TagName { get; set; }
-        public E_SellChannelRefType ReceptionMode { get; set; }
+        public E_SellChannelRefType ShopMode { get; set; }
         public DeliveryAddressModel DeliveryAddress { get; set; }
         public List<OrderConfirmProductSkuModel> Skus { get; set; }
     }

@@ -32,6 +32,6 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public bool Selected { get; set; }
         public E_ClientCartStatus Status { get; set; }
-        public E_SellChannelRefType ReceptionMode { get; set; }
+        public E_SellChannelRefType ShopMode { get; set; }
     }
 }

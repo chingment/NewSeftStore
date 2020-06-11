@@ -221,11 +221,11 @@ namespace LocalS.BLL.Biz
 
                         if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                         {
-                            if (productSku.ReceptionMode == E_SellChannelRefType.Mall)
+                            if (productSku.ShopMode == E_SellChannelRefType.Mall)
                             {
                                 sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
                             }
-                            else if (productSku.ReceptionMode == E_SellChannelRefType.Machine)
+                            else if (productSku.ShopMode == E_SellChannelRefType.Machine)
                             {
                                 sellChannelRefIds = store.SellMachineIds;
                             }
@@ -265,7 +265,7 @@ namespace LocalS.BLL.Biz
                                     }
                                     else
                                     {
-                                        bizProductSku.ReceptionMode = productSku.ReceptionMode;
+                                        bizProductSku.ShopMode = productSku.ShopMode;
                                         bizProductSkus.Add(bizProductSku);
                                     }
                                 }
@@ -503,24 +503,24 @@ namespace LocalS.BLL.Biz
 
             List<BuildOrderSub.Unique> buildOrderSubUniques = new List<BuildOrderSub.Unique>();
 
-            var receptionModes = reserveDetails.Select(m => m.ReceptionMode).Distinct().ToArray();
+            var shopModes = reserveDetails.Select(m => m.ShopMode).Distinct().ToArray();
 
-            foreach (var receptionMode in receptionModes)
+            foreach (var shopMode in shopModes)
             {
-                var l_reserveDetails = reserveDetails.Where(m => m.ReceptionMode == receptionMode).ToList();
+                var l_reserveDetails = reserveDetails.Where(m => m.ShopMode == shopMode).ToList();
 
                 foreach (var reserveDetail in l_reserveDetails)
                 {
-                    var productSku = productSkus.Where(m => m.Id == reserveDetail.Id && m.ReceptionMode == receptionMode).FirstOrDefault();
+                    var productSku = productSkus.Where(m => m.Id == reserveDetail.Id && m.ShopMode == shopMode).FirstOrDefault();
 
 
-                    var productSku_Stocks = productSku.Stocks.Where(m => m.RefType == reserveDetail.ReceptionMode).ToList();
+                    var productSku_Stocks = productSku.Stocks.Where(m => m.RefType == reserveDetail.ShopMode).ToList();
 
                     foreach (var item in productSku_Stocks)
                     {
                         for (var i = 0; i < item.SellQuantity; i++)
                         {
-                            int reservedQuantity = buildOrderSubUniques.Where(m => m.ProductSkuId == reserveDetail.Id && m.SellChannelRefType == reserveDetail.ReceptionMode).Sum(m => m.Quantity);//已订的数量
+                            int reservedQuantity = buildOrderSubUniques.Where(m => m.ProductSkuId == reserveDetail.Id && m.SellChannelRefType == reserveDetail.ShopMode).Sum(m => m.Quantity);//已订的数量
                             int needReserveQuantity = reserveDetail.Quantity;//需要订的数量
                             if (reservedQuantity != needReserveQuantity)
                             {
@@ -528,7 +528,7 @@ namespace LocalS.BLL.Biz
                                 buildOrderSubUnique.Id = IdWorker.Build(IdType.NewGuid);
                                 buildOrderSubUnique.SellChannelRefType = item.RefType;
                                 buildOrderSubUnique.SellChannelRefId = item.RefId;
-                                buildOrderSubUnique.ReceptionMode = receptionMode;
+                                buildOrderSubUnique.ShopMode = shopMode;
                                 buildOrderSubUnique.ProductSkuId = productSku.Id;
                                 buildOrderSubUnique.ProductId = productSku.ProductId;
                                 buildOrderSubUnique.CabinetId = item.CabinetId;
@@ -566,7 +566,7 @@ namespace LocalS.BLL.Biz
             var detailGroups = (from c in buildOrderSubUniques
                                 select new
                                 {
-                                    c.ReceptionMode,
+                                    c.ShopMode,
                                     c.SellChannelRefType,
                                     c.SellChannelRefId
                                 }).Distinct().ToList();
@@ -576,7 +576,7 @@ namespace LocalS.BLL.Biz
             foreach (var detailGroup in detailGroups)
             {
                 var buildOrderSub = new BuildOrderSub();
-                buildOrderSub.ReceptionMode = detailGroup.ReceptionMode;
+                buildOrderSub.ShopMode = detailGroup.ShopMode;
                 buildOrderSub.SellChannelRefType = detailGroup.SellChannelRefType;
                 buildOrderSub.SellChannelRefId = detailGroup.SellChannelRefId;
                 buildOrderSub.Quantity = buildOrderSubUniques.Where(m => m.SellChannelRefId == detailGroup.SellChannelRefId).Sum(m => m.Quantity);
@@ -615,7 +615,7 @@ namespace LocalS.BLL.Biz
                                                 select new
                                                 {
                                                     c.Id,
-                                                    c.ReceptionMode,
+                                                    c.ShopMode,
                                                     c.SellChannelRefType,
                                                     c.SellChannelRefId,
                                                     c.ProductSkuId,
@@ -636,7 +636,7 @@ namespace LocalS.BLL.Biz
                         orderSubDetailUnit.Id = detailChildSonGroup.Id;
                         orderSubDetailUnit.SellChannelRefType = detailChildSonGroup.SellChannelRefType;
                         orderSubDetailUnit.SellChannelRefId = detailChildSonGroup.SellChannelRefId;
-                        orderSubDetailUnit.ReceptionMode = detailChildSonGroup.ReceptionMode;
+                        orderSubDetailUnit.ShopMode = detailChildSonGroup.ShopMode;
                         orderSubDetailUnit.ProductSkuId = detailChildSonGroup.ProductSkuId;
                         orderSubDetailUnit.CabinetId = detailChildSonGroup.CabinetId;
                         orderSubDetailUnit.SlotId = detailChildSonGroup.SlotId;

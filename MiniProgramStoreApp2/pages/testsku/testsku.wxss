@@ -50,3 +50,92 @@
   color: #000;
   pointer-events: none;
 }
+
+.tab-double{
+  width:500rpx;
+  height:500rpx;
+  margin-left:auto;
+  margin-right:auto;
+  border-radius: 10rpx;
+  position: relative;
+
+  box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
+}
+
+.tab-title{
+  display:flex;
+}
+
+.tab-title .title-left{
+  flex:1;display:flex;
+  margin-right: -80rpx;
+  z-index: 0;
+}
+
+
+.tab-title .title-left  .txt{
+  flex:1;
+  background-color:#f3e7cf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius:10rpx;
+  padding-right: 60rpx;
+}
+
+.tab-title .title-left .left-triangle{
+
+  width: 0;
+  height: 0;
+  border-bottom: 80rpx solid #f3e7cf;
+  border-right: 80rpx solid transparent;
+}
+
+.tab-title .title-right{
+  flex:1;display:flex;
+  margin-left: -80rpx;
+  z-index: 0;
+}
+
+
+.tab-title .title-right .right-triangle{
+  width: 0;
+  height: 0;
+  border-bottom: 80rpx solid #f3e7cf;
+  border-left: 80rpx solid transparent;
+}
+
+.tab-title .title-right .txt{
+  flex:1; 
+  background-color:#f3e7cf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius:10rpx;
+  padding-left: 60rpx;
+}
+
+.tab-title  .selected{
+  z-index: 999;
+}
+
+.tab-title  .selected .right-triangle{
+  border-bottom: 80rpx solid #fff;
+  border-left: 80rpx solid transparent;
+}
+
+.tab-title  .selected .txt{
+  background-color:#fff;
+  padding: 0;
+}
+
+
+.tab-title  .selected .left-triangle{
+
+  border-bottom: 80rpx solid #fff;
+  border-right: 80rpx solid transparent;
+}
+
+.tab-title  .selected .left{
+  background-color:#fff;
+}

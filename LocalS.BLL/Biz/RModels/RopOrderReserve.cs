@@ -27,7 +27,7 @@ namespace LocalS.BLL.Biz
             public string CartId { get; set; }
             public string Id { get; set; }
             public int Quantity { get; set; }
-            public E_SellChannelRefType ReceptionMode { get; set; }
+            public E_SellChannelRefType ShopMode { get; set; }
             public string[] SellChannelRefIds { get; set; }
         }
 

@@ -21,6 +21,6 @@ namespace LocalS.Service.Api.StoreApp
         public string CartId { get; set; }
         public int Quantity { get; set; }
 
-        public E_SellChannelRefType ReceptionMode { get; set; }
+        public E_SellChannelRefType ShopMode { get; set; }
     }
 }

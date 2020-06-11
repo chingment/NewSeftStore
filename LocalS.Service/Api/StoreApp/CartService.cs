@@ -46,23 +46,23 @@ namespace LocalS.Service.Api.StoreApp
                         cartProcudtSkuModel.Quantity = clientCart.Quantity;
                         cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
                         cartProcudtSkuModel.Selected = clientCart.Selected;
-                        cartProcudtSkuModel.ReceptionMode = clientCart.ReceptionMode;
+                        cartProcudtSkuModel.ShopMode = clientCart.ShopMode;
                         cartProductSkuModels.Add(cartProcudtSkuModel);
                     }
                 }
             }
 
             //分类块，自取或快递 各构建
-            var receptionModes = (from c in clientCarts select c.ReceptionMode).Distinct().ToList();
+            var shopModes = (from c in clientCarts select c.ShopMode).Distinct().ToList();
 
-            foreach (var receptionMode in receptionModes)
+            foreach (var shopMode in shopModes)
             {
 
                 var carBlock = new CartBlockModel();
-                carBlock.ReceptionMode = receptionMode;
-                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ReceptionMode == receptionMode).ToList();
+                carBlock.ShopMode = shopMode;
+                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ShopMode == shopMode).ToList();
 
-                switch (receptionMode)
+                switch (shopMode)
                 {
                     case E_SellChannelRefType.Mall:
                         carBlock.TagName = "线上商城";
@@ -107,12 +107,12 @@ namespace LocalS.Service.Api.StoreApp
                     foreach (var item in rop.ProductSkus)
                     {
 
-                        if (item.ReceptionMode == E_SellChannelRefType.Unknow)
+                        if (item.ShopMode == E_SellChannelRefType.Unknow)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoSelectShopMode, "未选择购物方式");
                         }
 
-                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ReceptionMode == item.ReceptionMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
+                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ShopMode == item.ShopMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
 
                         switch (rop.Operate)
                         {
@@ -154,7 +154,7 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.CreateTime = DateTime.Now;
                                     clientCart.Creator = operater;
                                     clientCart.Quantity = 1;
-                                    clientCart.ReceptionMode = item.ReceptionMode;
+                                    clientCart.ShopMode = item.ShopMode;
                                     clientCart.Status = E_ClientCartStatus.WaitSettle;
                                     CurrentDb.ClientCart.Add(clientCart);
                                 }

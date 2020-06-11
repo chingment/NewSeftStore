@@ -34,7 +34,7 @@ namespace LocalS.BLL.Biz
         public decimal ChargeAmount { get; set; }
         public List<Child> Childs { get; set; }
 
-        public E_SellChannelRefType ReceptionMode { get; set; }
+        public E_SellChannelRefType ShopMode { get; set; }
         public class Child
         {
             public Child()
@@ -74,7 +74,7 @@ namespace LocalS.BLL.Biz
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
 
-            public E_SellChannelRefType ReceptionMode { get; set; }
+            public E_SellChannelRefType ShopMode { get; set; }
         }
 
         public class SlotStock

@@ -100,7 +100,7 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        receptionMode: 3
+        shopMode: 3
       });
 
       apiCart.operate({
