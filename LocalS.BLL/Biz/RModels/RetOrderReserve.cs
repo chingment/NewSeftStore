@@ -44,7 +44,6 @@ namespace LocalS.BLL.Biz
             }
             public E_SellChannelRefType SellChannelRefType { get; set; }
             public string SellChannelRefId { get; set; }
-
             public string ProductId { get; set; }
             public string ProductSkuId { get; set; }
             public decimal SalePrice { get; set; }
@@ -54,7 +53,6 @@ namespace LocalS.BLL.Biz
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
             public List<Unique> Uniques { get; set; }
-
             public List<SlotStock> SlotStock { get; set; }
         }
 
@@ -73,7 +71,6 @@ namespace LocalS.BLL.Biz
             public decimal OriginalAmount { get; set; }
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
-
             public E_SellChannelRefType ShopMode { get; set; }
         }
 
