@@ -15,12 +15,10 @@ namespace LocalS.Service.Api.StoreApp
         public decimal SalePrice { get; set; }
         public decimal ShowPrice { get; set; }
         public string BriefDes { get; set; }
-        public List<Lumos.ImgSet> DisplayImgUrls { get; set; }
-        public string DetailsDes { get; set; }
         public string SpecDes { get; set; }
         public string CartId { get; set; }
         public int Quantity { get; set; }
-
         public E_SellChannelRefType ShopMode { get; set; }
     }
 }
+

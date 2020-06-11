@@ -1298,6 +1298,8 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
 
             var ret = new RetOrderBuildPayOptions();
 
+            ret.Title = "支付方式";
+
             switch (rup.AppCaller)
             {
                 case E_AppCaller.Wxmp:
@@ -1336,7 +1338,7 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
         public List<OrderProductSkuByPickupModel> GetOrderProductSkuByPickup(string orderId, string machineId)
         {
             var models = new List<OrderProductSkuByPickupModel>();
-            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId ).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).FirstOrDefault();
             var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).ToList();
             var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).ToList();
 

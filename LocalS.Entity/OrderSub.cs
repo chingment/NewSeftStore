@@ -17,8 +17,6 @@ namespace LocalS.Entity
         public string SellChannelRefId { get; set; }
         public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
-        public string PickupCode { get; set; }
-        public DateTime? PickupCodeExpireTime { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }
@@ -26,10 +24,9 @@ namespace LocalS.Entity
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public int Quantity { get; set; }
-        public string Creator { get; set; }
-        public DateTime CreateTime { get; set; }
-        public string Mender { get; set; }
-        public DateTime? MendTime { get; set; }
+
+        public string PickupCode { get; set; }
+        public DateTime? PickupCodeExpireTime { get; set; }
         /// <summary>
         /// 是否触发过取货
         /// </summary>
@@ -38,12 +35,14 @@ namespace LocalS.Entity
         public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public DateTime? PayedTime { get; set; }
-
         public bool ExIsHappen { get; set; }
         public DateTime? ExHappenTime { get; set; }
         public bool ExIsHandle { get; set; }
         public DateTime? ExHandleTime { get; set; }
-
         public string ExHandleRemark { get; set; }
+        public string Creator { get; set; }
+        public DateTime CreateTime { get; set; }
+        public string Mender { get; set; }
+        public DateTime? MendTime { get; set; }
     }
 }
