@@ -47,9 +47,17 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;
             bizRop.IsTestMode = machine.IsTestMode;
+
+
+            OrderReserveBlockModel block = new OrderReserveBlockModel();
+
+            block.ShopMode = E_SellChannelRefType.Machine;
+
+            block.DeliveryAddress = null;
+
             foreach (var productSku in rop.ProductSkus)
             {
-                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine,SellChannelRefIds= new string[] { machine.Id } });
+                block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.Id } });
             }
 
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), bizRop);

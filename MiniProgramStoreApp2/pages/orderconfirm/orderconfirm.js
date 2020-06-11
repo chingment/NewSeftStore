@@ -24,8 +24,8 @@ var getData = function (_this) {
           var d = res.data
           _this.setData({
             orderId: orderId,
-            block: d.block,
-            subtotalItem: d.subtotalItem,
+            blocks: d.blocks,
+            subtotalItems: d.subtotalItems,
             actualAmount: d.actualAmount,
             originalAmount: d.originalAmount,
             coupon: d.coupon
@@ -43,7 +43,7 @@ Page({
    */
   data: {
     orderId: null,
-    block: [],
+    blocks: [],
     couponId: [],
     payOption:{
       title:'支付方式',
@@ -112,7 +112,7 @@ Page({
   deliveryAddressSelect: function (e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
-    var deliveryAddress = _this.data.block[index].deliveryAddress
+    var deliveryAddress = _this.data.blocks[index].deliveryAddress
     if (!deliveryAddress.canSelectElse)
       return
     wx.navigateTo({
@@ -136,9 +136,9 @@ Page({
   },
   unifiedOrder: function (e) {
     var _this = this
-    for (var i = 0; i < _this.data.block.length; i++) {
-      if (_this.data.block[i].shopMode == 1) {
-        if (_this.data.block[i].deliveryAddress.id == "") {
+    for (var i = 0; i < _this.data.blocks.length; i++) {
+      if (_this.data.blocks[i].shopMode == 1) {
+        if (_this.data.blocks[i].deliveryAddress.id == "") {
           toast.show({
             title: '请选择快寄地址'
           })

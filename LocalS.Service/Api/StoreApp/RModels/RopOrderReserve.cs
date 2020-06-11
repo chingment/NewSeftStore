@@ -1,4 +1,5 @@
-﻿using LocalS.Entity;
+﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +12,12 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RopOrderReserve()
         {
-            this.ProductSkus = new List<ProductSku>();
+            this.Blocks = new List<OrderReserveBlockModel>();
         }
 
         public string StoreId { get; set; }
-        public List<ProductSku> ProductSkus { get; set; }
+        public List<OrderReserveBlockModel> Blocks { get; set; }
         public E_OrderSource Source { get; set; }
-        public class ProductSku
-        {
-            public string Id { get; set; }
-            public string CartId { get; set; }
-            public int Quantity { get; set; }
-            public E_SellChannelRefType ShopMode { get; set; }
-        }
+   
     }
 }

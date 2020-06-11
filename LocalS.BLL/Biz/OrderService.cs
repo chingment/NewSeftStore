@@ -189,7 +189,7 @@ namespace LocalS.BLL.Biz
 
             lock (lock_Reserve)
             {
-                if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+                if (rop.Blocks == null || rop.Blocks.Count == 0)
                 {
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
                 }
@@ -215,7 +215,16 @@ namespace LocalS.BLL.Biz
                     #region 检查可售商品信息是否符合实际环境
                     List<string> warn_tips = new List<string>();
 
-                    foreach (var productSku in rop.ProductSkus)
+
+                    List<OrderReserveBlockModel.ProductSkuModel> productSkus = new List<OrderReserveBlockModel.ProductSkuModel>();
+
+                    foreach (var block in rop.Blocks)
+                    {
+                        productSkus.AddRange(block.Skus);
+                    }
+
+
+                    foreach (var productSku in productSkus)
                     {
                         string[] sellChannelRefIds = new string[] { };
 
@@ -281,11 +290,10 @@ namespace LocalS.BLL.Biz
                     #endregion
 
 
-                    LogUtil.Info("rop.ProductSkus:" + rop.ProductSkus.ToJsonString());
+                    LogUtil.Info("rop.ProductSkus:" + productSkus.ToJsonString());
                     LogUtil.Info("rop.bizProductSkus:" + bizProductSkus.ToJsonString());
 
-                    var buildOrderSubs = BuildOrderSubs(rop.ProductSkus, bizProductSkus);
-
+                    var buildOrderSubs = BuildOrderSubs(productSkus, bizProductSkus);
                     LogUtil.Info("SlotStock.buildOrderSubs:" + buildOrderSubs.ToJsonString());
 
                     var order = new Order();
@@ -295,7 +303,7 @@ namespace LocalS.BLL.Biz
                     order.StoreName = store.Name;
                     order.ClientUserId = rop.ClientUserId;
                     order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
-                    order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
+                    // order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
                     order.Status = E_OrderStatus.WaitPay;
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
@@ -311,7 +319,7 @@ namespace LocalS.BLL.Biz
 
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
                     {
-                        var cartsIds = rop.ProductSkus.Select(m => m.CartId).Distinct().ToArray();
+                        var cartsIds = productSkus.Select(m => m.CartId).Distinct().ToArray();
                         if (cartsIds != null)
                         {
                             var clientCarts = CurrentDb.ClientCart.Where(m => cartsIds.Contains(m.Id) && m.ClientUserId == rop.ClientUserId).ToList();
@@ -368,9 +376,16 @@ namespace LocalS.BLL.Biz
                                 break;
                             case E_SellChannelRefType.Mall:
                                 orderSub.SellChannelRefName = "[快递商品]";
-                                orderSub.Receiver = rop.Receiver;
-                                orderSub.ReceiverPhone = rop.ReceiverPhone;
-                                orderSub.ReceptionAddress = rop.ReceptionAddress;
+                                var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
+                                if (shopModeByMall != null)
+                                {
+                                    if (shopModeByMall.DeliveryAddress != null)
+                                    {
+                                        orderSub.Receiver = shopModeByMall.DeliveryAddress.Consignee;
+                                        orderSub.ReceiverPhone = shopModeByMall.DeliveryAddress.PhoneNumber;
+                                        orderSub.ReceptionAddress = shopModeByMall.DeliveryAddress.Address;
+                                    }
+                                }
                                 break;
                         }
 
@@ -497,7 +512,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        public List<BuildOrderSub> BuildOrderSubs(List<RopOrderReserve.ProductSku> reserveDetails, List<ProductSkuInfoModel> productSkus)
+        public List<BuildOrderSub> BuildOrderSubs(List<OrderReserveBlockModel.ProductSkuModel> reserveDetails, List<ProductSkuInfoModel> productSkus)
         {
             List<BuildOrderSub> buildOrderSubs = new List<BuildOrderSub>();
 

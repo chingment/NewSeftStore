@@ -10,16 +10,16 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetOrderConfirm()
         {
-            this.SubtotalItem = new List<OrderConfirmSubtotalItemModel>();
-            this.Block = new List<OrderBlockModel>();
+            this.SubtotalItems = new List<OrderConfirmSubtotalItemModel>();
+            this.Blocks = new List<OrderBlockModel>();
         }
 
         //选择的优惠卷
         public OrderConfirmCouponModel Coupon { get; set; }
         //订单块
-        public List<OrderBlockModel> Block { get; set; }
+        public List<OrderBlockModel> Blocks { get; set; }
         //小计项目
-        public List<OrderConfirmSubtotalItemModel> SubtotalItem { get; set; }
+        public List<OrderConfirmSubtotalItemModel> SubtotalItems { get; set; }
         //实际支付金额
         public string ActualAmount { get; set; }
         //原金额

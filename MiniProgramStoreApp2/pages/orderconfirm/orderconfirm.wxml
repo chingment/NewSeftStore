@@ -5,7 +5,7 @@
   <image class="img" src="/content/default/images/tag_address.png"></image>
 </view>
 <view class="ord-block">
-  <block wx:for="{{block}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+  <block wx:for="{{blocks}}" wx:for-index="index" wx:for-item="item" wx:key="list">
     <view class="ct pd-com">
       <view class="its-a">
         <view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}">

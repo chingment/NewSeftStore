@@ -56,12 +56,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
             bizRop.IsTestMode = store.IsTestMode;
-            //todo 判断机器状态 才能下单
-
-            foreach (var productSku in rop.ProductSkus)
-            {
-                bizRop.ProductSkus.Add(new LocalS.BLL.Biz.RopOrderReserve.ProductSku() { CartId = productSku.CartId, Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = productSku.ShopMode });
-            }
+            bizRop.Blocks = rop.Blocks;
 
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(operater, bizRop);
 
@@ -245,7 +240,7 @@ namespace LocalS.Service.Api.StoreApp
                 orderBlock.Add(orderBlock_Machine);
             }
 
-            ret.Block = orderBlock;
+            ret.Blocks = orderBlock;
 
             #region 暂时不开通 Coupon
 
@@ -305,7 +300,7 @@ namespace LocalS.Service.Api.StoreApp
             //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
             //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
 
-            ret.SubtotalItem = subtotalItem;
+            ret.SubtotalItems = subtotalItem;
 
 
             ret.ActualAmount = skuAmountByActual.ToF2Price();
