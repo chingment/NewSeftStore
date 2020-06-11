@@ -19,21 +19,21 @@ var getData = function (_this) {
     productSkus: productSkus,
     couponId: couponId
   }, {
-      success: function (res) {
-        if (res.result == 1) {
-          var d = res.data
-          _this.setData({
-            orderId: orderId,
-            blocks: d.blocks,
-            subtotalItems: d.subtotalItems,
-            actualAmount: d.actualAmount,
-            originalAmount: d.originalAmount,
-            coupon: d.coupon
-          })
-        }
-      },
-      fail: function () { }
-    })
+    success: function (res) {
+      if (res.result == 1) {
+        var d = res.data
+        _this.setData({
+          orderId: orderId,
+          blocks: d.blocks,
+          subtotalItems: d.subtotalItems,
+          actualAmount: d.actualAmount,
+          originalAmount: d.originalAmount,
+          coupon: d.coupon
+        })
+      }
+    },
+    fail: function () { }
+  })
 }
 
 Page({
@@ -45,11 +45,11 @@ Page({
     orderId: null,
     blocks: [],
     couponId: [],
-    payOption:{
-      title:'支付方式',
-      options:[]
+    payOption: {
+      title: '支付方式',
+      options: []
     },
-    curSelPayOption:null
+    curSelPayOption: null
   },
 
   /**
@@ -163,65 +163,52 @@ Page({
       })
       return
     }
-    
-  
+
+
 
     if (orderId == undefined || orderId == null) {
+
+      var blocks = []
+      var _blocks = _this.data.blocks
+      for (var i = 0; i < _blocks.length; i++) {
+        var skus = []
+        var _skus = _blocks[i].skus
+        for (var j = 0; j < _skus.length; j++) {
+          skus.push({ cartId: _skus[j].cartId, id: _skus[j].id, quantity: _skus[j].quantity, shopMode: _skus[j].shopMode })
+        }
+
+        var _deliveryAddress = _blocks[i].deliveryAddress
+        var deliveryAddress = {
+          id: _deliveryAddress.id,
+          consignee: _deliveryAddress.consignee,
+          phoneNumber: _deliveryAddress.phoneNumber,
+          areaName: _deliveryAddress.areaName,
+          areaCode: _deliveryAddress.areaCode,
+          address: _deliveryAddress.address
+        }
+
+        blocks.push({ shopMode: _blocks[i].shopMode, deliveryAddress: deliveryAddress, skus: skus })
+
+
+
+
+      }
+
+
 
 
       apiOrder.reserve({
         storeId: ownRequest.getCurrentStoreId(),
-        productSkus: productSkus,
+        blocks: blocks,
         source: 3
       }, {
-          success: function (res) {
-            if (res.result == 1) {
-              orderId = res.data.orderId
-              apiCart.pageData({
-                success: function (res) { }
-              })
-              _this.goPay(_this.data.curSelPayOption)
-            } else {
-              toast.show({
-                title: res.message
-              })
-            }
-          },
-          fail: function () { }
-        })
-
-    } else {
-      _this.goPay(_this.data.curSelPayOption)
-    }
-  },
-  goPay: function (payOption) {
-   
-    apiOrder.buildPayParams({
-      orderId: orderId,
-      payCaller: payOption.payCaller,
-      payPartner: payOption.payPartner
-    }, {
         success: function (res) {
           if (res.result == 1) {
-
-            var data = res.data;
-            wx.requestPayment({
-              'timeStamp': data.timestamp,
-              'nonceStr': data.nonceStr,
-              'package': data.package,
-              'signType': data.signType,
-              'paySign': data.paySign,
-              'success': function (res) {
-                wx.redirectTo({
-                  url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
-                })
-              },
-              'fail': function (res) {
-                wx.redirectTo({
-                  url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
-                })
-              }
+            orderId = res.data.orderId
+            apiCart.pageData({
+              success: function (res) { }
             })
+            _this.goPay(_this.data.curSelPayOption)
           } else {
             toast.show({
               title: res.message
@@ -230,20 +217,61 @@ Page({
         },
         fail: function () { }
       })
+
+    } else {
+      _this.goPay(_this.data.curSelPayOption)
+    }
   },
-  buildPayOptions: function(){
+  goPay: function (payOption) {
+
+    apiOrder.buildPayParams({
+      orderId: orderId,
+      payCaller: payOption.payCaller,
+      payPartner: payOption.payPartner
+    }, {
+      success: function (res) {
+        if (res.result == 1) {
+
+          var data = res.data;
+          wx.requestPayment({
+            'timeStamp': data.timestamp,
+            'nonceStr': data.nonceStr,
+            'package': data.package,
+            'signType': data.signType,
+            'paySign': data.paySign,
+            'success': function (res) {
+              wx.redirectTo({
+                url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
+              })
+            },
+            'fail': function (res) {
+              wx.redirectTo({
+                url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
+              })
+            }
+          })
+        } else {
+          toast.show({
+            title: res.message
+          })
+        }
+      },
+      fail: function () { }
+    })
+  },
+  buildPayOptions: function () {
     var _this = this
     apiOrder.buildPayOptions({
       appCaller: 1
     }, {
-        success: function (res) {
-          if (res.result == 1) {
-            _this.setData({ payOption:res.data})
-            
-          }
-        },
-        fail: function () { }
-      })
+      success: function (res) {
+        if (res.result == 1) {
+          _this.setData({ payOption: res.data })
+
+        }
+      },
+      fail: function () { }
+    })
 
   }
 
