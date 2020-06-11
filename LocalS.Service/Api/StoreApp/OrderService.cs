@@ -183,41 +183,47 @@ namespace LocalS.Service.Api.StoreApp
 
             var orderBlock = new List<OrderBlockModel>();
 
-            var skus_Express = skus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
-            if (skus_Express.Count > 0)
+            var skus_Mall = skus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
+            if (skus_Mall.Count > 0)
             {
-                var orderBlock_Express = new OrderBlockModel();
-                orderBlock_Express.TagName = "快递商品";
-                orderBlock_Express.Skus = skus_Express;
-                orderBlock_Express.ShopMode = E_SellChannelRefType.Mall;
-                var shippingAddressModel = new DeliveryAddressModel();
-                shippingAddressModel.CanSelectElse = true;
+                var orderBlock_Mall = new OrderBlockModel();
+                orderBlock_Mall.TagName = "快递商品";
+                orderBlock_Mall.Skus = skus_Mall;
+                orderBlock_Mall.ShopMode = E_SellChannelRefType.Mall;
+                orderBlock_Mall.TabMode = E_TabMode.DeliveryAndSelfTake;
+
+
+                var dliveryModel = new DeliveryModel();
+               
                 var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
                 if (shippingAddress == null)
                 {
-                    shippingAddressModel.Id = "";
-                    shippingAddressModel.Consignee = "快寄地址";
-                    shippingAddressModel.PhoneNumber = "选择";
-                    shippingAddressModel.AreaName = "";
-                    shippingAddressModel.Address = "";
-                    shippingAddressModel.IsDefault = false;
-                    shippingAddressModel.DefaultText = "";
+                    dliveryModel.Id = "";
+                    dliveryModel.Consignee = "快寄地址";
+                    dliveryModel.PhoneNumber = "选择";
+                    dliveryModel.AreaName = "";
+                    dliveryModel.Address = "";
+                    dliveryModel.IsDefault = false;
                 }
                 else
                 {
-                    shippingAddressModel.Id = shippingAddress.Id;
-                    shippingAddressModel.Consignee = shippingAddress.Consignee;
-                    shippingAddressModel.PhoneNumber = shippingAddress.PhoneNumber;
-                    shippingAddressModel.AreaName = shippingAddress.AreaName;
-                    shippingAddressModel.Address = shippingAddress.Address;
-                    shippingAddressModel.IsDefault = shippingAddress.IsDefault;
-                    shippingAddressModel.DefaultText = shippingAddress.IsDefault == true ? "默认" : "";
+                    dliveryModel.Id = shippingAddress.Id;
+                    dliveryModel.Consignee = shippingAddress.Consignee;
+                    dliveryModel.PhoneNumber = shippingAddress.PhoneNumber;
+                    dliveryModel.AreaName = shippingAddress.AreaName;
+                    dliveryModel.Address = shippingAddress.Address;
+                    dliveryModel.IsDefault = shippingAddress.IsDefault;
                 }
-                orderBlock_Express.DeliveryAddress = shippingAddressModel;
-                orderBlock.Add(orderBlock_Express);
+                orderBlock_Mall.Delivery = dliveryModel;
+
+                orderBlock_Mall.SelfTake.StoreName = store.Name;
+                orderBlock_Mall.SelfTake.StoreAddress = store.Address;
+
+
+                orderBlock.Add(orderBlock_Mall);
             }
 
-        
+
             var skus_Machine = skus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
             if (skus_Machine.Count > 0)
             {
@@ -225,17 +231,12 @@ namespace LocalS.Service.Api.StoreApp
                 orderBlock_Machine.TagName = "自提商品";
                 orderBlock_Machine.Skus = skus_Machine;
                 orderBlock_Machine.ShopMode = E_SellChannelRefType.Machine;
-                var shippingAddressModel = new DeliveryAddressModel();
-                shippingAddressModel.Id = null;
-                shippingAddressModel.Consignee = "店铺名称";
-                shippingAddressModel.IsDefault = true;
-                shippingAddressModel.DefaultText = "机器自取";
-                shippingAddressModel.PhoneNumber = store.Name;
-                shippingAddressModel.AreaName = "";
-                shippingAddressModel.Address = store.Address;
-                shippingAddressModel.CanSelectElse = false;
+                var selfTakeModel = new SelfTakeModel();
 
-                orderBlock_Machine.DeliveryAddress = shippingAddressModel;
+                selfTakeModel.StoreName = store.Name;
+                selfTakeModel.StoreAddress = store.Address;
+
+                orderBlock_Machine.SelfTake = selfTakeModel;
 
                 orderBlock.Add(orderBlock_Machine);
             }

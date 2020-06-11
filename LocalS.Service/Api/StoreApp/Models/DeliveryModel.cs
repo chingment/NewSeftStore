@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class DeliveryAddressModel
+    public class DeliveryModel
     {
+        public DeliveryModel()
+        {
+
+        }
+    
         public string Id { get; set; }
         public string Consignee { get; set; }
         public string PhoneNumber { get; set; }

@@ -62,6 +62,10 @@ page {
   background-color: #f4f4f4;
 }
 
+.line-space-ncolor {
+  height: 21rpx;
+}
+
 .col-nav {
   padding: 0 0;
 }

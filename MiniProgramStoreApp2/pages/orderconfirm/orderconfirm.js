@@ -22,7 +22,27 @@ var getData = function (_this) {
     success: function (res) {
       if (res.result == 1) {
         var d = res.data
+
+
+
+        var blocks = d.blocks
+        var tabShopModeByMall = 0
+        for (var i = 0; i < blocks.length; i++) {
+
+          if (blocks[i].shopMode == 1) {
+            if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
+              tabShopModeByMall = 0
+            }
+            else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
+              tabShopModeByMall = 1
+            }
+          }
+        }
+
+        console.log("tabShopModeByMall:" + tabShopModeByMall)
+
         _this.setData({
+          tabShopModeByMall: tabShopModeByMall,
           orderId: orderId,
           blocks: d.blocks,
           subtotalItems: d.subtotalItems,
@@ -42,6 +62,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tabShopModeByMall: 0,
+    tabShopModeByMachine: 1,
     orderId: null,
     blocks: [],
     couponId: [],
@@ -112,9 +134,7 @@ Page({
   deliveryAddressSelect: function (e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
-    var deliveryAddress = _this.data.blocks[index].deliveryAddress
-    if (!deliveryAddress.canSelectElse)
-      return
+
     wx.navigateTo({
       url: "/pages/deliveryaddress/deliveryaddress?operate=2&operateIndex=" + index,
       success: function (res) {
@@ -136,17 +156,6 @@ Page({
   },
   unifiedOrder: function (e) {
     var _this = this
-    for (var i = 0; i < _this.data.blocks.length; i++) {
-      if (_this.data.blocks[i].shopMode == 1) {
-        if (_this.data.blocks[i].deliveryAddress.id == "") {
-          toast.show({
-            title: '请选择快寄地址'
-          })
-          return
-        }
-      }
-    }
-
 
     for (var i = 0; i < _this.data.payOption.options.length; i++) {
       if (_this.data.payOption.options[i].isSelect == true) {
@@ -165,6 +174,7 @@ Page({
     }
 
 
+    var tabShopModeByMall = _this.data.tabShopModeByMall
 
     if (orderId == undefined || orderId == null) {
 
@@ -177,20 +187,54 @@ Page({
           skus.push({ cartId: _skus[j].cartId, id: _skus[j].id, quantity: _skus[j].quantity, shopMode: _skus[j].shopMode })
         }
 
-        var _deliveryAddress = _blocks[i].deliveryAddress
-        var deliveryAddress = {
-          id: _deliveryAddress.id,
-          consignee: _deliveryAddress.consignee,
-          phoneNumber: _deliveryAddress.phoneNumber,
-          areaName: _deliveryAddress.areaName,
-          areaCode: _deliveryAddress.areaCode,
-          address: _deliveryAddress.address
+
+        var _delivery = _blocks[i].delivery
+        var _selfTake = _blocks[i].selfTake
+
+        var delivery = null;
+        var selfTake = null;
+
+        var receiveMode = 0
+        if (_blocks[i].shopMode == 1) {
+          if (tabShopModeByMall == 0) {
+            receiveMode = 1
+
+            if (_delivery.id == "") {
+              toast.show({
+                title: '请选择快寄地址'
+              })
+              return
+            }
+
+            delivery = {
+              id: _delivery.id,
+              consignee: _delivery.consignee,
+              phoneNumber: _delivery.phoneNumber,
+              areaName: _delivery.areaName,
+              areaCode: _delivery.areaCode,
+              address: _delivery.address
+            }
+          }
+          else if (tabShopModeByMall == 1) {
+            receiveMode = 2
+
+            selfTake = {
+              storeName: _selfTake.storeName,
+              storeAddress: _selfTake.storeAddress,
+            }
+
+          }
+        }
+        else if (_blocks[i].shopMode == 3) {
+          receiveMode = 3
+
+          selfTake = {
+            storeName: _selfTake.storeName,
+            storeAddress: _selfTake.storeAddress,
+          }
         }
 
-        blocks.push({ shopMode: _blocks[i].shopMode, deliveryAddress: deliveryAddress, skus: skus })
-
-
-
+        blocks.push({ shopMode: _blocks[i].shopMode, receiveMode: receiveMode, delivery: delivery, selfTake: selfTake, skus: skus })
 
       }
 
@@ -273,6 +317,26 @@ Page({
       fail: function () { }
     })
 
+  },
+  tabShopModeByMallClick(e) {
+    var _this = this
+    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
+    var tabmode = e.currentTarget.dataset.replyTabmode //对应页面data-reply-index
+
+    var isFalg = false
+    if (index == 0) {
+      if (tabmode == 1 || tabmode == 3) {
+        isFalg = true
+      }
+    }
+    else if (index == 1) {
+      if (tabmode == 2 || tabmode == 3) {
+        isFalg = true
+      }
+    }
+    if (isFalg) {
+      _this.setData({ tabShopModeByMall: index })
+    }
   }
 
 

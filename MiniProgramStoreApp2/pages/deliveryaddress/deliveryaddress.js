@@ -116,15 +116,14 @@ Page({
     if (_this.data.operate == 2) {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.id = deliveryAddress.id
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.consignee = deliveryAddress.consignee
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.phoneNumber = deliveryAddress.phoneNumber
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.address = deliveryAddress.address
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.areaName = deliveryAddress.areaName
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.isDefault = deliveryAddress.isDefault
-      prevPage.data.block[_this.data.operateIndex].deliveryAddress.defaultText = deliveryAddress.isDefault==true?"默认":""
+      prevPage.data.blocks[_this.data.operateIndex].delivery.id = deliveryAddress.id
+      prevPage.data.blocks[_this.data.operateIndex].delivery.consignee = deliveryAddress.consignee
+      prevPage.data.blocks[_this.data.operateIndex].delivery.phoneNumber = deliveryAddress.phoneNumber
+      prevPage.data.blocks[_this.data.operateIndex].delivery.address = deliveryAddress.address
+      prevPage.data.blocks[_this.data.operateIndex].delivery.areaName = deliveryAddress.areaName
+      prevPage.data.blocks[_this.data.operateIndex].delivery.isDefault = deliveryAddress.isDefault
       prevPage.setData({
-        block: prevPage.data.block
+        blocks: prevPage.data.blocks
       })
 
       wx.navigateBack()

@@ -1,7 +1,7 @@
 Page({
 
   data: {
-
+    tabDoubleIndex:0,
     simulatedDATA: {
 
        specIdxSkus: [{
@@ -305,5 +305,10 @@ Page({
         true; //匹配选中的数据的库存，若不为空返回true反之返回false
 
   },
+  tabDoubleClick(e){
+    var _this=this
+    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
 
+    _this.setData({tabDoubleIndex:index})
+  }
 })

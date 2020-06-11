@@ -11,4 +11,13 @@ namespace LocalS.Entity
         Mall = 1,
         Machine = 3
     }
+
+    public enum E_ReceiveMode
+    {
+        Unknow = 0,
+        Delivery = 1,
+        StoreSelfTake = 2,
+        MachineSelfTake = 3
+    }
+
 }

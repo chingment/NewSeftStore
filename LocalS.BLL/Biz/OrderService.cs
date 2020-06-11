@@ -303,7 +303,7 @@ namespace LocalS.BLL.Biz
                     order.StoreName = store.Name;
                     order.ClientUserId = rop.ClientUserId;
                     order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
-                    // order.Quantity = rop.ProductSkus.Sum(m => m.Quantity);
+                    order.Quantity = productSkus.Sum(m => m.Quantity);
                     order.Status = E_OrderStatus.WaitPay;
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
@@ -369,21 +369,38 @@ namespace LocalS.BLL.Biz
                         switch (buildOrderSub.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
-                                orderSub.SellChannelRefName = "[机器]" + buildOrderSub.SellChannelRefId;
-                                orderSub.Receiver = null;
-                                orderSub.ReceiverPhone = null;
-                                orderSub.ReceptionAddress = store.Address;
+                                var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
+                                if (shopModeByMachine != null)
+                                {
+                                    if (shopModeByMachine.SelfTake != null)
+                                    {
+                                        orderSub.ReceiveMode = E_ReceiveMode.MachineSelfTake;
+                                        orderSub.SellChannelRefName = "[机器自提]" + buildOrderSub.SellChannelRefId;
+                                        orderSub.Receiver = null;
+                                        orderSub.ReceiverPhone = null;
+                                        orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
+                                    }
+                                }
                                 break;
                             case E_SellChannelRefType.Mall:
-                                orderSub.SellChannelRefName = "[快递商品]";
+
                                 var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
                                 if (shopModeByMall != null)
                                 {
-                                    if (shopModeByMall.DeliveryAddress != null)
+                                    if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                     {
-                                        orderSub.Receiver = shopModeByMall.DeliveryAddress.Consignee;
-                                        orderSub.ReceiverPhone = shopModeByMall.DeliveryAddress.PhoneNumber;
-                                        orderSub.ReceptionAddress = shopModeByMall.DeliveryAddress.Address;
+                                        orderSub.ReceiveMode = E_ReceiveMode.Delivery;
+                                        orderSub.SellChannelRefName = "[配送商品]";
+
+                                        orderSub.Receiver = shopModeByMall.Delivery.Consignee;
+                                        orderSub.ReceiverPhone = shopModeByMall.Delivery.PhoneNumber;
+                                        orderSub.ReceptionAddress = shopModeByMall.Delivery.Address;
+                                    }
+                                    if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                                    {
+                                        orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                        orderSub.SellChannelRefName = "[店铺自取]";
+                                        orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
                                     }
                                 }
                                 break;

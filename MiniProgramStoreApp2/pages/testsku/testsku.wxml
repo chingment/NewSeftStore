@@ -1,23 +1,33 @@
-
-<view class="tab-double" >
-<view class="tab-title" >
-	<view class="title-left selected">
-		<view class="txt">
-			<text>外卖配送</text>
+<view class="tab-double">
+	<view class="tab-title">
+		<view class="title-left {{tabDoubleIndex==0?'selected':''}}" bindtap="tabDoubleClick" data-reply-index="0">
+			<view class="txt">
+				<text>外卖配送</text>
+			</view>
+			<view class="left-triangle">
+			</view>
 		</view>
-		<view class="left-triangle">
+
+		<view class="title-right {{tabDoubleIndex==1?'selected':''}}" bindtap="tabDoubleClick" data-reply-index="1">
+			<view class="right-triangle">
+
+			</view>
+			<view class="txt">
+				<text>到店自取</text>
+			</view>
 		</view>
 	</view>
 
-	<view class="title-right">
-		<view class="right-triangle">
+	<view class="tab-content">
+		<view class="content-item {{tabDoubleIndex==0?'selected':''}}">
+			A
+		</view>
+		<view class="content-item {{tabDoubleIndex==1?'selected':''}}">
+			B
+		</view>
 
-		</view>
-		<view class="txt">
-			<text>到店自取</text>
-		</view>
 	</view>
-</view>
+
 </view>
 
 

@@ -33,8 +33,9 @@ namespace LocalS.BLL.Biz
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public List<Child> Childs { get; set; }
-
         public E_SellChannelRefType ShopMode { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
+
         public class Child
         {
             public Child()

@@ -17,6 +17,7 @@ namespace LocalS.Entity
         public string SellChannelRefId { get; set; }
         public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string ReceptionAddress { get; set; }

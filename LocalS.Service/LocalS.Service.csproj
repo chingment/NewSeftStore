@@ -266,12 +266,14 @@
     <Compile Include="Api\StoreApp\Models\BannerModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
+    <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmCouponModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmSubtotalItemModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
@@ -282,7 +284,7 @@
     <Compile Include="Api\StoreApp\Models\SpecValueModel.cs" />
     <Compile Include="Api\StoreApp\Models\StoreModel.cs" />
     <Compile Include="Api\StoreApp\Models\CouponModel.cs" />
-    <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
+    <Compile Include="Api\StoreApp\Models\DeliveryModel.cs" />
     <Compile Include="Api\StoreApp\Models\UserInfoModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />

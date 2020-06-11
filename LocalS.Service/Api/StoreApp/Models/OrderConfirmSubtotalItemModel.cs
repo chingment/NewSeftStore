@@ -12,12 +12,25 @@ namespace LocalS.Service.Api.StoreApp
         public OrderBlockModel()
         {
             this.Skus = new List<OrderConfirmProductSkuModel>();
+            this.Delivery = new DeliveryModel();
+            this.SelfTake = new SelfTakeModel();
         }
 
         public string TagName { get; set; }
         public E_SellChannelRefType ShopMode { get; set; }
-        public DeliveryAddressModel DeliveryAddress { get; set; }
+        public DeliveryModel Delivery { get; set; }
+        public SelfTakeModel SelfTake { get; set; }
         public List<OrderConfirmProductSkuModel> Skus { get; set; }
+        public E_TabMode TabMode { get; set; }
+    }
+
+    public enum E_TabMode
+    {
+
+        Unknow = 0,
+        Delivery = 1,
+        SelfTake = 2,
+        DeliveryAndSelfTake = 3
     }
 
     public class OrderConfirmSubtotalItemModel

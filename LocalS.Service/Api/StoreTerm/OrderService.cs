@@ -53,7 +53,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             block.ShopMode = E_SellChannelRefType.Machine;
 
-            block.DeliveryAddress = null;
+            block.SelfTake = null;
 
             foreach (var productSku in rop.ProductSkus)
             {
