@@ -41,9 +41,9 @@ Page({
               new QRCode('qrcode-' + i, {
                 // usingIn: this,
                 text: res.data.blocks[i].qrcode.code,
-                width: 150,
-                height: 150,
-                colorDark: "#fffff",
+                width: 130,
+                height: 130,
+                colorDark: "#000000",
                 colorLight: "white",
                 correctLevel: QRCode.CorrectLevel.H,
               });

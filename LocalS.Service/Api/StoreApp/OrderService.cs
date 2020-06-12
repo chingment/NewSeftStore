@@ -326,6 +326,9 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
+            var pageEntiy = new PageEntity<OrderModel>();
+
+
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
                          select new { o.Id, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
@@ -340,6 +343,10 @@ namespace LocalS.Service.Api.StoreApp
             int pageSize = 10;
 
             query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageIndex = rup.PageIndex;
+            pageEntiy.PageSize = pageSize;
 
             var list = query.ToList();
 
@@ -421,11 +428,12 @@ namespace LocalS.Service.Api.StoreApp
                         break;
                 }
 
-                models.Add(model);
+                pageEntiy.Items.Add(model);
+
             }
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", models);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pageEntiy);
 
             return result;
         }

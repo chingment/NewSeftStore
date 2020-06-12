@@ -172,8 +172,8 @@
 }
 
 .block-qrcode .qrimg{
-width: 200rpx;
- height: 200rpx;
+width: 130px;
+ height: 130px;
  margin:12rpx auto 0 auto;
 }
 

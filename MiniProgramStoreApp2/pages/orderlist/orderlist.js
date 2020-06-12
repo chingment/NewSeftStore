@@ -1,6 +1,6 @@
 const storeage = require('../../utils/storeageutil.js')
 const util = require('../../utils/util.js')
-const qrcode  = require('../../utils/qrcode.js')
+const qrcode = require('../../utils/qrcode.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()
@@ -30,31 +30,40 @@ var getList = function (_this) {
     status: status,
     caller: 1
   }, {
-      success: function (res) {
-        if (res.result == 1) {
-          var list
-          if (currentTab.pageIndex == 0) {
-            list = res.data
-          } else {
-            list = _this.data.tabs[currentTabIndex].list.concat(res.data)
-          }
-
-          _this.data.tabs[currentTabIndex].list = list;
-
-          _this.setData({
-            tabs: _this.data.tabs
-          })
+    success: function (res) {
+      if (res.result == 1) {
+        var d = res.data
+        var items = []
+        if (currentTab.pageIndex == 0) {
+          items = d.items
+        } else {
+          items = _this.data.tabs[currentTabIndex].list.concat(d.items)
         }
-      },
-      fail: function () { }
-    })
+
+        if (d.items.length == 0) {
+          _this.data.tabs[currentTabIndex].isCanScroll = false
+          _this.data.tabs[currentTabIndex].scrollTip = "没有更多订单了哟......"
+        }
+        else {
+          _this.data.tabs[currentTabIndex].isCanScroll = true
+        }
+
+        _this.data.tabs[currentTabIndex].total = d.total
+        _this.data.tabs[currentTabIndex].pageSize = d.pageSize
+        _this.data.tabs[currentTabIndex].pageCount = d.pageCount
+        _this.data.tabs[currentTabIndex].pageIndex = d.pageIndex
+        _this.data.tabs[currentTabIndex].list = items;
+
+        _this.setData({
+          tabs: _this.data.tabs
+        })
+      }
+    },
+    fail: function () { }
+  })
 }
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     tag: "orderlist",
     scrollHeight: 0,
@@ -65,41 +74,67 @@ Page({
         selected: false,
         status: "0000",
         pageIndex: 0,
-        list: null
+        pageSize: 10,
+        pageCount: 0,
+        total: 0,
+        scrollTip: '没有更多订单了哟......',
+        isCanScroll: true,
+        isCanLoadData: true,
+        list: []
       },
       {
         name: "待支付",
         selected: false,
         status: 2000,
         pageIndex: 0,
-        list: null
+        pageSize: 10,
+        pageCount: 0,
+        total: 0,
+        scrollTip: '没有更多订单了哟......',
+        isCanScroll: true,
+        isCanLoadData: true,
+        list: []
       }, {
         name: "待取货",
         selected: false,
         status: 3000,
         pageIndex: 0,
-        list: null
+        pageSize: 10,
+        pageCount: 0,
+        total: 0,
+        scrollTip: '没有更多订单了哟......',
+        isCanScroll: true,
+        isCanLoadData: true,
+        list: []
       }, {
         name: "已完成",
         selected: false,
         status: 4000,
         pageIndex: 0,
-        list: null
+        pageSize: 10,
+        pageCount: 0,
+        total: 0,
+        scrollTip: '没有更多订单了哟......',
+        isCanScroll: true,
+        isCanLoadData: true,
+        list: []
       }, {
         name: "已失效",
         selected: false,
         status: 5000,
         pageIndex: 0,
-        list: null
+        pageSize: 10,
+        pageCount: 0,
+        total: 0,
+        scrollTip: '没有更多订单了哟......',
+        isCanScroll: true,
+        isCanLoadData: true,
+        list: []
       }]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     var _this = this
-   
+
     var status = options.status == undefined ? "" : options.status
 
 
@@ -123,58 +158,9 @@ Page({
       _this.setData({
         scrollHeight: wHeight - rect[0].height
       });
-  }).exec()
+    }).exec()
 
     getList(_this)
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
 
   },
   //tab点击
@@ -219,11 +205,11 @@ Page({
                   apiOrder.cancle({
                     id: id
                   }, {
-                      success: function (res) {
-                        getList(_this)
-                      },
-                      fail: function () { }
-                    })
+                    success: function (res) {
+                      getList(_this)
+                    },
+                    fail: function () { }
+                  })
                 }
               }
             })
@@ -238,7 +224,56 @@ Page({
         break;
     }
   },
-  stopTouchMove: function () {
-    return false;
+  //加载更多
+  loadMore: function (e) {
+    var _this = this
+
+    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
+
+    // if (_this.data.tabs[index].isCanLoadData) {
+
+    console.log("index:" + index)
+    _this.data.tabs[index].pageIndex += 1
+    _this.data.tabs[index].isCanLoadData = false
+    _this.setData({
+      tabs: _this.data.tabs
+    })
+
+    getList(_this)
+    // }
+  },
+  //刷新处理
+  refesh: function (e) {
+    var _this = this
+
+    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
+    console.log("index:" + index)
+    var scrollTop = e.detail.scrollTop
+    _this.data.tabs[index].pageIndex = 0
+    _this.data.tabs[index].scrollTop = 0
+    _this.data.tabs[index].isCanScroll = true
+    _this.setData({
+      tabs: _this.data.tabs
+    })
+    getList(_this)
+  },
+  scroll: function (e) {
+    var _this = this
+
+    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
+    var scrollTop = e.detail.scrollTop
+
+    _this.data.tabs[index].scrollTop = scrollTop
+
+    console.log('scrollTop:' + scrollTop)
+    if (_this.data.tabs[index].isCanScroll) {
+      _this.data.tabs[index].scrollTip = "正在努力加载中......"
+      _this.data.tabs[index].isCanScroll = false
+      _this.setData({
+        tabs: _this.data.tabs
+      })
+
+    }
+
   }
 })

@@ -18,7 +18,9 @@ Component({
       type: Number
     }
   },
-  data: {},
+  data: {
+    isLogin:false
+  },
   methods: {
     goLogin: function (e) {
       ownRequest.goLogin()
