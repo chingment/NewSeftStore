@@ -403,6 +403,13 @@ page {
   margin: auto;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prd-list-2 .it-left .imgurl .img{
+  width: 85%;
+  height: 85%;
 }
 
 .prd-list-2 .name {

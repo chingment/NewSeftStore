@@ -37,6 +37,7 @@
   text-align: center;
   color: #dbdbdb;
   font-size: 24rpx;
+  padding: 60rpx;
 }
 
 

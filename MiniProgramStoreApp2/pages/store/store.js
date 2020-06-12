@@ -12,7 +12,7 @@ Page({
     if (isClearCache != undefined) {
       wx.clearStorage()
     }
-    
+
     function getStoreList(lat, lng) {
       apiStore.list({
         lat: lat,
@@ -22,12 +22,12 @@ Page({
           if (res.result == 1) {
             _this.setData({
               list: res.data,
-              currentStoreId: ownRequest.getCurrentStoreId()==undefined?'':ownRequest.getCurrentStoreId()
+              currentStoreId: ownRequest.getCurrentStoreId() == undefined ? '' : ownRequest.getCurrentStoreId()
             })
           }
         },
-          fail: function () { }
-        })
+        fail: function () { }
+      })
     }
 
     wx.getLocation({
@@ -35,10 +35,18 @@ Page({
       success: function (res) {
         var latitude = res.latitude
         var longitude = res.longitude
+        wx.setStorageSync("key_loaction", { lat: latitude, lng: longitude })
         getStoreList(latitude, longitude)
       }
     })
-    getStoreList(0, 0)
+
+    var loaction = wx.getStorageSync("key_loaction");
+
+    if (loaction == null) {
+      loaction = { lat: 0, lng: 0 }
+    }
+
+    getStoreList(loaction.lat, loaction.lng)
   },
   selectStore: function (e) {
     var store = e.currentTarget.dataset.replyStore

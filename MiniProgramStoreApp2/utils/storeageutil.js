@@ -20,8 +20,6 @@ function setCart(cart) {
     if (pages[i].data.tag == "main") {
       pages[i].data.tabBar[2].number = cart.count
 
-   
-
       pages[i].setCartComponentData({
         blocks: cart.blocks,
         count: cart.count,

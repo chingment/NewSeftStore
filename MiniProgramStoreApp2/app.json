@@ -14,9 +14,7 @@
     "pages/logs/logs",
     "pages/operate/operate",
     "pages/notopen/notopen",
-    "pages/test/test",
     "pages/orderdetails/orderdetails",
-    "pages/testsku/testsku",
     "pages/search/search"
   ],
   "window": {

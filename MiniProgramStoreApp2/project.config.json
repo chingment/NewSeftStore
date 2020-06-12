@@ -79,13 +79,6 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "pages/testsku/testsku",
-					"pathName": "pages/testsku/testsku",
-					"query": "",
-					"scene": null
-				},
-				{
 					"id": 5,
 					"name": "商品搜索",
 					"pathName": "pages/search/search",

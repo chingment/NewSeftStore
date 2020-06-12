@@ -50,10 +50,12 @@ page {
   text-align: center;
   color: #dbdbdb;
   padding: 60rpx;
+  font-size: 24rpx;
 }
 
 .nomore-tip{
   text-align: center;
   color: #dbdbdb;
   padding: 60rpx;
+  font-size: 24rpx;
 }

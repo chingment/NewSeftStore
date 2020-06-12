@@ -4,7 +4,7 @@ const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
 const app = getApp()
 
-var getList = function (_this) {
+var productSearch = function (_this) {
   var currentTab;
   var currentTabIndex = -1;
   for (var i = 0; i < _this.data.tabs.length; i++) {
@@ -23,7 +23,7 @@ var getList = function (_this) {
   var pageSize = currentTab.list.pageSize
   var kindId = currentTab.id == undefined ? "" : currentTab.id
 
-  apiProduct.list({
+  apiProduct.search({
     storeId: ownRequest.getCurrentStoreId(),
     pageIndex: pageIndex,
     pageSize: pageSize,
@@ -132,7 +132,7 @@ Component({
           tabs: _this.data.tabs
         })
 
-        getList(_this)
+        productSearch(_this)
       }
     },
     productRefesh: function (e) {
@@ -142,7 +142,7 @@ Component({
       _this.data.tabs[index].list.pageIndex = 0
 
       console.log("productLoadMore.index:" + index)
-      getList(_this)
+      productSearch(_this)
     },
     getPageData: function () {
       var _this = this
