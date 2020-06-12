@@ -3,7 +3,7 @@
 <view class="pd-com">
   <view wx:if="{{list.length>0}}" class="its-a">
     <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-      <view class="it">
+      <view class="it {{item.id==currentSelectId?'it-selected':''}}">
         <view class="it-l">
           <text class='txt-h1'>{{item.consignee}}</text>
           <text class='txt-h2 isDefault' wx:if="{{item.isDefault}}">默认</text>

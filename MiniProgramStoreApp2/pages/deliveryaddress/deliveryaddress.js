@@ -10,7 +10,7 @@ Page({
    */
   data: {
     operate: 0,
-    operateIndex: 0,
+    orderBlockIndex: 0,
     list: []
   },
 
@@ -20,8 +20,10 @@ Page({
   onLoad: function (options) {
     var _this = this
     var operate = parseInt(options.operate)
-    var operateIndex = parseInt(options.operateIndex)
+    var orderBlockIndex = parseInt(options.orderBlockIndex)
+    var currentSelectId = options.currentSelectId
 
+    
     var title = ""
     switch (operate) {
       case 1:
@@ -35,7 +37,7 @@ Page({
       title: title,
     })
 
-    _this.setData({ operate: operate, operateIndex: operateIndex })
+    _this.setData({ operate: operate, orderBlockIndex: orderBlockIndex,currentSelectId:currentSelectId })
 
   },
 
@@ -116,12 +118,12 @@ Page({
     if (_this.data.operate == 2) {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
-      prevPage.data.blocks[_this.data.operateIndex].delivery.id = deliveryAddress.id
-      prevPage.data.blocks[_this.data.operateIndex].delivery.consignee = deliveryAddress.consignee
-      prevPage.data.blocks[_this.data.operateIndex].delivery.phoneNumber = deliveryAddress.phoneNumber
-      prevPage.data.blocks[_this.data.operateIndex].delivery.address = deliveryAddress.address
-      prevPage.data.blocks[_this.data.operateIndex].delivery.areaName = deliveryAddress.areaName
-      prevPage.data.blocks[_this.data.operateIndex].delivery.isDefault = deliveryAddress.isDefault
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.id = deliveryAddress.id
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.consignee = deliveryAddress.consignee
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.phoneNumber = deliveryAddress.phoneNumber
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.address = deliveryAddress.address
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.areaName = deliveryAddress.areaName
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.isDefault = deliveryAddress.isDefault
       prevPage.setData({
         blocks: prevPage.data.blocks
       })

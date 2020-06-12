@@ -34,7 +34,7 @@
 						<view class="content-item {{tabShopModeByMall==0?'selected':''}}">
 
 							<view class="its-a">
-								<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}">
+								<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}" data-reply-deliveryaddressid="{{item.delivery.id}}"   >
 									<view class="it-l">
 										<text class='txt-h1'>{{item.delivery.consignee}}</text>
 										<text class="txt-h2 isDefault" wx:if="{{item.delivery.isDefault}}">默认</text>

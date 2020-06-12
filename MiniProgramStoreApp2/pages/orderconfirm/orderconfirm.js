@@ -134,9 +134,9 @@ Page({
   deliveryAddressSelect: function (e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
-
+    var deliveryaddressid = e.currentTarget.dataset.replyDeliveryaddressid
     wx.navigateTo({
-      url: "/pages/deliveryaddress/deliveryaddress?operate=2&operateIndex=" + index,
+      url: "/pages/deliveryaddress/deliveryaddress?operate=2&orderBlockIndex=" + index+"&currentSelectId="+deliveryaddressid,
       success: function (res) {
         // success
       },
