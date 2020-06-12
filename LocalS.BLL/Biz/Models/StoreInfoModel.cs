@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.Entity;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace LocalS.BLL.Biz
 {
     public class StoreInfoModel
     {
+        
         public string Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -25,5 +27,21 @@ namespace LocalS.BLL.Biz
         public List<ImgSet> DisplayImgUrls { get; set; }
 
         public bool IsTestMode { get; set; }
+
+
+        public string[] GetSellChannelRefIds(E_SellChannelRefType shopMode)
+        {
+            string[] sellChannelRefIds = null;
+            if (shopMode == E_SellChannelRefType.Machine)
+            {
+                sellChannelRefIds = this.SellMachineIds;
+            }
+            else if (shopMode == E_SellChannelRefType.Machine)
+            {
+                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+            }
+
+            return sellChannelRefIds;
+        }
     }
 }

@@ -24,13 +24,12 @@ namespace LocalS.Service.Api.StoreApp
 
             var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
 
-
             //构建购物车商品信息
             var cartProductSkuModels = new List<CartProductSkuModel>();
 
             foreach (var clientCart in clientCarts)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(clientCart.MerchId, store.Id, store.SellMachineIds, clientCart.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(clientCart.MerchId, store.Id, store.GetSellChannelRefIds(clientCart.ShopMode), clientCart.PrdProductSkuId);
                 if (bizProductSku != null)
                 {
                     if (bizProductSku.Stocks.Count > 0)
@@ -57,21 +56,18 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var shopMode in shopModes)
             {
-
                 var carBlock = new CartBlockModel();
                 carBlock.ShopMode = shopMode;
                 carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ShopMode == shopMode).ToList();
-
                 switch (shopMode)
                 {
                     case E_SellChannelRefType.Mall:
                         carBlock.TagName = "线上商城";
                         break;
                     case E_SellChannelRefType.Machine:
-                        carBlock.TagName = "线下机器自提";
+                        carBlock.TagName = "线下机器";
                         break;
                 }
-
                 ret.Blocks.Add(carBlock);
             }
 
@@ -129,7 +125,7 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.SellMachineIds, item.Id);
+                                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.GetSellChannelRefIds(item.ShopMode), item.Id);
 
                                 if (bizProductSku == null || bizProductSku.Stocks == null || bizProductSku.Stocks.Count == 0)
                                 {
