@@ -8,9 +8,19 @@ namespace WebApiStoreApp.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public OwnApiHttpResponse List([FromUri]RupProductList rup)
+        public OwnApiHttpResponse InitSearchPageData([FromUri]RupProductInitSearchPageData rup)
         {
-            var result = StoreAppServiceFactory.Product.List(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Product.InitSearchPageData(this.CurrentUserId, this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public OwnApiHttpResponse Search([FromUri]RupProductSearch rup)
+        {
+            var result = StoreAppServiceFactory.Product.Search(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
 

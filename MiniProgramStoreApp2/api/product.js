@@ -3,10 +3,21 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function list(urlParams, requestHandler) {
+function initSearchPageData(urlParams, requestHandler) {
 
   lumos.getJson({
-    url: config.apiUrl.productList,
+    url: config.apiUrl.productInitSearchPageData,
+    urlParams: urlParams,
+    success: function (res) {
+      requestHandler.success(res)
+    }
+  })
+}
+
+function search(urlParams, requestHandler) {
+
+  lumos.getJson({
+    url: config.apiUrl.productSearch,
     urlParams: urlParams,
     success: function (res) {
       requestHandler.success(res)
@@ -37,7 +48,8 @@ function skuStockInfo(urlParams, requestHandler) {
 }
 
 module.exports = {
-  list: list,
+  initSearchPageData:initSearchPageData,
+  search: search,
   details: details,
   skuStockInfo:skuStockInfo
 }

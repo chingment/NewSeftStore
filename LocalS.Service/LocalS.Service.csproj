@@ -275,6 +275,7 @@
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetProductInitSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RetPersonalPageData.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildPayOptions.cs" />
     <Compile Include="Api\StoreApp\RModels\RupPersonalPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupProductInitSearchPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductKindPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />
@@ -322,7 +324,7 @@
     <Compile Include="Api\StoreApp\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductDetails.cs" />
-    <Compile Include="Api\StoreApp\RModels\RupProductList.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupProductSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RupStoreList.cs" />
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />

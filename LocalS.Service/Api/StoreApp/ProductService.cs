@@ -12,7 +12,34 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductService : BaseDbContext
     {
-        public CustomJsonResult List(string operater, string clientUserId, RupProductList rup)
+        public CustomJsonResult InitSearchPageData(string operater, string clientUserId, RupProductInitSearchPageData rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            var ret = new RetProductInitSearch();
+
+            var store = BizFactory.Store.GetOne(rup.StoreId);
+
+            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+
+            foreach (var prdKind in prdKinds)
+            {
+                var option = new Option();
+                option.Id = prdKind.Id;
+                option.Name = prdKind.Name;
+                option.Selected = false;
+
+                ret.Condition_Kinds.Add(option);
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+        public CustomJsonResult Search(string operater, string clientUserId, RupProductSearch rup)
         {
             var result = new CustomJsonResult();
 
@@ -126,7 +153,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return result;
         }
-
 
         public CustomJsonResult SkuStockInfo(string operater, string clientUserId, RupProductDetails rup)
         {

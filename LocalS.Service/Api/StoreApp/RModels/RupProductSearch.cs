@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RupProductList
+    public class RupProductSearch
     {
         public string StoreId { get; set; }
         public int PageIndex { get; set; }

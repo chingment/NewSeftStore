@@ -10,7 +10,7 @@ namespace LocalS.BLL.Biz
 {
     public class StoreInfoModel
     {
-        
+
         public string Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -36,10 +36,11 @@ namespace LocalS.BLL.Biz
             {
                 sellChannelRefIds = this.SellMachineIds;
             }
-            else if (shopMode == E_SellChannelRefType.Machine)
+            else if (shopMode == E_SellChannelRefType.Mall)
             {
                 sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
             }
+
 
             return sellChannelRefIds;
         }

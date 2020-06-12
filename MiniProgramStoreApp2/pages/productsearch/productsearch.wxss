@@ -46,7 +46,14 @@ page {
   font-size: 0.8rem;
 }
 
+.nodata-tip{
+  text-align: center;
+  color: #dbdbdb;
+  padding: 60rpx;
+}
+
 .nomore-tip{
   text-align: center;
   color: #dbdbdb;
+  padding: 60rpx;
 }

@@ -2,19 +2,10 @@
 
 const config = require('../config')
 
-const key_productkind = "key_productkind"
 const key_cart = "key_cart"
 const key_accesstoken = "key_accesstoken"
 const key_store = "key_store"
 const key_openid = "openid"
-
-function getProductKind() {
-  return wx.getStorageSync(key_productkind) || []
-}
-
-function setProductKind(productkind) {
-  wx.setStorageSync(key_productkind, productkind)
-}
 
 function getCart() {
   return wx.getStorageSync(key_cart) || []
@@ -75,8 +66,6 @@ function setOpenId(openid) {
 }
 
 module.exports = {
-  getProductKind: getProductKind,
-  setProductKind: setProductKind,
   getCart: getCart,
   setCart: setCart,
   setAccessToken: setAccessToken,

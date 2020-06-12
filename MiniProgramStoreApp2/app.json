@@ -3,7 +3,7 @@
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",
-    "pages/productlist/productlist",
+    "pages/productsearch/productsearch",
     "pages/productdetails/productdetails",
     "pages/deliveryaddress/deliveryaddress",
     "pages/deliveryaddressedit/deliveryaddressedit",
