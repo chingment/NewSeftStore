@@ -67,6 +67,7 @@ Component({
       type: Object,
       observer: function (newVal, oldVal, changedPath) {
         var _this = this
+        console.log("productKind.initData")
       }
     },
     height: {

@@ -12,23 +12,19 @@ Component({
     initdata: {
       type: Object,
       observer: function (newVal, oldVal, changedPath) {
+        console.log("cart.initData")
         var _this = this
-        _this.setData({
-          scrollHeight: 500,
-          isLogin: ownRequest.isLogin(),
-          blocks: newVal.blocks,
-          count: newVal.count,
-          sumPrice: newVal.sumPrice,
-          countBySelected: newVal.countBySelected,
-          sumPriceBySelected: newVal.sumPriceBySelected
-        })
+        _this.getPageData()
       }
     },
     height: {
       type: Number
     }
   },
-  data: {},
+  data: {
+    isLogin:false,
+    blocks:[]
+  },
   methods: {
     itemOperate: util.throttle(function (e) {
 
@@ -215,12 +211,27 @@ Component({
 
     },
     getPageData: function (e) {
-      var self = this
-      apiCart.pageData({
-        success: function (res) {
-          self.setData({ initdata: res.data })
-        }
-      })
+      var _this = this
+      if (ownRequest.getCurrentStoreId() != undefined) {
+        apiCart.pageData({
+          success: function (res) {
+            if (res.result == 1) {
+              var d = res.data
+
+              _this.setData({
+                scrollHeight: 500,
+                isLogin: ownRequest.isLogin(),
+                blocks: d.blocks,
+                count: d.count,
+                sumPrice: d.sumPrice,
+                countBySelected: d.countBySelected,
+                sumPriceBySelected: d.sumPriceBySelected
+              })
+
+            }
+          }
+        })
+      }
     },
     goLogin: function (e) {
       ownRequest.goLogin()

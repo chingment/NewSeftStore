@@ -15,15 +15,7 @@ Component({
       observer: function (newVal, oldVal, changedPath) {
         console.log("index.initdata")
         var _this = this
-
         _this.getPageData()
-        // _this.setData({
-        //   shopModes:newVal.shopModes,
-        //   singleStore: typeof config.storeId == "undefined"?false:true ,
-        //   currentStore: newVal.store,
-        //   banner: newVal.banner,
-        //   pdArea: newVal.pdArea
-        // })
       }
     },
     height: {
@@ -116,10 +108,6 @@ Component({
     },
     onShow() {
       console.log("index.onShow")
-
-
-      //this.getPageData()
-
     }
   }
 })

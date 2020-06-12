@@ -1,5 +1,5 @@
 const ownRequest = require('../../own/ownRequest.js')
-
+const apiPersonal = require('../../api/personal.js')
 Component({
   options: {
     addGlobalClass: true,
@@ -8,14 +8,10 @@ Component({
   properties: {
     initdata: {
       type: Object,
-      observer: function(newVal, oldVal, changedPath) {
-
+      observer: function (newVal, oldVal, changedPath) {
+        console.log("personal.initData")
         var _this = this
-        _this.setData({
-          isLogin: ownRequest.isLogin(),
-          userInfo: newVal.userInfo
-        })
-
+        _this.getPageData()
       }
     },
     height: {
@@ -24,10 +20,10 @@ Component({
   },
   data: {},
   methods: {
-    goLogin: function(e) {
+    goLogin: function (e) {
       ownRequest.goLogin()
     },
-    navigateToClick: function(e) {
+    navigateToClick: function (e) {
       var ischecklogin = e.currentTarget.dataset.ischecklogin
       if (ischecklogin == "true") {
         if (!ownRequest.isLogin()) {
@@ -41,7 +37,26 @@ Component({
         url: url
       })
     },
-    onShow(){
+    getPageData: function (e) {
+      var _this = this
+      if (ownRequest.getCurrentStoreId() != undefined) {
+        apiPersonal.pageData(null, {
+          success: function (res) {
+            console.log("ab.2")
+            if (res.result == 1) {
+              var d = res.data
+              console.log("ab.1")
+              _this.setData({
+                isLogin: ownRequest.isLogin(),
+                userInfo: d.userInfo
+              })
+
+            }
+          }
+        })
+      }
+    },
+    onShow() {
       console.log("personal.onShow")
     }
   }

@@ -11,7 +11,6 @@ function pageData(params, requestHandler) {
     urlParams: params,
     success: function (res) {
       if (res.result == 1) {
-        storeage.setCart(res.data)
         requestHandler.success(res)
       }
     }

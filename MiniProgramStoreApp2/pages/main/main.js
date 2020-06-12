@@ -78,6 +78,10 @@ Page({
       sumPrice: 0,
       countBySelected: 0,
       sumPriceBySelected: 0
+    },
+    personal:{
+      isLogin: false,
+      userInfo: null
     }
   },
   onLoad: function (options) {
@@ -89,30 +93,29 @@ Page({
 
      app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
 
-    apiGlobal.dataSet({
-      storeId: ownRequest.getCurrentStoreId(),
-      datetime: util.formatTime(new Date())
-    }, {
-      success: function (res) {
-        if (res.result == 1) {
-          var cart = res.data.cart
-          var personal = res.data.personal
+    // apiGlobal.dataSet({
+    //   storeId: ownRequest.getCurrentStoreId(),
+    //   datetime: util.formatTime(new Date())
+    // }, {
+    //   success: function (res) {
+    //     if (res.result == 1) {
+    //       var cart = res.data.cart
+    //       var personal = res.data.personal
 
-          if (personal.userInfo == null) {
-            storeage.setAccessToken(null)
-          }
+    //       if (personal.userInfo == null) {
+    //         storeage.setAccessToken(null)
+    //       }
 
-          _this.setData({
-            cart: cart,
-            personal: personal
-          })
+    //       _this.setData({
+    //         cart: cart,
+    //         personal: personal
+    //       })
 
-          //storeage.setProductKind(productKind)
-          storeage.setCart(cart)
-        }
-      },
-      fail: function () { }
-    })
+    //       storeage.setCart(cart)
+    //     }
+    //   },
+    //   fail: function () { }
+    // })
 
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
@@ -131,6 +134,10 @@ Page({
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
+  },
+  setCartComponentData:function(data){
+    var _this = this
+    _this.selectComponent('#cp_cart').setData(data);
   },
   mainTabBarItemClick(e) {
     var _this = this
