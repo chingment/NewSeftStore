@@ -5,11 +5,11 @@
       <view class='close' bindtap='_close'>关闭</view>
     </view>
 
-    <view class="st-cart" style="height:500px;">
+    <view class="st-cart">
       <view class="ct" style="height:100%;">
 
         <block wx:if="{{cart.blocks.length>0}}">
-          <scroll-view scroll-y="true" style="height:500px;">
+          <scroll-view scroll-y="true" style="height:660rpx;">
             <view class="cart-blocks its-blocks">
               <block wx:for="{{cart.blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
                 <view class="it">

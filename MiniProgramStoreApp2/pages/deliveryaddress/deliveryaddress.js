@@ -21,7 +21,7 @@ Page({
     var _this = this
     var operate = parseInt(options.operate)
     var orderBlockIndex = parseInt(options.orderBlockIndex)
-    var currentSelectId = options.currentSelectId
+    var currentSelectId = typeof options.currentSelectId =="undefined"?"":options.currentSelectId
 
     
     var title = ""

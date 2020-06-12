@@ -4,27 +4,27 @@ page {
 
 
 .carttips {
-  width: 3.8rem;
-  height: 3.8rem;
-  border-radius: 3.8rem;
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 130rpx;
   float: right;
   background-color: #fff;
   position: fixed;
-  bottom: 2rem;
-  right: 10px;
+  bottom: 80rpx;
+  right: 50rpx;
   border: 0 solid #fff;
   text-align: center;
   align-items: center;
   justify-content: center;
   display: flex;
-  -webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 42rpx rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 42rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 42rpx rgba(0, 0, 0, 0.1);
 }
 
 .carttips .img {
-  width: 2rem;
-  height: 2rem;
+  width:55rpx;
+  height: 55rpx;
 }
 
 .carttips .title {
@@ -32,18 +32,18 @@ page {
 }
 
 .carttips .number {
-  width: 1.4rem;
-  height: 1.2rem;
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  font-size: 21rpx;
   border: 0 solid #fff;
   background-color: #f00;
   color: #fff;
   position: absolute;
-  right: 0.6rem;
-  border-radius: 1.4rem;
-  line-height: 1.2rem;
+  right: 32rpx;
+  border-radius: 30rpx;
   z-index: 999;
-  top: 0.3rem;
-  font-size: 0.8rem;
+  top: 24rpx;
 }
 
 .nodata-tip{
