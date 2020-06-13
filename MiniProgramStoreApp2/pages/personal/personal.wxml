@@ -5,10 +5,10 @@
 				<view class='item-left'>
 					<view class="container">
 
+						<view class='item-nickname'>
+						      <open-data type="userNickName"></open-data>
+						</view>
 						<block wx:if="{{isLogin}}">
-							<view class='item-nickname'>
-								<text>{{userInfo.nickName}}</text>
-							</view>
 							<view wx:if="{{userInfo.isVip}}" class='item-isvip'>
 								<image class="img" src='/content/default/images/member.png'></image>
 							</view>
@@ -21,9 +21,6 @@
 							</view>
 						</block>
 						<block wx:else>
-							<view class='item-logintip' bindtap="goLogin">
-								<text>未登陆</text>
-							</view>
 							<view class='item-logingo' bindtap="goLogin">
 								<text class='txt'>点击登录账号</text>
 							</view>
@@ -31,12 +28,10 @@
 					</view>
 				</view>
 				<view class='item-right'>
-					<block wx:if="{{isLogin}}">
-						<image class="img" src='{{userInfo.avatar}}'></image>
-					</block>
-					<block wx:else>
-						<image  class="img" src='/content/default/images/avaner_default.png'></image>
-					</block>
+
+        <view class="img">
+				<open-data  type="userAvatarUrl"></open-data>
+				</view>
 
 				</view>
 			</view>
