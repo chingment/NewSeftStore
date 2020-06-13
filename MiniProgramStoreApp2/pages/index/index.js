@@ -115,7 +115,6 @@ Component({
     },
     onShow() {
       console.log("index.onShow")
-
       var _this=this
       app.globalData.skeletonPage=_this;
     }

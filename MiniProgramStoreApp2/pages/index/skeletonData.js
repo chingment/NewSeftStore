@@ -3,14 +3,12 @@ module.exports = {
   "lists": [
     {
       "type": "bg",
-      "elements": [
-        "width:714rpx;height:212rpx;left:18rpx;top:384rpx"
-      ]
+      "elements": []
     },
     {
       "type": "rect",
       "elements": [
-        "width:256rpx;height:44rpx;left:70rpx;top:8rpx",
+        "width:160rpx;height:44rpx;left:70rpx;top:8rpx",
         "width:112rpx;height:40rpx;left:454rpx;top:10rpx",
         "width:112rpx;height:40rpx;left:620rpx;top:10rpx",
         "width:714rpx;height:300rpx;left:18rpx;top:70rpx",
@@ -34,10 +32,10 @@ module.exports = {
         "width:40rpx;height:40rpx;left:18rpx;top:10rpx",
         "width:32rpx;height:32rpx;left:412rpx;top:14rpx",
         "width:32rpx;height:32rpx;left:578rpx;top:14rpx",
-        "width:158.5rpx;height:120rpx;left:28rpx;top:414rpx",
-        "width:158.5rpx;height:120rpx;left:206.5rpx;top:414rpx",
-        "width:158.5rpx;height:120rpx;left:385rpx;top:414rpx",
-        "width:158.5rpx;height:120rpx;left:563.5rpx;top:414rpx"
+        "width:120rpx;height:120rpx;left:47.25rpx;top:414rpx",
+        "width:120rpx;height:120rpx;left:225.75rpx;top:414rpx",
+        "width:120rpx;height:120rpx;left:404.25rpx;top:414rpx",
+        "width:120rpx;height:120rpx;left:582.75rpx;top:414rpx"
       ]
     }
   ]

@@ -52,36 +52,36 @@
 			</view>
 		</view>
 
-		<view class="fc skeleton-bg">
+		<view class="fc">
 			<view class="ct">
 				<view class='its-fc'>
 					<navigator url="/pages/notopen/notopen" class="it"  hover-class="none">
-						<view class="icon skeleton-circle">
-							<image class='img' src='/content/default/images/index-fc-newuser.png'></image>
+						<view class="icon">
+							<image class='img skeleton-circle' src='/content/default/images/index-fc-newuser.png'></image>
 						</view>
 						<view class="title skeleton-rect">
 							<text class='txt'> 新人专享</text>
 						</view>
 					</navigator>
 					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon skeleton-circle">
-							<image class='img' src='/content/default/images/index-fc-seckill.png'></image>
+						<view class="icon">
+							<image class='img skeleton-circle' src='/content/default/images/index-fc-seckill.png'></image>
 						</view>
 						<view class="title skeleton-rect">
 							<text class='txt'>限时秒杀</text>
 						</view>
 					</navigator>
 					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon skeleton-circle">
-							<image class='img' src='/content/default/images/index-fc-member.png'></image>
+						<view class="icon">
+							<image class='img skeleton-circle' src='/content/default/images/index-fc-member.png'></image>
 						</view>
 						<view class="title skeleton-rect">
 							<text class='txt'>会员专区</text>
 						</view>
 					</navigator>
 					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon skeleton-circle">
-							<image class='img' src='/content/default/images/index-fc-coupon.png'></image>
+						<view class="icon">
+							<image class='img skeleton-circle' src='/content/default/images/index-fc-coupon.png'></image>
 						</view>
 						<view class="title skeleton-rect">
 							<text class='txt'>优惠券</text>
