@@ -1,14 +1,25 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
+<skeleton
+  loading="{{ skeletonSelectedLoadingType }}"
+  bgcolor="{{ skeletonBgcolor }}"
+  isDev="{{ skeletonIsDev }}"
+  data="{{ skeletonData }}"
+  wx:if="{{ !pageIsReady || skeletonIsDev }}"
+></skeleton>
+
+
+<view class="page skeleton" wx:if="{{ pageIsReady }}"> 
+
 <view class="search-condition" style="height:62rpx">
 	<block wx:if="{{condition_Kinds.length>1}}">
-		<scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{80*condition_Kinds_index}}">
-			<view style="width:{{condition_Kinds.length*80}}px;" class="tabbar-items">
+		<scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{100*condition_Kinds_index}}">
+			<view style="width:{{condition_Kinds.length*100}}px;" class="tabbar-items" style="height:62rpx">
 				<view class="container">
 					<block wx:for-items="{{condition_Kinds}}" wx:for-item="item" wx:key="index">
 						<view id="{{index}}" style="width:80px" class="item {{condition_Kinds_index==index?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClickByKind">
-							<view class="title">{{item.name}}</view>
+							<view  class="title skeleton-rect">{{item.name}}</view>
 							<view class='seleced-bottom'></view>
 						</view>
 					</block>
@@ -18,26 +29,25 @@
 	</block>
 </view>
 
-<scroll-view class="search-content" scroll-top="{{scrollTop}}" scroll-y="true" style="height:{{scrollHeight}}px" bindscrolltolower="loadMore" bindscrolltoupper="refesh">
-
+<scroll-view class="search-content" scroll-top="{{scrollTop}}" scroll-y="true" style="height:{{scrollHeight}}px;" bindscrolltolower="loadMore" bindscrolltoupper="refesh">
 
 	<view class='list-data prd-list-1' wx:if="{{dataList.items.length>0}}">
 		<block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 			<view class='it it-{{index%2}}'>
-				<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+				<navigator class='imgurl skeleton-rect' url="/pages/productdetails/productdetails?skuId={{item.id}}">
 					<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 						<view class="isOffSell-tip">已下架</view>
 					</view>
 					<image class="img" src="{{item.mainImgUrl}}"></image>
 				</navigator>
-				<text class="name font-gray">{{item.name}}</text>
-				<text class="briefInfo font-gray">{{item.briefDes}}</text>
-				<view class="area2">
-					<view class="price">
+				<text class="name font-gray skeleton-rect" >{{item.name}}</text>
+				<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
+				<view class="area2" >
+					<view class="price skeleton-rect" >
 						<text class="saleprice font-black">{{item.salePrice}}</text>
 						<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
 					</view>
-					<view class="operate">
+					<view class="operate skeleton-circle"  >
 						<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
 					</view>
 				</view>
@@ -57,3 +67,5 @@
 </view>
 
 <cart id="cart"></cart>
+
+</view>

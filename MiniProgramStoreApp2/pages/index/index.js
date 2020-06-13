@@ -3,6 +3,9 @@ const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
+
+const skeletonData = require('./skeletonData');
+
 const app = getApp()
 Component({
   options: {
@@ -23,10 +26,13 @@ Component({
     }
   },
   data: {
+    pageIsReady: false,
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
     shopMode: 0
-  },
-  ready: function () {
-
   },
   methods: {
     addToCart: function (e) {
@@ -76,7 +82,8 @@ Component({
                 singleStore: typeof config.storeId == "undefined" ? false : true,
                 currentStore: d.store,
                 banner: d.banner,
-                pdArea: d.pdArea
+                pdArea: d.pdArea,
+                pageIsReady:true
               })
             }
 
@@ -108,6 +115,9 @@ Component({
     },
     onShow() {
       console.log("index.onShow")
+
+      var _this=this
+      app.globalData.skeletonPage=_this;
     }
   }
 })

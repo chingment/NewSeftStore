@@ -1,12 +1,23 @@
+<skeleton
+  loading="{{ skeletonSelectedLoadingType }}"
+  bgcolor="{{ skeletonBgcolor }}"
+  isDev="{{ skeletonIsDev }}"
+  data="{{ skeletonData }}"
+  wx:if="{{ !pageIsReady || skeletonIsDev }}"
+></skeleton>
+
+<view class="page skeleton" wx:if="{{ pageIsReady }}" >
+
+
+
 <scroll-view scroll-y="true" style="height:{{height}}px;">
 
+
 	<view class="st-index pd-com">
-
-
-		<view style="height:61rpx">
+		<view style="height:61rpx;width:100%" >
 			<view class="store" bindtap="goSelectStore">
-				<image class="icon-img" src="/content/default/images/store_address.png"></image>
-				<text class="title">{{currentStore.name}}</text>
+				<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
+				<text class="title skeleton-rect">{{currentStore.name}}</text>
 				<image wx:if="{{!singleStore}}" class="more-img" src="/content/default/images/arro_down.png"></image>
 			</view>
 
@@ -14,15 +25,15 @@
 				<view class="radio-grp">
 					<block wx:for="{{shopModes}}" wx:for-item="item" wx:key="index">
 						<view class="radio-item" bindtap="switchShopMode" data-reply-shopmodeid="{{item.id}}" >
-							<image class="img" src='/content/default/images/{{item.selected==false?"radio_off":"radio_on"}}.png'></image>
-							<text class='txt {{item.selected==false?"txt-off":"txt-on"}}'>{{item.name}}</text>
+							<image class="img skeleton-circle" src='/content/default/images/{{item.selected==false?"radio_off":"radio_on"}}.png'></image>
+							<text  class='txt {{item.selected==false?"txt-off":"txt-on"}} skeleton-rect'>{{item.name}}</text>
 						</view>
 					</block>
 				</view>
 			</view>
 		</view>
 
-		<view class="banner">
+		<view class="banner skeleton-rect">
 			<view class="ct">
 				<block wx:if="{{banner.imgs.length>0}}">
 					<swiper class="its-swiper" autoplay="true" interval="2000" duration="500" circular="true" indicator-dots="true">
@@ -41,38 +52,38 @@
 			</view>
 		</view>
 
-		<view class="fc">
+		<view class="fc skeleton-bg">
 			<view class="ct">
 				<view class='its-fc'>
-					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon">
+					<navigator url="/pages/notopen/notopen" class="it"  hover-class="none">
+						<view class="icon skeleton-circle">
 							<image class='img' src='/content/default/images/index-fc-newuser.png'></image>
 						</view>
-						<view class="title">
+						<view class="title skeleton-rect">
 							<text class='txt'> 新人专享</text>
 						</view>
 					</navigator>
 					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon">
+						<view class="icon skeleton-circle">
 							<image class='img' src='/content/default/images/index-fc-seckill.png'></image>
 						</view>
-						<view class="title">
+						<view class="title skeleton-rect">
 							<text class='txt'>限时秒杀</text>
 						</view>
 					</navigator>
 					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon">
+						<view class="icon skeleton-circle">
 							<image class='img' src='/content/default/images/index-fc-member.png'></image>
 						</view>
-						<view class="title">
+						<view class="title skeleton-rect">
 							<text class='txt'>会员专区</text>
 						</view>
 					</navigator>
 					<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
-						<view class="icon">
+						<view class="icon skeleton-circle">
 							<image class='img' src='/content/default/images/index-fc-coupon.png'></image>
 						</view>
-						<view class="title">
+						<view class="title skeleton-rect">
 							<text class='txt'>优惠券</text>
 						</view>
 					</navigator>
@@ -86,18 +97,18 @@
 						<view class="it">
 							<view class="it-a1">
 								<view class="title">
-									<text class='txt'>{{tab.name}}</text>
+									<text class='txt skeleton-rect'>{{tab.name}}</text>
 								</view>
 								<navigator class='more' url="/pages/productsearch/productsearch?kindId={{tab.id}}" hover-class="none">
 									<view class="title">
-										<text class="txt">更多优选</text>
+										<text class="txt skeleton-rect">更多优选</text>
 									</view>
 									<view class="icon">
-										<image class='img' src='/content/default/images/col_nav_right.png'></image>
+										<image class='img skeleton-rect' src='/content/default/images/col_nav_right.png'></image>
 									</view>
 								</navigator>
 							</view>
-							<view class='it-a2'>
+							<view class='it-a2 skeleton-rect'>
 								<image class="img" src="{{tab.mainImgUrl}}"></image>
 							</view>
 							<view class="it-a3 prd-list-1">
@@ -105,20 +116,20 @@
 
 									<view class='it it-{{index%2}}'>
 
-										<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+										<navigator class='imgurl skeleton-rect' url="/pages/productdetails/productdetails?skuId={{item.id}}">
 											<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 												<view class="isOffSell-tip">已下架</view>
 											</view>
 											<image lazy-load class="img" src="{{item.mainImgUrl}}"></image>
 										</navigator>
-										<text class="name font-gray">{{item.name}}</text>
-										<text class="briefInfo font-gray">{{item.briefDes}}</text>
+										<text class="name font-gray skeleton-rect">{{item.name}}</text>
+										<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
 										<view class="area2">
-											<view class="price">
+											<view class="price skeleton-rect ">
 												<text class="saleprice">{{item.salePrice}}</text>
 												<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
 											</view>
-											<view class="operate">
+											<view class="operate skeleton-rect">
 												<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
 											</view>
 										</view>
@@ -133,3 +144,5 @@
 		</view>
 	</view>
 </scroll-view>
+
+</view>

@@ -312,6 +312,7 @@ page {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   color: #000;
+  margin:10rpx 0;
 }
 
 .prd-list-1 .briefInfo {
@@ -326,6 +327,7 @@ page {
   word-break: break-all;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  margin:10rpx 0;
 }
 
 .prd-list-1 .area2 {
@@ -335,6 +337,7 @@ page {
 .prd-list-1 .price {
   flex: 2;
   text-align: left;
+  margin-right:10px;
 }
 
 .prd-list-1 .saleprice {
@@ -358,7 +361,7 @@ page {
   flex: 1;
   text-align: right;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   height: 62rpx;
   line-height: 62rpx;
   display: flex;
@@ -420,11 +423,13 @@ page {
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
+  display: block;
   word-break: break-all;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   color: #000;
+  margin: 10rpx 0;
+
 }
 
 .prd-list-2 .briefInfo {
@@ -666,11 +671,9 @@ page {
 }
 
 .tabbar-items {
-  height: 62rpx;
-  line-height: 62rpx;
-  width: 1900px;
   transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1);
   transition-duration: 0ms;
+  overflow: hidden;
 }
 
 .tabbar-items .item {

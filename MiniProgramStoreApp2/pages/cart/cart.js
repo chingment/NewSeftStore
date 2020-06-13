@@ -239,7 +239,10 @@ Component({
     onShow() {
       console.log("cart.onShow")
       var _this = this
+
+      console.log("abbc:"+JSON.stringify(_this))
       const query = wx.createSelectorQuery().in(_this)
+
       query.select('.cart-bottom').boundingClientRect(function (rect) {
         if (rect != null) {
           if (rect.height != null) {
