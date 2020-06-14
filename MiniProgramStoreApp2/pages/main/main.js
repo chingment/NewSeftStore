@@ -86,7 +86,7 @@ Page({
   },
   onLoad: function (options) {
     var _this = this;
-    console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
+    //console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
@@ -130,7 +130,6 @@ Page({
     var _this = this
     var curMainTabBar=_this.data.tabBar[app.globalData.mainTabBarIndex]
     _this.selectComponent('#' + curMainTabBar.id).onShow();
-
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
@@ -144,5 +143,4 @@ Page({
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     app.mainTabBarSwitch(index)
   },
-
 })

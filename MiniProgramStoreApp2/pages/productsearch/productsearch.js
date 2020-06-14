@@ -4,7 +4,8 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
 const app = getApp()
-const skeletonData = require('./skeletonData');
+
+
 var search = function (_this) {
 
 
@@ -37,8 +38,7 @@ var search = function (_this) {
         _this.data.dataList.items = items;
 
         _this.setData({
-          dataList: _this.data.dataList,
-          pageIsReady: true
+          dataList: _this.data.dataList
         })
       }
     },
@@ -57,13 +57,7 @@ Page({
       items: []
     },
     scrollTop: 0,
-    scrollHeight: 0,
-    pageIsReady: false,
-    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
-    skeletonSelectedLoadingType: 'shine',
-    skeletonIsDev: false,
-    skeletonBgcolor: '#FFF',
-    skeletonData,
+    scrollHeight: 0
   },
   onLoad: function (options) {
     var _this = this
@@ -114,8 +108,7 @@ Page({
       if (typeof rect != 'undefined' && rect.length > 0) {
         height = rect[0].height
       }
-      console.log("search-condition-heihgt:" + height)
-
+     
       _this.setData({
         scrollHeight: wHeight - height
       });
@@ -138,7 +131,6 @@ Page({
 
     var scrollTop = typeof e.detail.scrollTop == "undefined" ? 0 : e.detail.scrollTop
 
-    console.log("scrollTop:" + scrollTop)
     _this.data.dataList.pageIndex = 0
     _this.setData({
       dataList: _this.data.dataList,
@@ -188,8 +180,6 @@ Page({
     search(_this)
   },
   onShow() {
-    console.log("productsearch.onShow")
-
     var _this = this
     app.globalData.skeletonPage = _this;
   }

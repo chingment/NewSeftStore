@@ -39,7 +39,7 @@ App({
 
   },
   onShow: function() {
-    //console.log("App.onShow")
+    console.log("App.onShow")
   },
   globalData: {
     userInfo: null,
@@ -61,6 +61,7 @@ App({
   },
   mainTabBarSwitch: function(index) {
     var _this=this
+
     var pages = getCurrentPages();
     var isHasMain=false;
     for (var i = 0; i < pages.length; i++) {
@@ -92,7 +93,6 @@ App({
           tabBar: tabBar
         })
 
-        
         let cp = pages[i].selectComponent('#' + tabBar[index].id);
         cp.onShow()
       }

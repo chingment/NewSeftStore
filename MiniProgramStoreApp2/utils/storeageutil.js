@@ -55,7 +55,7 @@ if(config.storeId!=''){
 }
   }
 
-  console.log("storeId:"+wx.getStorageSync(key_store))
+  //console.log("storeId:"+wx.getStorageSync(key_store))
 
   return wx.getStorageSync(key_store) || undefined
 }

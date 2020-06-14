@@ -1,16 +1,8 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
-<skeleton
-  loading="{{ skeletonSelectedLoadingType }}"
-  bgcolor="{{ skeletonBgcolor }}"
-  isDev="{{ skeletonIsDev }}"
-  data="{{ skeletonData }}"
-  wx:if="{{ !pageIsReady || skeletonIsDev }}"
-></skeleton>
 
-
-<view class="page skeleton" wx:if="{{ pageIsReady }}"> 
+<view class="page skeleton"> 
 
 <view class="search-condition" style="height:62rpx">
 	<block wx:if="{{condition_Kinds.length>1}}">

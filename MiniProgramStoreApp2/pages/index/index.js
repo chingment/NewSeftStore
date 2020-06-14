@@ -13,19 +13,12 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
   properties: {
-    initdata: {
-      type: Object,
-      observer: function (newVal, oldVal, changedPath) {
-        console.log("index.initdata")
-        var _this = this
-        _this.getPageData()
-      }
-    },
     height: {
       type: Number
     }
   },
   data: {
+    isOnLoad:false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
@@ -106,7 +99,6 @@ Component({
     switchShopMode: function (e) {
       var _this = this
       var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
-      console.log("shopModeId:" + shopMode)
 
       app.globalData.currentShopMode = shopMode
 
@@ -117,6 +109,12 @@ Component({
       console.log("index.onShow")
       var _this=this
       app.globalData.skeletonPage=_this;
+
+      if(!_this.data.isOnLoad){
+        _this.setData({isOnLoad:true})
+        _this.getPageData()
+      }
+
     }
   }
 })

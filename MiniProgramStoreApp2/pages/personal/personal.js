@@ -6,19 +6,12 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
   properties: {
-    initdata: {
-      type: Object,
-      observer: function (newVal, oldVal, changedPath) {
-        console.log("personal.initData")
-        var _this = this
-        _this.getPageData()
-      }
-    },
     height: {
       type: Number
     }
   },
   data: {
+    isOnLoad:false,
     isLogin:false
   },
   methods: {
@@ -44,22 +37,25 @@ Component({
       if (ownRequest.getCurrentStoreId() != undefined) {
         apiPersonal.pageData(null, {
           success: function (res) {
-            console.log("ab.2")
             if (res.result == 1) {
               var d = res.data
-              console.log("ab.1")
               _this.setData({
                 isLogin: ownRequest.isLogin(),
                 userInfo: d.userInfo
               })
-
             }
           }
         })
       }
     },
     onShow() {
+      var _this = this
       console.log("personal.onShow")
+
+      if(!_this.data.isOnLoad){
+        _this.setData({isOnLoad:true})
+        _this.getPageData()
+      }
     }
   }
 })

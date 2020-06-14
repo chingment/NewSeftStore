@@ -63,13 +63,6 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
   properties: {
-    initdata: {
-      type: Object,
-      observer: function (newVal, oldVal, changedPath) {
-        var _this = this
-        console.log("productKind.initData")
-      }
-    },
     height: {
       type: Number
     }
@@ -123,9 +116,9 @@ Component({
     productLoadMore: function (e) {
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
-      console.log("productLoadMore.index:" + index)
-      console.log("_this.data.tabs[index].pageIndex:" + _this.data.tabs[index].list.pageIndex)
-      console.log("_this.data.tabs[index].pageCount:" + _this.data.tabs[index].list.pageCountt - 1)
+      // console.log("productLoadMore.index:" + index)
+      // console.log("_this.data.tabs[index].pageIndex:" + _this.data.tabs[index].list.pageIndex)
+      // console.log("_this.data.tabs[index].pageCount:" + _this.data.tabs[index].list.pageCountt - 1)
       if (_this.data.tabs[index].list.pageIndex != _this.data.tabs[index].list.pageCount - 1) {
         _this.data.tabs[index].list.pageIndex += 1
         _this.setData({

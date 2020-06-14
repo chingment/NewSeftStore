@@ -9,19 +9,12 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
   properties: {
-    initdata: {
-      type: Object,
-      observer: function (newVal, oldVal, changedPath) {
-        console.log("cart.initData")
-        var _this = this
-        _this.getPageData()
-      }
-    },
     height: {
       type: Number
     }
   },
   data: {
+    isOnLoad:false,
     isLogin:false,
     blocks:[]
   },
@@ -240,7 +233,12 @@ Component({
       console.log("cart.onShow")
       var _this = this
 
-      console.log("abbc:"+JSON.stringify(_this))
+
+      if(!_this.data.isOnLoad){
+        _this.setData({isOnLoad:true})
+        _this.getPageData()
+      }
+
       const query = wx.createSelectorQuery().in(_this)
 
       query.select('.cart-bottom').boundingClientRect(function (rect) {

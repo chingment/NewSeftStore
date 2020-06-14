@@ -239,9 +239,9 @@ Page({
           productSku.salePriceByVip = d.salePriceByVip
           productSku.sellQuantity = d.sellQuantity
 
-          console.log("arr:" + JSON.stringify(arr))
-          console.log("specSubIndex:" + JSON.stringify(specSubIndex))
-          console.log("specShopItemInfo:" + JSON.stringify(specShopItemInfo))
+          // console.log("arr:" + JSON.stringify(arr))
+          // console.log("specSubIndex:" + JSON.stringify(specSubIndex))
+          // console.log("specShopItemInfo:" + JSON.stringify(specShopItemInfo))
           _this.setData({
             productSku: productSku,
             specSubIndex: specSubIndex,
