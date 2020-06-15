@@ -177,7 +177,7 @@ Page({
     _this.getList().then(function (res) {
       detail.success();
     })
-    // }
+   
   },
   //刷新处理
   refresh({

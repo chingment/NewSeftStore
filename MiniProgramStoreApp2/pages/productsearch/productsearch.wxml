@@ -22,7 +22,7 @@
 	</view>
 
 	<view class="tabbar-contents" current="0" style="height:{{scrollHeight}}px">
-			<component-scroll pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{allloaded}}" isEmpty="{{!loading &&dataList.items.length<=0}}">
+			<own-scroll pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{allloaded}}" isEmpty="{{!loading &&dataList.items.length<=0}}">
 				<view class='list-data prd-list-1' wx:if="{{dataList.items.length>0}}">
 					<block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 						<view class='it it-{{index%2}}'>
@@ -46,7 +46,7 @@
 						</view>
 					</block>
 				</view>
-			</component-scroll>
+			</own-scroll>
 	</view>
 
 	<view class="carttips" bindtap="goCart">

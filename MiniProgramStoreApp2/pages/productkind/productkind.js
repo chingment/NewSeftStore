@@ -4,59 +4,6 @@ const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
 const app = getApp()
 
-var productSearch = function (_this) {
-  var currentTab;
-  var currentTabIndex = -1;
-  for (var i = 0; i < _this.data.tabs.length; i++) {
-    if (_this.data.tabs[i].selected == true) {
-      currentTab = _this.data.tabs[i];
-      currentTabIndex = i;
-    }
-  }
-
-  if (currentTabIndex == -1) {
-    currentTabIndex = 0;
-    currentTab = _this.data.tabs[currentTabIndex];
-  }
-
-  var pageIndex = currentTab.list.pageIndex
-  var pageSize = currentTab.list.pageSize
-  var kindId = currentTab.id == undefined ? "" : currentTab.id
-
-  apiProduct.search({
-    storeId: ownRequest.getCurrentStoreId(),
-    pageIndex: pageIndex,
-    pageSize: pageSize,
-    kindId: kindId,
-    shopMode: app.globalData.currentShopMode,
-    name: ""
-  }, {
-    success: function (res) {
-      if (res.result == 1) {
-        var d = res.data
-        var items
-        if (currentTab.list.pageIndex == 0) {
-          items = d.items
-        } else {
-          items = _this.data.tabs[currentTabIndex].list.items.concat(d.items)
-        }
-
-        _this.data.tabs[currentTabIndex].list.total = d.total
-        _this.data.tabs[currentTabIndex].list.pageSize = d.pageSize
-        _this.data.tabs[currentTabIndex].list.pageCount = d.pageCount
-        _this.data.tabs[currentTabIndex].list.pageIndex = d.pageIndex
-        _this.data.tabs[currentTabIndex].list.items = items;
-
-        _this.setData({
-          tabs: _this.data.tabs
-        })
-      }
-    },
-    fail: function () { }
-  })
-
-}
-
 Component({
   options: {
     addGlobalClass: true,
@@ -101,8 +48,8 @@ Component({
         storeId: ownRequest.getCurrentStoreId(),
         operate: 2,
         productSkus: productSkus
-      }).then(function(res){
-        
+      }).then(function (res) {
+
       })
     },
     searchClick: function (e) {
@@ -110,29 +57,39 @@ Component({
         url: '/pages/search/search'
       })
     },
-    productLoadMore: function (e) {
+    productLoadMore({
+      detail
+    }) {
       var _this = this
-      var index = e.currentTarget.dataset.replyIndex
-      // console.log("productLoadMore.index:" + index)
-      // console.log("_this.data.tabs[index].pageIndex:" + _this.data.tabs[index].list.pageIndex)
-      // console.log("_this.data.tabs[index].pageCount:" + _this.data.tabs[index].list.pageCountt - 1)
-      if (_this.data.tabs[index].list.pageIndex != _this.data.tabs[index].list.pageCount - 1) {
-        _this.data.tabs[index].list.pageIndex += 1
-        _this.setData({
-          tabs: _this.data.tabs
-        })
+      var index = 0
 
-        productSearch(_this)
-      }
+      console.log("index:" + index)
+      _this.data.tabs[index].list.pageIndex += 1
+      _this.setData({
+        tabs: _this.data.tabs
+      })
+
+      _this.productSearch().then(function (res) {
+        detail.success();
+      })
+
     },
-    productRefesh: function (e) {
-      var _this = this
-      var index = e.currentTarget.dataset.replyIndex
+    productRefesh({
+      detail
+    }) {
 
-      _this.data.tabs[index].list.pageIndex = 0
+      var _this = this
+      var index = 0
 
       console.log("productLoadMore.index:" + index)
-      productSearch(_this)
+
+      _this.data.tabs[index].list.pageIndex = 0
+      _this.data.tabs[index].list.loading = false
+      _this.data.tabs[index].list.allloaded = false
+
+      _this.productSearch().then(function (res) {
+        detail.success();
+      })
     },
     getPageData: function () {
       var _this = this
@@ -167,7 +124,7 @@ Component({
 
       if (_this.data.currentShopMode != app.globalData.currentShopMode) {
         _this.setData({
-          currentShopMode:app.globalData.currentShopMode
+          currentShopMode: app.globalData.currentShopMode
         })
         _this.getPageData()
       }
@@ -181,6 +138,67 @@ Component({
 
       }).exec()
 
+
+    },
+    productSearch: function () {
+      var _this = this
+
+      var currentTab;
+      var currentTabIndex = -1;
+      for (var i = 0; i < _this.data.tabs.length; i++) {
+        if (_this.data.tabs[i].selected == true) {
+          currentTab = _this.data.tabs[i];
+          currentTabIndex = i;
+        }
+      }
+
+      if (currentTabIndex == -1) {
+        currentTabIndex = 0;
+        currentTab = _this.data.tabs[currentTabIndex];
+      }
+
+      _this.data.tabs[currentTabIndex].list.loading = true
+
+      _this.setData({ tabs: _this.data.tabs })
+
+      var pageIndex = currentTab.list.pageIndex
+      var pageSize = currentTab.list.pageSize
+      var kindId = currentTab.id == undefined ? "" : currentTab.id
+
+      return apiProduct.search({
+        storeId: ownRequest.getCurrentStoreId(),
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+        kindId: kindId,
+        shopMode: app.globalData.currentShopMode,
+        name: ""
+      }).then(function (res) {
+        if (res.result == 1) {
+          var d = res.data
+          var items=[]
+          var allloaded = false
+          if (currentTab.list.pageIndex == 0) {
+            items = d.items
+          } else {
+            items = _this.data.tabs[currentTabIndex].list.items.concat(d.items)
+          }
+
+          if ((d.pageIndex + 1) > d.pageCount) {
+            allloaded = true
+          }
+
+          _this.data.tabs[currentTabIndex].list.allloaded=allloaded
+          _this.data.tabs[currentTabIndex].list.total = d.total
+          _this.data.tabs[currentTabIndex].list.pageSize = d.pageSize
+          _this.data.tabs[currentTabIndex].list.pageCount = d.pageCount
+          _this.data.tabs[currentTabIndex].list.pageIndex = d.pageIndex
+          _this.data.tabs[currentTabIndex].list.items = items;
+
+          _this.setData({
+            tabs: _this.data.tabs
+          })
+        }
+      })
 
     }
   }

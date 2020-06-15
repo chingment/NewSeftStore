@@ -18,7 +18,7 @@
 <swiper class="tabbar-contents" current="{{tabsSliderIndex}}" duration="300" style="height:{{scrollHeight}}px">
 	<block wx:for="{{tabs}}" wx:for-item="item" wx:key="index">
 		<swiper-item class="item" catchtouchmove="stopTouchMove">
-			<component-scroll pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{item.allloaded}}" isEmpty="{{!item.loading &&item.list.length<=0}}">
+			<own-scroll pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{item.allloaded}}" isEmpty="{{!item.loading &&item.list.length<=0}}">
 				<view class='list'>
 					<block wx:for="{{item.list}}" wx:for-index="i" wx:for-item="item2" wx:key="list">
 
@@ -121,7 +121,7 @@
 						<view class="line-space"></view>
 					</block>
 				</view>
-			</component-scroll>
+			</own-scroll>
 		</swiper-item>
 	</block>
 </swiper>
