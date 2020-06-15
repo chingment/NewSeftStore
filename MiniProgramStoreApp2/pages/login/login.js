@@ -3,7 +3,6 @@ const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiOwn = require('../../api/own.js')
-const apiCart = require('../../api/cart.js')
 Page({
   data: {
     isAuthUserInfo: false

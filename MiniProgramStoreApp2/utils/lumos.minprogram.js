@@ -252,7 +252,10 @@ const myWxRequest = (opts) => {
           var d = res.data
           if (d.code == "2501") {
             storeage.setAccessToken("")
+            
+            if(_method=="POST"){
             ownRequest.goLogin()
+            }
           }
           else {
             resolve(d);

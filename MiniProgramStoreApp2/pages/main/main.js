@@ -131,6 +131,8 @@ Page({
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
+
+    apiCart.pageData()
   },
   mainTabBarItemClick(e) {
     var _this = this

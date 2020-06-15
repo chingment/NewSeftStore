@@ -226,10 +226,8 @@ Component({
     onReady:function(){
       var _this = this
       console.log("cart.onReady")
-
       if(!_this.data.isOnReady){
         _this.setData({isOnReady:true})
-        _this.getPageData()
       }
     },
     onShow() {
