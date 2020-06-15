@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "商品详情",
   "usingComponents": {
-    "cart": "/components/Cart/cart"
+    "cart": "/components/cart/cart"
   }
 }

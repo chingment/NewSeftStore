@@ -19,6 +19,8 @@ page{
 .it-tag {
   align-items: center;
   display: flex;
+  height: 40rpx;
+  line-height: 40rpx;
   padding: 8rpx 0;
   border-bottom: 3rpx solid #f8f8f8;
 }
@@ -37,14 +39,16 @@ page{
 }
 
 .it-tag .icon {
-  width: 40rpx;
-  height: 40rpx;
+  width: 26rpx;
+  height: 26rpx;
   margin-right: 10rpx;
+  display: flex;
 }
 
 .it-tag > .tag-name .content {
-  font-size: 28rpx;
+  font-size: 24rpx;
   margin-right: 12rpx;
+  color: #9d9d9d;
 }
 
 .it-buttons {

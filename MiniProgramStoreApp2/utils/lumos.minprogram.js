@@ -289,6 +289,7 @@ function wxRequest(opts) {
           })
         } else {
           if (res.data.code == "2501") {
+            storeage.setAccessToken("")
             if (_method == "POST") {
             ownRequest.goLogin()
             }

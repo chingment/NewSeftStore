@@ -56,6 +56,11 @@ Component({
         _this.setData({isOnLoad:true})
         _this.getPageData()
       }
+     
+        _this.setData({
+          isLogin:ownRequest.isLogin()
+        })
+      
     }
   }
 })

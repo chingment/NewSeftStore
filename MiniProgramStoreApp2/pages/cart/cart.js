@@ -213,7 +213,6 @@ Component({
 
               _this.setData({
                 scrollHeight: 500,
-                isLogin: ownRequest.isLogin(),
                 blocks: d.blocks,
                 count: d.count,
                 sumPrice: d.sumPrice,
@@ -238,6 +237,10 @@ Component({
         _this.setData({isOnLoad:true})
         _this.getPageData()
       }
+     
+      _this.setData({
+        isLogin:ownRequest.isLogin()
+      })
 
       const query = wx.createSelectorQuery().in(_this)
 

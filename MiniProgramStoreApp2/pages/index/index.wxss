@@ -42,7 +42,7 @@
 
 .banner .its-swiper {
   width: 100%;
-  height: 300rpx;
+  height: 285rpx;
   text-align: center;
 }
 

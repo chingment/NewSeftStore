@@ -87,11 +87,11 @@ Page({
   onLoad: function (options) {
     var _this = this;
     //console.log("mainTabBarIndex:" + app.globalData.mainTabBarIndex)
-    if (!ownRequest.isSelectedStore(true)) {
-      return
-    }
+    // if (!ownRequest.isSelectedStore(true)) {
+    //   return
+    // }
 
-     app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
+    // app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
 
     // apiGlobal.dataSet({
     //   storeId: ownRequest.getCurrentStoreId(),
@@ -127,9 +127,11 @@ Page({
 
   },
   onShow: function () {
+    console.log("mian.onShow")
     var _this = this
-    var curMainTabBar=_this.data.tabBar[app.globalData.mainTabBarIndex]
-    _this.selectComponent('#' + curMainTabBar.id).onShow();
+    app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
+    //var curMainTabBar=_this.data.tabBar[app.globalData.mainTabBarIndex]
+    //_this.selectComponent('#' + curMainTabBar.id).onShow();
     if (!ownRequest.isSelectedStore(true)) {
       return
     }

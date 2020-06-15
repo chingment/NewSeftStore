@@ -9,7 +9,7 @@
   width: 200rpx;
   height: 100%;
   font-size: 28rpx;
-  background: #F0F0F5;
+  background: #f8f8f8;
 }
 
 .kind-left-navbar .it {
