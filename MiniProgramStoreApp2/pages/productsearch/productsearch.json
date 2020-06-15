@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "cart": "/components/cart/cart",
-    "skeleton": "/components/skeleton/skeleton"
+    "skeleton": "/components/skeleton/skeleton",
+    "component-scroll": "/components/ownscroll/ownscroll"
   }
 }

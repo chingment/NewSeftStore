@@ -1,15 +1,12 @@
 const config = require('../config');
 const lumos = require('../utils/lumos.minprogram.js')
 
-function tobeSearch(urlParams, requestHandler) {
+function tobeSearch(urlParams) {
 
-  lumos.getJson({
+ return lumos.getJson({
     url: config.apiUrl.tobeSearch,
     urlParams: urlParams,
-    isShowLoading:false,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    isShowLoading:false
   })
 }
 

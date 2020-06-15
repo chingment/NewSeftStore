@@ -3,25 +3,19 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function my(urlParams, requestHandler) {
+function my(urlParams) {
 
-  lumos.getJson({
+return  lumos.getJson({
     url: config.apiUrl.deliveryAddressMy,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
-function edit(dataParams, requestHandler) {
+ function edit(dataParams) {
 
-  lumos.postJson({
+ return lumos.postJson({
     url: config.apiUrl.deliveryAddressEdit,
-    dataParams: dataParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    dataParams: dataParams
   })
 
 }

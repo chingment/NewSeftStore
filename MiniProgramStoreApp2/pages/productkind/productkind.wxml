@@ -15,7 +15,7 @@
 	</view>
 </view>
 
-<scroll-view scroll-y="true" style="height:{{scrollHeight}}px;">
+<view style="height:{{scrollHeight}}px;">
 	<view class='st-kind'>
 		<scroll-view class='kind-left-navbar' scroll-y="true">
 			<block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">
@@ -60,4 +60,4 @@
 			</scroll-view>
 		</block>
 	</view>
-</scroll-view>
+</view>

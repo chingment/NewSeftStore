@@ -31,27 +31,24 @@ Page({
 
     apiOrder.details({
       id: orderId
-    }, {
-      success: function(res) {
-        if (res.result == 1) {
-          _this.setData(res.data)
+    }).then(function(res) {
+      if (res.result == 1) {
+        _this.setData(res.data)
 
-          for (var i = 0; i < res.data.blocks.length; i++) {
-            if (res.data.blocks[i].qrcode.code != null && res.data.blocks[i].qrcode.code != '') {
-              new QRCode('qrcode-' + i, {
-                // usingIn: this,
-                text: res.data.blocks[i].qrcode.code,
-                width: 130,
-                height: 130,
-                colorDark: "#000000",
-                colorLight: "white",
-                correctLevel: QRCode.CorrectLevel.H,
-              });
-            }
+        for (var i = 0; i < res.data.blocks.length; i++) {
+          if (res.data.blocks[i].qrcode.code != null && res.data.blocks[i].qrcode.code != '') {
+            new QRCode('qrcode-' + i, {
+              // usingIn: this,
+              text: res.data.blocks[i].qrcode.code,
+              width: 130,
+              height: 130,
+              colorDark: "#000000",
+              colorLight: "white",
+              correctLevel: QRCode.CorrectLevel.H,
+            });
           }
         }
-      },
-      fail: function() {}
+      }
     })
 
     this.buildPayOptions()
@@ -81,53 +78,46 @@ Page({
       orderId: orderId,
       payCaller: _this.data.curSelPayOption.payCaller,
       payPartner: _this.data.curSelPayOption.payPartner
-    }, {
-      success: function(res) {
-        if (res.result == 1) {
+    }).then(function(res) {
+      if (res.result == 1) {
 
-          var data = res.data;
-          wx.requestPayment({
-            'timeStamp': data.timestamp,
-            'nonceStr': data.nonceStr,
-            'package': data.package,
-            'signType': data.signType,
-            'paySign': data.paySign,
-            'success': function(res) {
-              wx.redirectTo({
-                url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
-              })
-            },
-            'fail': function(res) {
-              wx.redirectTo({
-                url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
-              })
-            }
-          })
+        var data = res.data;
+        wx.requestPayment({
+          'timeStamp': data.timestamp,
+          'nonceStr': data.nonceStr,
+          'package': data.package,
+          'signType': data.signType,
+          'paySign': data.paySign,
+          'success': function(res) {
+            wx.redirectTo({
+              url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
+            })
+          },
+          'fail': function(res) {
+            wx.redirectTo({
+              url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
+            })
+          }
+        })
 
 
-        } else {
-          toast.show({
-            title: res.message
-          })
-        }
-      },
-      fail: function() {}
+      } else {
+        toast.show({
+          title: res.message
+        })
+      }
     })
   },
   buildPayOptions: function() {
     var _this = this
     apiOrder.buildPayOptions({
       appCaller: 1
-    }, {
-      success: function(res) {
-        if (res.result == 1) {
-          _this.setData({
-            payOption: res.data
-          })
-
-        }
-      },
-      fail: function() {}
+    }).then(function(res) {
+      if (res.result == 1) {
+        _this.setData({
+          payOption: res.data
+        })
+      }
     })
 
   }

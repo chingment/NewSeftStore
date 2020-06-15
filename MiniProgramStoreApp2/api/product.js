@@ -3,53 +3,40 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function initSearchPageData(urlParams, requestHandler) {
+function initSearchPageData(urlParams) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.productInitSearchPageData,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
-function search(urlParams, requestHandler) {
-
-  lumos.getJson({
+function search(urlParams) {
+  return lumos.getJson({
     url: config.apiUrl.productSearch,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
-function details(urlParams, requestHandler) {
+function details(urlParams) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.productDetails,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
-function skuStockInfo(urlParams, requestHandler) {
+function skuStockInfo(urlParams) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.productSkuStockInfo,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
 module.exports = {
-  initSearchPageData:initSearchPageData,
+  initSearchPageData: initSearchPageData,
   search: search,
   details: details,
-  skuStockInfo:skuStockInfo
+  skuStockInfo: skuStockInfo
 }

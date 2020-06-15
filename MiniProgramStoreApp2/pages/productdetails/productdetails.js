@@ -59,49 +59,46 @@ Page({
       storeId: storeId,
       skuId: skuId,
       shopMode: shopMode
-    }, {
-      success: function (res) {
-        if (res.result == 1) {
+    }).then(function (res) {
+      if (res.result == 1) {
 
-          var productSku = res.data
+        var productSku = res.data
 
-          var specIdxSkus = productSku.specIdxSkus
+        var specIdxSkus = productSku.specIdxSkus
 
-          var specShopItemInfo = _this.data.specShopItemInfo
+        var specShopItemInfo = _this.data.specShopItemInfo
 
-          var specItems = productSku.specItems
+        var specItems = productSku.specItems
 
-          for (var i in specIdxSkus) {
+        for (var i in specIdxSkus) {
 
-            specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
+          specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
 
-          }
-
-
-
-          for (var i = 0; i < specItems.length; i++) {
-
-            for (var o = 0; o < specItems[i].value.length; o++) {
-
-              specItems[i].value[o].isShow = true
-
-            }
-
-          }
-
-
-          productSku.specItems = specItems
-
-
-          _this.setData({
-            productSku: productSku,
-            cart: cart,
-            specShopItemInfo: specShopItemInfo,
-            specSubIndex: productSku.specIdx.split(',')
-          })
         }
-      },
-      fail: function () { }
+
+
+
+        for (var i = 0; i < specItems.length; i++) {
+
+          for (var o = 0; o < specItems[i].value.length; o++) {
+
+            specItems[i].value[o].isShow = true
+
+          }
+
+        }
+
+
+        productSku.specItems = specItems
+
+
+        _this.setData({
+          productSku: productSku,
+          cart: cart,
+          specShopItemInfo: specShopItemInfo,
+          specSubIndex: productSku.specIdx.split(',')
+        })
+      }
     })
   },
   goHome: function (e) {
@@ -134,18 +131,13 @@ Page({
       storeId: ownRequest.getCurrentStoreId(),
       operate: 2,
       productSkus: productSkus
-    }, {
-      success: function (res) {
-        if (res.result == 1) {
+    }).then(function (res) {
+      if (res.result == 1) {
 
-        } else {
-          toast.show({
-            title: res.message
-          })
-        }
-      },
-      fail: function () {
-
+      } else {
+        toast.show({
+          title: res.message
+        })
       }
     })
 
@@ -227,29 +219,27 @@ Page({
         storeId: _this.data.storeId,
         skuId: arr.skuId,
         shopMode: _this.data.shopMode
-      }, {
-        success: function (res) {
+      }).then(function (res) {
 
-          var d = res.data
+        var d = res.data
 
-          productSku.name = d.name
-          productSku.isOffSell = d.isOffSell
-          productSku.salePrice = d.salePrice
-          productSku.isShowPrice = d.isShowPrice
-          productSku.salePriceByVip = d.salePriceByVip
-          productSku.sellQuantity = d.sellQuantity
+        productSku.name = d.name
+        productSku.isOffSell = d.isOffSell
+        productSku.salePrice = d.salePrice
+        productSku.isShowPrice = d.isShowPrice
+        productSku.salePriceByVip = d.salePriceByVip
+        productSku.sellQuantity = d.sellQuantity
 
-          // console.log("arr:" + JSON.stringify(arr))
-          // console.log("specSubIndex:" + JSON.stringify(specSubIndex))
-          // console.log("specShopItemInfo:" + JSON.stringify(specShopItemInfo))
-          _this.setData({
-            productSku: productSku,
-            specSubIndex: specSubIndex,
-            specShopItemInfo: specShopItemInfo
+        // console.log("arr:" + JSON.stringify(arr))
+        // console.log("specSubIndex:" + JSON.stringify(specSubIndex))
+        // console.log("specShopItemInfo:" + JSON.stringify(specShopItemInfo))
+        _this.setData({
+          productSku: productSku,
+          specSubIndex: specSubIndex,
+          specShopItemInfo: specShopItemInfo
 
-          })
+        })
 
-        }
       })
 
     }

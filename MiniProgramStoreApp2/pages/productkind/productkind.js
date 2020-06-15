@@ -101,11 +101,8 @@ Component({
         storeId: ownRequest.getCurrentStoreId(),
         operate: 2,
         productSkus: productSkus
-      }, {
-        success: function (res) {
-
-        },
-        fail: function () { }
+      }).then(function(res){
+        
       })
     },
     searchClick: function (e) {
@@ -144,23 +141,21 @@ Component({
         apiKind.pageData({
           storeId: ownRequest.getCurrentStoreId(),
           shopMode: app.globalData.currentShopMode
-        }, {
-          success: function (res) {
+        }).then(function (res) {
 
-            if (res.result === 1) {
-              var d = res.data
-              var searchtips = [
-                "商品搜索",
-                "热销商品",
-              ];
+          if (res.result === 1) {
+            var d = res.data
+            var searchtips = [
+              "商品搜索",
+              "热销商品",
+            ];
 
 
-              _this.setData({
-                searchtips: searchtips,
-                tabs: d.tabs
-              })
+            _this.setData({
+              searchtips: searchtips,
+              tabs: d.tabs
+            })
 
-            }
           }
         })
       }

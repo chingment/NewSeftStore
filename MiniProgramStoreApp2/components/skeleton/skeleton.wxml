@@ -4,7 +4,7 @@
   class="skeleton skeleton_{{loading}}"
   wx:if="{{ !isDev || isShowByDev }}"
 >
-  <block wx:for="{{ isDev ? devData.lists : data.lists }}" wx:for-item="list" wx:key="type">
+  <block wx:for="{{ isDev ? devData.lists : data.lists }}" wx:for-item="list" wx:key="index">
     <view
       wx:for="{{ list.elements }}"
       wx:for-item="item"

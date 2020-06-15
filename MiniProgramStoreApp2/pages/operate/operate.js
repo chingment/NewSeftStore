@@ -20,19 +20,16 @@ Page({
       type: tp,
       caller: caller,
       isTimeout: isTimeout
-    }, {
-        success: function (res) {
-          if (res.result == 1) {
-            if (res.data.isComplete) {
-              clearInterval(_this.countDown);
-            }
-            _this.setData({
-              result: res.data
-            })
-          }
-        },
-        fail: function () { }
-      })
+    }).then(function (res) {
+      if (res.result == 1) {
+        if (res.data.isComplete) {
+          clearInterval(_this.countDown);
+        }
+        _this.setData({
+          result: res.data
+        })
+      }
+    })
   },
 
   onLoad: function (options) {

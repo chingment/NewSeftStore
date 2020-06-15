@@ -53,15 +53,12 @@ Page({
    */
   onShow: function () {
     var _this = this
-    apiDeliveryaddress.my({}, {
-      success: function (res) {
-        if (res.result == 1) {
-        _this.setData({
-          list: res.data
-        })
-        }
-      },
-      fail: function () { }
+    apiDeliveryaddress.my({}).then(function (res) {
+      if (res.result == 1) {
+      _this.setData({
+        list: res.data
+      })
+      }
     })
   },
 

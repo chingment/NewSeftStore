@@ -5,58 +5,17 @@ const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
 const app = getApp()
 
-
-var search = function (_this) {
-
-
-  var pageIndex = _this.data.dataList.pageIndex
-  var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
-
-  apiProduct.search({
-    storeId: ownRequest.getCurrentStoreId(),
-    pageIndex: pageIndex,
-    pageSize: 10,
-    kindId: kindId,
-    subjectId: undefined,
-    shopMode: app.globalData.currentShopMode,
-    name: ""
-  }, {
-    success: function (res) {
-      if (res.result == 1) {
-        var d = res.data
-        var items
-        if (_this.data.dataList.pageIndex == 0) {
-          items = d.items
-        } else {
-          items = _this.data.dataList.items.concat(d.items)
-        }
-
-        _this.data.dataList.total = d.total
-        _this.data.dataList.pageSize = d.pageSize
-        _this.data.dataList.pageCount = d.pageCount
-        _this.data.dataList.pageIndex = d.pageIndex
-        _this.data.dataList.items = items;
-
-        _this.setData({
-          dataList: _this.data.dataList
-        })
-      }
-    },
-    fail: function () { }
-  })
-
-}
-
 Page({
   data: {
     tag: "productlist",
+    allloaded: false,
+    loading: false,
     dataList: {
       total: 0,
       pageIndex: 0,
       pageCount: 0,
       items: []
     },
-    scrollTop: 0,
     scrollHeight: 0
   },
   onLoad: function (options) {
@@ -75,29 +34,26 @@ Page({
       kindId: kindId,
       subjectId: subjectId,
       shopMode: app.globalData.currentShopMode
-    }, {
-      success: function (res) {
-        if (res.result == 1) {
-          var d = res.data
+    }).then(function (res) {
+      if (res.result == 1) {
+        var d = res.data
 
-          var condition_Kinds_index = 0
-          for (var i = 0; i < d.condition_Kinds.length; i++) {
-            if (d.condition_Kinds[i].id == kindId) {
-              condition_Kinds_index = i
-            }
+        var condition_Kinds_index = 0
+        for (var i = 0; i < d.condition_Kinds.length; i++) {
+          if (d.condition_Kinds[i].id == kindId) {
+            condition_Kinds_index = i
           }
-
-          _this.setData({
-            condition_Kinds: d.condition_Kinds,
-            condition_Kinds_index: condition_Kinds_index,
-            cart: storeage.getCart()
-          })
-
-          search(_this)
-
         }
-      },
-      fail: function () { }
+
+        _this.setData({
+          condition_Kinds: d.condition_Kinds,
+          condition_Kinds_index: condition_Kinds_index,
+          cart: storeage.getCart()
+        })
+
+        _this.search()
+
+      }
     })
 
 
@@ -108,7 +64,7 @@ Page({
       if (typeof rect != 'undefined' && rect.length > 0) {
         height = rect[0].height
       }
-     
+
       _this.setData({
         scrollHeight: wHeight - height
       });
@@ -117,26 +73,27 @@ Page({
 
   },
   //加载更多
-  loadMore: function (e) {
+  loadmore({
+    detail
+  }) {
     var _this = this
     _this.data.dataList.pageIndex += 1
     _this.setData({
       dataList: _this.data.dataList
     })
-    search(_this)
+    _this.search().then(res => {
+      detail.success();
+    });
   },
   //刷新处理
-  refesh: function (e) {
+  refresh({
+    detail
+  }) {
     var _this = this
-
-    var scrollTop = typeof e.detail.scrollTop == "undefined" ? 0 : e.detail.scrollTop
-
     _this.data.dataList.pageIndex = 0
-    _this.setData({
-      dataList: _this.data.dataList,
-      scrollTop: scrollTop
-    })
-    search(_this)
+    _this.search().then(res => {
+      detail.success();
+    });
   },
   goCart: function (e) {
     this.selectComponent("#cart").open()
@@ -158,13 +115,8 @@ Page({
       storeId: ownRequest.getCurrentStoreId(),
       operate: 2,
       productSkus: productSkus
-    }, {
-      success: function (res) {
+    }).then(function (res) {
 
-      },
-      fail: function () {
-
-      }
     })
 
   },
@@ -177,10 +129,55 @@ Page({
       condition_Kinds_index: index,
       dataList: _this.data.dataList
     })
-    search(_this)
+    _this.search(_this)
   },
   onShow() {
     var _this = this
     app.globalData.skeletonPage = _this;
+  },
+  search: function () {
+    var _this = this
+
+    _this.setData({ loading: true })
+
+    var pageIndex = _this.data.dataList.pageIndex
+    var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
+
+    return apiProduct.search({
+      storeId: ownRequest.getCurrentStoreId(),
+      pageIndex: pageIndex,
+      pageSize: 10,
+      kindId: kindId,
+      subjectId: undefined,
+      shopMode: app.globalData.currentShopMode,
+      name: ""
+    }).then(function (res) {
+      if (res.result == 1) {
+        var d = res.data
+        var items = []
+        var allloaded = false
+        if (_this.data.dataList.pageIndex == 0) {
+          items = d.items
+        } else {
+          items = _this.data.dataList.items.concat(d.items)
+        }
+
+        if ((d.pageIndex + 1) > d.pageCount) {
+          allloaded = true
+        }
+
+        _this.data.dataList.total = d.total
+        _this.data.dataList.pageSize = d.pageSize
+        _this.data.dataList.pageCount = d.pageCount
+        _this.data.dataList.pageIndex = d.pageIndex
+        _this.data.dataList.items = items;
+
+        _this.setData({
+          loading: false,
+          allloaded: allloaded,
+          dataList: _this.data.dataList
+        })
+      }
+    })
   }
 })

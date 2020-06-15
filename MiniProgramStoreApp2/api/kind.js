@@ -4,16 +4,11 @@ const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
 
-function pageData(params,requestHandler) {
+function pageData(params) {
 
-  lumos.getJson({
+ return lumos.getJson({
     url: config.apiUrl.productKindPageData,
-    urlParams:params,
-    success: function (res) {
-      if (res.result == 1) {
-        requestHandler.success(res)
-      }
-    }
+    urlParams:params
   })
 }
 

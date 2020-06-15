@@ -5,12 +5,9 @@ const lumos = require('../utils/lumos.minprogram.js')
 
 function my(params, requestHandler) {
 
-  lumos.postJson({
+ return lumos.postJson({
     url: config.apiUrl.couponMy,
-    dataParams: params,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    dataParams: params
   })
 }
 

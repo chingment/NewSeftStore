@@ -17,16 +17,13 @@ Page({
       apiStore.list({
         lat: lat,
         lng: lng
-      }, {
-        success: function (res) {
-          if (res.result == 1) {
-            _this.setData({
-              list: res.data,
-              currentStoreId: ownRequest.getCurrentStoreId() == undefined ? '' : ownRequest.getCurrentStoreId()
-            })
-          }
-        },
-        fail: function () { }
+      }).then(function (res) {
+        if (res.result == 1) {
+          _this.setData({
+            list: res.data,
+            currentStoreId: ownRequest.getCurrentStoreId() == undefined ? '' : ownRequest.getCurrentStoreId()
+          })
+        }
       })
     }
 

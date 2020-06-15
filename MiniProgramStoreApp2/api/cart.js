@@ -4,30 +4,27 @@ const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
 function operate(params, requestHandler) {
-  lumos.postJson({
+  return lumos.postJson({
     url: config.apiUrl.cartOperate,
-    dataParams: params,
-    success: function (res) {
-      requestHandler.success(res)
-      if (res.result == 1) {
-        pageData(requestHandler)
-      }
+    dataParams: params
+  }).then(function (res) {
+    if (res.result == 1) {
+      pageData(requestHandler)
     }
   })
 }
 
 function pageData(requestHandler) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.cartPageData,
     urlParams: {
       storeId: ownRequest.getCurrentStoreId()
-    },
-    success: function (res) {
-      if (res.result == 1) {
-        storeage.setCart(res.data)
-        requestHandler.success(res)
-      }
+    }
+  }).then(function (res) {
+
+    if (res.result == 1) {
+      storeage.setCart(res.data)
     }
   })
 }

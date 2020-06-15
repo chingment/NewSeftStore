@@ -53,18 +53,15 @@ Component({
           storeId: ownRequest.getCurrentStoreId(),
           operate: operate,
           productSkus: operateProductSkus
-        }, {
-          success: function (res) {
-            if (res.result == 1) {
+        }).then( function (res) {
+          if (res.result == 1) {
 
-            }
-            else {
-              toast.show({
-                title: res.message
-              })
-            }
-          },
-          fail: function () { }
+          }
+          else {
+            toast.show({
+              title: res.message
+            })
+          }
         })
       }
 
@@ -206,21 +203,19 @@ Component({
     getPageData: function (e) {
       var _this = this
       if (ownRequest.getCurrentStoreId() != undefined) {
-        apiCart.pageData({
-          success: function (res) {
-            if (res.result == 1) {
-              var d = res.data
+        apiCart.pageData().then(function (res) {
+          if (res.result == 1) {
+            var d = res.data
 
-              _this.setData({
-                scrollHeight: 500,
-                blocks: d.blocks,
-                count: d.count,
-                sumPrice: d.sumPrice,
-                countBySelected: d.countBySelected,
-                sumPriceBySelected: d.sumPriceBySelected
-              })
+            _this.setData({
+              scrollHeight: 500,
+              blocks: d.blocks,
+              count: d.count,
+              sumPrice: d.sumPrice,
+              countBySelected: d.countBySelected,
+              sumPriceBySelected: d.sumPriceBySelected
+            })
 
-            }
           }
         })
       }

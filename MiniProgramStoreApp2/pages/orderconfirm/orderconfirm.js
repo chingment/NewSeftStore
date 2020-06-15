@@ -18,41 +18,38 @@ var getData = function (_this) {
     storeId: ownRequest.getCurrentStoreId(),
     productSkus: productSkus,
     couponId: couponId
-  }, {
-    success: function (res) {
-      if (res.result == 1) {
-        var d = res.data
+  }).then(function (res) {
+    if (res.result == 1) {
+      var d = res.data
 
 
 
-        var blocks = d.blocks
-        var tabShopModeByMall = 0
-        for (var i = 0; i < blocks.length; i++) {
+      var blocks = d.blocks
+      var tabShopModeByMall = 0
+      for (var i = 0; i < blocks.length; i++) {
 
-          if (blocks[i].shopMode == 1) {
-            if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
-              tabShopModeByMall = 0
-            }
-            else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
-              tabShopModeByMall = 1
-            }
+        if (blocks[i].shopMode == 1) {
+          if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
+            tabShopModeByMall = 0
+          }
+          else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
+            tabShopModeByMall = 1
           }
         }
-
-        console.log("tabShopModeByMall:" + tabShopModeByMall)
-
-        _this.setData({
-          tabShopModeByMall: tabShopModeByMall,
-          orderId: orderId,
-          blocks: d.blocks,
-          subtotalItems: d.subtotalItems,
-          actualAmount: d.actualAmount,
-          originalAmount: d.originalAmount,
-          coupon: d.coupon
-        })
       }
-    },
-    fail: function () { }
+
+      console.log("tabShopModeByMall:" + tabShopModeByMall)
+
+      _this.setData({
+        tabShopModeByMall: tabShopModeByMall,
+        orderId: orderId,
+        blocks: d.blocks,
+        subtotalItems: d.subtotalItems,
+        actualAmount: d.actualAmount,
+        originalAmount: d.originalAmount,
+        coupon: d.coupon
+      })
+    }
   })
 }
 
@@ -245,21 +242,18 @@ Page({
         storeId: ownRequest.getCurrentStoreId(),
         blocks: blocks,
         source: 3
-      }, {
-        success: function (res) {
-          if (res.result == 1) {
-            orderId = res.data.orderId
-            apiCart.pageData({
-              success: function (res) { }
-            })
-            _this.goPay(_this.data.curSelPayOption)
-          } else {
-            toast.show({
-              title: res.message
-            })
-          }
-        },
-        fail: function () { }
+      }).then(function (res) {
+        if (res.result == 1) {
+          orderId = res.data.orderId
+          apiCart.pageData({
+            success: function (res) { }
+          })
+          _this.goPay(_this.data.curSelPayOption)
+        } else {
+          toast.show({
+            title: res.message
+          })
+        }
       })
 
     } else {
@@ -272,49 +266,43 @@ Page({
       orderId: orderId,
       payCaller: payOption.payCaller,
       payPartner: payOption.payPartner
-    }, {
-      success: function (res) {
-        if (res.result == 1) {
+    }).then(function (res) {
+      if (res.result == 1) {
 
-          var data = res.data;
-          wx.requestPayment({
-            'timeStamp': data.timestamp,
-            'nonceStr': data.nonceStr,
-            'package': data.package,
-            'signType': data.signType,
-            'paySign': data.paySign,
-            'success': function (res) {
-              wx.redirectTo({
-                url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
-              })
-            },
-            'fail': function (res) {
-              wx.redirectTo({
-                url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
-              })
-            }
-          })
-        } else {
-          toast.show({
-            title: res.message
-          })
-        }
-      },
-      fail: function () { }
+        var data = res.data;
+        wx.requestPayment({
+          'timeStamp': data.timestamp,
+          'nonceStr': data.nonceStr,
+          'package': data.package,
+          'signType': data.signType,
+          'paySign': data.paySign,
+          'success': function (res) {
+            wx.redirectTo({
+              url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
+            })
+          },
+          'fail': function (res) {
+            wx.redirectTo({
+              url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
+            })
+          }
+        })
+      } else {
+        toast.show({
+          title: res.message
+        })
+      }
     })
   },
   buildPayOptions: function () {
     var _this = this
     apiOrder.buildPayOptions({
       appCaller: 1
-    }, {
-      success: function (res) {
-        if (res.result == 1) {
-          _this.setData({ payOption: res.data })
+    }).then(function (res) {
+      if (res.result == 1) {
+        _this.setData({ payOption: res.data })
 
-        }
-      },
-      fail: function () { }
+      }
     })
 
   },

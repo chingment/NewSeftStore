@@ -3,16 +3,11 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function dataSet(urlParams,requestHandler) {
+function dataSet(urlParams) {
 
-  lumos.getJson({
+return  lumos.getJson({
     url: config.apiUrl.globalDataSet,
-    urlParams: urlParams,
-    success: function (res) {
-      if (res.result == 1) {
-        requestHandler.success(res)
-      }
-    }
+    urlParams: urlParams
   })
 }
 

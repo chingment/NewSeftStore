@@ -99,14 +99,11 @@ Page({
     apiSearch.tobeSearch({
       storeId:ownRequest.getCurrentStoreId(),
       key: val
-    }, {
-      success: function(res) {
-        if (res.result == 1) {
-          _this.data.searchResult=res.data
-          _this.setData(_this.data)
-        }
-      },
-      fail: function() {}
+    }).then(function(res) {
+      if (res.result == 1) {
+        _this.data.searchResult=res.data
+        _this.setData(_this.data)
+      }
     })
 
   }

@@ -3,15 +3,12 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function result(urlParams, requestHandler) {
+function result(urlParams) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.operateResult,
     urlParams: urlParams,
-    isShowLoading:false,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    isShowLoading: false
   })
 }
 

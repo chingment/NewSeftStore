@@ -154,7 +154,7 @@ function isNullOrEmpty(obj) {
   return false
 }
 
-function postJson(opts) {
+const postJson = (opts) => {
   opts = extend({
     isShowLoading: true,
     url: '',
@@ -162,162 +162,237 @@ function postJson(opts) {
     urlParams: null,
     dataParams: null,
     async: true,
-    timeout: 0,
-    beforeSend: function (res) {
-
-    },
-    complete: function (res, status) {
-
-    },
-    suceess: function () {
-
-    }
+    timeout: 0
   }, opts)
 
 
-  wxRequest(opts)
+  return myWxRequest(opts)
 }
 
-function getJson(opts) {
+const getJson = (opts) => {
+
   opts = extend({
     isShowLoading: true,
     url: '',
     method: 'GET',
     urlParams: null,
     async: true,
-    timeout: 0,
-    beforeSend: function (res) {
-
-    },
-    complete: function (res, status) {
-
-    },
-    suceess: function () {
-
-    }
+    timeout: 0
   }, opts)
 
+  return myWxRequest(opts)
 
-  wxRequest(opts)
 }
 
-function wxRequest(opts) {
-  opts = extend({
-    isShowLoading: false,
-    url: '',
-    method: 'GET',
-    urlParams: null,
-    dataParams: null,
-    async: true,
-    timeout: 0,
-    beforeSend: function (res) {
+const myWxRequest = (opts) => {
 
-    },
-    complete: function (res, status) {
+  var promise = new Promise((resolve, reject) => {
 
-    },
-    suceess: function () {
+    opts = extend({
+      isShowLoading: false,
+      url: '',
+      method: 'GET',
+      urlParams: null,
+      dataParams: null,
+      async: true,
+      timeout: 0
+    }, opts)
 
-    }
-  }, opts)
+    var _url = opts.url
+    var _urlParams = opts.urlParams
+    var _dataParams = opts.dataParams
+    var _method = opts.method
+    var _isShowLoading = opts.isShowLoading
 
-  var _url = opts.url
-  var _urlParams = opts.urlParams
-  var _dataParams = opts.dataParams
-  var _method = opts.method
-  var _isShowLoading = opts.isShowLoading
-
-  if (_isShowLoading) {
-    wx.showLoading({
-      title: ''
-    })
-  }
-
-  console.log("wxRequest.url->>>" + _url)
-  console.log("wxRequest.urlParams->>>" + JSON.stringify(opts.urlParams))
-
-  if (isNullOrEmpty(_url)) {
-    return
-  }
-
-  if (_url.indexOf("?") < 0) {
-    _url += "?"
-  } else {
-    _url += "&"
-  }
-
-  _url += "appId=" + config.appId + "&merchId=" + config.merchId+"&token=" + storeage.getAccessToken()
-
-  if (!isNullOrEmpty(_urlParams)) {
-    _url += "&"
-    for (var p in _urlParams) {
-      _url += p + '=' + encodeURIComponent(_urlParams[p]).toUpperCase() + '&';
-    }
-
-    _url = _url.substring(0, _url.length - 1)
-  }
-
-  console.log("wxRequest.url and urlParams ->>>" + _url)
-  console.log("wxRequest.method->>>" + _method)
-
-  if (_method == "POST") {
-    console.log("wxRequest.dataParams->>>" + JSON.stringify(_dataParams))
-  }
-
-  wx.request({
-    url: _url,
-    data: _dataParams,
-    method: _method,
-    dataType: "json",
-    success: function (res) {
-      if (res.statusCode != 200) {
-        console.log("wxRequest.success->>>" + JSON.stringify(res));
-      }
-
-      if (typeof res.data == "undefined" || res.data == null) {
-        console.log("wxRequest.success->>>ata is undefined or null");
-      } else if (typeof res.data.result == "undefined" || res.data.result == null) {
-        console.log("wxRequest.success->>>data.result is undefined or null");
-      } else {
-        console.log("wxRequest.success->>>" + JSON.stringify(res.data));
-        if (res.data.result == 3) {
-          console.log("wxRequest.success->>>data.result is exception");
-          wx.showModal({
-            showCancel: false,
-            title: '提示',
-            content: res.data.message
-          })
-        } else {
-          if (res.data.code == "2501") {
-            storeage.setAccessToken("")
-            if (_method == "POST") {
-            ownRequest.goLogin()
-            }
-          } else {
-            opts.success(res.data)
-          }
-        }
-      }
-    },
-    fail: function (res) {
-      console.log("fail:" + JSON.stringify(res))
-      wx.showModal({
-        showCancel: false,
-        title: '提示',
-        content: '网络请求错误'
+    if (_isShowLoading) {
+      wx.showLoading({
+        title: ''
       })
-     },
-    complete: function () {
+    }
 
-      if (_isShowLoading) {
-        wx.hideLoading()
+    console.log("wxRequest.url->>>" + _url)
+    console.log("wxRequest.urlParams->>>" + JSON.stringify(opts.urlParams))
+
+    if (isNullOrEmpty(_url)) {
+      return
+    }
+
+    if (_url.indexOf("?") < 0) {
+      _url += "?"
+    } else {
+      _url += "&"
+    }
+
+    _url += "appId=" + config.appId + "&merchId=" + config.merchId + "&token=" + storeage.getAccessToken()
+
+    if (!isNullOrEmpty(_urlParams)) {
+      _url += "&"
+      for (var p in _urlParams) {
+        _url += p + '=' + encodeURIComponent(_urlParams[p]).toUpperCase() + '&';
       }
 
-      opts.complete()
-
+      _url = _url.substring(0, _url.length - 1)
     }
+
+    console.log("wxRequest.url and urlParams ->>>" + _url)
+    console.log("wxRequest.method->>>" + _method)
+
+    if (_method == "POST") {
+      console.log("wxRequest.dataParams->>>" + JSON.stringify(_dataParams))
+    }
+
+    wx.request({
+      url: _url,
+      data: _dataParams,
+      method: _method,
+      dataType: "json",
+      success: function (res) {
+        console.log("wxRequest.success->>>" + JSON.stringify(res));
+        if (res.statusCode == 200) {
+          var d = res.data
+          if (d.code == "2501") {
+            storeage.setAccessToken("")
+            ownRequest.goLogin()
+          }
+          else {
+            resolve(d);
+          }
+        } else {//返回错误提示信息
+          reject(res.errMsg);
+        }
+        if (_isShowLoading) {
+          wx.hideLoading()
+        }
+      },
+      error: function (e) {
+        if (_isShowLoading) {
+          wx.hideLoading()
+        }
+        reject('网络出错');
+      }
+    })
   })
+
+  return promise
 }
+
+// function wxRequest(opts) {
+//   opts = extend({
+//     isShowLoading: false,
+//     url: '',
+//     method: 'GET',
+//     urlParams: null,
+//     dataParams: null,
+//     async: true,
+//     timeout: 0,
+//     beforeSend: function (res) {
+
+//     },
+//     complete: function (res, status) {
+
+//     },
+//     suceess: function () {
+
+//     }
+//   }, opts)
+
+//   var _url = opts.url
+//   var _urlParams = opts.urlParams
+//   var _dataParams = opts.dataParams
+//   var _method = opts.method
+//   var _isShowLoading = opts.isShowLoading
+
+//   if (_isShowLoading) {
+//     wx.showLoading({
+//       title: ''
+//     })
+//   }
+
+//   console.log("wxRequest.url->>>" + _url)
+//   console.log("wxRequest.urlParams->>>" + JSON.stringify(opts.urlParams))
+
+//   if (isNullOrEmpty(_url)) {
+//     return
+//   }
+
+//   if (_url.indexOf("?") < 0) {
+//     _url += "?"
+//   } else {
+//     _url += "&"
+//   }
+
+//   _url += "appId=" + config.appId + "&merchId=" + config.merchId + "&token=" + storeage.getAccessToken()
+
+//   if (!isNullOrEmpty(_urlParams)) {
+//     _url += "&"
+//     for (var p in _urlParams) {
+//       _url += p + '=' + encodeURIComponent(_urlParams[p]).toUpperCase() + '&';
+//     }
+
+//     _url = _url.substring(0, _url.length - 1)
+//   }
+
+//   console.log("wxRequest.url and urlParams ->>>" + _url)
+//   console.log("wxRequest.method->>>" + _method)
+
+//   if (_method == "POST") {
+//     console.log("wxRequest.dataParams->>>" + JSON.stringify(_dataParams))
+//   }
+
+//   wx.request({
+//     url: _url,
+//     data: _dataParams,
+//     method: _method,
+//     dataType: "json",
+//     success: function (res) {
+//       if (res.statusCode != 200) {
+//         console.log("wxRequest.success->>>" + JSON.stringify(res));
+//       }
+
+//       if (typeof res.data == "undefined" || res.data == null) {
+//         console.log("wxRequest.success->>>ata is undefined or null");
+//       } else if (typeof res.data.result == "undefined" || res.data.result == null) {
+//         console.log("wxRequest.success->>>data.result is undefined or null");
+//       } else {
+//         console.log("wxRequest.success->>>" + JSON.stringify(res.data));
+//         if (res.data.result == 3) {
+//           console.log("wxRequest.success->>>data.result is exception");
+//           wx.showModal({
+//             showCancel: false,
+//             title: '提示',
+//             content: res.data.message
+//           })
+//         } else {
+//           if (res.data.code == "2501") {
+//             storeage.setAccessToken("")
+//             if (_method == "POST") {
+//               ownRequest.goLogin()
+//             }
+//           } else {
+//             opts.success(res.data)
+//           }
+//         }
+//       }
+//     },
+//     fail: function (res) {
+//       console.log("fail:" + JSON.stringify(res))
+//       wx.showModal({
+//         showCancel: false,
+//         title: '提示',
+//         content: '网络请求错误'
+//       })
+//     },
+//     complete: function () {
+
+//       if (_isShowLoading) {
+//         wx.hideLoading()
+//       }
+
+//       opts.complete()
+
+//     }
+//   })
+// }
 
 module.exports = {
   resultType: {

@@ -47,21 +47,18 @@ Page({
       code: code,
       iv: iv,
       encryptedData: encryptedData
-    }, {
-      success: function(res) {
-        if (res.result == 1) {
-          storeage.setOpenId(res.data.openId);
-          storeage.setAccessToken(res.data.token);
-          wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
-            url: ownRequest.getReturnUrl()
-          })
-        } else {
-          toast.show({
-            title: res.message
-          })
-        }
-      },
-      fail: function() {}
+    }).then(function(res) {
+      if (res.result == 1) {
+        storeage.setOpenId(res.data.openId);
+        storeage.setAccessToken(res.data.token);
+        wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
+          url: ownRequest.getReturnUrl()
+        })
+      } else {
+        toast.show({
+          title: res.message
+        })
+      }
     })
 
   },

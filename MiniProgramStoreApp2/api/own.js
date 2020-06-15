@@ -3,16 +3,12 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function loginByMinProgram(dataParams, requestHandler) {
+function loginByMinProgram(dataParams) {
 
-  lumos.postJson({
+ return  lumos.postJson({
     url: config.apiUrl.ownLoginByMinProgram,
-    dataParams: dataParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    dataParams: dataParams
   })
-
 }
 
 module.exports = {

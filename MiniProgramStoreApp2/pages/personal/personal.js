@@ -35,15 +35,13 @@ Component({
     getPageData: function (e) {
       var _this = this
       if (ownRequest.getCurrentStoreId() != undefined) {
-        apiPersonal.pageData(null, {
-          success: function (res) {
-            if (res.result == 1) {
-              var d = res.data
-              _this.setData({
-                isLogin: ownRequest.isLogin(),
-                userInfo: d.userInfo
-              })
-            }
+        apiPersonal.pageData().then(function (res) {
+          if (res.result == 1) {
+            var d = res.data
+            _this.setData({
+              isLogin: ownRequest.isLogin(),
+              userInfo: d.userInfo
+            })
           }
         })
       }

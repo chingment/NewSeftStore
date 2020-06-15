@@ -45,17 +45,14 @@ Page({
       isGetHis: isGetHis,
       couponId: couponId,
       productSkuIds: productSkuIds
-    }, {
-        success: function (res) {
-          if (res.result == 1) {
-            _this.setData({
-              coupon: res.data,
-              operate: operate
-            })
-          }
-        },
-        fail: function () { }
-      })
+    }).then(function (res) {
+      if (res.result == 1) {
+        _this.setData({
+          coupon: res.data,
+          operate: operate
+        })
+      }
+    })
 
   },
   goSelect: function(e) {

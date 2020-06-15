@@ -110,20 +110,17 @@ Component({
           storeId: ownRequest.getCurrentStoreId(),
           operate: operate,
           productSkus: operateProductSkus
-        }, {
-            success: function (res) {
-              if(res.result==1)
-              {
-                _this.setData({ cart: storeage.getCart() })
-              }
-              else{
-                toast.show({
-                  title: res.message
-                })
-              }
-            },
-            fail: function () { }
-          })
+        }).then(function (res) {
+          if(res.result==1)
+          {
+            _this.setData({ cart: storeage.getCart() })
+          }
+          else{
+            toast.show({
+              title: res.message
+            })
+          }
+        })
       }
 
       if (operate == 4) {

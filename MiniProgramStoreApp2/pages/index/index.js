@@ -18,7 +18,7 @@ Component({
     }
   },
   data: {
-    isOnLoad:false,
+    isOnLoad: false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
@@ -43,11 +43,6 @@ Component({
         storeId: ownRequest.getCurrentStoreId(),
         operate: 2,
         productSkus: productSkus
-      }, {
-        success: function (res) {
-
-        },
-        fail: function () { }
       })
     },
     getPageData: function () {
@@ -56,32 +51,28 @@ Component({
         apiIndex.pageData({
           storeId: ownRequest.getCurrentStoreId(),
           shopMode: app.globalData.currentShopMode
-        }, {
-          success: function (res) {
+        }).then(function (res) {
 
-            if (res.result === 1) {
-              var d = res.data
+          if (res.result === 1) {
+            var d = res.data
 
-              d.shopModes.forEach(function(item, index){
-                if(item.selected){
-                  app.globalData.currentShopMode=item.id
-                }
-              })
+            d.shopModes.forEach(function (item, index) {
+              if (item.selected) {
+                app.globalData.currentShopMode = item.id
+              }
+            })
 
-
-
-              _this.setData({
-                shopModes: d.shopModes,
-                singleStore: typeof config.storeId == "undefined" ? false : true,
-                currentStore: d.store,
-                banner: d.banner,
-                pdArea: d.pdArea,
-                pageIsReady:true
-              })
-            }
-
+            _this.setData({
+              shopModes: d.shopModes,
+              singleStore: typeof config.storeId == "undefined" ? false : true,
+              currentStore: d.store,
+              banner: d.banner,
+              pdArea: d.pdArea,
+              pageIsReady: true
+            })
           }
         })
+
       }
 
     },
@@ -107,11 +98,11 @@ Component({
     },
     onShow() {
       console.log("index.onShow")
-      var _this=this
-      app.globalData.skeletonPage=_this;
+      var _this = this
+      app.globalData.skeletonPage = _this;
 
-      if(!_this.data.isOnLoad){
-        _this.setData({isOnLoad:true})
+      if (!_this.data.isOnLoad) {
+        _this.setData({ isOnLoad: true })
         _this.getPageData()
       }
 

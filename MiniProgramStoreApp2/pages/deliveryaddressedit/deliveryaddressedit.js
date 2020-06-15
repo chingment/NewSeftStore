@@ -242,14 +242,11 @@ Page({
       areaName: areaName,
       address: address,
       isDefault: isDefault
-    }, {
-        success: function (res) {
-          if (res.result == 1) {
-          wx.navigateBack()
-          }
-        },
-        fail: function () { }
-      })
+    }).then(function (res) {
+      if (res.result == 1) {
+      wx.navigateBack()
+      }
+    })
 
   }
 

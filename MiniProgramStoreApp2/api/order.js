@@ -4,77 +4,56 @@ const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
 function confirm(params, requestHandler) {
-  lumos.postJson({
+  return lumos.postJson({
     url: config.apiUrl.orderConfirm,
-    dataParams: params,
-    success: function (res) {
-        requestHandler.success(res)
-    }
+    dataParams: params
   })
 }
 
-function reserve(params, requestHandler) {
-  lumos.postJson({
+function reserve(params) {
+  return lumos.postJson({
     url: config.apiUrl.orderReserve,
-    dataParams: params,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    dataParams: params
   })
 }
 
 
-function list(urlParams, requestHandler) {
+function list(urlParams) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.orderList,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
-function details(urlParams, requestHandler) {
+function details(urlParams) {
 
-  lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.orderDetails,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
-function cancle(params, requestHandler) {
-  lumos.postJson({
+function cancle(params) {
+  return lumos.postJson({
     url: config.apiUrl.orderCancle,
-    dataParams: params,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    dataParams: params
   })
 }
 
-function buildPayParams(params, requestHandler) {
+function buildPayParams(params) {
 
-  lumos.postJson({
+  return lumos.postJson({
     url: config.apiUrl.orderBuildPayParams,
-    dataParams: params,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    dataParams: params
   })
 }
 
-function buildPayOptions(urlParams, requestHandler) {
+function buildPayOptions(urlParams) {
 
-  lumos.getJson({
+ return lumos.getJson({
     url: config.apiUrl.orderBuildPayOptions,
-    urlParams: urlParams,
-    success: function (res) {
-      requestHandler.success(res)
-    }
+    urlParams: urlParams
   })
 }
 
