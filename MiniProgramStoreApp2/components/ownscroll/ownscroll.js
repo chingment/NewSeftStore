@@ -20,6 +20,10 @@ Component({
       type: String,
       value: '正在加载'
     },
+    emptyTipText: { // 数据为空
+      type: String,
+      value: '数据为空'
+    },
     isNeedLoadmore: { // 是否需要加载更多
       type: Boolean,
       value: false
@@ -39,6 +43,10 @@ Component({
     loadmoreAllloadedText: {
       type: String,
       value: '已经到最底部了~'
+    },
+    key:{
+      type: String,
+      value: ''
     },
   },
 
@@ -126,9 +134,12 @@ Component({
           refreshText: this.properties.refreshLoadingText,
           loadmoreHidden: true
         })
+
+      
+
         setTimeout(() => {
           this.triggerEvent('_refresh', {
-            success: (e) => {
+            success: () => {
               this.setData({
                 refreshHeight: 0,
                 refreshText: '',

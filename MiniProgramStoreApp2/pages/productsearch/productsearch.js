@@ -73,26 +73,22 @@ Page({
 
   },
   //加载更多
-  loadmore({
-    detail
-  }) {
+  loadmore:function(e){
     var _this = this
     _this.data.dataList.pageIndex += 1
     _this.setData({
       dataList: _this.data.dataList
     })
     _this.search().then(res => {
-      detail.success();
+      e.detail.success();
     });
   },
   //刷新处理
-  refresh({
-    detail
-  }) {
+  refresh:function(e){
     var _this = this
     _this.data.dataList.pageIndex = 0
     _this.search().then(res => {
-      detail.success();
+      e.detail.success();
     });
   },
   goCart: function (e) {

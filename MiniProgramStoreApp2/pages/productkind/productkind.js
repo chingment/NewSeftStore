@@ -57,11 +57,11 @@ Component({
         url: '/pages/search/search'
       })
     },
-    productLoadMore({
-      detail
-    }) {
+    productLoadMore:function(e)  {
       var _this = this
-      var index = 0
+
+
+      var index = e.currentTarget.dataset.replyIndex
 
       console.log("index:" + index)
       _this.data.tabs[index].list.pageIndex += 1
@@ -70,16 +70,14 @@ Component({
       })
 
       _this.productSearch().then(function (res) {
-        detail.success();
+        e.detail.success();
       })
 
     },
-    productRefesh({
-      detail
-    }) {
+    productRefesh:function(e){
 
       var _this = this
-      var index = 0
+      var index = e.currentTarget.dataset.replyIndex
 
       console.log("productLoadMore.index:" + index)
 
@@ -88,7 +86,7 @@ Component({
       _this.data.tabs[index].list.allloaded = false
 
       _this.productSearch().then(function (res) {
-        detail.success();
+        e.detail.success();
       })
     },
     getPageData: function () {

@@ -249,14 +249,7 @@ const myWxRequest = (opts) => {
       success: function (res) {
         console.log("wxRequest.success->>>" + JSON.stringify(res));
         if (res.statusCode == 200) {
-          var d = res.data
-          if (d.code == "2501") {
-            storeage.setAccessToken("")
-            ownRequest.goLogin()
-          }
-          else {
-            resolve(d);
-          }
+          resolve(res.data);
         } else {//返回错误提示信息
           reject(res.errMsg);
         }

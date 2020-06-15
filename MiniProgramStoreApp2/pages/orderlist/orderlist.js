@@ -162,9 +162,7 @@ Page({
     }
   },
   //加载更多
-  loadmore({
-    detail
-  }) {
+  loadmore:function(e) {
     var _this = this
 
     var index = _this.data.tabsSliderIndex 
@@ -175,15 +173,14 @@ Page({
     })
 
     _this.getList().then(function (res) {
-      detail.success();
+      e.detail.success();
     })
    
   },
   //刷新处理
-  refresh({
-    detail
-  }) {
+  refresh:function(e) {
 
+    console.log("index:" + JSON.stringify(e))
   
     var _this = this
 
@@ -198,7 +195,7 @@ Page({
       tabs: _this.data.tabs
     })
     _this.getList().then(function (res) {
-      detail.success();
+      e.detail.success();
     })
   },
   getList() {

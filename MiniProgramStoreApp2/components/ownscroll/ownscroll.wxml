@@ -17,7 +17,7 @@
 
 		<view wx:if="{{isEmpty&&!isRefresh}}" class='my-scroll-msgModule-empty' >
 			<view class="msg">
-				<text>~暂无数据~</text>
+				<text class="txt">{{emptyTipText}}</text>
 			</view>
 		</view>
 

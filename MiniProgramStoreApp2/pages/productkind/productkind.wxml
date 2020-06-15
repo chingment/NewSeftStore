@@ -26,7 +26,7 @@
 
 		<block wx:for="{{tabs}}" wx:for-index="tabIndex" wx:for-item="tab" wx:key="tabIndex">
 		
-			<own-scroll class='kind-right-content {{tab.selected==true ? "":"hidden" }}' pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="productLoadMore" bind:_refresh="productRefesh" allloaded="{{tab.list.allloaded}}" isEmpty="{{!tab.list.loading &&tab.list.items.length<=0}}">
+			<own-scroll data-reply-index="{{tabIndex}}" class='kind-right-content {{tab.selected==true ? "":"hidden" }}' pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="productLoadMore" bind:_refresh="productRefesh" allloaded="{{tab.list.allloaded}}" isEmpty="{{!tab.list.loading &&tab.list.items.length<=0}}">
 
 				<view class="prd-list-2">
 					<block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
