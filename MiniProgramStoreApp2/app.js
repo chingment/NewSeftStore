@@ -1,6 +1,6 @@
 //app.js
 App({
-  onLaunch: function() {
+  onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -38,14 +38,14 @@ App({
 
 
   },
-  onShow: function() {
+  onShow: function () {
     console.log("App.onShow")
   },
   globalData: {
     userInfo: null,
-    mainTabBarIndex:0,
-    currentShopMode:0,
-    skeletonPage:null
+    mainTabBarIndex: 0,
+    currentShopMode: 0,
+    skeletonPage: null
   },
   mainTabBarSetNumber(index, num) {
     var pages = getCurrentPages();
@@ -59,46 +59,52 @@ App({
       }
     }
   },
-  mainTabBarSwitch: function(index) {
-    var _this=this
+  mainTabBarSwitch: function (index) {
+    var _this = this
 
     var pages = getCurrentPages();
-    var isHasMain=false;
+    var isHasMain = false;
     for (var i = 0; i < pages.length; i++) {
       if (pages[i].data.tag == "main") {
-        isHasMain=true
+        isHasMain = true
         wx.navigateBack({
           delta: pages.length
         })
         var tabBar = pages[i].data.tabBar;
-      
+
         for (var j = 0; j < tabBar.length; j++) {
           if (j == index) {
             tabBar[j].selected = true
             var s = tabBar[j];
-            setTimeout(function() {
+            setTimeout(function () {
               wx.setNavigationBarTitle({
                 title: s.navTitle
               })
-              
+
             }, 1)
 
-            _this.globalData.mainTabBarIndex=index
-            
+            _this.globalData.mainTabBarIndex = index
+
           } else {
             tabBar[j].selected = false
           }
         }
+
+        let cp = pages[i].selectComponent('#' + tabBar[index].id);
+        cp.onReady()
+
         pages[i].setData({
           tabBar: tabBar
         })
 
-        let cp = pages[i].selectComponent('#' + tabBar[index].id);
+        cp = pages[i].selectComponent('#' + tabBar[index].id);
         cp.onShow()
+
+
       }
     }
 
-    if (!isHasMain){
+    if (!isHasMain) {
       wx.reLaunch({
         url: '/pages/main/main'
       })

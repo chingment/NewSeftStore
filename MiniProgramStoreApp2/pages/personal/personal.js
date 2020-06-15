@@ -11,7 +11,7 @@ Component({
     }
   },
   data: {
-    isOnLoad:false,
+    isOnReady:false,
     isLogin:false
   },
   methods: {
@@ -46,18 +46,22 @@ Component({
         })
       }
     },
-    onShow() {
+    onReady:function(){
       var _this = this
-      console.log("personal.onShow")
-
-      if(!_this.data.isOnLoad){
-        _this.setData({isOnLoad:true})
+      console.log("personal.onReady")
+      if(!_this.data.isOnReady){
+        _this.setData({isOnReady:true})
         _this.getPageData()
       }
      
         _this.setData({
           isLogin:ownRequest.isLogin()
         })
+    },
+    onShow() {
+      var _this = this
+      console.log("personal.onShow")
+
       
     }
   }

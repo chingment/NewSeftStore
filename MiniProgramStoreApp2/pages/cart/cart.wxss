@@ -23,12 +23,12 @@
 
 .its-blocks >.it>.it-tag .icon {
   margin-right: 10rpx;
-  width: 26rpx;
-  height: 26rpx;
+  width: 28rpx;
+  height: 28rpx;
 }
 
 .its-blocks >.it>.it-tag .name {
-  font-size: 24rpx;
+  font-size: 28rpx;
   color: #9d9d9d;
 }
 

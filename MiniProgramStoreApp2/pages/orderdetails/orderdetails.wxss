@@ -23,14 +23,15 @@
 }
 
 .it-tag .icon {
-  width: 40rpx;
-  height: 40rpx;
+  width: 28rpx;
+  height: 28rpx;
   margin-right: 10rpx;
 }
 
 .it-tag > .tag-name .content {
   font-size: 28rpx;
   margin-right: 12rpx;
+  color: #9d9d9d;
 }
 
 .it-buttons {

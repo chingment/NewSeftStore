@@ -15,6 +15,7 @@ Component({
     }
   },
   data: {
+    isOnReady:false,
     currentShopMode: 0
   },
   methods: {
@@ -116,21 +117,30 @@ Component({
       }
 
     },
+    onReady:function(){
+      var _this = this;
+      console.log("personal.onReady")
+
+      if(!_this.data.isOnReady){
+        if (_this.data.currentShopMode != app.globalData.currentShopMode) {
+          _this.setData({
+            currentShopMode: app.globalData.currentShopMode
+          })
+          _this.getPageData()
+        }
+      }
+    },
     onShow() {
       console.log("productKind.onShow")
       var _this = this;
-
-      if (_this.data.currentShopMode != app.globalData.currentShopMode) {
-        _this.setData({
-          currentShopMode: app.globalData.currentShopMode
-        })
-        _this.getPageData()
-      }
 
       const query = wx.createSelectorQuery().in(_this)
       query.select('.searchbox').boundingClientRect(function (rect) {
 
         var height = _this.data.height - rect.height
+        console.log("height:"+ _this.data.height)
+        console.log("rect.height:"+rect.height)
+        console.log("height:"+ height)
         _this.data["scrollHeight"] = height
         _this.setData(_this.data)
 

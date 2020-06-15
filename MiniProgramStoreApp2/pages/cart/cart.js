@@ -14,7 +14,7 @@ Component({
     }
   },
   data: {
-    isOnLoad:false,
+    isOnReady:false,
     isLogin:false,
     blocks:[]
   },
@@ -223,16 +223,19 @@ Component({
     goLogin: function (e) {
       ownRequest.goLogin()
     },
+    onReady:function(){
+      var _this = this
+      console.log("cart.onReady")
+
+      if(!_this.data.isOnReady){
+        _this.setData({isOnReady:true})
+        _this.getPageData()
+      }
+    },
     onShow() {
       console.log("cart.onShow")
       var _this = this
 
-
-      if(!_this.data.isOnLoad){
-        _this.setData({isOnLoad:true})
-        _this.getPageData()
-      }
-     
       _this.setData({
         isLogin:ownRequest.isLogin()
       })

@@ -5,7 +5,7 @@ const util = require('../../utils/util')
 const ownRequest = require('../../own/ownRequest.js')
 const apiGlobal = require('../../api/global.js')
 const apiOwn = require('../../api/own.js')
-
+const apiCart = require('../../api/cart.js')
 var app = getApp()
 
 Page({
@@ -123,26 +123,18 @@ Page({
         tabBarContentHeight: wHeight - rect[0].height
       });
     }).exec()
-
-
   },
   onShow: function () {
     console.log("mian.onShow")
     var _this = this
     app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
-    //var curMainTabBar=_this.data.tabBar[app.globalData.mainTabBarIndex]
-    //_this.selectComponent('#' + curMainTabBar.id).onShow();
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
   },
-  setCartComponentData:function(data){
-    var _this = this
-    _this.selectComponent('#cp_cart').setData(data);
-  },
   mainTabBarItemClick(e) {
     var _this = this
-    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
+    var index = e.currentTarget.dataset.replyIndex
     app.mainTabBarSwitch(index)
   },
 })

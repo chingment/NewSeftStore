@@ -39,14 +39,14 @@ page{
 }
 
 .it-tag .icon {
-  width: 26rpx;
-  height: 26rpx;
+  width: 28rpx;
+  height: 28rpx;
   margin-right: 10rpx;
   display: flex;
 }
 
 .it-tag > .tag-name .content {
-  font-size: 24rpx;
+  font-size: 28rpx;
   margin-right: 12rpx;
   color: #9d9d9d;
 }

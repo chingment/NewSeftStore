@@ -97,6 +97,9 @@ Component({
       this.getPageData()
 
     },
+    onReady:function(){
+      console.log("index.onReady")
+    },
     onShow() {
       console.log("index.onShow")
       var _this = this
