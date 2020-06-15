@@ -47,6 +47,7 @@ Component({
     },
     getPageData: function () {
       var _this = this
+      
       if (ownRequest.getCurrentStoreId() != undefined) {
         apiIndex.pageData({
           storeId: ownRequest.getCurrentStoreId(),
