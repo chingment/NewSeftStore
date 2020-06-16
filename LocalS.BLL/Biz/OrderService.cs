@@ -1106,7 +1106,7 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
                 }
 
-                order.PayExpireTime = DateTime.Now.AddMinutes(5);
+
                 order.PayCaller = rop.PayCaller;
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
@@ -1316,7 +1316,12 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
                 }
 
-                Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+                if (order.PayExpireTime == null)
+                {
+                    order.PayExpireTime = DateTime.Now.AddMinutes(5);
+
+                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
+                }
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
