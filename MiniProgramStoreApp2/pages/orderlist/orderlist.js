@@ -15,58 +15,73 @@ Page({
         name: "全部",
         selected: false,
         status: "0000",
-        pageIndex: 0,
-        pageSize: 10,
-        pageCount: 0,
-        total: 0,
-        loading: false,
-        allloaded: false,
-        list: []
+        list: {
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: 0,
+          total: 0,
+          isEmpty: false,
+          loading: false,
+          allloaded: false,
+          items: []
+        }
       },
       {
         name: "待支付",
         selected: false,
         status: 2000,
-        pageIndex: 0,
-        pageSize: 10,
-        pageCount: 0,
-        total: 0,
-        loading: false,
-        allloaded: false,
-        list: []
+        list: {
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: 0,
+          total: 0,
+          isEmpty: false,
+          loading: false,
+          allloaded: false,
+          items: []
+        }
       }, {
         name: "待取货",
         selected: false,
         status: 3000,
-        pageIndex: 0,
-        pageSize: 10,
-        pageCount: 0,
-        total: 0,
-        loading: false,
-        allloaded: false,
-        list: []
+        list: {
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: 0,
+          total: 0,
+          isEmpty: false,
+          loading: false,
+          allloaded: false,
+          items: []
+        }
       }, {
         name: "已完成",
         selected: false,
         status: 4000,
-        pageIndex: 0,
-        pageSize: 10,
-        pageCount: 0,
-        total: 0,
-        loading: false,
-        allloaded: false,
-        list: []
+        list: {
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: 0,
+          total: 0,
+          isEmpty: false,
+          loading: false,
+          allloaded: false,
+          items: []
+        }
       }, {
         name: "已失效",
         selected: false,
         status: 5000,
-        pageIndex: 0,
-        pageSize: 10,
-        pageCount: 0,
-        total: 0,
-        loading: false,
-        allloaded: false,
-        list: []
+        list: {
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: 0,
+          total: 0,
+          isEmpty: false,
+          loading: false,
+          allloaded: false,
+          items: []
+        }
       }]
   },
   onLoad: function (options) {
@@ -162,12 +177,12 @@ Page({
     }
   },
   //加载更多
-  loadmore:function(e) {
+  loadmore: function (e) {
     var _this = this
 
-    var index = _this.data.tabsSliderIndex 
+    var index = _this.data.tabsSliderIndex
     console.log("index:" + index)
-    _this.data.tabs[index].pageIndex += 1
+    _this.data.tabs[index].list.pageIndex += 1
     _this.setData({
       tabs: _this.data.tabs
     })
@@ -175,22 +190,22 @@ Page({
     _this.getList().then(function (res) {
       e.detail.success();
     })
-   
+
   },
   //刷新处理
-  refresh:function(e) {
+  refresh: function (e) {
 
     console.log("index:" + JSON.stringify(e))
-  
+
     var _this = this
 
-    var index =_this.data.tabsSliderIndex 
+    var index = _this.data.tabsSliderIndex
 
     console.log("index:" + index)
 
-    _this.data.tabs[index].pageIndex = 0
-    _this.data.tabs[index].loading = true
-    _this.data.tabs[index].allloaded = false
+    _this.data.tabs[index].list.pageIndex = 0
+    _this.data.tabs[index].list.loading = true
+    _this.data.tabs[index].list.allloaded = false
     _this.setData({
       tabs: _this.data.tabs
     })
@@ -215,7 +230,7 @@ Page({
       currentTab = _this.data.tabs[currentTabIndex];
     }
 
-    var pageIndex = currentTab.pageIndex
+    var pageIndex = currentTab.list.pageIndex
     var status = currentTab.status == undefined ? "" : currentTab.status
 
     console.log("pageIndex:" + pageIndex)
@@ -227,27 +242,35 @@ Page({
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
+
         var items = []
-        if (currentTab.pageIndex == 0) {
+        var allloaded = false
+        var isEmpty = false
+        var list = _this.data.tabs[currentTabIndex].list
+        if (d.pageIndex == 0) {
           items = d.items
         } else {
-          items = _this.data.tabs[currentTabIndex].list.concat(d.items)
+          items = list.items.concat(d.items)
         }
 
-        if (d.items.length == 0) {
-          _this.data.tabs[currentTabIndex].allloaded = true
-        }
-        else {
-          _this.data.tabs[currentTabIndex].allloaded = false
+        if (d.total == 0) {
+          isEmpty = true
         }
 
-        _this.data.tabs[currentTabIndex].loading = false
-        _this.data.tabs[currentTabIndex].total = d.total
-        _this.data.tabs[currentTabIndex].pageSize = d.pageSize
-        _this.data.tabs[currentTabIndex].pageCount = d.pageCount
-        _this.data.tabs[currentTabIndex].pageIndex = d.pageIndex
-        _this.data.tabs[currentTabIndex].list = items;
+        if ((d.pageIndex + 1) >= d.pageCount) {
+          allloaded = true
+        }
 
+
+        list.allloaded = allloaded
+        list.isEmpty = isEmpty
+        list.loading = false
+        list.total = d.total
+        list.pageSize = d.pageSize
+        list.pageCount = d.pageCount
+        list.pageIndex = d.pageIndex
+        list.items = items;
+        _this.data.tabs[currentTabIndex].list = list
         _this.setData({
           tabs: _this.data.tabs
         })
@@ -255,7 +278,7 @@ Page({
       }
     })
   },
-  stopTouchMove: function() {
+  stopTouchMove: function () {
     return false;
   }
 })

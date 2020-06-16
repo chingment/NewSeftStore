@@ -67,9 +67,6 @@ App({
     for (var i = 0; i < pages.length; i++) {
       if (pages[i].data.tag == "main") {
         isHasMain = true
-        wx.navigateBack({
-          delta: pages.length
-        })
         var tabBar = pages[i].data.tabBar;
 
         for (var j = 0; j < tabBar.length; j++) {
@@ -99,12 +96,18 @@ App({
 
         cp = pages[i].selectComponent('#' + tabBar[index].id);
         cp.onShow()
-
-
+        break
       }
     }
 
-    if (!isHasMain) {
+    if (isHasMain) {
+      if (pages.length > 1) {
+        wx.navigateBack({
+          delta: pages.length
+        })
+      }
+    }
+    else {
       wx.reLaunch({
         url: '/pages/main/main'
       })

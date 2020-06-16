@@ -8,9 +8,10 @@ const app = getApp()
 Page({
   data: {
     tag: "productlist",
-    allloaded: false,
-    loading: false,
     dataList: {
+      isEmpty: false,
+      allloaded: false,
+      loading: false,
       total: 0,
       pageIndex: 0,
       pageCount: 0,
@@ -73,18 +74,21 @@ Page({
 
   },
   //加载更多
-  loadmore:function(e){
+  loadmore: function (e) {
     var _this = this
-    _this.data.dataList.pageIndex += 1
-    _this.setData({
-      dataList: _this.data.dataList
-    })
-    _this.search().then(res => {
-      e.detail.success();
-    });
+
+    if (!_this.data.dataList.loading) {
+      _this.data.dataList.pageIndex += 1
+      _this.setData({
+        dataList: _this.data.dataList
+      })
+      _this.search().then(res => {
+        e.detail.success();
+      });
+    }
   },
   //刷新处理
-  refresh:function(e){
+  refresh: function (e) {
     var _this = this
     _this.data.dataList.pageIndex = 0
     _this.search().then(res => {
@@ -152,26 +156,34 @@ Page({
         var d = res.data
         var items = []
         var allloaded = false
-        if (_this.data.dataList.pageIndex == 0) {
+        var isEmpty = false
+        var list = _this.data.dataList
+        if (d.pageIndex == 0) {
           items = d.items
         } else {
-          items = _this.data.dataList.items.concat(d.items)
+          items = list.items.concat(d.items)
         }
 
-        if ((d.pageIndex + 1) > d.pageCount) {
+
+        if (d.total == 0) {
+          isEmpty = true
+        }
+
+        if ((d.pageIndex + 1) >= d.pageCount) {
           allloaded = true
         }
 
-        _this.data.dataList.total = d.total
-        _this.data.dataList.pageSize = d.pageSize
-        _this.data.dataList.pageCount = d.pageCount
-        _this.data.dataList.pageIndex = d.pageIndex
-        _this.data.dataList.items = items;
+        list.loading = false
+        list.allloaded = allloaded
+        list.isEmpty = isEmpty
+        list.total = d.total
+        list.pageSize = d.pageSize
+        list.pageCount = d.pageCount
+        list.pageIndex = d.pageIndex
+        list.items = items;
 
         _this.setData({
-          loading: false,
-          allloaded: allloaded,
-          dataList: _this.data.dataList
+          dataList: list
         })
       }
     })

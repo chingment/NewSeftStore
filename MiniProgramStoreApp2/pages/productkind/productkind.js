@@ -15,7 +15,7 @@ Component({
     }
   },
   data: {
-    isOnReady:false,
+    isOnReady: false,
     currentShopMode: 0
   },
   methods: {
@@ -58,7 +58,7 @@ Component({
         url: '/pages/search/search'
       })
     },
-    productLoadMore:function(e)  {
+    productLoadMore: function (e) {
       var _this = this
 
 
@@ -75,7 +75,7 @@ Component({
       })
 
     },
-    productRefesh:function(e){
+    productRefesh: function (e) {
 
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
@@ -117,11 +117,11 @@ Component({
       }
 
     },
-    onReady:function(){
+    onReady: function () {
       var _this = this;
       console.log("personal.onReady")
 
-      if(!_this.data.isOnReady){
+      if (!_this.data.isOnReady) {
         if (_this.data.currentShopMode != app.globalData.currentShopMode) {
           _this.setData({
             currentShopMode: app.globalData.currentShopMode
@@ -138,9 +138,9 @@ Component({
       query.select('.searchbox').boundingClientRect(function (rect) {
 
         var height = _this.data.height - rect.height
-        console.log("height:"+ _this.data.height)
-        console.log("rect.height:"+rect.height)
-        console.log("height:"+ height)
+        console.log("height:" + _this.data.height)
+        console.log("rect.height:" + rect.height)
+        console.log("height:" + height)
         _this.data["scrollHeight"] = height
         _this.setData(_this.data)
 
@@ -183,25 +183,33 @@ Component({
       }).then(function (res) {
         if (res.result == 1) {
           var d = res.data
-          var items=[]
+          var items = []
           var allloaded = false
-          if (currentTab.list.pageIndex == 0) {
+          var isEmpty = false
+          var list = _this.data.tabs[currentTabIndex].list
+          if (d.pageIndex == 0) {
             items = d.items
           } else {
-            items = _this.data.tabs[currentTabIndex].list.items.concat(d.items)
+            items = list.items.concat(d.items)
           }
 
-          if ((d.pageIndex + 1) > d.pageCount) {
+          if (d.total == 0) {
+            isEmpty = true
+          }
+
+          if ((d.pageIndex + 1) >= d.pageCount) {
             allloaded = true
           }
 
-          _this.data.tabs[currentTabIndex].list.allloaded=allloaded
-          _this.data.tabs[currentTabIndex].list.total = d.total
-          _this.data.tabs[currentTabIndex].list.pageSize = d.pageSize
-          _this.data.tabs[currentTabIndex].list.pageCount = d.pageCount
-          _this.data.tabs[currentTabIndex].list.pageIndex = d.pageIndex
-          _this.data.tabs[currentTabIndex].list.items = items;
+          list.isEmpty = isEmpty
+          list.allloaded = allloaded
+          list.total = d.total
+          list.pageSize = d.pageSize
+          list.pageCount = d.pageCount
+          list.pageIndex = d.pageIndex
+          list.items = items;
 
+          _this.data.tabs[currentTabIndex].list = list
           _this.setData({
             tabs: _this.data.tabs
           })

@@ -342,11 +342,14 @@ namespace LocalS.Service.Api.StoreApp
 
             int pageSize = 10;
 
-            query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
-
-            pageEntiy.Total = query.Count();
             pageEntiy.PageIndex = rup.PageIndex;
             pageEntiy.PageSize = pageSize;
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
+
+            query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+
+
 
             var list = query.ToList();
 
