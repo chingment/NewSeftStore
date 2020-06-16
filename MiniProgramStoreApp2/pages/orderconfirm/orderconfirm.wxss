@@ -1,3 +1,11 @@
+page{
+
+
+  background: linear-gradient(#f18d00, #fff, #fff, #fff, #fff, #fff, #fff, #fff);
+  padding-top: 40rpx;
+}
+
+
 .tag-address {
   height: 3rpx;
 }
@@ -99,7 +107,7 @@
   margin-right:auto;
   border-radius: 10rpx;
   position: relative;
-  
+  background-color: #fff;
   box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -123,13 +131,14 @@
   border-top-left-radius:10rpx;
   padding-right: 60rpx;
   color: #999;
+  border-top-right-radius: 3rpx;
 }
 
 .tab-double .tab-title .title-left .left-triangle{
 
   width: 0;
   height: 0;
-  border-bottom: 80rpx solid #f3e7cf;
+  border-bottom: 60rpx solid #f3e7cf;
   border-right: 80rpx solid transparent;
 }
 
@@ -143,7 +152,7 @@
 .tab-double .tab-title .title-right .right-triangle{
   width: 0;
   height: 0;
-  border-bottom: 80rpx solid #f3e7cf;
+  border-bottom: 60rpx solid #f3e7cf;
   border-left: 80rpx solid transparent;
 }
 
@@ -156,10 +165,13 @@
   border-top-right-radius:10rpx;
   padding-left: 60rpx;
   color: #999;
+  border-top-left-radius: 3rpx;
 }
 
 .tab-double .tab-title  .selected{
   z-index: 999;
+  margin-top: -10rpx;
+
 }
 
 .tab-double .tab-title  .selected .right-triangle{
@@ -172,6 +184,7 @@
   padding: 0;
   color: #f18d00;
   font-weight: 800;
+
 
 }
 

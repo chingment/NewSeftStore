@@ -23,7 +23,7 @@
 
 	<view class="tabbar-contents" current="0" style="height:{{scrollHeight}}px">
 			<own-scroll pulldownDistance="100" emptyTipText="暂未找到相关商品" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{dataList.allloaded}}" isEmpty="{{dataList.isEmpty}}">
-				<view class='list-data prd-list-1' wx:if="{{dataList.items.length>0}}">
+				<view class='list-data prd-list-1'>
 					<block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 						<view class='it it-{{index%2}}'>
 							<navigator class='imgurl skeleton-rect' url="/pages/productdetails/productdetails?skuId={{item.id}}">

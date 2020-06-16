@@ -91,6 +91,9 @@ Page({
   refresh: function (e) {
     var _this = this
     _this.data.dataList.pageIndex = 0
+    _this.data.dataList.loading = false
+    _this.data.dataList.allloaded = false
+    _this.data.dataList.isEmpty=false
     _this.search().then(res => {
       e.detail.success();
     });
@@ -125,6 +128,9 @@ Page({
     var _this = this
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     _this.data.dataList.pageIndex = 0
+    _this.data.dataList.loading = false
+    _this.data.dataList.allloaded = false
+    _this.data.dataList.isEmpty=false
     _this.setData({
       condition_Kinds_index: index,
       dataList: _this.data.dataList
@@ -157,13 +163,12 @@ Page({
         var items = []
         var allloaded = false
         var isEmpty = false
-        var list = _this.data.dataList
+        var list=_this.data.dataList
         if (d.pageIndex == 0) {
           items = d.items
         } else {
           items = list.items.concat(d.items)
         }
-
 
         if (d.total == 0) {
           isEmpty = true
@@ -172,6 +177,16 @@ Page({
         if ((d.pageIndex + 1) >= d.pageCount) {
           allloaded = true
         }
+
+        new Promise(function (resolve, reject){
+
+          setTimeout(function(){
+
+            console.log("我是异步")
+
+          },3000);
+
+        })
 
         list.loading = false
         list.allloaded = allloaded

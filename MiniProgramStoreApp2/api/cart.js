@@ -20,6 +20,7 @@ function pageData() {
 
   var operate= lumos.getJson({
     url: config.apiUrl.cartPageData,
+    isShowLoading:false,
     urlParams: {
       storeId: ownRequest.getCurrentStoreId()
     }

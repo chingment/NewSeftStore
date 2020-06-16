@@ -77,7 +77,7 @@ Page({
   onLoad: function (options) {
     var _this = this
     orderId = options.orderId == undefined ? null : options.orderId
-    productSkus = JSON.parse(options.productSkus)
+    productSkus =options.productSkus == undefined?null: JSON.parse(options.productSkus)
     this.buildPayOptions()
   },
 
@@ -173,69 +173,67 @@ Page({
 
     var tabShopModeByMall = _this.data.tabShopModeByMall
 
-    if (orderId == undefined || orderId == null) {
-
-      var blocks = []
-      var _blocks = _this.data.blocks
-      for (var i = 0; i < _blocks.length; i++) {
-        var skus = []
-        var _skus = _blocks[i].skus
-        for (var j = 0; j < _skus.length; j++) {
-          skus.push({ cartId: _skus[j].cartId, id: _skus[j].id, quantity: _skus[j].quantity, shopMode: _skus[j].shopMode })
-        }
+    var blocks = []
+    var _blocks = _this.data.blocks
+    for (var i = 0; i < _blocks.length; i++) {
+      var skus = []
+      var _skus = _blocks[i].skus
+      for (var j = 0; j < _skus.length; j++) {
+        skus.push({ cartId: _skus[j].cartId, id: _skus[j].id, quantity: _skus[j].quantity, shopMode: _skus[j].shopMode })
+      }
 
 
-        var _delivery = _blocks[i].delivery
-        var _selfTake = _blocks[i].selfTake
+      var _delivery = _blocks[i].delivery
+      var _selfTake = _blocks[i].selfTake
 
-        var delivery = null;
-        var selfTake = null;
+      var delivery = null;
+      var selfTake = null;
 
-        var receiveMode = 0
-        if (_blocks[i].shopMode == 1) {
-          if (tabShopModeByMall == 0) {
-            receiveMode = 1
+      var receiveMode = 0
+      if (_blocks[i].shopMode == 1) {
+        if (tabShopModeByMall == 0) {
+          receiveMode = 1
 
-            if (_delivery.id == "") {
-              toast.show({
-                title: '请选择快寄地址'
-              })
-              return
-            }
-
-            delivery = {
-              id: _delivery.id,
-              consignee: _delivery.consignee,
-              phoneNumber: _delivery.phoneNumber,
-              areaName: _delivery.areaName,
-              areaCode: _delivery.areaCode,
-              address: _delivery.address
-            }
+          if (_delivery.id == "") {
+            toast.show({
+              title: '请选择快寄地址'
+            })
+            return
           }
-          else if (tabShopModeByMall == 1) {
-            receiveMode = 2
 
-            selfTake = {
-              storeName: _selfTake.storeName,
-              storeAddress: _selfTake.storeAddress,
-            }
-
+          delivery = {
+            id: _delivery.id,
+            consignee: _delivery.consignee,
+            phoneNumber: _delivery.phoneNumber,
+            areaName: _delivery.areaName,
+            areaCode: _delivery.areaCode,
+            address: _delivery.address
           }
         }
-        else if (_blocks[i].shopMode == 3) {
-          receiveMode = 3
+        else if (tabShopModeByMall == 1) {
+          receiveMode = 2
 
           selfTake = {
             storeName: _selfTake.storeName,
             storeAddress: _selfTake.storeAddress,
           }
+
         }
+      }
+      else if (_blocks[i].shopMode == 3) {
+        receiveMode = 3
 
-        blocks.push({ shopMode: _blocks[i].shopMode, receiveMode: receiveMode, delivery: delivery, selfTake: selfTake, skus: skus })
-
+        selfTake = {
+          storeName: _selfTake.storeName,
+          storeAddress: _selfTake.storeAddress,
+        }
       }
 
+      blocks.push({ shopMode: _blocks[i].shopMode, receiveMode: receiveMode, delivery: delivery, selfTake: selfTake, skus: skus })
 
+    }
+
+    if (orderId == undefined || orderId == null) {
 
 
       apiOrder.reserve({
@@ -248,7 +246,7 @@ Page({
           apiCart.pageData({
             success: function (res) { }
           })
-          _this.goPay(_this.data.curSelPayOption)
+          _this.goPay(_this.data.curSelPayOption,null)
         } else {
           toast.show({
             title: res.message
@@ -257,14 +255,15 @@ Page({
       })
 
     } else {
-      _this.goPay(_this.data.curSelPayOption)
+      _this.goPay(_this.data.curSelPayOption,blocks)
     }
   },
-  goPay: function (payOption) {
+  goPay: function (payOption,blocks) {
 
     apiOrder.buildPayParams({
       orderId: orderId,
       payCaller: payOption.payCaller,
+      blocks:blocks,
       payPartner: payOption.payPartner
     }).then(function (res) {
       if (res.result == 1) {
