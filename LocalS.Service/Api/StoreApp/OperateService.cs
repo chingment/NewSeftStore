@@ -81,7 +81,7 @@ namespace LocalS.Service.Api.StoreApp
                         ret.IsComplete = true;
 
                         ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id) });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
 
                         ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
                         ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
@@ -95,7 +95,7 @@ namespace LocalS.Service.Api.StoreApp
                         ret.IsComplete = true;
 
                         ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id) });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
 
                         ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
                         ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
@@ -110,7 +110,7 @@ namespace LocalS.Service.Api.StoreApp
                         ret.IsComplete = true;
 
                         ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id) });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
 
                         ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
                         ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
@@ -160,7 +160,7 @@ namespace LocalS.Service.Api.StoreApp
                 ret.IsComplete = true;
                 ret.Message = "您已取消支付操作";
                 ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id) });
+                ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
                 ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
                 ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
 
@@ -170,13 +170,21 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public static string GetOrderDetailsUrl(E_AppCaller caller, string orderid)
+        public static string GetOrderDetailsUrl(E_AppCaller caller, string orderid, E_OrderStatus orderStatus)
         {
             string url = "";
             switch (caller)
             {
                 case E_AppCaller.Wxmp:
-                    url = string.Format("/pages/orderdetails/orderdetails?id={0}", orderid);
+                    switch (orderStatus)
+                    {
+                        case E_OrderStatus.WaitPay:
+                            url = string.Format("/pages/orderconfirm/orderconfirm?orderId={0}", orderid);
+                            break;
+                        default:
+                            url = string.Format("/pages/orderdetails/orderdetails?id={0}", orderid);
+                            break;
+                    }
                     break;
             }
 
