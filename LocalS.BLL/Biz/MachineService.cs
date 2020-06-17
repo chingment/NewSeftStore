@@ -97,6 +97,7 @@ namespace LocalS.BLL.Biz
                 {
                     model.StoreId = merchStore.Id;
                     model.StoreName = merchStore.Name;
+                    model.StoreAddress = merchStore.Address;
                 }
             }
 

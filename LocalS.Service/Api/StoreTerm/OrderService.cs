@@ -53,8 +53,8 @@ namespace LocalS.Service.Api.StoreTerm
 
             block.ShopMode = E_SellChannelRefType.Machine;
             block.ReceiveMode = E_ReceiveMode.MachineSelfTake;
-            block.SelfTake = null;
-
+            block.SelfTake.StoreName = machine.StoreName;
+            block.SelfTake.StoreAddress = machine.StoreAddress;
             foreach (var productSku in rop.ProductSkus)
             {
                 block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.Id } });

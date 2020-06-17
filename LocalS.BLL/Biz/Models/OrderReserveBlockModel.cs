@@ -34,8 +34,8 @@ namespace LocalS.BLL.Biz
         public class SelfTakeModel
         {
             public string StoreName { get; set; }
-
             public string StoreAddress { get; set; }
+
         }
         public class ProductSkuModel
         {

@@ -27,6 +27,8 @@ namespace LocalS.BLL.Biz
         public string CsrHelpTip { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }
+
+        public string StoreAddress { get; set; }
         public string JPushRegId { get; set; }
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }

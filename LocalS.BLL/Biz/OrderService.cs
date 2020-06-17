@@ -386,7 +386,7 @@ namespace LocalS.BLL.Biz
                                 orderSub.Receiver = null;
                                 orderSub.ReceiverPhoneNumber = null;
                                 orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
-
+                                orderSub.ReceptionMarkName = shopModeByMachine.SelfTake.StoreName;
                                 break;
                             case E_SellChannelRefType.Mall:
 
@@ -419,6 +419,7 @@ namespace LocalS.BLL.Biz
                                     orderSub.SellChannelRefName = "[店铺自取]";
                                     orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
                                     orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
+                                    orderSub.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
                                 }
 
                                 break;
@@ -1191,6 +1192,7 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
                                         orderSub.SellChannelRefName = "[店铺自取]";
                                         orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
                                         orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
+                                        orderSub.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
                                     }
 
                                     break;
