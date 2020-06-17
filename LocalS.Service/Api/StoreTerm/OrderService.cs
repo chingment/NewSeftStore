@@ -60,6 +60,8 @@ namespace LocalS.Service.Api.StoreTerm
                 block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.Id } });
             }
 
+            bizRop.Blocks.Add(block);
+
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(IdWorker.Build(IdType.EmptyGuid), bizRop);
 
             if (bizResult.Result == ResultType.Success)
