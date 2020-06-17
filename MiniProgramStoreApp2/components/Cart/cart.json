@@ -1,6 +1,3 @@
 {
-  "component": true,
-  "usingComponents": {
-    "page-cart": "/pages/cart/cart"
-  }
+  "component": true
 }

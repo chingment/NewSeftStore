@@ -1,0 +1,11 @@
+<view class="specsdialog" wx:if="{{isShow}}" catchtouchmove="ture">
+  <view class='content' animation='{{animationData}}'>
+    <view class="toparea">
+      <view class="title">购物车</view>
+      <view class='close' bindtap='_close'>关闭</view>
+    </view>
+    <view class="ctarea">
+    dsadasd
+    </view>
+  </view>
+</view>

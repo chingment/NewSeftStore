@@ -25,7 +25,10 @@ Component({
     skeletonIsDev: false,
     skeletonBgcolor: '#FFF',
     skeletonData,
-    shopMode: 0
+    shopMode: 0,
+    specsDialog:{
+      isShow:false
+    }
   },
   methods: {
     addToCart: function (e) {
@@ -44,6 +47,8 @@ Component({
         operate: 2,
         productSkus: productSkus
       })
+
+      //_this.setData({specsDialog:{ isShow:true }})
     },
     getPageData: function () {
       var _this = this
