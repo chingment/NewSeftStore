@@ -52,7 +52,7 @@ namespace LocalS.Service.Api.StoreTerm
             OrderReserveBlockModel block = new OrderReserveBlockModel();
 
             block.ShopMode = E_SellChannelRefType.Machine;
-
+            block.ReceiveMode = E_ReceiveMode.MachineSelfTake;
             block.SelfTake = null;
 
             foreach (var productSku in rop.ProductSkus)
