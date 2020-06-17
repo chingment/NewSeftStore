@@ -80,12 +80,6 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
-            }
-
             var ret = new RetOrderConfirm();
             var subtotalItem = new List<OrderConfirmSubtotalItemModel>();
             var skus = new List<OrderConfirmProductSkuModel>();
@@ -96,9 +90,17 @@ namespace LocalS.Service.Api.StoreApp
             decimal skuAmountByVip = 0;//会员总价
 
             StoreInfoModel store;
-
+            DeliveryModel dliveryModel = new DeliveryModel();
+            E_ReceiveMode receiveMode_Mall = E_ReceiveMode.Delivery;
             if (string.IsNullOrEmpty(rop.OrderId))
             {
+
+                if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
+                }
+
+
                 store = BizFactory.Store.GetOne(rop.StoreId);
 
                 foreach (var item in rop.ProductSkus)
@@ -122,6 +124,26 @@ namespace LocalS.Service.Api.StoreApp
                     {
                         LogUtil.Info("商品Id ：" + item.Id + ",信息为空");
                     }
+                }
+
+                var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
+                if (shippingAddress == null)
+                {
+                    dliveryModel.Id = "";
+                    dliveryModel.Consignee = "快寄地址";
+                    dliveryModel.PhoneNumber = "选择";
+                    dliveryModel.AreaName = "";
+                    dliveryModel.Address = "";
+                    dliveryModel.IsDefault = false;
+                }
+                else
+                {
+                    dliveryModel.Id = shippingAddress.Id;
+                    dliveryModel.Consignee = shippingAddress.Consignee;
+                    dliveryModel.PhoneNumber = shippingAddress.PhoneNumber;
+                    dliveryModel.AreaName = shippingAddress.AreaName;
+                    dliveryModel.Address = shippingAddress.Address;
+                    dliveryModel.IsDefault = shippingAddress.IsDefault;
                 }
 
             }
@@ -151,10 +173,29 @@ namespace LocalS.Service.Api.StoreApp
                     orderConfirmSkuModel.MainImgUrl = item.PrdProductSkuMainImgUrl;
                     orderConfirmSkuModel.Quantity = item.Quantity;
                     orderConfirmSkuModel.SalePrice = item.SalePrice;
+                    orderConfirmSkuModel.ShopMode = item.SellChannelRefType;
                     skuAmountByOriginal += (item.SalePrice * item.Quantity);
                     skuAmountByMemebr += (item.SalePrice * item.Quantity);
                     skus.Add(orderConfirmSkuModel);
                 }
+
+                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
+
+
+                var orderSub_Mall = orderSub.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                if (orderSub_Mall != null)
+                {
+                    receiveMode_Mall = orderSub_Mall.ReceiveMode;
+
+                    dliveryModel.Id = "";
+                    dliveryModel.Consignee = orderSub_Mall.Receiver;
+                    dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
+                    dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
+                    dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
+                    dliveryModel.Address = orderSub_Mall.ReceptionAddress;
+                    dliveryModel.IsDefault = false;
+                }
+
             }
 
 
@@ -181,45 +222,21 @@ namespace LocalS.Service.Api.StoreApp
                 skuAmountByActual = skuAmountByMemebr;
             }
 
+
             var orderBlock = new List<OrderBlockModel>();
 
             var skus_Mall = skus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
             if (skus_Mall.Count > 0)
             {
                 var orderBlock_Mall = new OrderBlockModel();
-                orderBlock_Mall.TagName = "快递商品";
+                orderBlock_Mall.TagName = "线上商城";
                 orderBlock_Mall.Skus = skus_Mall;
+                orderBlock_Mall.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
                 orderBlock_Mall.ShopMode = E_SellChannelRefType.Mall;
-                orderBlock_Mall.TabMode = E_TabMode.DeliveryAndSelfTake;
-
-
-                var dliveryModel = new DeliveryModel();
-               
-                var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
-                if (shippingAddress == null)
-                {
-                    dliveryModel.Id = "";
-                    dliveryModel.Consignee = "快寄地址";
-                    dliveryModel.PhoneNumber = "选择";
-                    dliveryModel.AreaName = "";
-                    dliveryModel.Address = "";
-                    dliveryModel.IsDefault = false;
-                }
-                else
-                {
-                    dliveryModel.Id = shippingAddress.Id;
-                    dliveryModel.Consignee = shippingAddress.Consignee;
-                    dliveryModel.PhoneNumber = shippingAddress.PhoneNumber;
-                    dliveryModel.AreaName = shippingAddress.AreaName;
-                    dliveryModel.Address = shippingAddress.Address;
-                    dliveryModel.IsDefault = shippingAddress.IsDefault;
-                }
+                orderBlock_Mall.ReceiveMode = receiveMode_Mall;
                 orderBlock_Mall.Delivery = dliveryModel;
-
                 orderBlock_Mall.SelfTake.StoreName = store.Name;
                 orderBlock_Mall.SelfTake.StoreAddress = store.Address;
-
-
                 orderBlock.Add(orderBlock_Mall);
             }
 
@@ -228,16 +245,13 @@ namespace LocalS.Service.Api.StoreApp
             if (skus_Machine.Count > 0)
             {
                 var orderBlock_Machine = new OrderBlockModel();
-                orderBlock_Machine.TagName = "自提商品";
+                orderBlock_Machine.TagName = "线下机器";
                 orderBlock_Machine.Skus = skus_Machine;
+                orderBlock_Machine.TabMode = E_TabMode.MachineSelfTake;
                 orderBlock_Machine.ShopMode = E_SellChannelRefType.Machine;
-                var selfTakeModel = new SelfTakeModel();
-
-                selfTakeModel.StoreName = store.Name;
-                selfTakeModel.StoreAddress = store.Address;
-
-                orderBlock_Machine.SelfTake = selfTakeModel;
-
+                orderBlock_Machine.ReceiveMode = E_ReceiveMode.MachineSelfTake;
+                orderBlock_Machine.SelfTake.StoreName = store.Name;
+                orderBlock_Machine.SelfTake.StoreAddress = store.Address;
                 orderBlock.Add(orderBlock_Machine);
             }
 
@@ -303,12 +317,12 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.SubtotalItems = subtotalItem;
 
-
             ret.ActualAmount = skuAmountByActual.ToF2Price();
 
             ret.OriginalAmount = skuAmountByOriginal.ToF2Price();
 
             ret.OrderId = rop.OrderId;
+
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
 
@@ -418,7 +432,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     case E_OrderStatus.WaitPay:
                         model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "取消订单", Color = "red" }, OpType = "FUN", OpVal = "cancleOrder" });
-                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id,item.Status) });
+                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
                         break;
                     case E_OrderStatus.Payed:
                         model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
@@ -545,6 +559,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             bizRop.CreateIp = rop.CreateIp;
+            bizRop.Blocks = rop.Blocks;
             return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
 

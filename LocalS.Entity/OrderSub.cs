@@ -19,8 +19,10 @@ namespace LocalS.Entity
         public string OrderId { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public string Receiver { get; set; }
-        public string ReceiverPhone { get; set; }
+        public string ReceiverPhoneNumber { get; set; }
         public string ReceptionAddress { get; set; }
+        public string ReceptionAreaCode { get; set; }
+        public string ReceptionAreaName { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }

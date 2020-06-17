@@ -34,7 +34,12 @@ Component({
     },
     isEmpty: { // 是否为空
       type: Boolean,
-      value: false
+      value: false,
+      observer:function(newVal,oldVal){
+        if(newVal){
+          this.setData({loadmoreHidden:true})
+        }
+      }
     },
     loadmoreLoadingText: { // 加载更多文字
       type: String,

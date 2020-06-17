@@ -11,9 +11,10 @@ function initSearchPageData(urlParams) {
   })
 }
 
-function search(urlParams) {
+function search(urlParams,isShowLoading) {
   return lumos.getJson({
     url: config.apiUrl.productSearch,
+    isShowLoading:isShowLoading,
     urlParams: urlParams
   })
 }

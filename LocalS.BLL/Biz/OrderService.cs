@@ -370,39 +370,57 @@ namespace LocalS.BLL.Biz
                         {
                             case E_SellChannelRefType.Machine:
                                 var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
-                                if (shopModeByMachine != null)
+
+                                if (shopModeByMachine == null || shopModeByMachine.SelfTake == null)
                                 {
-                                    if (shopModeByMachine.SelfTake != null)
-                                    {
-                                        orderSub.ReceiveMode = E_ReceiveMode.MachineSelfTake;
-                                        orderSub.SellChannelRefName = "[机器自提]" + buildOrderSub.SellChannelRefId;
-                                        orderSub.Receiver = null;
-                                        orderSub.ReceiverPhone = null;
-                                        orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
-                                    }
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空", null);
                                 }
+
+                                if (shopModeByMachine.ReceiveMode != E_ReceiveMode.MachineSelfTake)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式", null);
+                                }
+
+                                orderSub.SellChannelRefName = "[机器自提]" + buildOrderSub.SellChannelRefId;
+                                orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
+                                orderSub.Receiver = null;
+                                orderSub.ReceiverPhoneNumber = null;
+                                orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
+
                                 break;
                             case E_SellChannelRefType.Mall:
 
                                 var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
-                                if (shopModeByMall != null)
+                                if (shopModeByMall == null)
                                 {
-                                    if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
-                                    {
-                                        orderSub.ReceiveMode = E_ReceiveMode.Delivery;
-                                        orderSub.SellChannelRefName = "[配送商品]";
-
-                                        orderSub.Receiver = shopModeByMall.Delivery.Consignee;
-                                        orderSub.ReceiverPhone = shopModeByMall.Delivery.PhoneNumber;
-                                        orderSub.ReceptionAddress = shopModeByMall.Delivery.Address;
-                                    }
-                                    if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
-                                    {
-                                        orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
-                                        orderSub.SellChannelRefName = "[店铺自取]";
-                                        orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
-                                    }
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式数据为空", null);
                                 }
+                                else if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery && shopModeByMall.Delivery == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式配送地址为空", null);
+                                }
+                                else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake && shopModeByMall.SelfTake == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空", null);
+                                }
+
+                                if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
+                                {
+                                    orderSub.SellChannelRefName = "[配送商品]";
+                                    orderSub.ReceiveMode = E_ReceiveMode.Delivery;
+                                    orderSub.Receiver = shopModeByMall.Delivery.Consignee;
+                                    orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
+                                    orderSub.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
+                                    orderSub.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
+                                    orderSub.ReceptionAddress = shopModeByMall.Delivery.Address;
+                                }
+                                else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                                {
+                                    orderSub.SellChannelRefName = "[店铺自取]";
+                                    orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                    orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
+                                }
+
                                 break;
                         }
 
@@ -1108,6 +1126,82 @@ select new { b.Key.PrdProductSkuId, b.Key.SellChannelRefId, b.Key.SellChannelRef
 
 
                 order.PayCaller = rop.PayCaller;
+
+
+                if (rop.Blocks != null)
+                {
+                    if (rop.Blocks.Count > 0)
+                    {
+
+                        var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
+
+
+                        foreach (var orderSub in orderSubs)
+                        {
+
+                            switch (orderSub.SellChannelRefType)
+                            {
+                                case E_SellChannelRefType.Machine:
+                                    //var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
+
+                                    //if (shopModeByMachine == null || shopModeByMachine.SelfTake != null)
+                                    //{
+                                    //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空");
+                                    //}
+
+                                    //if (shopModeByMachine.ReceiveMode != E_ReceiveMode.MachineSelfTake)
+                                    //{
+                                    //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式");
+                                    //}
+
+                                    //orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
+                                    //orderSub.Receiver = null;
+                                    //orderSub.ReceiverPhoneNumber = null;
+                                    //orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
+
+                                    break;
+                                case E_SellChannelRefType.Mall:
+
+                                    var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
+                                    if (shopModeByMall == null)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式数据为空");
+                                    }
+                                    else if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery && shopModeByMall.Delivery == null)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式配送地址为空");
+                                    }
+                                    else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake && shopModeByMall.SelfTake == null)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空");
+                                    }
+
+                                    if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
+                                    {
+                                        orderSub.SellChannelRefName = "[配送商品]";
+                                        orderSub.ReceiveMode = E_ReceiveMode.Delivery;
+                                        orderSub.Receiver = shopModeByMall.Delivery.Consignee;
+                                        orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
+                                        orderSub.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
+                                        orderSub.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
+                                        orderSub.ReceptionAddress = shopModeByMall.Delivery.Address;
+                                    }
+                                    else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                                    {
+                                        orderSub.SellChannelRefName = "[店铺自取]";
+                                        orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                        orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
+                                    }
+
+                                    break;
+                            }
+
+                        }
+                    }
+                }
+
+
+
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 

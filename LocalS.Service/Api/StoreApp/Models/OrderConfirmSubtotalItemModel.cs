@@ -17,11 +17,28 @@ namespace LocalS.Service.Api.StoreApp
         }
 
         public string TagName { get; set; }
+
+        /// <summary>
+        /// Tab选项卡模式 Delivery 仅支持配送方式，SelfTake 仅支持自提方式 DeliveryAndSelfTake 支持配送和自提 
+        /// </summary>
+        public E_TabMode TabMode { get; set; }
+        /// <summary>
+        /// ShopMode 模式分 线上商城，线下机器
+        /// </summary>
         public E_SellChannelRefType ShopMode { get; set; }
+        /// <summary>
+        /// 收货方式   Delivery SelfTake
+        /// </summary>
+        public E_ReceiveMode ReceiveMode { get; set; }
+        /// <summary>
+        /// 当ReceiveMode 为 Delivery 选择该方式
+        /// </summary>
         public DeliveryModel Delivery { get; set; }
+        /// <summary>
+        /// 当当ReceiveMode 为 SelfTake 选择该方式
+        /// </summary>
         public SelfTakeModel SelfTake { get; set; }
         public List<OrderConfirmProductSkuModel> Skus { get; set; }
-        public E_TabMode TabMode { get; set; }
     }
 
     public enum E_TabMode
@@ -29,9 +46,11 @@ namespace LocalS.Service.Api.StoreApp
 
         Unknow = 0,
         Delivery = 1,
-        SelfTake = 2,
-        DeliveryAndSelfTake = 3
+        StoreSelfTake = 2,
+        DeliveryAndStoreSelfTake = 3,
+        MachineSelfTake = 4
     }
+
 
     public class OrderConfirmSubtotalItemModel
     {

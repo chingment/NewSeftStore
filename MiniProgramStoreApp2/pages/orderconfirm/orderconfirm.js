@@ -77,7 +77,7 @@ Page({
   onLoad: function (options) {
     var _this = this
     orderId = options.orderId == undefined ? null : options.orderId
-    productSkus =options.productSkus == undefined?null: JSON.parse(options.productSkus)
+    productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
     this.buildPayOptions()
   },
 
@@ -133,7 +133,7 @@ Page({
     var index = e.currentTarget.dataset.replyIndex
     var deliveryaddressid = e.currentTarget.dataset.replyDeliveryaddressid
     wx.navigateTo({
-      url: "/pages/deliveryaddress/deliveryaddress?operate=2&orderBlockIndex=" + index+"&currentSelectId="+deliveryaddressid,
+      url: "/pages/deliveryaddress/deliveryaddress?operate=2&orderBlockIndex=" + index + "&currentSelectId=" + deliveryaddressid,
       success: function (res) {
         // success
       },
@@ -189,18 +189,14 @@ Page({
       var delivery = null;
       var selfTake = null;
 
-      var receiveMode = 0
       if (_blocks[i].shopMode == 1) {
-        if (tabShopModeByMall == 0) {
-          receiveMode = 1
-
+        if (_blocks[i].receiveMode==1) {
           if (_delivery.id == "") {
             toast.show({
               title: '请选择快寄地址'
             })
             return
           }
-
           delivery = {
             id: _delivery.id,
             consignee: _delivery.consignee,
@@ -210,9 +206,7 @@ Page({
             address: _delivery.address
           }
         }
-        else if (tabShopModeByMall == 1) {
-          receiveMode = 2
-
+        else if (_blocks[i].receiveMode == 2) {
           selfTake = {
             storeName: _selfTake.storeName,
             storeAddress: _selfTake.storeAddress,
@@ -221,15 +215,13 @@ Page({
         }
       }
       else if (_blocks[i].shopMode == 3) {
-        receiveMode = 3
-
         selfTake = {
           storeName: _selfTake.storeName,
           storeAddress: _selfTake.storeAddress,
         }
       }
 
-      blocks.push({ shopMode: _blocks[i].shopMode, receiveMode: receiveMode, delivery: delivery, selfTake: selfTake, skus: skus })
+      blocks.push({ shopMode: _blocks[i].shopMode, receiveMode: _blocks[i].receiveMode, delivery: delivery, selfTake: selfTake, skus: skus })
 
     }
 
@@ -246,7 +238,7 @@ Page({
           apiCart.pageData({
             success: function (res) { }
           })
-          _this.goPay(_this.data.curSelPayOption,null)
+          _this.goPay(_this.data.curSelPayOption, null)
         } else {
           toast.show({
             title: res.message
@@ -255,15 +247,15 @@ Page({
       })
 
     } else {
-      _this.goPay(_this.data.curSelPayOption,blocks)
+      _this.goPay(_this.data.curSelPayOption, blocks)
     }
   },
-  goPay: function (payOption,blocks) {
+  goPay: function (payOption, blocks) {
 
     apiOrder.buildPayParams({
       orderId: orderId,
       payCaller: payOption.payCaller,
-      blocks:blocks,
+      blocks: blocks,
       payPartner: payOption.payPartner
     }).then(function (res) {
       if (res.result == 1) {
@@ -305,25 +297,24 @@ Page({
     })
 
   },
-  tabShopModeByMallClick(e) {
+  tabMallReceiveModeClick(e) {
     var _this = this
-    var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
-    var tabmode = e.currentTarget.dataset.replyTabmode //对应页面data-reply-index
+    var receivemode = e.currentTarget.dataset.replyReceivemode
+    var blockindex = e.currentTarget.dataset.replyBlockindex
+    var tabmode = e.currentTarget.dataset.replyTabmode
 
-    var isFalg = false
-    if (index == 0) {
-      if (tabmode == 1 || tabmode == 3) {
-        isFalg = true
-      }
+    console.log("blockindex:" + blockindex)
+    console.log("tabmode:" + tabmode)
+    console.log("receivemode:" + receivemode)
+
+    _this.data.blocks[blockindex].receiveMode = receivemode
+
+
+    if (tabmode == 3) {
+      _this.setData({ blocks: _this.data.blocks })
     }
-    else if (index == 1) {
-      if (tabmode == 2 || tabmode == 3) {
-        isFalg = true
-      }
-    }
-    if (isFalg) {
-      _this.setData({ tabShopModeByMall: index })
-    }
+
+
   }
 
 

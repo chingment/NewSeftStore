@@ -5,14 +5,14 @@
 	<image class="img" src="/content/default/images/tag_address.png"></image>
 </view> -->
 <view class="ord-block">
-	<block wx:for="{{blocks}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+	<block wx:for="{{blocks}}" wx:for-item="item" wx:key="index">
 		<view class="ct pd-com">
 
 			<block wx:if="{{item.shopMode==1}}">
 
 				<view class="tab-double">
 					<view class="tab-title">
-						<view class="title-left {{tabShopModeByMall==0?'selected':''}}" bindtap="tabShopModeByMallClick" data-reply-index="0" data-reply-tabmode="{{item.tabMode}}" >
+						<view class="title-left {{item.receiveMode==1?'selected':''}}" bindtap="tabMallReceiveModeClick" data-reply-blockindex="{{index}}" data-reply-receivemode="1" data-reply-tabmode="{{item.tabMode}}" >
 							<view class="txt">
 								<text wx:if="{{item.tabMode==1||item.tabMode==3}}" >配送地址</text>
 							</view>
@@ -20,7 +20,7 @@
 							</view>
 						</view>
 
-						<view class="title-right {{tabShopModeByMall==1?'selected':''}}" bindtap="tabShopModeByMallClick" data-reply-index="1" data-reply-tabmode="{{item.tabMode}}">
+						<view class="title-right {{item.receiveMode==2?'selected':''}}" bindtap="tabMallReceiveModeClick" data-reply-blockindex="{{index}}" data-reply-receivemode="2" data-reply-tabmode="{{item.tabMode}}">
 							<view class="right-triangle">
 
 							</view>
@@ -31,7 +31,7 @@
 					</view>
 
 					<view class="tab-content">
-						<view class="content-item {{tabShopModeByMall==0?'selected':''}}">
+						<view class="content-item {{item.receiveMode==1?'selected':''}}">
 
 							<view class="its-a">
 								<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}" data-reply-deliveryaddressid="{{item.delivery.id}}"   >
@@ -54,7 +54,7 @@
 							</view>
 
 						</view>
-						<view class="content-item {{tabShopModeByMall==1?'selected':''}}">
+						<view class="content-item {{item.receiveMode==2?'selected':''}}">
 
 
 							<view class="its-a">
@@ -177,12 +177,12 @@
 
 
 
-
 			</block>
-
+			
+		<view class="line-space-ncolor"></view>
 
 		</view>
-		<view class="line-space-ncolor"></view>
+
 
 	</block>
 

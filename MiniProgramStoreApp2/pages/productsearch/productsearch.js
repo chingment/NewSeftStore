@@ -157,7 +157,7 @@ Page({
       subjectId: undefined,
       shopMode: app.globalData.currentShopMode,
       name: ""
-    }).then(function (res) {
+    },false).then(function (res) {
       if (res.result == 1) {
         var d = res.data
         var items = []
