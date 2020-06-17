@@ -14,12 +14,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tag: "productdetails",
-    payOption: {
-      title: '支付方式',
-      options: []
-    },
-    curSelPayOption: null
+    tag: "orderdetails"
   },
 
   /**
@@ -50,75 +45,9 @@ Page({
         }
       }
     })
-
-    this.buildPayOptions()
   },
   goPay: function() {
 
-    var _this = this;
-
-    for (var i = 0; i < _this.data.payOption.options.length; i++) {
-      if (_this.data.payOption.options[i].isSelect == true) {
-        _this.data.curSelPayOption = _this.data.payOption.options[i]
-        break
-      }
-    }
-
-
-
-    if (_this.data.curSelPayOption == undefined || _this.data.curSelPayOption == null) {
-      toast.show({
-        title: '未选择支付方式'
-      })
-      return
-    }
-
-
-    apiOrder.buildPayParams({
-      orderId: orderId,
-      payCaller: _this.data.curSelPayOption.payCaller,
-      payPartner: _this.data.curSelPayOption.payPartner
-    }).then(function(res) {
-      if (res.result == 1) {
-
-        var data = res.data;
-        wx.requestPayment({
-          'timeStamp': data.timestamp,
-          'nonceStr': data.nonceStr,
-          'package': data.package,
-          'signType': data.signType,
-          'paySign': data.paySign,
-          'success': function(res) {
-            wx.redirectTo({
-              url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
-            })
-          },
-          'fail': function(res) {
-            wx.redirectTo({
-              url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
-            })
-          }
-        })
-
-
-      } else {
-        toast.show({
-          title: res.message
-        })
-      }
-    })
-  },
-  buildPayOptions: function() {
-    var _this = this
-    apiOrder.buildPayOptions({
-      appCaller: 1
-    }).then(function(res) {
-      if (res.result == 1) {
-        _this.setData({
-          payOption: res.data
-        })
-      }
-    })
 
   }
 

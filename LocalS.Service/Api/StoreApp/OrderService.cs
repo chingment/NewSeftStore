@@ -464,6 +464,7 @@ namespace LocalS.Service.Api.StoreApp
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
 
+            ret.Id = order.Id;
             ret.Status = order.Status;
 
 

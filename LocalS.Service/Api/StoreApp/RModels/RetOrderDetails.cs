@@ -16,6 +16,8 @@ namespace LocalS.Service.Api.StoreApp
             this.Blocks = new List<FsBlock>();
             this.FieldBlocks = new List<FsBlockByField>();
         }
+
+        public string Id { get; set; }
         public E_OrderStatus Status { get; set; }
         public FsTag Tag { get; set; }
         public List<FsBlock> Blocks { get; set; }
