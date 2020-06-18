@@ -6,6 +6,9 @@
   wx:if="{{ !pageIsReady || skeletonIsDev }}"
 ></skeleton>
 
+
+<specsdialog isShow="{{specsDialog.isShow}}" ></specsdialog>
+
 <view class="page skeleton" wx:if="{{ pageIsReady }}" >
 
 

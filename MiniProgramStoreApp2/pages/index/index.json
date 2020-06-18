@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "skeleton": "../../components/skeleton/skeleton"
+    "skeleton": "../../components/skeleton/skeleton",
+    "specsdialog": "../../components/specsdialog/specsdialog"
   }
 }
