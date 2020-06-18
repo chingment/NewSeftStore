@@ -1,88 +1,87 @@
 <view class="slide-cart" wx:if="{{show}}" catchtouchmove="ture">
-  <view class='content' animation='{{animationData}}'>
-    <view class="toparea">
-      <view class="title">购物车</view>
-      <view class='close' bindtap='_close'>关闭</view>
-    </view>
+	<view class='content' animation='{{animationData}}'>
+		<view class="wrapper">
+			<view class='close' bindtap='_close'>
 
-    <view class="st-cart">
-      <view class="ct" style="height:100%;">
+				<image class="img"  src='/content/default/images/icon_close.png'></image>
 
-        <block wx:if="{{cart.blocks.length>0}}">
-          <scroll-view scroll-y="true" style="height:660rpx;">
-            <view class="cart-blocks its-blocks">
-              <block wx:for="{{cart.blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
-                <view class="it">
-                  <view class="it-tag">
-                    <image class="icon img" src='/content/default/images/cart_channel{{item.shopMode}}.png'></image>
-                    <text class="name">{{item.tagName}}</text>
-                    <image class="more img" src='/content/default/images/col_nav_right.png'></image>
-                  </view>
-                  <view class="it-skus">
-                    <block wx:for="{{item.productSkus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
-                      <view class="it touch-item {{itemsku.isTouchMove ? 'touch-move-active' : ''}}" data-cartid="{{itemsku.cartId}}" bindtouchstart="_itemTouchstart" bindtouchmove="_itemTouchmove">
-                        <view class="it-content">
-                          <view class="it-l" bindtap="_itemOperate" data-reply-operate="1" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">
+			</view>
+			<view class="st-cart">
+				<view class="ct" style="height:100%;">
 
-                            <image class="img" src='/content/default/images/{{itemsku.selected==false?"checkedoff":"checkedon"}}.png'></image>
-                          </view>
-                          <view class="it-m">
-                            <view class="it-ml" style="position:relative; overflow:hidden;'">
-                              <view wx:if="{{itemsku.isOffSell}}" class="isOffSell-box">
-                                <view class="isOffSell-tip">已下架</view>
-                              </view>
-                              <image class='img' src="{{itemsku.mainImgUrl}}" />
-                            </view>
-                            <view class="it-mr">
-                              <text class='skuname font-black'>{{itemsku.name}}</text>
-                              <text class='sumprice font-gray'>{{itemsku.salePrice}}</text>
-                            </view>
-                          </view>
-                          <view class="it-r">
-                            <view class="decrease">
-                              <image class="img" bindtap="_itemOperate" data-reply-operate="3" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}" src='/content/default/images/decrease.png'></image>
-                            </view>
-                            <text class="quantity">{{itemsku.quantity}}</text>
+					<block wx:if="{{cart.blocks.length>0}}">
+						<scroll-view scroll-y="true" style="height:660rpx;">
+							<view class="cart-blocks its-blocks">
+								<block wx:for="{{cart.blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
+									<view class="it">
+										<view class="it-tag">
+											<image class="icon img" src='/content/default/images/cart_channel{{item.shopMode}}.png'></image>
+											<text class="name">{{item.tagName}}</text>
+											<image class="more img" src='/content/default/images/col_nav_right.png'></image>
+										</view>
+										<view class="it-skus">
+											<block wx:for="{{item.productSkus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
+												<view class="it touch-item {{itemsku.isTouchMove ? 'touch-move-active' : ''}}" data-cartid="{{itemsku.cartId}}" bindtouchstart="_itemTouchstart" bindtouchmove="_itemTouchmove">
+													<view class="it-content">
+														<view class="it-l" bindtap="_itemOperate" data-reply-operate="1" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">
 
-
-                            <view class="increase">
-                              <image class="img" bindtap="_itemOperate" data-reply-operate="2" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}" src='/content/default/images/increase.png'></image>
-                            </view>
-                          </view>
-                        </view>
-                        <view class="it-del" bindtap="_itemOperate" data-reply-operate="4" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">删除</view>
-
-                      </view>
-
-                    </block>
-                  </view>
-                </view>
-                <view class="line-space"></view>
-              </block>
-            </view>
-          </scroll-view>
-          <view class="cart-bottom">
-            <view class="it-l">
-              <text class='font-gray'>已选({{cart.countBySelected}})</text>
-            </view>
-            <view class="it-m">
-              <text class="font-main" value="249" decimal="2">{{cart.sumPriceBySelected}}</text>
-            </view>
-            <view bindtap="_immeBuy" class="bg-main it-r">
-              <text>下单</text>
-            </view>
-          </view>
-        </block>
-        <block wx:else>
-
-          <view style='height:100%;display:flex;justify-content:center;align-items:center'>
-            <image src='/content/default/images/cart_empty.png'></image>
-          </view>
-        </block>
-
-      </view>
-    </view>
+															<image class="img" src='/content/default/images/{{itemsku.selected==false?"checkedoff":"checkedon"}}.png'></image>
+														</view>
+														<view class="it-m">
+															<view class="it-ml" style="position:relative; overflow:hidden;'">
+																<view wx:if="{{itemsku.isOffSell}}" class="isOffSell-box">
+																	<view class="isOffSell-tip">已下架</view>
+																</view>
+																<image class='img' src="{{itemsku.mainImgUrl}}" />
+															</view>
+															<view class="it-mr">
+																<text class='skuname font-black'>{{itemsku.name}}</text>
+																<text class='sumprice font-gray'>{{itemsku.salePrice}}</text>
+															</view>
+														</view>
+														<view class="it-r">
+															<view class="decrease">
+																<image class="img" bindtap="_itemOperate" data-reply-operate="3" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}" src='/content/default/images/decrease.png'></image>
+															</view>
+															<text class="quantity">{{itemsku.quantity}}</text>
 
 
-  </view>
+															<view class="increase">
+																<image class="img" bindtap="_itemOperate" data-reply-operate="2" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}" src='/content/default/images/increase.png'></image>
+															</view>
+														</view>
+													</view>
+													<view class="it-del" bindtap="_itemOperate" data-reply-operate="4" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">删除</view>
+
+												</view>
+
+											</block>
+										</view>
+									</view>
+								</block>
+							</view>
+						</scroll-view>
+						<view class="cart-bottom">
+							<view class="it-l">
+								<text class='font-gray'>已选({{cart.countBySelected}})</text>
+							</view>
+							<view class="it-m">
+								<text class="font-main" value="249" decimal="2">{{cart.sumPriceBySelected}}</text>
+							</view>
+							<view bindtap="_immeBuy" class="bg-main it-r">
+								<text>下单</text>
+							</view>
+						</view>
+					</block>
+					<block wx:else>
+
+						<view style='height:100%;display:flex;justify-content:center;align-items:center'>
+							<image src='/content/default/images/cart_empty.png'></image>
+						</view>
+					</block>
+
+				</view>
+			</view>
+		</view>
+	</view>
 </view>

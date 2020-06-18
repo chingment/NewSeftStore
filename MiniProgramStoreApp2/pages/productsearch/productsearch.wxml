@@ -54,6 +54,6 @@
 		<image class="img" src="/content/default/images/cart.png"></image>
 	</view>
 
-	<cart id="cart"></cart>
+	<cart id="cart" isShow="{{cartIsShow}}" ></cart>
 
 </view>

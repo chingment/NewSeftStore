@@ -8,13 +8,23 @@ Component({
     addGlobalClass: true
   },
   properties: {
-    show: {
+    isShow: {
       type: Boolean,
-      value: false
+      value: false,
+      observer:function(newVal,oldVal){
+        console.log("newVal:"+newVal+",oldVal:"+oldVal)
+        if(newVal){
+          this._open()
+        }
+        else{
+          this._close();
+        }
+      }
     }
   },
   data: {
     animationData: {},
+    show:false,
     cart: {
       blocks: [],
       count: 0,
@@ -24,7 +34,7 @@ Component({
     }
   },
   methods: {
-    open: function (e) {
+    _open: function (e) {
 
       var _this = this;
       if (!_this.data.show) {
@@ -44,7 +54,8 @@ Component({
           // 通过export()方法导出数据
           animationData: animation.export(),
           // 改变view里面的Wx：if
-          show: true
+          show: true,
+          isShow:true
         })
         // 设置setTimeout来改变y轴偏移量，实现有感觉的滑动
         setTimeout(function () {
@@ -75,7 +86,8 @@ Component({
 
       setTimeout(function () {
         _this.setData({
-          show: false
+          show: false,
+          isShow:false
         })
       }, 500)
     },

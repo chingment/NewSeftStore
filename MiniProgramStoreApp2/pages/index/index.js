@@ -26,14 +26,16 @@ Component({
     skeletonBgcolor: '#FFF',
     skeletonData,
     shopMode: 0,
-    specsDialog:{
-      isShow:false
+    specsDialog: {
+      isShow: false
     }
   },
   methods: {
     addToCart: function (e) {
       var _this = this
-      var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
+      var skuId = e.currentTarget.dataset.replySkuid 
+      var sku= e.currentTarget.dataset.replySku
+
       var productSkus = new Array();
       productSkus.push({
         id: skuId,
@@ -42,17 +44,23 @@ Component({
         shopMode: app.globalData.currentShopMode
       });
 
-      apiCart.operate({
-        storeId: ownRequest.getCurrentStoreId(),
-        operate: 2,
-        productSkus: productSkus
+      // apiCart.operate({
+      //   storeId: ownRequest.getCurrentStoreId(),
+      //   operate: 2,
+      //   productSkus: productSkus
+      // })
+
+      _this.setData({
+        specsDialog: {
+          isShow: true,
+          productSku:sku
+        }
       })
 
-      //_this.setData({specsDialog:{ isShow:true }})
     },
     getPageData: function () {
       var _this = this
-      
+
       if (ownRequest.getCurrentStoreId() != undefined) {
         apiIndex.pageData({
           storeId: ownRequest.getCurrentStoreId(),
@@ -102,7 +110,7 @@ Component({
       this.getPageData()
 
     },
-    onReady:function(){
+    onReady: function () {
       console.log("index.onReady")
     },
     onShow() {

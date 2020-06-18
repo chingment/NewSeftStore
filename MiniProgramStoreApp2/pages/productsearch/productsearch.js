@@ -17,6 +17,7 @@ Page({
       pageCount: 0,
       items: []
     },
+    cartIsShow:false,
     scrollHeight: 0
   },
   onLoad: function (options) {
@@ -99,7 +100,8 @@ Page({
     });
   },
   goCart: function (e) {
-    this.selectComponent("#cart").open()
+    var _this=this
+    _this.setData({cartIsShow:true})
   },
   addToCart: function (e) {
 

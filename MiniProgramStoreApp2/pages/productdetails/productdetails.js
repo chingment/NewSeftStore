@@ -13,7 +13,7 @@ Page({
    */
   data: {
     tag: "productdetails",
-    isShowCart: false,
+    cartIsShow: false,
     specSelectArr: [], //存放被选中的值
     specShopItemInfo: {}, //存放要和选中的值进行匹配的数据
     specSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
@@ -105,7 +105,8 @@ Page({
     app.mainTabBarSwitch(0)
   },
   goCart: function (e) {
-    this.selectComponent("#cart").open()
+    var _this=this
+    _this.setData({cartIsShow:true})
   },
   addToCart: function (e) {
     var _this = this

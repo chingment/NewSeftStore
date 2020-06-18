@@ -15,10 +15,19 @@ Component({
           this._close();
         }
       }
+    },
+    productSku:{
+      type: Object,
+      value:null,
+      observer:function(newVal,oldVal){
+        console.log("newVal:"+JSON.stringify(newVal))
+        console.log("oldVal:"+JSON.stringify(oldVal))
+      }
     }
   },
   data: {
-    animationData: {}
+    animationData: {},
+    show:false
   },
   methods: {
     _open: function (e) {
@@ -41,7 +50,8 @@ Component({
           // 通过export()方法导出数据
           animationData: animation.export(),
           // 改变view里面的Wx：if
-          isShow: true
+          show: true,
+          isShow:true
         })
         // 设置setTimeout来改变y轴偏移量，实现有感觉的滑动
         setTimeout(function () {
@@ -66,7 +76,8 @@ Component({
 
       setTimeout(function () {
         _this.setData({
-          isShow: false
+          show: false,
+          isShow:false
         })
       }, 500)
     },

@@ -7,7 +7,7 @@
 ></skeleton>
 
 
-<specsdialog isShow="{{specsDialog.isShow}}" ></specsdialog>
+<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" ></specsdialog>
 
 <view class="page skeleton" wx:if="{{ pageIsReady }}" >
 
@@ -133,7 +133,10 @@
 												<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
 											</view>
 											<view class="operate skeleton-rect">
-												<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+												<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}"
+												data-reply-sku="{{item}}"
+												
+												 class="increase" src='/content/default/images/increase.png'></image>
 											</view>
 										</view>
 

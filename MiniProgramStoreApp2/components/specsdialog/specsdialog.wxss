@@ -18,4 +18,126 @@
     bottom: 0;
     z-index: 99999;
     background-color: #fff;
+
+    border-top-left-radius: 15rpx;
+    border-top-right-radius: 15rpx;
+  }
+
+  .specsdialog > .content > .wrapper{
+    padding: 15rpx 15rpx 0 15rpx;
+  }
+
+ .close{
+   top: 12rpx;
+   right: 15rpx;
+   width: 45rpx;
+   height: 45rpx;
+   position: fixed;
+   z-index: 999;
+ }
+
+  .prdinfo{
+    display: flex;
+  }
+
+  .prdinfo .mainimg{
+    width: 250rpx;
+    height: 250rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .prdinfo .mainimg .img{
+    height: 100%;
+    width: 100%;
+  }
+
+  .prdinfo .detail{
+    flex: 1;
+  }
+
+  .prdinfo .detail .name{
+    font-size: 32rpx;
+    font-weight: 800;
+  }
+
+  .prdinfo .detail .field{
+    font-size: 26rpx;
+    color: #9d9d9d;
+  }
+
+  .prdinfo .detail .value{
+    font-size: 26rpx;
+    color: #9d9d9d;
+  }
+
+  .prdinfo .detail .saleprice{
+    font-size: 42rpx;
+    color:#ffb101;
+  }
+
+  .qtyinfo {
+    display: flex;
+  }
+
+  .qtyinfo .field{
+    width: 120rpx;
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+  }
+
+  .qtyinfo .oparea{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  .qtyinfo .quantity {
+    width: 50rpx;
+    font-size: 28rpx;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .qtyinfo .increase {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .qtyinfo .increase .img{
+    width: 50rpx;
+height: 50rpx;
+  }
+  
+  .qtyinfo .decrease {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center
+  }
+
+  .qtyinfo .decrease .img{
+    width: 50rpx;
+    height: 50rpx;
+  } 
+
+  .addtocart{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    display: flex;
+    border-top: 3rpx solid #f8f8f8;
+    height: 80rpx;
+    line-height: 80rpx;
+    padding: 15rpx 0rpx;
+  }
+  
+  .addtocart .btn{
+    width: 90%;
+    color: #f8f8f8;
   }
