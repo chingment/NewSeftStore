@@ -387,7 +387,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式", null);
                                 }
 
-                                orderSub.SellChannelRefName = "[机器自提]" + buildOrderSub.SellChannelRefId;
+                                orderSub.SellChannelRefName = "机器自提（" + buildOrderSub.SellChannelRefId + "）";
                                 orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
                                 orderSub.Receiver = null;
                                 orderSub.ReceiverPhoneNumber = null;
@@ -412,7 +412,7 @@ namespace LocalS.BLL.Biz
 
                                 if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                 {
-                                    orderSub.SellChannelRefName = "[配送商品]";
+                                    orderSub.SellChannelRefName = "配送到手";
                                     orderSub.ReceiveMode = E_ReceiveMode.Delivery;
                                     orderSub.Receiver = shopModeByMall.Delivery.Consignee;
                                     orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
@@ -422,8 +422,12 @@ namespace LocalS.BLL.Biz
                                 }
                                 else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                                 {
-                                    orderSub.SellChannelRefName = "[店铺自取]";
+                                    orderSub.SellChannelRefName = "到店自取";
                                     orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                    orderSub.Receiver = shopModeByMall.SelfTake.Consignee;
+                                    orderSub.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
+                                    orderSub.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
+                                    orderSub.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
                                     orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
                                     orderSub.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
                                 }
@@ -960,6 +964,11 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
                 }
 
+                if (order.Status == E_OrderStatus.Canceled)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已被取消，请重新下单");
+                }
+
 
                 order.PayCaller = rop.PayCaller;
 
@@ -971,31 +980,10 @@ namespace LocalS.BLL.Biz
 
                         var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
 
-
                         foreach (var orderSub in orderSubs)
                         {
-
                             switch (orderSub.SellChannelRefType)
                             {
-                                case E_SellChannelRefType.Machine:
-                                    //var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
-
-                                    //if (shopModeByMachine == null || shopModeByMachine.SelfTake != null)
-                                    //{
-                                    //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空");
-                                    //}
-
-                                    //if (shopModeByMachine.ReceiveMode != E_ReceiveMode.MachineSelfTake)
-                                    //{
-                                    //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式");
-                                    //}
-
-                                    //orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
-                                    //orderSub.Receiver = null;
-                                    //orderSub.ReceiverPhoneNumber = null;
-                                    //orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
-
-                                    break;
                                 case E_SellChannelRefType.Mall:
 
                                     var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
@@ -1014,7 +1002,7 @@ namespace LocalS.BLL.Biz
 
                                     if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                     {
-                                        orderSub.SellChannelRefName = "[配送商品]";
+                                        orderSub.SellChannelRefName = "配送到手";
                                         orderSub.ReceiveMode = E_ReceiveMode.Delivery;
                                         orderSub.Receiver = shopModeByMall.Delivery.Consignee;
                                         orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
@@ -1024,8 +1012,12 @@ namespace LocalS.BLL.Biz
                                     }
                                     else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                                     {
-                                        orderSub.SellChannelRefName = "[店铺自取]";
+                                        orderSub.SellChannelRefName = "到店自取";
                                         orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                        orderSub.Receiver = shopModeByMall.SelfTake.Consignee;
+                                        orderSub.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
+                                        orderSub.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
+                                        orderSub.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
                                         orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
                                         orderSub.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
                                     }
@@ -1326,7 +1318,7 @@ namespace LocalS.BLL.Biz
                 model.Id = productSkuId;
                 model.Name = orderSubChilds_Sku[0].PrdProductSkuName;
                 model.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
-                model.Quantity = orderSubChilds_Sku.Sum(m=>m.Quantity);
+                model.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity);
                 model.QuantityBySuccess = orderSubChilds_Sku.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked).Count();
 
                 foreach (var orderSubChilds_SkuSlot in orderSubChilds_Sku)

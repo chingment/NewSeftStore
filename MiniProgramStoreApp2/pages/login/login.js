@@ -13,27 +13,14 @@ Page({
     wx.getSetting({
       success(res) {
         if (res.authSetting['scope.userInfo']) {
-
           _this.setData({
             isAuthUserInfo: true
           })
-
-          // console.log("res:"+JSON.stringify(res))
-          // // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          // wx.getUserInfo({
-          //   success: function (res) {
-          //     console.log(JSON.stringify(res))
-          //     //"errMsg":"getUserInfo:ok"
-          //     _this.login(storeage.getOpenId(), '', res.iv, res.encryptedData)
-          //     // console.log( JSON.stringify(res))
-          //     // wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
-          //     //   url: ownRequest.getReturnUrl()
-          //     // })
-          //   }
-          // })
         }
       }
     })
+
+    
   },
   onReady: function() {},
   onShow: function() {},

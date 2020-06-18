@@ -33,6 +33,10 @@ namespace LocalS.BLL.Biz
         }
         public class SelfTakeModel
         {
+            public string Consignee { get; set; }
+            public string PhoneNumber { get; set; }
+            public string AreaName { get; set; }
+            public string AreaCode { get; set; }
             public string StoreName { get; set; }
             public string StoreAddress { get; set; }
 

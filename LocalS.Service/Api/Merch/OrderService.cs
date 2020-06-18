@@ -77,9 +77,9 @@ namespace LocalS.Service.Api.Merch
                             var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
 
-                            foreach (var prderSubChildUnique in orderSubChilds)
+                            foreach (var orderSubChild in orderSubChilds)
                             {
-                                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == prderSubChildUnique.Id).OrderByDescending(m => m.CreateTime).ToList();
+                                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
 
                                 List<object> pickupLogs = new List<object>();
 
@@ -103,13 +103,13 @@ namespace LocalS.Service.Api.Merch
 
                                 pickupSkus.Add(new
                                 {
-                                    Id = prderSubChildUnique.PrdProductSkuId,
-                                    MainImgUrl = prderSubChildUnique.PrdProductSkuMainImgUrl,
-                                    UniqueId = prderSubChildUnique.Id,
-                                    ExPickupIsHandle = prderSubChildUnique.ExPickupIsHandle,
-                                    Name = prderSubChildUnique.PrdProductSkuName,
-                                    Quantity = prderSubChildUnique.Quantity,
-                                    Status = BizFactory.Order.GetPickupStatus(prderSubChildUnique.PickupStatus),
+                                    Id = orderSubChild.PrdProductSkuId,
+                                    MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
+                                    UniqueId = orderSubChild.Id,
+                                    ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
+                                    Name = orderSubChild.PrdProductSkuName,
+                                    Quantity = orderSubChild.Quantity,
+                                    Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
                                     PickupLogs = pickupLogs
                                 });
                             }

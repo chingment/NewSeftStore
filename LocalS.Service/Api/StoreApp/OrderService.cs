@@ -130,7 +130,7 @@ namespace LocalS.Service.Api.StoreApp
                 if (shippingAddress == null)
                 {
                     dliveryModel.Id = "";
-                    dliveryModel.Consignee = "快寄地址";
+                    dliveryModel.Consignee = "配送地址";
                     dliveryModel.PhoneNumber = "选择";
                     dliveryModel.AreaName = "";
                     dliveryModel.Address = "";
