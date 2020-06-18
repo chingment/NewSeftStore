@@ -210,88 +210,86 @@ namespace LocalS.BLL.Biz
                 {
                     RetOrderReserve ret = new RetOrderReserve();
 
-                    List<BuildOrderSub2.ProductSku> bizProductSkus = new List<BuildOrderSub2.ProductSku>();
+                    List<BuildOrderSub.ProductSku> buildOrderSubSkus = new List<BuildOrderSub.ProductSku>();
 
                     #region 检查可售商品信息是否符合实际环境
                     List<string> warn_tips = new List<string>();
 
-
-                    List<OrderReserveBlockModel.ProductSkuModel> productSkus = new List<OrderReserveBlockModel.ProductSkuModel>();
-
                     foreach (var block in rop.Blocks)
                     {
-                        productSkus.AddRange(block.Skus);
-                    }
+                        var productSkus = block.Skus;
 
-
-                    foreach (var productSku in productSkus)
-                    {
-                        string[] sellChannelRefIds = new string[] { };
-
-                        if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
+                        foreach (var productSku in productSkus)
                         {
-                            if (productSku.ShopMode == E_SellChannelRefType.Mall)
+                            string[] sellChannelRefIds = new string[] { };
+
+                            if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                             {
-                                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
-                            }
-                            else if (productSku.ShopMode == E_SellChannelRefType.Machine)
-                            {
-                                sellChannelRefIds = store.SellMachineIds;
-                            }
-                        }
-                        else
-                        {
-                            sellChannelRefIds = productSku.SellChannelRefIds;
-                        }
-
-                        var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
-
-                        if (bizProductSku == null)
-                        {
-                            warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
-                        }
-                        else
-                        {
-                            if (bizProductSku.Stocks.Count == 0)
-                            {
-                                warn_tips.Add(string.Format("{0}商品库存信息不存在", bizProductSku.Name));
+                                if (productSku.ShopMode == E_SellChannelRefType.Mall)
+                                {
+                                    sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                                }
+                                else if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                                {
+                                    sellChannelRefIds = store.SellMachineIds;
+                                }
                             }
                             else
                             {
-                                var sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                                sellChannelRefIds = productSku.SellChannelRefIds;
+                            }
 
-                                Console.WriteLine("sellQuantity：" + sellQuantity);
+                            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
 
-                                if (bizProductSku.Stocks[0].IsOffSell)
+                            if (bizProductSku == null)
+                            {
+                                warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
+                            }
+                            else
+                            {
+                                if (bizProductSku.Stocks.Count == 0)
                                 {
-                                    warn_tips.Add(string.Format("{0}已经下架", bizProductSku.Name));
+                                    warn_tips.Add(string.Format("{0}商品库存信息不存在", bizProductSku.Name));
                                 }
                                 else
                                 {
-                                    if (sellQuantity < productSku.Quantity)
+                                    var sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+
+                                    Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                                    if (bizProductSku.Stocks[0].IsOffSell)
                                     {
-                                        warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
+                                        warn_tips.Add(string.Format("{0}已经下架", bizProductSku.Name));
                                     }
                                     else
                                     {
-                                        var _skus = new BuildOrderSub2.ProductSku();
+                                        if (sellQuantity < productSku.Quantity)
+                                        {
+                                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
+                                        }
+                                        else
+                                        {
+                                            var _skus = new BuildOrderSub.ProductSku();
 
-                                        _skus.Id = productSku.Id;
-                                        _skus.ProductId = bizProductSku.ProductId;
-                                        _skus.Name = bizProductSku.Name;
-                                        _skus.MainImgUrl = bizProductSku.MainImgUrl;
-                                        _skus.BarCode = bizProductSku.BarCode;
-                                        _skus.CumCode = bizProductSku.CumCode;
-                                        _skus.SpecDes = bizProductSku.SpecDes;
-                                        _skus.Producer = bizProductSku.Producer;
-                                        _skus.Quantity = productSku.Quantity;
-                                        _skus.ShopMode = productSku.ShopMode;
-                                        _skus.Stocks = bizProductSku.Stocks;
-                                        bizProductSkus.Add(_skus);
+                                            _skus.Id = productSku.Id;
+                                            _skus.ProductId = bizProductSku.ProductId;
+                                            _skus.Name = bizProductSku.Name;
+                                            _skus.MainImgUrl = bizProductSku.MainImgUrl;
+                                            _skus.BarCode = bizProductSku.BarCode;
+                                            _skus.CumCode = bizProductSku.CumCode;
+                                            _skus.SpecDes = bizProductSku.SpecDes;
+                                            _skus.Producer = bizProductSku.Producer;
+                                            _skus.Quantity = productSku.Quantity;
+                                            _skus.ShopMode = productSku.ShopMode;
+                                            _skus.Stocks = bizProductSku.Stocks;
+                                            _skus.CartId = productSku.CartId;
+                                            buildOrderSubSkus.Add(_skus);
+                                        }
                                     }
                                 }
                             }
                         }
+
                     }
 
                     if (warn_tips.Count > 0)
@@ -301,12 +299,8 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
-
-                    LogUtil.Info("rop.ProductSkus:" + productSkus.ToJsonString());
-                    LogUtil.Info("rop.bizProductSkus:" + bizProductSkus.ToJsonString());
-
-                    var buildOrderSubs = BuildOrderSub2s(bizProductSkus);
-
+                    LogUtil.Info("rop.bizProductSkus:" + buildOrderSubSkus.ToJsonString());
+                    var buildOrderSubs = BuildOrderSubs(buildOrderSubSkus);
                     LogUtil.Info("SlotStock.buildOrderSubs:" + buildOrderSubs.ToJsonString());
 
                     var order = new Order();
@@ -316,7 +310,7 @@ namespace LocalS.BLL.Biz
                     order.StoreName = store.Name;
                     order.ClientUserId = rop.ClientUserId;
                     order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
-                    order.Quantity = productSkus.Sum(m => m.Quantity);
+                    order.Quantity = buildOrderSubs.Sum(m => m.Quantity);
                     order.Status = E_OrderStatus.WaitPay;
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
@@ -331,7 +325,7 @@ namespace LocalS.BLL.Biz
 
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
                     {
-                        var cartsIds = productSkus.Select(m => m.CartId).Distinct().ToArray();
+                        var cartsIds = buildOrderSubSkus.Select(m => m.CartId).Distinct().ToArray();
                         if (cartsIds != null)
                         {
                             var clientCarts = CurrentDb.ClientCart.Where(m => cartsIds.Contains(m.Id) && m.ClientUserId == rop.ClientUserId).ToList();
@@ -457,7 +451,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var buildOrderSubChid in buildOrderSub.Childs)
                         {
-                            var productSku = bizProductSkus.Where(m => m.Id == buildOrderSubChid.ProductSkuId).FirstOrDefault();
+                            var productSku = buildOrderSubSkus.Where(m => m.Id == buildOrderSubChid.ProductSkuId).FirstOrDefault();
 
                             var orderSubChild = new OrderSubChild();
                             orderSubChild.Id = orderSub.Id + buildOrderSub.Childs.IndexOf(buildOrderSubChid).ToString();
@@ -525,14 +519,14 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public List<BuildOrderSub2> BuildOrderSub2s(List<BuildOrderSub2.ProductSku> reserveProductSkus)
+        public List<BuildOrderSub> BuildOrderSubs(List<BuildOrderSub.ProductSku> reserveProductSkus)
         {
-            List<BuildOrderSub2> buildOrderSubs = new List<BuildOrderSub2>();
+            List<BuildOrderSub> buildOrderSubs = new List<BuildOrderSub>();
 
             if (reserveProductSkus == null || reserveProductSkus.Count == 0)
                 return buildOrderSubs;
 
-            List<BuildOrderSub2.Child> buildOrderSubChilds = new List<BuildOrderSub2.Child>();
+            List<BuildOrderSub.Child> buildOrderSubChilds = new List<BuildOrderSub.Child>();
 
             var shopModes = reserveProductSkus.Select(m => m.ShopMode).Distinct().ToArray();
 
@@ -549,7 +543,7 @@ namespace LocalS.BLL.Biz
 
                     if (shopMode == E_SellChannelRefType.Mall)
                     {
-                        var buildOrderSubChild = new BuildOrderSub2.Child();
+                        var buildOrderSubChild = new BuildOrderSub.Child();
                         buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
                         buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
                         buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
@@ -572,7 +566,7 @@ namespace LocalS.BLL.Biz
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
-                                    var buildOrderSubChild = new BuildOrderSub2.Child();
+                                    var buildOrderSubChild = new BuildOrderSub.Child();
                                     buildOrderSubChild.SellChannelRefType = item.RefType;
                                     buildOrderSubChild.SellChannelRefId = item.RefId;
                                     buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
@@ -629,7 +623,7 @@ namespace LocalS.BLL.Biz
 
             foreach (var orderSub in l_OrderSubs)
             {
-                var buildOrderSub = new BuildOrderSub2();
+                var buildOrderSub = new BuildOrderSub();
                 buildOrderSub.SellChannelRefType = orderSub.SellChannelRefType;
                 buildOrderSub.SellChannelRefId = orderSub.SellChannelRefId;
                 buildOrderSub.Quantity = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.Quantity);

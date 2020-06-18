@@ -3,6 +3,7 @@ page{
 
   background: linear-gradient(#f18d00, #fff, #fff, #fff, #fff, #fff, #fff, #fff);
   padding-top: 40rpx;
+  background-repeat: no-repeat;
 }
 
 

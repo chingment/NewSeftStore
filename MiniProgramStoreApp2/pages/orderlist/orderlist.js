@@ -156,11 +156,8 @@ Page({
                 if (sm.confirm) {
                   apiOrder.cancle({
                     id: id
-                  }, {
-                    success: function (res) {
-                      _this.getList()
-                    },
-                    fail: function () { }
+                  }).then(function(res){
+                    _this.getList()
                   })
                 }
               }

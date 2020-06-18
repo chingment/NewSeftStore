@@ -19,9 +19,9 @@ namespace LocalS.BLL.Biz
         public string ChargeAmount { get; set; }
     }
 
-    public class BuildOrderSub2
+    public class BuildOrderSub
     {
-        public BuildOrderSub2()
+        public BuildOrderSub()
         {
             this.Childs = new List<Child>();
         }
@@ -71,6 +71,8 @@ namespace LocalS.BLL.Biz
             public string BriefDes { get; set; }
             public List<SpecItem> SpecItems { get; set; }
             public string SpecIdx { get; set; }
+
+            public string CartId { get; set; }
         }
 
     }
