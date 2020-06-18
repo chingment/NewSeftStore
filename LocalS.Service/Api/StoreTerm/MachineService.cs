@@ -354,20 +354,20 @@ namespace LocalS.Service.Api.StoreTerm
 
                 exOrderModel.Id = orderSub.OrderId;
 
-                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
+                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
-                foreach (var orderSubChildUnique in orderSubChildUniques)
+                foreach (var orderSubChild in orderSubChilds)
                 {
                     var orderDetailItem = new RetMachineGetRunExHandleItems.OrderDetailItem();
-                    orderDetailItem.ProductId = orderSubChildUnique.PrdProductId;
-                    orderDetailItem.UniqueId = orderSubChildUnique.Id;
-                    orderDetailItem.SlotId = orderSubChildUnique.SlotId;
-                    orderDetailItem.Quantity = orderSubChildUnique.Quantity;
-                    orderDetailItem.Name = orderSubChildUnique.PrdProductSkuName;
-                    orderDetailItem.MainImgUrl = orderSubChildUnique.PrdProductSkuMainImgUrl;
-                    orderDetailItem.Status = BizFactory.Order.GetPickupStatus(orderSubChildUnique.PickupStatus);
+                    orderDetailItem.ProductId = orderSubChild.PrdProductId;
+                    orderDetailItem.UniqueId = orderSubChild.Id;
+                    orderDetailItem.SlotId = orderSubChild.SlotId;
+                    orderDetailItem.Quantity = orderSubChild.Quantity;
+                    orderDetailItem.Name = orderSubChild.PrdProductSkuName;
+                    orderDetailItem.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
+                    orderDetailItem.Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus);
                     orderDetailItem.SignStatus = 0;
-                    if (orderSubChildUnique.PickupStatus == E_OrderPickupStatus.Taked || orderSubChildUnique.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && orderSubChildUnique.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
+                    if (orderSubChild.PickupStatus == E_OrderPickupStatus.Taked || orderSubChild.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && orderSubChild.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
                     {
                         orderDetailItem.CanHandle = false;
                     }
@@ -399,11 +399,11 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     var l_order = CurrentDb.Order.Where(m => m.Id == order.Id).FirstOrDefault();
 
-                    var l_orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderId == order.Id && m.SellChannelRefId == rop.MachineId).ToList();
+                    var l_orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id && m.SellChannelRefId == rop.MachineId).ToList();
 
-                    foreach (var orderSubChildUnique in l_orderSubChildUniques)
+                    foreach (var orderSubChild in l_orderSubChilds)
                     {
-                        var uniqueItem = order.UniqueItems.Where(m => m.UniqueId == orderSubChildUnique.Id).FirstOrDefault();
+                        var uniqueItem = order.UniqueItems.Where(m => m.UniqueId == orderSubChild.Id).FirstOrDefault();
 
                         if (uniqueItem != null)
                         {
@@ -415,25 +415,25 @@ namespace LocalS.Service.Api.StoreTerm
 
                             if (uniqueItem.SignStatus == 1)
                             {
-                                if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                if (orderSubChild.PickupStatus != E_OrderPickupStatus.Taked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                 {
-                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.STORETERM, orderSubChild.MerchId, orderSubChild.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, 1);
                                 }
 
-                                orderSubChildUnique.ExPickupIsHandle = true;
-                                orderSubChildUnique.ExPickupHandleTime = DateTime.Now;
-                                orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
-                                orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
+                                orderSubChild.ExPickupIsHandle = true;
+                                orderSubChild.ExPickupHandleTime = DateTime.Now;
+                                orderSubChild.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
+                                orderSubChild.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
 
                                 var orderPickupLog = new OrderPickupLog();
                                 orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                                orderPickupLog.OrderId = orderSubChildUnique.OrderId;
+                                orderPickupLog.OrderId = orderSubChild.OrderId;
                                 orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                                orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
-                                orderPickupLog.UniqueId = orderSubChildUnique.Id;
-                                orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-                                orderPickupLog.CabinetId = orderSubChildUnique.CabinetId;
-                                orderPickupLog.SlotId = orderSubChildUnique.SlotId;
+                                orderPickupLog.SellChannelRefId = orderSubChild.SellChannelRefId;
+                                orderPickupLog.UniqueId = orderSubChild.Id;
+                                orderPickupLog.PrdProductSkuId = orderSubChild.PrdProductSkuId;
+                                orderPickupLog.CabinetId = orderSubChild.CabinetId;
+                                orderPickupLog.SlotId = orderSubChild.SlotId;
                                 orderPickupLog.Status = E_OrderPickupStatus.Taked;
                                 orderPickupLog.IsPickupComplete = true;
                                 orderPickupLog.ActionRemark = "人为标识已取货";
@@ -445,25 +445,25 @@ namespace LocalS.Service.Api.StoreTerm
                             else if (uniqueItem.SignStatus == 2)
                             {
 
-                                if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                if (orderSubChild.PickupStatus != E_OrderPickupStatus.Taked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                 {
-                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, orderSubChildUnique.MerchId, orderSubChildUnique.StoreId, orderSubChildUnique.SellChannelRefId, orderSubChildUnique.CabinetId, orderSubChildUnique.SlotId, orderSubChildUnique.PrdProductSkuId, 1);
+                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, orderSubChild.MerchId, orderSubChild.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, 1);
                                 }
 
-                                orderSubChildUnique.ExPickupIsHandle = true;
-                                orderSubChildUnique.ExPickupHandleTime = DateTime.Now;
-                                orderSubChildUnique.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
-                                orderSubChildUnique.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
+                                orderSubChild.ExPickupIsHandle = true;
+                                orderSubChild.ExPickupHandleTime = DateTime.Now;
+                                orderSubChild.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
+                                orderSubChild.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
 
                                 var orderPickupLog = new OrderPickupLog();
                                 orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                                orderPickupLog.OrderId = orderSubChildUnique.OrderId;
+                                orderPickupLog.OrderId = orderSubChild.OrderId;
                                 orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                                orderPickupLog.SellChannelRefId = orderSubChildUnique.SellChannelRefId;
-                                orderPickupLog.UniqueId = orderSubChildUnique.Id;
-                                orderPickupLog.PrdProductSkuId = orderSubChildUnique.PrdProductSkuId;
-                                orderPickupLog.CabinetId = orderSubChildUnique.CabinetId;
-                                orderPickupLog.SlotId = orderSubChildUnique.SlotId;
+                                orderPickupLog.SellChannelRefId = orderSubChild.SellChannelRefId;
+                                orderPickupLog.UniqueId = orderSubChild.Id;
+                                orderPickupLog.PrdProductSkuId = orderSubChild.PrdProductSkuId;
+                                orderPickupLog.CabinetId = orderSubChild.CabinetId;
+                                orderPickupLog.SlotId = orderSubChild.SlotId;
                                 orderPickupLog.Status = E_OrderPickupStatus.Taked;
                                 orderPickupLog.IsPickupComplete = false;
                                 orderPickupLog.ActionRemark = "人为标识未取货";
@@ -476,7 +476,7 @@ namespace LocalS.Service.Api.StoreTerm
                     }
 
 
-                    var orderSubIds = l_orderSubChildUniques.Select(m => m.OrderSubId).ToArray();
+                    var orderSubIds = l_orderSubChilds.Select(m => m.OrderSubId).ToArray();
 
                     var l_orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
 

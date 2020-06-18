@@ -41,7 +41,6 @@ namespace LocalS.DAL
         public IDbSet<Order> Order { get; set; }
         public IDbSet<OrderSub> OrderSub { get; set; }
         public IDbSet<OrderSubChild> OrderSubChild { get; set; }
-        public IDbSet<OrderSubChildUnique> OrderSubChildUnique { get; set; }
         public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Machine> Machine { get; set; }

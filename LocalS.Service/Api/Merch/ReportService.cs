@@ -251,7 +251,7 @@ namespace LocalS.Service.Api.Merch
             //}
 
 
-            var query = (from u in CurrentDb.OrderSubChildUnique
+            var query = (from u in CurrentDb.OrderSubChild
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime)
                          select new { u.StoreName, u.StoreId, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });

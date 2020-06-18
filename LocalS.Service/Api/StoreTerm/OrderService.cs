@@ -176,15 +176,15 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult result = new CustomJsonResult();
 
             var ret = new RetOrderPickupStatusQuery();
+            
+            var orderSubChild = CurrentDb.OrderSubChild.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
 
-            var orderSubChildUnique = CurrentDb.OrderSubChildUnique.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
-
-            if (orderSubChildUnique != null)
+            if (orderSubChild != null)
             {
-                ret.ProductSkuId = orderSubChildUnique.PrdProductId;
-                ret.SlotId = orderSubChildUnique.SlotId;
-                ret.UniqueId = orderSubChildUnique.Id;
-                ret.Status = orderSubChildUnique.PickupStatus;
+                ret.ProductSkuId = orderSubChild.PrdProductId;
+                ret.SlotId = orderSubChild.SlotId;
+                ret.UniqueId = orderSubChild.Id;
+                ret.Status = orderSubChild.PickupStatus;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             }

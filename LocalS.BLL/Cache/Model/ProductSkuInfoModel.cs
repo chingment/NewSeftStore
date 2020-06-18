@@ -28,7 +28,6 @@ namespace LocalS.BLL
         public List<string> CharTags { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
         public List<ProductSkuStockModel> Stocks { get; set; }
-
-        public E_SellChannelRefType ShopMode { get; set; }
+        //public E_SellChannelRefType ShopMode { get; set; }
     }
 }

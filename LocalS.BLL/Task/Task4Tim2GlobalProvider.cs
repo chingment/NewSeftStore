@@ -181,7 +181,7 @@ namespace LocalS.BLL.Task
                 var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
                 var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId).FirstOrDefault();
-                var orderSubChildUniques = CurrentDb.OrderSubChildUnique.Where(m => m.OrderSubId == orderSub.Id).ToList();
+                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
                 if (orderSub != null)
                 {
@@ -189,19 +189,19 @@ namespace LocalS.BLL.Task
                     orderSub.ExHappenTime = DateTime.Now;
                 }
 
-                if (orderSubChildUniques.Count > 0)
+                if (orderSubChilds.Count > 0)
                 {
-                    foreach (var orderSubChildUnique in orderSubChildUniques)
+                    foreach (var orderSubChild in orderSubChilds)
                     {
-                        if (orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Taked
-                            && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.Exception
-                            && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                            && orderSubChildUnique.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                        if (orderSubChild.PickupStatus != E_OrderPickupStatus.Taked
+                            && orderSubChild.PickupStatus != E_OrderPickupStatus.Exception
+                            && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                            && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                         {
 
-                            orderSubChildUnique.PickupStatus = E_OrderPickupStatus.Exception;
-                            orderSubChildUnique.ExPickupIsHappen = true;
-                            orderSubChildUnique.ExPickupHappenTime = DateTime.Now;
+                            orderSubChild.PickupStatus = E_OrderPickupStatus.Exception;
+                            orderSubChild.ExPickupIsHappen = true;
+                            orderSubChild.ExPickupHappenTime = DateTime.Now;
                         }
                     }
                 }
