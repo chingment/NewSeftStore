@@ -23,7 +23,8 @@ namespace LocalS.Entity
         public string ReceptionAddress { get; set; }
         public string ReceptionAreaCode { get; set; }
         public string ReceptionAreaName { get; set; }
-        public string ReceptionMarkName{ get; set; }
+        public string ReceptionMarkName { get; set; }
+        public DateTime? ReceptionBookTime { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }

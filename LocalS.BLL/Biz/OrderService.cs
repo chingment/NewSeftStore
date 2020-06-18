@@ -387,7 +387,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式", null);
                                 }
 
-                                orderSub.SellChannelRefName = "机器自提（" + buildOrderSub.SellChannelRefId + "）";
+                                orderSub.SellChannelRefName = "机器自提（编号：" + buildOrderSub.SellChannelRefId + "）";
                                 orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
                                 orderSub.Receiver = null;
                                 orderSub.ReceiverPhoneNumber = null;

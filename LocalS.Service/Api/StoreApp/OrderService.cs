@@ -163,26 +163,9 @@ namespace LocalS.Service.Api.StoreApp
 
                 store = BizFactory.Store.GetOne(order.StoreId);
 
-                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == rop.OrderId).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
 
-                foreach (var item in orderSubChilds)
-                {
-                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
-                    orderConfirmSkuModel.Id = item.PrdProductSkuId;
-                    orderConfirmSkuModel.Name = item.PrdProductSkuName;
-                    orderConfirmSkuModel.MainImgUrl = item.PrdProductSkuMainImgUrl;
-                    orderConfirmSkuModel.Quantity = item.Quantity;
-                    orderConfirmSkuModel.SalePrice = item.SalePrice;
-                    orderConfirmSkuModel.ShopMode = item.SellChannelRefType;
-                    skuAmountByOriginal += (item.SalePrice * item.Quantity);
-                    skuAmountByMemebr += (item.SalePrice * item.Quantity);
-                    skus.Add(orderConfirmSkuModel);
-                }
-
-                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
-
-
-                var orderSub_Mall = orderSub.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                var orderSub_Mall = orderSubs.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
                 if (orderSub_Mall != null)
                 {
                     receiveMode_Mall = orderSub_Mall.ReceiveMode;
@@ -196,6 +179,31 @@ namespace LocalS.Service.Api.StoreApp
                     dliveryModel.IsDefault = false;
                 }
 
+                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == rop.OrderId).ToList();
+
+                var shopModeSkus = (from c in orderSubChilds
+                                    select new
+                                    {
+                                        c.SellChannelRefType,
+                                        c.PrdProductSkuId
+                                    }).Distinct().ToList();
+
+
+                foreach (var shopModeSku in shopModeSkus)
+                {
+                    var l_orderSubChilds = orderSubChilds.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
+
+                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
+                    orderConfirmSkuModel.Id = l_orderSubChilds[0].PrdProductSkuId;
+                    orderConfirmSkuModel.Name = l_orderSubChilds[0].PrdProductSkuName;
+                    orderConfirmSkuModel.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
+                    orderConfirmSkuModel.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
+                    orderConfirmSkuModel.SalePrice = l_orderSubChilds[0].SalePrice;
+                    orderConfirmSkuModel.ShopMode = shopModeSku.SellChannelRefType;
+                    skuAmountByOriginal += (l_orderSubChilds[0].SalePrice * orderConfirmSkuModel.Quantity);
+                    skuAmountByMemebr += (l_orderSubChilds[0].SalePriceByVip * orderConfirmSkuModel.Quantity);
+                    skus.Add(orderConfirmSkuModel);
+                }
             }
 
 
