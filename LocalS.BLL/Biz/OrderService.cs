@@ -1242,9 +1242,9 @@ namespace LocalS.BLL.Biz
                 if (order.PayExpireTime == null)
                 {
                     order.PayExpireTime = DateTime.Now.AddMinutes(5);
-
-                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, order);
                 }
+
+                Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -1342,6 +1342,8 @@ namespace LocalS.BLL.Biz
 
                     model.Slots.Add(slot);
                 }
+
+                models.Add(model);
             }
 
             return models;
