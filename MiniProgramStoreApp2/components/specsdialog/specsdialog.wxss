@@ -90,9 +90,24 @@
     color: #9d9d9d;
   }
 
+  .prdinfo .detail .price{
+    line-height: 60rpx;
+    height: 60rpx;
+  }
+
   .prdinfo .detail .saleprice{
     font-size: 42rpx;
     color:#ffb101;
+  }
+
+  .prdinfo .detail .isOffSell{
+    line-height: 60rpx;
+    height: 60rpx;
+  }
+
+  .prdinfo .detail .isOffSell .txt{
+    font-size: 28rpx;
+    color:#f00;
   }
 
   .qtyinfo {
