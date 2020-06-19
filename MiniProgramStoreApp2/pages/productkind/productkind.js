@@ -1,4 +1,5 @@
 const ownRequest = require('../../own/ownRequest.js')
+const toast = require('../../utils/toastutil')
 const apiKind = require('../../api/kind.js')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
@@ -53,7 +54,16 @@ Component({
         operate: 2,
         productSkus: productSkus
       }).then(function (res) {
-
+        if (res.result == 1) {
+          toast.show({
+            title: '加入购物车成功'
+          })
+        }
+        else {
+          toast.show({
+            title: res.message
+          })
+        }
       })
     },
     selectSpecs:function(e){

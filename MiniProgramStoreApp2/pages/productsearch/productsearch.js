@@ -1,5 +1,6 @@
 const util = require('../../utils/util.js')
 const storeage = require('../../utils/storeageutil.js')
+const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
@@ -124,6 +125,17 @@ Page({
       operate: 2,
       productSkus: productSkus
     }).then(function (res) {
+
+      if (res.result == 1) {
+        toast.show({
+          title: '加入购物车成功'
+        })
+      }
+      else {
+        toast.show({
+          title: res.message
+        })
+      }
 
     })
 
