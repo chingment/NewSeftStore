@@ -24,15 +24,15 @@ namespace LocalS.BLL.Push
             if (machine != null)
             {
                 result = pushService.Send(machine.JPushRegId, cmd, content);
-            }
 
-            if (result.Result == ResultType.Success)
-            {
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machineId, cmd, "命令发送成功");
-            }
-            else
-            {
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machineId, cmd, "命令发送失败");
+                if (result.Result == ResultType.Success)
+                {
+                    MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machineId, cmd, "命令发送成功");
+                }
+                else
+                {
+                    MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machineId, cmd, "命令发送失败");
+                }
             }
 
             return result;

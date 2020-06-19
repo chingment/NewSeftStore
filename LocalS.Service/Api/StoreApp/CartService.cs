@@ -149,14 +149,14 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;
                                     clientCart.Creator = operater;
-                                    clientCart.Quantity = 1;
+                                    clientCart.Quantity = item.Quantity;
                                     clientCart.ShopMode = item.ShopMode;
                                     clientCart.Status = E_ClientCartStatus.WaitSettle;
                                     CurrentDb.ClientCart.Add(clientCart);
                                 }
                                 else
                                 {
-                                    clientCart.Quantity += 1;
+                                    clientCart.Quantity += item.Quantity;
                                     clientCart.MendTime = DateTime.Now;
                                     clientCart.Mender = operater;
                                 }

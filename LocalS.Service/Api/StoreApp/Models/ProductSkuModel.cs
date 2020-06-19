@@ -25,5 +25,6 @@ namespace LocalS.Service.Api.StoreApp
         public decimal ShowPrice { get; set; }
         public bool IsShowPrice { get; set; }
         public bool IsOffSell { get; set; }
-    }
+        public List<SpecIdxSku> SpecIdxSkus{ get; set; }
+}
 }

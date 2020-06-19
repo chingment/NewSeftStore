@@ -6,28 +6,46 @@
   bottom: 0;
   overflow: hidden;
   background: rgba(0,0,0,.4);
-  z-index: 999;
+  z-index: 1000;
   }
   
-
   .specsdialog > .content{
     width: 100%;
     height: 800rpx;
     position: fixed;
     left: 0;
     bottom: 0;
-    z-index: 99999;
+    z-index: 990;
     background-color: #fff;
-
     border-top-left-radius: 15rpx;
     border-top-right-radius: 15rpx;
   }
 
   .specsdialog > .content > .wrapper{
-    padding: 15rpx 15rpx 0 15rpx;
+   padding: 0 25rpx;
   }
 
- .close{
+
+  .specsdialog .bottominfo{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+  }
+
+  .specsdialog .bottominfo > .wrapper{
+    border-top: 3rpx solid #f8f8f8;
+    padding: 15rpx 25rpx;
+    display: flex;
+  }
+
+  .specsdialog .bottominfo .btn{
+    width: 100%;
+    color: #f8f8f8;
+  }
+
+
+  .specsdialog .closeinfo{
    top: 12rpx;
    right: 15rpx;
    width: 45rpx;
@@ -125,19 +143,51 @@ height: 50rpx;
     height: 50rpx;
   } 
 
-  .addtocart{
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    background: #fff;
+
+  .specinfo{
+    display: block;
+    overflow: hidden;
+   }
+   
+   .spect-item {
+     color: #323232;
+   }
+   
+   .spect-item-name {
+     font-size: 28rpx;
+     display: block;
+     color: #636363;
+     padding: 12rpx 0;
+   }
+   
+   .spect-item-values {
     display: flex;
-    border-top: 3rpx solid #f8f8f8;
-    height: 80rpx;
-    line-height: 80rpx;
-    padding: 15rpx 0rpx;
-  }
-  
-  .addtocart .btn{
-    width: 90%;
-    color: #f8f8f8;
-  }
+   }
+   
+   .spect-item-value {
+     border: 3rpx solid #f8f8f8;
+     background-color: #f8f8f8;
+     border-radius: 6rpx;
+     color: #2b2b2b;
+     text-align: center;
+     float: left;
+     min-width: 100rpx;
+     margin-right: 24rpx;
+     padding: 12rpx 42rpx;
+     font-size: 24rpx;
+
+   }
+   
+   .spect-item-values  .active {
+     background-color: #ffb101;
+     color: #fff;
+     border: 3rpx solid #ffb101;
+   }
+   
+   .spect-item-values  .invalid {
+     background-color: #ccc;
+     opacity: 0.4;
+     color: #000;
+     pointer-events: none;
+   }
+   

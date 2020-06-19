@@ -40,15 +40,20 @@
 															</view>
 														</view>
 														<view class="it-r">
-															<view class="decrease">
+
+														 <view wx:if="{{itemsku.specIdxSkus.length==0}}" >
+
+				
 																<image class="img" bindtap="_itemOperate" data-reply-operate="3" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}" src='/content/default/images/decrease.png'></image>
 															</view>
 															<text class="quantity">{{itemsku.quantity}}</text>
 
-
 															<view class="increase">
 																<image class="img" bindtap="_itemOperate" data-reply-operate="2" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}" src='/content/default/images/increase.png'></image>
 															</view>
+
+
+
 														</view>
 													</view>
 													<view class="it-del" bindtap="_itemOperate" data-reply-operate="4" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">删除</view>

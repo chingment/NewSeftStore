@@ -335,9 +335,10 @@ page {
 }
 
 .prd-list-1 .price {
-  flex: 2;
+  flex: 1;
   text-align: left;
   margin-right:10px;
+  
 }
 
 .prd-list-1 .saleprice {
@@ -1027,3 +1028,11 @@ page {
   font-size:24rpx
   }
   
+
+  .btn-selectSpecs{
+    background: #f18d00;
+    padding: 6rpx 18rpx;
+    border-radius: 10rpx;
+    font-size: 24rpx;
+    color:#fff ;
+  }

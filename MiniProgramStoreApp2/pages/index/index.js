@@ -44,19 +44,24 @@ Component({
         shopMode: app.globalData.currentShopMode
       });
 
-      // apiCart.operate({
-      //   storeId: ownRequest.getCurrentStoreId(),
-      //   operate: 2,
-      //   productSkus: productSkus
-      // })
+      apiCart.operate({
+        storeId: ownRequest.getCurrentStoreId(),
+        operate: 2,
+        productSkus: productSkus
+      })
 
+    },
+    selectSpecs:function(e){
+      var _this = this
+      var sku= e.currentTarget.dataset.replySku
       _this.setData({
         specsDialog: {
           isShow: true,
-          productSku:sku
+          productSku:sku,
+          shopMode:app.globalData.currentShopMode,
+          storeId: ownRequest.getCurrentStoreId(),
         }
       })
-
     },
     getPageData: function () {
       var _this = this
