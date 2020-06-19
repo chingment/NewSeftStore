@@ -1,11 +1,9 @@
 <view class="specsdialog" wx:if="{{myShow}}" catchtouchmove="ture">
-
 	<view class='content' animation='{{myAnimationData}}'>
-				<view class='closeinfo' bindtap='_dialogClose'>
-				<image class="img" src='/content/default/images/icon_close.png'></image>
-			</view>
-
-		<view class="wrapper">
+		<view class='closeinfo' bindtap='_dialogClose'>
+			<image class="img" src='/content/default/images/icon_close.png'></image>
+		</view>
+		<view class="contentinfo">
 			<view class="prdinfo">
 				<view class="mainimg">
 					<image class="img" src="{{myProductSku.mainImgUrl}}"></image>
@@ -18,10 +16,10 @@
 						<text class="field" >已选：</text>
 						<text class="value" >{{myProductSku.specIdx}} </text>
 					</view>
-         <view wx:if="{{myProductSku.isOffSell}}" class="isOffSell" >
-					  <text class="txt"  >已下架</text>
-				 </view>
-					<view wx:else class="price"  > 
+					<view wx:if="{{myProductSku.isOffSell}}" class="isOffSell">
+						<text class="txt"  >已下架</text>
+					</view>
+					<view wx:else class="price">
 						<text class="saleprice">{{myProductSku.salePrice}}</text>
 					</view>
 				</view>
@@ -43,29 +41,24 @@
 
 				</view>
 			</view>
-
-					<scroll-view scroll-y="true" style="height:{{mySpecinfoHeight}}px;">
-			<view class="specinfo" wx:if="{{myProductSku.specIdxSkus.length>1}}">
-				<view class="spect-item" wx:for="{{myProductSku.specItems}}" wx:for-index='specItemIndex' wx:for-item="specItem" wx:key="x">
-					<view class="spect-item-name">{{specItem.name}}</view>
-					<view class="spect-item-values">
-						<view wx:for="{{specItem.value}}" wx:for-item="oItem" class="spect-item-value  {{oItem.isShow?'':'invalid'}} {{mySpecSubIndex[specItemIndex] == oItem.name?'active':''}}" bindtap="_specValueSelect" data-show="{{oItem.isShow}}" data-ol="{{mySpecSubIndex[specItemIndex]}}" data-specitemvaluename="{{oItem.name}}" data-specitemindex="{{specItemIndex}}" data-specitemvalueindex="{{index}}" wx:key="j">
-							{{oItem.name}}
+			<scroll-view class="scroll-specinfo" scroll-y="true">
+				<view class="specinfo" wx:if="{{myProductSku.specIdxSkus.length>1}}">
+					<view class="spect-item" wx:for="{{myProductSku.specItems}}" wx:for-index='specItemIndex' wx:for-item="specItem" wx:key="x">
+						<view class="spect-item-name">{{specItem.name}}</view>
+						<view class="spect-item-values">
+							<view wx:for="{{specItem.value}}" wx:for-item="oItem" class="spect-item-value  {{oItem.isShow?'':'invalid'}} {{mySpecSubIndex[specItemIndex] == oItem.name?'active':''}}" bindtap="_specValueSelect" data-show="{{oItem.isShow}}" data-ol="{{mySpecSubIndex[specItemIndex]}}" data-specitemvaluename="{{oItem.name}}" data-specitemindex="{{specItemIndex}}" data-specitemvalueindex="{{index}}" wx:key="j">
+								{{oItem.name}}
+							</view>
 						</view>
 					</view>
 				</view>
-
-			</view>
-    </scroll-view>
+			</scroll-view>
 
 		</view>
-
-
-			<view class="bottominfo">
-				<view class="wrapper">
-					<button bindtap="_addToCart" class='btn {{myProductSku.isOffSell==true?"bg-gray":"bg-main"}}'>加入购物车</button>
-				</view>
+		<view class="bottominfo">
+			<view class="wrapper">
+				<button bindtap="_addToCart" class='btn {{myProductSku.isOffSell==true?"bg-gray":"bg-main"}}'>加入购物车</button>
 			</view>
-
+		</view>
 	</view>
 </view>

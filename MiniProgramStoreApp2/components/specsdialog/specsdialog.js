@@ -97,23 +97,6 @@ Component({
       })
 
       setTimeout(function () {
-
-        const query = wx.createSelectorQuery().in(_this)
-        query.selectAll('.content,.prdinfo,.qtyinfo,.bottominfo').boundingClientRect(function (rect) {
-          console.log(JSON.stringify(rect))
-          if (rect != null) {
-            if (rect.length >= 4) {
-              var height = rect[0].height - rect[1].height - rect[2].height - rect[3].height
-              console.log(JSON.stringify(rect) + ".height:" + height)
-              _this.setData({
-                mySpecinfoHeight: height
-              })
-            }
-          }
-
-        }).exec()
-
-
         animation.translateY(0).step()
         _this.setData({
           myAnimationData: animation.export()

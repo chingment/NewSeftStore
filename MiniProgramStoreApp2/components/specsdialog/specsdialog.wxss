@@ -21,15 +21,15 @@
     border-top-right-radius: 15rpx;
   }
 
-  .specsdialog > .content > .wrapper{
+  .specsdialog .contentinfo{
    padding: 0 25rpx;
+   height: 680rpx;
   }
 
 
   .specsdialog .bottominfo{
+    height: 120rpx;
     width: 100%;
-    position: fixed;
-    bottom: 0;
     background: #fff;
   }
 
@@ -44,7 +44,6 @@
     color: #f8f8f8;
   }
 
-
   .specsdialog .closeinfo{
    top: 12rpx;
    right: 15rpx;
@@ -56,6 +55,7 @@
 
   .prdinfo{
     display: flex;
+    height: 250rpx;
   }
 
   .prdinfo .mainimg{
@@ -112,6 +112,7 @@
 
   .qtyinfo {
     display: flex;
+    height: 50rpx;
   }
 
   .qtyinfo .field{
@@ -158,6 +159,9 @@ height: 50rpx;
     height: 50rpx;
   } 
 
+  .scroll-specinfo{
+    height: 380rpx;
+  }
 
   .specinfo{
     display: block;
