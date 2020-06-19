@@ -22,7 +22,7 @@
 				<view class='list'>
 					<block wx:for="{{tab.list.items}}" wx:for-index="i" wx:for-item="item2" wx:key="list">
 
-						<view class="it pd-com">
+						<view class="it pd-com it-ordbk">
 
 							<view class="it-tag">
 								<view class="tag-name">
@@ -67,11 +67,6 @@
 											</view>
 										</view>
 
-										<!-- <view class="block-qrcode" >
-              <canvas canvas-id="qrcode{{z}}-{{i}}-{{j}}" />
-             </view> -->
-
-
 										<view class="block-field">
 
 
@@ -85,7 +80,7 @@
 														</view>
 														<view class="it-m">
 															<view class="it-ml">
-																<view >
+																<view>
 																	<text class='name'>{{skusitem.value.name}}</text>
 																</view>
 																<view>
@@ -105,10 +100,8 @@
 
 										</view>
 									</view>
-
 								</block>
 							</view>
-
 							<view class="it-message">
 
 							</view>
@@ -121,7 +114,6 @@
 								</block>
 
 							</view>
-
 						</view>
 						<view class="line-space"></view>
 					</block>
