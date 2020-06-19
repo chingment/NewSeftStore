@@ -18,7 +18,10 @@ Page({
       items: []
     },
     cartIsShow:false,
-    scrollHeight: 0
+    scrollHeight: 0,
+    specsDialog: {
+      isShow: false
+    }
   },
   onLoad: function (options) {
     var _this = this
@@ -124,6 +127,18 @@ Page({
 
     })
 
+  },
+  selectSpecs:function(e){
+    var _this = this
+    var sku= e.currentTarget.dataset.replySku
+    _this.setData({
+      specsDialog: {
+        isShow: true,
+        productSku:sku,
+        shopMode:app.globalData.currentShopMode,
+        storeId: ownRequest.getCurrentStoreId(),
+      }
+    })
   },
   //tab点击
   tabBarClickByKind: function (e) {

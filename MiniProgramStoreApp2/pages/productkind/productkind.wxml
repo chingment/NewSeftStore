@@ -1,3 +1,6 @@
+<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+
+
 <view  id="searchbox" class="searchbox cl1" bindtap="searchClick" >
 	<view class="searchbox-ct">
    <view class="searchbox-icon" >
@@ -48,7 +51,17 @@
 										<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
 									</view>
 									<view class="operate">
+
+		<view wx:if="{{item.specIdxSkus.length<=1}}">
 										<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+										</view>
+										<view wx:else>
+
+														<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
+
+													</view>
+									
+									
 									</view>
 								</view>
 							</view>

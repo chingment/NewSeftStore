@@ -16,7 +16,10 @@ Component({
   },
   data: {
     isOnReady: false,
-    currentShopMode: 0
+    currentShopMode: 0,
+    specsDialog: {
+      isShow: false
+    }
   },
   methods: {
     itemClick(e) {
@@ -42,7 +45,7 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: 3
+        shopMode: app.globalData.currentShopMode
       });
 
       apiCart.operate({
@@ -51,6 +54,18 @@ Component({
         productSkus: productSkus
       }).then(function (res) {
 
+      })
+    },
+    selectSpecs:function(e){
+      var _this = this
+      var sku= e.currentTarget.dataset.replySku
+      _this.setData({
+        specsDialog: {
+          isShow: true,
+          productSku:sku,
+          shopMode:app.globalData.currentShopMode,
+          storeId: ownRequest.getCurrentStoreId(),
+        }
       })
     },
     searchClick: function (e) {
@@ -138,11 +153,11 @@ Component({
       query.select('.searchbox').boundingClientRect(function (rect) {
 
         var height = _this.data.height - rect.height
-        console.log("height:" + _this.data.height)
-        console.log("rect.height:" + rect.height)
-        console.log("height:" + height)
-        _this.data["scrollHeight"] = height
-        _this.setData(_this.data)
+        // console.log("height:" + _this.data.height)
+        // console.log("rect.height:" + rect.height)
+        // console.log("height:" + height)
+        // _this.data["scrollHeight"] = height
+        _this.setData({scrollHeight:height})
 
       }).exec()
 
