@@ -25,6 +25,15 @@ namespace LocalS.Service.UI
             this.Value.Color = valueColor;
         }
 
+        public FsField(string value, string valueColor)
+        {
+            this.Title = new FsText();
+            this.Value = new FsText();
+
+            this.Value.Content = value;
+            this.Value.Color = valueColor;
+        }
+
         public FsText Title
         {
             get; set;

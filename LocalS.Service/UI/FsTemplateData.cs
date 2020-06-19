@@ -21,6 +21,7 @@ namespace LocalS.Service.UI
             public string Quantity { get; set; }
             public string ChargeAmount { get; set; }
             public bool IsGift { get; set; }
+            public string StatusName { get; set; }
             public FsText Desc { get; set; }
         }
     }

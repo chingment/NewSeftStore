@@ -18,7 +18,7 @@
 <swiper class="tabbar-contents" current="{{tabsSliderIndex}}" duration="300" style="height:{{scrollHeight}}px">
 	<block wx:for="{{tabs}}" wx:for-item="tab" wx:key="index">
 		<swiper-item class="item" catchtouchmove="stopTouchMove">
-			<own-scroll data-reply-index="{{index}}" pulldownDistance="100"  emptyTipText="暂未找到相关订单" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
+			<own-scroll data-reply-index="{{index}}" pulldownDistance="100" emptyTipText="暂未找到相关订单" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
 				<view class='list'>
 					<block wx:for="{{tab.list.items}}" wx:for-index="i" wx:for-item="item2" wx:key="list">
 
@@ -85,14 +85,19 @@
 														</view>
 														<view class="it-m">
 															<view class="it-ml">
-																<text class='name'>{{skusitem.value.name}}</text>
+																<view >
+																	<text class='name'>{{skusitem.value.name}}</text>
+																</view>
+																<view>
+																	<text class='statusname'>{{skusitem.value.statusName}}</text>
+																</view>
 															</view>
 															<view class="it-mr">
 																<text class='quantity'> x {{skusitem.value.quantity}}</text>
 															</view>
 														</view>
 														<view class="it-r">
-															<text class='salePrice'> {{skusitem.value.salePrice}}</text>
+															<text class='salePrice'> {{skusitem.value.chargeAmount}}</text>
 														</view>
 													</view>
 												</block>

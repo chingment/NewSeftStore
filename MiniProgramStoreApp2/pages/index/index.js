@@ -70,9 +70,9 @@ Component({
           if (res.result === 1) {
             var d = res.data
 
-            d.shopModes.forEach(function (item, index) {
-              if (item.selected) {
-                app.globalData.currentShopMode = item.id
+            d.shopModes.forEach(function (shopMode, index) {
+              if (shopMode.selected) {
+                app.globalData.currentShopMode = shopMode.id
               }
             })
 

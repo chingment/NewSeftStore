@@ -1,104 +1,109 @@
 <view class="it block pd-com">
 
-  <view class="it-tag">
-    <view class="tag-name">
+	<view class="it-tag">
+		<view class="tag-name">
 
-      <view class="icon">
-        <image class="img" src="/content/default/images/store_address.png"></image>
-      </view>
-      <view class="content">
-        <text class="txt">{{tag.name.content}}</text>
-      </view>
+			<view class="icon">
+				<image class="img" src="/content/default/images/store_address.png"></image>
+			</view>
+			<view class="content">
+				<text class="txt">{{tag.name.content}}</text>
+			</view>
 
-    </view>
-    <view class="tag-desc">
-      <view class="content">
-        <text class="txt">{{tag.desc.title.content}}</text>
-        <text class="txt">{{tag.desc.value.content}}</text>
-      </view>
+		</view>
+		<view class="tag-desc">
+			<view class="content">
+				<text class="txt">{{tag.desc.title.content}}</text>
+				<text class="txt">{{tag.desc.value.content}}</text>
+			</view>
 
-    </view>
-  </view>
+		</view>
+	</view>
 
-  <view class="it-blocks">
+	<view class="it-blocks">
 
-    <block wx:for="{{blocks}}" wx:for-index="index" wx:for-item="block" wx:key="list">
-      <view class="block">
-        <view class="block-tag">
+		<block wx:for="{{blocks}}" wx:for-index="index" wx:for-item="block" wx:key="list">
+			<view class="block">
+				<view class="block-tag">
 
-          <view class="tag-name">
-            <view class="content">
-              <text class="txt">{{block.tag.name.content}}</text>
-            </view>
-          </view>
-          <view class="tag-desc">
-            <view class="content">
-              <text class="t">{{block.tag.desc.title.content}}</text>
-              <text class="c" style="color:{{block.tag.desc.value.color}}">{{block.tag.desc.value.content}}</text>
-            </view>
-          </view>
-        </view>
+					<view class="tag-name">
+						<view class="content">
+							<text class="txt">{{block.tag.name.content}}</text>
+						</view>
+					</view>
+					<view class="tag-desc">
+						<view class="content">
+							<text class="t">{{block.tag.desc.title.content}}</text>
+							<text class="c" style="color:{{block.tag.desc.value.color}}">{{block.tag.desc.value.content}}</text>
+						</view>
+					</view>
+				</view>
 
-      
-          <view wx:if="{{block.qrcode.code!=null&&block.qrcode.code!=''}}" class="block-qrcode">
-            <canvas class="qrimg" canvas-id="qrcode-{{index}}"></canvas>
-            <text class="remark">{{block.qrcode.remark}}</text>
-          </view>
-    
-        <view class="block-field">
-          <view class="its-odcskus">
-            <block wx:for="{{block.data}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
-              <view class="it">
-                <view class="it-l">
-                  <view class="imgUrl">
-                    <image class="img" src="{{skusitem.value.mainImgUrl}}"></image>
-                  </view>
-                </view>
-                <view class="it-m">
-                  <view class="it-ml">
-                    <text class='name'>{{skusitem.value.name}}</text>
-                  </view>
-                  <view class="it-mr">
-                    <text class='quantity'> x {{skusitem.value.quantity}}</text>
-                  </view>
-                </view>
-                <view class="it-r">
-                  <text class='salePrice'> {{skusitem.value.salePrice}}</text>
-                </view>
-              </view>
-            </block>
-          </view>
 
-        </view>
-      </view>
+				<view wx:if="{{block.qrcode.code!=null&&block.qrcode.code!=''}}" class="block-qrcode">
+					<canvas class="qrimg" canvas-id="qrcode-{{index}}"></canvas>
+					<text class="remark">{{block.qrcode.remark}}</text>
+				</view>
 
-    </block>
-  </view>
+				<view class="block-field">
+					<view class="its-odcskus">
+						<block wx:for="{{block.data}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+							<view class="it">
+								<view class="it-l">
+									<view class="imgUrl">
+										<image class="img" src="{{skusitem.value.mainImgUrl}}"></image>
+									</view>
+								</view>
+								<view class="it-m">
+									<view class="it-ml">
+										<view>
+											<text class='name'>{{skusitem.value.name}}</text>
+										</view>
+										<view>
+											<text class='statusname'>{{skusitem.value.statusName}}</text>
+										</view>
+									</view>
+									<view class="it-mr">
+										<text class='quantity'> x {{skusitem.value.quantity}}</text>
+									</view>
+								</view>
+								<view class="it-r">
+									<text class='salePrice'> {{skusitem.value.chargeAmount}}</text>
+								</view>
+							</view>
+						</block>
+					</view>
 
-  <view class="it-message">
+				</view>
+			</view>
 
-  </view>
+		</block>
+	</view>
+
+	<view class="it-message">
+
+	</view>
 
 
 </view>
 <view class="line-space"></view>
 
 <view class="its-a fieldBlock pd-com">
-  <block wx:for="{{fieldBlocks}}" wx:for-item="fieldBlock" wx:key="list">
+	<block wx:for="{{fieldBlocks}}" wx:for-item="fieldBlock" wx:key="list">
 
-    <block wx:for="{{fieldBlock.data}}" wx:for-item="item" wx:key="list">
-      <view class="it">
-        <view class="it-m">
-          <view class="it-ml w100">
-            <text class="txt">{{item.title.content}}</text>
-          </view>
-          <view class="it-mr flex1">
-            <text class="txt">{{item.value.content}}</text>
-          </view>
-        </view>
-      </view>
-    </block>
-  </block>
+		<block wx:for="{{fieldBlock.data}}" wx:for-item="item" wx:key="list">
+			<view class="it">
+				<view class="it-m">
+					<view class="it-ml w100">
+						<text class="txt">{{item.title.content}}</text>
+					</view>
+					<view class="it-mr flex1">
+						<text class="txt">{{item.value.content}}</text>
+					</view>
+				</view>
+			</view>
+		</block>
+	</block>
 </view>
 <view class="line-space"></view>
 <!-- 

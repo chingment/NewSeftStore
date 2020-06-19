@@ -123,8 +123,8 @@ Component({
           operate: operate,
           productSkus: operateProductSkus
         }).then(function (res) {
-          if(res.result==1)
-          {
+          if(res.result==1){
+            console.log("storeage.getCart():"+JSON.stringify(storeage.getCart()))
             _this.setData({ cart: storeage.getCart() })
           }
           else{

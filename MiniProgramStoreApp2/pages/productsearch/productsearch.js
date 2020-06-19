@@ -7,7 +7,7 @@ const app = getApp()
 
 Page({
   data: {
-    tag: "productlist",
+    tag: "productsearch",
     dataList: {
       isEmpty: false,
       allloaded: false,

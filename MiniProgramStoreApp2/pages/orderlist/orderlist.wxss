@@ -108,7 +108,7 @@ page{
 }
 
 .block-tag > .tag-desc .t {
-  margin-right: 1rpx;
+  margin-right: 10rpx;
 }
 
 
@@ -136,11 +136,14 @@ page{
 .its-odcskus .it-l .imgUrl {
   align-items: center;
   display: flex;
+  width: 100rpx;
+  height: 100rpx;
+  padding: 10rpx;
 }
 
 .its-odcskus .it-l .imgUrl .img {
-  width: 150rpx;
-  height: 150rpx;
+  width: 100%;
+  height: 100%;
 }
 
 .its-odcskus .it-m {
@@ -151,12 +154,17 @@ page{
 .its-odcskus .it-ml {
   flex: 1;
   align-items: center;
-  display: flex;
   -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
   -webkit-box-orient: vertical;
+}
+
+.statusname{
+  color: #82cbb2;
+  font-size: 26rpx;
+  padding: 10rpx 0rpx;
 }
 
 .its-odcskus .it-mr {
@@ -173,6 +181,7 @@ page{
   display: flex;
   justify-content: flex-end;
   margin-left: 10rpx;
+  min-width: 90rpx;
 }
 
 .its-odcskus .name {

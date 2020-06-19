@@ -7,14 +7,15 @@ App({
     wx.setStorageSync('logs', logs)
 
 
-    // wx.login({
-    //   success: function(res) {
-    //     if (res.code) {
+    wx.login({
+      success: function(res) {
+        console.log("minProgram:login")
+        if (res.code) {
         
-    //       console.log(res)
-    //     }
-    //   }
-    // });
+          console.log(res)
+        }
+      }
+    });
     
   },
   onShow: function () {

@@ -28,13 +28,12 @@ function setCart(cart) {
         sumPriceBySelected: cart.sumPriceBySelected
       });
 
-  
       pages[i].setData({ tabBar: pages[i].data.tabBar })
     }
     else if (pages[i].data.tag == "productdetails") {
       pages[i].setData({ cart: cart })
     }
-    else if (pages[i].data.tag == "productlist") {
+    else if (pages[i].data.tag == "productsearch") {
       pages[i].setData({ cart: cart })
     }
   }
