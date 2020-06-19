@@ -41,7 +41,7 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: app.globalData.currentShopMode
+        shopMode: _this.data.shopMode
       });
 
       apiCart.operate({
@@ -69,7 +69,7 @@ Component({
         specsDialog: {
           isShow: true,
           productSku:sku,
-          shopMode:app.globalData.currentShopMode,
+          shopMode:_this.data.shopMode,
           storeId: ownRequest.getCurrentStoreId(),
         }
       })
@@ -80,19 +80,22 @@ Component({
       if (ownRequest.getCurrentStoreId() != undefined) {
         apiIndex.pageData({
           storeId: ownRequest.getCurrentStoreId(),
-          shopMode: app.globalData.currentShopMode
+          shopMode: _this.data.shopMode
         }).then(function (res) {
 
           if (res.result === 1) {
             var d = res.data
 
-            d.shopModes.forEach(function (shopMode, index) {
-              if (shopMode.selected) {
-                app.globalData.currentShopMode = shopMode.id
+            var shopMode
+            d.shopModes.forEach(function (item, index) {
+              if (item.selected) {
+                shopMode = item.id
               }
             })
-
+            app.globalData.currentShopMode=shopMode
+    
             _this.setData({
+              shopMode: shopMode,
               shopModes: d.shopModes,
               singleStore: typeof config.storeId == "undefined" ? false : true,
               currentStore: d.store,
@@ -119,11 +122,9 @@ Component({
     },
     switchShopMode: function (e) {
       var _this = this
-      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
-
-      app.globalData.currentShopMode = shopMode
-
-      this.getPageData()
+      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面\
+      _this.setData({shopMode:shopMode})
+      _this.getPageData()
 
     },
     onReady: function () {

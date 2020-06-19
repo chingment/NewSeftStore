@@ -17,7 +17,7 @@ Component({
   },
   data: {
     isOnReady: false,
-    currentShopMode: 0,
+    shopMode: 0,
     specsDialog: {
       isShow: false
     }
@@ -46,7 +46,7 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: app.globalData.currentShopMode
+        shopMode: _this.data.shopMode
       });
 
       apiCart.operate({
@@ -73,7 +73,7 @@ Component({
         specsDialog: {
           isShow: true,
           productSku:sku,
-          shopMode:app.globalData.currentShopMode,
+          shopMode:_this.data.shopMode,
           storeId: ownRequest.getCurrentStoreId(),
         }
       })
@@ -121,7 +121,7 @@ Component({
       if (ownRequest.getCurrentStoreId() != undefined) {
         apiKind.pageData({
           storeId: ownRequest.getCurrentStoreId(),
-          shopMode: app.globalData.currentShopMode
+          shopMode: _this.data.shopMode
         }).then(function (res) {
 
           if (res.result === 1) {
@@ -147,9 +147,11 @@ Component({
       console.log("personal.onReady")
 
       if (!_this.data.isOnReady) {
-        if (_this.data.currentShopMode != app.globalData.currentShopMode) {
+        var shopMode=app.globalData.currentShopMode
+
+        if (_this.data.shopMode != shopMode) {
           _this.setData({
-            currentShopMode: app.globalData.currentShopMode
+            shopMode: shopMode
           })
           _this.getPageData()
         }
@@ -203,7 +205,7 @@ Component({
         pageIndex: pageIndex,
         pageSize: pageSize,
         kindId: kindId,
-        shopMode: app.globalData.currentShopMode,
+        shopMode: _this.data.shopMode,
         name: ""
       },false).then(function (res) {
         if (res.result == 1) {

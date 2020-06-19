@@ -18,6 +18,7 @@ Page({
       pageCount: 0,
       items: []
     },
+    shopMode:0,
     cartIsShow:false,
     scrollHeight: 0,
     specsDialog: {
@@ -26,6 +27,8 @@ Page({
   },
   onLoad: function (options) {
     var _this = this
+
+    _this.setData({shopMode:app.globalData.currentShopMode})
 
     var kindId = options.kindId == undefined ? "" : options.kindId
     var subjectId = options.subjectId == undefined ? "" : options.subjectId
@@ -39,7 +42,7 @@ Page({
       storeId: ownRequest.getCurrentStoreId(),
       kindId: kindId,
       subjectId: subjectId,
-      shopMode: app.globalData.currentShopMode
+      shopMode: _this.data.shopMode
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -117,7 +120,7 @@ Page({
       id: skuId,
       quantity: 1,
       selected: true,
-      shopMode: app.globalData.currentShopMode
+      shopMode: _this.data.shopMode
     });
 
     apiCart.operate({
@@ -147,7 +150,7 @@ Page({
       specsDialog: {
         isShow: true,
         productSku:sku,
-        shopMode:app.globalData.currentShopMode,
+        shopMode:_this.data.shopMode,
         storeId: ownRequest.getCurrentStoreId(),
       }
     })
@@ -184,7 +187,7 @@ Page({
       pageSize: 10,
       kindId: kindId,
       subjectId: undefined,
-      shopMode: app.globalData.currentShopMode,
+      shopMode: _this.data.shopMode,
       name: ""
     },false).then(function (res) {
       if (res.result == 1) {
