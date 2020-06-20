@@ -1,10 +1,7 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
-<specsdialog isShow="{{specsDialog.isShow}}"
-
- bind:_updateProductSku="updateProductSku"
- productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
 
 
 
@@ -30,19 +27,22 @@
 						<view class="item-briefIntro font-gray">
 							<text class="briefIntro">{{productSku.briefDes}}</text>
 						</view>
-						<view class="item-price">
+						<view wx:if="{{productSku.isOffSell}}" class="item-isOffSell">
+							<text class="txt">已下架</text>
+						</view>
+						<view wx:else class="item-price">
 							<text class="unitPrice">{{productSku.salePrice}}</text>
 							<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
 						</view>
 					</view>
 				</view>
 
-				<view wx:if="{{productSku.specIdxSkus.length>1}}" class="details-info3 its-option" >
+				<view wx:if="{{productSku.specIdxSkus.length>1}}" class="details-info3 its-option">
 					<view class="it">
-						<view class="title" ><text>已选</text> </view>
+						<view class="title"><text>已选</text> </view>
 						<view class="content">{{productSku.specIdx}}</view>
-						<view class="icon" >
-								<image class="img" style="width:60rpx;height:60rpx" bindtap="selectSpecs" src='/content/default/images/icon_more1.png'></image>
+						<view class="icon">
+							<image class="img" style="width:60rpx;height:60rpx" bindtap="selectSpecs" src='/content/default/images/icon_more1.png'></image>
 						</view>
 					</view>
 

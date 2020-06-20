@@ -56,6 +56,12 @@ swiper {
   text-decoration: line-through;
 }
 
+.details-info1 .item-isOffSell .txt{
+
+  font-size: 26rpx;
+  color: #f00;
+}
+
 .details-info2 {
 }
 

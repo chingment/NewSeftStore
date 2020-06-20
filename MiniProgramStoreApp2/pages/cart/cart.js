@@ -244,8 +244,7 @@ Component({
         if (rect != null) {
           if (rect.height != null) {
             var height = _this.data.height - rect.height
-            _this.data["scrollHeight"] = height
-            _this.setData(_this.data)
+            _this.setData({scrollHeight:height})
           }
         }
 

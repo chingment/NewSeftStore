@@ -35,8 +35,7 @@ Component({
           tabs[i].selected = false
         }
       }
-      _this.data.tabs = tabs
-      _this.setData(_this.data)
+      _this.setData({tabs:tabs})
     },
     addToCart: function (e) {
       var _this = this
