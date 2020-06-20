@@ -87,6 +87,12 @@
 					"pathName": "pages/search/search",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "时间轴",
+					"pathName": "pages/receipttimeaxis/receipttimeaxis",
+					"scene": null
 				}
 			]
 		}

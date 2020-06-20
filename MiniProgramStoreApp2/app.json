@@ -15,7 +15,8 @@
     "pages/operate/operate",
     "pages/notopen/notopen",
     "pages/orderdetails/orderdetails",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/receipttimeaxis/receipttimeaxis"
   ],
   "window": {
     "backgroundTextStyle": "light",
