@@ -16,6 +16,7 @@ Component({
   data: {
     isOnReady:false,
     isLogin:false,
+    storeId:undefined,
     blocks:[]
   },
   methods: {
@@ -50,7 +51,7 @@ Component({
       function _operate() {
 
         apiCart.operate({
-          storeId: ownRequest.getCurrentStoreId(),
+          storeId: _this.data.storeId,
           operate: operate,
           productSkus: operateProductSkus
         }).then( function (res) {
@@ -202,7 +203,6 @@ Component({
     },
     getPageData: function (e) {
       var _this = this
-      if (ownRequest.getCurrentStoreId() != undefined) {
         apiCart.pageData().then(function (res) {
           if (res.result == 1) {
             var d = res.data
@@ -218,7 +218,6 @@ Component({
 
           }
         })
-      }
     },
     goLogin: function (e) {
       ownRequest.goLogin()
@@ -235,6 +234,7 @@ Component({
       var _this = this
 
       _this.setData({
+        storeId:ownRequest.getCurrentStoreId(),
         isLogin:ownRequest.isLogin()
       })
 

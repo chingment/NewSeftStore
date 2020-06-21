@@ -95,7 +95,7 @@ Page({
     });
 
     apiCart.operate({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       operate: 2,
       productSkus: productSkus
     }).then(function (res) {
@@ -158,7 +158,7 @@ Page({
     // 设置转发内容
     var shareObj = {
       title: _this.data.productSku.name,
-      path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this_data.shopMode + '&storeId=' + ownRequest.getCurrentStoreId() + "&merchId=" + config.merchId, // 默认是当前页面，必须是以‘/’开头的完整路径
+      path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this_data.shopMode + '&storeId=' + _this.data.storeId + "&merchId=" + config.merchId, // 默认是当前页面，必须是以‘/’开头的完整路径
       imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') { }

@@ -18,6 +18,7 @@ Component({
     }
   },
   data: {
+    storeId:undefined,
     isOnLoad: false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
@@ -45,7 +46,7 @@ Component({
       });
 
       apiCart.operate({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId:_this.data.storeId,
         operate: 2,
         productSkus: productSkus
       }).then(function(res){
@@ -70,16 +71,14 @@ Component({
           isShow: true,
           productSku:sku,
           shopMode:_this.data.shopMode,
-          storeId: ownRequest.getCurrentStoreId(),
+          storeId: _this.data.storeId,
         }
       })
     },
     getPageData: function () {
       var _this = this
-
-      if (ownRequest.getCurrentStoreId() != undefined) {
         apiIndex.pageData({
-          storeId: ownRequest.getCurrentStoreId(),
+          storeId: _this.data.storeId,
           shopMode: _this.data.shopMode
         }).then(function (res) {
 
@@ -105,9 +104,6 @@ Component({
             })
           }
         })
-
-      }
-
     },
     goSelectStore: function (e) {
 
@@ -136,7 +132,10 @@ Component({
       app.globalData.skeletonPage = _this;
 
       if (!_this.data.isOnLoad) {
-        _this.setData({ isOnLoad: true })
+        _this.setData({ 
+          isOnLoad: true, 
+          storeId:ownRequest.getCurrentStoreId()
+        })
         _this.getPageData()
       }
 

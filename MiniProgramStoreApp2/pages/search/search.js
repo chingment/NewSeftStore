@@ -32,6 +32,7 @@ Page({
       }
     })
 
+    _this.setData({storeId:ownRequest.getCurrentStoreId()})
   },
 
   /**
@@ -93,7 +94,7 @@ Page({
     console.log(val)
 
     apiSearch.tobeSearch({
-      storeId:ownRequest.getCurrentStoreId(),
+      storeId:_this.data.storeId,
       key: val
     }).then(function(res) {
       if (res.result == 1) {

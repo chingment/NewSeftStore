@@ -18,6 +18,7 @@ Page({
       pageCount: 0,
       items: []
     },
+    storeId:'',
     shopMode:0,
     cartIsShow:false,
     scrollHeight: 0,
@@ -28,7 +29,10 @@ Page({
   onLoad: function (options) {
     var _this = this
 
-    _this.setData({shopMode:app.globalData.currentShopMode})
+    _this.setData({
+      shopMode:app.globalData.currentShopMode,
+      storeId:ownRequest.getCurrentStoreId()
+    })
 
     var kindId = options.kindId == undefined ? "" : options.kindId
     var subjectId = options.subjectId == undefined ? "" : options.subjectId
@@ -39,7 +43,7 @@ Page({
     })
 
     apiProduct.initSearchPageData({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       kindId: kindId,
       subjectId: subjectId,
       shopMode: _this.data.shopMode
@@ -124,7 +128,7 @@ Page({
     });
 
     apiCart.operate({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       operate: 2,
       productSkus: productSkus
     }).then(function (res) {
@@ -151,7 +155,7 @@ Page({
         isShow: true,
         productSku:sku,
         shopMode:_this.data.shopMode,
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: _this.data.storeId,
       }
     })
   },
@@ -182,7 +186,7 @@ Page({
     var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
 
     return apiProduct.search({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       pageIndex: pageIndex,
       pageSize: 10,
       kindId: kindId,

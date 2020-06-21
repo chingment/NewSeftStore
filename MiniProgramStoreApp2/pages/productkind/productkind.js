@@ -49,7 +49,7 @@ Component({
       });
 
       apiCart.operate({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: _this.data.storeId,
         operate: 2,
         productSkus: productSkus
       }).then(function (res) {
@@ -73,7 +73,7 @@ Component({
           isShow: true,
           productSku:sku,
           shopMode:_this.data.shopMode,
-          storeId: ownRequest.getCurrentStoreId(),
+          storeId: _this.data.storeId,
         }
       })
     },
@@ -117,9 +117,8 @@ Component({
     getPageData: function () {
       var _this = this
 
-      if (ownRequest.getCurrentStoreId() != undefined) {
         apiKind.pageData({
-          storeId: ownRequest.getCurrentStoreId(),
+          storeId: _this.data.storeId,
           shopMode: _this.data.shopMode
         }).then(function (res) {
 
@@ -138,8 +137,6 @@ Component({
 
           }
         })
-      }
-
     },
     onReady: function () {
       var _this = this;
@@ -147,10 +144,11 @@ Component({
 
       if (!_this.data.isOnReady) {
         var shopMode=app.globalData.currentShopMode
-
+    
         if (_this.data.shopMode != shopMode) {
           _this.setData({
-            shopMode: shopMode
+            shopMode: shopMode,
+            storeId:ownRequest.getCurrentStoreId()
           })
           _this.getPageData()
         }
@@ -200,7 +198,7 @@ Component({
       var kindId = currentTab.id == undefined ? "" : currentTab.id
 
       return apiProduct.search({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: _this.data.storeId,
         pageIndex: pageIndex,
         pageSize: pageSize,
         kindId: kindId,
