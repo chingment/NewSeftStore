@@ -21,12 +21,12 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
-        console.log("newVal:" + newVal + ",oldVal:" + oldVal)
+        //console.log("newVal:" + newVal + ",oldVal:" + oldVal)
         if (newVal) {
-          this._open()
+          this._dialogOpen()
         }
         else {
-          this._close();
+          this._dialogClose();
         }
       }
     },
@@ -35,30 +35,24 @@ Component({
       value: null,
       observer: function (newVal, oldVal) {
         var _this = this
-
+        //console.log("newVal:" + JSON.stringify(newVal))
+        //console.log("oldVal:" + JSON.stringify(oldVal))
         var productSku = newVal
-
         var specIdxSkus = productSku.specIdxSkus
-
         var specShopItemInfo = {}
-
         var specItems = productSku.specItems
-
         for (var i in specIdxSkus) {
-          specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i]; //修改数据结构格式，改成键值对的方式，以方便和选中之后的值进行匹配
+          specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i];
         }
+
+        //console.log("specShopItemInfo=>"+JSON.stringify(specShopItemInfo))
 
         for (var i = 0; i < specItems.length; i++) {
           for (var o = 0; o < specItems[i].value.length; o++) {
             specItems[i].value[o].isShow = true
           }
         }
-
         productSku.specItem = specItems
-
-        console.log("newVal:" + JSON.stringify(newVal))
-        console.log("oldVal:" + JSON.stringify(oldVal))
-
         _this.setData({
           myQuantity: 1,
           mySpecShopItemInfo: specShopItemInfo,
@@ -77,64 +71,49 @@ Component({
     mySpecSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
     mySpecBoxArr: {},
     myShow: false,
+    myStop: true,
     mySpecinfoHeight: 100,
     myQuantity: 1
   },
   methods: {
-    _open: function (e) {
+    _dialogOpen: function (e) {
       var _this = this;
 
+      if (!_this.data.myStop)
+        return
 
 
-      if (!_this.data.myShow) {
-        var animation = wx.createAnimation({
-          duration: 500,
-          timingFunction: 'linear'
-        })
-        _this.animation = animation
-        animation.translateY(500).step()
-        _this.setData({
-          myAnimationData: animation.export(),
-          isShow: true,
-          myShow: true
-        })
-
-
-
-        setTimeout(function () {
-
-          const query = wx.createSelectorQuery().in(_this)
-          query.selectAll('.content,.prdinfo,.qtyinfo,.bottominfo').boundingClientRect(function (rect) {
-            console.log(JSON.stringify(rect))
-            if (rect != null) {
-              if (rect.length >= 4) {
-                var height = rect[0].height - rect[1].height - rect[2].height - rect[3].height
-                console.log(JSON.stringify(rect) + ".height:" + height)
-                _this.setData({
-                  mySpecinfoHeight: height
-                })
-              }
-            }
-
-          }).exec()
-
-
-          animation.translateY(0).step()
-          _this.setData({
-            myAnimationData: animation.export()
-          })
-        }, 400)
-      }
-    },
-    _close: function (e) {
-      var _this = this;
       var animation = wx.createAnimation({
-        duration: 500,
+        duration: 200,
         timingFunction: 'linear'
       })
-      _this.animation = animation
+
       animation.translateY(500).step()
       _this.setData({
+        myAnimationData: animation.export(),
+        isShow: true,
+        myShow: true,
+        myStop: false
+      })
+
+      setTimeout(function () {
+        animation.translateY(0).step()
+        _this.setData({
+          myAnimationData: animation.export()
+        })
+      }, 200)
+
+    },
+    _dialogClose: function (e) {
+      var _this = this;
+      var animation = wx.createAnimation({
+        duration: 200,
+        timingFunction: 'linear'
+      })
+     
+      animation.translateY(500).step()
+      _this.setData({
+        myStop:true,
         myAnimationData: animation.export()
       });
 
@@ -143,69 +122,59 @@ Component({
           myShow: false,
           isShow: false
         })
-      }, 500)
+      }, 200)
     },
     _qtyOperate: function (e) {
       var _this = this
-
-      console.log("_qtyOperate")
       var operate = parseInt(e.currentTarget.dataset.replyOperate)
-
+      var quantity= _this.data.myQuantity
       if (operate == 1) {
-        if (_this.data.myQuantity > 1) {
-          _this.data.myQuantity -= 1;
-          _this.setData({ myQuantity: _this.data.myQuantity })
+        if (quantity > 1) {
+          quantity -= 1;
         }
       }
       else {
-        _this.data.myQuantity += 1;
-        _this.setData({ myQuantity: _this.data.myQuantity })
+        quantity += 1;
       }
-
+      _this.setData({ myQuantity: quantity })
     },
-    _specValueBtn(e) {
+    _specValueSelect:function(e) {
       var _this = this;
-      var n = e.currentTarget.dataset.n
-      var index = e.currentTarget.dataset.index
-      var item = e.currentTarget.dataset.name
       var myProductSku = _this.data.myProductSku
+
+      var specItemIndex = e.currentTarget.dataset.specitemindex
+      var specItemValueIndex = e.currentTarget.dataset.specitemvalueindex
+      var specItemValueName = e.currentTarget.dataset.specitemvaluename
       var mySpecSubIndex = _this.data.mySpecSubIndex
-      var mySpecBoxArr = _this.data.mySpecBoxArr
+
       var mySpecShopItemInfo = _this.data.mySpecShopItemInfo
-      if (mySpecSubIndex[n] != item) {
-        mySpecSubIndex[n] = item;
-        mySpecSubIndex[n] = item;
-      } else {
-        // self.selectArr[n] = "";
-        // self.subIndex[n] = -1; //去掉选中的颜色
-      }
+      if (mySpecSubIndex[specItemIndex] != specItemValueName) {
+        mySpecSubIndex[specItemIndex] = specItemValueName;
+      } 
 
-      _this.checkItem();
-
-      var arr = mySpecShopItemInfo[mySpecSubIndex];
-
+      var selSpec = mySpecShopItemInfo[mySpecSubIndex];
 
       //选中修改当前SKU.ID
-      if (arr) {
- 
+      if (selSpec) {
+        
         apiProduct.skuStockInfo({
           storeId: _this.data.storeId,
-          skuId: arr.skuId,
+          skuId: selSpec.skuId,
           shopMode: _this.data.shopMode
         }).then(function (res) {
-      
+          
           if (res.result == 1) {
+           
             var d = res.data
-            
-            myProductSku.id = arr.skuId;
-            myProductSku.specIdx = arr.specIdx;
+            myProductSku.id = d.skuId;
+            myProductSku.specIdx = selSpec.specIdx;
             myProductSku.name = d.name
             myProductSku.isOffSell = d.isOffSell
             myProductSku.salePrice = d.salePrice
             myProductSku.isShowPrice = d.isShowPrice
             myProductSku.salePriceByVip = d.salePriceByVip
             myProductSku.sellQuantity = d.sellQuantity
-      
+
             _this.setData({
               myProductSku: myProductSku,
               mySpecSubIndex: mySpecSubIndex,
@@ -213,7 +182,7 @@ Component({
             })
 
             _this.triggerEvent('_updateProductSku', {
-              productSku:myProductSku
+              productSku: myProductSku
             })
 
           }
@@ -222,7 +191,6 @@ Component({
     },
     _addToCart: function (e) {
       var _this = this
-
       if (_this.data.myProductSku.isOffSell)
         return
 
@@ -240,54 +208,18 @@ Component({
         operate: 2,
         productSkus: productSkus
       }).then(function (res) {
-
         if (res.result == 1) {
           toast.show({
             title: '加入购物车成功'
           })
-
-          _this._close()
+          _this._dialogClose()
         }
         else {
           toast.show({
             title: res.message
           })
         }
-
       })
-
-    },
-    checkItem() {
-      var _this = this;
-      var myProductSku = _this.data.myProductSku
-      var specItems = _this.data.myProductSku.specItems;
-      var result = []; //定义数组存储被选中的值
-      for (var i in specItems) {
-        result[i] = _this.data.mySpecSelectArr[i] ? _this.data.mySpecSelectArr[i] : "";
-      }
-
-      for (var i in specItems) {
-        var last = result[i]; //把选中的值存放到字符串last去
-        for (var k in specItems[i].item) {
-          result[i] = specItems[i].item[k].name; //赋值，存在直接覆盖，不存在往里面添加name值
-          specItems[i].item[k].isShow = _this.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
-        }
-        result[i] = last; //还原，目的是记录点下去那个值，避免下一次执行循环时避免被覆盖
-      }
-
-      myProductSku.specItems = specItems
-      _this.setData({
-        myProductSku: myProductSku
-      })
-    },
-    isMay(result) {
-      var _this = this
-      for (var i in result) {
-        if (result[i] == "") {
-          return true; //如果数组里有为空的值，那直接返回true
-        }
-      }
-      return !_this.data.mySpecShopItemInfo[result] ? false : _this.data.mySpecShopItemInfo[result].stock == 0 ? false : true; //匹配选中的数据的库存，若不为空返回true反之返回false
     }
   }
 })

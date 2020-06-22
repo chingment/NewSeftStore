@@ -26,16 +26,13 @@ Page({
         //导航高度
         var statusBarHeight=res.statusBarHeight
         var navHeight = statusBarHeight + 46
-     
-        _this.data.statusBarHeight=statusBarHeight
-        _this.data.navH=navHeight
-
-        _this.setData( _this.data)
+        _this.setData({statusBarHeight:statusBarHeight,navH:navHeight})
       }, fail(err) {
         console.log(err);
       }
     })
 
+    _this.setData({storeId:ownRequest.getCurrentStoreId()})
   },
 
   /**
@@ -97,12 +94,13 @@ Page({
     console.log(val)
 
     apiSearch.tobeSearch({
-      storeId:ownRequest.getCurrentStoreId(),
+      storeId:_this.data.storeId,
       key: val
     }).then(function(res) {
       if (res.result == 1) {
-        _this.data.searchResult=res.data
-        _this.setData(_this.data)
+        _this.setData({
+          searchResult:res.data
+        })
       }
     })
 

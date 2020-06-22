@@ -15,7 +15,7 @@ var getData = function (_this) {
 
   apiOrder.confirm({
     orderId: orderId,
-    storeId: ownRequest.getCurrentStoreId(),
+    storeId: _this.data.storeId,
     productSkus: productSkus,
     couponId: couponId
   }).then(function (res) {
@@ -61,6 +61,7 @@ Page({
   data: {
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
+    storeId:undefined,
     orderId: null,
     blocks: [],
     couponId: [],
@@ -78,6 +79,7 @@ Page({
     var _this = this
     orderId = options.orderId == undefined ? null : options.orderId
     productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
+    _this.setData({storeId: ownRequest.getCurrentStoreId()})
     this.buildPayOptions()
   },
 
@@ -229,7 +231,7 @@ Page({
 
 
       apiOrder.reserve({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: _this.data.storeId,
         blocks: blocks,
         source: 3
       }).then(function (res) {

@@ -12,7 +12,8 @@ Page({
     if (isClearCache != undefined) {
       wx.clearStorage()
     }
-
+    var storeId=ownRequest.getCurrentStoreId() 
+    
     function getStoreList(lat, lng) {
       apiStore.list({
         lat: lat,
@@ -21,7 +22,7 @@ Page({
         if (res.result == 1) {
           _this.setData({
             list: res.data,
-            currentStoreId: ownRequest.getCurrentStoreId() == undefined ? '' : ownRequest.getCurrentStoreId()
+            currentStoreId: storeId == undefined ? '' : storeId
           })
         }
       })

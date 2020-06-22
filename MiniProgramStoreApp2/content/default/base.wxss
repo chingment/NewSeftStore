@@ -1030,7 +1030,7 @@ page {
   
 
   .btn-selectSpecs{
-    background: #f18d00;
+    background: #ffb101;
     padding: 6rpx 18rpx;
     border-radius: 10rpx;
     font-size: 24rpx;

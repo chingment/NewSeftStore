@@ -1,4 +1,5 @@
 const ownRequest = require('../../own/ownRequest.js')
+const toast = require('../../utils/toastutil')
 const apiKind = require('../../api/kind.js')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
@@ -16,7 +17,7 @@ Component({
   },
   data: {
     isOnReady: false,
-    currentShopMode: 0,
+    shopMode: 0,
     specsDialog: {
       isShow: false
     }
@@ -34,8 +35,7 @@ Component({
           tabs[i].selected = false
         }
       }
-      _this.data.tabs = tabs
-      _this.setData(_this.data)
+      _this.setData({tabs:tabs})
     },
     addToCart: function (e) {
       var _this = this
@@ -45,15 +45,24 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: app.globalData.currentShopMode
+        shopMode: _this.data.shopMode
       });
 
       apiCart.operate({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: _this.data.storeId,
         operate: 2,
         productSkus: productSkus
       }).then(function (res) {
-
+        if (res.result == 1) {
+          toast.show({
+            title: '加入购物车成功'
+          })
+        }
+        else {
+          toast.show({
+            title: res.message
+          })
+        }
       })
     },
     selectSpecs:function(e){
@@ -63,8 +72,8 @@ Component({
         specsDialog: {
           isShow: true,
           productSku:sku,
-          shopMode:app.globalData.currentShopMode,
-          storeId: ownRequest.getCurrentStoreId(),
+          shopMode:_this.data.shopMode,
+          storeId: _this.data.storeId,
         }
       })
     },
@@ -108,10 +117,9 @@ Component({
     getPageData: function () {
       var _this = this
 
-      if (ownRequest.getCurrentStoreId() != undefined) {
         apiKind.pageData({
-          storeId: ownRequest.getCurrentStoreId(),
-          shopMode: app.globalData.currentShopMode
+          storeId: _this.data.storeId,
+          shopMode: _this.data.shopMode
         }).then(function (res) {
 
           if (res.result === 1) {
@@ -129,17 +137,18 @@ Component({
 
           }
         })
-      }
-
     },
     onReady: function () {
       var _this = this;
       console.log("personal.onReady")
 
       if (!_this.data.isOnReady) {
-        if (_this.data.currentShopMode != app.globalData.currentShopMode) {
+        var shopMode=app.globalData.currentShopMode
+    
+        if (_this.data.shopMode != shopMode) {
           _this.setData({
-            currentShopMode: app.globalData.currentShopMode
+            shopMode: shopMode,
+            storeId:ownRequest.getCurrentStoreId()
           })
           _this.getPageData()
         }
@@ -189,11 +198,11 @@ Component({
       var kindId = currentTab.id == undefined ? "" : currentTab.id
 
       return apiProduct.search({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: _this.data.storeId,
         pageIndex: pageIndex,
         pageSize: pageSize,
         kindId: kindId,
-        shopMode: app.globalData.currentShopMode,
+        shopMode: _this.data.shopMode,
         name: ""
       },false).then(function (res) {
         if (res.result == 1) {

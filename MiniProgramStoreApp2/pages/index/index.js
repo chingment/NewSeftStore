@@ -18,6 +18,7 @@ Component({
     }
   },
   data: {
+    storeId:undefined,
     isOnLoad: false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
@@ -41,13 +42,24 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: app.globalData.currentShopMode
+        shopMode: _this.data.shopMode
       });
 
       apiCart.operate({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId:_this.data.storeId,
         operate: 2,
         productSkus: productSkus
+      }).then(function(res){
+        if (res.result == 1) {
+          toast.show({
+            title: '加入购物车成功'
+          })
+        }
+        else {
+          toast.show({
+            title: res.message
+          })
+        }
       })
 
     },
@@ -58,30 +70,31 @@ Component({
         specsDialog: {
           isShow: true,
           productSku:sku,
-          shopMode:app.globalData.currentShopMode,
-          storeId: ownRequest.getCurrentStoreId(),
+          shopMode:_this.data.shopMode,
+          storeId: _this.data.storeId,
         }
       })
     },
     getPageData: function () {
       var _this = this
-
-      if (ownRequest.getCurrentStoreId() != undefined) {
         apiIndex.pageData({
-          storeId: ownRequest.getCurrentStoreId(),
-          shopMode: app.globalData.currentShopMode
+          storeId: _this.data.storeId,
+          shopMode: _this.data.shopMode
         }).then(function (res) {
 
           if (res.result === 1) {
             var d = res.data
 
-            d.shopModes.forEach(function (shopMode, index) {
-              if (shopMode.selected) {
-                app.globalData.currentShopMode = shopMode.id
+            var shopMode
+            d.shopModes.forEach(function (item, index) {
+              if (item.selected) {
+                shopMode = item.id
               }
             })
-
+            app.globalData.currentShopMode=shopMode
+    
             _this.setData({
+              shopMode: shopMode,
               shopModes: d.shopModes,
               singleStore: typeof config.storeId == "undefined" ? false : true,
               currentStore: d.store,
@@ -91,9 +104,6 @@ Component({
             })
           }
         })
-
-      }
-
     },
     goSelectStore: function (e) {
 
@@ -108,11 +118,9 @@ Component({
     },
     switchShopMode: function (e) {
       var _this = this
-      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面data-reply-index
-
-      app.globalData.currentShopMode = shopMode
-
-      this.getPageData()
+      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面\
+      _this.setData({shopMode:shopMode})
+      _this.getPageData()
 
     },
     onReady: function () {
@@ -124,7 +132,10 @@ Component({
       app.globalData.skeletonPage = _this;
 
       if (!_this.data.isOnLoad) {
-        _this.setData({ isOnLoad: true })
+        _this.setData({ 
+          isOnLoad: true, 
+          storeId:ownRequest.getCurrentStoreId()
+        })
         _this.getPageData()
       }
 

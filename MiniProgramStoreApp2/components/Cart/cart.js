@@ -12,20 +12,20 @@ Component({
       type: Boolean,
       value: false,
       observer:function(newVal,oldVal){
-        console.log("newVal:"+newVal+",oldVal:"+oldVal)
         if(newVal){
-          this._open()
+          this._dialogOpen()
         }
         else{
-          this._close();
+          this._dialogClose();
         }
       }
     }
   },
   data: {
-    animationData: {},
-    show:false,
-    cart: {
+    myAnimationData: {},
+    myShow:false,
+    myStop: true,
+    myCart: {
       blocks: [],
       count: 0,
       sumPrice: 0,
@@ -34,60 +34,47 @@ Component({
     }
   },
   methods: {
-    _open: function (e) {
-
+    _dialogOpen: function (e) {
       var _this = this;
-      if (!_this.data.show) {
-        // 创建一个动画实例
+      if (!_this.data.myStop)
+      return
+
         var animation = wx.createAnimation({
-          // 动画持续时间
-          duration: 500,
-          // 定义动画效果，当前是匀速
+          duration: 200,
           timingFunction: 'linear'
         })
-        // 将该变量赋值给当前动画
-        _this.animation = animation
-        // 先在y轴偏移，然后用step()完成一个动画
         animation.translateY(500).step()
-        // 用setData改变当前动画
         _this.setData({
-          // 通过export()方法导出数据
-          animationData: animation.export(),
-          // 改变view里面的Wx：if
-          show: true,
-          isShow:true
+          myAnimationData: animation.export(),
+          myShow: true,
+          isShow:true,
+          myStop: false
         })
-        // 设置setTimeout来改变y轴偏移量，实现有感觉的滑动
         setTimeout(function () {
           animation.translateY(0).step()
           _this.setData({
-            animationData: animation.export()
+            myAnimationData: animation.export()
           })
-        }, 400)
-      }
-
-
-
-      _this.setData({ cart: storeage.getCart() })
-
-
+        }, 200)
+      
+      _this.setData({ myCart: storeage.getCart() })
     },
-    _close: function (e) {
+    _dialogClose: function (e) {
       var _this = this;
       var animation = wx.createAnimation({
         duration: 500,
         timingFunction: 'linear'
       })
-      _this.animation = animation
       animation.translateY(500).step()
       _this.setData({
-        animationData: animation.export()
+        myAnimationData: animation.export()
       });
 
       setTimeout(function () {
         _this.setData({
-          show: false,
-          isShow:false
+          myShow: false,
+          isShow:false,
+          myStop:true,
         })
       }, 500)
     },
@@ -96,7 +83,7 @@ Component({
       var pIndex = e.currentTarget.dataset.replyPindex
       var cIndex = e.currentTarget.dataset.replyCindex
       var operate = e.currentTarget.dataset.replyOperate
-      var productSku = _this.data.cart.blocks[pIndex].productSkus[cIndex];
+      var productSku = _this.data.myCart.blocks[pIndex].productSkus[cIndex];
 
       switch (operate) {
         case "1":
@@ -125,7 +112,7 @@ Component({
         }).then(function (res) {
           if(res.result==1){
             console.log("storeage.getCart():"+JSON.stringify(storeage.getCart()))
-            _this.setData({ cart: storeage.getCart() })
+            _this.setData({ myCart: storeage.getCart() })
           }
           else{
             toast.show({
@@ -154,7 +141,7 @@ Component({
     _immeBuy: function (e) {
       var _this = this
 
-      var blocks = _this.data.cart.blocks
+      var blocks = _this.data.myCart.blocks
 
       var productSkus = []
 
@@ -190,10 +177,10 @@ Component({
       //开始触摸时 重置所有删除
       var _this = this
 
-      for (var i = 0; i < _this.data.cart.blocks.length; i++) {
-        for (var j = 0; j < _this.data.cart.blocks[i].productSkus.length; j++) {
-          if (_this.data.cart.blocks[i].productSkus[j].isTouchMove) {
-            _this.data.cart.blocks[i].productSkus[j].isTouchMove = false;
+      for (var i = 0; i < _this.data.myCart.blocks.length; i++) {
+        for (var j = 0; j < _this.data.myCart.blocks[i].productSkus.length; j++) {
+          if (_this.data.myCart.blocks[i].productSkus[j].isTouchMove) {
+            _this.data.myCart.blocks[i].productSkus[j].isTouchMove = false;
           }
         }
       }
@@ -201,7 +188,7 @@ Component({
       this.setData({
         startX: e.changedTouches[0].clientX,
         startY: e.changedTouches[0].clientY,
-        cart: _this.data.cart
+        myCart: _this.data.myCart
       })
 
     },
@@ -230,24 +217,24 @@ Component({
           });
 
 
-      for (var i = 0; i < _this.data.cart.blocks.length; i++) {
-        for (var j = 0; j < _this.data.cart.blocks[i].productSkus.length; j++) {
+      for (var i = 0; i < _this.data.myCart.blocks.length; i++) {
+        for (var j = 0; j < _this.data.myCart.blocks[i].productSkus.length; j++) {
 
-          _this.data.cart.blocks[i].productSkus[j].isTouchMove = false
+          _this.data.myCart.blocks[i].productSkus[j].isTouchMove = false
 
           //滑动超过30度角 return
 
           if (Math.abs(angle) > 30) return;
 
-          if (cartId == _this.data.cart.blocks[i].productSkus[j].cartId) {
+          if (cartId == _this.data.myCart.blocks[i].productSkus[j].cartId) {
 
             if (touchMoveX > startX) //右滑
 
-              _this.data.cart.blocks[i].productSkus[j].isTouchMove = false
+              _this.data.myCart.blocks[i].productSkus[j].isTouchMove = false
 
             else //左滑
 
-              _this.data.cart.blocks[i].productSkus[j].isTouchMove = true
+              _this.data.myCart.blocks[i].productSkus[j].isTouchMove = true
 
           }
         }
@@ -255,7 +242,7 @@ Component({
 
       //更新数据
       _this.setData({
-        cart: _this.data.cart
+        myCart: _this.data.myCart
       })
 
     },

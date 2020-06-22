@@ -8,6 +8,7 @@ const app = getApp()
 Page({
   data: {
     tag: "orderlist",
+    storeId:'',
     scrollHeight: 0,
     tabsSliderIndex: -1,
     tabs: [
@@ -102,7 +103,8 @@ Page({
 
     _this.setData({
       tabsSliderIndex: _tabsSliderIndex,
-      tabs: _this.data.tabs
+      tabs: _this.data.tabs,
+      storeId:ownRequest.getCurrentStoreId()
     })
 
     wx.createSelectorQuery().selectAll('.tabbar-items').boundingClientRect(function (rect) {
@@ -232,7 +234,7 @@ Page({
 
     console.log("pageIndex:" + pageIndex)
     return apiOrder.list({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       pageIndex: pageIndex,
       status: status,
       caller: 1

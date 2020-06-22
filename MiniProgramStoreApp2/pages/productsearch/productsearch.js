@@ -1,5 +1,6 @@
 const util = require('../../utils/util.js')
 const storeage = require('../../utils/storeageutil.js')
+const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
@@ -17,6 +18,8 @@ Page({
       pageCount: 0,
       items: []
     },
+    storeId:'',
+    shopMode:0,
     cartIsShow:false,
     scrollHeight: 0,
     specsDialog: {
@@ -25,6 +28,11 @@ Page({
   },
   onLoad: function (options) {
     var _this = this
+
+    _this.setData({
+      shopMode:app.globalData.currentShopMode,
+      storeId:ownRequest.getCurrentStoreId()
+    })
 
     var kindId = options.kindId == undefined ? "" : options.kindId
     var subjectId = options.subjectId == undefined ? "" : options.subjectId
@@ -35,10 +43,10 @@ Page({
     })
 
     apiProduct.initSearchPageData({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       kindId: kindId,
       subjectId: subjectId,
-      shopMode: app.globalData.currentShopMode
+      shopMode: _this.data.shopMode
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -116,14 +124,25 @@ Page({
       id: skuId,
       quantity: 1,
       selected: true,
-      shopMode: app.globalData.currentShopMode
+      shopMode: _this.data.shopMode
     });
 
     apiCart.operate({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       operate: 2,
       productSkus: productSkus
     }).then(function (res) {
+
+      if (res.result == 1) {
+        toast.show({
+          title: '加入购物车成功'
+        })
+      }
+      else {
+        toast.show({
+          title: res.message
+        })
+      }
 
     })
 
@@ -135,8 +154,8 @@ Page({
       specsDialog: {
         isShow: true,
         productSku:sku,
-        shopMode:app.globalData.currentShopMode,
-        storeId: ownRequest.getCurrentStoreId(),
+        shopMode:_this.data.shopMode,
+        storeId: _this.data.storeId,
       }
     })
   },
@@ -167,12 +186,12 @@ Page({
     var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
 
     return apiProduct.search({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: _this.data.storeId,
       pageIndex: pageIndex,
       pageSize: 10,
       kindId: kindId,
       subjectId: undefined,
-      shopMode: app.globalData.currentShopMode,
+      shopMode: _this.data.shopMode,
       name: ""
     },false).then(function (res) {
       if (res.result == 1) {
