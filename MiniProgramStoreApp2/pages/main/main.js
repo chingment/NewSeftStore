@@ -127,11 +127,10 @@ Page({
   onShow: function () {
     console.log("mian.onShow")
     var _this = this
-    app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
-
+    app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
     apiCart.pageData()
   },
   mainTabBarItemClick(e) {

@@ -24,6 +24,9 @@ Page({
     scrollHeight: 0,
     specsDialog: {
       isShow: false
+    },
+    cartDialog: {
+      isShow: false
     }
   },
   onLoad: function (options) {
@@ -112,7 +115,7 @@ Page({
   },
   goCart: function (e) {
     var _this=this
-    _this.setData({cartIsShow:true})
+    _this.setData({cartDialog:{isShow:true}})
   },
   addToCart: function (e) {
 

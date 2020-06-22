@@ -76,4 +76,4 @@
 		</view>
 	</view>
 </view>
-<cart id="cart" isShow="{{cartIsShow}}"></cart>
+<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>

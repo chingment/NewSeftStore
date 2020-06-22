@@ -12,8 +12,8 @@ Page({
     if (isClearCache != undefined) {
       wx.clearStorage()
     }
-    var storeId=ownRequest.getCurrentStoreId() 
-    
+    var storeId = ownRequest.getCurrentStoreId()
+
     function getStoreList(lat, lng) {
       apiStore.list({
         lat: lat,
@@ -28,21 +28,25 @@ Page({
       })
     }
 
+
+    var loaction = wx.getStorageSync("key_loaction");
+    if (loaction == null) {
+      loaction = { lat: 0, lng: 0 }
+    }
+
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
         var latitude = res.latitude
         var longitude = res.longitude
         wx.setStorageSync("key_loaction", { lat: latitude, lng: longitude })
-        getStoreList(latitude, longitude)
+        if (loaction.lat != latitude || loaction.lng != longitude) {
+          getStoreList(latitude, longitude)
+        }
       }
     })
 
-    var loaction = wx.getStorageSync("key_loaction");
 
-    if (loaction == null) {
-      loaction = { lat: 0, lng: 0 }
-    }
 
     getStoreList(loaction.lat, loaction.lng)
   },
