@@ -758,6 +758,8 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderId));
                 }
 
+                LogUtil.Info("进入PaySuccess修改订单,开始");
+
                 //if (order.Status != E_OrderStatus.WaitPay)
                 //{
                 //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderId));
@@ -797,8 +799,11 @@ namespace LocalS.BLL.Biz
 
                         var l_orderSubChilds = orderSubChilds.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
-                        foreach (var orderSubChild in orderSubChilds)
+                        foreach (var orderSubChild in l_orderSubChilds)
                         {
+
+                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + orderSubChild.PrdProductSkuId + ",Quantity:" + orderSubChild.Quantity);
+
                             orderSubChild.PayWay = payWay;
                             orderSubChild.PayStatus = E_OrderPayStatus.PaySuccess;
                             orderSubChild.PayedTime = DateTime.Now;
@@ -816,6 +821,8 @@ namespace LocalS.BLL.Biz
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                LogUtil.Info("进入PaySuccess修改订单,结束");
 
                 Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
                 MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
