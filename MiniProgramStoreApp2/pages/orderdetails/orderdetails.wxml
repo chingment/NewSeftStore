@@ -1,3 +1,5 @@
+<view class="page-ct">
+
 <view class="it it-ordbk pd-com">
 
 	<view class="it-tag">
@@ -106,7 +108,4 @@
 	</block>
 </view>
 <view class="line-space"></view>
-<!-- 
-<block wx:if="{{status==2000}}">
-  <button bindtap="goPay" class="btn-bottom bg-main">去支付</button>
-</block> -->
+</view>

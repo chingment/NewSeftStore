@@ -1,4 +1,4 @@
-<view class="pd-com">
+<view class="page-ct pd-com">
 <!-- url="/pages/main/main?storeId={{item.id}}" -->
   <view class="its-a">
     <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">

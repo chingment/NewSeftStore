@@ -1,5 +1,5 @@
-<view class="st-cart" style="height:{{height}}px;">
-  <view class="ct" style="height:100%;position:relative">
+<view class="page st-cart" style="height:{{height}}px;">
+  <view class="page-ct ct" style="height:100%;position:relative">
 
     <block wx:if="{{blocks.length>0}}">
       <scroll-view scroll-y="true" style="height:{{scrollHeight}}px;">

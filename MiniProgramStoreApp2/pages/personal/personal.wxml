@@ -1,6 +1,6 @@
 <scroll-view scroll-y="true" style="height:{{height}}px;">
-	<view class='st-personal'>
-		<view class="container">
+	<view class='page st-personal'>
+		<view class="page-ct container">
 			<view class='personal-userinfo'>
 				<view class='item-left'>
 					<view class="container">
@@ -124,5 +124,4 @@
 
 		</view>
 	</view>
-
 </scroll-view>

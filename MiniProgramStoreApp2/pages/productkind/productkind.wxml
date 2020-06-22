@@ -1,77 +1,78 @@
 <specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-
-
-<view  id="searchbox" class="searchbox cl1" bindtap="searchClick" >
-	<view class="searchbox-ct">
-   <view class="searchbox-icon" >
-    <image class="img" src="/content/default/images/icon_search_box.png" ></image>
-   </view>
-    <view class="searchbox-tips">
-      <swiper class="swiperitem"  autoplay="true" vertical="true" >
-        <block wx:for="{{searchtips}}"  wx:key="index" >
-          <swiper-item>
-            <text class="swiper-txt">{{item}}</text>
-          </swiper-item>
-        </block>
-      </swiper>
-    </view>
-	</view>
-</view>
-
-<view style="height:{{scrollHeight}}px;">
-	<view class='st-kind'>
-		<scroll-view class='kind-left-navbar' scroll-y="true">
-			<block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">
-				<view class="it {{ tab.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{tabsIndex}}" bindtap="itemClick">{{tab.name}}
+<view class="page">
+	<view class="page-ct">
+		<view id="searchbox" class="searchbox cl1" bindtap="searchClick">
+			<view class="searchbox-ct">
+				<view class="searchbox-icon">
+					<image class="img" src="/content/default/images/icon_search_box.png"></image>
 				</view>
-			</block>
-		</scroll-view>
-
-		<block wx:for="{{tabs}}" wx:for-index="tabIndex" wx:for-item="tab" wx:key="tabIndex">
-		
-			<own-scroll data-reply-index="{{tabIndex}}" class='kind-right-content {{tab.selected==true ? "":"hidden" }}' pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="productLoadMore" bind:_refresh="productRefesh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
-
-				<view class="prd-list-2">
-					<block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
-						<view class='it'>
-							<view class="it-left">
-								<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}" hover-class="none">
-									<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
-										<view class="isOffSell-tip">已下架</view>
-									</view>
-									<image class="img" src="{{item.mainImgUrl}}"></image>
-								</navigator>
-							</view>
-							<view class="it-right">
-								<text class="name font-gray">{{item.name}}</text>
-								<text class="briefInfo font-gray">{{item.briefDes}}</text>
-								<view class="area2">
-									<view class="price">
-										<text class="saleprice font-black">{{item.salePrice}}</text>
-										<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
-									</view>
-									<view class="operate">
-
-		<view wx:if="{{item.specIdxSkus.length<=1}}">
-										<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
-										</view>
-										<view wx:else>
-
-														<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
-
-													</view>
-									
-									
-									</view>
-								</view>
-							</view>
+				<view class="searchbox-tips">
+					<swiper class="swiperitem" autoplay="true" vertical="true">
+						<block wx:for="{{searchtips}}" wx:key="index">
+							<swiper-item>
+								<text class="swiper-txt">{{item}}</text>
+							</swiper-item>
+						</block>
+					</swiper>
+				</view>
+			</view>
+		</view>
+		<view style="height:{{scrollHeight}}px;">
+			<view class='st-kind'>
+				<scroll-view class='kind-left-navbar' scroll-y="true">
+					<block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">
+						<view class="it {{ tab.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{tabsIndex}}" bindtap="itemClick">{{tab.name}}
 						</view>
 					</block>
-				</view>
+				</scroll-view>
 
-			</own-scroll>
-		
-		
-		</block>
+				<block wx:for="{{tabs}}" wx:for-index="tabIndex" wx:for-item="tab" wx:key="tabIndex">
+
+					<own-scroll data-reply-index="{{tabIndex}}" class='kind-right-content {{tab.selected==true ? "":"hidden" }}' pulldownDistance="100" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="productLoadMore" bind:_refresh="productRefesh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
+
+						<view class="prd-list-2">
+							<block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
+								<view class='it'>
+									<view class="it-left">
+										<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}" hover-class="none">
+											<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+												<view class="isOffSell-tip">已下架</view>
+											</view>
+											<image class="img" src="{{item.mainImgUrl}}"></image>
+										</navigator>
+									</view>
+									<view class="it-right">
+										<text class="name font-gray">{{item.name}}</text>
+										<text class="briefInfo font-gray">{{item.briefDes}}</text>
+										<view class="area2">
+											<view class="price">
+												<text class="saleprice font-black">{{item.salePrice}}</text>
+												<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
+											</view>
+											<view class="operate">
+
+												<view wx:if="{{item.specIdxSkus.length<=1}}">
+													<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+												</view>
+												<view wx:else>
+
+													<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
+
+												</view>
+
+
+											</view>
+										</view>
+									</view>
+								</view>
+							</block>
+						</view>
+
+					</own-scroll>
+
+
+				</block>
+			</view>
+		</view>
 	</view>
 </view>

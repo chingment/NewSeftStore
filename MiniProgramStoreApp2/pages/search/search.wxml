@@ -1,4 +1,4 @@
-<view>
+<view class="page-ct">
 	<view class='nav' style='height:{{navH}}px'>
 		<view class="nav-ct" style='margin-top:{{statusBarHeight}}px;height:{{navH-statusBarHeight}}px'>
 			<view class="nav-goback" bindtap="navGoBackClick">

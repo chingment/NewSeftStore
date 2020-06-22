@@ -1,7 +1,7 @@
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
-<view class='login-box'>
+<view class='page-ct login-box'>
   <view class="logo">
     <image class="img" src='/content/default/images/logo.jpg'></image>
   </view>

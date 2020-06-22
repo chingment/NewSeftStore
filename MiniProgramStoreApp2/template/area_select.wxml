@@ -4,7 +4,7 @@
         <view class="area2-select-inner">
             <view class="area2-select-header">
                 <view class="area2-close-wrap" bindtap="areaClose">
-                    <image class="area2-close-icon" src="http://cdn.jiguo.com/static/WeiXin/images/center/area_close.png"></image>
+                    <image class="area2-close-icon" src="/content/default/images/icon_close.png"></image>
                 </view>
                 <view>所在区域</view>
             </view>

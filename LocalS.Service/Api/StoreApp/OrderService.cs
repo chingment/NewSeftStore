@@ -52,7 +52,15 @@ namespace LocalS.Service.Api.StoreApp
                         sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
                         sku.Quantity = orderSubChild.Quantity.ToString();
                         sku.ChargeAmount = orderSubChild.ChargeAmount.ToF2Price();
-                        sku.StatusName = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus).Text.NullToEmpty();
+
+                        if (orderSubChild.SellChannelRefType == E_SellChannelRefType.Machine)
+                        {
+                            sku.StatusName = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus).Text.NullToEmpty();
+                        }
+                        else
+                        {
+                            sku.StatusName = "";
+                        }
 
                         field.Value = sku;
 

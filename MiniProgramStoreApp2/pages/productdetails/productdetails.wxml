@@ -2,10 +2,9 @@
 <template is="showToast" data="{{showToast: showToast}}" />
 
 <specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>
 
-
-
-<view class="details">
+<view class="page-ct details">
 	<view class="details-main">
 		<swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
 			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="index">
@@ -76,4 +75,3 @@
 		</view>
 	</view>
 </view>
-<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>

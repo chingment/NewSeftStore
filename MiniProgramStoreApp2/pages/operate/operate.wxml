@@ -1,7 +1,5 @@
 
-
-<view id="block_area" class="pd-com" >
-
+<view id="block_area" class="page-ct pd-com" >
   <block wx:if="{{!result.isComplete}}">
     <view class="operate-check">
       <canvas class="it-countdown" style="width: 180px; height: 180px;margin:auto" canvas-id="secondCanvas"></canvas>

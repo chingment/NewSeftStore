@@ -1,9 +1,9 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 <specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>
 
-
-<view class="page skeleton">
+<view class="page-ct skeleton">
 
 	<view class="search-condition" style="height:62rpx">
 		<block wx:if="{{condition_Kinds.length>1}}">
@@ -65,7 +65,5 @@
 		<view class="number">{{cart.count}}</view>
 		<image class="img" src="/content/default/images/cart.png"></image>
 	</view>
-
-	<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>
 
 </view>

@@ -1,16 +1,9 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}" data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
-
-
 <specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
 
-<view class="page skeleton" wx:if="{{ pageIsReady }}">
-
-
-
-	<scroll-view scroll-y="true" style="height:{{height}}px;">
-
-
-		<view class="st-index pd-com">
+<scroll-view scroll-y="true" style="height:{{height}}px;">
+	<view class="page st-index pd-com skeleton" wx:if="{{ pageIsReady }}">
+		<view class="page-ct">
 			<view style="height:61rpx;width:100%">
 				<view class="store" bindtap="goSelectStore">
 					<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
@@ -29,7 +22,6 @@
 					</view>
 				</view>
 			</view>
-
 			<view class="banner skeleton-rect">
 				<view class="ct">
 					<block wx:if="{{banner.imgs.length>0}}">
@@ -48,7 +40,6 @@
 					</block>
 				</view>
 			</view>
-
 			<view class="fc">
 				<view class="ct">
 					<view class='its-fc'>
@@ -152,6 +143,5 @@
 				</view>
 			</view>
 		</view>
-	</scroll-view>
-
-</view>
+	</view>
+</scroll-view>
