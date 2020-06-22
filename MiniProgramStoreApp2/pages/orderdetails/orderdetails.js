@@ -6,8 +6,6 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()
 
-var orderId = null
-
 Page({
 
   /**
@@ -22,7 +20,7 @@ Page({
    */
   onLoad: function(options) {
     var _this = this
-    orderId = options.id == undefined ? "" : options.id
+    var orderId = options.id == undefined ? "" : options.id
 
     apiOrder.details({
       id: orderId

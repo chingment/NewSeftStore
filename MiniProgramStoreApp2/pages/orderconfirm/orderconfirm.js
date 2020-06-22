@@ -6,58 +6,7 @@ const apiCart = require('../../api/cart.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()
 
-var productSkus = null
-var orderId = null
-var getData = function (_this) {
-
-  var couponId = _this.data.couponId
-
-
-  apiOrder.confirm({
-    orderId: orderId,
-    storeId: _this.data.storeId,
-    productSkus: productSkus,
-    couponId: couponId
-  }).then(function (res) {
-    if (res.result == 1) {
-      var d = res.data
-
-
-
-      var blocks = d.blocks
-      var tabShopModeByMall = 0
-      for (var i = 0; i < blocks.length; i++) {
-
-        if (blocks[i].shopMode == 1) {
-          if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
-            tabShopModeByMall = 0
-          }
-          else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
-            tabShopModeByMall = 1
-          }
-        }
-      }
-
-      console.log("tabShopModeByMall:" + tabShopModeByMall)
-
-      _this.setData({
-        tabShopModeByMall: tabShopModeByMall,
-        orderId: orderId,
-        blocks: d.blocks,
-        subtotalItems: d.subtotalItems,
-        actualAmount: d.actualAmount,
-        originalAmount: d.originalAmount,
-        coupon: d.coupon
-      })
-    }
-  })
-}
-
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
@@ -71,62 +20,35 @@ Page({
     },
     curSelPayOption: null
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     var _this = this
-    orderId = options.orderId == undefined ? null : options.orderId
-    productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
-    _this.setData({storeId: ownRequest.getCurrentStoreId()})
-    this.buildPayOptions()
+    var orderId = options.orderId == undefined ? null : options.orderId
+    var productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
+    _this.setData({
+      storeId: ownRequest.getCurrentStoreId(),
+      orderId:orderId,
+      productSkus:productSkus
+    })
+    _this.buildPayOptions()
+    _this.getConfirmData()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
   onReady: function () {
     var _this = this
-    getData(_this)
+
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () { },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
   onHide: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
   onUnload: function () {
 
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
   onPullDownRefresh: function () {
 
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
   onReachBottom: function () {
 
   },
-
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage: function () {
 
   },
@@ -145,7 +67,7 @@ Page({
     var _this = this
 
     var couponId = _this.data.couponId
-
+    var productSkus= _this.data.productSkus
     wx.navigateTo({
       url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponId=" + JSON.stringify(couponId),
       success: function (res) {
@@ -227,7 +149,7 @@ Page({
 
     }
 
-    if (orderId == undefined || orderId == null) {
+    if (_this.data.orderId == undefined || _this.data.orderId  == null) {
 
 
       apiOrder.reserve({
@@ -236,10 +158,11 @@ Page({
         source: 3
       }).then(function (res) {
         if (res.result == 1) {
-          orderId = res.data.orderId
+          var d=res.data
           apiCart.pageData({
             success: function (res) { }
           })
+          _this.setData({orderId:d.orderId})
           _this.goPay(_this.data.curSelPayOption, null)
         } else {
           toast.show({
@@ -253,30 +176,33 @@ Page({
     }
   },
   goPay: function (payOption, blocks) {
-
+    var _this=this
     apiOrder.buildPayParams({
-      orderId: orderId,
+      orderId: _this.data.orderId,
       payCaller: payOption.payCaller,
       blocks: blocks,
       payPartner: payOption.payPartner
     }).then(function (res) {
       if (res.result == 1) {
 
-        var data = res.data;
+        var d = res.data;
+
+        _this.setData({orderId:d.orderId})
+
         wx.requestPayment({
-          'timeStamp': data.timestamp,
-          'nonceStr': data.nonceStr,
-          'package': data.package,
-          'signType': data.signType,
-          'paySign': data.paySign,
+          'timeStamp': d.timestamp,
+          'nonceStr': d.nonceStr,
+          'package': d.package,
+          'signType': d.signType,
+          'paySign': d.paySign,
           'success': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + data.orderId + '&type=1&caller=1'
+              url: '/pages/operate/operate?id=' + d.orderId + '&type=1&caller=1'
             })
           },
           'fail': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + data.orderId + '&type=2&caller=1'
+              url: '/pages/operate/operate?id=' + d.orderId + '&type=2&caller=1'
             })
           }
         })
@@ -317,7 +243,45 @@ Page({
     }
 
 
+  },
+  getConfirmData:function (_this) {
+    var _this= this
+    var _data=_this.data
+    apiOrder.confirm({
+      orderId: _data.orderId,
+      storeId: _data.storeId,
+      productSkus: _data.productSkus,
+      couponId:  _data.couponId
+    }).then(function (res) {
+      if (res.result == 1) {
+        var d = res.data
+        var blocks = d.blocks
+        var tabShopModeByMall = 0
+        for (var i = 0; i < blocks.length; i++) {
+          if (blocks[i].shopMode == 1) {
+            if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
+              tabShopModeByMall = 0
+            }
+            else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
+              tabShopModeByMall = 1
+            }
+          }
+        }
+  
+        console.log("tabShopModeByMall:" + tabShopModeByMall)
+  
+        _this.setData({
+          tabShopModeByMall: tabShopModeByMall,
+          blocks: d.blocks,
+          subtotalItems: d.subtotalItems,
+          actualAmount: d.actualAmount,
+          originalAmount: d.originalAmount,
+          coupon: d.coupon
+        })
+      }
+    })
   }
+  
 
 
 })
