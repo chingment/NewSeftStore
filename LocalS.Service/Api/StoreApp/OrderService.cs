@@ -540,6 +540,65 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
 
+            var ret = new RetOrderReceiptTimeAxis();
+
+
+            var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == rup.UniqueId).OrderByDescending(m => m.CreateTime).ToList();
+
+            if (orderPickupLogs.Count > 0)
+            {
+                string orderId = orderPickupLogs[0].OrderId;
+                E_SellChannelRefType sellChannelRefType = orderPickupLogs[0].SellChannelRefType;
+                string sellChannelRefId = orderPickupLogs[0].SellChannelRefId;
+                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == sellChannelRefId).FirstOrDefault();
+
+                switch (sellChannelRefType)
+                {
+                    case E_SellChannelRefType.Mall:
+                        ret.RecordTop.CircleText = "收";
+                        ret.RecordTop.Description = orderSub.ReceptionAddress;
+                        break;
+                    case E_SellChannelRefType.Machine:
+                        ret.RecordTop.CircleText = "提";
+                        ret.RecordTop.Description = orderSub.ReceptionMarkName;
+                        break;
+                }
+
+                for (var i = orderPickupLogs.Count - 1; i >= 0; i--)
+                {
+                    var record = new RetOrderReceiptTimeAxis.RecordModel();
+                    string time1 = orderPickupLogs[i].CreateTime.ToString("MM-dd");
+                    DateTime dateNow = DateTime.Parse(DateTime.Now.ToString("yyyMMdd"));
+                    DateTime createTime = DateTime.Parse(orderPickupLogs[i].CreateTime.ToString("yyyMMdd"));
+                    if (dateNow == createTime)
+                    {
+                        time1 = "今天";
+                    }
+                    else if ((dateNow - createTime).TotalDays == 1)
+                    {
+                        time1 = "昨天";
+                    }
+                    else if ((dateNow - createTime).TotalDays == 2)
+                    {
+                        time1 = "前天";
+                    }
+                    record.Time1 = time1;
+                    record.Time2 = orderPickupLogs[i].CreateTime.ToString("HH:mm");
+                    record.Description = orderPickupLogs[i].ActionName;
+                    record.Status = orderPickupLogs[i].ActionStatusName;
+                    if (i == orderPickupLogs.Count - 1) {
+                        record.IsLastest = true;
+                    }
+                    else {
+                        record.IsLastest = false;
+                    }
+
+                    ret.Records.Add(record);
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
             return result;
         }
 
