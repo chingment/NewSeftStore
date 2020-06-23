@@ -24,6 +24,8 @@
         <view class='getAddress-text'>[收货地址] 广东省深圳市南山区 南山街道 亿利达大厦</view>
       </view>
     </view>
+
+    
     <!-- 顶部收货地址半个时间轴线 -->
     <view class='noReach-online-top-close'></view>
 

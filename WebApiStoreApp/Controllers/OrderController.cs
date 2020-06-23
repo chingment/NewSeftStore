@@ -173,5 +173,14 @@ namespace WebApiStoreApp.Controllers
             }
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
         }
+
+
+        [HttpGet]
+        public OwnApiHttpResponse ReceiptTimeAxis([FromUri]RupOrderReceiptTimeAxis rup)
+        {
+            IResult result = StoreAppServiceFactory.Order.ReceiptTimeAxis(this.CurrentUserId, this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+        
     }
 }

@@ -534,5 +534,14 @@ namespace LocalS.Service.Api.StoreApp
             return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
 
+
+        public CustomJsonResult ReceiptTimeAxis(string operater, string clientUserId, RupOrderReceiptTimeAxis rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            return result;
+        }
+
     }
 }
