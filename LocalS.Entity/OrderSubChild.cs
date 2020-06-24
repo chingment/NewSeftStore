@@ -62,7 +62,6 @@ namespace LocalS.Entity
         public E_OrderPayStatus PayStatus { get; set; }
         public E_OrderPayWay PayWay { get; set; }
         public DateTime? PayedTime { get; set; }
-
         public bool ExPickupIsHappen { get; set; }
         public DateTime? ExPickupHappenTime { get; set; }
         public bool ExPickupIsHandle { get; set; }
@@ -73,7 +72,7 @@ namespace LocalS.Entity
         public DateTime? PickupEndTime { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
-        public int LastPickupActionId { get; set; }
-        public int LastPickupActionStatusCode { get; set; }
+        public string PickupFlowLastDesc { get; set; }
+        public DateTime? PickupFlowLastTime { get; set; }
     }
 }

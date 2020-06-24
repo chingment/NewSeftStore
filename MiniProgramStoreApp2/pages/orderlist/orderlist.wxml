@@ -67,6 +67,25 @@
 												</view>
 											</view>
 
+
+
+											<view wx:if="{{block.receiptInfo!=null}}" class="block-receiptinfo">
+												<navigator class="ct" hover-class="none" url="/pages/receipttimeaxis/receipttimeaxis?uniqueId={{block.uniqueId}}&uniqueType={{block.uniqueType}}" >
+													<view class="content">
+														<view class="des">
+															<image class="img" src="/content/default/images/icon_express.png"></image> <text class="txt">{{block.receiptInfo.description}}</text>
+														</view>
+														<view class="time">
+															<text class="txt">{{block.receiptInfo.lastTime}}</text>
+														</view>
+													</view>
+													<view class="more">
+														<image class="img" src="/content/default/images/col_nav_right.png"></image>
+													</view>
+												</navigator>
+											</view>
+
+
 											<view class="block-field">
 
 

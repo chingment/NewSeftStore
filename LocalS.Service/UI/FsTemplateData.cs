@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace LocalS.Service.UI
 
         public class TmplOrderSku
         {
+            public string UniqueId { get; set; }
+            public E_UniqueType UniqueType { get; set; }
             public string Id { get; set; }
             public string Name { get; set; }
             public string MainImgUrl { get; set; }

@@ -5,6 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_UniqueType
+    {
+        Unknow = 0,
+        Order = 1,
+        OrderSub = 2,
+        OrderSubChild = 3
+    }
+
     public enum E_SellChannelRefType
     {
         Unknow = 0,

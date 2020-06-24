@@ -1027,7 +1027,51 @@ page {
   margin-top: 20rpx;
   font-size:24rpx
   }
+
+  .it-ordbk .block-receiptinfo {
+    padding: 8rpx;
+  }
   
+  .it-ordbk .block-receiptinfo >.ct{
+    background-color: #f8f5f5;
+    border-radius: 10rpx;
+    display: flex;
+    padding: 18rpx;
+
+  }
+
+  .it-ordbk .block-receiptinfo  .content{
+    flex: 1;
+  }
+
+  .it-ordbk .block-receiptinfo  .des{
+    font-size: 26rpx;
+    color: #363636;
+  }
+
+  .it-ordbk .block-receiptinfo  .des .img{
+    width: 36rpx;
+    height: 36rpx;
+    margin-bottom: -5rpx
+  }
+
+  .it-ordbk .block-receiptinfo  .time {
+     color: #adadad;
+     font-size: 24rpx;
+     margin-top: 10rpx
+  }
+
+  .it-ordbk .block-receiptinfo  .more{
+    width: 40rpx;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .it-ordbk .block-receiptinfo  .more .img{
+    width: 12rpx;
+    height: 16rpx;
+  }
 
   .btn-selectSpecs{
     background: #ffb101;

@@ -45,9 +45,16 @@ namespace LocalS.Entity
         public bool ExIsHandle { get; set; }
         public DateTime? ExHandleTime { get; set; }
         public string ExHandleRemark { get; set; }
+        public string PickupFlowLastDesc { get; set; }
+        public DateTime? PickupFlowLastTime { get; set; }
+        public string ExpressNumber { get; set; }
+        public string ExpressComName { get; set; }
+        public string ExpressComId { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+
+
     }
 }

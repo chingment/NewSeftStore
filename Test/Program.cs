@@ -105,6 +105,9 @@ namespace Test
         {
             log.InfoFormat("程序开始");
 
+            //string a11 = "dasdsad";
+            //string a22 = null;
+            //string a33 = a11 + a22;
 
             var p1 = new List<BuildOrderSub.ProductSku>();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,13 @@ namespace LocalS.Service.UI
         {
             this.Tag = new FsTag();
             this.Data = new List<FsTemplateData>();
-            this.Qrcode = new FsQrcode();
         }
 
+        public string UniqueId { get; set; }
+        public E_UniqueType UniqueType { get; set; }
         public FsTag Tag { get; set; }
         public List<FsTemplateData> Data { get; set; }
         public FsQrcode Qrcode { get; set; }
+        public FsReceiptInfo ReceiptInfo { get; set; }
     }
 }

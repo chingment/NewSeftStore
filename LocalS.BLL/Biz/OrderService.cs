@@ -793,6 +793,23 @@ namespace LocalS.BLL.Biz
                         orderSub.PayWay = payWay;
                         orderSub.PayStatus = E_OrderPayStatus.PaySuccess;
                         orderSub.PayedTime = DateTime.Now;
+
+                        switch (orderSub.ReceiveMode)
+                        {
+                            case E_ReceiveMode.Delivery:
+                                orderSub.PickupFlowLastDesc = "您提交了订单，等待发货";
+                                orderSub.PickupFlowLastTime = DateTime.Now;
+                                break;
+                            case E_ReceiveMode.StoreSelfTake:
+                                orderSub.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】,出示取货码【{1}】，给店员", orderSub.ReceptionMarkName, orderSub.PickupCode);
+                                orderSub.PickupFlowLastTime = DateTime.Now;
+                                break;
+                            case E_ReceiveMode.MachineSelfTake:
+                                orderSub.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", orderSub.ReceptionMarkName, orderSub.SellChannelRefId, orderSub.PickupCode);
+                                orderSub.PickupFlowLastTime = DateTime.Now;
+                                break;
+                        }
+
                         orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
                         orderSub.MendTime = DateTime.Now;
 

@@ -26,6 +26,9 @@ namespace LocalS.Service.Api.StoreApp
             {
                 var block = new FsBlock();
 
+                block.UniqueId = orderSub.Id;
+                block.UniqueType = E_UniqueType.OrderSub;
+
                 block.Tag.Name = new FsText(orderSub.SellChannelRefName, "");
 
 
@@ -36,7 +39,13 @@ namespace LocalS.Service.Api.StoreApp
                         block.Tag.Desc = new FsField("取货码", "", orderSub.PickupCode, "#f18d00");
                         block.Qrcode = new FsQrcode { Code = orderSub.PickupCode, Url = "", Remark = string.Format("请在机器（编号：{0}）输入取货码或在扫码枪扫一扫", orderSub.SellChannelRefId) };
                     }
+                    else if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall)
+                    {
+                        block.Tag.Desc = new FsField("", "", "", "");
+                        block.ReceiptInfo = new FsReceiptInfo { LastTime = orderSub.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = orderSub.PickupFlowLastDesc };
+                    }
                 }
+
 
                 var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
 
@@ -47,6 +56,9 @@ namespace LocalS.Service.Api.StoreApp
                         var field = new FsTemplateData();
                         field.Type = "SkuTmp";
                         var sku = new FsTemplateData.TmplOrderSku();
+                        sku.UniqueId = orderSubChild.Id;
+                        sku.UniqueType = E_UniqueType.OrderSubChild;
+
                         sku.Id = orderSubChild.PrdProductSkuId;
                         sku.Name = orderSubChild.PrdProductSkuName;
                         sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
@@ -80,7 +92,6 @@ namespace LocalS.Service.Api.StoreApp
                         field.Type = "SkuTmp";
 
                         var sku = new FsTemplateData.TmplOrderSku();
-
                         sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
                         sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
                         sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
@@ -586,10 +597,12 @@ namespace LocalS.Service.Api.StoreApp
                     record.Time2 = orderPickupLogs[i].CreateTime.ToString("HH:mm");
                     record.Description = orderPickupLogs[i].ActionName;
                     record.Status = orderPickupLogs[i].ActionStatusName;
-                    if (i == orderPickupLogs.Count - 1) {
+                    if (i == orderPickupLogs.Count - 1)
+                    {
                         record.IsLastest = true;
                     }
-                    else {
+                    else
+                    {
                         record.IsLastest = false;
                     }
 

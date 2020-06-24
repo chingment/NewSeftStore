@@ -365,6 +365,8 @@ namespace LocalS.BLL.Biz
                         Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, orderSub.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = orderSub.OrderId, OrderSubId = orderSub.Id, MachineId = orderSub.SellChannelRefId });
                     }
 
+
+
                     foreach (var orderSubChild in orderSubChilds)
                     {
                         if (model.Status == E_OrderPickupStatus.Exception)
@@ -386,8 +388,8 @@ namespace LocalS.BLL.Biz
                         {
                             if (orderSubChild.Id == model.UniqueId)
                             {
-                                orderSubChild.LastPickupActionId = model.ActionId;
-                                orderSubChild.LastPickupActionStatusCode = model.ActionStatusCode;
+                                orderSubChild.PickupFlowLastDesc = model.ActionName + model.ActionStatusName;
+                                orderSubChild.PickupFlowLastTime = DateTime.Now;
 
                                 if (model.Status == E_OrderPickupStatus.Taked)
                                 {
