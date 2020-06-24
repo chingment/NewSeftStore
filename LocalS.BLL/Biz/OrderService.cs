@@ -816,6 +816,7 @@ namespace LocalS.BLL.Biz
                         var orderPickupLog = new OrderPickupLog();
                         orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         orderPickupLog.OrderId = order.Id;
+                        orderPickupLog.OrderSubId = orderSub.Id;
                         orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
                         orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
                         orderPickupLog.UniqueId = orderSub.Id;

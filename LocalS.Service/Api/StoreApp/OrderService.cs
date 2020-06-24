@@ -542,34 +542,40 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetOrderReceiptTimeAxis();
 
-
-            var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == rup.UniqueId).OrderByDescending(m => m.CreateTime).ToList();
-
-            if (orderPickupLogs.Count > 0)
+            OrderSub orderSub = null;
+            List<OrderPickupLog> orderPickupLogs = null;
+            switch (rup.UniqueType)
             {
-                string orderId = orderPickupLogs[0].OrderId;
-                E_SellChannelRefType sellChannelRefType = orderPickupLogs[0].SellChannelRefType;
-                string sellChannelRefId = orderPickupLogs[0].SellChannelRefId;
-                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == sellChannelRefId).FirstOrDefault();
+                case E_UniqueType.OrderSub:
+                    orderSub = CurrentDb.OrderSub.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
+                    orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.OrderSubId == rup.UniqueId).OrderByDescending(m => m.CreateTime).ToList();
+                    break;
+            }
 
-                switch (sellChannelRefType)
+            if (orderSub != null)
+            {
+                switch (orderSub.ReceiveMode)
                 {
-                    case E_SellChannelRefType.Mall:
+                    case E_ReceiveMode.Delivery:
                         ret.RecordTop.CircleText = "收";
                         ret.RecordTop.Description = orderSub.ReceptionAddress;
                         break;
-                    case E_SellChannelRefType.Machine:
+                    case E_ReceiveMode.StoreSelfTake:
+                        ret.RecordTop.CircleText = "自";
+                        ret.RecordTop.Description = orderSub.ReceptionAddress;
+                        break;
+                    case E_ReceiveMode.MachineSelfTake:
                         ret.RecordTop.CircleText = "提";
                         ret.RecordTop.Description = orderSub.ReceptionMarkName;
                         break;
                 }
 
-                for (var i = orderPickupLogs.Count - 1; i >= 0; i--)
+                for (var i = 0; i < orderPickupLogs.Count; i++)
                 {
                     var record = new RetOrderReceiptTimeAxis.RecordModel();
                     string time1 = orderPickupLogs[i].CreateTime.ToString("MM-dd");
-                    DateTime dateNow = DateTime.Parse(DateTime.Now.ToString("yyyMMdd"));
-                    DateTime createTime = DateTime.Parse(orderPickupLogs[i].CreateTime.ToString("yyyMMdd"));
+                    DateTime dateNow = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
+                    DateTime createTime = DateTime.Parse(orderPickupLogs[i].CreateTime.ToString("yyyy-MM-dd"));
                     if (dateNow == createTime)
                     {
                         time1 = "今天";
@@ -584,9 +590,9 @@ namespace LocalS.Service.Api.StoreApp
                     }
                     record.Time1 = time1;
                     record.Time2 = orderPickupLogs[i].CreateTime.ToString("HH:mm");
-                    record.Description = orderPickupLogs[i].ActionName;
+                    record.Description = orderPickupLogs[i].ActionRemark;
                     record.Status = orderPickupLogs[i].ActionStatusName;
-                    if (i == orderPickupLogs.Count - 1)
+                    if (i == 0)
                     {
                         record.IsLastest = true;
                     }
@@ -598,6 +604,8 @@ namespace LocalS.Service.Api.StoreApp
                     ret.Records.Add(record);
                 }
             }
+
+            ret.Top = null;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

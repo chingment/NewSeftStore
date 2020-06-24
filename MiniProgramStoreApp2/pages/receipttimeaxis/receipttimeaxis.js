@@ -1,17 +1,47 @@
-// pages/receipttimeaxis/receipttimeaxis.js
+const config = require('../../config')
+const toast = require('../../utils/toastutil')
+const storeage = require('../../utils/storeageutil.js')
+const QRCode = require('../../utils/qrcode.js')
+const ownRequest = require('../../own/ownRequest.js')
+const apiOrder = require('../../api/order.js')
+const app = getApp()
+
+
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    receiptTimeAxis:{
+      top:null,
+      recordTop:{
+        circleText:'',
+        description:''
+      },
+      records:[]
+    }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var _this=this
+    var uniqueId = options.uniqueId == undefined ? "" : options.uniqueId
+    var uniqueType = options.uniqueType == undefined ? "" : options.uniqueType
+
+
+    apiOrder.receiptTimeAxis({
+      uniqueId: uniqueId,
+      uniqueType:uniqueType
+    }).then(function (res) {
+      if (res.result == 1) {
+  
+        _this.setData({receiptTimeAxis:res.data})
+      }
+    })
 
   },
 

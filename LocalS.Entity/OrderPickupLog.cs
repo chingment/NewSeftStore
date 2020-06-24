@@ -10,6 +10,7 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string OrderId { get; set; }
+        public string OrderSubId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public string UniqueId { get; set; }

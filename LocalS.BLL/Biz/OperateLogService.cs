@@ -370,6 +370,7 @@ namespace LocalS.BLL.Biz
                         var l_orderPickupLog = new OrderPickupLog();
                         l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         l_orderPickupLog.OrderId = order.Id;
+                        l_orderPickupLog.OrderSubId = orderSub.Id;
                         l_orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
                         l_orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
                         l_orderPickupLog.UniqueId = orderSub.Id;
@@ -385,6 +386,7 @@ namespace LocalS.BLL.Biz
                     var orderPickupLog = new OrderPickupLog();
                     orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                     orderPickupLog.OrderId = model.OrderId;
+                    orderPickupLog.OrderSubId = orderSub.Id;
                     orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                     orderPickupLog.SellChannelRefId = machineId;
                     orderPickupLog.UniqueId = model.UniqueId;
@@ -463,6 +465,7 @@ namespace LocalS.BLL.Biz
                         var l_orderPickupLog = new OrderPickupLog();
                         l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         l_orderPickupLog.OrderId = order.Id;
+                        l_orderPickupLog.OrderSubId = orderSub.Id;
                         l_orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
                         l_orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
                         l_orderPickupLog.UniqueId = orderSub.Id;
@@ -524,6 +527,7 @@ namespace LocalS.BLL.Biz
                             var l_orderPickupLog = new OrderPickupLog();
                             l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             l_orderPickupLog.OrderId = order.Id;
+                            l_orderPickupLog.OrderSubId = orderSub.Id;
                             l_orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
                             l_orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
                             l_orderPickupLog.UniqueId = orderSub.Id;

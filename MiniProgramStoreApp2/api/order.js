@@ -57,11 +57,20 @@ function buildPayOptions(urlParams) {
   })
 }
 
+function receiptTimeAxis(urlParams) {
+
+  return lumos.getJson({
+     url: config.apiUrl.orderReceiptTimeAxis,
+     urlParams: urlParams
+   })
+ }
+
 module.exports = {
   confirm: confirm,
   reserve: reserve,
   list: list,
   details: details,
+  receiptTimeAxis:receiptTimeAxis,
   cancle: cancle,
   buildPayParams: buildPayParams,
   buildPayOptions: buildPayOptions

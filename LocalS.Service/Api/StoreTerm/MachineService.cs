@@ -428,6 +428,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 var orderPickupLog = new OrderPickupLog();
                                 orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                                 orderPickupLog.OrderId = orderSubChild.OrderId;
+                                orderPickupLog.OrderSubId = orderSubChild.OrderSubId;
                                 orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                                 orderPickupLog.SellChannelRefId = orderSubChild.SellChannelRefId;
                                 orderPickupLog.UniqueId = orderSubChild.Id;
@@ -458,6 +459,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 var orderPickupLog = new OrderPickupLog();
                                 orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                                 orderPickupLog.OrderId = orderSubChild.OrderId;
+                                orderPickupLog.OrderSubId = orderSubChild.OrderSubId;
                                 orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                                 orderPickupLog.SellChannelRefId = orderSubChild.SellChannelRefId;
                                 orderPickupLog.UniqueId = orderSubChild.Id;

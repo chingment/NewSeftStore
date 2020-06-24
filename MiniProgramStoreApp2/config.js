@@ -36,6 +36,7 @@ var config = {
     orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
     orderDetails: `${host}/Order/Details`,
+    orderReceiptTimeAxis: `${host}/Order/ReceiptTimeAxis`,
     kindPageData: `${host}/Kind/PageData`,
     personalPageData: `${host}/Personal/PageData`,
     tobeSearch: `${host}/Search/TobeSearch`,
