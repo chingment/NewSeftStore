@@ -552,19 +552,32 @@ namespace LocalS.Service.Api.StoreApp
                     break;
             }
 
+
             if (orderSub != null)
             {
+                var merch = CurrentDb.Merch.Where(m => m.Id == orderSub.MerchId).FirstOrDefault();
+
                 switch (orderSub.ReceiveMode)
                 {
                     case E_ReceiveMode.Delivery:
+
+                        ret.Top = null;
                         ret.RecordTop.CircleText = "收";
                         ret.RecordTop.Description = orderSub.ReceptionAddress;
                         break;
                     case E_ReceiveMode.StoreSelfTake:
+                        ret.Top.CircleText = "自";
+                        ret.Top.Field1 = orderSub.ReceptionMarkName;
+                        ret.Top.Field2 = orderSub.ReceptionAddress;
+                        ret.Top.Field3 = string.Format("客服热线 {0}", merch.CsrPhoneNumber);
                         ret.RecordTop.CircleText = "自";
                         ret.RecordTop.Description = orderSub.ReceptionAddress;
                         break;
                     case E_ReceiveMode.MachineSelfTake:
+                        ret.Top.CircleText = "提";
+                        ret.Top.Field1 = orderSub.ReceptionMarkName;
+                        ret.Top.Field2 = orderSub.ReceptionAddress;
+                        ret.Top.Field3 = string.Format("客服热线 {0}", merch.CsrPhoneNumber);
                         ret.RecordTop.CircleText = "提";
                         ret.RecordTop.Description = orderSub.ReceptionMarkName;
                         break;
@@ -590,8 +603,8 @@ namespace LocalS.Service.Api.StoreApp
                     }
                     record.Time1 = time1;
                     record.Time2 = orderPickupLogs[i].CreateTime.ToString("HH:mm");
-                    record.Description = orderPickupLogs[i].ActionRemark;
-                    record.Status = orderPickupLogs[i].ActionStatusName;
+                    record.Description = orderPickupLogs[i].ActionRemark.NullToEmpty();
+                    record.Status = orderPickupLogs[i].ActionStatusName.NullToEmpty();
                     if (i == 0)
                     {
                         record.IsLastest = true;
@@ -605,7 +618,6 @@ namespace LocalS.Service.Api.StoreApp
                 }
             }
 
-            ret.Top = null;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

@@ -11,10 +11,11 @@ page {
   width: 710rpx;
   height: 155rpx;
   background: #fff;
-  margin: 10rpx auto;
+  margin: 10rpx auto 0rpx 10rpx;
   display: flex;
   border-radius: 10rpx;
 }
+
 
 .topExpress-left {
   width: 100rpx;
@@ -34,6 +35,18 @@ page {
   padding: 20rpx 0;
 }
 
+.topExpress-icon{
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  background: #fe4f33;
+  font-size: 32rpx;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .topExpress-right-middle {
   font-size: 22rpx;
 }
@@ -44,11 +57,11 @@ page {
 }
 
 .expressRecord {
+  margin: 20rpx auto 0rpx auto;
   width: 710rpx;
   padding-top: 30rpx;
   padding-bottom: 200rpx;
   background: #fff;
-  margin: 0 auto;
   border-radius: 10rpx;
 }
 

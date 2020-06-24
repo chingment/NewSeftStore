@@ -1028,10 +1028,7 @@ page {
   font-size:24rpx
   }
 
-  .it-ordbk .block-receiptinfo {
-    padding: 8rpx;
-  }
-  
+
   .it-ordbk .block-receiptinfo >.ct{
     background-color: #f8f5f5;
     border-radius: 10rpx;
