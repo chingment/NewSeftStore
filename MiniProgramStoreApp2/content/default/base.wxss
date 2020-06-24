@@ -1023,8 +1023,7 @@ page {
   margin: auto;
   display: block;
   text-align: center;
-  line-height: 24rpx;
-  margin-top: 20rpx;
+  line-height: 60rpx;
   font-size:24rpx
   }
 
