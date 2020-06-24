@@ -10,6 +10,7 @@ var initdata = function (that) {
 
 Page({
   data: {
+    tag: "personalinfo",
     delBtnWidth: 180,//删除按钮宽度单位（rpx）
     list: [
       {

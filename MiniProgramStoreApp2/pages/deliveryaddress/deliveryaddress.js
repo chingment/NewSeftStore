@@ -9,6 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tag:'deliveryaddress',
     operate: 0,
     orderBlockIndex: 0,
     list: []
@@ -115,11 +116,13 @@ Page({
     if (_this.data.operate == 2) {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
+      if(prevPage.data.tag=='orderconfirm')
       prevPage.data.blocks[_this.data.orderBlockIndex].delivery.id = deliveryAddress.id
       prevPage.data.blocks[_this.data.orderBlockIndex].delivery.consignee = deliveryAddress.consignee
       prevPage.data.blocks[_this.data.orderBlockIndex].delivery.phoneNumber = deliveryAddress.phoneNumber
       prevPage.data.blocks[_this.data.orderBlockIndex].delivery.address = deliveryAddress.address
       prevPage.data.blocks[_this.data.orderBlockIndex].delivery.areaName = deliveryAddress.areaName
+      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.areaCode = deliveryAddress.areaCode
       prevPage.data.blocks[_this.data.orderBlockIndex].delivery.isDefault = deliveryAddress.isDefault
       prevPage.setData({
         blocks: prevPage.data.blocks

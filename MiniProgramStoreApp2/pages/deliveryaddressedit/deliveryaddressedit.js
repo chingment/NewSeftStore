@@ -8,6 +8,7 @@ const app = getApp()
 
 Page({
   data: {
+    tag:'deliveryaddressedit',
     address: { area: "" },
     showArea: false,
     currentTab: 1,

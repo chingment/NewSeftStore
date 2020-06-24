@@ -11,6 +11,7 @@ Component({
     }
   },
   data: {
+    tag: "personal",
     isOnReady:false,
     isLogin:false
   },

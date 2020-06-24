@@ -5,6 +5,7 @@ const app = getApp()
 
 Page({
   data: {
+    tag: "operate",
     result: {
       isComplete: false,
       message: "正在处理，请耐心等候",

@@ -14,6 +14,7 @@ Component({
     }
   },
   data: {
+    tag:'cart',
     isOnReady:false,
     isLogin:false,
     storeId:undefined,

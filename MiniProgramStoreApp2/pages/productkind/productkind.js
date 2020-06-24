@@ -16,6 +16,7 @@ Component({
     }
   },
   data: {
+    tag:'productkind',
     isOnReady: false,
     shopMode: 0,
     specsDialog: {

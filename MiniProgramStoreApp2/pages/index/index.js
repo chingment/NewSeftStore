@@ -18,6 +18,7 @@ Component({
     }
   },
   data: {
+    tag: "index",
     storeId:undefined,
     isOnLoad: false,
     pageIsReady: false,

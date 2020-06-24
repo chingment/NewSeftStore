@@ -62,7 +62,7 @@ namespace LocalS.Service.Api.Merch
             List<object> olist = new List<object>();
 
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && rop.StoreIds.Contains(m.StoreId)).OrderBy(m => m.SlotId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && rop.StoreIds.Contains(m.StoreId) && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine).OrderBy(m => m.SlotId).ToList();
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
@@ -150,7 +150,7 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merchId && rop.StoreIds.Contains(m.StoreId) && m.StockDate == rop.StockDate).OrderBy(m => m.SlotId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merchId && rop.StoreIds.Contains(m.StoreId) && m.StockDate == rop.StockDate && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine).OrderBy(m => m.SlotId).ToList();
 
             foreach (var sellChannelStock in sellChannelStocks)
             {

@@ -8,6 +8,7 @@ const app = getApp()
 
 Page({
   data: {
+    tag:'orderconfirm',
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     storeId:undefined,
@@ -134,14 +135,17 @@ Page({
           selfTake = {
             storeName: _selfTake.storeName,
             storeAddress: _selfTake.storeAddress,
+            areaCode: _selfTake.areaCode,
+            address: _selfTake.address
           }
-
         }
       }
       else if (_blocks[i].shopMode == 3) {
         selfTake = {
           storeName: _selfTake.storeName,
           storeAddress: _selfTake.storeAddress,
+          areaCode: _selfTake.areaCode,
+          address: _selfTake.address
         }
       }
 

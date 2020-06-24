@@ -5,6 +5,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiOwn = require('../../api/own.js')
 Page({
   data: {
+    tag: "login",
     isAuthUserInfo: false
   },
   onLoad: function(options) {
