@@ -22,6 +22,7 @@ namespace LocalS.Entity
         public int ActionStatusCode { get; set; }
         public string ActionStatusName { get; set; }
         public string ActionRemark { get; set; }
+        public DateTime? ActionTime { get; set; }
         public string Remark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

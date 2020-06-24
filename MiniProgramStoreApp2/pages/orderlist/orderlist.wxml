@@ -68,9 +68,13 @@
 											</view>
 
 
+											<!-- <view wx:if="{{block.qrcode.code!=null&&block.qrcode.code!=''}}" class="block-qrcode">
+												<canvas class="qrimg" canvas-id="qrcode-{{i}}-{{j}}"></canvas>
+												<text class="remark">{{block.qrcode.remark}}</text>
+											</view> -->
 
 											<view wx:if="{{block.receiptInfo!=null}}" class="block-receiptinfo">
-												<navigator class="ct" hover-class="none" url="/pages/receipttimeaxis/receipttimeaxis?uniqueId={{block.uniqueId}}&uniqueType={{block.uniqueType}}" >
+												<navigator class="ct" hover-class="none" url="/pages/receipttimeaxis/receipttimeaxis?uniqueId={{block.uniqueId}}&uniqueType={{block.uniqueType}}">
 													<view class="content">
 														<view class="des">
 															<image class="img" src="/content/default/images/icon_express.png"></image> <text class="txt">{{block.receiptInfo.description}}</text>

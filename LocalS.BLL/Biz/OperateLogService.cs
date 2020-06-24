@@ -359,13 +359,27 @@ namespace LocalS.BLL.Biz
                     {
                         orderSub.PickupIsTrg = true;
                         orderSub.PickupTrgTime = DateTime.Now;
+                        orderSub.PickupFlowLastDesc = "您在机器录入取货码，正在出货";
+                        orderSub.PickupFlowLastTime = DateTime.Now;
 
                         int timoutM = orderSub.Quantity * 5;
 
                         Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, orderSub.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = orderSub.OrderId, OrderSubId = orderSub.Id, MachineId = orderSub.SellChannelRefId });
+
+                        var l_orderPickupLog = new OrderPickupLog();
+                        l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                        l_orderPickupLog.OrderId = order.Id;
+                        l_orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
+                        l_orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                        l_orderPickupLog.UniqueId = orderSub.Id;
+                        l_orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
+                        l_orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
+                        l_orderPickupLog.Remark = "";
+                        l_orderPickupLog.CreateTime = DateTime.Now;
+                        l_orderPickupLog.Creator = operater;
+                        CurrentDb.OrderPickupLog.Add(l_orderPickupLog);
+
                     }
-
-
 
                     foreach (var orderSubChild in orderSubChilds)
                     {

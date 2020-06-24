@@ -813,6 +813,19 @@ namespace LocalS.BLL.Biz
                         orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
                         orderSub.MendTime = DateTime.Now;
 
+                        var orderPickupLog = new OrderPickupLog();
+                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                        orderPickupLog.OrderId = order.Id;
+                        orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
+                        orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                        orderPickupLog.UniqueId = orderSub.Id;
+                        orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
+                        orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
+                        orderPickupLog.Remark = "";
+                        orderPickupLog.CreateTime = DateTime.Now;
+                        orderPickupLog.Creator = operater;
+                        CurrentDb.OrderPickupLog.Add(orderPickupLog);
+
 
                         var l_orderSubChilds = orderSubChilds.Where(m => m.OrderSubId == orderSub.Id).ToList();
 

@@ -37,14 +37,13 @@ namespace LocalS.Service.Api.StoreApp
                     if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                     {
                         block.Tag.Desc = new FsField("取货码", "", orderSub.PickupCode, "#f18d00");
-                        block.Qrcode = new FsQrcode { Code = orderSub.PickupCode, Url = "", Remark = string.Format("请在机器（编号：{0}）输入取货码或在扫码枪扫一扫", orderSub.SellChannelRefId) };
+                        block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(orderSub.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", orderSub.SellChannelRefId) };
                     }
-                    else if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall)
-                    {
-                        block.Tag.Desc = new FsField("", "", "", "");
-                        block.ReceiptInfo = new FsReceiptInfo { LastTime = orderSub.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = orderSub.PickupFlowLastDesc };
-                    }
+
+                    block.ReceiptInfo = new FsReceiptInfo { LastTime = orderSub.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = orderSub.PickupFlowLastDesc };
+
                 }
+
 
 
                 var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
@@ -58,22 +57,12 @@ namespace LocalS.Service.Api.StoreApp
                         var sku = new FsTemplateData.TmplOrderSku();
                         sku.UniqueId = orderSubChild.Id;
                         sku.UniqueType = E_UniqueType.OrderSubChild;
-
                         sku.Id = orderSubChild.PrdProductSkuId;
                         sku.Name = orderSubChild.PrdProductSkuName;
                         sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
                         sku.Quantity = orderSubChild.Quantity.ToString();
                         sku.ChargeAmount = orderSubChild.ChargeAmount.ToF2Price();
-
-                        if (orderSubChild.SellChannelRefType == E_SellChannelRefType.Machine)
-                        {
-                            sku.StatusName = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus).Text.NullToEmpty();
-                        }
-                        else
-                        {
-                            sku.StatusName = "";
-                        }
-
+                        sku.StatusName = "";
                         field.Value = sku;
 
                         block.Data.Add(field);

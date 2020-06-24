@@ -1,6 +1,6 @@
 const storeage = require('../../utils/storeageutil.js')
 const util = require('../../utils/util.js')
-const qrcode = require('../../utils/qrcode.js')
+const QRCode = require('../../utils/qrcode.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiOrder = require('../../api/order.js')
 const app = getApp()
@@ -8,7 +8,7 @@ const app = getApp()
 Page({
   data: {
     tag: "orderlist",
-    storeId:'',
+    storeId: '',
     scrollHeight: 0,
     tabsSliderIndex: -1,
     tabs: [
@@ -104,7 +104,7 @@ Page({
     _this.setData({
       tabsSliderIndex: _tabsSliderIndex,
       tabs: _this.data.tabs,
-      storeId:ownRequest.getCurrentStoreId()
+      storeId: ownRequest.getCurrentStoreId()
     })
 
     wx.createSelectorQuery().selectAll('.tabbar-items').boundingClientRect(function (rect) {
@@ -158,7 +158,7 @@ Page({
                 if (sm.confirm) {
                   apiOrder.cancle({
                     id: id
-                  }).then(function(res){
+                  }).then(function (res) {
                     _this.getList()
                   })
                 }
@@ -273,6 +273,30 @@ Page({
         _this.setData({
           tabs: _this.data.tabs
         })
+
+
+        // setTimeout(function () {
+
+        //   for (var i = 0; i < items.length; i++) {
+        //     var blocks = items[i].blocks
+        //     for (var j = 0; j < blocks.length; j++) {
+        //       var id='qrcode-' + i+"-"+j
+        //       console.log("id:"+id)
+        //       if (blocks[j].qrcode != null) {
+        //         new QRCode(id, {
+        //           // usingIn: this,
+        //           text: blocks[j].qrcode.code,
+        //           width: 130,
+        //           height: 130,
+        //           colorDark: "#000000",
+        //           colorLight: "white",
+        //           correctLevel: QRCode.CorrectLevel.H,
+        //         });
+        //       }
+        //     }
+        //   }
+
+        // }, 100)
 
       }
     })
