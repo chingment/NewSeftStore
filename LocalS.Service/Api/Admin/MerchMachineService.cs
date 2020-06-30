@@ -168,7 +168,21 @@ namespace LocalS.Service.Api.Admin
                         machineCabinet.ComId = cabinet.ComId;
                         machineCabinet.IsUse = cabinet.IsUse;
                         machineCabinet.SlotMaxQuantity = cabinet.SlotMaxQuantity;
-                        machineCabinet.PendantRows = cabinet.PendantRows;
+                        if (machineCabinet.CabinetId.StartsWith("ds"))
+                        {
+                            if (!string.IsNullOrEmpty(machineCabinet.RowColLayout))
+                            {
+                                var rowColLayout = machineCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                                if(rowColLayout!=null)
+                                {
+                                    rowColLayout.PendantRows = cabinet.PendantRows.ToJsonObject<List<int>>();
+
+                                    machineCabinet.RowColLayout = rowColLayout.ToJsonString();
+                                    machineCabinet.PendantRows = cabinet.PendantRows;
+                                }
+                            }
+                        }
+
 
                         CurrentDb.SaveChanges();
                     }
