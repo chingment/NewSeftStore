@@ -88,7 +88,18 @@ namespace LocalS.Service.Api.Admin
 
             foreach (var machineCabinet in machineCabinets)
             {
-                cabinets.Add(new { Id = machineCabinet.CabinetId, Name = machineCabinet.CabinetName, ComId = machineCabinet.ComId, IsUse = machineCabinet.IsUse, PendantRows = machineCabinet.PendantRows, SlotMaxQuantity = machineCabinet.SlotMaxQuantity });
+                string pendantRows = "";
+
+                if (machineCabinet.CabinetId.Contains("ds"))
+                {
+                    var rowlayout = machineCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                    if (rowlayout != null)
+                    {
+                        pendantRows = rowlayout.PendantRows.ToJsonString();
+                    }
+                }
+
+                cabinets.Add(new { Id = machineCabinet.CabinetId, Name = machineCabinet.CabinetName, ComId = machineCabinet.ComId, IsUse = machineCabinet.IsUse, PendantRows = pendantRows, SlotMaxQuantity = machineCabinet.SlotMaxQuantity });
             }
 
             var data = new
@@ -173,12 +184,11 @@ namespace LocalS.Service.Api.Admin
                             if (!string.IsNullOrEmpty(machineCabinet.RowColLayout))
                             {
                                 var rowColLayout = machineCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
-                                if(rowColLayout!=null)
+                                if (rowColLayout != null)
                                 {
                                     rowColLayout.PendantRows = cabinet.PendantRows.ToJsonObject<List<int>>();
 
                                     machineCabinet.RowColLayout = rowColLayout.ToJsonString();
-                                    machineCabinet.PendantRows = cabinet.PendantRows;
                                 }
                             }
                         }

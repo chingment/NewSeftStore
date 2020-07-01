@@ -166,10 +166,12 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，解释旧布局格式错误");
                     }
+
+                    newRowColLayout.PendantRows = oldRowColLayout.PendantRows;
+
                 }
 
-                newRowColLayout.PendantRows = cabinet.PendantRows.ToJsonObject<List<int>>();//将固定的挂件行赋值给新的布局
-
+               
                 //旧布局代表有数据需要检测
                 if (oldRowColLayout.Rows != null)
                 {

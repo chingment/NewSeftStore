@@ -18,7 +18,7 @@ namespace LocalS.Entity
         public string CabinetId { get; set; }
         public string CabinetName { get; set; }
         public string RowColLayout { get; set; }
-        public string PendantRows { get; set; }
+        //public string PendantRows { get; set; }
         public bool IsUse { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
