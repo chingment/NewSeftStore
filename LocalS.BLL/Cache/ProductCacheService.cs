@@ -18,7 +18,6 @@ namespace LocalS.BLL
             var productSpuInfoModel = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId);
             if (productSpuInfoModel != null)
             {
-
                 var specIdxSkus = productSpuInfoModel.SpecIdxSkus;
                 if (specIdxSkus != null && specIdxSkus.Count > 0)
                 {
