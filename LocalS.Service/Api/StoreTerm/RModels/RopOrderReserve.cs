@@ -23,6 +23,8 @@ namespace LocalS.Service.Api.StoreTerm
         {
             public string Id { get; set; }
             public int Quantity { get; set; }
+
+            public string SvcConsulterId { get; set; }
         }
     }
 }

@@ -57,7 +57,7 @@ namespace LocalS.Service.Api.StoreTerm
             block.SelfTake.StoreAddress = machine.StoreAddress;
             foreach (var productSku in rop.ProductSkus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.Id } });
+                block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.Id }, SvcConsulterId = productSku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);
@@ -176,7 +176,7 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult result = new CustomJsonResult();
 
             var ret = new RetOrderPickupStatusQuery();
-            
+
             var orderSubChild = CurrentDb.OrderSubChild.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
 
             if (orderSubChild != null)

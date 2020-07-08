@@ -283,6 +283,7 @@ namespace LocalS.BLL.Biz
                                             _skus.ShopMode = productSku.ShopMode;
                                             _skus.Stocks = bizProductSku.Stocks;
                                             _skus.CartId = productSku.CartId;
+                                            _skus.SvcConsulterId = productSku.SvcConsulterId;
                                             buildOrderSubSkus.Add(_skus);
                                         }
                                     }
@@ -486,7 +487,7 @@ namespace LocalS.BLL.Biz
                             orderSubChild.ChargeAmount = buildOrderSubChid.ChargeAmount;
                             orderSubChild.PayStatus = E_OrderPayStatus.WaitPay;
                             orderSubChild.PickupStatus = E_OrderPickupStatus.WaitPay;
-
+                            orderSubChild.SvcConsulterId = productSku.SvcConsulterId;
                             orderSubChild.Creator = operater;
                             orderSubChild.CreateTime = DateTime.Now;
                             CurrentDb.OrderSubChild.Add(orderSubChild);

@@ -74,5 +74,7 @@ namespace LocalS.Entity
         public string SlotId { get; set; }
         public string PickupFlowLastDesc { get; set; }
         public DateTime? PickupFlowLastTime { get; set; }
+
+        public string SvcConsulterId { get; set; }
     }
 }

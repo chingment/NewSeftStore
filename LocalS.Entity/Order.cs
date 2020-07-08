@@ -106,7 +106,6 @@ namespace LocalS.Entity
         public E_OrderPayWay PayWay { get; set; }
         public E_OrderPayCaller PayCaller { get; set; }
         public DateTime? PayExpireTime { get; set; }
-
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
@@ -117,7 +116,6 @@ namespace LocalS.Entity
         public DateTime? ExHandleTime { get; set; }
         public string ExHandleRemark { get; set; }
         public bool IsTestMode { get; set; }
-
         public string AppId { get; set; }
     }
 }

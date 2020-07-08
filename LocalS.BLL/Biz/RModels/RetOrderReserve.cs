@@ -73,6 +73,8 @@ namespace LocalS.BLL.Biz
             public string SpecIdx { get; set; }
 
             public string CartId { get; set; }
+
+            public string SvcConsulterId { get; set; }
         }
 
     }
