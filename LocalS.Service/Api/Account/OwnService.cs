@@ -203,7 +203,7 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
-                if (merchUser.ImIsUse)
+                if (!merchUser.ImIsUse)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户没有权限");
                 }
