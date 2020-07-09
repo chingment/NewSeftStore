@@ -106,7 +106,6 @@ namespace LocalS.Service.Api.Account
             }
 
             var result = new CustomJsonResult();
-            var ret = new RetOwnLoginByAccount();
 
             var sysUser = CurrentDb.SysUser.Where(m => m.UserName == rop.UserName).FirstOrDefault();
 
@@ -126,12 +125,11 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号已被禁用");
             }
 
-            ret.Token = IdWorker.Build(IdType.NewGuid);
+            string token = IdWorker.Build(IdType.NewGuid);
 
             var tokenInfo = new TokenInfo();
             tokenInfo.UserId = sysUser.Id;
             tokenInfo.UserName = sysUser.UserName;
-
 
             if (rop.AppId == AppId.MERCH)
             {
@@ -143,13 +141,14 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
-
-          
                 tokenInfo.BelongId = merchUser.MerchId;
                 tokenInfo.BelongType = Enumeration.BelongType.Merch;
 
                 MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
+                SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", null);
 
                 #endregion
             }
@@ -190,16 +189,33 @@ namespace LocalS.Service.Api.Account
                 MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
 
-                ret.UserName = storeTermUser.UserName;
-                ret.FullName = storeTermUser.FullName;
+                SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token, UserName = sysUser.UserName, FullName = sysUser.FullName });
                 #endregion
             }
+            else if (rop.AppId == AppId.SVCCHAT)
+            {
+                #region SVCCHAT
+                var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                if (merchUser == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                }
+
+                if (merchUser.ImIsUse)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户没有权限");
+                }
 
 
+                SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
-            SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token, UserName = sysUser.UserName, Avatar = sysUser.Avatar, NickName = sysUser.NickName });
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
+                #endregion 
+            }
+
 
             return result;
         }
@@ -346,7 +362,7 @@ namespace LocalS.Service.Api.Account
 
                 if (string.IsNullOrEmpty(machine.MerchId))
                 {
-                
+
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
                 }
 
@@ -364,11 +380,8 @@ namespace LocalS.Service.Api.Account
             }
 
 
-
-
             var result = new CustomJsonResult();
 
-            var ret = new RetOwnLoginByAccount();
 
             LogUtil.Info("静指脉数据1：" + rop.VeinData);
 
@@ -422,7 +435,7 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，账号已被禁用");
                 }
 
-                ret.Token = IdWorker.Build(IdType.NewGuid);
+                string token = IdWorker.Build(IdType.NewGuid);
 
                 var tokenInfo = new TokenInfo();
                 tokenInfo.UserId = userId;
@@ -444,18 +457,16 @@ namespace LocalS.Service.Api.Account
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                     }
-                    ret.UserName = storeTermUser.UserName;
-                    ret.FullName = storeTermUser.FullName;
                     #endregion
                 }
 
 
-                SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+                SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
                 MqFactory.Global.PushEventNotify(userId, rop.AppId, "", "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
 
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { UserName= sysUser.UserName, FullName= sysUser.FullName });
             }
 
             return result;

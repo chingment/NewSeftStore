@@ -22,7 +22,7 @@ namespace LocalS.Service.Api.StoreTerm
             if (machine == null || machine.MerchId == null)
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
 
-            var imUsers = CurrentDb.SysMerchUser.Where(m => m.Id == machine.MerchId && m.IsDelete == false && m.ImIsUse == true).ToList();
+            var imUsers = CurrentDb.SysMerchUser.Where(m => m.MerchId == machine.MerchId && m.IsDelete == false && m.ImIsUse == true).ToList();
 
             foreach (var imUser in imUsers)
             {

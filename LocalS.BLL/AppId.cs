@@ -14,6 +14,7 @@ namespace LocalS.BLL
         public const string AGENT = "agent.17fanju.com";
         public const string WXMINPRAGROM = "mp.17fanju.com";
         public const string STORETERM = "com.uplink.selfstore";
+        public const string SVCCHAT = "svcchat.17fanju.com";
 
 
         public static string GetName(string appId)
@@ -38,6 +39,9 @@ namespace LocalS.BLL
                     break;
                 case AppId.STORETERM:
                     name = "终端设备";
+                    break;
+                case AppId.SVCCHAT:
+                    name = "音视频应用";
                     break;
             }
 
