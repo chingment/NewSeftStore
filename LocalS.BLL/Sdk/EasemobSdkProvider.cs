@@ -49,7 +49,7 @@ namespace LocalS.BLL
             return accessToken;
         }
 
-        public CustomJsonResult<RegisterUserResult> RegisterUser(string userName, string password, string nickname)
+        public CustomJsonResult<RegisterUserResult> RegisterUser(string userName,string password, string nickname)
         {
             var result = new CustomJsonResult();
 

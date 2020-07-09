@@ -53,5 +53,7 @@ namespace LocalS.Entity
         public string CsrHelpTip { get; set; }
 
         public string BuildStockRptDate { get; set; }
+
+        public int ImAccountLimit { get; set; }
     }
 }

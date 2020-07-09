@@ -138,10 +138,18 @@ export default {
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+      if (this.form.displayImgUrls.length === 0) {
+        var var1 = document.querySelector('.el-upload')
+        var1.style.display = 'block'
+      }
     },
     handleSuccess(response, file, fileList) {
       this.uploadImglist = fileList
       this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+      if (this.form.displayImgUrls.length === 1) {
+        var var1 = document.querySelector('.el-upload')
+        var1.style.display = 'none'
+      }
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList

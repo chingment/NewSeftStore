@@ -19,6 +19,7 @@ namespace LocalS.Service.Api.StoreTerm
         public List<string> CharTags { get; set; }
         public string BriefDes { get; set; }
         public string ImUserName { get; set; }
+        public string ImPassword { get; set; }
         public string ImStatus { get; set; }
     }
 }

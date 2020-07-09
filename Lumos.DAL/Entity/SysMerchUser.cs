@@ -10,9 +10,11 @@ namespace Lumos.DbRelay
     {
         public string MerchId { get; set; }
         public bool IsMaster { get; set; }
-
-        //public string ImPartner { get; set; }
-        //public string ImUserName { get; set; }
-        //public string ImPassword { get; set; }
+        public bool ImIsUse { get; set; }
+        public string ImPartner { get; set; }
+        public string ImUserName { get; set; }
+        public string ImPassword { get; set; }
+        public string CharTags { get; set; }
+        public string BriefDes { get; set; }
     }
 }

@@ -162,6 +162,8 @@ namespace LocalS.Service.Api.Merch
                 merchUser.Id = IdWorker.Build(IdType.NewGuid);
                 merchUser.UserName = rop.UserName;
                 merchUser.FullName = rop.FullName;
+                merchUser.NickName = rop.NickName;
+                merchUser.Avatar = rop.Avatar;
                 merchUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 merchUser.Email = rop.Email;
                 merchUser.PhoneNumber = rop.PhoneNumber;
@@ -172,9 +174,34 @@ namespace LocalS.Service.Api.Merch
                 merchUser.MerchId = merchId;
                 merchUser.RegisterTime = DateTime.Now;
                 merchUser.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
+                merchUser.ImIsUse = rop.ImIsUse;
+
+
+                if (rop.ImIsUse)
+                {
+                    var imCountLimit = CurrentDb.Merch.Where(m => m.Id == merchId).First().ImAccountLimit;
+                    var imCount = CurrentDb.SysMerchUser.Where(m => m.MerchId == merchId && m.IsDelete == false && m.ImIsUse == true).Count();
+                    if (imCount >= imCountLimit)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "抱歉，您最大开通的音频服务账号数量为" + imCountLimit + "个,如需帮助，请联系客服");
+                    }
+
+                    merchUser.ImPartner = "Em";
+                    merchUser.ImUserName = merchUser.UserName;
+                    merchUser.ImPassword = "1a2b3c4d";
+                    var rt_RegisterUser = SdkFactory.Easemob.RegisterUser(merchUser.ImUserName, merchUser.ImPassword, merchUser.NickName);
+                    if (rt_RegisterUser.Result != ResultType.Success)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，音频服务存在问题");
+                    }
+                }
+
+
                 merchUser.Creator = operater;
                 merchUser.CreateTime = DateTime.Now;
+
                 CurrentDb.SysMerchUser.Add(merchUser);
+
 
                 if (rop.RoleIds != null)
                 {
@@ -186,6 +213,10 @@ namespace LocalS.Service.Api.Merch
                         }
                     }
                 }
+
+
+
+
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -210,10 +241,12 @@ namespace LocalS.Service.Api.Merch
             ret.Id = merchUser.Id;
             ret.UserName = merchUser.UserName;
             ret.PhoneNumber = merchUser.PhoneNumber;
+            ret.Avatar = merchUser.Avatar;
             ret.Email = merchUser.Email;
             ret.FullName = merchUser.FullName;
+            ret.NickName = merchUser.NickName;
             ret.IsDisable = merchUser.IsDisable;
-
+            ret.ImIsUse = merchUser.ImIsUse;
             ret.Roles = GetRoleTree();
             ret.RoleIds = (from m in CurrentDb.SysUserRole where m.UserId == merchUser.Id select m.RoleId).ToList();
 
@@ -238,11 +271,36 @@ namespace LocalS.Service.Api.Merch
                 }
 
                 merchUser.FullName = rop.FullName;
+                merchUser.NickName = rop.NickName;
+                merchUser.Avatar = rop.Avatar;
                 merchUser.Email = rop.Email;
                 merchUser.PhoneNumber = rop.PhoneNumber;
                 merchUser.IsDisable = rop.IsDisable;
                 merchUser.MendTime = DateTime.Now;
                 merchUser.Mender = operater;
+                merchUser.ImIsUse = rop.ImIsUse;
+                if (rop.ImIsUse)
+                {
+                    var imCountLimit = CurrentDb.Merch.Where(m => m.Id == merchId).First().ImAccountLimit;
+                    var imCount = CurrentDb.SysMerchUser.Where(m => m.MerchId == merchId && m.Id != merchUser.Id && m.IsDelete == false && m.ImIsUse == true).Count();
+                    if (imCount >= imCountLimit)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "抱歉，您最大开通的音频服务账号数量为" + imCountLimit + "个,如需帮助，请联系客服");
+                    }
+
+                    if (string.IsNullOrEmpty(merchUser.ImUserName))
+                    {
+                        merchUser.ImPartner = "Em";
+                        merchUser.ImUserName = merchUser.UserName;
+                        merchUser.ImPassword = "1a2b3c4d";
+                        var rt_RegisterUser = SdkFactory.Easemob.RegisterUser(merchUser.ImUserName, merchUser.ImPassword, merchUser.NickName);
+                        if (rt_RegisterUser.Result != ResultType.Success)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，音频服务存在问题");
+                        }
+                    }
+                }
+
 
 
                 var sysUserRoles = CurrentDb.SysUserRole.Where(r => r.UserId == rop.Id).ToList();

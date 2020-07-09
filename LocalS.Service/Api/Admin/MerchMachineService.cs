@@ -162,7 +162,6 @@ namespace LocalS.Service.Api.Admin
                         machine.ImPartner = "Em";
                         machine.ImUserName = string.Format("MH_{0}", machine.Id);
                         machine.ImPassword = "1a2b3c4d";
-
                         var var1 = SdkFactory.Easemob.RegisterUser(machine.ImUserName, machine.ImPassword, machine.Id);
                         if (var1.Result != ResultType.Success)
                         {

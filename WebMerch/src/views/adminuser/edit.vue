@@ -18,6 +18,29 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item label="头像" prop="avatar">
+        <el-input :value="form.avatar" style="display:none" />
+        <el-upload
+          ref="uploadImg"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :on-success="handleSuccessByAvatar"
+          :on-remove="handleRemoveByAvatar"
+          :on-error="handleErrorByAvatar"
+          :on-preview="handlePreviewByAvatar"
+          :file-list="uploadImglistByAvatar"
+          :limit="1"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByAvatar">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByAvatar" alt="">
+        </el-dialog>
+        <div class="remark-tip"><span class="sign">*注</span>：格式为500*500</div>
+      </el-form-item>
+      <el-form-item label="昵称" prop="nickName">
+        <el-input v-model="form.nickName" />
+      </el-form-item>
       <el-form-item label="姓名" prop="fullName">
         <el-input v-model="form.fullName" />
       </el-form-item>
@@ -26,6 +49,9 @@
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" />
+      </el-form-item>
+      <el-form-item label="音视频">
+        <el-switch v-model="form.imIsUse" />
       </el-form-item>
       <el-form-item label="禁用">
         <el-switch v-model="form.isDisable" />
@@ -57,21 +83,29 @@ export default {
         userName: '',
         password: '',
         fullName: '',
+        nickName: '',
         phoneNumber: '',
         email: '',
+        avatar: '',
         orgIds: [],
-        roleIds: []
+        roleIds: [],
+        imIsUse: false
       },
       rules: {
         password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
-        fullName: [{ required: true, message: '必填', trigger: 'change' }],
+        avatar: [{ required: true, message: '必须上传' }],
+        nickName: [{ required: true, message: '必填', trigger: 'change' }],
         orgIds: [{ required: true, message: '必选' }],
         phoneNumber: [{ required: false, message: '格式错误,eg:13800138000', trigger: 'change', pattern: fromReg.phoneNumber }],
         email: [{ required: false, message: '格式错误,eg:xxxx@xxx.xxx', trigger: 'change', pattern: fromReg.email }]
       },
       cascader_org_props: { multiple: true, checkStrictly: true, emitPath: false },
       cascader_org_options: [],
-      checkbox_group_role_options: []
+      checkbox_group_role_options: [],
+      uploadImglistByAvatar: [],
+      uploadImgPreImgDialogUrlByAvatar: '',
+      uploadImgPreImgDialogVisibleByAvatar: false,
+      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
   created() {
@@ -87,12 +121,21 @@ export default {
           this.form.id = d.id
           this.form.userName = d.userName
           this.form.fullName = d.fullName
+          this.form.nickName = d.nickName
           this.form.phoneNumber = d.phoneNumber
           this.form.email = d.email
           this.form.orgIds = d.orgIds
           this.form.roleIds = d.roleIds
+          this.form.imIsUse = d.imIsUse
+          this.form.avatar = d.avatar
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
+
+          if (d.avatar != null && d.avatar.length > 0) {
+            this.uploadImglistByAvatar.push({ name: 'xx', url: d.avatar })
+            var var1 = document.querySelector('.el-upload')
+            var1.style.display = 'none'
+          }
         }
         this.loading = false
       })
@@ -128,6 +171,25 @@ export default {
     },
     cascader_org_change() {
       console.log('dasd')
+    },
+    handleRemoveByAvatar(file, fileList) {
+      this.uploadImglistByAvatar = fileList
+      this.form.avatar = ''
+      var var1 = document.querySelector('.el-upload')
+      var1.style.display = 'block'
+    },
+    handleSuccessByAvatar(response, file, fileList) {
+      this.uploadImglistByAvatar = fileList
+      this.form.avatar = file.response.data.url
+      var var1 = document.querySelector('.el-upload')
+      var1.style.display = 'none'
+    },
+    handleErrorByAvatar(errs, file, fileList) {
+      this.uploadImglistByAvatar = fileList
+    },
+    handlePreviewByAvatar(file) {
+      this.uploadImgPreImgDialogUrlByAvatar = file.url
+      this.uploadImgPreImgDialogVisibleByAvatar = true
     }
   }
 }
