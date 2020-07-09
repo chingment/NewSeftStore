@@ -211,7 +211,7 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token, UserName = sysUser.UserName, Avatar = sysUser.Avatar, NickName = sysUser.NickName });
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token, UserName = sysUser.UserName, Avatar = sysUser.Avatar, NickName = sysUser.NickName, ImUserName = merchUser.ImUserName, ImPassword = merchUser.ImPassword });
 
                 #endregion 
             }
@@ -466,7 +466,7 @@ namespace LocalS.Service.Api.Account
                 MqFactory.Global.PushEventNotify(userId, rop.AppId, "", "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
 
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { UserName= sysUser.UserName, FullName= sysUser.FullName });
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { UserName = sysUser.UserName, FullName = sysUser.FullName });
             }
 
             return result;

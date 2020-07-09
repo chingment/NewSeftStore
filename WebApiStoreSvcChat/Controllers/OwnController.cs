@@ -33,7 +33,5 @@ namespace WebApiStoreSvcChat.Controllers
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
-
-
     }
 }
