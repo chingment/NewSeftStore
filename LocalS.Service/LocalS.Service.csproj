@@ -330,6 +330,9 @@
     <Compile Include="Api\StoreApp\RModels\RupStoreList.cs" />
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />
+    <Compile Include="Api\StoreSvcChat\RModels\RupUserGetInfo.cs" />
+    <Compile Include="Api\StoreSvcChat\StoreSvcChatServiceFactory.cs" />
+    <Compile Include="Api\StoreSvcChat\UserService.cs" />
     <Compile Include="Api\StoreTerm\ControlService.cs" />
     <Compile Include="Api\StoreTerm\ImService.cs" />
     <Compile Include="Api\StoreTerm\MachineService.cs" />
@@ -387,6 +390,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Api\Admin\Models\" />
+    <Folder Include="Api\StoreSvcChat\Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasemobSdk\EasemobSdk.csproj">
