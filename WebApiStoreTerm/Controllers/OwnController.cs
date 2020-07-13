@@ -57,7 +57,6 @@ namespace WebApiStoreTerm.Controllers
 
             rop.Token = this.Token;
 
-            
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
