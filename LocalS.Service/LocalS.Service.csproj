@@ -330,6 +330,9 @@
     <Compile Include="Api\StoreApp\RModels\RupStoreList.cs" />
     <Compile Include="Api\StoreApp\StoreService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />
+    <Compile Include="Api\StoreSvcChat\OwnService.cs" />
+    <Compile Include="Api\StoreSvcChat\RModels\RetOwnGetContactInfos.cs" />
+    <Compile Include="Api\StoreSvcChat\RModels\RopOwnGetContactInfos.cs" />
     <Compile Include="Api\StoreSvcChat\RModels\RupUserGetInfo.cs" />
     <Compile Include="Api\StoreSvcChat\StoreSvcChatServiceFactory.cs" />
     <Compile Include="Api\StoreSvcChat\UserService.cs" />

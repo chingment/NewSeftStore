@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.Service.Api.StoreSvcChat;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,5 +34,13 @@ namespace WebApiStoreSvcChat.Controllers
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse GetContactInfos([FromBody]RopOwnGetContactInfos rop)
+        {
+            IResult result = StoreSvcChatServiceFactory.Own.GetContactInfos(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

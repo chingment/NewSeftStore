@@ -15,5 +15,13 @@ namespace LocalS.Service.Api.StoreSvcChat
                 return new UserService();
             }
         }
+
+        public static OwnService Own
+        {
+            get
+            {
+                return new OwnService();
+            }
+        }
     }
 }
