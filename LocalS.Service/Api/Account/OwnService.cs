@@ -148,7 +148,7 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", null);
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token });
 
                 #endregion
             }
@@ -212,6 +212,24 @@ namespace LocalS.Service.Api.Account
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token, UserName = sysUser.UserName, Avatar = sysUser.Avatar, NickName = sysUser.NickName, ImUserName = merchUser.ImUserName, ImPassword = merchUser.ImPassword });
+
+                #endregion 
+            }
+            else if (rop.AppId == AppId.ADMIN)
+            {
+                #region ADMIN
+                var sysAdminUser = CurrentDb.SysAdminUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
+                if (sysAdminUser == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
+                }
+
+                tokenInfo.BelongId = sysAdminUser.Id;
+                tokenInfo.BelongType = Enumeration.BelongType.Admin;
+
+                SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功",  new { Token = token });
 
                 #endregion 
             }
