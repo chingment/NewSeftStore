@@ -435,7 +435,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 orderPickupLog.PrdProductSkuId = orderSubChild.PrdProductSkuId;
                                 orderPickupLog.CabinetId = orderSubChild.CabinetId;
                                 orderPickupLog.SlotId = orderSubChild.SlotId;
-                                orderPickupLog.Status = E_OrderPickupStatus.Taked;
+                                orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
                                 orderPickupLog.IsPickupComplete = true;
                                 orderPickupLog.ActionRemark = "人为标识已取货";
                                 orderPickupLog.Remark = "";
@@ -466,7 +466,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 orderPickupLog.PrdProductSkuId = orderSubChild.PrdProductSkuId;
                                 orderPickupLog.CabinetId = orderSubChild.CabinetId;
                                 orderPickupLog.SlotId = orderSubChild.SlotId;
-                                orderPickupLog.Status = E_OrderPickupStatus.Taked;
+                                orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;
                                 orderPickupLog.IsPickupComplete = false;
                                 orderPickupLog.ActionRemark = "人为标识未取货";
                                 orderPickupLog.Remark = "";
