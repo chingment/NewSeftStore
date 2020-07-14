@@ -461,21 +461,6 @@ namespace LocalS.BLL.Biz
 
                         machine.ExIsHas = true;
 
-
-                        var l_orderPickupLog = new OrderPickupLog();
-                        l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                        l_orderPickupLog.OrderId = order.Id;
-                        l_orderPickupLog.OrderSubId = orderSub.Id;
-                        l_orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
-                        l_orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
-                        l_orderPickupLog.UniqueId = orderSub.Id;
-                        l_orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
-                        l_orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
-                        l_orderPickupLog.Remark = "";
-                        l_orderPickupLog.CreateTime = DateTime.Now;
-                        l_orderPickupLog.Creator = operater;
-                        CurrentDb.OrderPickupLog.Add(l_orderPickupLog);
-
                         Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
                     }
                     else
@@ -523,20 +508,7 @@ namespace LocalS.BLL.Biz
 
                             orderSub.PickupFlowLastDesc = "全部商品出货完成";
                             orderSub.PickupFlowLastTime = DateTime.Now;
-
-                            var l_orderPickupLog = new OrderPickupLog();
-                            l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                            l_orderPickupLog.OrderId = order.Id;
-                            l_orderPickupLog.OrderSubId = orderSub.Id;
-                            l_orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
-                            l_orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
-                            l_orderPickupLog.UniqueId = orderSub.Id;
-                            l_orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
-                            l_orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
-                            l_orderPickupLog.Remark = "";
-                            l_orderPickupLog.CreateTime = DateTime.Now;
-                            l_orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(l_orderPickupLog);
+                           
 
                             Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
                         }
