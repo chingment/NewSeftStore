@@ -9,6 +9,11 @@ namespace LocalS.Service.Api.Account
 {
     public class RopOwnLogout
     {
+        public RopOwnLogout()
+        {
+
+        }
+
         public string AppId { get; set; }
         public string Token { get; set; }
         public Enumeration.LoginWay LoginWay { get; set; }
