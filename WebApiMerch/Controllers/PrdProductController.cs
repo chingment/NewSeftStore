@@ -60,5 +60,13 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.PrdProduct.EditSalePriceOnStore(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse Search(string key)
+        {
+        
+            IResult result = MerchServiceFactory.PrdProduct.Search(this.CurrentUserId, this.CurrentMerchId, key);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

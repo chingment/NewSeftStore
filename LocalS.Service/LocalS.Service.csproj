@@ -239,6 +239,7 @@
     <Compile Include="Api\Merch\RModels\RopStoreRemoveMachine.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopStoreSaveKind.cs" />
     <Compile Include="Api\Merch\RModels\RupAdSpaceGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupAdSpaceGetReleaseList.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />

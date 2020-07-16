@@ -56,6 +56,14 @@ export function editSalePriceOnStore(data) {
   })
 }
 
+export function search(params) {
+  return request({
+    url: '/prdproduct/search',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -63,5 +71,6 @@ export default {
   initEdit: initEdit,
   edit: edit,
   getOnSaleStores: getOnSaleStores,
-  editSalePriceOnStore: editSalePriceOnStore
+  editSalePriceOnStore: editSalePriceOnStore,
+  search: search
 }

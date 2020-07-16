@@ -2,6 +2,7 @@
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
 using LocalS.Entity;
+using LocalS.Service.UI;
 using Lumos;
 using Lumos.Redis;
 using System;
@@ -356,6 +357,161 @@ namespace LocalS.Service.Api.Merch
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
             }
+            return result;
+        }
+
+
+
+        public CustomJsonResult GetKinds(string operater, string merchId, string storeId)
+        {
+            var result = new CustomJsonResult();
+
+            var storeKinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderByDescending(m => m.Priority).ToList();
+
+            List<object> objs = new List<object>();
+
+            objs.Add(new { Id = "", Name = "全部" });
+
+            foreach (var storeKind in storeKinds)
+            {
+                objs.Add(new { Id = storeKind.Id, Name = storeKind.Name, Description = storeKind.Description, DisplayImgUrls = storeKind.DisplayImgUrls.ToJsonObject<List<ImgSet>>() });
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", objs);
+
+            return result;
+        }
+
+        public CustomJsonResult SaveKind(string operater, string merchId, RopStoreSaveKind rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                string oldName = null;
+                if (string.IsNullOrEmpty(rop.Id))
+                {
+                    var isExist = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Name == rop.Name).FirstOrDefault();
+                    if (isExist != null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该分类已经存在");
+                    }
+
+                    var storeKind = new StoreKind();
+                    storeKind.Id = IdWorker.Build(IdType.NewGuid);
+                    storeKind.Name = rop.Name;
+                    storeKind.MerchId = merchId;
+                    storeKind.StoreId = rop.StoreId;
+                    storeKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                    storeKind.Description = rop.Description;
+                    storeKind.CreateTime = DateTime.Now;
+                    storeKind.Creator = operater;
+                    CurrentDb.StoreKind.Add(storeKind);
+                    CurrentDb.SaveChanges();
+
+                }
+                else
+                {
+                    var isExist = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id != rop.Id && m.Name == rop.Name).FirstOrDefault();
+                    if (isExist != null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该分类已经存在");
+                    }
+
+                    var storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id == rop.Id).FirstOrDefault();
+
+                    if (storeKind == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应信息");
+                    }
+
+                    oldName = storeKind.Name;
+
+                    storeKind.Name = rop.Name;
+                    storeKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                    storeKind.Description = rop.Description;
+                    storeKind.MendTime = DateTime.Now;
+                    storeKind.Mender = operater;
+                    CurrentDb.SaveChanges();
+
+                }
+
+                if (rop.IsSynElseStore)
+                {
+                    var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.StoreId).ToList();
+
+                    foreach (var store in stores)
+                    {
+                        StoreKind storeKind = null;
+                        if (string.IsNullOrEmpty(oldName))
+                        {
+                            storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.Name == rop.Name).FirstOrDefault();
+                        }
+                        else
+                        {
+                            storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.Name == oldName).FirstOrDefault();
+                        }
+
+                        if (storeKind == null)
+                        {
+                            storeKind = new StoreKind();
+                            storeKind.Id = IdWorker.Build(IdType.NewGuid);
+                            storeKind.Name = rop.Name;
+                            storeKind.MerchId = merchId;
+                            storeKind.StoreId = store.Id;
+                            storeKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                            storeKind.Description = rop.Description;
+                            storeKind.CreateTime = DateTime.Now;
+                            storeKind.Creator = operater;
+                            CurrentDb.StoreKind.Add(storeKind);
+                            CurrentDb.SaveChanges();
+                        }
+                        else
+                        {
+                            storeKind.Name = rop.Name;
+                            storeKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                            storeKind.Description = rop.Description;
+                            storeKind.MendTime = DateTime.Now;
+                            storeKind.Mender = operater;
+                            CurrentDb.SaveChanges();
+                        }
+                    }
+                }
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult RemoveKind(string operater, string merchId, string storeId)
+        {
+            var result = new CustomJsonResult();
+
+            var storeKinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderByDescending(m => m.Priority).ToList();
+
+            List<TreeNode> treeNodes = new List<TreeNode>();
+
+
+            treeNodes.Add(new TreeNode { Id = "0", PId = "", Label = "全部" });
+
+            foreach (var storeKind in storeKinds)
+            {
+                TreeNode treeNode = new TreeNode();
+                treeNode.Id = storeKind.Id;
+                treeNode.Label = storeKind.Name;
+                treeNode.Description = storeKind.Description;
+
+                treeNodes.Add(treeNode);
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", treeNodes);
+
             return result;
         }
     }

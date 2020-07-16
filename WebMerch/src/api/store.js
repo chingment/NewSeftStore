@@ -96,6 +96,22 @@ export function removeMachine(data) {
   })
 }
 
+export function getKinds(params) {
+  return request({
+    url: '/store/getKinds',
+    method: 'get',
+    params
+  })
+}
+
+export function saveKind(data) {
+  return request({
+    url: '/store/saveKind',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -108,5 +124,6 @@ export default {
   initManageMachine: initManageMachine,
   manageMachineGetMachineList: manageMachineGetMachineList,
   removeMachine: removeMachine,
-  addMachine: addMachine
+  addMachine: addMachine,
+  getKinds: getKinds
 }

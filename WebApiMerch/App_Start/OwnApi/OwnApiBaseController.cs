@@ -9,6 +9,7 @@ namespace WebApiMerch
     [OwnApiAuthorize]
     public class OwnApiBaseController : BaseController
     {
+        
         public OwnApiBaseController()
         {
             LogUtil.SetTrackId(OwnApiRequest.Token);

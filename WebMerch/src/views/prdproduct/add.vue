@@ -687,7 +687,8 @@ export default {
 
       if (inputValue && this.form.charTags.length <= 2) {
         this.form.charTags.push(inputValue)
-      } else {
+      }     
+      else {
         this.$message('最多输入3个特色标签')
       }
       this.charTagsInputVisible = false

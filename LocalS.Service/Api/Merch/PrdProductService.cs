@@ -563,5 +563,12 @@ namespace LocalS.Service.Api.Merch
         {
             return BizFactory.ProductSku.AdjustStockSalePrice(operater, AppId.MERCH, merchId, rop.StoreId, rop.ProductSkuId, rop.ProductSkuSalePrice, rop.ProductSkuIsOffSell);
         }
+
+        public CustomJsonResult Search(string operater, string merchId, string key)
+        {
+            var productSkus = CacheServiceFactory.Product.Search(merchId, "All", key);
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkus);
+        }
     }
 }

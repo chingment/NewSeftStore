@@ -81,5 +81,20 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+
+        [HttpGet]
+        public OwnApiHttpResponse GetKinds(string id)
+        {
+            IResult result = MerchServiceFactory.Store.GetKinds(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaveKind([FromBody]RopStoreSaveKind rop)
+        {
+            IResult result = MerchServiceFactory.Store.SaveKind(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }
