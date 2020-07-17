@@ -36,7 +36,7 @@
               <ul>
                 <li><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageProduct(item)">商品管理</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageProduct(item)">商品分类</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#f38b3f;display:none" @click="handleManageExpressStock(item)">快递库存</el-button></li>
               </ul>
             </div>

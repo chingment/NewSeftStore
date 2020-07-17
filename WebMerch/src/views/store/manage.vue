@@ -14,7 +14,7 @@
     </div>
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="id" /></el-tab-pane>
-      <el-tab-pane label="商品管理" name="tabProduct"><manage-pane-product :storeid="id" /></el-tab-pane>
+      <el-tab-pane label="商品分类" name="tabProduct"><manage-pane-product :storeid="id" /></el-tab-pane>
       <el-tab-pane label="机器信息" name="tabMachine"><manage-pane-machine :storeid="id" /></el-tab-pane>
       <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order :storeid="id" /></el-tab-pane>
     </el-tabs>

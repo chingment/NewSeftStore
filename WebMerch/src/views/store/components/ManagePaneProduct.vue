@@ -92,7 +92,7 @@
     </el-dialog>
 
     <el-dialog title="添加商品" :visible.sync="dialogKindSpuIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <el-form ref="kindSpuForm" v-loading="dialogKindSpuIsLoading" :model="kindSpuForm" :rules="kindSpuRules" label-width="75px">
+      <el-form ref="kindSpuForm" v-loading="dialogKindSpuIsLoading" :model="kindSpuForm" :rules="kindSpuRules" label-width="80px">
 
         <el-form-item label="所属分类">
           <el-select v-model="kindSpuForm.kindId" placeholder="请选择" style="width:300px">
@@ -104,7 +104,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="商品搜索">
+        <el-form-item label="商品搜索" prop="productId">
           <el-autocomplete
             v-model="productSearchName"
             style="width:300px"
@@ -261,7 +261,7 @@ export default {
       kindSpuRules: {
         storeId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
         kindId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
-        productId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }]
+        productId: [{ required: true, min: 1, message: '请搜索商品后选择', trigger: 'change' }]
       },
       listQueryByGetKindSpus: {
         page: 1,
