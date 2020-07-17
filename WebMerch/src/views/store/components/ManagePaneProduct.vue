@@ -31,7 +31,7 @@
         </el-header>
         <el-main>
           <el-row v-loading="isLoaingByKindSpus" :gutter="20">
-            <el-col v-for="item in listDataByKindSpus" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px;margin-right:20px">
+            <el-col v-for="item in listDataByKindSpus" :key="item.id" :span="6" :xs="6" style="margin-bottom:20px;">
               <el-card class="box-card box-card-product">
                 <div slot="header" class="it-header clearfix">
                   <div class="left">
@@ -55,7 +55,7 @@
     <el-dialog title="店铺分类" :visible.sync="dialogKindIsVisible" :width="isDesktop==true?'800px':'90%'">
       <el-form ref="kindForm" v-loading="dialogKindIsLoading" :model="kindForm" :rules="kindRules" label-width="75px">
         <el-form-item label="名称" prop="name">
-          <el-input v-model="kindForm.name" clearable />
+          <el-input v-model="kindForm.name" clearable style="width:300px" />
         </el-form-item>
         <el-form-item label="图片" prop="displayImgUrls">
           <el-input :value="kindForm.displayImgUrls.toString()" style="display:none" />
@@ -291,24 +291,23 @@ export default {
   methods: {
     init() {
       var id = getUrlParam('id')
-      console.log('this.storeId' + id)
       this.storeId = id
       this.kindForm.storeId = id
       this.kindSpuForm.storeId = id
       this.listDataByKinds = []
       this.listDataByKindSpus = []
+      this.currentKindIndex = 0
       this._getKinds()
     },
     _getKinds() {
       this.isLoaingByKinds = true
-      getKinds({ id: this.storeId }).then(res => {
+      return getKinds({ id: this.storeId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listDataByKinds = d
 
           if (d.length > 0) {
-            this.currentKindIndex = 0
-            this.currentKindName = d[0].name
+            this.currentKindName = d[this.currentKindIndex].name
             this.kindEditBtnDisabled = false
             this._getKindSpus()
           } else {
