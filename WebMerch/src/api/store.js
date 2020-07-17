@@ -112,11 +112,27 @@ export function saveKind(data) {
   })
 }
 
+export function removeKind(data) {
+  return request({
+    url: '/store/removeKind',
+    method: 'post',
+    data
+  })
+}
+
 export function saveKindSpu(data) {
   return request({
     url: '/store/saveKindSpu',
     method: 'post',
     data
+  })
+}
+
+export function getKindSpus(params) {
+  return request({
+    url: '/store/getKindSpus',
+    method: 'get',
+    params
   })
 }
 
@@ -134,5 +150,8 @@ export default {
   removeMachine: removeMachine,
   addMachine: addMachine,
   getKinds: getKinds,
-  saveKindSpu: saveKindSpu
+  saveKind: saveKind,
+  removeKind: removeKind,
+  saveKindSpu: saveKindSpu,
+  getKindSpus: getKindSpus
 }

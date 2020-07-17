@@ -1,16 +1,17 @@
 <template>
   <div class="prodcut-list">
-    <el-container>
-      <el-aside width="200px">
-
+    <el-container style="min-height:300px">
+      <el-aside width="200px;">
         <div style="padding:10px;0px;text-align: center;">
           <el-button type="primary" icon="el-icon-edit" size="small" @click="dialogKindOpen(false)">新建分类</el-button>
-
         </div>
 
-        <el-menu v-loading="isLoaingByKinds" @select="kindSelect">
-
-          <el-menu-item v-for="(item,index) in kinds" :key="item.id" :index="index+''">
+        <el-menu
+          v-loading="isLoaingByKinds"
+          :default-active="currentKindIndex+''"
+          @select="kindSelect"
+        >
+          <el-menu-item v-for="(item,index) in listDataByKinds" :key="item.id" :index="index+''">
             <span slot="title">{{ item.name }}</span>
           </el-menu-item>
 
@@ -29,11 +30,24 @@
 
         </el-header>
         <el-main>
-          <el-table :data="tableData">
-            <el-table-column prop="date" label="日期" width="140" />
-            <el-table-column prop="name" label="姓名" width="120" />
-            <el-table-column prop="address" label="地址" />
-          </el-table>
+          <el-row v-loading="isLoaingByKindSpus" :gutter="20">
+            <el-col v-for="item in listDataByKindSpus" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px;margin-right:20px">
+              <el-card class="box-card box-card-product">
+                <div slot="header" class="it-header clearfix">
+                  <div class="left">
+                    <span class="name">{{ item.name }}</span>
+                  </div>
+                  <div class="right">
+                    <el-button type="text">管理</el-button>
+                  </div>
+                </div>
+                <div class="it-component">
+                  <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
+                  <div class="describe" />
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
         </el-main>
       </el-container>
     </el-container>
@@ -71,6 +85,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="_saveKind">保存</el-button>
+          <el-button v-show="kindRemoveBtnShow" type="warning" @click="_removeKind">删除</el-button>
         </el-form-item>
       </el-form>
 
@@ -82,7 +97,7 @@
         <el-form-item label="所属分类">
           <el-select v-model="kindSpuForm.kindId" placeholder="请选择" style="width:300px">
             <el-option
-              v-for="item in kinds"
+              v-for="item in listDataByKinds"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -123,7 +138,7 @@
   </div>
 
 </template>
-<style>
+<style lang="scss" scoped>
 
 .prodcut-list   .el-menu{
     border-right: solid 0px #e6e6e6;
@@ -138,32 +153,91 @@
   .el-aside {
     color: #333;
   }
+
+.box-card-product{
+  .it-header{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    height:20px ;
+    .left{
+      flex: 1;
+      justify-content: flex-start;
+      align-items: center;
+      display: block;
+      height: 100%;
+    overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+    .name{
+    padding: 0px 5px;
+    }
+    }
+    .right{
+      width: 100px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+  }
+  .it-component{
+    min-height: 100px;
+    display: flex;
+    .img{
+      width: 120px;
+      height: 120px;
+
+      img{
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .describe{
+      flex: 1;
+      padding: 0px;
+      font-size: 12px;
+
+      ul{
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+         li{
+           width: 100%;
+           text-align: right;
+        height: 26px;
+        line-height: 26px;
+      }
+      }
+    }
+
+  }
+  }
+
 </style>
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getKinds, saveKind, saveKindSpu } from '@/api/store'
+import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind } from '@/api/store'
 import { search } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    }
     return {
-      tableData: Array(20).fill(item),
       loading: false,
       storeId: '',
       isLoaingByKinds: false,
-      kinds: [],
+      isLoaingByKindSpus: false,
+      listDataByKinds: [],
       dialogKindIsVisible: false,
       dialogKindIsEdit: false,
       dialogKindIsLoading: false,
       currentKindIndex: 0,
       currentKindName: '全部',
       kindEditBtnDisabled: true,
+      kindRemoveBtnShow: false,
       kindForm: {
         id: '',
         name: '',
@@ -189,6 +263,13 @@ export default {
         kindId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
         productId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }]
       },
+      listQueryByGetKindSpus: {
+        page: 1,
+        limit: 10,
+        storeId: '',
+        kindId: ''
+      },
+      listDataByKindSpus: [],
       uploadImglistByKindDisplayImgUrls: [],
       uploadImgPreImgDialogUrlByKindDisplayImgUrls: '',
       uploadImgPreImgDialogVisibleByKindDisplayImgUrls: false,
@@ -212,29 +293,35 @@ export default {
       console.log('this.storeId' + id)
       this.storeId = id
       this.kindForm.storeId = id
+      this.kindSpuForm.storeId = id
       this._getKinds()
     },
     _getKinds() {
       this.isLoaingByKinds = true
       getKinds({ id: this.storeId }).then(res => {
         if (res.result === 1) {
-          this.kinds = res.data
+          var d = res.data
+          this.listDataByKinds = d
+
+          if (d.length > 0) {
+            this.currentKindIndex = 0
+            this.currentKindName = d[0].name
+            this.kindEditBtnDisabled = false
+            this._getKindSpus()
+          } else {
+            this.kindEditBtnDisabled = true
+            this.currentKindName = '暂无分类'
+          }
         }
         this.isLoaingByKinds = false
       })
     },
     kindSelect(index, indexPath) {
-      var kind = this.kinds[index]
-
-      // if (index === '0') {
-      //   this.kindEditBtnDisabled = true
-      // } else {
-      //   this.kindEditBtnDisabled = false
-      // }
+      var kind = this.listDataByKinds[index]
       this.kindEditBtnDisabled = false
       this.currentKindIndex = index
       this.currentKindName = kind.name
-      // console.log('index:' + index)
+      this._getKindSpus()
     },
     _saveKind() {
       this.$refs['kindForm'].validate((valid) => {
@@ -256,6 +343,22 @@ export default {
         }
       })
     },
+    _removeKind() {
+      MessageBox.confirm('确定要删除', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeKind({ storeId: this.storeId, id: this.kindForm.id, isSynElseStore: this.kindForm.isSynElseStore }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this._getKinds()
+            this.dialogKindIsVisible = false
+          }
+        })
+      }).catch(() => {
+      })
+    },
     _saveKindSpu() {
       this.$refs['kindSpuForm'].validate((valid) => {
         if (valid) {
@@ -268,6 +371,7 @@ export default {
               this.$message(res.message)
               if (res.result === 1) {
                 this.dialogKindSpuIsVisible = false
+                this._getKindSpus()
               }
             })
           }).catch(() => {
@@ -275,11 +379,25 @@ export default {
         }
       })
     },
+    _getKindSpus() {
+      var kind = this.listDataByKinds[this.currentKindIndex]
+      this.listQueryByGetKindSpus.storeId = this.storeId
+      this.listQueryByGetKindSpus.kindId = kind.id
+      this.isLoaingByKindSpus = true
+      getKindSpus(this.listQueryByGetKindSpus).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.listDataByKindSpus = d.items
+        }
+        this.isLoaingByKindSpus = false
+      })
+    },
     dialogKindOpen(isEdit) {
       this.dialogKindIsVisible = true
 
       if (isEdit) {
-        var kind = this.kinds[this.currentKindIndex]
+        this.kindRemoveBtnShow = true
+        var kind = this.listDataByKinds[this.currentKindIndex]
         this.kindForm.id = kind.id
         this.kindForm.name = kind.name
         this.kindForm.description = kind.description
@@ -287,6 +405,7 @@ export default {
         this.uploadImglistByKindDisplayImgUrls = this.getUploadImglist(kind.displayImgUrls)
         this.kindForm.isSynElseStore = false
       } else {
+        this.kindRemoveBtnShow = false
         this.kindForm.id = ''
         this.kindForm.name = ''
         this.kindForm.description = ''
@@ -297,8 +416,7 @@ export default {
     },
     dialogKindSpuOpen() {
       this.dialogKindSpuIsVisible = true
-      var kind = this.kinds[ this.currentKindIndex]
-
+      var kind = this.listDataByKinds[ this.currentKindIndex]
       this.kindSpuForm.kindId = kind.id
     },
     productSearchAsync(queryString, cb) {

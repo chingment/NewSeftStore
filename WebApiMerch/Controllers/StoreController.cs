@@ -97,6 +97,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse RemoveKind([FromBody]RopStoreRemoveKind rop)
+        {
+            IResult result = MerchServiceFactory.Store.RemoveKind(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         public OwnApiHttpResponse SaveKindSpu([FromBody]RopStoreSaveKindSpu rop)
         {
             IResult result = MerchServiceFactory.Store.SaveKindSpu(this.CurrentUserId, this.CurrentMerchId, rop);
@@ -104,7 +111,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetKindSpus([FromBody]RupStoreGetKindSpus rup)
+        public OwnApiHttpResponse GetKindSpus([FromUri]RupStoreGetKindSpus rup)
         {
             IResult result = MerchServiceFactory.Store.GetKindSpus(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
