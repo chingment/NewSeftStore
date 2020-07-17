@@ -24,7 +24,7 @@
 
           <span style="font-size: 21px;display: block; float: left;margin-right: 20px;width: 130px;">{{ currentKindName }} </span>
 
-          <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">编辑</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">编辑分类</el-button>
 
           <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindSpuOpen()">添加商品</el-button>
 
@@ -275,7 +275,8 @@ export default {
       uploadImgPreImgDialogVisibleByKindDisplayImgUrls: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
       productSearchName: '',
-      productSearchMainImgUrl: 'http://file.17fanju.com/upload/default1.jpg',
+      productSearchMainImgUrl: '',
+      emptyImgUrl: 'http://file.17fanju.com/upload/default1.jpg',
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -294,6 +295,8 @@ export default {
       this.storeId = id
       this.kindForm.storeId = id
       this.kindSpuForm.storeId = id
+      this.listDataByKinds = []
+      this.listDataByKindSpus = []
       this._getKinds()
     },
     _getKinds() {
@@ -418,6 +421,9 @@ export default {
       this.dialogKindSpuIsVisible = true
       var kind = this.listDataByKinds[ this.currentKindIndex]
       this.kindSpuForm.kindId = kind.id
+      this.kindSpuForm.productId = ''
+      this.productSearchName = ''
+      this.productSearchMainImgUrl = this.emptyImgUrl
     },
     productSearchAsync(queryString, cb) {
       console.log('queryString:' + queryString)
