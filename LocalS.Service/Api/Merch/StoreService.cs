@@ -370,8 +370,6 @@ namespace LocalS.Service.Api.Merch
 
             List<object> objs = new List<object>();
 
-            objs.Add(new { Id = "", Name = "全部" });
-
             foreach (var storeKind in storeKinds)
             {
                 objs.Add(new { Id = storeKind.Id, Name = storeKind.Name, Description = storeKind.Description, DisplayImgUrls = storeKind.DisplayImgUrls.ToJsonObject<List<ImgSet>>() });
@@ -513,6 +511,118 @@ namespace LocalS.Service.Api.Merch
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", treeNodes);
 
             return result;
+        }
+
+
+        public CustomJsonResult SaveKindSpu(string operater, string merchId, RopStoreSaveKindSpu rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                if (string.IsNullOrEmpty(rop.StoreId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择店铺");
+                }
+
+                if (string.IsNullOrEmpty(rop.KindId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择分类");
+                }
+
+                if (string.IsNullOrEmpty(rop.ProductId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择商品");
+                }
+
+                List<Store> stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.StoreId).ToList();
+                if (rop.IsSynElseStore)
+                {
+                    stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                }
+                else
+                {
+                    stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id == rop.StoreId).ToList();
+                }
+
+
+                foreach (var store in stores)
+                {
+                    var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
+                    if (storeKindSpu == null)
+                    {
+                        storeKindSpu = new StoreKindSpu();
+                        storeKindSpu.Id = IdWorker.Build(IdType.NewGuid);
+                        storeKindSpu.MerchId = merchId;
+                        storeKindSpu.StoreId = rop.StoreId;
+                        storeKindSpu.StoreKindId = rop.KindId;
+                        storeKindSpu.PrdProductId = rop.ProductId;
+                        storeKindSpu.IsDelete = false;
+                        storeKindSpu.CreateTime = DateTime.Now;
+                        storeKindSpu.Creator = operater;
+                        CurrentDb.StoreKindSpu.Add(storeKindSpu);
+                    }
+                    else
+                    {
+                        storeKindSpu.IsDelete = false;
+                        storeKindSpu.MendTime = DateTime.Now;
+                        storeKindSpu.Mender = operater;
+                    }
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult GetKindSpus(string operater, string merchId, RupStoreGetKindSpus rup)
+        {
+
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.StoreKindSpu
+                         where u.MerchId == merchId && u.StoreId == rup.StoreId
+                         &&
+                         u.StoreKindId == rup.KindId
+                         select new { u.PrdProductId, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                var product = CacheServiceFactory.Product.GetSpuInfo(merchId, item.PrdProductId);
+                olist.Add(new
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    MainImgUrl = product.MainImgUrl,
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+
         }
     }
 }

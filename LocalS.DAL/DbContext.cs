@@ -51,6 +51,7 @@ namespace LocalS.DAL
 
         public IDbSet<StoreKind> StoreKind { get; set; }
 
+        public IDbSet<StoreKindSpu> StoreKindSpu { get; set; }
         //public IDbSet<RptOrder> RptOrder { get; set; }
         //public IDbSet<RptOrderDetails> RptOrderDetails { get; set; }
         //public IDbSet<RptOrderDetailsChild> RptOrderDetailsChild { get; set; }

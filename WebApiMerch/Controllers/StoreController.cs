@@ -96,5 +96,19 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse SaveKindSpu([FromBody]RopStoreSaveKindSpu rop)
+        {
+            IResult result = MerchServiceFactory.Store.SaveKindSpu(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetKindSpus([FromBody]RupStoreGetKindSpus rup)
+        {
+            IResult result = MerchServiceFactory.Store.GetKindSpus(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

@@ -112,6 +112,14 @@ export function saveKind(data) {
   })
 }
 
+export function saveKindSpu(data) {
+  return request({
+    url: '/store/saveKindSpu',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -125,5 +133,6 @@ export default {
   manageMachineGetMachineList: manageMachineGetMachineList,
   removeMachine: removeMachine,
   addMachine: addMachine,
-  getKinds: getKinds
+  getKinds: getKinds,
+  saveKindSpu: saveKindSpu
 }

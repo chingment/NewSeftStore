@@ -56,7 +56,7 @@ namespace LocalS.BLL
             RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId);
         }
 
-        private ProductSpuInfoModel GetSpuInfo(string merchId, string productId)
+        public ProductSpuInfoModel GetSpuInfo(string merchId, string productId)
         {
             var productSpuByCache = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId);
 
@@ -237,6 +237,7 @@ namespace LocalS.BLL
                     var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(productSku);
                     var searchModel = new ProductSkuInfoBySearchModel();
                     searchModel.Id = productSkuModel.Id;
+                    searchModel.ProductId = productSkuModel.ProductId;
                     searchModel.Name = productSkuModel.Name;
                     searchModel.CumCode = productSkuModel.CumCode;
                     searchModel.BarCode = productSkuModel.BarCode;

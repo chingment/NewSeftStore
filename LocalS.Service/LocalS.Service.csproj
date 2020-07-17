@@ -240,6 +240,7 @@
     <Compile Include="Api\Merch\RModels\RopAdminUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreSaveKind.cs" />
+    <Compile Include="Api\Merch\RModels\RopStoreSaveKindSpu.cs" />
     <Compile Include="Api\Merch\RModels\RupAdSpaceGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupAdSpaceGetReleaseList.cs" />
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Api\Merch\RModels\RupPrdSubjectGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RupStoreGetKindSpus.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageMachineGetMachineList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageProductGetProductList.cs" />

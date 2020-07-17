@@ -1,10 +1,11 @@
 <template>
   <div class="prodcut-list">
-    <el-container style="height: 500px; border: 1px solid #eee">
+    <el-container>
       <el-aside width="200px">
 
         <div style="padding:10px;0px;text-align: center;">
-          <el-button @click="dialogKindOpen(false)">添加分类</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="small" @click="dialogKindOpen(false)">新建分类</el-button>
+
         </div>
 
         <el-menu v-loading="isLoaingByKinds" @select="kindSelect">
@@ -66,7 +67,7 @@
           <el-input v-model="kindForm.description" type="textarea" />
         </el-form-item>
         <el-form-item label="数据同步">
-          <el-switch v-model="kindForm.isSynElseStore" />  <span>开启后，该分类信息将同步到其他店铺</span>
+          <el-switch v-model="kindForm.isSynElseStore" />  <span>开启后，该分类信息同步到其它店铺分类信息中</span>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="_saveKind">保存</el-button>
@@ -76,10 +77,10 @@
     </el-dialog>
 
     <el-dialog title="添加商品" :visible.sync="dialogKindSpuIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <el-form ref="dialogKindSpuForm" v-loading="dialogKindSpuIsLoading" :model="kindSpuForm" :rules="kindSpuRules" label-width="75px">
+      <el-form ref="kindSpuForm" v-loading="dialogKindSpuIsLoading" :model="kindSpuForm" :rules="kindSpuRules" label-width="75px">
 
         <el-form-item label="所属分类">
-          <el-select v-model="kindSpuForm.kindIds" multiple placeholder="请选择" style="width:300px">
+          <el-select v-model="kindSpuForm.kindId" placeholder="请选择" style="width:300px">
             <el-option
               v-for="item in kinds"
               :key="item.id"
@@ -88,31 +89,32 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="商品搜索" prop="nickName">
+        <el-form-item label="商品搜索">
           <el-autocomplete
             v-model="productSearchName"
+            style="width:300px"
             :fetch-suggestions="productSearchAsync"
             placeholder="拼音/条形码/首字母"
             @select="productSelect"
           />
         </el-form-item>
 
-        <el-form-item label="商品名称" prop="nickName">
+        <el-form-item label="商品名称">
           <span>{{ productSearchName }}</span>
         </el-form-item>
-        <el-form-item label="商品图片" prop="nickName">
+        <el-form-item label="商品图片">
           <el-image
             style="width: 100px; height: 100px"
             :src="productSearchMainImgUrl"
-            :fit="fit"
+            fit="fit"
           />
         </el-form-item>
 
         <el-form-item label="数据同步">
-          <el-switch v-model="kindSpuForm.isSynElseStore" />  <span>开启后，该分类信息将同步到其他店铺</span>
+          <el-switch v-model="kindSpuForm.isSynElseStore" />  <span>开启后，该商品信息同步到其它店铺分类信息中</span>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="_saveKind">保存</el-button>
+          <el-button type="primary" @click="_saveKindSpu">保存</el-button>
         </el-form-item>
       </el-form>
 
@@ -140,7 +142,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getKinds, saveKind } from '@/api/store'
+import { getKinds, saveKind, saveKindSpu } from '@/api/store'
 import { search } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -178,8 +180,8 @@ export default {
       dialogKindSpuIsLoading: false,
       kindSpuForm: {
         storeId: '',
-        kindIds: '',
-        productIds: '',
+        kindId: '',
+        productId: '',
         isSynElseStore: false
       },
       kindSpuRules: {
@@ -192,7 +194,7 @@ export default {
       uploadImgPreImgDialogVisibleByKindDisplayImgUrls: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
       productSearchName: '',
-      productSearchMainImgUrl: '',
+      productSearchMainImgUrl: 'http://file.17fanju.com/upload/default1.jpg',
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -224,11 +226,12 @@ export default {
     kindSelect(index, indexPath) {
       var kind = this.kinds[index]
 
-      if (index === '0') {
-        this.kindEditBtnDisabled = true
-      } else {
-        this.kindEditBtnDisabled = false
-      }
+      // if (index === '0') {
+      //   this.kindEditBtnDisabled = true
+      // } else {
+      //   this.kindEditBtnDisabled = false
+      // }
+      this.kindEditBtnDisabled = false
       this.currentKindIndex = index
       this.currentKindName = kind.name
       // console.log('index:' + index)
@@ -246,6 +249,25 @@ export default {
               if (res.result === 1) {
                 this._getKinds()
                 this.dialogKindIsVisible = false
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
+    },
+    _saveKindSpu() {
+      this.$refs['kindSpuForm'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            saveKindSpu(this.kindSpuForm).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.dialogKindSpuIsVisible = false
               }
             })
           }).catch(() => {
@@ -277,8 +299,7 @@ export default {
       this.dialogKindSpuIsVisible = true
       var kind = this.kinds[ this.currentKindIndex]
 
-      var kindIds = [kind.id]
-      this.kindSpuForm.kindIds = kindIds
+      this.kindSpuForm.kindId = kind.id
     },
     productSearchAsync(queryString, cb) {
       console.log('queryString:' + queryString)
@@ -287,7 +308,7 @@ export default {
           var d = res.data
           var restaurants = []
           for (var j = 0; j < d.length; j++) {
-            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name })
+            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId })
           }
 
           cb(restaurants)
@@ -297,6 +318,8 @@ export default {
     productSelect(item) {
       console.log(JSON.stringify(item))
       this.productSearchMainImgUrl = item.mainImgUrl
+      this.kindSpuForm.storeId = this.storeId
+      this.kindSpuForm.productId = item.productId
     },
     getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
@@ -328,8 +351,8 @@ export default {
       this.kindForm.displayImgUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreviewByKindDisplayImgUrls(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
+      this.uploadImgPreImgDialogUrlByKindDisplayImgUrls = file.url
+      this.uploadImgPreImgDialogVisibleByKindDisplayImgUrls = true
     }
   }
 }
