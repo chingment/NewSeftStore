@@ -71,5 +71,13 @@ namespace LocalS.Service.Api.Admin
                 return new MerchRepairFunService();
             }
         }
+
+        public static MerchPrdKindService MerchPrdKind
+        {
+            get
+            {
+                return new MerchPrdKindService();
+            }
+        }
     }
 }

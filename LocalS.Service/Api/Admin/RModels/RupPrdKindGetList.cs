@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.Merch
+namespace LocalS.Service.Api.Admin
 {
-    public class RupPrdSubjectGetList : RupBaseGetList
+    public class RupPrdKindGetList : RupBaseGetList
     {
+
     }
 }

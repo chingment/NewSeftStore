@@ -5,13 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.Merch
+namespace LocalS.Service.Api.Admin
 {
-    public class RetPrdKindInitEdit
+    public class RopPrdKindEdit
     {
-
-        public string PId { get; set; }
-        public string PName { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }

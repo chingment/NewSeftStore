@@ -72,10 +72,7 @@
     <Compile Include="PrdKind.cs" />
     <Compile Include="PrdProductSku.cs" />
     <Compile Include="Merch.cs" />
-    <Compile Include="PrdProductKind.cs" />
     <Compile Include="PrdProductSkuBatch.cs" />
-    <Compile Include="PrdProductSubject.cs" />
-    <Compile Include="PrdSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventCodeRemarkAttribute.cs" />
     <Compile Include="SellChannel.cs" />

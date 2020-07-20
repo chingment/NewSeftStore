@@ -48,22 +48,6 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static PrdKindService PrdKind
-        {
-            get
-            {
-                return new PrdKindService();
-            }
-        }
-
-        public static PrdSubjectService PrdSubject
-        {
-            get
-            {
-                return new PrdSubjectService();
-            }
-        }
-
         public static MachineService Machine
         {
             get

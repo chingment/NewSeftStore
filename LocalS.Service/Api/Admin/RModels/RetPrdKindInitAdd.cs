@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.Api.Merch
+namespace LocalS.Service.Api.Admin
 {
-    public class RetPrdSubjectInitAdd
+    public class RetPrdKindInitAdd
     {
         public string PId { get; set; }
         public string PName { get; set; }
