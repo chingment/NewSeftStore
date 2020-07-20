@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: '/prdkind/getlist',
+    url: '/merchprdkind/getlist',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getList(params) {
 
 export function initAdd(params) {
   return request({
-    url: '/prdkind/initAdd',
+    url: '/merchprdkind/initAdd',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function initAdd(params) {
 
 export function add(data) {
   return request({
-    url: '/prdkind/add',
+    url: '/merchprdkind/add',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function add(data) {
 
 export function initEdit(params) {
   return request({
-    url: '/prdkind/initEdit',
+    url: '/merchprdkind/initEdit',
     method: 'get',
     params
   })
@@ -34,7 +34,7 @@ export function initEdit(params) {
 
 export function edit(data) {
   return request({
-    url: '/prdkind/edit',
+    url: '/merchprdkind/edit',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function edit(data) {
 
 export function sort(data) {
   return request({
-    url: '/prdkind/sort',
+    url: '/merchprdkind/sort',
     method: 'post',
     data
   })

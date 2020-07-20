@@ -30,33 +30,31 @@ namespace LocalS.Service.Api.Admin
                 treeNode.Description = p_prdKind.Description;
                 treeNode.Depth = p_prdKind.Depth;
 
-                //var productCount = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == p_prdKind.Id).Count();
+                if (p_prdKind.Depth == 0)
+                {
+                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false };
+                }
+                else
+                {
+                    if (p_prdKind.Depth >= 3)
+                    {
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true };
+                    }
+                    else
+                    {
+                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true };
+                    }
+                }
 
-                //if (p_prdKind.Depth == 0)
-                //{
-                //    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false, ProductCount = productCount };
-                //}
-                //else
-                //{
-                //    if (p_prdKind.Depth >= 1)
-                //    {
-                //        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true, ProductCount = productCount };
-                //    }
-                //    else
-                //    {
-                //        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true, ProductCount = productCount };
-                //    }
-                //}
-
-                //var children = GetTree(p_prdKind.Id, prdKinds);
-                //if (children != null)
-                //{
-                //    if (children.Count > 0)
-                //    {
-                //        treeNode.Children = new List<TreeNode>();
-                //        treeNode.Children.AddRange(children);
-                //    }
-                //}
+                var children = GetTree(p_prdKind.Id, prdKinds);
+                if (children != null)
+                {
+                    if (children.Count > 0)
+                    {
+                        treeNode.Children = new List<TreeNode>();
+                        treeNode.Children.AddRange(children);
+                    }
+                }
 
                 treeNodes.Add(treeNode);
             }
@@ -69,6 +67,8 @@ namespace LocalS.Service.Api.Admin
             var result = new CustomJsonResult();
 
             var prdKinds = CurrentDb.PrdKind.OrderBy(m => m.Priority).ToList();
+
+            prdKinds.Add(new PrdKind { Id = "1", Name = "商品分类", Depth = 0, IsDelete = false, Priority = 0, CreateTime = DateTime.Now, Creator = "" });
 
             var toPrdKind = prdKinds.Where(m => m.Depth == 0).FirstOrDefault();
 
@@ -88,7 +88,12 @@ namespace LocalS.Service.Api.Admin
 
             var prdKind = CurrentDb.PrdKind.Where(m => m.Id == pKindId).FirstOrDefault();
 
-            if (prdKind != null)
+            if (prdKind == null)
+            {
+                ret.PId = "1";
+                ret.PName = "/";
+            }
+            else
             {
                 ret.PId = prdKind.Id;
                 ret.PName = prdKind.Name;

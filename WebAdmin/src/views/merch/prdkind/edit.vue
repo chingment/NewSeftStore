@@ -39,7 +39,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { edit, initEdit } from '@/api/prdkind'
+import { edit, initEdit } from '@/api/merchprdkind'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {

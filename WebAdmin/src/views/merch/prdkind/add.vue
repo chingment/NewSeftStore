@@ -40,7 +40,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { add, initAdd } from '@/api/prdkind'
+import { add, initAdd } from '@/api/merchprdkind'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
@@ -56,7 +56,7 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 20, message: '必填,且不能超过20个字符', trigger: 'change' }],
-        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
+        // displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         description: [{ required: false, min: 0, max: 500, message: '不能超过500个字符', trigger: 'change' }]
       },
       uploadImglist: [],

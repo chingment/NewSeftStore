@@ -13,7 +13,7 @@
       @node-drop="sort"
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
-        <span>{{ node.label }}   <span v-if="data.depth!=0"> ({{ data.extAttr.productCount }})</span> </span>
+        <span>{{ node.label }}  </span>
 
         <span>
           <el-button
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { getList, sort } from '@/api/prdkind'
+import { getList, sort } from '@/api/merchprdkind'
 import { treeGetNodesByDepth } from '@/utils/commonUtil'
 export default {
   data() {
@@ -69,12 +69,12 @@ export default {
     },
     handleCreate(row) {
       this.$router.push({
-        path: '/prdkind/add?pId=' + row.id
+        path: '/merch/prdkind/add?pId=' + row.id
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/prdkind/edit?id=' + row.id
+        path: '/merch/prdkind/edit?id=' + row.id
       })
     },
     onDrop(moveNode, inNode, type) {
