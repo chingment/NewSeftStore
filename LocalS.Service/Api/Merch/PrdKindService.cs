@@ -30,33 +30,33 @@ namespace LocalS.Service.Api.Merch
                 treeNode.Description = p_prdKind.Description;
                 treeNode.Depth = p_prdKind.Depth;
 
-                var productCount = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == p_prdKind.Id).Count();
+                //var productCount = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == p_prdKind.Id).Count();
 
-                if (p_prdKind.Depth == 0)
-                {
-                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false, ProductCount = productCount };
-                }
-                else
-                {
-                    if (p_prdKind.Depth >= 1)
-                    {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true, ProductCount = productCount };
-                    }
-                    else
-                    {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true, ProductCount = productCount };
-                    }
-                }
+                //if (p_prdKind.Depth == 0)
+                //{
+                //    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true, CanEdit = false, ProductCount = productCount };
+                //}
+                //else
+                //{
+                //    if (p_prdKind.Depth >= 1)
+                //    {
+                //        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false, CanEdit = true, ProductCount = productCount };
+                //    }
+                //    else
+                //    {
+                //        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true, CanEdit = true, ProductCount = productCount };
+                //    }
+                //}
 
-                var children = GetTree(p_prdKind.Id, prdKinds);
-                if (children != null)
-                {
-                    if (children.Count > 0)
-                    {
-                        treeNode.Children = new List<TreeNode>();
-                        treeNode.Children.AddRange(children);
-                    }
-                }
+                //var children = GetTree(p_prdKind.Id, prdKinds);
+                //if (children != null)
+                //{
+                //    if (children.Count > 0)
+                //    {
+                //        treeNode.Children = new List<TreeNode>();
+                //        treeNode.Children.AddRange(children);
+                //    }
+                //}
 
                 treeNodes.Add(treeNode);
             }
@@ -64,179 +64,179 @@ namespace LocalS.Service.Api.Merch
             return treeNodes;
         }
 
-        public CustomJsonResult GetList(string operater, string merchId, RupPrdKindGetList rup)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult GetList(string operater,RupPrdKindGetList rup)
+        //{
+        //    var result = new CustomJsonResult();
 
-            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
+        //    var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
 
-            var toPrdKind = prdKinds.Where(m => m.Depth == 0).FirstOrDefault();
+        //    var toPrdKind = prdKinds.Where(m => m.Depth == 0).FirstOrDefault();
 
-            var tree = GetTree(toPrdKind.PId, prdKinds);
+        //    var tree = GetTree(toPrdKind.PId, prdKinds);
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", tree);
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", tree);
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
-        public CustomJsonResult InitAdd(string operater, string merchId, string pKindId)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult InitAdd(string operater, string merchId, string pKindId)
+        //{
+        //    var result = new CustomJsonResult();
 
-            var ret = new RetPrdKindInitAdd();
+        //    var ret = new RetPrdKindInitAdd();
 
-            var prdKind = CurrentDb.PrdKind.Where(m => m.Id == pKindId).FirstOrDefault();
+        //    var prdKind = CurrentDb.PrdKind.Where(m => m.Id == pKindId).FirstOrDefault();
 
-            if (prdKind != null)
-            {
-                ret.PId = prdKind.Id;
-                ret.PName = prdKind.Name;
-            }
+        //    if (prdKind != null)
+        //    {
+        //        ret.PId = prdKind.Id;
+        //        ret.PName = prdKind.Name;
+        //    }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        public CustomJsonResult Add(string operater, string merchId, RopPrdKindAdd rop)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult Add(string operater, string merchId, RopPrdKindAdd rop)
+        //{
+        //    var result = new CustomJsonResult();
 
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var isExists = CurrentDb.PrdKind.Where(m => m.Name == rop.Name).FirstOrDefault();
-                if (isExists != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
-                }
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        var isExists = CurrentDb.PrdKind.Where(m => m.Name == rop.Name).FirstOrDefault();
+        //        if (isExists != null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
+        //        }
 
-                var pPrdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.PId).FirstOrDefault();
-                if (pPrdKind == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
-                }
+        //        var pPrdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.PId).FirstOrDefault();
+        //        if (pPrdKind == null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
+        //        }
 
-                var productKind = new PrdKind();
-                productKind.Id = IdWorker.Build(IdType.NewGuid);
-                productKind.PId = rop.PId;
-                productKind.Name = rop.Name;
-                productKind.IconImgUrl = rop.IconImgUrl;
-                productKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                productKind.MainImgUrl = ImgSet.GetMain_O(productKind.DisplayImgUrls);
-                productKind.MerchId = merchId;
-                productKind.Description = rop.Description;
-                productKind.Depth = pPrdKind.Depth + 1;
-                productKind.CreateTime = DateTime.Now;
-                productKind.Creator = operater;
-                CurrentDb.PrdKind.Add(productKind);
+        //        var productKind = new PrdKind();
+        //        productKind.Id = IdWorker.Build(IdType.NewGuid);
+        //        productKind.PId = rop.PId;
+        //        productKind.Name = rop.Name;
+        //        productKind.IconImgUrl = rop.IconImgUrl;
+        //        productKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+        //        productKind.MainImgUrl = ImgSet.GetMain_O(productKind.DisplayImgUrls);
+        //        productKind.MerchId = merchId;
+        //        productKind.Description = rop.Description;
+        //        productKind.Depth = pPrdKind.Depth + 1;
+        //        productKind.CreateTime = DateTime.Now;
+        //        productKind.Creator = operater;
+        //        CurrentDb.PrdKind.Add(productKind);
 
-                CurrentDb.SaveChanges();
-                ts.Complete();
+        //        CurrentDb.SaveChanges();
+        //        ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdKindAdd, string.Format("新建商品分类（{0}）成功", rop.Name));
+        //        MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdKindAdd, string.Format("新建商品分类（{0}）成功", rop.Name));
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
+        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        //    }
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
-        public CustomJsonResult InitEdit(string operater, string merchId, string orgId)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult InitEdit(string operater, string merchId, string orgId)
+        //{
+        //    var result = new CustomJsonResult();
 
-            var ret = new RetPrdKindInitEdit();
+        //    var ret = new RetPrdKindInitEdit();
 
-            var prdKind = CurrentDb.PrdKind.Where(m => m.Id == orgId).FirstOrDefault();
+        //    var prdKind = CurrentDb.PrdKind.Where(m => m.Id == orgId).FirstOrDefault();
 
-            if (prdKind != null)
-            {
-                ret.Id = prdKind.Id;
-                ret.Name = prdKind.Name;
-                ret.DisplayImgUrls = prdKind.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-
-
-                ret.Description = prdKind.Description;
-
-                var p_ProductKind = CurrentDb.PrdKind.Where(m => m.Id == prdKind.PId).FirstOrDefault();
-
-                if (p_ProductKind != null)
-                {
-                    ret.PId = p_ProductKind.Id;
-                    ret.PName = p_ProductKind.Name;
-                }
-                else
-                {
-                    ret.PName = "/";
-                }
-            }
+        //    if (prdKind != null)
+        //    {
+        //        ret.Id = prdKind.Id;
+        //        ret.Name = prdKind.Name;
+        //        ret.DisplayImgUrls = prdKind.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
 
 
+        //        ret.Description = prdKind.Description;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        //        var p_ProductKind = CurrentDb.PrdKind.Where(m => m.Id == prdKind.PId).FirstOrDefault();
 
-            return result;
-        }
+        //        if (p_ProductKind != null)
+        //        {
+        //            ret.PId = p_ProductKind.Id;
+        //            ret.PName = p_ProductKind.Name;
+        //        }
+        //        else
+        //        {
+        //            ret.PName = "/";
+        //        }
+        //    }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopPrdKindEdit rop)
-        {
-
-            CustomJsonResult result = new CustomJsonResult();
 
 
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var prdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.Id).FirstOrDefault();
-                if (prdKind == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
-                }
-                prdKind.Name = rop.Name;
-                prdKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                prdKind.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
-                prdKind.Description = rop.Description;
-                prdKind.MendTime = DateTime.Now;
-                prdKind.Mender = operater;
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
-                CurrentDb.SaveChanges();
-                ts.Complete();
+        //    return result;
+        //}
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdKindEdit, string.Format("保存商品分类（{0}）信息成功", rop.Name));
+        //public CustomJsonResult Edit(string operater, string merchId, RopPrdKindEdit rop)
+        //{
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
+        //    CustomJsonResult result = new CustomJsonResult();
 
-            return result;
 
-        }
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        var prdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.Id).FirstOrDefault();
+        //        if (prdKind == null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
+        //        }
+        //        prdKind.Name = rop.Name;
+        //        prdKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+        //        prdKind.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
+        //        prdKind.Description = rop.Description;
+        //        prdKind.MendTime = DateTime.Now;
+        //        prdKind.Mender = operater;
 
-        public CustomJsonResult Sort(string operater, string merchId, RopPrdKindSort rop)
-        {
+        //        CurrentDb.SaveChanges();
+        //        ts.Complete();
 
-            CustomJsonResult result = new CustomJsonResult();
+        //        MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdKindEdit, string.Format("保存商品分类（{0}）信息成功", rop.Name));
 
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var prdKinds = CurrentDb.PrdKind.Where(m => rop.Ids.Contains(m.Id)).ToList();
+        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        //    }
 
-                for (int i = 0; i < prdKinds.Count; i++)
-                {
-                    int priority = rop.Ids.IndexOf(prdKinds[i].Id);
-                    prdKinds[i].Priority = priority;
-                }
+        //    return result;
 
-                CurrentDb.SaveChanges();
-                ts.Complete();
+        //}
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdKindEdit, "保存商品分类排序成功");
+        //public CustomJsonResult Sort(string operater, string merchId, RopPrdKindSort rop)
+        //{
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
+        //    CustomJsonResult result = new CustomJsonResult();
 
-            return result;
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        var prdKinds = CurrentDb.PrdKind.Where(m => rop.Ids.Contains(m.Id)).ToList();
 
-        }
+        //        for (int i = 0; i < prdKinds.Count; i++)
+        //        {
+        //            int priority = rop.Ids.IndexOf(prdKinds[i].Id);
+        //            prdKinds[i].Priority = priority;
+        //        }
+
+        //        CurrentDb.SaveChanges();
+        //        ts.Complete();
+
+        //        MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdKindEdit, "保存商品分类排序成功");
+
+        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        //    }
+
+        //    return result;
+
+        //}
     }
 }

@@ -31,7 +31,7 @@
         </el-header>
         <el-main>
           <el-row v-loading="isLoaingByKindSpus" :gutter="20">
-            <el-col v-for="item in listDataByKindSpus" :key="item.id" :span="6" :xs="6" style="margin-bottom:20px;">
+            <el-col v-for="item in listDataByKindSpus" :key="item.id" :span="5" style="margin-bottom:20px;">
               <el-card class="box-card box-card-product">
                 <div slot="header" class="it-header clearfix">
                   <div class="left">
@@ -48,6 +48,9 @@
               </el-card>
             </el-col>
           </el-row>
+          <pagination v-show="listTotalByKindSpus>0" :total="listTotalByKindSpus" :page.sync="listQueryByGetKindSpus.page" :limit.sync="listQueryByGetKindSpus.limit" @pagination="_getKindSpus" />
+
+          <span v-show="listTotalByKindSpus==0">该分类没有相关产品，请添加商品 {{ listTotalByKindSpus }}</span>
         </el-main>
       </el-container>
     </el-container>
@@ -144,6 +147,10 @@
     border-right: solid 0px #e6e6e6;
 }
 
+.prodcut-list .el-col-5{
+  width: 20%;
+}
+
   .el-header {
     background-color: #B3C0D1;
     color: #333;
@@ -223,7 +230,10 @@ import { MessageBox } from 'element-ui'
 import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind } from '@/api/store'
 import { search } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
+  name: 'ManagePaneProduct',
+  components: { Pagination },
   data() {
     return {
       loading: false,
@@ -270,6 +280,7 @@ export default {
         kindId: ''
       },
       listDataByKindSpus: [],
+      listTotalByKindSpus: 0,
       uploadImglistByKindDisplayImgUrls: [],
       uploadImgPreImgDialogUrlByKindDisplayImgUrls: '',
       uploadImgPreImgDialogVisibleByKindDisplayImgUrls: false,
@@ -313,6 +324,7 @@ export default {
           } else {
             this.kindEditBtnDisabled = true
             this.currentKindName = '暂无分类'
+            this.listTotalByKindSpus = 0
           }
         }
         this.isLoaingByKinds = false
@@ -337,7 +349,6 @@ export default {
               this.$message(res.message)
               if (res.result === 1) {
                 this._getKinds()
-                this.dialogKindIsVisible = false
               }
             })
           }).catch(() => {
@@ -390,6 +401,7 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.listDataByKindSpus = d.items
+          this.listTotalByKindSpus = d.total
         }
         this.isLoaingByKindSpus = false
       })

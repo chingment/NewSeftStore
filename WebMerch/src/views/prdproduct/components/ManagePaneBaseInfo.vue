@@ -28,18 +28,13 @@
         <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
       </el-form-item>
       <el-form-item label="所属分类" prop="kindIds">
-        <el-input :value="form.kindIds.toString()" style="display:none" />
-        <treeselect
+        <el-cascader
           v-model="form.kindIds"
-          :multiple="true"
-          :options="treeselect_kind_options"
-          :normalizer="treeselect_kind_normalizer"
-          :flat="true"
-          sort-value-by="INDEX"
-          :default-expand-level="99"
-          placeholder="选择"
-          no-children-text=""
+          :options="kind_options"
+          placeholder="请选择"
+          style="width:300px"
         />
+
       </el-form-item>
 
       <el-form-item label="音视频咨询">
@@ -161,13 +156,11 @@
 import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
-import { getUrlParam, treeselectNormalizer, strLen, isMoney } from '@/utils/commonUtil'
-import Treeselect from '@riophae/vue-treeselect'
+import { getUrlParam, strLen, isMoney } from '@/utils/commonUtil'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import Sortable from 'sortablejs'
 export default {
-  components: { Treeselect },
   data() {
     return {
       loading: false,
@@ -186,15 +179,12 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        // kindIds: [{ type: 'array', required: true, message: '至少必选一个,且必须少于3个', max: 3 }],
+        kindIds: [{ type: 'array', required: true, message: '请选择一个三级商品分类', min: 3, max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }],
         charTags: [{ type: 'array', required: false, message: '不能超过5个', max: 3 }]
       },
-      treeselect_kind_normalizer: treeselectNormalizer,
-      treeselect_kind_options: [],
-      treeselect_subject_normalizer: treeselectNormalizer,
-      treeselect_subject_options: [],
+      kind_options: [],
       uploadImglistByDisplayImgUrls: [],
       uploadImgPreImgDialogUrlByDisplayImgUrls: '',
       uploadImgPreImgDialogVisibleByDisplayImgUrls: false,
@@ -234,8 +224,7 @@ export default {
           this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
-          this.treeselect_subject_options = d.subjects
-          this.treeselect_kind_options = d.kinds
+          this.kind_options = d.kinds
         }
         this.loading = false
       })

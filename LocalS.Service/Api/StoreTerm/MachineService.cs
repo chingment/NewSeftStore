@@ -139,8 +139,8 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var productKindModels = new List<ProductKindModel>();
 
-            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId  && m.SellChannelRefId == machineId).ToList();
+            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId).ToList();
 
 
             var prdKindModelByAll = new ProductKindModel();
@@ -155,7 +155,7 @@ namespace LocalS.Service.Api.StoreTerm
                 prdKindModel.Id = prdKind.Id;
                 prdKindModel.Name = prdKind.Name;
 
-                var productIds = CurrentDb.PrdProductKind.Where(m => m.PrdKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
+                var productIds = CurrentDb.StoreKindSpu.Where(m => m.StoreKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
                 if (productIds.Count > 0)
                 {
                     var productSkuIds = sellChannelStocks.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();

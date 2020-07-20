@@ -11,7 +11,9 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string PrdKindIds { get; set; }
-        public string PrdSubjectIds { get; set; }
+        public string PrdKindId1 { get; set; }
+        public string PrdKindId2 { get; set; }
+        public string PrdKindId3 { get; set; }
         public string Name { get; set; }
         public string PinYinIndex { get; set; }
         public string MainImgUrl { get; set; }

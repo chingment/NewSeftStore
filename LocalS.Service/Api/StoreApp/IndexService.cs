@@ -70,14 +70,14 @@ namespace LocalS.Service.Api.StoreApp
 
             var pdAreaModel = new PdAreaModel();
 
-            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId & m.IsDelete == false && m.Depth == 1).OrderBy(m => m.Priority).ToList();
+            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == store.Id && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
             foreach (var prdKind in prdKinds)
             {
                 var tab = new PdAreaModel.Tab();
                 tab.Id = prdKind.Id;
                 tab.Name = prdKind.Name;
-                tab.MainImgUrl = prdKind.MainImgUrl;
+                tab.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
                 tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, prdKind.Id);
                 if (tab.List.Items.Count > 0)
                 {

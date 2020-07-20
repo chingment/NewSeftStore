@@ -204,33 +204,6 @@ namespace LocalS.Service.Api.Admin
                 sysUserOrg.Creator = operater;
                 CurrentDb.SysUserOrg.Add(sysUserOrg);
 
-
-
-                var prdKind = new PrdKind();
-                prdKind.Id = IdWorker.Build(IdType.NewGuid);
-                prdKind.MerchId = merchId;
-                prdKind.Name = "我的品类";
-                prdKind.PId = IdWorker.Build(IdType.EmptyGuid);
-                prdKind.Depth = 0;
-                prdKind.Priority = 0;
-                prdKind.IsDelete = false;
-                prdKind.CreateTime = DateTime.Now;
-                prdKind.Creator = operater;
-                CurrentDb.PrdKind.Add(prdKind);
-
-
-                var prdSubject = new PrdSubject();
-                prdSubject.Id = IdWorker.Build(IdType.NewGuid);
-                prdSubject.PId = IdWorker.Build(IdType.EmptyGuid);
-                prdSubject.MerchId = merchId;
-                prdSubject.Name = "我的栏目";
-
-                prdSubject.Priority = 0;
-                prdSubject.IsDelete = false;
-                prdSubject.CreateTime = DateTime.Now;
-                prdSubject.Creator = operater;
-                CurrentDb.PrdSubject.Add(prdSubject);
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

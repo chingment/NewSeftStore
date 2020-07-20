@@ -24,10 +24,6 @@ namespace LocalS.Service.Api.Merch
         public List<ImgSet> DetailsDes { get; set; }
         public string BriefDes { get; set; }
         public List<string> KindIds { get; set; }
-        public List<string> SubjectIds
-        {
-            get; set;
-        }
         public bool IsTrgVideoService { get; set; }
         public List<string> CharTags { get; set; }
         public List<Sku> Skus { get; set; }

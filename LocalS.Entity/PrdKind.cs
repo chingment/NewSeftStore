@@ -13,8 +13,6 @@ namespace LocalS.Entity
         [MaxLength(128)]
         public string PId { get; set; }
         public string Name { get; set; }
-        [MaxLength(128)]
-        public string MerchId { get; set; }
         public string IconImgUrl { get; set; }
         public string DisplayImgUrls { get; set; }
         public string MainImgUrl { get; set; }

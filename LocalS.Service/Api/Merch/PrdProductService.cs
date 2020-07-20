@@ -40,46 +40,23 @@ namespace LocalS.Service.Api.Merch
                         treeNode.Children = new List<TreeNode>();
                         treeNode.Children.AddRange(children);
                     }
+                    else
+                    {
+                        treeNode.Children = null;
+                    }
                 }
+
                 treeNodes.Add(treeNode);
+
             }
 
             return treeNodes;
         }
 
-        public List<TreeNode> GetKindTree(string merchId)
+        public List<TreeNode> GetKindTree()
         {
-            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
-            return GetKindTree(IdWorker.Build(IdType.EmptyGuid), prdKinds);
-        }
-
-        private List<TreeNode> GetSubjectTree(string id, List<PrdSubject> productSubjects)
-        {
-            List<TreeNode> treeNodes = new List<TreeNode>();
-
-            var p_productSubjects = productSubjects.Where(t => t.PId == id).ToList();
-
-            foreach (var p_productSubject in p_productSubjects)
-            {
-                TreeNode treeNode = new TreeNode();
-                treeNode.Id = p_productSubject.Id;
-                treeNode.PId = p_productSubject.PId;
-                treeNode.Value = p_productSubject.Id;
-                treeNode.Label = p_productSubject.Name;
-                treeNode.IsDisabled = p_productSubject.Depth <= 0 ? true : false;
-                var children = GetSubjectTree(treeNode.Id, productSubjects);
-                treeNode.Children.AddRange(children);
-
-                treeNodes.Add(treeNode);
-            }
-
-            return treeNodes;
-        }
-
-        public List<TreeNode> GetSubjectTree(string merchId)
-        {
-            var prdSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
-            return GetSubjectTree(IdWorker.Build(IdType.EmptyGuid), prdSubjects);
+            var prdKinds = CurrentDb.PrdKind.OrderBy(m => m.Priority).ToList();
+            return GetKindTree("1", prdKinds);
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupPrdProductGetList rup)
@@ -123,10 +100,10 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var prdKindNames = CurrentDb.PrdKind.Where(p => (from d in CurrentDb.PrdProductKind
-                                                                 where d.PrdProductId == item.Id
-                                                                 select d.PrdKindId).Contains(p.Id)).Select(m => m.Name).ToArray();
-                string str_prdKindNames = prdKindNames.Length != 0 ? string.Join(",", prdKindNames) : "";
+                //var prdKindNames = CurrentDb.PrdKind.Where(p => (from d in CurrentDb.PrdProductKind
+                //                                                 where d.PrdProductId == item.Id
+                //                                                 select d.PrdKindId).Contains(p.Id)).Select(m => m.Name).ToArray();
+                //string str_prdKindNames = prdKindNames.Length != 0 ? string.Join(",", prdKindNames) : "";
 
                 var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == item.Id).ToList();
 
@@ -143,7 +120,7 @@ namespace LocalS.Service.Api.Merch
                     Name = item.Name,
                     BriefDes = item.BriefDes,
                     MainImgUrl = ImgSet.GetMain_S(item.DisplayImgUrls),
-                    KindNames = str_prdKindNames,
+                    KindNames = "",
                     Skus = list_Sku,
                     CreateTime = item.CreateTime,
                 });
@@ -167,9 +144,7 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
             var ret = new RetPrdProductInitAdd();
 
-
-            ret.Kinds = GetKindTree(merchId);
-            ret.Subjects = GetSubjectTree(merchId);
+            ret.Kinds = GetKindTree();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -199,15 +174,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品名称不能为空");
             }
 
-            //if (rop.KindIds == null || rop.KindIds.Count == 0)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品模块");
-            //}
-
-            //if (rop.SubjectIds == null || rop.SubjectIds.Count == 0)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "至少选择一个商品栏目");
-            //}
+            if (rop.KindIds == null || rop.KindIds.Count != 3)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择三级商品分类");
+            }
 
             if (rop.DisplayImgUrls == null || rop.DisplayImgUrls.Count == 0)
             {
@@ -226,6 +196,10 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.Id = IdWorker.Build(IdType.NewGuid);
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name.Trim2();
+                prdProduct.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
+                prdProduct.PrdKindId1 = rop.KindIds[0];
+                prdProduct.PrdKindId2 = rop.KindIds[1];
+                prdProduct.PrdKindId3 = rop.KindIds[2];
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.MainImgUrl = ImgSet.GetMain_O(prdProduct.DisplayImgUrls);
@@ -277,37 +251,6 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.SaveChanges();
                 }
 
-                if (rop.KindIds != null)
-                {
-                    prdProduct.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
-
-                    foreach (var kindId in rop.KindIds)
-                    {
-                        var productSkuKind = new PrdProductKind();
-                        productSkuKind.Id = IdWorker.Build(IdType.NewGuid);
-                        productSkuKind.PrdKindId = kindId;
-                        productSkuKind.PrdProductId = prdProduct.Id;
-                        productSkuKind.Creator = operater;
-                        productSkuKind.CreateTime = DateTime.Now;
-                        CurrentDb.PrdProductKind.Add(productSkuKind);
-                    }
-                }
-
-                if (rop.SubjectIds != null)
-                {
-                    prdProduct.PrdSubjectIds = string.Join(",", rop.SubjectIds.ToArray());
-
-                    foreach (var subjectId in rop.SubjectIds)
-                    {
-                        var productSkuSubject = new PrdProductSubject();
-                        productSkuSubject.Id = IdWorker.Build(IdType.NewGuid);
-                        productSkuSubject.PrdSubjectId = subjectId;
-                        productSkuSubject.PrdProductId = prdProduct.Id;
-                        productSkuSubject.Creator = operater;
-                        productSkuSubject.CreateTime = DateTime.Now;
-                        CurrentDb.PrdProductSubject.Add(productSkuSubject);
-                    }
-                }
 
                 CurrentDb.PrdProduct.Add(prdProduct);
                 CurrentDb.SaveChanges();
@@ -331,12 +274,10 @@ namespace LocalS.Service.Api.Merch
                 ret.Name = prdProduct.Name;
                 ret.DetailsDes = prdProduct.DetailsDes.ToJsonObject<List<ImgSet>>();
                 ret.BriefDes = prdProduct.BriefDes;
-                ret.KindIds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdKindId).ToList();
-                ret.SubjectIds = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProductId).Select(m => m.PrdSubjectId).ToList();
+                ret.KindIds = string.IsNullOrEmpty(prdProduct.PrdKindIds) ? new List<string>() : prdProduct.PrdKindIds.Split(',').ToList();
                 ret.CharTags = prdProduct.CharTags.ToJsonObject<List<string>>();
                 ret.DisplayImgUrls = prdProduct.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                ret.Kinds = GetKindTree(merchId);
-                ret.Subjects = GetSubjectTree(merchId);
+                ret.Kinds = GetKindTree();
                 ret.IsTrgVideoService = prdProduct.IsTrgVideoService;
                 var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).OrderBy(m => m.SpecDes).ToList();
 
@@ -364,11 +305,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品名称不能为空");
             }
 
-
-            //if (rop.KindIds == null || rop.KindIds.Count == 0)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品模块分类不能为空");
-            //}
+            if (rop.KindIds == null || rop.KindIds.Count != 3)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择三级商品分类");
+            }
 
             if (rop.DisplayImgUrls == null || rop.DisplayImgUrls.Count == 0)
             {
@@ -384,6 +324,11 @@ namespace LocalS.Service.Api.Merch
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 prdProduct.Name = rop.Name;
+
+                prdProduct.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
+                prdProduct.PrdKindId1 = rop.KindIds[0];
+                prdProduct.PrdKindId2 = rop.KindIds[1];
+                prdProduct.PrdKindId3 = rop.KindIds[2];
                 prdProduct.PinYinIndex = CommonUtil.GetPingYinIndex(prdProduct.Name);
                 prdProduct.BriefDes = rop.BriefDes;
                 prdProduct.DetailsDes = rop.DetailsDes.ToJsonString();
@@ -432,50 +377,6 @@ namespace LocalS.Service.Api.Merch
                         }
                     }
                 }
-
-                var prdProductKinds = CurrentDb.PrdProductKind.Where(m => m.PrdProductId == prdProduct.Id).ToList();
-
-                foreach (var prdProductKind in prdProductKinds)
-                {
-                    CurrentDb.PrdProductKind.Remove(prdProductKind);
-                }
-
-                if (rop.KindIds != null)
-                {
-                    foreach (var kindId in rop.KindIds)
-                    {
-                        var prdProductKind = new PrdProductKind();
-                        prdProductKind.Id = IdWorker.Build(IdType.NewGuid);
-                        prdProductKind.PrdKindId = kindId;
-                        prdProductKind.PrdProductId = prdProduct.Id;
-                        prdProductKind.Creator = operater;
-                        prdProductKind.CreateTime = DateTime.Now;
-                        CurrentDb.PrdProductKind.Add(prdProductKind);
-                    }
-                }
-
-                var prdProductSubjects = CurrentDb.PrdProductSubject.Where(m => m.PrdProductId == prdProduct.Id).ToList();
-
-                foreach (var prdProductSubject in prdProductSubjects)
-                {
-                    CurrentDb.PrdProductSubject.Remove(prdProductSubject);
-                }
-
-
-                if (rop.SubjectIds != null)
-                {
-                    foreach (var subjectId in rop.SubjectIds)
-                    {
-                        var prdProductSubject = new PrdProductSubject();
-                        prdProductSubject.Id = IdWorker.Build(IdType.NewGuid);
-                        prdProductSubject.PrdSubjectId = subjectId;
-                        prdProductSubject.PrdProductId = prdProduct.Id;
-                        prdProductSubject.Creator = operater;
-                        prdProductSubject.CreateTime = DateTime.Now;
-                        CurrentDb.PrdProductSubject.Add(prdProductSubject);
-                    }
-                }
-
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

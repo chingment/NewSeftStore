@@ -617,7 +617,7 @@ namespace LocalS.Service.Api.Merch
             int total = query.Count();
 
             int pageIndex = rup.Page - 1;
-            int pageSize = int.MaxValue;
+            int pageSize = rup.Limit;
 
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 

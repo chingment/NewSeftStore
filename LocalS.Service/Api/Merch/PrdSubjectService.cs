@@ -14,219 +14,219 @@ namespace LocalS.Service.Api.Merch
 {
    public class PrdSubjectService : BaseDbContext
     {
-        private List<TreeNode> GetTree(string id, List<PrdSubject> productSubjects)
-        {
-            List<TreeNode> treeNodes = new List<TreeNode>();
+        //private List<TreeNode> GetTree(string id, List<PrdSubject> productSubjects)
+        //{
+        //    List<TreeNode> treeNodes = new List<TreeNode>();
 
-            var p_productSubjects = productSubjects.Where(t => t.PId == id).ToList();
+        //    var p_productSubjects = productSubjects.Where(t => t.PId == id).ToList();
 
-            foreach (var p_productSubject in p_productSubjects)
-            {
-                TreeNode treeNode = new TreeNode();
-                treeNode.Id = p_productSubject.Id;
-                treeNode.PId = p_productSubject.PId;
-                treeNode.Label = p_productSubject.Name;
-                treeNode.Description = p_productSubject.Description;
-                treeNode.Depth = p_productSubject.Depth;
+        //    foreach (var p_productSubject in p_productSubjects)
+        //    {
+        //        TreeNode treeNode = new TreeNode();
+        //        treeNode.Id = p_productSubject.Id;
+        //        treeNode.PId = p_productSubject.PId;
+        //        treeNode.Label = p_productSubject.Name;
+        //        treeNode.Description = p_productSubject.Description;
+        //        treeNode.Depth = p_productSubject.Depth;
 
-                if (p_productSubject.Depth == 0)
-                {
-                    treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
-                }
-                else
-                {
-                    if (p_productSubject.Depth >= 1)
-                    {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
-                    }
-                    else
-                    {
-                        treeNode.ExtAttr = new { CanDelete = true, CanAdd = true };
-                    }
-                }
+        //        if (p_productSubject.Depth == 0)
+        //        {
+        //            treeNode.ExtAttr = new { CanDelete = false, CanAdd = true };
+        //        }
+        //        else
+        //        {
+        //            if (p_productSubject.Depth >= 1)
+        //            {
+        //                treeNode.ExtAttr = new { CanDelete = true, CanAdd = false };
+        //            }
+        //            else
+        //            {
+        //                treeNode.ExtAttr = new { CanDelete = true, CanAdd = true };
+        //            }
+        //        }
 
-                var children = GetTree(p_productSubject.Id, productSubjects);
-                if (children != null)
-                {
-                    if (children.Count > 0)
-                    {
-                        treeNode.Children = new List<TreeNode>();
-                        treeNode.Children.AddRange(children);
-                    }
-                }
+        //        var children = GetTree(p_productSubject.Id, productSubjects);
+        //        if (children != null)
+        //        {
+        //            if (children.Count > 0)
+        //            {
+        //                treeNode.Children = new List<TreeNode>();
+        //                treeNode.Children.AddRange(children);
+        //            }
+        //        }
 
-                treeNodes.Add(treeNode);
-            }
+        //        treeNodes.Add(treeNode);
+        //    }
 
-            return treeNodes;
-        }
+        //    return treeNodes;
+        //}
 
-        public CustomJsonResult GetList(string operater, string merchId, RupPrdSubjectGetList rup)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult GetList(string operater, string merchId, RupPrdSubjectGetList rup)
+        //{
+        //    var result = new CustomJsonResult();
 
-            var prdSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
+        //    var prdSubjects = CurrentDb.PrdSubject.Where(m => m.MerchId == merchId).OrderBy(m => m.Priority).ToList();
 
-            var topPrdSubject = prdSubjects.Where(m => m.Depth == 0).FirstOrDefault();
+        //    var topPrdSubject = prdSubjects.Where(m => m.Depth == 0).FirstOrDefault();
 
-            var tree = GetTree(topPrdSubject.PId, prdSubjects);
+        //    var tree = GetTree(topPrdSubject.PId, prdSubjects);
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", tree);
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", tree);
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
-        public CustomJsonResult InitAdd(string operater, string merchId, string pSubjectId)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult InitAdd(string operater, string merchId, string pSubjectId)
+        //{
+        //    var result = new CustomJsonResult();
 
-            var ret = new RetPrdSubjectInitAdd();
+        //    var ret = new RetPrdSubjectInitAdd();
 
-            var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == pSubjectId).FirstOrDefault();
+        //    var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == pSubjectId).FirstOrDefault();
 
-            if (prdSubject != null)
-            {
-                ret.PId = prdSubject.Id;
-                ret.PName = prdSubject.Name;
-            }
+        //    if (prdSubject != null)
+        //    {
+        //        ret.PId = prdSubject.Id;
+        //        ret.PName = prdSubject.Name;
+        //    }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        public CustomJsonResult Add(string operater, string merchId, RopPrdSubjectAdd rop)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult Add(string operater, string merchId, RopPrdSubjectAdd rop)
+        //{
+        //    var result = new CustomJsonResult();
 
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var isExists = CurrentDb.PrdSubject.Where(m => m.Name == rop.Name).FirstOrDefault();
-                if (isExists != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
-                }
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        var isExists = CurrentDb.PrdSubject.Where(m => m.Name == rop.Name).FirstOrDefault();
+        //        if (isExists != null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
+        //        }
 
-                var pPrdSubject = CurrentDb.PrdSubject.Where(m => m.Id == rop.PId).FirstOrDefault();
-                if (pPrdSubject == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
-                }
+        //        var pPrdSubject = CurrentDb.PrdSubject.Where(m => m.Id == rop.PId).FirstOrDefault();
+        //        if (pPrdSubject == null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
+        //        }
 
-                var prdSubject = new PrdSubject();
-                prdSubject.Id = IdWorker.Build(IdType.NewGuid);
-                prdSubject.PId = rop.PId;
-                prdSubject.Name = rop.Name;
-                prdSubject.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                prdSubject.MainImgUrl = ImgSet.GetMain_O(prdSubject.DisplayImgUrls);
-                prdSubject.MerchId = merchId;
-                prdSubject.Description = rop.Description;
-                prdSubject.Depth = pPrdSubject.Depth + 1;
-                prdSubject.CreateTime = DateTime.Now;
-                prdSubject.Creator = operater;
-                CurrentDb.PrdSubject.Add(prdSubject);
+        //        var prdSubject = new PrdSubject();
+        //        prdSubject.Id = IdWorker.Build(IdType.NewGuid);
+        //        prdSubject.PId = rop.PId;
+        //        prdSubject.Name = rop.Name;
+        //        prdSubject.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+        //        prdSubject.MainImgUrl = ImgSet.GetMain_O(prdSubject.DisplayImgUrls);
+        //        prdSubject.MerchId = merchId;
+        //        prdSubject.Description = rop.Description;
+        //        prdSubject.Depth = pPrdSubject.Depth + 1;
+        //        prdSubject.CreateTime = DateTime.Now;
+        //        prdSubject.Creator = operater;
+        //        CurrentDb.PrdSubject.Add(prdSubject);
 
-                CurrentDb.SaveChanges();
-                ts.Complete();
+        //        CurrentDb.SaveChanges();
+        //        ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
+        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        //    }
 
-            return result;
+        //    return result;
 
-        }
+        //}
 
-        public CustomJsonResult InitEdit(string operater, string merchId, string orgId)
-        {
-            var result = new CustomJsonResult();
+        //public CustomJsonResult InitEdit(string operater, string merchId, string orgId)
+        //{
+        //    var result = new CustomJsonResult();
 
-            var ret = new RetProductSubjectInitEdit();
+        //    var ret = new RetProductSubjectInitEdit();
 
-            var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == orgId).FirstOrDefault();
+        //    var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == orgId).FirstOrDefault();
 
-            if (prdSubject != null)
-            {
-                ret.Id = prdSubject.Id;
-                ret.Name = prdSubject.Name;
-                ret.DisplayImgUrls = prdSubject.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-
-
-                ret.Description = prdSubject.Description;
-
-                var p_PrdSubject = CurrentDb.PrdSubject.Where(m => m.Id == prdSubject.PId).FirstOrDefault();
-
-                if (p_PrdSubject != null)
-                {
-                    ret.PId = p_PrdSubject.Id;
-                    ret.PName = p_PrdSubject.Name;
-                }
-                else
-                {
-                    ret.PName = "/";
-                }
-            }
+        //    if (prdSubject != null)
+        //    {
+        //        ret.Id = prdSubject.Id;
+        //        ret.Name = prdSubject.Name;
+        //        ret.DisplayImgUrls = prdSubject.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
 
 
+        //        ret.Description = prdSubject.Description;
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        //        var p_PrdSubject = CurrentDb.PrdSubject.Where(m => m.Id == prdSubject.PId).FirstOrDefault();
 
-            return result;
-        }
+        //        if (p_PrdSubject != null)
+        //        {
+        //            ret.PId = p_PrdSubject.Id;
+        //            ret.PName = p_PrdSubject.Name;
+        //        }
+        //        else
+        //        {
+        //            ret.PName = "/";
+        //        }
+        //    }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopPrdSubjectEdit rop)
-        {
-
-            CustomJsonResult result = new CustomJsonResult();
 
 
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == rop.Id).FirstOrDefault();
-                if (prdSubject == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
-                }
-                prdSubject.Name = rop.Name;
-                prdSubject.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                prdSubject.MainImgUrl = ImgSet.GetMain_O(prdSubject.DisplayImgUrls);
-                prdSubject.Description = rop.Description;
-                prdSubject.MendTime = DateTime.Now;
-                prdSubject.Mender = operater;
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
-                CurrentDb.SaveChanges();
-                ts.Complete();
+        //    return result;
+        //}
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
+        //public CustomJsonResult Edit(string operater, string merchId, RopPrdSubjectEdit rop)
+        //{
 
-            return result;
+        //    CustomJsonResult result = new CustomJsonResult();
 
-        }
 
-        public CustomJsonResult Sort(string operater, string merchId, RopPrdSubjectSort rop)
-        {
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        var prdSubject = CurrentDb.PrdSubject.Where(m => m.Id == rop.Id).FirstOrDefault();
+        //        if (prdSubject == null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据为空");
+        //        }
+        //        prdSubject.Name = rop.Name;
+        //        prdSubject.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+        //        prdSubject.MainImgUrl = ImgSet.GetMain_O(prdSubject.DisplayImgUrls);
+        //        prdSubject.Description = rop.Description;
+        //        prdSubject.MendTime = DateTime.Now;
+        //        prdSubject.Mender = operater;
 
-            CustomJsonResult result = new CustomJsonResult();
+        //        CurrentDb.SaveChanges();
+        //        ts.Complete();
 
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var productSubjects = CurrentDb.PrdSubject.Where(m => rop.Ids.Contains(m.Id)).ToList();
+        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        //    }
 
-                for (int i = 0; i < productSubjects.Count; i++)
-                {
-                    int priority = rop.Ids.IndexOf(productSubjects[i].Id);
-                    productSubjects[i].Priority = priority;
-                }
+        //    return result;
 
-                CurrentDb.SaveChanges();
-                ts.Complete();
+        //}
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
+        //public CustomJsonResult Sort(string operater, string merchId, RopPrdSubjectSort rop)
+        //{
 
-            return result;
+        //    CustomJsonResult result = new CustomJsonResult();
 
-        }
+        //    using (TransactionScope ts = new TransactionScope())
+        //    {
+        //        var productSubjects = CurrentDb.PrdSubject.Where(m => rop.Ids.Contains(m.Id)).ToList();
+
+        //        for (int i = 0; i < productSubjects.Count; i++)
+        //        {
+        //            int priority = rop.Ids.IndexOf(productSubjects[i].Id);
+        //            productSubjects[i].Priority = priority;
+        //        }
+
+        //        CurrentDb.SaveChanges();
+        //        ts.Complete();
+
+        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+        //    }
+
+        //    return result;
+
+        //}
     }
 }

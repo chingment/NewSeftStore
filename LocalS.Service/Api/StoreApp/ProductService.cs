@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == rup.StoreId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
             foreach (var prdKind in prdKinds)
             {
@@ -73,8 +73,8 @@ namespace LocalS.Service.Api.StoreApp
 
             if (!string.IsNullOrEmpty(kindId))
             {
-                query = query.Where(p => (from d in CurrentDb.PrdProductKind
-                                          where d.PrdKindId == kindId
+                query = query.Where(p => (from d in CurrentDb.StoreKindSpu
+                                          where d.StoreKindId == kindId
                                           select d.PrdProductId).Contains(p.PrdProductId));
             }
 

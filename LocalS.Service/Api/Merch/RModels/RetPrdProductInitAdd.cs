@@ -12,11 +12,9 @@ namespace LocalS.Service.Api.Merch
         public RetPrdProductInitAdd()
         {
             this.Kinds = new List<TreeNode>();
-            this.Subjects = new List<TreeNode>();
         }
 
         public List<TreeNode> Kinds { get; set; }
-        public List<TreeNode> Subjects { get; set; }
 
     }
 }

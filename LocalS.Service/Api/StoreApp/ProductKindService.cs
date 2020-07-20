@@ -23,14 +23,14 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var prdKinds = CurrentDb.PrdKind.Where(m => m.MerchId == store.MerchId && m.Depth == 1 && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == rup.StoreId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
             foreach (var prdKind in prdKinds)
             {
                 var prdKindModel = new PrdKindModel();
                 prdKindModel.Id = prdKind.Id;
                 prdKindModel.Name = prdKind.Name;
-                prdKindModel.MainImgUrl = prdKind.MainImgUrl;
+                prdKindModel.MainImgUrl =ImgSet.GetMain_O(prdKind.DisplayImgUrls);
                 prdKindModel.Selected = false;
                 prdKindModel.List = StoreAppServiceFactory.Product.GetProducts(0, 10, rup.StoreId, rup.ShopMode, prdKind.Id);
 

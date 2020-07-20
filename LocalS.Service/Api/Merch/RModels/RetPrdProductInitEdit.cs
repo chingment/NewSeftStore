@@ -14,7 +14,6 @@ namespace LocalS.Service.Api.Merch
         {
             this.Skus = new List<Sku>();
             this.Kinds = new List<TreeNode>();
-            this.Subjects = new List<TreeNode>();
         }
 
         public string Id { get; set; }
@@ -32,11 +31,6 @@ namespace LocalS.Service.Api.Merch
         public List<string> KindIds { get; set; }
         public List<string> CharTags { get; set; }
         public bool IsTrgVideoService { get; set; }
-        public List<string> SubjectIds
-        {
-            get; set;
-        }
-
         public List<Sku> Skus { get; set; }
         public class Sku
         {
@@ -51,6 +45,5 @@ namespace LocalS.Service.Api.Merch
         }
 
         public List<TreeNode> Kinds { get; set; }
-        public List<TreeNode> Subjects { get; set; }
     }
 }
