@@ -8,6 +8,6 @@ namespace LocalS.Service.Api.Admin
 {
     public class RopPrdKindSort
     {
-        public List<string> Ids { get; set; }
+        public List<int> Ids { get; set; }
     }
 }

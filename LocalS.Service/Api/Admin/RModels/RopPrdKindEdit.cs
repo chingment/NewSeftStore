@@ -9,7 +9,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class RopPrdKindEdit
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public string Description { get; set; }

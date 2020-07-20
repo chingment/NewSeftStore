@@ -155,7 +155,7 @@ namespace LocalS.Service.Api.StoreTerm
                 prdKindModel.Id = prdKind.Id;
                 prdKindModel.Name = prdKind.Name;
 
-                var productIds = CurrentDb.StoreKindSpu.Where(m => m.StoreKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
+                var productIds = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.StoreKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
                 if (productIds.Count > 0)
                 {
                     var productSkuIds = sellChannelStocks.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();

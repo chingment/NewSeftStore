@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class RetPrdKindInitAdd
     {
-        public string PId { get; set; }
+        public int PId { get; set; }
         public string PName { get; set; }
     }
 }

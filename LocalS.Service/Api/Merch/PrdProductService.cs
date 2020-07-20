@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class PrdProductService : BaseDbContext
     {
-        private List<TreeNode> GetKindTree(string id, List<PrdKind> prdKinds)
+        private List<TreeNode> GetKindTree(int id, List<PrdKind> prdKinds)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
@@ -26,13 +26,13 @@ namespace LocalS.Service.Api.Merch
             foreach (var p_productKind in p_PrdKinds)
             {
                 TreeNode treeNode = new TreeNode();
-                treeNode.Id = p_productKind.Id;
-                treeNode.PId = p_productKind.PId;
-                treeNode.Value = p_productKind.Id;
+                treeNode.Id = p_productKind.Id.ToString();
+                treeNode.PId = p_productKind.PId.ToString();
+                treeNode.Value = p_productKind.Id.ToString();
                 treeNode.Label = p_productKind.Name;
                 treeNode.IsDisabled = p_productKind.Depth <= 0 ? true : false;
 
-                var children = GetKindTree(treeNode.Id, prdKinds);
+                var children = GetKindTree(p_productKind.Id, prdKinds);
                 if (children != null)
                 {
                     if (children.Count > 0)
@@ -56,7 +56,7 @@ namespace LocalS.Service.Api.Merch
         public List<TreeNode> GetKindTree()
         {
             var prdKinds = CurrentDb.PrdKind.OrderBy(m => m.Priority).ToList();
-            return GetKindTree("1", prdKinds);
+            return GetKindTree(1, prdKinds);
         }
 
         public CustomJsonResult GetList(string operater, string merchId, RupPrdProductGetList rup)
@@ -101,10 +101,12 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
                 string str_prdKindNames = "";
-                List<string> prdKindIds = new List<string>();
+                List<int> prdKindIds = new List<int>();
                 if (!string.IsNullOrEmpty(item.PrdKindIds))
                 {
-                    prdKindIds = item.PrdKindIds.Split(',').ToList();
+                    prdKindIds.Add(item.PrdKindId1.Value);
+                    prdKindIds.Add(item.PrdKindId2.Value);
+                    prdKindIds.Add(item.PrdKindId3.Value);
                     var prdKindNames = CurrentDb.PrdKind.Where(p => prdKindIds.Contains(p.Id)).OrderBy(m => m.Depth).Select(m => m.Name).ToArray();
                     str_prdKindNames = prdKindNames.Length != 0 ? string.Join("/", prdKindNames) : "";
                 }

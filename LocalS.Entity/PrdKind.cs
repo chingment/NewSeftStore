@@ -8,10 +8,9 @@ namespace LocalS.Entity
     [Table("PrdKind")]
     public class PrdKind
     {
-        [Key]
-        public string Id { get; set; }
-        [MaxLength(128)]
-        public string PId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; }
+        public int PId { get; set; }
         public string Name { get; set; }
         public string IconImgUrl { get; set; }
         public string DisplayImgUrls { get; set; }

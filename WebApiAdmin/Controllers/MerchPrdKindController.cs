@@ -18,7 +18,7 @@ namespace WebApiAdmin.Controllers
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
-        public OwnApiHttpResponse InitAdd([FromUri]string pId)
+        public OwnApiHttpResponse InitAdd([FromUri]int pId)
         {
             IResult result = AdminServiceFactory.MerchPrdKind.InitAdd(this.CurrentUserId, pId);
             return new OwnApiHttpResponse(result);
@@ -32,7 +32,7 @@ namespace WebApiAdmin.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitEdit([FromUri]string id)
+        public OwnApiHttpResponse InitEdit([FromUri]int id)
         {
             IResult result = AdminServiceFactory.MerchPrdKind.InitEdit(this.CurrentUserId, id);
             return new OwnApiHttpResponse(result);

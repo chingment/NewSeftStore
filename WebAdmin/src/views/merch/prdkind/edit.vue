@@ -76,7 +76,11 @@ export default {
           var d = res.data
           this.form = d
 
-          this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
+          if (d.displayImgUrls == null) {
+            this.form.displayImgUrls = []
+          } else {
+            this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
+          }
         }
         this.loading = false
       })

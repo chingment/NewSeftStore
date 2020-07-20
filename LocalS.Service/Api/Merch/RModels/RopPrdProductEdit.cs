@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.Merch
 
         public List<string> CharTags { get; set; }
 
-        public List<string> KindIds { get; set; }
+        public List<int> KindIds { get; set; }
 
         public List<string> SubjectIds
         {

@@ -87,9 +87,12 @@ namespace Lumos
 
             if (format != null)
             {
-                if (imgUrl.IndexOf("_O") > -1)
+                if (imgUrl != null)
                 {
-                    imgUrl = imgUrl.Replace("_O", format);
+                    if (imgUrl.IndexOf("_O") > -1)
+                    {
+                        imgUrl = imgUrl.Replace("_O", format);
+                    }
                 }
             }
 

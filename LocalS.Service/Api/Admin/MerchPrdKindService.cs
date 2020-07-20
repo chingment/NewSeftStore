@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class MerchPrdKindService : BaseDbContext
     {
-        private List<TreeNode> GetTree(string id, List<PrdKind> prdKinds)
+        private List<TreeNode> GetTree(int id, List<PrdKind> prdKinds)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
 
@@ -24,8 +24,8 @@ namespace LocalS.Service.Api.Admin
             foreach (var p_prdKind in p_prdKinds)
             {
                 TreeNode treeNode = new TreeNode();
-                treeNode.Id = p_prdKind.Id;
-                treeNode.PId = p_prdKind.PId;
+                treeNode.Id = p_prdKind.Id.ToString();
+                treeNode.PId = p_prdKind.PId.ToString();
                 treeNode.Label = p_prdKind.Name;
                 treeNode.Description = p_prdKind.Description;
                 treeNode.Depth = p_prdKind.Depth;
@@ -68,7 +68,7 @@ namespace LocalS.Service.Api.Admin
 
             var prdKinds = CurrentDb.PrdKind.OrderBy(m => m.Priority).ToList();
 
-            prdKinds.Add(new PrdKind { Id = "1", Name = "商品分类", Depth = 0, IsDelete = false, Priority = 0, CreateTime = DateTime.Now, Creator = "" });
+            prdKinds.Add(new PrdKind { Id = 1, Name = "商品分类", Depth = 0, IsDelete = false, Priority = 0, CreateTime = DateTime.Now, Creator = "" });
 
             var toPrdKind = prdKinds.Where(m => m.Depth == 0).FirstOrDefault();
 
@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.Admin
 
         }
 
-        public CustomJsonResult InitAdd(string operater, string pKindId)
+        public CustomJsonResult InitAdd(string operater, int pKindId)
         {
             var result = new CustomJsonResult();
 
@@ -90,7 +90,7 @@ namespace LocalS.Service.Api.Admin
 
             if (prdKind == null)
             {
-                ret.PId = "1";
+                ret.PId = 1;
                 ret.PName = "/";
             }
             else
@@ -122,8 +122,19 @@ namespace LocalS.Service.Api.Admin
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
                 }
 
+                var count = CurrentDb.PrdKind.Where(m => m.PId == rop.PId).Count();
+
+                if (count == 99)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "最大子节点99级");
+                }
+
+                int id = int.Parse(rop.PId.ToString() + (count + 1).ToString().PadLeft(2, '0'));
+
+                LogUtil.Info("id:" + id.ToString());
+
                 var productKind = new PrdKind();
-                productKind.Id = IdWorker.Build(IdType.NewGuid);
+                productKind.Id = id;
                 productKind.PId = rop.PId;
                 productKind.Name = rop.Name;
                 productKind.IconImgUrl = rop.IconImgUrl;
@@ -145,13 +156,13 @@ namespace LocalS.Service.Api.Admin
 
         }
 
-        public CustomJsonResult InitEdit(string operater, string orgId)
+        public CustomJsonResult InitEdit(string operater, int id)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetPrdKindInitEdit();
 
-            var prdKind = CurrentDb.PrdKind.Where(m => m.Id == orgId).FirstOrDefault();
+            var prdKind = CurrentDb.PrdKind.Where(m => m.Id == id).FirstOrDefault();
 
             if (prdKind != null)
             {
