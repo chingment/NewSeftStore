@@ -81,7 +81,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.PrdProduct
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.BriefDes, u.CreateTime, u.DisplayImgUrls });
+                         select new { u.Id, u.Name, u.BriefDes, u.PrdKindIds, u.PrdKindId1, u.PrdKindId2, u.PrdKindId3, u.CreateTime, u.DisplayImgUrls });
 
             if (productIds != null)
             {
@@ -100,10 +100,14 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                //var prdKindNames = CurrentDb.PrdKind.Where(p => (from d in CurrentDb.PrdProductKind
-                //                                                 where d.PrdProductId == item.Id
-                //                                                 select d.PrdKindId).Contains(p.Id)).Select(m => m.Name).ToArray();
-                //string str_prdKindNames = prdKindNames.Length != 0 ? string.Join(",", prdKindNames) : "";
+                string str_prdKindNames = "";
+                List<string> prdKindIds = new List<string>();
+                if (!string.IsNullOrEmpty(item.PrdKindIds))
+                {
+                    prdKindIds = item.PrdKindIds.Split(',').ToList();
+                    var prdKindNames = CurrentDb.PrdKind.Where(p => prdKindIds.Contains(p.Id)).OrderBy(m => m.Depth).Select(m => m.Name).ToArray();
+                    str_prdKindNames = prdKindNames.Length != 0 ? string.Join("/", prdKindNames) : "";
+                }
 
                 var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == item.Id).ToList();
 
@@ -120,17 +124,11 @@ namespace LocalS.Service.Api.Merch
                     Name = item.Name,
                     BriefDes = item.BriefDes,
                     MainImgUrl = ImgSet.GetMain_S(item.DisplayImgUrls),
-                    KindNames = "",
+                    KindNames = str_prdKindNames,
                     Skus = list_Sku,
                     CreateTime = item.CreateTime,
                 });
             }
-
-            //var productSkus = CurrentDb.PrdProductSku.ToList();
-            //foreach (var item in productSkus)
-            //{
-            //    CacheServiceFactory.ProductSku.Update(item.MerchId, item.Id);
-            //}
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
