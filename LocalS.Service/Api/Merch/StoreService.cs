@@ -505,55 +505,59 @@ namespace LocalS.Service.Api.Merch
                     storeKindSpu.StoreKindId = rop.KindId;
                     storeKindSpu.PrdProductId = rop.ProductId;
                     storeKindSpu.IsDelete = false;
+                    storeKindSpu.IsSellMall = rop.IsSellMall;
                     storeKindSpu.CreateTime = DateTime.Now;
                     storeKindSpu.Creator = operater;
                     CurrentDb.StoreKindSpu.Add(storeKindSpu);
                 }
                 else
                 {
+                    storeKindSpu.IsSellMall = rop.IsSellMall;
                     storeKindSpu.IsDelete = false;
                     storeKindSpu.MendTime = DateTime.Now;
                     storeKindSpu.Mender = operater;
                 }
 
-
-                if (rop.Stocks != null)
+                if (rop.IsSellMall)
                 {
-                    foreach (var stock in rop.Stocks)
+                    if (rop.Stocks != null)
                     {
-                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
-                        if (sellChannelStock == null)
+                        foreach (var stock in rop.Stocks)
                         {
-                            sellChannelStock = new SellChannelStock();
-                            sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
-                            sellChannelStock.MerchId = merchId;
-                            sellChannelStock.StoreId = rop.StoreId;
-                            sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
-                            sellChannelStock.SellChannelRefId = SellChannelStock.MallSellChannelRefId;
-                            sellChannelStock.CabinetId = "0";
-                            sellChannelStock.SlotId = "0";
-                            sellChannelStock.PrdProductId = rop.ProductId;
-                            sellChannelStock.PrdProductSkuId = stock.SkuId;
-                            sellChannelStock.SalePrice = stock.SalePrice;
-                            sellChannelStock.SalePriceByVip = stock.SalePrice;
-                            sellChannelStock.IsOffSell = false;
-                            sellChannelStock.SellQuantity = stock.SumQuantity;
-                            sellChannelStock.WaitPayLockQuantity = 0;
-                            sellChannelStock.WaitPickupLockQuantity = 0;
-                            sellChannelStock.SumQuantity = stock.SumQuantity;
-                            sellChannelStock.CreateTime = DateTime.Now;
-                            sellChannelStock.Creator = operater;
-                            CurrentDb.SellChannelStock.Add(sellChannelStock);
-                        }
-                        else
-                        {
-                            sellChannelStock.SalePrice = stock.SalePrice;
-                            sellChannelStock.SalePriceByVip = stock.SalePrice;
-                            sellChannelStock.IsOffSell = false;
-                            sellChannelStock.SumQuantity = stock.SumQuantity;
-                            sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
-                            sellChannelStock.MendTime = DateTime.Now;
-                            sellChannelStock.Mender = operater;
+                            var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                            if (sellChannelStock == null)
+                            {
+                                sellChannelStock = new SellChannelStock();
+                                sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
+                                sellChannelStock.MerchId = merchId;
+                                sellChannelStock.StoreId = rop.StoreId;
+                                sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
+                                sellChannelStock.SellChannelRefId = SellChannelStock.MallSellChannelRefId;
+                                sellChannelStock.CabinetId = "0";
+                                sellChannelStock.SlotId = "0";
+                                sellChannelStock.PrdProductId = rop.ProductId;
+                                sellChannelStock.PrdProductSkuId = stock.SkuId;
+                                sellChannelStock.SalePrice = stock.SalePrice;
+                                sellChannelStock.SalePriceByVip = stock.SalePrice;
+                                sellChannelStock.IsOffSell = stock.IsOffSell;
+                                sellChannelStock.SellQuantity = stock.SumQuantity;
+                                sellChannelStock.WaitPayLockQuantity = 0;
+                                sellChannelStock.WaitPickupLockQuantity = 0;
+                                sellChannelStock.SumQuantity = stock.SumQuantity;
+                                sellChannelStock.CreateTime = DateTime.Now;
+                                sellChannelStock.Creator = operater;
+                                CurrentDb.SellChannelStock.Add(sellChannelStock);
+                            }
+                            else
+                            {
+                                sellChannelStock.SalePrice = stock.SalePrice;
+                                sellChannelStock.SalePriceByVip = stock.SalePrice;
+                                sellChannelStock.IsOffSell = stock.IsOffSell;
+                                sellChannelStock.SumQuantity = stock.SumQuantity;
+                                sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
+                                sellChannelStock.MendTime = DateTime.Now;
+                                sellChannelStock.Mender = operater;
+                            }
                         }
                     }
                 }
@@ -575,6 +579,7 @@ namespace LocalS.Service.Api.Merch
             var product = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.ProductId).FirstOrDefault();
 
             var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.PrdProductId == product.Id).ToList();
+            var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.PrdProductId == product.Id).FirstOrDefault();
 
             List<object> stocks = new List<object>();
 
@@ -583,15 +588,15 @@ namespace LocalS.Service.Api.Merch
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == productSku.Id).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
-                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice });
+                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice, IsOffSell = false });
                 }
                 else
                 {
-                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = productSku.SpecIdx, SalePrice = sellChannelStock.SalePrice });
+                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = productSku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell });
                 }
             }
 
-            var ret = new { Id = product.Id, Name = product.Name, MainImgUrl = product.MainImgUrl, Stocks = stocks };
+            var ret = new { Id = product.Id, IsSellMall = storeKindSpu.IsSellMall, Name = product.Name, MainImgUrl = product.MainImgUrl, Stocks = stocks };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;

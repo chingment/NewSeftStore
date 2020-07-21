@@ -127,8 +127,11 @@
             fit="fit"
           />
         </el-form-item>
+        <el-form-item label="线上商城">
+          <el-checkbox v-model="kindSpuForm.isSellMall">开启</el-checkbox>
+        </el-form-item>
 
-        <el-form-item label="SKU列表" style="max-width:1000px">
+        <el-form-item v-show="kindSpuForm.isSellMall" label="SKU列表" style="max-width:1000px">
           <table class="list-tb" cellpadding="0" cellspacing="0">
             <thead>
               <tr>
@@ -143,6 +146,9 @@
                 </th>
                 <th style="width:100px">
                   价格
+                </th>
+                <th style="width:100px">
+                  下架
                 </th>
               </tr>
             </thead>
@@ -162,6 +168,9 @@
                 </td>
                 <td>
                   <el-input v-model="item.salePrice" clearable style="width:90%" />
+                </td>
+                <td>
+                  <el-checkbox v-model="item.isOffSell" />
                 </td>
               </tr>
             </tbody>
@@ -304,7 +313,8 @@ export default {
         storeId: '',
         kindId: '',
         productId: '',
-        stocks: []
+        stocks: [],
+        isSellMall: false
       },
       kindSpuRules: {
         storeId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
@@ -498,12 +508,14 @@ export default {
             var d = res.data
             this.kindSpuForm.productId = item.productId
             this.kindSpuForm.storeId = item.storeId
+            this.kindSpuForm.isSellMall = d.isSellMall
             this.kindSpuForm.stocks = d.stocks
             this.productSearchName = d.name
             this.productSearchMainImgUrl = d.mainImgUrl
           }
         })
       } else {
+        this.kindSpuForm.isSellMall = false
         this.kindSpuRemoveBtnShow = false
         this.kindSpuForm.productId = ''
         this.kindSpuForm.stocks = []
