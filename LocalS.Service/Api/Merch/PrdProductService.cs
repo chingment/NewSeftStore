@@ -104,9 +104,9 @@ namespace LocalS.Service.Api.Merch
                 List<int> prdKindIds = new List<int>();
                 if (!string.IsNullOrEmpty(item.PrdKindIds))
                 {
-                    prdKindIds.Add(item.PrdKindId1.Value);
-                    prdKindIds.Add(item.PrdKindId2.Value);
-                    prdKindIds.Add(item.PrdKindId3.Value);
+                    prdKindIds.Add(item.PrdKindId1);
+                    prdKindIds.Add(item.PrdKindId2);
+                    prdKindIds.Add(item.PrdKindId3);
                     var prdKindNames = CurrentDb.PrdKind.Where(p => prdKindIds.Contains(p.Id)).OrderBy(m => m.Depth).Select(m => m.Name).ToArray();
                     str_prdKindNames = prdKindNames.Length != 0 ? string.Join("/", prdKindNames) : "";
                 }

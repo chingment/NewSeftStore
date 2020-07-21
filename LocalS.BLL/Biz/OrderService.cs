@@ -284,6 +284,10 @@ namespace LocalS.BLL.Biz
                                             _skus.Stocks = bizProductSku.Stocks;
                                             _skus.CartId = productSku.CartId;
                                             _skus.SvcConsulterId = productSku.SvcConsulterId;
+                                            _skus.KindId1 = bizProductSku.KindId1;
+                                            _skus.KindId2 = bizProductSku.KindId2;
+                                            _skus.KindId3 = bizProductSku.KindId3;
+
                                             buildOrderSubSkus.Add(_skus);
                                         }
                                     }
@@ -479,6 +483,9 @@ namespace LocalS.BLL.Biz
                             orderSubChild.PrdProductSkuProducer = productSku.Producer;
                             orderSubChild.PrdProductSkuBarCode = productSku.BarCode;
                             orderSubChild.PrdProductSkuCumCode = productSku.CumCode;
+                            orderSubChild.KindId1 = productSku.KindId1;
+                            orderSubChild.KindId2 = productSku.KindId2;
+                            orderSubChild.KindId3 = productSku.KindId3;
                             orderSubChild.SalePrice = buildOrderSubChid.SalePrice;
                             orderSubChild.SalePriceByVip = buildOrderSubChid.SalePriceByVip;
                             orderSubChild.Quantity = buildOrderSubChid.Quantity;

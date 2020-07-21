@@ -37,5 +37,9 @@ namespace LocalS.BLL
         public bool IsTrgVideoService { get; set; }
         public List<string> CharTags { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
+
+        public int KindId1 { get; set; }
+        public int KindId2 { get; set; }
+        public int KindId3 { get; set; }
     }
 }

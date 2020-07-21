@@ -78,6 +78,9 @@ namespace LocalS.BLL
                     productSpuByCache.SpecItems = prdProductDb.SpecItems.ToJsonObject<List<SpecItem>>();
                     productSpuByCache.CharTags = prdProductDb.CharTags.ToJsonObject<List<string>>();
                     productSpuByCache.IsTrgVideoService = prdProductDb.IsTrgVideoService;
+                    productSpuByCache.KindId1 = prdProductDb.PrdKindId1;
+                    productSpuByCache.KindId2 = prdProductDb.PrdKindId2;
+                    productSpuByCache.KindId3 = prdProductDb.PrdKindId3;
 
                     var productSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == productId).ToList();
 
@@ -152,7 +155,9 @@ namespace LocalS.BLL
                     productSkuByCache.SpecIdx = productSkuByDb.SpecIdx;
                     productSkuByCache.SpecIdxSkus = productSpuByCache.SpecIdxSkus;
                     productSkuByCache.IsTrgVideoService = productSpuByCache.IsTrgVideoService;
-
+                    productSkuByCache.KindId1 = productSpuByCache.KindId1;
+                    productSkuByCache.KindId2 = productSpuByCache.KindId2;
+                    productSkuByCache.KindId3 = productSpuByCache.KindId3;
                     if (!string.IsNullOrEmpty(productSkuByCache.BarCode))
                     {
                         RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SBR, merchId), productSkuByCache.BarCode.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
