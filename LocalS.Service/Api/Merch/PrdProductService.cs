@@ -471,5 +471,22 @@ namespace LocalS.Service.Api.Merch
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkus);
         }
+
+        public CustomJsonResult GetSpecs(string operater, string merchId, string productId)
+        {
+
+            var productSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == productId).ToList();
+
+            List<object> objs = new List<object>();
+
+
+            foreach (var productSku in productSkus)
+            {
+                objs.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice });
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", objs);
+        }
+
     }
 }

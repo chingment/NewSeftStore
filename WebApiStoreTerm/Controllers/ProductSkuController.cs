@@ -19,5 +19,6 @@ namespace WebApiStoreTerm.Controllers
             IResult result = StoreTermServiceFactory.ProductSku.Search(rup);
             return new OwnApiHttpResponse(result);
         }
+
     }
 }

@@ -144,6 +144,14 @@ export function removeKindSpu(data) {
   })
 }
 
+export function getKindSpuInfo(params) {
+  return request({
+    url: '/store/getKindSpuInfo',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -162,5 +170,6 @@ export default {
   removeKind: removeKind,
   saveKindSpu: saveKindSpu,
   getKindSpus: getKindSpus,
-  removeKindSpu: removeKindSpu
+  removeKindSpu: removeKindSpu,
+  getKindSpuInfo: getKindSpuInfo
 }

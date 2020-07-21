@@ -234,6 +234,7 @@ namespace LocalS.BLL
 
                 foreach (var productSku in productSkus)
                 {
+
                     var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(productSku);
                     var searchModel = new ProductSkuInfoBySearchModel();
                     searchModel.Id = productSkuModel.Id;

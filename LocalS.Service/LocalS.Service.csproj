@@ -252,6 +252,7 @@
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RupStoreGetKindSpu.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpus.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageMachineGetMachineList.cs" />

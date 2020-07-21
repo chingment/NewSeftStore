@@ -110,6 +110,13 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetKindSpuInfo([FromUri]RupStoreGetKindSpu rup)
+        {
+            IResult result = MerchServiceFactory.Store.GetKindSpuInfo(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpPost]
         public OwnApiHttpResponse RemoveKindSpu([FromBody]RopStoreSaveKindSpu rop)
         {

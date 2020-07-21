@@ -2,8 +2,9 @@
   <div class="prodcut-list">
     <el-container style="min-height:300px">
       <el-aside width="200px;">
-        <div style="padding:10px;0px;text-align: center;">
-          <el-button type="primary" icon="el-icon-edit" size="small" @click="dialogKindOpen(false)">新建分类</el-button>
+        <div style="padding:4px;0px;text-align: center;">
+          <el-button type="text" icon="el-icon-plus" style="font-size: 18px;color:#000;" @click="dialogKindOpen(false)">新建分类</el-button>
+
         </div>
 
         <el-menu
@@ -21,12 +22,14 @@
 
       <el-container>
         <el-header style="text-align: left; font-size: 12px;background-color: #fff">
+          <el-button type="text" icon="el-icon-edit" size="small" style="font-size: 18px;color:#000;" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">{{ currentKindName }}</el-button>
 
-          <span style="font-size: 21px;display: block; float: left;margin-right: 20px;width: 130px;">{{ currentKindName }} </span>
+          <!-- <el-link @click="dialogKindOpen(true)">{{ currentKindName }}<i class="el-icon-edit" /> </el-link> -->
+          <!-- <span style="font-size: 21px;display: block; float: left;margin-right: 20px;width: 130px;">{{ currentKindName }} </span> -->
 
-          <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">编辑分类</el-button>
+          <!-- <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">编辑分类</el-button> -->
 
-          <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindSpuOpen()">添加商品</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindSpuOpen(false,null)">添加商品</el-button>
 
         </el-header>
         <el-main>
@@ -38,7 +41,7 @@
                     <span class="name">{{ item.name }}</span>
                   </div>
                   <div class="right">
-                    <el-button type="text" @click="_removeKindSpu(item)">移除</el-button>
+                    <el-button type="text" @click="dialogKindSpuOpen(true,item)">编辑</el-button>
                   </div>
                 </div>
                 <div class="it-component">
@@ -83,22 +86,19 @@
         <el-form-item label="描述" prop="description">
           <el-input v-model="kindForm.description" type="textarea" />
         </el-form-item>
-        <el-form-item label="数据同步">
-          <el-switch v-model="kindForm.isSynElseStore" />  <span>开启后，该分类信息同步到其它店铺分类信息中</span>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="_saveKind">保存</el-button>
-          <el-button v-show="kindRemoveBtnShow" type="warning" @click="_removeKind">删除</el-button>
-        </el-form-item>
       </el-form>
-
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="_saveKind">保存</el-button>
+        <el-button v-show="kindRemoveBtnShow" type="warning" @click="_removeKind">删除</el-button>
+        <el-button @click="dialogKindIsVisible=false">关闭</el-button>
+      </span>
     </el-dialog>
 
-    <el-dialog title="添加商品" :visible.sync="dialogKindSpuIsVisible" :width="isDesktop==true?'800px':'90%'">
+    <el-dialog :title="dialogKindSpuIsEdit?'编辑商品':'添加商品'" :visible.sync="dialogKindSpuIsVisible" :width="isDesktop==true?'800px':'90%'">
       <el-form ref="kindSpuForm" v-loading="dialogKindSpuIsLoading" :model="kindSpuForm" :rules="kindSpuRules" label-width="80px">
 
         <el-form-item label="所属分类">
-          <el-select v-model="kindSpuForm.kindId" placeholder="请选择" style="width:300px">
+          <el-select v-model="kindSpuForm.kindId" :disabled="dialogKindSpuIsEdit?true:false" placeholder="请选择" style="width:300px">
             <el-option
               v-for="item in listDataByKinds"
               :key="item.id"
@@ -107,7 +107,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="商品搜索" prop="productId">
+        <el-form-item v-show="!dialogKindSpuIsEdit" label="商品搜索" prop="productId">
           <el-autocomplete
             v-model="productSearchName"
             style="width:300px"
@@ -128,14 +128,51 @@
           />
         </el-form-item>
 
-        <el-form-item label="数据同步">
-          <el-switch v-model="kindSpuForm.isSynElseStore" />  <span>开启后，该商品信息同步到其它店铺分类信息中</span>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="_saveKindSpu">保存</el-button>
+        <el-form-item label="SKU列表" style="max-width:1000px">
+          <table class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+              <tr>
+                <th>
+                  规格
+                </th>
+                <th style="width:180px">
+                  编码
+                </th>
+                <th style="width:180px">
+                  库存
+                </th>
+                <th style="width:100px">
+                  价格
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(item,x) in kindSpuForm.stocks"
+                :key="x"
+              >
+                <td>
+                  {{ item.specIdx }}
+                </td>
+                <td>
+                  {{ item.cumCode }}
+                </td>
+                <td>
+                  <el-input v-model="item.sumQuantity" clearable style="width:90%" />
+                </td>
+                <td>
+                  <el-input v-model="item.salePrice" clearable style="width:90%" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </el-form-item>
       </el-form>
-
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="_saveKindSpu">保存</el-button>
+        <el-button v-show="kindSpuRemoveBtnShow" type="warning" @click="_removeKindSpu">删除</el-button>
+        <el-button @click="dialogKindSpuIsVisible=false">关闭</el-button>
+      </span>
     </el-dialog>
 
   </div>
@@ -227,8 +264,8 @@ white-space: nowrap;
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind, removeKindSpu } from '@/api/store'
-import { search } from '@/api/prdproduct'
+import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind, removeKindSpu, getKindSpuInfo } from '@/api/store'
+import { search, getSpecs } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
@@ -249,11 +286,10 @@ export default {
       kindEditBtnDisabled: true,
       kindRemoveBtnShow: false,
       kindForm: {
-        id: '',
+        kindId: '',
         name: '',
         description: '',
-        displayImgUrls: [],
-        isSynElseStore: false
+        displayImgUrls: []
       },
       kindRules: {
         name: [{ required: true, min: 1, max: 6, message: '必填,且不能超过6个字符', trigger: 'change' }],
@@ -262,11 +298,13 @@ export default {
       },
       dialogKindSpuIsVisible: false,
       dialogKindSpuIsLoading: false,
+      dialogKindSpuIsEdit: false,
+      kindSpuRemoveBtnShow: false,
       kindSpuForm: {
         storeId: '',
         kindId: '',
         productId: '',
-        isSynElseStore: false
+        stocks: []
       },
       kindSpuRules: {
         storeId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
@@ -368,7 +406,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeKind({ storeId: this.storeId, id: this.kindForm.id, isSynElseStore: this.kindForm.isSynElseStore }).then(res => {
+        removeKind({ storeId: this.storeId, kindId: this.kindForm.kindId }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this._getKinds()
@@ -398,13 +436,13 @@ export default {
         }
       })
     },
-    _removeKindSpu(item) {
+    _removeKindSpu() {
       MessageBox.confirm('确定要移除', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeKindSpu({ storeId: item.storeId, kindId: item.kindId, productId: item.productId }).then(res => {
+        removeKindSpu({ storeId: this.kindSpuForm.storeId, kindId: this.kindSpuForm.kindId, productId: this.kindSpuForm.productId }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this.dialogKindSpuIsVisible = false
@@ -434,29 +472,44 @@ export default {
       if (isEdit) {
         this.kindRemoveBtnShow = true
         var kind = this.listDataByKinds[this.currentKindIndex]
-        this.kindForm.id = kind.id
+        this.kindForm.kindId = kind.id
         this.kindForm.name = kind.name
         this.kindForm.description = kind.description
         this.kindForm.displayImgUrls = kind.displayImgUrls
         this.uploadImglistByKindDisplayImgUrls = this.getUploadImglist(kind.displayImgUrls)
-        this.kindForm.isSynElseStore = false
       } else {
         this.kindRemoveBtnShow = false
-        this.kindForm.id = ''
+        this.kindForm.kindId = ''
         this.kindForm.name = ''
         this.kindForm.description = ''
         this.kindForm.displayImgUrls = []
         this.uploadImglistByKindDisplayImgUrls = []
-        this.kindForm.isSynElseStore = false
       }
     },
-    dialogKindSpuOpen() {
+    dialogKindSpuOpen(isEdit, item) {
+      this.dialogKindSpuIsEdit = isEdit
       this.dialogKindSpuIsVisible = true
       var kind = this.listDataByKinds[ this.currentKindIndex]
       this.kindSpuForm.kindId = kind.id
-      this.kindSpuForm.productId = ''
-      this.productSearchName = ''
-      this.productSearchMainImgUrl = this.emptyImgUrl
+      if (isEdit) {
+        this.kindSpuRemoveBtnShow = true
+        getKindSpuInfo({ storeId: item.storeId, productId: item.productId, kindId: item.kindId }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.kindSpuForm.productId = item.productId
+            this.kindSpuForm.storeId = item.storeId
+            this.kindSpuForm.stocks = d.stocks
+            this.productSearchName = d.name
+            this.productSearchMainImgUrl = d.mainImgUrl
+          }
+        })
+      } else {
+        this.kindSpuRemoveBtnShow = false
+        this.kindSpuForm.productId = ''
+        this.kindSpuForm.stocks = []
+        this.productSearchName = ''
+        this.productSearchMainImgUrl = this.emptyImgUrl
+      }
     },
     productSearchAsync(queryString, cb) {
       console.log('queryString:' + queryString)
@@ -477,6 +530,15 @@ export default {
       this.productSearchMainImgUrl = item.mainImgUrl
       this.kindSpuForm.storeId = this.storeId
       this.kindSpuForm.productId = item.productId
+
+      getSpecs({ id: item.productId }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.kindSpuForm.stocks = d
+        } else {
+          this.kindSpuForm.stock = []
+        }
+      })
     },
     getUploadImglist(displayImgUrls) {
       var _uploadImglist = []

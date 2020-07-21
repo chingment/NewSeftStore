@@ -64,6 +64,14 @@ export function search(params) {
   })
 }
 
+export function getSpecs(params) {
+  return request({
+    url: '/prdproduct/getSpecs',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -72,5 +80,6 @@ export default {
   edit: edit,
   getOnSaleStores: getOnSaleStores,
   editSalePriceOnStore: editSalePriceOnStore,
-  search: search
+  search: search,
+  getSpecs: getSpecs
 }

@@ -11,6 +11,13 @@ namespace LocalS.Service.Api.Merch
         public string StoreId { get; set; }
         public string KindId { get; set; }
         public string ProductId { get; set; }
-        public bool IsSynElseStore { get; set; }
+        public List<StockInfo> Stocks { get; set; }
+
+        public class StockInfo
+        {
+            public string SkuId { get; set; }
+            public decimal SalePrice { get; set; }
+            public int SumQuantity { get; set; }
+        }
     }
 }

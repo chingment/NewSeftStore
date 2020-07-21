@@ -74,7 +74,7 @@ namespace LocalS.Service.Api.StoreApp
             if (!string.IsNullOrEmpty(kindId))
             {
                 query = query.Where(p => (from d in CurrentDb.StoreKindSpu
-                                          where d.StoreKindId == kindId
+                                          where d.StoreKindId == kindId && d.IsDelete == false
                                           select d.PrdProductId).Contains(p.PrdProductId));
             }
 

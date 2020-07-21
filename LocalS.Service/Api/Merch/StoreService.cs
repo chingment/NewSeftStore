@@ -360,8 +360,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
-
         public CustomJsonResult GetKinds(string operater, string merchId, string storeId)
         {
             var result = new CustomJsonResult();
@@ -386,9 +384,8 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-
                 string oldName = null;
-                if (string.IsNullOrEmpty(rop.Id))
+                if (string.IsNullOrEmpty(rop.KindId))
                 {
                     var storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Name == rop.Name).FirstOrDefault();
                     if (storeKind != null)
@@ -427,13 +424,13 @@ namespace LocalS.Service.Api.Merch
                 }
                 else
                 {
-                    var isExist = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id != rop.Id && m.Name == rop.Name && m.IsDelete == false).FirstOrDefault();
+                    var isExist = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id != rop.KindId && m.Name == rop.Name && m.IsDelete == false).FirstOrDefault();
                     if (isExist != null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该分类已经存在");
                     }
 
-                    var storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id == rop.Id).FirstOrDefault();
+                    var storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id == rop.KindId).FirstOrDefault();
 
                     if (storeKind == null)
                     {
@@ -451,49 +448,6 @@ namespace LocalS.Service.Api.Merch
 
                 }
 
-                if (rop.IsSynElseStore)
-                {
-                    var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.StoreId).ToList();
-
-                    foreach (var store in stores)
-                    {
-                        StoreKind storeKind = null;
-                        if (string.IsNullOrEmpty(oldName))
-                        {
-                            storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.Name == rop.Name).FirstOrDefault();
-                        }
-                        else
-                        {
-                            storeKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.Name == oldName).FirstOrDefault();
-                        }
-
-                        if (storeKind == null)
-                        {
-                            storeKind = new StoreKind();
-                            storeKind.Id = IdWorker.Build(IdType.NewGuid);
-                            storeKind.Name = rop.Name;
-                            storeKind.MerchId = merchId;
-                            storeKind.StoreId = store.Id;
-                            storeKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                            storeKind.Description = rop.Description;
-                            storeKind.CreateTime = DateTime.Now;
-                            storeKind.Creator = operater;
-                            CurrentDb.StoreKind.Add(storeKind);
-                            CurrentDb.SaveChanges();
-                        }
-                        else
-                        {
-                            storeKind.Name = rop.Name;
-                            storeKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                            storeKind.Description = rop.Description;
-                            storeKind.MendTime = DateTime.Now;
-                            storeKind.Mender = operater;
-                            CurrentDb.SaveChanges();
-                        }
-                    }
-                }
-
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -506,31 +460,14 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult RemoveKind(string operater, string merchId, RopStoreRemoveKind rop)
         {
             var result = new CustomJsonResult();
-
-            List<Store> stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.StoreId).ToList();
-            if (rop.IsSynElseStore)
+            var storeKindSpu = CurrentDb.StoreKind.Where(m => m.Id == rop.KindId && m.StoreId == rop.StoreId).FirstOrDefault();
+            if (storeKindSpu != null)
             {
-                stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                storeKindSpu.IsDelete = true;
+                storeKindSpu.MendTime = DateTime.Now;
+                storeKindSpu.Mender = operater;
+                CurrentDb.SaveChanges();
             }
-            else
-            {
-                stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id == rop.StoreId).ToList();
-            }
-
-            var storeKind = CurrentDb.StoreKind.Where(m => m.Id == rop.Id).FirstOrDefault();
-
-            foreach (var store in stores)
-            {
-                var storeKindSpu = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.Name == storeKind.Name).FirstOrDefault();
-                if (storeKindSpu != null)
-                {
-                    storeKindSpu.IsDelete = true;
-                    storeKindSpu.MendTime = DateTime.Now;
-                    storeKindSpu.Mender = operater;
-                    CurrentDb.SaveChanges();
-                }
-            }
-
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
 
@@ -558,40 +495,69 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择商品");
                 }
 
-                List<Store> stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.StoreId).ToList();
-                if (rop.IsSynElseStore)
+                var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
+                if (storeKindSpu == null)
                 {
-                    stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                    storeKindSpu = new StoreKindSpu();
+                    storeKindSpu.Id = IdWorker.Build(IdType.NewGuid);
+                    storeKindSpu.MerchId = merchId;
+                    storeKindSpu.StoreId = rop.StoreId;
+                    storeKindSpu.StoreKindId = rop.KindId;
+                    storeKindSpu.PrdProductId = rop.ProductId;
+                    storeKindSpu.IsDelete = false;
+                    storeKindSpu.CreateTime = DateTime.Now;
+                    storeKindSpu.Creator = operater;
+                    CurrentDb.StoreKindSpu.Add(storeKindSpu);
                 }
                 else
                 {
-                    stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id == rop.StoreId).ToList();
+                    storeKindSpu.IsDelete = false;
+                    storeKindSpu.MendTime = DateTime.Now;
+                    storeKindSpu.Mender = operater;
                 }
 
 
-                foreach (var store in stores)
+                if (rop.Stocks != null)
                 {
-                    var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == store.Id && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
-                    if (storeKindSpu == null)
+                    foreach (var stock in rop.Stocks)
                     {
-                        storeKindSpu = new StoreKindSpu();
-                        storeKindSpu.Id = IdWorker.Build(IdType.NewGuid);
-                        storeKindSpu.MerchId = merchId;
-                        storeKindSpu.StoreId = rop.StoreId;
-                        storeKindSpu.StoreKindId = rop.KindId;
-                        storeKindSpu.PrdProductId = rop.ProductId;
-                        storeKindSpu.IsDelete = false;
-                        storeKindSpu.CreateTime = DateTime.Now;
-                        storeKindSpu.Creator = operater;
-                        CurrentDb.StoreKindSpu.Add(storeKindSpu);
-                    }
-                    else
-                    {
-                        storeKindSpu.IsDelete = false;
-                        storeKindSpu.MendTime = DateTime.Now;
-                        storeKindSpu.Mender = operater;
+                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            sellChannelStock = new SellChannelStock();
+                            sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
+                            sellChannelStock.MerchId = merchId;
+                            sellChannelStock.StoreId = rop.StoreId;
+                            sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
+                            sellChannelStock.SellChannelRefId = SellChannelStock.MallSellChannelRefId;
+                            sellChannelStock.CabinetId = "0";
+                            sellChannelStock.SlotId = "0";
+                            sellChannelStock.PrdProductId = rop.ProductId;
+                            sellChannelStock.PrdProductSkuId = stock.SkuId;
+                            sellChannelStock.SalePrice = stock.SalePrice;
+                            sellChannelStock.SalePriceByVip = stock.SalePrice;
+                            sellChannelStock.IsOffSell = false;
+                            sellChannelStock.SellQuantity = stock.SumQuantity;
+                            sellChannelStock.WaitPayLockQuantity = 0;
+                            sellChannelStock.WaitPickupLockQuantity = 0;
+                            sellChannelStock.SumQuantity = stock.SumQuantity;
+                            sellChannelStock.CreateTime = DateTime.Now;
+                            sellChannelStock.Creator = operater;
+                            CurrentDb.SellChannelStock.Add(sellChannelStock);
+                        }
+                        else
+                        {
+                            sellChannelStock.SalePrice = stock.SalePrice;
+                            sellChannelStock.SalePriceByVip = stock.SalePrice;
+                            sellChannelStock.IsOffSell = false;
+                            sellChannelStock.SumQuantity = stock.SumQuantity;
+                            sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
+                            sellChannelStock.MendTime = DateTime.Now;
+                            sellChannelStock.Mender = operater;
+                        }
                     }
                 }
+
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -599,6 +565,35 @@ namespace LocalS.Service.Api.Merch
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
+            return result;
+        }
+
+        public CustomJsonResult GetKindSpuInfo(string operater, string merchId, RupStoreGetKindSpu rup)
+        {
+            var result = new CustomJsonResult();
+
+            var product = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.ProductId).FirstOrDefault();
+
+            var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.PrdProductId == product.Id).ToList();
+
+            List<object> stocks = new List<object>();
+
+            foreach (var productSku in productSkus)
+            {
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == productSku.Id).FirstOrDefault();
+                if (sellChannelStock == null)
+                {
+                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice });
+                }
+                else
+                {
+                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = productSku.SpecIdx, SalePrice = sellChannelStock.SalePrice });
+                }
+            }
+
+            var ret = new { Id = product.Id, Name = product.Name, MainImgUrl = product.MainImgUrl, Stocks = stocks };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
         }
 
@@ -630,9 +625,21 @@ namespace LocalS.Service.Api.Merch
                     storeKindSpu.IsDelete = true;
                     storeKindSpu.MendTime = DateTime.Now;
                     storeKindSpu.Mender = operater;
-                    CurrentDb.SaveChanges();
                 }
 
+                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductId == rop.ProductId).ToList();
+
+                foreach (var sellChannelStock in sellChannelStocks)
+                {
+                    if ((sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity) > 0)
+                    {
+                        return new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除失败，该商品有客户进行中");
+                    }
+
+                    CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                }
+
+                CurrentDb.SaveChanges();
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");

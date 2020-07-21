@@ -68,5 +68,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.PrdProduct.Search(this.CurrentUserId, this.CurrentMerchId, key);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetSpecs(string id)
+        {
+            IResult result = MerchServiceFactory.PrdProduct.GetSpecs(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
