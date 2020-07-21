@@ -602,6 +602,45 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult RemoveKindSpu(string operater, string merchId, RopStoreSaveKindSpu rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                if (string.IsNullOrEmpty(rop.StoreId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择店铺");
+                }
+
+                if (string.IsNullOrEmpty(rop.KindId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择分类");
+                }
+
+                if (string.IsNullOrEmpty(rop.ProductId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择商品");
+                }
+
+
+                var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
+                if (storeKindSpu != null)
+                {
+                    storeKindSpu.IsDelete = true;
+                    storeKindSpu.MendTime = DateTime.Now;
+                    storeKindSpu.Mender = operater;
+                    CurrentDb.SaveChanges();
+                }
+
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+            }
+
+            return result;
+        }
+
         public CustomJsonResult GetKindSpus(string operater, string merchId, RupStoreGetKindSpus rup)
         {
 
@@ -610,8 +649,8 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.StoreKindSpu
                          where u.MerchId == merchId && u.StoreId == rup.StoreId
                          &&
-                         u.StoreKindId == rup.KindId
-                         select new { u.PrdProductId, u.CreateTime });
+                         u.StoreKindId == rup.KindId && u.IsDelete == false
+                         select new { u.StoreId, u.StoreKindId, u.PrdProductId, u.CreateTime });
 
 
             int total = query.Count();
@@ -630,7 +669,9 @@ namespace LocalS.Service.Api.Merch
                 var product = CacheServiceFactory.Product.GetSpuInfo(merchId, item.PrdProductId);
                 olist.Add(new
                 {
-                    Id = product.Id,
+                    ProductId = product.Id,
+                    StoreId = item.StoreId,
+                    KindId = item.StoreKindId,
                     Name = product.Name,
                     MainImgUrl = product.MainImgUrl,
                     CreateTime = item.CreateTime,

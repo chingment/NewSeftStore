@@ -110,16 +110,21 @@ namespace LocalS.Service.Api.Admin
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var isExists = CurrentDb.PrdKind.Where(m => m.Name == rop.Name).FirstOrDefault();
-                if (isExists != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该名称已经存在");
-                }
-
+                int depth = 0;
                 var pPrdKind = CurrentDb.PrdKind.Where(m => m.Id == rop.PId).FirstOrDefault();
-                if (pPrdKind == null)
+                if (pPrdKind == null && rop.PId != 1)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到上级节点");
+                }
+
+
+                if (pPrdKind != null)
+                {
+                    depth += pPrdKind.Depth + 1;
+                }
+                else
+                {
+                    depth = 1;
                 }
 
                 var count = CurrentDb.PrdKind.Where(m => m.PId == rop.PId).Count();
@@ -141,7 +146,7 @@ namespace LocalS.Service.Api.Admin
                 productKind.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 productKind.MainImgUrl = ImgSet.GetMain_O(productKind.DisplayImgUrls);
                 productKind.Description = rop.Description;
-                productKind.Depth = pPrdKind.Depth + 1;
+                productKind.Depth = depth;
                 productKind.CreateTime = DateTime.Now;
                 productKind.Creator = operater;
                 CurrentDb.PrdKind.Add(productKind);

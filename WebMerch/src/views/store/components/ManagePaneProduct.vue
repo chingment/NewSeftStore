@@ -38,7 +38,7 @@
                     <span class="name">{{ item.name }}</span>
                   </div>
                   <div class="right">
-                    <el-button type="text">管理</el-button>
+                    <el-button type="text" @click="_removeKindSpu(item)">移除</el-button>
                   </div>
                 </div>
                 <div class="it-component">
@@ -227,7 +227,7 @@ white-space: nowrap;
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind } from '@/api/store'
+import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind, removeKindSpu } from '@/api/store'
 import { search } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -313,11 +313,18 @@ export default {
     _getKinds() {
       this.isLoaingByKinds = true
       return getKinds({ id: this.storeId }).then(res => {
+        this.isLoaingByKinds = false
         if (res.result === 1) {
           var d = res.data
           this.listDataByKinds = d
 
           if (d.length > 0) {
+            var currentKindIndex = 0
+            if (this.currentKindIndex > d.length) {
+              currentKindIndex = d.length - 1
+              this.currentKindIndex = currentKindIndex
+            }
+
             this.currentKindName = d[this.currentKindIndex].name
             this.kindEditBtnDisabled = false
             this._getKindSpus()
@@ -327,7 +334,6 @@ export default {
             this.listTotalByKindSpus = 0
           }
         }
-        this.isLoaingByKinds = false
       })
     },
     kindSelect(index, indexPath) {
@@ -390,6 +396,22 @@ export default {
           }).catch(() => {
           })
         }
+      })
+    },
+    _removeKindSpu(item) {
+      MessageBox.confirm('确定要移除', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeKindSpu({ storeId: item.storeId, kindId: item.kindId, productId: item.productId }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.dialogKindSpuIsVisible = false
+            this._getKindSpus()
+          }
+        })
+      }).catch(() => {
       })
     },
     _getKindSpus() {
