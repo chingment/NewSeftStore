@@ -80,8 +80,11 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：以订单单位维度来统计销售报表</div>
+    <el-alert
+      title="提示：以订单单位维度来统计销售报表"
+      type="remark-gray"
+      :closable="false"
+    />
   </div>
 </template>
 

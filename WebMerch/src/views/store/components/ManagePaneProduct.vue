@@ -81,7 +81,11 @@
           <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByKindDisplayImgUrls">
             <img width="100%" :src="uploadImgPreImgDialogUrlByKindDisplayImgUrls" alt="">
           </el-dialog>
-          <div class="remark-tip"><span class="sign">*注</span>：第一张默认为主图，可拖动改变图片顺便</div>
+          <el-alert
+            title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
+            type="remark-gray"
+            :closable="false"
+          />
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input v-model="kindForm.description" type="textarea" />
@@ -129,6 +133,12 @@
         </el-form-item>
         <el-form-item label="线上商城">
           <el-checkbox v-model="kindSpuForm.isSellMall">开启</el-checkbox>
+          <el-alert
+            show-icon
+            title="开启后，则需要设置线上商城库存，该库存只能用于店里自取、配送到手，若机器自提，请在机器设置"
+            type="remark"
+            :closable="false"
+          />
         </el-form-item>
 
         <el-form-item v-show="kindSpuForm.isSellMall" label="SKU列表" style="max-width:1000px">

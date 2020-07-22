@@ -100,7 +100,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：实时统计机器库存报表</div>
+    <el-alert
+      title="提示：统计机器历史库存报表"
+      type="remark-gray"
+      :closable="false"
+    />
   </div>
 </template>
 

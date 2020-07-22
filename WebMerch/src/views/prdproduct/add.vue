@@ -31,17 +31,26 @@
         <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDisplayImgUrls">
           <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt="">
         </el-dialog>
-        <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
+
+        <el-alert
+          title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
+          type="remark-gray"
+          :closable="false"
+        />
       </el-form-item>
       <el-form-item label="所属分类" prop="kindIds">
-
         <el-cascader
           v-model="form.kindIds"
           :options="kind_options"
           placeholder="请选择"
           style="width:300px"
         />
-
+        <el-alert
+          show-icon
+          title="如果商品分类不满足业务需要，请联系系统管理员进行添加或修改"
+          type="remark"
+          :closable="false"
+        />
       </el-form-item>
 
       <el-form-item label="音视频咨询">
@@ -77,7 +86,11 @@
           <template slot="prepend">￥</template>
         </el-input>
 
-        <div class="remark-tip"><span class="sign">*注</span>：该价格作为默认销售价，若更改可在编辑-》在售店铺里修改</div>
+        <el-alert
+          title="提示：该价格作为默认销售价"
+          type="remark-gray"
+          :closable="false"
+        />
 
       </el-form-item>
       <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
@@ -220,8 +233,11 @@
         <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDetailsDes">
           <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt="">
         </el-dialog>
-        <div class="remark-tip"><span class="sign">*注</span>：图片不超过4M；可拖动改变图片顺序</div>
-
+        <el-alert
+          title="提示：图片不超过4M；可拖动改变图片顺序"
+          type="remark-gray"
+          :closable="false"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>

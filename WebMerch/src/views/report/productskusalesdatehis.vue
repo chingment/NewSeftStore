@@ -117,8 +117,12 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-alert
+      title="提示：以单个商品单位维度来统计销售报表"
+      type="remark-gray"
+      :closable="false"
+    />
 
-    <div class="remark-tip" style="line-height: 42px;font-size:14px;"><span class="sign">*注</span>：以单个商品单位维度来统计销售报表</div>
   </div>
 </template>
 

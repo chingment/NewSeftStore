@@ -86,3 +86,17 @@
 .el-cascader-node__prefix{
   top: 10px;
 }
+
+.el-alert--remark{
+   padding: 5px 0px;
+   color: #e6a23c;
+}
+
+.el-alert--remark-gray{
+  padding: 5px 0px;
+  color: #8c939d;
+}
+
+.el-alert--remark-gray .el-alert__content{
+  padding:0px;
+}
