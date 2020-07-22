@@ -70,60 +70,56 @@ namespace LocalS.Service.Api.Merch
                 foreach (var orderDetail in orderSub)
                 {
                     List<object> pickupSkus = new List<object>();
-                    switch (orderDetail.SellChannelRefType)
+
+                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+
+
+                    foreach (var orderSubChild in orderSubChilds)
                     {
-                        case E_SellChannelRefType.Machine:
+                        var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
 
-                            var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+                        List<object> pickupLogs = new List<object>();
 
-
-                            foreach (var orderSubChild in orderSubChilds)
+                        foreach (var orderPickupLog in orderPickupLogs)
+                        {
+                            string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+                            string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+                            List<string> imgUrls = new List<string>();
+                            if (!string.IsNullOrEmpty(imgUrl))
                             {
-                                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
-
-                                List<object> pickupLogs = new List<object>();
-
-                                foreach (var orderPickupLog in orderPickupLogs)
-                                {
-                                    string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-                                    string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-                                    List<string> imgUrls = new List<string>();
-                                    if (!string.IsNullOrEmpty(imgUrl))
-                                    {
-                                        imgUrls.Add(imgUrl);
-                                    }
-
-                                    if (!string.IsNullOrEmpty(imgUrl2))
-                                    {
-                                        imgUrls.Add(imgUrl2);
-                                    }
-
-                                    pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
-                                }
-
-                                pickupSkus.Add(new
-                                {
-                                    Id = orderSubChild.PrdProductSkuId,
-                                    MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
-                                    UniqueId = orderSubChild.Id,
-                                    ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
-                                    Name = orderSubChild.PrdProductSkuName,
-                                    Quantity = orderSubChild.Quantity,
-                                    Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
-                                    PickupLogs = pickupLogs
-                                });
+                                imgUrls.Add(imgUrl);
                             }
 
-                            sellChannelDetails.Add(new
+                            if (!string.IsNullOrEmpty(imgUrl2))
                             {
-                                Name = orderDetail.SellChannelRefName,
-                                Type = orderDetail.SellChannelRefType,
-                                DetailType = 1,
-                                DetailItems = pickupSkus
-                            });
+                                imgUrls.Add(imgUrl2);
+                            }
 
-                            break;
+                            pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                        }
+
+                        pickupSkus.Add(new
+                        {
+                            Id = orderSubChild.PrdProductSkuId,
+                            MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
+                            UniqueId = orderSubChild.Id,
+                            ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
+                            Name = orderSubChild.PrdProductSkuName,
+                            Quantity = orderSubChild.Quantity,
+                            Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
+                            PickupLogs = pickupLogs
+                        });
                     }
+
+                    sellChannelDetails.Add(new
+                    {
+                        Name = orderDetail.SellChannelRefName,
+                        Type = orderDetail.SellChannelRefType,
+                        DetailType = 1,
+                        DetailItems = pickupSkus
+                    });
+
+
                 }
 
                 olist.Add(new
@@ -187,54 +183,50 @@ namespace LocalS.Service.Api.Merch
             {
                 var sellChannelDetail = new RetOrderDetails.SellChannelDetail();
 
-                switch (orderSub.SellChannelRefType)
+                sellChannelDetail.Type = E_SellChannelRefType.Machine;
+                sellChannelDetail.Name = orderSub.SellChannelRefName;
+                sellChannelDetail.DetailType = 1;
+
+                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+                var pickupSkus = new List<RetOrderDetails.PickupSku>();
+                foreach (var orderSubChild in orderSubChilds)
                 {
-                    case E_SellChannelRefType.Machine:
-                        sellChannelDetail.Type = E_SellChannelRefType.Machine;
-                        sellChannelDetail.Name = orderSub.SellChannelRefName;
-                        sellChannelDetail.DetailType = 1;
+                    var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
 
-                        var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-                        var pickupSkus = new List<RetOrderDetails.PickupSku>();
-                        foreach (var orderSubChild in orderSubChilds)
+                    List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
+
+                    foreach (var orderPickupLog in orderPickupLogs)
+                    {
+                        string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+                        string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+                        List<string> imgUrls = new List<string>();
+                        if (!string.IsNullOrEmpty(imgUrl))
                         {
-                            var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
-
-                            List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
-
-                            foreach (var orderPickupLog in orderPickupLogs)
-                            {
-                                string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-                                string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-                                List<string> imgUrls = new List<string>();
-                                if (!string.IsNullOrEmpty(imgUrl))
-                                {
-                                    imgUrls.Add(imgUrl);
-                                }
-                                if (!string.IsNullOrEmpty(imgUrl2))
-                                {
-                                    imgUrls.Add(imgUrl2);
-                                }
-                                pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
-                            }
-
-                            sellChannelDetail.DetailItems.Add(new RetOrderDetails.PickupSku
-                            {
-                                Id = orderSubChild.PrdProductSkuId,
-                                ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
-                                UniqueId = orderSubChild.Id,
-                                MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
-                                Name = orderSubChild.PrdProductSkuName,
-                                Quantity = orderSubChild.Quantity,
-                                Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
-                                PickupLogs = pickupLogs,
-                                SignStatus = 0
-                            });
+                            imgUrls.Add(imgUrl);
                         }
+                        if (!string.IsNullOrEmpty(imgUrl2))
+                        {
+                            imgUrls.Add(imgUrl2);
+                        }
+                        pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                    }
 
-                        ret.SellChannelDetails.Add(sellChannelDetail);
-                        break;
+                    sellChannelDetail.DetailItems.Add(new RetOrderDetails.PickupSku
+                    {
+                        Id = orderSubChild.PrdProductSkuId,
+                        ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
+                        UniqueId = orderSubChild.Id,
+                        MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
+                        Name = orderSubChild.PrdProductSkuName,
+                        Quantity = orderSubChild.Quantity,
+                        Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
+                        PickupLogs = pickupLogs,
+                        SignStatus = 0
+                    });
                 }
+
+                ret.SellChannelDetails.Add(sellChannelDetail);
+
             }
 
 
