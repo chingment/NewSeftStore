@@ -233,7 +233,6 @@ export default {
       this.getListData(this.listQuery)
     },
     getListData(listQuery) {
-      console.log('getListData')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
       manageStockGetStocks(this.listQuery).then(res => {

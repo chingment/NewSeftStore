@@ -109,7 +109,6 @@ export default {
     init() {
       var id = getUrlParam('id')
       this.loading = true
-      console.log('this.storeId' + id)
       this.storeId = id
       this.listQuery.storeId = id
 

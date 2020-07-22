@@ -14,7 +14,7 @@ namespace LocalS.BLL
         public const string AGENT = "agent.17fanju.com";
         public const string WXMINPRAGROM = "mp.17fanju.com";
         public const string STORETERM = "com.uplink.selfstore";
-        public const string SVCCHAT = "com.hyphenate.chatuidemo";
+        public const string SVCCHAT = "com.uplink.svcchat";
 
 
         public static string GetName(string appId)

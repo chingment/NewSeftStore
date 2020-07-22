@@ -518,13 +518,14 @@ namespace LocalS.Service.Api.Merch
                     storeKindSpu.Mender = operater;
                 }
 
-                if (rop.IsSellMall)
+
+                if (rop.Stocks != null)
                 {
-                    if (rop.Stocks != null)
+                    foreach (var stock in rop.Stocks)
                     {
-                        foreach (var stock in rop.Stocks)
+                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                        if (rop.IsSellMall)
                         {
-                            var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
                             if (sellChannelStock == null)
                             {
                                 sellChannelStock = new SellChannelStock();
@@ -557,6 +558,18 @@ namespace LocalS.Service.Api.Merch
                                 sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
                                 sellChannelStock.MendTime = DateTime.Now;
                                 sellChannelStock.Mender = operater;
+                            }
+                        }
+                        else
+                        {
+                            if (sellChannelStock != null)
+                            {
+                                if ((sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity) > 0)
+                                {
+                                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存失败，该商品有客户进行中");
+                                }
+
+                                CurrentDb.SellChannelStock.Remove(sellChannelStock);
                             }
                         }
                     }
