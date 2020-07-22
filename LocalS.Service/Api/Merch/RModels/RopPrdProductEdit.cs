@@ -49,6 +49,8 @@ namespace LocalS.Service.Api.Merch
             public string BarCode { get; set; }
 
             public string CumCode { get; set; }
+
+            public bool IsOffSell { get; set; }
         }
 
         public class SpecDes

@@ -72,11 +72,11 @@
       </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
 
-        <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新店铺销售价</el-checkbox>
+        <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新所有店铺销售信息</el-checkbox>
 
         <el-alert
           show-icon
-          title="提示：勾选后，SKU列表里的价格会统一更新店铺的销售价格，不勾选只作参考价格"
+          title="提示：勾选后，SKU列表里的价格会统一更新所有店铺销售信息，不勾选只作参考价格，若指定店铺信息修改，请点击在售店铺"
           type="remark"
           :closable="false"
         />
@@ -95,6 +95,9 @@
               </th>
               <th style="width:100px">
                 价格
+              </th>
+              <th style="width:100px">
+                下架
               </th>
             </tr>
           </thead>
@@ -116,14 +119,13 @@
                 <el-input v-model="item.cumCode" clearable style="width:90%" />
               </td>
               <td>
-
                 <el-input v-model="item.barCode" clearable style="width:90%" />
-
               </td>
               <td>
-
                 <el-input v-model="item.salePrice" clearable style="width:90%" />
-
+              </td>
+              <td>
+                <el-checkbox v-model="item.isOffSell" />
               </td>
             </tr>
           </tbody>

@@ -283,7 +283,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var prdProductSku in prdProductSkus)
                 {
-                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, SpecDes = prdProductSku.SpecDes.ToJsonObject<List<object>>() });
+                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, IsOffSell=false, SpecDes = prdProductSku.SpecDes.ToJsonObject<List<object>>() });
                 }
 
             }
@@ -371,6 +371,7 @@ namespace LocalS.Service.Api.Merch
                             foreach (var sellChannelStock in sellChannelStocks)
                             {
                                 sellChannelStock.SalePrice = sku.SalePrice;
+                                sellChannelStock.IsOffSell = sku.IsOffSell;
                                 sellChannelStock.Mender = operater;
                                 sellChannelStock.MendTime = DateTime.Now;
                             }
