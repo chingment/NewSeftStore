@@ -52,7 +52,8 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
 
-            int ss = int.Parse(("10").ToString() + ("1").ToString().PadLeft(2, '0'));
+
+            int ss = int.Parse(("13").ToString().PadRight(2,'0') + ("1").ToString().PadLeft(2, '0'));
 
 
             String input = "{channelUserCode:\"15989287032\",userName:\"15989287032\",phone:\"15989287032\",idName:\"\",email:\"\",channelCompanyCode:\"\"}";
