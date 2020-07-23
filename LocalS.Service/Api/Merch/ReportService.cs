@@ -73,7 +73,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     StoreName = machineInfo.StoreName,
-                    MachineName = machineInfo.Name,
+                    SellChannelRefName = sellChannelStock.SellChannelRefId,
                     ProductSkuId = bizProductSku.Id,
                     ProductSkuName = bizProductSku.Name,
                     ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
@@ -159,7 +159,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     StoreName = machineInfo.StoreName,
-                    MachineName = machineInfo.Name,
+                    SellChannelRefName = sellChannelStock.SellChannelRefId,
                     ProductSkuId = bizProductSku.Id,
                     ProductSkuName = bizProductSku.Name,
                     ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
@@ -254,7 +254,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.OrderSubChild
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime)
-                         select new { u.StoreName, u.StoreId, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId,u.ReceiveModeName, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -307,7 +307,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     StoreName = item.StoreName,
-                    SellChannelRefName = item.SellChannelRefId,
+                    ReceiveModeName = item.ReceiveModeName,
                     OrderId = item.OrderId,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     ProductSkuName = item.PrdProductSkuName,

@@ -38,10 +38,10 @@
     >
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <div v-for="(sellChannelDetail,index) in scope.row.sellChannelDetails" :key="index">
-            <div> <i class="el-icon-place" /><span> {{ sellChannelDetail.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+          <div v-for="(item,index) in scope.row.receiveDetails" :key="index">
+            <div> <i class="el-icon-place" /><span> {{ item.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
             <table class="table-skus" style="width:100%;table-layout:fixed;">
-              <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
+              <tr v-for="(pickupSku,sub_index) in item.detailItems" :key="sub_index">
                 <td style="20%">
                   <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
                 </td>
@@ -236,10 +236,10 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(sellChannelDetail,index) in details.sellChannelDetails" :key="index">
-          <div> <i class="el-icon-place" /><span> {{ sellChannelDetail.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+        <div v-for="(item,index) in details.receiveDetails" :key="index">
+          <div> <i class="el-icon-place" /><span> {{ item.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
           <table class="table-skus" style="width:100%;table-layout:fixed;">
-            <tr v-for="(pickupSku,sub_index) in sellChannelDetail.detailItems" :key="sub_index">
+            <tr v-for="(pickupSku,sub_index) in item.detailItems" :key="sub_index">
               <td style="width:10%">
                 <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
               </td>
@@ -471,8 +471,8 @@ export default {
       }
 
       var uniqueItems = []
-      for (var i = 0; i < order.sellChannelDetails.length; i++) {
-        var s_detailItems = order.sellChannelDetails[i].detailItems
+      for (var i = 0; i < order.receiveDetails.length; i++) {
+        var s_detailItems = order.receiveDetails[i].detailItems
         for (var j = 0; j < s_detailItems.length; j++) {
           if (s_detailItems[j].status.value === 6000) {
             if (s_detailItems[j].signStatus === 0) {
