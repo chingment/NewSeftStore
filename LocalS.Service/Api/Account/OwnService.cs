@@ -194,7 +194,7 @@ namespace LocalS.Service.Api.Account
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token, UserName = sysUser.UserName, FullName = sysUser.FullName });
                 #endregion
             }
-            else if (rop.AppId == AppId.SVCCHAT)
+            else if (rop.AppId == AppId.SVCCHAT || rop.AppId == AppId.SVCCHAT_Test)
             {
                 #region SVCCHAT
                 var merchUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
@@ -229,7 +229,7 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功",  new { Token = token });
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { Token = token });
 
                 #endregion 
             }
