@@ -38,7 +38,8 @@ namespace LocalS.Entity
         public string StoreName { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
-        public string SellChannelRefName { get; set; }
+        public string ReceiveModeName { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
         public string OrderId { get; set; }
         public string OrderSubId { get; set; }
         public string PrdProductId { get; set; }

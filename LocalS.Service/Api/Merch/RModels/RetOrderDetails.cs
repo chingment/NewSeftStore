@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.Merch
     {
         public RetOrderDetails()
         {
-            this.SellChannelDetails = new List<SellChannelDetail>();
+            this.ReceiveDetails = new List<ReceiveDetail>();
         }
 
         public string Id { get; set; }
@@ -33,16 +33,16 @@ namespace LocalS.Service.Api.Merch
         public string ExHandleRemark { get; set; }
 
         public bool ExIsHappen { get; set; }
-        public List<SellChannelDetail> SellChannelDetails { get; set; }
-        public class SellChannelDetail
+        public List<ReceiveDetail> ReceiveDetails { get; set; }
+        public class ReceiveDetail
         {
-            public SellChannelDetail()
+            public ReceiveDetail()
             {
                 this.DetailItems = new List<object>();
             }
 
             public string Name { get; set; }
-            public E_SellChannelRefType Type { get; set; }
+            public E_ReceiveMode Mode { get; set; }
             public int DetailType { get; set; }
             public List<object> DetailItems { get; set; }
         }

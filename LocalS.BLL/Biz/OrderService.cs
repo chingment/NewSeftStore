@@ -365,7 +365,8 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    List<SellChannelRefModel> sellChannelRefModels = new List<Biz.SellChannelRefModel>();
+                    List<OrderSub> orderSubs = new List<OrderSub>();
+
                     foreach (var buildOrderSub in buildOrderSubs)
                     {
                         var orderSub = new OrderSub();
@@ -392,7 +393,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式", null);
                                 }
 
-                                orderSub.SellChannelRefName = "机器自提";
+                                orderSub.ReceiveModeName = "机器自提";
                                 orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
                                 orderSub.Receiver = null;
                                 orderSub.ReceiverPhoneNumber = null;
@@ -417,7 +418,7 @@ namespace LocalS.BLL.Biz
 
                                 if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                 {
-                                    orderSub.SellChannelRefName = "配送到手";
+                                    orderSub.ReceiveModeName = "配送到手";
                                     orderSub.ReceiveMode = E_ReceiveMode.Delivery;
                                     orderSub.Receiver = shopModeByMall.Delivery.Consignee;
                                     orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
@@ -427,7 +428,7 @@ namespace LocalS.BLL.Biz
                                 }
                                 else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                                 {
-                                    orderSub.SellChannelRefName = "到店自取";
+                                    orderSub.ReceiveModeName = "到店自取";
                                     orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
                                     orderSub.Receiver = shopModeByMall.SelfTake.Consignee;
                                     orderSub.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
@@ -451,12 +452,15 @@ namespace LocalS.BLL.Biz
                             return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
                         }
                         orderSub.PayStatus = E_OrderPayStatus.WaitPay;
+                        orderSub.Status = order.Status;
+                        orderSub.Source = order.Source;
+                        orderSub.SubmittedTime = order.SubmittedTime;
+                        orderSub.ClientUserName = order.ClientUserName;
                         orderSub.Creator = operater;
                         orderSub.CreateTime = DateTime.Now;
                         CurrentDb.OrderSub.Add(orderSub);
 
-                        sellChannelRefModels.Add(new SellChannelRefModel { Id = orderSub.SellChannelRefId, Type = orderSub.SellChannelRefType, Name = orderSub.SellChannelRefName });
-
+                        orderSubs.Add(orderSub);
 
                         foreach (var buildOrderSubChid in buildOrderSub.Childs)
                         {
@@ -470,7 +474,8 @@ namespace LocalS.BLL.Biz
                             orderSubChild.StoreName = store.Name;
                             orderSubChild.SellChannelRefType = buildOrderSubChid.SellChannelRefType;
                             orderSubChild.SellChannelRefId = buildOrderSubChid.SellChannelRefId;
-                            orderSubChild.SellChannelRefName = orderSub.SellChannelRefName;
+                            orderSubChild.ReceiveModeName = orderSub.ReceiveModeName;
+                            orderSubChild.ReceiveMode = orderSub.ReceiveMode;
                             orderSubChild.CabinetId = buildOrderSubChid.CabinetId;
                             orderSubChild.SlotId = buildOrderSubChid.SlotId;
                             orderSubChild.OrderId = order.Id;
@@ -508,8 +513,9 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    order.SellChannelRefIds = string.Join(",", sellChannelRefModels.Select(m => m.Id).ToArray());
-                    order.SellChannelRefNames = string.Join(",", sellChannelRefModels.Select(m => m.Name).ToArray());
+                    order.SellChannelRefIds = string.Join(",", orderSubs.Select(m => m.SellChannelRefId).ToArray());
+                    order.ReceiveModes = string.Join(",", orderSubs.Select(m => m.ReceiveMode).ToArray());
+                    order.ReceiveModeNames = string.Join(",", orderSubs.Select(m => m.ReceiveModeName).ToArray());
 
                     CurrentDb.Order.Add(order);
                     CurrentDb.SaveChanges();
@@ -774,14 +780,14 @@ namespace LocalS.BLL.Biz
                 //}
 
                 order.PayWay = payWay;
-                order.PayStatus = E_OrderPayStatus.PaySuccess;
-                order.PayedTime = DateTime.Now;
+
                 order.PayPartnerOrderId = payPartnerOrderId;
 
                 if (order.Status == E_OrderStatus.WaitPay)
                 {
+                    order.PayStatus = E_OrderPayStatus.PaySuccess;
                     order.Status = E_OrderStatus.Payed;
-
+                    order.PayedTime = DateTime.Now;
                     if (pms != null)
                     {
                         if (pms.ContainsKey("clientUserName"))
@@ -798,9 +804,10 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderSub in orderSubs)
                     {
-                        orderSub.PayWay = payWay;
-                        orderSub.PayStatus = E_OrderPayStatus.PaySuccess;
-                        orderSub.PayedTime = DateTime.Now;
+                        orderSub.PayWay = order.PayWay;
+                        orderSub.PayStatus = order.PayStatus;
+                        orderSub.PayedTime = order.PayedTime;
+                        orderSub.Status = order.Status;
 
                         switch (orderSub.ReceiveMode)
                         {
@@ -943,6 +950,8 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderSub in orderSubs)
                     {
+                        orderSub.Status = order.Status;
+                        orderSub.CanceledTime = order.CanceledTime;
                         orderSub.Mender = operater;
                         orderSub.MendTime = DateTime.Now;
 
@@ -973,15 +982,10 @@ namespace LocalS.BLL.Biz
 
                             orderSubChild.PickupStatus = E_OrderPickupStatus.Canceled;
 
-
                             BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, orderSubChild.Quantity);
 
                         }
-
                     }
-
-
-
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
@@ -1048,7 +1052,7 @@ namespace LocalS.BLL.Biz
 
                                     if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                     {
-                                        orderSub.SellChannelRefName = "配送到手";
+                                        orderSub.ReceiveModeName = "配送到手";
                                         orderSub.ReceiveMode = E_ReceiveMode.Delivery;
                                         orderSub.Receiver = shopModeByMall.Delivery.Consignee;
                                         orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
@@ -1058,7 +1062,7 @@ namespace LocalS.BLL.Biz
                                     }
                                     else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                                     {
-                                        orderSub.SellChannelRefName = "到店自取";
+                                        orderSub.ReceiveModeName = "到店自取";
                                         orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
                                         orderSub.Receiver = shopModeByMall.SelfTake.Consignee;
                                         orderSub.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;

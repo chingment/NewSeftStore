@@ -393,7 +393,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_OrderPayStatus.PaySuccess
-                         select new { u.Id, u.StoreName, u.StoreId, u.SellChannelRefNames, u.SellChannelRefIds, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
+                         select new { u.Id, u.StoreName, u.StoreId, u.ReceiveModeNames, u.SellChannelRefIds, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.Status });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
@@ -411,7 +411,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     StoreName = item.StoreName,
-                    SellChannelRefNames = item.SellChannelRefNames,
+                    ReceiveModeNames = item.ReceiveModeNames,
                     OrderId = item.Id,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     Quantity = item.Quantity,

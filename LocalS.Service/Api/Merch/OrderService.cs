@@ -66,7 +66,7 @@ namespace LocalS.Service.Api.Merch
             {
                 var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).ToList();
 
-                List<object> sellChannelDetails = new List<object>();
+                List<object> receiveDetails = new List<object>();
                 foreach (var orderDetail in orderSub)
                 {
                     List<object> pickupSkus = new List<object>();
@@ -111,10 +111,10 @@ namespace LocalS.Service.Api.Merch
                         });
                     }
 
-                    sellChannelDetails.Add(new
+                    receiveDetails.Add(new
                     {
-                        Name = orderDetail.SellChannelRefName,
-                        Type = orderDetail.SellChannelRefType,
+                        Name = orderDetail.ReceiveModeName,
+                        Mode = orderDetail.ReceiveMode,
                         DetailType = 1,
                         DetailItems = pickupSkus
                     });
@@ -138,7 +138,7 @@ namespace LocalS.Service.Api.Merch
                     SourceName = BizFactory.Order.GetSourceName(item.Source),
                     ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
                     CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
-                    SellChannelDetails = sellChannelDetails
+                    ReceiveDetails = receiveDetails
                 });
             }
 
@@ -178,14 +178,14 @@ namespace LocalS.Service.Api.Merch
             ret.ExIsHappen = order.ExIsHappen;
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
 
-            List<RetOrderDetails.SellChannelDetail> sellChannelDetails = new List<RetOrderDetails.SellChannelDetail>();
+            List<RetOrderDetails.ReceiveDetail> receiveDetails = new List<RetOrderDetails.ReceiveDetail>();
             foreach (var orderSub in orderSubs)
             {
-                var sellChannelDetail = new RetOrderDetails.SellChannelDetail();
+                var receiveDetail = new RetOrderDetails.ReceiveDetail();
 
-                sellChannelDetail.Type = E_SellChannelRefType.Machine;
-                sellChannelDetail.Name = orderSub.SellChannelRefName;
-                sellChannelDetail.DetailType = 1;
+                receiveDetail.Mode = orderSub.ReceiveMode;
+                receiveDetail.Name = orderSub.ReceiveModeName;
+                receiveDetail.DetailType = 1;
 
                 var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
                 var pickupSkus = new List<RetOrderDetails.PickupSku>();
@@ -211,7 +211,7 @@ namespace LocalS.Service.Api.Merch
                         pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                     }
 
-                    sellChannelDetail.DetailItems.Add(new RetOrderDetails.PickupSku
+                    receiveDetail.DetailItems.Add(new RetOrderDetails.PickupSku
                     {
                         Id = orderSubChild.PrdProductSkuId,
                         ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
@@ -225,7 +225,7 @@ namespace LocalS.Service.Api.Merch
                     });
                 }
 
-                ret.SellChannelDetails.Add(sellChannelDetail);
+                ret.ReceiveDetails.Add(receiveDetail);
 
             }
 

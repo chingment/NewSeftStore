@@ -188,6 +188,7 @@
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\OrderService.cs" />
+    <Compile Include="Api\Merch\OrderSubService.cs" />
     <Compile Include="Api\Merch\PrdProductService.cs" />
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />

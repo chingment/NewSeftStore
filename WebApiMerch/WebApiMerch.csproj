@@ -148,6 +148,7 @@
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\OrderSubController.cs" />
     <Compile Include="Controllers\PrdProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StoreController.cs" />

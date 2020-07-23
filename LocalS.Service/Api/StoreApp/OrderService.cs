@@ -29,7 +29,7 @@ namespace LocalS.Service.Api.StoreApp
                 block.UniqueId = orderSub.Id;
                 block.UniqueType = E_UniqueType.OrderSub;
 
-                block.Tag.Name = new FsText(orderSub.SellChannelRefName, "");
+                block.Tag.Name = new FsText(orderSub.ReceiveModeName, "");
 
 
                 if (orderSub.PayStatus == E_OrderPayStatus.PaySuccess)

@@ -15,9 +15,9 @@ namespace LocalS.Entity
         public string StoreName { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
-        public string SellChannelRefName { get; set; }
         public string OrderId { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
+        public string ReceiveModeName { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhoneNumber { get; set; }
         public string ReceptionAddress { get; set; }
@@ -29,7 +29,6 @@ namespace LocalS.Entity
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public int Quantity { get; set; }
-
         public string PickupCode { get; set; }
         public DateTime? PickupCodeExpireTime { get; set; }
         /// <summary>
@@ -54,7 +53,11 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
-
+        public DateTime? SubmittedTime { get; set; }
+        public DateTime? CompletedTime { get; set; }
+        public DateTime? CanceledTime { get; set; }
+        public E_OrderSource Source { get; set; }
+        public E_OrderStatus Status { get; set; }
+        public string ClientUserName { get; set; }
     }
 }
