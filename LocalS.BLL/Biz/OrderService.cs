@@ -772,6 +772,8 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderId));
                 }
 
+                operater = order.Creator;
+
                 LogUtil.Info("进入PaySuccess修改订单,开始");
 
                 //if (order.Status != E_OrderStatus.WaitPay)
@@ -926,6 +928,8 @@ namespace LocalS.BLL.Biz
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经完成");
                 }
+
+                operater = order.Creator;
 
                 if (order.Status != E_OrderStatus.Payed && order.Status != E_OrderStatus.Completed)
                 {
