@@ -206,11 +206,6 @@ namespace LocalS.BLL.Task
                     }
                 }
 
-                if (order != null)
-                {
-                    order.ExIsHappen = true;
-                    order.ExHappenTime = DateTime.Now;
-                }
 
                 //if (machine != null)
                 //{

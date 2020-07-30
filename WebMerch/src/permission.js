@@ -42,6 +42,7 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done()
     }
   } else {
+    console.log('dsdad2')
     next()
     NProgress.done()
   }

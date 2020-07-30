@@ -12,30 +12,30 @@ namespace LocalS.Service.Api.StoreTerm
         public RetMachineGetRunExHandleItems()
         {
             this.ExReasons = new List<ExReason>();
-            this.ExOrders = new List<Order>();
+            this.ExItems = new List<ExItem>();
         }
 
         public List<ExReason> ExReasons { get; set; }
-        public List<Order> ExOrders { get; set; }
-        public class Order
+        public List<ExItem> ExItems { get; set; }
+        public class ExItem
         {
-            public Order()
+            public ExItem()
             {
-                this.DetailItems = new List<OrderDetailItem>();
+                this.Uniques = new List<ExUnique>();
             }
 
             public string Id { get; set; }
-            public List<OrderDetailItem> DetailItems { get; set; }
+            public List<ExUnique> Uniques { get; set; }
 
         }
 
-        public class OrderDetailItem
+        public class ExUnique
         {
-            public string ProductId { get; set; }
+            public string Id { get; set; }
+            public string ProductSkuId { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
             public int Quantity { get; set; }
-            public string UniqueId { get; set; }
             public string SlotId { get; set; }
             public bool CanHandle { get; set; }
             public int SignStatus { get; set; }

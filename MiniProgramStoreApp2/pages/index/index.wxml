@@ -97,7 +97,7 @@
 									</navigator>
 								</view>
 								<view class='it-a2 skeleton-rect'>
-									<image class="img" src="{{tab.mainImgUrl}}"></image>
+									<image class="img" binderror="imageOnloadError" src="{{tab.mainImgUrl}}"></image>
 								</view>
 								<view class="it-a3 prd-list-1">
 									<block wx:for="{{tab.list.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">

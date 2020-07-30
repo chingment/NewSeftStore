@@ -412,7 +412,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var query = (from o in CurrentDb.Order
                          where o.ClientUserId == clientUserId
-                         select new { o.Id, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.ExIsHappen, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
+                         select new { o.Id, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
              );
 
 

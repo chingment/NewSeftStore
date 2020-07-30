@@ -140,6 +140,9 @@ Component({
         _this.getPageData()
       }
 
+    },
+    imageOnloadError:function(e){
+      console.log('das')
     }
   }
 })

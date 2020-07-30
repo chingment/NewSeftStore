@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.BLL.Biz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,41 +9,14 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopMachineHandleRunExItems
     {
-
         public RopMachineHandleRunExItems()
         {
-            this.ExOrders = new List<Order>();
-            this.ExReasons = new List<ExReason>();
+            this.Items = new List<ExItem>();
+            this.Reasons = new List<ExReason>();
         }
 
         public string MachineId { get; set; }
-        public List<Order> ExOrders { get; set; }
-
-        public List<ExReason> ExReasons { get; set; }
-
-        public string Rermark { get; set; }
-        public class Order
-        {
-            public Order()
-            {
-                this.UniqueItems = new List<OrderUniqueItem>();
-            }
-
-            public string Id { get; set; }
-
-            public List<OrderUniqueItem> UniqueItems { get; set; }
-        }
-
-        public class OrderUniqueItem
-        {
-            public string UniqueId { get; set; }
-            public int SignStatus { get; set; }
-        }
-
-        public class ExReason
-        {
-            public string Id { get; set; }
-            public string Title { get; set; }
-        }
+        public List<ExItem> Items { get; set; }
+        public List<ExReason> Reasons { get; set; }
     }
 }

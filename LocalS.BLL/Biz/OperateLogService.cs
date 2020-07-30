@@ -431,8 +431,6 @@ namespace LocalS.BLL.Biz
 
                     if (model.Status == E_OrderPickupStatus.Exception)
                     {
-                        order.ExIsHappen = true;
-                        order.ExHappenTime = DateTime.Now;
 
                         orderSub.ExIsHappen = true;
                         orderSub.ExHappenTime = DateTime.Now;
@@ -504,7 +502,7 @@ namespace LocalS.BLL.Biz
                         {
                             order.Status = E_OrderStatus.Completed;
                             order.CompletedTime = DateTime.Now;
-                            order.ExIsHappen = false;
+  
 
                             orderSub.PickupFlowLastDesc = "全部商品出货完成";
                             orderSub.PickupFlowLastTime = DateTime.Now;

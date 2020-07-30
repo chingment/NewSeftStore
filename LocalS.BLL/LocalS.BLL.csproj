@@ -102,6 +102,7 @@
     <Compile Include="Biz\RModels\RopBackgroundJobAdd.cs" />
     <Compile Include="Biz\RModels\RopBackgroundJobEdit.cs" />
     <Compile Include="Biz\RModels\RopOrderBuildPayParams.cs" />
+    <Compile Include="Biz\RModels\RopOrderHandleExOrderByMachineSelfTake.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
     <Compile Include="Biz\RModels\RupOrderBuildPayOptions.cs" />
     <Compile Include="Biz\StoreService.cs" />

@@ -25,11 +25,5 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse HandleExOrder([FromBody]RopOrderHandleExOrder rop)
-        {
-            IResult result = MerchServiceFactory.Order.HandleExOrder(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
     }
 }

@@ -64,6 +64,14 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static OrderSubService OrderSub
+        {
+            get
+            {
+                return new OrderSubService();
+            }
+        }
+
         public static AdSpaceService AdSpace
         {
             get
