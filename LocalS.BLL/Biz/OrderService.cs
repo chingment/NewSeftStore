@@ -316,7 +316,6 @@ namespace LocalS.BLL.Biz
                     order.ClientUserId = rop.ClientUserId;
                     order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
                     order.Quantity = buildOrderSubs.Sum(m => m.Quantity);
-                    order.Status = E_OrderStatus.WaitPay;
                     order.PayStatus = E_OrderPayStatus.WaitPay;
                     order.Source = rop.Source;
                     order.IsTestMode = rop.IsTestMode;
@@ -452,7 +451,7 @@ namespace LocalS.BLL.Biz
                             return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
                         }
                         orderSub.PayStatus = E_OrderPayStatus.WaitPay;
-                        orderSub.Status = order.Status;
+                        orderSub.Status = E_OrderStatus.WaitPay;
                         orderSub.Source = order.Source;
                         orderSub.SubmittedTime = order.SubmittedTime;
                         orderSub.ClientUserName = order.ClientUserName;
@@ -767,7 +766,7 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderId));
                 }
 
-                if (order.Status == E_OrderStatus.Payed || order.Status == E_OrderStatus.Completed)
+                if (order.PayStatus == E_OrderPayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderId));
                 }
@@ -785,10 +784,9 @@ namespace LocalS.BLL.Biz
 
                 order.PayPartnerOrderId = payPartnerOrderId;
 
-                if (order.Status == E_OrderStatus.WaitPay)
+                if (order.PayStatus == E_OrderPayStatus.WaitPay || order.PayStatus == E_OrderPayStatus.Paying)
                 {
                     order.PayStatus = E_OrderPayStatus.PaySuccess;
-                    order.Status = E_OrderStatus.Payed;
                     order.PayedTime = DateTime.Now;
                     if (pms != null)
                     {
@@ -809,7 +807,7 @@ namespace LocalS.BLL.Biz
                         orderSub.PayWay = order.PayWay;
                         orderSub.PayStatus = order.PayStatus;
                         orderSub.PayedTime = order.PayedTime;
-                        orderSub.Status = order.Status;
+                        orderSub.Status = E_OrderStatus.Payed;
 
                         switch (orderSub.ReceiveMode)
                         {
@@ -894,7 +892,7 @@ namespace LocalS.BLL.Biz
             var ret = new RetPayResultQuery();
 
             ret.OrderId = order.Id;
-            ret.Status = order.Status;
+            ret.Status = order.PayStatus;
 
             result = new CustomJsonResult<RetPayResultQuery>(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -914,26 +912,26 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该订单号:{0},找不到", orderId));
                 }
 
-                if (order.Status == E_OrderStatus.Canceled)
+                if (order.PayStatus ==  E_OrderPayStatus.PayCancle)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经取消");
                 }
 
-                if (order.Status == E_OrderStatus.Payed)
+                if (order.PayStatus == E_OrderPayStatus.PayTimeout)
+                {
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经超时");
+                }
+
+                if (order.PayStatus ==  E_OrderPayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经支付成功");
                 }
 
-                if (order.Status == E_OrderStatus.Completed)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经完成");
-                }
 
                 operater = order.Creator;
 
-                if (order.Status != E_OrderStatus.Payed && order.Status != E_OrderStatus.Completed)
+                if (order.PayStatus != E_OrderPayStatus.PaySuccess)
                 {
-                    order.Status = E_OrderStatus.Canceled;
                     order.Mender = operater;
                     order.MendTime = DateTime.Now;
                     order.CancelOperator = operater;
@@ -954,7 +952,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderSub in orderSubs)
                     {
-                        orderSub.Status = order.Status;
+                        orderSub.Status =  E_OrderStatus.Canceled;
                         orderSub.CanceledTime = order.CanceledTime;
                         orderSub.Mender = operater;
                         orderSub.MendTime = DateTime.Now;
@@ -1018,9 +1016,14 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
                 }
 
-                if (order.Status == E_OrderStatus.Canceled)
+                if (order.PayStatus ==  E_OrderPayStatus.PayCancle)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已被取消，请重新下单");
+                }
+
+                if (order.PayStatus == E_OrderPayStatus.PayTimeout)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已超时，请重新下单");
                 }
 
 

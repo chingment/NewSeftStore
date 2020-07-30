@@ -95,10 +95,8 @@ namespace LocalS.Entity
         public int Quantity { get; set; }
         public DateTime? SubmittedTime { get; set; }
         public DateTime? PayedTime { get; set; }
-        public DateTime? CompletedTime { get; set; }
         public DateTime? CanceledTime { get; set; }
         public E_OrderSource Source { get; set; }
-        public E_OrderStatus Status { get; set; }
         public string CancelReason { get; set; }
         public string CancelOperator { get; set; }
         public E_OrderPayPartner PayPartner { get; set; }
@@ -111,12 +109,15 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-        public bool ExIsHappen { get; set; }
-        public DateTime? ExHappenTime { get; set; }
-        public bool ExIsHandle { get; set; }
-        public DateTime? ExHandleTime { get; set; }
-        public string ExHandleRemark { get; set; }
         public bool IsTestMode { get; set; }
         public string AppId { get; set; }
+
+        //public bool ExIsHappen { get; set; }
+        //public DateTime? ExHappenTime { get; set; }
+        //public bool ExIsHandle { get; set; }
+        //public DateTime? ExHandleTime { get; set; }
+        //public string ExHandleRemark { get; set; }
+        //public DateTime? CompletedTime { get; set; }
+        //public E_OrderStatus Status { get; set; }
     }
 }

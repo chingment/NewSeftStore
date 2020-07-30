@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getList(params) {
+  return request({
+    url: '/ordersub/getList',
+    method: 'get',
+    params
+  })
+}
+
 export function getListByDelivery(params) {
   return request({
     url: '/ordersub/GetListByDelivery',
@@ -49,6 +57,7 @@ export function handleExByMachineSelfTake(data) {
 }
 
 export default {
+  getList: getList,
   getListByDelivery: getListByDelivery,
   getListByMachineSelfTake: getListByMachineSelfTake,
   getListByStoreSelfTake: getListByStoreSelfTake,

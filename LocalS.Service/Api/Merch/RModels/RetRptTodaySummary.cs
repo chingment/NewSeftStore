@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.Merch
             this.TodayGmvRl = new TodayGmvRlModel();
         }
 
-        public int SumExWaitHandleCount { get; set; }
+        public int SumExHdByMachineSelfTake { get; set; }
 
         public TodayGmvRlModel TodayGmvRl { get; set; }
 

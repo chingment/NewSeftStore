@@ -25,11 +25,11 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderId == null || o.Id.Contains(rup.OrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.PayStatus });
 
             if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
             {
-                query = query.Where(m => m.Status == rup.OrderStauts);
+                //query = query.Where(m => m.Status == rup.OrderStauts);
             }
 
             if (!string.IsNullOrEmpty(rup.StoreId))
@@ -134,7 +134,7 @@ namespace LocalS.Service.Api.Merch
                     OriginalAmount = item.OriginalAmount.ToF2Price(),
                     Quantity = item.Quantity,
                     CreateTime = item.CreateTime,
-                    Status = BizFactory.Order.GetStatus(item.Status),
+                    //Status = BizFactory.Order.GetStatus(item.Status),
                     SourceName = BizFactory.Order.GetSourceName(item.Source),
                    // ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
 //CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
@@ -171,7 +171,7 @@ namespace LocalS.Service.Api.Merch
             ret.OriginalAmount = order.OriginalAmount.ToF2Price();
             ret.Quantity = order.Quantity;
             ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
-            ret.Status = BizFactory.Order.GetStatus(order.Status);
+            //ret.Status = BizFactory.Order.GetStatus(order.Status);
             ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
             //ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
             //ret.ExHandleRemark = order.ExHandleRemark;

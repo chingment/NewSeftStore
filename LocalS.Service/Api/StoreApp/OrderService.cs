@@ -215,7 +215,7 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单");
                 }
 
-                if (order.Status != E_OrderStatus.WaitPay)
+                if (order.PayStatus != E_OrderPayStatus.WaitPay || order.PayStatus != E_OrderPayStatus.Paying)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不在就绪支付状态");
                 }
@@ -410,62 +410,62 @@ namespace LocalS.Service.Api.StoreApp
             var pageEntiy = new PageEntity<OrderModel>();
 
 
-            var query = (from o in CurrentDb.Order
-                         where o.ClientUserId == clientUserId
-                         select new { o.Id, o.StoreId, o.StoreName, o.Status, o.SubmittedTime, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
-             );
+            //var query = (from o in CurrentDb.Order
+            //             where o.ClientUserId == clientUserId
+            //             select new { o.Id, o.StoreId, o.StoreName, o.PayStatus, o.SubmittedTime, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
+            // );
 
 
-            if (rup.Status != E_OrderStatus.Unknow)
-            {
-                query = query.Where(m => m.Status == rup.Status);
-            }
+            //if (rup.Status != E_OrderStatus.Unknow)
+            //{
+            //    query = query.Where(m => m.Status == rup.Status);
+            //}
 
-            int pageSize = 10;
+            //int pageSize = 10;
 
-            pageEntiy.PageIndex = rup.PageIndex;
-            pageEntiy.PageSize = pageSize;
-            pageEntiy.Total = query.Count();
-            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
+            //pageEntiy.PageIndex = rup.PageIndex;
+            //pageEntiy.PageSize = pageSize;
+            //pageEntiy.Total = query.Count();
+            //pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+            //query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
 
 
 
-            var list = query.ToList();
+            //var list = query.ToList();
 
-            List<OrderModel> models = new List<OrderModel>();
+            //List<OrderModel> models = new List<OrderModel>();
 
-            foreach (var item in list)
-            {
-                var model = new OrderModel();
+            //foreach (var item in list)
+            //{
+            //    var model = new OrderModel();
 
-                model.Id = item.Id;
-                model.Tag.Name = new FsText(item.StoreName, "");
-                model.Tag.Desc = new FsField(BizFactory.Order.GetStatus(item.Status).Text, "");
-                model.ChargeAmount = item.ChargeAmount.ToF2Price();
-                model.Blocks = GetOrderBlocks(item.Id);
+            //    model.Id = item.Id;
+            //    model.Tag.Name = new FsText(item.StoreName, "");
+            //    model.Tag.Desc = new FsField(BizFactory.Order.GetStatus(item.Status).Text, "");
+            //    model.ChargeAmount = item.ChargeAmount.ToF2Price();
+            //    model.Blocks = GetOrderBlocks(item.Id);
 
-                switch (item.Status)
-                {
-                    case E_OrderStatus.WaitPay:
-                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "取消订单", Color = "red" }, OpType = "FUN", OpVal = "cancleOrder" });
-                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-                        break;
-                    case E_OrderStatus.Payed:
-                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-                        break;
-                    case E_OrderStatus.Completed:
-                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-                        break;
-                    case E_OrderStatus.Canceled:
-                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-                        break;
-                }
+            //    switch (item.Status)
+            //    {
+            //        case E_OrderStatus.WaitPay:
+            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "取消订单", Color = "red" }, OpType = "FUN", OpVal = "cancleOrder" });
+            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
+            //            break;
+            //        case E_OrderStatus.Payed:
+            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
+            //            break;
+            //        case E_OrderStatus.Completed:
+            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
+            //            break;
+            //        case E_OrderStatus.Canceled:
+            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
+            //            break;
+            //    }
 
-                pageEntiy.Items.Add(model);
+            //    pageEntiy.Items.Add(model);
 
-            }
+            //}
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pageEntiy);
@@ -482,9 +482,9 @@ namespace LocalS.Service.Api.StoreApp
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
             ret.Id = order.Id;
-            ret.Status = order.Status;
+            //ret.Status = order.Status;
             ret.Tag.Name = new FsText(order.StoreName, "");
-            ret.Tag.Desc = new FsField(BizFactory.Order.GetStatus(order.Status).Text, "");
+            //ret.Tag.Desc = new FsField(BizFactory.Order.GetStatus(order.Status).Text, "");
 
             var fsBlockByField = new FsBlockByField();
 
@@ -496,10 +496,10 @@ namespace LocalS.Service.Api.StoreApp
             {
                 fsBlockByField.Data.Add(new FsField("付款时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));
             }
-            if (order.CompletedTime != null)
-            {
-                fsBlockByField.Data.Add(new FsField("完成时间", "", order.CompletedTime.ToUnifiedFormatDateTime(), ""));
-            }
+            //if (order.CompletedTime != null)
+            //{
+            //    fsBlockByField.Data.Add(new FsField("完成时间", "", order.CompletedTime.ToUnifiedFormatDateTime(), ""));
+            //}
 
             if (order.CanceledTime != null)
             {

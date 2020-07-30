@@ -28,12 +28,12 @@ namespace LocalS.Service.Api.Merch
             var retRptTodaySummary = new RetRptTodaySummary();
 
             StringBuilder sql = new StringBuilder();
-            sql.Append(" select COUNT(*) from dbo.[Order] where ExIsHappen=1 and ExIsHandle=0 and merchId='" + merchId + "' ");
+            sql.Append(" select COUNT(*) from dbo.[OrderSub] where ReceiveMode=3 and ExIsHappen=1 and ExIsHandle=0 and merchId='" + merchId + "' ");
 
 
-            int sumExWaitHandleCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql.ToString()).ToString());
+            int sumExHdByMachineSelfTake = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql.ToString()).ToString());
 
-            retRptTodaySummary.SumExWaitHandleCount = sumExWaitHandleCount;
+            retRptTodaySummary.SumExHdByMachineSelfTake = sumExHdByMachineSelfTake;
 
 
 

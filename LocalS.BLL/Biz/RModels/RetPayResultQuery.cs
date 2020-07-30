@@ -10,7 +10,7 @@ namespace LocalS.BLL.Biz
     public class RetPayResultQuery
     {
         public string OrderId { get; set; }
-        public E_OrderStatus Status { get; set; }
+        public E_OrderPayStatus Status { get; set; }
 
     }
 }

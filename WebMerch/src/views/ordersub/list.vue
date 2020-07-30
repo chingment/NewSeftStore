@@ -338,7 +338,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getListByMachineSelfTake, getDetailsByMachineSelfTake, handleExByMachineSelfTake } from '@/api/ordersub'
+import { getList, getDetailsByMachineSelfTake, handleExByMachineSelfTake } from '@/api/ordersub'
 import Pagination from '@/components/Pagination'
 import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -350,7 +350,12 @@ export default {
       require: false,
       default: ''
     },
-    machineid: {
+    sellchannelrefid: {
+      type: String,
+      require: false,
+      default: ''
+    },
+    receivemode: {
       type: String,
       require: false,
       default: ''
@@ -374,8 +379,8 @@ export default {
         clientName: undefined,
         orderId: undefined,
         storeId: undefined,
-        machineId: undefined,
-        isHasEx: false
+        isHasEx: false,
+        sellChannelRefId: undefined
       },
       dialogDetailsIsVisible: false,
       detailsLoading: false,
@@ -422,8 +427,8 @@ export default {
   },
   watch: {
     $route() {
-      this.listQuery.receiveMode = getUrlParam('receiveMode')
-      console.log(this.listQuery.receiveMode)
+      var receiveMode = getUrlParam('receiveMode')
+      this.listQuery.receiveMode = receiveMode
       this.init()
     }
   },
@@ -441,8 +446,8 @@ export default {
     }
 
     this.listQuery.storeId = this.storeid
-    this.listQuery.machineId = this.machineid
-
+    this.listQuery.sellChannelRefId = this.sellchannelrefid
+    this.listQuery.receiveMode = this.receivemode
     if (this.clientuserid === '') {
       this.isShowClientUserNameInput = true
     } else {
@@ -456,9 +461,11 @@ export default {
       this.getListData()
     },
     getListData() {
+      console.log('sellchannelrefid:' + this.listQuery.sellChannelRefId)
+      console.log('receivemode:' + this.listQuery.receiveMode)
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getListByMachineSelfTake(this.listQuery).then(res => {
+      getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

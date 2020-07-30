@@ -98,7 +98,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.Data = new RetOrderPayStatusQuery();
                 ret.Data.Id = ret_Biz.Data.OrderId;
                 ret.Data.Status = ret_Biz.Data.Status;
-                if (ret_Biz.Data.Status == E_OrderStatus.Payed)
+                if (ret_Biz.Data.Status == E_OrderPayStatus.PaySuccess)
                 {
                     ret.Data.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(rup.OrderId, rup.MachineId);
                 }

@@ -16,7 +16,7 @@
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="id" /></el-tab-pane>
       <el-tab-pane label="商品分类" name="tabProduct"><manage-pane-product :storeid="id" /></el-tab-pane>
       <el-tab-pane label="机器信息" name="tabMachine"><manage-pane-machine :storeid="id" /></el-tab-pane>
-      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order :storeid="id" /></el-tab-pane>
+      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order ref="order" :storeid="id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -26,7 +26,7 @@ import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneMachine from './components/ManagePaneMachine'
 import managePaneProduct from './components/ManagePaneProduct'
-import managePaneOrder from '@/views/order/list'
+import managePaneOrder from '@/views/ordersub/list'
 export default {
   components: { managePaneBaseInfo, managePaneProduct, managePaneMachine, managePaneOrder },
   data() {
@@ -42,6 +42,7 @@ export default {
   watch: {
     '$route'(to, from) {
       this.id = to.query.id
+      this.$refs.order.listQuery.storeId = this.id
       this.init()
     }
   },

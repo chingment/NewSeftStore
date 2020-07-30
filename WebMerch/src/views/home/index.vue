@@ -16,7 +16,7 @@
               <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
             </div>
             <div class="it">
-              <div class="t1" @click="sumExWaitHandleCountClick"><span class="m3">  {{ todaySummary.sumExWaitHandleCount }}</span><br> <span class="d1">异常订单</span></div>
+              <div class="t1" @click="sumExHdByMachineSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByMachineSelfTake }}</span><br> <span class="d1">机器异常订单</span></div>
             </div>
           </div>
         </el-card>
@@ -165,7 +165,7 @@ export default {
   data() {
     return {
       todaySummary: {
-        sumExWaitHandleCount: 0,
+        sumExHdByMachineSelfTake: 0,
         todayGmvRl: {
           sumCount: 0,
           sumTradeAmount: 0
@@ -194,7 +194,7 @@ export default {
       getTodaySummary().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.todaySummary.sumExWaitHandleCount = d.sumExWaitHandleCount
+          this.todaySummary.sumExHdByMachineSelfTake = d.sumExHdByMachineSelfTake
           // this.todayGmv = res.data.days[0]
         }
       })
@@ -228,10 +228,10 @@ export default {
         }
       })
     },
-    sumExWaitHandleCountClick() {
+    sumExHdByMachineSelfTakeClick() {
       this.$cookies.set('isHasEx', '1')
       this.$router.push({
-        path: '/order/list'
+        path: '/ordersub/listbymachineselftake'
       })
     },
     todayGmvClick() {

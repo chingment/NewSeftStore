@@ -11,6 +11,15 @@ namespace WebApiMerch.Controllers
 {
     public class OrderSubController : OwnApiBaseController
     {
+
+        [HttpGet]
+        public OwnApiHttpResponse GetList([FromUri]RupOrderSubGetList rup)
+        {
+            IResult result = MerchServiceFactory.OrderSub.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+
         [HttpGet]
         public OwnApiHttpResponse GetListByDelivery([FromUri]RupOrderSubGetList rup)
         {
