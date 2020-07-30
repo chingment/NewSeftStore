@@ -24,6 +24,16 @@
             style="width: 100%"
           />
         </el-col>
+        <el-col :span="3" :xs="24" style="margin-bottom:20px">
+          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式">
+            <el-option
+              v-for="item in optionsReceiveModes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
@@ -51,7 +61,7 @@
       </el-table-column>
       <el-table-column v-if="isDesktop" label="提货方式" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveModeNames }}</span>
+          <span>{{ scope.row.receiveModeName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单号" align="left" min-width="10%">
@@ -108,9 +118,20 @@ export default {
       listTotal: 0,
       listQuery: {
         storeIds: [],
-        tradeDateTimeArea: []
+        tradeDateTimeArea: [],
+        receiveMode: undefined
       },
       optionsStores: [],
+      optionsReceiveModes: [{
+        value: '3',
+        label: '机器自提'
+      }, {
+        value: '2',
+        label: '店铺自取'
+      }, {
+        value: '1',
+        label: '配送商品'
+      }],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -165,7 +186,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['店铺', '提货方式', '订单号', '交易时间', '数量', '总金额', '支付方式']
-        const filterVal = ['storeName', 'receiveModeNames', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
+        const filterVal = ['storeName', 'receiveModeName', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

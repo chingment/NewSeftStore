@@ -59,5 +59,10 @@ namespace LocalS.Entity
         public E_OrderSource Source { get; set; }
         public E_OrderStatus Status { get; set; }
         public string ClientUserName { get; set; }
+
+        public decimal RefundAmount { get; set; }
+        public string RefundOperator { get; set; }
+
+        public DateTime? RefundTime { get; set; }
     }
 }

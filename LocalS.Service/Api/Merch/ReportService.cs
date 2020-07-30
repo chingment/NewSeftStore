@@ -254,7 +254,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.OrderSubChild
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_OrderPayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime)
-                         select new { u.StoreName, u.StoreId,u.ReceiveModeName, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -276,6 +276,11 @@ namespace LocalS.Service.Api.Merch
             else if (rop.PickupStatus == "3")
             {
                 query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Taked || m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignTaked);
+            }
+
+            if (rop.ReceiveMode != Entity.E_ReceiveMode.Unknow)
+            {
+                query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
             }
 
             //var machine = BizFactory.Machine.GetOne(rup.MachineId);
@@ -391,15 +396,20 @@ namespace LocalS.Service.Api.Merch
 
 
 
-            var query = (from u in CurrentDb.Order
+            var query = (from u in CurrentDb.OrderSub
                          where u.MerchId == merchId && u.PayStatus == Entity.E_OrderPayStatus.PaySuccess
-                         select new { u.Id, u.StoreName, u.StoreId, u.ReceiveModeNames, u.SellChannelRefIds, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
+                         select new { u.Id, u.StoreName, u.StoreId, u.ReceiveMode, u.ReceiveModeName, u.SellChannelRefId, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
                 query = query.Where(u => rop.StoreIds.Contains(u.StoreId));
+            }
+
+            if (rop.ReceiveMode != Entity.E_ReceiveMode.Unknow)
+            {
+                query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
             }
 
             List<object> olist = new List<object>();
@@ -411,7 +421,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     StoreName = item.StoreName,
-                    ReceiveModeNames = item.ReceiveModeNames,
+                    ReceiveModeName = item.ReceiveModeName,
                     OrderId = item.Id,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     Quantity = item.Quantity,
@@ -488,6 +498,11 @@ namespace LocalS.Service.Api.Merch
             sql.Append(" IsNull(SumEx,0) as SumEx,  ");
             sql.Append(" IsNull(SumExHandle,0) as SumExHandle,");
             sql.Append(" IsNull((SumEx-SumExHandle),0) as SumExNoHandle, ");
+
+            sql.Append(" IsNull(SumReceiveMode1,0) as SumReceiveMode1, ");
+            sql.Append(" IsNull(SumReceiveMode2,0) as SumReceiveMode2, ");
+            sql.Append(" IsNull(SumReceiveMode3,0) as SumReceiveMode3, ");
+
             sql.Append(" IsNull(SumQuantity,0) as SumQuantity, ");
             sql.Append(" IsNull(SumChargeAmount,0) as SumChargeAmount, ");
             sql.Append(" IsNull(SumRefundAmount,0) as SumRefundAmount, ");
@@ -499,13 +514,17 @@ namespace LocalS.Service.Api.Merch
             sql.Append(" COUNT(Id) as SumCount,  ");
             sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,  ");
             sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle,  ");
+            sql.Append(" SUM( CASE ReceiveMode WHEN 1 THEN 1 ELSE 0 END) as SumReceiveMode1,  ");
+            sql.Append(" SUM( CASE ReceiveMode WHEN 2 THEN 1 ELSE 0 END) as SumReceiveMode2,  ");
+            sql.Append(" SUM( CASE ReceiveMode WHEN 3 THEN 1 ELSE 0 END) as SumReceiveMode3,  ");
+
             sql.Append(" SUM(Quantity) as SumQuantity,  ");
             sql.Append(" SUM(ChargeAmount)as SumChargeAmount,  ");
             sql.Append(" SUM(RefundAmount) as SumRefundAmount ,  ");
             sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx,  ");
             sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb,  ");
             sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete   ");
-            sql.Append(" from [Order]  a where PayStatus=3 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  group by StoreId )   ");
+            sql.Append(" from [OrderSub]  a where PayStatus=3 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  group by StoreId )   ");
             sql.Append(" tb on tb1.Id=tb.StoreId  where MerchId='" + merchId + "'  order by SumChargeAmount desc  ");
 
 

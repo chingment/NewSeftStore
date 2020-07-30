@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace LocalS.Service.Api.Merch
         public string[] TradeDateTimeArea { get; set; }
 
         public string PickupStatus { get; set; }
+
+        public E_ReceiveMode ReceiveMode { get; set; }
     }
 }

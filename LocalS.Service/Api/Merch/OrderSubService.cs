@@ -172,9 +172,9 @@ namespace LocalS.Service.Api.Merch
                          o.MerchId == merchId
                          select new { o.Id, o.StoreId, o.StoreName, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
-            if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
+            if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
-                query = query.Where(m => m.Status == rup.OrderStauts);
+                query = query.Where(m => m.Status == rup.OrderStatus);
             }
 
             if (!string.IsNullOrEmpty(rup.StoreId))
@@ -295,9 +295,9 @@ namespace LocalS.Service.Api.Merch
                          o.MerchId == merchId
                          select new { o.Id, o.StoreId, o.StoreName, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
-            if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
+            if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
-                query = query.Where(m => m.Status == rup.OrderStauts);
+                query = query.Where(m => m.Status == rup.OrderStatus);
             }
 
             if (!string.IsNullOrEmpty(rup.StoreId))
@@ -420,9 +420,9 @@ namespace LocalS.Service.Api.Merch
                          o.MerchId == merchId
                          select new { o.Id, o.StoreId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
-            if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
+            if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
-                query = query.Where(m => m.Status == rup.OrderStauts);
+                query = query.Where(m => m.Status == rup.OrderStatus);
             }
 
             if (!string.IsNullOrEmpty(rup.StoreId))

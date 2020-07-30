@@ -25,7 +25,7 @@
             style="width: 100%"
           />
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :span="3" :xs="24" style="margin-bottom:20px">
           <el-select v-model="listQuery.pickupStatus" clearable placeholder="全部取货状态">
             <el-option
               v-for="item in optionsPickupStatus"
@@ -35,7 +35,16 @@
             />
           </el-select>
         </el-col>
-
+        <el-col :span="3" :xs="24" style="margin-bottom:20px">
+          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式">
+            <el-option
+              v-for="item in optionsReceiveModes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
@@ -118,7 +127,7 @@
       </el-table-column>
     </el-table>
     <el-alert
-      title="提示：以单个商品单位维度来统计销售报表"
+      title="提示：以商品单位维度来统计销售报表"
       type="remark-gray"
       :closable="false"
     />
@@ -146,7 +155,8 @@ export default {
       listTotal: 0,
       listQuery: {
         storeIds: [],
-        tradeDateTimeArea: []
+        tradeDateTimeArea: [],
+        receiveMode: undefined
       },
       optionsPickupStatus: [{
         value: '1',
@@ -157,6 +167,16 @@ export default {
       }, {
         value: '3',
         label: '已取货'
+      }],
+      optionsReceiveModes: [{
+        value: '3',
+        label: '机器自提'
+      }, {
+        value: '2',
+        label: '店铺自取'
+      }, {
+        value: '1',
+        label: '配送商品'
       }],
       optionsStores: [],
       isDesktop: this.$store.getters.isDesktop
