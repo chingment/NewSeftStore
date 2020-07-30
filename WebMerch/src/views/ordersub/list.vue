@@ -6,8 +6,18 @@
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" />
         </el-col>
-        <el-col v-if="isShowClientUserNameInput" :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col v-if="isShowClientUserNameInput" :span="3" :xs="12" style="margin-bottom:20px">
           <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
+        </el-col>
+        <el-col :span="3" :xs="12" style="margin-bottom:20px">
+          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式">
+            <el-option
+              v-for="item in options_ReceiveModes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-col>
         <el-col :span="3" :xs="12" style="margin-bottom:20px">
           <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">
@@ -412,6 +422,16 @@ export default {
         value: '5000',
         label: '已取消'
       }],
+      options_ReceiveModes: [{
+        value: '3',
+        label: '机器自提'
+      }, {
+        value: '2',
+        label: '店铺自取'
+      }, {
+        value: '1',
+        label: '配送商品'
+      }],
       options_pickupTrgStatus: [
         {
           value: '1',
@@ -445,9 +465,18 @@ export default {
       this.listQuery.isHasEx = false
     }
 
+    var receiveMode = getUrlParam('receiveMode')
+    if (receiveMode != null) {
+      this.listQuery.receiveMode = receiveMode
+    } else {
+      this.listQuery.receiveMode = this.receivemode
+    }
+
+    console.log('receiveMode:' + receiveMode)
+
     this.listQuery.storeId = this.storeid
     this.listQuery.sellChannelRefId = this.sellchannelrefid
-    this.listQuery.receiveMode = this.receivemode
+
     if (this.clientuserid === '') {
       this.isShowClientUserNameInput = true
     } else {

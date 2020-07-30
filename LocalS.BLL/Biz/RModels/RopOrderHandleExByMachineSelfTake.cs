@@ -24,9 +24,9 @@ namespace LocalS.BLL.Biz
         public string Title { get; set; }
     }
 
-    public class RopOrderHandleExOrderByMachineSelfTake
+    public class RopOrderHandleExByMachineSelfTake
     {
-        public RopOrderHandleExOrderByMachineSelfTake()
+        public RopOrderHandleExByMachineSelfTake()
         {
             this.Items = new List<ExItem>();
         }
@@ -34,5 +34,7 @@ namespace LocalS.BLL.Biz
         public List<ExItem> Items { get; set; }
         public string Remark { get; set; }
         public bool IsRunning { get; set; }
+
+        public string MachineId { get; set; }
     }
 }

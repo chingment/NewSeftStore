@@ -225,7 +225,7 @@
     <Compile Include="Api\Merch\RModels\RopMachineSetSysStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineShutdownSys.cs" />
     <Compile Include="Api\Merch\RModels\RopOrderHandleExOrder.cs" />
-    <Compile Include="Api\Merch\RModels\RopOrderSubHandleExOrderByMachineSelfTake.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrderSubHandleExByMachineSelfTake.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductEditSalePriceOnStore.cs" />

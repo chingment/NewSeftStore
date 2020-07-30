@@ -231,14 +231,14 @@ export default {
     sumExHdByMachineSelfTakeClick() {
       this.$cookies.set('isHasEx', '1')
       this.$router.push({
-        path: '/ordersub/listbymachineselftake'
+        path: '/ordersub/list?receiveMode=3'
       })
     },
     todayGmvClick() {
       this.$cookies.set('tradeStartTime', '2020-01-20')
       this.$cookies.set('tradeEndTime', '2020-01-20')
       this.$router.push({
-        path: '/order/list'
+        path: '/ordersub/list'
       })
     }
   }

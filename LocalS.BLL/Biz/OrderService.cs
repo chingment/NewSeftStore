@@ -912,7 +912,7 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该订单号:{0},找不到", orderId));
                 }
 
-                if (order.PayStatus ==  E_OrderPayStatus.PayCancle)
+                if (order.PayStatus == E_OrderPayStatus.PayCancle)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经取消");
                 }
@@ -922,7 +922,7 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经超时");
                 }
 
-                if (order.PayStatus ==  E_OrderPayStatus.PaySuccess)
+                if (order.PayStatus == E_OrderPayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经支付成功");
                 }
@@ -952,7 +952,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var orderSub in orderSubs)
                     {
-                        orderSub.Status =  E_OrderStatus.Canceled;
+                        orderSub.Status = E_OrderStatus.Canceled;
                         orderSub.CanceledTime = order.CanceledTime;
                         orderSub.Mender = operater;
                         orderSub.MendTime = DateTime.Now;
@@ -1016,7 +1016,7 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
                 }
 
-                if (order.PayStatus ==  E_OrderPayStatus.PayCancle)
+                if (order.PayStatus == E_OrderPayStatus.PayCancle)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已被取消，请重新下单");
                 }
@@ -1479,16 +1479,12 @@ namespace LocalS.BLL.Biz
             return sr.ReadToEnd();
         }
 
-        public CustomJsonResult HandleExOrderByMachineSelfTake(string operater, RopOrderHandleExOrderByMachineSelfTake rop)
+        public CustomJsonResult HandleExByMachineSelfTake(string operater, RopOrderHandleExByMachineSelfTake rop)
         {
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (rop.Items.Count == 0)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "处理的项目不能为空");
-                }
 
                 if (string.IsNullOrEmpty(rop.Remark))
                 {
@@ -1607,11 +1603,27 @@ namespace LocalS.BLL.Biz
 
                 if (rop.IsRunning)
                 {
-                    var machineIds = orderSubs.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).Select(m => m.SellChannelRefId).ToArray();
-
-                    foreach (var machineId in machineIds)
+                    if (string.IsNullOrEmpty(rop.MachineId))
                     {
-                        var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                        var machineIds = orderSubs.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).Select(m => m.SellChannelRefId).ToArray();
+
+                        foreach (var machineId in machineIds)
+                        {
+                            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                            if (machine != null)
+                            {
+                                machine.RunStatus = E_MachineRunStatus.Running;
+                                machine.ExIsHas = false;
+                                machine.MendTime = DateTime.Now;
+                                machine.Mender = operater;
+                                CurrentDb.SaveChanges();
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
                         if (machine != null)
                         {
                             machine.RunStatus = E_MachineRunStatus.Running;
@@ -1621,6 +1633,7 @@ namespace LocalS.BLL.Biz
                             CurrentDb.SaveChanges();
                         }
                     }
+
                 }
 
                 CurrentDb.SaveChanges();

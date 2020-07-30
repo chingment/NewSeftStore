@@ -617,13 +617,13 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult HandleExOrderByMachineSelfTake(string operater, string merchId, RopOrderSubHandleExOrderByMachineSelfTake rop)
+        public CustomJsonResult HandleExByMachineSelfTake(string operater, string merchId, RopOrderSubHandleExByMachineSelfTake rop)
         {
-            var bizRop = new BLL.Biz.RopOrderHandleExOrderByMachineSelfTake();
+            var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
             bizRop.Items.Add(new ExItem { Id = rop.Id, Uniques = rop.Uniques });
-            var result = BizFactory.Order.HandleExOrderByMachineSelfTake(operater, bizRop);
+            var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             return result;
         }
     }

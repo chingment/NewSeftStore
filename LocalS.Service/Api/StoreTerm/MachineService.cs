@@ -391,12 +391,12 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
-            var bizRop = new RopOrderHandleExOrderByMachineSelfTake();
+            var bizRop = new RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = true;
             bizRop.Remark = string.Join(",", rop.Reasons.Select(m => m.Title).ToArray());
             bizRop.Items = rop.Items;
-
-            var bizResult = BizFactory.Order.HandleExOrderByMachineSelfTake(operater, bizRop);
+            bizRop.MachineId = rop.MachineId;
+            var bizResult = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             if (bizResult.Result == ResultType.Success)
             {
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopOrderSubHandleExOrderByMachineSelfTake
+    public class RopOrderSubHandleExByMachineSelfTake
     {
-        public RopOrderSubHandleExOrderByMachineSelfTake()
+        public RopOrderSubHandleExByMachineSelfTake()
         {
             this.Uniques = new List<ExUnique>();
         }

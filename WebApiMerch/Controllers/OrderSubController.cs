@@ -50,9 +50,9 @@ namespace WebApiMerch.Controllers
 
 
         [HttpPost]
-        public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderSubHandleExOrderByMachineSelfTake rop)
+        public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderSubHandleExByMachineSelfTake rop)
         {
-            IResult result = MerchServiceFactory.OrderSub.HandleExOrderByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.OrderSub.HandleExByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }
