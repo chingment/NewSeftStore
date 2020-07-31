@@ -109,32 +109,32 @@ namespace Test
             //string a22 = null;
             //string a33 = a11 + a22;
 
-            var p1 = new List<BuildOrderSub.ProductSku>();
+            //var p1 = new List<BuildOrderSub.ProductSku>();
 
-            BuildOrderSub.ProductSku a1 = new BuildOrderSub.ProductSku();
-            a1.Id = "1";
-            a1.Quantity = 3;
-            a1.ShopMode = E_SellChannelRefType.Mall;
-            a1.Stocks.Add(new ProductSkuStockModel() { RefId = SellChannelStock.MallSellChannelRefId, RefType = E_SellChannelRefType.Mall, CabinetId = "0", SlotId = "0", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 10, SumQuantity = 10 });
-            p1.Add(a1);
+            //BuildOrderSub.ProductSku a1 = new BuildOrderSub.ProductSku();
+            //a1.Id = "1";
+            //a1.Quantity = 3;
+            //a1.ShopMode = E_SellChannelRefType.Mall;
+            //a1.Stocks.Add(new ProductSkuStockModel() { RefId = SellChannelStock.MallSellChannelRefId, RefType = E_SellChannelRefType.Mall, CabinetId = "0", SlotId = "0", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 10, SumQuantity = 10 });
+            //p1.Add(a1);
 
 
-            BuildOrderSub.ProductSku a2 = new BuildOrderSub.ProductSku();
-            a2.Id = "2";
-            a2.Quantity = 5;
-            a2.ShopMode = E_SellChannelRefType.Mall;
-            a2.Stocks.Add(new ProductSkuStockModel() { RefId = SellChannelStock.MallSellChannelRefId, RefType = E_SellChannelRefType.Mall, CabinetId = "0", SlotId = "0", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 7, SumQuantity = 7 });
-            p1.Add(a2);
+            //BuildOrderSub.ProductSku a2 = new BuildOrderSub.ProductSku();
+            //a2.Id = "2";
+            //a2.Quantity = 5;
+            //a2.ShopMode = E_SellChannelRefType.Mall;
+            //a2.Stocks.Add(new ProductSkuStockModel() { RefId = SellChannelStock.MallSellChannelRefId, RefType = E_SellChannelRefType.Mall, CabinetId = "0", SlotId = "0", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 7, SumQuantity = 7 });
+            //p1.Add(a2);
 
-            BuildOrderSub.ProductSku a3 = new BuildOrderSub.ProductSku();
-            a3.Id = "3";
-            a3.Quantity = 10;
-            a3.ShopMode = E_SellChannelRefType.Machine;
-            a3.Stocks.Add(new ProductSkuStockModel() { RefId = "3012002", RefType = E_SellChannelRefType.Machine, CabinetId = "0", SlotId = "1", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 7, SumQuantity = 7 });
-            a3.Stocks.Add(new ProductSkuStockModel() { RefId = "3011001", RefType = E_SellChannelRefType.Machine, CabinetId = "0", SlotId = "2", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 4, SumQuantity = 4 });
-            p1.Add(a3);
+            //BuildOrderSub.ProductSku a3 = new BuildOrderSub.ProductSku();
+            //a3.Id = "3";
+            //a3.Quantity = 10;
+            //a3.ShopMode = E_SellChannelRefType.Machine;
+            //a3.Stocks.Add(new ProductSkuStockModel() { RefId = "3012002", RefType = E_SellChannelRefType.Machine, CabinetId = "0", SlotId = "1", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 7, SumQuantity = 7 });
+            //a3.Stocks.Add(new ProductSkuStockModel() { RefId = "3011001", RefType = E_SellChannelRefType.Machine, CabinetId = "0", SlotId = "2", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 4, SumQuantity = 4 });
+            //p1.Add(a3);
 
-            var buildOrderSubs = BizFactory.Order.BuildOrderSubs(p1);
+            //var buildOrderSubs = BizFactory.Order.BuildOrderSubs(p1);
 
             string ab = "[{\"cartId\":\"0ee2e0c85a314d6c9d5df6a2f0ce4aea\",\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"quantity\":2,\"receptionMode\":3},{\"cartId\":\"1fe7be781a5248ea9aa2b77bfcbf47dd\",\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"quantity\":3,\"receptionMode\":1}]";
             string cs = "[{\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"receptionMode\":3,\"barCode\":\"\",\"cumCode\":\"343\",\"pinYinIndex\":\"KKKLGZ250ML\",\"productId\":\"f1b911de7b28445184b1ad89a0eade1b\",\"name\":\"可口可乐 灌装 250ML\",\"mainImgUrl\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"displayImgUrls\":[{\"url\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"isMain\":false,\"name\":\"3dbf6644-c267-46f8-bba2-7d9d1735366d_o.jpg\",\"priority\":0}],\"specDes\":[{\"name\":\"形状\",\"value\":\"灌装\"},{\"name\":\"容量\",\"value\":\"250ML\"}],\"briefDes\":\"#美味可口\",\"specItems\":[{\"name\":\"形状\",\"value\":[{\"name\":\"圆形\"},{\"name\":\"灌装\"}]},{\"name\":\"容量\",\"value\":[{\"name\":\"100ML\"},{\"name\":\"250ML\"}]}],\"specIdx\":\"灌装,250ML\",\"isTrgVideoService\":true,\"charTags\":[\"精致美品\",\"优选\"],\"specIdxSkus\":[{\"skuId\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"specIdx\":\"灌装,250ML\"},{\"skuId\":\"27a780d03d364197a657cf4e05ac000d\",\"specIdx\":\"灌装,100ML\"},{\"skuId\":\"88eae5cf68f84471a35b71c453d8f806\",\"specIdx\":\"圆形,100ML\"},{\"skuId\":\"af08c84c45e04fc4b9e467b52a1671f5\",\"specIdx\":\"圆形,250ML\"}],\"stocks\":[{\"refType\":3,\"refId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r4c4\",\"sumQuantity\":4,\"lockQuantity\":2,\"sellQuantity\":2,\"isOffSell\":false,\"salePrice\":2.00,\"salePriceByVip\":1.00}]},{\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"receptionMode\":1,\"barCode\":\"\",\"cumCode\":\"343\",\"pinYinIndex\":\"KKKLGZ250ML\",\"productId\":\"f1b911de7b28445184b1ad89a0eade1b\",\"name\":\"可口可乐 灌装 250ML\",\"mainImgUrl\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"displayImgUrls\":[{\"url\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"isMain\":false,\"name\":\"3dbf6644-c267-46f8-bba2-7d9d1735366d_o.jpg\",\"priority\":0}],\"specDes\":[{\"name\":\"形状\",\"value\":\"灌装\"},{\"name\":\"容量\",\"value\":\"250ML\"}],\"briefDes\":\"#美味可口\",\"specItems\":[{\"name\":\"形状\",\"value\":[{\"name\":\"圆形\"},{\"name\":\"灌装\"}]},{\"name\":\"容量\",\"value\":[{\"name\":\"100ML\"},{\"name\":\"250ML\"}]}],\"specIdx\":\"灌装,250ML\",\"isTrgVideoService\":true,\"charTags\":[\"精致美品\",\"优选\"],\"specIdxSkus\":[{\"skuId\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"specIdx\":\"灌装,250ML\"},{\"skuId\":\"27a780d03d364197a657cf4e05ac000d\",\"specIdx\":\"灌装,100ML\"},{\"skuId\":\"88eae5cf68f84471a35b71c453d8f806\",\"specIdx\":\"圆形,100ML\"},{\"skuId\":\"af08c84c45e04fc4b9e467b52a1671f5\",\"specIdx\":\"圆形,250ML\"}],\"stocks\":[{\"refType\":1,\"refId\":\"000000000000\",\"cabinetId\":\"0\",\"slotId\":\"0\",\"sumQuantity\":100,\"lockQuantity\":0,\"sellQuantity\":100,\"isOffSell\":false,\"salePrice\":3.50,\"salePriceByVip\":3.50}]}]";

@@ -26,7 +26,7 @@ import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStock from './components/ManagePaneStock'
 import managePaneControlCenter from './components/ManagePaneControlCenter'
-import managePaneOrder from '@/views/ordersub/list?receiveMode=3'
+import managePaneOrder from '@/views/order/list?receiveMode=3'
 export default {
   components: { managePaneBaseInfo, managePaneStock, managePaneOrder, managePaneControlCenter },
   data() {

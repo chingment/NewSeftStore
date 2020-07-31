@@ -10,9 +10,9 @@ namespace LocalS.BLL
     public class PayResult
     {
         public bool IsPaySuccess { get; set; }
-        public string OrderId { get; set; }
+        public string PayTransId { get; set; }
         public string PayPartnerOrderId { get; set; }
-        public E_OrderPayWay OrderPayWay { get; set; }
+        public E_PayWay PayWay { get; set; }
         public string ClientUserName { get; set; }
     }
 }

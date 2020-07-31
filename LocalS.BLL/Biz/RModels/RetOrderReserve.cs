@@ -13,15 +13,19 @@ namespace LocalS.BLL.Biz
     {
         public RetOrderReserve()
         {
-
+            this.Orders = new List<Order>();
         }
-        public string OrderId { get; set; }
-        public string ChargeAmount { get; set; }
+        public List<Order> Orders { get; set; }
+        public class Order
+        {
+            public string Id { get; set; }
+            public string ChargeAmount { get; set; }
+        }
     }
 
-    public class BuildOrderSub
+    public class BuildOrder
     {
-        public BuildOrderSub()
+        public BuildOrder()
         {
             this.Childs = new List<Child>();
         }

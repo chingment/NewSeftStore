@@ -11,10 +11,96 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
+
 namespace LocalS.Service.Api.Merch
 {
     public class OrderService : BaseDbContext
     {
+        public CustomJsonResult GetDetails(string operater, string merchId, string orderId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetOrderDetails();
+
+            //var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
+            //if (order == null)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+            //}
+
+            //ret.Id = order.Id;
+            //ret.ClientUserName = order.ClientUserName;
+            //ret.ClientUserId = order.ClientUserId;
+            //ret.StoreName = order.StoreName;
+            //ret.SubmitTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            //ret.ChargeAmount = order.ChargeAmount.ToF2Price();
+            //ret.DiscountAmount = order.DiscountAmount.ToF2Price();
+            //ret.OriginalAmount = order.OriginalAmount.ToF2Price();
+            //ret.Quantity = order.Quantity;
+            //ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
+            ////ret.Status = BizFactory.Order.GetStatus(order.Status);
+            //ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
+            ////ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
+            ////ret.ExHandleRemark = order.ExHandleRemark;
+            ////ret.ExIsHappen = order.ExIsHappen;
+            //var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+
+            //List<RetOrderDetails.ReceiveDetail> receiveDetails = new List<RetOrderDetails.ReceiveDetail>();
+            //foreach (var orderSub in orderSubs)
+            //{
+            //    var receiveDetail = new RetOrderDetails.ReceiveDetail();
+
+            //    receiveDetail.Mode = orderSub.ReceiveMode;
+            //    receiveDetail.Name = orderSub.ReceiveModeName;
+            //    receiveDetail.DetailType = 1;
+
+            //    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+            //    var pickupSkus = new List<RetOrderDetails.PickupSku>();
+            //    foreach (var orderSubChild in orderSubChilds)
+            //    {
+            //        var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
+
+            //        List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
+
+            //        foreach (var orderPickupLog in orderPickupLogs)
+            //        {
+            //            string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+            //            string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+            //            List<string> imgUrls = new List<string>();
+            //            if (!string.IsNullOrEmpty(imgUrl))
+            //            {
+            //                imgUrls.Add(imgUrl);
+            //            }
+            //            if (!string.IsNullOrEmpty(imgUrl2))
+            //            {
+            //                imgUrls.Add(imgUrl2);
+            //            }
+            //            pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+            //        }
+
+            //        receiveDetail.DetailItems.Add(new RetOrderDetails.PickupSku
+            //        {
+            //            Id = orderSubChild.PrdProductSkuId,
+            //            ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
+            //            UniqueId = orderSubChild.Id,
+            //            MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
+            //            Name = orderSubChild.PrdProductSkuName,
+            //            Quantity = orderSubChild.Quantity,
+            //            Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
+            //            PickupLogs = pickupLogs,
+            //            SignStatus = 0
+            //        });
+            //    }
+
+            //    ret.ReceiveDetails.Add(receiveDetail);
+
+            //}
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+            return result;
+
+        }
 
         public CustomJsonResult GetList(string operater, string merchId, RupOrderGetList rup)
         {
@@ -23,23 +109,20 @@ namespace LocalS.Service.Api.Merch
             var query = (from o in CurrentDb.Order
                          where (rup.ClientUserName == null || o.ClientUserName.Contains(rup.ClientUserName))
                          &&
+                         o.PayStatus == E_PayStatus.PaySuccess
+                         &&
                          (rup.OrderId == null || o.Id.Contains(rup.OrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.SellChannelRefIds, o.StoreId, o.ClientUserId, o.ClientUserName, o.StoreName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.PayStatus });
+                         select new { o.Id, o.StoreId, o.SellChannelRefId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
-            if (rup.OrderStauts != Entity.E_OrderStatus.Unknow)
+            if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
-                //query = query.Where(m => m.Status == rup.OrderStauts);
+                query = query.Where(m => m.Status == rup.OrderStatus);
             }
 
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
                 query = query.Where(m => m.StoreId == rup.StoreId);
-            }
-
-            if (!string.IsNullOrEmpty(rup.MachineId))
-            {
-                query = query.Where(m => m.SellChannelRefIds.Contains(rup.MachineId));
             }
 
             if (!string.IsNullOrEmpty(rup.ClientUserId))
@@ -49,7 +132,26 @@ namespace LocalS.Service.Api.Merch
 
             if (rup.IsHasEx)
             {
-                //query = query.Where(m => m.ExIsHappen == true && m.ExIsHandle == false);
+                query = query.Where(m => m.ExIsHappen == true && m.ExIsHandle == false);
+            }
+
+            if (rup.PickupTrgStatus == 1)
+            {
+                query = query.Where(m => m.PickupIsTrg == false);
+            }
+            else if (rup.PickupTrgStatus == 2)
+            {
+                query = query.Where(m => m.PickupIsTrg == true);
+            }
+
+            if (rup.ReceiveMode != E_ReceiveMode.Unknow)
+            {
+                query = query.Where(m => m.ReceiveMode == rup.ReceiveMode);
+            }
+
+            if (!string.IsNullOrEmpty(rup.SellChannelRefId))
+            {
+                query = query.Where(m => m.SellChannelRefId == rup.SellChannelRefId);
             }
 
             int total = query.Count();
@@ -64,63 +166,55 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).ToList();
-
                 List<object> receiveDetails = new List<object>();
-                foreach (var orderDetail in orderSub)
+                List<object> pickupSkus = new List<object>();
+
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+
+                foreach (var orderSub in orderSubs)
                 {
-                    List<object> pickupSkus = new List<object>();
+                    var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.CreateTime).ToList();
 
-                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+                    List<object> pickupLogs = new List<object>();
 
-
-                    foreach (var orderSubChild in orderSubChilds)
+                    foreach (var orderPickupLog in orderPickupLogs)
                     {
-                        var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
-
-                        List<object> pickupLogs = new List<object>();
-
-                        foreach (var orderPickupLog in orderPickupLogs)
+                        string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+                        string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+                        List<string> imgUrls = new List<string>();
+                        if (!string.IsNullOrEmpty(imgUrl))
                         {
-                            string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-                            string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-                            List<string> imgUrls = new List<string>();
-                            if (!string.IsNullOrEmpty(imgUrl))
-                            {
-                                imgUrls.Add(imgUrl);
-                            }
-
-                            if (!string.IsNullOrEmpty(imgUrl2))
-                            {
-                                imgUrls.Add(imgUrl2);
-                            }
-
-                            pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                            imgUrls.Add(imgUrl);
                         }
 
-                        pickupSkus.Add(new
+                        if (!string.IsNullOrEmpty(imgUrl2))
                         {
-                            Id = orderSubChild.PrdProductSkuId,
-                            MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
-                            UniqueId = orderSubChild.Id,
-                            ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
-                            Name = orderSubChild.PrdProductSkuName,
-                            Quantity = orderSubChild.Quantity,
-                            Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
-                            PickupLogs = pickupLogs
-                        });
+                            imgUrls.Add(imgUrl2);
+                        }
+
+                        pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                     }
 
-                    receiveDetails.Add(new
+                    pickupSkus.Add(new
                     {
-                        Name = orderDetail.ReceiveModeName,
-                        Mode = orderDetail.ReceiveMode,
-                        DetailType = 1,
-                        DetailItems = pickupSkus
+                        Id = orderSub.PrdProductSkuId,
+                        MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
+                        UniqueId = orderSub.Id,
+                        ExPickupIsHandle = orderSub.ExPickupIsHandle,
+                        Name = orderSub.PrdProductSkuName,
+                        Quantity = orderSub.Quantity,
+                        Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                        PickupLogs = pickupLogs
                     });
-
-
                 }
+
+                receiveDetails.Add(new
+                {
+                    Name = item.ReceiveModeName,
+                    Mode = item.ReceiveMode,
+                    DetailType = 1,
+                    DetailItems = pickupSkus
+                });
 
                 olist.Add(new
                 {
@@ -134,11 +228,13 @@ namespace LocalS.Service.Api.Merch
                     OriginalAmount = item.OriginalAmount.ToF2Price(),
                     Quantity = item.Quantity,
                     CreateTime = item.CreateTime,
-                    //Status = BizFactory.Order.GetStatus(item.Status),
+                    Status = BizFactory.Order.GetStatus(item.Status),
                     SourceName = BizFactory.Order.GetSourceName(item.Source),
-                   // ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
-//CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
-                    ReceiveDetails = receiveDetails
+                    ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
+                    CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
+                    ReceiveDetails = receiveDetails,
+                    ReceiveModeName = item.ReceiveModeName,
+                    TrgStatus = item.PickupIsTrg == false ? "未触发" : "已触发"
                 });
             }
 
@@ -149,11 +245,11 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetDetails(string operater, string merchId, string orderId)
+        public CustomJsonResult GetDetailsByMachineSelfTake(string operater, string merchId, string orderId)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetOrderDetails();
+            var ret = new RetOrderDetailsByMachineSelfTake();
 
             var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
             if (order == null)
@@ -171,69 +267,69 @@ namespace LocalS.Service.Api.Merch
             ret.OriginalAmount = order.OriginalAmount.ToF2Price();
             ret.Quantity = order.Quantity;
             ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
-            //ret.Status = BizFactory.Order.GetStatus(order.Status);
+            ret.Status = BizFactory.Order.GetStatus(order.Status);
             ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
-            //ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
-            //ret.ExHandleRemark = order.ExHandleRemark;
-            //ret.ExIsHappen = order.ExIsHappen;
-            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+            ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
+            ret.ExHandleRemark = order.ExHandleRemark;
+            ret.ExIsHappen = order.ExIsHappen;
 
-            List<RetOrderDetails.ReceiveDetail> receiveDetails = new List<RetOrderDetails.ReceiveDetail>();
+            var receiveMode = new RetOrderDetailsByMachineSelfTake.ReceiveMode();
+            receiveMode.Mode = order.ReceiveMode;
+            receiveMode.Name = order.ReceiveModeName;
+            receiveMode.Type = 1;
+
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+            var pickupSkus = new List<RetOrderDetailsByMachineSelfTake.PickupSku>();
             foreach (var orderSub in orderSubs)
             {
-                var receiveDetail = new RetOrderDetails.ReceiveDetail();
+                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.CreateTime).ToList();
 
-                receiveDetail.Mode = orderSub.ReceiveMode;
-                receiveDetail.Name = orderSub.ReceiveModeName;
-                receiveDetail.DetailType = 1;
+                List<RetOrderDetailsByMachineSelfTake.PickupLog> pickupLogs = new List<RetOrderDetailsByMachineSelfTake.PickupLog>();
 
-                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-                var pickupSkus = new List<RetOrderDetails.PickupSku>();
-                foreach (var orderSubChild in orderSubChilds)
+                foreach (var orderPickupLog in orderPickupLogs)
                 {
-                    var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
-
-                    List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
-
-                    foreach (var orderPickupLog in orderPickupLogs)
+                    string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+                    string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+                    List<string> imgUrls = new List<string>();
+                    if (!string.IsNullOrEmpty(imgUrl))
                     {
-                        string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-                        string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-                        List<string> imgUrls = new List<string>();
-                        if (!string.IsNullOrEmpty(imgUrl))
-                        {
-                            imgUrls.Add(imgUrl);
-                        }
-                        if (!string.IsNullOrEmpty(imgUrl2))
-                        {
-                            imgUrls.Add(imgUrl2);
-                        }
-                        pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                        imgUrls.Add(imgUrl);
                     }
-
-                    receiveDetail.DetailItems.Add(new RetOrderDetails.PickupSku
+                    if (!string.IsNullOrEmpty(imgUrl2))
                     {
-                        Id = orderSubChild.PrdProductSkuId,
-                        ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
-                        UniqueId = orderSubChild.Id,
-                        MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
-                        Name = orderSubChild.PrdProductSkuName,
-                        Quantity = orderSubChild.Quantity,
-                        Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
-                        PickupLogs = pickupLogs,
-                        SignStatus = 0
-                    });
+                        imgUrls.Add(imgUrl2);
+                    }
+                    pickupLogs.Add(new RetOrderDetailsByMachineSelfTake.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                 }
 
-                ret.ReceiveDetails.Add(receiveDetail);
-
+                receiveMode.Items.Add(new RetOrderDetailsByMachineSelfTake.PickupSku
+                {
+                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
+                    UniqueId = orderSub.Id,
+                    MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
+                    Name = orderSub.PrdProductSkuName,
+                    Quantity = orderSub.Quantity,
+                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                    PickupLogs = pickupLogs,
+                    SignStatus = 0
+                });
             }
 
+            ret.ReceiveModes.Add(receiveMode);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
 
         }
 
+        public CustomJsonResult HandleExByMachineSelfTake(string operater, string merchId, RopOrderHandleExByMachineSelfTake rop)
+        {
+            var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
+            bizRop.IsRunning = rop.IsRunning;
+            bizRop.Remark = rop.Remark;
+            bizRop.Items.Add(new ExItem { Id = rop.Id, Uniques = rop.Uniques });
+            var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
+            return result;
+        }
     }
 }

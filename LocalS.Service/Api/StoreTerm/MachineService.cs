@@ -346,28 +346,28 @@ namespace LocalS.Service.Api.StoreTerm
             ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "2", Title = "机器出现故障" });
             ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "3", Title = "未知原因" });
 
-            var orderSubs = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
+            var orders = CurrentDb.Order.Where(m => m.SellChannelRefId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
-            foreach (var orderSub in orderSubs)
+            foreach (var order in orders)
             {
                 var exItem = new RetMachineGetRunExHandleItems.ExItem();
 
-                exItem.Id = orderSub.Id;
+                exItem.Id = order.Id;
 
-                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
 
-                foreach (var orderSubChild in orderSubChilds)
+                foreach (var orderSub in orderSubs)
                 {
                     var exUnique = new RetMachineGetRunExHandleItems.ExUnique();
-                    exUnique.Id = orderSubChild.Id;
-                    exUnique.ProductSkuId = orderSubChild.PrdProductSkuId;
-                    exUnique.SlotId = orderSubChild.SlotId;
-                    exUnique.Quantity = orderSubChild.Quantity;
-                    exUnique.Name = orderSubChild.PrdProductSkuName;
-                    exUnique.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
-                    exUnique.Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus);
+                    exUnique.Id = orderSub.Id;
+                    exUnique.ProductSkuId = orderSub.PrdProductSkuId;
+                    exUnique.SlotId = orderSub.SlotId;
+                    exUnique.Quantity = orderSub.Quantity;
+                    exUnique.Name = orderSub.PrdProductSkuName;
+                    exUnique.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                    exUnique.Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus);
                     exUnique.SignStatus = 0;
-                    if (orderSubChild.PickupStatus == E_OrderPickupStatus.Taked || orderSubChild.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && orderSubChild.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
+                    if (orderSub.PickupStatus == E_OrderPickupStatus.Taked || orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
                     {
                         exUnique.CanHandle = false;
                     }

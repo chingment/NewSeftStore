@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.StoreApp
     public class RopOrderBuildPayParams
     {
         public string AppId { get; set; }
-        public string OrderId { get; set; }
-        public E_OrderPayCaller PayCaller { get; set; }
-        public E_OrderPayPartner PayPartner { get; set; }
+        public List<BLL.Biz.RopOrderBuildPayParams.Order> Orders { get; set; }
+        public E_PayCaller PayCaller { get; set; }
+        public E_PayPartner PayPartner { get; set; }
         public string CreateIp { get; set; }
 
         public List<OrderReserveBlockModel> Blocks { get; set; }

@@ -12,14 +12,14 @@ namespace LocalS.BLL
     public class TgPaySdkProvider : IPaySdkProvider<TgPayInfoConfg>
     {
 
-        public PayBuildQrCodeResult PayBuildQrCode(TgPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire=null)
+        public PayBuildQrCodeResult PayBuildQrCode(TgPayInfoConfg config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire=null)
         {
             var result = new PayBuildQrCodeResult();
 
     
             TgPayUtil tgUtil = new TgPayUtil(config);
 
-            if (payCaller == E_OrderPayCaller.AggregatePayByNt)
+            if (payCaller == E_PayCaller.AggregatePayByNt)
             {
                 var ret = tgUtil.AllQrcodePay(order_sn, order_amount.ToString("#0.00"), body, store_id);
 
@@ -52,15 +52,15 @@ namespace LocalS.BLL
                     if (obt_content.state == "0")
                     {
                         result.IsPaySuccess = true;
-                        result.OrderId = obt_content.lowOrderId;
+                        result.PayTransId = obt_content.lowOrderId;
                         result.PayPartnerOrderId = obt_content.upOrderId;
                         if (obt_content.channelID == "WX")
                         {
-                            result.OrderPayWay = E_OrderPayWay.Wx;
+                            result.PayWay = E_PayWay.Wx;
                         }
                         if (obt_content.channelID == "ZFB")
                         {
-                            result.OrderPayWay = E_OrderPayWay.Zfb;
+                            result.PayWay = E_PayWay.Zfb;
                         }
 
                     }
@@ -80,15 +80,15 @@ namespace LocalS.BLL
                 if (obj_content.state == "0")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderId = obj_content.lowOrderId;
+                    result.PayTransId = obj_content.lowOrderId;
                     result.PayPartnerOrderId = obj_content.upOrderId;
                     if (obj_content.channelID == "WX")
                     {
-                        result.OrderPayWay = E_OrderPayWay.Wx;
+                        result.PayWay = E_PayWay.Wx;
                     }
                     if (obj_content.channelID == "ZFB")
                     {
-                        result.OrderPayWay = E_OrderPayWay.Zfb;
+                        result.PayWay = E_PayWay.Zfb;
                     }
 
                 }

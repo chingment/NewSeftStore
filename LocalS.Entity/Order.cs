@@ -21,33 +21,6 @@ namespace LocalS.Entity
         Wxmp = 3
     }
 
-    public enum E_OrderPayWay
-    {
-        Unknow = 0,
-        Wx = 1,//微信支付
-        Zfb = 2 //支付宝支付
-    }
-
-    public enum E_OrderPayPartner
-    {
-        Unknow = 0,
-        Wx = 1,//微信支付
-        Zfb = 2, //支付宝支付
-        Tg = 91, //通莞金服
-        Xrt = 92 //深银联金服
-    }
-
-    public enum E_OrderPayStatus
-    {
-        Unknow = 0,
-        WaitPay = 1,
-        Paying = 2,
-        PaySuccess = 3,
-        PayCancle = 4,
-        PayTimeout = 5
-    }
-
-
     public enum E_OrderCancleType
     {
         Unknow = 0,
@@ -55,23 +28,29 @@ namespace LocalS.Entity
         PayTimeout = 2
     }
 
-    public enum E_OrderPayCaller
+    public enum E_OrderPickupStatus
     {
         Unknow = 0,
-        WxByNt = 10, //微信方式生成二维码
-        WxByPa = 11, //微信公众号发起支付
-        WxByMp = 12, //微信小程序发起支付,
-        ZfbByNt = 20, //支付宝方式生成二维码
-        AggregatePayByNt = 90 //聚合方式生成二维码
+        Submitted = 1000,
+        WaitPay = 2000,
+        Payed = 3000,
+        WaitPickup = 3010,
+        SendPickupCmd = 3011,
+        Pickuping = 3012,
+        Taked = 4000,
+        Canceled = 5000,
+        Exception = 6000,
+        ExPickupSignTaked = 6010,
+        ExPickupSignUnTaked = 6011
     }
 
-
-    public class PayOption
+    public enum E_OrderExPickupHandleSign
     {
-        public E_OrderPayCaller Caller { get; set; }
-        public E_OrderPayPartner Partner { get; set; }
-        public List<E_OrderPayWay> SupportWays { get; set; }
+        Unknow = 0,
+        Taked = 1,
+        UnTaked = 2
     }
+
 
     [Table("Order")]
     public class Order
@@ -79,45 +58,65 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string ClientUserId { get; set; }
-        public string ClientUserName { get; set; }
         public string MerchId { get; set; }
+        public string MerchName { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
-        public string SellChannelRefIds { get; set; }
-        public string ReceiveModes { get; set; }
-        public string ReceiveModeNames { get; set; }
-        public string CouponIds { get; set; }
+        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public string SellChannelRefId { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
+        public string ReceiveModeName { get; set; }
+        public string Receiver { get; set; }
+        public string ReceiverPhoneNumber { get; set; }
+        public string ReceptionAddress { get; set; }
+        public string ReceptionAreaCode { get; set; }
+        public string ReceptionAreaName { get; set; }
+        public string ReceptionMarkName { get; set; }
+        public DateTime? ReceptionBookTime { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
-        public decimal RefundAmount { get; set; }
-        public string RefundOperator { get; set; }
         public int Quantity { get; set; }
-        public DateTime? SubmittedTime { get; set; }
+        public string PickupCode { get; set; }
+        public DateTime? PickupCodeExpireTime { get; set; }
+        /// <summary>
+        /// 是否触发过取货
+        /// </summary>
+        public bool PickupIsTrg { get; set; }
+        public DateTime? PickupTrgTime { get; set; }
+        public E_PayStatus PayStatus { get; set; }
+        public E_PayWay PayWay { get; set; }
         public DateTime? PayedTime { get; set; }
-        public DateTime? CanceledTime { get; set; }
-        public E_OrderSource Source { get; set; }
-        public string CancelReason { get; set; }
-        public string CancelOperator { get; set; }
-        public E_OrderPayPartner PayPartner { get; set; }
-        public string PayPartnerOrderId { get; set; }
-        public E_OrderPayStatus PayStatus { get; set; }
-        public E_OrderPayWay PayWay { get; set; }
-        public E_OrderPayCaller PayCaller { get; set; }
-        public DateTime? PayExpireTime { get; set; }
+        public bool ExIsHappen { get; set; }
+        public DateTime? ExHappenTime { get; set; }
+        public bool ExIsHandle { get; set; }
+        public DateTime? ExHandleTime { get; set; }
+        public string ExHandleRemark { get; set; }
+        public string PickupFlowLastDesc { get; set; }
+        public DateTime? PickupFlowLastTime { get; set; }
+        public string ExpressNumber { get; set; }
+        public string ExpressComName { get; set; }
+        public string ExpressComId { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-        public bool IsTestMode { get; set; }
+        public DateTime? SubmittedTime { get; set; }
+        public DateTime? CompletedTime { get; set; }
+        public DateTime? CanceledTime { get; set; }
+        public E_OrderSource Source { get; set; }
+        public E_OrderStatus Status { get; set; }
+        public string ClientUserName { get; set; }
         public string AppId { get; set; }
+        public bool IsTestMode { get; set; }
+        public DateTime? PayExpireTime { get; set; }
+        public string CancelOperator { get; set; }
+        public string CancelReason { get; set; }
+        public decimal? RefundAmount { get; set; }
+        public string RefundOperator { get; set; }
+        public string RefundReason { get; set; }
+        public DateTime? RefundTime { get; set; }
 
-        //public bool ExIsHappen { get; set; }
-        //public DateTime? ExHappenTime { get; set; }
-        //public bool ExIsHandle { get; set; }
-        //public DateTime? ExHandleTime { get; set; }
-        //public string ExHandleRemark { get; set; }
-        //public DateTime? CompletedTime { get; set; }
-        //public E_OrderStatus Status { get; set; }
+        public string PayTransId { get; set; }
     }
 }

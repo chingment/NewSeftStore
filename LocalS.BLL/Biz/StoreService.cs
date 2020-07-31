@@ -20,11 +20,14 @@ namespace LocalS.BLL.Biz
             if (store == null)
                 return null;
 
+            var merch = CurrentDb.Merch.Where(m => m.Id == store.MerchId).FirstOrDefault();
+
             var merchMachines = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == id).ToList();
 
             model.Id = store.Id;
             model.Name = store.Name;
             model.MerchId = store.MerchId;
+            model.MerchName = merch.Name;
             model.Address = store.Address;
             model.BriefDes = store.BriefDes;
             model.DisplayImgUrls = store.DisplayImgUrls.ToJsonObject<List<ImgSet>>();

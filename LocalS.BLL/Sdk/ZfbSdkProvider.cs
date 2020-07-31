@@ -12,7 +12,7 @@ namespace LocalS.BLL
 {
     public class ZfbSdkProvider : BaseDbContext, IPaySdkProvider<ZfbAppInfoConfig>
     {
-        public PayBuildQrCodeResult PayBuildQrCode(ZfbAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildQrCodeResult PayBuildQrCode(ZfbAppInfoConfig config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
 
             var result = new PayBuildQrCodeResult();
@@ -63,7 +63,7 @@ namespace LocalS.BLL
                     {
                         if (!string.IsNullOrEmpty(payResult.out_trade_no))
                         {
-                            result.OrderId = payResult.out_trade_no;
+                            result.PayTransId = payResult.out_trade_no;
                         }
 
                         if (!string.IsNullOrEmpty(payResult.trade_no))
@@ -76,12 +76,12 @@ namespace LocalS.BLL
                             result.ClientUserName = payResult.buyer_logon_id;
                         }
 
-                        LogUtil.Info("解释支付宝支付协议，订单号：" + result.OrderId);
+                        LogUtil.Info("解释支付宝支付协议，订单号：" + result.PayTransId);
 
                         if (payResult.trade_status == "TRADE_SUCCESS")
                         {
                             result.IsPaySuccess = true;
-                            result.OrderPayWay = Entity.E_OrderPayWay.Zfb;
+                            result.PayWay = Entity.E_PayWay.Zfb;
                         }
                     }
                 }
@@ -98,7 +98,7 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("out_trade_no"))
             {
-                result.OrderId = dic["out_trade_no"].ToString();
+                result.PayTransId = dic["out_trade_no"].ToString();
             }
 
             if (dic.ContainsKey("trade_no"))
@@ -106,7 +106,7 @@ namespace LocalS.BLL
                 result.PayPartnerOrderId = dic["trade_no"].ToString();
             }
 
-            LogUtil.Info("解释支付宝支付协议，订单号：" + result.OrderId);
+            LogUtil.Info("解释支付宝支付协议，订单号：" + result.PayTransId);
 
 
             if (dic.ContainsKey("buyer_logon_id"))
@@ -122,7 +122,7 @@ namespace LocalS.BLL
                 if (trade_status == "TRADE_SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderPayWay = Entity.E_OrderPayWay.Zfb;
+                    result.PayWay = Entity.E_PayWay.Zfb;
                 }
             }
 

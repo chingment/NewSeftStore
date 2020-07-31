@@ -16,6 +16,8 @@ namespace LocalS.BLL.Biz
         public string Address { get; set; }
         public bool IsDelete { get; set; }
         public string MerchId { get; set; }
+
+        public string MerchName { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
         public string[] AllMachineIds { get; set; }

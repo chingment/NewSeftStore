@@ -9,8 +9,8 @@ namespace LocalS.BLL.Biz
 {
     public class PayOptionModel
     {
-        public E_OrderPayCaller Caller { get; set; }
+        public E_PayCaller Caller { get; set; }
 
-        public E_OrderPayPartner Partner { get; set; }
+        public E_PayPartner Partner { get; set; }
     }
 }

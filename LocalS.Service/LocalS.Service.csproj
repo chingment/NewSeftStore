@@ -188,7 +188,6 @@
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\OrderService.cs" />
-    <Compile Include="Api\Merch\OrderSubService.cs" />
     <Compile Include="Api\Merch\PrdProductService.cs" />
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
@@ -224,8 +223,7 @@
     <Compile Include="Api\Merch\RModels\RopMachineRebootSys.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineSetSysStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineShutdownSys.cs" />
-    <Compile Include="Api\Merch\RModels\RopOrderHandleExOrder.cs" />
-    <Compile Include="Api\Merch\RModels\RopOrderSubHandleExByMachineSelfTake.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrderHandleExByMachineSelfTake.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductEditSalePriceOnStore.cs" />
@@ -252,7 +250,6 @@
     <Compile Include="Api\Merch\RModels\RupMachineGetStocks.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineQueryMsgPushResult.cs" />
     <Compile Include="Api\Merch\RModels\RupOrderGetList.cs" />
-    <Compile Include="Api\Merch\RModels\RupOrderSubGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />

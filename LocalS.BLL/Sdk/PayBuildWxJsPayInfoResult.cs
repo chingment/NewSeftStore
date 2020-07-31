@@ -14,6 +14,6 @@ namespace LocalS.BLL
         public string Package { get; set; }
         public string SignType { get; set; }
         public string PaySign { get; set; }
-        public string OrderId { get; set; }
+        public string PayTransId { get; set; }
     }
 }

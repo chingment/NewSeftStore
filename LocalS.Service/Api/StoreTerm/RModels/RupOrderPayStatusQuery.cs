@@ -9,6 +9,6 @@ namespace LocalS.Service.Api.StoreTerm
     public class RupOrderPayStatusQuery
     {
         public string MachineId { get; set; }
-        public string OrderId { get; set; }
+        public string PayTransId { get; set; }
     }
 }

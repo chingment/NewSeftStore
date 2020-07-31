@@ -10,9 +10,7 @@ namespace LocalS.BLL.Biz
     public class OrderAttachModel
     {
         public string MerchId { get; set; }
-
         public string StoreId { get; set; }
-
-        public E_OrderPayCaller PayCaller { get; set; }
+        public E_PayCaller PayCaller { get; set; }
     }
 }

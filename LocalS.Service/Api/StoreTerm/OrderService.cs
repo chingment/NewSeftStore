@@ -66,11 +66,8 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (bizResult.Result == ResultType.Success)
             {
-                RetOrderReserve ret = new RetOrderReserve();
-                ret.OrderId = bizResult.Data.OrderId;
-                ret.ChargeAmount = bizResult.Data.ChargeAmount;
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                var order = bizResult.Data.Orders[0];
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", new { OrderId = order.Id, ChargeAmount = order.ChargeAmount });
             }
             else
             {
@@ -87,7 +84,7 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult<RetOrderPayStatusQuery> ret = new CustomJsonResult<RetOrderPayStatusQuery>();
 
 
-            var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayResultQuery(rup.MachineId, rup.OrderId);
+            var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayResultQuery(rup.MachineId, rup.PayTransId);
 
             ret.Result = ret_Biz.Result;
             ret.Code = ret_Biz.Code;
@@ -96,11 +93,12 @@ namespace LocalS.Service.Api.StoreTerm
             if (ret_Biz.Data != null)
             {
                 ret.Data = new RetOrderPayStatusQuery();
-                ret.Data.Id = ret_Biz.Data.OrderId;
-                ret.Data.Status = ret_Biz.Data.Status;
-                if (ret_Biz.Data.Status == E_OrderPayStatus.PaySuccess)
+                ret.Data.PayTransId = ret_Biz.Data.PayTransId;
+                ret.Data.PayStatus = ret_Biz.Data.PayStatus;
+                if (ret_Biz.Data.PayStatus == E_PayStatus.PaySuccess)
                 {
-                    ret.Data.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(rup.OrderId, rup.MachineId);
+                    ret.Data.OrderId = ret_Biz.Data.OrderIds[0];
+                    ret.Data.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(ret_Biz.Data.OrderIds[0], rup.MachineId);
                 }
             }
 
@@ -143,29 +141,29 @@ namespace LocalS.Service.Api.StoreTerm
 
             LogUtil.Info("PickupCode2=>>" + pickupCode);
 
-            var orderSub = CurrentDb.OrderSub.Where(m => m.SellChannelRefId == rup.MachineId && m.PickupCode == pickupCode).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.SellChannelRefId == rup.MachineId && m.PickupCode == pickupCode).FirstOrDefault();
 
-            if (orderSub == null)
+            if (order == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            if (orderSub.PayStatus != E_OrderPayStatus.PaySuccess)
+            if (order.PayStatus != E_PayStatus.PaySuccess)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未支付");
             }
 
-            if (orderSub.PickupIsTrg)
+            if (order.PickupIsTrg)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经取货");
             }
 
             var ret = new RetOrderSearchByPickupCode();
 
-            ret.Id = orderSub.OrderId;
+            ret.Id = order.Id;
 
 
-            ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(orderSub.OrderId, rup.MachineId);
+            ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(order.Id, rup.MachineId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
@@ -177,14 +175,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetOrderPickupStatusQuery();
 
-            var orderSubChild = CurrentDb.OrderSubChild.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
+            var orderSub = CurrentDb.OrderSub.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
 
-            if (orderSubChild != null)
+            if (orderSub != null)
             {
-                ret.ProductSkuId = orderSubChild.PrdProductId;
-                ret.SlotId = orderSubChild.SlotId;
-                ret.UniqueId = orderSubChild.Id;
-                ret.Status = orderSubChild.PickupStatus;
+                ret.ProductSkuId = orderSub.PrdProductId;
+                ret.SlotId = orderSub.SlotId;
+                ret.UniqueId = orderSub.Id;
+                ret.Status = orderSub.PickupStatus;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             }
@@ -195,7 +193,7 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult BuildPayParams(RopOrderBuildPayParams rop)
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
-            bizRop.OrderId = rop.OrderId;
+            bizRop.Orders.Add(new BLL.Biz.RopOrderBuildPayParams.Order { Id = rop.OrderId });
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             bizRop.CreateIp = rop.CreateIp;

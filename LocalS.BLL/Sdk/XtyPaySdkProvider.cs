@@ -44,7 +44,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayBuildQrCodeResult PayBuildQrCode(XrtPayInfoConfg config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildQrCodeResult PayBuildQrCode(XrtPayInfoConfg config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
             var result = new PayBuildQrCodeResult();
 
@@ -52,14 +52,14 @@ namespace LocalS.BLL
 
             string totelFee = Convert.ToInt32(order_amount * 100).ToString();
 
-            if (payCaller == E_OrderPayCaller.WxByNt)
+            if (payCaller == E_PayCaller.WxByNt)
             {
                 var wxPayBuildByNt = xrtPayUtil.WxPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.Value.ToString("yyyyMMddHHmmss"));
 
                 if (wxPayBuildByNt.status == "0" && wxPayBuildByNt.result_code == "0")
                     result.CodeUrl = wxPayBuildByNt.code_url;
             }
-            else if (payCaller == E_OrderPayCaller.ZfbByNt)
+            else if (payCaller == E_PayCaller.ZfbByNt)
             {
                 var zfbBuildByNt = xrtPayUtil.ZfbPayBuildByNt(order_sn, totelFee, body, "", create_ip, "", time_expire.Value.ToString("yyyyMMddHHmmss"));
 
@@ -93,7 +93,7 @@ namespace LocalS.BLL
                 if (obj_content.trade_state == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderId = obj_content.out_trade_no;
+                    result.PayTransId = obj_content.out_trade_no;
                     result.PayPartnerOrderId = obj_content.transaction_id;
                 }
 
@@ -113,7 +113,7 @@ namespace LocalS.BLL
                 if (obj_content.pay_result == 0)
                 {
                     result.IsPaySuccess = true;
-                    result.OrderId = obj_content.out_trade_no;
+                    result.PayTransId = obj_content.out_trade_no;
                     result.PayPartnerOrderId = obj_content.transaction_id;
                 }
 

@@ -63,10 +63,10 @@
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />
+    <Compile Include="PayTrans.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderSub.cs" />
-    <Compile Include="OrderSubChild.cs" />
-    <Compile Include="OrderNotifyLog.cs" />
+    <Compile Include="PayTransNotifyLog.cs" />
     <Compile Include="OrderPickupLog.cs" />
     <Compile Include="PrdProduct.cs" />
     <Compile Include="PrdKind.cs" />

@@ -10,17 +10,14 @@ namespace LocalS.Service.Api.Merch
     public class RupOrderGetList : RupBaseGetList
     {
         public string ClientUserName { get; set; }
-
         public string StoreId { get; set; }
-
         public string OrderId { get; set; }
-
-        public E_OrderStatus OrderStauts { get; set; }
-
+        public E_OrderStatus OrderStatus { get; set; }
         public string MachineId { get; set; }
-
         public string ClientUserId { get; set; }
-
         public bool IsHasEx { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
+        public int PickupTrgStatus { get; set; }
+        public string SellChannelRefId { get; set; }
     }
 }

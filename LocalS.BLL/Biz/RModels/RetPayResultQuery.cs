@@ -9,8 +9,9 @@ namespace LocalS.BLL.Biz
 {
     public class RetPayResultQuery
     {
-        public string OrderId { get; set; }
-        public E_OrderPayStatus Status { get; set; }
+        public string PayTransId { get; set; }
+        public E_PayStatus PayStatus { get; set; }
+        public List<string> OrderIds { get; set; }
 
     }
 }

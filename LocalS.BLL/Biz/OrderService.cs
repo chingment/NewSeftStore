@@ -210,7 +210,7 @@ namespace LocalS.BLL.Biz
                 {
                     RetOrderReserve ret = new RetOrderReserve();
 
-                    List<BuildOrderSub.ProductSku> buildOrderSubSkus = new List<BuildOrderSub.ProductSku>();
+                    List<BuildOrder.ProductSku> buildOrderSkus = new List<BuildOrder.ProductSku>();
 
                     #region 检查可售商品信息是否符合实际环境
                     List<string> warn_tips = new List<string>();
@@ -269,7 +269,7 @@ namespace LocalS.BLL.Biz
                                         }
                                         else
                                         {
-                                            var _skus = new BuildOrderSub.ProductSku();
+                                            var _skus = new BuildOrder.ProductSku();
 
                                             _skus.Id = productSku.Id;
                                             _skus.ProductId = bizProductSku.ProductId;
@@ -288,7 +288,7 @@ namespace LocalS.BLL.Biz
                                             _skus.KindId2 = bizProductSku.KindId2;
                                             _skus.KindId3 = bizProductSku.KindId3;
 
-                                            buildOrderSubSkus.Add(_skus);
+                                            buildOrderSkus.Add(_skus);
                                         }
                                     }
                                 }
@@ -304,32 +304,16 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
-                    LogUtil.Info("rop.bizProductSkus:" + buildOrderSubSkus.ToJsonString());
-                    var buildOrderSubs = BuildOrderSubs(buildOrderSubSkus);
-                    LogUtil.Info("SlotStock.buildOrderSubs:" + buildOrderSubs.ToJsonString());
+                    LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
+                    var buildOrders = BuildOrders(buildOrderSkus);
+                    LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
-                    var order = new Order();
-                    order.Id = IdWorker.Build(IdType.OrderId);
-                    order.MerchId = store.MerchId;
-                    order.StoreId = rop.StoreId;
-                    order.StoreName = store.Name;
-                    order.ClientUserId = rop.ClientUserId;
-                    order.ClientUserName = BizFactory.Merch.GetClientName(order.MerchId, rop.ClientUserId);
-                    order.Quantity = buildOrderSubs.Sum(m => m.Quantity);
-                    order.PayStatus = E_OrderPayStatus.WaitPay;
-                    order.Source = rop.Source;
-                    order.IsTestMode = rop.IsTestMode;
-                    order.AppId = rop.AppId;
-                    order.SubmittedTime = DateTime.Now;
-                    order.PayExpireTime = DateTime.Now.AddSeconds(300);
-                    order.Creator = operater;
-                    order.CreateTime = DateTime.Now;
 
                     #region 更改购物车标识
 
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
                     {
-                        var cartsIds = buildOrderSubSkus.Select(m => m.CartId).Distinct().ToArray();
+                        var cartsIds = buildOrderSkus.Select(m => m.CartId).Distinct().ToArray();
                         if (cartsIds != null)
                         {
                             var clientCarts = CurrentDb.ClientCart.Where(m => cartsIds.Contains(m.Id) && m.ClientUserId == rop.ClientUserId).ToList();
@@ -350,34 +334,31 @@ namespace LocalS.BLL.Biz
 
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
-                    if (rop.IsTestMode)
+
+                    List<Order> orders = new List<Order>();
+
+                    foreach (var buildOrder in buildOrders)
                     {
-                        order.OriginalAmount = buildOrderSubs.Sum(m => m.OriginalAmount);
-                        order.DiscountAmount = buildOrderSubs.Sum(m => m.DiscountAmount);
-                        order.ChargeAmount = 0.01m;
-                    }
-                    else
-                    {
-                        order.OriginalAmount = buildOrderSubs.Sum(m => m.OriginalAmount);
-                        order.DiscountAmount = buildOrderSubs.Sum(m => m.DiscountAmount);
-                        order.ChargeAmount = buildOrderSubs.Sum(m => m.ChargeAmount);
-                    }
+                        var order = new Order();
+                        order.Id = IdWorker.Build(IdType.OrderId);
+                        order.ClientUserId = rop.ClientUserId;
+                        order.MerchId = store.MerchId;
+                        order.MerchName = store.MerchName;
+                        order.StoreId = rop.StoreId;
+                        order.StoreName = store.Name;
+                        order.SellChannelRefType = buildOrder.SellChannelRefType;
+                        order.SellChannelRefId = buildOrder.SellChannelRefId;
+                        order.PayExpireTime = DateTime.Now.AddSeconds(300);
+                        order.PickupCode = IdWorker.BuildPickupCode();
+                        order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
+                        order.SubmittedTime = DateTime.Now;
 
+                        if (order.PickupCode == null)
+                        {
+                            return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
+                        }
 
-                    List<OrderSub> orderSubs = new List<OrderSub>();
-
-                    foreach (var buildOrderSub in buildOrderSubs)
-                    {
-                        var orderSub = new OrderSub();
-                        orderSub.Id = order.Id + buildOrderSubs.IndexOf(buildOrderSub).ToString();
-                        orderSub.ClientUserId = rop.ClientUserId;
-                        orderSub.MerchId = store.MerchId;
-                        orderSub.StoreId = rop.StoreId;
-                        orderSub.StoreName = store.Name;
-                        orderSub.SellChannelRefType = buildOrderSub.SellChannelRefType;
-                        orderSub.SellChannelRefId = buildOrderSub.SellChannelRefId;
-
-                        switch (buildOrderSub.SellChannelRefType)
+                        switch (buildOrder.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
                                 var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
@@ -392,12 +373,12 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式", null);
                                 }
 
-                                orderSub.ReceiveModeName = "机器自提";
-                                orderSub.ReceiveMode = shopModeByMachine.ReceiveMode;
-                                orderSub.Receiver = null;
-                                orderSub.ReceiverPhoneNumber = null;
-                                orderSub.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
-                                orderSub.ReceptionMarkName = shopModeByMachine.SelfTake.StoreName;
+                                order.ReceiveModeName = "机器自提";
+                                order.ReceiveMode = shopModeByMachine.ReceiveMode;
+                                order.Receiver = null;
+                                order.ReceiverPhoneNumber = null;
+                                order.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
+                                order.ReceptionMarkName = shopModeByMachine.SelfTake.StoreName;
                                 break;
                             case E_SellChannelRefType.Mall:
 
@@ -417,115 +398,103 @@ namespace LocalS.BLL.Biz
 
                                 if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                 {
-                                    orderSub.ReceiveModeName = "配送到手";
-                                    orderSub.ReceiveMode = E_ReceiveMode.Delivery;
-                                    orderSub.Receiver = shopModeByMall.Delivery.Consignee;
-                                    orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
-                                    orderSub.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
-                                    orderSub.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
-                                    orderSub.ReceptionAddress = shopModeByMall.Delivery.Address;
+                                    order.ReceiveModeName = "配送到手";
+                                    order.ReceiveMode = E_ReceiveMode.Delivery;
+                                    order.Receiver = shopModeByMall.Delivery.Consignee;
+                                    order.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
+                                    order.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
+                                    order.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
+                                    order.ReceptionAddress = shopModeByMall.Delivery.Address;
                                 }
                                 else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                                 {
-                                    orderSub.ReceiveModeName = "到店自取";
-                                    orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
-                                    orderSub.Receiver = shopModeByMall.SelfTake.Consignee;
-                                    orderSub.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
-                                    orderSub.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
-                                    orderSub.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
-                                    orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
-                                    orderSub.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
+                                    order.ReceiveModeName = "到店自取";
+                                    order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                    order.Receiver = shopModeByMall.SelfTake.Consignee;
+                                    order.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
+                                    order.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
+                                    order.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
+                                    order.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
+                                    order.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
                                 }
 
                                 break;
                         }
 
-                        orderSub.OrderId = order.Id;
-                        orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
-                        orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
-                        orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
-                        orderSub.Quantity = buildOrderSub.Quantity;
-                        orderSub.PickupCode = IdWorker.BuildPickupCode();
-                        if (orderSub.PickupCode == null)
+
+                        order.OriginalAmount = buildOrder.OriginalAmount;
+                        order.DiscountAmount = buildOrder.DiscountAmount;
+                        order.ChargeAmount = buildOrder.ChargeAmount;
+                        order.Quantity = buildOrder.Quantity;
+                        order.PayStatus = E_PayStatus.WaitPay;
+                        order.Status = E_OrderStatus.WaitPay;
+                        order.Source = order.Source;
+                        order.SubmittedTime = order.SubmittedTime;
+                        order.ClientUserName = order.ClientUserName;
+                        order.Source = rop.Source;
+                        order.AppId = rop.AppId;
+                        order.IsTestMode = rop.IsTestMode;
+                        order.Creator = operater;
+                        order.CreateTime = DateTime.Now;
+                        CurrentDb.Order.Add(order);
+                        orders.Add(order);
+
+                        foreach (var buildOrderSub in buildOrder.Childs)
                         {
-                            return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
-                        }
-                        orderSub.PayStatus = E_OrderPayStatus.WaitPay;
-                        orderSub.Status = E_OrderStatus.WaitPay;
-                        orderSub.Source = order.Source;
-                        orderSub.SubmittedTime = order.SubmittedTime;
-                        orderSub.ClientUserName = order.ClientUserName;
-                        orderSub.Creator = operater;
-                        orderSub.CreateTime = DateTime.Now;
-                        CurrentDb.OrderSub.Add(orderSub);
+                            var productSku = buildOrderSkus.Where(m => m.Id == buildOrderSub.ProductSkuId).FirstOrDefault();
 
-                        orderSubs.Add(orderSub);
+                            var orderSub = new OrderSub();
+                            orderSub.Id = order.Id + buildOrder.Childs.IndexOf(buildOrderSub).ToString();
+                            orderSub.ClientUserId = rop.ClientUserId;
+                            orderSub.MerchId = store.MerchId;
+                            orderSub.StoreId = rop.StoreId;
+                            orderSub.StoreName = store.Name;
+                            orderSub.SellChannelRefType = order.SellChannelRefType;
+                            orderSub.SellChannelRefId = order.SellChannelRefId;
+                            orderSub.ReceiveModeName = order.ReceiveModeName;
+                            orderSub.ReceiveMode = order.ReceiveMode;
+                            orderSub.CabinetId = buildOrderSub.CabinetId;
+                            orderSub.SlotId = buildOrderSub.SlotId;
+                            orderSub.OrderId = order.Id;
+                            orderSub.PrdProductSkuId = buildOrderSub.ProductSkuId;
+                            orderSub.PrdProductId = productSku.ProductId;
+                            orderSub.PrdProductSkuName = productSku.Name;
+                            orderSub.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
+                            orderSub.PrdProductSkuSpecDes = productSku.SpecDes.ToJsonString();
+                            orderSub.PrdProductSkuProducer = productSku.Producer;
+                            orderSub.PrdProductSkuBarCode = productSku.BarCode;
+                            orderSub.PrdProductSkuCumCode = productSku.CumCode;
+                            orderSub.PrdKindId1 = productSku.KindId1;
+                            orderSub.PrdKindId2 = productSku.KindId2;
+                            orderSub.PrdKindId3 = productSku.KindId3;
+                            orderSub.SalePrice = buildOrderSub.SalePrice;
+                            orderSub.SalePriceByVip = buildOrderSub.SalePriceByVip;
+                            orderSub.Quantity = buildOrderSub.Quantity;
+                            orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
+                            orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
+                            orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
+                            orderSub.PayStatus = E_PayStatus.WaitPay;
+                            orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
+                            orderSub.SvcConsulterId = productSku.SvcConsulterId;
+                            orderSub.Creator = operater;
+                            orderSub.CreateTime = DateTime.Now;
+                            CurrentDb.OrderSub.Add(orderSub);
 
-                        foreach (var buildOrderSubChid in buildOrderSub.Childs)
-                        {
-                            var productSku = buildOrderSubSkus.Where(m => m.Id == buildOrderSubChid.ProductSkuId).FirstOrDefault();
-
-                            var orderSubChild = new OrderSubChild();
-                            orderSubChild.Id = orderSub.Id + buildOrderSub.Childs.IndexOf(buildOrderSubChid).ToString();
-                            orderSubChild.ClientUserId = rop.ClientUserId;
-                            orderSubChild.MerchId = store.MerchId;
-                            orderSubChild.StoreId = rop.StoreId;
-                            orderSubChild.StoreName = store.Name;
-                            orderSubChild.SellChannelRefType = buildOrderSubChid.SellChannelRefType;
-                            orderSubChild.SellChannelRefId = buildOrderSubChid.SellChannelRefId;
-                            orderSubChild.ReceiveModeName = orderSub.ReceiveModeName;
-                            orderSubChild.ReceiveMode = orderSub.ReceiveMode;
-                            orderSubChild.CabinetId = buildOrderSubChid.CabinetId;
-                            orderSubChild.SlotId = buildOrderSubChid.SlotId;
-                            orderSubChild.OrderId = order.Id;
-                            orderSubChild.OrderSubId = orderSub.Id;
-                            orderSubChild.PrdProductSkuId = buildOrderSubChid.ProductSkuId;
-                            orderSubChild.PrdProductId = productSku.ProductId;
-                            orderSubChild.PrdProductSkuName = productSku.Name;
-                            orderSubChild.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
-                            orderSubChild.PrdProductSkuSpecDes = productSku.SpecDes.ToJsonString();
-                            orderSubChild.PrdProductSkuProducer = productSku.Producer;
-                            orderSubChild.PrdProductSkuBarCode = productSku.BarCode;
-                            orderSubChild.PrdProductSkuCumCode = productSku.CumCode;
-                            orderSubChild.PrdKindId1 = productSku.KindId1;
-                            orderSubChild.PrdKindId2 = productSku.KindId2;
-                            orderSubChild.PrdKindId3 = productSku.KindId3;
-                            orderSubChild.SalePrice = buildOrderSubChid.SalePrice;
-                            orderSubChild.SalePriceByVip = buildOrderSubChid.SalePriceByVip;
-                            orderSubChild.Quantity = buildOrderSubChid.Quantity;
-                            orderSubChild.OriginalAmount = buildOrderSubChid.OriginalAmount;
-                            orderSubChild.DiscountAmount = buildOrderSubChid.DiscountAmount;
-                            orderSubChild.ChargeAmount = buildOrderSubChid.ChargeAmount;
-                            orderSubChild.PayStatus = E_OrderPayStatus.WaitPay;
-                            orderSubChild.PickupStatus = E_OrderPickupStatus.WaitPay;
-                            orderSubChild.SvcConsulterId = productSku.SvcConsulterId;
-                            orderSubChild.Creator = operater;
-                            orderSubChild.CreateTime = DateTime.Now;
-                            CurrentDb.OrderSubChild.Add(orderSubChild);
-
-
-                            LogUtil.Info("SlotStock:" + buildOrderSubChid.ToJsonString());
-
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, orderSubChild.Quantity);
-
+                            LogUtil.Info("SlotStock:" + buildOrderSub.ToJsonString());
+                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
                         }
                     }
 
 
-                    order.SellChannelRefIds = string.Join(",", orderSubs.Select(m => m.SellChannelRefId).ToArray());
-                    order.ReceiveModes = string.Join(",", orderSubs.Select(m => m.ReceiveMode).ToArray());
-                    order.ReceiveModeNames = string.Join(",", orderSubs.Select(m => m.ReceiveModeName).ToArray());
-
-                    CurrentDb.Order.Add(order);
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
-
-                    MqFactory.Global.PushEventNotify(operater, rop.AppId, order.MerchId, order.StoreId, "", EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", order.Id));
-
-                    ret.OrderId = order.Id;
-                    ret.ChargeAmount = order.ChargeAmount.ToF2Price();
+                    foreach (var order in orders)
+                    {
+                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId });
+                        MqFactory.Global.PushEventNotify(operater, rop.AppId, order.MerchId, order.StoreId, "", EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", order.Id));
+                        ret.Orders.Add(new RetOrderReserve.Order { Id = order.Id, ChargeAmount = order.ChargeAmount.ToF2Price() });
+                    }
 
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
 
@@ -535,15 +504,14 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-
-        public List<BuildOrderSub> BuildOrderSubs(List<BuildOrderSub.ProductSku> reserveProductSkus)
+        public List<BuildOrder> BuildOrders(List<BuildOrder.ProductSku> reserveProductSkus)
         {
-            List<BuildOrderSub> buildOrderSubs = new List<BuildOrderSub>();
+            List<BuildOrder> buildOrders = new List<BuildOrder>();
 
             if (reserveProductSkus == null || reserveProductSkus.Count == 0)
-                return buildOrderSubs;
+                return buildOrders;
 
-            List<BuildOrderSub.Child> buildOrderSubChilds = new List<BuildOrderSub.Child>();
+            List<BuildOrder.Child> buildOrderSubChilds = new List<BuildOrder.Child>();
 
             var shopModes = reserveProductSkus.Select(m => m.ShopMode).Distinct().ToArray();
 
@@ -560,7 +528,7 @@ namespace LocalS.BLL.Biz
 
                     if (shopMode == E_SellChannelRefType.Mall)
                     {
-                        var buildOrderSubChild = new BuildOrderSub.Child();
+                        var buildOrderSubChild = new BuildOrder.Child();
                         buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
                         buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
                         buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
@@ -583,7 +551,7 @@ namespace LocalS.BLL.Biz
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
-                                    var buildOrderSubChild = new BuildOrderSub.Child();
+                                    var buildOrderSubChild = new BuildOrder.Child();
                                     buildOrderSubChild.SellChannelRefType = item.RefType;
                                     buildOrderSubChild.SellChannelRefId = item.RefId;
                                     buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
@@ -640,7 +608,7 @@ namespace LocalS.BLL.Biz
 
             foreach (var orderSub in l_OrderSubs)
             {
-                var buildOrderSub = new BuildOrderSub();
+                var buildOrderSub = new BuildOrder();
                 buildOrderSub.SellChannelRefType = orderSub.SellChannelRefType;
                 buildOrderSub.SellChannelRefId = orderSub.SellChannelRefId;
                 buildOrderSub.Quantity = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.Quantity);
@@ -648,75 +616,74 @@ namespace LocalS.BLL.Biz
                 buildOrderSub.DiscountAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.DiscountAmount);
                 buildOrderSub.ChargeAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.ChargeAmount);
                 buildOrderSub.Childs = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).ToList();
-                buildOrderSubs.Add(buildOrderSub);
+                buildOrders.Add(buildOrderSub);
             }
 
 
-            return buildOrderSubs;
+            return buildOrders;
         }
-
         private static readonly object lock_PayResultNotify = new object();
-        public CustomJsonResult PayResultNotify(string operater, E_OrderPayPartner payPartner, E_OrderNotifyLogNotifyFrom from, string content)
+        public CustomJsonResult PayResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
         {
             LogUtil.Info("PayResultNotify");
             lock (lock_PayResultNotify)
             {
                 var payResult = new PayResult();
 
-                if (payPartner == E_OrderPayPartner.Wx)
+                if (payPartner == E_PayPartner.Wx)
                 {
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信支付协议");
 
-                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.PayQuery)
                     {
                         payResult = SdkFactory.Wx.Convert2PayResultByPayQuery(null, content);
                     }
-                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
                         payResult = SdkFactory.Wx.Convert2PayResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
-                else if (payPartner == E_OrderPayPartner.Zfb)
+                else if (payPartner == E_PayPartner.Zfb)
                 {
                     #region 解释支付宝支付协议
                     LogUtil.Info("解释支付宝支付协议");
 
-                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.PayQuery)
                     {
                         payResult = SdkFactory.Zfb.Convert2PayResultByPayQuery(null, content);
                     }
-                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
                         payResult = SdkFactory.Zfb.Convert2PayResultByNotifyUrl(null, content);
                     }
 
                     #endregion
                 }
-                else if (payPartner == E_OrderPayPartner.Tg)
+                else if (payPartner == E_PayPartner.Tg)
                 {
                     #region 解释通莞支付协议
 
-                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.PayQuery)
                     {
                         payResult = SdkFactory.TgPay.Convert2PayResultByPayQuery(null, content);
                     }
 
-                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
                         payResult = SdkFactory.TgPay.Convert2PayResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
-                else if (payPartner == E_OrderPayPartner.Xrt)
+                else if (payPartner == E_PayPartner.Xrt)
                 {
                     #region 解释XRT支付协议
-                    if (from == E_OrderNotifyLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.PayQuery)
                     {
                         payResult = SdkFactory.XrtPay.Convert2PayResultByPayQuery(null, content);
                     }
-                    else if (from == E_OrderNotifyLogNotifyFrom.NotifyUrl)
+                    else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
                         payResult = SdkFactory.XrtPay.Convert2PayResultByNotifyUrl(null, content);
                     }
@@ -729,21 +696,21 @@ namespace LocalS.BLL.Biz
                     Dictionary<string, string> pms = new Dictionary<string, string>();
                     pms.Add("clientUserName", payResult.ClientUserName);
 
-                    PaySuccess(operater, payResult.OrderId, payResult.PayPartnerOrderId, payResult.OrderPayWay, DateTime.Now, pms);
+                    PaySuccess(operater, payResult.PayTransId, payPartner, payResult.PayPartnerOrderId, payResult.PayWay, DateTime.Now, pms);
                 }
 
 
-                var mod_OrderNotifyLog = new OrderNotifyLog();
-                mod_OrderNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
-                mod_OrderNotifyLog.OrderId = payResult.OrderId;
-                mod_OrderNotifyLog.PayPartner = payPartner;
-                mod_OrderNotifyLog.PayPartnerOrderId = payResult.PayPartnerOrderId;
-                mod_OrderNotifyLog.NotifyContent = content;
-                mod_OrderNotifyLog.NotifyFrom = from;
-                mod_OrderNotifyLog.NotifyType = E_OrderNotifyLogNotifyType.Pay;
-                mod_OrderNotifyLog.CreateTime = DateTime.Now;
-                mod_OrderNotifyLog.Creator = operater;
-                CurrentDb.OrderNotifyLog.Add(mod_OrderNotifyLog);
+                var payTransNotifyLog = new PayTransNotifyLog();
+                payTransNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
+                payTransNotifyLog.PayTransId = payResult.PayTransId;
+                payTransNotifyLog.PayPartner = payPartner;
+                payTransNotifyLog.PayPartnerOrderId = payResult.PayPartnerOrderId;
+                payTransNotifyLog.NotifyContent = content;
+                payTransNotifyLog.NotifyFrom = from;
+                payTransNotifyLog.NotifyType = E_PayTransLogNotifyType.Pay;
+                payTransNotifyLog.CreateTime = DateTime.Now;
+                payTransNotifyLog.Creator = operater;
+                CurrentDb.PayTransNotifyLog.Add(payTransNotifyLog);
                 CurrentDb.SaveChanges();
 
 
@@ -751,148 +718,155 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string orderId, string payPartnerOrderId, E_OrderPayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
+        public CustomJsonResult PaySuccess(string operater, string payTransId, E_PayPartner payPartner, string payPartnerOrderId, E_PayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                LogUtil.Info("orderId:" + orderId);
+                LogUtil.Info("payTransId:" + payTransId);
 
-                var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+                var payTrans = CurrentDb.PayTrans.Where(m => m.Id == payTransId).FirstOrDefault();
 
-                if (order == null)
+                if (payTrans == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderId));
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", payTransId));
                 }
 
-                if (order.PayStatus == E_OrderPayStatus.PaySuccess)
+                if (payTrans.PayStatus == E_PayStatus.PaySuccess)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", orderId));
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", payTransId));
                 }
 
-                operater = order.Creator;
+                operater = payTrans.Creator;
 
                 LogUtil.Info("进入PaySuccess修改订单,开始");
 
-                //if (order.Status != E_OrderStatus.WaitPay)
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", orderId));
-                //}
 
-                order.PayWay = payWay;
+                payTrans.PayPartner = payPartner;
+                payTrans.PayPartnerOrderId = payPartnerOrderId;
+                payTrans.PayWay = payWay;
 
-                order.PayPartnerOrderId = payPartnerOrderId;
 
-                if (order.PayStatus == E_OrderPayStatus.WaitPay || order.PayStatus == E_OrderPayStatus.Paying)
+
+                if (payTrans.PayStatus == E_PayStatus.WaitPay || payTrans.PayStatus == E_PayStatus.Paying)
                 {
-                    order.PayStatus = E_OrderPayStatus.PaySuccess;
-                    order.PayedTime = DateTime.Now;
+
+                    payTrans.PayStatus = E_PayStatus.PaySuccess;
+                    payTrans.PayedTime = DateTime.Now;
                     if (pms != null)
                     {
                         if (pms.ContainsKey("clientUserName"))
                         {
                             if (!string.IsNullOrEmpty(pms["clientUserName"]))
                             {
-                                order.ClientUserName = pms["clientUserName"];
+                                payTrans.ClientUserName = pms["clientUserName"];
                             }
                         }
                     }
 
-                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
-                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
-
-                    foreach (var orderSub in orderSubs)
+                    var orderIds = payTrans.OrderIds.Split(',');
+                    var orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
+                    foreach (var order in orders)
                     {
-                        orderSub.PayWay = order.PayWay;
-                        orderSub.PayStatus = order.PayStatus;
-                        orderSub.PayedTime = order.PayedTime;
-                        orderSub.Status = E_OrderStatus.Payed;
+                        order.PayedTime = payTrans.PayedTime;
+                        order.PayStatus = payTrans.PayStatus;
+                        order.PayWay = payTrans.PayWay;
+                        order.Status = E_OrderStatus.Payed;
 
-                        switch (orderSub.ReceiveMode)
+                        LogUtil.Info("payTrans.PayedTime:" + payTrans.PayedTime.ToUnifiedFormatDateTime());
+                        LogUtil.Info("payTrans.PayStatus:" + payTrans.PayStatus);
+                        LogUtil.Info("payTrans.PayWay:" + payTrans.PayWay);
+
+                        switch (order.ReceiveMode)
                         {
                             case E_ReceiveMode.Delivery:
-                                orderSub.PickupFlowLastDesc = "您提交了订单，等待发货";
-                                orderSub.PickupFlowLastTime = DateTime.Now;
+                                order.PickupFlowLastDesc = "您提交了订单，等待发货";
+                                order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.StoreSelfTake:
-                                orderSub.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】,出示取货码【{1}】，给店员", orderSub.ReceptionMarkName, orderSub.PickupCode);
-                                orderSub.PickupFlowLastTime = DateTime.Now;
+                                order.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】,出示取货码【{1}】，给店员", order.ReceptionMarkName, order.PickupCode);
+                                order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.MachineSelfTake:
-                                orderSub.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", orderSub.ReceptionMarkName, orderSub.SellChannelRefId, orderSub.PickupCode);
-                                orderSub.PickupFlowLastTime = DateTime.Now;
+                                order.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", order.ReceptionMarkName, order.SellChannelRefId, order.PickupCode);
+                                order.PickupFlowLastTime = DateTime.Now;
                                 break;
                         }
 
-                        orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
-                        orderSub.MendTime = DateTime.Now;
+                        var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
 
-                        var orderPickupLog = new OrderPickupLog();
-                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                        orderPickupLog.OrderId = order.Id;
-                        orderPickupLog.OrderSubId = orderSub.Id;
-                        orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
-                        orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
-                        orderPickupLog.UniqueId = orderSub.Id;
-                        orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
-                        orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
-                        orderPickupLog.Remark = "";
-                        orderPickupLog.CreateTime = DateTime.Now;
-                        orderPickupLog.Creator = operater;
-                        CurrentDb.OrderPickupLog.Add(orderPickupLog);
-
-
-                        var l_orderSubChilds = orderSubChilds.Where(m => m.OrderSubId == orderSub.Id).ToList();
-
-                        foreach (var orderSubChild in l_orderSubChilds)
+                        foreach (var orderSub in orderSubs)
                         {
+                            orderSub.PayWay = order.PayWay;
+                            orderSub.PayStatus = order.PayStatus;
+                            orderSub.PayedTime = order.PayedTime;
+                            orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
+                            orderSub.MendTime = DateTime.Now;
 
-                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + orderSubChild.PrdProductSkuId + ",Quantity:" + orderSubChild.Quantity);
+                            var orderPickupLog = new OrderPickupLog();
+                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                            orderPickupLog.OrderId = order.Id;
+                            orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
+                            orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                            orderPickupLog.UniqueId = orderSub.Id;
+                            orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
+                            orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
+                            orderPickupLog.Remark = "";
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                            orderSubChild.PayWay = payWay;
-                            orderSubChild.PayStatus = E_OrderPayStatus.PaySuccess;
-                            orderSubChild.PayedTime = DateTime.Now;
-                            orderSubChild.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                            orderSubChild.Mender = IdWorker.Build(IdType.EmptyGuid);
-                            orderSubChild.MendTime = DateTime.Now;
+                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + orderSub.PrdProductSkuId + ",Quantity:" + orderSub.Quantity);
 
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, orderSubChild.Quantity);
+                            orderSub.PayWay = payWay;
+                            orderSub.PayStatus = E_PayStatus.PaySuccess;
+                            orderSub.PayedTime = DateTime.Now;
+                            orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                            orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
+                            orderSub.MendTime = DateTime.Now;
+
+                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+
                         }
+
+                        order.MendTime = DateTime.Now;
+                        order.Mender = operater;
+                        CurrentDb.SaveChanges();
                     }
                 }
-
-                order.MendTime = DateTime.Now;
-                order.Mender = operater;
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
                 LogUtil.Info("进入PaySuccess修改订单,结束");
 
-                Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
-                MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：订单号({0})通知成功", order.Id));
+                //Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckSendPay, order.Id);
+
+                //MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：交易号({0})通知成功", payTransId));
             }
 
             return result;
         }
-        public CustomJsonResult<RetPayResultQuery> PayResultQuery(string operater, string orderId)
+        public CustomJsonResult<RetPayResultQuery> PayResultQuery(string operater, string payTransId)
         {
             var result = new CustomJsonResult<RetPayResultQuery>();
 
-            var order = BizFactory.Order.GetOne(orderId);
+            var payTrans = CurrentDb.PayTrans.Where(m => m.Id == payTransId).FirstOrDefault();
 
-            if (order == null)
+            if (payTrans == null)
             {
                 return new CustomJsonResult<RetPayResultQuery>(ResultType.Failure, ResultCode.Failure, "找不到订单", null);
             }
 
             var ret = new RetPayResultQuery();
 
-            ret.OrderId = order.Id;
-            ret.Status = order.PayStatus;
+            ret.PayTransId = payTrans.Id;
+            ret.PayStatus = payTrans.PayStatus;
+            ret.OrderIds = payTrans.OrderIds.Split(',').ToList();
 
             result = new CustomJsonResult<RetPayResultQuery>(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -912,17 +886,17 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该订单号:{0},找不到", orderId));
                 }
 
-                if (order.PayStatus == E_OrderPayStatus.PayCancle)
+                if (order.PayStatus == E_PayStatus.PayCancle)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经取消");
                 }
 
-                if (order.PayStatus == E_OrderPayStatus.PayTimeout)
+                if (order.PayStatus == E_PayStatus.PayTimeout)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经超时");
                 }
 
-                if (order.PayStatus == E_OrderPayStatus.PaySuccess)
+                if (order.PayStatus == E_PayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经支付成功");
                 }
@@ -930,8 +904,9 @@ namespace LocalS.BLL.Biz
 
                 operater = order.Creator;
 
-                if (order.PayStatus != E_OrderPayStatus.PaySuccess)
+                if (order.PayStatus != E_PayStatus.PaySuccess)
                 {
+                    order.Status = E_OrderStatus.Canceled;
                     order.Mender = operater;
                     order.MendTime = DateTime.Now;
                     order.CancelOperator = operater;
@@ -940,59 +915,46 @@ namespace LocalS.BLL.Biz
 
                     if (cancleType == E_OrderCancleType.PayCancle)
                     {
-                        order.PayStatus = E_OrderPayStatus.PayCancle;
+                        order.PayStatus = E_PayStatus.PayCancle;
                     }
                     else if (cancleType == E_OrderCancleType.PayTimeout)
                     {
-                        order.PayStatus = E_OrderPayStatus.PayTimeout;
+                        order.PayStatus = E_PayStatus.PayTimeout;
                     }
 
                     var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
-                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == order.Id).ToList();
 
                     foreach (var orderSub in orderSubs)
                     {
-                        orderSub.Status = E_OrderStatus.Canceled;
-                        orderSub.CanceledTime = order.CanceledTime;
+
                         orderSub.Mender = operater;
                         orderSub.MendTime = DateTime.Now;
 
                         if (cancleType == E_OrderCancleType.PayCancle)
                         {
-                            orderSub.PayStatus = E_OrderPayStatus.PayCancle;
+                            orderSub.PayStatus = E_PayStatus.PayCancle;
                         }
                         else if (cancleType == E_OrderCancleType.PayTimeout)
                         {
-                            orderSub.PayStatus = E_OrderPayStatus.PayTimeout;
+                            orderSub.PayStatus = E_PayStatus.PayTimeout;
                         }
 
-                        var l_orderSubChilds = orderSubChilds.Where(m => m.OrderSubId == orderSub.Id).ToList();
+                        orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
 
-                        foreach (var orderSubChild in l_orderSubChilds)
-                        {
-                            orderSubChild.Mender = operater;
-                            orderSubChild.MendTime = DateTime.Now;
+                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
 
-                            if (cancleType == E_OrderCancleType.PayCancle)
-                            {
-                                orderSubChild.PayStatus = E_OrderPayStatus.PayCancle;
-                            }
-                            else if (cancleType == E_OrderCancleType.PayTimeout)
-                            {
-                                orderSubChild.PayStatus = E_OrderPayStatus.PayTimeout;
-                            }
 
-                            orderSubChild.PickupStatus = E_OrderPickupStatus.Canceled;
-
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, orderSubChild.Quantity);
-
-                        }
                     }
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPay, order.Id);
+                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, order.Id);
+
+                    if (string.IsNullOrEmpty(order.PayTransId))
+                    {
+                        Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, order.PayTransId);
+                    }
 
                     MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", order.Id));
 
@@ -1002,44 +964,50 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
+
         public CustomJsonResult BuildPayParams(string operater, RopOrderBuildPayParams rop)
         {
-
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var order = CurrentDb.Order.Where(m => m.Id == rop.OrderId).FirstOrDefault();
+                var orders = new List<Order>();
 
-                if (order == null)
+                if (rop.Orders == null || rop.Orders.Count == 0)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单数据");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付的订单数据不能为空");
                 }
 
-                if (order.PayStatus == E_OrderPayStatus.PayCancle)
+                var payTrans = new PayTrans();
+                payTrans.Id = IdWorker.Build(IdType.PayTransId);
+
+
+                foreach (var order in rop.Orders)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已被取消，请重新下单");
-                }
+                    var l_order = CurrentDb.Order.Where(m => m.Id == order.Id).FirstOrDefault();
 
-                if (order.PayStatus == E_OrderPayStatus.PayTimeout)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已超时，请重新下单");
-                }
-
-
-                order.PayCaller = rop.PayCaller;
-
-
-                if (rop.Blocks != null)
-                {
-                    if (rop.Blocks.Count > 0)
+                    if (l_order == null)
                     {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，单号不存在", order.Id));
+                    }
 
-                        var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
+                    if (l_order.PayStatus == E_PayStatus.PayCancle)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，已被取消，请重新下单", order.Id));
+                    }
 
-                        foreach (var orderSub in orderSubs)
+                    if (l_order.PayStatus == E_PayStatus.PayTimeout)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，该订单已超时，请重新下单", order.Id));
+                    }
+
+                    l_order.PayTransId = payTrans.Id;
+
+                    if (rop.Blocks != null)
+                    {
+                        if (rop.Blocks.Count > 0)
                         {
-                            switch (orderSub.SellChannelRefType)
+                            switch (l_order.SellChannelRefType)
                             {
                                 case E_SellChannelRefType.Mall:
 
@@ -1059,93 +1027,122 @@ namespace LocalS.BLL.Biz
 
                                     if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
                                     {
-                                        orderSub.ReceiveModeName = "配送到手";
-                                        orderSub.ReceiveMode = E_ReceiveMode.Delivery;
-                                        orderSub.Receiver = shopModeByMall.Delivery.Consignee;
-                                        orderSub.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
-                                        orderSub.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
-                                        orderSub.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
-                                        orderSub.ReceptionAddress = shopModeByMall.Delivery.Address;
+                                        l_order.ReceiveModeName = "配送到手";
+                                        l_order.ReceiveMode = E_ReceiveMode.Delivery;
+                                        l_order.Receiver = shopModeByMall.Delivery.Consignee;
+                                        l_order.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
+                                        l_order.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
+                                        l_order.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
+                                        l_order.ReceptionAddress = shopModeByMall.Delivery.Address;
                                     }
                                     else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                                     {
-                                        orderSub.ReceiveModeName = "到店自取";
-                                        orderSub.ReceiveMode = E_ReceiveMode.StoreSelfTake;
-                                        orderSub.Receiver = shopModeByMall.SelfTake.Consignee;
-                                        orderSub.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
-                                        orderSub.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
-                                        orderSub.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
-                                        orderSub.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
-                                        orderSub.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
+                                        l_order.ReceiveModeName = "到店自取";
+                                        l_order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                        l_order.Receiver = shopModeByMall.SelfTake.Consignee;
+                                        l_order.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
+                                        l_order.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
+                                        l_order.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
+                                        l_order.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
+                                        l_order.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
                                     }
-
                                     break;
                             }
-
                         }
                     }
+
+
+                    CurrentDb.SaveChanges();
+
+                    orders.Add(l_order);
                 }
 
+                if (orders.Count != rop.Orders.Count)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付订单号与后台数据不对应");
+                }
 
+                payTrans.MerchId = orders[0].MerchId;
+                payTrans.MerchName = orders[0].MerchName;
+                payTrans.StoreId = orders[0].StoreId;
+                payTrans.StoreName = orders[0].StoreName;
+                payTrans.OrderIds = string.Join(",", orders.Select(m => m.Id));
+                payTrans.OriginalAmount = orders.Sum(m => m.OriginalAmount);
+                payTrans.DiscountAmount = orders.Sum(m => m.DiscountAmount);
+                payTrans.ChargeAmount = orders.Sum(m => m.ChargeAmount);
+                payTrans.Quantity = orders.Sum(m => m.Quantity);
+                payTrans.IsTestMode = orders[0].IsTestMode;
+                payTrans.AppId = orders[0].AppId;
+                payTrans.ClientUserId = orders[0].ClientUserId;
+                payTrans.ClientUserName = orders[0].ClientUserName;
+                payTrans.SubmittedTime = DateTime.Now;
+                payTrans.Source = orders[0].Source;
+                payTrans.CreateTime = DateTime.Now;
+                payTrans.Creator = operater;
+                payTrans.PayExpireTime = orders[0].PayExpireTime;
+                payTrans.PayCaller = rop.PayCaller;
 
+                if (payTrans.IsTestMode)
+                {
+                    payTrans.ChargeAmount = 0.01m;
+                }
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
-
                 switch (rop.PayPartner)
                 {
-                    case E_OrderPayPartner.Wx:
+                    case E_PayPartner.Wx:
                         #region  微信商户支付
                         switch (rop.PayCaller)
                         {
-                            case E_OrderPayCaller.WxByNt:
+                            case E_PayCaller.WxByNt:
                                 #region WxByNt
-                                order.PayPartner = E_OrderPayPartner.Wx;
-                                order.PayWay = E_OrderPayWay.Wx;
-                                order.PayStatus = E_OrderPayStatus.Paying;
-                                var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
-                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_OrderPayCaller.WxByNt, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                payTrans.PayPartner = E_PayPartner.Wx;
+                                payTrans.PayWay = E_PayWay.Wx;
+                                payTrans.PayStatus = E_PayStatus.Paying;
+                                var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
+                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_PayCaller.WxByNt, payTrans.MerchId, payTrans.StoreId, "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wx_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var wxByNt_PayParams = new { PayUrl = wx_PayBuildQrCode.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var wxByNt_PayParams = new { PayTransId = payTrans.Id, PayUrl = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByNt_PayParams);
                                 #endregion
                                 break;
-                            case E_OrderPayCaller.WxByMp:
+                            case E_PayCaller.WxByMp:
                                 #region WxByMp
-                                order.PayPartner = E_OrderPayPartner.Wx;
-                                order.PayWay = E_OrderPayWay.Wx;
-                                order.PayStatus = E_OrderPayStatus.Paying;
-                                var wxByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
+                                payTrans.PayPartner = E_PayPartner.Wx;
+                                payTrans.PayWay = E_PayWay.Wx;
+                                payTrans.PayStatus = E_PayStatus.Paying;
+                                var wxByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == payTrans.ClientUserId).FirstOrDefault();
 
                                 if (wxByMp_UserInfo == null)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                 }
 
-                                var wxByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(order.MerchId);
+                                var wxByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
 
                                 if (wxByMp_AppInfoConfig == null)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
                                 }
 
-                                orderAttach.MerchId = order.MerchId;
-                                orderAttach.StoreId = order.StoreId;
+                                orderAttach.MerchId = payTrans.MerchId;
+                                orderAttach.StoreId = payTrans.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.OpenId, order.Id, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, payTrans.MerchId, "", "", wxByMp_UserInfo.OpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
                                 }
 
-                                wxByMp_PayBuildWxJsPayInfo.OrderId = order.Id;
+                                wxByMp_PayBuildWxJsPayInfo.PayTransId = payTrans.Id;
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
                                 #endregion
@@ -1156,23 +1153,23 @@ namespace LocalS.BLL.Biz
                         }
                         #endregion 
                         break;
-                    case E_OrderPayPartner.Zfb:
+                    case E_PayPartner.Zfb:
                         #region  支付宝商户支付
                         switch (rop.PayCaller)
                         {
-                            case E_OrderPayCaller.ZfbByNt:
+                            case E_PayCaller.ZfbByNt:
                                 #region ZfbByNt
-                                order.PayPartner = E_OrderPayPartner.Zfb;
-                                order.PayWay = E_OrderPayWay.Zfb;
-                                order.PayStatus = E_OrderPayStatus.Paying;
-                                var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(order.MerchId);
-                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_OrderPayCaller.ZfbByNt, order.MerchId, order.StoreId, "", order.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                payTrans.PayPartner = E_PayPartner.Zfb;
+                                payTrans.PayWay = E_PayWay.Zfb;
+                                payTrans.PayStatus = E_PayStatus.Paying;
+                                var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
+                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var zfbByNt_PayParams = new { PayUrl = zfbByNt_PayBuildQrCode.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var zfbByNt_PayParams = new { PayTransId = payTrans.Id, PayUrl = zfbByNt_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", zfbByNt_PayParams);
                                 #endregion
@@ -1182,26 +1179,26 @@ namespace LocalS.BLL.Biz
                         }
                         #endregion
                         break;
-                    case E_OrderPayPartner.Tg:
+                    case E_PayPartner.Tg:
                         #region 通莞商户支付
 
-                        var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(order.MerchId);
+                        var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(payTrans.MerchId);
 
-                        order.PayPartner = E_OrderPayPartner.Tg;
-                        order.PayStatus = E_OrderPayStatus.Paying;
+                        payTrans.PayPartner = E_PayPartner.Tg;
+                        payTrans.PayStatus = E_PayStatus.Paying;
 
                         switch (rop.PayCaller)
                         {
-                            case E_OrderPayCaller.AggregatePayByNt:
+                            case E_PayCaller.AggregatePayByNt:
                                 #region AggregatePayByNt
 
-                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(tgPay_AllQrcodePay.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var tg_AllQrcodePay_PayParams = new { PayUrl = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, PayUrl = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
@@ -1212,76 +1209,76 @@ namespace LocalS.BLL.Biz
                         }
                         #endregion 
                         break;
-                    case E_OrderPayPartner.Xrt:
+                    case E_PayPartner.Xrt:
                         #region Xrt支付
 
                         // todo 发布去掉
 
-                        var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(order.MerchId);
+                        var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTrans.MerchId);
 
-                        order.PayPartner = E_OrderPayPartner.Xrt;
-                        order.PayStatus = E_OrderPayStatus.Paying;
+                        payTrans.PayPartner = E_PayPartner.Xrt;
+                        payTrans.PayStatus = E_PayStatus.Paying;
 
                         switch (rop.PayCaller)
                         {
-                            case E_OrderPayCaller.WxByNt:
+                            case E_PayCaller.WxByNt:
                                 #region WxByNt
 
-                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var xrtPay_WxPayBuildByNtResultParams = new { PayUrl = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, PayUrl = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
 
                                 #endregion
                                 break;
-                            case E_OrderPayCaller.WxByMp:
+                            case E_PayCaller.WxByMp:
                                 #region WxByMp
 
-                                order.PayPartner = E_OrderPayPartner.Wx;
-                                order.PayWay = E_OrderPayWay.Wx;
-                                order.PayStatus = E_OrderPayStatus.Paying;
-                                var wxByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == order.ClientUserId).FirstOrDefault();
+                                payTrans.PayPartner = E_PayPartner.Wx;
+                                payTrans.PayWay = E_PayWay.Wx;
+                                payTrans.PayStatus = E_PayStatus.Paying;
+                                var wxByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == payTrans.ClientUserId).FirstOrDefault();
 
                                 if (wxByMp_UserInfo == null)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                 }
 
-                                orderAttach.MerchId = order.MerchId;
-                                orderAttach.StoreId = order.StoreId;
+                                orderAttach.MerchId = payTrans.MerchId;
+                                orderAttach.StoreId = payTrans.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, order.MerchId, order.StoreId, "", wxByMp_UserInfo.AppId, wxByMp_UserInfo.OpenId, order.Id, order.ChargeAmount, "", rop.CreateIp, "自助商品", order.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", wxByMp_UserInfo.AppId, wxByMp_UserInfo.OpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
                                 }
 
-                                wxByMp_PayBuildWxJsPayInfo.OrderId = order.Id;
+                                wxByMp_PayBuildWxJsPayInfo.PayTransId = payTrans.Id;
 
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
 
                                 #endregion
                                 break;
-                            case E_OrderPayCaller.ZfbByNt:
+                            case E_PayCaller.ZfbByNt:
                                 #region ZfbByNt
 
-                                var xrtPay_ZfbByNtBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, order.MerchId, order.StoreId, "", order.Id, order.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", order.PayExpireTime.Value);
+                                var xrtPay_ZfbByNtBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(xrtPay_ZfbByNtBuildByNtResult.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var xrtPay_ZfbByNtBuildByNtResultParams = new { PayUrl = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = order.ChargeAmount.ToF2Price() };
+                                var xrtPay_ZfbByNtBuildByNtResultParams = new { PayTransId = payTrans.Id, PayUrl = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_ZfbByNtBuildByNtResultParams);
 
@@ -1296,15 +1293,12 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
                 }
 
-                if (order.PayExpireTime == null)
-                {
-                    order.PayExpireTime = DateTime.Now.AddMinutes(5);
-                }
-
-                Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId, PayCaller = order.PayCaller, PayPartner = order.PayPartner });
-
+                CurrentDb.PayTrans.Add(payTrans);
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+
+                Task4Factory.Tim2Global.Enter(Task4TimType.PayTrans2CheckStatus, payTrans.Id, payTrans.PayExpireTime.Value, new PayTrans2CheckStatusModel { Id = payTrans.Id, MerchId = payTrans.MerchId, PayCaller = payTrans.PayCaller, PayPartner = payTrans.PayPartner });
             }
 
             return result;
@@ -1334,7 +1328,7 @@ namespace LocalS.BLL.Biz
                                 my_option.PaySupportWays = option.SupportWays;
                                 switch (option.Caller)
                                 {
-                                    case E_OrderPayCaller.WxByMp:
+                                    case E_PayCaller.WxByMp:
                                         my_option.IsSelect = true;
                                         my_option.Title = "微信支付";
                                         my_option.Desc = "快捷支付";
@@ -1354,43 +1348,42 @@ namespace LocalS.BLL.Biz
         }
         public List<OrderProductSkuByPickupModel> GetOrderProductSkuByPickup(string orderId, string machineId)
         {
-            //todo 
             var models = new List<OrderProductSkuByPickupModel>();
 
-            var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).FirstOrDefault();
-            var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).ToList();
+            var order = CurrentDb.Order.Where(m => m.Id == orderId && m.SellChannelRefId == machineId).FirstOrDefault();
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.SellChannelRefId == machineId).ToList();
 
             LogUtil.Info("orderId:" + orderId);
             LogUtil.Info("machineId:" + machineId);
-            LogUtil.Info("orderSubChilds.Count:" + orderSubChilds.Count);
+            LogUtil.Info("orderSubs.Count:" + orderSubs.Count);
 
 
-            var productSkuIds = orderSubChilds.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+            var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
 
             foreach (var productSkuId in productSkuIds)
             {
-                var orderSubChilds_Sku = orderSubChilds.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+                var orderSubs_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
 
                 var model = new OrderProductSkuByPickupModel();
                 model.Id = productSkuId;
-                model.Name = orderSubChilds_Sku[0].PrdProductSkuName;
-                model.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
-                model.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity);
-                model.QuantityBySuccess = orderSubChilds_Sku.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked).Count();
+                model.Name = orderSubs_Sku[0].PrdProductSkuName;
+                model.MainImgUrl = orderSubs_Sku[0].PrdProductSkuMainImgUrl;
+                model.Quantity = orderSubs_Sku.Sum(m => m.Quantity);
+                model.QuantityBySuccess = orderSubs_Sku.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked).Count();
 
-                foreach (var orderSubChilds_SkuSlot in orderSubChilds_Sku)
+                foreach (var orderSubs_SkuSlot in orderSubs_Sku)
                 {
                     var slot = new OrderProductSkuByPickupModel.Slot();
-                    slot.UniqueId = orderSubChilds_SkuSlot.Id;
-                    slot.CabinetId = orderSubChilds_SkuSlot.CabinetId;
-                    slot.SlotId = orderSubChilds_SkuSlot.SlotId;
-                    slot.Status = orderSubChilds_SkuSlot.PickupStatus;
+                    slot.UniqueId = orderSubs_SkuSlot.Id;
+                    slot.CabinetId = orderSubs_SkuSlot.CabinetId;
+                    slot.SlotId = orderSubs_SkuSlot.SlotId;
+                    slot.Status = orderSubs_SkuSlot.PickupStatus;
 
-                    if (orderSubChilds_SkuSlot.PayStatus == E_OrderPayStatus.PaySuccess)
+                    if (orderSubs_SkuSlot.PayStatus == E_PayStatus.PaySuccess)
                     {
-                        if (!orderSub.PickupIsTrg)
+                        if (!order.PickupIsTrg)
                         {
-                            if (orderSubChilds_SkuSlot.PickupStatus == E_OrderPickupStatus.WaitPickup)
+                            if (orderSubs_SkuSlot.PickupStatus == E_OrderPickupStatus.WaitPickup)
                             {
                                 slot.IsAllowPickup = true;
                             }
@@ -1405,15 +1398,182 @@ namespace LocalS.BLL.Biz
 
             return models;
         }
-        public string GetPayWayName(E_OrderPayWay payWay)
+        public CustomJsonResult HandleExByMachineSelfTake(string operater, RopOrderHandleExByMachineSelfTake rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                if (string.IsNullOrEmpty(rop.Remark))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "处理的备注信息不能为空");
+                }
+
+                List<Order> orders = new List<Order>();
+
+                foreach (var item in rop.Items)
+                {
+                    var order = CurrentDb.Order.Where(m => m.Id == item.Id).FirstOrDefault();
+                    if (order == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息不存在");
+                    }
+
+                    if (!order.ExIsHappen)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
+                    }
+
+                    if (order.ExIsHandle)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理完毕");
+                    }
+
+
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
+
+                    foreach (var orderSub in orderSubs)
+                    {
+                        var detailItem = item.Uniques.Where(m => m.Id == orderSub.Id).FirstOrDefault();
+                        if (detailItem == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
+                        }
+
+                        if (detailItem.SignStatus != 1 && detailItem.SignStatus != 2)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.SignStatus);
+                        }
+
+                        if (detailItem.SignStatus == 1)
+                        {
+
+                            if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            {
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.MERCH, orderSub.MerchId, orderSub.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                            }
+
+                            orderSub.ExPickupIsHandle = true;
+                            orderSub.ExPickupHandleTime = DateTime.Now;
+                            orderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
+                            orderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
+
+
+                            var orderPickupLog = new OrderPickupLog();
+                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                            orderPickupLog.OrderId = orderSub.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                            orderPickupLog.UniqueId = orderSub.Id;
+                            orderPickupLog.PrdProductSkuId = orderSub.PrdProductSkuId;
+                            orderPickupLog.CabinetId = orderSub.CabinetId;
+                            orderPickupLog.SlotId = orderSub.SlotId;
+                            orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
+                            orderPickupLog.IsPickupComplete = true;
+                            orderPickupLog.ActionRemark = "人为标识已取货";
+                            orderPickupLog.Remark = "";
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
+                        }
+                        else if (detailItem.SignStatus == 2)
+                        {
+                            if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            {
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, orderSub.MerchId, orderSub.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                            }
+
+                            orderSub.ExPickupIsHandle = true;
+                            orderSub.ExPickupHandleTime = DateTime.Now;
+                            orderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
+                            orderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
+
+                            var orderPickupLog = new OrderPickupLog();
+                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                            orderPickupLog.OrderId = orderSub.OrderId;
+                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                            orderPickupLog.UniqueId = orderSub.Id;
+                            orderPickupLog.PrdProductSkuId = orderSub.PrdProductSkuId;
+                            orderPickupLog.CabinetId = orderSub.CabinetId;
+                            orderPickupLog.SlotId = orderSub.SlotId;
+                            orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;
+                            orderPickupLog.IsPickupComplete = false;
+                            orderPickupLog.ActionRemark = "人为标识未取货";
+                            orderPickupLog.Remark = "";
+                            orderPickupLog.CreateTime = DateTime.Now;
+                            orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
+                        }
+                    }
+
+                    order.ExIsHandle = true;
+                    order.ExHandleTime = DateTime.Now;
+                    order.ExHandleRemark = rop.Remark;
+                    order.Status = E_OrderStatus.Completed;
+                    order.CompletedTime = DateTime.Now;
+
+                    orders.Add(order);
+
+                }
+
+                if (rop.IsRunning)
+                {
+                    if (string.IsNullOrEmpty(rop.MachineId))
+                    {
+                        var machineIds = orders.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).Select(m => m.SellChannelRefId).ToArray();
+
+                        foreach (var machineId in machineIds)
+                        {
+                            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                            if (machine != null)
+                            {
+                                machine.RunStatus = E_MachineRunStatus.Running;
+                                machine.ExIsHas = false;
+                                machine.MendTime = DateTime.Now;
+                                machine.Mender = operater;
+                                CurrentDb.SaveChanges();
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+                        if (machine != null)
+                        {
+                            machine.RunStatus = E_MachineRunStatus.Running;
+                            machine.ExIsHas = false;
+                            machine.MendTime = DateTime.Now;
+                            machine.Mender = operater;
+                            CurrentDb.SaveChanges();
+                        }
+                    }
+
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+
+                //MqFactory.Global.PushEventNotify(operater, AppId.MERCH, orderSub.MerchId, "", "", EventCode.OrderHandleExOrder, string.Format("处理异常子订单号：{0}，备注：{1}", orderSub.Id, orderSub.ExHandleRemark));
+
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
+            }
+
+            return result;
+        }
+        public string GetPayWayName(E_PayWay payWay)
         {
             string str = "";
             switch (payWay)
             {
-                case E_OrderPayWay.Wx:
+                case E_PayWay.Wx:
                     str = "微信支付";
                     break;
-                case E_OrderPayWay.Zfb:
+                case E_PayWay.Zfb:
                     str = "支付宝";
                     break;
                 default:
@@ -1477,176 +1637,6 @@ namespace LocalS.BLL.Biz
             CryptoStream cst = new CryptoStream(ms, cryptoProvider.CreateDecryptor(byKey, byIV), CryptoStreamMode.Read);
             StreamReader sr = new StreamReader(cst);
             return sr.ReadToEnd();
-        }
-
-        public CustomJsonResult HandleExByMachineSelfTake(string operater, RopOrderHandleExByMachineSelfTake rop)
-        {
-            var result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-
-                if (string.IsNullOrEmpty(rop.Remark))
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "处理的备注信息不能为空");
-                }
-
-                List<OrderSub> orderSubs = new List<OrderSub>();
-
-                foreach (var item in rop.Items)
-                {
-                    var orderSub = CurrentDb.OrderSub.Where(m => m.Id == item.Id).FirstOrDefault();
-                    if (orderSub == null)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息不存在");
-                    }
-
-                    if (!orderSub.ExIsHappen)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
-                    }
-
-                    if (orderSub.ExIsHandle)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理完毕");
-                    }
-
-
-                    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == item.Id && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
-
-                    foreach (var orderSubChild in orderSubChilds)
-                    {
-                        var detailItem = item.Uniques.Where(m => m.Id == orderSubChild.Id).FirstOrDefault();
-                        if (detailItem == null)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
-                        }
-
-                        if (detailItem.SignStatus != 1 && detailItem.SignStatus != 2)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.SignStatus);
-                        }
-
-                        if (detailItem.SignStatus == 1)
-                        {
-
-                            if (orderSubChild.PickupStatus != E_OrderPickupStatus.Taked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-                            {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.MERCH, orderSubChild.MerchId, orderSubChild.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, 1);
-                            }
-
-                            orderSubChild.ExPickupIsHandle = true;
-                            orderSubChild.ExPickupHandleTime = DateTime.Now;
-                            orderSubChild.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
-                            orderSubChild.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
-
-
-                            var orderPickupLog = new OrderPickupLog();
-                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                            orderPickupLog.OrderId = orderSubChild.OrderId;
-                            orderPickupLog.OrderSubId = orderSubChild.OrderSubId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderSubChild.SellChannelRefId;
-                            orderPickupLog.UniqueId = orderSubChild.Id;
-                            orderPickupLog.PrdProductSkuId = orderSubChild.PrdProductSkuId;
-                            orderPickupLog.CabinetId = orderSubChild.CabinetId;
-                            orderPickupLog.SlotId = orderSubChild.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
-                            orderPickupLog.IsPickupComplete = true;
-                            orderPickupLog.ActionRemark = "人为标识已取货";
-                            orderPickupLog.Remark = "";
-                            orderPickupLog.CreateTime = DateTime.Now;
-                            orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-                        }
-                        else if (detailItem.SignStatus == 2)
-                        {
-                            if (orderSubChild.PickupStatus != E_OrderPickupStatus.Taked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-                            {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, orderSubChild.MerchId, orderSubChild.StoreId, orderSubChild.SellChannelRefId, orderSubChild.CabinetId, orderSubChild.SlotId, orderSubChild.PrdProductSkuId, 1);
-                            }
-
-                            orderSubChild.ExPickupIsHandle = true;
-                            orderSubChild.ExPickupHandleTime = DateTime.Now;
-                            orderSubChild.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
-                            orderSubChild.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
-
-                            var orderPickupLog = new OrderPickupLog();
-                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                            orderPickupLog.OrderId = orderSubChild.OrderId;
-                            orderPickupLog.OrderSubId = orderSubChild.OrderSubId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            orderPickupLog.SellChannelRefId = orderSubChild.SellChannelRefId;
-                            orderPickupLog.UniqueId = orderSubChild.Id;
-                            orderPickupLog.PrdProductSkuId = orderSubChild.PrdProductSkuId;
-                            orderPickupLog.CabinetId = orderSubChild.CabinetId;
-                            orderPickupLog.SlotId = orderSubChild.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;
-                            orderPickupLog.IsPickupComplete = false;
-                            orderPickupLog.ActionRemark = "人为标识未取货";
-                            orderPickupLog.Remark = "";
-                            orderPickupLog.CreateTime = DateTime.Now;
-                            orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-                        }
-                    }
-
-                    orderSub.ExIsHandle = true;
-                    orderSub.ExHandleTime = DateTime.Now;
-                    orderSub.ExHandleRemark = rop.Remark;
-                    orderSub.Status = E_OrderStatus.Completed;
-                    orderSub.CompletedTime = DateTime.Now;
-
-                    orderSubs.Add(orderSub);
-
-                }
-
-                if (rop.IsRunning)
-                {
-                    if (string.IsNullOrEmpty(rop.MachineId))
-                    {
-                        var machineIds = orderSubs.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).Select(m => m.SellChannelRefId).ToArray();
-
-                        foreach (var machineId in machineIds)
-                        {
-                            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
-                            if (machine != null)
-                            {
-                                machine.RunStatus = E_MachineRunStatus.Running;
-                                machine.ExIsHas = false;
-                                machine.MendTime = DateTime.Now;
-                                machine.Mender = operater;
-                                CurrentDb.SaveChanges();
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                        var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-                        if (machine != null)
-                        {
-                            machine.RunStatus = E_MachineRunStatus.Running;
-                            machine.ExIsHas = false;
-                            machine.MendTime = DateTime.Now;
-                            machine.Mender = operater;
-                            CurrentDb.SaveChanges();
-                        }
-                    }
-
-                }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-
-                //MqFactory.Global.PushEventNotify(operater, AppId.MERCH, orderSub.MerchId, "", "", EventCode.OrderHandleExOrder, string.Format("处理异常子订单号：{0}，备注：{1}", orderSub.Id, orderSub.ExHandleRemark));
-
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
-            }
-
-            return result;
         }
 
     }

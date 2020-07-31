@@ -16,89 +16,84 @@ namespace LocalS.Service.Api.StoreApp
 
     public class OrderService : BaseDbContext
     {
-        private List<FsBlock> GetOrderBlocks(string orderId)
+        private List<FsBlock> GetOrderBlocks(Order order)
         {
             var fsBlocks = new List<FsBlock>();
 
-            var orderSubs = CurrentDb.OrderSub.Where(c => c.OrderId == orderId).ToList();
 
-            foreach (var orderSub in orderSubs)
+            var block = new FsBlock();
+
+            block.UniqueId = order.Id;
+            block.UniqueType = E_UniqueType.Order;
+
+            block.Tag.Name = new FsText(order.ReceiveModeName, "");
+
+
+            if (order.PayStatus == E_PayStatus.PaySuccess)
             {
-                var block = new FsBlock();
-
-                block.UniqueId = orderSub.Id;
-                block.UniqueType = E_UniqueType.OrderSub;
-
-                block.Tag.Name = new FsText(orderSub.ReceiveModeName, "");
-
-
-                if (orderSub.PayStatus == E_OrderPayStatus.PaySuccess)
+                if (order.SellChannelRefType == E_SellChannelRefType.Machine)
                 {
-                    if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
-                    {
-                        block.Tag.Desc = new FsField("取货码", "", orderSub.PickupCode, "#f18d00");
-                        block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(orderSub.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", orderSub.SellChannelRefId) };
-                    }
-
-                    block.ReceiptInfo = new FsReceiptInfo { LastTime = orderSub.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = orderSub.PickupFlowLastDesc };
-
+                    block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
+                    block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", order.SellChannelRefId) };
                 }
 
+                block.ReceiptInfo = new FsReceiptInfo { LastTime = order.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = order.PickupFlowLastDesc };
 
-
-                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
-
-                if (orderSub.PayStatus == E_OrderPayStatus.PaySuccess)
-                {
-                    foreach (var orderSubChild in orderSubChilds)
-                    {
-                        var field = new FsTemplateData();
-                        field.Type = "SkuTmp";
-                        var sku = new FsTemplateData.TmplOrderSku();
-                        sku.UniqueId = orderSubChild.Id;
-                        sku.UniqueType = E_UniqueType.OrderSubChild;
-                        sku.Id = orderSubChild.PrdProductSkuId;
-                        sku.Name = orderSubChild.PrdProductSkuName;
-                        sku.MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl;
-                        sku.Quantity = orderSubChild.Quantity.ToString();
-                        sku.ChargeAmount = orderSubChild.ChargeAmount.ToF2Price();
-                        sku.StatusName = "";
-                        field.Value = sku;
-
-                        block.Data.Add(field);
-                    }
-                }
-                else
-                {
-                    var productSkuIds = orderSubChilds.Select(m => m.PrdProductSkuId).Distinct().ToArray();
-
-                    foreach (var productSkuId in productSkuIds)
-                    {
-                        var orderSubChilds_Sku = orderSubChilds.Where(m => m.PrdProductSkuId == productSkuId).ToList();
-
-                        var field = new FsTemplateData();
-
-                        field.Type = "SkuTmp";
-
-                        var sku = new FsTemplateData.TmplOrderSku();
-                        sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
-                        sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
-                        sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
-                        sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
-                        sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
-                        sku.StatusName = "";
-                        field.Value = sku;
-
-                        block.Data.Add(field);
-
-                    }
-                }
-
-
-
-
-                fsBlocks.Add(block);
             }
+
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+
+            if (order.PayStatus == E_PayStatus.PaySuccess)
+            {
+                foreach (var orderSub in orderSubs)
+                {
+                    var field = new FsTemplateData();
+                    field.Type = "SkuTmp";
+                    var sku = new FsTemplateData.TmplOrderSku();
+                    sku.UniqueId = orderSub.Id;
+                    sku.UniqueType = E_UniqueType.OrderSub;
+                    sku.Id = orderSub.PrdProductSkuId;
+                    sku.Name = orderSub.PrdProductSkuName;
+                    sku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                    sku.Quantity = orderSub.Quantity.ToString();
+                    sku.ChargeAmount = orderSub.ChargeAmount.ToF2Price();
+                    sku.StatusName = "";
+                    field.Value = sku;
+
+                    block.Data.Add(field);
+                }
+            }
+            else
+            {
+                var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+
+                foreach (var productSkuId in productSkuIds)
+                {
+                    var orderSubChilds_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+
+                    var field = new FsTemplateData();
+
+                    field.Type = "SkuTmp";
+
+                    var sku = new FsTemplateData.TmplOrderSku();
+                    sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
+                    sku.UniqueId = order.Id;
+                    sku.UniqueType = E_UniqueType.Order;
+                    sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
+                    sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
+                    sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
+                    sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
+                    sku.StatusName = "";
+                    field.Value = sku;
+                    block.Data.Add(field);
+                }
+            }
+
+
+
+
+            fsBlocks.Add(block);
+
 
             return fsBlocks;
         }
@@ -121,11 +116,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (bizResult.Result == ResultType.Success)
             {
-                RetOrderReserve ret = new RetOrderReserve();
-                ret.OrderId = bizResult.Data.OrderId;
-                ret.ChargeAmount = bizResult.Data.ChargeAmount;
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", bizResult.Data);
             }
             else
             {
@@ -208,61 +199,61 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                var order = BizFactory.Order.GetOne(rop.OrderId);
+                //var order = BizFactory.Order.GetOne(rop.OrderId);
 
-                if (order == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单");
-                }
+                //if (order == null)
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单");
+                //}
 
-                if (order.PayStatus != E_OrderPayStatus.WaitPay || order.PayStatus != E_OrderPayStatus.Paying)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不在就绪支付状态");
-                }
+                //if (order.PayStatus != E_PayStatus.WaitPay || order.PayStatus != E_PayStatus.Paying)
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不在就绪支付状态");
+                //}
 
-                store = BizFactory.Store.GetOne(order.StoreId);
+                 store = BizFactory.Store.GetOne(rop.StoreId);
 
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
+                //var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
 
-                var orderSub_Mall = orderSubs.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
-                if (orderSub_Mall != null)
-                {
-                    receiveMode_Mall = orderSub_Mall.ReceiveMode;
+                //var orderSub_Mall = orderSubs.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                //if (orderSub_Mall != null)
+                //{
+                //    receiveMode_Mall = orderSub_Mall.ReceiveMode;
 
-                    dliveryModel.Id = "";
-                    dliveryModel.Consignee = orderSub_Mall.Receiver;
-                    dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
-                    dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
-                    dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
-                    dliveryModel.Address = orderSub_Mall.ReceptionAddress;
-                    dliveryModel.IsDefault = false;
-                }
+                //    dliveryModel.Id = "";
+                //    dliveryModel.Consignee = orderSub_Mall.Receiver;
+                //    dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
+                //    dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
+                //    dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
+                //    dliveryModel.Address = orderSub_Mall.ReceptionAddress;
+                //    dliveryModel.IsDefault = false;
+                //}
 
-                var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == rop.OrderId).ToList();
+                //var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == rop.OrderId).ToList();
 
-                var shopModeSkus = (from c in orderSubChilds
-                                    select new
-                                    {
-                                        c.SellChannelRefType,
-                                        c.PrdProductSkuId
-                                    }).Distinct().ToList();
+                //var shopModeSkus = (from c in orderSubChilds
+                //                    select new
+                //                    {
+                //                        c.SellChannelRefType,
+                //                        c.PrdProductSkuId
+                //                    }).Distinct().ToList();
 
 
-                foreach (var shopModeSku in shopModeSkus)
-                {
-                    var l_orderSubChilds = orderSubChilds.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
+                //foreach (var shopModeSku in shopModeSkus)
+                //{
+                //    var l_orderSubChilds = orderSubChilds.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
 
-                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
-                    orderConfirmSkuModel.Id = l_orderSubChilds[0].PrdProductSkuId;
-                    orderConfirmSkuModel.Name = l_orderSubChilds[0].PrdProductSkuName;
-                    orderConfirmSkuModel.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
-                    orderConfirmSkuModel.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
-                    orderConfirmSkuModel.SalePrice = l_orderSubChilds[0].SalePrice;
-                    orderConfirmSkuModel.ShopMode = shopModeSku.SellChannelRefType;
-                    skuAmountByOriginal += (l_orderSubChilds[0].SalePrice * orderConfirmSkuModel.Quantity);
-                    skuAmountByMemebr += (l_orderSubChilds[0].SalePriceByVip * orderConfirmSkuModel.Quantity);
-                    skus.Add(orderConfirmSkuModel);
-                }
+                //    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
+                //    orderConfirmSkuModel.Id = l_orderSubChilds[0].PrdProductSkuId;
+                //    orderConfirmSkuModel.Name = l_orderSubChilds[0].PrdProductSkuName;
+                //    orderConfirmSkuModel.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
+                //    orderConfirmSkuModel.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
+                //    orderConfirmSkuModel.SalePrice = l_orderSubChilds[0].SalePrice;
+                //    orderConfirmSkuModel.ShopMode = shopModeSku.SellChannelRefType;
+                //    skuAmountByOriginal += (l_orderSubChilds[0].SalePrice * orderConfirmSkuModel.Quantity);
+                //    skuAmountByMemebr += (l_orderSubChilds[0].SalePriceByVip * orderConfirmSkuModel.Quantity);
+                //    skus.Add(orderConfirmSkuModel);
+                //}
             }
 
 
@@ -410,62 +401,156 @@ namespace LocalS.Service.Api.StoreApp
             var pageEntiy = new PageEntity<OrderModel>();
 
 
-            //var query = (from o in CurrentDb.Order
-            //             where o.ClientUserId == clientUserId
-            //             select new { o.Id, o.StoreId, o.StoreName, o.PayStatus, o.SubmittedTime, o.CompletedTime, o.ChargeAmount, o.CanceledTime }
-            // );
+            var query = (from o in CurrentDb.Order
+                         where o.ClientUserId == clientUserId
+                         select new
+                         {
+                             Id = o.Id,
+                             StoreId = o.StoreId,
+                             StoreName = o.StoreName,
+                             Status = o.Status,
+                             PayStatus = o.PayStatus,
+                             SubmittedTime = o.SubmittedTime,
+                             CompletedTime = o.CompletedTime,
+                             ChargeAmount = o.ChargeAmount,
+                             CanceledTime = o.CanceledTime,
+                             ReceiveModeName=o.ReceiveModeName,
+                             SellChannelRefType=o.SellChannelRefType,
+                             SellChannelRefId=o.SellChannelRefId,
+                             PickupFlowLastTime=o.PickupFlowLastTime,
+                             PickupFlowLastDesc=o.PickupFlowLastDesc,
+                             PickupCode =o.PickupCode
+                         }
+             );
 
 
-            //if (rup.Status != E_OrderStatus.Unknow)
-            //{
-            //    query = query.Where(m => m.Status == rup.Status);
-            //}
+            if (rup.Status != E_OrderStatus.Unknow)
+            {
+                query = query.Where(m => m.Status == rup.Status);
+            }
 
-            //int pageSize = 10;
+            int pageSize = 10;
 
-            //pageEntiy.PageIndex = rup.PageIndex;
-            //pageEntiy.PageSize = pageSize;
-            //pageEntiy.Total = query.Count();
-            //pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
+            pageEntiy.PageIndex = rup.PageIndex;
+            pageEntiy.PageSize = pageSize;
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            //query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.SubmittedTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
 
 
 
-            //var list = query.ToList();
+            var list = query.ToList();
 
-            //List<OrderModel> models = new List<OrderModel>();
+            List<OrderModel> models = new List<OrderModel>();
 
-            //foreach (var item in list)
-            //{
-            //    var model = new OrderModel();
+            foreach (var item in list)
+            {
+                var model = new OrderModel();
 
-            //    model.Id = item.Id;
-            //    model.Tag.Name = new FsText(item.StoreName, "");
-            //    model.Tag.Desc = new FsField(BizFactory.Order.GetStatus(item.Status).Text, "");
-            //    model.ChargeAmount = item.ChargeAmount.ToF2Price();
-            //    model.Blocks = GetOrderBlocks(item.Id);
+                model.Id = item.Id;
+                model.Tag.Name = new FsText(item.StoreName, "");
+                model.Tag.Desc = new FsField(BizFactory.Order.GetStatus(item.Status).Text, "");
+                model.ChargeAmount = item.ChargeAmount.ToF2Price();
 
-            //    switch (item.Status)
-            //    {
-            //        case E_OrderStatus.WaitPay:
-            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "取消订单", Color = "red" }, OpType = "FUN", OpVal = "cancleOrder" });
-            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-            //            break;
-            //        case E_OrderStatus.Payed:
-            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-            //            break;
-            //        case E_OrderStatus.Completed:
-            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-            //            break;
-            //        case E_OrderStatus.Canceled:
-            //            model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.Status) });
-            //            break;
-            //    }
 
-            //    pageEntiy.Items.Add(model);
+                var fsBlocks = new List<FsBlock>();
 
-            //}
+
+                var block = new FsBlock();
+
+                block.UniqueId = item.Id;
+                block.UniqueType = E_UniqueType.Order;
+
+                block.Tag.Name = new FsText(item.ReceiveModeName, "");
+
+
+                if (item.PayStatus == E_PayStatus.PaySuccess)
+                {
+                    if (item.SellChannelRefType == E_SellChannelRefType.Machine)
+                    {
+                        block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
+                        block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
+                    }
+
+                    block.ReceiptInfo = new FsReceiptInfo { LastTime = item.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = item.PickupFlowLastDesc };
+
+                }
+
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).ToList();
+
+                if (item.PayStatus == E_PayStatus.PaySuccess)
+                {
+                    foreach (var orderSub in orderSubs)
+                    {
+                        var field = new FsTemplateData();
+                        field.Type = "SkuTmp";
+                        var sku = new FsTemplateData.TmplOrderSku();
+                        sku.UniqueId = orderSub.Id;
+                        sku.UniqueType = E_UniqueType.OrderSub;
+                        sku.Id = orderSub.PrdProductSkuId;
+                        sku.Name = orderSub.PrdProductSkuName;
+                        sku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                        sku.Quantity = orderSub.Quantity.ToString();
+                        sku.ChargeAmount = orderSub.ChargeAmount.ToF2Price();
+                        sku.StatusName = "";
+                        field.Value = sku;
+
+                        block.Data.Add(field);
+                    }
+                }
+                else
+                {
+                    var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+
+                    foreach (var productSkuId in productSkuIds)
+                    {
+                        var orderSubChilds_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+
+                        var field = new FsTemplateData();
+
+                        field.Type = "SkuTmp";
+
+                        var sku = new FsTemplateData.TmplOrderSku();
+                        sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
+                        sku.UniqueId = item.Id;
+                        sku.UniqueType = E_UniqueType.Order;
+                        sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
+                        sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
+                        sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
+                        sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
+                        sku.StatusName = "";
+                        field.Value = sku;
+                        block.Data.Add(field);
+                    }
+                }
+
+
+
+                fsBlocks.Add(block);
+
+                model.Blocks = fsBlocks;
+
+                switch (item.Status)
+                {
+                    case E_OrderStatus.WaitPay:
+                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "取消订单", Color = "red" }, OpType = "FUN", OpVal = "cancleOrder" });
+                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.PayStatus) });
+                        break;
+                    case E_OrderStatus.Payed:
+                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.PayStatus) });
+                        break;
+                    case E_OrderStatus.Completed:
+                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.PayStatus) });
+                        break;
+                    case E_OrderStatus.Canceled:
+                        model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = OperateService.GetOrderDetailsUrl(rup.Caller, item.Id, item.PayStatus) });
+                        break;
+                }
+
+                pageEntiy.Items.Add(model);
+
+            }
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pageEntiy);
@@ -482,9 +567,9 @@ namespace LocalS.Service.Api.StoreApp
             var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
             ret.Id = order.Id;
-            //ret.Status = order.Status;
+            ret.Status = order.Status;
             ret.Tag.Name = new FsText(order.StoreName, "");
-            //ret.Tag.Desc = new FsField(BizFactory.Order.GetStatus(order.Status).Text, "");
+            ret.Tag.Desc = new FsField(BizFactory.Order.GetStatus(order.Status).Text, "");
 
             var fsBlockByField = new FsBlockByField();
 
@@ -496,10 +581,10 @@ namespace LocalS.Service.Api.StoreApp
             {
                 fsBlockByField.Data.Add(new FsField("付款时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));
             }
-            //if (order.CompletedTime != null)
-            //{
-            //    fsBlockByField.Data.Add(new FsField("完成时间", "", order.CompletedTime.ToUnifiedFormatDateTime(), ""));
-            //}
+            if (order.CompletedTime != null)
+            {
+                fsBlockByField.Data.Add(new FsField("完成时间", "", order.CompletedTime.ToUnifiedFormatDateTime(), ""));
+            }
 
             if (order.CanceledTime != null)
             {
@@ -510,7 +595,7 @@ namespace LocalS.Service.Api.StoreApp
             ret.FieldBlocks.Add(fsBlockByField);
 
 
-            ret.Blocks = GetOrderBlocks(order.Id);
+            ret.Blocks = GetOrderBlocks(order);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -526,7 +611,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
             bizRop.AppId = rop.AppId;
-            bizRop.OrderId = rop.OrderId;
+            bizRop.Orders = rop.Orders;
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             bizRop.CreateIp = rop.CreateIp;
@@ -542,44 +627,44 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetOrderReceiptTimeAxis();
 
-            OrderSub orderSub = null;
+            Order order = null;
             List<OrderPickupLog> orderPickupLogs = null;
             switch (rup.UniqueType)
             {
-                case E_UniqueType.OrderSub:
-                    orderSub = CurrentDb.OrderSub.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
-                    orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.OrderSubId == rup.UniqueId).OrderByDescending(m => m.CreateTime).ToList();
+                case E_UniqueType.Order:
+                    order = CurrentDb.Order.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
+                    orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.OrderId == rup.UniqueId).OrderByDescending(m => m.CreateTime).ToList();
                     break;
             }
 
 
-            if (orderSub != null)
+            if (order != null)
             {
-                var merch = CurrentDb.Merch.Where(m => m.Id == orderSub.MerchId).FirstOrDefault();
+                var merch = CurrentDb.Merch.Where(m => m.Id == order.MerchId).FirstOrDefault();
 
-                switch (orderSub.ReceiveMode)
+                switch (order.ReceiveMode)
                 {
                     case E_ReceiveMode.Delivery:
 
                         ret.Top = null;
                         ret.RecordTop.CircleText = "收";
-                        ret.RecordTop.Description = orderSub.ReceptionAddress;
+                        ret.RecordTop.Description = order.ReceptionAddress;
                         break;
                     case E_ReceiveMode.StoreSelfTake:
                         ret.Top.CircleText = "自";
-                        ret.Top.Field1 = orderSub.ReceptionMarkName;
-                        ret.Top.Field2 = orderSub.ReceptionAddress;
+                        ret.Top.Field1 = order.ReceptionMarkName;
+                        ret.Top.Field2 = order.ReceptionAddress;
                         ret.Top.Field3 = string.Format("客服热线 {0}", merch.CsrPhoneNumber);
                         ret.RecordTop.CircleText = "自";
-                        ret.RecordTop.Description = orderSub.ReceptionAddress;
+                        ret.RecordTop.Description = order.ReceptionAddress;
                         break;
                     case E_ReceiveMode.MachineSelfTake:
                         ret.Top.CircleText = "提";
-                        ret.Top.Field1 = orderSub.ReceptionMarkName;
-                        ret.Top.Field2 = orderSub.ReceptionAddress;
+                        ret.Top.Field1 = order.ReceptionMarkName;
+                        ret.Top.Field2 = order.ReceptionAddress;
                         ret.Top.Field3 = string.Format("客服热线 {0}", merch.CsrPhoneNumber);
                         ret.RecordTop.CircleText = "提";
-                        ret.RecordTop.Description = orderSub.ReceptionMarkName;
+                        ret.RecordTop.Description = order.ReceptionMarkName;
                         break;
                 }
 

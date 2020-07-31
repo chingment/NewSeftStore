@@ -13,6 +13,7 @@ Page({
     tabShopModeByMachine: 1,
     storeId:undefined,
     orderId: null,
+    orders:null,
     blocks: [],
     couponId: [],
     payOption: {
@@ -153,7 +154,7 @@ Page({
 
     }
 
-    if (_this.data.orderId == undefined || _this.data.orderId  == null) {
+    if (_this.data.orders == undefined || _this.data.orders  == null||orders.length==0) {
 
 
       apiOrder.reserve({
@@ -166,7 +167,7 @@ Page({
           apiCart.pageData({
             success: function (res) { }
           })
-          _this.setData({orderId:d.orderId})
+          _this.setData({orders:d.orders})
           _this.goPay(_this.data.curSelPayOption, null)
         } else {
           toast.show({
@@ -182,7 +183,7 @@ Page({
   goPay: function (payOption, blocks) {
     var _this=this
     apiOrder.buildPayParams({
-      orderId: _this.data.orderId,
+      orders: _this.data.orders,
       payCaller: payOption.payCaller,
       blocks: blocks,
       payPartner: payOption.payPartner
@@ -191,7 +192,7 @@ Page({
 
         var d = res.data;
 
-        _this.setData({orderId:d.orderId})
+        _this.setData({payTransId:d.payTransId})
 
         wx.requestPayment({
           'timeStamp': d.timestamp,
@@ -201,12 +202,12 @@ Page({
           'paySign': d.paySign,
           'success': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.orderId + '&type=1&caller=1'
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1'
             })
           },
           'fail': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.orderId + '&type=2&caller=1'
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1'
             })
           }
         })

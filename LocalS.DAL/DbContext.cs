@@ -40,8 +40,8 @@ namespace LocalS.DAL
         public IDbSet<ClientDeliveryAddress> ClientDeliveryAddress { get; set; }
         public IDbSet<Order> Order { get; set; }
         public IDbSet<OrderSub> OrderSub { get; set; }
-        public IDbSet<OrderSubChild> OrderSubChild { get; set; }
-        public IDbSet<OrderNotifyLog> OrderNotifyLog { get; set; }
+        public IDbSet<PayTrans> PayTrans { get; set; }
+        public IDbSet<PayTransNotifyLog> PayTransNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Machine> Machine { get; set; }
         public IDbSet<MachineCabinet> MachineCabinet { get; set; }

@@ -139,7 +139,7 @@ namespace LocalS.BLL
 
         }
 
-        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_OrderPayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
         {
 
             var result = new PayBuildQrCodeResult();
@@ -406,7 +406,7 @@ namespace LocalS.BLL
             var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
             if (dic.ContainsKey("out_trade_no"))
             {
-                result.OrderId = dic["out_trade_no"].ToString();
+                result.PayTransId = dic["out_trade_no"].ToString();
             }
 
             if (dic.ContainsKey("transaction_id"))
@@ -414,7 +414,7 @@ namespace LocalS.BLL
                 result.PayPartnerOrderId = dic["transaction_id"].ToString();
             }
 
-            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderId);
+            LogUtil.Info("解释微信支付协议，订单号：" + result.PayTransId);
 
 
             if (dic.ContainsKey("out_trade_no") && dic.ContainsKey("trade_state"))
@@ -424,7 +424,7 @@ namespace LocalS.BLL
                 if (trade_state == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderPayWay = E_OrderPayWay.Wx;
+                    result.PayWay = E_PayWay.Wx;
                 }
             }
 
@@ -440,7 +440,7 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("out_trade_no"))
             {
-                result.OrderId = dic["out_trade_no"].ToString();
+                result.PayTransId = dic["out_trade_no"].ToString();
             }
 
             if (dic.ContainsKey("transaction_id"))
@@ -448,7 +448,7 @@ namespace LocalS.BLL
                 result.PayPartnerOrderId = dic["transaction_id"].ToString();
             }
 
-            LogUtil.Info("解释微信支付协议，订单号：" + result.OrderId);
+            LogUtil.Info("解释微信支付协议，订单号：" + result.PayTransId);
 
 
 
@@ -459,7 +459,7 @@ namespace LocalS.BLL
                 if (result_code == "SUCCESS")
                 {
                     result.IsPaySuccess = true;
-                    result.OrderPayWay = E_OrderPayWay.Wx;
+                    result.PayWay = E_PayWay.Wx;
                 }
             }
 

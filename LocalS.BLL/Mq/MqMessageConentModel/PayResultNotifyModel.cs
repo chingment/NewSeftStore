@@ -12,8 +12,8 @@ namespace LocalS.BLL.Mq
 
         public string Content { get; set; }
 
-        public E_OrderNotifyLogNotifyFrom From { get; set; }
+        public E_PayTransLogNotifyFrom From { get; set; }
 
-        public E_OrderPayPartner PayPartner { get; set; }
+        public E_PayPartner PayPartner { get; set; }
     }
 }

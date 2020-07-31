@@ -10,7 +10,8 @@ namespace Lumos.Redis
         OrderId = 1,
         MachineId = 2,
         NewGuid = 3,
-        EmptyGuid = 4
+        EmptyGuid = 4,
+        PayTransId = 5,
     }
     public class IdWorker
     {
@@ -43,6 +44,7 @@ namespace Lumos.Redis
         {
             string id = "";
 
+            string part0 = "";
             string prefix = "";
             string part1 = "";
             string part2 = "";
@@ -51,7 +53,14 @@ namespace Lumos.Redis
             {
                 case IdType.OrderId:
                     prefix = "61";
-                    string part0 = ran.Next(100, 999).ToString();
+                    part0 = ran.Next(100, 999).ToString();
+                    part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    part2 = GetIncrNum().ToString().PadLeft(5, '0');
+                    id = prefix + part2 + part1 + part0;
+                    break;
+                case IdType.PayTransId:
+                    prefix = "62";
+                    part0 = ran.Next(100, 999).ToString();
                     part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
                     part2 = GetIncrNum().ToString().PadLeft(5, '0');
                     id = prefix + part2 + part1 + part0;

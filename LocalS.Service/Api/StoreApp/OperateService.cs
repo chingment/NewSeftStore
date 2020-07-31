@@ -37,11 +37,9 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetOperateResult();
 
+            var payTrans = CurrentDb.PayTrans.Where(m => m.Id == rup.Id).FirstOrDefault();
 
-
-            var order = BizFactory.Order.GetOne(rup.Id);
-
-            if (order == null)
+            if (payTrans == null)
             {
                 ret.Result = RetOperateResult.ResultType.Failure;
                 ret.Message = "系统找不到该订单号";
@@ -60,68 +58,54 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                //switch (order.Status)
-                //{
-                //    case E_OrderStatus.Submitted:
-                //        ret.Result = RetOperateResult.ResultType.Success;
-                //        ret.Message = "该订单未支付";
-                //        ret.IsComplete = true;
-                //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单未支付", ret);
-                //        break;
-                //    case E_OrderStatus.WaitPay:
-                //        ret.Result = RetOperateResult.ResultType.Success;
-                //        ret.IsComplete = false;
-                //        ret.Message = "该订单未支付";
-                //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单未支付", ret);
-                //        break;
-                //    case E_OrderStatus.Payed:
-                //        ret.Result = RetOperateResult.ResultType.Success;
-                //        ret.Remarks = "";
-                //        ret.Message = "支付成功";
-                //        ret.IsComplete = true;
+                switch (payTrans.PayStatus)
+                {
+                    case E_PayStatus.WaitPay:
+                        ret.Result = RetOperateResult.ResultType.Success;
+                        ret.IsComplete = false;
+                        ret.Message = "该订单未支付";
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单未支付", ret);
+                        break;
+                    case E_PayStatus.Paying:
+                        ret.Result = RetOperateResult.ResultType.Success;
+                        ret.IsComplete = false;
+                        ret.Message = "该订单正在支付";
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单正在支付", ret);
+                        break;
+                    case E_PayStatus.PaySuccess:
+                        ret.Result = RetOperateResult.ResultType.Success;
+                        ret.Remarks = "";
+                        ret.Message = "支付成功";
+                        ret.IsComplete = true;
 
-                //        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                //        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, payTrans.OrderIds, payTrans.PayStatus) });
 
-                //        ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
-                //        ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
-                //        ret.Fields.Add(new FsField("支付时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));
+                        ret.Fields.Add(new FsField("交易号", "", payTrans.Id, ""));
+                        ret.Fields.Add(new FsField("提交时间", "", payTrans.SubmittedTime.ToUnifiedFormatDateTime(), ""));
+                        ret.Fields.Add(new FsField("支付时间", "", payTrans.PayedTime.ToUnifiedFormatDateTime(), ""));
 
-                //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "支付成功", ret);
-                //        break;
-                //    case E_OrderStatus.Completed:
-                //        ret.Result = RetOperateResult.ResultType.Success;
-                //        ret.Message = "该订单已经完成";
-                //        ret.IsComplete = true;
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "支付成功", ret);
+                        break;
+                    case E_PayStatus.PayCancle:
+                    case E_PayStatus.PayTimeout:
+                        ret.Result = RetOperateResult.ResultType.Success;
+                        ret.Message = "该订单已经取消";
+                        ret.IsComplete = true;
 
-                //        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                //        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, payTrans.OrderIds, payTrans.PayStatus) });
 
-                //        ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
-                //        ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
-                //        ret.Fields.Add(new FsField("支付时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));
-                //        ret.Fields.Add(new FsField("完成时间", "", order.CompletedTime.ToUnifiedFormatDateTime(), ""));
+                        ret.Fields.Add(new FsField("交易号", "", payTrans.Id, ""));
+                        ret.Fields.Add(new FsField("提交时间", "", payTrans.SubmittedTime.ToUnifiedFormatDateTime(), ""));
+                        ret.Fields.Add(new FsField("取消时间", "", payTrans.CanceledTime.ToUnifiedFormatDateTime(), ""));
+                        ret.Fields.Add(new FsField("取消原因", "", payTrans.CancelReason, ""));
 
-                //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单已经完成", ret);
-                //        break;
-                //    case E_OrderStatus.Canceled:
-                //        ret.Result = RetOperateResult.ResultType.Success;
-                //        ret.Message = "该订单已经取消";
-                //        ret.IsComplete = true;
-
-                //        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                //        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
-
-                //        ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
-                //        ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
-                //        ret.Fields.Add(new FsField("取消时间", "", order.CanceledTime.ToUnifiedFormatDateTime(), ""));
-                //        ret.Fields.Add(new FsField("取消原因", "", order.CancelReason, ""));
-
-                //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单已经取消", ret);
-                //        break;
-                //    default:
-                //        break;
-                //}
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单已经取消", ret);
+                        break;
+                    default:
+                        break;
+                }
             }
 
 
@@ -170,19 +154,20 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public static string GetOrderDetailsUrl(E_AppCaller caller, string orderid, E_OrderStatus orderStatus)
+        public static string GetOrderDetailsUrl(E_AppCaller caller, string orderIds, E_PayStatus payStatus)
         {
             string url = "";
             switch (caller)
             {
                 case E_AppCaller.Wxmp:
-                    switch (orderStatus)
+                    switch (payStatus)
                     {
-                        case E_OrderStatus.WaitPay:
-                            url = string.Format("/pages/orderconfirm/orderconfirm?orderId={0}", orderid);
+                        case E_PayStatus.WaitPay:
+                        case E_PayStatus.Paying:
+                            url = string.Format("/pages/orderconfirm/orderconfirm?orderIds={0}", orderIds);
                             break;
                         default:
-                            url = string.Format("/pages/orderdetails/orderdetails?id={0}", orderid);
+                            url = string.Format("/pages/orderdetails/orderdetails?ids={0}", orderIds);
                             break;
                     }
                     break;

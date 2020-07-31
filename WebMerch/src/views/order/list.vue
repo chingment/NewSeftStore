@@ -6,13 +6,33 @@
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" />
         </el-col>
-        <el-col v-if="isShowClientUserNameInput" :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col v-if="isShowClientUserNameInput" :span="3" :xs="12" style="margin-bottom:20px">
           <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :span="3" :xs="12" style="margin-bottom:20px">
+          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式" style="width: 100%">
+            <el-option
+              v-for="item in options_ReceiveModes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="3" :xs="12" style="margin-bottom:20px">
           <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">
             <el-option
               v-for="item in options_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="3" :xs="12" style="margin-bottom:20px">
+          <el-select v-model="listQuery.pickupTrgStatus" clearable placeholder="触发状态" style="width: 100%">
+            <el-option
+              v-for="item in options_pickupTrgStatus"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -94,12 +114,12 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.clientUserName }}</span>
         </template>
@@ -107,6 +127,16 @@
       <el-table-column v-if="isDesktop" label="下单方式" prop="sourceName" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.sourceName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="isDesktop" label="取货方式" prop="sourceName" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.receiveModeName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.pickupIsTrg }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="数量" prop="quantity" align="left" min-width="10%">
@@ -236,10 +266,10 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(item,index) in details.receiveDetails" :key="index">
-          <div> <i class="el-icon-place" /><span> {{ item.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+        <div v-for="(receiveMode,index) in details.receiveModes" :key="index">
+          <div> <i class="el-icon-place" /><span> {{ receiveMode.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
           <table class="table-skus" style="width:100%;table-layout:fixed;">
-            <tr v-for="(pickupSku,sub_index) in item.detailItems" :key="sub_index">
+            <tr v-for="(pickupSku,sub_index) in receiveMode.items" :key="sub_index">
               <td style="width:10%">
                 <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
               </td>
@@ -305,7 +335,7 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button v-if="details.canHandleEx" type="primary" @click="_handleExOrder(details)">
+        <el-button v-if="details.canHandleEx" type="primary" @click="_handleEx(details)">
           确认处理
         </el-button>
         <el-button @click="dialogDetailsIsVisible = false">
@@ -318,9 +348,9 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetails, handleExOrder } from '@/api/order'
+import { getList, getDetailsByMachineSelfTake, handleExByMachineSelfTake } from '@/api/order'
 import Pagination from '@/components/Pagination'
-import { isEmpty } from '@/utils/commonUtil'
+import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
   name: 'OrderList',
   components: { Pagination },
@@ -330,7 +360,12 @@ export default {
       require: false,
       default: ''
     },
-    machineid: {
+    sellchannelrefid: {
+      type: String,
+      require: false,
+      default: ''
+    },
+    receivemode: {
       type: String,
       require: false,
       default: ''
@@ -348,13 +383,14 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
+        receiveMode: undefined,
         page: 1,
         limit: 10,
         clientName: undefined,
         orderId: undefined,
         storeId: undefined,
-        machineId: undefined,
-        isHasEx: false
+        isHasEx: false,
+        sellChannelRefId: undefined
       },
       dialogDetailsIsVisible: false,
       detailsLoading: false,
@@ -370,7 +406,8 @@ export default {
         submitTime: '',
         status: { text: '' },
         exHandleRemark: '',
-        details: undefined
+        details: undefined,
+        isRunning: false
       },
       options_status: [{
         value: '2000',
@@ -385,17 +422,33 @@ export default {
         value: '5000',
         label: '已取消'
       }],
+      options_ReceiveModes: [{
+        value: '3',
+        label: '机器自提'
+      }, {
+        value: '2',
+        label: '店铺自取'
+      }, {
+        value: '1',
+        label: '配送商品'
+      }],
+      options_pickupTrgStatus: [
+        {
+          value: '1',
+          label: '未触发'
+        }, {
+          value: '2',
+          label: '已触发'
+        }
+      ],
       isDesktop: this.$store.getters.isDesktop,
       isShowClientUserNameInput: true
     }
   },
   watch: {
-    storeid: function(value) {
-      this.listQuery.storeId = value
-      this.init()
-    },
-    machineid: function(value) {
-      this.listQuery.machineId = value
+    $route() {
+      var receiveMode = getUrlParam('receiveMode')
+      this.listQuery.receiveMode = receiveMode
       this.init()
     }
   },
@@ -412,8 +465,17 @@ export default {
       this.listQuery.isHasEx = false
     }
 
+    var receiveMode = getUrlParam('receiveMode')
+    if (receiveMode != null) {
+      this.listQuery.receiveMode = receiveMode
+    } else {
+      this.listQuery.receiveMode = this.receivemode
+    }
+
+    console.log('receiveMode:' + receiveMode)
+
     this.listQuery.storeId = this.storeid
-    this.listQuery.machineId = this.machineid
+    this.listQuery.sellChannelRefId = this.sellchannelrefid
 
     if (this.clientuserid === '') {
       this.isShowClientUserNameInput = true
@@ -428,6 +490,8 @@ export default {
       this.getListData()
     },
     getListData() {
+      console.log('sellchannelrefid:' + this.listQuery.sellChannelRefId)
+      console.log('receivemode:' + this.listQuery.receiveMode)
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -445,7 +509,7 @@ export default {
     },
     refreshDetails(id) {
       this.detailsLoading = true
-      getDetails({ id: id }).then(res => {
+      getDetailsByMachineSelfTake({ id: id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }
@@ -454,7 +518,7 @@ export default {
     },
     dialogDetailsOpen(row) {
       this.detailsLoading = true
-      getDetails({ id: row.id }).then(res => {
+      getDetailsByMachineSelfTake({ id: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }
@@ -462,24 +526,27 @@ export default {
         this.dialogDetailsIsVisible = true
       })
     },
-    _handleExOrder(order) {
+    _handleEx(details) {
       var _this = this
 
-      if (isEmpty(order.exHandleRemark)) {
+      if (isEmpty(details.exHandleRemark)) {
         this.$message('请输入备注')
         return
       }
 
-      var uniqueItems = []
-      for (var i = 0; i < order.receiveDetails.length; i++) {
-        var s_detailItems = order.receiveDetails[i].detailItems
-        for (var j = 0; j < s_detailItems.length; j++) {
-          if (s_detailItems[j].status.value === 6000) {
-            if (s_detailItems[j].signStatus === 0) {
-              this.$message('处理前，请选择【' + s_detailItems[j].name + '】的取货状态 已取或未取')
-              return
-            } else {
-              uniqueItems.push({ id: s_detailItems[j].id, uniqueId: s_detailItems[j].uniqueId, signStatus: s_detailItems[j].signStatus })
+      var uniques = []
+
+      for (var i = 0; i < details.receiveModes.length; i++) {
+        if (details.receiveModes[i].mode === 3) {
+          var l_items = details.receiveModes[i].items
+          for (var j = 0; j < l_items.length; j++) {
+            if (l_items[j].status.value === 6000) {
+              if (l_items[j].signStatus === 0) {
+                this.$message('处理前，请选择【' + l_items[j].name + '】的取货状态 已取或未取')
+                return
+              } else {
+                uniques.push({ id: l_items[j].uniqueId, signStatus: l_items[j].signStatus })
+              }
             }
           }
         }
@@ -492,10 +559,10 @@ export default {
         type: 'warning'
       }).then(() => {
         this.detailsLoading = true
-        handleExOrder({ id: order.id, uniqueItems: uniqueItems, remark: order.exHandleRemark }).then(res => {
+        handleExByMachineSelfTake({ id: details.id, uniques: uniques, remark: details.exHandleRemark, isRunning: false }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
-            _this.refreshDetails(order.id)
+            _this.refreshDetails(details.id)
             _this.getListData()
           }
 

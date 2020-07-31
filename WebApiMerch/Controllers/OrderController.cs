@@ -11,6 +11,7 @@ namespace WebApiMerch.Controllers
 {
     public class OrderController : OwnApiBaseController
     {
+
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupOrderGetList rup)
         {
@@ -25,5 +26,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+
+        [HttpPost]
+        public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderHandleExByMachineSelfTake rop)
+        {
+            IResult result = MerchServiceFactory.Order.HandleExByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

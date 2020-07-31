@@ -18,9 +18,9 @@ namespace LocalS.BLL.Biz
         public List<Option> Options { get; set; }
         public class Option
         {
-            public E_OrderPayCaller PayCaller { get; set; }
-            public E_OrderPayPartner PayPartner { get; set; }
-            public List<E_OrderPayWay> PaySupportWays { get; set; }
+            public E_PayCaller PayCaller { get; set; }
+            public E_PayPartner PayPartner { get; set; }
+            public List<E_PayWay> PaySupportWays { get; set; }
             public string Title { get; set; }
             public string Desc { get; set; }
             public bool IsSelect { get; set; }
