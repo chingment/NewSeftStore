@@ -10,7 +10,7 @@
           <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col :span="3" :xs="12" style="margin-bottom:20px">
-          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式">
+          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式" style="width: 100%">
             <el-option
               v-for="item in options_ReceiveModes"
               :key="item.value"

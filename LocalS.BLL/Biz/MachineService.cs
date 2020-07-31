@@ -169,12 +169,12 @@ namespace LocalS.BLL.Biz
             return PushService.QueryMsgPushResult(operater, appId, merchId, machineId, messageId);
         }
 
-        public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)
-        {
-            var orderDetails = BizFactory.Order.GetOrderProductSkuByPickup(orderId, machineId);
-            var content = new { orderId = orderId, status = E_OrderStatus.Payed, orderDetails = orderDetails };
-            return PushService.SendPaySuccess(operater, appId, merchId, machineId, content);
-        }
+        //public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)
+        //{
+        //    var orderDetails = BizFactory.Order.GetOrderProductSkuByPickup(orderId, machineId);
+        //    var content = new { orderId = orderId, status = E_OrderStatus.Payed, orderDetails = orderDetails };
+        //    return PushService.SendPaySuccess(operater, appId, merchId, machineId, content);
+        //}
 
         public CustomJsonResult EventNotify(string operater, string appId, string machineId, string eventCode, string eventRemark, object content)
         {

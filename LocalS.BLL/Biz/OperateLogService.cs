@@ -499,10 +499,12 @@ namespace LocalS.BLL.Biz
                         var orderDetailsChildSonsCompeleteCount = orderSubChilds.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
                         //判断全部订单都是已完成
                         if (orderDetailsChildSonsCompeleteCount == orderSubChilds.Count)
-                        {  
+                        {
                             orderSub.PickupFlowLastDesc = "全部商品出货完成";
                             orderSub.PickupFlowLastTime = DateTime.Now;
-                           
+                            orderSub.Status = E_OrderStatus.Completed;
+                            orderSub.CompletedTime = DateTime.Now;
+
                             Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
                         }
                     }
