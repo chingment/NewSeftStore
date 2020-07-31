@@ -119,9 +119,9 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetOperateResult();
 
-            var order = BizFactory.Order.GetOne(rup.Id);
+            var payTrans = CurrentDb.PayTrans.Where(m => m.Id == rup.Id).FirstOrDefault();
 
-            if (order == null)
+            if (payTrans == null)
             {
                 ret.Result = RetOperateResult.ResultType.Failure;
                 ret.Message = "系统找不到该订单号";
@@ -144,9 +144,9 @@ namespace LocalS.Service.Api.StoreApp
                 ret.IsComplete = true;
                 ret.Message = "您已取消支付操作";
                 ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
-                //ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, order.Id, order.Status) });
-                ret.Fields.Add(new FsField("订单号", "", order.Id, ""));
-                ret.Fields.Add(new FsField("提交时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
+                ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, payTrans.OrderIds, payTrans.PayStatus) });
+                ret.Fields.Add(new FsField("交易号", "", payTrans.Id, ""));
+                ret.Fields.Add(new FsField("提交时间", "", payTrans.SubmittedTime.ToUnifiedFormatDateTime(), ""));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "订单未支付", ret);
             }

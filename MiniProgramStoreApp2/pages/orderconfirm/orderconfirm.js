@@ -12,7 +12,6 @@ Page({
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     storeId:undefined,
-    orderId: null,
     orders:null,
     blocks: [],
     couponId: [],
@@ -24,11 +23,23 @@ Page({
   },
   onLoad: function (options) {
     var _this = this
-    var orderId = options.orderId == undefined ? null : options.orderId
+    var orderIds = options.orderIds == undefined ? null : options.orderIds
+   console.log('orderIds:'+orderIds)
+    var orders=[]
+    if(orderIds!=null){
+      var arr_order= orderIds.split(',')
+
+      for(let i=0;i<arr_order.length;i++){
+        orders.push({id:arr_order[i]})
+    }
+    
+      console.log("orders"+JSON.stringify(orders))
+    }
+
     var productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
     _this.setData({
       storeId: ownRequest.getCurrentStoreId(),
-      orderId:orderId,
+      orders:orders,
       productSkus:productSkus
     })
     _this.buildPayOptions()
@@ -154,7 +165,7 @@ Page({
 
     }
 
-    if (_this.data.orders == undefined || _this.data.orders  == null||orders.length==0) {
+    if (_this.data.orders == undefined || _this.data.orders  == null||_this.data.orders.length==0) {
 
 
       apiOrder.reserve({
@@ -253,7 +264,7 @@ Page({
     var _this= this
     var _data=_this.data
     apiOrder.confirm({
-      orderId: _data.orderId,
+      orders: _data.orders,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
       couponId:  _data.couponId

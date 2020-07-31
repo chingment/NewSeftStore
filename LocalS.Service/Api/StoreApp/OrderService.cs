@@ -142,7 +142,7 @@ namespace LocalS.Service.Api.StoreApp
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
             E_ReceiveMode receiveMode_Mall = E_ReceiveMode.Delivery;
-            if (string.IsNullOrEmpty(rop.OrderId))
+            if (rop.Orders == null || rop.Orders.Count == 0)
             {
 
                 if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
@@ -199,61 +199,52 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                //var order = BizFactory.Order.GetOne(rop.OrderId);
 
-                //if (order == null)
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单");
-                //}
+                var arr_orderIds = rop.Orders.Select(m => m.Id);
 
-                //if (order.PayStatus != E_PayStatus.WaitPay || order.PayStatus != E_PayStatus.Paying)
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不在就绪支付状态");
-                //}
+                store = BizFactory.Store.GetOne(rop.StoreId);
 
-                 store = BizFactory.Store.GetOne(rop.StoreId);
+                var orders = CurrentDb.Order.Where(m => arr_orderIds.Contains(m.Id)).ToList();
 
-                //var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == rop.OrderId).ToList();
+                var orderSub_Mall = orders.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                if (orderSub_Mall != null)
+                {
+                    receiveMode_Mall = orderSub_Mall.ReceiveMode;
 
-                //var orderSub_Mall = orderSubs.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
-                //if (orderSub_Mall != null)
-                //{
-                //    receiveMode_Mall = orderSub_Mall.ReceiveMode;
+                    dliveryModel.Id = "";
+                    dliveryModel.Consignee = orderSub_Mall.Receiver;
+                    dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
+                    dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
+                    dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
+                    dliveryModel.Address = orderSub_Mall.ReceptionAddress;
+                    dliveryModel.IsDefault = false;
+                }
 
-                //    dliveryModel.Id = "";
-                //    dliveryModel.Consignee = orderSub_Mall.Receiver;
-                //    dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
-                //    dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
-                //    dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
-                //    dliveryModel.Address = orderSub_Mall.ReceptionAddress;
-                //    dliveryModel.IsDefault = false;
-                //}
+                var orderSubs = CurrentDb.OrderSub.Where(m => arr_orderIds.Contains(m.OrderId)).ToList();
 
-                //var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderId == rop.OrderId).ToList();
-
-                //var shopModeSkus = (from c in orderSubChilds
-                //                    select new
-                //                    {
-                //                        c.SellChannelRefType,
-                //                        c.PrdProductSkuId
-                //                    }).Distinct().ToList();
+                var shopModeSkus = (from c in orderSubs
+                                    select new
+                                    {
+                                        c.SellChannelRefType,
+                                        c.PrdProductSkuId
+                                    }).Distinct().ToList();
 
 
-                //foreach (var shopModeSku in shopModeSkus)
-                //{
-                //    var l_orderSubChilds = orderSubChilds.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
+                foreach (var shopModeSku in shopModeSkus)
+                {
+                    var l_orderSubChilds = orderSubs.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
 
-                //    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
-                //    orderConfirmSkuModel.Id = l_orderSubChilds[0].PrdProductSkuId;
-                //    orderConfirmSkuModel.Name = l_orderSubChilds[0].PrdProductSkuName;
-                //    orderConfirmSkuModel.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
-                //    orderConfirmSkuModel.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
-                //    orderConfirmSkuModel.SalePrice = l_orderSubChilds[0].SalePrice;
-                //    orderConfirmSkuModel.ShopMode = shopModeSku.SellChannelRefType;
-                //    skuAmountByOriginal += (l_orderSubChilds[0].SalePrice * orderConfirmSkuModel.Quantity);
-                //    skuAmountByMemebr += (l_orderSubChilds[0].SalePriceByVip * orderConfirmSkuModel.Quantity);
-                //    skus.Add(orderConfirmSkuModel);
-                //}
+                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
+                    orderConfirmSkuModel.Id = l_orderSubChilds[0].PrdProductSkuId;
+                    orderConfirmSkuModel.Name = l_orderSubChilds[0].PrdProductSkuName;
+                    orderConfirmSkuModel.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
+                    orderConfirmSkuModel.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
+                    orderConfirmSkuModel.SalePrice = l_orderSubChilds[0].SalePrice;
+                    orderConfirmSkuModel.ShopMode = shopModeSku.SellChannelRefType;
+                    skuAmountByOriginal += (l_orderSubChilds[0].SalePrice * orderConfirmSkuModel.Quantity);
+                    skuAmountByMemebr += (l_orderSubChilds[0].SalePriceByVip * orderConfirmSkuModel.Quantity);
+                    skus.Add(orderConfirmSkuModel);
+                }
             }
 
 
@@ -379,7 +370,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.OriginalAmount = skuAmountByOriginal.ToF2Price();
 
-            ret.OrderId = rop.OrderId;
+            ret.Orders = rop.Orders;
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
@@ -414,12 +405,12 @@ namespace LocalS.Service.Api.StoreApp
                              CompletedTime = o.CompletedTime,
                              ChargeAmount = o.ChargeAmount,
                              CanceledTime = o.CanceledTime,
-                             ReceiveModeName=o.ReceiveModeName,
-                             SellChannelRefType=o.SellChannelRefType,
-                             SellChannelRefId=o.SellChannelRefId,
-                             PickupFlowLastTime=o.PickupFlowLastTime,
-                             PickupFlowLastDesc=o.PickupFlowLastDesc,
-                             PickupCode =o.PickupCode
+                             ReceiveModeName = o.ReceiveModeName,
+                             SellChannelRefType = o.SellChannelRefType,
+                             SellChannelRefId = o.SellChannelRefId,
+                             PickupFlowLastTime = o.PickupFlowLastTime,
+                             PickupFlowLastDesc = o.PickupFlowLastDesc,
+                             PickupCode = o.PickupCode
                          }
              );
 
@@ -558,13 +549,13 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public CustomJsonResult Details(string operater, string clientUserId, string orderId)
+        public CustomJsonResult Details(string operater, string clientUserId, string orderIds)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             var ret = new RetOrderDetails();
 
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.Id == orderIds).FirstOrDefault();
 
             ret.Id = order.Id;
             ret.Status = order.Status;

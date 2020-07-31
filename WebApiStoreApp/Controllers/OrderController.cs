@@ -38,9 +38,9 @@ namespace WebApiStoreApp.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse Details(string id)
+        public OwnApiHttpResponse Details(string ids)
         {
-            IResult result = StoreAppServiceFactory.Order.Details(this.CurrentUserId, this.CurrentUserId, id);
+            IResult result = StoreAppServiceFactory.Order.Details(this.CurrentUserId, this.CurrentUserId, ids);
             return new OwnApiHttpResponse(result);
         }
 
