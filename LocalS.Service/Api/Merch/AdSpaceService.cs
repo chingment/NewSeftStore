@@ -146,7 +146,7 @@ namespace LocalS.Service.Api.Merch
                 }
                 else if (adSpace.BelongType == E_AdSpaceBelongType.Machine)
                 {
-                    var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
+                    var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
 
                     foreach (var merchMachine in merchMachines)
                     {
@@ -156,7 +156,7 @@ namespace LocalS.Service.Api.Merch
                         {
                             storeName = store.Name;
                         }
-                        ret.Belongs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器({0})]{1}", storeName, merchMachine.Name) });
+                        ret.Belongs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", merchMachine.MachineId, storeName) });
                     }
                 }
             }
