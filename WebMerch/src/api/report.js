@@ -1,32 +1,32 @@
 import request from '@/utils/request'
 
-export function machineStockRealDataInit(params) {
+export function storeStockRealDataInit(params) {
   return request({
-    url: '/report/machineStockRealDataInit',
+    url: '/report/storeStockRealDataInit',
     method: 'get',
     params
   })
 }
 
-export function machineStockRealDataGet(data) {
+export function storeStockRealDataGet(data) {
   return request({
-    url: '/report/machineStockRealDataGet',
+    url: '/report/storeStockRealDataGet',
     method: 'post',
     data
   })
 }
 
-export function machineStockDateHisInit(params) {
+export function storeStockDateHisInit(params) {
   return request({
-    url: '/report/machineStockDateHisInit',
+    url: '/report/storeStockDateHisInit',
     method: 'get',
     params
   })
 }
 
-export function machineStockDateHisGet(data) {
+export function storeStockDateHisGet(data) {
   return request({
-    url: '/report/machineStockDateHisGet',
+    url: '/report/storeStockDateHisGet',
     method: 'post',
     data
   })
@@ -81,14 +81,14 @@ export function storeSalesDateHisGet(data) {
 }
 
 export default {
-  machineStockRealDataInit: machineStockRealDataInit,
-  machineStockRealDataGet: machineStockRealDataGet,
+  storemachineStockRealDataInit: storeStockRealDataInit,
+  storehStockRealDataGet: storeStockRealDataGet,
   productSkuSalesDateHisInit: productSkuSalesDateHisInit,
   productSkuSalesDateHisGet: productSkuSalesDateHisGet,
   orderSalesDateHisInit: orderSalesDateHisInit,
   orderSalesDateHisGet: orderSalesDateHisGet,
-  machineStockDateHisInit: machineStockDateHisInit,
-  machineStockDateHisGet: machineStockDateHisGet,
-  storeSalesDateHisInit:storeSalesDateHisInit,
-  storeSalesDateHisGet:storeSalesDateHisGet
+  storeStockDateHisInit: storeStockDateHisInit,
+  storeStockDateHisGet: storeStockDateHisGet,
+  storeSalesDateHisInit: storeSalesDateHisInit,
+  storeSalesDateHisGet: storeSalesDateHisGet
 }

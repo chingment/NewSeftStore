@@ -37,8 +37,8 @@ namespace LocalS.Service.Api.StoreTerm
                 machine.Name = "贩卖X1";//默认名称
                 machine.JPushRegId = rop.JPushRegId;
                 machine.DeviceId = rop.DeviceId;
-                machine.ImeiId = rop.ImeiId == null ? IdWorker.Build(IdType.NewGuid) : rop.ImeiId;
-                machine.MacAddress = rop.MacAddress == null ? IdWorker.Build(IdType.NewGuid) : rop.MacAddress;
+                machine.ImeiId = string.IsNullOrEmpty(rop.ImeiId) == true ? IdWorker.Build(IdType.NewGuid) : rop.ImeiId;
+                machine.MacAddress = string.IsNullOrEmpty(rop.MacAddress) == true ? IdWorker.Build(IdType.NewGuid) : rop.MacAddress;
                 machine.MainImgUrl = "http://file.17fanju.com/Upload/machine1.jpg";
                 machine.AppVersionCode = rop.AppVersionCode;
                 machine.AppVersionName = rop.AppVersionName;

@@ -106,6 +106,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+
             var query = (from o in CurrentDb.Order
                          where (rup.ClientUserName == null || o.ClientUserName.Contains(rup.ClientUserName))
                          &&

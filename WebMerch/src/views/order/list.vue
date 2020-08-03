@@ -20,7 +20,7 @@
           </el-select>
         </el-col>
         <el-col :span="3" :xs="12" style="margin-bottom:20px">
-          <el-select v-model="listQuery.orderStauts" clearable placeholder="全部状态" style="width: 100%">
+          <el-select v-model="listQuery.orderStatus" clearable placeholder="全部状态" style="width: 100%">
             <el-option
               v-for="item in options_status"
               :key="item.value"
@@ -388,6 +388,7 @@ export default {
         limit: 10,
         clientName: undefined,
         orderId: undefined,
+        orderStatus: undefined,
         storeId: undefined,
         isHasEx: false,
         sellChannelRefId: undefined

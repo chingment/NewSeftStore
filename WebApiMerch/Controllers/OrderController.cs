@@ -26,6 +26,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetDetailsByMachineSelfTake(string id)
+        {
+            IResult result = MerchServiceFactory.Order.GetDetailsByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
 
         [HttpPost]
         public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderHandleExByMachineSelfTake rop)

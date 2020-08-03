@@ -12,31 +12,31 @@ namespace WebApiMerch.Controllers
     public class ReportController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse MachineStockRealDataInit()
+        public OwnApiHttpResponse StoreStockRealDataInit()
         {
-            IResult result = MerchServiceFactory.Report.MachineStockRealDataInit(this.CurrentUserId, this.CurrentMerchId);
+            IResult result = MerchServiceFactory.Report.StoreStockRealDataInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse MachineStockRealDataGet([FromBody]RopReportMachineStockRealDataGet rop)
+        public OwnApiHttpResponse StoreStockRealDataGet([FromBody]RopReportMachineStockRealDataGet rop)
         {
-            IResult result = MerchServiceFactory.Report.MachineStockRealDataGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Report.StoreStockRealDataGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
 
         [HttpGet]
-        public OwnApiHttpResponse MachineStockDateHisInit()
+        public OwnApiHttpResponse StoreStockDateHisInit()
         {
-            IResult result = MerchServiceFactory.Report.MachineStockDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            IResult result = MerchServiceFactory.Report.StoreStockDateHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse MachineStockDateHisGet([FromBody]RopReportMachineStockDateHisGet rop)
+        public OwnApiHttpResponse StoreStockDateHisGet([FromBody]RopReportMachineStockDateHisGet rop)
         {
-            IResult result = MerchServiceFactory.Report.MachineStockDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Report.StoreStockDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

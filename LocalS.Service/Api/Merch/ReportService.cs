@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class ReportService : BaseDbContext
     {
-        public CustomJsonResult MachineStockRealDataInit(string operater, string merchId)
+        public CustomJsonResult StoreStockRealDataInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
@@ -49,7 +49,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult MachineStockRealDataGet(string operater, string merchId, RopReportMachineStockRealDataGet rop)
+        public CustomJsonResult StoreStockRealDataGet(string operater, string merchId, RopReportMachineStockRealDataGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -62,18 +62,43 @@ namespace LocalS.Service.Api.Merch
             List<object> olist = new List<object>();
 
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && rop.StoreIds.Contains(m.StoreId) && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine).OrderBy(m => m.SlotId).ToList();
+            var query = (from m in CurrentDb.SellChannelStock
+                         join s in CurrentDb.Store on m.StoreId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where
+                         m.MerchId == merchId
+                         && rop.StoreIds.Contains(m.StoreId)
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.SellChannelRefId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+
+            if (rop.SellChannelRefType != Entity.E_SellChannelRefType.Unknow)
+            {
+                query = query.Where(m => m.SellChannelRefType == rop.SellChannelRefType);
+            }
+
+            var sellChannelStocks = query.OrderBy(m => m.SlotId).ToList();
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
-                var machineInfo = BizFactory.Machine.GetOne(sellChannelStock.SellChannelRefId);
-
                 var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+
+                string sellChannelRefName = "";
+                string sellChannelRemark = "";
+
+                if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Mall)
+                {
+                    sellChannelRefName = "线上商城";
+                }
+                else if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
+                {
+                    sellChannelRefName = "线下机器";
+                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.SellChannelRefId, sellChannelStock.SlotId);
+                }
 
                 olist.Add(new
                 {
-                    StoreName = machineInfo.StoreName,
-                    SellChannelRefName = sellChannelStock.SellChannelRefId,
+                    StoreName = sellChannelStock.StoreName,
+                    SellChannelRefName = sellChannelRefName,
+                    SellChannelRemark = sellChannelRemark,
                     ProductSkuId = bizProductSku.Id,
                     ProductSkuName = bizProductSku.Name,
                     ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
@@ -98,7 +123,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult MachineStockDateHisInit(string operater, string merchId)
+        public CustomJsonResult StoreStockDateHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
@@ -133,7 +158,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult MachineStockDateHisGet(string operater, string merchId, RopReportMachineStockDateHisGet rop)
+        public CustomJsonResult StoreStockDateHisGet(string operater, string merchId, RopReportMachineStockDateHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -150,16 +175,46 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merchId && rop.StoreIds.Contains(m.StoreId) && m.StockDate == rop.StockDate && m.SellChannelRefType == Entity.E_SellChannelRefType.Machine).OrderBy(m => m.SlotId).ToList();
+
+            var query = (from m in CurrentDb.SellChannelStockDateHis
+                         join s in CurrentDb.Store on m.StoreId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where
+                         m.MerchId == merchId
+                         && rop.StoreIds.Contains(m.StoreId) &&
+                         m.StockDate == rop.StockDate
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.SellChannelRefId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+
+            if (rop.SellChannelRefType != Entity.E_SellChannelRefType.Unknow)
+            {
+                query = query.Where(m => m.SellChannelRefType == rop.SellChannelRefType);
+            }
+
+            var sellChannelStocks = query.OrderBy(m => m.SlotId).ToList();
+
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
-                var machineInfo = BizFactory.Machine.GetOne(sellChannelStock.SellChannelRefId);
                 var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+
+                string sellChannelRefName = "";
+                string sellChannelRemark = "";
+
+                if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Mall)
+                {
+                    sellChannelRefName = "线上商城";
+                }
+                else if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
+                {
+                    sellChannelRefName = "线下机器";
+                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.SellChannelRefId, sellChannelStock.SlotId);
+                }
+
                 olist.Add(new
                 {
-                    StoreName = machineInfo.StoreName,
-                    SellChannelRefName = sellChannelStock.SellChannelRefId,
+                    StoreName = sellChannelStock.StoreName,
+                    SellChannelRefName = sellChannelRefName,
+                    SellChannelRemark = sellChannelRemark,
                     ProductSkuId = bizProductSku.Id,
                     ProductSkuName = bizProductSku.Name,
                     ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),

@@ -738,22 +738,19 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", payTransId));
                 }
 
-                operater = payTrans.Creator;
-
-                LogUtil.Info("进入PaySuccess修改订单,开始");
-
-
-                payTrans.PayPartner = payPartner;
-                payTrans.PayPartnerOrderId = payPartnerOrderId;
-                payTrans.PayWay = payWay;
-
-
 
                 if (payTrans.PayStatus == E_PayStatus.WaitPay || payTrans.PayStatus == E_PayStatus.Paying)
                 {
+                    LogUtil.Info("进入PaySuccess修改订单,开始");
 
+                    operater = payTrans.Creator;
+
+                    payTrans.PayPartner = payPartner;
+                    payTrans.PayPartnerOrderId = payPartnerOrderId;
+                    payTrans.PayWay = payWay;
                     payTrans.PayStatus = E_PayStatus.PaySuccess;
                     payTrans.PayedTime = DateTime.Now;
+
                     if (pms != null)
                     {
                         if (pms.ContainsKey("clientUserName"))
@@ -769,6 +766,8 @@ namespace LocalS.BLL.Biz
                     var orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
                     foreach (var order in orders)
                     {
+                        order.ClientUserId = payTrans.ClientUserId;
+                        order.ClientUserName = payTrans.ClientUserName;
                         order.PayedTime = payTrans.PayedTime;
                         order.PayStatus = payTrans.PayStatus;
                         order.PayWay = payTrans.PayWay;
@@ -798,9 +797,13 @@ namespace LocalS.BLL.Biz
 
                         foreach (var orderSub in orderSubs)
                         {
+                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + orderSub.PrdProductSkuId + ",Quantity:" + orderSub.Quantity);
+
                             orderSub.PayWay = order.PayWay;
                             orderSub.PayStatus = order.PayStatus;
                             orderSub.PayedTime = order.PayedTime;
+                            orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                            orderSub.ClientUserId = order.ClientUserId;
                             orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
                             orderSub.MendTime = DateTime.Now;
 
@@ -817,15 +820,6 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.Creator = operater;
                             CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + orderSub.PrdProductSkuId + ",Quantity:" + orderSub.Quantity);
-
-                            orderSub.PayWay = payWay;
-                            orderSub.PayStatus = E_PayStatus.PaySuccess;
-                            orderSub.PayedTime = DateTime.Now;
-                            orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                            orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
-                            orderSub.MendTime = DateTime.Now;
-
                             BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
 
                         }
@@ -834,17 +828,23 @@ namespace LocalS.BLL.Biz
                         order.Mender = operater;
                         CurrentDb.SaveChanges();
                     }
+
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
+
+                    LogUtil.Info("进入PaySuccess修改订单,结束");
+
+
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, payTrans.Id);
+
+                    foreach (var order in orders)
+                    {
+                        Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, order.Id);
+                        MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
+
+                    }
                 }
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                LogUtil.Info("进入PaySuccess修改订单,结束");
-
-
-                //Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckSendPay, order.Id);
-
-                //MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：交易号({0})通知成功", payTransId));
             }

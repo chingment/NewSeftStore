@@ -5,9 +5,6 @@
       <el-form-item label="机器编号">
         {{ temp.id }}
       </el-form-item>
-      <el-form-item label="机器名称">
-        {{ temp.name }}
-      </el-form-item>
       <el-form-item label="机器Logo">
         <img :src="temp.logoImgUrl" class="singlepic-machine-banner">
       </el-form-item>
@@ -31,9 +28,6 @@
     <el-form v-show="isEdit" ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="机器编号">
         {{ temp.id }}
-      </el-form-item>
-      <el-form-item label="机器名称" prop="name">
-        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="机器Logo">
 
@@ -95,7 +89,6 @@ export default {
         logoImgUrl: ''
       },
       rules: {
-        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }]
       },
       uploadImglist: [],

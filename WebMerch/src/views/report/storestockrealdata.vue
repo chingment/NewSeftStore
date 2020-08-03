@@ -4,7 +4,6 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-
           <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
             <el-option
               v-for="item in optionsStores"
@@ -14,15 +13,16 @@
             />
           </el-select>
         </el-col>
+
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-date-picker
-            v-model="listQuery.stockDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择日期"
-            style="width: 100%"
-            :picker-options="datePickerOptionsStockDate"
-          />
+          <el-select v-model="listQuery.sellChannelRefType" clearable placeholder="销售模式" style="width: 100%">
+            <el-option
+              v-for="item in optionsSellChannelRefTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-col>
 
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
@@ -34,7 +34,7 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="_getData(listQuery)" />
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="_ge(listQuery)" />
     </div>
     <el-table
       :key="listKey"
@@ -49,14 +49,14 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="机器编码" align="left" min-width="10%">
+      <el-table-column label="销售模式" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.sellChannelRefName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="货道" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="模式备注" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.slotId }}</span>
+          <span>{{ scope.row.sellChannelRemark }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品名称" align="left" min-width="10%">
@@ -101,7 +101,7 @@
       </el-table-column>
     </el-table>
     <el-alert
-      title="提示：统计机器历史库存报表"
+      title="提示：实时统计店铺库存报表"
       type="remark-gray"
       :closable="false"
     />
@@ -110,7 +110,7 @@
 
 <script>
 
-import { machineStockDateHisInit, machineStockDateHisGet } from '@/api/report'
+import { storeStockRealDataInit, storeStockRealDataGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'MachineStock',
@@ -118,22 +118,24 @@ export default {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '机器历史库存报表',
+      filename: '店铺实时库存报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
-      listData: [],
+      listData: null,
       listTotal: 0,
       listQuery: {
         storeIds: [],
-        stockDate: undefined
+        sellChannelRefType: undefined
       },
       optionsStores: [],
-      datePickerOptionsStockDate: {
-        disabledDate(time) {
-          return time.getTime() > Date.now()
-        }
-      },
+      optionsSellChannelRefTypes: [{
+        value: '1',
+        label: '线上商城'
+      }, {
+        value: '3',
+        label: '线下机器'
+      }],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -145,7 +147,7 @@ export default {
   },
   methods: {
     _initData() {
-      machineStockDateHisInit().then(res => {
+      storeStockRealDataInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsStores = d.optionsStores
@@ -156,7 +158,7 @@ export default {
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      machineStockDateHisGet(this.listQuery).then(res => {
+      storeStockRealDataGet(this.listQuery).then(res => {
         if (res.result === 1) {
           this.listData = res.data
 
@@ -188,14 +190,14 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '机器编码', '货道', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
-        const filterVal = ['storeName', 'sellChannelRefName', 'slotId', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
+        const tHeader = ['店铺', '销售模式', '模式备注', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
+        const filterVal = ['storeName', 'sellChannelRefName', 'sellChannelRefRemark', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename + '(' + this.listQuery.stockDate + ')',
+          filename: this.filename,
           autoWidth: this.autoWidth,
           bookType: this.bookType
         })

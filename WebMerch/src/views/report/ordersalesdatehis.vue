@@ -25,7 +25,7 @@
           />
         </el-col>
         <el-col :span="3" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式">
+          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部提货方式">
             <el-option
               v-for="item in optionsReceiveModes"
               :key="item.value"

@@ -364,14 +364,14 @@ namespace LocalS.Service.Api.Merch
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var isExist = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId != rop.Id && m.Name == rop.Name).FirstOrDefault();
-                if (isExist != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
-                }
+                //var isExist = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId != rop.Id && m.Name == rop.Name).FirstOrDefault();
+                //if (isExist != null)
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                //}
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.Id).FirstOrDefault();
-                merchMachine.Name = rop.Name;
+                //merchMachine.Name = rop.Name;
                 merchMachine.LogoImgUrl = rop.LogoImgUrl;
                 merchMachine.MendTime = DateTime.Now;
                 merchMachine.Mender = operater;
