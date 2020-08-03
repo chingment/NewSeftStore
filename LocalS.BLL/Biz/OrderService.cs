@@ -310,7 +310,7 @@ namespace LocalS.BLL.Biz
 
 
                     #region 更改购物车标识
-
+                    var clientUserName = "匿名";
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
                     {
                         var cartsIds = buildOrderSkus.Select(m => m.CartId).Distinct().ToArray();
@@ -328,6 +328,15 @@ namespace LocalS.BLL.Biz
                                 }
                             }
                         }
+
+                        var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
+                        if (clientUser != null)
+                        {
+                            if (!string.IsNullOrEmpty(clientUser.NickName))
+                            {
+                                clientUserName = clientUser.NickName;
+                            }
+                        }
                     }
                     #endregion
 
@@ -342,6 +351,7 @@ namespace LocalS.BLL.Biz
                         var order = new Order();
                         order.Id = IdWorker.Build(IdType.OrderId);
                         order.ClientUserId = rop.ClientUserId;
+                        order.ClientUserName = order.ClientUserName;
                         order.MerchId = store.MerchId;
                         order.MerchName = store.MerchName;
                         order.StoreId = rop.StoreId;
@@ -428,9 +438,6 @@ namespace LocalS.BLL.Biz
                         order.Quantity = buildOrder.Quantity;
                         order.PayStatus = E_PayStatus.WaitPay;
                         order.Status = E_OrderStatus.WaitPay;
-                        order.Source = order.Source;
-                        order.SubmittedTime = order.SubmittedTime;
-                        order.ClientUserName = order.ClientUserName;
                         order.Source = rop.Source;
                         order.AppId = rop.AppId;
                         order.IsTestMode = rop.IsTestMode;
@@ -744,6 +751,7 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("进入PaySuccess修改订单,开始");
 
                     operater = payTrans.Creator;
+
 
                     payTrans.PayPartner = payPartner;
                     payTrans.PayPartnerOrderId = payPartnerOrderId;
