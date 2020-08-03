@@ -358,7 +358,7 @@ namespace LocalS.BLL.Biz
                     {
                         order.PickupIsTrg = true;
                         order.PickupTrgTime = DateTime.Now;
-                        order.PickupFlowLastDesc = "您在机器录入取货码，正在出货";
+                        order.PickupFlowLastDesc = "商品取货，正在出货";
                         order.PickupFlowLastTime = DateTime.Now;
 
                         int timoutM = order.Quantity * 5;

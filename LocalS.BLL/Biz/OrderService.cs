@@ -788,15 +788,15 @@ namespace LocalS.BLL.Biz
                         switch (order.ReceiveMode)
                         {
                             case E_ReceiveMode.Delivery:
-                                order.PickupFlowLastDesc = "您提交了订单，等待发货";
+                                order.PickupFlowLastDesc = "您已成功支付，等待发货";
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.StoreSelfTake:
-                                order.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】,出示取货码【{1}】，给店员", order.ReceptionMarkName, order.PickupCode);
+                                order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", order.ReceptionMarkName, order.PickupCode);
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.MachineSelfTake:
-                                order.PickupFlowLastDesc = string.Format("您提交了订单，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", order.ReceptionMarkName, order.SellChannelRefId, order.PickupCode);
+                                order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", order.ReceptionMarkName, order.SellChannelRefId, order.PickupCode);
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
                         }
@@ -812,7 +812,9 @@ namespace LocalS.BLL.Biz
                             orderSub.PayedTime = order.PayedTime;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                             orderSub.ClientUserId = order.ClientUserId;
-                            orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
+                            orderSub.PickupFlowLastDesc = order.PickupFlowLastDesc;
+                            orderSub.PickupFlowLastTime = order.PickupFlowLastTime;
+                            orderSub.Mender = operater;
                             orderSub.MendTime = DateTime.Now;
 
                             var orderPickupLog = new OrderPickupLog();
@@ -821,8 +823,8 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
                             orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
                             orderPickupLog.UniqueId = orderSub.Id;
-                            orderPickupLog.ActionRemark = orderSub.PickupFlowLastDesc;
-                            orderPickupLog.ActionTime = orderSub.PickupFlowLastTime;
+                            orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
+                            orderPickupLog.ActionTime = order.PickupFlowLastTime;
                             orderPickupLog.Remark = "";
                             orderPickupLog.CreateTime = DateTime.Now;
                             orderPickupLog.Creator = operater;
