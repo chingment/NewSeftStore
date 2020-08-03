@@ -151,6 +151,94 @@ namespace LocalS.BLL.Biz
             return status;
         }
 
+        public StatusModel GetPayStatus(E_PayStatus payStatus)
+        {
+            var status = new StatusModel();
+
+            switch (payStatus)
+            {
+                case E_PayStatus.WaitPay:
+                    status.Value = 1;
+                    status.Text = "待支付";
+                    break;
+                case E_PayStatus.Paying:
+                    status.Value = 2;
+                    status.Text = "支付中";
+                    break;
+                case E_PayStatus.PaySuccess:
+                    status.Value = 3;
+                    status.Text = "已支付";
+                    break;
+                case E_PayStatus.PayCancle:
+                    status.Value = 4;
+                    status.Text = "已取消";
+                    break;
+                case E_PayStatus.PayTimeout:
+                    status.Value = 5;
+                    status.Text = "已超时";
+                    break;
+                default:
+                    status.Value = 0;
+                    status.Text = "未知";
+                    break;
+            }
+            return status;
+        }
+
+        public StatusModel GetPayWay(E_PayWay payWay)
+        {
+            var status = new StatusModel();
+
+            switch (payWay)
+            {
+                case E_PayWay.Wx:
+                    status.Value = 1;
+                    status.Text = "微信支付";
+                    break;
+                case E_PayWay.Zfb:
+                    status.Value = 2;
+                    status.Text = "支付宝";
+                    break;
+                default:
+                    status.Value = 0;
+                    status.Text = "未知";
+                    break;
+            }
+            return status;
+
+        }
+
+        public StatusModel GetPayPartner(E_PayPartner payPartner)
+        {
+            var status = new StatusModel();
+
+            switch (payPartner)
+            {
+                case E_PayPartner.Wx:
+                    status.Value = 1;
+                    status.Text = "微信支付";
+                    break;
+                case E_PayPartner.Zfb:
+                    status.Value = 2;
+                    status.Text = "支付宝";
+                    break;
+                case E_PayPartner.Tg:
+                    status.Value = 91;
+                    status.Text = "通莞";
+                    break;
+                case E_PayPartner.Xrt:
+                    status.Value = 92;
+                    status.Text = "深银联";
+                    break;
+                default:
+                    status.Value = 0;
+                    status.Text = "未知";
+                    break;
+            }
+            return status;
+
+        }
+
         public string GetSourceName(E_OrderSource orderSource)
         {
             string name = "";
@@ -1574,24 +1662,6 @@ namespace LocalS.BLL.Biz
             }
 
             return result;
-        }
-        public string GetPayWayName(E_PayWay payWay)
-        {
-            string str = "";
-            switch (payWay)
-            {
-                case E_PayWay.Wx:
-                    str = "微信支付";
-                    break;
-                case E_PayWay.Zfb:
-                    str = "支付宝";
-                    break;
-                default:
-                    str = "未知";
-                    break;
-            }
-
-            return str;
         }
         public string BuildQrcode2PickupCode(string pickupCode)
         {

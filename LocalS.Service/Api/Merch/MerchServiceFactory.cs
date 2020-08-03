@@ -64,6 +64,14 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static PayTransService PayTrans
+        {
+            get
+            {
+                return new PayTransService();
+            }
+        }
+
         public static AdSpaceService AdSpace
         {
             get

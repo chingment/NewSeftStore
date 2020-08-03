@@ -188,6 +188,7 @@
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\OrderService.cs" />
+    <Compile Include="Api\Merch\PayTransService.cs" />
     <Compile Include="Api\Merch\PrdProductService.cs" />
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Api\Merch\RModels\RupMachineGetStocks.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineQueryMsgPushResult.cs" />
     <Compile Include="Api\Merch\RModels\RupOrderGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupPayTransGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />

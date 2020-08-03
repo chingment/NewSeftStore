@@ -378,7 +378,7 @@ namespace LocalS.Service.Api.Merch
                     Quantity = item.Quantity,
                     SalePrice = item.SalePrice,
                     TradeAmount = item.ChargeAmount,
-                    PayWay = BizFactory.Order.GetPayWayName(item.PayWay),
+                    PayWay = BizFactory.Order.GetPayWay(item.PayWay).Text,
                     PickupStatus = pickupStatus
                 });
 
@@ -481,7 +481,7 @@ namespace LocalS.Service.Api.Merch
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     Quantity = item.Quantity,
                     TradeAmount = item.ChargeAmount,
-                    PayWay = BizFactory.Order.GetPayWayName(item.PayWay)
+                    PayWay = BizFactory.Order.GetPayWay(item.PayWay).Text
                 });
             }
 
