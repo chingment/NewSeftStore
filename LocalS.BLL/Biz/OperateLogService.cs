@@ -590,8 +590,15 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.StoreId = storeId;
                 sellChannelStockLog.StoreName = storeName;
                 sellChannelStockLog.SellChannelRefId = model.SellChannelRefId;
-                sellChannelStockLog.SellChannelRefName = machineName;
                 sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
+                if (model.SellChannelRefType == E_SellChannelRefType.Machine)
+                {
+                    sellChannelStockLog.SellChannelRefName = "线上商城";
+                }
+                else if (model.SellChannelRefType == E_SellChannelRefType.Mall)
+                {
+                    sellChannelStockLog.SellChannelRefName = "线下机器";
+                }
                 sellChannelStockLog.CabinetId = model.CabinetId;
                 sellChannelStockLog.SlotId = model.SlotId;
                 sellChannelStockLog.PrdProductId = bizProductSku.ProductId;
