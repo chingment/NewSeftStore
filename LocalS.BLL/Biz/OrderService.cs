@@ -1043,7 +1043,7 @@ namespace LocalS.BLL.Biz
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, order.Id);
 
-                    if (string.IsNullOrEmpty(order.PayTransId))
+                    if (!string.IsNullOrEmpty(order.PayTransId))
                     {
                         Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, order.PayTransId);
                     }
