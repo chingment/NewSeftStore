@@ -85,7 +85,6 @@ namespace WebApiMerch.Controllers
         }
 
 
-
         [HttpPost]
         public OwnApiHttpResponse Dsx01OpenPickupDoor([FromBody]RopMachineShutdownSys rop)
         {
