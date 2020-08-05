@@ -264,12 +264,6 @@ namespace LocalS.BLL.Biz
             return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
         }
 
-        public Order GetOne(string id)
-        {
-            var order = CurrentDb.Order.Where(m => m.Id == id).FirstOrDefault();
-
-            return order;
-        }
         private static readonly object lock_Reserve = new object();
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
@@ -439,7 +433,7 @@ namespace LocalS.BLL.Biz
                         var order = new Order();
                         order.Id = IdWorker.Build(IdType.OrderId);
                         order.ClientUserId = rop.ClientUserId;
-                        order.ClientUserName = order.ClientUserName;
+                        order.ClientUserName = clientUserName;
                         order.MerchId = store.MerchId;
                         order.MerchName = store.MerchName;
                         order.StoreId = rop.StoreId;
@@ -1062,7 +1056,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult BuildPayParams(string operater, RopOrderBuildPayParams rop)
         {
             var result = new CustomJsonResult();

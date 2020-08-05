@@ -205,6 +205,8 @@ namespace LocalS.BLL.Task
                 {
                     order.ExIsHappen = true;
                     order.ExHappenTime = DateTime.Now;
+                    order.MendTime = DateTime.Now;
+                    order.Mender = IdWorker.Build(IdType.EmptyGuid);
                 }
 
                 if (orderSubs.Count > 0)
@@ -220,6 +222,8 @@ namespace LocalS.BLL.Task
                             orderSub.PickupStatus = E_OrderPickupStatus.Exception;
                             orderSub.ExPickupIsHappen = true;
                             orderSub.ExPickupHappenTime = DateTime.Now;
+                            orderSub.MendTime = DateTime.Now;
+                            orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
                         }
                     }
                 }
@@ -227,6 +231,8 @@ namespace LocalS.BLL.Task
                 if (machine != null)
                 {
                     machine.ExIsHas = true;
+                    machine.MendTime = DateTime.Now;
+                    machine.Mender = IdWorker.Build(IdType.EmptyGuid);
                 }
 
                 CurrentDb.SaveChanges();
