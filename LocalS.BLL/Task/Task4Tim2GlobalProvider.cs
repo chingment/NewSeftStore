@@ -197,44 +197,42 @@ namespace LocalS.BLL.Task
         {
             using (TransactionScope ts = new TransactionScope())
             {
-                //var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
-                //var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-                //var orderSub = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId).FirstOrDefault();
-                //var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).ToList();
+                var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
+                var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId).ToList();
 
-                //if (orderSub != null)
-                //{
-                //    orderSub.ExIsHappen = true;
-                //    orderSub.ExHappenTime = DateTime.Now;
-                //}
+                if (order != null)
+                {
+                    order.ExIsHappen = true;
+                    order.ExHappenTime = DateTime.Now;
+                }
 
-                //if (orderSubChilds.Count > 0)
-                //{
-                //    foreach (var orderSubChild in orderSubChilds)
-                //    {
-                //        if (orderSubChild.PickupStatus != E_OrderPickupStatus.Taked
-                //            && orderSubChild.PickupStatus != E_OrderPickupStatus.Exception
-                //            && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                //            && orderSubChild.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-                //        {
+                if (orderSubs.Count > 0)
+                {
+                    foreach (var orderSub in orderSubs)
+                    {
+                        if (orderSub.PickupStatus != E_OrderPickupStatus.Taked
+                            && orderSub.PickupStatus != E_OrderPickupStatus.Exception
+                            && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                            && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                        {
 
-                //            orderSubChild.PickupStatus = E_OrderPickupStatus.Exception;
-                //            orderSubChild.ExPickupIsHappen = true;
-                //            orderSubChild.ExPickupHappenTime = DateTime.Now;
-                //        }
-                //    }
-                //}
+                            orderSub.PickupStatus = E_OrderPickupStatus.Exception;
+                            orderSub.ExPickupIsHappen = true;
+                            orderSub.ExPickupHappenTime = DateTime.Now;
+                        }
+                    }
+                }
 
+                if (machine != null)
+                {
+                    machine.ExIsHas = true;
+                }
 
-                ////if (machine != null)
-                ////{
-                ////    machine.ExIsHas = true;
-                ////}
+                CurrentDb.SaveChanges();
+                ts.Complete();
 
-                //CurrentDb.SaveChanges();
-                //ts.Complete();
-
-                //Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, orderSub.Id);
+                Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, order.Id);
             }
         }
 
