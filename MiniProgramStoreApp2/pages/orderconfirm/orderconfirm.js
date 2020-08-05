@@ -12,7 +12,7 @@ Page({
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     storeId:undefined,
-    orders:null,
+    orderIds:null,
     blocks: [],
     couponId: [],
     payOption: {
@@ -23,23 +23,23 @@ Page({
   },
   onLoad: function (options) {
     var _this = this
-    var orderIds = options.orderIds == undefined ? null : options.orderIds
-   console.log('orderIds:'+orderIds)
-    var orders=[]
-    if(orderIds!=null){
-      var arr_order= orderIds.split(',')
+    var _orderIds = options.orderIds == undefined ? null : options.orderIds
+   console.log('orderIds:'+_orderIds)
+    var orderIds=[]
+    if(_orderIds!=null){
+      var arr_order= _orderIds.split(',')
 
       for(let i=0;i<arr_order.length;i++){
-        orders.push({id:arr_order[i]})
+        orderIds.push(arr_order[i])
     }
     
-      console.log("orders"+JSON.stringify(orders))
+      console.log("orderIds:"+JSON.stringify(orderIds))
     }
 
     var productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
     _this.setData({
       storeId: ownRequest.getCurrentStoreId(),
-      orders:orders,
+      orderIds:orderIds,
       productSkus:productSkus
     })
     _this.buildPayOptions()
@@ -165,7 +165,7 @@ Page({
 
     }
 
-    if (_this.data.orders == undefined || _this.data.orders  == null||_this.data.orders.length==0) {
+    if (_this.data.orderIds == undefined || _this.data.orderIds  == null||_this.data.orderIds.length==0) {
 
 
       apiOrder.reserve({
@@ -178,7 +178,13 @@ Page({
           apiCart.pageData({
             success: function (res) { }
           })
-          _this.setData({orders:d.orders})
+
+          var orderIds=[]
+          for(var i=0;i<d.orders.length;i++){
+            orderIds.push(d.orders[i].id)
+          }
+
+          _this.setData({orderIds:orderIds})
           _this.goPay(_this.data.curSelPayOption, null)
         } else {
           toast.show({
@@ -194,7 +200,7 @@ Page({
   goPay: function (payOption, blocks) {
     var _this=this
     apiOrder.buildPayParams({
-      orders: _this.data.orders,
+      orderIds: _this.data.orderIds,
       payCaller: payOption.payCaller,
       blocks: blocks,
       payPartner: payOption.payPartner
@@ -264,7 +270,7 @@ Page({
     var _this= this
     var _data=_this.data
     apiOrder.confirm({
-      orders: _data.orders,
+      orderIds: _data.orderIds,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
       couponId:  _data.couponId

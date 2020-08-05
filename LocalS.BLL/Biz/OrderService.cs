@@ -999,11 +999,11 @@ namespace LocalS.BLL.Biz
                 if (order.PayStatus != E_PayStatus.PaySuccess)
                 {
                     order.Status = E_OrderStatus.Canceled;
-                    order.Mender = operater;
-                    order.MendTime = DateTime.Now;
                     order.CancelOperator = operater;
                     order.CanceledTime = DateTime.Now;
                     order.CancelReason = cancelReason;
+                    order.Mender = operater;
+                    order.MendTime = DateTime.Now;
 
                     if (cancleType == E_OrderCancleType.PayCancle)
                     {
@@ -1064,7 +1064,7 @@ namespace LocalS.BLL.Biz
             {
                 var orders = new List<Order>();
 
-                if (rop.Orders == null || rop.Orders.Count == 0)
+                if (rop.OrderIds == null || rop.OrderIds.Count == 0)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付的订单数据不能为空");
                 }
@@ -1073,23 +1073,23 @@ namespace LocalS.BLL.Biz
                 payTrans.Id = IdWorker.Build(IdType.PayTransId);
 
 
-                foreach (var order in rop.Orders)
+                foreach (var orderId in rop.OrderIds)
                 {
-                    var l_order = CurrentDb.Order.Where(m => m.Id == order.Id).FirstOrDefault();
+                    var l_order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
                     if (l_order == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，单号不存在", order.Id));
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，单号不存在", orderId));
                     }
 
                     if (l_order.PayStatus == E_PayStatus.PayCancle)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，已被取消，请重新下单", order.Id));
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，已被取消，请重新下单", orderId));
                     }
 
                     if (l_order.PayStatus == E_PayStatus.PayTimeout)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，该订单已超时，请重新下单", order.Id));
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号：{0}，该订单已超时，请重新下单", orderId));
                     }
 
                     l_order.PayTransId = payTrans.Id;
@@ -1148,7 +1148,7 @@ namespace LocalS.BLL.Biz
                     orders.Add(l_order);
                 }
 
-                if (orders.Count != rop.Orders.Count)
+                if (orders.Count != rop.OrderIds.Count)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付订单号与后台数据不对应");
                 }

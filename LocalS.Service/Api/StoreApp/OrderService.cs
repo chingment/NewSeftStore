@@ -142,7 +142,7 @@ namespace LocalS.Service.Api.StoreApp
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
             E_ReceiveMode receiveMode_Mall = E_ReceiveMode.Delivery;
-            if (rop.Orders == null || rop.Orders.Count == 0)
+            if (rop.OrderIds == null || rop.OrderIds.Count == 0)
             {
 
                 if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
@@ -200,11 +200,9 @@ namespace LocalS.Service.Api.StoreApp
             else
             {
 
-                var arr_orderIds = rop.Orders.Select(m => m.Id);
-
                 store = BizFactory.Store.GetOne(rop.StoreId);
 
-                var orders = CurrentDb.Order.Where(m => arr_orderIds.Contains(m.Id)).ToList();
+                var orders = CurrentDb.Order.Where(m =>rop.OrderIds.Contains(m.Id)).ToList();
 
                 var orderSub_Mall = orders.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
                 if (orderSub_Mall != null)
@@ -220,7 +218,7 @@ namespace LocalS.Service.Api.StoreApp
                     dliveryModel.IsDefault = false;
                 }
 
-                var orderSubs = CurrentDb.OrderSub.Where(m => arr_orderIds.Contains(m.OrderId)).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(m => rop.OrderIds.Contains(m.OrderId)).ToList();
 
                 var shopModeSkus = (from c in orderSubs
                                     select new
@@ -370,7 +368,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.OriginalAmount = skuAmountByOriginal.ToF2Price();
 
-            ret.Orders = rop.Orders;
+            ret.OrderIds = rop.OrderIds;
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
         }
@@ -549,13 +547,13 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public CustomJsonResult Details(string operater, string clientUserId, string orderIds)
+        public CustomJsonResult Details(string operater, string clientUserId, string orderId)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             var ret = new RetOrderDetails();
 
-            var order = CurrentDb.Order.Where(m => m.Id == orderIds).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
             ret.Id = order.Id;
             ret.Status = order.Status;
@@ -602,14 +600,13 @@ namespace LocalS.Service.Api.StoreApp
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
             bizRop.AppId = rop.AppId;
-            bizRop.Orders = rop.Orders;
+            bizRop.OrderIds = rop.OrderIds;
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             bizRop.CreateIp = rop.CreateIp;
             bizRop.Blocks = rop.Blocks;
             return BLL.Biz.BizFactory.Order.BuildPayParams(operater, bizRop);
         }
-
 
         public CustomJsonResult ReceiptTimeAxis(string operater, string clientUserId, RupOrderReceiptTimeAxis rup)
         {

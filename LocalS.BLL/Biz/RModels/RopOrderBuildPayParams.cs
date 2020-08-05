@@ -11,11 +11,11 @@ namespace LocalS.BLL.Biz
     {
         public RopOrderBuildPayParams()
         {
-            this.Orders = new List<Order>();
+            this.OrderIds = new List<string>();
             this.Blocks = new List<OrderReserveBlockModel>();
         }
         public string AppId { get; set; }
-        public List<Order> Orders { get; set; }
+        public List<string> OrderIds { get; set; }
         public E_PayCaller PayCaller { get; set; }
         public E_PayPartner PayPartner { get; set; }
         public string CreateIp { get; set; }

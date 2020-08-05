@@ -193,7 +193,7 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult BuildPayParams(RopOrderBuildPayParams rop)
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
-            bizRop.Orders.Add(new BLL.Biz.RopOrderBuildPayParams.Order { Id = rop.OrderId });
+            bizRop.OrderIds.Add(rop.OrderId);
             bizRop.PayCaller = rop.PayCaller;
             bizRop.PayPartner = rop.PayPartner;
             bizRop.CreateIp = rop.CreateIp;

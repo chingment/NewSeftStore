@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.StoreApp
         //原金额
         public string OriginalAmount { get; set; }
 
-        public List<RopOrderConfirm.Order> Orders { get; set; }
+        public List<string> OrderIds { get; set; }
 
     }
 }

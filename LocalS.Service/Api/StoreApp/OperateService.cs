@@ -167,7 +167,7 @@ namespace LocalS.Service.Api.StoreApp
                             url = string.Format("/pages/orderconfirm/orderconfirm?orderIds={0}", orderIds);
                             break;
                         default:
-                            url = string.Format("/pages/orderdetails/orderdetails?ids={0}", orderIds);
+                            url = string.Format("/pages/orderdetails/orderdetails?id={0}", orderIds);
                             break;
                     }
                     break;
