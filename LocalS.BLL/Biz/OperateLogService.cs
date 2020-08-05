@@ -593,11 +593,11 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
                 if (model.SellChannelRefType == E_SellChannelRefType.Machine)
                 {
-                    sellChannelStockLog.SellChannelRefName = "线上商城";
+                    sellChannelStockLog.SellChannelRefName = "线下机器";
                 }
                 else if (model.SellChannelRefType == E_SellChannelRefType.Mall)
                 {
-                    sellChannelStockLog.SellChannelRefName = "线下机器";
+                    sellChannelStockLog.SellChannelRefName = "线上商城";
                 }
                 sellChannelStockLog.CabinetId = model.CabinetId;
                 sellChannelStockLog.SlotId = model.SlotId;
