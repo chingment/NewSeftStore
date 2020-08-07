@@ -136,7 +136,7 @@
       </el-table-column>
       <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.pickupIsTrg }}</span>
+          <span>{{ scope.row.pickupTrgStatus.text }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="数量" prop="quantity" align="left" min-width="10%">

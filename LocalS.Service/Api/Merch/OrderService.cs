@@ -235,7 +235,7 @@ namespace LocalS.Service.Api.Merch
                     CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
                     ReceiveDetails = receiveDetails,
                     ReceiveModeName = item.ReceiveModeName,
-                    TrgStatus = item.PickupIsTrg == false ? "未触发" : "已触发"
+                    PickupTrgStatus = BizFactory.Order.GetPickupTrgStatus(item.ReceiveMode, item.PickupIsTrg)
                 });
             }
 

@@ -239,6 +239,24 @@ namespace LocalS.BLL.Biz
 
         }
 
+        public StatusModel GetPickupTrgStatus(E_ReceiveMode receiveMode, bool pickupIsTrg)
+        {
+            var status = new StatusModel();
+
+            if (pickupIsTrg)
+            {
+                status.Value = 1;
+                status.Text = "已触发";
+            }
+            else
+            {
+                status.Value = 0;
+                status.Text = "未触发";
+            }
+
+            return status;
+        }
+
         public string GetSourceName(E_OrderSource orderSource)
         {
             string name = "";

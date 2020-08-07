@@ -30,6 +30,8 @@ namespace Test
 {
     class Program
     {
+        
+
         public static sbyte[] a(byte[] myByte)
         {
             sbyte[] mySByte = new sbyte[myByte.Length];

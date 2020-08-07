@@ -29,5 +29,10 @@ namespace Test
 
         [Remark("关闭")]
         public string MaA { get; set; }
+
+        public void hello()
+        {
+
+        }
     }
 }
