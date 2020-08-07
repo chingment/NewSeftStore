@@ -66,7 +66,7 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.MerchMachine
-                         where (rup.Name == null || u.Name.Contains(rup.Name))
+                         where (rup.Id == null || u.MachineId.Contains(rup.Id))
                          &&
                          u.MerchId == merchId
                          select new { u.Id, u.MachineId, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });

@@ -10,7 +10,7 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="机器名称" va class="filter-item" />
+          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -66,7 +66,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        name: undefined
+        id: undefined
       },
       listData: []
 
