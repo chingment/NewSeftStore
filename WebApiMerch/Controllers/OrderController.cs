@@ -19,6 +19,7 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+
         [HttpGet]
         public OwnApiHttpResponse GetDetails(string id)
         {

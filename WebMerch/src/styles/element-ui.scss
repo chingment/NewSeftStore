@@ -100,3 +100,7 @@
 .el-alert--remark-gray .el-alert__content{
   padding:0px;
 }
+
+.router-link-active .el-menu-item  span{
+  color: rgb(64, 158, 255);
+}

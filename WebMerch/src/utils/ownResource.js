@@ -117,8 +117,13 @@ export function generateRoutes(data) {
     menus.filter(item => {
       if (item.isRouter) {
         if (item.component !== null) {
+          var path = item.path
+          if (item.path.indexOf('?') > -1) {
+            path = item.path.split('?')[0]
+          }
+
           var _router = {
-            path: item.path,
+            path: path,
             component: () => import(`@/views${item.component}`),
             children: undefined,
             hidden: item.hidden,
