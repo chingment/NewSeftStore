@@ -45,7 +45,7 @@ namespace LocalS.BLL.Biz
         {
             var models = new List<StoreInfoModel>();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CreateTime).ToList();
 
 
             foreach (var store in stores)

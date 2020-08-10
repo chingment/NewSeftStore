@@ -82,7 +82,7 @@ namespace LocalS.Service.Api.Merch
             int pageIndex = rup.Page - 1;
             int pageSize = int.MaxValue;
 
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.CurUseStoreId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -123,7 +123,7 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetMachineInitManage();
 
-            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
+            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CurUseStoreId).ToList();
 
 
             foreach (var merchMachine in merchMachines)

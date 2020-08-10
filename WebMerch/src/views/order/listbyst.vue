@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" />
+          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col v-if="isShowClientUserNameInput" :span="3" :xs="12" style="margin-bottom:20px">
           <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />

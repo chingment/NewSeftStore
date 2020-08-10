@@ -8,6 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupClientGetList : RupBaseGetList
     {
+        public string UserName { get; set; }
         public string NickName { get; set; }
 
         public string PhoneNumber { get; set; }

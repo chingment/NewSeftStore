@@ -15,7 +15,9 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.SysClientUser
-                         where (rup.NickName == null || u.UserName.Contains(rup.NickName)) &&
+                         where 
+                          (rup.UserName == null || u.UserName.Contains(rup.UserName)) &&
+                         (rup.NickName == null || u.NickName.Contains(rup.NickName)) &&
                          (rup.PhoneNumber == null || u.PhoneNumber.Contains(rup.PhoneNumber)) &&
                          u.IsDelete == false &&
                          u.MerchId == merchId

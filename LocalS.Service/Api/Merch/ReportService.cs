@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportMachineStockRealDataInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CreateTime).ToList();
 
 
             foreach (var store in stores)
@@ -129,7 +129,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportMachineStockRealDataInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CreateTime).ToList();
 
 
             foreach (var store in stores)
@@ -245,7 +245,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportProductSkuSalesDateHisInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CreateTime).ToList();
 
 
             foreach (var store in stores)
@@ -396,7 +396,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportProductSkuSalesDateHisInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CreateTime).ToList();
 
 
             foreach (var store in stores)
@@ -497,7 +497,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportProductSkuSalesDateHisInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CreateTime).ToList();
 
 
             foreach (var store in stores)

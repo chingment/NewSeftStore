@@ -4,13 +4,13 @@
 
       <el-row :gutter="16">
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.paytransId" clearable style="width: 100%" placeholder="交易号" class="filter-item" />
+          <el-input v-model="listQuery.paytransId" clearable style="width: 100%" placeholder="交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderId" clearable style="width: 100%" placeholder="订单号" class="filter-item" />
+          <el-input v-model="listQuery.orderId" clearable style="width: 100%" placeholder="订单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.payPartnerOrderId" clearable style="width: 100%" placeholder="支付商交易号" class="filter-item" />
+          <el-input v-model="listQuery.payPartnerOrderId" clearable style="width: 100%" placeholder="支付商交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
