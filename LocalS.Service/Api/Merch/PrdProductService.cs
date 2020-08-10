@@ -387,6 +387,7 @@ namespace LocalS.Service.Api.Merch
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
+            CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
 
             if (result.Result == ResultType.Success)
             {
