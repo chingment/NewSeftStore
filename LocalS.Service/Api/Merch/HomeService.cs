@@ -18,6 +18,40 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var retRptTodaySummary = new RetRptTodaySummary();
+
+            StringBuilder sql1 = new StringBuilder();
+            sql1.Append(" select count(*) from Store where IsDelete=0 and merchId='" + merchId + "' ");
+
+
+            int storeCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql1.ToString()).ToString());
+
+            StringBuilder sql2 = new StringBuilder();
+            sql2.Append(" select count(*) from MerchMachine where IsStopUse=0 and merchId='" + merchId + "' ");
+
+            int machineCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql2.ToString()).ToString());
+
+
+
+            StringBuilder sql3 = new StringBuilder();
+            sql3.Append(" select sum(ChargeAmount) from [Order] where payStatus='3' and merchId='" + merchId + "' ");
+
+            string sumTradeAmount = DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql3.ToString()).ToString();
+
+            StringBuilder sql4 = new StringBuilder();
+            sql4.Append("  select count(*) from SellChannelStock where SellQuantity=0 or(SumQuantity < MaxQuantity) and merchId='" + merchId + "' ");
+
+            string replenishCount = DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql4.ToString()).ToString();
+
+
+            StringBuilder sql5 = new StringBuilder();
+            sql5.Append(" select count(*) from Machine where (ExIsHas=1 or  datediff(MINUTE,LastRequestTime,GETDATE())>15) and CurUseMerchId='" + merchId + "' ");
+
+            int machineExCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql5.ToString()).ToString());
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { storeCount = storeCount, machineCount = machineCount, machineExCount = machineExCount, sumTradeAmount = sumTradeAmount, replenishCount = replenishCount });
+
+
             return result;
         }
 

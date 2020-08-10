@@ -1,6 +1,71 @@
 <template>
   <div id="home_container">
 
+    <el-row :gutter="40" class="panel-group">
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleStoreCount('newVisitis')">
+          <div class="card-panel-icon-wrapper icon-select">
+            <svg-icon icon-class="t_store" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              店铺
+            </div>
+            <count-to :start-val="0" :end-val="storeCount" :duration="2600" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleMachineCount('messages')">
+          <div class="card-panel-icon-wrapper icon-select">
+            <svg-icon icon-class="t_machine" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              机器
+            </div>
+            <div style="display:flex">
+              <div style="margin-right:10px;display:flex; align-items: center;">
+                台数：
+                <count-to :start-val="0" :end-val="machineCount" :duration="3000" class="card-panel-num" />
+              </div>
+              <div style="display:flex; align-items: center;">
+                异常：
+                <count-to :start-val="0" :end-val="machineExCount" :duration="3000" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleSumTradeAmount('purchases')">
+          <div class="card-panel-icon-wrapper icon-select">
+            <svg-icon icon-class="t_money" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              总收入
+            </div>
+            <count-to :start-val="0" :end-val="sumTradeAmount" :duration="3200" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleReplenishCount('shoppings')">
+          <div class="card-panel-icon-wrapper icon-select">
+            <svg-icon icon-class="t_buhuo" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              补货
+            </div>
+            <count-to :start-val="0" :end-val="replenishCount" :duration="3600" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+
     <el-row :gutter="8">
       <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
 
@@ -157,13 +222,20 @@
 </template>
 
 <script>
-
-import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary } from '@/api/home'
+import CountTo from 'vue-count-to'
+import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
 
 export default {
-
+  components: {
+    CountTo
+  },
   data() {
     return {
+      storeCount: 0,
+      machineCount: 0,
+      machineExCount: 0,
+      sumTradeAmount: 0,
+      replenishCount: 0,
       todaySummary: {
         sumExHdByMachineSelfTake: 0,
         todayGmvRl: {
@@ -183,6 +255,7 @@ export default {
     }
   },
   created() {
+    this._getIndexPageData()
     this._getTodaySummary()
     this._get7DayGmv()
     this._getTodayStoreGmvRl()
@@ -190,6 +263,18 @@ export default {
     this._getStoreGmvRl()
   },
   methods: {
+    _getIndexPageData: function() {
+      getIndexPageData().then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.storeCount = d.storeCount
+          this.machineCount = d.machineCount
+          this.sumTradeAmount = d.sumTradeAmount
+          this.replenishCount = d.replenishCount
+          this.machineExCount = d.machineExCount
+        }
+      })
+    },
     _getTodaySummary: function() {
       getTodaySummary().then(res => {
         if (res.result === 1) {
@@ -240,6 +325,24 @@ export default {
       this.$router.push({
         path: '/order/list'
       })
+    },
+    handleStoreCount() {
+      this.$router.push({
+        path: '/store/list'
+      })
+    },
+    handleMachineCount() {
+      this.$router.push({
+        path: '/machine/list'
+      })
+    },
+    handleSumTradeAmount() {
+      this.$router.push({
+        path: '/order/list'
+      })
+    },
+    handleReplenishCount() {
+
     }
   }
 }
@@ -317,4 +420,101 @@ line-height: 30px;
   }
 
 }
+
+.panel-group {
+
+  .card-panel-col {
+    margin-bottom: 30px;
+  }
+
+  .card-panel {
+    height: 108px;
+    cursor: pointer;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+    color: #666;
+    background: #fff;
+    -webkit-box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border-color: rgba(0, 0, 0, .05);
+    border-radius: 4px;
+    &:hover {
+      .card-panel-icon-wrapper {
+        color: #fff;
+      }
+
+      .icon-select {
+        background: #40c9c6;
+      }
+    }
+
+    .icon-people {
+      color: #40c9c6;
+    }
+
+    .icon-message {
+      color: #36a3f7;
+    }
+
+    .icon-money {
+      color: #f4516c;
+    }
+
+    .icon-shopping {
+      color: #34bfa3
+    }
+
+    .card-panel-icon-wrapper {
+      float: left;
+      margin: 14px 0 0 14px;
+      padding: 16px;
+      transition: all 0.38s ease-out;
+      border-radius: 6px;
+    }
+
+    .card-panel-icon {
+      float: left;
+      font-size: 48px;
+    }
+
+    .card-panel-description {
+      float: right;
+      font-weight: bold;
+      margin: 26px;
+      margin-left: 0px;
+
+      .card-panel-text {
+        line-height: 18px;
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+
+      .card-panel-num {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width:550px) {
+  .card-panel-description {
+    display: none;
+  }
+
+  .card-panel-icon-wrapper {
+    float: none !important;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+
+    .svg-icon {
+      display: block;
+      margin: 14px auto !important;
+      float: none !important;
+    }
+  }
+}
+
 </style>

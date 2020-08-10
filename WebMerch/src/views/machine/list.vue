@@ -4,6 +4,7 @@
     <div class="circle-status-bar">
       <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
       <span class="circle-status circle-status-2" /> <span class="name">正常</span>
+      <span class="circle-status circle-status-4" /> <span class="name">维护</span>
       <span class="circle-status circle-status-3" /> <span class="name">异常</span>
     </div>
     <div class="filter-container">

@@ -8,7 +8,7 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Running = 1,
-        Stoped = 2,
+        //Stoped = 2,
         Setting = 3
     }
 

@@ -16,18 +16,23 @@ namespace LocalS.Service.Api.Merch
     public class MachineService : BaseDbContext
     {
 
-        public StatusModel GetStatus(string curUseStoreId, bool isStopUse, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
+        public StatusModel GetStatus(string curUseStoreId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
         {
             var status = new StatusModel();
 
-            if (isStopUse)
-            {
-                return new StatusModel(3, "停止使用");
-            }
-
             if (string.IsNullOrEmpty(curUseStoreId))
             {
-                return new StatusModel(3, "未绑定店铺");
+                return new StatusModel(1, "未绑定店铺");
+            }
+
+            if (isStopUse)
+            {
+                return new StatusModel(1, "停止使用");
+            }
+
+            if (isEx)
+            {
+                return new StatusModel(3, "异常");
             }
 
             if (lastRequestTime != null)
@@ -46,12 +51,12 @@ namespace LocalS.Service.Api.Merch
                     break;
                 case E_MachineRunStatus.Setting:
                     status.Text = "维护中";
-                    status.Value = 3;
+                    status.Value = 4;
                     break;
-                case E_MachineRunStatus.Stoped:
-                    status.Text = "停止";
-                    status.Value = 1;
-                    break;
+                //case E_MachineRunStatus.Stoped:
+                //    status.Text = "停止";
+                //    status.Value = 1;
+                //    break;
                 default:
                     status.Text = "未知状态";
                     status.Value = 1;
@@ -66,10 +71,12 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.MerchMachine
+                         join m in CurrentDb.Machine on u.MachineId equals m.Id into temp
+                         from tt in temp.DefaultIfEmpty()
                          where (rup.Id == null || u.MachineId.Contains(rup.Id))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.MachineId, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, u.MachineId, tt.ExIsHas, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
 
 
             if (!string.IsNullOrEmpty(rup.StoreId))
@@ -100,7 +107,7 @@ namespace LocalS.Service.Api.Merch
                         MainImgUrl = machine.MainImgUrl,
                         AppVersion = machine.AppVersion,
                         CtrlSdkVersion = machine.CtrlSdkVersion,
-                        Status = GetStatus(item.CurUseStoreId, item.IsStopUse, machine.RunStatus, machine.LastRequestTime),
+                        Status = GetStatus(item.CurUseStoreId, item.IsStopUse, item.ExIsHas, machine.RunStatus, machine.LastRequestTime),
                         LastRequestTime = machine.LastRequestTime,
                         CreateTime = item.CreateTime,
                         StoreId = machine.StoreId,
@@ -163,7 +170,7 @@ namespace LocalS.Service.Api.Merch
             ret.Id = merchMachine.MachineId;
             ret.Name = merchMachine.Name;
             ret.LogoImgUrl = merchMachine.LogoImgUrl;
-            ret.Status = GetStatus(merchMachine.CurUseStoreId, merchMachine.IsStopUse, machine.RunStatus, machine.LastRequestTime);
+            ret.Status = GetStatus(merchMachine.CurUseStoreId, merchMachine.IsStopUse, machine.ExIsHas, machine.RunStatus, machine.LastRequestTime);
             ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
             ret.AppVersion = machine.AppVersion;
             ret.CtrlSdkVersion = machine.CtrlSdkVersion;
