@@ -102,7 +102,7 @@
       </el-table-column>
       <el-table-column label="单价" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.salePrice }}</span>
+          <span>{{ scope.row.salePrice.toFixed(2) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="left" prop="quantity" min-width="10%">
@@ -112,7 +112,7 @@
       </el-table-column>
       <el-table-column label="总金额" align="left" prop="tradeAmount" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.tradeAmount }}</span>
+          <span>{{ scope.row.tradeAmount.toFixed(2) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="支付方式" align="left" min-width="10%">

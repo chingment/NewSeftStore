@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column v-if="isDesktop" label="销售价" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuSalePrice }}</span>
+          <span>{{ scope.row.productSkuSalePrice.toFixed(2) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
