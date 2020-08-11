@@ -394,6 +394,8 @@ export default {
   .it{
   display: flex;
 line-height: 30px;
+height:30px;
+overflow:hidden;
   .name{
     flex: 2;
     text-align: left

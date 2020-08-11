@@ -58,7 +58,7 @@
       </el-table-column>
       <el-table-column v-if="isDesktop" label="默认销售价" align="left" min-width="30%">
         <template slot-scope="{row}">
-          <el-button type="text" @click="handleSalePrice(row)">{{ row.skus[0].salePrice.toFixed(2) }}</el-button>
+          <el-button type="text" @click="handleSalePrice(row)">{{ row.skus[0].salePrice }}</el-button>
 
         </template>
       </el-table-column>

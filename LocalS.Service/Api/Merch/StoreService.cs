@@ -43,6 +43,8 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Name == null || u.Name.Contains(rup.Name))
                          &&
                          u.MerchId == merchId
+                         &&
+                         u.IsDelete == false
                          select new { u.Id, u.Name, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
 
 
@@ -189,13 +191,16 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var store in stores)
             {
-                if (store.Id == storeId)
+                if (!store.IsDelete)
                 {
-                    ret.CurStore.Id = store.Id;
-                    ret.CurStore.Name = store.Name;
-                }
+                    if (store.Id == storeId)
+                    {
+                        ret.CurStore.Id = store.Id;
+                        ret.CurStore.Name = store.Name;
+                    }
 
-                ret.Stores.Add(new StoreModel { Id = store.Id, Name = store.Name });
+                    ret.Stores.Add(new StoreModel { Id = store.Id, Name = store.Name });
+                }
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);

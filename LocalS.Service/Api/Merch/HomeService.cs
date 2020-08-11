@@ -45,7 +45,7 @@ namespace LocalS.Service.Api.Merch
 
 
             StringBuilder sql5 = new StringBuilder();
-            sql5.Append(" select count(*) from Machine where (ExIsHas=1 or  datediff(MINUTE,LastRequestTime,GETDATE())>15) and CurUseMerchId='" + merchId + "' ");
+            sql5.Append(" select count(*) from Machine where (ExIsHas=1 or  datediff(MINUTE,LastRequestTime,GETDATE())>15) AND CurUseStoreId IS NOT NULL and CurUseMerchId='" + merchId + "' ");
 
             int machineExCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql5.ToString()).ToString());
 

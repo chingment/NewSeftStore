@@ -116,7 +116,6 @@ namespace LocalS.Entity
         public string RefundOperator { get; set; }
         public string RefundReason { get; set; }
         public DateTime? RefundTime { get; set; }
-
         public string PayTransId { get; set; }
     }
 }

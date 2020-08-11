@@ -81,17 +81,17 @@
       </el-table-column>
       <el-table-column label="支付金额" align="left" prop="sumChargeAmount">
         <template slot-scope="scope">
-          <span>{{ scope.row.sumChargeAmount.toFixed(2) }}</span>
+          <span>{{ scope.row.sumChargeAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column label="退款金额" align="left" prop="sumRefundAmount">
         <template slot-scope="scope">
-          <span>{{ scope.row.sumRefundAmount.toFixed(2) }}</span>
+          <span>{{ scope.row.sumRefundAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column label="合计金额" align="left" prop="sumAmount">
         <template slot-scope="scope">
-          <span>{{ scope.row.sumAmount.toFixed(2) }}</span>
+          <span>{{ scope.row.sumAmount }}</span>
         </template>
       </el-table-column>
     </el-table>
