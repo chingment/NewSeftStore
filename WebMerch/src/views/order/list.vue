@@ -473,8 +473,6 @@ export default {
       this.listQuery.receiveMode = this.receivemode
     }
 
-    console.log('receiveMode:' + receiveMode)
-
     this.listQuery.storeId = this.storeid
     this.listQuery.sellChannelRefId = this.sellchannelrefid
 
@@ -491,8 +489,6 @@ export default {
       this.getListData()
     },
     getListData() {
-      console.log('sellchannelrefid:' + this.listQuery.sellChannelRefId)
-      console.log('receivemode:' + this.listQuery.receiveMode)
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
