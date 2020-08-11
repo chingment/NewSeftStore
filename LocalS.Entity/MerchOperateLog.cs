@@ -18,7 +18,6 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string StoreName { get; set; }
         public string MachineId { get; set; }
-        public string MachineName { get; set; }
         public string OperateUserId { get; set; }
         public string OperateUserName { get; set; }
         public string EventCode { get; set; }

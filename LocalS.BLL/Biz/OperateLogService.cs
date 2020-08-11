@@ -60,7 +60,6 @@ namespace LocalS.BLL.Biz
         {
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             if (!string.IsNullOrEmpty(operater) && operater != IdWorker.Build(IdType.EmptyGuid))
@@ -86,7 +85,6 @@ namespace LocalS.BLL.Biz
             merchOperateLog.StoreId = storeId;
             merchOperateLog.StoreName = storeName;
             merchOperateLog.MachineId = machineId;
-            merchOperateLog.MachineName = machineName;
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
@@ -98,7 +96,7 @@ namespace LocalS.BLL.Biz
             }
             else
             {
-                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineId, eventRemark);
             }
             merchOperateLog.Creator = operater;
             merchOperateLog.CreateTime = DateTime.Now;
@@ -111,7 +109,6 @@ namespace LocalS.BLL.Biz
         {
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var sysUserOperateLog = new SysUserOperateLog();
@@ -151,7 +148,6 @@ namespace LocalS.BLL.Biz
             merchOperateLog.StoreId = storeId;
             merchOperateLog.StoreName = storeName;
             merchOperateLog.MachineId = machineId;
-            merchOperateLog.MachineName = machineName;
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
@@ -164,7 +160,7 @@ namespace LocalS.BLL.Biz
             }
             else
             {
-                merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}", model.LoginAccount, eventRemark, storeName, machineName);
+                merchOperateLog.Remark = string.Format("账号：{0}，{1}，进入店铺：{2}，机器：{3}", model.LoginAccount, eventRemark, storeName, machineId);
             }
 
             merchOperateLog.Creator = operater;
@@ -177,7 +173,6 @@ namespace LocalS.BLL.Biz
         {
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var sysUserOperateLog = new SysUserOperateLog();
@@ -217,7 +212,6 @@ namespace LocalS.BLL.Biz
             merchOperateLog.StoreId = storeId;
             merchOperateLog.StoreName = storeName;
             merchOperateLog.MachineId = machineId;
-            merchOperateLog.MachineName = machineName;
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
@@ -234,7 +228,6 @@ namespace LocalS.BLL.Biz
         {
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
@@ -248,7 +241,7 @@ namespace LocalS.BLL.Biz
             switch (model.Status)
             {
                 case "running":
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineName);
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineId);
 
                     if (machine.RunStatus != E_MachineRunStatus.Running)
                     {
@@ -258,7 +251,7 @@ namespace LocalS.BLL.Biz
                     machine.RunStatus = E_MachineRunStatus.Running;
                     break;
                 case "setting":
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineName);
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineId);
 
                     if (machine.RunStatus != E_MachineRunStatus.Setting)
                     {
@@ -268,7 +261,7 @@ namespace LocalS.BLL.Biz
                     machine.RunStatus = E_MachineRunStatus.Setting;
                     break;
                 default:
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineName);
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineId);
                     break;
             }
 
@@ -282,7 +275,6 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.StoreId = storeId;
                 merchOperateLog.StoreName = storeName;
                 merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName = machineName;
                 merchOperateLog.OperateUserId = operater;
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
@@ -305,7 +297,6 @@ namespace LocalS.BLL.Biz
             {
                 string merchName = BizFactory.Merch.GetMerchName(merchId);
                 string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-                string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
                 string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
                 var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
@@ -515,13 +506,12 @@ namespace LocalS.BLL.Biz
                 merchOperateLog.StoreId = storeId;
                 merchOperateLog.StoreName = storeName;
                 merchOperateLog.MachineId = machineId;
-                merchOperateLog.MachineName = machineName;
                 merchOperateLog.OperateUserId = operater;
                 merchOperateLog.OperateUserName = operaterUserName;
                 merchOperateLog.EventCode = eventCode;
                 merchOperateLog.EventLevel = eventLevel;
                 merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineName, model.CabinetId, model.SlotId, productSkuName, remark.ToString());
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，机柜：{2}，货道：{3}，商品：{4}，{5}", storeName, machineId, model.CabinetId, model.SlotId, productSkuName, remark.ToString());
                 merchOperateLog.Creator = operater;
                 merchOperateLog.CreateTime = DateTime.Now;
                 CurrentDb.MerchOperateLog.Add(merchOperateLog);
@@ -535,7 +525,6 @@ namespace LocalS.BLL.Biz
         {
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
-            string machineName = BizFactory.Merch.GetMachineName(merchId, machineId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
             if (!string.IsNullOrEmpty(operater) && operater != IdWorker.Build(IdType.EmptyGuid))
             {
@@ -560,7 +549,6 @@ namespace LocalS.BLL.Biz
             merchOperateLog.StoreId = storeId;
             merchOperateLog.StoreName = storeName;
             merchOperateLog.MachineId = machineId;
-            merchOperateLog.MachineName = machineName;
             merchOperateLog.OperateUserId = operater;
             merchOperateLog.OperateUserName = operaterUserName;
             merchOperateLog.EventCode = eventCode;
@@ -572,7 +560,7 @@ namespace LocalS.BLL.Biz
             }
             else
             {
-                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+                merchOperateLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineId, eventRemark);
             }
             merchOperateLog.Creator = operater;
             merchOperateLog.CreateTime = DateTime.Now;
@@ -619,7 +607,7 @@ namespace LocalS.BLL.Biz
                 }
                 else
                 {
-                    sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineName, eventRemark);
+                    sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, machineId, eventRemark);
                 }
                 CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
                 CurrentDb.SaveChanges();

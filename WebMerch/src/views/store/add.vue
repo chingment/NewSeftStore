@@ -1,6 +1,13 @@
 <template>
   <div id="store_add" class="app-container">
+
+    <baidu-map class="bm-view" :center="center" :zoom="zoom" :scroll-wheel-zoom="true" ak="4Uzg40oyzbtgTxT2qVnL9pjXIGF7y9P6">
+      <bm-marker :position="center" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
+      <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
+    </baidu-map>
+
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
+
       <el-form-item label="店铺名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
@@ -46,7 +53,18 @@ import { goBack } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 import { all } from 'q'
 
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
+import BmView from 'vue-baidu-map/components/map/MapView' // 地图视图
+import BmNavigation from 'vue-baidu-map/components/controls/Navigation' // 缩放控件
+import BmMarker from 'vue-baidu-map/components/overlays/Marker'// 标注点
+
 export default {
+  components: {
+    BaiduMap,
+    BmView,
+    BmNavigation,
+    BmMarker
+  },
   data() {
     return {
       loading: false,
@@ -66,7 +84,9 @@ export default {
       uploadImgMaxSize: 4,
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
+      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+      center: { lng: 113.353787, lat: 23.134224 },
+      zoom: 18
     }
   },
   mounted() {
@@ -209,6 +229,12 @@ export default {
 
 .el-upload-list >>> .el-tag {
   cursor: pointer;
+}
+
+.bm-view {
+  width: 600px;
+  height: 300px;
+  margin-bottom: 20px;
 }
 }
 </style>
