@@ -140,6 +140,7 @@ namespace LocalS.Service.Api.Merch
             ret.Id = store.Id;
             ret.Name = store.Name;
             ret.Address = store.Address;
+            ret.AddressPoint = store.AddressPoint;
             ret.BriefDes = store.BriefDes;
             ret.DisplayImgUrls = store.DisplayImgUrls;
             ret.IsOpen = store.IsOpen;
@@ -170,6 +171,8 @@ namespace LocalS.Service.Api.Merch
                 store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
                 store.IsOpen = rop.IsOpen;
+                store.Lat = rop.AddressPoint.Lat;
+                store.Lng = rop.AddressPoint.Lng;
                 store.MendTime = DateTime.Now;
                 store.Mender = operater;
                 CurrentDb.SaveChanges();

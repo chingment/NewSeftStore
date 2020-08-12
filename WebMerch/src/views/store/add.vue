@@ -1,17 +1,31 @@
 <template>
   <div id="store_add" class="app-container">
 
-    <baidu-map class="bm-view" :center="center" :zoom="zoom" :scroll-wheel-zoom="true" ak="4Uzg40oyzbtgTxT2qVnL9pjXIGF7y9P6">
-      <bm-marker :position="center" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
-      <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
-    </baidu-map>
-
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
+      <el-form-item label="地理位置">
+        <el-autocomplete
+          v-model="mapSearchText"
+          style="width:100%;"
+          popper-class="autoAddressClass"
+          :fetch-suggestions="mapQuerySearchAsync"
+          :trigger-on-focus="false"
+          placeholder="搜索"
+          clearable
+          @select="mapHandleSelect"
+        >
+          <template slot-scope="{item}">
+            <div style="address-ct overflow:hidden;">
+              <span class="address ellipsis">{{ item.address }}</span>
+            </div>
+          </template>
+        </el-autocomplete>
+        <div id="mapContainer" class="bm-view" />
+      </el-form-item>
 
       <el-form-item label="店铺名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="联系地址" prop="name">
+      <el-form-item label="联系地址" prop="address">
         <el-input v-model="form.address" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
@@ -53,18 +67,7 @@ import { goBack } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 import { all } from 'q'
 
-import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
-import BmView from 'vue-baidu-map/components/map/MapView' // 地图视图
-import BmNavigation from 'vue-baidu-map/components/controls/Navigation' // 缩放控件
-import BmMarker from 'vue-baidu-map/components/overlays/Marker'// 标注点
-
 export default {
-  components: {
-    BaiduMap,
-    BmView,
-    BmNavigation,
-    BmMarker
-  },
   data() {
     return {
       loading: false,
@@ -72,7 +75,11 @@ export default {
         name: '',
         address: '',
         briefDes: '',
-        displayImgUrls: []
+        displayImgUrls: [],
+        addressPoint: { // 详细地址经纬度
+          lng: 0,
+          lat: 0
+        }
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -85,12 +92,15 @@ export default {
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-      center: { lng: 113.353787, lat: 23.134224 },
-      zoom: 18
+      mapSearchText: '',
+      mapObject: '', // 地图实例
+      mapMarker: '', // Marker实例
+      mapGeoc: null
     }
   },
   mounted() {
     this.setUploadImgSort()
+    this.bdMap()
   },
   created() {
     this.init()
@@ -105,6 +115,47 @@ export default {
         }
         this.loading = false
       })
+    },
+    bdMap() {
+      var _this = this
+      // 创建地图
+      var mapObject = new BMap.Map('mapContainer', { enableMapClick: false })
+      var mapGeoc = new BMap.Geocoder()
+      var point = new BMap.Point(113.3309751406, 23.1123809784)
+      mapObject.centerAndZoom(point, 16) // 创建点坐标
+      mapObject.addControl(new BMap.NavigationControl())
+      mapObject.enableScrollWheelZoom(true)// 允许鼠标滚动缩放
+
+      // 初始化地图， 设置中心点坐标和地图级别
+      var mapMarker = new BMap.Marker(point)
+      mapObject.addOverlay(mapMarker) // 添加覆盖物
+      mapMarker.setAnimation(BMAP_ANIMATION_BOUNCE) // 跳动的动画
+      // 添加覆盖物文字
+      const label = new BMap.Label('广州塔', {
+        offset: new BMap.Size(20, -25)
+      })
+      mapMarker.setLabel(label)
+
+      // 鼠标点击
+      mapObject.addEventListener('click', function(e) {
+        var pt = e.point
+        var marker = new BMap.Marker(pt) // 创建标注
+        mapObject.clearOverlays()
+        mapObject.addOverlay(marker)
+        mapGeoc.getLocation(pt, function(rs) {
+          var addComp = rs.addressComponents
+          _this.form.addressPoint = rs.point
+          _this.form.address =
+                addComp.province +
+                addComp.city +
+                addComp.district +
+                addComp.street +
+                addComp.streetNumber
+        })
+      })
+
+      this.mapObject = mapObject
+      this.mapMarker = mapMarker
     },
     resetForm() {
 
@@ -210,6 +261,32 @@ export default {
         },
         animation: 150
       })
+    },
+    mapQuerySearchAsync(str, cb) {
+      var options = {
+        onSearchComplete: function(res) { // 检索完成后的回调函数
+          var s = []
+          if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+            for (var i = 0; i < res.getCurrentNumPois(); i++) {
+              s.push(res.getPoi(i))
+            }
+            cb(s) // 获取到数据时，通过回调函数cb返回到<el-autocomplete>组件中进行显示
+          } else {
+            cb(s)
+          }
+        }
+      }
+      var local = new BMap.LocalSearch(this.mapObject, options) // 创建LocalSearch构造函数
+      local.search(str) // 调用search方法，根据检索词str发起检索
+    },
+    mapHandleSelect(item) {
+      this.mapSearchText = item.address + item.title // 记录详细地址，含建筑物名
+      this.form.address = item.address + item.title
+      this.form.addressPoint = item.point // 记录当前选中地址坐标
+      this.mapObject.clearOverlays() // 清除地图上所有覆盖物
+      this.mapMarker = new BMap.Marker(item.point) // 根据所选坐标重新创建Marker
+      this.mapObject.addOverlay(this.mapMarker) // 将覆盖物重新添加到地图中
+      this.mapObject.panTo(item.point) // 将地图的中心点更改为选定坐标点
     }
   }
 }
@@ -232,10 +309,35 @@ export default {
 }
 
 .bm-view {
-  width: 600px;
-  height: 300px;
-  margin-bottom: 20px;
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
 }
+
+.autoAddressClass{
+  li {
+    display: flex;
+    i.el-icon-search {margin-top:11px;}
+    .mgr10 {margin-right: 10px;}
+    .title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+.address-ct{
+  flex: 1;
+}
+
+    .address {
+      line-height: 1;
+      font-size: 12px;
+      color: #b4b4b4;
+      margin-bottom: 5px;
+    }
+
+  }
+}
+
 }
 </style>
 

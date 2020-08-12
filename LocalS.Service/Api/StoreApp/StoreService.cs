@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else
                 {
-                    distance = DistanceUtil.GetDistance(m.Lat, m.Lng, rup.Lat, rup.Lng);
+                    distance = DistanceUtil.GetDistance(m.AddressPoint.Lat, m.AddressPoint.Lng, rup.Lat, rup.Lng);
 
                     distanceMsg = string.Format("{0}km", distance.ToString("f2"));
                 }
