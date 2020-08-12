@@ -5,6 +5,7 @@
       <el-form-item label="地理位置">
 
         <el-autocomplete
+          v-show="isEdit"
           v-model="mapSearchText"
           style="width:100%;"
           popper-class="autoAddressClass"

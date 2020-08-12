@@ -553,6 +553,7 @@ namespace LocalS.Service.Api.Merch
                                 sellChannelStock.WaitPayLockQuantity = 0;
                                 sellChannelStock.WaitPickupLockQuantity = 0;
                                 sellChannelStock.SumQuantity = stock.SumQuantity;
+                                sellChannelStock.MaxQuantity = stock.SumQuantity;
                                 sellChannelStock.CreateTime = DateTime.Now;
                                 sellChannelStock.Creator = operater;
                                 CurrentDb.SellChannelStock.Add(sellChannelStock);
@@ -564,6 +565,7 @@ namespace LocalS.Service.Api.Merch
                                 sellChannelStock.IsOffSell = stock.IsOffSell;
                                 sellChannelStock.SumQuantity = stock.SumQuantity;
                                 sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
+                                sellChannelStock.MaxQuantity = stock.SumQuantity;
                                 sellChannelStock.MendTime = DateTime.Now;
                                 sellChannelStock.Mender = operater;
                             }
