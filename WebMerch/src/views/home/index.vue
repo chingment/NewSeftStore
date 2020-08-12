@@ -47,7 +47,7 @@
             <div class="card-panel-text">
               总收入
             </div>
-            <count-to :start-val="0" :end-val="sumTradeAmount" :duration="3200" class="card-panel-num" />
+            <count-to :start-val="0" decimals="2" :end-val="sumTradeAmount" :duration="2000" class="card-panel-num" />
           </div>
         </div>
       </el-col>

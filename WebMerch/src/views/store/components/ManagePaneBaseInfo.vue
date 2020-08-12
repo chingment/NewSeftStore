@@ -25,10 +25,10 @@
 
       </el-form-item>
       <el-form-item label="名称" prop="name" :show-message="isEdit">
-        <span v-show="!isEdit">{{ form.name }}</span> <el-input v-show="isEdit" v-model="form.name" clearable />
+        <span v-show="!isEdit">{{ temp.name }}</span> <el-input v-show="isEdit" v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="地址" prop="address" :show-message="isEdit">
-        <span v-show="!isEdit">{{ form.address }}</span>  <el-input v-show="isEdit" v-model="form.address" clearable />
+        <span v-show="!isEdit">{{ temp.address }}</span>  <el-input v-show="isEdit" v-model="form.address" clearable />
       </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls" :show-message="isEdit">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
@@ -64,10 +64,10 @@
         <div v-show="isEdit" class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
-        <span v-show="!isEdit">{{ form.briefDes }}</span>   <el-input v-show="isEdit" v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
+        <span v-show="!isEdit">{{ temp.briefDes }}</span>   <el-input v-show="isEdit" v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
       </el-form-item>
       <el-form-item label="开启营业">
-        <span v-show="!isEdit">{{ form.status.text }}</span>
+        <span v-show="!isEdit">{{ temp.status.text }}</span>
 
         <el-switch v-show="isEdit" v-model="form.isOpen" />
       </el-form-item>
@@ -94,6 +94,18 @@ export default {
     return {
       isEdit: false,
       loading: false,
+      temp: {
+        id: '',
+        name: '',
+        address: '',
+        briefDes: '',
+        displayImgUrls: [],
+        isOpen: false,
+        status: {
+          text: '',
+          value: ''
+        }
+      },
       form: {
         id: '',
         name: '',
@@ -150,6 +162,12 @@ export default {
           this.form.displayImgUrls = d.displayImgUrls
           this.form.isOpen = d.isOpen
           this.form.status = d.status
+
+          this.temp.name = this.form.name
+          this.temp.address = this.form.address
+          this.temp.briefDes = this.form.briefDes
+          this.temp.status = this.form.status
+
           this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
 
           var pt = new BMap.Point(d.addressPoint.lng, d.addressPoint.lat)
