@@ -4,7 +4,19 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.key" clearable style="width: 100%" placeholder="商品名称/编码/条形码/首拼音" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+
+          <el-autocomplete
+            v-model="listQuery.key"
+            :fetch-suggestions="productSearchAsync"
+            placeholder="商品名称/编码/条形码/首拼音母"
+            clearable
+            style="width: 100%"
+            @select="productSelect"
+            @keyup.enter.native="handleFilter"
+            @clear="handleFilter"
+          />
+
+          <!-- <el-input v-model="listQuery.key" clearable style="width: 100%" placeholder="商品名称/编码/条形码/首拼音" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" /> -->
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -76,7 +88,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/prdproduct'
+import { getList, search } from '@/api/prdproduct'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -84,6 +96,7 @@ export default {
   components: { Pagination },
   data() {
     return {
+      productSearchName: '',
       loading: false,
       listKey: 0,
       listData: null,
@@ -91,7 +104,9 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        name: undefined
+        name: undefined,
+        key: undefined,
+        productId: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -132,6 +147,31 @@ export default {
     handleSalePrice(row) {
       this.$router.push({
         path: '/prdproduct/manage?id=' + row.id + '&tab=tabStoreSale'
+      })
+    },
+    productSearchAsync(queryString, cb) {
+      console.log('queryString:' + queryString)
+      search({ key: queryString }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          var restaurants = []
+          for (var j = 0; j < d.length; j++) {
+            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId })
+          }
+
+          cb(restaurants)
+        }
+      })
+    },
+    productSelect(item) {
+      this.listQuery.key = item.name
+      getList(this.listQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.listData = d.items
+          this.listTotal = d.total
+        }
+        this.loading = false
       })
     }
   }
