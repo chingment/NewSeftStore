@@ -19,6 +19,7 @@ namespace Lumos
         public readonly static string Success = "1000";
         public readonly static string Failure = "2000";
         public readonly static string Failure2NoRight = "2401";
+        public readonly static string Failure2NoExsit = "2404";
         public readonly static string Failure2Sign = "2501";
         public readonly static string Failure2NoSelectShopMode = "2600";
         public readonly static string Exception = "3000";

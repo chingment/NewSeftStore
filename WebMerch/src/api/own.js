@@ -8,7 +8,7 @@ export function getInfo(token, website) {
   })
 }
 
-export function checkPermission(website,tpye, content) {
+export function checkPermission(website, tpye, content) {
   return request({
     url: '/own/checkPermission',
     method: 'get',

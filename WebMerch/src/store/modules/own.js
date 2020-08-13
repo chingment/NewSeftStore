@@ -65,7 +65,7 @@ const actions = {
   // checkperminssion
   checkPermission({ commit }, type, content) {
     return new Promise((resolve, reject) => {
-      checkPermission('merch',type, content).then(response => {
+      checkPermission('merch', type, content).then(response => {
         resolve(response)
       }).catch(error => {
         reject(error)
