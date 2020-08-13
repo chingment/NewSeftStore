@@ -131,7 +131,7 @@ namespace LocalS.Service.Api.Merch
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
             sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' and PayedTime>='" + startTime + "'  and PayedTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
-            sql.Append("  where merchId='" + merchId + "' order by sumTradeAmount desc ");
+            sql.Append("  where merchId='" + merchId + "' and a.IsDelete=0 order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {
@@ -159,7 +159,7 @@ namespace LocalS.Service.Api.Merch
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
             sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(chargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' group by StoreId  )  b on a.id=b.storeId ");
-            sql.Append("  where merchId='" + merchId + "' order by sumTradeAmount desc ");
+            sql.Append("  where merchId='" + merchId + "' and a.IsDelete=0 order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {

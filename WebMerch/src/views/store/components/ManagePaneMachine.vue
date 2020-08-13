@@ -1,16 +1,17 @@
 <template>
   <div id="store_list" class="app-container">
     <div class="circle-status-bar">
-      <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
-      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
-      <span class="circle-status circle-status-3" /> <span class="name">异常</span>
+      <div class="circle-item"> <span class="icon-status icon-status-1" /> <span class="name">关闭</span></div>
+      <div class="circle-item"> <span class="icon-status icon-status-2" /> <span class="name">正常</span></div>
+      <div class="circle-item"> <span class="icon-status icon-status-4" /> <span class="name">维护</span></div>
+      <div class="circle-item"> <span class="icon-status icon-status-3" /> <span class="name">异常</span></div>
     </div>
     <el-row v-loading="loading" :gutter="20">
       <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span> ({{ item.status.text }})
+              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>          <span style="font-size:12px;"> ({{ item.status.text }})</span></div>
             </div>
             <div class="right">
               <el-button type="text" @click="handleRemoveMachine(item)">移除</el-button>

@@ -150,38 +150,42 @@ line-height: 110px;
   margin-bottom:16px;
   padding-left:5px;
   font-size: 12px;
+  display: flex;
 }
 
-.circle-status{
-  border-radius: 50%;
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  }
 
-.circle-status-0{
-background-color: #97a8be;
-border-color: #97a8be;
-}
+        .circle-item{
+          display: flex;
+          margin-right: 8px;
+          align-items: center;
+        }
 
-.circle-status-1{
-  background-color: #97a8be;
-  border-color: #97a8be;
-  }
+        .circle-item .icon-status{
+          border-radius: 50%;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          margin-right: 3px;
+        }
 
-  .circle-status-2{
-    background-color: #67c23a;
+        .circle-item .icon-status-1{
+          background-color: #97a8be;
+          border-color: #97a8be;
+        }
+
+        .circle-item .icon-status-2{
+          background-color: #67c23a;
     border-color: #67c23a;
-    }
+        }
 
-    .circle-status-3{
-      background-color:#ff4949;
-      border-color: #ff4949;
-      }
+        .circle-item .icon-status-3{
+          background-color:#ff4949;
+          border-color: #ff4949;
+        }
 
-      .circle-status-4{
-        background-color:#e1b11e;
-        border-color: #e1b11e;
+        .circle-item .icon-status-4{
+          background-color:#e1b11e;
+          border-color: #e1b11e;
         }
 
     .table-tree{

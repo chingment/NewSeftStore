@@ -2,9 +2,12 @@
   <div id="machine_stock">
 
     <div class="circle-status-bar">
-      <span class="circle-status sellQuantity sellQuantity-bg" /> <span class="name">可售</span>
-      <span class="circle-status lockQuantity lockQuantity-bg" /> <span class="name">锁定</span>
-      <span class="circle-status sumQuantity sumQuantity-bg" /> <span class="name">总量</span>
+
+      <div class="circle-status-bar">
+        <div class="circle-item"> <span class="icon-status sellQuantity sellQuantity-bg" /> <span class="name">可售</span></div>
+        <div class="circle-item"> <span class="icon-status lockQuantity lockQuantity-bg" /> <span class="name">锁定</span></div>
+        <div class="circle-item"> <span class="icon-status sumQuantity sumQuantity-bg" /> <span class="name">总量</span></div>
+      </div>
     </div>
 
     <div class="filter-container">
@@ -322,8 +325,6 @@ export default {
 
 #machine_stock{
   padding: 20px;
-  padding-top: 0px;
-
 .rows{
 .row{
 

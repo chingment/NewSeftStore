@@ -2,8 +2,8 @@
   <div id="store_list" class="app-container">
 
     <div class="circle-status-bar">
-      <span class="circle-status circle-status-1" /> <span class="name">关闭</span>
-      <span class="circle-status circle-status-2" /> <span class="name">正常</span>
+      <div class="circle-item"> <span class="icon-status icon-status-1" /> <span class="name">关闭</span></div>
+      <div class="circle-item"> <span class="icon-status icon-status-2" /> <span class="name">正常</span></div>
     </div>
     <div class="filter-container">
 
@@ -24,7 +24,9 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-              <span :class="'circle-status circle-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>
+
+              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span> </div>
+
             </div>
             <div class="right">
               <el-button type="text" @click="handleManage(item)">管理</el-button>
