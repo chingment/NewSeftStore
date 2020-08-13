@@ -11,7 +11,7 @@
             placeholder="商品名称/编码/条形码/首拼音母"
             clearable
             style="width: 100%"
-            @select="productSelect"
+            @select="productSearchSelect"
             @keyup.enter.native="handleFilter"
             @clear="handleFilter"
           />
@@ -96,7 +96,6 @@ export default {
   components: { Pagination },
   data() {
     return {
-      productSearchName: '',
       loading: false,
       listKey: 0,
       listData: null,
@@ -104,9 +103,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        name: undefined,
-        key: undefined,
-        productId: undefined
+        key: ''
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -163,7 +160,7 @@ export default {
         }
       })
     },
-    productSelect(item) {
+    productSearchSelect(item) {
       this.listQuery.key = item.name
       getList(this.listQuery).then(res => {
         if (res.result === 1) {
