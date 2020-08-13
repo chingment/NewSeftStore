@@ -63,20 +63,16 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            string[] productSkuIds = null;
+        
             string[] productIds = null;
             if (!string.IsNullOrEmpty(rup.Key))
             {
                 var search = CacheServiceFactory.Product.Search(merchId, "All", rup.Key);
                 if (search != null)
                 {
-                    productSkuIds = search.Select(m => m.Id).Distinct().ToArray();
-
-                    productIds = CurrentDb.PrdProductSku.Where(m => productSkuIds.Contains(m.Id)).Select(m => m.PrdProductId).Distinct().ToArray();
+                    productIds = search.Select(m => m.ProductId).Distinct().ToArray();
                 }
             }
-
-
 
             var query = (from u in CurrentDb.PrdProduct
                          where
