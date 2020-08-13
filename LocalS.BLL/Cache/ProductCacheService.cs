@@ -27,26 +27,7 @@ namespace LocalS.BLL
 
                         if (productSkuInfoModel != null)
                         {
-                            if (!string.IsNullOrEmpty(productSkuInfoModel.BarCode))
-                            {
-                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SBR, merchId), productSkuInfoModel.BarCode);
-                            }
-
-                            if (!string.IsNullOrEmpty(productSkuInfoModel.PinYinIndex))
-                            {
-                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SPY, merchId), productSkuInfoModel.PinYinIndex);
-                            }
-
-                            if (!string.IsNullOrEmpty(productSkuInfoModel.Name))
-                            {
-                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SNA, merchId), productSkuInfoModel.Name);
-                            }
-
-                            if (!string.IsNullOrEmpty(productSkuInfoModel.CumCode))
-                            {
-                                RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), productSkuInfoModel.CumCode);
-                            }
-
+                            RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId), string.Format("*{0}*", productSkuInfoModel.Id));
                             RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SKU_INF, merchId), productSkuInfoModel.Id);
                         }
                     }
@@ -160,22 +141,22 @@ namespace LocalS.BLL
                     productSkuByCache.KindId3 = productSpuByCache.KindId3;
                     if (!string.IsNullOrEmpty(productSkuByCache.BarCode))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SBR, merchId), productSkuByCache.BarCode.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId), string.Format("BC:{0}", productSkuByCache.BarCode.ToUpper()), productSkuId, StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(productSkuByCache.PinYinIndex))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SPY, merchId), productSkuByCache.PinYinIndex.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId), string.Format("PY:{0}", productSkuByCache.PinYinIndex.ToUpper()), productSkuId, StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(productSkuByCache.Name))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SNA, merchId), productSkuByCache.Name, productSkuId, StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId), string.Format("NA:{0}", productSkuByCache.Name.ToUpper()), productSkuId, StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(productSkuByCache.CumCode))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), productSkuByCache.CumCode.ToUpper(), productSkuId, StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId), string.Format("CC:{0}", productSkuByCache.CumCode.ToUpper()), productSkuId, StackExchange.Redis.When.Always);
                     }
                 }
 
@@ -194,40 +175,11 @@ namespace LocalS.BLL
 
             List<RedisValue> productSkuIds = new List<RedisValue>();
 
-            if (type == "BarCode" || type == "All")
-            {
-                var search_Scan_BarCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PRD_SKU_SBR, merchId), string.Format("*{0}*", key.ToUpper()));
-                foreach (var item in search_Scan_BarCode)
-                {
-                    productSkuIds.Add(item.Value);
-                }
-            }
 
-            if (type == "PinYinIndex" || type == "All")
+            var search_Scan_BarCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId), string.Format("*{0}*", key.ToUpper()));
+            foreach (var item in search_Scan_BarCode)
             {
-                var search_Scan_PinYinIndex = RedisManager.Db.HashScan(string.Format(RedisKeyS.PRD_SKU_SPY, merchId), string.Format("*{0}*", key.ToUpper()));
-                foreach (var item in search_Scan_PinYinIndex)
-                {
-                    productSkuIds.Add(item.Value);
-                }
-            }
-
-            if (type == "CumCode" || type == "All")
-            {
-                var search_Scan_CumCode = RedisManager.Db.HashScan(string.Format(RedisKeyS.PRD_SKU_SCC, merchId), string.Format("*{0}*", key.ToUpper()));
-                foreach (var item in search_Scan_CumCode)
-                {
-                    productSkuIds.Add(item.Value);
-                }
-            }
-
-            if (type == "Name" || type == "All")
-            {
-                var search_Scan_Name = RedisManager.Db.HashScan(string.Format(RedisKeyS.PRD_SKU_SNA, merchId), string.Format("*{0}*", key));
-                foreach (var item in search_Scan_Name)
-                {
-                    productSkuIds.Add(item.Value);
-                }
+                productSkuIds.Add(item.Value);
             }
 
             productSkuIds = productSkuIds.Distinct().ToList();
@@ -261,10 +213,7 @@ namespace LocalS.BLL
             var merchs = CurrentDb.Merch.ToList();
             foreach (var merch in merchs)
             {
-                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SBR, merch.Id));
-                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SPY, merch.Id));
-                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SNA, merch.Id));
-                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SCC, merch.Id));
+                RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_SKEY, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SKU_INF, merch.Id));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SPU_INF, merch.Id));
 
