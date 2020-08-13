@@ -553,7 +553,9 @@ namespace LocalS.BLL.Biz
                             var orderSub = new OrderSub();
                             orderSub.Id = order.Id + buildOrder.Childs.IndexOf(buildOrderSub).ToString();
                             orderSub.ClientUserId = rop.ClientUserId;
+                            orderSub.ClientUserName = clientUserName;
                             orderSub.MerchId = store.MerchId;
+                            orderSub.MerchName = store.MerchName;
                             orderSub.StoreId = rop.StoreId;
                             orderSub.StoreName = store.Name;
                             orderSub.SellChannelRefType = order.SellChannelRefType;
