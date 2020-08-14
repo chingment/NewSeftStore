@@ -254,6 +254,7 @@
     <Compile Include="Api\Merch\RModels\RupMachineGetStocks.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineQueryMsgPushResult.cs" />
     <Compile Include="Api\Merch\RModels\RupOrderGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupPayRefundGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPayRefundSearchOrder.cs" />
     <Compile Include="Api\Merch\RModels\RupPayTransGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />

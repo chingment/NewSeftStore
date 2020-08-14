@@ -12,6 +12,14 @@ namespace WebApiMerch.Controllers
 {
     public class PayRefundController : OwnApiBaseController
     {
+
+        [HttpGet]
+        public OwnApiHttpResponse GetList([FromUri]RupPayRefundGetList rup)
+        {
+            IResult result = MerchServiceFactory.PayRefund.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse SearchOrder([FromUri]RupPayRefundSearchOrder rup)
         {

@@ -2,7 +2,10 @@
   <div id="user_list" class="app-container">
     <div class="filter-container">
 
-      <el-row :gutter="16">
+      <el-row :gutter="20">
+        <el-col :span="4" :xs="24" style="margin-bottom:20px">
+          <el-input v-model="listQuery.payrefundId" clearable style="width: 100%" placeholder="退款单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+        </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.paytransId" clearable style="width: 100%" placeholder="交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
@@ -33,7 +36,7 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="交易号" align="left" min-width="10%">
+      <el-table-column label="退款单号" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -43,14 +46,14 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="相关订单号" align="left" min-width="10%">
+      <el-table-column label="订单号" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.orderIds }}</span>
+          <span>{{ scope.row.orderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付商" align="left" min-width="5%">
+      <el-table-column label="交易号" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.payPartner.text }}</span>
+          <span>{{ scope.row.payTransId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="支付商交易号" align="left" min-width="10%">
@@ -58,50 +61,33 @@
           <span>{{ scope.row.payPartnerOrderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" align="left" min-width="5%">
+      <el-table-column label="退款金额" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.chargeAmount }}</span>
+          <span>{{ scope.row.amount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付方式" align="left" min-width="5%">
+      <el-table-column label="申请时间" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.payWay.text }}</span>
+          <span>{{ scope.row.applyTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易状态" align="left" min-width="5%">
+      <el-table-column label="状态" align="left" min-width="5%">
         <template slot-scope="scope">
-          <span>{{ scope.row.payStatus.text }}</span>
+          <span>{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="left" min-width="10%">
+      <el-table-column label="原因" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.description }}</span>
+          <span>{{ scope.row.reason }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="应用程序" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.appId }}</span>
+      <!-- <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="handleDetails(row)">
+            查看
+          </el-button>
         </template>
-      </el-table-column>
-      <el-table-column label="交易时间" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.submittedTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="120" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-dropdown @command="handleOperate">
-            <el-button type="primary" size="small">
-              操作<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :command="'payRefund-'+scope.row.id">退款</el-dropdown-item>
-
-            </el-dropdown-menu>
-          </el-dropdown>
-
-        </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
@@ -109,7 +95,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/paytrans'
+import { getList } from '@/api/payrefund'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -152,14 +138,10 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleOperate(command) {
-      // this.$message('click on item ' + command)
-      var arr = command.split('-')
-      if (arr[0] === 'payRefund') {
-        this.$router.push({
-          path: '/payrefund/apply?payTransId=' + arr[1]
-        })
-      }
+    handleDetails(row) {
+      this.$router.push({
+        path: '/clientuser/details?id=' + row.id
+      })
     }
   }
 }

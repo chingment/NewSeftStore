@@ -24,6 +24,8 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string StoreName { get; set; }
         public string OrderId { get; set; }
+        public string PayTransId { get; set; }
+        public string PayPartnerOrderId { get; set; }
         public DateTime? RefundTime { get; set; }
         public string Method { get; set; }
         public decimal Amount { get; set; }

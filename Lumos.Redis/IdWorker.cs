@@ -12,6 +12,7 @@ namespace Lumos.Redis
         NewGuid = 3,
         EmptyGuid = 4,
         PayTransId = 5,
+        PayRefundId = 6,
     }
     public class IdWorker
     {
@@ -60,6 +61,13 @@ namespace Lumos.Redis
                     break;
                 case IdType.PayTransId:
                     prefix = "62";
+                    part0 = ran.Next(100, 999).ToString();
+                    part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    part2 = GetIncrNum().ToString().PadLeft(5, '0');
+                    id = prefix + part2 + part1 + part0;
+                    break;
+                case IdType.PayRefundId:
+                    prefix = "63";
                     part0 = ran.Next(100, 999).ToString();
                     part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
                     part2 = GetIncrNum().ToString().PadLeft(5, '0');

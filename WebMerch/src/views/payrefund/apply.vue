@@ -28,6 +28,11 @@
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="交易号" prop="payTransId" align="left" :width="isDesktop==true?220:80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.payTransId }}</span>
+          </template>
+        </el-table-column>
         <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.storeName }}</span>
@@ -215,7 +220,7 @@
 
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_handleEx(details)">
+        <el-button type="primary" @click="_apply()">
           确认处理
         </el-button>
         <el-button @click="isSearch = true">
@@ -227,8 +232,9 @@
 </template>
 
 <script>
-import { searchOrder, getOrderDetails } from '@/api/payrefund'
+import { searchOrder, getOrderDetails, apply } from '@/api/payrefund'
 import { MessageBox } from 'element-ui'
+import { getUrlParam } from '@/utils/commonUtil'
 export default {
   data() {
     return {
@@ -257,6 +263,7 @@ export default {
         isRunning: false
       },
       formByApply: {
+        orderId: '',
         method: '1',
         reason: '',
         amount: 0
@@ -272,7 +279,9 @@ export default {
   },
   methods: {
     init() {
-
+      var payTransId = getUrlParam('payTransId')
+      this.listQuery.payTransId = payTransId
+      this.handleSearch()
     },
     handleSearch() {
       this.listQuery.page = 1
@@ -288,7 +297,13 @@ export default {
       })
     },
     dialogOpenByRefundApply(row) {
+      if (row.exStatus.value === 2) {
+        this.$message('该订单存在异常未有处理，请到订单中处理')
+        return
+      }
+
       this.loadingByRefundApply = true
+      this.formByApply.orderId = row.id
       getOrderDetails({ orderId: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
@@ -296,7 +311,27 @@ export default {
         this.loadingByRefundApply = false
         this.isSearch = false
       })
+    },
+    _apply() {
+      var _this = this
+      MessageBox.confirm('确定要提交退款？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        apply(_this.formByApply).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            var d = res.data
+            this.$router.push({
+              path: '/payRefund/query?payRefundId=' + d.payRefundId
+            })
+          }
+        })
+      }).catch(() => {
+      })
     }
+
   }
 }
 </script>
