@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
+using LocalS.BLL.Task;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -37,6 +38,25 @@ namespace LocalS.Service.Api.Merch
             return model;
         }
 
+        public StatusModel GetMethod(E_PayRefundMethod method)
+        {
+            var model = new StatusModel();
+
+            switch (method)
+            {
+                case E_PayRefundMethod.Original:
+                    model.Value = 1;
+                    model.Text = "原路退回";
+                    break;
+                case E_PayRefundMethod.Manual:
+                    model.Value = 2;
+                    model.Text = "线下处理";
+                    break;
+            }
+            return model;
+        }
+
+
         public CustomJsonResult GetList(string operater, string merchId, RupPayRefundGetList rup)
         {
             var result = new CustomJsonResult();
@@ -49,7 +69,7 @@ namespace LocalS.Service.Api.Merch
                             (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
                             (rup.PayPartnerOrderId == null || o.PayPartnerOrderId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.OrderId, o.Status, o.Amount, o.PayPartnerOrderId, o.Reason, o.PayTransId, o.ApplyTime, o.CreateTime });
+                         select new { o.Id, o.StoreId, o.StoreName, o.Method, o.OrderId, o.Status, o.Amount, o.PayPartnerOrderId, o.Reason, o.PayTransId, o.ApplyTime, o.CreateTime });
 
             int total = query.Count();
 
@@ -70,6 +90,7 @@ namespace LocalS.Service.Api.Merch
                     StoreName = item.StoreName,
                     OrderId = item.OrderId,
                     Amount = item.Amount,
+                    Method = GetMethod(item.Method),
                     Status = GetStatus(item.Status),
                     PayPartnerOrderId = item.PayPartnerOrderId,
                     Reason = item.Reason,
@@ -239,9 +260,32 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var payRefund = new PayRefund();
+                var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
 
-                payRefund.Id = IdWorker.Build(IdType.PayRefundId);
+                string payRefundId = IdWorker.Build(IdType.PayRefundId);
+
+
+                PayRefundResult payRefundResult = null;
+                switch (order.PayPartner)
+                {
+                    case E_PayPartner.Wx:
+                        var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
+                        payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount.ToF2Price(), rop.Amount.ToPrice(), rop.Reason);
+                        break;
+                }
+
+                if (payRefundResult == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                }
+
+                if (payRefundResult.Status != "APPLYING")
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                }
+
+                var payRefund = new PayRefund();
+                payRefund.Id = payRefundId;
                 payRefund.MerchId = order.MerchId;
                 payRefund.MerchName = order.MerchName;
                 payRefund.StoreId = order.StoreId;
@@ -264,6 +308,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, payRefundId, DateTime.Now.AddMinutes(30), new PayRefund2CheckStatusModel { Id = payRefundId, MerchId = order.MerchId, PayPartner = order.PayPartner });
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "申请成功", new { PayRefundId = payRefund.Id });
 

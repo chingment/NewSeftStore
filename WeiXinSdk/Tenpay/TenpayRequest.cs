@@ -35,6 +35,8 @@ namespace MyWeiXinSdk.Tenpay
 
         public SortedDictionary<string, string> DoPost(WxAppInfoConfig config, ITenpayPostApi request,bool isUserCert=false)
         {
+            SortedDictionary<string, string> m_values = new SortedDictionary<string, string>();
+
             string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
 
             WebUtils webUtils = new WebUtils();
@@ -42,7 +44,6 @@ namespace MyWeiXinSdk.Tenpay
             _returnCoennt = webUtils.DoPost(config, realServerUrl, request.PostData, isUserCert);
 
  
-            SortedDictionary<string, string> m_values = new SortedDictionary<string, string>();
 
 
             XmlDocument xmlDoc = new XmlDocument();

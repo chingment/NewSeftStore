@@ -66,6 +66,11 @@
           <span>{{ scope.row.amount }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="退款方式" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.method.text }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="申请时间" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.applyTime }}</span>

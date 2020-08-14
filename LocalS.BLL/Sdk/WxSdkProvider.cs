@@ -495,6 +495,22 @@ namespace LocalS.BLL
             c.DoPost(templateSend);
         }
 
+        public PayRefundResult PayRefund(WxAppInfoConfig config, string payTranId, string payRefundId, string total_fee, string refund_fee, string refund_desc)
+        {
+            var result = new PayRefundResult();
+            TenpayUtil tenpayUtil = new TenpayUtil(config);
+
+            var orderPayRefund = tenpayUtil.OrderPayRefund(payTranId, payRefundId, total_fee, refund_fee, refund_desc);
+
+            result.Status = orderPayRefund.Status;
+
+            return result;
+        }
+        public string PayRefundQuery(WxAppInfoConfig config, string payRefundId)
+        {
+            return null;
+        }
+
 
         //public string OrderPayReFund(string comCode, string orderId, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
         //{

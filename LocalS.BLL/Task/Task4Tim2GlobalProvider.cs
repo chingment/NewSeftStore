@@ -18,7 +18,8 @@ namespace LocalS.BLL.Task
         Unknow = 0,
         Order2CheckReservePay = 1,
         Order2CheckPickupTimeout = 2,
-        PayTrans2CheckStatus = 3
+        PayTrans2CheckStatus = 3,
+        PayRefundCheckStatus = 4
     }
 
     public class Task4Tim2GlobalProvider : BaseDbContext, IJob
@@ -147,7 +148,7 @@ namespace LocalS.BLL.Task
                                     }
 
                                     LogUtil.Info(string.Format("交易号：{0},查询支付结果文件:{1}", payTrans.Id, content));
-                                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.EmptyGuid), payTrans.PayPartner, E_PayTransLogNotifyFrom.PayQuery, content);
+                                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.EmptyGuid), payTrans.PayPartner, E_PayTransLogNotifyFrom.Query, content);
                                 }
                                 else
                                 {
@@ -167,6 +168,35 @@ namespace LocalS.BLL.Task
                                 if (m.ExpireTime.AddMinutes(1) <= DateTime.Now)
                                 {
                                     Order2CheckPickupTimeout(orderSub2CheckPickupTimeoutModel);
+                                }
+                                #endregion
+                                break;
+                            case Task4TimType.PayRefundCheckStatus:
+                                #region 检查订单退款是否成功
+                                var payRefund = m.Data.ToJsonObject<PayRefund2CheckStatusModel>();
+                                LogUtil.Info(string.Format("查询退款单号：{0}", payRefund.Id));
+                                //判断支付过期时间
+                                if (m.ExpireTime.AddMinutes(1) >= DateTime.Now)
+                                {
+                                    //未过期查询支付状态
+                                    string content = "";
+                                    switch (payRefund.PayPartner)
+                                    {
+                                        case E_PayPartner.Wx:
+                                            #region Wx
+                                            var wxByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(payRefund.MerchId);
+                                            content = SdkFactory.Wx.PayRefundQuery(wxByMp_AppInfoConfig, payRefund.Id);
+                                            #endregion
+                                            break;
+                                    }
+
+                                    LogUtil.Info(string.Format("退款单号：{0},查询结果文件:{1}", payRefund.Id, content));
+                                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefund.PayPartner, E_PayTransLogNotifyFrom.Query, content);
+                                }
+                                else
+                                {
+                                    LogUtil.Info(string.Format("退款单号：{0},有效时间过期", payRefund.Id));
+                                    Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, payRefund.Id);
                                 }
                                 #endregion
                                 break;

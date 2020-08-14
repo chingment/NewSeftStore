@@ -12,6 +12,14 @@ namespace LocalS.Entity
         Success = 2,
         Failure = 3
     }
+
+    public enum E_PayRefundMethod
+    {
+        Unknow = 0,
+        Original = 1,
+        Manual = 2
+    }
+    
     [Table("PayRefund")]
     public class PayRefund
     {
@@ -27,7 +35,7 @@ namespace LocalS.Entity
         public string PayTransId { get; set; }
         public string PayPartnerOrderId { get; set; }
         public DateTime? RefundTime { get; set; }
-        public string Method { get; set; }
+        public E_PayRefundMethod Method { get; set; }
         public decimal Amount { get; set; }
         public string Operator { get; set; }
         public string Reason { get; set; }

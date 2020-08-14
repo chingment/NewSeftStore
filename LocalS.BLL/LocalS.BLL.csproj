@@ -116,6 +116,7 @@
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\EventNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\LoginLogModel.cs" />
+    <Compile Include="Mq\MqMessageConentModel\PayRefundResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\SellChannelStockChangeModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Push\PushService.cs" />
     <Compile Include="Sdk\EasemobSdkProvider.cs" />
+    <Compile Include="Sdk\PayRefundResult.cs" />
     <Compile Include="Sdk\ZfbSdkProvider.cs" />
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\PayBuildWxJsPayInfoResult.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Task\Launcher.cs" />
     <Compile Include="Task\Model\Order2CheckPayModel.cs" />
     <Compile Include="Task\Model\OrderSub2CheckPickupTimeoutModel.cs" />
+    <Compile Include="Task\Model\PayRefund2CheckStatusModel.cs" />
     <Compile Include="Task\Model\PayTrans2CheckStatusModel.cs" />
     <Compile Include="Task\Quartz\QuartzManager.cs" />
     <Compile Include="Task\Quartz\SchedulerJobListener.cs" />

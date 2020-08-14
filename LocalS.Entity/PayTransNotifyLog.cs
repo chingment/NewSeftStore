@@ -16,7 +16,7 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         NotifyUrl = 2,
-        PayQuery = 3
+        Query = 3
     }
 
     [Table("PayTransNotifyLog")]

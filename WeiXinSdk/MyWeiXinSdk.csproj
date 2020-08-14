@@ -89,6 +89,7 @@
     <Compile Include="Post\WxApiQrCodeCreateRequest.cs" />
     <Compile Include="Post\WxApiQrCodeCreatePostData.cs" />
     <Compile Include="Post\WxApiQrCodeCreateResult.cs" />
+    <Compile Include="Tenpay\Model\OrderPayRefundResult.cs" />
     <Compile Include="Tenpay\Model\UnifiedOrder.cs" />
     <Compile Include="Model\Articles.cs" />
     <Compile Include="Model\Author.cs" />

@@ -10,6 +10,7 @@ namespace LocalS.BLL.Mq
     {
         Unknow = 0,
         PayResultNotify = 2,
-        EventNotify = 3
+        EventNotify = 3,
+        PayRefundNotify = 4
     }
 }

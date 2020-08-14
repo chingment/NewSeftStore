@@ -744,7 +744,7 @@ namespace LocalS.BLL.Biz
                     #region 解释微信支付协议
                     LogUtil.Info("解释微信支付协议");
 
-                    if (from == E_PayTransLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.Query)
                     {
                         payResult = SdkFactory.Wx.Convert2PayResultByPayQuery(null, content);
                     }
@@ -759,7 +759,7 @@ namespace LocalS.BLL.Biz
                     #region 解释支付宝支付协议
                     LogUtil.Info("解释支付宝支付协议");
 
-                    if (from == E_PayTransLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.Query)
                     {
                         payResult = SdkFactory.Zfb.Convert2PayResultByPayQuery(null, content);
                     }
@@ -774,7 +774,7 @@ namespace LocalS.BLL.Biz
                 {
                     #region 解释通莞支付协议
 
-                    if (from == E_PayTransLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.Query)
                     {
                         payResult = SdkFactory.TgPay.Convert2PayResultByPayQuery(null, content);
                     }
@@ -788,7 +788,7 @@ namespace LocalS.BLL.Biz
                 else if (payPartner == E_PayPartner.Xrt)
                 {
                     #region 解释XRT支付协议
-                    if (from == E_PayTransLogNotifyFrom.PayQuery)
+                    if (from == E_PayTransLogNotifyFrom.Query)
                     {
                         payResult = SdkFactory.XrtPay.Convert2PayResultByPayQuery(null, content);
                     }

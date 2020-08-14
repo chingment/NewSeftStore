@@ -115,5 +115,6 @@ namespace LocalS.Entity
         public decimal RefundedAmount { get; set; }
         public string PayTransId { get; set; }
         public string PayPartnerOrderId { get; set; }
+        public E_PayPartner PayPartner { get; set; }
     }
 }
