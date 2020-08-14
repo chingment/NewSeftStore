@@ -63,6 +63,7 @@
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />
+    <Compile Include="PayRefund.cs" />
     <Compile Include="PayTrans.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderSub.cs" />

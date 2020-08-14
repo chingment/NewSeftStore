@@ -72,6 +72,14 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static PayRefundService PayRefund
+        {
+            get
+            {
+                return new PayRefundService();
+            }
+        }
+
         public static AdSpaceService AdSpace
         {
             get

@@ -53,7 +53,7 @@
           </el-row>
           <pagination v-show="listTotalByKindSpus>0" :total="listTotalByKindSpus" :page.sync="listQueryByGetKindSpus.page" :limit.sync="listQueryByGetKindSpus.limit" @pagination="_getKindSpus" />
 
-          <span v-show="listTotalByKindSpus==0">该分类没有相关产品，请添加商品 {{ listTotalByKindSpus }}</span>
+          <span v-show="listTotalByKindSpus==0">该分类没有相关产品，请添加商品</span>
         </el-main>
       </el-container>
     </el-container>

@@ -112,10 +112,8 @@ namespace LocalS.Entity
         public DateTime? PayExpireTime { get; set; }
         public string CancelOperator { get; set; }
         public string CancelReason { get; set; }
-        public decimal? RefundAmount { get; set; }
-        public string RefundOperator { get; set; }
-        public string RefundReason { get; set; }
-        public DateTime? RefundTime { get; set; }
+        public decimal RefundedAmount { get; set; }
         public string PayTransId { get; set; }
+        public string PayPartnerOrderId { get; set; }
     }
 }

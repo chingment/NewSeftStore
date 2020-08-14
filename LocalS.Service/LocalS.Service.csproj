@@ -188,6 +188,7 @@
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
     <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\OrderService.cs" />
+    <Compile Include="Api\Merch\PayRefundService.cs" />
     <Compile Include="Api\Merch\PayTransService.cs" />
     <Compile Include="Api\Merch\PrdProductService.cs" />
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Api\Merch\ReportService.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetailsByMachineSelfTake.cs" />
+    <Compile Include="Api\Merch\RModels\RetPayRefundOrderDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetReportMachineStockRealDataInit.cs" />
     <Compile Include="Api\Merch\RModels\RetReportProductSkuSalesDateHisInit.cs" />
     <Compile Include="Api\Merch\RModels\RetRpt7DayGmvRl.cs" />
@@ -225,6 +227,7 @@
     <Compile Include="Api\Merch\RModels\RopMachineSetSysStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineShutdownSys.cs" />
     <Compile Include="Api\Merch\RModels\RopOrderHandleExByMachineSelfTake.cs" />
+    <Compile Include="Api\Merch\RModels\RopPayRefundApply.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopPrdProductEditSalePriceOnStore.cs" />
@@ -251,6 +254,7 @@
     <Compile Include="Api\Merch\RModels\RupMachineGetStocks.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineQueryMsgPushResult.cs" />
     <Compile Include="Api\Merch\RModels\RupOrderGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupPayRefundSearchOrder.cs" />
     <Compile Include="Api\Merch\RModels\RupPayTransGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
