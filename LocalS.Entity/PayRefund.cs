@@ -8,7 +8,7 @@ namespace LocalS.Entity
     public enum E_PayRefundStatus
     {
         Unknow = 0,
-        Applying = 1,
+        Handling = 1,
         Success = 2,
         Failure = 3
     }
@@ -19,7 +19,7 @@ namespace LocalS.Entity
         Original = 1,
         Manual = 2
     }
-    
+
     [Table("PayRefund")]
     public class PayRefund
     {
@@ -37,10 +37,13 @@ namespace LocalS.Entity
         public DateTime? RefundTime { get; set; }
         public E_PayRefundMethod Method { get; set; }
         public decimal Amount { get; set; }
-        public string Operator { get; set; }
-        public string Reason { get; set; }
         public E_PayRefundStatus Status { get; set; }
         public DateTime? ApplyTime { get; set; }
+        public string ApplyRemark { get; set; }
+        public string Applyer { get; set; }
+        public DateTime? HandleTime { get; set; }
+        public string HandleRemark { get; set; }
+        public string Handler { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

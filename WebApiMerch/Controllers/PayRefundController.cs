@@ -40,5 +40,26 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.PayRefund.Apply(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetListByHandle([FromUri]RupPayRefundGetList rup)
+        {
+            IResult result = MerchServiceFactory.PayRefund.GetListByHandle(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetHandleDetails(string payRefundId)
+        {
+            IResult result = MerchServiceFactory.PayRefund.GetHandleDetails(this.CurrentUserId, this.CurrentMerchId, payRefundId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Handle([FromBody]RopPayRefundHandle rop)
+        {
+            IResult result = MerchServiceFactory.PayRefund.Handle(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

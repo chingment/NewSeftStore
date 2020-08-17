@@ -1,91 +1,105 @@
 <template>
-  <div id="refund_apply" class="app-container">
+  <div id="user_list" class="app-container">
 
-    <div v-show="isSearch">
-      <el-form ref="form" label-width="120px">
-        <el-form-item label="交易号">
-          <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
-        </el-form-item>
-        <el-form-item label="订单号">
-          <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
-        </el-form-item>
-        <el-form-item label="支付商交易号">
-          <el-input v-model="listQuery.payPartnerOrderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearch">查询交易</el-button>
-        </el-form-item>
-      </el-form>
+    <div v-show="!isHandle">
+      <div class="filter-container">
+
+        <el-row :gutter="20">
+          <el-col :span="4" :xs="24" style="margin-bottom:20px">
+            <el-input v-model="listQuery.payrefundId" clearable style="width: 100%" placeholder="退款单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          </el-col>
+          <el-col :span="4" :xs="24" style="margin-bottom:20px">
+            <el-input v-model="listQuery.paytransId" clearable style="width: 100%" placeholder="交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          </el-col>
+          <el-col :span="4" :xs="24" style="margin-bottom:20px">
+            <el-input v-model="listQuery.orderId" clearable style="width: 100%" placeholder="订单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          </el-col>
+          <el-col :span="4" :xs="24" style="margin-bottom:20px">
+            <el-input v-model="listQuery.payPartnerOrderId" clearable style="width: 100%" placeholder="支付商交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          </el-col>
+          <el-col :span="4" :xs="24" style="margin-bottom:20px">
+            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+              查询
+            </el-button>
+          </el-col>
+        </el-row>
+
+      </div>
       <el-table
+        :key="listKey"
         v-loading="loading"
         :data="listData"
         fit
         highlight-current-row
         style="width: 100%;"
       >
-        <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
+        <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.$index+1 }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="退款单号" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="交易号" prop="payTransId" align="left" :width="isDesktop==true?220:80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.payTransId }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">
+        <el-table-column label="店铺" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.storeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="10%">
+        <el-table-column label="订单号" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.clientUserName }}</span>
+            <span>{{ scope.row.orderId }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="下单方式" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="交易号" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.sourceName }}</span>
+            <span>{{ scope.row.payTransId }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="取货方式" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="支付商交易号" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.receiveModeName }}</span>
+            <span>{{ scope.row.payPartnerOrderId }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="退款金额" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.pickupTrgStatus.text }}</span>
+            <span>{{ scope.row.amount }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="金额" prop="chargeAmount" align="left" min-width="10%">
+        <el-table-column label="退款方式" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.chargeAmount }}</span>
+            <span>{{ scope.row.method.text }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" prop="status" align="left" min-width="10%">
+        <el-table-column label="申请时间" align="left" min-width="10%">
+          <template slot-scope="scope">
+            <span>{{ scope.row.applyTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" align="left" min-width="5%">
           <template slot-scope="scope">
             <span>{{ scope.row.status.text }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="下单时间" prop="submitTime" align="left" min-width="10%">
-          <template slot-scope="scope">
-            <span>{{ scope.row.submittedTime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" align="center" width="180" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button type="primary" size="mini" @click="dialogOpenByRefundApply(row)">
-              退款
+            <el-button v-if="row.method.value==2" type="primary" size="mini" @click="dialogOpenByRefundHandle(row)">
+              人工处理
             </el-button>
+
+            <el-tag v-if="row.method.value==1" type="warning">自动处理</el-tag>
+
           </template>
         </el-table-column>
       </el-table>
+      <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+
     </div>
 
-    <div v-show="!isSearch">
+    <div v-show="isHandle">
       <div v-loading="loadingByRefundApply">
-
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>
@@ -204,16 +218,13 @@
 
           </el-form-item>
           <el-form-item label="退款方式" prop="method">
-            <el-radio v-model="formByApply.method" label="1">原路退回</el-radio>
-            <el-radio v-model="formByApply.method" label="2">线下退回</el-radio>
+            <span>{{ details.refundedAmount }}</span>
           </el-form-item>
           <el-form-item label="退款金额" prop="amount">
-            <el-input v-model="formByApply.amount" style="width:160px">
-              <template slot="prepend">￥</template>
-            </el-input>
+            <span>{{ details.refundedAmount }}</span>
           </el-form-item>
-          <el-form-item label="原因" prop="remark">
-            <el-input v-model="formByApply.remark" />
+          <el-form-item label="原因" prop="reason">
+            <span>{{ details.refundedAmount }}</span>
           </el-form-item>
 
         </el-form>
@@ -221,32 +232,38 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="_apply()">
-          确认提交
+          确认处理
         </el-button>
-        <el-button @click="isSearch = true">
+        <el-button @click="isHandle = false">
           返回
         </el-button>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import { searchOrder, getOrderDetails, apply } from '@/api/payrefund'
-import { MessageBox } from 'element-ui'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
+import { getList } from '@/api/payrefund'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
 export default {
+  name: 'PaytransList',
+  components: { Pagination },
   data() {
     return {
       loading: false,
+      listKey: 0,
+      listData: null,
+      listTotal: 0,
       listQuery: {
         page: 1,
         limit: 10,
-        payTransId: undefined,
+        payrefundId: undefined,
+        paytransId: undefined,
         orderId: undefined,
         payPartnerOrderId: undefined
       },
-      loadingByRefundApply: false,
       details: {
         sn: '',
         storeName: '',
@@ -262,94 +279,46 @@ export default {
         details: undefined,
         isRunning: false
       },
-      formByApply: {
-        orderId: '',
-        method: '1',
-        remark: '',
-        amount: 0
-      },
-      rulesByApply: {
-      },
-      isSearch: true,
+      isHandle: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
   created() {
-    this.init()
+    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
+      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+    }
+    this.getListData()
   },
   methods: {
-    init() {
-      var payTransId = getUrlParam('payTransId')
-      if (payTransId != null) {
-        this.listQuery.payTransId = payTransId
-        this.handleSearch()
-      }
-    },
-    handleSearch() {
-      if (isEmpty(this.listQuery.payTransId) && isEmpty(this.listQuery.orderId) && isEmpty(this.listQuery.payPartnerOrderId)) {
-        this.$message('找少输入一个搜索条件')
-        return
-      }
-
-      this.listQuery.page = 1
+    getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      searchOrder(this.listQuery).then(res => {
+      getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
           this.listTotal = d.total
-          if (d.total === 0) {
-            this.$message('查询不到有效的交易记录')
-          }
         }
         this.loading = false
       })
     },
-    dialogOpenByRefundApply(row) {
-      if (row.exStatus.value === 2) {
-        this.$message('该订单存在异常未有处理，请到订单中处理')
-        return
-      }
-
-      this.loadingByRefundApply = true
-      this.formByApply.orderId = row.id
-      getOrderDetails({ orderId: row.id }).then(res => {
-        if (res.result === 1) {
-          this.details = res.data
-        }
-        this.loadingByRefundApply = false
-        this.isSearch = false
-      })
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getListData()
     },
-    _apply() {
-      var _this = this
-      MessageBox.confirm('确定要提交退款？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        apply(_this.formByApply).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            var d = res.data
-            this.$router.push({
-              path: '/payRefund/query?payRefundId=' + d.payRefundId
-            })
-          }
-        })
-      }).catch(() => {
-      })
-    }
+    dialogOpenByRefundHandle(row) {
+      // this.loadingByRefundApply = true
+      // this.formByApply.orderId = row.id
+      // getOrderDetails({ orderId: row.id }).then(res => {
+      //   if (res.result === 1) {
+      //     this.details = res.data
+      //   }
+      //   this.loadingByRefundApply = false
+      //   this.isSearch = false
+      // })
 
+      this.isHandle = true
+    }
   }
 }
 </script>
-
-<style  lang="scss"  scoped>
-
-#refund_apply{
-
-}
-</style>
-

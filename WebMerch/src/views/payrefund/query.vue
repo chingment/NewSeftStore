@@ -83,7 +83,7 @@
       </el-table-column>
       <el-table-column label="原因" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.reason }}</span>
+          <span>{{ scope.row.applyRemark }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">

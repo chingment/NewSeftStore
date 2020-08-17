@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.Merch
     {
         public string OrderId { get; set; }
         public E_PayRefundMethod Method { get; set; }
-        public string Reason { get; set; }
+        public string Remark { get; set; }
         public decimal Amount { get; set; }
     }
 }
