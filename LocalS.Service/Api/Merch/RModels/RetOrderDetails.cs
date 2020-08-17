@@ -19,7 +19,7 @@ namespace LocalS.Service.Api.Merch
         public string ClientUserName { get; set; }
         public string ClientUserId { get; set; }
         public string StoreName { get; set; }
-        public string SubmitTime { get; set; }
+        public string SubmittedTime { get; set; }
         public string ChargeAmount { get; set; }
         public string DiscountAmount { get; set; }
         public string OriginalAmount { get; set; }

@@ -32,7 +32,7 @@ namespace LocalS.Service.Api.Merch
             //ret.ClientUserName = order.ClientUserName;
             //ret.ClientUserId = order.ClientUserId;
             //ret.StoreName = order.StoreName;
-            //ret.SubmitTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            //ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
             //ret.ChargeAmount = order.ChargeAmount.ToF2Price();
             //ret.DiscountAmount = order.DiscountAmount.ToF2Price();
             //ret.OriginalAmount = order.OriginalAmount.ToF2Price();
@@ -223,7 +223,7 @@ namespace LocalS.Service.Api.Merch
                     ClientUserName = item.ClientUserName,
                     ClientUserId = item.ClientUserId,
                     StoreName = item.StoreName,
-                    SubmitTime = item.SubmittedTime.ToUnifiedFormatDateTime(),
+                    SubmittedTime = item.SubmittedTime.ToUnifiedFormatDateTime(),
                     ChargeAmount = item.ChargeAmount.ToF2Price(),
                     DiscountAmount = item.DiscountAmount.ToF2Price(),
                     OriginalAmount = item.OriginalAmount.ToF2Price(),
@@ -262,7 +262,7 @@ namespace LocalS.Service.Api.Merch
             ret.ClientUserName = order.ClientUserName;
             ret.ClientUserId = order.ClientUserId;
             ret.StoreName = order.StoreName;
-            ret.SubmitTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
             ret.ChargeAmount = order.ChargeAmount.ToF2Price();
             ret.DiscountAmount = order.DiscountAmount.ToF2Price();
             ret.OriginalAmount = order.OriginalAmount.ToF2Price();

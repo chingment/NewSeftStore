@@ -183,7 +183,7 @@ namespace LocalS.Service.Api.Merch
             ret.ClientUserName = order.ClientUserName;
             ret.ClientUserId = order.ClientUserId;
             ret.StoreName = order.StoreName;
-            ret.SubmitTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
             ret.ChargeAmount = order.ChargeAmount.ToF2Price();
             ret.DiscountAmount = order.DiscountAmount.ToF2Price();
             ret.OriginalAmount = order.OriginalAmount.ToF2Price();
@@ -236,6 +236,20 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            if (rop.Amount <= 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款金额必须大于0且不能大于可退金额");
+            }
+
+            if (rop.Method == E_PayRefundMethod.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择退款方式");
+            }
+
+            if (string.IsNullOrEmpty(rop.Remark))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款原因不能为空");
+            }
 
             var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.OrderId).FirstOrDefault();
             if (order == null)
@@ -247,6 +261,7 @@ namespace LocalS.Service.Api.Merch
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单发生异常没有处理，请到订单处理，再进行退款操作");
             }
+
 
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == rop.OrderId).ToList();
 
@@ -265,24 +280,24 @@ namespace LocalS.Service.Api.Merch
                 string payRefundId = IdWorker.Build(IdType.PayRefundId);
 
 
-                PayRefundResult payRefundResult = null;
-                switch (order.PayPartner)
-                {
-                    case E_PayPartner.Wx:
-                        var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
-                        payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount.ToF2Price(), rop.Amount.ToPrice(), rop.Remark);
-                        break;
-                }
+                //PayRefundResult payRefundResult = null;
+                //switch (order.PayPartner)
+                //{
+                //    case E_PayPartner.Wx:
+                //        var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
+                //        payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount.ToF2Price(), rop.Amount.ToPrice(), rop.Remark);
+                //        break;
+                //}
 
-                if (payRefundResult == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
-                }
+                //if (payRefundResult == null)
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                //}
 
-                if (payRefundResult.Status != "APPLYING")
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
-                }
+                //if (payRefundResult.Status != "APPLYING")
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                //}
 
                 var payRefund = new PayRefund();
                 payRefund.Id = payRefundId;
