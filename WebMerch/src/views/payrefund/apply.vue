@@ -4,13 +4,13 @@
     <div v-show="isSearch">
       <el-form ref="form" label-width="120px">
         <el-form-item label="交易号">
-          <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" @clear="handleSearch" />
+          <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item label="订单号">
-          <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" @clear="handleSearch" />
+          <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item label="支付商交易号">
-          <el-input v-model="listQuery.payPartnerOrderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" @clear="handleSearch" />
+          <el-input v-model="listQuery.payPartnerOrderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">查询交易</el-button>
@@ -234,7 +234,7 @@
 <script>
 import { searchOrder, getOrderDetails, apply } from '@/api/payrefund'
 import { MessageBox } from 'element-ui'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
   data() {
     return {
@@ -286,6 +286,11 @@ export default {
       }
     },
     handleSearch() {
+      if (isEmpty(this.listQuery.payTransId) && isEmpty(this.listQuery.orderId) && isEmpty(this.listQuery.payPartnerOrderId)) {
+        this.$message('找少输入一个搜索条件')
+        return
+      }
+
       this.listQuery.page = 1
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
