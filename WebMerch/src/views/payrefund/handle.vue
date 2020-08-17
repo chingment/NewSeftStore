@@ -88,9 +88,7 @@
             <el-button v-if="row.method.value==2" type="primary" size="mini" @click="dialogOpenByRefundHandle(row)">
               人工处理
             </el-button>
-
             <el-tag v-if="row.method.value==1" type="warning">自动处理</el-tag>
-
           </template>
         </el-table-column>
       </el-table>
@@ -142,7 +140,7 @@
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="下单时间:" class="postInfo-container-item">
-                    {{ details.submitTime }}
+                    {{ details.submittedTime }}
                   </el-form-item>
                 </el-col>
 
@@ -273,7 +271,7 @@ export default {
         originalAmount: '',
         discountAmount: '',
         chargeAmount: '',
-        submitTime: '',
+        submittedTime: '',
         status: { text: '' },
         exHandleRemark: '',
         details: undefined,

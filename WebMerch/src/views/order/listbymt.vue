@@ -159,9 +159,9 @@
           <span :class="'enable-status enable-status-'+scope.row.exStatus.value">{{ scope.row.exStatus.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下单时间" prop="submitTime" align="left" min-width="15%">
+      <el-table-column v-if="isDesktop" label="下单时间" prop="submittedTime" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span>{{ scope.row.submitTime }}</span>
+          <span>{{ scope.row.submittedTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
@@ -225,7 +225,7 @@
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="下单时间:" class="postInfo-container-item">
-                    {{ details.submitTime }}
+                    {{ details.submittedTime }}
                   </el-form-item>
                 </el-col>
 
@@ -404,7 +404,7 @@ export default {
         originalAmount: '',
         discountAmount: '',
         chargeAmount: '',
-        submitTime: '',
+        submittedTime: '',
         status: { text: '' },
         exHandleRemark: '',
         details: undefined,
