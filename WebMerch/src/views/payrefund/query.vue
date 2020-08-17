@@ -63,12 +63,12 @@
       </el-table-column>
       <el-table-column label="退款金额" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.amount }}</span>
+          <span>{{ scope.row.applyAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column label="退款方式" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.method.text }}</span>
+          <span>{{ scope.row.applyMethod.text }}</span>
         </template>
       </el-table-column>
       <el-table-column label="申请时间" align="left" min-width="10%">

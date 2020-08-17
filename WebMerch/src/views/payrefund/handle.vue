@@ -65,12 +65,12 @@
         </el-table-column>
         <el-table-column label="退款金额" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.amount }}</span>
+            <span>{{ scope.row.applyAmount }}</span>
           </template>
         </el-table-column>
         <el-table-column label="退款方式" align="left" min-width="10%">
           <template slot-scope="scope">
-            <span>{{ scope.row.method.text }}</span>
+            <span>{{ scope.row.applyMethod.text }}</span>
           </template>
         </el-table-column>
         <el-table-column label="申请时间" align="left" min-width="10%">
@@ -85,10 +85,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button v-if="row.method.value==2" type="primary" size="mini" @click="dialogOpenByRefundHandle(row)">
+            <el-button v-if="row.applyMethod.value==2" type="primary" size="mini" @click="dialogOpenByRefundHandle(row)">
               人工处理
             </el-button>
-            <el-tag v-if="row.method.value==1" type="warning">自动处理</el-tag>
+            <el-tag v-if="row.applyMethod.value==1" type="warning">自动处理</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -97,7 +97,7 @@
     </div>
 
     <div v-show="isHandle">
-      <div v-loading="loadingByRefundApply">
+      <div v-loading="loadingByRefundHandle">
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>
@@ -112,27 +112,27 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label-width="80px" label="订单编号:" class="postInfo-container-item">
-                    {{ details.id }}
+                    {{ details.order.id }}
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24">
                   <el-form-item label-width="80px" label="店铺名称:" class="postInfo-container-item">
-                    {{ details.storeName }}
+                    {{ details.order.storeName }}
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="下单用户:" class="postInfo-container-item">
-                    {{ details.clientUserName }}
+                    {{ details.order.clientUserName }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="下单方式:" class="postInfo-container-item">
-                    {{ details.sourceName }}
+                    {{ details.order.sourceName }}
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -140,13 +140,13 @@
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="下单时间:" class="postInfo-container-item">
-                    {{ details.submittedTime }}
+                    {{ details.order.submittedTime }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="原金额:" class="postInfo-container-item">
-                    {{ details.originalAmount }}
+                    {{ details.order.originalAmount }}
                   </el-form-item>
                 </el-col>
 
@@ -155,13 +155,13 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="优惠金额:" class="postInfo-container-item">
-                    {{ details.discountAmount }}
+                    {{ details.order.discountAmount }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="支付金额:" class="postInfo-container-item">
-                    {{ details.chargeAmount }}
+                    {{ details.order.chargeAmount }}
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -169,7 +169,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="80px" label="状态:" class="postInfo-container-item">
-                    {{ details.status.text }}
+                    {{ details.order.status.text }}
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" />
@@ -181,7 +181,7 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(receiveMode,index) in details.receiveModes" :key="index" style="font-size:14px">
+        <div v-for="(receiveMode,index) in details.order.receiveModes" :key="index" style="font-size:14px">
           <div> <i class="el-icon-place" /><span> {{ receiveMode.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
           <table class="table-skus" style="max-width:800px;table-layout:fixed;">
             <tr v-for="(pickupSku,sub_index) in receiveMode.items" :key="sub_index">
@@ -209,27 +209,45 @@
           </div>
         </div>
 
-        <el-form ref="form" v-loading="loading" :model="formByApply" :rules="rulesByApply" label-width="80px" style="max-width:800px;">
+        <el-form ref="form" label-width="80px" style="max-width:800px;">
           <el-form-item label="退款提示">
 
-            <span>已退款金额：<span>{{ details.refundedAmount }}</span>，正在申请退款金额：<span>{{ details.refundingAmount }}</span>，可申请退款金额：<span>{{ details.refundableAmount }}</span></span>
+            <span>已退款金额：<span class="refundedAmount">{{ details.order.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.order.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.order.refundableAmount }}</span></span>
 
           </el-form-item>
-          <el-form-item label="退款方式" prop="method">
-            <span>{{ details.refundedAmount }}</span>
+          <el-form-item label="申请退款方式" prop="method">
+            <span>{{ details.applyMethod.text }}</span>
           </el-form-item>
-          <el-form-item label="退款金额" prop="amount">
-            <span>{{ details.refundedAmount }}</span>
+          <el-form-item label="申请退款金额" prop="amount">
+            <span>{{ details.applyAmount }}</span>
           </el-form-item>
-          <el-form-item label="原因" prop="reason">
-            <span>{{ details.refundedAmount }}</span>
+          <el-form-item label="申请原因" prop="reason">
+            <span>{{ details.applyRemark }}</span>
           </el-form-item>
 
         </el-form>
 
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>退款处理</h5>
+          </div>
+        </div>
+
+        <el-form ref="formByHandle" :model="formByHandle" :rules="rulesByHandle" label-width="80px" style="max-width:800px;">
+
+          <el-form-item label="结果" prop="result">
+            <el-radio-group v-model="formByHandle.result">
+              <el-radio label="1">退款成功</el-radio>
+              <el-radio label="2">退款失败</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="formByHandle.remark" />
+          </el-form-item>
+        </el-form>
+
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_apply()">
+        <el-button type="primary" @click="_handle()">
           确认处理
         </el-button>
         <el-button @click="isHandle = false">
@@ -242,8 +260,9 @@
 </template>
 
 <script>
-import { getList } from '@/api/payrefund'
+import { getListByHandle, getHandleDetails, handle } from '@/api/payrefund'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { MessageBox } from 'element-ui'
 
 export default {
   name: 'PaytransList',
@@ -262,21 +281,38 @@ export default {
         orderId: undefined,
         payPartnerOrderId: undefined
       },
-      details: {
-        sn: '',
-        storeName: '',
-        clientUserName: '',
-        sourceName: '',
-        quantity: '',
-        originalAmount: '',
-        discountAmount: '',
-        chargeAmount: '',
-        submittedTime: '',
-        status: { text: '' },
-        exHandleRemark: '',
-        details: undefined,
-        isRunning: false
+      formByHandle: {
+        payRefundId: '',
+        remark: '',
+        result: ''
       },
+      rulesByHandle: {
+        result: [{ required: true, max: 200, message: '请选择结果', trigger: 'change' }],
+        remark: [{ required: true, min: 1, max: 200, message: '原因不能为空', trigger: 'change' }]
+      },
+      details: {
+        payRefundId: '',
+        applyMethod: { text: '' },
+        applyAmount: '',
+        applyTime: '',
+        applyRemark: '',
+        order: {
+          id: '',
+          storeName: '',
+          clientUserName: '',
+          sourceName: '',
+          quantity: '',
+          originalAmount: '',
+          discountAmount: '',
+          chargeAmount: '',
+          submittedTime: '',
+          status: { text: '' },
+          refundedAmount: '',
+          refundingAmount: '',
+          refundableAmount: ''
+        }
+      },
+      loadingByRefundHandle: false,
       isHandle: false,
       isDesktop: this.$store.getters.isDesktop
     }
@@ -291,7 +327,7 @@ export default {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getList(this.listQuery).then(res => {
+      getListByHandle(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -305,17 +341,39 @@ export default {
       this.getListData()
     },
     dialogOpenByRefundHandle(row) {
-      // this.loadingByRefundApply = true
-      // this.formByApply.orderId = row.id
-      // getOrderDetails({ orderId: row.id }).then(res => {
-      //   if (res.result === 1) {
-      //     this.details = res.data
-      //   }
-      //   this.loadingByRefundApply = false
-      //   this.isSearch = false
-      // })
+      this.loadingByRefundHandle = true
+      this.formByHandle.payRefundId = row.id
+      this.formByHandle.result = ''
+      this.formByHandle.remark = ''
+      getHandleDetails({ payRefundId: row.id }).then(res => {
+        if (res.result === 1) {
+          this.details = res.data
+        }
+        this.loadingByRefundHandle = false
+        this.isHandle = true
+      })
+    },
+    _handle() {
+      var _this = this
 
-      this.isHandle = true
+      this.$refs['formByHandle'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要处理？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            handle(_this.formByHandle).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.isHandle = false
+                this.getListData()
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
     }
   }
 }

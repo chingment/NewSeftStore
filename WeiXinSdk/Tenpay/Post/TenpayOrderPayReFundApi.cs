@@ -44,8 +44,6 @@ namespace MyWeiXinSdk.Tenpay
             sParams.Add("nonce_str", CommonUtil.GetNonceStr());//随机字符串
             sParams.Add("out_trade_no", out_trade_no);//微信订单号
 
-
-
             sParams.Add("total_fee", int.Parse(total_fee));//订单总金额
             sParams.Add("refund_fee", int.Parse(refund_fee));//退款金额
             sParams.Add("out_refund_no", out_refund_no);//随机生成商户退款单号

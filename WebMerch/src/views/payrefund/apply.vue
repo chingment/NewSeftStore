@@ -197,15 +197,19 @@
           </div>
         </div>
 
-        <el-form ref="form" v-loading="loading" :model="formByApply" :rules="rulesByApply" label-width="80px" style="max-width:800px;">
+        <el-form ref="formByApply" :model="formByApply" :rules="rulesByApply" label-width="80px" style="max-width:800px;">
           <el-form-item label="退款提示">
 
-            <span>已退款金额：<span>{{ details.refundedAmount }}</span>，正在申请退款金额：<span>{{ details.refundingAmount }}</span>，可申请退款金额：<span>{{ details.refundableAmount }}</span></span>
+            <span>已退款金额：<span class="refundedAmount">{{ details.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.refundableAmount }}</span></span>
 
           </el-form-item>
           <el-form-item label="退款方式" prop="method">
-            <el-radio v-model="formByApply.method" label="1">原路退回</el-radio>
-            <el-radio v-model="formByApply.method" label="2">线下退回</el-radio>
+
+            <el-radio-group v-model="formByApply.method">
+              <el-radio label="1">原路退回</el-radio>
+              <el-radio label="2">线下退回</el-radio>
+            </el-radio-group>
+
           </el-form-item>
           <el-form-item label="退款金额" prop="amount">
             <el-input v-model="formByApply.amount" style="width:160px">
@@ -239,6 +243,7 @@ export default {
   data() {
     return {
       loading: false,
+      listData: [],
       listQuery: {
         page: 1,
         limit: 10,
@@ -264,11 +269,13 @@ export default {
       },
       formByApply: {
         orderId: '',
-        method: '1',
+        method: '',
         remark: '',
         amount: 0
       },
       rulesByApply: {
+        method: [{ required: true, max: 200, message: '请选择退款方式', trigger: 'change' }],
+        remark: [{ required: true, min: 1, max: 200, message: '原因不能为空', trigger: 'change' }]
       },
       isSearch: true,
       isDesktop: this.$store.getters.isDesktop
@@ -314,6 +321,10 @@ export default {
 
       this.loadingByRefundApply = true
       this.formByApply.orderId = row.id
+      this.formByApply.remark = ''
+      this.formByApply.method = ''
+      this.formByApply.amount = 0
+
       getOrderDetails({ orderId: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
@@ -324,21 +335,26 @@ export default {
     },
     _apply() {
       var _this = this
-      MessageBox.confirm('确定要提交退款？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        apply(_this.formByApply).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            var d = res.data
-            this.$router.push({
-              path: '/payRefund/query?payRefundId=' + d.payRefundId
+
+      this.$refs['formByApply'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要提交退款？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            apply(_this.formByApply).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                var d = res.data
+                this.$router.push({
+                  path: '/payRefund/query?payRefundId=' + d.payRefundId
+                })
+              }
             })
-          }
-        })
-      }).catch(() => {
+          }).catch(() => {
+          })
+        }
       })
     }
 

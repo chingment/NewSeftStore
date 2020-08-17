@@ -69,7 +69,7 @@ namespace LocalS.Service.Api.Merch
                             (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
                             (rup.PayPartnerOrderId == null || o.PayPartnerOrderId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.Method, o.OrderId, o.Status, o.Amount, o.PayPartnerOrderId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
+                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerOrderId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
 
             int total = query.Count();
 
@@ -89,8 +89,8 @@ namespace LocalS.Service.Api.Merch
                     StoreId = item.StoreId,
                     StoreName = item.StoreName,
                     OrderId = item.OrderId,
-                    Amount = item.Amount,
-                    Method = GetMethod(item.Method),
+                    ApplyAmount = item.ApplyAmount,
+                    ApplyMethod = GetMethod(item.ApplyMethod),
                     Status = GetStatus(item.Status),
                     PayPartnerOrderId = item.PayPartnerOrderId,
                     ApplyRemark = item.ApplyRemark,
@@ -197,8 +197,8 @@ namespace LocalS.Service.Api.Merch
 
             var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
 
-            decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.Amount);
-            decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.Amount);
+            decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.ApplyAmount);
             ret.RefundedAmount = refundedAmount.ToF2Price();
             ret.RefundingAmount = refundingAmount.ToF2Price();
             ret.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
@@ -265,8 +265,8 @@ namespace LocalS.Service.Api.Merch
 
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == rop.OrderId).ToList();
 
-            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.Amount);
-            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.Amount);
+            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.ApplyAmount);
 
             if (rop.Amount > (order.ChargeAmount - (refundedAmount + refundingAmount)))
             {
@@ -280,24 +280,27 @@ namespace LocalS.Service.Api.Merch
                 string payRefundId = IdWorker.Build(IdType.PayRefundId);
 
 
-                //PayRefundResult payRefundResult = null;
-                //switch (order.PayPartner)
-                //{
-                //    case E_PayPartner.Wx:
-                //        var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
-                //        payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount.ToF2Price(), rop.Amount.ToPrice(), rop.Remark);
-                //        break;
-                //}
+                if (rop.Method == E_PayRefundMethod.Original)
+                {
+                    PayRefundResult payRefundResult = null;
+                    switch (order.PayPartner)
+                    {
+                        case E_PayPartner.Wx:
+                            var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
+                            payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
+                            break;
+                    }
 
-                //if (payRefundResult == null)
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
-                //}
+                    if (payRefundResult == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                    }
 
-                //if (payRefundResult.Status != "APPLYING")
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
-                //}
+                    if (payRefundResult.Status != "APPLYING")
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                    }
+                }
 
                 var payRefund = new PayRefund();
                 payRefund.Id = payRefundId;
@@ -311,9 +314,9 @@ namespace LocalS.Service.Api.Merch
                 payRefund.PayPartnerOrderId = order.PayPartnerOrderId;
                 payRefund.PayTransId = order.PayTransId;
                 payRefund.ApplyTime = DateTime.Now;
-                payRefund.Method = rop.Method;
+                payRefund.ApplyMethod = rop.Method;
                 payRefund.ApplyRemark = rop.Remark;
-                payRefund.Amount = rop.Amount;
+                payRefund.ApplyAmount = rop.Amount;
                 payRefund.Applyer = operater;
                 payRefund.Status = E_PayRefundStatus.Handling;
                 payRefund.CreateTime = DateTime.Now;
@@ -323,9 +326,12 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, payRefundId, DateTime.Now.AddMinutes(30), new PayRefund2CheckStatusModel { Id = payRefundId, MerchId = order.MerchId, PayPartner = order.PayPartner });
+                if (rop.Method == E_PayRefundMethod.Original)
+                {
+                    Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, payRefundId, DateTime.Now.AddMinutes(30), new PayRefund2CheckStatusModel { Id = payRefundId, MerchId = order.MerchId, PayPartner = order.PayPartner });
+                }
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "申请成功", new { PayRefundId = payRefund.Id });
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", new { PayRefundId = payRefund.Id });
 
             }
 
@@ -346,7 +352,7 @@ namespace LocalS.Service.Api.Merch
                             (rup.PayPartnerOrderId == null || o.PayPartnerOrderId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId &&
                          o.Status == E_PayRefundStatus.Handling
-                         select new { o.Id, o.StoreId, o.StoreName, o.Method, o.OrderId, o.Status, o.Amount, o.PayPartnerOrderId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
+                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerOrderId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
 
             int total = query.Count();
 
@@ -366,8 +372,8 @@ namespace LocalS.Service.Api.Merch
                     StoreId = item.StoreId,
                     StoreName = item.StoreName,
                     OrderId = item.OrderId,
-                    Amount = item.Amount,
-                    Method = GetMethod(item.Method),
+                    ApplyAmount = item.ApplyAmount,
+                    ApplyMethod = GetMethod(item.ApplyMethod),
                     Status = GetStatus(item.Status),
                     PayPartnerOrderId = item.PayPartnerOrderId,
                     ApplyRemark = item.ApplyRemark,
@@ -388,8 +394,65 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var ret = new RetPayRefundHandleDetails();
 
 
+            var payRefund = CurrentDb.PayRefund.Where(m => m.Id == payRefundId).FirstOrDefault();
+
+            ret.PayRefundId = payRefundId;
+            ret.ApplyAmount = payRefund.ApplyAmount.ToF2Price();
+            ret.ApplyMethod = GetMethod(payRefund.ApplyMethod);
+            ret.ApplyTime = payRefund.ApplyTime.ToUnifiedFormatDateTime();
+            ret.ApplyRemark = payRefund.ApplyRemark;
+
+            var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
+
+
+            ret.Order.Id = order.Id;
+            ret.Order.ClientUserName = order.ClientUserName;
+            ret.Order.ClientUserId = order.ClientUserId;
+            ret.Order.StoreName = order.StoreName;
+            ret.Order.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            ret.Order.ChargeAmount = order.ChargeAmount.ToF2Price();
+            ret.Order.DiscountAmount = order.DiscountAmount.ToF2Price();
+            ret.Order.OriginalAmount = order.OriginalAmount.ToF2Price();
+            ret.Order.Quantity = order.Quantity;
+            ret.Order.Status = BizFactory.Order.GetStatus(order.Status);
+            ret.Order.SourceName = BizFactory.Order.GetSourceName(order.Source);
+
+            var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
+
+            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.ApplyAmount);
+            ret.Order.RefundedAmount = refundedAmount.ToF2Price();
+            ret.Order.RefundingAmount = refundingAmount.ToF2Price();
+            ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
+
+            var receiveMode = new RetPayRefundHandleDetails.ReceiveMode();
+            receiveMode.Mode = order.ReceiveMode;
+            receiveMode.Name = order.ReceiveModeName;
+            receiveMode.Type = 1;
+
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+
+            foreach (var orderSub in orderSubs)
+            {
+                receiveMode.Items.Add(new
+                {
+                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
+                    UniqueId = orderSub.Id,
+                    MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
+                    Name = orderSub.PrdProductSkuName,
+                    Quantity = orderSub.Quantity,
+                    SalePrice = orderSub.SalePrice,
+                    ChargeAmount = orderSub.ChargeAmount,
+                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus)
+                });
+            }
+
+            ret.Order.ReceiveModes.Add(receiveMode);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
 
@@ -403,6 +466,15 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
+                if (rop.Result == RopPayRefundHandle.E_Result.Unknow)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择处理结果");
+                }
+
+                if (string.IsNullOrEmpty(rop.Remark))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "备注不能为空");
+                }
 
                 var payRefund = CurrentDb.PayRefund.Where(m => m.MerchId == merchId && m.Id == rop.PayRefundId).FirstOrDefault();
                 if (payRefund == null)
@@ -417,15 +489,15 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该信息");
                 }
 
-                if (rop.IsSuccess)
+                if (rop.Result == RopPayRefundHandle.E_Result.Success)
                 {
-                    order.RefundedAmount += payRefund.Amount;
+                    order.RefundedAmount += payRefund.ApplyAmount;
                     order.Mender = operater;
                     order.MendTime = DateTime.Now;
 
                     payRefund.Status = E_PayRefundStatus.Success;
                 }
-                else
+                else if (rop.Result == RopPayRefundHandle.E_Result.Failure)
                 {
                     payRefund.Status = E_PayRefundStatus.Failure;
                 }

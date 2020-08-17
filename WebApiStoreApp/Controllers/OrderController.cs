@@ -175,12 +175,25 @@ namespace WebApiStoreApp.Controllers
         }
 
 
+
+
         [HttpGet]
         public OwnApiHttpResponse ReceiptTimeAxis([FromUri]RupOrderReceiptTimeAxis rup)
         {
             IResult result = StoreAppServiceFactory.Order.ReceiptTimeAxis(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
-        
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public HttpResponseMessage RefundResultNotifyByWx()
+        {
+            string content = GetRequestContent();
+            LogUtil.Info("接收支付结果:" + content);
+
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
+        }
+
     }
 }

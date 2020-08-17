@@ -8,6 +8,14 @@ export function getList(params) {
   })
 }
 
+export function getListByHandle(params) {
+  return request({
+    url: '/payrefund/getListByHandle',
+    method: 'get',
+    params
+  })
+}
+
 export function searchOrder(params) {
   return request({
     url: '/payrefund/searchOrder',
@@ -24,6 +32,14 @@ export function getOrderDetails(params) {
   })
 }
 
+export function getHandleDetails(params) {
+  return request({
+    url: '/payrefund/GetHandleDetails',
+    method: 'get',
+    params
+  })
+}
+
 export function apply(data) {
   return request({
     url: '/payrefund/apply',
@@ -32,10 +48,21 @@ export function apply(data) {
   })
 }
 
+export function handle(data) {
+  return request({
+    url: '/payrefund/handle',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
+  getListByHandle: getListByHandle,
   searchOrder: searchOrder,
   getOrderDetails: getOrderDetails,
-  apply: apply
+  getHandleDetails: getHandleDetails,
+  apply: apply,
+  handle: handle
 }
 

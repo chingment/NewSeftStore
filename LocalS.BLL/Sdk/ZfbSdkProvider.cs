@@ -129,7 +129,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayRefundResult PayRefund(ZfbAppInfoConfig config, string payTranId, string payRefundId, string total_fee, string refund_fee, string refund_desc)
+        public PayRefundResult PayRefund(ZfbAppInfoConfig config, string payTranId, string payRefundId, decimal total_fee, decimal refund_fee, string refund_desc)
         {
             return null;
         }
