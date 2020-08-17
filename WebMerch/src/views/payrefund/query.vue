@@ -115,7 +115,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        userName: undefined
+        payrefundId: undefined,
+        paytransId: undefined,
+        orderId: undefined,
+        payPartnerOrderId: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -135,6 +138,10 @@ export default {
           var d = res.data
           this.listData = d.items
           this.listTotal = d.total
+
+          if (d.total === 0) {
+            this.$message('查询不到有效的退款记录')
+          }
         }
         this.loading = false
       })

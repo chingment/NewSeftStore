@@ -280,8 +280,10 @@ export default {
   methods: {
     init() {
       var payTransId = getUrlParam('payTransId')
-      this.listQuery.payTransId = payTransId
-      this.handleSearch()
+      if (payTransId != null) {
+        this.listQuery.payTransId = payTransId
+        this.handleSearch()
+      }
     },
     handleSearch() {
       this.listQuery.page = 1
@@ -292,6 +294,9 @@ export default {
           var d = res.data
           this.listData = d.items
           this.listTotal = d.total
+          if (d.total === 0) {
+            this.$message('查询不到有效的交易记录')
+          }
         }
         this.loading = false
       })

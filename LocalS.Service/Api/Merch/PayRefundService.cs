@@ -115,6 +115,7 @@ namespace LocalS.Service.Api.Merch
                          ((rup.OrderId != null && o.Id == rup.OrderId) ||
                          (rup.PayTransId != null && o.PayTransId == rup.PayTransId) ||
                          (rup.PayPartnerOrderId != null && o.PayPartnerOrderId == rup.PayPartnerOrderId)) &&
+                         o.PayStatus == E_PayStatus.PaySuccess &&
                          o.MerchId == merchId
                          select new { o.Id, o.StoreId, o.StoreName, o.ReceiveMode, o.PayTransId, o.Status, o.PickupIsTrg, o.ExIsHappen, o.ExIsHandle, o.ReceiveModeName, o.SellChannelRefId, o.SellChannelRefType, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.PayedTime, o.PayWay, o.CreateTime, o.PayStatus, o.PayPartnerOrderId });
 
