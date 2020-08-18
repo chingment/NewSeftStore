@@ -56,6 +56,7 @@
     <Compile Include="Post\AliNativePayRequestResult.cs" />
     <Compile Include="Post\BaseRequestResult.cs" />
     <Compile Include="Post\PayRefundQueryRequest.cs" />
+    <Compile Include="Post\PayRefundQueryRequestResult.cs" />
     <Compile Include="Post\PayTransQueryRequest.cs" />
     <Compile Include="Post\PayTransQueryRequestResult.cs" />
     <Compile Include="Post\PayTransUrlNotifyResult.cs" />

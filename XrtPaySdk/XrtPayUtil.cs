@@ -273,7 +273,7 @@ namespace XrtPaySdk
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
-            dic.Add("service", "unified.trade.query");
+            dic.Add("service", "unified.trade.refundquery");
             dic.Add("version", "");
             dic.Add("charset", "");
             dic.Add("sign_type", "");

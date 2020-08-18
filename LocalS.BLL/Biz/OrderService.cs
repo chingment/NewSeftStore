@@ -1682,7 +1682,31 @@ namespace LocalS.BLL.Biz
         public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
         {
             LogUtil.Info("PayRefundResultNotify");
-            
+
+            switch (payPartner)
+            {
+                case E_PayPartner.Xrt:
+
+                    var dic = XmlUtil.ToDictionary(content);
+
+
+
+
+                    break;
+            }
+
+            //var payTransNotifyLog = new PayTransNotifyLog();
+            //payTransNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
+            //payTransNotifyLog.PayTransId = payResult.PayTransId;
+            //payTransNotifyLog.PayPartner = payPartner;
+            //payTransNotifyLog.PayPartnerPayTransId = payResult.PayPartnerPayTransId;
+            //payTransNotifyLog.NotifyContent = content;
+            //payTransNotifyLog.NotifyFrom = from;
+            //payTransNotifyLog.NotifyType = E_PayTransLogNotifyType.Pay;
+            //payTransNotifyLog.CreateTime = DateTime.Now;
+            //payTransNotifyLog.Creator = operater;
+            //CurrentDb.PayTransNotifyLog.Add(payTransNotifyLog);
+            //CurrentDb.SaveChanges();
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");

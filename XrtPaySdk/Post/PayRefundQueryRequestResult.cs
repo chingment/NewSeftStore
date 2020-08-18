@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace XrtPaySdk.Post
+namespace XrtPaySdk
 {
     [XmlRoot("xml")]
     public class PayRefundQueryRequestResult : BaseRequestResult
