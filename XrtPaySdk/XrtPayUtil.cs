@@ -199,7 +199,7 @@ namespace XrtPaySdk
             return requestResult;
         }
 
-        public string PayQuery(string out_trade_no)
+        public string PayTransQuery(string out_trade_no)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -223,7 +223,7 @@ namespace XrtPaySdk
                 }
             }
 
-            var request = new OrderPayQueryRequest(dic);
+            var request = new PayTransQueryRequest(dic);
 
             var requestResult = _api.DoPost(request);
 
@@ -231,7 +231,7 @@ namespace XrtPaySdk
         }
 
 
-        public RefundResult Refund(string out_trade_no,string out_refund_no, string total_fee, string refund_fee, string op_user_id, string refund_channel)
+        public PayRefundResult PayRefund(string out_trade_no,string out_refund_no, string total_fee, string refund_fee, string op_user_id, string refund_channel)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -262,7 +262,7 @@ namespace XrtPaySdk
                 }
             }
 
-            var request = new RefundRequest(dic);
+            var request = new PayRefundRequest(dic);
 
             var requestResult = _api.DoPost(request);
 

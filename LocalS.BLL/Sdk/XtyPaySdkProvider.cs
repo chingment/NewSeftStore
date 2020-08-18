@@ -71,23 +71,23 @@ namespace LocalS.BLL
 
         }
 
-        public string PayQuery(XrtPayInfoConfg config, string order_sn)
+        public string PayTransQuery(XrtPayInfoConfg config, string order_sn)
         {
             var result = new PayTransResult();
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
 
 
-            var xrtPayQueryResult = xrtPayUtil.PayQuery(order_sn);
+            var xrtPayQueryResult = xrtPayUtil.PayTransQuery(order_sn);
 
             return xrtPayQueryResult;
         }
 
-        public PayTransResult Convert2PayResultByPayQuery(XrtPayInfoConfg config, string content)
+        public PayTransResult Convert2PayTransResultByQuery(XrtPayInfoConfg config, string content)
         {
             var result = new PayTransResult();
 
-            var obj_content = XmlUtil.DeserializeToObject<OrderPayQueryRequestResult>(content);
+            var obj_content = XmlUtil.DeserializeToObject<PayTransQueryRequestResult>(content);
             if (obj_content.status == "0" && obj_content.result_code == "0")
             {
                 if (obj_content.trade_state == "SUCCESS")
@@ -103,7 +103,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayTransResult Convert2PayResultByNotifyUrl(XrtPayInfoConfg config, string content)
+        public PayTransResult Convert2PayTransResultByNotifyUrl(XrtPayInfoConfg config, string content)
         {
             var result = new PayTransResult();
 
@@ -123,7 +123,7 @@ namespace LocalS.BLL
             var result = new PayRefundResult();
             XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
 
-            var refundResult = xrtPayUtil.Refund(payTranId, payRefundId, Convert.ToInt32(total_fee * 100).ToString(), Convert.ToInt32(refund_fee * 100).ToString(), config.Mch_id, "ORIGINAL");
+            var refundResult = xrtPayUtil.PayRefund(payTranId, payRefundId, Convert.ToInt32(total_fee * 100).ToString(), Convert.ToInt32(refund_fee * 100).ToString(), config.Mch_id, "ORIGINAL");
 
             if (refundResult != null)
             {

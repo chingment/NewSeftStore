@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace XrtPaySdk
 {
     [XmlRoot("xml")]
-    public class RefundResult : BaseRequestResult
+    public class PayRefundResult : BaseRequestResult
     {
         public string transaction_id { get; set; }
         public string out_trade_no { get; set; }

@@ -13,7 +13,7 @@
           <el-input v-model="listQuery.orderId" clearable style="width: 100%" placeholder="订单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.payPartnerOrderId" clearable style="width: 100%" placeholder="支付商交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.payPartnerPayTransId" clearable style="width: 100%" placeholder="支付商交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -58,7 +58,7 @@
       </el-table-column>
       <el-table-column label="支付商交易号" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.payPartnerOrderId }}</span>
+          <span>{{ scope.row.payPartnerPayTransId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="退款金额" align="left" min-width="10%">
@@ -118,7 +118,7 @@ export default {
         payrefundId: undefined,
         paytransId: undefined,
         orderId: undefined,
-        payPartnerOrderId: undefined
+        payPartnerPayTransId: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }

@@ -39,7 +39,7 @@ namespace LocalS.BLL
 
         }
 
-        public string PayQuery(ZfbAppInfoConfig config, string orderId)
+        public string PayTransQuery(ZfbAppInfoConfig config, string orderId)
         {
             ZfbUtil zfbUtil = new ZfbUtil(config);
 
@@ -48,7 +48,7 @@ namespace LocalS.BLL
         }
 
 
-        public PayTransResult Convert2PayResultByPayQuery(ZfbAppInfoConfig config, string content)
+        public PayTransResult Convert2PayTransResultByQuery(ZfbAppInfoConfig config, string content)
         {
             var result = new PayTransResult();
 
@@ -90,7 +90,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayTransResult Convert2PayResultByNotifyUrl(ZfbAppInfoConfig config, string content)
+        public PayTransResult Convert2PayTransResultByNotifyUrl(ZfbAppInfoConfig config, string content)
         {
             var result = new PayTransResult();
 

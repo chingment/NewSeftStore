@@ -106,11 +106,11 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_PayCaller.WxByNt:
                                                     var wxByNt_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
-                                                    content = SdkFactory.Wx.PayQuery(wxByNt_AppInfoConfig, payTrans.Id);
+                                                    content = SdkFactory.Wx.PayTransQuery(wxByNt_AppInfoConfig, payTrans.Id);
                                                     break;
                                                 case E_PayCaller.WxByMp:
                                                     var wxByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
-                                                    content = SdkFactory.Wx.PayQuery(wxByMp_AppInfoConfig, payTrans.Id);
+                                                    content = SdkFactory.Wx.PayTransQuery(wxByMp_AppInfoConfig, payTrans.Id);
                                                     break;
                                             }
                                             #endregion
@@ -121,7 +121,7 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_PayCaller.ZfbByNt:
                                                     var zfbByNt_AppInfoConfig = BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
-                                                    content = SdkFactory.Zfb.PayQuery(zfbByNt_AppInfoConfig, payTrans.Id);
+                                                    content = SdkFactory.Zfb.PayTransQuery(zfbByNt_AppInfoConfig, payTrans.Id);
                                                     break;
                                             }
                                             #endregion
@@ -132,7 +132,7 @@ namespace LocalS.BLL.Task
                                             {
                                                 case E_PayCaller.AggregatePayByNt:
                                                     var tgPay_AppInfoConfig = BizFactory.Merch.GetTgPayInfoConfg(payTrans.MerchId);
-                                                    content = SdkFactory.TgPay.PayQuery(tgPay_AppInfoConfig, payTrans.Id);
+                                                    content = SdkFactory.TgPay.PayTransQuery(tgPay_AppInfoConfig, payTrans.Id);
                                                     break;
                                             }
                                             #endregion Tg
@@ -141,7 +141,7 @@ namespace LocalS.BLL.Task
                                             #region Xrt
 
                                             var xrtPay_AppInfoConfig = BizFactory.Merch.GetXrtPayInfoConfg(payTrans.MerchId);
-                                            content = SdkFactory.XrtPay.PayQuery(xrtPay_AppInfoConfig, payTrans.Id);
+                                            content = SdkFactory.XrtPay.PayTransQuery(xrtPay_AppInfoConfig, payTrans.Id);
 
                                             #endregion
                                             break;

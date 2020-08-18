@@ -329,7 +329,7 @@ namespace LocalS.BLL
             return OAuthApi.UploadMultimediaImage(this.GetApiAccessToken(config), imageUrl);
         }
 
-        public string PayQuery(WxAppInfoConfig config, string orderId)
+        public string PayTransQuery(WxAppInfoConfig config, string orderId)
         {
             CustomJsonResult result = new CustomJsonResult();
             TenpayUtil tenpayUtil = new TenpayUtil(config);
@@ -399,7 +399,7 @@ namespace LocalS.BLL
 
         }
 
-        public PayTransResult Convert2PayResultByPayQuery(WxAppInfoConfig config, string content)
+        public PayTransResult Convert2PayTransResultByQuery(WxAppInfoConfig config, string content)
         {
             var result = new PayTransResult();
 
@@ -432,7 +432,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayTransResult Convert2PayResultByNotifyUrl(WxAppInfoConfig config, string content)
+        public PayTransResult Convert2PayTransResultByNotifyUrl(WxAppInfoConfig config, string content)
         {
             var result = new PayTransResult();
 

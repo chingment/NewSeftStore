@@ -10,7 +10,7 @@
           <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item label="支付商交易号">
-          <el-input v-model="listQuery.payPartnerOrderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
+          <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">查询交易</el-button>
@@ -249,7 +249,7 @@ export default {
         limit: 10,
         payTransId: undefined,
         orderId: undefined,
-        payPartnerOrderId: undefined
+        payPartnerPayTransId: undefined
       },
       loadingByRefundApply: false,
       details: {
@@ -293,7 +293,7 @@ export default {
       }
     },
     handleSearch() {
-      if (isEmpty(this.listQuery.payTransId) && isEmpty(this.listQuery.orderId) && isEmpty(this.listQuery.payPartnerOrderId)) {
+      if (isEmpty(this.listQuery.payTransId) && isEmpty(this.listQuery.orderId) && isEmpty(this.listQuery.payPartnerPayTransId)) {
         this.$message('找少输入一个搜索条件')
         return
       }

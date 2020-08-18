@@ -746,11 +746,11 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_PayTransLogNotifyFrom.Query)
                     {
-                        payResult = SdkFactory.Wx.Convert2PayResultByPayQuery(null, content);
+                        payResult = SdkFactory.Wx.Convert2PayTransResultByQuery(null, content);
                     }
                     else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
-                        payResult = SdkFactory.Wx.Convert2PayResultByNotifyUrl(null, content);
+                        payResult = SdkFactory.Wx.Convert2PayTransResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
@@ -761,11 +761,11 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_PayTransLogNotifyFrom.Query)
                     {
-                        payResult = SdkFactory.Zfb.Convert2PayResultByPayQuery(null, content);
+                        payResult = SdkFactory.Zfb.Convert2PayTransResultByQuery(null, content);
                     }
                     else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
-                        payResult = SdkFactory.Zfb.Convert2PayResultByNotifyUrl(null, content);
+                        payResult = SdkFactory.Zfb.Convert2PayTransResultByNotifyUrl(null, content);
                     }
 
                     #endregion
@@ -776,12 +776,12 @@ namespace LocalS.BLL.Biz
 
                     if (from == E_PayTransLogNotifyFrom.Query)
                     {
-                        payResult = SdkFactory.TgPay.Convert2PayResultByPayQuery(null, content);
+                        payResult = SdkFactory.TgPay.Convert2PayTransResultByQuery(null, content);
                     }
 
                     else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
-                        payResult = SdkFactory.TgPay.Convert2PayResultByNotifyUrl(null, content);
+                        payResult = SdkFactory.TgPay.Convert2PayTransResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }
@@ -790,11 +790,11 @@ namespace LocalS.BLL.Biz
                     #region 解释XRT支付协议
                     if (from == E_PayTransLogNotifyFrom.Query)
                     {
-                        payResult = SdkFactory.XrtPay.Convert2PayResultByPayQuery(null, content);
+                        payResult = SdkFactory.XrtPay.Convert2PayTransResultByQuery(null, content);
                     }
                     else if (from == E_PayTransLogNotifyFrom.NotifyUrl)
                     {
-                        payResult = SdkFactory.XrtPay.Convert2PayResultByNotifyUrl(null, content);
+                        payResult = SdkFactory.XrtPay.Convert2PayTransResultByNotifyUrl(null, content);
                     }
                     #endregion
                 }

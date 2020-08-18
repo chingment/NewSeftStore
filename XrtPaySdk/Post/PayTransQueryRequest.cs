@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace XrtPaySdk
 {
-    public class OrderPayQueryRequest : IApiPostRequest<OrderPayQueryRequestResult>
+    public class PayTransQueryRequest : IApiPostRequest<PayTransQueryRequestResult>
     {
         public Dictionary<string, string> PostData { get; set; }
 
-        public OrderPayQueryRequest(Dictionary<string, string> postdata)
+        public PayTransQueryRequest(Dictionary<string, string> postdata)
         {
             this.PostData = postdata;
         }

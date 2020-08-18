@@ -33,14 +33,14 @@ namespace LocalS.BLL
             return result;
         }
 
-        public string PayQuery(TgPayInfoConfg config, string orderId)
+        public string PayTransQuery(TgPayInfoConfg config, string orderId)
         {
             TgPayUtil tgUtil = new TgPayUtil(config);
             string ret = tgUtil.OrderQuery(orderId);
             return ret;
         }
 
-        public PayTransResult Convert2PayResultByPayQuery(TgPayInfoConfg config, string content)
+        public PayTransResult Convert2PayTransResultByQuery(TgPayInfoConfg config, string content)
         {
             var result = new PayTransResult();
 
@@ -70,7 +70,7 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayTransResult Convert2PayResultByNotifyUrl(TgPayInfoConfg config, string content)
+        public PayTransResult Convert2PayTransResultByNotifyUrl(TgPayInfoConfg config, string content)
         {
             var result = new PayTransResult();
 
