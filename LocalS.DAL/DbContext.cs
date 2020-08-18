@@ -42,7 +42,7 @@ namespace LocalS.DAL
         public IDbSet<OrderSub> OrderSub { get; set; }
         public IDbSet<PayTrans> PayTrans { get; set; }
         public IDbSet<PayRefund> PayRefund { get; set; }
-        public IDbSet<PayTransNotifyLog> PayTransNotifyLog { get; set; }
+        public IDbSet<PayNotifyLog> PayNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Machine> Machine { get; set; }
         public IDbSet<MachineCabinet> MachineCabinet { get; set; }

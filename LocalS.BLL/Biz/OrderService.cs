@@ -809,17 +809,17 @@ namespace LocalS.BLL.Biz
                 }
 
 
-                var payTransNotifyLog = new PayTransNotifyLog();
-                payTransNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
-                payTransNotifyLog.PayTransId = payResult.PayTransId;
-                payTransNotifyLog.PayPartner = payPartner;
-                payTransNotifyLog.PayPartnerPayTransId = payResult.PayPartnerPayTransId;
-                payTransNotifyLog.NotifyContent = content;
-                payTransNotifyLog.NotifyFrom = from;
-                payTransNotifyLog.NotifyType = E_PayTransLogNotifyType.Pay;
-                payTransNotifyLog.CreateTime = DateTime.Now;
-                payTransNotifyLog.Creator = operater;
-                CurrentDb.PayTransNotifyLog.Add(payTransNotifyLog);
+                var payNotifyLog = new PayNotifyLog();
+                payNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
+                payNotifyLog.PayTransId = payResult.PayTransId;
+                payNotifyLog.PayPartner = payPartner;
+                payNotifyLog.PayPartnerPayTransId = payResult.PayPartnerPayTransId;
+                payNotifyLog.NotifyContent = content;
+                payNotifyLog.NotifyFrom = from;
+                payNotifyLog.NotifyType = E_PayTransLogNotifyType.PayTrans;
+                payNotifyLog.CreateTime = DateTime.Now;
+                payNotifyLog.Creator = operater;
+                CurrentDb.PayNotifyLog.Add(payNotifyLog);
                 CurrentDb.SaveChanges();
 
 
@@ -1683,30 +1683,40 @@ namespace LocalS.BLL.Biz
         {
             LogUtil.Info("PayRefundResultNotify");
 
+            string payTransId = "";
+            string payPartnerPayTransId = "";
             switch (payPartner)
             {
                 case E_PayPartner.Xrt:
 
                     var dic = XmlUtil.ToDictionary(content);
 
+                    if (dic.ContainsKey("out_trade_no"))
+                    {
+                        payTransId = dic["out_trade_no"].ToString();
+                    }
+                    if (dic.ContainsKey("refund_count"))
+                    {
+                        int refund_count = Convert.ToInt32(dic["refund_count"].ToString());
 
+                        
 
-
+                    }
                     break;
             }
 
-            //var payTransNotifyLog = new PayTransNotifyLog();
-            //payTransNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
-            //payTransNotifyLog.PayTransId = payResult.PayTransId;
-            //payTransNotifyLog.PayPartner = payPartner;
-            //payTransNotifyLog.PayPartnerPayTransId = payResult.PayPartnerPayTransId;
-            //payTransNotifyLog.NotifyContent = content;
-            //payTransNotifyLog.NotifyFrom = from;
-            //payTransNotifyLog.NotifyType = E_PayTransLogNotifyType.Pay;
-            //payTransNotifyLog.CreateTime = DateTime.Now;
-            //payTransNotifyLog.Creator = operater;
-            //CurrentDb.PayTransNotifyLog.Add(payTransNotifyLog);
-            //CurrentDb.SaveChanges();
+            var payNotifyLog = new PayNotifyLog();
+            payNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
+            payNotifyLog.PayTransId = payTransId;
+            payNotifyLog.PayPartner = payPartner;
+            payNotifyLog.PayPartnerPayTransId = payPartnerPayTransId;
+            payNotifyLog.NotifyContent = content;
+            payNotifyLog.NotifyFrom = from;
+            payNotifyLog.NotifyType = E_PayTransLogNotifyType.PayRefund;
+            payNotifyLog.CreateTime = DateTime.Now;
+            payNotifyLog.Creator = operater;
+            CurrentDb.PayNotifyLog.Add(payNotifyLog);
+            CurrentDb.SaveChanges();
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");

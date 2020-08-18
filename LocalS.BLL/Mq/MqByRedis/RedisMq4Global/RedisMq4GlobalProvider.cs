@@ -24,12 +24,12 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushPayRefundResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from, string content)
+        public void PushPayRefundResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from, string payTransId, string payRefundId, string content)
         {
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.PayRefundResultNotify;
             obj.Ticket = ticket;
-            obj.Content = new PayRefundResultNotifyModel { PayPartner = payParner, From = from, Content = content };
+            obj.Content = new PayRefundResultNotifyModel { PayPartner = payParner, From = from, PayTransId= payTransId, PayRefundId= payRefundId, Content = content };
             this.Push(obj);
         }
 

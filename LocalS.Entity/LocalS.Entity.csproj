@@ -67,7 +67,7 @@
     <Compile Include="PayTrans.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderSub.cs" />
-    <Compile Include="PayTransNotifyLog.cs" />
+    <Compile Include="PayNotifyLog.cs" />
     <Compile Include="OrderPickupLog.cs" />
     <Compile Include="PrdProduct.cs" />
     <Compile Include="PrdKind.cs" />

@@ -9,8 +9,8 @@ namespace LocalS.Entity
     {
 
         Unknow = 0,
-        Pay = 1,
-        ReFund = 2
+        PayTrans = 1,
+        PayRefund = 2
     }
     public enum E_PayTransLogNotifyFrom
     {
@@ -19,13 +19,14 @@ namespace LocalS.Entity
         Query = 3
     }
 
-    [Table("PayTransNotifyLog")]
-    public class PayTransNotifyLog
+    [Table("PayNotifyLog")]
+    public class PayNotifyLog
     {
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string PayTransId { get; set; }
+        public string PayRefundId { get; set; }
         public E_PayPartner PayPartner { get; set; }
         public string PayPartnerPayTransId { get; set; }
         public E_PayTransLogNotifyType NotifyType { get; set; }
