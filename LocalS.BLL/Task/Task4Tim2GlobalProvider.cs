@@ -148,7 +148,7 @@ namespace LocalS.BLL.Task
                                     }
 
                                     LogUtil.Info(string.Format("交易号：{0},查询支付结果文件:{1}", payTrans.Id, content));
-                                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.EmptyGuid), payTrans.PayPartner, E_PayTransLogNotifyFrom.Query, content);
+                                    MqFactory.Global.PushPayTransResultNotify(IdWorker.Build(IdType.EmptyGuid), payTrans.PayPartner, E_PayTransLogNotifyFrom.Query, content);
                                 }
                                 else
                                 {
@@ -185,13 +185,19 @@ namespace LocalS.BLL.Task
                                         case E_PayPartner.Wx:
                                             #region Wx
                                             var wxByMp_AppInfoConfig = BizFactory.Merch.GetWxMpAppInfoConfig(payRefund.MerchId);
-                                            content = SdkFactory.Wx.PayRefundQuery(wxByMp_AppInfoConfig, payRefund.Id);
+                                            content = SdkFactory.Wx.PayRefundQuery(wxByMp_AppInfoConfig, payRefund.PayTransId, payRefund.Id);
+                                            #endregion
+                                            break;
+                                        case E_PayPartner.Xrt:
+                                            #region Wx
+                                            var xrt_AppInfoConfig = BizFactory.Merch.GetXrtPayInfoConfg(payRefund.MerchId);
+                                            content = SdkFactory.XrtPay.PayRefundQuery(xrt_AppInfoConfig, payRefund.PayTransId, payRefund.Id);
                                             #endregion
                                             break;
                                     }
 
                                     LogUtil.Info(string.Format("退款单号：{0},查询结果文件:{1}", payRefund.Id, content));
-                                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefund.PayPartner, E_PayTransLogNotifyFrom.Query, content);
+                                    MqFactory.Global.PushPayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefund.PayPartner, E_PayTransLogNotifyFrom.Query, content);
                                 }
                                 else
                                 {

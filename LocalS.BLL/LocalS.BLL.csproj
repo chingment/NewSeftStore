@@ -117,7 +117,7 @@
     <Compile Include="Mq\MqMessageConentModel\EventNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\LoginLogModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayRefundResultNotifyModel.cs" />
-    <Compile Include="Mq\MqMessageConentModel\PayResultNotifyModel.cs" />
+    <Compile Include="Mq\MqMessageConentModel\PayTransResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\SellChannelStockChangeModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />

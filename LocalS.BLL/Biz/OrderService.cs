@@ -732,9 +732,9 @@ namespace LocalS.BLL.Biz
             return buildOrders;
         }
         private static readonly object lock_PayResultNotify = new object();
-        public CustomJsonResult PayResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
+        public CustomJsonResult PayTransResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
         {
-            LogUtil.Info("PayResultNotify");
+            LogUtil.Info("PayTransResultNotify");
             lock (lock_PayResultNotify)
             {
                 var payResult = new PayTransResult();
@@ -882,6 +882,8 @@ namespace LocalS.BLL.Biz
                         order.PayStatus = payTrans.PayStatus;
                         order.PayWay = payTrans.PayWay;
                         order.Status = E_OrderStatus.Payed;
+                        order.PayPartner = payPartner;
+                        order.PayPartnerPayTransId = payPartnerPayTransId;
 
                         LogUtil.Info("payTrans.PayedTime:" + payTrans.PayedTime.ToUnifiedFormatDateTime());
                         LogUtil.Info("payTrans.PayStatus:" + payTrans.PayStatus);
@@ -1676,6 +1678,17 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
+
+        public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
+        {
+            LogUtil.Info("PayRefundResultNotify");
+            
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        }
+
+
         public string BuildQrcode2PickupCode(string pickupCode)
         {
             string encode_qrcode = PickupCodeEncode(pickupCode);

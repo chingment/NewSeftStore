@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Mq
 {
-    public class PayResultNotifyModel
+    public class PayTransResultNotifyModel
     {
 
         public string Content { get; set; }

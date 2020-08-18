@@ -15,21 +15,21 @@ namespace LocalS.BLL.Mq.MqByRedis
         protected override string MessageQueueKeyName { get { return "RedisMq4Global"; } }
         protected override bool IsTran { get { return false; } }
 
-        public void PushPayResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from, string content)
+        public void PushPayTransResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from, string content)
         {
             var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.PayResultNotify;
+            obj.Type = MqMessageType.PayTransResultNotify;
             obj.Ticket = ticket;
-            obj.Content = new PayResultNotifyModel { PayPartner = payParner, From = from, Content = content };
+            obj.Content = new PayTransResultNotifyModel { PayPartner = payParner, From = from, Content = content };
             this.Push(obj);
         }
 
         public void PushPayRefundResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from, string content)
         {
             var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.PayRefundNotify;
+            obj.Type = MqMessageType.PayRefundResultNotify;
             obj.Ticket = ticket;
-            obj.Content = new PayResultNotifyModel { PayPartner = payParner, From = from, Content = content };
+            obj.Content = new PayRefundResultNotifyModel { PayPartner = payParner, From = from, Content = content };
             this.Push(obj);
         }
 

@@ -506,7 +506,7 @@ namespace LocalS.BLL
 
             return result;
         }
-        public string PayRefundQuery(WxAppInfoConfig config, string payRefundId)
+        public string PayRefundQuery(WxAppInfoConfig config, string payTranId, string payRefundId)
         {
             return null;
         }

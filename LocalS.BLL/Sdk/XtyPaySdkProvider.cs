@@ -95,6 +95,18 @@ namespace LocalS.BLL
                     result.IsPaySuccess = true;
                     result.PayTransId = obj_content.out_trade_no;
                     result.PayPartnerPayTransId = obj_content.transaction_id;
+
+                    if (obj_content.trade_type != null)
+                    {
+                        if (obj_content.trade_type.Contains("weixin"))
+                        {
+                            result.PayWay = E_PayWay.Wx;
+                        }
+                        else if (obj_content.trade_type.Contains("alipay"))
+                        {
+                            result.PayWay = E_PayWay.Zfb;
+                        }
+                    }
                 }
 
             }
@@ -113,6 +125,18 @@ namespace LocalS.BLL
                 result.IsPaySuccess = true;
                 result.PayTransId = obj_content.out_trade_no;
                 result.PayPartnerPayTransId = obj_content.transaction_id;
+
+                if (obj_content.trade_type != null)
+                {
+                    if (obj_content.trade_type.Contains("weixin"))
+                    {
+                        result.PayWay = E_PayWay.Wx;
+                    }
+                    else if (obj_content.trade_type.Contains("alipay"))
+                    {
+                        result.PayWay = E_PayWay.Zfb;
+                    }
+                }
             }
 
             return result;
@@ -141,9 +165,15 @@ namespace LocalS.BLL
 
             return result;
         }
-        public string PayRefundQuery(XrtPayInfoConfg config, string payRefundId)
+        public string PayRefundQuery(XrtPayInfoConfg config, string payTransId, string payRefundId)
         {
-            return null;
+            var result = new PayRefundResult();
+
+            XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
+
+            var payRefundQuery = xrtPayUtil.PayRefundQuery(payTransId, payRefundId);
+
+            return payRefundQuery;
         }
     }
 }

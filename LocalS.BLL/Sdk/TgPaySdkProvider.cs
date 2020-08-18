@@ -101,7 +101,7 @@ namespace LocalS.BLL
         {
             return null;
         }
-        public string PayRefundQuery(TgPayInfoConfg config, string payRefundId)
+        public string PayRefundQuery(TgPayInfoConfg config, string payTranId, string payRefundId)
         {
             return null;
         }

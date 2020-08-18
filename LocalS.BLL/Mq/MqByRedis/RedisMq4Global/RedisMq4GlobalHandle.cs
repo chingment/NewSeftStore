@@ -33,10 +33,15 @@ namespace LocalS.BLL.Mq.MqByRedis
                     {
                         switch (this.Type)
                         {
-                            case MqMessageType.PayResultNotify:
+                            case MqMessageType.PayTransResultNotify:
                                 LogUtil.Info("PayResultNotify");
-                                var payResultNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<PayResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.Order.PayResultNotify(IdWorker.Build(IdType.EmptyGuid), payResultNotifyModel.PayPartner, payResultNotifyModel.From, payResultNotifyModel.Content);
+                                var payTransResultNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<PayTransResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.Order.PayTransResultNotify(IdWorker.Build(IdType.EmptyGuid), payTransResultNotifyModel.PayPartner, payTransResultNotifyModel.From, payTransResultNotifyModel.Content);
+                                break;
+                            case MqMessageType.PayRefundResultNotify:
+                                LogUtil.Info("PayRefundResultNotify");
+                                var payRefundResultNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<PayRefundResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.Order.PayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefundResultNotifyModel.PayPartner, payRefundResultNotifyModel.From, payRefundResultNotifyModel.Content);
                                 break;
                             case MqMessageType.EventNotify:
                                 LogUtil.Info("EventNotify");

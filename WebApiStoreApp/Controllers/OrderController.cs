@@ -87,7 +87,7 @@ namespace WebApiStoreApp.Controllers
 
                 if (!string.IsNullOrEmpty(content))
                 {
-                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Wx, E_PayTransLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayTransResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Wx, E_PayTransLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -118,7 +118,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Zfb, E_PayTransLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayTransResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Zfb, E_PayTransLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -148,7 +148,7 @@ namespace WebApiStoreApp.Controllers
                 if (!string.IsNullOrEmpty(content))
                 {
 
-                    MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Tg, E_PayTransLogNotifyFrom.NotifyUrl, content);
+                    MqFactory.Global.PushPayTransResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Tg, E_PayTransLogNotifyFrom.NotifyUrl, content);
                 }
             }
             finally
@@ -169,7 +169,7 @@ namespace WebApiStoreApp.Controllers
             LogUtil.Info("接收支付结果:" + content);
             if (!string.IsNullOrEmpty(content))
             {
-                MqFactory.Global.PushPayResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Xrt,E_PayTransLogNotifyFrom.NotifyUrl, content);
+                MqFactory.Global.PushPayTransResultNotify(IdWorker.Build(IdType.NewGuid), E_PayPartner.Xrt,E_PayTransLogNotifyFrom.NotifyUrl, content);
             }
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
         }

@@ -133,7 +133,7 @@ namespace LocalS.BLL
         {
             return null;
         }
-        public string PayRefundQuery(ZfbAppInfoConfig config, string payRefundId)
+        public string PayRefundQuery(ZfbAppInfoConfig config, string payTranId, string payRefundId)
         {
             return null;
         }

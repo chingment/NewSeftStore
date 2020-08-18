@@ -16,6 +16,6 @@ namespace LocalS.BLL
         PayTransResult Convert2PayTransResultByQuery(T config, string content);
         PayTransResult Convert2PayTransResultByNotifyUrl(T config, string content);
         PayRefundResult PayRefund(T config, string payTranId, string payRefundId, decimal total_fee, decimal refund_fee, string refund_desc);
-        string PayRefundQuery(T config, string payRefundId);
+        string PayRefundQuery(T config, string payTranId, string payRefundId);
     }
 }

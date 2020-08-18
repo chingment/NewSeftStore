@@ -9,8 +9,8 @@ namespace LocalS.BLL.Mq
     public enum MqMessageType
     {
         Unknow = 0,
-        PayResultNotify = 2,
+        PayTransResultNotify = 2,
         EventNotify = 3,
-        PayRefundNotify = 4
+        PayRefundResultNotify = 4
     }
 }
