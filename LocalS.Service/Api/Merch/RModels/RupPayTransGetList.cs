@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.Merch
 
         public string OrderId { get; set; }
 
-        public string PayPartnerOrderId { get; set; }
+        public string PayPartnerPayTransId { get; set; }
 
         public string ClientUserName { get; set; }
 

@@ -206,8 +206,8 @@
           <el-form-item label="退款方式" prop="method">
 
             <el-radio-group v-model="formByApply.method">
-              <el-radio label="1">原路退回</el-radio>
-              <el-radio label="2">线下退回</el-radio>
+              <el-radio label="1">原路退回（系统自动处理，退款到用户支付账号）</el-radio>
+              <el-radio label="2">线下退回（人工审核处理，线下人工退回）</el-radio>
             </el-radio-group>
 
           </el-form-item>

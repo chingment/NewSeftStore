@@ -27,10 +27,10 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderId == null || o.OrderIds.Contains(rup.OrderId)) &&
                               (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
-                                          (rup.PayPartnerOrderId == null || o.PayPartnerOrderId.Contains(rup.PayPartnerOrderId)) &&
+                                          (rup.PayPartnerPayTransId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerPayTransId)) &&
                                           o.PayStatus == E_PayStatus.PaySuccess&&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.Description, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.OrderIds, o.PayedTime, o.PayWay, o.PayCaller, o.PayPartner, o.CreateTime, o.PayStatus, o.PayPartnerOrderId });
+                         select new { o.Id, o.StoreId, o.StoreName, o.Description, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.OrderIds, o.PayedTime, o.PayWay, o.PayCaller, o.PayPartner, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
 
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
@@ -68,7 +68,7 @@ namespace LocalS.Service.Api.Merch
                     PayedTime = item.PayedTime,
                     PayWay = BizFactory.Order.GetPayWay(item.PayWay),
                     PayPartner = BizFactory.Order.GetPayPartner(item.PayPartner),
-                    PayPartnerOrderId = item.PayPartnerOrderId,
+                    PayPartnerPayTransId = item.PayPartnerPayTransId,
                     Description = item.Description
                 });
             }

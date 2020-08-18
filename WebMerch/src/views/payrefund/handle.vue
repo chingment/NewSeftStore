@@ -209,7 +209,7 @@
           </div>
         </div>
 
-        <el-form ref="form" label-width="80px" style="max-width:800px;">
+        <el-form ref="form" label-width="120px" style="max-width:800px;">
           <el-form-item label="退款提示">
 
             <span>已退款金额：<span class="refundedAmount">{{ details.order.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.order.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.order.refundableAmount }}</span></span>
@@ -232,7 +232,7 @@
           </div>
         </div>
 
-        <el-form ref="formByHandle" :model="formByHandle" :rules="rulesByHandle" label-width="80px" style="max-width:800px;">
+        <el-form ref="formByHandle" :model="formByHandle" :rules="rulesByHandle" label-width="120px" style="max-width:800px;">
 
           <el-form-item label="结果" prop="result">
             <el-radio-group v-model="formByHandle.result">

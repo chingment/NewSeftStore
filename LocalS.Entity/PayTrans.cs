@@ -71,7 +71,7 @@ namespace LocalS.Entity
         public string CancelReason { get; set; }
         public string CancelOperator { get; set; }
         public E_PayPartner PayPartner { get; set; }
-        public string PayPartnerOrderId { get; set; }
+        public string PayPartnerPayTransId { get; set; }
         public E_PayStatus PayStatus { get; set; }
         public E_PayWay PayWay { get; set; }
         public E_PayCaller PayCaller { get; set; }

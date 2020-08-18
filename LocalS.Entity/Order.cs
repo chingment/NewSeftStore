@@ -114,7 +114,7 @@ namespace LocalS.Entity
         public string CancelReason { get; set; }
         public decimal RefundedAmount { get; set; }
         public string PayTransId { get; set; }
-        public string PayPartnerOrderId { get; set; }
+        public string PayPartnerPayTransId { get; set; }
         public E_PayPartner PayPartner { get; set; }
     }
 }

@@ -40,9 +40,9 @@ namespace LocalS.BLL
             return ret;
         }
 
-        public PayResult Convert2PayResultByPayQuery(TgPayInfoConfg config, string content)
+        public PayTransResult Convert2PayResultByPayQuery(TgPayInfoConfg config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var obt_content = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderQueryRequestResult>(content);
             if (result != null)
@@ -53,7 +53,7 @@ namespace LocalS.BLL
                     {
                         result.IsPaySuccess = true;
                         result.PayTransId = obt_content.lowOrderId;
-                        result.PayPartnerOrderId = obt_content.upOrderId;
+                        result.PayPartnerPayTransId = obt_content.upOrderId;
                         if (obt_content.channelID == "WX")
                         {
                             result.PayWay = E_PayWay.Wx;
@@ -70,9 +70,9 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayResult Convert2PayResultByNotifyUrl(TgPayInfoConfg config, string content)
+        public PayTransResult Convert2PayResultByNotifyUrl(TgPayInfoConfg config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var obj_content = Newtonsoft.Json.JsonConvert.DeserializeObject<AllQrcodePayAsynNotifyResult>(content);
             if (obj_content != null)
@@ -81,7 +81,7 @@ namespace LocalS.BLL
                 {
                     result.IsPaySuccess = true;
                     result.PayTransId = obj_content.lowOrderId;
-                    result.PayPartnerOrderId = obj_content.upOrderId;
+                    result.PayPartnerPayTransId = obj_content.upOrderId;
                     if (obj_content.channelID == "WX")
                     {
                         result.PayWay = E_PayWay.Wx;

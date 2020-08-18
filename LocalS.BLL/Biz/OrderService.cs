@@ -737,7 +737,7 @@ namespace LocalS.BLL.Biz
             LogUtil.Info("PayResultNotify");
             lock (lock_PayResultNotify)
             {
-                var payResult = new PayResult();
+                var payResult = new PayTransResult();
 
                 if (payPartner == E_PayPartner.Wx)
                 {
@@ -805,7 +805,7 @@ namespace LocalS.BLL.Biz
                     Dictionary<string, string> pms = new Dictionary<string, string>();
                     pms.Add("clientUserName", payResult.ClientUserName);
 
-                    PaySuccess(operater, payResult.PayTransId, payPartner, payResult.PayPartnerOrderId, payResult.PayWay, DateTime.Now, pms);
+                    PaySuccess(operater, payResult.PayTransId, payPartner, payResult.PayPartnerPayTransId, payResult.PayWay, DateTime.Now, pms);
                 }
 
 
@@ -813,7 +813,7 @@ namespace LocalS.BLL.Biz
                 payTransNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
                 payTransNotifyLog.PayTransId = payResult.PayTransId;
                 payTransNotifyLog.PayPartner = payPartner;
-                payTransNotifyLog.PayPartnerOrderId = payResult.PayPartnerOrderId;
+                payTransNotifyLog.PayPartnerPayTransId = payResult.PayPartnerPayTransId;
                 payTransNotifyLog.NotifyContent = content;
                 payTransNotifyLog.NotifyFrom = from;
                 payTransNotifyLog.NotifyType = E_PayTransLogNotifyType.Pay;
@@ -827,7 +827,7 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string payTransId, E_PayPartner payPartner, string payPartnerOrderId, E_PayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
+        public CustomJsonResult PaySuccess(string operater, string payTransId, E_PayPartner payPartner, string payPartnerPayTransId, E_PayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -856,7 +856,7 @@ namespace LocalS.BLL.Biz
 
 
                     payTrans.PayPartner = payPartner;
-                    payTrans.PayPartnerOrderId = payPartnerOrderId;
+                    payTrans.PayPartnerPayTransId = payPartnerPayTransId;
                     payTrans.PayWay = payWay;
                     payTrans.PayStatus = E_PayStatus.PaySuccess;
                     payTrans.PayedTime = DateTime.Now;

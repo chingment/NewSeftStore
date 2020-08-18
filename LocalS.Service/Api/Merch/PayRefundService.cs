@@ -67,9 +67,9 @@ namespace LocalS.Service.Api.Merch
                               (rup.PayRefundId == null || o.Id.Contains(rup.PayRefundId)) &&
                             (rup.OrderId == null || o.OrderId.Contains(rup.OrderId)) &&
                             (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
-                            (rup.PayPartnerOrderId == null || o.PayPartnerOrderId.Contains(rup.PayPartnerOrderId)) &&
+                            (rup.PayPartnerOrderId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerOrderId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
+                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerPayTransId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
 
             int total = query.Count();
 
@@ -92,7 +92,7 @@ namespace LocalS.Service.Api.Merch
                     ApplyAmount = item.ApplyAmount,
                     ApplyMethod = GetMethod(item.ApplyMethod),
                     Status = GetStatus(item.Status),
-                    PayPartnerOrderId = item.PayPartnerOrderId,
+                    PayPartnerPayTransId = item.PayPartnerPayTransId,
                     ApplyRemark = item.ApplyRemark,
                     PayTransId = item.PayTransId,
                     ApplyTime = item.ApplyTime.ToUnifiedFormatDateTime(),
@@ -114,10 +114,10 @@ namespace LocalS.Service.Api.Merch
                          where
                          ((rup.OrderId != null && o.Id == rup.OrderId) ||
                          (rup.PayTransId != null && o.PayTransId == rup.PayTransId) ||
-                         (rup.PayPartnerOrderId != null && o.PayPartnerOrderId == rup.PayPartnerOrderId)) &&
+                         (rup.PayPartnerOrderId != null && o.PayPartnerPayTransId == rup.PayPartnerOrderId)) &&
                          o.PayStatus == E_PayStatus.PaySuccess &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.ReceiveMode, o.PayTransId, o.Status, o.PickupIsTrg, o.ExIsHappen, o.ExIsHandle, o.ReceiveModeName, o.SellChannelRefId, o.SellChannelRefType, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.PayedTime, o.PayWay, o.CreateTime, o.PayStatus, o.PayPartnerOrderId });
+                         select new { o.Id, o.StoreId, o.StoreName, o.ReceiveMode, o.PayTransId, o.Status, o.PickupIsTrg, o.ExIsHappen, o.ExIsHandle, o.ReceiveModeName, o.SellChannelRefId, o.SellChannelRefType, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.PayedTime, o.PayWay, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
 
             int total = query.Count();
 
@@ -151,7 +151,7 @@ namespace LocalS.Service.Api.Merch
                     PayStatus = BizFactory.Order.GetPayStatus(item.PayStatus),
                     PayedTime = item.PayedTime,
                     PayWay = BizFactory.Order.GetPayWay(item.PayWay),
-                    PayPartnerOrderId = item.PayPartnerOrderId,
+                    PayPartnerPayTransId = item.PayPartnerPayTransId,
                     Status = BizFactory.Order.GetStatus(item.Status),
                     ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
                     CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
@@ -311,7 +311,7 @@ namespace LocalS.Service.Api.Merch
                 payRefund.ClientUserId = order.ClientUserId;
                 payRefund.ClientUserName = order.ClientUserName;
                 payRefund.OrderId = order.Id;
-                payRefund.PayPartnerOrderId = order.PayPartnerOrderId;
+                payRefund.PayPartnerPayTransId = order.PayPartnerPayTransId;
                 payRefund.PayTransId = order.PayTransId;
                 payRefund.ApplyTime = DateTime.Now;
                 payRefund.ApplyMethod = rop.Method;
@@ -349,10 +349,10 @@ namespace LocalS.Service.Api.Merch
                               (rup.PayRefundId == null || o.Id.Contains(rup.PayRefundId)) &&
                             (rup.OrderId == null || o.OrderId.Contains(rup.OrderId)) &&
                             (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
-                            (rup.PayPartnerOrderId == null || o.PayPartnerOrderId.Contains(rup.PayPartnerOrderId)) &&
+                            (rup.PayPartnerOrderId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId &&
                          o.Status == E_PayRefundStatus.Handling
-                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerOrderId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
+                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerPayTransId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
 
             int total = query.Count();
 
@@ -375,7 +375,7 @@ namespace LocalS.Service.Api.Merch
                     ApplyAmount = item.ApplyAmount,
                     ApplyMethod = GetMethod(item.ApplyMethod),
                     Status = GetStatus(item.Status),
-                    PayPartnerOrderId = item.PayPartnerOrderId,
+                    PayPartnerPayTransId = item.PayPartnerPayTransId,
                     ApplyRemark = item.ApplyRemark,
                     PayTransId = item.PayTransId,
                     ApplyTime = item.ApplyTime.ToUnifiedFormatDateTime(),

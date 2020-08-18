@@ -73,7 +73,7 @@ namespace LocalS.BLL
 
         public string PayQuery(XrtPayInfoConfg config, string order_sn)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
 
@@ -83,9 +83,9 @@ namespace LocalS.BLL
             return xrtPayQueryResult;
         }
 
-        public PayResult Convert2PayResultByPayQuery(XrtPayInfoConfg config, string content)
+        public PayTransResult Convert2PayResultByPayQuery(XrtPayInfoConfg config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var obj_content = XmlUtil.DeserializeToObject<OrderPayQueryRequestResult>(content);
             if (obj_content.status == "0" && obj_content.result_code == "0")
@@ -94,7 +94,7 @@ namespace LocalS.BLL
                 {
                     result.IsPaySuccess = true;
                     result.PayTransId = obj_content.out_trade_no;
-                    result.PayPartnerOrderId = obj_content.transaction_id;
+                    result.PayPartnerPayTransId = obj_content.transaction_id;
                 }
 
             }
@@ -103,20 +103,16 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayResult Convert2PayResultByNotifyUrl(XrtPayInfoConfg config, string content)
+        public PayTransResult Convert2PayResultByNotifyUrl(XrtPayInfoConfg config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var obj_content = XmlUtil.DeserializeToObject<OrderPayUrlNotifyResult>(content);
-            if (obj_content.status == "0")
+            if (obj_content.status == "0" && obj_content.pay_result == 0)
             {
-                if (obj_content.pay_result == 0)
-                {
-                    result.IsPaySuccess = true;
-                    result.PayTransId = obj_content.out_trade_no;
-                    result.PayPartnerOrderId = obj_content.transaction_id;
-                }
-
+                result.IsPaySuccess = true;
+                result.PayTransId = obj_content.out_trade_no;
+                result.PayPartnerPayTransId = obj_content.transaction_id;
             }
 
             return result;
@@ -124,7 +120,26 @@ namespace LocalS.BLL
 
         public PayRefundResult PayRefund(XrtPayInfoConfg config, string payTranId, string payRefundId, decimal total_fee, decimal refund_fee, string refund_desc)
         {
-            return null;
+            var result = new PayRefundResult();
+            XrtPayUtil xrtPayUtil = new XrtPayUtil(config);
+
+            var refundResult = xrtPayUtil.Refund(payTranId, payRefundId, Convert.ToInt32(total_fee * 100).ToString(), Convert.ToInt32(refund_fee * 100).ToString(), config.Mch_id, "ORIGINAL");
+
+            if (refundResult != null)
+            {
+                if (refundResult.status == "0" && refundResult.result_code == "0")
+                {
+                    result.Status = "APPLYING";
+                    result.PayTransId = refundResult.out_trade_no;
+                    result.PayRefundId = refundResult.out_refund_no;
+                    result.PayPartnerPayRefundId = refundResult.refund_id;
+                    result.RefundChannel = refundResult.refund_channel;
+                    result.RefundFee = refundResult.refund_fee;
+                    result.CouponRefundFee = refundResult.coupon_refund_fee;
+                }
+            }
+
+            return result;
         }
         public string PayRefundQuery(XrtPayInfoConfg config, string payRefundId)
         {

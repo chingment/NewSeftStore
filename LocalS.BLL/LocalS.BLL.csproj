@@ -129,7 +129,7 @@
     <Compile Include="Sdk\ZfbSdkProvider.cs" />
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\PayBuildWxJsPayInfoResult.cs" />
-    <Compile Include="Sdk\PayResult.cs" />
+    <Compile Include="Sdk\PayTransResult.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\TgPaySdkProvider.cs" />
     <Compile Include="Sdk\PayBuildQrCodeResult.cs" />

@@ -48,9 +48,9 @@ namespace LocalS.BLL
         }
 
 
-        public PayResult Convert2PayResultByPayQuery(ZfbAppInfoConfig config, string content)
+        public PayTransResult Convert2PayResultByPayQuery(ZfbAppInfoConfig config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var obj_content = Newtonsoft.Json.JsonConvert.DeserializeObject<TradeQueryResult>(content);
             if (obj_content != null)
@@ -68,7 +68,7 @@ namespace LocalS.BLL
 
                         if (!string.IsNullOrEmpty(payResult.trade_no))
                         {
-                            result.PayPartnerOrderId = payResult.trade_no;
+                            result.PayPartnerPayTransId = payResult.trade_no;
                         }
 
                         if (!string.IsNullOrEmpty(payResult.buyer_logon_id))
@@ -90,9 +90,9 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayResult Convert2PayResultByNotifyUrl(ZfbAppInfoConfig config, string content)
+        public PayTransResult Convert2PayResultByNotifyUrl(ZfbAppInfoConfig config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var dic = MyAlipaySdk.CommonUtil.FormStringToDictionary(content);
 
@@ -103,7 +103,7 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("trade_no"))
             {
-                result.PayPartnerOrderId = dic["trade_no"].ToString();
+                result.PayPartnerPayTransId = dic["trade_no"].ToString();
             }
 
             LogUtil.Info("解释支付宝支付协议，订单号：" + result.PayTransId);

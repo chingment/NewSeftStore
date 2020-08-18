@@ -399,9 +399,9 @@ namespace LocalS.BLL
 
         }
 
-        public PayResult Convert2PayResultByPayQuery(WxAppInfoConfig config, string content)
+        public PayTransResult Convert2PayResultByPayQuery(WxAppInfoConfig config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
             if (dic.ContainsKey("out_trade_no"))
@@ -411,7 +411,7 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("transaction_id"))
             {
-                result.PayPartnerOrderId = dic["transaction_id"].ToString();
+                result.PayPartnerPayTransId = dic["transaction_id"].ToString();
             }
 
             LogUtil.Info("解释微信支付协议，订单号：" + result.PayTransId);
@@ -432,9 +432,9 @@ namespace LocalS.BLL
             return result;
         }
 
-        public PayResult Convert2PayResultByNotifyUrl(WxAppInfoConfig config, string content)
+        public PayTransResult Convert2PayResultByNotifyUrl(WxAppInfoConfig config, string content)
         {
-            var result = new PayResult();
+            var result = new PayTransResult();
 
             var dic = MyWeiXinSdk.CommonUtil.XmlToDictionary(content);
 
@@ -445,7 +445,7 @@ namespace LocalS.BLL
 
             if (dic.ContainsKey("transaction_id"))
             {
-                result.PayPartnerOrderId = dic["transaction_id"].ToString();
+                result.PayPartnerPayTransId = dic["transaction_id"].ToString();
             }
 
             LogUtil.Info("解释微信支付协议，订单号：" + result.PayTransId);

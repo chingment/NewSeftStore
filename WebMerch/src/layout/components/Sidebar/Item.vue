@@ -19,10 +19,11 @@ export default {
     if (icon) {
       vnodes.push(<svg-icon icon-class={icon}/>)
     }
-
+    // <el-badge value='0' max='0' class='item'/>
     if (title) {
       vnodes.push(<span slot='title'>{(title)}</span>)
     }
+
     return vnodes
   }
 }

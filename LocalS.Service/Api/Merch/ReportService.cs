@@ -560,8 +560,8 @@ namespace LocalS.Service.Api.Merch
 
             sql.Append(" IsNull(SumQuantity,0) as SumQuantity, ");
             sql.Append(" IsNull(SumChargeAmount,0) as SumChargeAmount, ");
-            sql.Append(" IsNull(SumRefundAmount,0) as SumRefundAmount, ");
-            sql.Append(" IsNull((SumChargeAmount-SumRefundAmount),0) as SumAmount, ");
+            sql.Append(" IsNull(SumRefundedAmount,0) as SumRefundedAmount, ");
+            sql.Append(" IsNull((SumChargeAmount-SumRefundedAmount),0) as SumAmount, ");
             sql.Append(" IsNull(PayWayByWx,0) as PayWayByWx, ");
             sql.Append(" IsNull(PayWayByZfb,0) as PayWayByZfb ");
             sql.Append(" from Store tb1 left join (  ");
@@ -575,7 +575,7 @@ namespace LocalS.Service.Api.Merch
 
             sql.Append(" SUM(Quantity) as SumQuantity,  ");
             sql.Append(" SUM(ChargeAmount)as SumChargeAmount,  ");
-            sql.Append(" SUM(RefundAmount) as SumRefundAmount ,  ");
+            sql.Append(" SUM(RefundedAmount) as SumRefundedAmount ,  ");
             sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx,  ");
             sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb,  ");
             sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete   ");

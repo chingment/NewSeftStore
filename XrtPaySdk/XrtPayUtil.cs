@@ -230,5 +230,45 @@ namespace XrtPaySdk
             return _api.ResponseString;
         }
 
+
+        public RefundResult Refund(string out_trade_no,string out_refund_no, string total_fee, string refund_fee, string op_user_id, string refund_channel)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic.Add("service", "unified.trade.refund");
+            dic.Add("version", "");
+            dic.Add("charset", "");
+            dic.Add("sign_type", "");
+            dic.Add("mch_id", this.mch_id);
+            dic.Add("out_trade_no", out_trade_no);
+            dic.Add("out_refund_no", out_refund_no);
+            dic.Add("device_info", "");
+            dic.Add("total_fee", total_fee);
+            dic.Add("refund_fee", refund_fee);
+            dic.Add("op_user_id", op_user_id);
+            dic.Add("refund_channel", refund_channel);
+            dic.Add("nonce_str", GetNonceStr());
+
+
+            dic.Add("sign", GetSign(dic));
+
+
+            Dictionary<string, string> post_dic = new Dictionary<string, string>();
+            foreach (var key in dic)
+            {
+                if (!string.IsNullOrEmpty(key.Value))
+                {
+                    post_dic.Add(key.Key, key.Value);
+                }
+            }
+
+            var request = new RefundRequest(dic);
+
+            var requestResult = _api.DoPost(request);
+
+
+            return requestResult;
+        }
+
     }
 }
