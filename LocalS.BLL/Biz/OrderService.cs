@@ -1685,22 +1685,47 @@ namespace LocalS.BLL.Biz
 
             string payTransId = "";
             string payPartnerPayTransId = "";
+            string payRefundId = "";
+
             switch (payPartner)
             {
                 case E_PayPartner.Xrt:
 
                     var dic = XmlUtil.ToDictionary(content);
 
-                    if (dic.ContainsKey("out_trade_no"))
+                    string status = "";
+
+                    if (dic.ContainsKey("status"))
                     {
-                        payTransId = dic["out_trade_no"].ToString();
+                        status = dic["status"].ToString();
                     }
-                    if (dic.ContainsKey("refund_count"))
+
+                    string result_code = "";
+                    if (dic.ContainsKey("result_code"))
                     {
-                        int refund_count = Convert.ToInt32(dic["refund_count"].ToString());
+                        result_code = dic["result_code"].ToString();
+                    }
 
-                        
+                    if (status == "0" && result_code == "0")
+                    {
+                        if (dic.ContainsKey("out_trade_no"))
+                        {
+                            payTransId = dic["out_trade_no"].ToString();
+                        }
 
+                        if (dic.ContainsKey("refund_count"))
+                        {
+                            int refund_count = Convert.ToInt32(dic["refund_count"].ToString());
+
+                            for (var i = 0; i < refund_count; i++)
+                            {
+                                if (dic.ContainsKey("out_refund_no_" + i))
+                                {
+                                    string out_refund_no = dic["out_refund_no_" + i].ToString();
+                                }
+                            }
+
+                        }
                     }
                     break;
             }
@@ -1710,6 +1735,7 @@ namespace LocalS.BLL.Biz
             payNotifyLog.PayTransId = payTransId;
             payNotifyLog.PayPartner = payPartner;
             payNotifyLog.PayPartnerPayTransId = payPartnerPayTransId;
+            payNotifyLog.PayRefundId = payRefundId;
             payNotifyLog.NotifyContent = content;
             payNotifyLog.NotifyFrom = from;
             payNotifyLog.NotifyType = E_PayTransLogNotifyType.PayRefund;
