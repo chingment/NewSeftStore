@@ -440,6 +440,10 @@
       <Project>{636311A8-0485-4953-841E-35CA27EEA436}</Project>
       <Name>MyWeiXinSdk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XrtPaySdk\XrtPaySdk.csproj">
+      <Project>{27871c52-caca-4eca-bba8-6866022c8d91}</Project>
+      <Name>XrtPaySdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

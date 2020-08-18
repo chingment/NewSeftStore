@@ -289,6 +289,11 @@ namespace LocalS.Service.Api.Merch
                             var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
                             payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
                             break;
+                        case E_PayPartner.Xrt:
+                            var xrt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTran.MerchId);
+                            payRefundResult = SdkFactory.XrtPay.PayRefund(xrt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
+                            break;
+
                     }
 
                     if (payRefundResult == null)
