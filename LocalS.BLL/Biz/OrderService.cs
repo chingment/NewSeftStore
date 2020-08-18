@@ -1684,7 +1684,7 @@ namespace LocalS.BLL.Biz
             LogUtil.Info("PayRefundResultNotify");
 
 
-            bool isSuccess = false;
+            string refundStatus = "";
             string payPartnerPayTransId = "";
 
 
@@ -1726,7 +1726,7 @@ namespace LocalS.BLL.Biz
 
                                     if (out_refund_no == payRefundId)
                                     {
-                                        isSuccess = true;
+                                        refundStatus = dic["refund_status_" + i].ToString();
                                         break;
                                     }
                                 }
@@ -1737,17 +1737,16 @@ namespace LocalS.BLL.Biz
                     break;
             }
 
-            if (isSuccess)
+
+            using (TransactionScope ts = new TransactionScope())
             {
-                using (TransactionScope ts = new TransactionScope())
+                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == payRefundId).FirstOrDefault();
+                if (payRefund != null)
                 {
-                    var payRefund = CurrentDb.PayRefund.Where(m => m.Id == payRefundId).FirstOrDefault();
-                    if (payRefund != null)
+                    if (refundStatus == "SUCCESS")
                     {
                         payRefund.Status = E_PayRefundStatus.Success;
                         payRefund.RefundTime = DateTime.Now;
-                        payRefund.Mender = operater;
-                        payRefund.MendTime = DateTime.Now;
 
                         var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
 
@@ -1757,13 +1756,22 @@ namespace LocalS.BLL.Biz
                             order.Mender = operater;
                             order.MendTime = DateTime.Now;
 
-                          
+
                         }
                     }
-                    CurrentDb.SaveChanges();
-                    ts.Complete();
+                    else if (refundStatus == "FAIL")
+                    {
+                        payRefund.Status = E_PayRefundStatus.Failure;
+                    }
+
+                    payRefund.Mender = operater;
+                    payRefund.MendTime = DateTime.Now;
+
                 }
+                CurrentDb.SaveChanges();
+                ts.Complete();
             }
+
 
             var payNotifyLog = new PayNotifyLog();
             payNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
