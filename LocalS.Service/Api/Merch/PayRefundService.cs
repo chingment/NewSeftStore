@@ -333,7 +333,7 @@ namespace LocalS.Service.Api.Merch
 
                 if (rop.Method == E_PayRefundMethod.Original)
                 {
-                    Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, payRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = payRefundId, MerchId = order.MerchId, PayPartner = order.PayPartner });
+                    Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, payRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = payRefundId, MerchId = order.MerchId, PayTransId = order.PayTransId, PayPartner = order.PayPartner });
                 }
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", new { PayRefundId = payRefund.Id });

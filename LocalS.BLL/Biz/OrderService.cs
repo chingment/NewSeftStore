@@ -1679,13 +1679,14 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
+        public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string payTransId, string payRefundId, string content)
         {
             LogUtil.Info("PayRefundResultNotify");
 
-            string payTransId = "";
+
+            bool isSuccess = false;
             string payPartnerPayTransId = "";
-            string payRefundId = "";
+
 
             switch (payPartner)
             {
@@ -1722,12 +1723,46 @@ namespace LocalS.BLL.Biz
                                 if (dic.ContainsKey("out_refund_no_" + i))
                                 {
                                     string out_refund_no = dic["out_refund_no_" + i].ToString();
+
+                                    if (out_refund_no == payRefundId)
+                                    {
+                                        isSuccess = true;
+                                        break;
+                                    }
                                 }
                             }
 
                         }
                     }
                     break;
+            }
+
+            if (isSuccess)
+            {
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    var payRefund = CurrentDb.PayRefund.Where(m => m.Id == payRefundId).FirstOrDefault();
+                    if (payRefund != null)
+                    {
+                        payRefund.Status = E_PayRefundStatus.Success;
+                        payRefund.RefundTime = DateTime.Now;
+                        payRefund.Mender = operater;
+                        payRefund.MendTime = DateTime.Now;
+
+                        var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
+
+                        if (order != null)
+                        {
+                            order.RefundedAmount += payRefund.ApplyAmount;
+                            order.Mender = operater;
+                            order.MendTime = DateTime.Now;
+
+                          
+                        }
+                    }
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
+                }
             }
 
             var payNotifyLog = new PayNotifyLog();

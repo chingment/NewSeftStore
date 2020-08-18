@@ -41,7 +41,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                             case MqMessageType.PayRefundResultNotify:
                                 LogUtil.Info("PayRefundResultNotify");
                                 var payRefundResultNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<PayRefundResultNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.Order.PayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefundResultNotifyModel.PayPartner, payRefundResultNotifyModel.From, payRefundResultNotifyModel.Content);
+                                BLL.Biz.BizFactory.Order.PayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefundResultNotifyModel.PayPartner, payRefundResultNotifyModel.From, payRefundResultNotifyModel.PayTransId, payRefundResultNotifyModel.PayRefundId, payRefundResultNotifyModel.Content);
                                 break;
                             case MqMessageType.EventNotify:
                                 LogUtil.Info("EventNotify");

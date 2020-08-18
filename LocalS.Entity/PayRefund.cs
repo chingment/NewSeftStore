@@ -43,6 +43,8 @@ namespace LocalS.Entity
         public DateTime? HandleTime { get; set; }
         public string HandleRemark { get; set; }
         public string Handler { get; set; }
+
+        public DateTime? RefundTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
