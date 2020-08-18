@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XrtPaySdk
 {
-    public class PayRefundQueryRequest : IApiPostRequest<object>
+    public class PayRefundQueryRequest : IApiPostRequest<PayRefundQueryRequestResult>
     {
         public Dictionary<string, string> PostData { get; set; }
 
