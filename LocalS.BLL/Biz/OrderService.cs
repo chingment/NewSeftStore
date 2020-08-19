@@ -805,7 +805,7 @@ namespace LocalS.BLL.Biz
                     Dictionary<string, string> pms = new Dictionary<string, string>();
                     pms.Add("clientUserName", payResult.ClientUserName);
 
-                    PaySuccess(operater, payResult.PayTransId, payPartner, payResult.PayPartnerPayTransId, payResult.PayWay, DateTime.Now, pms);
+                    PayTransSuccess(operater, payResult.PayTransId, payPartner, payResult.PayPartnerPayTransId, payResult.PayWay, DateTime.Now, pms);
                 }
 
 
@@ -827,7 +827,7 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-        public CustomJsonResult PaySuccess(string operater, string payTransId, E_PayPartner payPartner, string payPartnerPayTransId, E_PayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
+        public CustomJsonResult PayTransSuccess(string operater, string payTransId, E_PayPartner payPartner, string payPartnerPayTransId, E_PayWay payWay, DateTime completedTime, Dictionary<string, string> pms = null)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -965,7 +965,7 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public CustomJsonResult<RetPayResultQuery> PayResultQuery(string operater, string payTransId)
+        public CustomJsonResult<RetPayResultQuery> PayTransResultQuery(string operater, string payTransId)
         {
             var result = new CustomJsonResult<RetPayResultQuery>();
 
@@ -1686,8 +1686,8 @@ namespace LocalS.BLL.Biz
 
             string refundStatus = "";
             string payPartnerPayTransId = "";
-
-
+            string refundRemark = "";
+            decimal refundAmount = 0m;
             switch (payPartner)
             {
                 case E_PayPartner.Xrt:
@@ -1727,6 +1727,7 @@ namespace LocalS.BLL.Biz
                                     if (out_refund_no == payRefundId)
                                     {
                                         refundStatus = dic["refund_status_" + i].ToString();
+                                        refundAmount = decimal.Parse(dic["refund_fee_" + i].ToString()) * 0.01m;
                                         break;
                                     }
                                 }
@@ -1738,40 +1739,16 @@ namespace LocalS.BLL.Biz
             }
 
 
-            using (TransactionScope ts = new TransactionScope())
+            if (refundStatus == "SUCCESS")
             {
-                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == payRefundId).FirstOrDefault();
-                if (payRefund != null)
-                {
-                    if (refundStatus == "SUCCESS")
-                    {
-                        payRefund.Status = E_PayRefundStatus.Success;
-                        payRefund.RefundTime = DateTime.Now;
-
-                        var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
-
-                        if (order != null)
-                        {
-                            order.RefundedAmount += payRefund.ApplyAmount;
-                            order.Mender = operater;
-                            order.MendTime = DateTime.Now;
-
-
-                        }
-                    }
-                    else if (refundStatus == "FAIL")
-                    {
-                        payRefund.Status = E_PayRefundStatus.Failure;
-                    }
-
-                    payRefund.Mender = operater;
-                    payRefund.MendTime = DateTime.Now;
-
-                }
-                CurrentDb.SaveChanges();
-                ts.Complete();
+                refundRemark = "系统自动退款成功";
+            }
+            else if (refundStatus == "FAIL")
+            {
+                refundRemark = "系统自动退款失败";
             }
 
+            PayRefundHandle(IdWorker.Build(IdType.EmptyGuid), payRefundId, refundStatus, refundAmount, refundRemark);
 
             var payNotifyLog = new PayNotifyLog();
             payNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -1791,6 +1768,57 @@ namespace LocalS.BLL.Biz
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
+
+
+        public CustomJsonResult PayRefundHandle(string operater, string refundId, string refundStatus, decimal refundAmount, string refundRemark)
+        {
+
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == refundId).FirstOrDefault();
+                if (payRefund == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该信息");
+                }
+
+                if (refundStatus == "SUCCESS")
+                {
+                    payRefund.Status = E_PayRefundStatus.Success;
+                    payRefund.RefundTime = DateTime.Now;
+                    payRefund.RefundAmount = refundAmount;
+                    payRefund.Handler = operater;
+                    payRefund.HandleRemark = refundRemark;
+                    payRefund.Mender = operater;
+                    payRefund.MendTime = DateTime.Now;
+
+                    var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
+                    if (order != null)
+                    {
+                        order.RefundedAmount += refundAmount;
+                        order.Mender = operater;
+                        order.MendTime = DateTime.Now;
+                    }
+                }
+                else if (refundStatus == "FAIL")
+                {
+                    payRefund.Status = E_PayRefundStatus.Failure;
+                    payRefund.Handler = operater;
+                    payRefund.HandleRemark = refundRemark;
+                    payRefund.Mender = operater;
+                    payRefund.MendTime = DateTime.Now;
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
+            }
+
+            return result;
+
+        }
 
         public string BuildQrcode2PickupCode(string pickupCode)
         {

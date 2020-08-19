@@ -480,44 +480,17 @@ namespace LocalS.Service.Api.Merch
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "备注不能为空");
                 }
-
-                var payRefund = CurrentDb.PayRefund.Where(m => m.MerchId == merchId && m.Id == rop.PayRefundId).FirstOrDefault();
-                if (payRefund == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该信息");
-                }
-
-
-                var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == payRefund.OrderId).FirstOrDefault();
-                if (order == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该信息");
-                }
-
+                string refundStatus = "";
                 if (rop.Result == RopPayRefundHandle.E_Result.Success)
                 {
-                    order.RefundedAmount += payRefund.ApplyAmount;
-                    order.Mender = operater;
-                    order.MendTime = DateTime.Now;
-
-                    payRefund.Status = E_PayRefundStatus.Success;
+                    refundStatus = "SUCCESS";
                 }
                 else if (rop.Result == RopPayRefundHandle.E_Result.Failure)
                 {
-                    payRefund.Status = E_PayRefundStatus.Failure;
+                    refundStatus = "FAIL";
                 }
 
-                payRefund.Handler = operater;
-                payRefund.HandleRemark = rop.Remark;
-                payRefund.Mender = operater;
-                payRefund.MendTime = DateTime.Now;
-
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
-
+                result = BizFactory.Order.PayRefundHandle(operater, rop.PayRefundId, refundStatus, rop.Amount, rop.Remark);
             }
 
             return result;

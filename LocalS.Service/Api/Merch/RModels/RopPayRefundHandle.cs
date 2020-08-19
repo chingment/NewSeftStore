@@ -10,9 +10,8 @@ namespace LocalS.Service.Api.Merch
     {
         public string PayRefundId { get; set; }
         public string Remark { get; set; }
-
         public E_Result Result { get; set; }
-
+        public decimal Amount { get; set; }
         public enum E_Result
         {
             Unknow = 0,

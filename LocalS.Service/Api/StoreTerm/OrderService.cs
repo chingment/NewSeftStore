@@ -84,7 +84,7 @@ namespace LocalS.Service.Api.StoreTerm
             CustomJsonResult<RetOrderPayStatusQuery> ret = new CustomJsonResult<RetOrderPayStatusQuery>();
 
 
-            var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayResultQuery(rup.MachineId, rup.PayTransId);
+            var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayTransResultQuery(rup.MachineId, rup.PayTransId);
 
             ret.Result = ret_Biz.Result;
             ret.Code = ret_Biz.Code;
