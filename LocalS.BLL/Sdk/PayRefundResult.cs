@@ -13,7 +13,9 @@ namespace LocalS.BLL
         public string PayRefundId { get; set; }
         public string PayPartnerPayRefundId { get; set; }
         public string RefundChannel { get; set; }
-        public int RefundFee{ get; set; }
+        public int RefundFee { get; set; }
         public int CouponRefundFee { get; set; }
+
+        public string Message { get; set; }
     }
 }

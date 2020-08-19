@@ -298,12 +298,12 @@ namespace LocalS.Service.Api.Merch
 
                     if (payRefundResult == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败:"+ payRefundResult.Message);
                     }
 
                     if (payRefundResult.Status != "APPLYING")
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败:"+ payRefundResult.Message);
                     }
                 }
 

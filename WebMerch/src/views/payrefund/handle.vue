@@ -284,7 +284,8 @@ export default {
       formByHandle: {
         payRefundId: '',
         remark: '',
-        result: ''
+        result: '',
+        amount: 0
       },
       rulesByHandle: {
         result: [{ required: true, max: 200, message: '请选择结果', trigger: 'change' }],
@@ -343,6 +344,7 @@ export default {
     dialogOpenByRefundHandle(row) {
       this.loadingByRefundHandle = true
       this.formByHandle.payRefundId = row.id
+      this.formByHandle.amount = row.applyAmount
       this.formByHandle.result = ''
       this.formByHandle.remark = ''
       getHandleDetails({ payRefundId: row.id }).then(res => {

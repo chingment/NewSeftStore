@@ -161,6 +161,7 @@ namespace LocalS.BLL
                     result.RefundFee = refundResult.refund_fee;
                     result.CouponRefundFee = refundResult.coupon_refund_fee;
                 }
+                result.Message = refundResult.message;
             }
 
             return result;

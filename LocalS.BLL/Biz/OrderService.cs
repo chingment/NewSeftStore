@@ -1681,7 +1681,7 @@ namespace LocalS.BLL.Biz
 
         public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string payTransId, string payRefundId, string content)
         {
-            LogUtil.Info("PayRefundResultNotify");
+            LogUtil.Info("PayRefundResultNotify2");
 
 
             string refundStatus = "";
@@ -1777,7 +1777,7 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == refundId).FirstOrDefault();
+                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == refundId&&m.Status== E_PayRefundStatus.Handling).FirstOrDefault();
                 if (payRefund == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该信息");
@@ -1786,10 +1786,11 @@ namespace LocalS.BLL.Biz
                 if (refundStatus == "SUCCESS")
                 {
                     payRefund.Status = E_PayRefundStatus.Success;
-                    payRefund.RefundTime = DateTime.Now;
-                    payRefund.RefundAmount = refundAmount;
+                    payRefund.RefundedTime = DateTime.Now;
+                    payRefund.RefundedAmount = refundAmount;
                     payRefund.Handler = operater;
                     payRefund.HandleRemark = refundRemark;
+                    payRefund.HandleTime = DateTime.Now;
                     payRefund.Mender = operater;
                     payRefund.MendTime = DateTime.Now;
 
@@ -1800,6 +1801,8 @@ namespace LocalS.BLL.Biz
                         order.Mender = operater;
                         order.MendTime = DateTime.Now;
                     }
+
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
                 }
                 else if (refundStatus == "FAIL")
                 {
@@ -1808,6 +1811,8 @@ namespace LocalS.BLL.Biz
                     payRefund.HandleRemark = refundRemark;
                     payRefund.Mender = operater;
                     payRefund.MendTime = DateTime.Now;
+                    payRefund.HandleTime = DateTime.Now;
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
                 }
 
                 CurrentDb.SaveChanges();
