@@ -277,6 +277,12 @@ namespace LocalS.Service.Api.Merch
             {
                 var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
 
+                if (rop.Amount > payTran.ChargeAmount)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款的金额不能大于可退金额");
+                }
+
+
                 string payRefundId = IdWorker.Build(IdType.PayRefundId);
 
 
