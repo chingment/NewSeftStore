@@ -111,7 +111,7 @@
 
       <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.id }}</span> <span style="color:#e1b11e">{{ scope.row.isTestMode==false?"":"[测]" }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">
@@ -197,7 +197,7 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label-width="80px" label="订单编号:" class="postInfo-container-item">
-                    {{ details.id }}
+                    {{ details.id }} <span style="color:#e1b11e">{{ details.isTestMode==false?"":"[测]" }}</span>
                   </el-form-item>
                 </el-col>
               </el-row>

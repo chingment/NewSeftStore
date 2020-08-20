@@ -36,6 +36,8 @@ namespace LocalS.Service.Api.Merch
 
         public string ReceiveModeName { get; set; }
 
+        public bool IsTestMode { get; set; }
+
         public List<object> DetailItems { get; set; }
 
         public List<ReceiveMode> ReceiveModes { get; set; }
