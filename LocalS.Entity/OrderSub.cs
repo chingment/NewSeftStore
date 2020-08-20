@@ -58,5 +58,6 @@ namespace LocalS.Entity
         public int PrdKindId1 { get; set; }
         public int PrdKindId2 { get; set; }
         public int PrdKindId3 { get; set; }
+        public bool IsTestMode { get; set; }
     }
 }

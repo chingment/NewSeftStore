@@ -91,7 +91,7 @@
       </el-table-column>
     </el-table>
     <el-alert
-      title="提示：以订单单位维度来统计销售报表"
+      title="提示：以订单单位维度来统计销售报表， 不统计测试模式"
       type="remark-gray"
       :closable="false"
     />

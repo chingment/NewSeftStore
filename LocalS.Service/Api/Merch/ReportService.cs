@@ -308,7 +308,8 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.OrderSub
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
-                        && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime)
+                        && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
+                        u.IsTestMode == false
                          select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
@@ -452,7 +453,8 @@ namespace LocalS.Service.Api.Merch
 
 
             var query = (from u in CurrentDb.Order
-                         where u.MerchId == merchId && u.PayStatus == Entity.E_PayStatus.PaySuccess
+                         where u.MerchId == merchId && u.PayStatus == Entity.E_PayStatus.PaySuccess &&
+                         u.IsTestMode == false
                          select new { u.Id, u.StoreName, u.StoreId, u.ReceiveMode, u.ReceiveModeName, u.SellChannelRefId, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
@@ -579,7 +581,7 @@ namespace LocalS.Service.Api.Merch
             sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx,  ");
             sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb,  ");
             sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete   ");
-            sql.Append(" from [Order]  a where PayStatus=3 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  group by StoreId )   ");
+            sql.Append(" from [Order]  a where PayStatus=3 and IsTestMode=0 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  group by StoreId )   ");
             sql.Append(" tb on tb1.Id=tb.StoreId  where MerchId='" + merchId + "' and tb1.IsDelete=0  order by SumChargeAmount desc  ");
 
 
