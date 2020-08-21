@@ -321,45 +321,45 @@
             </tr>
           </table>
         </div>
-
-        <div class="row-title clearfix">
-          <div class="pull-left"> <h5> 退款记录</h5>
+        <div v-if="details.refundRecords!=null&&details.refundRecords.length>0">
+          <div class="row-title clearfix">
+            <div class="pull-left"> <h5> 退款记录</h5>
+            </div>
           </div>
+
+          <el-table
+            :data="details.refundRecords"
+            fit
+            highlight-current-row
+            style="width: 100%;"
+          >
+            <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.$index+1 }} </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="交易号" align="left" min-width="40%">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" align="left" min-width="15%">
+              <template slot-scope="scope">
+                <span>{{ scope.row.status.text }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="金额" align="left" min-width="15%">
+              <template slot-scope="scope">
+                <span>{{ scope.row.amount }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="时间" align="left" min-width="30%">
+              <template slot-scope="scope">
+                <span>{{ scope.row.dateTime }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
-
-        <el-table
-          :data="details.refundRecords "
-          fit
-          highlight-current-row
-          style="width: 100%;"
-        >
-          <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
-            <template slot-scope="scope">
-              <span>{{ scope.$index+1 }} </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="交易号" align="left" min-width="40%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" align="left" min-width="15%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.status.text }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="金额" align="left" min-width="15%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.amount }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="时间" align="left" min-width="30%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.dateTime }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-
         <div v-if="details.exIsHappen">
           <div class="row-title clearfix">
             <div class="pull-left"> <h5> 异常处理</h5>
