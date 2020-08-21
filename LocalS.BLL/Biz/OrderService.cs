@@ -585,6 +585,7 @@ namespace LocalS.BLL.Biz
                             orderSub.PayStatus = E_PayStatus.WaitPay;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
                             orderSub.SvcConsulterId = productSku.SvcConsulterId;
+                            orderSub.IsTestMode = rop.IsTestMode;
                             orderSub.Creator = operater;
                             orderSub.CreateTime = DateTime.Now;
                             CurrentDb.OrderSub.Add(orderSub);
