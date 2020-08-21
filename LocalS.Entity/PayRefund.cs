@@ -8,9 +8,10 @@ namespace LocalS.Entity
     public enum E_PayRefundStatus
     {
         Unknow = 0,
-        Handling = 1,
-        Success = 2,
-        Failure = 3
+        WaitHandle = 1,
+        Handling = 2,
+        Success = 3,
+        Failure = 4
     }
 
     public enum E_PayRefundMethod

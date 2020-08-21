@@ -22,16 +22,20 @@ namespace LocalS.Service.Api.Merch
 
             switch (status)
             {
-                case E_PayRefundStatus.Handling:
+                case E_PayRefundStatus.WaitHandle:
                     model.Value = 1;
+                    model.Text = "待处理";
+                    break;
+                case E_PayRefundStatus.Handling:
+                    model.Value = 2;
                     model.Text = "处理中";
                     break;
                 case E_PayRefundStatus.Success:
-                    model.Value = 2;
+                    model.Value = 3;
                     model.Text = "成功";
                     break;
                 case E_PayRefundStatus.Failure:
-                    model.Value = 3;
+                    model.Value = 4;
                     model.Text = "失败";
                     break;
             }
@@ -285,34 +289,6 @@ namespace LocalS.Service.Api.Merch
 
                 string payRefundId = IdWorker.Build(IdType.PayRefundId);
 
-
-                if (rop.Method == E_PayRefundMethod.Original)
-                {
-                    PayRefundResult payRefundResult = null;
-                    switch (order.PayPartner)
-                    {
-                        case E_PayPartner.Wx:
-                            var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
-                            payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
-                            break;
-                        case E_PayPartner.Xrt:
-                            var xrt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTran.MerchId);
-                            payRefundResult = SdkFactory.XrtPay.PayRefund(xrt_AppInfoConfig, order.PayTransId, payRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
-                            break;
-
-                    }
-
-                    if (payRefundResult == null)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败:"+ payRefundResult.Message);
-                    }
-
-                    if (payRefundResult.Status != "APPLYING")
-                    {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败:"+ payRefundResult.Message);
-                    }
-                }
-
                 var payRefund = new PayRefund();
                 payRefund.Id = payRefundId;
                 payRefund.MerchId = order.MerchId;
@@ -329,18 +305,13 @@ namespace LocalS.Service.Api.Merch
                 payRefund.ApplyRemark = rop.Remark;
                 payRefund.ApplyAmount = rop.Amount;
                 payRefund.Applyer = operater;
-                payRefund.Status = E_PayRefundStatus.Handling;
+                payRefund.Status = E_PayRefundStatus.WaitHandle;
                 payRefund.CreateTime = DateTime.Now;
                 payRefund.Creator = operater;
 
                 CurrentDb.PayRefund.Add(payRefund);
                 CurrentDb.SaveChanges();
                 ts.Complete();
-
-                if (rop.Method == E_PayRefundMethod.Original)
-                {
-                    Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, payRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = payRefundId, MerchId = order.MerchId, PayTransId = order.PayTransId, PayPartner = order.PayPartner });
-                }
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", new { PayRefundId = payRefund.Id });
 
@@ -362,7 +333,7 @@ namespace LocalS.Service.Api.Merch
                             (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
                             (rup.PayPartnerOrderId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId &&
-                         o.Status == E_PayRefundStatus.Handling
+                         (o.Status == E_PayRefundStatus.WaitHandle || o.Status == E_PayRefundStatus.Handling)
                          select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerPayTransId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
 
             int total = query.Count();
@@ -486,17 +457,78 @@ namespace LocalS.Service.Api.Merch
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "备注不能为空");
                 }
-                string refundStatus = "";
-                if (rop.Result == RopPayRefundHandle.E_Result.Success)
+
+
+                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == rop.PayRefundId && m.Status == E_PayRefundStatus.WaitHandle).FirstOrDefault();
+
+                if (payRefund == null)
                 {
-                    refundStatus = "SUCCESS";
-                }
-                else if (rop.Result == RopPayRefundHandle.E_Result.Failure)
-                {
-                    refundStatus = "FAIL";
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应信息");
                 }
 
-                result = BizFactory.Order.PayRefundHandle(operater, rop.PayRefundId, refundStatus, rop.Amount, rop.Remark);
+
+                if (payRefund.ApplyMethod == E_PayRefundMethod.Original)
+                {
+                    var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
+                    var payTran = CurrentDb.PayTrans.Where(m => m.Id == payRefund.PayTransId).FirstOrDefault();
+
+                    PayRefundResult payRefundResult = null;
+                    switch (order.PayPartner)
+                    {
+                        case E_PayPartner.Wx:
+                            var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
+                            payRefundResult = SdkFactory.Wx.PayRefund(wxByNt_AppInfoConfig, order.PayTransId, rop.PayRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
+                            break;
+                        case E_PayPartner.Xrt:
+                            var xrt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTran.MerchId);
+                            payRefundResult = SdkFactory.XrtPay.PayRefund(xrt_AppInfoConfig, order.PayTransId, rop.PayRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
+                            break;
+
+                    }
+
+                    if (payRefundResult == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败:" + payRefundResult.Message);
+                    }
+
+                    if (payRefundResult.Status != "APPLYING")
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "申请失败:" + payRefundResult.Message);
+                    }
+
+                    payRefund.Status = E_PayRefundStatus.Handling;
+                    payRefund.MendTime = DateTime.Now;
+                    payRefund.Mender = operater;
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
+
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功", new { PayRefundId = payRefund.Id });
+
+
+                    if (payRefund.ApplyMethod == E_PayRefundMethod.Original)
+                    {
+                        Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, rop.PayRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = rop.PayRefundId, MerchId = order.MerchId, PayTransId = order.PayTransId, PayPartner = order.PayPartner });
+                    }
+                }
+                else if (payRefund.ApplyMethod == E_PayRefundMethod.Manual)
+                {
+                    string refundStatus = "";
+                    if (rop.Result == RopPayRefundHandle.E_Result.Success)
+                    {
+                        refundStatus = "SUCCESS";
+                    }
+                    else if (rop.Result == RopPayRefundHandle.E_Result.Failure)
+                    {
+                        refundStatus = "FAIL";
+                    }
+
+                    result = BizFactory.Order.PayRefundHandle(operater, rop.PayRefundId, refundStatus, rop.Amount, rop.Remark);
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
+
+                }
+
             }
 
             return result;
