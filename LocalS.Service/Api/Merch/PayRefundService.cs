@@ -270,7 +270,7 @@ namespace LocalS.Service.Api.Merch
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == rop.OrderId).ToList();
 
             decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
-            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
 
             if (rop.Amount > (order.ChargeAmount - (refundedAmount + refundingAmount)))
             {
@@ -405,7 +405,7 @@ namespace LocalS.Service.Api.Merch
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
 
             decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
-            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
             ret.Order.RefundedAmount = refundedAmount.ToF2Price();
             ret.Order.RefundingAmount = refundingAmount.ToF2Price();
             ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
@@ -524,11 +524,11 @@ namespace LocalS.Service.Api.Merch
                     }
 
                     result = BizFactory.Order.PayRefundHandle(operater, rop.PayRefundId, refundStatus, rop.Amount, rop.Remark);
+
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
                 }
-
             }
 
             return result;

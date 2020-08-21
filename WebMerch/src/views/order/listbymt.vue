@@ -322,16 +322,78 @@
           </table>
         </div>
 
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5> 退款记录</h5>
+          </div>
+        </div>
+
+        <el-table
+          :data="details.refundRecords "
+          fit
+          highlight-current-row
+          style="width: 100%;"
+        >
+          <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+            <template slot-scope="scope">
+              <span>{{ scope.$index+1 }} </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="交易号" align="left" min-width="40%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.id }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" align="left" min-width="15%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.status.text }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="金额" align="left" min-width="15%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.amount }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="时间" align="left" min-width="30%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.dateTime }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+
         <div v-if="details.exIsHappen">
           <div class="row-title clearfix">
-            <div class="pull-left"> <h5> 异常处理备注</h5>
+            <div class="pull-left"> <h5> 异常处理</h5>
             </div>
           </div>
 
-          <el-input v-if="details.canHandleEx" v-model="details.exHandleRemark" type="textarea" maxlength="200" show-word-limit />
+          <el-form v-if="details.canHandleEx" ref="formByApply" :model="formByHandle" :rules="rulesByHandle" label-width="80px" style="max-width:800px;">
+            <el-form-item label="申请退款:" prop="isRefund">
+              <el-radio-group v-model="formByHandle.isRefund">
+                <el-radio :label="false">否</el-radio>
+                <el-radio :label="true">是</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item v-show="formByHandle.isRefund" label="退款提示:">
+              <span>已退款金额：<span class="refundedAmount">{{ details.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.refundableAmount }}</span></span>
+            </el-form-item>
+            <el-form-item v-show="formByHandle.isRefund" label="退款方式:" prop="refundMethod">
+              <el-radio-group v-model="formByHandle.refundMethod">
+                <el-radio label="1">原路退回（系统自动处理，退款到用户支付账号）</el-radio>
+                <el-radio label="2">线下退回（人工审核处理，线下人工退回）</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item v-show="formByHandle.isRefund" label="退款金额:" prop="refundAmount">
+              <el-input v-model="formByHandle.refundAmount" style="width:160px">
+                <template slot="prepend">￥</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="备注:" prop="remark">
+              <el-input v-model="formByHandle.remark" />
+            </el-form-item>
+
+          </el-form>
 
           <p v-else>{{ details.exHandleRemark }}</p>
-
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -442,6 +504,15 @@ export default {
           label: '已触发'
         }
       ],
+      formByHandle: {
+        refundMethod: '1',
+        remark: '',
+        isRefund: false,
+        refundAmount: 0
+      },
+      rulesByHandle: {
+        remark: [{ required: true, min: 1, max: 200, message: '原因不能为空', trigger: 'change' }]
+      },
       isDesktop: this.$store.getters.isDesktop,
       isShowClientUserNameInput: true
     }
@@ -525,8 +596,8 @@ export default {
     },
     _handleEx(details) {
       var _this = this
-
-      if (isEmpty(details.exHandleRemark)) {
+      var _formByHandle = _this.formByHandle
+      if (isEmpty(_this.formByHandle.remark)) {
         this.$message('请输入备注')
         return
       }
@@ -556,7 +627,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.detailsLoading = true
-        handleExByMachineSelfTake({ id: details.id, uniques: uniques, remark: details.exHandleRemark, isRunning: false }).then(res => {
+        handleExByMachineSelfTake({ id: details.id, uniques: uniques, remark: _formByHandle.remark, isRefund: _formByHandle.isRefund, refundAmount: _formByHandle.refundAmount, refundMethod: _formByHandle.refundMethod, isRunning: false }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             _this.refreshDetails(details.id)

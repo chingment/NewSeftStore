@@ -13,6 +13,7 @@ namespace LocalS.Service.Api.Merch
         public RetOrderDetailsByMachineSelfTake()
         {
             this.ReceiveModes = new List<ReceiveMode>();
+            this.RefundRecords = new List<object>();
         }
 
         public string Id { get; set; }
@@ -37,9 +38,12 @@ namespace LocalS.Service.Api.Merch
         public string ReceiveModeName { get; set; }
 
         public bool IsTestMode { get; set; }
-
+        public string RefundedAmount { get; set; }
+        public string RefundingAmount { get; set; }
+        public string RefundableAmount { get; set; }
         public List<object> DetailItems { get; set; }
 
+        public List<object> RefundRecords { get; set; }
         public List<ReceiveMode> ReceiveModes { get; set; }
         public class ReceiveMode
         {

@@ -276,6 +276,35 @@ namespace LocalS.Service.Api.Merch
             ret.ExIsHappen = order.ExIsHappen;
             ret.IsTestMode = order.IsTestMode;
 
+
+            var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
+
+            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
+            ret.RefundedAmount = refundedAmount.ToF2Price();
+            ret.RefundingAmount = refundingAmount.ToF2Price();
+            ret.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
+
+
+            foreach (var payRefund in payRefunds)
+            {
+                decimal amount = payRefund.ApplyAmount;
+                string dateTime = payRefund.ApplyTime.ToUnifiedFormatDateTime();
+
+                if (payRefund.Status == E_PayRefundStatus.Success)
+                {
+                    amount = payRefund.RefundedAmount;
+                    dateTime = payRefund.RefundedTime.ToUnifiedFormatDateTime();
+                }
+                else if (payRefund.Status == E_PayRefundStatus.Failure)
+                {
+                    dateTime = payRefund.HandleTime.ToUnifiedFormatDateTime();
+                }
+
+                ret.RefundRecords.Add(new { Id = payRefund.Id, Amount = amount, Status = MerchServiceFactory.PayRefund.GetStatus(payRefund.Status), DateTime = dateTime });
+            }
+
+
             var receiveMode = new RetOrderDetailsByMachineSelfTake.ReceiveMode();
             receiveMode.Mode = order.ReceiveMode;
             receiveMode.Name = order.ReceiveModeName;
@@ -330,7 +359,7 @@ namespace LocalS.Service.Api.Merch
             var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
-            bizRop.Items.Add(new ExItem { Id = rop.Id, Uniques = rop.Uniques });
+            bizRop.Items.Add(new ExItem { Id = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
             var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             return result;
         }

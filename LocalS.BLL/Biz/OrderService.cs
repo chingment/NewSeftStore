@@ -1544,6 +1544,51 @@ namespace LocalS.BLL.Biz
                     }
 
 
+                    if (item.IsRefund)
+                    {
+
+                        var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == item.Id).ToList();
+
+                        decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+                        decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
+
+                        if (item.RefundAmount > (order.ChargeAmount - (refundedAmount + refundingAmount)))
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款的金额不能大于可退金额");
+                        }
+
+                        var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
+
+                        if (item.RefundAmount > payTran.ChargeAmount)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款的金额不能大于可退金额");
+                        }
+
+                        string payRefundId = IdWorker.Build(IdType.PayRefundId);
+
+                        var payRefund = new PayRefund();
+                        payRefund.Id = payRefundId;
+                        payRefund.MerchId = order.MerchId;
+                        payRefund.MerchName = order.MerchName;
+                        payRefund.StoreId = order.StoreId;
+                        payRefund.StoreName = order.StoreName;
+                        payRefund.ClientUserId = order.ClientUserId;
+                        payRefund.ClientUserName = order.ClientUserName;
+                        payRefund.OrderId = order.Id;
+                        payRefund.PayPartnerPayTransId = order.PayPartnerPayTransId;
+                        payRefund.PayTransId = order.PayTransId;
+                        payRefund.ApplyTime = DateTime.Now;
+                        payRefund.ApplyMethod = item.RefundMethod;
+                        payRefund.ApplyRemark = rop.Remark;
+                        payRefund.ApplyAmount = item.RefundAmount;
+                        payRefund.Applyer = operater;
+                        payRefund.Status = E_PayRefundStatus.WaitHandle;
+                        payRefund.CreateTime = DateTime.Now;
+                        payRefund.Creator = operater;
+                        CurrentDb.PayRefund.Add(payRefund);
+                    }
+
+
                     var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
                     foreach (var orderSub in orderSubs)
@@ -1777,10 +1822,17 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == refundId&&m.Status== E_PayRefundStatus.Handling).FirstOrDefault();
+                var payRefund = CurrentDb.PayRefund.Where(m => m.Id == refundId).FirstOrDefault();
                 if (payRefund == null)
                 {
+                    ts.Complete();
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该信息");
+                }
+
+                if (payRefund.Status == E_PayRefundStatus.Success || payRefund.Status == E_PayRefundStatus.Failure)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被处理");
                 }
 
                 if (refundStatus == "SUCCESS")

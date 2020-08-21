@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,9 @@ namespace LocalS.BLL.Biz
     {
         public string Id { get; set; }
         public List<ExUnique> Uniques { get; set; }
+        public bool IsRefund { get; set; }
+        public decimal RefundAmount { get; set; }
+        public E_PayRefundMethod RefundMethod { get; set; }
     }
 
     public class ExReason
