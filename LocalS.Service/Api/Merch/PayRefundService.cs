@@ -463,7 +463,7 @@ namespace LocalS.Service.Api.Merch
 
                 if (payRefund == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应信息");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到待处理信息");
                 }
 
 
