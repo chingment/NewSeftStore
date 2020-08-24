@@ -922,25 +922,25 @@ namespace LocalS.BLL.Biz
                             orderSub.Mender = operater;
                             orderSub.MendTime = DateTime.Now;
 
-                            var orderPickupLog = new OrderPickupLog();
-                            orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                            orderPickupLog.OrderId = order.Id;
-                            orderPickupLog.SellChannelRefType = orderSub.SellChannelRefType;
-                            orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
-                            orderPickupLog.UniqueId = orderSub.Id;
-                            orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
-                            orderPickupLog.ActionTime = order.PickupFlowLastTime;
-                            orderPickupLog.Remark = "";
-                            orderPickupLog.CreateTime = DateTime.Now;
-                            orderPickupLog.Creator = operater;
-                            CurrentDb.OrderPickupLog.Add(orderPickupLog);
-
                             BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
 
                         }
 
                         order.MendTime = DateTime.Now;
                         order.Mender = operater;
+
+                        var orderPickupLog = new OrderPickupLog();
+                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                        orderPickupLog.OrderId = order.Id;
+                        orderPickupLog.SellChannelRefType = order.SellChannelRefType;
+                        orderPickupLog.SellChannelRefId = order.SellChannelRefId;
+                        orderPickupLog.UniqueId = order.Id;
+                        orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
+                        orderPickupLog.ActionTime = order.PickupFlowLastTime;
+                        orderPickupLog.Remark = "";
+                        orderPickupLog.CreateTime = DateTime.Now;
+                        orderPickupLog.Creator = operater;
+                        CurrentDb.OrderPickupLog.Add(orderPickupLog);
                         CurrentDb.SaveChanges();
                     }
 
