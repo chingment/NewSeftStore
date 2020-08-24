@@ -60,8 +60,8 @@ namespace LocalS.Service.Api.StoreTerm
                 if (bizProductSku != null)
                 {
                     var slot = new SlotModel();
-
                     slot.Id = item.SlotId;
+                    slot.CabinetId = item.CabinetId;
                     slot.ProductSkuId = bizProductSku.Id;
                     slot.ProductSkuCumCode = bizProductSku.CumCode;
                     slot.ProductSkuName = bizProductSku.Name;

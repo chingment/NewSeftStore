@@ -20,5 +20,7 @@ namespace LocalS.Service.Api.StoreTerm
         public int MaxQuantity { get; set; }
 
         public int Version { get; set; }
+
+        public string CabinetId { get; set; }
     }
 }

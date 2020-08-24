@@ -18,6 +18,8 @@ namespace LocalS.Entity
         public const string ScanSlots = "ScanSlots";
         [EventCodeRemark("A", "机器商品取货")]
         public const string Pickup = "Pickup";
+        [EventCodeRemark("D", "机器商品测试取货")]
+        public const string PickupTest = "PickupTest";
         [EventCodeRemark("A", "库存改变-机器货道商品初始化")]
         public const string MachineCabinetSlotInit = "MachineCabinetSlotInit";
         [EventCodeRemark("A", "库存改变-机器货道商品替换")]
