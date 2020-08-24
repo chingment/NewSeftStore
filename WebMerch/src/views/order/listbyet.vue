@@ -470,7 +470,8 @@ export default {
         status: { text: '' },
         exHandleRemark: '',
         details: undefined,
-        isRunning: false
+        isRunning: false,
+        refundRecords: null
       },
       options_status: [{
         value: '2000',
