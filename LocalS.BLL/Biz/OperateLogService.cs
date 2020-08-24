@@ -335,156 +335,159 @@ namespace LocalS.BLL.Biz
                 }
 
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == machine.Id).ToList();
-
-                //是否触发过取货
-                if (order.PickupTrgTime == null)
+                if (order != null)
                 {
-                    order.PickupIsTrg = true;
-                    order.PickupTrgTime = DateTime.Now;
-                    order.PickupFlowLastDesc = "商品取货，正在出货";
-                    order.PickupFlowLastTime = DateTime.Now;
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == machine.Id).ToList();
 
-                    int timoutM = order.Quantity * 5;
-
-                    Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.SellChannelRefId });
-
-
-                    var l_orderPickupLog = new OrderPickupLog();
-                    l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                    l_orderPickupLog.OrderId = order.Id;
-                    l_orderPickupLog.SellChannelRefType = order.SellChannelRefType;
-                    l_orderPickupLog.SellChannelRefId = order.SellChannelRefId;
-                    l_orderPickupLog.UniqueId = order.Id;
-                    l_orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
-                    l_orderPickupLog.ActionTime = order.PickupFlowLastTime;
-                    l_orderPickupLog.Remark = "";
-                    l_orderPickupLog.CreateTime = DateTime.Now;
-                    l_orderPickupLog.Creator = operater;
-                    CurrentDb.OrderPickupLog.Add(l_orderPickupLog);
-
-                }
-
-                var orderPickupLog = new OrderPickupLog();
-                orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                orderPickupLog.OrderId = model.OrderId;
-                orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                orderPickupLog.SellChannelRefId = machineId;
-                orderPickupLog.UniqueId = model.UniqueId;
-                orderPickupLog.PrdProductSkuId = model.ProductSkuId;
-                orderPickupLog.CabinetId = model.CabinetId;
-                orderPickupLog.SlotId = model.SlotId;
-                orderPickupLog.Status = model.Status;
-                orderPickupLog.ActionId = model.ActionId;
-                orderPickupLog.ActionName = model.ActionName;
-                orderPickupLog.ActionStatusCode = model.ActionStatusCode;
-                orderPickupLog.ActionStatusName = model.ActionStatusName;
-                orderPickupLog.IsPickupComplete = model.IsPickupComplete;
-                orderPickupLog.ImgId = model.ImgId;
-                orderPickupLog.ImgId2 = model.ImgId2;
-
-                if (model.IsPickupComplete)
-                {
-                    orderPickupLog.PickupUseTime = model.PickupUseTime;
-                    orderPickupLog.ActionRemark = "取货完成";
-                }
-                else
-                {
-                    if (model.Status == E_OrderPickupStatus.SendPickupCmd)
+                    //是否触发过取货
+                    if (order.PickupTrgTime == null)
                     {
-                        orderPickupLog.ActionRemark = "发送命令";
+                        order.PickupIsTrg = true;
+                        order.PickupTrgTime = DateTime.Now;
+                        order.PickupFlowLastDesc = "商品取货，正在出货";
+                        order.PickupFlowLastTime = DateTime.Now;
+
+                        int timoutM = order.Quantity * 5;
+
+                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.SellChannelRefId });
+
+
+                        var l_orderPickupLog = new OrderPickupLog();
+                        l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                        l_orderPickupLog.OrderId = order.Id;
+                        l_orderPickupLog.SellChannelRefType = order.SellChannelRefType;
+                        l_orderPickupLog.SellChannelRefId = order.SellChannelRefId;
+                        l_orderPickupLog.UniqueId = order.Id;
+                        l_orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
+                        l_orderPickupLog.ActionTime = order.PickupFlowLastTime;
+                        l_orderPickupLog.Remark = "";
+                        l_orderPickupLog.CreateTime = DateTime.Now;
+                        l_orderPickupLog.Creator = operater;
+                        CurrentDb.OrderPickupLog.Add(l_orderPickupLog);
+
                     }
-                    else if (model.Status == E_OrderPickupStatus.Exception)
+
+                    var orderPickupLog = new OrderPickupLog();
+                    orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                    orderPickupLog.OrderId = model.OrderId;
+                    orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                    orderPickupLog.SellChannelRefId = machineId;
+                    orderPickupLog.UniqueId = model.UniqueId;
+                    orderPickupLog.PrdProductSkuId = model.ProductSkuId;
+                    orderPickupLog.CabinetId = model.CabinetId;
+                    orderPickupLog.SlotId = model.SlotId;
+                    orderPickupLog.Status = model.Status;
+                    orderPickupLog.ActionId = model.ActionId;
+                    orderPickupLog.ActionName = model.ActionName;
+                    orderPickupLog.ActionStatusCode = model.ActionStatusCode;
+                    orderPickupLog.ActionStatusName = model.ActionStatusName;
+                    orderPickupLog.IsPickupComplete = model.IsPickupComplete;
+                    orderPickupLog.ImgId = model.ImgId;
+                    orderPickupLog.ImgId2 = model.ImgId2;
+
+                    if (model.IsPickupComplete)
                     {
-                        orderPickupLog.ActionRemark = "发生异常";
+                        orderPickupLog.PickupUseTime = model.PickupUseTime;
+                        orderPickupLog.ActionRemark = "取货完成";
                     }
                     else
                     {
-                        orderPickupLog.ActionRemark = model.ActionName + model.ActionStatusName;
-                    }
-                }
-
-                orderPickupLog.Remark = model.Remark;
-                orderPickupLog.CreateTime = DateTime.Now;
-                orderPickupLog.Creator = operater;
-                CurrentDb.OrderPickupLog.Add(orderPickupLog);
-
-                if (model.Status == E_OrderPickupStatus.Exception)
-                {
-
-                    order.ExIsHappen = true;
-                    order.ExHappenTime = DateTime.Now;
-                    order.PickupFlowLastDesc = "取货发生异常";
-                    order.PickupFlowLastTime = DateTime.Now;
-
-                    foreach (var orderSub in orderSubs)
-                    {
-                        if (model.Status == E_OrderPickupStatus.Exception)
+                        if (model.Status == E_OrderPickupStatus.SendPickupCmd)
                         {
-                            if (orderSub.PayStatus == E_PayStatus.PaySuccess)
-                            {
-                                if (orderSub.PickupStatus != E_OrderPickupStatus.Taked
-                                    && orderSub.PickupStatus != E_OrderPickupStatus.Exception
-                                    && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                                    && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-                                {
-                                    orderSub.PickupStatus = E_OrderPickupStatus.Exception;
-                                    orderSub.ExPickupIsHappen = true;
-                                    orderSub.ExPickupHappenTime = DateTime.Now;
-                                }
-                            }
+                            orderPickupLog.ActionRemark = "发送命令";
+                        }
+                        else if (model.Status == E_OrderPickupStatus.Exception)
+                        {
+                            orderPickupLog.ActionRemark = "发生异常";
+                        }
+                        else
+                        {
+                            orderPickupLog.ActionRemark = model.ActionName + model.ActionStatusName;
                         }
                     }
 
-                    machine.ExIsHas = true;
+                    orderPickupLog.Remark = model.Remark;
+                    orderPickupLog.CreateTime = DateTime.Now;
+                    orderPickupLog.Creator = operater;
+                    CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, order.Id);
-                }
-                else
-                {
-
-                    foreach (var orderSub in orderSubs)
+                    if (model.Status == E_OrderPickupStatus.Exception)
                     {
-                        if (orderSub.Id == model.UniqueId)
-                        {
-                            orderSub.PickupFlowLastDesc = model.ActionName + model.ActionStatusName;
-                            orderSub.PickupFlowLastTime = DateTime.Now;
 
-                            if (model.Status == E_OrderPickupStatus.Taked)
-                            {
-                                if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-                                {
-                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.MerchId, orderSub.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
-                                }
-                            }
-
-                            if (orderSub.PickupStartTime == null)
-                            {
-                                orderSub.PickupStartTime = DateTime.Now;
-                            }
-
-                            if (model.IsPickupComplete)
-                            {
-                                if (orderSub.PickupEndTime == null)
-                                {
-                                    orderSub.PickupEndTime = DateTime.Now;
-                                }
-                            }
-
-                            orderSub.PickupStatus = model.Status;
-                        }
-                    }
-
-                    var orderDetailsChildSonsCompeleteCount = orderSubs.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
-                    //判断全部订单都是已完成
-                    if (orderDetailsChildSonsCompeleteCount == orderSubs.Count)
-                    {
-                        order.PickupFlowLastDesc = "全部商品出货完成";
+                        order.ExIsHappen = true;
+                        order.ExHappenTime = DateTime.Now;
+                        order.PickupFlowLastDesc = "取货发生异常";
                         order.PickupFlowLastTime = DateTime.Now;
-                        order.Status = E_OrderStatus.Completed;
-                        order.CompletedTime = DateTime.Now;
+
+                        foreach (var orderSub in orderSubs)
+                        {
+                            if (model.Status == E_OrderPickupStatus.Exception)
+                            {
+                                if (orderSub.PayStatus == E_PayStatus.PaySuccess)
+                                {
+                                    if (orderSub.PickupStatus != E_OrderPickupStatus.Taked
+                                        && orderSub.PickupStatus != E_OrderPickupStatus.Exception
+                                        && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                                        && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                    {
+                                        orderSub.PickupStatus = E_OrderPickupStatus.Exception;
+                                        orderSub.ExPickupIsHappen = true;
+                                        orderSub.ExPickupHappenTime = DateTime.Now;
+                                    }
+                                }
+                            }
+                        }
+
+                        machine.ExIsHas = true;
 
                         Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, order.Id);
+                    }
+                    else
+                    {
+
+                        foreach (var orderSub in orderSubs)
+                        {
+                            if (orderSub.Id == model.UniqueId)
+                            {
+                                orderSub.PickupFlowLastDesc = model.ActionName + model.ActionStatusName;
+                                orderSub.PickupFlowLastTime = DateTime.Now;
+
+                                if (model.Status == E_OrderPickupStatus.Taked)
+                                {
+                                    if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                    {
+                                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.MerchId, orderSub.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                    }
+                                }
+
+                                if (orderSub.PickupStartTime == null)
+                                {
+                                    orderSub.PickupStartTime = DateTime.Now;
+                                }
+
+                                if (model.IsPickupComplete)
+                                {
+                                    if (orderSub.PickupEndTime == null)
+                                    {
+                                        orderSub.PickupEndTime = DateTime.Now;
+                                    }
+                                }
+
+                                orderSub.PickupStatus = model.Status;
+                            }
+                        }
+
+                        var orderDetailsChildSonsCompeleteCount = orderSubs.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
+                        //判断全部订单都是已完成
+                        if (orderDetailsChildSonsCompeleteCount == orderSubs.Count)
+                        {
+                            order.PickupFlowLastDesc = "全部商品出货完成";
+                            order.PickupFlowLastTime = DateTime.Now;
+                            order.Status = E_OrderStatus.Completed;
+                            order.CompletedTime = DateTime.Now;
+
+                            Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, order.Id);
+                        }
                     }
                 }
 
