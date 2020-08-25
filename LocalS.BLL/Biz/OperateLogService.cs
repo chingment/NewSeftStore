@@ -474,6 +474,7 @@ namespace LocalS.BLL.Biz
                                 }
 
                                 orderSub.PickupStatus = model.Status;
+                                CurrentDb.SaveChanges();
                             }
                         }
 
