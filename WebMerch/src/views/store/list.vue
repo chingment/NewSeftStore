@@ -157,13 +157,16 @@ export default {
 text-overflow:ellipsis;
 white-space: nowrap;
     .name{
-    padding: 0px 5px;
-        overflow: hidden;
-    text-overflow: ellipsis;
+padding: 0 5px;
+    display: inline-block;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
     }
     }
     .right{
-      width: 100px;
+      max-width: 100px;
       display: flex;
       justify-content: flex-end;
       align-items: center;

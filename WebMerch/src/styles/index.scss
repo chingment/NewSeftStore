@@ -155,14 +155,14 @@ line-height: 110px;
 
 
         .circle-item{
-       
           margin-right: 8px;
           align-items: center;
+          display: flex;
         }
 
         .circle-item .icon-status{
           border-radius: 50%;
-          display: inline-block;
+          display: flex;
           width: 12px;
           height: 12px;
           margin-right: 3px;

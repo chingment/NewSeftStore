@@ -27,7 +27,7 @@
           <div slot="header" class="it-header clearfix">
             <div class="left">
 
-              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>          <span style="font-size:12px;"> ({{ item.status.text }})</span></div>
+              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }} <span style="font-size:12px;"> ({{ item.status.text }})</span></span></div>
 
             </div>
             <div class="right">
@@ -140,9 +140,12 @@ export default {
 text-overflow:ellipsis;
 white-space: nowrap;
     .name{
-    padding: 0px 5px;
-        overflow: hidden;
-    text-overflow: ellipsis;
+padding: 0 5px;
+    display: inline-block;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
     }
     }
     .right{
