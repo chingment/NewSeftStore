@@ -279,10 +279,10 @@
               <td style="width:5%">
                 x {{ pickupSku.quantity }}
               </td>
-              <td style="width:15%;text-align:center;">
+              <td style="width:30%;text-align:center;">
                 {{ pickupSku.status.text }}
               </td>
-              <td style="width:15%;text-align:center;">
+              <td style="width:30%;text-align:center;">
                 <el-popover
                   v-if="pickupSku.pickupLogs.length>0"
                   placement="right"
@@ -310,13 +310,11 @@
                   <el-link slot="reference" type="primary" style="margin-right:15px;">出货流程</el-link>
                 </el-popover>
               </td>
-              <td style="width:200px">
-
+              <td v-show="pickupSku.status.value==6000" style="width:200px">
                 <div v-if="pickupSku.status.value==6000">
                   <el-radio v-model="pickupSku.signStatus" label="1" style="margin-right:5px;">已取</el-radio>
                   <el-radio v-model="pickupSku.signStatus" label="2">未取</el-radio>
                 </div>
-
               </td>
             </tr>
           </table>
@@ -587,6 +585,7 @@ export default {
     },
     dialogDetailsOpen(row) {
       this.detailsLoading = true
+      this.formByHandle.remark = ''
       getDetailsByMachineSelfTake({ id: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data

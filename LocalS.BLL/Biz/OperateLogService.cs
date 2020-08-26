@@ -418,7 +418,7 @@ namespace LocalS.BLL.Biz
                         order.ExHappenTime = DateTime.Now;
                         order.PickupFlowLastDesc = "取货发生异常";
                         order.PickupFlowLastTime = DateTime.Now;
-
+     
                         foreach (var orderSub in orderSubs)
                         {
                             if (model.Status == E_OrderPickupStatus.Exception)
