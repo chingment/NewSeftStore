@@ -358,6 +358,7 @@ namespace LocalS.BLL.Biz
                         l_orderPickupLog.SellChannelRefType = order.SellChannelRefType;
                         l_orderPickupLog.SellChannelRefId = order.SellChannelRefId;
                         l_orderPickupLog.UniqueId = order.Id;
+                        l_orderPickupLog.UniqueType = E_UniqueType.Order;
                         l_orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
                         l_orderPickupLog.ActionTime = order.PickupFlowLastTime;
                         l_orderPickupLog.Remark = "";
@@ -373,6 +374,7 @@ namespace LocalS.BLL.Biz
                     orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
                     orderPickupLog.SellChannelRefId = machineId;
                     orderPickupLog.UniqueId = model.UniqueId;
+                    orderPickupLog.UniqueType = E_UniqueType.OrderSub;
                     orderPickupLog.PrdProductSkuId = model.ProductSkuId;
                     orderPickupLog.CabinetId = model.CabinetId;
                     orderPickupLog.SlotId = model.SlotId;

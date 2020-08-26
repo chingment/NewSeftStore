@@ -12,6 +12,8 @@ namespace LocalS.Entity
         public string OrderId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
+
+        public E_UniqueType UniqueType { get; set; }
         public string UniqueId { get; set; }
         public string CabinetId { get; set; }
         public string PrdProductSkuId { get; set; }

@@ -141,6 +141,8 @@ text-overflow:ellipsis;
 white-space: nowrap;
     .name{
     padding: 0px 5px;
+        overflow: hidden;
+    text-overflow: ellipsis;
     }
     }
     .right{

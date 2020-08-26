@@ -9,8 +9,7 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Order = 1,
-        OrderSub = 2,
-        OrderSubChild = 3
+        OrderSub = 2
     }
 
     public enum E_SellChannelRefType
