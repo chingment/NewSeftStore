@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.Merch
             int machineCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql2.ToString()).ToString());
 
             StringBuilder sql3 = new StringBuilder();
-            sql3.Append(" select sum(ChargeAmount) from [Order] where  payStatus='3' and IsTestMode=0 and merchId='" + merchId + "' ");
+            sql3.Append(" select ISNULL(sum(ChargeAmount),0) from [Order] where  payStatus='3' and IsTestMode=0 and merchId='" + merchId + "' ");
 
             decimal sumTradeAmount = decimal.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql3.ToString()).ToString());
 

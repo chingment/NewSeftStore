@@ -51,7 +51,7 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-
+            decimal sumTradeAmount = decimal.Parse("236.00");
 
             int ss = int.Parse(("13").ToString().PadRight(2,'0') + ("1").ToString().PadLeft(2, '0'));
 
