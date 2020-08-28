@@ -60,7 +60,7 @@
         <template slot-scope="scope">
           <div v-for="(item,index) in scope.row.receiveDetails" :key="index">
             <div> <i class="el-icon-place" /><span> {{ item.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
-            <table class="table-skus" style="width:100%;table-layout:fixed;">
+            <table class="table-skus" style="width:100%;table-layout:fixed;max-width: 800px;">
               <tr v-for="(pickupSku,sub_index) in item.detailItems" :key="sub_index">
                 <td style="20%">
                   <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
@@ -71,10 +71,10 @@
                 <td style="30%">
                   x {{ pickupSku.quantity }}
                 </td>
-                <td style="15%">
+                <td v-show="scope.row.receiveMode===3" style="15%">
                   {{ pickupSku.status.text }}
                 </td>
-                <td style="width:15%;text-align:center;">
+                <td v-show="scope.row.receiveMode===3" style="width:15%;text-align:center;">
                   <el-popover
                     v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
@@ -273,16 +273,16 @@
               <td style="width:10%">
                 <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="width:25%">
+              <td style="width:50%">
                 {{ pickupSku.name }}
               </td>
-              <td style="width:5%">
+              <td style="width:40%">
                 x {{ pickupSku.quantity }}
               </td>
-              <td style="width:30%;text-align:center;">
+              <td v-show="receiveMode.mode===3" style="width:200px;text-align:center;">
                 {{ pickupSku.status.text }}
               </td>
-              <td style="width:30%;text-align:center;">
+              <td v-show="receiveMode.mode===3" style="width:100px;text-align:center;">
                 <el-popover
                   v-if="pickupSku.pickupLogs.length>0"
                   placement="right"

@@ -234,6 +234,7 @@ namespace LocalS.Service.Api.Merch
                     ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
                     CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
                     ReceiveDetails = receiveDetails,
+                    ReceiveMode = item.ReceiveMode,
                     ReceiveModeName = item.ReceiveModeName,
                     PickupTrgStatus = BizFactory.Order.GetPickupTrgStatus(item.ReceiveMode, item.PickupIsTrg),
                     IsTestMode = item.IsTestMode

@@ -217,7 +217,7 @@ namespace LocalS.Service.Api.Merch
 
             ret.StoreName = store.Name;
 
-            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).ToList();
+            var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).OrderBy(m => m.CurUseStoreId).ToList();
 
             foreach (var merchMachine in merchMachines)
             {
@@ -226,14 +226,14 @@ namespace LocalS.Service.Api.Merch
                 string label = "";
                 if (string.IsNullOrEmpty(merchMachine.CurUseStoreId))
                 {
-                    label = string.Format("{0}(未使用)", merchMachine.Name);
+                    label = string.Format("{0}(未使用)", merchMachine.MachineId);
                     disabled = false;
                 }
                 else
                 {
                     var l_store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
 
-                    label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.Name, l_store.Name);
+                    label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.MachineId, l_store.Name);
                     disabled = true;
                 }
 
