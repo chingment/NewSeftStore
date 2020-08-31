@@ -301,7 +301,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAddMachine, string.Format("机器（{0}）绑定店铺（{1}）成功", merchMachine.Name, store.Name));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAddMachine, string.Format("机器（{0}）绑定店铺（{1}）成功", merchMachine.MachineId, store.Name));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
             }
@@ -358,7 +358,7 @@ namespace LocalS.Service.Api.Merch
                 merchMachine.Mender = operater;
                 merchMachine.MendTime = DateTime.Now;
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreRemoveMachine, string.Format("机器（{0}）解绑店铺（{1}）成功", merchMachine.Name, store.Name));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreRemoveMachine, string.Format("机器（{0}）解绑店铺（{1}）成功", merchMachine.MachineId, store.Name));
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
