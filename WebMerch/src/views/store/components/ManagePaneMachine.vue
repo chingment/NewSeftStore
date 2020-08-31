@@ -129,7 +129,7 @@ export default {
       // this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
       manageMachineGetMachineList(listQuery).then(res => {
         if (res.result === 1) {
-          var d = res.data
+          var d = res.data                                   
           this.listData = d.items
         }
         this.loading = false

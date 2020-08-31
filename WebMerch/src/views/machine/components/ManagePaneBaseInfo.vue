@@ -1,37 +1,15 @@
 <template>
   <div id="machine_baseinfo" v-loading="loading" class="app-container">
 
-    <el-form v-show="!isEdit" class="noeditform" label-width="100px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px" :hide-required-asterisk="!isEdit">
       <el-form-item label="机器编号">
         {{ temp.id }}
       </el-form-item>
       <el-form-item label="机器Logo">
-        <img :src="temp.logoImgUrl" class="singlepic-machine-banner">
-      </el-form-item>
-      <el-form-item label="所属店铺">
-        {{ temp.storeName }}
-      </el-form-item>
-      <el-form-item label="控制程序号">
-        {{ temp.ctrlSdkVersion }}
-      </el-form-item>
-      <el-form-item label="应用程序号">
-        {{ temp.appVersion }}
-      </el-form-item>
-      <el-form-item label="机器状态">
-        {{ temp.status.text }}
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="openEdit">编辑</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-form v-show="isEdit" ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="机器编号">
-        {{ temp.id }}
-      </el-form-item>
-      <el-form-item label="机器Logo">
+        <img v-show="!isEdit" :src="temp.logoImgUrl" class="singlepic-machine-banner">
 
         <el-upload
+          v-show="isEdit"
           class="singlepic-uploader"
           :action="uploadImgServiceUrl"
           :show-file-list="false"
@@ -55,9 +33,13 @@
       <el-form-item label="机器状态">
         {{ temp.status.text }}
       </el-form-item>
+      <el-form-item label="最后运行时间">
+        {{ temp.lastRequestTime }}
+      </el-form-item>
       <el-form-item>
-        <el-button type="info" @click="cancleEdit">取消</el-button>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
+        <el-button v-show="!isEdit" type="primary" @click="openEdit">编辑</el-button>
+        <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
+        <el-button v-show="isEdit" type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -126,6 +108,7 @@ export default {
           this.temp.ctrlSdkVersion = d.ctrlSdkVersion
           this.temp.appVersion = d.appVersion
           this.temp.storeName = d.storeName
+          this.temp.lastRequestTime = d.lastRequestTime
         }
         this.loading = false
       })

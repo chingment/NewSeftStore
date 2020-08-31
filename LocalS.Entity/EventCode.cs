@@ -12,7 +12,7 @@ namespace LocalS.Entity
         public const string Login = "Login";
         [EventCodeRemark("A", "系统退出")]
         public const string Logout = "Logout";
-        [EventCodeRemark("A", "心跳包")]
+        [EventCodeRemark("D", "心跳包")]
         public const string HeartbeatBag = "HeartbeatBag";
         [EventCodeRemark("A", "机器扫描货道")]
         public const string ScanSlots = "ScanSlots";
@@ -30,7 +30,7 @@ namespace LocalS.Entity
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
         [EventCodeRemark("A", "库存改变-机器货道商品调整库存数量")]
         public const string MachineCabinetSlotAdjustStockQuantity = "MachineCabinetSlotAdjustStockQuantity";
-        [EventCodeRemark("A", "机器货道商品库存查看")]
+        [EventCodeRemark("A", "机器商品库存查看")]
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
         [EventCodeRemark("A", "机器货道保存扫成结果")]
         public const string MachineCabinetSaveRowColLayout = "MachineCabinetSaveRowColLayout";
