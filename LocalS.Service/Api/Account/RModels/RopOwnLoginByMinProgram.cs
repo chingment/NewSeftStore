@@ -11,8 +11,10 @@ namespace LocalS.Service.Api.Account
         public string MerchId { get; set; }
         public string AppId { get; set; }
         public string OpenId { get; set; }
-        public string Code { get; set; }
-        public string Iv { get; set; }
-        public string EncryptedData { get; set; }
+        //public string Code { get; set; }
+        //public string Iv { get; set; }
+        //public string EncryptedData { get; set; }
+
+        public string PhoneNumber { get; set; }
     }
 }

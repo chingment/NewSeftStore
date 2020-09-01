@@ -14,21 +14,23 @@
   height: 200rpx;
   display: flex;
   flex-direction: row;
+  padding: 0rpx 20rpx;
 }
 
 .personal-userinfo .item-left {
   flex: 1;
   height: 180rpx;
   width: 70%;
-  padding: 20rpx 0rpx 0rpx 60rpx;
+  padding: 20rpx 0rpx 0rpx 0rpx;
 }
 
 .personal-userinfo .item-right {
   width: 30%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   height: 200rpx;
+
 }
 
 .personal-userinfo .item-right .img {
@@ -61,6 +63,7 @@
 .personal-userinfo .item-phone {
   height: 48rpx;
   line-height: 48rpx;
+  margin-top: 18rpx;
 }
 
 .personal-userinfo .item-phone .img {

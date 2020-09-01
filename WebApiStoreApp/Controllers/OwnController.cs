@@ -16,6 +16,20 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public OwnApiHttpResponse WxApiCode2Session(RopWxApiCode2Session rop)
+        {
+            IResult result = AccountServiceFactory.Own.GetWxApiCode2Session(rop);
+            return new OwnApiHttpResponse(result);
+        }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public OwnApiHttpResponse WxPhoneNumber(RopWxGetPhoneNumber rop)
+        {
+            IResult result = AccountServiceFactory.Own.GetWxPhoneNumber(rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

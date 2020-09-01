@@ -1,28 +1,53 @@
 //app.js
+
+const config = require('/config')
+const toast = require('/utils/toastutil')
+const storeage = require('/utils/storeageutil.js')
+const ownRequest = require('/own/ownRequest.js')
+const apiOwn = require('/api/own.js')
+
 App({
   onLaunch: function () {
-    this.autoUpdate()
+    var _this = this
+    _this.autoUpdate()
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-
     wx.login({
-      success: function(res) {
+      success: function (res) {
         console.log("minProgram:login")
         if (res.code) {
-        
           console.log(res)
+          apiOwn.WxApiCode2Session({
+            merchId: config.merchId,
+            appId: config.appId,
+            code: res.code,
+          }).then(function (res2) {
+            console.log(res2)
+            if (res2.result == 1) {
+              var d = res2.data
+              _this.globalData.openid = d.openid
+              _this.globalData.session_key = d.session_key
+            } else {
+              toast.show({
+                title: res2.message
+              })
+            }
+          })
         }
       }
     });
-    
+
+
   },
   onShow: function () {
     console.log("App.onShow")
   },
   globalData: {
+    openid: null,
+    session_key: null,
     userInfo: null,
     mainTabBarIndex: 0,
     currentShopMode: 0,
@@ -94,9 +119,9 @@ App({
       })
     }
   },
-  autoUpdate:function(){
+  autoUpdate: function () {
     console.log(new Date())
-    var self=this
+    var self = this
     // 获取小程序更新机制兼容
     if (wx.canIUse('getUpdateManager')) {
       const updateManager = wx.getUpdateManager()
@@ -119,9 +144,9 @@ App({
                   wx.showModal({
                     title: '温馨提示~',
                     content: '本次版本更新涉及到新的功能添加，旧版本无法正常访问的哦~',
-                    success: function (res) {     
+                    success: function (res) {
                       self.autoUpdate()
-                      return;                 
+                      return;
                       //第二次提示后，强制更新                      
                       if (res.confirm) {
                         // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启

@@ -15,6 +15,8 @@ var config = {
   // storeId: '21ae9399b1804dbc9ddd3c29e8b5c670',
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
+    ownWxApiCode2Session: `${host}/Own/WxApiCode2Session`,
+    ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
     globalDataSet: `${host}/Global/DataSet`,
     indexPageData: `${host}/Index/PageData`,
     productKindPageData:`${host}/ProductKind/PageData`,

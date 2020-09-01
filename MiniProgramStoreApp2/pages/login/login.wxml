@@ -6,7 +6,7 @@
     <image class="img" src='/content/default/images/logo.jpg'></image>
   </view>
 
-  <button class="btn bg-main btn-login" open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button>
-   <button class="btn bg-main btn-login hidden " open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">手机一键登录</button>
+  <!-- <button class="btn bg-main btn-login" open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button> -->
+  <button class="btn bg-main btn-login" open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">微信手机一键登录</button>
    
 </view>

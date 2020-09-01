@@ -238,6 +238,7 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
+
         public CustomJsonResult LoginByMinProgram(RopOwnLoginByMinProgram rop)
         {
             var result = new CustomJsonResult();
@@ -245,88 +246,85 @@ namespace LocalS.Service.Api.Account
 
             WxUserInfo wxUserInfo = null;
 
-            if (string.IsNullOrEmpty(rop.OpenId))
+
+            var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+
+            if (merch == null)
             {
-                var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+            }
 
-                if (merch == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
-                }
+            var wxAppInfoConfig = new WxAppInfoConfig();
 
-                var wxAppInfoConfig = new WxAppInfoConfig();
+            wxAppInfoConfig.AppId = merch.WxMpAppId;
+            wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+            wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+            wxAppInfoConfig.PayKey = merch.WxPayKey;
+            wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+            wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
 
-                wxAppInfoConfig.AppId = merch.WxMpAppId;
-                wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
-                wxAppInfoConfig.PayMchId = merch.WxPayMchId;
-                wxAppInfoConfig.PayKey = merch.WxPayKey;
-                wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-                wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+            var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByApiToken(wxAppInfoConfig, rop.OpenId);
 
+            if (wxUserInfoByMinProram == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
+            }
 
-                var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
+            wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == rop.OpenId).FirstOrDefault();
 
-                if (wxUserInfoByMinProram == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
-                }
+            if (wxUserInfo == null)
+            {
+                string sysClientUserId = IdWorker.Build(IdType.NewGuid);
 
-                wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == wxUserInfoByMinProram.openId).FirstOrDefault();
-                if (wxUserInfo == null)
-                {
-                    string sysClientUserId = IdWorker.Build(IdType.NewGuid);
+                var sysClientUser = new SysClientUser();
 
-                    var sysClientUser = new SysClientUser();
+                sysClientUser.Id = sysClientUserId;
+                sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
+                sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+                sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
+                sysClientUser.RegisterTime = DateTime.Now;
+                sysClientUser.NickName = wxUserInfoByMinProram.nickname;
+                sysClientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
+                sysClientUser.Province = wxUserInfoByMinProram.province;
+                sysClientUser.City = wxUserInfoByMinProram.city;
+                sysClientUser.Country = wxUserInfoByMinProram.country;
+                sysClientUser.Avatar = wxUserInfoByMinProram.headimgurl;
+                sysClientUser.PhoneNumber = rop.PhoneNumber;
+                sysClientUser.IsVip = false;
+                sysClientUser.CreateTime = DateTime.Now;
+                sysClientUser.Creator = sysClientUserId;
+                sysClientUser.BelongType = Enumeration.BelongType.Client;
+                sysClientUser.MerchId = rop.MerchId;
+                CurrentDb.SysClientUser.Add(sysClientUser);
+                CurrentDb.SaveChanges();
 
-                    sysClientUser.Id = sysClientUserId;
-                    sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
-                    sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
-                    sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
-                    sysClientUser.RegisterTime = DateTime.Now;
-                    sysClientUser.NickName = wxUserInfoByMinProram.nickName;
-                    sysClientUser.Sex = wxUserInfoByMinProram.gender;
-                    sysClientUser.Province = wxUserInfoByMinProram.province;
-                    sysClientUser.City = wxUserInfoByMinProram.city;
-                    sysClientUser.Country = wxUserInfoByMinProram.country;
-                    sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
-                    sysClientUser.IsVip = false;
-                    sysClientUser.CreateTime = DateTime.Now;
-                    sysClientUser.Creator = sysClientUserId;
-                    sysClientUser.BelongType = Enumeration.BelongType.Client;
-                    sysClientUser.MerchId = rop.MerchId;
-                    CurrentDb.SysClientUser.Add(sysClientUser);
-                    CurrentDb.SaveChanges();
-
-                    wxUserInfo = new WxUserInfo();
-                    wxUserInfo.Id = IdWorker.Build(IdType.NewGuid);
-                    wxUserInfo.MerchId = rop.MerchId;
-                    wxUserInfo.AppId = rop.AppId;
-                    wxUserInfo.ClientUserId = sysClientUser.Id;
-                    wxUserInfo.OpenId = wxUserInfoByMinProram.openId;
-                    wxUserInfo.CreateTime = DateTime.Now;
-                    wxUserInfo.Creator = sysClientUserId;
-                    CurrentDb.WxUserInfo.Add(wxUserInfo);
-                    CurrentDb.SaveChanges();
-                }
-                else
-                {
-                    var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
-                    if (sysClientUser != null)
-                    {
-                        sysClientUser.NickName = wxUserInfoByMinProram.nickName;
-                        sysClientUser.Sex = wxUserInfoByMinProram.gender;
-                        sysClientUser.Province = wxUserInfoByMinProram.province;
-                        sysClientUser.City = wxUserInfoByMinProram.city;
-                        sysClientUser.Country = wxUserInfoByMinProram.country;
-                        sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
-                    }
-                    CurrentDb.SaveChanges();
-                }
+                wxUserInfo = new WxUserInfo();
+                wxUserInfo.Id = IdWorker.Build(IdType.NewGuid);
+                wxUserInfo.MerchId = rop.MerchId;
+                wxUserInfo.AppId = rop.AppId;
+                wxUserInfo.ClientUserId = sysClientUser.Id;
+                wxUserInfo.OpenId = rop.OpenId;
+                wxUserInfo.CreateTime = DateTime.Now;
+                wxUserInfo.Creator = sysClientUserId;
+                CurrentDb.WxUserInfo.Add(wxUserInfo);
+                CurrentDb.SaveChanges();
             }
             else
             {
-                wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == rop.OpenId).FirstOrDefault();
+                var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
+                if (sysClientUser != null)
+                {
+                    sysClientUser.NickName = wxUserInfoByMinProram.nickname;
+                    sysClientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
+                    sysClientUser.Province = wxUserInfoByMinProram.province;
+                    sysClientUser.City = wxUserInfoByMinProram.city;
+                    sysClientUser.Country = wxUserInfoByMinProram.country;
+                    sysClientUser.Avatar = wxUserInfoByMinProram.headimgurl;
+                    sysClientUser.PhoneNumber = rop.PhoneNumber;
+                }
+                CurrentDb.SaveChanges();
             }
+
 
             var tokenInfo = new TokenInfo();
             ret.Token = IdWorker.Build(IdType.NewGuid);
@@ -342,6 +340,111 @@ namespace LocalS.Service.Api.Account
 
             return result;
         }
+
+        //public CustomJsonResult LoginByMinProgram(RopOwnLoginByMinProgram rop)
+        //{
+        //    var result = new CustomJsonResult();
+        //    var ret = new RetOwnLoginByMinProgram();
+
+        //    WxUserInfo wxUserInfo = null;
+
+        //    if (string.IsNullOrEmpty(rop.OpenId))
+        //    {
+        //        var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+
+        //        if (merch == null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+        //        }
+
+        //        var wxAppInfoConfig = new WxAppInfoConfig();
+
+        //        wxAppInfoConfig.AppId = merch.WxMpAppId;
+        //        wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+        //        wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+        //        wxAppInfoConfig.PayKey = merch.WxPayKey;
+        //        wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+        //        wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+
+
+        //        var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
+
+        //        if (wxUserInfoByMinProram == null)
+        //        {
+        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
+        //        }
+
+        //        wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == wxUserInfoByMinProram.openId).FirstOrDefault();
+        //        if (wxUserInfo == null)
+        //        {
+        //            string sysClientUserId = IdWorker.Build(IdType.NewGuid);
+
+        //            var sysClientUser = new SysClientUser();
+
+        //            sysClientUser.Id = sysClientUserId;
+        //            sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
+        //            sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+        //            sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
+        //            sysClientUser.RegisterTime = DateTime.Now;
+        //            sysClientUser.NickName = wxUserInfoByMinProram.nickName;
+        //            sysClientUser.Sex = wxUserInfoByMinProram.gender;
+        //            sysClientUser.Province = wxUserInfoByMinProram.province;
+        //            sysClientUser.City = wxUserInfoByMinProram.city;
+        //            sysClientUser.Country = wxUserInfoByMinProram.country;
+        //            sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+        //            sysClientUser.IsVip = false;
+        //            sysClientUser.CreateTime = DateTime.Now;
+        //            sysClientUser.Creator = sysClientUserId;
+        //            sysClientUser.BelongType = Enumeration.BelongType.Client;
+        //            sysClientUser.MerchId = rop.MerchId;
+        //            CurrentDb.SysClientUser.Add(sysClientUser);
+        //            CurrentDb.SaveChanges();
+
+        //            wxUserInfo = new WxUserInfo();
+        //            wxUserInfo.Id = IdWorker.Build(IdType.NewGuid);
+        //            wxUserInfo.MerchId = rop.MerchId;
+        //            wxUserInfo.AppId = rop.AppId;
+        //            wxUserInfo.ClientUserId = sysClientUser.Id;
+        //            wxUserInfo.OpenId = wxUserInfoByMinProram.openId;
+        //            wxUserInfo.CreateTime = DateTime.Now;
+        //            wxUserInfo.Creator = sysClientUserId;
+        //            CurrentDb.WxUserInfo.Add(wxUserInfo);
+        //            CurrentDb.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
+        //            if (sysClientUser != null)
+        //            {
+        //                sysClientUser.NickName = wxUserInfoByMinProram.nickName;
+        //                sysClientUser.Sex = wxUserInfoByMinProram.gender;
+        //                sysClientUser.Province = wxUserInfoByMinProram.province;
+        //                sysClientUser.City = wxUserInfoByMinProram.city;
+        //                sysClientUser.Country = wxUserInfoByMinProram.country;
+        //                sysClientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+        //            }
+        //            CurrentDb.SaveChanges();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == rop.OpenId).FirstOrDefault();
+        //    }
+
+        //    var tokenInfo = new TokenInfo();
+        //    ret.Token = IdWorker.Build(IdType.NewGuid);
+        //    ret.OpenId = wxUserInfo.OpenId;
+
+        //    tokenInfo.UserId = wxUserInfo.ClientUserId;
+
+        //    SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+
+        //    MqFactory.Global.PushEventNotify(wxUserInfo.Id, rop.AppId, wxUserInfo.MerchId, "", "", EventCode.Login, "登录成功");
+
+        //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
+
+        //    return result;
+        //}
 
         public CustomJsonResult LoginByFingerVein(RopOwnLoginByFingerVein rop)
         {
@@ -721,6 +824,42 @@ namespace LocalS.Service.Api.Account
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
             }
+
+            return result;
+        }
+
+
+        public CustomJsonResult GetWxApiCode2Session(RopWxApiCode2Session rop)
+        {
+            var result = new CustomJsonResult();
+
+            var config = BizFactory.Merch.GetWxMpAppInfoConfig(rop.MerchId);
+
+            if (config == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "配置信息失败");
+            }
+
+            var ret = SdkFactory.Wx.GetJsCode2Session(config, rop.Code);
+
+            if (ret == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key });
+
+            return result;
+        }
+
+
+        public CustomJsonResult GetWxPhoneNumber(RopWxGetPhoneNumber rop)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = SdkFactory.Wx.GetWxPhoneNumber(rop.encryptedData, rop.iv, rop.session_key);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

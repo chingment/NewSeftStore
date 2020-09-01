@@ -249,6 +249,22 @@ namespace LocalS.BLL
             }
         }
 
+
+        public WxApiJsCode2SessionResult GetJsCode2Session(WxAppInfoConfig config, string code)
+        {
+            return OAuthApi.GetWxApiJsCode2Session(config.AppId, config.AppSecret, code);
+        }
+
+
+        public WxPhoneNumber GetWxPhoneNumber(string encryptedData, string iv,string session_key)
+        {
+            string strData = AES_decrypt(encryptedData, iv, session_key);
+
+            var obj = JsonConvert.DeserializeObject<WxPhoneNumber>(strData);
+
+            return obj;
+        }
+
         public string CardCodeDecrypt(WxAppInfoConfig config, string encrypt_code)
         {
             return OAuthApi.CardCodeDecrypt(this.GetApiAccessToken(config), encrypt_code);
@@ -510,6 +526,8 @@ namespace LocalS.BLL
         {
             return null;
         }
+
+
 
 
         //public string OrderPayReFund(string comCode, string orderId, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)

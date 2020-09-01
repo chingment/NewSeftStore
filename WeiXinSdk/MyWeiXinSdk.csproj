@@ -124,6 +124,7 @@
     <Compile Include="WxApi.cs" />
     <Compile Include="WxApiBaseResult.cs" />
     <Compile Include="Model\WxCard.cs" />
+    <Compile Include="WxPhoneNumber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Post\Model\" />
