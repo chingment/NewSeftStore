@@ -55,6 +55,9 @@ namespace MyWeiXinSdk.Tenpay
 
             TenpayOrderPayReFundApi api = new TenpayOrderPayReFundApi(_config, out_trade_no, out_refund_no, total_fee, refund_fee, refund_desc);
             var result = _request.DoPost(_config, api, true);
+
+
+
             if (result.ContainsKey("result_code"))
             {
                 string result_code = result["result_code"].ToString();
@@ -63,6 +66,12 @@ namespace MyWeiXinSdk.Tenpay
                     ret.Status = "APPLYING";
                 }
             }
+
+            if (result.ContainsKey("return_msg"))
+            {
+                ret.Message = result["return_msg"].ToString();
+            }
+
             return ret;
         }
 

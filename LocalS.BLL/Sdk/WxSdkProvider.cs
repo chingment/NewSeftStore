@@ -256,7 +256,7 @@ namespace LocalS.BLL
         }
 
 
-        public WxPhoneNumber GetWxPhoneNumber(string encryptedData, string iv,string session_key)
+        public WxPhoneNumber GetWxPhoneNumber(string encryptedData, string iv, string session_key)
         {
             try
             {
@@ -526,7 +526,7 @@ namespace LocalS.BLL
             var orderPayRefund = tenpayUtil.OrderPayRefund(payTranId, payRefundId, Convert.ToInt32(total_fee * 100).ToString(), Convert.ToInt32(refund_fee * 100).ToString(), refund_desc);
 
             result.Status = orderPayRefund.Status;
-
+            result.Message = orderPayRefund.Message;
             return result;
         }
         public string PayRefundQuery(WxAppInfoConfig config, string payTranId, string payRefundId)

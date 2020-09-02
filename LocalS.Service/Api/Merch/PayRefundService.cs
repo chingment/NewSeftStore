@@ -448,10 +448,6 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (rop.Result == RopPayRefundHandle.E_Result.Unknow)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择处理结果");
-                }
 
                 if (string.IsNullOrEmpty(rop.Remark))
                 {
@@ -503,7 +499,7 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功", new { PayRefundId = payRefund.Id });
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "申请成功", new { PayRefundId = payRefund.Id });
 
 
                     if (payRefund.ApplyMethod == E_PayRefundMethod.Original)
@@ -513,6 +509,12 @@ namespace LocalS.Service.Api.Merch
                 }
                 else if (payRefund.ApplyMethod == E_PayRefundMethod.Manual)
                 {
+
+                    if (rop.Result == RopPayRefundHandle.E_Result.Unknow)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择处理结果");
+                    }
+
                     string refundStatus = "";
                     if (rop.Result == RopPayRefundHandle.E_Result.Success)
                     {

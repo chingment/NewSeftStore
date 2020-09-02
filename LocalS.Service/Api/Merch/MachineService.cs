@@ -20,14 +20,14 @@ namespace LocalS.Service.Api.Merch
         {
             var status = new StatusModel();
 
-            if (string.IsNullOrEmpty(curUseStoreId))
-            {
-                return new StatusModel(1, "未绑定店铺");
-            }
-
             if (isStopUse)
             {
                 return new StatusModel(1, "停止使用");
+            }
+
+            if (string.IsNullOrEmpty(curUseStoreId))
+            {
+                return new StatusModel(1, "未绑定店铺");
             }
 
             if (isEx)
@@ -91,7 +91,7 @@ namespace LocalS.Service.Api.Merch
 
             query = query.OrderByDescending(r => r.CurUseStoreId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
-            var list = query.ToList();
+            var list = query.OrderBy(m => m.IsStopUse).ToList();
 
             List<object> olist = new List<object>();
 

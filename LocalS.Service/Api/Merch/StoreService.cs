@@ -224,17 +224,27 @@ namespace LocalS.Service.Api.Merch
                 bool disabled = false;
                 string value = merchMachine.MachineId;
                 string label = "";
-                if (string.IsNullOrEmpty(merchMachine.CurUseStoreId))
+
+                if (merchMachine.IsStopUse)
                 {
-                    label = string.Format("{0}(未使用)", merchMachine.MachineId);
-                    disabled = false;
+                    label = string.Format("{0}(停止使用)", merchMachine.MachineId);
+                    disabled = true;
                 }
                 else
                 {
-                    var l_store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
 
-                    label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.MachineId, l_store.Name);
-                    disabled = true;
+                    if (string.IsNullOrEmpty(merchMachine.CurUseStoreId))
+                    {
+                        label = string.Format("{0}(未使用)", merchMachine.MachineId);
+                        disabled = false;
+                    }
+                    else
+                    {
+                        var l_store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
+
+                        label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.MachineId, l_store.Name);
+                        disabled = true;
+                    }
                 }
 
                 ret.FormSelectMachines.Add(new { value = value, label = label, disabled = disabled });

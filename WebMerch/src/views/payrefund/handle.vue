@@ -85,10 +85,9 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button v-if="row.applyMethod.value==2" type="primary" size="mini" @click="dialogOpenByRefundHandle(row)">
-              人工处理
+            <el-button type="primary" size="mini" @click="dialogOpenByRefundHandle(row)">
+              处理
             </el-button>
-            <el-tag v-if="row.applyMethod.value==1" type="warning">自动处理</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -234,7 +233,7 @@
 
         <el-form ref="formByHandle" :model="formByHandle" :rules="rulesByHandle" label-width="120px" style="max-width:800px;">
 
-          <el-form-item label="结果" prop="result">
+          <el-form-item v-show="details.applyMethod.value===2" label="结果" prop="result">
             <el-radio-group v-model="formByHandle.result">
               <el-radio label="1">退款成功</el-radio>
               <el-radio label="2">退款失败</el-radio>
@@ -347,6 +346,13 @@ export default {
       this.formByHandle.amount = row.applyAmount
       this.formByHandle.result = ''
       this.formByHandle.remark = ''
+
+      if (row.applyMethod.value === 1) {
+        this.rulesByHandle.result[0].required = false
+      } else if (row.applyMethod.value === 2) {
+        this.rulesByHandle.result[0].required = true
+      }
+
       getHandleDetails({ payRefundId: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
