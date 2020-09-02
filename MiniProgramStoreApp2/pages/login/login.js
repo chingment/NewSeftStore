@@ -24,12 +24,12 @@ Page({
   },
   onReady: function () { },
   onShow: function () { },
-  login: function (openid, phoneNumber) {
+  login: function (openId, phoneNumber) {
 
     apiOwn.loginByMinProgram({
       merchId: config.merchId,
       appId: config.appId,
-      openId: openid,
+      openId: openId,
       phoneNumber: phoneNumber,
     }).then(function (res) {
       if (res.result == 1) {
@@ -95,12 +95,10 @@ Page({
           })
         }
       })
-
-
     }
     else {
       toast.show({
-        title: '登录失败'
+        title: '您点击了拒绝授权！'
       })
     }
   }

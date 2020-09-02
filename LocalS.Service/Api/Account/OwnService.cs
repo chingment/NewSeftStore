@@ -238,7 +238,6 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-
         public CustomJsonResult LoginByMinProgram(RopOwnLoginByMinProgram rop)
         {
             var result = new CustomJsonResult();
@@ -246,12 +245,11 @@ namespace LocalS.Service.Api.Account
 
             WxUserInfo wxUserInfo = null;
 
-
             var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
 
             if (merch == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败");
             }
 
             var wxAppInfoConfig = new WxAppInfoConfig();
@@ -267,7 +265,7 @@ namespace LocalS.Service.Api.Account
 
             if (wxUserInfoByMinProram == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取微信用户信息失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败");
             }
 
             wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == rop.OpenId).FirstOrDefault();
@@ -858,6 +856,11 @@ namespace LocalS.Service.Api.Account
             var result = new CustomJsonResult();
 
             var ret = SdkFactory.Wx.GetWxPhoneNumber(rop.encryptedData, rop.iv, rop.session_key);
+
+            if (ret == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释数据失败");
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

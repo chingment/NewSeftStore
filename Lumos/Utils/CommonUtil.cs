@@ -269,5 +269,30 @@ namespace Lumos
         {
             return System.Text.RegularExpressions.Regex.IsMatch(ip, @"^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$");
         }
+
+
+        public static string GetEncryptionPhoneNumber(string phone)
+        {
+
+            if (string.IsNullOrEmpty(phone))
+            {
+                return null;
+            }
+
+            if (phone.Length < 11)
+            {
+                return null;
+            }
+
+            try
+            {
+                return Regex.Replace(phone, "(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+            }
+            catch (Exception)
+            {
+                return "未知号码";
+            }
+
+        }
     }
 }

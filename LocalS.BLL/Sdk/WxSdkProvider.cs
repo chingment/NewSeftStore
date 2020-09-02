@@ -258,11 +258,18 @@ namespace LocalS.BLL
 
         public WxPhoneNumber GetWxPhoneNumber(string encryptedData, string iv,string session_key)
         {
-            string strData = AES_decrypt(encryptedData, iv, session_key);
+            try
+            {
+                string strData = AES_decrypt(encryptedData, iv, session_key);
 
-            var obj = JsonConvert.DeserializeObject<WxPhoneNumber>(strData);
+                var obj = JsonConvert.DeserializeObject<WxPhoneNumber>(strData);
 
-            return obj;
+                return obj;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public string CardCodeDecrypt(WxAppInfoConfig config, string encrypt_code)
