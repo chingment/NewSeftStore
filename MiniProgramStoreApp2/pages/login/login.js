@@ -21,6 +21,34 @@ Page({
         }
       }
     })
+
+
+    wx.login({
+      success: function (res) {
+        console.log("minProgram:login")
+        if (res.code) {
+          console.log(res)
+          apiOwn.WxApiCode2Session({
+            merchId: config.merchId,
+            appId: config.appId,
+            code: res.code,
+          }).then(function (res2) {
+            console.log(res2)
+            if (res2.result == 1) {
+              var d = res2.data
+              app.globalData.openid = d.openid
+              app.globalData.session_key = d.session_key
+            } else {
+              toast.show({
+                title: res2.message
+              })
+            }
+          })
+        }
+      }
+    });
+
+
   },
   onReady: function () { },
   onShow: function () { },
