@@ -1870,7 +1870,16 @@ namespace LocalS.BLL.Biz
                     payRefund.HandleTime = DateTime.Now;
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
                 }
-
+                else if (refundStatus == "INVAILD")
+                {
+                    payRefund.Status = E_PayRefundStatus.InVaild;
+                    payRefund.Handler = operater;
+                    payRefund.HandleRemark = refundRemark;
+                    payRefund.Mender = operater;
+                    payRefund.MendTime = DateTime.Now;
+                    payRefund.HandleTime = DateTime.Now;
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
+                }
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

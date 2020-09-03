@@ -17,6 +17,8 @@ namespace LocalS.Service.Api.Merch
             Unknow = 0,
             Success = 1,
             Failure = 2,
+            TurnToAutoRefund = 3,
+            InVaild = 4,
         }
     }
 }

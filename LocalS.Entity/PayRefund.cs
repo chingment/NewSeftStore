@@ -11,7 +11,8 @@ namespace LocalS.Entity
         WaitHandle = 1,
         Handling = 2,
         Success = 3,
-        Failure = 4
+        Failure = 4,
+        InVaild = 5
     }
 
     public enum E_PayRefundMethod

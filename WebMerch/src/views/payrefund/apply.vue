@@ -99,27 +99,27 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label-width="80px" label="订单编号:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="订单编号:" class="postInfo-container-item">
                     {{ details.id }}
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label-width="80px" label="店铺名称:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="店铺名称:" class="postInfo-container-item">
                     {{ details.storeName }}
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="下单用户:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="下单用户:" class="postInfo-container-item">
                     {{ details.clientUserName }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="下单方式:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="下单方式:" class="postInfo-container-item">
                     {{ details.sourceName }}
                   </el-form-item>
                 </el-col>
@@ -127,13 +127,13 @@
               <el-row>
 
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="下单时间:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="下单时间:" class="postInfo-container-item">
                     {{ details.submittedTime }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="原金额:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="原金额:" class="postInfo-container-item">
                     {{ details.originalAmount }}
                   </el-form-item>
                 </el-col>
@@ -142,13 +142,13 @@
 
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="优惠金额:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="优惠金额:" class="postInfo-container-item">
                     {{ details.discountAmount }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="支付金额:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="支付金额:" class="postInfo-container-item">
                     {{ details.chargeAmount }}
                   </el-form-item>
                 </el-col>
@@ -156,7 +156,7 @@
 
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="状态:" class="postInfo-container-item">
+                  <el-form-item label-width="110px" label="状态:" class="postInfo-container-item">
                     {{ details.status.text }}
                   </el-form-item>
                 </el-col>
@@ -197,13 +197,13 @@
           </div>
         </div>
 
-        <el-form ref="formByApply" :model="formByApply" :rules="rulesByApply" label-width="80px" style="max-width:800px;">
-          <el-form-item label="退款提示">
+        <el-form ref="formByApply" :model="formByApply" :rules="rulesByApply" label-width="110px" style="max-width:800px;">
+          <el-form-item label="退款提示:">
 
-            <span>已退款金额：<span class="refundedAmount">{{ details.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.refundableAmount }}</span></span>
+            <span style="line-height:30px">已退款金额：<span class="refundedAmount">{{ details.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.refundableAmount }}</span></span>
 
           </el-form-item>
-          <el-form-item label="退款方式" prop="method">
+          <el-form-item label="退款方式:" prop="method">
 
             <el-radio-group v-model="formByApply.method">
               <el-radio label="1">原路退回（系统自动处理，退款到用户支付账号）</el-radio>
@@ -211,26 +211,26 @@
             </el-radio-group>
 
           </el-form-item>
-          <el-form-item label="退款金额" prop="amount">
+          <el-form-item label="退款金额:" prop="amount">
             <el-input v-model="formByApply.amount" style="width:160px">
               <template slot="prepend">￥</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="原因" prop="remark">
+          <el-form-item label="原因:" prop="remark">
             <el-input v-model="formByApply.remark" />
           </el-form-item>
-
+          <el-form-item label="" prop="">
+            <el-button type="primary" @click="_apply()">
+              确认
+            </el-button>
+            <el-button @click="isSearch = true">
+              返回
+            </el-button>
+          </el-form-item>
         </el-form>
 
       </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_apply()">
-          确认提交
-        </el-button>
-        <el-button @click="isSearch = true">
-          返回
-        </el-button>
-      </div>
+
     </div>
   </div>
 </template>
