@@ -7,6 +7,6 @@
   </view>
 
   <!-- <button class="btn bg-main btn-login" open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button> -->
-  <button class="btn bg-main btn-login" open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">微信手机一键登录</button>
+  <button class="btn bg-main btn-login" open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">微信授权登录</button>
    
 </view>

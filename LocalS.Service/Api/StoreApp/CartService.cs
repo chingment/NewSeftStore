@@ -68,7 +68,11 @@ namespace LocalS.Service.Api.StoreApp
                         carBlock.TagName = "线下机器";
                         break;
                 }
-                ret.Blocks.Add(carBlock);
+
+                if (carBlock.ProductSkus.Count > 0)
+                {
+                    ret.Blocks.Add(carBlock);
+                }
             }
 
             ret.Count = cartProductSkuModels.Sum(m => m.Quantity);

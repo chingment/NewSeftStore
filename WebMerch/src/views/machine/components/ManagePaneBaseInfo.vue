@@ -173,6 +173,11 @@ export default {
   line-height: 47px;
   font-size: 16px;
 }
+
+.singlepic-uploader{
+  height: 62px;
+}
+
 }
 
 </style>

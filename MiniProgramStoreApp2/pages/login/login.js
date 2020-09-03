@@ -98,7 +98,7 @@ Page({
     }
     else {
       toast.show({
-        title: '您点击了拒绝授权！'
+        title: '您点击了拒绝授权登录！'
       })
     }
   }
