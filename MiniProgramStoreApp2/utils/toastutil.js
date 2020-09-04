@@ -8,26 +8,33 @@ mask:     是否显示透明蒙层，防止触摸穿透，默认：true 选填
 cb:       接口调用成功的回调函数 选填
  */
 function show(obj) {
-  if (typeof obj == 'object' && obj.title) {
-    if (!obj.duration || typeof obj.duration != 'number') { obj.duration = 1500; }//默认1.5s后消失
-    var that = getCurrentPages()[getCurrentPages().length - 1];//获取当前page实例
 
-    if (obj.duration < 10000) {
-      setTimeout(function () {
-        obj.isShow = false;
-        obj.cb && typeof obj.cb == 'function' && obj.cb();//如果有成功的回调则执行
-        that.setData({
-          'showToast.isShow': obj.isShow
-        });
-      }, obj.duration);
-    }
-    obj.isShow = true;//开启toast
-    that.setData({
-      showToast: obj
-    });
-  } else {
+  wx.showToast({
+    title: obj.title,
+    icon: 'none',
+    duration: 2000
+  })
+
+  // if (typeof obj == 'object' && obj.title) {
+  //   if (!obj.duration || typeof obj.duration != 'number') { obj.duration = 1500; }//默认1.5s后消失
+  //   var that = getCurrentPages()[getCurrentPages().length - 1];//获取当前page实例
+
+  //   if (obj.duration < 10000) {
+  //     setTimeout(function () {
+  //       obj.isShow = false;
+  //       obj.cb && typeof obj.cb == 'function' && obj.cb();//如果有成功的回调则执行
+  //       that.setData({
+  //         'showToast.isShow': obj.isShow
+  //       });
+  //     }, obj.duration);
+  //   }
+  //   obj.isShow = true;//开启toast
+  //   that.setData({
+  //     showToast: obj
+  //   });
+  // } else {
    
-  }
+  // }
 }
 /**
  *手动关闭toast提示

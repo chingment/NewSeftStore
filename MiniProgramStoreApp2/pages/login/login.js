@@ -22,6 +22,14 @@ Page({
       }
     })
 
+    wx.checkSession({
+      success () {
+       console.log('session 未过期')
+      },
+      fail () {
+        console.log('session 已过期')
+      }
+    })
 
     wx.login({
       success: function (res) {
