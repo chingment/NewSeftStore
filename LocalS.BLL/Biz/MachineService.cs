@@ -126,6 +126,18 @@ namespace LocalS.BLL.Biz
             return bannerModels;
         }
 
+        public bool IsStopUse(string merchId,string machineId)
+        {
+            bool isFlag = true;
+
+            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
+
+            if (merchMachine == null)
+                return true;
+
+            return merchMachine.IsStopUse;
+        }
+
         public void SendUpdateProductSkuStock(string operater, string appId, string merchId, string machineId, UpdateMachineProdcutSkuStockModel updateProdcutSkuStock)
         {
             PushService.SendUpdateProductSkuStock(operater, appId, merchId, machineId, updateProdcutSkuStock);
@@ -145,22 +157,42 @@ namespace LocalS.BLL.Biz
 
         public CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string machineId)
         {
+            if (IsStopUse(merchId, machineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
+            }
+
             return PushService.SendSysReboot(operater, appId, merchId, machineId);
         }
 
         public CustomJsonResult SendSysShutdown(string operater, string appId, string merchId, string machineId)
         {
+            if (IsStopUse(merchId, machineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
+            }
+
             return PushService.SendSysShutdown(operater, appId, merchId, machineId);
         }
 
         public CustomJsonResult SendSysSetStatus(string operater, string appId, string merchId, string machineId, int status, string helpTip)
         {
+            if (IsStopUse(merchId, machineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
+            }
+
             var content = new { status = status, helpTip = helpTip };
             return PushService.SendSysSetStatus(operater, appId, merchId, machineId, content);
         }
 
         public CustomJsonResult SendDsx01OpenPickupDoor(string operater, string appId, string merchId, string machineId)
         {
+            if (IsStopUse(merchId, machineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
+            }
+
             return PushService.SendDsx01OpenPickupDoor(operater, appId, merchId, machineId);
         }
 
@@ -168,6 +200,7 @@ namespace LocalS.BLL.Biz
         {
             return PushService.QueryMsgPushResult(operater, appId, merchId, machineId, messageId);
         }
+
 
         //public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)
         //{

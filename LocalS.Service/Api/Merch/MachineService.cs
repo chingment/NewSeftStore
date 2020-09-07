@@ -174,6 +174,9 @@ namespace LocalS.Service.Api.Merch
             ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
             ret.AppVersion = machine.AppVersion;
             ret.CtrlSdkVersion = machine.CtrlSdkVersion;
+            ret.IsStopUse = merchMachine.IsStopUse;
+
+
             if (string.IsNullOrEmpty(machine.StoreId))
             {
                 ret.StoreName = "未绑定店铺";
@@ -378,6 +381,10 @@ namespace LocalS.Service.Api.Merch
                 //}
 
                 var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.Id).FirstOrDefault();
+                if (merchMachine.IsStopUse)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
+                }
                 //merchMachine.Name = rop.Name;
                 merchMachine.LogoImgUrl = rop.LogoImgUrl;
                 merchMachine.MendTime = DateTime.Now;
@@ -404,6 +411,8 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult SysReboot(string operater, string merchId, RopMachineRebootSys rop)
         {
             CustomJsonResult result = new CustomJsonResult();
+
+
 
             result = BizFactory.Machine.SendSysReboot(operater, AppId.MERCH, merchId, rop.Id);
 

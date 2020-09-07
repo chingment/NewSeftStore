@@ -18,5 +18,7 @@ namespace LocalS.Service.Api.Merch
         public string CtrlSdkVersion { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
+
+        public bool IsStopUse { get; set; }
     }
 }

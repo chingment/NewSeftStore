@@ -217,16 +217,6 @@ namespace LocalS.BLL
         }
 
 
-        public void AddToStore(string storeId, string productSkuId)
-        {
-
-        }
-
-        public void AddToStore(string storeId, string productSkuId)
-        {
-
-        }
-
         public void ReLoad()
         {
             var merchs = CurrentDb.Merch.ToList();
