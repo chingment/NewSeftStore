@@ -54,11 +54,8 @@
 										</view>
 									</view>
 								</view>
-
 							</view>
 							<view class="content-item {{item.receiveMode==2?'selected':''}}">
-
-
 								<view class="its-a">
 									<view class="it">
 										<view class="it-l">
@@ -72,9 +69,7 @@
 										</view>
 									</view>
 								</view>
-
 							</view>
-
 						</view>
 						<view class="its-odcskus" style="padding: 18rpx;">
 							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
