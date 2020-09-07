@@ -184,6 +184,7 @@ namespace LocalS.BLL
 
             productSkuIds = productSkuIds.Distinct().ToList();
 
+            LogUtil.Info("productSkuIds.length:" + productSkuIds.Count);
 
             if (productSkuIds.Count > 0)
             {
@@ -191,16 +192,24 @@ namespace LocalS.BLL
 
                 foreach (var productSku in productSkus)
                 {
-                    var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(productSku);
-                    var searchModel = new ProductSkuInfoBySearchModel();
-                    searchModel.Id = productSkuModel.Id;
-                    searchModel.ProductId = productSkuModel.ProductId;
-                    searchModel.Name = productSkuModel.Name;
-                    searchModel.CumCode = productSkuModel.CumCode;
-                    searchModel.BarCode = productSkuModel.BarCode;
-                    searchModel.SpecDes = SpecDes.GetDescribe(productSkuModel.SpecDes);
-                    searchModel.MainImgUrl = ImgSet.Convert_S(productSkuModel.MainImgUrl);
-                    searchModels.Add(searchModel);
+                    try
+                    {
+                        var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(productSku);
+                        var searchModel = new ProductSkuInfoBySearchModel();
+                        searchModel.Id = productSkuModel.Id;
+                        searchModel.ProductId = productSkuModel.ProductId;
+                        searchModel.Name = productSkuModel.Name;
+                        searchModel.CumCode = productSkuModel.CumCode;
+                        searchModel.BarCode = productSkuModel.BarCode;
+                        searchModel.SpecDes = SpecDes.GetDescribe(productSkuModel.SpecDes);
+                        searchModel.MainImgUrl = ImgSet.Convert_S(productSkuModel.MainImgUrl);
+                        searchModels.Add(searchModel);
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
+
                 }
             }
 

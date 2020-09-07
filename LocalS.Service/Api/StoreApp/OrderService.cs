@@ -202,7 +202,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 store = BizFactory.Store.GetOne(rop.StoreId);
 
-                var orders = CurrentDb.Order.Where(m =>rop.OrderIds.Contains(m.Id)).ToList();
+                var orders = CurrentDb.Order.Where(m => rop.OrderIds.Contains(m.Id)).ToList();
 
                 var orderSub_Mall = orders.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
                 if (orderSub_Mall != null)
@@ -210,12 +210,29 @@ namespace LocalS.Service.Api.StoreApp
                     receiveMode_Mall = orderSub_Mall.ReceiveMode;
 
                     dliveryModel.Id = "";
-                    dliveryModel.Consignee = orderSub_Mall.Receiver;
-                    dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
-                    dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
-                    dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
-                    dliveryModel.Address = orderSub_Mall.ReceptionAddress;
-                    dliveryModel.IsDefault = false;
+
+                    if (string.IsNullOrEmpty(orderSub_Mall.Receiver))
+                    {
+                        var clientDeliveryAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == orderSub_Mall.ClientUserId && m.IsDelete == false).OrderByDescending(m => m.IsDefault).FirstOrDefault();
+                        if (clientDeliveryAddress != null)
+                        {
+                            dliveryModel.Consignee = clientDeliveryAddress.Consignee;
+                            dliveryModel.PhoneNumber = clientDeliveryAddress.PhoneNumber;
+                            dliveryModel.AreaCode = clientDeliveryAddress.AreaCode;
+                            dliveryModel.AreaName = clientDeliveryAddress.AreaName;
+                            dliveryModel.Address = clientDeliveryAddress.Address;
+                            dliveryModel.IsDefault = clientDeliveryAddress.IsDefault;
+                        }
+                    }
+                    else
+                    {
+                        dliveryModel.Consignee = orderSub_Mall.Receiver;
+                        dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
+                        dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
+                        dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
+                        dliveryModel.Address = orderSub_Mall.ReceptionAddress;
+                        dliveryModel.IsDefault = false;
+                    }
                 }
 
                 var orderSubs = CurrentDb.OrderSub.Where(m => rop.OrderIds.Contains(m.OrderId)).ToList();
