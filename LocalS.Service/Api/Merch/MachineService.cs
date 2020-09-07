@@ -132,18 +132,28 @@ namespace LocalS.Service.Api.Merch
 
             var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CurUseStoreId).ToList();
 
+            merchMachines = merchMachines.OrderBy(m => m.IsStopUse).ToList();
 
             foreach (var merchMachine in merchMachines)
             {
 
                 string name = string.Format("{0} [{1}]", merchMachine.MachineId, "未绑定店铺");
 
-                if (!string.IsNullOrEmpty(merchMachine.CurUseStoreId))
+                if (merchMachine.IsStopUse)
                 {
-                    var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
-
-                    name = string.Format("{0} [{1}]", merchMachine.MachineId, store.Name);
+                    name = string.Format("{0} [{1}]", merchMachine.MachineId, "已停止使用");
                 }
+                else
+                {
+                    if (!string.IsNullOrEmpty(merchMachine.CurUseStoreId))
+                    {
+                        var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
+
+                        name = string.Format("{0} [{1}]", merchMachine.MachineId, store.Name);
+                    }
+                }
+
+
 
                 if (merchMachine.MachineId == machineId)
                 {
@@ -185,6 +195,8 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.StoreName = machine.StoreName;
             }
+
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
