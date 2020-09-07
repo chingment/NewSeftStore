@@ -198,6 +198,11 @@ namespace LocalS.BLL.Biz
 
         public CustomJsonResult QueryMsgPushResult(string operater, string appId, string merchId, string machineId, string messageId)
         {
+            if (IsStopUse(merchId, machineId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
+            }
+
             return PushService.QueryMsgPushResult(operater, appId, merchId, machineId, messageId);
         }
 
