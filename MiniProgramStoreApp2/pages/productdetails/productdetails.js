@@ -20,7 +20,8 @@ Page({
       isShow: false
     },
     cartDialog: {
-      isShow: false
+      isShow: false,
+      dataS:{}
     }
   },
 
@@ -107,6 +108,10 @@ Page({
         toast.show({
           title: '加入购物车成功'
         })
+  
+        var cartDialog=_this.data.cartDialog
+        cartDialog.dataS=res.data
+        _this.setData({cartDialog:cartDialog})
       } else {
         toast.show({
           title: res.message

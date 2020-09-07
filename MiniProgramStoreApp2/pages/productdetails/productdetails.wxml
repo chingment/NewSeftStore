@@ -2,7 +2,7 @@
 <template is="showToast" data="{{showToast: showToast}}" />
 
 <specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>
+<cart id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}" ></cart>
 
 <view class="page-ct details">
 	<view class="details-main">

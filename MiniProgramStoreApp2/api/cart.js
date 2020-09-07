@@ -14,7 +14,8 @@ function operate(params) {
 
       if (res1.result == 1) {
         pageData().then(function (res2) {
-          resolve(res1);
+          var res3={"result":1,"code":1000,"message":"操作成功",data:res2.data}
+          resolve(res3);
         })
       }
       else{

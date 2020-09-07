@@ -19,6 +19,14 @@ Component({
           this._dialogClose();
         }
       }
+    },
+    dataS:{
+      type: Object,
+      value: {},
+      observer:function(newVal,oldVal){
+        console.log('newVal:'+newVal)
+        this.setData({myCart:newVal})
+      }
     }
   },
   data: {
