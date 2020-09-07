@@ -32,7 +32,7 @@
 							</view>
 						</view>
 
-						<view class="tab-content">
+						<view class="tab-content" style="height: 96rpx;">
 							<view class="content-item {{item.receiveMode==1?'selected':''}}">
 
 								<view class="its-a">

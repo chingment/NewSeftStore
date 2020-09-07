@@ -216,6 +216,7 @@ namespace LocalS.Service.Api.StoreApp
                         var clientDeliveryAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == orderSub_Mall.ClientUserId && m.IsDelete == false).OrderByDescending(m => m.IsDefault).FirstOrDefault();
                         if (clientDeliveryAddress != null)
                         {
+                            dliveryModel.Id = clientDeliveryAddress.Id;
                             dliveryModel.Consignee = clientDeliveryAddress.Consignee;
                             dliveryModel.PhoneNumber = clientDeliveryAddress.PhoneNumber;
                             dliveryModel.AreaCode = clientDeliveryAddress.AreaCode;
