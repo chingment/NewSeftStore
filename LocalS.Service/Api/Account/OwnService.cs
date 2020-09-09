@@ -330,7 +330,7 @@ namespace LocalS.Service.Api.Account
 
             tokenInfo.UserId = wxUserInfo.ClientUserId;
 
-            SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(1, 0, 0));
+            SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
             MqFactory.Global.PushEventNotify(wxUserInfo.Id, rop.AppId, wxUserInfo.MerchId, "", "", EventCode.Login, "登录成功");
 
