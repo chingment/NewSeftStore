@@ -182,7 +182,7 @@ namespace LocalS.BLL
                 productSkuIds.Add(item.Value);
             }
 
-            productSkuIds = productSkuIds.Distinct().ToList();
+            productSkuIds = productSkuIds.Distinct().Take(10).ToList();
 
             LogUtil.Info("productSkuIds.length:" + productSkuIds.Count);
 
@@ -205,7 +205,7 @@ namespace LocalS.BLL
                         searchModel.MainImgUrl = ImgSet.Convert_S(productSkuModel.MainImgUrl);
                         searchModels.Add(searchModel);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
