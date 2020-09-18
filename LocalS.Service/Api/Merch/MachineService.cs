@@ -66,6 +66,17 @@ namespace LocalS.Service.Api.Merch
             return status;
         }
 
+        public CustomJsonResult InitGetList(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var machineCount = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).Count();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { machineCount= machineCount });
+            return result;
+        }
+
+
         public CustomJsonResult GetList(string operater, string merchId, RupMachineGetList rup)
         {
             var result = new CustomJsonResult();

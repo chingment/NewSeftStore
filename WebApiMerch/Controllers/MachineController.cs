@@ -12,6 +12,14 @@ namespace WebApiMerch.Controllers
 {
     public class MachineController : OwnApiBaseController
     {
+
+        [HttpGet]
+        public OwnApiHttpResponse InitGetList()
+        {
+            IResult result = MerchServiceFactory.Machine.InitGetList(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupMachineGetList rup)
         {

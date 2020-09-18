@@ -22,7 +22,7 @@
     </div>
     <el-row v-loading="loading" :gutter="20">
 
-      <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
+      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
@@ -48,16 +48,31 @@
           </div>
         </el-card>
       </el-col>
+
+      <el-col v-show="machineCount===0" :span="6" :xs="24" style="margin-bottom:20px">
+        <el-card class="box-card">
+          <div slot="header" class="it-header clearfix">
+            <div class="left" />
+            <el-button type="text">暂无机器，请联系您的客户经理绑定！</el-button>
+          </div>
+          <div class="it-component">
+
+            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
+
+          </div>
+        </el-card>
+      </el-col>
+
     </el-row>
 
-    <div v-show="listData.length<=0" class="list-empty">
+    <div v-show="listData.length<=0&&machineCount>0" class="list-empty">
       <span>暂无数据</span>
     </div>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/machine'
+import { getList, initGetList } from '@/api/machine'
 
 export default {
   name: 'MachineList',
@@ -69,6 +84,7 @@ export default {
         limit: 10,
         id: undefined
       },
+      machineCount: 0,
       listData: []
 
     }
@@ -77,9 +93,25 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+
+    this.init()
   },
   methods: {
+    init() {
+      this.loading = true
+
+      initGetList().then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.machineCount = d.machineCount
+
+          if (d.machineCount > 0) {
+            this.getListData()
+          }
+        }
+        this.loading = false
+      })
+    },
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })

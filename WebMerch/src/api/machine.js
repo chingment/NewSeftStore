@@ -8,6 +8,13 @@ export function getList(params) {
   })
 }
 
+export function initGetList() {
+  return request({
+    url: '/machine/initGetList',
+    method: 'get'
+  })
+}
+
 export function edit(data) {
   return request({
     url: '/machine/edit',
@@ -97,6 +104,7 @@ export function dsx01OpenPickupDoor(data) {
 }
 
 export default {
+  initGetList: initGetList,
   getList: getList,
   edit: edit,
   initManage: initManage,

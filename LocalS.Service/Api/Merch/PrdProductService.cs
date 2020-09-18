@@ -186,6 +186,9 @@ namespace LocalS.Service.Api.Merch
             }
 
 
+            List<string> productSkuIds = new List<string>();
+
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var prdProduct = new PrdProduct();
@@ -206,8 +209,6 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
-
-                List<string> productSkuIds = new List<string>();
 
                 foreach (var sku in rop.Skus)
                 {
@@ -256,15 +257,17 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+
+            if(result.Result== ResultType.Success)
+            {
                 foreach (var productSkuId in productSkuIds)
                 {
                     CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
                 }
-
-
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name));
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
             return result;
@@ -324,10 +327,10 @@ namespace LocalS.Service.Api.Merch
             //先删除缓存
 
             CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
-            foreach (var sku in rop.Skus)
-            {
-                CacheServiceFactory.Product.GetSkuInfo(merchId, sku.Id);
-            }
+
+
+            List<string> productSkuIds = new List<string>();
+
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -387,6 +390,8 @@ namespace LocalS.Service.Api.Merch
                             }
                         }
                     }
+
+                    productSkuIds.Add(sku.Id);
                 }
 
                 CurrentDb.SaveChanges();
@@ -401,7 +406,12 @@ namespace LocalS.Service.Api.Merch
   
             if (result.Result == ResultType.Success)
             {
-       
+
+                foreach (var productSkuId in productSkuIds)
+                {
+                    CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+                }
+
                 var sellChannelStocks = (from m in CurrentDb.SellChannelStock where m.MerchId == merchId && m.PrdProductId == rop.Id select new { m.StoreId, m.SellChannelRefId, m.PrdProductSkuId }).Distinct();
 
                 foreach (var sellChannelStock in sellChannelStocks)
