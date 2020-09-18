@@ -108,10 +108,10 @@
           </div>
         </template>
       </el-table-column>
-
+      <!-- <span>{{ scope.row.id }}</span> <span style="color:#e1b11e">{{ scope.row.isTestMode==false?"":"[测]" }}</span> -->
       <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span> <span style="color:#e1b11e">{{ scope.row.isTestMode==false?"":"[测]" }}</span>
+          <span :class="'c-mode-'+(scope.row.isTestMode==false?'1':'2')">{{ scope.row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">

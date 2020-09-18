@@ -49,6 +49,8 @@ namespace LocalS.Entity
         public bool SannerIsUse { get; set; }
         public string SannerComId { get; set; }
         public bool FingerVeinnerIsUse { get; set; }
+
+        public string ExReason { get; set; }
         public bool ExIsHas { get; set; }
         public string MstVern { get; set; } //门所在主控商
         public string OstVern { get; set; } //系统在主控商

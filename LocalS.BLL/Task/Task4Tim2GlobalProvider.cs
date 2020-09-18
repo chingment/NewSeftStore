@@ -19,7 +19,8 @@ namespace LocalS.BLL.Task
         Order2CheckReservePay = 1,
         Order2CheckPickupTimeout = 2,
         PayTrans2CheckStatus = 3,
-        PayRefundCheckStatus = 4
+        PayRefundCheckStatus = 4,
+        MachineRunInfo = 5
     }
 
     public class Task4Tim2GlobalProvider : BaseDbContext, IJob
@@ -34,11 +35,6 @@ namespace LocalS.BLL.Task
             d.ExpireTime = expireTime;
             d.Data = data;
             RedisManager.Db.HashSetAsync(key, d.Id, d.ToJsonString(), StackExchange.Redis.When.Always);
-        }
-
-        public void UpdateData(Task4TimType type, string id, object data)
-        {
-            RedisManager.Db.HashSetAsync(key, id, data.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
         public void Exit(Task4TimType type, string id)
@@ -75,8 +71,8 @@ namespace LocalS.BLL.Task
                         switch (m.Type)
                         {
                             case Task4TimType.Order2CheckReservePay:
-                                LogUtil.Info(string.Format("开始执行订单查询,时间：{0}", DateTime.Now));
                                 #region 检查支付状态
+                                LogUtil.Info(string.Format("开始执行订单查询,时间：{0}", DateTime.Now));
                                 var order = m.Data.ToJsonObject<Order2CheckPayModel>();
                                 LogUtil.Info(string.Format("查询订单号：{0}", order.Id));
                                 //判断支付过期时间
@@ -85,12 +81,12 @@ namespace LocalS.BLL.Task
                                     LogUtil.Info(string.Format("订单号：{0},订单支付有效时间过期", order.Id));
                                     BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), order.Id, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
                                 }
-                                #endregion
                                 LogUtil.Info(string.Format("结束执行订单查询,时间:{0}", DateTime.Now));
+                                #endregion            
                                 break;
                             case Task4TimType.PayTrans2CheckStatus:
-                                LogUtil.Info(string.Format("开始执行交易查询,时间：{0}", DateTime.Now));
                                 #region 检查支付状态
+                                LogUtil.Info(string.Format("开始执行交易查询,时间：{0}", DateTime.Now));
                                 var payTrans = m.Data.ToJsonObject<PayTrans2CheckStatusModel>();
                                 LogUtil.Info(string.Format("查询交易号：{0}", payTrans.Id));
                                 //判断支付过期时间
@@ -159,8 +155,8 @@ namespace LocalS.BLL.Task
                                         BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), orderId, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
                                     }
                                 }
-                                #endregion
                                 LogUtil.Info(string.Format("结束执行交易查询,时间:{0}", DateTime.Now));
+                                #endregion
                                 break;
                             case Task4TimType.Order2CheckPickupTimeout:
                                 #region 检查订单是否取货超时
@@ -206,7 +202,6 @@ namespace LocalS.BLL.Task
                                 }
                                 #endregion
                                 break;
-
                         }
                     }
                 }
@@ -254,10 +249,10 @@ namespace LocalS.BLL.Task
                             && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
                             && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                         {
-
                             orderSub.PickupStatus = E_OrderPickupStatus.Exception;
                             orderSub.ExPickupIsHappen = true;
                             orderSub.ExPickupHappenTime = DateTime.Now;
+                            orderSub.ExPickupReason = "取货动作发生超时";
                             orderSub.MendTime = DateTime.Now;
                             orderSub.Mender = IdWorker.Build(IdType.EmptyGuid);
                         }
@@ -267,6 +262,7 @@ namespace LocalS.BLL.Task
                 if (machine != null)
                 {
                     machine.ExIsHas = true;
+                    machine.ExReason = "取货动作发生超时";
                     machine.MendTime = DateTime.Now;
                     machine.Mender = IdWorker.Build(IdType.EmptyGuid);
                 }

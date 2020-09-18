@@ -44,6 +44,7 @@ namespace LocalS.Entity
         public DateTime? PayedTime { get; set; }
         public bool ExPickupIsHappen { get; set; }
         public DateTime? ExPickupHappenTime { get; set; }
+        public string ExPickupReason { get; set; }
         public bool ExPickupIsHandle { get; set; }
         public DateTime? ExPickupHandleTime { get; set; }
         public E_OrderExPickupHandleSign ExPickupHandleSign { get; set; }

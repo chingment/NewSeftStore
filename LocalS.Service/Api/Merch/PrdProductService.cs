@@ -63,7 +63,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-        
+
             string[] productIds = null;
             if (!string.IsNullOrEmpty(rup.Key))
             {
@@ -207,6 +207,8 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
 
+                List<string> productSkuIds = new List<string>();
+
                 foreach (var sku in rop.Skus)
                 {
                     if (string.IsNullOrEmpty(sku.CumCode))
@@ -245,12 +247,20 @@ namespace LocalS.Service.Api.Merch
                     prdProductSku.CreateTime = DateTime.Now;
                     CurrentDb.PrdProductSku.Add(prdProductSku);
                     CurrentDb.SaveChanges();
+
+                    productSkuIds.Add(prdProductSku.Id);
                 }
 
 
                 CurrentDb.PrdProduct.Add(prdProduct);
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                foreach (var productSkuId in productSkuIds)
+                {
+                    CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+                }
+
 
                 MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name));
 
@@ -279,7 +289,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var prdProductSku in prdProductSkus)
                 {
-                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, IsOffSell=false, SpecDes = prdProductSku.SpecDes.ToJsonObject<List<object>>() });
+                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = prdProductSku.Id, SalePrice = prdProductSku.SalePrice, BarCode = prdProductSku.BarCode, CumCode = prdProductSku.CumCode, IsOffSell = false, SpecDes = prdProductSku.SpecDes.ToJsonObject<List<object>>() });
                 }
 
             }
@@ -314,6 +324,10 @@ namespace LocalS.Service.Api.Merch
             //先删除缓存
 
             CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
+            foreach (var sku in rop.Skus)
+            {
+                CacheServiceFactory.Product.GetSkuInfo(merchId, sku.Id);
+            }
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -384,9 +398,10 @@ namespace LocalS.Service.Api.Merch
             }
 
             CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
-
+  
             if (result.Result == ResultType.Success)
             {
+       
                 var sellChannelStocks = (from m in CurrentDb.SellChannelStock where m.MerchId == merchId && m.PrdProductId == rop.Id select new { m.StoreId, m.SellChannelRefId, m.PrdProductSkuId }).Distinct();
 
                 foreach (var sellChannelStock in sellChannelStocks)

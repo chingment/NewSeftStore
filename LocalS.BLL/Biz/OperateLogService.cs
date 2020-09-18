@@ -418,9 +418,9 @@ namespace LocalS.BLL.Biz
 
                         order.ExIsHappen = true;
                         order.ExHappenTime = DateTime.Now;
-                        order.PickupFlowLastDesc = "取货发生异常";
+                        order.PickupFlowLastDesc = "取货动作发生异常";
                         order.PickupFlowLastTime = DateTime.Now;
-     
+
                         foreach (var orderSub in orderSubs)
                         {
                             if (model.Status == E_OrderPickupStatus.Exception)
@@ -433,6 +433,7 @@ namespace LocalS.BLL.Biz
                                         && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
                                         orderSub.PickupStatus = E_OrderPickupStatus.Exception;
+                                        orderSub.ExPickupReason = "取货动作发生异常";
                                         orderSub.ExPickupIsHappen = true;
                                         orderSub.ExPickupHappenTime = DateTime.Now;
                                     }
@@ -441,6 +442,7 @@ namespace LocalS.BLL.Biz
                         }
 
                         machine.ExIsHas = true;
+                        machine.ExReason = "取货动作发生异常";
 
                         Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, order.Id);
                     }
