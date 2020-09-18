@@ -90,6 +90,7 @@ namespace LocalS.Entity
         public bool ExIsHappen { get; set; }
         public DateTime? ExHappenTime { get; set; }
         public bool ExIsHandle { get; set; }
+        public string ExImgUrls { get; set; }
         public DateTime? ExHandleTime { get; set; }
         public string ExHandleRemark { get; set; }
         public string PickupFlowLastDesc { get; set; }

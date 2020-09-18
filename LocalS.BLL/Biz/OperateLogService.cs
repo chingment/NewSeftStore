@@ -418,6 +418,24 @@ namespace LocalS.BLL.Biz
 
                         order.ExIsHappen = true;
                         order.ExHappenTime = DateTime.Now;
+
+                        List<ImgSet> exImgUrls = new List<ImgSet>();
+
+                        if (!string.IsNullOrEmpty(model.ImgId))
+                        {
+                            exImgUrls.Add(new ImgSet { Url = BizFactory.Order.GetPickImgUrl(model.ImgId) });
+                        }
+
+                        if (!string.IsNullOrEmpty(model.ImgId2))
+                        {
+                            exImgUrls.Add(new ImgSet { Url = BizFactory.Order.GetPickImgUrl(model.ImgId2) });
+                        }
+
+                        if (exImgUrls.Count > 0)
+                        {
+                            order.ExImgUrls = exImgUrls.ToJsonString();
+                        }
+
                         order.PickupFlowLastDesc = "取货动作发生异常";
                         order.PickupFlowLastTime = DateTime.Now;
 
