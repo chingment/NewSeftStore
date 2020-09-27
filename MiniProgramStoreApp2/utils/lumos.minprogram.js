@@ -263,16 +263,19 @@ const myWxRequest = (opts) => {
         } else {//返回错误提示信息
           reject(res.errMsg);
         }
-        if (_isShowLoading) {
-          wx.hideLoading()
-        }
       },
       error: function (e) {
+        reject('网络出错');
+      },
+      complete: function () {
+
+        //MMD 问题就是在这，把我上面的错误提示都给干掉了
+
         if (_isShowLoading) {
           wx.hideLoading()
         }
-        reject('网络出错');
-      }
+
+     }
     })
   })
 

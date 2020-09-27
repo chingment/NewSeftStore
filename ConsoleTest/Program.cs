@@ -51,26 +51,51 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            decimal sumTradeAmount = decimal.Parse("236.00");
 
-            int ss = int.Parse(("13").ToString().PadRight(2,'0') + ("1").ToString().PadLeft(2, '0'));
+            int[] arr = new int[5] { 7, 8, 6, 9, 2 };
+
+            for (int i = 0; i < arr.Length - 1; i++)
+            {
+                Console.WriteLine("正在运行第" + (i + 1) + "躺");
+                for (int j = 0; j < arr.Length - i - 1; j++)
+                {
+                    Console.WriteLine(arr[j] + "跟" + arr[j + 1] + "比较");
+
+                    if (arr[j + 1] < arr[j])
+                    {
+                        int temp = arr[j + 1];
+                        arr[j + 1] = arr[j];
+                        arr[j] = temp;
+                    }
+                }
+
+                for (int z = 0; z < arr.Length; z++)
+                {
+                    Console.WriteLine("--：" + arr[z]);
+                }
+            }
 
 
-            String input = "{channelUserCode:\"15989287032\",userName:\"15989287032\",phone:\"15989287032\",idName:\"\",email:\"\",channelCompanyCode:\"\"}";
+            //decimal sumTradeAmount = decimal.Parse("236.00");
 
-            userInfo u = new userInfo();
-
-            u.channelUserCode = "15989287032";
-            u.userName = "15989287032";
-            u.phone = "15989287032";
-            u.idName = "";
-            u.email = "";
-            u.channelCompanyCode = "";
+            //int ss = int.Parse(("13").ToString().PadRight(2, '0') + ("1").ToString().PadLeft(2, '0'));
 
 
-            input = Newtonsoft.Json.JsonConvert.SerializeObject(u);
+            //String input = "{channelUserCode:\"15989287032\",userName:\"15989287032\",phone:\"15989287032\",idName:\"\",email:\"\",channelCompanyCode:\"\"}";
 
-            input = input.Replace("\\", "");
+            //userInfo u = new userInfo();
+
+            //u.channelUserCode = "15989287032";
+            //u.userName = "15989287032";
+            //u.phone = "15989287032";
+            //u.idName = "";
+            //u.email = "";
+            //u.channelCompanyCode = "";
+
+
+            //input = Newtonsoft.Json.JsonConvert.SerializeObject(u);
+
+            //input = input.Replace("\\", "");
             //// 公钥
             //String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCuTexchfJUXLJR5cSevbQutT9dYj95tW8NuH/Bc5JZwGn/WOr1Vw6jg7ncVTilPRjIS5XqmcTFm6H0qa/uZ3Vn1Mh+XZkfX6hcxmeTQm9vkv3mb4hpWRFhfri3gcbmkQr+DnklqoI7TGWcuYQt47BeppGeeKT7WYblz+lZvaqepQIDAQAB";
             String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTT1ryGLfq5lucyHdzPLbjtcVsgurf5x4Y09U/cTiV85duIk0zQeRTXNyGcMAS92+xV/eGp7IjncwL8QE8JqlclLvuOU3zTdlAQ58lu/JcTcsF6eA6JXb8OJAhmDoug1J77M2GLoqAl0Cf34kavj/r9bAQpWqbk8JlJU3YqIePuwIDAQAB";
@@ -99,14 +124,16 @@ namespace ConsoleTest
             //        
             //        System.out.println("结果相同:" + input.equals(decry));
 
-            RSAForJava rsa = new RSAForJava();
-            var key = rsa.GetKey(publicKey, privateKey);
+            //RSAForJava rsa = new RSAForJava();
+            //var key = rsa.GetKey(publicKey, privateKey);
 
-            String encry = rsa.EncryptByPublicKey(input, key.PublicKey);
+            //String encry = rsa.EncryptByPublicKey(input, key.PublicKey);
 
-            Console.WriteLine("加密结果:" + encry);
-            String decry = rsa.DecryptByPrivateKey(encry, key.PrivateKey);
-            Console.WriteLine("解密结果:" + decry);
+            //Console.WriteLine("加密结果:" + encry);
+            //String decry = rsa.DecryptByPrivateKey(encry, key.PrivateKey);
+            //Console.WriteLine("解密结果:" + decry);
+
+            Console.ReadLine();
         }
     }
 }
