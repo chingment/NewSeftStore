@@ -41,6 +41,11 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
+            if (store == null || store.IsDelete)
+            {
+                return new CustomJsonResult<RetIndexPageData>(ResultType.Failure, ResultCode.Failure2NoExsit, "无效店铺", null);
+            }
+
             var storeModel = new StoreModel();
             storeModel.Id = store.Id;
             storeModel.Name = store.Name;
