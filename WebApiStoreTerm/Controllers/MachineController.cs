@@ -17,29 +17,29 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
-        {
-            var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
+        //{
+        //    var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
 
-            if (request.Headers["data_head"] != null)
-            {
-                string data_head = System.Web.HttpUtility.UrlDecode(request.Headers["data_head"].ToString());
-                LogUtil.Info("data_head:" + data_head);
+        //    if (request.Headers["data_head"] != null)
+        //    {
+        //        string data_head = System.Web.HttpUtility.UrlDecode(request.Headers["data_head"].ToString());
+        //        LogUtil.Info("data_head:" + data_head);
 
-                rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(data_head);
-            }
-            else
-            {
-                LogUtil.Info("data_head: NULL");
-            }
+        //        rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(data_head);
+        //    }
+        //    else
+        //    {
+        //        LogUtil.Info("data_head: NULL");
+        //    }
 
-            StoreTermServiceFactory.Machine.UpLoadTraceLog(rop);
+        //    StoreTermServiceFactory.Machine.UpLoadTraceLog(rop);
 
-            IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-            return new OwnApiHttpResponse(result);
-        }
+        //    IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        //    return new OwnApiHttpResponse(result);
+        //}
 
         [HttpGet]
         [AllowAnonymous]

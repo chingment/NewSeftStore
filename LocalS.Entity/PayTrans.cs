@@ -38,6 +38,7 @@ namespace LocalS.Entity
         WxByPa = 11, //微信公众号发起支付
         WxByMp = 12, //微信小程序发起支付,
         ZfbByNt = 20, //支付宝方式生成二维码
+        UrlRedirect = 30,//路径跳转方式
         AggregatePayByNt = 90 //聚合方式生成二维码
     }
 

@@ -11,10 +11,6 @@ namespace Lumos
     /// <summary>
     /// 扩展JsonResult
     /// </summary>
-    /// 
-
-
-
     public class CustomJsonResult<T> : ActionResult, IResult<T>
     {
         private ResultType _result = ResultType.Unknown;
