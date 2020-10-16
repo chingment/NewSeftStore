@@ -35,10 +35,8 @@ namespace LocalS.Service.Api.StoreTerm
                 _isOffSell = value;
             }
         }
-
         public int SellQuantity { get; set; }
         public bool IsTrgVideoService { get; set; }
-
         public List<string> CharTags { get; set; }
     }
 }
