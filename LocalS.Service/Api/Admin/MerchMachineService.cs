@@ -99,7 +99,7 @@ namespace LocalS.Service.Api.Admin
                     }
                 }
 
-                cabinets.Add(new { Id = machineCabinet.CabinetId, Name = machineCabinet.CabinetName, ComId = machineCabinet.ComId, IsUse = machineCabinet.IsUse, PendantRows = pendantRows, SlotMaxQuantity = machineCabinet.SlotMaxQuantity });
+                cabinets.Add(new { Id = machineCabinet.CabinetId, Name = machineCabinet.CabinetName, ComId = machineCabinet.ComId, IsUse = machineCabinet.IsUse, PendantRows = pendantRows });
             }
 
             var data = new
@@ -177,7 +177,6 @@ namespace LocalS.Service.Api.Admin
                     {
                         machineCabinet.ComId = cabinet.ComId;
                         machineCabinet.IsUse = cabinet.IsUse;
-                        machineCabinet.SlotMaxQuantity = cabinet.SlotMaxQuantity;
                         if (machineCabinet.CabinetId.StartsWith("ds"))
                         {
                             if (!string.IsNullOrEmpty(machineCabinet.RowColLayout))

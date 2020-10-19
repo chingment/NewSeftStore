@@ -95,7 +95,10 @@ namespace LocalS.BLL.Biz
                         SumQuantity = 0,
                         LockQuantity = 0,
                         SellQuantity = 0,
-                        MaxQuantity = 10
+                        MaxQuantity = 0,
+                        WarnQuantity = 0,
+                        HoldQuantity = 0,
+                        IsCanAlterMaxQuantity = true
                     };
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
@@ -123,6 +126,8 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.WaitPickupLockQuantity = 0;
                         sellChannelStock.SumQuantity = 0;
                         sellChannelStock.SellQuantity = 0;
+                        sellChannelStock.WarnQuantity = 0;
+                        sellChannelStock.HoldQuantity = 0;
                         sellChannelStock.IsOffSell = false;
                         sellChannelStock.SalePrice = productSku.SalePrice;
                         sellChannelStock.SalePriceByVip = productSku.SalePrice;
@@ -593,7 +598,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult AdjustStockQuantity(string operater, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null)
+        public CustomJsonResult AdjustStockQuantity(string operater, string appId, string merchId, string storeId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null, int? warnQuantity = null, int? holdQuantity = null)
         {
             var result = new CustomJsonResult();
 
@@ -626,13 +631,21 @@ namespace LocalS.BLL.Biz
                 sellChannelStock.Version += 1;
                 sellChannelStock.MendTime = DateTime.Now;
                 sellChannelStock.Mender = operater;
-                if (maxQuantity == null)
-                {
-                    sellChannelStock.MaxQuantity = sumQuantity;//取最近一次为置满库存
-                }
-                else
+
+                if (maxQuantity != null)
                 {
                     sellChannelStock.MaxQuantity = maxQuantity.Value;
+                }
+
+
+                if (holdQuantity != null)
+                {
+                    sellChannelStock.HoldQuantity = holdQuantity.Value;
+                }
+
+                if (warnQuantity != null)
+                {
+                    sellChannelStock.WarnQuantity = warnQuantity.Value;
                 }
 
                 CurrentDb.SaveChanges();
@@ -669,7 +682,10 @@ namespace LocalS.BLL.Biz
                     LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                     SellQuantity = sellChannelStock.SellQuantity,
                     MaxQuantity = sellChannelStock.MaxQuantity,
-                    Version = sellChannelStock.Version
+                    WarnQuantity = sellChannelStock.WarnQuantity,
+                    HoldQuantity = sellChannelStock.HoldQuantity,
+                    Version = sellChannelStock.Version,
+                    IsCanAlterMaxQuantity = true
                 };
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);

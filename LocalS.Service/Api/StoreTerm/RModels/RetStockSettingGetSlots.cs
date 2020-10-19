@@ -16,8 +16,6 @@ namespace LocalS.Service.Api.StoreTerm
 
         public string RowColLayout { get; set; }
 
-        public int SlotMaxQuantity { get; set; }
-
         public Dictionary<string, SlotModel> Slots { get; set; }
     }
 }

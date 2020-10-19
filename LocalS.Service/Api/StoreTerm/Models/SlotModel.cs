@@ -19,9 +19,10 @@ namespace LocalS.Service.Api.StoreTerm
         public int LockQuantity { get; set; }
         public int SellQuantity { get; set; }
         public int MaxQuantity { get; set; }
-
+        public int WarnQuantity { get; set; }
+        public int HoldQuantity { get; set; }
+        public bool IsCanAlterMaxQuantity { get; set; }
         public int Version { get; set; }
-
         public string CabinetId { get; set; }
     }
 }

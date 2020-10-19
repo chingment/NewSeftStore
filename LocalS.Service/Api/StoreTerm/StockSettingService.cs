@@ -50,8 +50,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             ret.RowColLayout = cabinet.RowColLayout;
-            ret.SlotMaxQuantity = cabinet.SlotMaxQuantity;
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId  && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)
             {
@@ -72,6 +71,9 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
                     slot.MaxQuantity = item.MaxQuantity;
+                    slot.WarnQuantity = item.WarnQuantity;
+                    slot.HoldQuantity = item.HoldQuantity;
+                    slot.IsCanAlterMaxQuantity = true;
                     slot.Version = item.Version;
                     ret.Slots.Add(item.SlotId, slot);
                 }
@@ -172,7 +174,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 }
 
-               
+
                 //旧布局代表有数据需要检测
                 if (oldRowColLayout.Rows != null)
                 {
@@ -187,7 +189,7 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId  && m.SellChannelRefId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
 
                     for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                     {

@@ -26,6 +26,8 @@ namespace LocalS.Entity
         public int WaitPickupLockQuantity { get; set; }
         public int SellQuantity { get; set; }
         public int MaxQuantity { get; set; }
+        public int WarnQuantity { get; set; }
+        public int HoldQuantity { get; set; }
         public bool IsOffSell { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SalePriceByVip { get; set; }

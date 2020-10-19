@@ -14,8 +14,6 @@ namespace LocalS.BLL.Biz
 
         public int Priority { get; set; }
 
-        public int SlotMaxQuantity { get; set; }
-
         public string ComId { get; set; }
     }
 }
