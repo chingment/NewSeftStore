@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.StoreTerm
             this.Childs = new List<string>();
         }
 
-        public string Id { get; set; }
+        public string KindId { get; set; }
 
         public string Name { get; set; }
 

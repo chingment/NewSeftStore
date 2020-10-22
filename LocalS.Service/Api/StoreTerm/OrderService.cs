@@ -57,7 +57,7 @@ namespace LocalS.Service.Api.StoreTerm
             block.SelfTake.StoreAddress = machine.StoreAddress;
             foreach (var productSku in rop.ProductSkus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.Id, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.Id }, SvcConsulterId = productSku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);
@@ -160,7 +160,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetOrderSearchByPickupCode();
 
-            ret.Id = order.Id;
+            ret.OrderId = order.Id;
 
 
             ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(order.Id, rup.MachineId);

@@ -18,7 +18,7 @@ namespace LocalS.Service.Api.StoreTerm
             this.Cabinets = new Dictionary<string, CabinetInfoModel>();
         }
 
-        public string Id { get; set; }
+        public string MachineId { get; set; }
         public string Name { get; set; }
 
         public string DeviceId { get; set; }

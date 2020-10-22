@@ -8,7 +8,7 @@ namespace LocalS.BLL.Biz
 {
     public class ScannerModel
     {
-        public string Id { get; set; }
+        public string ScannerId { get; set; }
         public string ComId { get; set; }
         public bool IsUse { get; set; }
     }

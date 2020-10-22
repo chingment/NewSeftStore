@@ -422,7 +422,7 @@ namespace LocalS.Service.Api.Merch
                         if (bizProductSku.Stocks.Count > 0)
                         {
                             var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
-                            updateProdcutSkuStock.Id = bizProductSku.Id;
+                            updateProdcutSkuStock.ProductSkuId = bizProductSku.Id;
                             updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                             updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
                             updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;

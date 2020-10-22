@@ -133,7 +133,7 @@ namespace WebApiStoreTerm.Controllers
 
             string machineId = "000000000000000";
 
-            
+
             //Dictionary<string, string> parames = new Dictionary<string, string>();
             //parames.Add("machineId", machineId.ToString());
             //parames.Add("key", "http%3A%2F%2Fqr.weibo.cn%2Fg%2F3iv86t");
@@ -271,7 +271,7 @@ namespace WebApiStoreTerm.Controllers
 
             string a1 = JsonConvert.SerializeObject(pms);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            string signStr = Signature.Compute("", key, secret, timespan, a1);
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
             headers1.Add("key", key);

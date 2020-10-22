@@ -126,7 +126,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
+            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
 
             var productSkuDetailsModel = new ProductSkuDetailsModel();
             productSkuDetailsModel.Id = bizProductSku.Id;
@@ -161,7 +161,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.Id, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
+            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
 
             bool isOffSell = true;
             bool isShowPrice = false;

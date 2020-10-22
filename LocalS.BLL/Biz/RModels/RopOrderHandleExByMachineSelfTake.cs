@@ -15,7 +15,7 @@ namespace LocalS.BLL.Biz
 
     public class ExItem
     {
-        public string Id { get; set; }
+        public string ItemId { get; set; }
         public List<ExUnique> Uniques { get; set; }
         public bool IsRefund { get; set; }
         public decimal RefundAmount { get; set; }
@@ -24,7 +24,7 @@ namespace LocalS.BLL.Biz
 
     public class ExReason
     {
-        public string Id { get; set; }
+        public string ReasonId { get; set; }
         public string Title { get; set; }
     }
 

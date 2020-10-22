@@ -87,8 +87,8 @@ namespace WebApiStoreTerm
                 }
 
 
-
-                string app_key = request.Headers["key"];
+                string app_id = request.Headers["appId"];
+                string app_key = request.Headers["appKey"];
                 string app_sign = request.Headers["sign"];
                 string app_version = request.Headers["version"];
                 string app_timestamp_s = request.Headers["timestamp"];
@@ -143,7 +143,7 @@ namespace WebApiStoreTerm
                 }
 
                 //检查key是否在数据库中存在
-                string app_secret = LocalS.BLL.Biz.BizFactory.AppSoftware.GetAppSecretByAppKey(app_key);
+                string app_secret = LocalS.BLL.Biz.BizFactory.AppSoftware.GetAppSecretByAppKey(app_id, app_key);
 
                 if (app_secret == null)
                 {
@@ -154,7 +154,7 @@ namespace WebApiStoreTerm
 
                 long app_timestamp = long.Parse(app_timestamp_s);
 
-                string signStr = Signature.Compute(app_key, app_secret, app_timestamp, app_data);
+                string signStr = Signature.Compute(app_id, app_key, app_secret, app_timestamp, app_data);
 
                 if (Signature.IsRequestTimeout(app_timestamp))
                 {

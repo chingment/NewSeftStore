@@ -24,7 +24,7 @@ namespace LocalS.BLL.Biz
 
             var merchMachines = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == id).ToList();
 
-            model.Id = store.Id;
+            model.StoreId = store.Id;
             model.Name = store.Name;
             model.MerchId = store.MerchId;
             model.MerchName = merch.Name;
@@ -52,7 +52,7 @@ namespace LocalS.BLL.Biz
             {
                 var merchMachines = CurrentDb.MerchMachine.Where(m => m.CurUseStoreId == store.Id).ToList();
                 var model = new StoreInfoModel();
-                model.Id = store.Id;
+                model.StoreId = store.Id;
                 model.Name = store.Name;
                 model.MerchId = store.MerchId;
                 model.Address = store.Address;

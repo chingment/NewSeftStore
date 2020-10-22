@@ -24,14 +24,14 @@ namespace LocalS.Service.Api.StoreTerm
                 this.Uniques = new List<ExUnique>();
             }
 
-            public string Id { get; set; }
+            public string ItemId { get; set; }
             public List<ExUnique> Uniques { get; set; }
 
         }
 
         public class ExUnique
         {
-            public string Id { get; set; }
+            public string UniqueId { get; set; }
             public string ProductSkuId { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
@@ -45,7 +45,7 @@ namespace LocalS.Service.Api.StoreTerm
         public class ExReason
         {
 
-            public string Id { get; set; }
+            public string ReasonId { get; set; }
             public string Title { get; set; }
             public bool IsChecked { get; set; }
         }

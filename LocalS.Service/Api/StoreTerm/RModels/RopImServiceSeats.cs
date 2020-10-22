@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.StoreTerm
         public List<ProductSku> ProductSkus { get; set; }
         public class ProductSku
         {
-            public string Id { get; set; }
+            public string ProductSkuId { get; set; }
             public int Quantity { get; set; }
         }
     }

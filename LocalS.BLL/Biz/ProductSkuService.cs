@@ -28,7 +28,7 @@ namespace LocalS.BLL.Biz
                     {
 
                         var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
-                        updateProdcutSkuStock.Id = bizProductSku.Id;
+                        updateProdcutSkuStock.ProductSkuId = bizProductSku.Id;
                         updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                         updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
                         updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
@@ -88,7 +88,7 @@ namespace LocalS.BLL.Biz
 
                     var slot = new
                     {
-                        Id = slotId,
+                        SlotId = slotId,
                         ProductSkuId = "",
                         ProductSkuName = "暂无商品",
                         ProductSkuMainImgUrl = "",
@@ -237,7 +237,7 @@ namespace LocalS.BLL.Biz
 
                     var slot = new
                     {
-                        Id = slotId,
+                        SlotId = slotId,
                         ProductSkuId = bizProductSku.Id,
                         ProductSkuName = bizProductSku.Name,
                         ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
@@ -673,7 +673,7 @@ namespace LocalS.BLL.Biz
 
                 var slot = new
                 {
-                    Id = slotId,
+                    SlotId = slotId,
                     CabinetId = cabinetId,
                     ProductSkuId = bizProductSku.Id,
                     ProductSkuName = bizProductSku.Name,

@@ -8,7 +8,7 @@ namespace LocalS.BLL.Biz
 {
     public class CabinetInfoModel
     {
-        public string Id { get; set; }
+        public string CabinetId { get; set; }
         public string Name { get; set; }
         public string RowColLayout { get; set; }
 

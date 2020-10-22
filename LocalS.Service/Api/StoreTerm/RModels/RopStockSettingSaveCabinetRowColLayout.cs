@@ -10,6 +10,6 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string MachineId { get; set; }
         public string CabinetId { get; set; }
-        public string CabinetRowColLayout { get; set; }
+        public string RowColLayout { get; set; }
     }
 }

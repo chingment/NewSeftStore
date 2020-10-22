@@ -59,7 +59,7 @@ namespace LocalS.Service.Api.StoreTerm
                 if (bizProductSku != null)
                 {
                     var slot = new SlotModel();
-                    slot.Id = item.SlotId;
+                    slot.SlotId = item.SlotId;
                     slot.StockId = item.Id;
                     slot.CabinetId = item.CabinetId;
                     slot.ProductSkuId = bizProductSku.Id;
@@ -92,16 +92,16 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
                 return result;
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.Id, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
+                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
 
                 }
 
@@ -115,7 +115,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
-            if (string.IsNullOrEmpty(rop.CabinetRowColLayout))
+            if (string.IsNullOrEmpty(rop.RowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道结果为空，上传失败");
             }
@@ -148,7 +148,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             using (TransactionScope ts = new TransactionScope())
             {
-                CabinetRowColLayoutByDSModel newRowColLayout = rop.CabinetRowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                CabinetRowColLayoutByDSModel newRowColLayout = rop.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
                 if (newRowColLayout == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，解释新布局格式错误");

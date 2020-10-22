@@ -24,7 +24,7 @@ namespace LocalS.BLL.Biz
             if (machine == null)
                 return null;
 
-            model.Id = machine.Id;
+            model.MachineId = machine.Id;
             model.DeviceId = machine.DeviceId;
             model.Name = machine.Name;
             model.MainImgUrl = machine.MainImgUrl;
@@ -54,19 +54,19 @@ namespace LocalS.BLL.Biz
             foreach (var machineCabinet in machineCabinets)
             {
                 var cabinet = new CabinetInfoModel();
-                cabinet.Id = machineCabinet.CabinetId;
+                cabinet.CabinetId = machineCabinet.CabinetId;
                 cabinet.Name = machineCabinet.CabinetName;
                 cabinet.RowColLayout = machineCabinet.RowColLayout;
                 cabinet.Priority = machineCabinet.Priority;
                 cabinet.ComId = machineCabinet.ComId;
-                model.Cabinets.Add(cabinet.Id, cabinet);
+                model.Cabinets.Add(cabinet.CabinetId, cabinet);
             }
 
 
-            model.FingerVeinner.Id = "FV";
+            model.FingerVeinner.FingerVeinnerId = "FV";
             model.FingerVeinner.IsUse = machine.FingerVeinnerIsUse;
 
-            model.Scanner.Id = "SC";
+            model.Scanner.ScannerId = "SC";
             model.Scanner.IsUse = machine.SannerIsUse;
             model.Scanner.ComId = machine.SannerComId;
 
@@ -94,7 +94,7 @@ namespace LocalS.BLL.Biz
                 var merchStore = BizFactory.Store.GetOne(machine.CurUseStoreId);
                 if (merchStore != null)
                 {
-                    model.StoreId = merchStore.Id;
+                    model.StoreId = merchStore.StoreId;
                     model.StoreName = merchStore.Name;
                     model.StoreAddress = merchStore.Address;
                 }
@@ -125,7 +125,7 @@ namespace LocalS.BLL.Biz
             return bannerModels;
         }
 
-        public bool IsStopUse(string merchId,string machineId)
+        public bool IsStopUse(string merchId, string machineId)
         {
             bool isFlag = true;
 
@@ -209,7 +209,7 @@ namespace LocalS.BLL.Biz
         //public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)
         //{
         //    var orderDetails = BizFactory.Order.GetOrderProductSkuByPickup(orderId, machineId);
-        //    var content = new { orderId = orderId, status = E_OrderStatus.Payed, orderDetails = orderDetails };
+        //    var content = new { orderId = orderId, status = E_OrderStatus.Payed, orderDetails =  orderDetails };
         //    return PushService.SendPaySuccess(operater, appId, merchId, machineId, content);
         //}
 

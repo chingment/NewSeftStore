@@ -141,7 +141,7 @@ namespace LocalS.Service.Api.Merch
 
                     foreach (var store in stores)
                     {
-                        ret.Belongs.Add(new { Id = store.Id, Name = string.Format("[店铺]{0}", store.Name) });
+                        ret.Belongs.Add(new { Id = store.StoreId, Name = string.Format("[店铺]{0}", store.Name) });
                     }
                 }
                 else if (adSpace.BelongType == E_AdSpaceBelongType.Machine)

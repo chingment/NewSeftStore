@@ -34,34 +34,41 @@ namespace Lumos
         /// <summary>
         /// 用于混淆签名内容的，调用方唯一的128位字符串
         /// </summary>
-        public string Secret;
+        /// 
+        public string AppId;
 
-        public string Key;
+        public string AppSecret;
 
-        public Signature(string key, string secret, long timestamp, string data)
+        public string AppKey;
+
+        public Signature(string app_id, string app_key, string app_secret, long timestamp, string data)
         {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentOutOfRangeException("key");
+            if (string.IsNullOrEmpty(app_id))
+                throw new ArgumentOutOfRangeException("app_id");
 
-            if (string.IsNullOrEmpty(secret))
-                throw new ArgumentOutOfRangeException("secret");
+            if (string.IsNullOrEmpty(app_key))
+                throw new ArgumentOutOfRangeException("app_key");
+
+            if (string.IsNullOrEmpty(app_secret))
+                throw new ArgumentOutOfRangeException("app_secret");
 
             if (string.IsNullOrEmpty(timestamp.ToString()))
                 throw new ArgumentOutOfRangeException("timestamp");
 
             this.Data = data;
             this.Timestamp = timestamp;
-            this.Secret = secret;
-            this.Key = key;
+            this.AppId = app_id;
+            this.AppSecret = app_secret;
+            this.AppKey = app_key;
         }
 
         private string BuildMaterial()
         {
             var sb = new StringBuilder();
 
-
-            sb.Append(this.Key);
-            sb.Append(this.Secret);
+            sb.Append(this.AppId);
+            sb.Append(this.AppKey);
+            sb.Append(this.AppSecret);
             sb.Append(this.Timestamp.ToString());
 
             if (this.Data != null)
@@ -128,13 +135,23 @@ namespace Lumos
             return false;
         }
 
-        public static string Compute(string key, string secret, long timestamp, string data)
+        public static string Compute(string app_id, string app_key, string app_secret, long timestamp, string data)
         {
-            if (secret == null)
+            if (app_id == null)
             {
                 return null;
             }
-            var signature = new Signature(key, secret, timestamp, data);
+
+            if (app_key == null)
+            {
+                return null;
+            }
+
+            if (app_secret == null)
+            {
+                return null;
+            }
+            var signature = new Signature(app_id,app_key, app_secret, timestamp, data);
             return signature.Compute();
         }
 
@@ -154,7 +171,7 @@ namespace Lumos
             while (dem.MoveNext())
             {
                 string key = dem.Current.Key;
-                string value =dem.Current.Value;
+                string value = dem.Current.Value;
                 if (!string.IsNullOrEmpty(key))
                 {
                     queryStr.Append("&").Append(key).Append("=").Append(value);

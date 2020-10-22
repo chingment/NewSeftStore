@@ -14,7 +14,7 @@ namespace LocalS.BLL.Biz
             this.Slots = new List<Slot>();
         }
 
-        public string Id { get; set; }
+        public string ProductSkuId { get; set; }
         public string MainImgUrl { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }

@@ -9,15 +9,15 @@ namespace LocalS.BLL.Biz
 {
     public class AppSoftwareService : BaseDbContext
     {
-        public string GetAppSecretByAppKey(string appKey)
+        public string GetAppSecretByAppKey(string appId, string appKey)
         {
-            var term = CurrentDb.AppSoftware.Where(m => m.AppApiKey == appKey).FirstOrDefault();
+            var term = CurrentDb.AppSoftware.Where(m => m.AppId == appId && m.AppKey == appKey).FirstOrDefault();
             if (term == null)
             {
                 return null;
             }
 
-            return term.AppApiSecret;
+            return term.AppSecret;
         }
     }
 }

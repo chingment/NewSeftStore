@@ -28,108 +28,108 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备编码为空");
             }
 
-            var machine = CurrentDb.Machine.Where(m => m.ImeiId == rop.DeviceId || m.MacAddress == rop.DeviceId).FirstOrDefault();
+            var d_machine = CurrentDb.Machine.Where(m => m.ImeiId == rop.DeviceId || m.MacAddress == rop.DeviceId).FirstOrDefault();
 
-            if (machine == null)
+            if (d_machine == null)
             {
-                machine = new Machine();
-                machine.Id = IdWorker.Build(IdType.MachineId);
-                machine.Name = "贩卖X1";//默认名称
-                machine.JPushRegId = rop.JPushRegId;
-                machine.DeviceId = rop.DeviceId;
-                machine.ImeiId = string.IsNullOrEmpty(rop.ImeiId) == true ? IdWorker.Build(IdType.NewGuid) : rop.ImeiId;
-                machine.MacAddress = string.IsNullOrEmpty(rop.MacAddress) == true ? IdWorker.Build(IdType.NewGuid) : rop.MacAddress;
-                machine.MainImgUrl = "http://file.17fanju.com/Upload/machine1.jpg";
-                machine.AppVersionCode = rop.AppVersionCode;
-                machine.AppVersionName = rop.AppVersionName;
-                machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
-                machine.KindIsHidden = false;
-                machine.KindRowCellSize = 3;
-                machine.CreateTime = DateTime.Now;
-                machine.Creator = IdWorker.Build(IdType.EmptyGuid);
-                CurrentDb.Machine.Add(machine);
+                d_machine = new Machine();
+                d_machine.Id = IdWorker.Build(IdType.MachineId);
+                d_machine.Name = "贩卖X1";//默认名称
+                d_machine.JPushRegId = rop.JPushRegId;
+                d_machine.DeviceId = rop.DeviceId;
+                d_machine.ImeiId = string.IsNullOrEmpty(rop.ImeiId) == true ? IdWorker.Build(IdType.NewGuid) : rop.ImeiId;
+                d_machine.MacAddress = string.IsNullOrEmpty(rop.MacAddress) == true ? IdWorker.Build(IdType.NewGuid) : rop.MacAddress;
+                d_machine.MainImgUrl = "http://file.17fanju.com/Upload/machine1.jpg";
+                d_machine.AppVersionCode = rop.AppVersionCode;
+                d_machine.AppVersionName = rop.AppVersionName;
+                d_machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
+                d_machine.KindIsHidden = false;
+                d_machine.KindRowCellSize = 3;
+                d_machine.CreateTime = DateTime.Now;
+                d_machine.Creator = IdWorker.Build(IdType.EmptyGuid);
+                CurrentDb.Machine.Add(d_machine);
                 CurrentDb.SaveChanges();
             }
             else
             {
-                machine.JPushRegId = rop.JPushRegId;
-                machine.AppVersionCode = rop.AppVersionCode;
-                machine.AppVersionName = rop.AppVersionName;
-                machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
-                machine.MendTime = DateTime.Now;
-                machine.Mender = IdWorker.Build(IdType.EmptyGuid);
+                d_machine.JPushRegId = rop.JPushRegId;
+                d_machine.AppVersionCode = rop.AppVersionCode;
+                d_machine.AppVersionName = rop.AppVersionName;
+                d_machine.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;
+                d_machine.MendTime = DateTime.Now;
+                d_machine.Mender = IdWorker.Build(IdType.EmptyGuid);
                 CurrentDb.SaveChanges();
             }
 
-            if (string.IsNullOrEmpty(machine.CurUseMerchId))
+            if (string.IsNullOrEmpty(d_machine.CurUseMerchId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(machine.CurUseStoreId))
+            if (string.IsNullOrEmpty(d_machine.CurUseStoreId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
             }
 
-            var machineInfo = BizFactory.Machine.GetOne(machine.Id);
-            ret.Machine.Id = machineInfo.Id;
-            ret.Machine.DeviceId = machineInfo.DeviceId;
-            ret.Machine.Name = machineInfo.Name;
-            ret.Machine.LogoImgUrl = machineInfo.LogoImgUrl;
-            ret.Machine.MerchName = machineInfo.MerchName;
-            ret.Machine.StoreName = machineInfo.StoreName;
-            ret.Machine.CsrQrCode = machineInfo.CsrQrCode;
-            ret.Machine.CsrPhoneNumber = machineInfo.CsrPhoneNumber;
-            ret.Machine.CsrHelpTip = machineInfo.CsrHelpTip;
-            ret.Machine.Cabinets = machineInfo.Cabinets;
-            ret.Machine.IsHiddenKind = machineInfo.KindIsHidden;
-            ret.Machine.KindRowCellSize = machineInfo.KindRowCellSize;
-            ret.Machine.PayOptions = machineInfo.PayOptions;
-            ret.Machine.CameraByChkIsUse = machine.CameraByChkIsUse;
-            ret.Machine.CameraByJgIsUse = machine.CameraByJgIsUse;
-            ret.Machine.CameraByRlIsUse = machine.CameraByRlIsUse;
+            var l_machine = BizFactory.Machine.GetOne(d_machine.Id);
+            ret.Machine.MachineId = l_machine.MachineId;
+            ret.Machine.DeviceId = l_machine.DeviceId;
+            ret.Machine.Name = l_machine.Name;
+            ret.Machine.LogoImgUrl = l_machine.LogoImgUrl;
+            ret.Machine.MerchName = l_machine.MerchName;
+            ret.Machine.StoreName = l_machine.StoreName;
+            ret.Machine.CsrQrCode = l_machine.CsrQrCode;
+            ret.Machine.CsrPhoneNumber = l_machine.CsrPhoneNumber;
+            ret.Machine.CsrHelpTip = l_machine.CsrHelpTip;
+            ret.Machine.Cabinets = l_machine.Cabinets;
+            ret.Machine.IsHiddenKind = l_machine.KindIsHidden;
+            ret.Machine.KindRowCellSize = l_machine.KindRowCellSize;
+            ret.Machine.PayOptions = l_machine.PayOptions;
+            ret.Machine.CameraByChkIsUse = l_machine.CameraByChkIsUse;
+            ret.Machine.CameraByJgIsUse = l_machine.CameraByJgIsUse;
+            ret.Machine.CameraByRlIsUse = l_machine.CameraByRlIsUse;
             ret.Machine.MaxBuyNumber = 10;
-            ret.Machine.ExIsHas = machineInfo.ExIsHas;
-            ret.Machine.OstVern = machineInfo.OstVern;
-            ret.Machine.MstVern = machineInfo.MstVern;
-            ret.Machine.Scanner = machineInfo.Scanner;
-            ret.Machine.FingerVeinner = machineInfo.FingerVeinner;
-            ret.Machine.ImIsUse = machineInfo.ImIsUse;
-            ret.Machine.ImPartner = machineInfo.ImPartner;
-            ret.Machine.ImUserName = machineInfo.ImUserName;
-            ret.Machine.ImPassword = machineInfo.ImPassword;
+            ret.Machine.ExIsHas = l_machine.ExIsHas;
+            ret.Machine.OstVern = l_machine.OstVern;
+            ret.Machine.MstVern = l_machine.MstVern;
+            ret.Machine.Scanner = l_machine.Scanner;
+            ret.Machine.FingerVeinner = l_machine.FingerVeinner;
+            ret.Machine.ImIsUse = l_machine.ImIsUse;
+            ret.Machine.ImPartner = l_machine.ImPartner;
+            ret.Machine.ImUserName = l_machine.ImUserName;
+            ret.Machine.ImPassword = l_machine.ImPassword;
 
-            ret.Banners = BizFactory.Machine.GetHomeBanners(machineInfo.Id);
-            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
-            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(machineInfo.MerchId, machineInfo.StoreId, machineInfo.Id);
+            ret.Banners = BizFactory.Machine.GetHomeBanners(l_machine.MachineId);
+            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(l_machine.MerchId, l_machine.StoreId, l_machine.MachineId);
+            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.MachineId);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string machineId)
         {
-            var products = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, machineId);
+            var l_products = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, machineId);
 
             var dics = new Dictionary<string, ProductSkuModel>();
 
-            if (products == null)
+            if (l_products == null)
             {
                 return dics;
             }
 
-            if (products.Items == null)
+            if (l_products.Items == null)
             {
                 return dics;
             }
 
-            if (products.Items.Count == 0)
+            if (l_products.Items.Count == 0)
             {
                 return dics;
             }
 
-            foreach (var item in products.Items)
+            foreach (var item in l_products.Items)
             {
-                dics.Add(item.Id, item);
+                dics.Add(item.ProductSkuId, item);
             }
 
             return dics;
@@ -137,60 +137,62 @@ namespace LocalS.Service.Api.StoreTerm
 
         public List<ProductKindModel> GetProductKinds(string merchId, string storeId, string machineId)
         {
-            var productKindModels = new List<ProductKindModel>();
+            var l_kinds = new List<ProductKindModel>();
 
-            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId).ToList();
+            var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+
+            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId).ToList();
 
 
-            var prdKindModelByAll = new ProductKindModel();
-            prdKindModelByAll.Id = IdWorker.Build(IdType.EmptyGuid);
-            prdKindModelByAll.Name = "全部";
-            prdKindModelByAll.Childs = sellChannelStocks.Select(m => m.PrdProductSkuId).Distinct().ToList();
-            productKindModels.Add(prdKindModelByAll);
+            var l_kind_all = new ProductKindModel();
+            l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);
+            l_kind_all.Name = "全部";
+            l_kind_all.Childs = d_stocks.Select(m => m.PrdProductSkuId).Distinct().ToList();
 
-            foreach (var prdKind in prdKinds)
+            l_kinds.Add(l_kind_all);
+
+            foreach (var d_kind in d_kinds)
             {
-                var prdKindModel = new ProductKindModel();
-                prdKindModel.Id = prdKind.Id;
-                prdKindModel.Name = prdKind.Name;
+                var l_kind = new ProductKindModel();
+                l_kind.KindId = d_kind.Id;
+                l_kind.Name = d_kind.Name;
 
-                var productIds = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.StoreKindId == prdKind.Id).Select(m => m.PrdProductId).Distinct().ToList();
-                if (productIds.Count > 0)
+                var l_productIds = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.StoreKindId == d_kind.Id).Select(m => m.PrdProductId).Distinct().ToList();
+                if (l_productIds.Count > 0)
                 {
-                    var productSkuIds = sellChannelStocks.Where(m => productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();
-                    if (productSkuIds.Count > 0)
+                    var l_productSkuIds = d_stocks.Where(m => l_productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();
+                    if (l_productIds.Count > 0)
                     {
-                        prdKindModel.Childs = productSkuIds;
-                        productKindModels.Add(prdKindModel);
+                        l_kind.Childs = l_productSkuIds;
+                        l_kinds.Add(l_kind);
                     }
                 }
             }
 
-            return productKindModels;
+            return l_kinds;
         }
 
         public CustomJsonResult CheckUpdate(RupMachineCheckUpdate rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var appSoftware = CurrentDb.AppSoftware.Where(m => m.AppId == rup.AppId && m.AppApiKey == rup.AppKey).FirstOrDefault();
-            if (appSoftware == null)
+            var d_appSoftware = CurrentDb.AppSoftware.Where(m => m.AppId == rup.AppId && m.AppKey == rup.AppKey).FirstOrDefault();
+            if (d_appSoftware == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
 
-            if (string.IsNullOrEmpty(appSoftware.VersionName))
+            if (string.IsNullOrEmpty(d_appSoftware.VersionName))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
 
-            if (string.IsNullOrEmpty(appSoftware.ApkDownloadUrl))
+            if (string.IsNullOrEmpty(d_appSoftware.DownloadUrl))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
 
-            var model = new { versionCode = appSoftware.VersionCode, versionName = appSoftware.VersionName, apkDownloadUrl = appSoftware.ApkDownloadUrl };
+            var model = new { versionCode = d_appSoftware.VersionCode, versionName = d_appSoftware.VersionName, downloadUrl = d_appSoftware.DownloadUrl };
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
         }
@@ -342,44 +344,44 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetMachineGetRunExHandleItems();
 
-            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "1", Title = "App异常退出" });
-            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "2", Title = "机器出现故障" });
-            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { Id = "3", Title = "未知原因" });
+            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { ReasonId = "1", Title = "App异常退出" });
+            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { ReasonId = "2", Title = "机器出现故障" });
+            ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { ReasonId = "3", Title = "未知原因" });
 
-            var orders = CurrentDb.Order.Where(m => m.SellChannelRefId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
+            var d_orders = CurrentDb.Order.Where(m => m.SellChannelRefId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
-            foreach (var order in orders)
+            foreach (var d_order in d_orders)
             {
-                var exItem = new RetMachineGetRunExHandleItems.ExItem();
+                var l_exItem = new RetMachineGetRunExHandleItems.ExItem();
 
-                exItem.Id = order.Id;
+                l_exItem.ItemId = d_order.Id;
 
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+                var d_orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_order.Id).ToList();
 
-                foreach (var orderSub in orderSubs)
+                foreach (var d_orderSub in d_orderSubs)
                 {
-                    var exUnique = new RetMachineGetRunExHandleItems.ExUnique();
-                    exUnique.Id = orderSub.Id;
-                    exUnique.ProductSkuId = orderSub.PrdProductSkuId;
-                    exUnique.SlotId = orderSub.SlotId;
-                    exUnique.Quantity = orderSub.Quantity;
-                    exUnique.Name = orderSub.PrdProductSkuName;
-                    exUnique.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
-                    exUnique.Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus);
-                    exUnique.SignStatus = 0;
-                    if (orderSub.PickupStatus == E_OrderPickupStatus.Taked || orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
+                    var l_exUnique = new RetMachineGetRunExHandleItems.ExUnique();
+                    l_exUnique.UniqueId = d_orderSub.Id;
+                    l_exUnique.ProductSkuId = d_orderSub.PrdProductSkuId;
+                    l_exUnique.SlotId = d_orderSub.SlotId;
+                    l_exUnique.Quantity = d_orderSub.Quantity;
+                    l_exUnique.Name = d_orderSub.PrdProductSkuName;
+                    l_exUnique.MainImgUrl = d_orderSub.PrdProductSkuMainImgUrl;
+                    l_exUnique.Status = BizFactory.Order.GetPickupStatus(d_orderSub.PickupStatus);
+                    l_exUnique.SignStatus = 0;
+                    if (d_orderSub.PickupStatus == E_OrderPickupStatus.Taked || d_orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && d_orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
                     {
-                        exUnique.CanHandle = false;
+                        l_exUnique.CanHandle = false;
                     }
                     else
                     {
-                        exUnique.CanHandle = true;
+                        l_exUnique.CanHandle = true;
                     }
 
-                    exItem.Uniques.Add(exUnique);
+                    l_exItem.Uniques.Add(l_exUnique);
                 }
 
-                ret.ExItems.Add(exItem);
+                ret.ExItems.Add(l_exItem);
             }
 
 
@@ -399,8 +401,8 @@ namespace LocalS.Service.Api.StoreTerm
             var bizResult = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             if (bizResult.Result == ResultType.Success)
             {
-                var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.CurUseMerchId, machine.CurUseStoreId, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark);
+                var d_machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, d_machine.CurUseMerchId, d_machine.CurUseStoreId, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark);
             }
 
 

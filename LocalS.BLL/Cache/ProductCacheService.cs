@@ -196,7 +196,7 @@ namespace LocalS.BLL
                     {
                         var productSkuModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(productSku);
                         var searchModel = new ProductSkuInfoBySearchModel();
-                        searchModel.Id = productSkuModel.Id;
+                        searchModel.ProductSkuId = productSkuModel.Id;
                         searchModel.ProductId = productSkuModel.ProductId;
                         searchModel.Name = productSkuModel.Name;
                         searchModel.CumCode = productSkuModel.CumCode;

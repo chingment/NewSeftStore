@@ -15,11 +15,11 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string AppId { get; set; }
-        public string AppApiKey { get; set; }
-        public string AppApiSecret { get; set; }
+        public string AppKey { get; set; }
+        public string AppSecret { get; set; }
         public string VersionName { get; set; }
         public string VersionCode { get; set; }
-        public string ApkDownloadUrl { get; set; }
+        public string DownloadUrl { get; set; }
         public string Description { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

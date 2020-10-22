@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopStockSettingSaveCabinetSlot
     {
-        public string Id { get; set; }
+        public string SlotId { get; set; }
         public string StockId { get; set; }
         public string CabinetId { get; set; }
         public string MachineId { get; set; }

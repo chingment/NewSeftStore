@@ -20,7 +20,7 @@ namespace LocalS.BLL.Biz
         {
             this.AddressPoint = new MapPoint();
         }
-        public string Id { get; set; }
+        public string StoreId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public MapPoint AddressPoint { get; set; }

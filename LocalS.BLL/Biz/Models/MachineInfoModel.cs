@@ -16,7 +16,7 @@ namespace LocalS.BLL.Biz
             this.FingerVeinner = new FingerVeinnerModel();
         }
 
-        public string Id { get; set; }
+        public string MachineId { get; set; }
         public string DeviceId { get; set; }
         public string Name { get; set; }
         public string LogoImgUrl { get; set; }

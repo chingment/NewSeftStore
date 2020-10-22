@@ -40,7 +40,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                 var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
 
                 var productSkuModel = new ProductSkuModel();
-                productSkuModel.Id = bizProductSku.Id;
+                productSkuModel.ProductSkuId = bizProductSku.Id;
                 productSkuModel.ProductId = bizProductSku.ProductId;
                 productSkuModel.Name = bizProductSku.Name;
                 productSkuModel.MainImgUrl = ImgSet.Convert_B(bizProductSku.MainImgUrl);

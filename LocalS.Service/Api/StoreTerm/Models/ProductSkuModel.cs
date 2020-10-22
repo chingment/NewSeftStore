@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.StoreTerm
     {
         private bool _isOffSell = true;
 
-        public string Id { get; set; }
+        public string ProductSkuId { get; set; }
         public string ProductId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }

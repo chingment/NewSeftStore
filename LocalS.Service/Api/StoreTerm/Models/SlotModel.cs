@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class SlotModel
     {
-        public string Id { get; set; }
+        public string SlotId { get; set; }
         public string StockId { get; set; }
         public string ProductSkuId { get; set; }
         public string ProductSkuCumCode { get; set; }

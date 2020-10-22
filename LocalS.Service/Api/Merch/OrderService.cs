@@ -360,7 +360,7 @@ namespace LocalS.Service.Api.Merch
             var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
-            bizRop.Items.Add(new ExItem { Id = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
+            bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
             var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             return result;
         }

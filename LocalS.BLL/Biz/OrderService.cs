@@ -1480,7 +1480,7 @@ namespace LocalS.BLL.Biz
                 var orderSubs_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
 
                 var model = new OrderProductSkuByPickupModel();
-                model.Id = productSkuId;
+                model.ProductSkuId = productSkuId;
                 model.Name = orderSubs_Sku[0].PrdProductSkuName;
                 model.MainImgUrl = orderSubs_Sku[0].PrdProductSkuMainImgUrl;
                 model.Quantity = orderSubs_Sku.Sum(m => m.Quantity);
@@ -1529,7 +1529,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in rop.Items)
                 {
-                    var order = CurrentDb.Order.Where(m => m.Id == item.Id).FirstOrDefault();
+                    var order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
                     if (order == null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息不存在");
@@ -1549,7 +1549,7 @@ namespace LocalS.BLL.Biz
                     if (item.IsRefund)
                     {
 
-                        var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == item.Id).ToList();
+                        var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == item.ItemId).ToList();
 
                         decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
                         decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
@@ -1591,7 +1591,7 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.ItemId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
                     foreach (var orderSub in orderSubs)
                     {

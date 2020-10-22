@@ -137,7 +137,7 @@ namespace LocalS.Service.Api.Merch
 
             var store = BizFactory.Store.GetOne(storeId);
 
-            ret.Id = store.Id;
+            ret.Id = store.StoreId;
             ret.Name = store.Name;
             ret.Address = store.Address;
             ret.AddressPoint = store.AddressPoint;
@@ -196,13 +196,13 @@ namespace LocalS.Service.Api.Merch
             {
                 if (!store.IsDelete)
                 {
-                    if (store.Id == storeId)
+                    if (store.StoreId == storeId)
                     {
-                        ret.CurStore.Id = store.Id;
+                        ret.CurStore.Id = store.StoreId;
                         ret.CurStore.Name = store.Name;
                     }
 
-                    ret.Stores.Add(new StoreModel { Id = store.Id, Name = store.Name });
+                    ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name });
                 }
             }
 

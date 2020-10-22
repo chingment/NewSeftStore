@@ -64,9 +64,10 @@ namespace Lumos.Web.Http
                  sb.Append("Header.CurrentUserId: " + currentUserId + Environment.NewLine);
                  sb.Append("Header.RequestGuid: " + requestGuid + Environment.NewLine);
 
-                 if (headers["key"] != null)
+                 if (headers["appKey"] != null)
                  {
-                     sb.Append("Header.key: " + headers["key"] + Environment.NewLine);
+                     sb.Append("Header.appId: " + headers["appId"] + Environment.NewLine);
+                     sb.Append("Header.appKey: " + headers["appKey"] + Environment.NewLine);
                      sb.Append("Header.sign: " + headers["sign"] + Environment.NewLine);
                      sb.Append("Header.version: " + headers["version"] + Environment.NewLine);
                      sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
