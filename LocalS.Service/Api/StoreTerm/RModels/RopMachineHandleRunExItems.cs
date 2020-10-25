@@ -11,12 +11,12 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public RopMachineHandleRunExItems()
         {
-            this.Items = new List<ExItem>();
-            this.Reasons = new List<ExReason>();
+            this.ExItems = new List<ExItem>();
+            this.ExReasons = new List<ExReason>();
         }
 
         public string MachineId { get; set; }
-        public List<ExItem> Items { get; set; }
-        public List<ExReason> Reasons { get; set; }
+        public List<ExItem> ExItems { get; set; }
+        public List<ExReason> ExReasons { get; set; }
     }
 }

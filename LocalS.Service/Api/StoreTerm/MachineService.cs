@@ -396,8 +396,8 @@ namespace LocalS.Service.Api.StoreTerm
 
             var bizRop = new RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = true;
-            bizRop.Remark = string.Join(",", rop.Reasons.Select(m => m.Title).ToArray());
-            bizRop.Items = rop.Items;
+            bizRop.Remark = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
+            bizRop.Items = rop.ExItems;
             bizRop.MachineId = rop.MachineId;
             var bizResult = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             if (bizResult.Result == ResultType.Success)
