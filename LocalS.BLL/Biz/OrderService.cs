@@ -1393,7 +1393,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var xrtPay_ZfbByNtBuildByNtResultParams = new { PayTransId = payTrans.Id, PayUrl = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var xrtPay_ZfbByNtBuildByNtResultParams = new { OrderId = payTrans.OrderIds, PayTransId = payTrans.Id, PayUrl = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_ZfbByNtBuildByNtResultParams);
 
@@ -1529,6 +1529,8 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in rop.Items)
                 {
+                    LogUtil.Info("Item:" + item.ItemId);
+
                     var order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
                     if (order == null)
                     {
@@ -1590,12 +1592,16 @@ namespace LocalS.BLL.Biz
                         CurrentDb.PayRefund.Add(payRefund);
                     }
 
+                    LogUtil.Info("orderSubs");
 
                     var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.ItemId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
+
                     foreach (var orderSub in orderSubs)
                     {
-                        var detailItem = item.Uniques.Where(m => m.Id == orderSub.Id).FirstOrDefault();
+                        LogUtil.Info("orderSubs");
+
+                        var detailItem = item.Uniques.Where(m => m.UniqueId == orderSub.Id).FirstOrDefault();
                         if (detailItem == null)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
@@ -1678,7 +1684,11 @@ namespace LocalS.BLL.Biz
 
                     orders.Add(order);
 
+
+                    LogUtil.Info("orders");
                 }
+
+                LogUtil.Info("IsRunning");
 
                 if (rop.IsRunning)
                 {

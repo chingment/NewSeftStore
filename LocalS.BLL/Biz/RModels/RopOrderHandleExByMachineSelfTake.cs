@@ -9,7 +9,7 @@ namespace LocalS.BLL.Biz
 {
     public class ExUnique
     {
-        public string Id { get; set; }
+        public string UniqueId { get; set; }
         public int SignStatus { get; set; }
     }
 

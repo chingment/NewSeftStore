@@ -72,6 +72,8 @@
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
+    <Compile Include="Biz\Models\AdContentModel.cs" />
+    <Compile Include="Biz\Models\AdModel.cs" />
     <Compile Include="Biz\Models\BannerModel.cs" />
     <Compile Include="Biz\Models\CabinetInfoModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByDSModel.cs" />

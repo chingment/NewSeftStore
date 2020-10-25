@@ -10,5 +10,7 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string MachineId { get; set; }
         public string PayTransId { get; set; }
+
+        public string OrderId { get; set; }
     }
 }

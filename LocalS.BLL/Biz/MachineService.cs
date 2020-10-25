@@ -125,6 +125,41 @@ namespace LocalS.BLL.Biz
             return bannerModels;
         }
 
+
+        public Dictionary<string, AdModel> GetAds(string id)
+        {
+            var ads = new Dictionary<string, AdModel>();
+
+            var machine = BizFactory.Machine.GetOne(id);
+
+
+            var adSpaces = CurrentDb.AdSpace.Where(m => m.Id == E_AdSpaceId.MachineHomeBanner).ToList();
+
+            foreach (var adSpace in adSpaces)
+            {
+                var ad = new AdModel();
+                ad.AdId = adSpace.Id;
+                ad.Name = adSpace.Name;
+                var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == machine.MerchId && m.AdSpaceId == adSpace.Id && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+
+                if (adContentIds != null && adContentIds.Length > 0)
+                {
+                    var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
+
+                    foreach (var item in adContents)
+                    {
+                        ad.Contents.Add(new AdContentModel { DataType = "image", DataUrl = item.Url });
+                    }
+                }
+
+                ads.Add(((int)adSpace.Id).ToString(), ad);
+            }
+
+
+
+            return ads;
+        }
+
         public bool IsStopUse(string merchId, string machineId)
         {
             bool isFlag = true;

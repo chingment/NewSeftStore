@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace LocalS.Service.Api.StoreTerm
         public List<BannerModel> Banners { get; set; }
         public Dictionary<string, ProductSkuModel> ProductSkus { get; set; }
         public List<ProductKindModel> ProductKinds { get; set; }
+        public Dictionary<string, AdModel> Ads { get; set; }
     }
 }

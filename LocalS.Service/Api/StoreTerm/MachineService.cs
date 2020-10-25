@@ -100,6 +100,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.ImPassword = l_machine.ImPassword;
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(l_machine.MachineId);
+            ret.Ads = BizFactory.Machine.GetAds(l_machine.MachineId);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(l_machine.MerchId, l_machine.StoreId, l_machine.MachineId);
             ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.MachineId);
 
@@ -405,9 +406,7 @@ namespace LocalS.Service.Api.StoreTerm
                 MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, d_machine.CurUseMerchId, d_machine.CurUseStoreId, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark);
             }
 
-
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
+            return bizResult;
         }
     }
 }
