@@ -441,22 +441,20 @@ namespace LocalS.BLL.Biz
 
                         foreach (var orderSub in orderSubs)
                         {
-                            if (model.Status == E_OrderPickupStatus.Exception)
+                            if (orderSub.PayStatus == E_PayStatus.PaySuccess)
                             {
-                                if (orderSub.PayStatus == E_PayStatus.PaySuccess)
+                                if (orderSub.PickupStatus != E_OrderPickupStatus.Taked
+                                    && orderSub.PickupStatus != E_OrderPickupStatus.Exception
+                                    && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
+                                    && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                 {
-                                    if (orderSub.PickupStatus != E_OrderPickupStatus.Taked
-                                        && orderSub.PickupStatus != E_OrderPickupStatus.Exception
-                                        && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                                        && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
-                                    {
-                                        orderSub.PickupStatus = E_OrderPickupStatus.Exception;
-                                        orderSub.ExPickupReason = "取货动作发生异常";
-                                        orderSub.ExPickupIsHappen = true;
-                                        orderSub.ExPickupHappenTime = DateTime.Now;
-                                    }
+                                    orderSub.PickupStatus = E_OrderPickupStatus.Exception;
+                                    orderSub.ExPickupReason = "取货动作发生异常";
+                                    orderSub.ExPickupIsHappen = true;
+                                    orderSub.ExPickupHappenTime = DateTime.Now;
                                 }
                             }
+
                         }
 
                         machine.ExIsHas = true;

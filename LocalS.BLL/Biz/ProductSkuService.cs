@@ -86,18 +86,24 @@ namespace LocalS.BLL.Biz
                         MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，商品：{2}，删除成功，移除实际库存：{3}", cabinetId, slotId, bizProdutSku.Name, sellChannelStock.SumQuantity), eventContent);
                     }
 
+
                     var slot = new
                     {
+                        StockId = "",
+                        CabinetId = cabinetId,
                         SlotId = slotId,
                         ProductSkuId = "",
-                        ProductSkuName = "暂无商品",
-                        ProductSkuMainImgUrl = "",
+                        Name = "暂无商品",
+                        CumCode = "",
+                        SpecDes = "",
+                        MainImgUrl = "",
                         SumQuantity = 0,
                         LockQuantity = 0,
                         SellQuantity = 0,
                         MaxQuantity = 0,
                         WarnQuantity = 0,
                         HoldQuantity = 0,
+                        Version = 0,
                         IsCanAlterMaxQuantity = true
                     };
 
@@ -235,17 +241,25 @@ namespace LocalS.BLL.Biz
                     }
 
 
+
                     var slot = new
                     {
+                        StockId = sellChannelStock.Id,
+                        CabinetId = cabinetId,
                         SlotId = slotId,
                         ProductSkuId = bizProductSku.Id,
-                        ProductSkuName = bizProductSku.Name,
-                        ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
+                        Name = bizProductSku.Name,
+                        CumCode = bizProductSku.CumCode,
+                        MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl),
+                        SpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
                         SumQuantity = sellChannelStock.SumQuantity,
                         LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                         SellQuantity = sellChannelStock.SellQuantity,
                         MaxQuantity = sellChannelStock.MaxQuantity,
-                        Version = sellChannelStock.Version
+                        WarnQuantity = sellChannelStock.WarnQuantity,
+                        HoldQuantity = sellChannelStock.HoldQuantity,
+                        Version = sellChannelStock.Version,
+                        IsCanAlterMaxQuantity = true
                     };
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
                     #endregion
@@ -673,11 +687,14 @@ namespace LocalS.BLL.Biz
 
                 var slot = new
                 {
-                    SlotId = slotId,
+                    StockId = sellChannelStock.Id,
                     CabinetId = cabinetId,
+                    SlotId = slotId,
                     ProductSkuId = bizProductSku.Id,
-                    ProductSkuName = bizProductSku.Name,
-                    ProductSkuMainImgUrl = bizProductSku.MainImgUrl,
+                    CumCode = bizProductSku.CumCode,
+                    Name = bizProductSku.Name,
+                    MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl),
+                    SpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
                     SumQuantity = sellChannelStock.SumQuantity,
                     LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                     SellQuantity = sellChannelStock.SellQuantity,

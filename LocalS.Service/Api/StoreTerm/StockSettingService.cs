@@ -63,10 +63,10 @@ namespace LocalS.Service.Api.StoreTerm
                     slot.StockId = item.Id;
                     slot.CabinetId = item.CabinetId;
                     slot.ProductSkuId = bizProductSku.Id;
-                    slot.ProductSkuCumCode = bizProductSku.CumCode;
-                    slot.ProductSkuName = bizProductSku.Name;
-                    slot.ProductSkuMainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
-                    slot.ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes);
+                    slot.CumCode = bizProductSku.CumCode;
+                    slot.Name = bizProductSku.Name;
+                    slot.MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
+                    slot.SpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes);
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
