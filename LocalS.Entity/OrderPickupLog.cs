@@ -29,7 +29,6 @@ namespace LocalS.Entity
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public int PickupUseTime { get; set; }
-        public bool IsPickupComplete { get; set; }
         public string ImgId { get; set; }
         public string ImgId2 { get; set; }
     }

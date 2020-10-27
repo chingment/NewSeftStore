@@ -316,22 +316,21 @@ namespace LocalS.BLL.Biz
                     productSkuName = bizProductSku.Name;
                 }
 
-                if (model.Status == E_OrderPickupStatus.SendPickupCmd)
+                if (model.PickupStatus == E_OrderPickupStatus.SendPickupCmd)
                 {
                     remark.Append("发送命令");
                 }
-                else if (model.Status == E_OrderPickupStatus.Exception)
+                else if (model.PickupStatus == E_OrderPickupStatus.Exception)
                 {
                     remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
+                }
+                else if (model.PickupStatus == E_OrderPickupStatus.Taked)
+                {
+                    remark.Append(string.Format("取货完成，用时：{0}", model.PickupUseTime));
                 }
                 else
                 {
                     remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
-
-                    if (model.IsPickupComplete)
-                    {
-                        remark.Append(string.Format("，取货完成，用时：{0}", model.PickupUseTime));
-                    }
                 }
 
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
@@ -378,42 +377,21 @@ namespace LocalS.BLL.Biz
                     orderPickupLog.PrdProductSkuId = model.ProductSkuId;
                     orderPickupLog.CabinetId = model.CabinetId;
                     orderPickupLog.SlotId = model.SlotId;
-                    orderPickupLog.Status = model.Status;
+                    orderPickupLog.Status = model.PickupStatus;
                     orderPickupLog.ActionId = model.ActionId;
                     orderPickupLog.ActionName = model.ActionName;
                     orderPickupLog.ActionStatusCode = model.ActionStatusCode;
                     orderPickupLog.ActionStatusName = model.ActionStatusName;
-                    orderPickupLog.IsPickupComplete = model.IsPickupComplete;
                     orderPickupLog.ImgId = model.ImgId;
                     orderPickupLog.ImgId2 = model.ImgId2;
-
-                    if (model.IsPickupComplete)
-                    {
-                        orderPickupLog.PickupUseTime = model.PickupUseTime;
-                        orderPickupLog.ActionRemark = "取货完成";
-                    }
-                    else
-                    {
-                        if (model.Status == E_OrderPickupStatus.SendPickupCmd)
-                        {
-                            orderPickupLog.ActionRemark = "发送命令";
-                        }
-                        else if (model.Status == E_OrderPickupStatus.Exception)
-                        {
-                            orderPickupLog.ActionRemark = "发生异常";
-                        }
-                        else
-                        {
-                            orderPickupLog.ActionRemark = model.ActionName + model.ActionStatusName;
-                        }
-                    }
-
+                    orderPickupLog.PickupUseTime = model.PickupUseTime;
+                    orderPickupLog.ActionRemark = remark.ToString();
                     orderPickupLog.Remark = model.Remark;
                     orderPickupLog.CreateTime = DateTime.Now;
                     orderPickupLog.Creator = operater;
                     CurrentDb.OrderPickupLog.Add(orderPickupLog);
 
-                    if (model.Status == E_OrderPickupStatus.Exception)
+                    if (model.PickupStatus == E_OrderPickupStatus.Exception)
                     {
 
                         order.ExIsHappen = true;
@@ -472,12 +450,18 @@ namespace LocalS.BLL.Biz
                                 orderSub.PickupFlowLastDesc = model.ActionName + model.ActionStatusName;
                                 orderSub.PickupFlowLastTime = DateTime.Now;
 
-                                if (model.Status == E_OrderPickupStatus.Taked)
+                                if (model.PickupStatus == E_OrderPickupStatus.Taked)
                                 {
                                     if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
                                         BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.MerchId, orderSub.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
                                     }
+
+                                    if (orderSub.PickupEndTime == null)
+                                    {
+                                        orderSub.PickupEndTime = DateTime.Now;
+                                    }
+
                                 }
 
                                 if (orderSub.PickupStartTime == null)
@@ -485,15 +469,8 @@ namespace LocalS.BLL.Biz
                                     orderSub.PickupStartTime = DateTime.Now;
                                 }
 
-                                if (model.IsPickupComplete)
-                                {
-                                    if (orderSub.PickupEndTime == null)
-                                    {
-                                        orderSub.PickupEndTime = DateTime.Now;
-                                    }
-                                }
 
-                                orderSub.PickupStatus = model.Status;
+                                orderSub.PickupStatus = model.PickupStatus;
                                 CurrentDb.SaveChanges();
                             }
                         }
@@ -558,22 +535,21 @@ namespace LocalS.BLL.Biz
                 productSkuName += bizProductSku.Name;
             }
 
-            if (model.Status == E_OrderPickupStatus.SendPickupCmd)
+            if (model.PickupStatus == E_OrderPickupStatus.SendPickupCmd)
             {
                 remark.Append("发送命令");
             }
-            else if (model.Status == E_OrderPickupStatus.Exception)
+            else if (model.PickupStatus == E_OrderPickupStatus.Exception)
             {
                 remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
+            }
+            else if (model.PickupStatus == E_OrderPickupStatus.Taked)
+            {
+                remark.Append(string.Format("取货完成，用时：{0}", model.PickupUseTime));
             }
             else
             {
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
-
-                if (model.IsPickupComplete)
-                {
-                    remark.Append(string.Format("，取货完成，用时：{0}", model.PickupUseTime));
-                }
             }
 
             var merchOperateLog = new MerchOperateLog();
