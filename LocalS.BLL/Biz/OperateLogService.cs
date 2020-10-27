@@ -349,22 +349,6 @@ namespace LocalS.BLL.Biz
                         int timoutM = order.Quantity * 5;
 
                         Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.SellChannelRefId });
-
-
-                        var l_orderPickupLog = new OrderPickupLog();
-                        l_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                        l_orderPickupLog.OrderId = order.Id;
-                        l_orderPickupLog.SellChannelRefType = order.SellChannelRefType;
-                        l_orderPickupLog.SellChannelRefId = order.SellChannelRefId;
-                        l_orderPickupLog.UniqueId = order.Id;
-                        l_orderPickupLog.UniqueType = E_UniqueType.Order;
-                        l_orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
-                        l_orderPickupLog.ActionTime = order.PickupFlowLastTime;
-                        l_orderPickupLog.Remark = "";
-                        l_orderPickupLog.CreateTime = DateTime.Now;
-                        l_orderPickupLog.Creator = operater;
-                        CurrentDb.OrderPickupLog.Add(l_orderPickupLog);
-
                     }
 
                     var orderPickupLog = new OrderPickupLog();
