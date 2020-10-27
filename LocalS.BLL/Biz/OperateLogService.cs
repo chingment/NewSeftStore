@@ -320,13 +320,13 @@ namespace LocalS.BLL.Biz
                 {
                     remark.Append("发送命令");
                 }
-                else if (model.PickupStatus == E_OrderPickupStatus.Exception)
-                {
-                    remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
-                }
                 else if (model.PickupStatus == E_OrderPickupStatus.Taked)
                 {
                     remark.Append(string.Format("取货完成，用时：{0}", model.PickupUseTime));
+                }
+                else if (model.PickupStatus == E_OrderPickupStatus.Exception)
+                {
+                    remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
                 }
                 else
                 {
@@ -523,13 +523,13 @@ namespace LocalS.BLL.Biz
             {
                 remark.Append("发送命令");
             }
-            else if (model.PickupStatus == E_OrderPickupStatus.Exception)
-            {
-                remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
-            }
             else if (model.PickupStatus == E_OrderPickupStatus.Taked)
             {
                 remark.Append(string.Format("取货完成，用时：{0}", model.PickupUseTime));
+            }
+            else if (model.PickupStatus == E_OrderPickupStatus.Exception)
+            {
+                remark.Append(string.Format("发生异常，原因：{0}", model.Remark));
             }
             else
             {
