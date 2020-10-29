@@ -522,8 +522,8 @@ namespace LocalS.BLL.Biz
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
                         }
 
+                        sellChannelStock.WaitPickupLockQuantity -= quantity;
                         sellChannelStock.SellQuantity += quantity;
-                        sellChannelStock.SumQuantity += quantity;
                         sellChannelStock.Version += 1;
                         sellChannelStock.Mender = operater;
                         sellChannelStock.MendTime = DateTime.Now;
