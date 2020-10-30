@@ -93,7 +93,7 @@ export default {
       }).then(() => {
         sysReboot({ id: this.machineId }).then(res => {
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.messageId)
+            this.onQueryMsgStatus(res.data.msg_id)
           } else {
             this.$message(res.message)
           }
@@ -109,7 +109,7 @@ export default {
       }).then(() => {
         sysShutdown({ id: this.machineId }).then(res => {
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.messageId)
+            this.onQueryMsgStatus(res.data.msg_id)
           } else {
             this.$message(res.message)
           }
@@ -133,7 +133,7 @@ export default {
             sysSetStatus({ id: this.machineId, status: this.formBySysSetStatus.status, helpTip: this.formBySysSetStatus.helpTip }).then(res => {
               if (res.result === 1) {
                 this.dialogSysSetStatusIsVisible = false
-                this.onQueryMsgStatus(res.data.messageId)
+                this.onQueryMsgStatus(res.data.msg_id)
               } else {
                 this.$message(res.message)
               }
@@ -151,7 +151,7 @@ export default {
       }).then(() => {
         dsx01OpenPickupDoor({ id: this.machineId }).then(res => {
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.messageId)
+            this.onQueryMsgStatus(res.data.msg_id)
           } else {
             this.$message(res.message)
           }
@@ -170,7 +170,7 @@ export default {
 
       var timeout = null
       var interval = window.setInterval(function() {
-        queryMsgPushResult({ machineId: _this.machineId, messageId: msgId }).then(res => {
+        queryMsgPushResult({ machineId: _this.machineId, msg_id: msgId }).then(res => {
           if (res.result === 1) {
             loading.close()
             _this.$message(res.message)
@@ -185,7 +185,7 @@ export default {
       timeout = window.setTimeout(() => {
         loading.close()
         window.clearInterval(interval)
-        queryMsgPushResult({ machineId: _this.machineId, messageId: msgId }).then(res => {
+        queryMsgPushResult({ machineId: _this.machineId, msg_id: msgId }).then(res => {
           _this.$message(res.message)
         })
       }, 10000)

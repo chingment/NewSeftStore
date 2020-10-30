@@ -27,13 +27,6 @@ namespace LocalS.BLL.Task
             var push = new EmqxPushService();
 
             push.ConnectMqttServer();
-
-            Thread.Sleep(2000);
-
-
-
-            push.Send("202004220011", "update", new { Id = "邱庆文" });
-
             return result;
         }
     }

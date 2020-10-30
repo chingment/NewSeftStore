@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopMachineQueryMsgPushResult
     {
-        public string MessageId { get; set; }
+        public string msg_id { get; set; }
 
         public string MachineId { get; set; }
     }

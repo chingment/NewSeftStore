@@ -474,7 +474,7 @@ namespace LocalS.Service.Api.Merch
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Machine.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.MachineId, rop.MessageId);
+            result = BizFactory.Machine.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.MachineId, rop.msg_id);
 
             return result;
         }

@@ -84,10 +84,10 @@ namespace MyPushSdk
 
             var publish = mqttClient.PublishAsync(appMsg);
 
-            if (!publish.IsCompleted)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");
-            }
+            //if (!publish.IsCompleted)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");
+            //}
 
 
             var ret = new SendResult();
@@ -105,7 +105,7 @@ namespace MyPushSdk
         {
             var result = new CustomJsonResult();
 
-            string msg = RedisManager.Db.StringGet(msgId);
+            string msg = RedisManager.Db.StringGet("msg:" + msgId);
 
             if (msg == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "推送失败");

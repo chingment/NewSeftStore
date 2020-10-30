@@ -7,8 +7,8 @@
     <ProjectGuid>{1EA1FEEA-CCD8-419A-B143-A8311DC8A1E1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Task4Tim2Global</RootNamespace>
-    <AssemblyName>Task4Tim2Global</AssemblyName>
+    <RootNamespace>Task4Mqtt2Machine</RootNamespace>
+    <AssemblyName>Task4Mqtt2Machine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

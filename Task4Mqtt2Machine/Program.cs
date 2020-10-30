@@ -14,11 +14,6 @@ namespace Task4Mqtt2Machine
         static void Main(string[] args)
         {
 
-            //IPushService push = new EmqxPushService();
-
-            //push.Send("202004220011", "update", new { Id = "邱庆文" });
-
-
             log.InfoFormat("程序开始");
 
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "log4net.config"));
