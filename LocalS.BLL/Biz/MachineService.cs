@@ -237,7 +237,7 @@ namespace LocalS.BLL.Biz
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
             }
 
-            return PushService.QueryMsgPushResult(operater, appId, merchId, machineId, messageId);
+            return PushService.QueryStatus(operater, appId, merchId, machineId, messageId);
         }
 
 

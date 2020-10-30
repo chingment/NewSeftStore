@@ -9,18 +9,6 @@ using System.Threading.Tasks;
 
 namespace MyPushSdk
 {
-    public class JgPushResult
-    {
-        public string sendno { get; set; }
-
-        public string msg_id { get; set; }
-    }
-
-    public class JgPushQuqeryResult
-    {
-        public int status { get; set; }
-    }
-
     public class JgPushService : IPushService
     {
         private static JPushClient client = new JPushClient("47571aa2482f3b9e2af243a9", "8b0ea490c90fddbf64e0fb9f");
@@ -81,7 +69,7 @@ namespace MyPushSdk
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    var jgPushResult = response.Content.ToJsonObject<JgPushResult>();
+                    var jgPushResult = response.Content.ToJsonObject<SendResult>();
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功", new { messageId = jgPushResult.msg_id });
                 }
@@ -99,7 +87,7 @@ namespace MyPushSdk
             return result;
         }
 
-        public CustomJsonResult QueryMsgPushResult(string registrationid, string msgId)
+        public CustomJsonResult QueryStatus(string registrationid, string msgId)
         {
             var result = new CustomJsonResult();
 
@@ -115,7 +103,7 @@ namespace MyPushSdk
                     //{ "1104a8979234f30c8c2":{ "status":0} }
                     //[{"android_received":null,"ios_apns_received":null,"ios_apns_sent":null,"ios_msg_received":null,"msg_id":"47287851766226406","wp_mpns_sent":null}]
 
-                    var jgPushQuqeryResult = jgReportResult.Content.ToJsonObject<Dictionary<string, JgPushQuqeryResult>>();
+                    var jgPushQuqeryResult = jgReportResult.Content.ToJsonObject<Dictionary<string, QueryStatusResult>>();
 
                     if (jgPushQuqeryResult.ContainsKey(registrationid))
                     {

@@ -13,7 +13,7 @@ namespace LocalS.BLL.Push
 {
     public static class PushService
     {
-        private static IPushService pushService = new JgPushService();
+        private static IPushService pushService = new EmqxPushService();
 
         public static CustomJsonResult Send(string operater, string appId, string merchId, string machineId, string cmd, object content)
         {
@@ -23,7 +23,7 @@ namespace LocalS.BLL.Push
 
             if (machine != null)
             {
-                result = pushService.Send(machine.JPushRegId, cmd, content);
+                result = pushService.Send(machineId, cmd, content);
 
                 if (result.Result == ResultType.Success)
                 {
@@ -94,11 +94,11 @@ namespace LocalS.BLL.Push
             return result;
         }
 
-        public static CustomJsonResult QueryMsgPushResult(string operater, string appId, string merchId, string machineId, string messageId)
+        public static CustomJsonResult QueryStatus(string operater, string appId, string merchId, string machineId, string messageId)
         {
             var result = new CustomJsonResult();
             var machine = BizFactory.Machine.GetOne(machineId);
-            result = pushService.QueryMsgPushResult(machine.JPushRegId, messageId);
+            result = pushService.QueryStatus(machine.JPushRegId, messageId);
             return result;
         }
 

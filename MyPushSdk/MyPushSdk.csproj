@@ -34,6 +34,19 @@
     <Reference Include="Jiguang.JPush">
       <HintPath>..\packages\JPush\Jiguang.JPush.dll</HintPath>
     </Reference>
+    <Reference Include="MQTTnet">
+      <HintPath>..\packages\MQTTnet.2.4.0\lib\net45\MQTTnet.dll</HintPath>
+    </Reference>
+    <Reference Include="MQTTnet.Core">
+      <HintPath>..\packages\MQTTnet.2.4.0\lib\net45\MQTTnet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,12 +57,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmqxPushService\EmqxPushService.cs" />
     <Compile Include="IPushService.cs" />
     <Compile Include="JgPushService\JgPushService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryStatusResult.cs" />
+    <Compile Include="SendResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
+      <Project>{C165E6A0-DD43-4AA1-94B1-D4BF5420A80D}</Project>
+      <Name>Lumos.Redis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lumos\Lumos.csproj">
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>

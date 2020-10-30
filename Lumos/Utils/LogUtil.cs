@@ -29,9 +29,9 @@ namespace Lumos
 
         public static void SetTrackId(string token)
         {
-            if(string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token))
             {
-                token= Guid.NewGuid().ToString();
+                token = Guid.NewGuid().ToString();
             }
 
             LogicalThreadContext.Properties["trackid"] = token;
@@ -55,7 +55,7 @@ namespace Lumos
             return log4net.LogManager.GetLogger(name);
         }
 
-        public static void Info(string msg)
+        public static void Info(string tag, string msg)
         {
             string r_msg = "\r\n";
             //var trace = new System.Diagnostics.StackTrace();
@@ -75,7 +75,12 @@ namespace Lumos
             //}
 
 
-            GetLog().Info(r_msg + msg);
+            GetLog().Info(r_msg + tag + msg);
+        }
+
+        public static void Info(string msg)
+        {
+            Info("", msg);
         }
 
         public static void Warn(string msg)
@@ -90,7 +95,12 @@ namespace Lumos
 
         public static void Error(string msg, Exception ex)
         {
-            GetLog().Error(msg, ex);
+            Error("", msg, ex);
+        }
+
+        public static void Error(string tag, string msg, Exception ex)
+        {
+            GetLog().Error(tag + msg, ex);
         }
     }
 }

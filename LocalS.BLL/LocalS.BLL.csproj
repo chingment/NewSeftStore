@@ -41,6 +41,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net465\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MQTTnet">
+      <HintPath>..\packages\MQTTnet.2.4.0\lib\net45\MQTTnet.dll</HintPath>
+    </Reference>
+    <Reference Include="MQTTnet.Core">
+      <HintPath>..\packages\MQTTnet.2.4.0\lib\net45\MQTTnet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
@@ -149,6 +155,7 @@
     <Compile Include="Task\Quartz\SchedulerJobListener.cs" />
     <Compile Include="Task\Task4Factory.cs" />
     <Compile Include="Task\Task4Mq2GlobalProvder.cs" />
+    <Compile Include="Task\Task4Mqtt2MachineProvder.cs" />
     <Compile Include="Task\Task4Tim2GlobalProvider.cs" />
     <Compile Include="Task\Task4Tim2WxUpdateUsersInfoProvider.cs" />
   </ItemGroup>

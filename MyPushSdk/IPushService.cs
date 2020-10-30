@@ -12,6 +12,6 @@ namespace MyPushSdk
     {
         CustomJsonResult Send(string registrationid, string cmd, object content);
 
-        CustomJsonResult QueryMsgPushResult(string registrationid, string msgId);
+        CustomJsonResult QueryStatus(string registrationid, string msgId);
     }
 }
