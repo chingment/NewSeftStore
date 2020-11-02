@@ -94,10 +94,13 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.MstVern = l_machine.MstVern;
             ret.Machine.Scanner = l_machine.Scanner;
             ret.Machine.FingerVeinner = l_machine.FingerVeinner;
-            ret.Machine.ImIsUse = l_machine.ImIsUse;
-            ret.Machine.ImPartner = l_machine.ImPartner;
-            ret.Machine.ImUserName = l_machine.ImUserName;
-            ret.Machine.ImPassword = l_machine.ImPassword;
+            ret.Machine.Im.IsUse = l_machine.ImIsUse;
+            ret.Machine.Im.Partner = l_machine.ImPartner;
+            ret.Machine.Im.UserName = l_machine.ImUserName;
+            ret.Machine.Im.Password = l_machine.ImPassword;
+            ret.Machine.Mqtt.Host = "tcp://112.74.179.185:1883";
+            ret.Machine.Mqtt.UserName = "admin";
+            ret.Machine.Mqtt.Password = "public";
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(l_machine.MachineId);
             ret.Ads = BizFactory.Machine.GetAds(l_machine.MachineId);

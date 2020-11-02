@@ -349,8 +349,10 @@
     <Compile Include="Api\StoreTerm\ControlService.cs" />
     <Compile Include="Api\StoreTerm\ImService.cs" />
     <Compile Include="Api\StoreTerm\MachineService.cs" />
+    <Compile Include="Api\StoreTerm\Models\ImModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ImSeatModel.cs" />
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
+    <Compile Include="Api\StoreTerm\Models\MqttModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
     <Compile Include="Api\StoreTerm\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />

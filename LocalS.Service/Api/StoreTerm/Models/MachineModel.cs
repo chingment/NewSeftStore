@@ -14,6 +14,8 @@ namespace LocalS.Service.Api.StoreTerm
         {
             this.PayOptions = new List<PayOption>();
             this.Scanner = new ScannerModel();
+            this.Im = new ImModel();
+            this.Mqtt = new MqttModel();
             this.FingerVeinner = new FingerVeinnerModel();
             this.Cabinets = new Dictionary<string, CabinetInfoModel>();
         }
@@ -41,11 +43,8 @@ namespace LocalS.Service.Api.StoreTerm
         public FingerVeinnerModel FingerVeinner { get; set; }
         public string MstVern { get; set; }
         public string OstVern { get; set; }
-
-        public bool ImIsUse { get; set; }
-        public string ImPartner { get; set; }
-        public string ImUserName { get; set; }
-        public string ImPassword { get; set; }
+        public MqttModel Mqtt { get; set; }
+        public ImModel Im { get; set; }
     }
 
 }
