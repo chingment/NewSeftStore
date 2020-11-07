@@ -105,8 +105,11 @@ namespace Test
 
         static void Main(string[] args)
         {
+            //&..00111122==IIaabcccdddeeeefhiiikllmmnnnnooprsssttux
+            // 9b6e056b87057a3c173312ba5b2a418e109bc39eecd400086cad89909ded2ad4
+            //OWI2ZTA1NmI4NzA1N2EzYzE3MzMxMmJhNWIyYTQxOGUxMDliYzM5ZWVjZDQwMDA4NmNhZDg5OTA5ZGVkMmFkNA==
             log.InfoFormat("程序开始");
-
+            Signature.Compute("com.uplink.selfstore", "1", "2", 2, "machineId=1&cabinetId=dsx01n01");
             //string a11 = "dasdsad";
             //string a22 = null;
             //string a33 = a11 + a22;
