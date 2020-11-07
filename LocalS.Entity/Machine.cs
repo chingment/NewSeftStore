@@ -9,7 +9,8 @@ namespace LocalS.Entity
         Unknow = 0,
         Running = 1,
         //Stoped = 2,
-        Setting = 3
+        Setting = 3,
+        Excepition = 4
     }
 
     [Table("Machine")]
