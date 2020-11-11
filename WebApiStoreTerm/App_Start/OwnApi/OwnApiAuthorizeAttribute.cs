@@ -45,26 +45,15 @@ namespace WebApiStoreTerm
             return sb.ToString();
         }
 
-        public static string GetQueryData(Dictionary<string, string> parames)
+        public static string GetQueryData(NameValueCollection names)
         {
-            // 第一步：把字典按Key的字母顺序排序
-            IDictionary<string, string> sortedParams = new SortedDictionary<string, string>(parames);
-            IEnumerator<KeyValuePair<string, string>> dem = sortedParams.GetEnumerator();
-
-            // 第二步：把所有参数名和参数值串在一起
-            StringBuilder query = new StringBuilder("");  //签名字符串
             StringBuilder queryStr = new StringBuilder(""); //url参数
-            if (parames == null || parames.Count == 0)
+            if (names == null || names.Count == 0)
                 return "";
 
-            while (dem.MoveNext())
+            for (int f = 0; f < names.Count; f++)
             {
-                string key = dem.Current.Key;
-                string value = UrlEncode(dem.Current.Value);
-                if (!string.IsNullOrEmpty(key))
-                {
-                    queryStr.Append("&").Append(key).Append("=").Append(value);
-                }
+                queryStr.Append("&").Append(names.Keys[f]).Append("=").Append(names[f]);
             }
 
             string s = queryStr.ToString().Substring(1, queryStr.Length - 1);
@@ -78,7 +67,8 @@ namespace WebApiStoreTerm
             {
                 DateTime requestTime = DateTime.Now;
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;
-                var requestMethod = request.HttpMethod;
+                var httpMethod = request.HttpMethod;
+                var contentType = request.ContentType;
 
                 bool skipAuthorization = actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any();
                 if (skipAuthorization)
@@ -95,43 +85,47 @@ namespace WebApiStoreTerm
 
                 string app_data = null;
 
-                if (requestMethod == "POST")
+                if (httpMethod == "POST")
                 {
-                    Stream stream = HttpContext.Current.Request.InputStream;
-                    stream.Seek(0, SeekOrigin.Begin);
-                    app_data = new StreamReader(stream).ReadToEnd();
-
-                    #region 过滤图片
-                    if (app_data.LastIndexOf(",\"ImgData\":{") > -1)
+                    if (contentType.Contains("application/json"))
                     {
-                        //Log.Info("去掉图片之前的数据：" + app_data);
-                        int x = app_data.LastIndexOf(",\"ImgData\":{");
-                        app_data = app_data.Substring(0, x);
-                        app_data += "}";
-                        //Log.Info("去掉图片之后的数据：" + app_data);
+                        Stream stream = HttpContext.Current.Request.InputStream;
+                        stream.Seek(0, SeekOrigin.Begin);
+                        app_data = new StreamReader(stream).ReadToEnd();
 
+                        #region 过滤图片
+                        if (app_data.LastIndexOf(",\"ImgData\":{") > -1)
+                        {
+                            //Log.Info("去掉图片之前的数据：" + app_data);
+                            int x = app_data.LastIndexOf(",\"ImgData\":{");
+                            app_data = app_data.Substring(0, x);
+                            app_data += "}";
+                            //Log.Info("去掉图片之后的数据：" + app_data);
+
+                        }
+                        else if (app_data.LastIndexOf(",\"imgData\":{") > -1)
+                        {
+                            // Log.Info("去掉图片之前的数据：" + app_data);
+                            int x = app_data.LastIndexOf(",\"imgData\":{");
+                            app_data = app_data.Substring(0, x);
+                            app_data += "}";
+                            //Log.Info("去掉图片之后的数据：" + app_data);
+                        }
+
+                        #endregion
                     }
-                    else if (app_data.LastIndexOf(",\"imgData\":{") > -1)
+                    else if (contentType.Contains("multipart/form-data"))
                     {
-                        // Log.Info("去掉图片之前的数据：" + app_data);
-                        int x = app_data.LastIndexOf(",\"imgData\":{");
-                        app_data = app_data.Substring(0, x);
-                        app_data += "}";
-                        //Log.Info("去掉图片之后的数据：" + app_data);
+                        NameValueCollection queryForm = request.Form;
+                        app_data = GetQueryData(queryForm);
                     }
 
-                    #endregion
+                    LogUtil.Info("Sign_data:" + app_data);
                 }
-                else
+                else if (httpMethod == "GET")
                 {
-                    NameValueCollection queryForm = HttpContext.Current.Request.QueryString;
-                    Dictionary<string, string> queryData = new Dictionary<string, string>();
-                    for (int f = 0; f < queryForm.Count; f++)
-                    {
-                        string querykey = queryForm.Keys[f];
-                        queryData.Add(querykey, queryForm[querykey]);
-                    }
-                    app_data = GetQueryData(queryData);
+                    NameValueCollection queryForm = request.QueryString;
+                    app_data = GetQueryData(queryForm);
                 }
 
                 //检查必要的参数
