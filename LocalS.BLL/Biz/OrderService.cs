@@ -1222,7 +1222,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var wxByNt_PayParams = new { PayTransId = payTrans.Id, PayUrl = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var wxByNt_PayParams = new { PayTransId = payTrans.Id, ParamType="url", ParamData = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByNt_PayParams);
                                 #endregion
@@ -1284,7 +1284,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var zfbByNt_PayParams = new { PayTransId = payTrans.Id, PayUrl = zfbByNt_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var zfbByNt_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = zfbByNt_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", zfbByNt_PayParams);
                                 #endregion
@@ -1313,7 +1313,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, PayUrl = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, ParamType="url", ParamData = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
@@ -1346,7 +1346,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, PayUrl = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, ParamType="url", ParamData = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
 
@@ -1393,7 +1393,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var xrtPay_ZfbByNtBuildByNtResultParams = new { OrderId = payTrans.OrderIds, PayTransId = payTrans.Id, PayUrl = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var xrtPay_ZfbByNtBuildByNtResultParams = new { OrderId = payTrans.OrderIds, PayTransId = payTrans.Id, ParamType = "url", ParamData = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_ZfbByNtBuildByNtResultParams);
 

@@ -51,6 +51,26 @@ namespace WebApiStoreTerm
             if (names == null || names.Count == 0)
                 return "";
 
+
+            for (int f = 0; f < names.Count; f++)
+            {
+                string value = UrlEncode(names[f]);
+
+                queryStr.Append("&").Append(names.Keys[f]).Append("=").Append(value);
+            }
+
+            string s = queryStr.ToString().Substring(1, queryStr.Length - 1);
+
+            return s;
+        }
+
+        public static string GetFromData(NameValueCollection names)
+        {
+            StringBuilder queryStr = new StringBuilder(""); //url参数
+            if (names == null || names.Count == 0)
+                return "";
+
+
             for (int f = 0; f < names.Count; f++)
             {
                 queryStr.Append("&").Append(names.Keys[f]).Append("=").Append(names[f]);
@@ -117,7 +137,7 @@ namespace WebApiStoreTerm
                     else if (contentType.Contains("multipart/form-data"))
                     {
                         NameValueCollection queryForm = request.Form;
-                        app_data = GetQueryData(queryForm);
+                        app_data = GetFromData(queryForm);
                     }
 
                     LogUtil.Info("Sign_data:" + app_data);
