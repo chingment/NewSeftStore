@@ -32,6 +32,8 @@ namespace LocalS.Service.Api.Account
             if (belongSite == Enumeration.BelongSite.Admin || belongSite == Enumeration.BelongSite.Merch)
             {
                 sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
+
+             
             }
 
             foreach (var sysMenu in sysMenus)
@@ -647,8 +649,11 @@ namespace LocalS.Service.Api.Account
                         ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
                         break;
                     case "merch":
+                        var sysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
+                        var merch = CurrentDb.Merch.Where(m => m.MerchUserId == sysMerchUser.MerchId).FirstOrDefault();
                         ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId);
                         ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
+                       // ret.ActModel = merch.ActMode;
                         break;
                 }
             }

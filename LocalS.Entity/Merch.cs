@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-
-
     [Table("Merch")]
     public class Merch
     {
@@ -55,5 +53,14 @@ namespace LocalS.Entity
         public string BuildStockRptDate { get; set; }
 
         public int ImAccountLimit { get; set; }
+
+        //账号模式
+        //线上商城，单店铺  F1
+        //线上商城，多店铺  F2
+        //线下机器，单店铺  K1
+        //线下机器，多店铺  K2
+        //线上+线下，单店铺 M1
+        //线上+线下，多店铺 M2
+        //public string ActMode { get; set; }
     }
 }
