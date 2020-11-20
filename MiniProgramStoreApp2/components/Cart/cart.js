@@ -11,27 +11,30 @@ Component({
     isShow: {
       type: Boolean,
       value: false,
-      observer:function(newVal,oldVal){
-        if(newVal){
+      observer: function (newVal, oldVal) {
+        if (newVal) {
           this._dialogOpen()
-        }
-        else{
-          this._dialogClose();
+        } else {
+          this._dialogClose()
         }
       }
     },
-    dataS:{
+    dataS: {
       type: Object,
       value: {},
-      observer:function(newVal,oldVal){
-        console.log('newVal:'+newVal)
-        this.setData({myCart:newVal})
+      observer: function (newVal, oldVal) {
+        if (newVal == null)
+          return
+        console.log('newVal:' + newVal)
+        this.setData({
+          myCart: newVal
+        })
       }
     }
   },
   data: {
     myAnimationData: {},
-    myShow:false,
+    myShow: false,
     myStop: true,
     myCart: {
       blocks: [],
@@ -45,27 +48,29 @@ Component({
     _dialogOpen: function (e) {
       var _this = this;
       if (!_this.data.myStop)
-      return
+        return
 
-        var animation = wx.createAnimation({
-          duration: 200,
-          timingFunction: 'linear'
-        })
-        animation.translateY(500).step()
+      var animation = wx.createAnimation({
+        duration: 200,
+        timingFunction: 'linear'
+      })
+      animation.translateY(500).step()
+      _this.setData({
+        myAnimationData: animation.export(),
+        myShow: true,
+        isShow: true,
+        myStop: false
+      })
+      setTimeout(function () {
+        animation.translateY(0).step()
         _this.setData({
-          myAnimationData: animation.export(),
-          myShow: true,
-          isShow:true,
-          myStop: false
+          myAnimationData: animation.export()
         })
-        setTimeout(function () {
-          animation.translateY(0).step()
-          _this.setData({
-            myAnimationData: animation.export()
-          })
-        }, 200)
-      
-      _this.setData({ myCart: storeage.getCart() })
+      }, 200)
+
+      _this.setData({
+        myCart: storeage.getCart()
+      })
     },
     _dialogClose: function (e) {
       var _this = this;
@@ -81,8 +86,8 @@ Component({
       setTimeout(function () {
         _this.setData({
           myShow: false,
-          isShow:false,
-          myStop:true,
+          isShow: false,
+          myStop: true,
         })
       }, 500)
     },
@@ -108,7 +113,7 @@ Component({
         id: productSku.id,
         quantity: 1,
         selected: productSku.selected,
-        shopMode : productSku.shopMode
+        shopMode: productSku.shopMode
       });
 
       function _operate() {
@@ -118,11 +123,12 @@ Component({
           operate: operate,
           productSkus: operateProductSkus
         }).then(function (res) {
-          if(res.result==1){
-            console.log("storeage.getCart():"+JSON.stringify(storeage.getCart()))
-            _this.setData({ myCart: storeage.getCart() })
-          }
-          else{
+          if (res.result == 1) {
+            console.log("storeage.getCart():" + JSON.stringify(storeage.getCart()))
+            _this.setData({
+              myCart: storeage.getCart()
+            })
+          } else {
             toast.show({
               title: res.message
             })
@@ -137,8 +143,7 @@ Component({
           success: function (sm) {
             if (sm.confirm) {
               _operate()
-            } else if (sm.cancel) {
-            }
+            } else if (sm.cancel) {}
           }
         })
 
@@ -220,9 +225,9 @@ Component({
           X: startX,
           Y: startY
         }, {
-            X: touchMoveX,
-            Y: touchMoveY
-          });
+          X: touchMoveX,
+          Y: touchMoveY
+        });
 
 
       for (var i = 0; i < _this.data.myCart.blocks.length; i++) {

@@ -23,7 +23,7 @@
 		<view class="pd-com">
 			<view class="its-skus">
 				<block wx:for="{{searchResult.productSkus}}" wx:for-item="item" wx:key="index">
-				    <navigator class='it' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+				    <navigator class='it' url="/pages/productdetails/productdetails?skuId={{item.productSkuId}}">
 						<view class="it-l">
 							<view class="icon">
 								<image class="img" src='{{item.mainImgUrl}}'></image>
