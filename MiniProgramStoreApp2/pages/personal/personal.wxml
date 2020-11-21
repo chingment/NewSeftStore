@@ -108,8 +108,8 @@
 					</div>
 
 					<button class="btn-noboder col-nav-item" hover-class="none" open-type="contact">
-						<view class="item-left">
-							<image src='/content/default/images/col_nav_icon_service.png'></image>
+						<view class="item-left" >
+							<image src='/content/default/images/col_nav_icon_service.png' style="margin-left:-12rpx"></image>
 						</view>
 						<view class="item-middle">
 							<text class="title">联系客服</text>
