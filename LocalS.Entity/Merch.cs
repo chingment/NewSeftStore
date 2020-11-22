@@ -54,13 +54,13 @@ namespace LocalS.Entity
 
         public int ImAccountLimit { get; set; }
 
-        //账号模式
-        //线上商城，单店铺 F1
-        //线上商城，多店铺 F2
-        //线下机器，单店铺 K1
-        //线下机器，多店铺 K2
-        //线上商城+线下机器，单店铺 FK1
-        //线上商城+线下机器，多店铺 FK2
-        public string SctMode { get; set; }
+        //商户模式
+        //线上商城，单店铺 FS
+        //线上商城，多店铺 FM
+        //线下机器，单店铺 KS
+        //线下机器，多店铺 KM
+        //线上商城+线下机器，单店铺 FKS
+        //线上商城+线下机器，多店铺 FKM
+        public string MctMode { get; set; }
     }
 }

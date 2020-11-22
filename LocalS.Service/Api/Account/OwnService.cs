@@ -23,7 +23,7 @@ namespace LocalS.Service.Api.Account
         [DllImport(@"BioVein.x64.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern int FV_MatchFeature([MarshalAs(UnmanagedType.LPArray)] byte[] featureDataMatch, [MarshalAs(UnmanagedType.LPArray)]  byte[] featureDataReg, byte RegCnt, byte flag, byte securityLevel, int[] diff, [MarshalAs(UnmanagedType.LPArray)] byte[] AIDataBuf, int[] AIDataLen);
 
-        private List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)
+        private List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId, string mctMode = "")
         {
             List<MenuNode> menuNodes = new List<MenuNode>();
 
@@ -33,7 +33,15 @@ namespace LocalS.Service.Api.Account
             {
                 sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
 
-             
+                if (belongSite == Enumeration.BelongSite.Merch)
+                {
+                    if (mctMode.IndexOf("K") < 0)
+                    {
+                        string[] isNots = new string[2] { "我的机器", "机器自提"};
+                        sysMenus = sysMenus.Where(m => !isNots.Contains(m.Title)).ToList();
+                    }
+                }
+
             }
 
             foreach (var sysMenu in sysMenus)
@@ -649,11 +657,23 @@ namespace LocalS.Service.Api.Account
                         ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
                         break;
                     case "merch":
+
+                        string mctMode = "";
+
                         var sysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
-                        var merch = CurrentDb.Merch.Where(m => m.MerchUserId == sysMerchUser.MerchId).FirstOrDefault();
-                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId);
+                        if (sysMerchUser != null)
+                        {
+                            var merch = CurrentDb.Merch.Where(m => m.Id == sysMerchUser.MerchId).FirstOrDefault();
+                            if (merch != null)
+                            {
+
+                                mctMode = merch.MctMode;
+                            }
+
+                        }
+                        ret.MctMode = mctMode;
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId, mctMode);
                         ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
-                       // ret.ActModel = merch.ActMode;
                         break;
                 }
             }

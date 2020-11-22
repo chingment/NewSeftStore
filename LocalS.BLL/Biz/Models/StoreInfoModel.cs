@@ -38,6 +38,7 @@ namespace LocalS.BLL.Biz
 
         public bool IsTestMode { get; set; }
 
+        public string SctMode { get; set; }
 
         public string[] GetSellChannelRefIds(E_SellChannelRefType shopMode)
         {

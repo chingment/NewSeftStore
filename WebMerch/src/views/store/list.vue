@@ -36,7 +36,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li>
+                <li v-if="item.sctMode.indexOf('K')>-1"><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageProduct(item)">商品分类</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#f38b3f;display:none" @click="handleManageExpressStock(item)">快递库存</el-button></li>
@@ -46,7 +46,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="6" :xs="24" style="margin-bottom:20px">
+      <el-col v-if="mctMode.indexOf('M')>-1" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
@@ -76,14 +76,15 @@ export default {
         limit: 10,
         name: undefined
       },
-      listData: []
-
+      listData: [],
+      mctMode: ''
     }
   },
   created() {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
+    this.mctMode = this.$store.getters.userInfo.mctMode
     this.getListData()
   },
   methods: {

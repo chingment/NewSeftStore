@@ -33,5 +33,6 @@ namespace Lumos.DbRelay
         public bool IsSidebar { get; set; }
         public bool IsNavbar { get; set; }
         public int Depth { get; set; }
+        //public string SctMode { get; set; }
     }
 }

@@ -15,7 +15,7 @@
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="id" /></el-tab-pane>
       <el-tab-pane label="商品分类" name="tabProduct"><manage-pane-product :storeid="id" /></el-tab-pane>
-      <el-tab-pane label="机器信息" name="tabMachine"><manage-pane-machine :storeid="id" /></el-tab-pane>
+      <el-tab-pane v-if="curStore.sctMode.indexOf('K')>-1" label="机器信息" name="tabMachine"><manage-pane-machine :storeid="id" /></el-tab-pane>
       <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order ref="order" :storeid="id" /></el-tab-pane>
     </el-tabs>
   </div>
@@ -34,7 +34,8 @@ export default {
       activeName: 'tabBaseInfo',
       curStore: {
         id: '',
-        name: ''
+        name: '',
+        sctMode: ''
       },
       stores: []
     }

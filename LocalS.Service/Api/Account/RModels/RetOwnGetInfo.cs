@@ -23,5 +23,7 @@ namespace LocalS.Service.Api.Account
         public List<MenuNode> Menus { get; set; }
 
         public List<RoleModel> Roles { get; set; }
+
+        public string MctMode { get; set; }
     }
 }

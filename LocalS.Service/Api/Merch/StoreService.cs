@@ -45,7 +45,7 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId
                          &&
                          u.IsDelete == false
-                         select new { u.Id, u.Name, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
+                         select new { u.Id, u.Name, u.SctMode, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
 
 
             int total = query.Count();
@@ -69,6 +69,7 @@ namespace LocalS.Service.Api.Merch
                     MainImgUrl = item.MainImgUrl,
                     Address = item.Address,
                     Status = GetStatus(item.IsOpen),
+                    SctMode = item.SctMode,
                     CreateTime = item.CreateTime,
                 });
             }
@@ -200,6 +201,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         ret.CurStore.Id = store.StoreId;
                         ret.CurStore.Name = store.Name;
+                        ret.CurStore.SctMode = store.SctMode;
                     }
 
                     ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name });
