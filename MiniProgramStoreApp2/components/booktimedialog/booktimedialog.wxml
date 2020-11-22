@@ -29,9 +29,8 @@
 
 		<view class="bottominfo">
 			<view class="wrapper">
-				<button bindtap="_addToCart" class='btn bg-main'>确定</button>
+				<button bindtap="_confirm" class='btn bg-main'>确定</button>
 			</view>
 		</view>
-
 	</view>
 </view>

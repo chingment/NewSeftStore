@@ -117,5 +117,8 @@ namespace LocalS.Entity
         public string PayTransId { get; set; }
         public string PayPartnerPayTransId { get; set; }
         public E_PayPartner PayPartner { get; set; }
+
+        //public DateTime? BookStartTime { get; set; }
+        //public DateTime? BookEndTime { get; set; }
     }
 }

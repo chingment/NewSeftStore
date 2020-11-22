@@ -24,16 +24,36 @@ function throttle(fn, gapTime) {
 
   // 返回新的函数
   return function () {
-    let _nowTime = + new Date()
+    let _nowTime = +new Date()
     if (_nowTime - _lastTime > gapTime || !_lastTime) {
-      fn.apply(this, arguments)   //将this和参数传给原函数
+      fn.apply(this, arguments) //将this和参数传给原函数
       _lastTime = _nowTime
     }
   }
 }
 
+function isEmptyOrNull(str) {
+
+  if (typeof str === 'undefined')
+    return true
+
+  if (str == null)
+    return true
+
+  if (typeof (str) == "string") {
+    if (str.replace(/(^s*)|(s*$)/g, "").length == 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+  else{
+    return false
+  }
+}
 
 module.exports = {
   formatTime: formatTime,
-  throttle: throttle
+  throttle: throttle,
+  isEmptyOrNull: isEmptyOrNull
 }

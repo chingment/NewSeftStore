@@ -94,8 +94,7 @@ scroll-view .listItem .date{
   font-size: 21rpx;
 }
 scroll-view .current{
-  background-color: #76aef8;
-
+  background-color: #f3e7cf;
 }
 scroll-view .current text{
   color: #fff;

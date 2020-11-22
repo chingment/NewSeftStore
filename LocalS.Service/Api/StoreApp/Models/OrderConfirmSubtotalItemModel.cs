@@ -14,6 +14,7 @@ namespace LocalS.Service.Api.StoreApp
             this.Skus = new List<OrderConfirmProductSkuModel>();
             this.Delivery = new DeliveryModel();
             this.SelfTake = new SelfTakeModel();
+            this.BookTime = new BookTimeModel();
         }
 
         public string TagName { get; set; }
@@ -39,6 +40,8 @@ namespace LocalS.Service.Api.StoreApp
         /// </summary>
         public SelfTakeModel SelfTake { get; set; }
         public List<OrderConfirmProductSkuModel> Skus { get; set; }
+
+        public BookTimeModel BookTime { get; set; }
     }
 
     public enum E_TabMode
@@ -51,6 +54,12 @@ namespace LocalS.Service.Api.StoreApp
         MachineSelfTake = 4
     }
 
+    public class BookTimeModel
+    {
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public string Type { get; set; }
+    }
 
     public class OrderConfirmSubtotalItemModel
     {

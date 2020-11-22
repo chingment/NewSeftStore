@@ -1,4 +1,5 @@
 const config = require('../../config')
+const util = require('../../utils/util')
 const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
@@ -23,11 +24,7 @@ Page({
     booktimeDialog: {
       isShow: false
     },
-    booktime: {
-      date: '',
-      time: '',
-      week: ''
-    }
+    booktimeSelectBlockIndex: -1
   },
   onLoad: function (options) {
     var _this = this
@@ -76,7 +73,9 @@ Page({
   booktimeSelect: function (e) {
     console.log('booktimeSelect')
     var _this = this
+    var index = e.currentTarget.dataset.replyIndex
     _this.setData({
+      booktimeSelectBlockIndex: index,
       booktimeDialog: {
         isShow: true
       }
@@ -115,15 +114,12 @@ Page({
       }
     }
 
-
-
-    if (_this.data.curSelPayOption == undefined || _this.data.curSelPayOption == null) {
+    if (util.isEmptyOrNull(_this.data.curSelPayOption)) {
       toast.show({
         title: '未选择支付方式'
       })
       return
     }
-
 
     var tabShopModeByMall = _this.data.tabShopModeByMall
 
@@ -150,7 +146,7 @@ Page({
 
       if (_blocks[i].shopMode == 1) {
         if (_blocks[i].receiveMode == 1) {
-          if (_delivery.id == "") {
+          if (util.isEmptyOrNull(_delivery.id)) {
             toast.show({
               title: '请选择快寄地址'
             })
@@ -165,6 +161,14 @@ Page({
             address: _delivery.address
           }
         } else if (_blocks[i].receiveMode == 2) {
+
+          if (util.isEmptyOrNull(_blocks[i].bookTime.date)) {
+            toast.show({
+              title: '请选择预约时间'
+            })
+            return
+          }
+
           selfTake = {
             storeName: _selfTake.storeName,
             storeAddress: _selfTake.storeAddress,
@@ -337,16 +341,19 @@ Page({
     })
   },
   getselectbooktime: function (e) {
-    var _this=this;
-    var d=e.detail.params
-    console.log('ss')
-    // 这里就是子组件传过来的内容了
+    var _this = this;
+    var d = e.detail.params
+
+    var booktime = {
+      date: d.date,
+      time: d.time,
+      week: d.week
+    }
+
+    _this.data.blocks[_this.data.booktimeSelectBlockIndex].bookTime = booktime
+
     _this.setData({
-      booktime: {
-        date: d.date,
-        time: d.time,
-        week: d.week
-      }
+      blocks: _this.data.blocks
     })
   }
 

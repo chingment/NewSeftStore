@@ -77,7 +77,10 @@
 										</view>
 										<view class="it-m">
 											<view class="it-ml">
-												<text class='txt bold'>({{booktime.week}}){{booktime.date}} {{booktime.time}} </text>
+												<text class='txt bold'>
+												<block wx:if="{{item.bookTime.date==null}}" >选择</block>
+						            <block wx:else>({{item.bookTime.week}}){{item.bookTime.date}} {{item.bookTime.time}}</block>
+												 </text>
 											</view>
 										</view>
 										<view class='it-r'>
