@@ -1,5 +1,6 @@
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
+<booktimedialog id="booktimeDialog" bindgetselectbooktime="getselectbooktime" isShow="{{booktimeDialog.isShow}}"></booktimedialog>
 
 <!-- <view class='tag-address'>
 	<image class="img" src="/content/default/images/tag_address.png"></image>
@@ -32,7 +33,7 @@
 							</view>
 						</view>
 
-						<view class="tab-content" style="height: 96rpx;">
+						<view class="tab-content" >
 							<view class="content-item {{item.receiveMode==1?'selected':''}}">
 
 								<view class="its-a">
@@ -68,6 +69,24 @@
 											</view>
 										</view>
 									</view>
+
+									<view class="it" bindtap="booktimeSelect" data-reply-index="{{index}}" >
+										<view class="it-l">
+											<text class='txt-h1'>预约时间</text>
+											<text class="txt-h2 isDefault">预约</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt bold'>({{booktime.week}}){{booktime.date}} {{booktime.time}} </text>
+											</view>
+										</view>
+										<view class='it-r'>
+											<view class="icon">
+												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											</view>
+										</view>
+									</view>
+
 								</view>
 							</view>
 						</view>

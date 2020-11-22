@@ -8,39 +8,47 @@ const app = getApp()
 
 Page({
   data: {
-    tag:'orderconfirm',
+    tag: 'orderconfirm',
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
-    storeId:undefined,
-    orderIds:null,
+    storeId: undefined,
+    orderIds: null,
     blocks: [],
     couponId: [],
     payOption: {
       title: '支付方式',
       options: []
     },
-    curSelPayOption: null
+    curSelPayOption: null,
+    booktimeDialog: {
+      isShow: false
+    },
+    booktime: {
+      date: '',
+      time: '',
+      week: ''
+    }
   },
   onLoad: function (options) {
     var _this = this
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
-   console.log('orderIds:'+_orderIds)
-    var orderIds=[]
-    if(_orderIds!=null){
-      var arr_order= _orderIds.split(',')
+    console.log('orderIds:' + _orderIds)
+    var orderIds = []
+    if (_orderIds != null) {
+      var arr_order = _orderIds.split(',')
 
-      for(let i=0;i<arr_order.length;i++){
+      for (let i = 0; i < arr_order.length; i++) {
         orderIds.push(arr_order[i])
-    }
-    
-      console.log("orderIds:"+JSON.stringify(orderIds))
+      }
+
+      console.log("orderIds:" + JSON.stringify(orderIds))
     }
 
     var productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
     _this.setData({
       storeId: ownRequest.getCurrentStoreId(),
-      orderIds:orderIds,
-      productSkus:productSkus
+      orderIds: orderIds,
+      productSkus: productSkus
     })
     _this.buildPayOptions()
     _this.getConfirmData()
@@ -49,7 +57,7 @@ Page({
     var _this = this
 
   },
-  onShow: function () { },
+  onShow: function () {},
   onHide: function () {
 
   },
@@ -64,6 +72,15 @@ Page({
   },
   onShareAppMessage: function () {
 
+  },
+  booktimeSelect: function (e) {
+    console.log('booktimeSelect')
+    var _this = this
+    _this.setData({
+      booktimeDialog: {
+        isShow: true
+      }
+    })
   },
   deliveryAddressSelect: function (e) {
     var _this = this
@@ -80,7 +97,7 @@ Page({
     var _this = this
 
     var couponId = _this.data.couponId
-    var productSkus= _this.data.productSkus
+    var productSkus = _this.data.productSkus
     wx.navigateTo({
       url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponId=" + JSON.stringify(couponId),
       success: function (res) {
@@ -116,7 +133,12 @@ Page({
       var skus = []
       var _skus = _blocks[i].skus
       for (var j = 0; j < _skus.length; j++) {
-        skus.push({ cartId: _skus[j].cartId, id: _skus[j].id, quantity: _skus[j].quantity, shopMode: _skus[j].shopMode })
+        skus.push({
+          cartId: _skus[j].cartId,
+          id: _skus[j].id,
+          quantity: _skus[j].quantity,
+          shopMode: _skus[j].shopMode
+        })
       }
 
 
@@ -127,7 +149,7 @@ Page({
       var selfTake = null;
 
       if (_blocks[i].shopMode == 1) {
-        if (_blocks[i].receiveMode==1) {
+        if (_blocks[i].receiveMode == 1) {
           if (_delivery.id == "") {
             toast.show({
               title: '请选择快寄地址'
@@ -142,8 +164,7 @@ Page({
             areaCode: _delivery.areaCode,
             address: _delivery.address
           }
-        }
-        else if (_blocks[i].receiveMode == 2) {
+        } else if (_blocks[i].receiveMode == 2) {
           selfTake = {
             storeName: _selfTake.storeName,
             storeAddress: _selfTake.storeAddress,
@@ -151,8 +172,7 @@ Page({
             address: _selfTake.address
           }
         }
-      }
-      else if (_blocks[i].shopMode == 3) {
+      } else if (_blocks[i].shopMode == 3) {
         selfTake = {
           storeName: _selfTake.storeName,
           storeAddress: _selfTake.storeAddress,
@@ -161,11 +181,17 @@ Page({
         }
       }
 
-      blocks.push({ shopMode: _blocks[i].shopMode, receiveMode: _blocks[i].receiveMode, delivery: delivery, selfTake: selfTake, skus: skus })
+      blocks.push({
+        shopMode: _blocks[i].shopMode,
+        receiveMode: _blocks[i].receiveMode,
+        delivery: delivery,
+        selfTake: selfTake,
+        skus: skus
+      })
 
     }
 
-    if (_this.data.orderIds == undefined || _this.data.orderIds  == null||_this.data.orderIds.length==0) {
+    if (_this.data.orderIds == undefined || _this.data.orderIds == null || _this.data.orderIds.length == 0) {
 
 
       apiOrder.reserve({
@@ -174,17 +200,19 @@ Page({
         source: 3
       }).then(function (res) {
         if (res.result == 1) {
-          var d=res.data
+          var d = res.data
           apiCart.pageData({
-            success: function (res) { }
+            success: function (res) {}
           })
 
-          var orderIds=[]
-          for(var i=0;i<d.orders.length;i++){
+          var orderIds = []
+          for (var i = 0; i < d.orders.length; i++) {
             orderIds.push(d.orders[i].id)
           }
 
-          _this.setData({orderIds:orderIds})
+          _this.setData({
+            orderIds: orderIds
+          })
           _this.goPay(_this.data.curSelPayOption, null)
         } else {
           toast.show({
@@ -198,7 +226,7 @@ Page({
     }
   },
   goPay: function (payOption, blocks) {
-    var _this=this
+    var _this = this
     apiOrder.buildPayParams({
       orderIds: _this.data.orderIds,
       payCaller: payOption.payCaller,
@@ -209,7 +237,9 @@ Page({
 
         var d = res.data;
 
-        _this.setData({payTransId:d.payTransId})
+        _this.setData({
+          payTransId: d.payTransId
+        })
 
         wx.requestPayment({
           'timeStamp': d.timestamp,
@@ -241,7 +271,9 @@ Page({
       appCaller: 1
     }).then(function (res) {
       if (res.result == 1) {
-        _this.setData({ payOption: res.data })
+        _this.setData({
+          payOption: res.data
+        })
 
       }
     })
@@ -261,19 +293,21 @@ Page({
 
 
     if (tabmode == 3) {
-      _this.setData({ blocks: _this.data.blocks })
+      _this.setData({
+        blocks: _this.data.blocks
+      })
     }
 
 
   },
-  getConfirmData:function (_this) {
-    var _this= this
-    var _data=_this.data
+  getConfirmData: function (_this) {
+    var _this = this
+    var _data = _this.data
     apiOrder.confirm({
       orderIds: _data.orderIds,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
-      couponId:  _data.couponId
+      couponId: _data.couponId
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -283,15 +317,14 @@ Page({
           if (blocks[i].shopMode == 1) {
             if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
               tabShopModeByMall = 0
-            }
-            else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
+            } else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
               tabShopModeByMall = 1
             }
           }
         }
-  
+
         console.log("tabShopModeByMall:" + tabShopModeByMall)
-  
+
         _this.setData({
           tabShopModeByMall: tabShopModeByMall,
           blocks: d.blocks,
@@ -302,8 +335,19 @@ Page({
         })
       }
     })
+  },
+  getselectbooktime: function (e) {
+    var _this=this;
+    var d=e.detail.params
+    console.log('ss')
+    // 这里就是子组件传过来的内容了
+    _this.setData({
+      booktime: {
+        date: d.date,
+        time: d.time,
+        week: d.week
+      }
+    })
   }
-  
-
 
 })

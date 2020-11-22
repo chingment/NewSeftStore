@@ -1,0 +1,37 @@
+<view class="booktimeDialog" wx:if="{{myShow}}" catchtouchmove="ture">
+	<view class='content' animation='{{myAnimationData}}'>
+		<view class='closeinfo' bindtap='_dialogClose'>
+
+			<image class="img" src='/content/default/images/icon_close.png'></image>
+
+		</view>
+		<scroll-view class="contentinfo" scroll-y="true">
+			<view class="wrapper">
+				<scroll-view class="scroll-view_H" scroll-x>
+					<view class='list' style='width:{{ width }}rpx'>
+						<view bindtap="_selectDate" wx:for="{{ dateArea }}" wx:for-item="item" wx:for-index="index"
+							data-index="{{ index }}" class='listItem {{index==curDateAreaIndex? "current":""}}'>
+							<text class='name'>{{ item.week }}</text>
+							<text class='date'>{{ item.date }}</text>
+						</view>
+					</view>
+				</scroll-view>
+				<view class='time'>
+					<view wx:for="{{ timeArea }}" wx:for-item="timeItem" wx:for-index="timeIndex" data-Tindex="{{ timeIndex }}"
+						bindtap='_selectTime' class='listItem {{ curTimeAreaIndex==timeIndex? "current":"" }}'>
+						<text>{{ timeItem.time }}</text>
+						<text>{{ timeItem.tip }}</text>
+					</view>
+				</view>
+
+			</view>
+		</scroll-view>
+
+		<view class="bottominfo">
+			<view class="wrapper">
+				<button bindtap="_addToCart" class='btn bg-main'>确定</button>
+			</view>
+		</view>
+
+	</view>
+</view>
