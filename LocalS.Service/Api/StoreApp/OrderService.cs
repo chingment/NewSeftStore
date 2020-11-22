@@ -296,9 +296,29 @@ namespace LocalS.Service.Api.StoreApp
                 var orderBlock_Mall = new OrderBlockModel();
                 orderBlock_Mall.TagName = "线上商城";
                 orderBlock_Mall.Skus = skus_Mall;
-                orderBlock_Mall.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
+
+                if (store.SctMode.Contains("T1"))
+                {
+                    orderBlock_Mall.TabMode = E_TabMode.Delivery;
+                    orderBlock_Mall.ReceiveMode = E_ReceiveMode.Delivery;
+                }
+                else if (store.SctMode.Contains("T2"))
+                {
+                    orderBlock_Mall.TabMode = E_TabMode.StoreSelfTake;
+                    orderBlock_Mall.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                }
+                else if (store.SctMode.Contains("T3"))
+                {
+                    orderBlock_Mall.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
+                    orderBlock_Mall.ReceiveMode = receiveMode_Mall;
+                }
+                else
+                {
+                    orderBlock_Mall.TabMode = E_TabMode.Delivery;
+                    orderBlock_Mall.ReceiveMode = E_ReceiveMode.Delivery;
+                }
+
                 orderBlock_Mall.ShopMode = E_SellChannelRefType.Mall;
-                orderBlock_Mall.ReceiveMode = receiveMode_Mall;
                 orderBlock_Mall.Delivery = dliveryModel;
                 orderBlock_Mall.SelfTake.StoreName = store.Name;
                 orderBlock_Mall.SelfTake.StoreAddress = store.Address;

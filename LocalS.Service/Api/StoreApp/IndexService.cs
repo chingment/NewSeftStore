@@ -17,14 +17,33 @@ namespace LocalS.Service.Api.StoreApp
 
             var result = new CustomJsonResult<RetIndexPageData>();
 
+            var store = BizFactory.Store.GetOne(rup.StoreId);
+
+            if (store == null || store.IsDelete)
+            {
+                return new CustomJsonResult<RetIndexPageData>(ResultType.Failure, ResultCode.Failure2NoExsit, "无效店铺", null);
+            }
+
             var ret = new RetIndexPageData();
 
             string storeId = rup.StoreId;
 
 
+            if (store.SctMode.Contains("K"))
+            {
+                ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Machine, Name = "线下机器", Selected = false });
+            }
 
-            ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Machine, Name = "线下机器", Selected = false });
-            ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Mall, Name = "线上商城", Selected = false });
+            if (store.SctMode.Contains("F"))
+            {
+                ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Mall, Name = "线上商城", Selected = false });
+            }
+
+            //若没有，默认添加一个线上商城
+            if (ret.ShopModes.Count == 0)
+            {
+                ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Mall, Name = "线上商城", Selected = false });
+            }
 
             if (rup.ShopMode == E_SellChannelRefType.Unknow)
             {
@@ -32,19 +51,20 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                ret.ShopModes.Where(m => m.Id == rup.ShopMode).First().Selected = true;
+                var shopMode = ret.ShopModes.Where(m => m.Id == rup.ShopMode).FirstOrDefault();
+                if (shopMode == null)
+                {
+                    ret.ShopModes[0].Selected = true;
+                }
+                else
+                {
+                    ret.ShopModes.Where(m => m.Id == rup.ShopMode).First().Selected = true;
+                }
             }
 
 
             rup.ShopMode = ret.ShopModes.Where(m => m.Selected == true).First().Id;
 
-
-            var store = BizFactory.Store.GetOne(rup.StoreId);
-
-            if (store == null || store.IsDelete)
-            {
-                return new CustomJsonResult<RetIndexPageData>(ResultType.Failure, ResultCode.Failure2NoExsit, "无效店铺", null);
-            }
 
             var storeModel = new StoreModel();
             storeModel.Id = store.StoreId;

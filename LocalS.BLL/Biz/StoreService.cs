@@ -38,6 +38,7 @@ namespace LocalS.BLL.Biz
             model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();
             model.SellMachineIds = merchMachines.Where(m => m.IsStopUse == false).Select(m => m.MachineId).ToArray();
             model.IsTestMode = store.IsTestMode;
+            model.SctMode = store.SctMode;
             return model;
         }
 

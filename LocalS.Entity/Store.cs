@@ -37,10 +37,10 @@ namespace LocalS.Entity
         public bool IsTestMode { get; set; }
 
 
-        //店铺模式
-        //线上商城 F
-        //线下机器 K 
-        //线上商城+线下机器 FK
+        //店铺模式  T1：配送，T2:店铺自取，T3:配送+店铺自取
+        //线上商城 F+(Tn)
+        //线下机器 K +(Tn)
+        //线上商城+线下机器 FK+(Tn)
         public string SctMode { get; set; }
     }
 }
