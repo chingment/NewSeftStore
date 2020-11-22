@@ -41,7 +41,7 @@ Component({
     curDateAreaIndex: 0,
     curTimeAreaIndex: 0,
     dateArea: [{
-        week: '今日',
+        week: '今天',
         date: '2020-11-22',
         status: 1,
         tip: "xxx",
@@ -60,10 +60,27 @@ Component({
           type: 1,
           status: "1",
           tip: "约满"
-        }]
+        },
+        {
+          time: "1:00-2:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }, {
+          time: "2:00-3:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }, {
+          time: "4:00-4:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }
+      ]
       },
       {
-        week: '明日',
+        week: '明天',
         date: '2020-11-23',
         status: 1,
         tip: "xxxx",
@@ -71,7 +88,73 @@ Component({
           time: "4:00-5:00",
           type: 1,
           status: "1",
+          tip: "约满2"
+        }, {
+          time: "6:00-7:00",
+          type: 1,
+          status: "1",
           tip: "约满"
+        }, {
+          time: "8:00-9:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }]
+      },
+      {
+        week: '明天',
+        date: '2020-11-24',
+        status: 1,
+        tip: "xxxx",
+        timeArea: [{
+          time: "4:00-5:00",
+          type: 1,
+          status: "1",
+          tip: "约满3"
+        }, {
+          time: "6:00-7:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }, {
+          time: "8:00-9:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }]
+      },
+      {
+        week: '明天',
+        date: '2020-11-25',
+        status: 1,
+        tip: "xxxx",
+        timeArea: [{
+          time: "4:00-5:00",
+          type: 1,
+          status: "1",
+          tip: "约满4"
+        }, {
+          time: "6:00-7:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }, {
+          time: "8:00-9:00",
+          type: 1,
+          status: "1",
+          tip: "约满"
+        }]
+      },
+      {
+        week: '明天',
+        date: '2020-11-23',
+        status: 1,
+        tip: "xxxx",
+        timeArea: [{
+          time: "4:00-5:00",
+          type: 1,
+          status: "1",
+          tip: "约满5"
         }, {
           time: "6:00-7:00",
           type: 1,
@@ -137,12 +220,13 @@ Component({
     _selectDate: function (e) {
       var _this = this
       var curDateAreaIndex = e.currentTarget.dataset.index
+      console.log('curDateAreaIndex>>'+curDateAreaIndex)
       var timeArea = _this.data.dateArea[curDateAreaIndex].timeArea
       _this.setData({
         curDateAreaIndex: curDateAreaIndex,
         timeArea: timeArea
       })
-      _this._getSelectBookTime()
+       _this._getSelectBookTime()
     },
     _selectTime: function (e) {
       var _this = this

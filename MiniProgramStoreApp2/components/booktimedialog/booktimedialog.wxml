@@ -1,3 +1,5 @@
+<wxs module="filters" src="booktimedialog.wxs"></wxs>
+
 <view class="booktimeDialog" wx:if="{{myShow}}" catchtouchmove="ture">
 	<view class='content' animation='{{myAnimationData}}'>
 		<view class='closeinfo' bindtap='_dialogClose'>
@@ -17,11 +19,33 @@
 					</view>
 				</scroll-view>
 				<view class='time'>
-					<view wx:for="{{ timeArea }}" wx:for-item="timeItem" wx:for-index="timeIndex" data-Tindex="{{ timeIndex }}"
+
+					<!-- <block wx:for="{{timeArea}}" wx:for-index="timeIndex" wx:for-item="timeItem" wx:key="timeIndex">
+
+
+						<view   data-Tindex="{{timeIndex}}"
 						bindtap='_selectTime' class='listItem {{ curTimeAreaIndex==timeIndex? "current":"" }}'>
 						<text>{{ timeItem.time }}</text>
 						<text>{{ timeItem.tip }}</text>
 					</view>
+
+					</block> -->
+
+					<block wx:for="{{timeArea.length%4?filters.toFix(timeArea.length/4)+1:timeArea.length/4}}" wx:for-index="i"
+						wx:for-key="{{i}}" wx:key="i">
+						<view class="time-row">
+							<block wx:for="{{4}}" wx:for-index="j" wx:for-item="{{item_j}}" wx:for-key="key_j" wx:key="j">
+								<view wx:if="{{timeArea[i*4+j].time}}" bindtap='_selectTime' data-Tindex="{{i*4+j}}" class='time-item'>
+									<view class='screen-data {{ curTimeAreaIndex==(i*4+j)? "current":"" }}'>
+										<text>{{ timeArea[i*4+j].time }}</text>
+										<text>{{ timeArea[i*4+j].tip }}</text>
+									</view>
+								</view>
+							</block>
+						</view>
+					</block>
+
+
 				</view>
 
 			</view>
