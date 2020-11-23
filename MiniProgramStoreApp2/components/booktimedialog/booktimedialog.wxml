@@ -1,11 +1,9 @@
 <wxs module="filters" src="booktimedialog.wxs"></wxs>
 
-<view class="booktimeDialog" wx:if="{{myShow}}" catchtouchmove="ture">
+<view class="booktimeDialog" wx:if="{{myShow}}">
 	<view class='content' animation='{{myAnimationData}}'>
 		<view class='closeinfo' bindtap='_dialogClose'>
-
 			<image class="img" src='/content/default/images/icon_close.png'></image>
-
 		</view>
 		<scroll-view class="contentinfo" scroll-y="true">
 			<view class="wrapper">

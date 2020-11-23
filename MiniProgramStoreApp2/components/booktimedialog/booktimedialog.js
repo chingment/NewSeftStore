@@ -41,13 +41,16 @@ Component({
         duration: 200,
         timingFunction: 'linear'
       })
+
       animation.translateY(500).step()
+      
       _this.setData({
         myAnimationData: animation.export(),
         myShow: true,
         isShow: true,
         myStop: false
       })
+
       setTimeout(function () {
         animation.translateY(0).step()
         _this.setData({
@@ -55,20 +58,18 @@ Component({
         })
       }, 200)
 
-
-
       apiOrder.buildBookTimeArea({
         appCaller: 1
       }).then(function (res) {
         if (res.result == 1) {
 
-          var d=res.data
+          var d = res.data
 
-          var dateArea=d.dateArea
-          var timeArea=dateArea[0].timeArea
+          var dateArea = d.dateArea
+          var timeArea = dateArea[0].timeArea
           _this.setData({
-            dateArea:dateArea,
-            timeArea:timeArea,
+            dateArea: dateArea,
+            timeArea: timeArea,
             width: 186 * parseInt(dateArea.length - _this.data.curDateAreaIndex <= 7 ? dateArea.length : 7)
           })
 
@@ -79,6 +80,7 @@ Component({
     },
     _dialogClose: function (e) {
       var _this = this;
+
       var animation = wx.createAnimation({
         duration: 500,
         timingFunction: 'linear'
@@ -86,14 +88,14 @@ Component({
       animation.translateY(500).step()
       _this.setData({
         myAnimationData: animation.export()
-      });
+      })
       setTimeout(function () {
         _this.setData({
           myShow: false,
           isShow: false,
-          myStop: true,
+          myStop: true
         })
-      }, 500)
+      }, 200)
     },
     _selectDate: function (e) {
       var _this = this
