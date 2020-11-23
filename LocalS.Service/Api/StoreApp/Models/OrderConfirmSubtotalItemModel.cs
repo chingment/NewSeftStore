@@ -56,6 +56,7 @@ namespace LocalS.Service.Api.StoreApp
 
     public class BookTimeModel
     {
+        public string Week { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
         public string Type { get; set; }

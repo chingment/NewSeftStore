@@ -142,6 +142,7 @@ namespace LocalS.Service.Api.StoreApp
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
             E_ReceiveMode receiveMode_Mall = E_ReceiveMode.Delivery;
+            BookTimeModel bookTimeModel = new BookTimeModel();
             if (rop.OrderIds == null || rop.OrderIds.Count == 0)
             {
 
@@ -204,16 +205,16 @@ namespace LocalS.Service.Api.StoreApp
 
                 var orders = CurrentDb.Order.Where(m => rop.OrderIds.Contains(m.Id)).ToList();
 
-                var orderSub_Mall = orders.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
-                if (orderSub_Mall != null)
+                var orderByMall = orders.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                if (orderByMall != null)
                 {
-                    receiveMode_Mall = orderSub_Mall.ReceiveMode;
+                    receiveMode_Mall = orderByMall.ReceiveMode;
 
                     dliveryModel.Id = "";
 
-                    if (string.IsNullOrEmpty(orderSub_Mall.Receiver))
+                    if (string.IsNullOrEmpty(orderByMall.Receiver))
                     {
-                        var clientDeliveryAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == orderSub_Mall.ClientUserId && m.IsDelete == false).OrderByDescending(m => m.IsDefault).FirstOrDefault();
+                        var clientDeliveryAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == orderByMall.ClientUserId && m.IsDelete == false).OrderByDescending(m => m.IsDefault).FirstOrDefault();
                         if (clientDeliveryAddress != null)
                         {
                             dliveryModel.Id = clientDeliveryAddress.Id;
@@ -227,11 +228,11 @@ namespace LocalS.Service.Api.StoreApp
                     }
                     else
                     {
-                        dliveryModel.Consignee = orderSub_Mall.Receiver;
-                        dliveryModel.PhoneNumber = orderSub_Mall.ReceiverPhoneNumber;
-                        dliveryModel.AreaCode = orderSub_Mall.ReceptionAreaCode;
-                        dliveryModel.AreaName = orderSub_Mall.ReceptionAreaName;
-                        dliveryModel.Address = orderSub_Mall.ReceptionAddress;
+                        dliveryModel.Consignee = orderByMall.Receiver;
+                        dliveryModel.PhoneNumber = orderByMall.ReceiverPhoneNumber;
+                        dliveryModel.AreaCode = orderByMall.ReceptionAreaCode;
+                        dliveryModel.AreaName = orderByMall.ReceptionAreaName;
+                        dliveryModel.Address = orderByMall.ReceptionAddress;
                         dliveryModel.IsDefault = false;
                     }
                 }
@@ -320,6 +321,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 orderBlock_Mall.ShopMode = E_SellChannelRefType.Mall;
                 orderBlock_Mall.Delivery = dliveryModel;
+                orderBlock_Mall.BookTime = bookTimeModel;
                 orderBlock_Mall.SelfTake.StoreName = store.Name;
                 orderBlock_Mall.SelfTake.StoreAddress = store.Address;
                 orderBlock.Add(orderBlock_Mall);
