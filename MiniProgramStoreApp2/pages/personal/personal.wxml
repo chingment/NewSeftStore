@@ -58,7 +58,7 @@
 				</div>
 				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000" class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_pickup.png'></image>
-					<text class='item-title'>待取货</text>
+					<text class='item-title'>待取/待收</text>
 				</div>
 				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000" class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_complete.png'></image>

@@ -43,7 +43,6 @@ namespace LocalS.Service.Api.Account
                         {
                             sysMenus = sysMenus.Where(m => m.BelongMctMode != "K").ToList();
                         }
-
                     }
                 }
 

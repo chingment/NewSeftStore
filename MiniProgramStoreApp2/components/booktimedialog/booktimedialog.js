@@ -46,38 +46,38 @@ Component({
         status: 1,
         tip: "xxx",
         timeArea: [{
-          time: "1:00-2:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "2:00-3:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "4:00-4:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        },
-        {
-          time: "1:00-2:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "2:00-3:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "4:00-4:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }
-      ]
+            time: "1:00-2:00",
+            type: 1,
+            status: "1",
+            tip: "约满"
+          }, {
+            time: "2:00-3:00",
+            type: 1,
+            status: "1",
+            tip: "约满"
+          }, {
+            time: "4:00-4:00",
+            type: 1,
+            status: "1",
+            tip: "约满"
+          },
+          {
+            time: "1:00-2:00",
+            type: 1,
+            status: "1",
+            tip: "约满"
+          }, {
+            time: "2:00-3:00",
+            type: 1,
+            status: "1",
+            tip: "约满"
+          }, {
+            time: "4:00-4:00",
+            type: 1,
+            status: "1",
+            tip: "约满"
+          }
+        ]
       },
       {
         week: '明天',
@@ -220,13 +220,21 @@ Component({
     _selectDate: function (e) {
       var _this = this
       var curDateAreaIndex = e.currentTarget.dataset.index
-      console.log('curDateAreaIndex>>'+curDateAreaIndex)
+      console.log('curDateAreaIndex>>' + curDateAreaIndex)
       var timeArea = _this.data.dateArea[curDateAreaIndex].timeArea
+
+      var curTimeAreaIndex = _this.data.curTimeAreaIndex
+
+      if (curTimeAreaIndex >= timeArea.length) {
+        curTimeAreaIndex = 0
+      }
+
       _this.setData({
         curDateAreaIndex: curDateAreaIndex,
+        curTimeAreaIndex: curTimeAreaIndex,
         timeArea: timeArea
       })
-       _this._getSelectBookTime()
+      _this._getSelectBookTime()
     },
     _selectTime: function (e) {
       var _this = this

@@ -42,7 +42,7 @@ Page({
           items: []
         }
       }, {
-        name: "待取货",
+        name: "待取/待收",
         selected: false,
         status: 3000,
         list: {

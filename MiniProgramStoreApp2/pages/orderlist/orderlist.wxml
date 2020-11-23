@@ -4,7 +4,7 @@
 			<view class="tabbar-items" style="width:100%">
 				<view class="container" style="display:flex;width:100%">
 					<block wx:for-items="{{tabs}}" wx:for-item="item" wx:key="index">
-						<view id="{{index}}" style="width:100%;flex:1;" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
+						<view id="{{index}}" style="width:100%;flex:1;font-size:30rpx" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
 							<view class="title">{{item.name}}</view>
 							<view class='seleced-bottom'></view>
 

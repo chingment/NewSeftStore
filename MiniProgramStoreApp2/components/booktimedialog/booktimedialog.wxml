@@ -11,7 +11,7 @@
 			<view class="wrapper">
 				<scroll-view class="scroll-view_H" scroll-x>
 					<view class='list' style='width:{{ width }}rpx'>
-						<view bindtap="_selectDate" wx:for="{{ dateArea }}" wx:for-item="item" wx:for-index="index"
+						<view bindtap="_selectDate" wx:for="{{ dateArea }}" wx:for-item="item" wx:for-index="index" wx:for-key="{{key_index}}" wx:key="index"
 							data-index="{{ index }}" class='listItem {{index==curDateAreaIndex? "current":""}}'>
 							<text class='name'>{{ item.week }}</text>
 							<text class='date'>{{ item.date }}</text>
@@ -44,8 +44,6 @@
 							</block>
 						</view>
 					</block>
-
-
 				</view>
 
 			</view>
