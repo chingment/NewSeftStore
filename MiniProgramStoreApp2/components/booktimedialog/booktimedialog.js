@@ -12,7 +12,6 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
-        console.log('sss')
         if (newVal) {
           this._dialogOpen()
         } else {
@@ -43,7 +42,7 @@ Component({
       })
 
       animation.translateY(500).step()
-      
+
       _this.setData({
         myAnimationData: animation.export(),
         myShow: true,
@@ -66,7 +65,7 @@ Component({
           var d = res.data
 
           var dateArea = d.dateArea
-          var timeArea = dateArea[0].timeArea
+          var timeArea = dateArea[_this.data.curDateAreaIndex].timeArea
           _this.setData({
             dateArea: dateArea,
             timeArea: timeArea,
