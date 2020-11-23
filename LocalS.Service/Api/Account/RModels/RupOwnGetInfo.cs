@@ -10,5 +10,7 @@ namespace LocalS.Service.Api.Account
     {
         public string WebSite { get; set; }
 
+        public string Token { get; set; }
+
     }
 }

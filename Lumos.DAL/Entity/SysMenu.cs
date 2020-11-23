@@ -29,6 +29,7 @@ namespace Lumos.DbRelay
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
         public Enumeration.BelongSite BelongSite { get; set; }
+        public string BelongMctMode { get; set; }
         public bool IsRouter { get; set; }
         public bool IsSidebar { get; set; }
         public bool IsNavbar { get; set; }

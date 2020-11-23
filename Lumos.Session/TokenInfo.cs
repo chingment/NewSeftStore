@@ -9,5 +9,6 @@ namespace Lumos.Session
         public string UserName { get; set; }
         public string BelongId { get; set; }
         public Enumeration.BelongType BelongType { get; set; }
+        public string MctMode { get; set; }
     }
 }

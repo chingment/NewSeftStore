@@ -35,10 +35,15 @@ namespace LocalS.Service.Api.Account
 
                 if (belongSite == Enumeration.BelongSite.Merch)
                 {
-                    if (mctMode.IndexOf("K") < 0)
+                    if (!string.IsNullOrEmpty(mctMode))
                     {
-                        string[] isNots = new string[2] { "我的机器", "机器自提"};
-                        sysMenus = sysMenus.Where(m => !isNots.Contains(m.Title)).ToList();
+                        mctMode = (mctMode.Replace("M", "")).Replace("S", "");
+
+                        if (mctMode == "F")
+                        {
+                            sysMenus = sysMenus.Where(m => m.BelongMctMode != "K").ToList();
+                        }
+
                     }
                 }
 
@@ -151,9 +156,15 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
+                var merch = CurrentDb.Merch.Where(m => m.Id == merchUser.MerchId).FirstOrDefault();
+                if (merch == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该商户不存在");
+                }
+
                 tokenInfo.BelongId = merchUser.MerchId;
                 tokenInfo.BelongType = Enumeration.BelongType.Merch;
-
+                tokenInfo.MctMode = merch.MctMode;
                 MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
@@ -657,22 +668,9 @@ namespace LocalS.Service.Api.Account
                         ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
                         break;
                     case "merch":
-
-                        string mctMode = "";
-
-                        var sysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == userId).FirstOrDefault();
-                        if (sysMerchUser != null)
-                        {
-                            var merch = CurrentDb.Merch.Where(m => m.Id == sysMerchUser.MerchId).FirstOrDefault();
-                            if (merch != null)
-                            {
-
-                                mctMode = merch.MctMode;
-                            }
-
-                        }
-                        ret.MctMode = mctMode;
-                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId, mctMode);
+                        var tokenInfo = SSOUtil.GetTokenInfo(rup.Token);
+                        ret.MctMode = tokenInfo.MctMode;
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId, tokenInfo.MctMode);
                         ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
                         break;
                 }
