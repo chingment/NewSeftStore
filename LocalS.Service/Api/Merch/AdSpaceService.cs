@@ -40,9 +40,23 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+
+            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+
             var query = (from u in CurrentDb.AdSpace
                          select new { u.Id, u.Name, u.Description, u.CreateTime });
 
+
+
+            if (!merch.MctMode.Contains("K"))
+            {
+                query = query.Where(m => m.Id != E_AdSpaceId.MachineHomeBanner);
+            }
+
+            if (!merch.MctMode.Contains("F"))
+            {
+                query = query.Where(m => m.Id != E_AdSpaceId.AppHomeTopBanner);
+            }
 
             int total = query.Count();
 

@@ -17,7 +17,8 @@ namespace LocalS.Service.Api.StoreApp
 
             var result = new CustomJsonResult<RetIndexPageData>();
 
-            var store = BizFactory.Store.GetOne(rup.StoreId);
+
+            var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
             if (store == null || store.IsDelete)
             {
@@ -67,14 +68,14 @@ namespace LocalS.Service.Api.StoreApp
 
 
             var storeModel = new StoreModel();
-            storeModel.Id = store.StoreId;
+            storeModel.Id = store.Id;
             storeModel.Name = store.Name;
             storeModel.Address = store.Address;
 
 
             ret.Store = storeModel;
 
-            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == store.MerchId && m.AdSpaceId == E_AdSpaceId.AppHomeTopBanner && m.BelongType == E_AdSpaceBelongType.App && m.BelongId == store.StoreId).Select(m => m.AdContentId).ToArray();
+            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == store.MerchId && m.AdSpaceId == E_AdSpaceId.AppHomeTopBanner && m.BelongType == E_AdSpaceBelongType.App && m.BelongId == store.Id).Select(m => m.AdContentId).ToArray();
 
             var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
 
@@ -95,7 +96,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var pdAreaModel = new PdAreaModel();
 
-            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == store.Id && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
             foreach (var prdKind in prdKinds)
             {

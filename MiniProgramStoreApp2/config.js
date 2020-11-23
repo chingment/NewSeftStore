@@ -35,6 +35,7 @@ var config = {
     orderReserve: `${host}/Order/Reserve`,
     orderBuildPayParams: `${host}/Order/BuildPayParams`,
     orderBuildPayOptions: `${host}/Order/BuildPayOptions`,
+    orderBuildBookTimeArea: `${host}/Order/BuildBookTimeArea`,
     orderList: `${host}/Order/List`,
     orderCancle: `${host}/Order/Cancle`,
     orderDetails: `${host}/Order/Details`,

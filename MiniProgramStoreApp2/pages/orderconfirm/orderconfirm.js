@@ -340,7 +340,7 @@ Page({
       }
     })
   },
-  getselectbooktime: function (e) {
+  getSelectBookTime: function (e) {
     var _this = this;
     var d = e.detail.params
 

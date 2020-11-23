@@ -274,6 +274,8 @@
     <Compile Include="Api\Merch\AdminUserService.cs" />
     <Compile Include="Api\StoreApp\GlobalService.cs" />
     <Compile Include="Api\StoreApp\Models\BannerModel.cs" />
+    <Compile Include="Api\StoreApp\Models\BookTimeDateAreaModel.cs" />
+    <Compile Include="Api\StoreApp\Models\BookTimeTimeAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderReceiptTimeAxis.cs" />
     <Compile Include="Api\StoreApp\RModels\RetProductInitSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetSearchTobeSearch.cs" />
@@ -304,6 +307,7 @@
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildPayOptions.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderReceiptTimeAxis.cs" />
     <Compile Include="Api\StoreApp\RModels\RupPersonalPageData.cs" />

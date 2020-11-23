@@ -174,9 +174,6 @@ namespace WebApiStoreApp.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
         }
 
-
-
-
         [HttpGet]
         public OwnApiHttpResponse ReceiptTimeAxis([FromUri]RupOrderReceiptTimeAxis rup)
         {
@@ -193,6 +190,13 @@ namespace WebApiStoreApp.Controllers
             LogUtil.Info("接收支付结果:" + content);
 
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("success", Encoding.UTF8, "text/plain") };
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse BuildBookTimeArea([FromUri]RupOrderBuildBookTimeArea rup)
+        {
+            IResult result = StoreAppServiceFactory.Order.BuildBookTimeArea(this.CurrentUserId, this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
         }
 
     }

@@ -51,8 +51,16 @@ function buildPayParams(params) {
 
 function buildPayOptions(urlParams) {
 
- return lumos.getJson({
+  return lumos.getJson({
     url: config.apiUrl.orderBuildPayOptions,
+    urlParams: urlParams
+  })
+}
+
+function buildBookTimeArea(urlParams) {
+
+  return lumos.getJson({
+    url: config.apiUrl.orderBuildBookTimeArea,
     urlParams: urlParams
   })
 }
@@ -60,18 +68,19 @@ function buildPayOptions(urlParams) {
 function receiptTimeAxis(urlParams) {
 
   return lumos.getJson({
-     url: config.apiUrl.orderReceiptTimeAxis,
-     urlParams: urlParams
-   })
- }
+    url: config.apiUrl.orderReceiptTimeAxis,
+    urlParams: urlParams
+  })
+}
 
 module.exports = {
   confirm: confirm,
   reserve: reserve,
   list: list,
   details: details,
-  receiptTimeAxis:receiptTimeAxis,
+  receiptTimeAxis: receiptTimeAxis,
   cancle: cancle,
   buildPayParams: buildPayParams,
-  buildPayOptions: buildPayOptions
+  buildPayOptions: buildPayOptions,
+  buildBookTimeArea: buildBookTimeArea
 }

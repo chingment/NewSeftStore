@@ -1,6 +1,6 @@
 const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
-const apiCart = require('../../api/cart.js')
+const apiOrder = require('../../api/order.js')
 const storeage = require('../../utils/storeageutil.js')
 
 Component({
@@ -12,23 +12,12 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
+        console.log('sss')
         if (newVal) {
           this._dialogOpen()
         } else {
           this._dialogClose()
         }
-      }
-    },
-    dataS: {
-      type: Object,
-      value: {},
-      observer: function (newVal, oldVal) {
-        if (newVal == null)
-          return
-        console.log('newVal:' + newVal)
-        this.setData({
-          myCart: newVal
-        })
       }
     }
   },
@@ -36,139 +25,11 @@ Component({
     myAnimationData: {},
     myShow: false,
     myStop: true,
-    calendar: [],
     width: 0,
     curDateAreaIndex: 0,
     curTimeAreaIndex: 0,
-    dateArea: [{
-        week: '今天',
-        date: '2020-11-22',
-        status: 1,
-        tip: "xxx",
-        timeArea: [{
-            time: "1:00-2:00",
-            type: 1,
-            status: "1",
-            tip: "约满"
-          }, {
-            time: "2:00-3:00",
-            type: 1,
-            status: "1",
-            tip: "约满"
-          }, {
-            time: "4:00-4:00",
-            type: 1,
-            status: "1",
-            tip: "约满"
-          },
-          {
-            time: "1:00-2:00",
-            type: 1,
-            status: "1",
-            tip: "约满"
-          }, {
-            time: "2:00-3:00",
-            type: 1,
-            status: "1",
-            tip: "约满"
-          }, {
-            time: "4:00-4:00",
-            type: 1,
-            status: "1",
-            tip: "约满"
-          }
-        ]
-      },
-      {
-        week: '明天',
-        date: '2020-11-23',
-        status: 1,
-        tip: "xxxx",
-        timeArea: [{
-          time: "4:00-5:00",
-          type: 1,
-          status: "1",
-          tip: "约满2"
-        }, {
-          time: "6:00-7:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "8:00-9:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }]
-      },
-      {
-        week: '明天',
-        date: '2020-11-24',
-        status: 1,
-        tip: "xxxx",
-        timeArea: [{
-          time: "4:00-5:00",
-          type: 1,
-          status: "1",
-          tip: "约满3"
-        }, {
-          time: "6:00-7:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "8:00-9:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }]
-      },
-      {
-        week: '明天',
-        date: '2020-11-25',
-        status: 1,
-        tip: "xxxx",
-        timeArea: [{
-          time: "4:00-5:00",
-          type: 1,
-          status: "1",
-          tip: "约满4"
-        }, {
-          time: "6:00-7:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "8:00-9:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }]
-      },
-      {
-        week: '明天',
-        date: '2020-11-23',
-        status: 1,
-        tip: "xxxx",
-        timeArea: [{
-          time: "4:00-5:00",
-          type: 1,
-          status: "1",
-          tip: "约满5"
-        }, {
-          time: "6:00-7:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }, {
-          time: "8:00-9:00",
-          type: 1,
-          status: "1",
-          tip: "约满"
-        }]
-      }
-    ],
-    timeArea: null
+    dateArea: [],
+    timeArea: []
   },
   methods: {
     _dialogOpen: function (e) {
@@ -194,10 +55,27 @@ Component({
         })
       }, 200)
 
-      _this.setData({
-        timeArea: _this.data.dateArea[_this.data.curDateAreaIndex].timeArea,
-        width: 186 * parseInt(_this.data.dateArea.length - _this.data.curDateAreaIndex <= 7 ? _this.data.dateArea.length : 7)
+
+
+      apiOrder.buildBookTimeArea({
+        appCaller: 1
+      }).then(function (res) {
+        if (res.result == 1) {
+
+          var d=res.data
+
+          var dateArea=d.dateArea
+          var timeArea=dateArea[0].timeArea
+          _this.setData({
+            dateArea:dateArea,
+            timeArea:timeArea,
+            width: 186 * parseInt(dateArea.length - _this.data.curDateAreaIndex <= 7 ? dateArea.length : 7)
+          })
+
+        }
       })
+
+
     },
     _dialogClose: function (e) {
       var _this = this;
@@ -248,7 +126,7 @@ Component({
       var _this = this
       var curDate = _this.data.dateArea[_this.data.curDateAreaIndex]
       var curTime = _this.data.timeArea[_this.data.curTimeAreaIndex]
-      this.triggerEvent('getselectbooktime', {
+      this.triggerEvent('getSelectBookTime', {
         params: {
           week: curDate.week,
           date: curDate.date,

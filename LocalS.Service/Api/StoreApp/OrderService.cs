@@ -735,5 +735,68 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+
+        public CustomJsonResult BuildBookTimeArea(string operater, string clientUserId, RupOrderBuildBookTimeArea rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetOrderBuildBookTimeArea();
+
+            DateTime startTime = DateTime.Now;
+            //DateTime endTime=
+
+            for (int i = 0; i < 7; i++)
+            {
+                DateTime dateTime = DateTime.Now.AddDays(i);
+
+                var dateArea = new BookTimeDateAreaModel();
+
+                if ((dateTime - startTime).TotalDays == 0)
+                {
+                    dateArea.Week = "今天";
+                }
+                else if ((dateTime - startTime).TotalDays == 1)
+                {
+                    dateArea.Week = "明天";
+                }
+                else if ((dateTime - startTime).TotalDays == 2)
+                {
+                    dateArea.Week = "后天";
+                }
+                else
+                {
+                    dateArea.Week = Lumos.CommonUtil.GetCnWeekDayName(dateTime);
+                }
+
+                dateArea.Date = dateTime.ToUnifiedFormatDate();
+                dateArea.Value = dateTime.ToUnifiedFormatDate();
+                dateArea.Status = 1;
+                dateArea.Tip = "";
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "8:00", Tip = "", Status = 1, Value = "8:00", Type = 1 });
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "8:30", Tip = "", Status = 1, Value = "8:30", Type = 1 });
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "9:00", Tip = "", Status = 1, Value = "9:00", Type = 1 });
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "9:30", Tip = "", Status = 1, Value = "9:30", Type = 1 });
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "10:00", Tip = "", Status = 1, Value = "10:00", Type = 1 });
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "10:30", Tip = "", Status = 1, Value = "10:30", Type = 1 });
+
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "11:30", Tip = "", Status = 1, Value = "11:30", Type = 1 });
+
+
+                ret.DateArea.Add(dateArea);
+
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
     }
 }
