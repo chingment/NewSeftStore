@@ -49,7 +49,7 @@
 }
 
 .cumUpDialog .contentinfo .wrapper {
-  padding: 25rpx;
+  padding:0 25rpx;
 }
 
 .cumUpDialog .bottominfo {
@@ -121,7 +121,6 @@ scroll-view .current text {
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 0 auto;
-  margin-top: 30rpx;
 }
 
 .time-row {
