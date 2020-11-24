@@ -526,6 +526,37 @@ namespace LocalS.BLL.Biz
                                     order.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
                                     order.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
                                     order.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
+
+
+                                    if (shopModeByMall.BookTime != null && !string.IsNullOrEmpty(shopModeByMall.BookTime.Value))
+                                    {
+                                        //1为具体时间值 例如 2020-11-24 13:00
+                                        //2为时间段区间 例如 2020-11-24 13:00,2020-11-24 13:00
+                                        if (shopModeByMall.BookTime.Type == 1)
+                                        {
+                                            if (Lumos.CommonUtil.IsDateTime(shopModeByMall.BookTime.Value))
+                                            {
+                                                order.BookStartTime = DateTime.Parse(shopModeByMall.BookTime.Value);
+                                            }
+                                        }
+                                        else if (shopModeByMall.BookTime.Type == 2)
+                                        {
+                                            string[] arr_time = shopModeByMall.BookTime.Value.Split(',');
+                                            if (arr_time.Length == 2)
+                                            {
+                                                if (Lumos.CommonUtil.IsDateTime(arr_time[0]))
+                                                {
+                                                    order.BookStartTime = DateTime.Parse(arr_time[0]);
+                                                }
+
+                                                if (Lumos.CommonUtil.IsDateTime(arr_time[1]))
+                                                {
+                                                    order.BookEndTime = DateTime.Parse(arr_time[1]);
+                                                }
+                                            }
+
+                                        }
+                                    }
                                 }
 
                                 break;
@@ -1222,7 +1253,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var wxByNt_PayParams = new { PayTransId = payTrans.Id, ParamType="url", ParamData = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var wxByNt_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByNt_PayParams);
                                 #endregion
@@ -1313,7 +1344,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, ParamType="url", ParamData = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
@@ -1346,7 +1377,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
                                 }
 
-                                var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, ParamType="url", ParamData = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
                                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
 
