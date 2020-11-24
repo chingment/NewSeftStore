@@ -129,9 +129,8 @@ Component({
       var curTime = _this.data.timeArea[_this.data.curTimeAreaIndex]
       this.triggerEvent('getSelectBookTime', {
         params: {
-          week: curDate.week,
-          date: curDate.date,
-          time: curTime.time,
+          text: '(' + curDate.week + ')' + curDate.date + ' ' + curTime.time,
+          value: curDate.value + ' ' + curTime.value,
           type: curTime.type
         }
       }, {})

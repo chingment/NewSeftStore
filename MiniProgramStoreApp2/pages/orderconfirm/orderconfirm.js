@@ -141,9 +141,9 @@ Page({
       var _delivery = _blocks[i].delivery
       var _selfTake = _blocks[i].selfTake
 
-      var delivery = null;
-      var selfTake = null;
-
+      var delivery = null
+      var selfTake = null
+      var bookTime = null
       if (_blocks[i].shopMode == 1) {
         if (_blocks[i].receiveMode == 1) {
           if (util.isEmptyOrNull(_delivery.id)) {
@@ -162,11 +162,16 @@ Page({
           }
         } else if (_blocks[i].receiveMode == 2) {
 
-          if (util.isEmptyOrNull(_blocks[i].bookTime.date)) {
+          if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
             toast.show({
               title: '请选择预约时间'
             })
             return
+          }
+
+          bookTime = {
+            type: _blocks[i].bookTime.type,
+            value: _blocks[i].bookTime.value
           }
 
           selfTake = {
@@ -190,6 +195,7 @@ Page({
         receiveMode: _blocks[i].receiveMode,
         delivery: delivery,
         selfTake: selfTake,
+        bookTime: bookTime,
         skus: skus
       })
 
@@ -345,9 +351,9 @@ Page({
     var d = e.detail.params
 
     var booktime = {
-      date: d.date,
-      time: d.time,
-      week: d.week
+      text: d.text,
+      value: d.value,
+      type: d.type
     }
 
     _this.data.blocks[_this.data.booktimeSelectBlockIndex].bookTime = booktime
