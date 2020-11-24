@@ -264,6 +264,18 @@ namespace LocalS.BLL.Biz
 
                     machine.RunStatus = E_MachineRunStatus.Setting;
                     break;
+                case "excepition":
+
+                    eventRemark = string.Format("店铺：{0}，机器：{1}，异常", storeName, machineId);
+
+                    if (machine.RunStatus != E_MachineRunStatus.Setting)
+                    {
+                        isLog = true;
+                    }
+
+                    machine.RunStatus = E_MachineRunStatus.Excepition;
+
+                    break;
                 default:
                     eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineId);
                     break;
