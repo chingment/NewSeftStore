@@ -1,57 +1,74 @@
-.specsdialog{
+.cumUpDialog {
   position: fixed;
   width: 100%;
   left: 0;
   top: 0;
   bottom: 0;
   overflow: hidden;
-  background: rgba(0,0,0,.4);
-  z-index: 1000;
-  }
-  
-  .specsdialog > .content{
-    width: 100%;
-    height: 800rpx;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    z-index: 990;
-    background-color: #fff;
-    border-top-left-radius: 15rpx;
-    border-top-right-radius: 15rpx;
-  }
+  background: rgba(0, 0, 0, .4);
+  z-index: 9999;
+}
 
-  .specsdialog .contentinfo{
-   padding: 0 25rpx;
-   height: 680rpx;
-  }
+.cumUpDialog>.wrapper {
+  width: 100%;
+  height: 800rpx;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: #fff;
+  border-top-left-radius: 15rpx;
+  border-top-right-radius: 15rpx;
+}
 
+.cumUpDialog .topinfo {
+  height: 70rpx;
+}
 
-  .specsdialog .bottominfo{
-    height: 120rpx;
-    width: 100%;
-    background: #fff;
-  }
+.cumUpDialog .topinfo .title {
+  top: 12rpx;
+  left: 25rpx;
+  width: 200rpx;
+  height: 45rpx;
+  line-height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
 
-  .specsdialog .bottominfo > .wrapper{
-    border-top: 3rpx solid #f8f8f8;
-    padding: 15rpx 25rpx;
-    display: flex;
-  }
+.cumUpDialog .topinfo .close {
+  top: 12rpx;
+  right: 15rpx;
+  width: 45rpx;
+  height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
 
-  .specsdialog .bottominfo .btn{
-    width: 100%;
-    color: #f8f8f8;
-  }
+.cumUpDialog .contentinfo {
+  height: 607rpx;
+  padding: 0 25rpx;
+}
 
-  .specsdialog .closeinfo{
-   top: 12rpx;
-   right: 15rpx;
-   width: 45rpx;
-   height: 45rpx;
-   position: fixed;
-   z-index: 999;
- }
+.cumUpDialog .contentinfo .wrapper {
+  padding: 25rpx;
+}
+
+.cumUpDialog .bottominfo {
+  height: 120rpx;
+  width: 100%;
+  background: #fff;
+}
+
+.cumUpDialog .bottominfo>.wrapper {
+  border-top: 3rpx solid #f8f8f8;
+  padding: 15rpx 25rpx;
+  display: flex;
+}
+
+.cumUpDialog .bottominfo .btn {
+  width: 100%;
+  color: #f8f8f8;
+}
 
   .prdinfo{
     display: flex;

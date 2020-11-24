@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "cart": "/components/cart/cart",
+    "cartdialog": "/components/cartdialog/cartdialog",
     "skeleton": "/components/skeleton/skeleton",
     "own-scroll": "/components/ownscroll/ownscroll",
     "specsdialog": "../../components/specsdialog/specsdialog"

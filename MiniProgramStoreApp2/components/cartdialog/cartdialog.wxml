@@ -1,9 +1,12 @@
-<view class="cartdialog" wx:if="{{myShow}}" catchtouchmove="ture">
-	<view class='content' animation='{{myAnimationData}}'>
-		<view class='closeinfo' bindtap='_dialogClose'>
-
-			<image class="img" src='/content/default/images/icon_close.png'></image>
-
+<view class="cumUpDialog" wx:if="{{myShow}}" catchtouchmove="ture">
+	<view class='wrapper' animation='{{myAnimationData}}'>
+		<view class="topinfo">
+		  <view class="title">
+			  购物车
+			</view>
+			<view class='close' bindtap='_dialogClose'>
+				<image class="img" src='/content/default/images/icon_close.png'></image>
+			</view>
 		</view>
 		<scroll-view class="contentinfo" scroll-y="true">
 		  <view class="wrapper">
@@ -68,7 +71,6 @@
 			</block>
 			</view>
 		</scroll-view>
-
 		<view class="bottominfo">
 			<view class="cart-bottom">
 				<view class="it-l">
@@ -82,6 +84,5 @@
 				</view>
 			</view>
 		</view>
-
 	</view>
 </view>

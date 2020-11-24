@@ -1,16 +1,15 @@
-.booktimeDialog{
-position: fixed;
-width: 100%;
-left: 0;
-top: 0;
-bottom: 0;
-overflow: hidden;
-background: rgba(0,0,0,.4);
-z-index: 9999;
+.cumUpDialog {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, .4);
+  z-index: 9999;
 }
 
-
-.booktimeDialog > .content{
+.cumUpDialog>.wrapper {
   width: 100%;
   height: 800rpx;
   position: fixed;
@@ -22,21 +21,21 @@ z-index: 9999;
   border-top-right-radius: 15rpx;
 }
 
-.booktimeDialog .contentinfo{
-  height: 677rpx;
- }
+.cumUpDialog .topinfo {
+  height: 70rpx;
+}
 
- .booktimeDialog  .contentinfo .wrapper{
-  padding: 25rpx;
- }
+.cumUpDialog .topinfo .title {
+  top: 12rpx;
+  left: 25rpx;
+  width: 200rpx;
+  height: 45rpx;
+  line-height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
 
- .booktimeDialog .bottominfo{
-   height: 83rpx;
-   width: 100%;
-   background: #fff;
- }
-
- .booktimeDialog .closeinfo{
+.cumUpDialog .topinfo .close {
   top: 12rpx;
   right: 15rpx;
   width: 45rpx;
@@ -45,36 +44,46 @@ z-index: 9999;
   z-index: 999;
 }
 
-.booktimeDialog .bottominfo{
+.cumUpDialog .contentinfo {
+  height: 607rpx;
+}
+
+.cumUpDialog .contentinfo .wrapper {
+  padding: 25rpx;
+}
+
+.cumUpDialog .bottominfo {
   height: 120rpx;
   width: 100%;
   background: #fff;
 }
 
-.booktimeDialog .bottominfo > .wrapper{
+.cumUpDialog .bottominfo>.wrapper {
   border-top: 3rpx solid #f8f8f8;
   padding: 15rpx 25rpx;
   display: flex;
 }
 
-.booktimeDialog .bottominfo .btn{
+.cumUpDialog .bottominfo .btn {
   width: 100%;
   color: #f8f8f8;
 }
 
 /* pages/orderTime/index.wxss */
-scroll-view{
+scroll-view {
   height: 128rpx;
- 
+
   width: 100%;
 }
-scroll-view .list{
+
+scroll-view .list {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
-    width: 1302rpx; 
+  width: 1302rpx;
 }
-scroll-view .listItem{
+
+scroll-view .listItem {
   text-align: center;
   width: 186rpx;
   height: 128rpx;
@@ -84,22 +93,29 @@ scroll-view .listItem{
   /* float: left; */
   display: inline-block;
 }
-scroll-view .listItem text{
+
+scroll-view .listItem text {
   display: block;
 }
-scroll-view .listItem .name{
-  font-size: 21rpx;
+
+scroll-view .listItem .name {
+  font-size: 24rpx;
 }
-scroll-view .listItem .date{
-  font-size: 21rpx;
+
+scroll-view .listItem .date {
+  margin-top: 5rpx;
+  font-size: 24rpx;
 }
-scroll-view .current{
+
+scroll-view .current {
   background-color: #f18d00;
 }
-scroll-view .current text{
+
+scroll-view .current text {
   color: #fff;
 }
-.time{
+
+.time {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -108,24 +124,25 @@ scroll-view .current text{
   margin-top: 30rpx;
 }
 
-.time-row{
+.time-row {
   display: flex;
-  justify-content:flex-start;
+  justify-content: flex-start;
   width: 100%;
 }
-.time-item{
+
+.time-item {
   margin-top: 24rpx;
   width: 25%;
 }
 
-.time-item .screen-data{
+.time-item .screen-data {
   margin: 12rpx;
   padding: 12rpx;
   text-align: center;
-  border:1px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 8rpx;
 }
 
-.time-item .current{
+.time-item .current {
   background-color: #f18d00;
 }

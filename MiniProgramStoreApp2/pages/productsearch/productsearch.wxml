@@ -1,7 +1,7 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 <specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-<cart id="cart" isShow="{{cartDialog.isShow}}"></cart>
+<cartdialog id="cart" isShow="{{cartDialog.isShow}}"></cartdialog>
 
 <view class="page-ct skeleton">
 

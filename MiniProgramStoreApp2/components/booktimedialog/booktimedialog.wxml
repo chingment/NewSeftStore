@@ -1,16 +1,22 @@
 <wxs module="filters" src="booktimedialog.wxs"></wxs>
 
-<view class="booktimeDialog" wx:if="{{myShow}}">
-	<view class='content' animation='{{myAnimationData}}'>
-		<view class='closeinfo' bindtap='_dialogClose'>
-			<image class="img" src='/content/default/images/icon_close.png'></image>
+<view class="cumUpDialog booktimeDialog" wx:if="{{myShow}}">
+	<view class='wrapper' animation='{{myAnimationData}}'>
+		<view class="topinfo">
+		  <view class="title">
+			  选择时间
+			</view>
+			<view class='close' bindtap='_dialogClose'>
+				<image class="img" src='/content/default/images/icon_close.png'></image>
+			</view>
 		</view>
 		<scroll-view class="contentinfo" scroll-y="true">
 			<view class="wrapper">
 				<scroll-view class="scroll-view_H" scroll-x>
 					<view class='list' style='width:{{ width }}rpx'>
-						<view bindtap="_selectDate" wx:for="{{ dateArea }}" wx:for-item="item" wx:for-index="index" wx:for-key="{{key_index}}" wx:key="index"
-							data-index="{{ index }}" class='listItem {{index==curDateAreaIndex? "current":""}}'>
+						<view bindtap="_selectDate" wx:for="{{ dateArea }}" wx:for-item="item" wx:for-index="index"
+							wx:for-key="{{key_index}}" wx:key="index" data-index="{{ index }}"
+							class='listItem {{index==curDateAreaIndex? "current":""}}'>
 							<text class='name'>{{ item.week }}</text>
 							<text class='date'>{{ item.date }}</text>
 						</view>
@@ -46,7 +52,6 @@
 
 			</view>
 		</scroll-view>
-
 		<view class="bottominfo">
 			<view class="wrapper">
 				<button bindtap="_confirm" class='btn bg-main'>确定</button>

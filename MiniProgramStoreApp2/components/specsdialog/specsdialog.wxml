@@ -1,7 +1,12 @@
-<view class="specsdialog" wx:if="{{myShow}}" catchtouchmove="ture">
-	<view class='content' animation='{{myAnimationData}}'>
-		<view class='closeinfo' bindtap='_dialogClose'>
-			<image class="img" src='/content/default/images/icon_close.png'></image>
+<view class="cumUpDialog specsdialog" wx:if="{{myShow}}" catchtouchmove="ture">
+	<view class='wrapper' animation='{{myAnimationData}}'>
+		<view class="topinfo">
+		  <view class="title">
+			  选择规格
+			</view>
+			<view class='close' bindtap='_dialogClose'>
+				<image class="img" src='/content/default/images/icon_close.png'></image>
+			</view>
 		</view>
 		<view class="contentinfo">
 			<view class="prdinfo">
@@ -53,7 +58,6 @@
 					</view>
 				</view>
 			</scroll-view>
-
 		</view>
 		<view class="bottominfo">
 			<view class="wrapper">
