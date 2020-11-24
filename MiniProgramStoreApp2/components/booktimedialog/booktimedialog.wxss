@@ -70,20 +70,20 @@
 }
 
 /* pages/orderTime/index.wxss */
-scroll-view {
+.scroll-view_H {
   height: 128rpx;
 
   width: 100%;
 }
 
-scroll-view .list {
+.scroll-view_H .list {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
   width: 1302rpx;
 }
 
-scroll-view .listItem {
+.scroll-view_H .listItem {
   text-align: center;
   width: 186rpx;
   height: 128rpx;
@@ -94,24 +94,22 @@ scroll-view .listItem {
   display: inline-block;
 }
 
-scroll-view .listItem text {
+.scroll-view_H .listItem .name {
+  font-size: 24rpx;
   display: block;
 }
 
-scroll-view .listItem .name {
-  font-size: 24rpx;
-}
-
-scroll-view .listItem .date {
+.scroll-view_H .listItem .date {
   margin-top: 5rpx;
   font-size: 24rpx;
+  display: block;
 }
 
-scroll-view .current {
+.scroll-view_H .current {
   background-color: #f18d00;
 }
 
-scroll-view .current text {
+.scroll-view_H .current .name, .scroll-view_H .current .date{
   color: #fff;
 }
 

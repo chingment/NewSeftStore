@@ -1,6 +1,6 @@
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
-<booktimedialog id="booktimeDialog" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}"></booktimedialog>
+<booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}"></booktimedialog>
 
 <!-- <view class='tag-address'>
 	<image class="img" src="/content/default/images/tag_address.png"></image>

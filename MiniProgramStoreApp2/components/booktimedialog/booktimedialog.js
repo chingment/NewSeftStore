@@ -99,7 +99,7 @@ Component({
     _selectDate: function (e) {
       var _this = this
       var curDateAreaIndex = e.currentTarget.dataset.index
-      console.log('curDateAreaIndex>>' + curDateAreaIndex)
+      //console.log('curDateAreaIndex>>' + curDateAreaIndex)
       var timeArea = _this.data.dateArea[curDateAreaIndex].timeArea
 
       var curTimeAreaIndex = _this.data.curTimeAreaIndex
