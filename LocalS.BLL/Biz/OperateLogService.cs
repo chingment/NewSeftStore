@@ -30,6 +30,7 @@ namespace LocalS.BLL.Biz
                     EventHandleByLogout(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, logoutLogModel);
                     break;
                 case EventCode.MachineStatus:
+                    LogUtil.Info(">>>>>MachineStatus");
                     var machineStatusModel = model.EventContent.ToJsonObject<MachineEventByMachineStatusModel>();
                     EventHandleByMachineStatus(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, machineStatusModel);
                     break;
@@ -230,6 +231,7 @@ namespace LocalS.BLL.Biz
 
         private void EventHandleByMachineStatus(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
         {
+            LogUtil.Info(">>>>>EventHandleByMachineStatus");
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);
             string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
@@ -268,7 +270,7 @@ namespace LocalS.BLL.Biz
 
                     eventRemark = string.Format("店铺：{0}，机器：{1}，异常", storeName, machineId);
 
-                    if (machine.RunStatus != E_MachineRunStatus.Setting)
+                    if (machine.RunStatus != E_MachineRunStatus.Excepition)
                     {
                         isLog = true;
                     }
@@ -280,6 +282,8 @@ namespace LocalS.BLL.Biz
                     eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineId);
                     break;
             }
+
+            CurrentDb.SaveChanges();
 
             if (isLog)
             {

@@ -93,13 +93,13 @@ namespace LocalS.BLL.Task
             //机器推送的消息到服务，消息处理
             if (topic.Contains("topic_p_mch"))
             {
-                Dictionary<string, string> msg = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(payload);
+                Dictionary<string, JToken> msg = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, JToken>>(payload);
 
                 if (msg.ContainsKey("type"))
                 {
-                    string type = msg["type"];
+                    string type = msg["type"].ToString();
                     string machineId = topic.Split('/')[1];
-                    string content = msg["content"];
+                    string content = msg["content"].ToString(Newtonsoft.Json.Formatting.None);
                     switch (type)
                     {
                         case "machine_status":
