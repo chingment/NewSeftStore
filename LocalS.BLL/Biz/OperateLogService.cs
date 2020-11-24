@@ -29,9 +29,9 @@ namespace LocalS.BLL.Biz
                     var logoutLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
                     EventHandleByLogout(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, logoutLogModel);
                     break;
-                case EventCode.HeartbeatBag:
-                    var heartbeatBagModel = model.EventContent.ToJsonObject<MachineEventByHeartbeatBagModel>();
-                    EventHandleByHeartbeatBag(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, heartbeatBagModel);
+                case EventCode.MachineStatus:
+                    var machineStatusModel = model.EventContent.ToJsonObject<MachineEventByMachineStatusModel>();
+                    EventHandleByMachineStatus(model.Operater, model.AppId, model.MerchId, model.StoreId, model.MachineId, model.EventCode, model.EventRemark, machineStatusModel);
                     break;
                 case EventCode.Pickup:
                     var pickupModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
@@ -228,7 +228,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
         }
 
-        private void EventHandleByHeartbeatBag(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, MachineEventByHeartbeatBagModel model)
+        private void EventHandleByMachineStatus(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
         {
             string merchName = BizFactory.Merch.GetMerchName(merchId);
             string storeName = BizFactory.Merch.GetStoreName(merchId, storeId);

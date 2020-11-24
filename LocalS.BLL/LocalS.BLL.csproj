@@ -86,7 +86,7 @@
     <Compile Include="Biz\Models\CabinetRowColLayoutByZSModel.cs" />
     <Compile Include="Biz\Models\FingerVeinnerModel.cs" />
     <Compile Include="Biz\Models\MachineEventBaseModel.cs" />
-    <Compile Include="Biz\Models\MachineEventByHeartbeatBagModel.cs" />
+    <Compile Include="Biz\Models\MachineEventByMachineStatusModel.cs" />
     <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />
     <Compile Include="Biz\Models\MachineEventByScanSlotsModel.cs" />
     <Compile Include="Biz\Models\MachineInfoModel.cs" />

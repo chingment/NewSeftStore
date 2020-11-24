@@ -232,6 +232,8 @@ Component({
           list.pageSize = d.pageSize
           list.pageCount = d.pageCount
           list.pageIndex = d.pageIndex
+
+
           list.items = items;
 
           _this.data.tabs[currentTabIndex].list = list

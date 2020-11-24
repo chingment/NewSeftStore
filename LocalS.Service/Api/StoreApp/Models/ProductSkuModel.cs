@@ -26,5 +26,7 @@ namespace LocalS.Service.Api.StoreApp
         public bool IsShowPrice { get; set; }
         public bool IsOffSell { get; set; }
         public List<SpecIdxSku> SpecIdxSkus{ get; set; }
+
+        public int CartQuantity { get; set; }
 }
 }
