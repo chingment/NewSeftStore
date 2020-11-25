@@ -53,7 +53,6 @@ namespace LocalS.BLL.Biz
 
             public string SvcConsulterId { get; set; }
         }
-
         public class BookTimeModel
         {
             public string Value { get; set; }

@@ -193,6 +193,7 @@ export default {
         isOffSell: false,
         mainImgUrl: '',
         machineId: '',
+        cabinetId: '',
         slotId: '',
         version: 0
       },
@@ -290,6 +291,7 @@ export default {
       this.form.salePrice = productSku.salePrice
       this.form.isOffSell = productSku.isOffSell
       this.form.mainImgUrl = productSku.mainImgUrl
+      this.form.cabinetId = this.listQuery.cabinetId
       this.form.slotId = productSku.slotId
       this.form.version = productSku.version
       this.form.machineId = getUrlParam('id')

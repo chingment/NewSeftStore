@@ -621,7 +621,6 @@ namespace LocalS.BLL.Biz
                 SellChannelStockChangeModel eventContent = new SellChannelStockChangeModel();
 
                 var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
-
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId && m.PrdProductSkuId == productSkuId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
