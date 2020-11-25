@@ -12,6 +12,7 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
+        console.log('isShow:' + newVal)
         if (newVal) {
           this._dialogOpen()
         } else {
@@ -25,7 +26,7 @@ Component({
       observer: function (newVal, oldVal) {
         if (newVal == null)
           return
-        console.log('newVal:' + newVal)
+        console.log('dataS:' + newVal)
         this.setData({
           myCart: newVal
         })

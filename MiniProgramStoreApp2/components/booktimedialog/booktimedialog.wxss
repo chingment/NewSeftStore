@@ -106,7 +106,7 @@
 }
 
 .scroll-view_H .current {
-  background-color: #f18d00;
+  background-color: #ffb101;
 }
 
 .scroll-view_H .current .name, .scroll-view_H .current .date{
@@ -136,10 +136,14 @@
   margin: 12rpx;
   padding: 12rpx;
   text-align: center;
-  border: 1px solid #ccc;
   border-radius: 8rpx;
+  border: 3rpx solid #f8f8f8;
+  background-color: #f8f8f8;
+  color: #2b2b2b;
 }
 
 .time-item .current {
-  background-color: #f18d00;
+  background-color: #ffb101;
+  color: #fff;
+  border: 3rpx solid #ffb101;
 }
