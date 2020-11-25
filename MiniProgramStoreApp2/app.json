@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/memberprom/memberprom",
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",
