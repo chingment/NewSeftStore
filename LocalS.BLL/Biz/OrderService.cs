@@ -323,6 +323,7 @@ namespace LocalS.BLL.Biz
                         {
                             string[] sellChannelRefIds = new string[] { };
 
+                            //商品指定销售渠道ID
                             if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                             {
                                 if (productSku.ShopMode == E_SellChannelRefType.Mall)
@@ -408,7 +409,6 @@ namespace LocalS.BLL.Biz
                     var buildOrders = BuildOrders(buildOrderSkus);
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
-
                     #region 更改购物车标识
                     var clientUserName = "匿名";
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
@@ -440,7 +440,6 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
 
-
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
 
@@ -463,14 +462,16 @@ namespace LocalS.BLL.Biz
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
 
-                        if (order.PickupCode == null)
-                        {
-                            return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
-                        }
-
                         switch (buildOrder.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
+                                #region Machine
+
+                                if (order.PickupCode == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
+                                }
+
                                 var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
 
                                 if (shopModeByMachine == null || shopModeByMachine.SelfTake == null)
@@ -489,9 +490,10 @@ namespace LocalS.BLL.Biz
                                 order.ReceiverPhoneNumber = null;
                                 order.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
                                 order.ReceptionMarkName = shopModeByMachine.SelfTake.StoreName;
+                                #endregion 
                                 break;
                             case E_SellChannelRefType.Mall:
-
+                                #region Mall
                                 var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
                                 if (shopModeByMall == null)
                                 {
@@ -558,10 +560,9 @@ namespace LocalS.BLL.Biz
                                         }
                                     }
                                 }
-
+                                #endregion 
                                 break;
                         }
-
 
                         order.OriginalAmount = buildOrder.OriginalAmount;
                         order.DiscountAmount = buildOrder.DiscountAmount;
