@@ -49,76 +49,76 @@ App({
     openid: null,
     session_key: null,
     userInfo: null,
-    mainTabBarIndex: 0,
+    //mainTabBarIndex: 0,
     currentShopMode: 0,
     skeletonPage: null
   },
-  mainTabBarSetNumber(index, num) {
-    var pages = getCurrentPages();
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i].data.tag == "main") {
-        pages[i].data.tabBar[index].number = num
-        pages[i].setData({
-          tabBar: pages[i].data.tabBar
-        })
-        break;
-      }
-    }
-  },
-  mainTabBarSwitch: function (index) {
-    var _this = this
+  // mainTabBarSetNumber(index, num) {
+  //   var pages = getCurrentPages();
+  //   for (var i = 0; i < pages.length; i++) {
+  //     if (pages[i].data.tag == "main") {
+  //       pages[i].data.tabBar[index].number = num
+  //       pages[i].setData({
+  //         tabBar: pages[i].data.tabBar
+  //       })
+  //       break;
+  //     }
+  //   }
+  // },
+  // mainTabBarSwitch: function (index) {
+  //   var _this = this
 
-    var pages = getCurrentPages();
-    var isHasMain = false;
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i].data.tag == "main") {
-        isHasMain = true
-        var tabBar = pages[i].data.tabBar;
+  //   var pages = getCurrentPages();
+  //   var isHasMain = false;
+  //   for (var i = 0; i < pages.length; i++) {
+  //     if (pages[i].data.tag == "main") {
+  //       isHasMain = true
+  //       var tabBar = pages[i].data.tabBar;
 
-        for (var j = 0; j < tabBar.length; j++) {
-          if (j == index) {
-            tabBar[j].selected = true
-            var s = tabBar[j];
-            setTimeout(function () {
-              wx.setNavigationBarTitle({
-                title: s.navTitle
-              })
+  //       for (var j = 0; j < tabBar.length; j++) {
+  //         if (j == index) {
+  //           tabBar[j].selected = true
+  //           var s = tabBar[j];
+  //           setTimeout(function () {
+  //             wx.setNavigationBarTitle({
+  //               title: s.navTitle
+  //             })
 
-            }, 1)
+  //           }, 1)
 
-            _this.globalData.mainTabBarIndex = index
+  //           _this.globalData.mainTabBarIndex = index
 
-          } else {
-            tabBar[j].selected = false
-          }
-        }
+  //         } else {
+  //           tabBar[j].selected = false
+  //         }
+  //       }
 
-        let cp = pages[i].selectComponent('#' + tabBar[index].id);
-        cp.onReady()
+  //       let cp = pages[i].selectComponent('#' + tabBar[index].id);
+  //       cp.onReady()
 
-        pages[i].setData({
-          tabBar: tabBar
-        })
+  //       pages[i].setData({
+  //         tabBar: tabBar
+  //       })
 
-        cp = pages[i].selectComponent('#' + tabBar[index].id);
-        cp.onShow()
-        break
-      }
-    }
+  //       cp = pages[i].selectComponent('#' + tabBar[index].id);
+  //       cp.onShow()
+  //       break
+  //     }
+  //   }
 
-    if (isHasMain) {
-      if (pages.length > 1) {
-        wx.navigateBack({
-          delta: pages.length
-        })
-      }
-    }
-    else {
-      wx.reLaunch({
-        url: '/pages/main/main'
-      })
-    }
-  },
+  //   if (isHasMain) {
+  //     if (pages.length > 1) {
+  //       wx.navigateBack({
+  //         delta: pages.length
+  //       })
+  //     }
+  //   }
+  //   else {
+  //     wx.reLaunch({
+  //       url: '/pages/main/main'
+  //     })
+  //   }
+  // },
   autoUpdate: function () {
     console.log(new Date())
     var self = this

@@ -1,6 +1,7 @@
 const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiOperate = require('../../api/operate.js')
+const pageMain = require('../../pages/main/main.js');
 const app = getApp()
 
 Page({
@@ -142,7 +143,7 @@ Page({
       case "FUN":
         switch (opVal) {
           case "goHome":
-            app.mainTabBarSwitch(0)
+            pageMain.mainTabBarSwitch(0)
             break;
         }
         break;

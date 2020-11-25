@@ -119,16 +119,27 @@
 												</view>
 												<view class="operate skeleton-rect">
 
-													<view wx:if="{{item.specIdxSkus.length<=1}}">
+													<block wx:if="{{item.specIdxSkus.length<=1}}">
 
-														<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}" class="increase" src='/content/default/images/increase.png'></image>
-													</view>
+	
+												<!-- <view class="decrease">
+                          <image class="img" bindtap="addToCart" data-reply-operate="3" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  src='/content/default/images/decrease.png'></image>
+                        </view>
+                        <text class="quantity">0</text> -->
 
-													<view wx:else>
+                        <view class="increase">
+                          <image wx:if="{{!item.isOffSell}}" class="img" bindtap="addToCart"  data-reply-operate="2" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  src='/content/default/images/increase.png'></image>
+                        </view>
+												
+												
+												
+													</block>
+
+													<block wx:else>
 
 														<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
 
-													</view>
+													</block>
 
 
 												</view>

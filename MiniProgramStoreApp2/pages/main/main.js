@@ -14,6 +14,7 @@ Page({
     tag: "main",
     tabBarContentHeight: 0,
     name: "index",
+    tabBarIndex:0,
     tabBar: [{
       id: "cp_index",
       name: "index",
@@ -79,7 +80,7 @@ Page({
       countBySelected: 0,
       sumPriceBySelected: 0
     },
-    personal:{
+    personal: {
       isLogin: false,
       userInfo: null
     }
@@ -99,12 +100,70 @@ Page({
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
-    app.mainTabBarSwitch(app.globalData.mainTabBarIndex)
+    mainTabBarSwitch(_this.data.tabBarIndex)
     apiCart.pageData()
   },
   mainTabBarItemClick(e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
-    app.mainTabBarSwitch(index)
+    mainTabBarSwitch(index)
   },
 })
+
+function mainTabBarSwitch(index) {
+  console.log('mainTabBarSwitch')
+
+  var _this = this
+
+  var pages = getCurrentPages();
+  var isHasMain = false;
+  for (var i = 0; i < pages.length; i++) {
+    if (pages[i].data.tag == "main") {
+      isHasMain = true
+      var tabBar = pages[i].data.tabBar;
+
+      for (var j = 0; j < tabBar.length; j++) {
+        if (j == index) {
+          tabBar[j].selected = true
+          var s = tabBar[j];
+          setTimeout(function () {
+            wx.setNavigationBarTitle({
+              title: s.navTitle
+            })
+          }, 1)
+          pages[i].setData({tabBarIndex:index})
+        } else {
+          tabBar[j].selected = false
+        }
+      }
+
+      let cp = pages[i].selectComponent('#' + tabBar[index].id);
+      cp.onReady()
+
+      pages[i].setData({
+        tabBar: tabBar
+      })
+
+      cp = pages[i].selectComponent('#' + tabBar[index].id);
+      cp.onShow()
+      break
+    }
+  }
+
+  if (isHasMain) {
+    if (pages.length > 1) {
+      wx.navigateBack({
+        delta: pages.length
+      })
+    }
+  } else {
+    wx.reLaunch({
+      url: '/pages/main/main'
+    })
+  }
+
+}
+
+module.exports = {
+  mainTabBarSwitch: mainTabBarSwitch
+}

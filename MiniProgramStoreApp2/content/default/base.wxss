@@ -368,6 +368,18 @@ page {
   display: flex;
 }
 
+.prd-list-1 .decrease {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.prd-list-1 .quantity {
+  width: 50rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+}
+
 .prd-list-1 .increase {
   width: 50rpx;
   height: 50rpx;
@@ -475,12 +487,11 @@ page {
 
 .prd-list-2 .operate {
   flex: 1;
-  text-align: right;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   height: 62rpx;
-  line-height: 62rpx;
   display: flex;
+  padding-right: 18rpx;
 }
 
 .prd-list-2 .increase {

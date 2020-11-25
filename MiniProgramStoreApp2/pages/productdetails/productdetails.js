@@ -4,6 +4,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
 const config = require('../../config');
+const pageMain = require('../../pages/main/main.js');
 const app = getApp()
 
 Page({
@@ -72,7 +73,8 @@ Page({
     })
   },
   goHome: function (e) {
-    app.mainTabBarSwitch(0)
+    pageMain.mainTabBarSwitch(0)
+    //app.mainTabBarSwitch(0)
   },
   goCart: function (e) {
     console.log("goCart")

@@ -42,15 +42,15 @@
 							</view>
 							<view class="operate skeleton-circle">
 
-								<view wx:if="{{item.specIdxSkus.length<=1}}">
+								<block wx:if="{{item.specIdxSkus.length<=1}}">
 									<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
-								</view>
+								</block>
 
-								<view wx:else>
+								<block wx:else>
 
 									<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
 
-								</view>
+								</block>
 
 							</view>
 						</view>

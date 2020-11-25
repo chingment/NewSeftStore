@@ -51,14 +51,14 @@
 											</view>
 											<view class="operate">
 
-												<view wx:if="{{item.specIdxSkus.length<=1}}">
+												<block wx:if="{{item.specIdxSkus.length<=1}}">
 													<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
-												</view>
-												<view wx:else>
+												</block>
+												<block wx:else>
 
 													<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
 
-												</view>
+												</block>
 
 
 											</view>

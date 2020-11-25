@@ -84,7 +84,7 @@ Component({
 
 
       var animation = wx.createAnimation({
-        duration: 200,
+        duration: 300,
         timingFunction: 'linear'
       })
 
@@ -101,13 +101,13 @@ Component({
         _this.setData({
           myAnimationData: animation.export()
         })
-      }, 200)
+      }, 100)
 
     },
     _dialogClose: function (e) {
       var _this = this;
       var animation = wx.createAnimation({
-        duration: 200,
+        duration: 300,
         timingFunction: 'linear'
       })
      
@@ -122,7 +122,7 @@ Component({
           myShow: false,
           isShow: false
         })
-      }, 200)
+      }, 300)
     },
     _qtyOperate: function (e) {
       var _this = this

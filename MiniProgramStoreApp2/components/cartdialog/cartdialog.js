@@ -51,7 +51,7 @@ Component({
         return
 
       var animation = wx.createAnimation({
-        duration: 200,
+        duration: 300,
         timingFunction: 'linear'
       })
       animation.translateY(500).step()
@@ -66,7 +66,7 @@ Component({
         _this.setData({
           myAnimationData: animation.export()
         })
-      }, 200)
+      }, 100)
 
       _this.setData({
         myCart: storeage.getCart()
@@ -75,7 +75,7 @@ Component({
     _dialogClose: function (e) {
       var _this = this;
       var animation = wx.createAnimation({
-        duration: 500,
+        duration: 300,
         timingFunction: 'linear'
       })
       animation.translateY(500).step()
@@ -89,7 +89,7 @@ Component({
           isShow: false,
           myStop: true,
         })
-      }, 500)
+      }, 300)
     },
     _itemOperate(e) {
       var _this = this
