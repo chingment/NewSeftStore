@@ -321,80 +321,102 @@ namespace LocalS.BLL.Biz
 
                         foreach (var productSku in productSkus)
                         {
-  
                             string[] sellChannelRefIds = new string[] { };
 
-                            //商品指定销售渠道ID
-                            if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
+                            if (productSku.ShopMode == E_SellChannelRefType.Mall)
                             {
-                                if (productSku.ShopMode == E_SellChannelRefType.Mall)
-                                {
-                                    sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
-                                }
-                                else if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                            }
+                            else if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                            {
+                                if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                                 {
                                     sellChannelRefIds = store.SellMachineIds;
                                 }
-                            }
-                            else
-                            {
-                                sellChannelRefIds = productSku.SellChannelRefIds;
-                            }
-
-                            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
-
-                            if (bizProductSku == null)
-                            {
-                                warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
-                            }
-                            else
-                            {
-                                if (bizProductSku.Stocks.Count == 0)
+                                else
                                 {
-                                    warn_tips.Add(string.Format("{0}商品库存信息不存在", bizProductSku.Name));
+                                    sellChannelRefIds = productSku.SellChannelRefIds;
+                                }
+                            }
+
+                            //string[] sellChannelRefIds = new string[] { };
+
+                            ////商品指定销售渠道ID
+                            //if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
+                            //{
+                            //    if (productSku.ShopMode == E_SellChannelRefType.Mall)
+                            //    {
+                            //        sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                            //    }
+                            //    else if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                            //    {
+                            //        sellChannelRefIds = store.SellMachineIds;
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    sellChannelRefIds = productSku.SellChannelRefIds;
+                            //}
+
+                            if (productSku.ShopMode == E_SellChannelRefType.Mall || productSku.ShopMode == E_SellChannelRefType.Machine)
+                            {
+                                #region Mall,Machine
+                                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
+
+                                if (bizProductSku == null)
+                                {
+                                    warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
                                 }
                                 else
                                 {
-                                    var sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
-
-                                    Console.WriteLine("sellQuantity：" + sellQuantity);
-
-                                    if (bizProductSku.Stocks[0].IsOffSell)
+                                    if (bizProductSku.Stocks.Count == 0)
                                     {
-                                        warn_tips.Add(string.Format("{0}已经下架", bizProductSku.Name));
+                                        warn_tips.Add(string.Format("{0}商品库存信息不存在", bizProductSku.Name));
                                     }
                                     else
                                     {
-                                        if (sellQuantity < productSku.Quantity)
+                                        var sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+
+                                        Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                                        if (bizProductSku.Stocks[0].IsOffSell)
                                         {
-                                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
+                                            warn_tips.Add(string.Format("{0}已经下架", bizProductSku.Name));
                                         }
                                         else
                                         {
-                                            var _skus = new BuildOrder.ProductSku();
-
-                                            _skus.Id = productSku.Id;
-                                            _skus.ProductId = bizProductSku.ProductId;
-                                            _skus.Name = bizProductSku.Name;
-                                            _skus.MainImgUrl = bizProductSku.MainImgUrl;
-                                            _skus.BarCode = bizProductSku.BarCode;
-                                            _skus.CumCode = bizProductSku.CumCode;
-                                            _skus.SpecDes = bizProductSku.SpecDes;
-                                            _skus.Producer = bizProductSku.Producer;
-                                            _skus.Quantity = productSku.Quantity;
-                                            _skus.ShopMode = productSku.ShopMode;
-                                            _skus.Stocks = bizProductSku.Stocks;
-                                            _skus.CartId = productSku.CartId;
-                                            _skus.SvcConsulterId = productSku.SvcConsulterId;
-                                            _skus.KindId1 = bizProductSku.KindId1;
-                                            _skus.KindId2 = bizProductSku.KindId2;
-                                            _skus.KindId3 = bizProductSku.KindId3;
-
-                                            buildOrderSkus.Add(_skus);
+                                            if (sellQuantity < productSku.Quantity)
+                                            {
+                                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
+                                            }
+                                            else
+                                            {
+                                                var buildOrderSku = new BuildOrder.ProductSku();
+                                                buildOrderSku.Id = productSku.Id;
+                                                buildOrderSku.ProductId = bizProductSku.ProductId;
+                                                buildOrderSku.Name = bizProductSku.Name;
+                                                buildOrderSku.MainImgUrl = bizProductSku.MainImgUrl;
+                                                buildOrderSku.BarCode = bizProductSku.BarCode;
+                                                buildOrderSku.CumCode = bizProductSku.CumCode;
+                                                buildOrderSku.SpecDes = bizProductSku.SpecDes;
+                                                buildOrderSku.Producer = bizProductSku.Producer;
+                                                buildOrderSku.Quantity = productSku.Quantity;
+                                                buildOrderSku.ShopMode = productSku.ShopMode;
+                                                buildOrderSku.Stocks = bizProductSku.Stocks;
+                                                buildOrderSku.CartId = productSku.CartId;
+                                                buildOrderSku.SvcConsulterId = productSku.SvcConsulterId;
+                                                buildOrderSku.KindId1 = bizProductSku.KindId1;
+                                                buildOrderSku.KindId2 = bizProductSku.KindId2;
+                                                buildOrderSku.KindId3 = bizProductSku.KindId3;
+                                                buildOrderSkus.Add(buildOrderSku);
+                                            }
                                         }
                                     }
                                 }
+
+                                #endregion
                             }
+
                         }
                     }
 
@@ -622,8 +644,12 @@ namespace LocalS.BLL.Biz
                             orderSub.CreateTime = DateTime.Now;
                             CurrentDb.OrderSub.Add(orderSub);
 
-                            LogUtil.Info("SlotStock:" + buildOrderSub.ToJsonString());
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                            //判断SellChannelRefType 是 Machine，Mall 才进行库存操作
+                            if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine || orderSub.SellChannelRefType == E_SellChannelRefType.Mall)
+                            {
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                            }
+
                         }
                     }
 
@@ -887,7 +913,6 @@ namespace LocalS.BLL.Biz
 
                     operater = payTrans.Creator;
 
-
                     payTrans.PayPartner = payPartner;
                     payTrans.PayPartnerPayTransId = payPartnerPayTransId;
                     payTrans.PayWay = payWay;
@@ -954,8 +979,10 @@ namespace LocalS.BLL.Biz
                             orderSub.Mender = operater;
                             orderSub.MendTime = DateTime.Now;
 
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
-
+                            if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall || orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
+                            {
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                            }
                         }
 
                         order.MendTime = DateTime.Now;
@@ -1089,8 +1116,10 @@ namespace LocalS.BLL.Biz
 
                         orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
 
-                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
-
+                        if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall || orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
+                        {
+                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                        }
 
                     }
 
