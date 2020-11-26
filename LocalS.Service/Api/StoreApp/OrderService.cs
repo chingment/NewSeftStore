@@ -266,18 +266,15 @@ namespace LocalS.Service.Api.StoreApp
 
 
             var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
-            bool isVip = false;
+            int memberLevel = 0;
 
             if (clientUser != null)
             {
-                if (clientUser.IsVip)
-                {
-                    isVip = true;
-                }
+                memberLevel = clientUser.MemberLevel;
             }
 
 
-            if (isVip)
+            if (memberLevel > 0)
             {
                 skuAmountByActual = skuAmountByVip;//会员用户总价 为 实际总价
 

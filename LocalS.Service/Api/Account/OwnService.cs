@@ -308,7 +308,7 @@ namespace LocalS.Service.Api.Account
                 sysClientUser.Country = wxUserInfoByMinProram.country;
                 sysClientUser.Avatar = wxUserInfoByMinProram.headimgurl;
                 sysClientUser.PhoneNumber = rop.PhoneNumber;
-                sysClientUser.IsVip = false;
+                sysClientUser.MemberLevel = 0;
                 sysClientUser.CreateTime = DateTime.Now;
                 sysClientUser.Creator = sysClientUserId;
                 sysClientUser.BelongType = Enumeration.BelongType.Client;

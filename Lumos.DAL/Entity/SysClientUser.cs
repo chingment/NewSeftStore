@@ -7,7 +7,8 @@ namespace Lumos.DbRelay
     [Table("SysClientUser")]
     public class SysClientUser : SysUser
     {
-        public bool IsVip { get; set; }
+        //0 为非会员
+        public int MemberLevel { get; set; }
 
         public string MerchId { get; set; }
     }

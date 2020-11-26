@@ -321,6 +321,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var productSku in productSkus)
                         {
+  
                             string[] sellChannelRefIds = new string[] { };
 
                             //商品指定销售渠道ID
@@ -395,7 +396,6 @@ namespace LocalS.BLL.Biz
                                 }
                             }
                         }
-
                     }
 
                     if (warn_tips.Count > 0)

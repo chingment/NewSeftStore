@@ -53,7 +53,7 @@ namespace LocalS.BLL.Task
                                     sysClientUser.City = apiUserInfo.city;
                                     sysClientUser.Country = apiUserInfo.country;
                                     sysClientUser.Avatar = apiUserInfo.headimgurl;
-                                    sysClientUser.IsVip = false;
+                                    sysClientUser.MemberLevel = 0;
                                     sysClientUser.CreateTime = DateTime.Now;
                                     sysClientUser.Creator = sysClientUserId;
                                     sysClientUser.BelongType = Enumeration.BelongType.Client;

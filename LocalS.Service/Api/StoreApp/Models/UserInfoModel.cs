@@ -15,7 +15,8 @@ namespace LocalS.Service.Api.StoreApp
         public string PhoneNumber { get; set; }
 
         public string Avatar { get; set; }
-
         public bool IsVip { get; set; }
+        public int MemberLevel { get; set; }
+        public string MemberTag { get; set; }
     }
 }

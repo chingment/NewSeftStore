@@ -83,6 +83,8 @@
   color: #fff;
   border-radius: 50rpx;
   font-weight: 800;
+  height: 85rpx;
+  line-height: 85rpx;
 }
 
 .tui-btn-tip {
@@ -116,8 +118,10 @@
 
 .bg-bottom .tip1 {
   color: #797979;
+  font-size: 21rpx;
 }
 
 .bg-bottom .tip2 {
   color: #ffbb0d;
+  font-size: 21rpx;
 }

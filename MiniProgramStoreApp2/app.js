@@ -9,11 +9,31 @@ const apiOwn = require('/api/own.js')
 App({
   onLaunch: function () {
     var _this = this
+    console.log('app.onLaunch')
     _this.autoUpdate()
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+
+
+    wx.onNetworkStatusChange(function (res) {
+      console.log(res)
+      if (!res.isConnected) {
+        
+      }
+    })
+
+  },
+  onShow: function () {
+    var _this = this
+    console.log('app.onShow')
+
+    wx.getNetworkType({
+      success: function (res) {
+        console.log(res)
+      }
+    })
 
     wx.login({
       success: function (res) {
@@ -39,11 +59,6 @@ App({
         }
       }
     });
-
-
-  },
-  onShow: function () {
-    console.log("App.onShow")
   },
   globalData: {
     openid: null,
