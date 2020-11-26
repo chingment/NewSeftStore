@@ -9,7 +9,7 @@ namespace Lumos.DbRelay
     {
         //0 为非会员
         public int MemberLevel { get; set; }
-
+        public DateTime? MemberExpireTime { get; set; }
         public string MerchId { get; set; }
     }
 }

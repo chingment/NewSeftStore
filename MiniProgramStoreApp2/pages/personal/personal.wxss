@@ -45,25 +45,38 @@
   line-height: 62rpx;
 }
 
-.personal-userinfo .item-isvip {
-  padding: 5px 0px;
+.item-member{
+  display: flex;
 }
 
-.personal-userinfo .item-isvip .img {
-  width: 118rpx;
-  height: 30rpx;
+.personal-userinfo .item-member {
+  height: 48rpx;
+  line-height: 48rpx;
+  margin-top: 8rpx;
+}
+.personal-userinfo .item-member .img{
+  height: 32rpx;
+  width: 32rpx;
+  float: left;
+  display: block;
+  margin-left: -6rpx;
 }
 
-
- .personal-userinfo .item-novip .txt {
-  font-size: 21rpx;
+ .personal-userinfo .item-member .txt {
+  height: 28rpx;
+  line-height: 30rpx;
+  width: 120rpx;
+  float: left;
+  display: block;
+  font-size: 12px;
+  margin-left: 10rpx;
   color: #9d9d9d;
 }
 
 .personal-userinfo .item-phone {
   height: 48rpx;
   line-height: 48rpx;
-  margin-top: 18rpx;
+  margin-top: 8rpx;
 }
 
 .personal-userinfo .item-phone .img {

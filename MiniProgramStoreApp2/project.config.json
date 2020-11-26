@@ -42,17 +42,10 @@
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
     "plugin": {
       "list": []
     },
     "game": {
-      "currentL": -1,
       "list": []
     },
     "gamePlugin": {
@@ -98,6 +91,12 @@
           "id": -1,
           "name": "时间轴",
           "pathName": "pages/receipttimeaxis/receipttimeaxis",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "商城主页",
+          "pathName": "pages/main/main",
           "scene": null
         }
       ]

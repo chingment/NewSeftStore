@@ -5,15 +5,13 @@
 				<view class='item-left'>
 					<view class="container">
 
-						<view class='item-nickname'> 
-						      <open-data type="userNickName"></open-data>
+						<view class='item-nickname'>
+							<open-data type="userNickName"></open-data>
 						</view>
 						<block wx:if="{{isLogin}}">
-							<view wx:if="{{userInfo.isVip}}" class='item-isvip'>
-								<image class="img" src='/content/default/images/member.png'></image>
-							</view>
-							<view wx:else class='item-novip'>
-								<text class='txt'>普通用户</text>
+							<view class="item-member">
+								<image class="img" src='/content/default/images/icon_member_{{userInfo.memberLevel>0?1:0}}.png'></image>
+								<text class='txt'>{{userInfo.memberTag}}</text>
 							</view>
 							<view wx:if="{{userInfo.phoneNumber!=null}}" class='item-phone'>
 								<image class="img" src='/content/default/images/icon_phone.png'></image>
@@ -29,9 +27,9 @@
 				</view>
 				<view class='item-right'>
 
-        <view class="img">
-				<open-data  type="userAvatarUrl"></open-data>
-				</view>
+					<view class="img">
+						<open-data type="userAvatarUrl"></open-data>
+					</view>
 
 				</view>
 			</view>
@@ -44,7 +42,8 @@
 						<view class="item-middle">
 							<text class="title">我的订单</text>
 						</view>
-						<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=0000" class='item-right' style="width:100rpx">
+						<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=0000"
+							class='item-right' style="width:100rpx">
 							<text style="color:#292929">全部</text>
 							<image src='/content/default/images/col_nav_right.png'></image>
 						</view>
@@ -52,26 +51,31 @@
 				</view>
 			</view>
 			<view class='personal-orderstatus'>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000" class="item" hover-class="none">
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000"
+					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_waitpay.png'></image>
 					<text class='item-title'>待支付</text>
 				</div>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000" class="item" hover-class="none">
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000"
+					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_pickup.png'></image>
 					<text class='item-title'>待取/待收</text>
 				</div>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000" class="item" hover-class="none">
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000"
+					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_complete.png'></image>
 					<text class='item-title'>已完成</text>
 				</div>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000" class="item" hover-class="none">
+				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000"
+					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_cancel.png'></image>
 					<text class='item-title'>已失效</text>
 				</div>
 			</view>
 			<view class="col-nav">
 				<view class="container">
-					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
+					<div bindtap="navigateToClick" data-ischecklogin="true"
+						data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
 						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_coupon.png'></image>
 						</view>
@@ -83,7 +87,8 @@
 						</view>
 					</div>
 
-					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item" hover-class="none">
+					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item"
+						hover-class="none">
 						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_personalinfo.png'></image>
 						</view>
@@ -95,7 +100,8 @@
 						</view>
 					</div>
 
-					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
+					<div bindtap="navigateToClick" data-ischecklogin="true"
+						data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
 						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_address.png'></image>
 						</view>
@@ -108,7 +114,7 @@
 					</div>
 
 					<button class="btn-noboder col-nav-item" hover-class="none" open-type="contact">
-						<view class="item-left" >
+						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_service.png' style="margin-left:-12rpx"></image>
 						</view>
 						<view class="item-middle">
