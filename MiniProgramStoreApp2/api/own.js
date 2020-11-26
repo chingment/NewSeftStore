@@ -15,7 +15,8 @@ function WxApiCode2Session(dataParams) {
 
   return lumos.postJson({
     url: config.apiUrl.ownWxApiCode2Session,
-    dataParams: dataParams
+    dataParams: dataParams,
+    isShowLoading:false
   })
 }
 

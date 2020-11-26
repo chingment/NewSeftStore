@@ -1,4 +1,4 @@
-.bg_1{
+.bg_1 {
   width: 100%;
   height: 248rpx;
 }
@@ -8,24 +8,24 @@
   height: 100%;
 }
 
-.bg_2{
+.bg_2 {
   width: 100%;
   height: 847rpx;
   position: relative;
 }
 
-.bg_3{
+.bg_3 {
   width: 100%;
   height: 3116rpx;
 }
 
-.bg_2 .section{
+.bg_2 .section {
   position: absolute;
   top: -30rpx;
   padding: 0 20rpx;
 }
 
-.tui-table-view{
+.tui-table-view {
   display: -webkit-flex;
   display: flex;
   align-items: center;
@@ -33,8 +33,9 @@
   flex-wrap: wrap;
   width: 100%;
 }
-.tui-col-3{
- flex: 0 0 auto;
+
+.tui-col-3 {
+  flex: 0 0 auto;
   width: 33.33333333%;
   text-align: center;
   color: #797979;
@@ -43,24 +44,80 @@
   height: 130rpx;
 }
 
-.icon-box{
+.icon-box {
   width: 100%;
   height: 80rpx;
 }
-.tui-col-3 .icon{
+
+.tui-col-3 .icon {
   width: 80rpx;
   height: 80rpx;
 }
 
-.tui-col-3 .title{
+.tui-col-3 .title {
   color: #000;
   font-weight: 800;
   font-size: 24rpx;
   padding-top: 10rpx;
 }
 
-.tui-col-3 .tip{
+.tui-col-3 .tip {
   color: #99989d;
   font-size: 20rpx;
   padding: 8rpx 0;
+}
+
+.tui-btn-view {
+  margin-top: 80rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.tui-btn-view .wrapper {
+  width: 420rpx;
+  position: absolute;
+}
+
+.btn-open {
+  background-color: #ffbb0d;
+  color: #fff;
+  border-radius: 50rpx;
+  font-weight: 800;
+}
+
+.tui-btn-tip {
+  width: 221rpx;
+  height: 83rpx;
+  position: absolute;
+  right: -50rpx;
+  top: -70rpx;
+  z-index: 9;
+}
+
+.bg-bottom {
+  position: fixed;
+  bottom: 0rpx;
+  width: 100%;
+  background-color: #fff;
+}
+
+.bg-bottom>.wrapper {
+  padding: 12rpx;
+}
+
+.bg-bottom .btn-open {
+  width: 95%;
+}
+
+.bg-bottom .btn-tip {
+  text-align: center;
+  padding: 12prx 0;
+}
+
+.bg-bottom .tip1 {
+  color: #797979;
+}
+
+.bg-bottom .tip2 {
+  color: #ffbb0d;
 }
