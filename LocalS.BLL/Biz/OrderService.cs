@@ -358,16 +358,18 @@ namespace LocalS.BLL.Biz
                             //    sellChannelRefIds = productSku.SellChannelRefIds;
                             //}
 
-                            if (productSku.ShopMode == E_SellChannelRefType.Mall || productSku.ShopMode == E_SellChannelRefType.Machine)
-                            {
-                                #region Mall,Machine
-                                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
 
-                                if (bizProductSku == null)
-                                {
-                                    warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
-                                }
-                                else
+                            #region Mall,Machine
+
+                            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
+
+                            if (bizProductSku == null)
+                            {
+                                warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
+                            }
+                            else
+                            {
+                                if (productSku.ShopMode == E_SellChannelRefType.Mall || productSku.ShopMode == E_SellChannelRefType.Machine)
                                 {
                                     if (bizProductSku.Stocks.Count == 0)
                                     {
@@ -389,33 +391,31 @@ namespace LocalS.BLL.Biz
                                             {
                                                 warn_tips.Add(string.Format("{0}的可销售数量为{1}个", bizProductSku.Name, sellQuantity));
                                             }
-                                            else
-                                            {
-                                                var buildOrderSku = new BuildOrder.ProductSku();
-                                                buildOrderSku.Id = productSku.Id;
-                                                buildOrderSku.ProductId = bizProductSku.ProductId;
-                                                buildOrderSku.Name = bizProductSku.Name;
-                                                buildOrderSku.MainImgUrl = bizProductSku.MainImgUrl;
-                                                buildOrderSku.BarCode = bizProductSku.BarCode;
-                                                buildOrderSku.CumCode = bizProductSku.CumCode;
-                                                buildOrderSku.SpecDes = bizProductSku.SpecDes;
-                                                buildOrderSku.Producer = bizProductSku.Producer;
-                                                buildOrderSku.Quantity = productSku.Quantity;
-                                                buildOrderSku.ShopMode = productSku.ShopMode;
-                                                buildOrderSku.Stocks = bizProductSku.Stocks;
-                                                buildOrderSku.CartId = productSku.CartId;
-                                                buildOrderSku.SvcConsulterId = productSku.SvcConsulterId;
-                                                buildOrderSku.KindId1 = bizProductSku.KindId1;
-                                                buildOrderSku.KindId2 = bizProductSku.KindId2;
-                                                buildOrderSku.KindId3 = bizProductSku.KindId3;
-                                                buildOrderSkus.Add(buildOrderSku);
-                                            }
                                         }
                                     }
                                 }
 
-                                #endregion
+                                var buildOrderSku = new BuildOrder.ProductSku();
+                                buildOrderSku.Id = productSku.Id;
+                                buildOrderSku.ProductId = bizProductSku.ProductId;
+                                buildOrderSku.Name = bizProductSku.Name;
+                                buildOrderSku.MainImgUrl = bizProductSku.MainImgUrl;
+                                buildOrderSku.BarCode = bizProductSku.BarCode;
+                                buildOrderSku.CumCode = bizProductSku.CumCode;
+                                buildOrderSku.SpecDes = bizProductSku.SpecDes;
+                                buildOrderSku.Producer = bizProductSku.Producer;
+                                buildOrderSku.Quantity = productSku.Quantity;
+                                buildOrderSku.ShopMode = productSku.ShopMode;
+                                buildOrderSku.Stocks = bizProductSku.Stocks;
+                                buildOrderSku.CartId = productSku.CartId;
+                                buildOrderSku.SvcConsulterId = productSku.SvcConsulterId;
+                                buildOrderSku.KindId1 = bizProductSku.KindId1;
+                                buildOrderSku.KindId2 = bizProductSku.KindId2;
+                                buildOrderSku.KindId3 = bizProductSku.KindId3;
+                                buildOrderSkus.Add(buildOrderSku);
                             }
+
+                            #endregion
 
                         }
                     }
@@ -584,6 +584,11 @@ namespace LocalS.BLL.Biz
                                 }
                                 #endregion 
                                 break;
+                            case E_SellChannelRefType.Platform:
+                                #region Platform
+                                order.ReceiveMode = E_ReceiveMode.Platform;
+                                #endregion
+                                break;
                         }
 
                         order.OriginalAmount = buildOrder.OriginalAmount;
@@ -672,7 +677,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        public List<BuildOrder> BuildOrders(List<BuildOrder.ProductSku> reserveProductSkus)
+        private List<BuildOrder> BuildOrders(List<BuildOrder.ProductSku> reserveProductSkus)
         {
             List<BuildOrder> buildOrders = new List<BuildOrder>();
 
@@ -1796,7 +1801,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string payTransId, string payRefundId, string content)
         {
             LogUtil.Info("PayRefundResultNotify2");
@@ -1885,9 +1889,6 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-
-
-
         public CustomJsonResult PayRefundHandle(string operater, string refundId, string refundStatus, decimal refundAmount, string refundRemark)
         {
 
@@ -1958,7 +1959,6 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-
         public string BuildQrcode2PickupCode(string pickupCode)
         {
             string encode_qrcode = PickupCodeEncode(pickupCode);
