@@ -1,6 +1,8 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
+using LocalS.Service.UI;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +22,8 @@ namespace LocalS.Service.Api.Merch
                 case E_Coupon_Category.All:
                     name = "全场赠券";
                     break;
-                case E_Coupon_Category.Register:
-                    name = "注册赠券";
+                case E_Coupon_Category.NewUser:
+                    name = "新用户赠券";
                     break;
                 case E_Coupon_Category.Memeber:
                     name = "会员赠券";
@@ -136,9 +138,22 @@ namespace LocalS.Service.Api.Merch
                     faceValue = string.Format("{0}折", item.FaceValue);
                 }
 
-                string validDate = string.Format("{0}-{1}", item.StartTime.ToUnifiedFormatDate(), item.EndTime.ToUnifiedFormatDate());
+                string validDate = string.Format("{0}至{1}", item.StartTime.ToUnifiedFormatDate(), item.EndTime.ToUnifiedFormatDate());
 
                 string status = "";
+
+                if (DateTime.Now < item.StartTime)
+                {
+                    status = "未生效";
+                }
+                else if (DateTime.Now >= item.StartTime && DateTime.Now <= item.EndTime)
+                {
+                    status = "已生效";
+                }
+                else
+                {
+                    status = "已过期";
+                }
 
                 olist.Add(new
                 {
@@ -159,6 +174,86 @@ namespace LocalS.Service.Api.Merch
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult InitAdd(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetCouponInitAdd();
+
+            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+
+            foreach (var store in stores)
+            {
+                var optionsStore = new OptionNode();
+
+                optionsStore.Value = store.Id;
+                optionsStore.Label = store.Name;
+                ret.OptionsStores.Add(optionsStore);
+            }
+
+            ret.OptionsProductKinds = MerchServiceFactory.PrdProduct.GetKindTree();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+
+        public CustomJsonResult Add(string operater, string merchId, RupCouponAdd rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.Name))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称不能为空");
+            }
+
+            if (rop.IssueQuantity < 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发行量必须大于零");
+            }
+
+            if (rop.FaceValue < 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "券值必须大于零");
+            }
+
+            if (rop.PerLimitNum < 1)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "每人限领必须大于零");
+            }
+
+            var d_coupon = new Coupon();
+            d_coupon.Id = IdWorker.Build(IdType.NewGuid);
+            d_coupon.MerchId = merchId;
+            d_coupon.Name = rop.Name;
+            d_coupon.Category = rop.Category;
+            d_coupon.ShopMode = E_Coupon_ShopMode.Unknow;
+            d_coupon.UseMode = rop.UseMode;
+            d_coupon.IssueQuantity = rop.IssueQuantity;
+            d_coupon.FaceType = rop.FaceType;
+            d_coupon.FaceValue = rop.FaceValue;
+            d_coupon.PerLimitNum = rop.PerLimitNum;
+            d_coupon.AtLeastAmount = rop.AtLeastAmount;
+            d_coupon.StartTime = DateTime.Parse(rop.ValidDate[0]);
+            d_coupon.EndTime = DateTime.Parse(rop.ValidDate[1]);
+            d_coupon.IsSuperposition = false;
+            d_coupon.IsDelete = false;
+            d_coupon.Description = "";
+
+            d_coupon.UseAreaType = rop.UseAreaType;
+            d_coupon.CreateTime = DateTime.Now;
+            d_coupon.Creator = operater;
+            CurrentDb.Coupon.Add(d_coupon);
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+
 
             return result;
         }

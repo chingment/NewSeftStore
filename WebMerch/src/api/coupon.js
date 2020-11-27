@@ -8,6 +8,24 @@ export function getList(params) {
   })
 }
 
+export function initAdd(params) {
+  return request({
+    url: '/coupon/initAdd',
+    method: 'get',
+    params
+  })
+}
+
+export function add(data) {
+  return request({
+    url: '/coupon/add',
+    method: 'post',
+    data
+  })
+}
+
 export default {
-  getList: getList
+  getList: getList,
+  add: add,
+  initAdd: initAdd
 }

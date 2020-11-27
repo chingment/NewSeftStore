@@ -10,6 +10,9 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+            新建
+          </el-button>
         </el-col>
       </el-row>
 
@@ -27,7 +30,7 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="优惠券名称" prop="name" align="left" min-width="20%">
+      <el-table-column label="优惠券名称" prop="name" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -37,12 +40,17 @@
           <span>{{ scope.row.category }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="使用方式" prop="useMode" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.useMode }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="可使用范围" prop="useAreaType" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.useAreaType }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="使用门槛" prop="atLeastAmount" align="left" min-width="15%">
+      <el-table-column v-if="isDesktop" label="使用门槛" prop="atLeastAmount" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.atLeastAmount }}</span>
         </template>
@@ -127,6 +135,11 @@ export default {
     handleDetails(row) {
       this.$router.push({
         path: '/clientuser/details?id=' + row.id
+      })
+    },
+    handleCreate(row) {
+      this.$router.push({
+        path: '/coupon/add'
       })
     }
   }

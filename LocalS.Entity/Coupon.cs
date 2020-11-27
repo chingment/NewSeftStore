@@ -40,7 +40,7 @@ namespace LocalS.Entity
 
         Unknow = 0,
         All = 1,
-        Register = 2,
+        NewUser = 2,
         Memeber = 3,
         Shopping = 4
     }
@@ -64,7 +64,8 @@ namespace LocalS.Entity
         public E_Coupon_Category Category { get; set; }
         public E_Coupon_ShopMode ShopMode { get; set; }
         public int IssueQuantity { get; set; }
-        public int UseQuantity { get; set; }
+        public int UsedQuantity { get; set; }
+        public int ReceivedQuantity { get; set; }
         public E_Coupon_FaceType FaceType { get; set; }
         public decimal FaceValue { get; set; }
         public int PerLimitNum { get; set; }
