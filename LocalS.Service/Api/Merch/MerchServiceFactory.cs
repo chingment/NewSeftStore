@@ -103,5 +103,13 @@ namespace LocalS.Service.Api.Merch
                 return new LogService();
             }
         }
+
+        public static CouponService Coupon
+        {
+            get
+            {
+                return new CouponService();
+            }
+        }
     }
 }

@@ -57,6 +57,9 @@ namespace LocalS.DAL
         //public IDbSet<RptOrderDetails> RptOrderDetails { get; set; }
         //public IDbSet<RptOrderDetailsChild> RptOrderDetailsChild { get; set; }
         public IDbSet<AppTraceLog> AppTraceLog { get; set; }
+
+        public IDbSet<Coupon> Coupon { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

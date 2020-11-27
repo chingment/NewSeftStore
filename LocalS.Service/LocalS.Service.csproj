@@ -177,6 +177,7 @@
     <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
     <Compile Include="Api\Merch\AdSpaceService.cs" />
     <Compile Include="Api\Merch\ClientUserService.cs" />
+    <Compile Include="Api\Merch\CouponService.cs" />
     <Compile Include="Api\Merch\LogService.cs" />
     <Compile Include="Api\Merch\MachineService.cs" />
     <Compile Include="Api\Merch\Models\MachineModel.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Api\Merch\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientDetailsOrdersGetOrderList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupCouponGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByOperate.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByRelStock.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByStock.cs" />

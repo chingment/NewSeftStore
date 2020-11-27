@@ -51,6 +51,7 @@
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />
+    <Compile Include="Coupon.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="EventCode.cs" />
     <Compile Include="Ins\InsCarCompanyRule.cs" />
