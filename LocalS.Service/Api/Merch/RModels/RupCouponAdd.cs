@@ -19,8 +19,10 @@ namespace LocalS.Service.Api.Merch
         public decimal AtLeastAmount { get; set; }
         public string[] ValidDate { get; set; }
         public E_Coupon_UseAreaType UseAreaType { get; set; }
+        public object UseAreaValue { get; set; }
         public E_Coupon_UseMode UseMode { get; set; }
-        public string UseAreaValue { get; set; }
+        public E_Coupon_UseTimeType UseTimeType { get; set; }
+        public object UseTimeValue { get; set; }
         public string Description { get; set; }
         public bool IsSuperposition { get; set; }
     }

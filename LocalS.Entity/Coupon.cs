@@ -53,6 +53,15 @@ namespace LocalS.Entity
         Machine = 3
     }
 
+    public enum E_Coupon_UseTimeType
+    {
+
+        Unknow = 0,
+        //时间段
+        TimeArea = 1,
+        //有效日
+        ValidDay = 2
+    }
 
     [Table("Coupon")]
     public class Coupon
@@ -75,6 +84,8 @@ namespace LocalS.Entity
         public E_Coupon_UseAreaType UseAreaType { get; set; }
         public E_Coupon_UseMode UseMode { get; set; }
         public string UseAreaValue { get; set; }
+        public E_Coupon_UseTimeType UseTimeType { get; set; }
+        public string UseTimeValue { get; set; }
         public string Description { get; set; }
         public bool IsDelete { get; set; }
         public bool IsSuperposition { get; set; }

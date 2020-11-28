@@ -212,9 +212,16 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称不能为空");
             }
 
-            if (rop.IssueQuantity < 0)
+            if (rop.Category == E_Coupon_Category.Memeber || rop.Category == E_Coupon_Category.NewUser)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发行量必须大于零");
+                rop.IssueQuantity = -1;//改为-1 不限制
+            }
+            else
+            {
+                if (rop.IssueQuantity < 0)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发行量必须大于零");
+                }
             }
 
             if (rop.FaceValue < 0)
@@ -241,11 +248,22 @@ namespace LocalS.Service.Api.Merch
             d_coupon.AtLeastAmount = rop.AtLeastAmount;
             d_coupon.StartTime = DateTime.Parse(rop.ValidDate[0]);
             d_coupon.EndTime = DateTime.Parse(rop.ValidDate[1]);
+            d_coupon.UseTimeType = rop.UseTimeType;
+
+            if (rop.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+            {
+                d_coupon.UseTimeValue = rop.UseTimeValue.ToString();
+            }
+            else if (rop.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+            {
+                d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
+            }
+
             d_coupon.IsSuperposition = false;
             d_coupon.IsDelete = false;
-            d_coupon.Description = "";
-
+            d_coupon.Description = rop.Description;
             d_coupon.UseAreaType = rop.UseAreaType;
+            d_coupon.UseAreaValue = rop.UseAreaValue.ToJsonString();
             d_coupon.CreateTime = DateTime.Now;
             d_coupon.Creator = operater;
             CurrentDb.Coupon.Add(d_coupon);

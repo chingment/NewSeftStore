@@ -2,7 +2,7 @@
   <div id="user_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="优惠券类型" prop="category">
-        <el-select v-model="form.category" style="width: 100%">
+        <el-select v-model="form.category" style="width: 100%" @change="handleCategoryChange">
           <el-option
             v-for="item in options_category"
             :key="item.value"
@@ -20,8 +20,14 @@
           <el-radio-button label="2">用户出示二维码</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="发行总量" prop="issueQuantity">
-        <el-input v-model="form.issueQuantity" clearable="" />
+      <el-form-item label="发行总量" prop="issueQuantity" :show-message="errors.issueQuantity.isShow">
+
+        <block v-if="form.category==2||form.category==3">
+          <span>不限制</span>
+        </block>
+        <block v-else>
+          <el-input v-model="form.issueQuantity" clearable="" />
+        </block>
       </el-form-item>
 
       <el-form-item label="券种" prop="faceType">
@@ -54,12 +60,41 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
           style="width: 100%"
         />
       </el-form-item>
-      <el-form-item label="可使用范围" prop="useAreaValue">
+      <el-form-item label="可使用时间" prop="useTimeValue">
         <div>
-          <el-radio-group v-model="form.useAreaType" @change="useAreaTypeChange">
+          <el-radio-group v-model="form.useTimeType" @change="handleUseTimeTypeChange">
+            <el-radio-button label="1">按时间段</el-radio-button>
+            <el-radio-button label="2">按领取时间计算有效期</el-radio-button>
+          </el-radio-group>
+        </div>
+        <div style="margin-top:10px">
+          <div v-if="form.useTimeType==1">
+            <el-date-picker
+              v-model="form.useTimeValue"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
+              style="width: 100%"
+            />
+          </div>
+
+          <div v-if="form.useTimeType==2">
+            <el-input v-model="form.useTimeValue" placeholder="">
+              <template slot="append">日无效</template>
+            </el-input>
+          </div>
+
+        </div>
+      </el-form-item>
+      <el-form-item label="可使用范围" prop="useAreaValue" :show-message="errors.useAreaValue.isShow">
+        <div>
+          <el-radio-group v-model="form.useAreaType" @change="handleUseAreaTypeChange">
             <el-radio-button label="1">全场通用</el-radio-button>
             <el-radio-button label="2">指定店铺</el-radio-button>
             <el-radio-button label="3">指定商品分类</el-radio-button>
@@ -145,16 +180,42 @@
             </div>
           </div>
           <div v-if="form.useAreaType==4" style="margin-top:10px">
-            <el-autocomplete
-              v-model="temp.productSearchKey"
-              :fetch-suggestions="productSearchAsync"
-              placeholder="商品名称/编码/条形码/首拼音母"
-              clearable
-              style="width: 75%"
-              size="medium"
-              @select="productSearchSelect"
-            />
-            <el-button size="medium" style="width: 20%">添加</el-button>
+
+            <div>
+              <el-autocomplete
+                v-model="temp.productSearchKey"
+                :fetch-suggestions="productSearchAsync"
+                placeholder="商品名称/编码/条形码/首拼音母"
+                clearable
+                style="width: 75%"
+                size="medium"
+                @select="handleUseAreaProductSelect"
+              />
+              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProduct">添加</el-button>
+            </div>
+
+            <div>
+              <el-table
+                key="list_usearea_products"
+                :data="temp.list_usearea_products"
+                fit
+                highlight-current-row
+                style="width: 100%;"
+              >
+                <el-table-column label="商品名称" prop="userName" align="left" min-width="30%">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="mini" @click="handleUseAreaDelProduct(scope.$index)">
+                      删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
 
           </div>
         </div>
@@ -193,9 +254,11 @@ export default {
         faceType: 1,
         faceValue: '',
         perLimitNum: '',
-        validDate: '',
+        validDate: [],
         useAreaType: 1,
-        useAreaValue: [],
+        useAreaValue: '',
+        useTimeType: 1,
+        useTimeValue: '',
         description: ''
       },
       temp: {
@@ -203,8 +266,10 @@ export default {
         options_productkinds: [],
         cur_sel_usearea_store: { id: '', name: '' },
         cur_sel_usearea_productkind: { id: '', name: '' },
+        cur_sel_usearea_product: { id: '', name: '' },
         list_usearea_stores: [],
         list_usearea_productkinds: [],
+        list_usearea_products: [],
         productKindIds: [],
         productSearchKey: ''
       },
@@ -214,7 +279,13 @@ export default {
         faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
         perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
         atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
-        useAreaValue: [{ type: 'array', required: false, message: '至少选择一个', max: 99 }]
+        useAreaValue: [{ required: false, message: '请选择' }],
+        validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
+        useTimeValue: [{ required: true, message: '请输入' }]
+      },
+      errors: {
+        issueQuantity: { message: '', isShow: true },
+        useAreaValue: { message: '', isShow: false }
       },
       options_category: [{
         value: 1,
@@ -265,26 +336,45 @@ export default {
             type: 'warning'
           }).then(() => {
             console.log(JSON.stringify(this.form))
-            // add(this.form).then(res => {
-            //   this.$message(res.message)
-            //   if (res.result === 1) {
-            //     goBack(this)
-            //   }
-            // })
+            add(this.form).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                goBack(this)
+              }
+            })
           }).catch(() => {
           })
         }
       })
     },
-    useAreaTypeChange(value) {
-      this.form.useAreaValue = []
-      if (value === '1') {
-        console.log('1')
-        this.rules.useAreaValue[0].required = false
+    handleCategoryChange(value) {
+      if (value === 1 || value === 4) {
+        this.rules.issueQuantity[0].required = true
+        this.errors.issueQuantity.isShow = true
       } else {
-        this.form.useAreaValue = []
-        console.log('2')
+        this.rules.issueQuantity[0].required = false
+        this.errors.issueQuantity.isShow = false
+      }
+    },
+    handleUseTimeTypeChange(value) {
+      this.form.useTimeValue = ''
+    },
+    handleUseAreaTypeChange(value) {
+      if (value === '1') {
+        console.log('a1')
+        this.rules.useAreaValue[0].required = false
+        this.errors.useAreaValue.isShow = false
+      } else {
+        if (value === '2') {
+          this.form.useAreaValue = this.temp.list_usearea_stores
+        } else if (value === '3') {
+          this.form.useAreaValue = this.temp.list_usearea_productkinds
+        } else if (value === '4') {
+          this.form.useAreaValue = this.temp.list_usearea_products
+        }
+        // console.log('a2')
         this.rules.useAreaValue[0].required = true
+        this.errors.useAreaValue.isShow = true
       }
     },
     productSearchAsync(queryString, cb) {
@@ -301,8 +391,28 @@ export default {
         }
       })
     },
-    productSearchSelect(item) {
+    handleUseAreaProductSelect(item) {
+      this.temp.cur_sel_usearea_product.id = item.productId
+      this.temp.cur_sel_usearea_product.name = item.name
+    },
+    handleUseAreaAddProduct(item) {
+      var list = this.temp.list_usearea_products
+      var id = this.temp.cur_sel_usearea_product.id
+      var name = this.temp.cur_sel_usearea_product.name
 
+      if (id === '') {
+        this.$message('请选择商品')
+        return
+      }
+      const is_has = list.find((item) => {
+        return item.id === id
+      })
+
+      if (is_has != null) {
+        this.$message('商品已存在')
+        return
+      }
+      list.push({ id: id, name: name })
     },
     handleUseAreaStoreChange(val) {
       const sel_obj = this.temp.options_stores.find((item) => {
@@ -383,8 +493,8 @@ export default {
       }
       list.push({ id: id, name: name })
     },
-    handleUseAreaDelProductKind(index) {
-      this.temp.list_usearea_productkinds.splice(index, 1)
+    handleUseAreaDelProduct(index) {
+      this.temp.list_usearea_products.splice(index, 1)
     }
   }
 }
