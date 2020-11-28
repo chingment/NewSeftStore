@@ -20,14 +20,14 @@
           <el-radio-button label="2">用户出示二维码</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="发行总量" prop="issueQuantity" :show-message="errors.issueQuantity.isShow">
+      <el-form-item label="发行总量" prop="issueQuantity" :show-message="rules.issueQuantity[0].isShow">
 
-        <block v-if="form.category==2||form.category==3">
+        <template v-if="form.category==2||form.category==3">
           <span>不限制</span>
-        </block>
-        <block v-else>
+        </template>
+        <template v-else>
           <el-input v-model="form.issueQuantity" clearable="" />
-        </block>
+        </template>
       </el-form-item>
 
       <el-form-item label="券种" prop="faceType">
@@ -67,12 +67,12 @@
       <el-form-item label="可使用时间" prop="useTimeValue">
         <div>
           <el-radio-group v-model="form.useTimeType" @change="handleUseTimeTypeChange">
-            <el-radio-button label="1">按时间段</el-radio-button>
-            <el-radio-button label="2">按领取时间计算有效期</el-radio-button>
+            <el-radio-button label="1">按领取时间计算有效期</el-radio-button>
+            <el-radio-button label="2">按时间段</el-radio-button>
           </el-radio-group>
         </div>
         <div style="margin-top:10px">
-          <div v-if="form.useTimeType==1">
+          <div v-if="form.useTimeType==2">
             <el-date-picker
               v-model="form.useTimeValue"
               type="daterange"
@@ -84,7 +84,7 @@
             />
           </div>
 
-          <div v-if="form.useTimeType==2">
+          <div v-else-if="form.useTimeType==1">
             <el-input v-model="form.useTimeValue" placeholder="">
               <template slot="append">日无效</template>
             </el-input>
@@ -92,7 +92,7 @@
 
         </div>
       </el-form-item>
-      <el-form-item label="可使用范围" prop="useAreaValue" :show-message="errors.useAreaValue.isShow">
+      <el-form-item label="可使用范围" prop="useAreaValue" :show-message="rules.useAreaValue[0].isShow" :error="rules.useAreaValue[0].message">
         <div>
           <el-radio-group v-model="form.useAreaType" @change="handleUseAreaTypeChange">
             <el-radio-button label="1">全场通用</el-radio-button>
@@ -105,7 +105,7 @@
 
           <div v-if="form.useAreaType==2" style="margin-top:10px">
             <div>
-              <el-select v-model="temp.cur_sel_usearea_store.id" placeholder="选择店铺" style="width: 75%" size="medium" clearable @change="handleUseAreaStoreChange">
+              <el-select v-model="temp.cur_sel_usearea_store.id" placeholder="选择店铺" style="width: 75%" size="medium" clearable @change="handleUseAreaSelStore">
                 <el-option
                   v-for="item in temp.options_stores"
                   :key="item.value"
@@ -151,7 +151,7 @@
                 style="width: 75%"
                 size="medium"
                 clearable
-                @change="handleUseAreaProductKindChange"
+                @change="handleUseAreaSelProductKind"
               />
               <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProductKind">添加</el-button>
             </div>
@@ -189,7 +189,7 @@
                 clearable
                 style="width: 75%"
                 size="medium"
-                @select="handleUseAreaProductSelect"
+                @select="handleUseAreaSelProduct"
               />
               <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProduct">添加</el-button>
             </div>
@@ -256,9 +256,9 @@ export default {
         perLimitNum: '',
         validDate: [],
         useAreaType: 1,
-        useAreaValue: '',
+        useAreaValue: [],
         useTimeType: 1,
-        useTimeValue: '',
+        useTimeValue: [],
         description: ''
       },
       temp: {
@@ -275,17 +275,16 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
+        issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1, isShow: true }],
         faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
         perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
         atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
-        useAreaValue: [{ required: false, message: '请选择' }],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
-        useTimeValue: [{ required: true, message: '请输入' }]
+        useTimeValue: [{ type: 'array', required: true, message: '请输入正整数', isShow: true }],
+        useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]
       },
       errors: {
-        issueQuantity: { message: '', isShow: true },
-        useAreaValue: { message: '', isShow: false }
+        useTimeValue: { isShow: false, message: '' }
       },
       options_category: [{
         value: 1,
@@ -350,20 +349,35 @@ export default {
     handleCategoryChange(value) {
       if (value === 1 || value === 4) {
         this.rules.issueQuantity[0].required = true
-        this.errors.issueQuantity.isShow = true
+        this.rules.issueQuantity[0].isShow = true
       } else {
         this.rules.issueQuantity[0].required = false
-        this.errors.issueQuantity.isShow = false
+        this.rules.issueQuantity[0].isShow = false
       }
     },
     handleUseTimeTypeChange(value) {
-      this.form.useTimeValue = ''
+      // this.form.useTimeValue = ''
+      console.log('handleUseTimeTypeChange：' + value)
+      if (parseInt(value) === 1) {
+        // this.rules.useTimeValue[0]., = [{ type: 'string', required: true, message: '只能输入正整数', isShow: true }]
+
+        // console.log('handleUseTimeTypeChange2：1')
+        // this.rules.useTimeValue[0].required = true
+        this.rules.useTimeValue[0].message = '只能输入正整数'
+      } else {
+        // this.rules.useTimeValue = [{ type: 'array', required: true, message: '请选择日期', isShow: true }]
+        // console.log('handleUseTimeTypeChange2：2')
+        // this.rules.useTimeValue[0].type = 'string'
+        // this.rules.useTimeValue[0].required = true
+        this.rules.useTimeValue[0].message = '请选择日期'
+      }
     },
     handleUseAreaTypeChange(value) {
       if (value === '1') {
         console.log('a1')
         this.rules.useAreaValue[0].required = false
-        this.errors.useAreaValue.isShow = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
       } else {
         if (value === '2') {
           this.form.useAreaValue = this.temp.list_usearea_stores
@@ -372,9 +386,16 @@ export default {
         } else if (value === '4') {
           this.form.useAreaValue = this.temp.list_usearea_products
         }
-        // console.log('a2')
-        this.rules.useAreaValue[0].required = true
-        this.errors.useAreaValue.isShow = true
+
+        if (this.form.useAreaValue == null || this.form.useAreaValue.length === 0) {
+          this.rules.useAreaValue[0].required = true
+          this.rules.useAreaValue[0].isShow = true
+          this.rules.useAreaValue[0].message = '请选择.'
+        } else {
+          this.rules.useAreaValue[0].required = false
+          this.rules.useAreaValue[0].isShow = false
+          this.rules.useAreaValue[0].message = ''
+        }
       }
     },
     productSearchAsync(queryString, cb) {
@@ -391,7 +412,7 @@ export default {
         }
       })
     },
-    handleUseAreaProductSelect(item) {
+    handleUseAreaSelProduct(item) {
       this.temp.cur_sel_usearea_product.id = item.productId
       this.temp.cur_sel_usearea_product.name = item.name
     },
@@ -412,9 +433,37 @@ export default {
         this.$message('商品已存在')
         return
       }
-      list.push({ id: id, name: name })
+      list.push({ id: id, name: name, type: 'product_spu' })
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
     },
-    handleUseAreaStoreChange(val) {
+    handleUseAreaDelProduct(index) {
+      var list = this.temp.list_usearea_products
+      list.splice(index, 1)
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    },
+    handleUseAreaSelStore(val) {
       const sel_obj = this.temp.options_stores.find((item) => {
         return item.value === val
       })
@@ -439,12 +488,37 @@ export default {
         this.$message('店铺已存在')
         return
       }
-      list.push({ id: id, name: name })
+      list.push({ id: id, name: name, type: 'store' })
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].message = '请选择'
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
     },
     handleUseAreaDelStore(index) {
-      this.temp.list_usearea_stores.splice(index, 1)
+      var list = this.temp.list_usearea_stores
+      list.splice(index, 1)
+
+      if (list == null || list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].message = '请选择'
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
     },
-    handleUseAreaProductKindChange(val) {
+    handleUseAreaSelProductKind(val) {
       let name1
       let name2
       let name3
@@ -480,7 +554,7 @@ export default {
       var name = this.temp.cur_sel_usearea_productkind.name
 
       if (id === '') {
-        this.$message('请选择店铺')
+        this.$message('请选择分类')
         return
       }
       const is_has = list.find((item) => {
@@ -491,10 +565,35 @@ export default {
         this.$message('分类已存在')
         return
       }
-      list.push({ id: id, name: name })
+      list.push({ id: id, name: name, type: 'product_kind' })
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
     },
-    handleUseAreaDelProduct(index) {
-      this.temp.list_usearea_products.splice(index, 1)
+    handleUseAreaDelProductKind(index) {
+      var list = this.temp.list_usearea_productkinds
+      list.splice(index, 1)
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
     }
   }
 }

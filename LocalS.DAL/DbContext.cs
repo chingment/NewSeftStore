@@ -59,6 +59,7 @@ namespace LocalS.DAL
         public IDbSet<AppTraceLog> AppTraceLog { get; set; }
 
         public IDbSet<Coupon> Coupon { get; set; }
+        public IDbSet<CouponUseAreaObj> CouponUseAreaObj { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

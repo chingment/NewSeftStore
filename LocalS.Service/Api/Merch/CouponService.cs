@@ -3,11 +3,13 @@ using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.Redis;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
@@ -212,6 +214,31 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称不能为空");
             }
 
+            if(rop.Category== E_Coupon_Category.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择优惠券类型");
+            }
+
+            if (rop.UseMode == E_Coupon_UseMode.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择使用方式");
+            }
+
+            if (rop.FaceType == E_Coupon_FaceType.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择券种");
+            }
+
+            if (rop.UseTimeType == E_Coupon_UseTimeType.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择使用时间类型");
+            }
+
+            if (rop.UseAreaType == E_Coupon_UseAreaType.Unknow)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择可使用范围");
+            }
+
             if (rop.Category == E_Coupon_Category.Memeber || rop.Category == E_Coupon_Category.NewUser)
             {
                 rop.IssueQuantity = -1;//改为-1 不限制
@@ -234,43 +261,70 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "每人限领必须大于零");
             }
 
-            var d_coupon = new Coupon();
-            d_coupon.Id = IdWorker.Build(IdType.NewGuid);
-            d_coupon.MerchId = merchId;
-            d_coupon.Name = rop.Name;
-            d_coupon.Category = rop.Category;
-            d_coupon.ShopMode = E_Coupon_ShopMode.Unknow;
-            d_coupon.UseMode = rop.UseMode;
-            d_coupon.IssueQuantity = rop.IssueQuantity;
-            d_coupon.FaceType = rop.FaceType;
-            d_coupon.FaceValue = rop.FaceValue;
-            d_coupon.PerLimitNum = rop.PerLimitNum;
-            d_coupon.AtLeastAmount = rop.AtLeastAmount;
-            d_coupon.StartTime = DateTime.Parse(rop.ValidDate[0]);
-            d_coupon.EndTime = DateTime.Parse(rop.ValidDate[1]);
-            d_coupon.UseTimeType = rop.UseTimeType;
-
-            if (rop.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+            using (TransactionScope ts = new TransactionScope())
             {
-                d_coupon.UseTimeValue = rop.UseTimeValue.ToString();
+                var d_coupon = new Coupon();
+                d_coupon.Id = IdWorker.Build(IdType.NewGuid);
+                d_coupon.MerchId = merchId;
+                d_coupon.Name = rop.Name;
+                d_coupon.Category = rop.Category;
+                d_coupon.ShopMode = E_Coupon_ShopMode.Unknow;
+                d_coupon.UseMode = rop.UseMode;
+                d_coupon.IssueQuantity = rop.IssueQuantity;
+                d_coupon.FaceType = rop.FaceType;
+                d_coupon.FaceValue = rop.FaceValue;
+                d_coupon.PerLimitNum = rop.PerLimitNum;
+                d_coupon.AtLeastAmount = rop.AtLeastAmount;
+                d_coupon.StartTime = DateTime.Parse(rop.ValidDate[0]);
+                d_coupon.EndTime = DateTime.Parse(rop.ValidDate[1]);
+                d_coupon.UseTimeType = rop.UseTimeType;
+
+                if (rop.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+                {
+                    d_coupon.UseTimeValue = rop.UseTimeValue.ToString();
+                }
+                else if (rop.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+                {
+                    d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
+                }
+
+                d_coupon.IsSuperposition = false;
+                d_coupon.IsDelete = false;
+                d_coupon.Description = rop.Description;
+                d_coupon.UseAreaType = rop.UseAreaType;
+                d_coupon.UseAreaValue = rop.UseAreaValue.ToJsonString();
+                d_coupon.CreateTime = DateTime.Now;
+                d_coupon.Creator = operater;
+                CurrentDb.Coupon.Add(d_coupon);
+                CurrentDb.SaveChanges();
+
+                if (rop.UseAreaType != E_Coupon_UseAreaType.All)
+                {
+                    var useAreaValue = rop.UseAreaValue.ToJsonObject<JArray>();
+
+                    foreach (var item in useAreaValue)
+                    {
+
+                        var d_couponUseAreaObj = new CouponUseAreaObj();
+                        d_couponUseAreaObj.Id = IdWorker.Build(IdType.NewGuid);
+                        d_couponUseAreaObj.CouponId = d_coupon.Id;
+                        d_couponUseAreaObj.ObjId = item["id"].ToString();
+                        d_couponUseAreaObj.ObjName = item["name"].ToString();
+                        d_couponUseAreaObj.ObjType = item["type"].ToString();
+                        d_couponUseAreaObj.CreateTime = DateTime.Now;
+                        d_couponUseAreaObj.Creator = operater;
+                        CurrentDb.CouponUseAreaObj.Add(d_couponUseAreaObj);
+
+                    }
+
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
             }
-            else if (rop.UseTimeType == E_Coupon_UseTimeType.TimeArea)
-            {
-                d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
-            }
-
-            d_coupon.IsSuperposition = false;
-            d_coupon.IsDelete = false;
-            d_coupon.Description = rop.Description;
-            d_coupon.UseAreaType = rop.UseAreaType;
-            d_coupon.UseAreaValue = rop.UseAreaValue.ToJsonString();
-            d_coupon.CreateTime = DateTime.Now;
-            d_coupon.Creator = operater;
-            CurrentDb.Coupon.Add(d_coupon);
-            CurrentDb.SaveChanges();
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
 
 
             return result;
