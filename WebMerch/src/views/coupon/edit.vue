@@ -76,7 +76,7 @@
         <div style="margin-top:10px">
           <div v-if="form.useTimeType===1">
             <el-input v-model="form.useTimeValue" placeholder="" style="max-width:250px">
-              <template slot="append">日无效</template>
+              <template slot="append">日后无效</template>
             </el-input>
 
           </div>
@@ -95,7 +95,7 @@
 
         </div>
       </el-form-item>
-      <el-form-item label="可使用范围" prop="useAreaValue">
+      <el-form-item label="可使用范围" prop="useAreaValue" :show-message="rules.useAreaValue[0].isShow" :error="rules.useAreaValue[0].message">
         <div>
           <el-radio-group v-model="form.useAreaType" @change="handleUseAreaTypeChange">
             <el-radio-button label="1">全场通用</el-radio-button>
@@ -104,9 +104,8 @@
             <el-radio-button label="4">指定具体商品</el-radio-button>
           </el-radio-group>
         </div>
-        <div>
-
-          <div v-if="form.useAreaType==2" style="margin-top:10px">
+        <div style="margin-top:10px">
+          <div v-if="form.useAreaType==2">
             <div>
               <el-select v-model="temp.cur_sel_usearea_store.id" placeholder="选择店铺" style="width: 75%" size="medium" clearable @change="handleUseAreaSelStore">
                 <el-option
@@ -145,7 +144,7 @@
             </div>
 
           </div>
-          <div v-if="form.useAreaType==3" style="margin-top:10px">
+          <div v-if="form.useAreaType==3">
             <div>
               <el-cascader
                 v-model="temp.productKindIds"
@@ -182,7 +181,7 @@
               </el-table>
             </div>
           </div>
-          <div v-if="form.useAreaType==4" style="margin-top:10px">
+          <div v-if="form.useAreaType==4">
 
             <div>
               <el-autocomplete
@@ -440,7 +439,7 @@ export default {
       var id = this.temp.cur_sel_usearea_product.id
       var name = this.temp.cur_sel_usearea_product.name
 
-      if (id === '') {
+      if (id === '' || typeof id === 'undefined') {
         this.$message('请选择商品')
         return
       }
@@ -474,7 +473,7 @@ export default {
       var id = this.temp.cur_sel_usearea_store.id
       var name = this.temp.cur_sel_usearea_store.name
 
-      if (id === '') {
+      if (id === '' || typeof id === 'undefined') {
         this.$message('请选择店铺')
         return
       }
@@ -531,7 +530,7 @@ export default {
       var id = this.temp.cur_sel_usearea_productkind.id
       var name = this.temp.cur_sel_usearea_productkind.name
 
-      if (id === '') {
+      if (id === '' || typeof id === 'undefined') {
         this.$message('请选择分类')
         return
       }
@@ -554,11 +553,13 @@ export default {
     },
     handleUseAreaCheckSel(list) {
       if (list == null || list.length === 0) {
+        console.log('a')
         this.form.useAreaValue = null
         this.rules.useAreaValue[0].required = true
         this.rules.useAreaValue[0].isShow = true
         this.rules.useAreaValue[0].message = '请选择'
       } else {
+        console.log('b')
         this.form.useAreaValue = list
         this.rules.useAreaValue[0].required = false
         this.rules.useAreaValue[0].isShow = false
