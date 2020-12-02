@@ -4,7 +4,7 @@
       <el-form-item label="优惠券类型" prop="category">
         <el-select v-model="form.category" style="width: 100%" @change="handleCategoryChange">
           <el-option
-            v-for="item in options_category"
+            v-for="item in temp.options_category"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -186,7 +186,7 @@
             <div>
               <el-autocomplete
                 v-model="temp.productSearchKey"
-                :fetch-suggestions="productSearchAsync"
+                :fetch-suggestions="handleUseAreaSrhProduct"
                 placeholder="商品名称/编码/条形码/首拼音母"
                 clearable
                 style="width: 75%"
@@ -273,7 +273,20 @@ export default {
         list_usearea_productkinds: [],
         list_usearea_products: [],
         productKindIds: [],
-        productSearchKey: ''
+        productSearchKey: '',
+        options_category: [{
+          value: 1,
+          label: '全场赠券'
+        }, {
+          value: 2,
+          label: '新用户赠券'
+        }, {
+          value: 3,
+          label: '会员赠券'
+        }, {
+          value: 4,
+          label: '购物赠券'
+        }]
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
@@ -284,23 +297,7 @@ export default {
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
         useTimeValue: [{ required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
         useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]
-      },
-      errors: {
-        useTimeValue: { isShow: false, message: '' }
-      },
-      options_category: [{
-        value: 1,
-        label: '全场赠券'
-      }, {
-        value: 2,
-        label: '新用户赠券'
-      }, {
-        value: 3,
-        label: '会员赠券'
-      }, {
-        value: 4,
-        label: '购物赠券'
-      }]
+      }
     }
   },
   created() {
@@ -312,7 +309,6 @@ export default {
       initAdd().then(res => {
         if (res.result === 1) {
           var d = res.data
-
           this.temp.options_stores = d.optionsStores
           this.temp.options_productkinds = d.optionsProductKinds
         }
@@ -327,7 +323,6 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            console.log(JSON.stringify(this.form))
             add(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
@@ -384,6 +379,7 @@ export default {
         } else if (value === 4) {
           this.form.useAreaValue = this.temp.list_usearea_products
         }
+
         if (this.form.useAreaValue == null || this.form.useAreaValue.length === 0) {
           this.rules.useAreaValue[0].required = true
           this.rules.useAreaValue[0].isShow = true
@@ -395,7 +391,7 @@ export default {
         }
       }
     },
-    productSearchAsync(queryString, cb) {
+    handleUseAreaSrhProduct(queryString, cb) {
       console.log('queryString:' + queryString)
       search({ key: queryString }).then(res => {
         if (res.result === 1) {
@@ -432,33 +428,13 @@ export default {
       }
       list.push({ id: id, name: name, type: 'product_spu' })
 
-      if (list.length === 0) {
-        this.form.useAreaValue = null
-        this.rules.useAreaValue[0].required = true
-        this.rules.useAreaValue[0].isShow = true
-        this.rules.useAreaValue[0].message = '请选择'
-      } else {
-        this.form.useAreaValue = list
-        this.rules.useAreaValue[0].required = false
-        this.rules.useAreaValue[0].isShow = false
-        this.rules.useAreaValue[0].message = ''
-      }
+      this.handleUseAreaCheckSel(list)
     },
     handleUseAreaDelProduct(index) {
       var list = this.temp.list_usearea_products
       list.splice(index, 1)
 
-      if (list.length === 0) {
-        this.form.useAreaValue = null
-        this.rules.useAreaValue[0].required = true
-        this.rules.useAreaValue[0].isShow = true
-        this.rules.useAreaValue[0].message = '请选择'
-      } else {
-        this.form.useAreaValue = list
-        this.rules.useAreaValue[0].required = false
-        this.rules.useAreaValue[0].isShow = false
-        this.rules.useAreaValue[0].message = ''
-      }
+      this.handleUseAreaCheckSel(list)
     },
     handleUseAreaSelStore(val) {
       const sel_obj = this.temp.options_stores.find((item) => {
@@ -487,33 +463,12 @@ export default {
       }
       list.push({ id: id, name: name, type: 'store' })
 
-      if (list.length === 0) {
-        this.form.useAreaValue = null
-        this.rules.useAreaValue[0].message = '请选择'
-        this.rules.useAreaValue[0].required = true
-        this.rules.useAreaValue[0].isShow = true
-      } else {
-        this.form.useAreaValue = list
-        this.rules.useAreaValue[0].required = false
-        this.rules.useAreaValue[0].isShow = false
-        this.rules.useAreaValue[0].message = ''
-      }
+      this.handleUseAreaCheckSel(list)
     },
     handleUseAreaDelStore(index) {
       var list = this.temp.list_usearea_stores
       list.splice(index, 1)
-
-      if (list == null || list.length === 0) {
-        this.form.useAreaValue = null
-        this.rules.useAreaValue[0].message = '请选择'
-        this.rules.useAreaValue[0].required = true
-        this.rules.useAreaValue[0].isShow = true
-      } else {
-        this.form.useAreaValue = list
-        this.rules.useAreaValue[0].required = false
-        this.rules.useAreaValue[0].isShow = false
-        this.rules.useAreaValue[0].message = ''
-      }
+      this.handleUseAreaCheckSel(list)
     },
     handleUseAreaSelProductKind(val) {
       let name1
@@ -564,23 +519,16 @@ export default {
       }
       list.push({ id: id, name: name, type: 'product_kind' })
 
-      if (list.length === 0) {
-        this.form.useAreaValue = null
-        this.rules.useAreaValue[0].required = true
-        this.rules.useAreaValue[0].isShow = true
-        this.rules.useAreaValue[0].message = '请选择'
-      } else {
-        this.form.useAreaValue = list
-        this.rules.useAreaValue[0].required = false
-        this.rules.useAreaValue[0].isShow = false
-        this.rules.useAreaValue[0].message = ''
-      }
+      this.handleUseAreaCheckSel(list)
     },
     handleUseAreaDelProductKind(index) {
       var list = this.temp.list_usearea_productkinds
       list.splice(index, 1)
 
-      if (list.length === 0) {
+      this.handleUseAreaCheckSel(list)
+    },
+    handleUseAreaCheckSel(list) {
+      if (list == null || list.length === 0) {
         this.form.useAreaValue = null
         this.rules.useAreaValue[0].required = true
         this.rules.useAreaValue[0].isShow = true
