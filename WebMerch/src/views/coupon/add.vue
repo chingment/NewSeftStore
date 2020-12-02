@@ -280,11 +280,8 @@ export default {
         perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
         atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
-        useTimeValue: [{ type: 'array', required: true, message: '请输入正整数', isShow: true }],
+        useTimeValue: [{ type: 'string', required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
         useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]
-      },
-      errors: {
-        useTimeValue: { isShow: false, message: '' }
       },
       options_category: [{
         value: 1,
@@ -361,18 +358,21 @@ export default {
       if (parseInt(value) === 1) {
         // this.rules.useTimeValue[0]., = [{ type: 'string', required: true, message: '只能输入正整数', isShow: true }]
 
-        this.form.useTimeType=1
+        this.form.useTimeType = 1
+        this.rules.useTimeValue[0].pattern = fromReg.intege1
+        this.rules.useTimeValue[0].type = 'string'
         this.rules.useTimeValue[0].required = true
         this.rules.useTimeValue[0].message = '只能输入正整数'
-        this.rules.useTimeValue[0].isShow=true
+        this.rules.useTimeValue[0].isShow = true
       } else {
         // this.rules.useTimeValue = [{ type: 'array', required: true, message: '请选择日期', isShow: true }]
-       
-        // this.rules.useTimeValue[0].type = 'string'
-        this.form.useTimeType=2
+
+        this.form.useTimeType = 2
+        this.rules.useTimeValue[0].pattern = null
+        this.rules.useTimeValue[0].type = 'array'
         this.rules.useTimeValue[0].required = true
         this.rules.useTimeValue[0].message = '请选择日期'
-        this.rules.useTimeValue[0].isShow=true
+        this.rules.useTimeValue[0].isShow = true
       }
     },
     handleUseAreaTypeChange(value) {
