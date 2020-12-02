@@ -62,6 +62,7 @@
     <Compile Include="Agent.cs" />
     <Compile Include="Machine.cs" />
     <Compile Include="MachineCabinet.cs" />
+    <Compile Include="MemberCardTemplate.cs" />
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />
