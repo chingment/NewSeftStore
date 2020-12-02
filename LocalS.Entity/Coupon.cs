@@ -57,10 +57,10 @@ namespace LocalS.Entity
     {
 
         Unknow = 0,
-        //时间段
-        TimeArea = 1,
         //有效日
-        ValidDay = 2
+        ValidDay = 1,
+        //时间段
+        TimeArea = 2
     }
 
     [Table("Coupon")]

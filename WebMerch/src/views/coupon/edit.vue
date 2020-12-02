@@ -1,0 +1,638 @@
+<template>
+  <div id="user_add" class="app-container">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
+      <el-form-item label="优惠券类型" prop="category">
+        <el-select v-model="form.category" style="width: 100%" @change="handleCategoryChange">
+          <el-option
+            v-for="item in options_category"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="优惠券名称" prop="name">
+        <el-input v-model="form.name" clearable="" />
+      </el-form-item>
+      <el-form-item label="使用方式" prop="useMode">
+        <el-radio-group v-model="form.useMode">
+          <el-radio-button label="1">用户支付时选择</el-radio-button>
+          <el-radio-button label="2">用户出示二维码</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="发行总量" prop="issueQuantity">
+
+        <template v-if="form.category===2||form.category===3">
+          <span>不限制</span>
+        </template>
+        <template v-else>
+          <el-input v-model="form.issueQuantity" placeholder="" style="max-width:250px">
+            <template slot="append">张</template>
+          </el-input>
+        </template>
+      </el-form-item>
+
+      <el-form-item label="券种" prop="faceType">
+        <el-radio-group v-model="form.faceType">
+          <el-radio-button label="1">代金券</el-radio-button>
+          <el-radio-button label="2">折扣券</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+
+      <el-form-item label="券值" prop="faceValue">
+        <el-input v-model="form.faceValue" placeholder="" style="max-width:250px">
+          <template slot="append">{{ form.faceType==1?"元":"折" }}</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="每人限领" prop="perLimitNum">
+        <el-input v-model="form.perLimitNum" placeholder="" style="max-width:250px">
+          <template slot="append">张</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="使用门槛" prop="atLeastAmount">
+        <el-input v-model="form.atLeastAmount" placeholder="" style="max-width:250px">
+          <template slot="prepend">满</template>
+          <template slot="append">元可使用</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="有效期" prop="validDate">
+        <el-date-picker
+          v-model="form.validDate"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
+          style="width: 100%"
+        />
+      </el-form-item>
+      <el-form-item label="可使用时间" prop="useTimeValue">
+        <div>
+          <el-radio-group v-model="form.useTimeType" @change="handleUseTimeTypeChange">
+            <el-radio-button label="1">按领取时间计算有效期</el-radio-button>
+            <el-radio-button label="2">按时间段</el-radio-button>
+          </el-radio-group>
+        </div>
+        <div style="margin-top:10px">
+          <div v-if="form.useTimeType===1">
+            <el-input v-model="form.useTimeValue" placeholder="" style="max-width:250px">
+              <template slot="append">日无效</template>
+            </el-input>
+
+          </div>
+
+          <div v-else-if="form.useTimeType===2">
+            <el-date-picker
+              v-model="form.useTimeValue"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
+              style="width: 100%"
+            />
+          </div>
+
+        </div>
+      </el-form-item>
+      <el-form-item label="可使用范围" prop="useAreaValue">
+        <div>
+          <el-radio-group v-model="form.useAreaType" @change="handleUseAreaTypeChange">
+            <el-radio-button label="1">全场通用</el-radio-button>
+            <el-radio-button label="2">指定店铺</el-radio-button>
+            <el-radio-button label="3">指定商品分类</el-radio-button>
+            <el-radio-button label="4">指定具体商品</el-radio-button>
+          </el-radio-group>
+        </div>
+        <div>
+
+          <div v-if="form.useAreaType==2" style="margin-top:10px">
+            <div>
+              <el-select v-model="temp.cur_sel_usearea_store.id" placeholder="选择店铺" style="width: 75%" size="medium" clearable @change="handleUseAreaSelStore">
+                <el-option
+                  v-for="item in temp.options_stores"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddStore">添加</el-button>
+            </div>
+
+            <div>
+
+              <el-table
+                key="list_usearea_stores"
+                :data="temp.list_usearea_stores"
+                fit
+                highlight-current-row
+                style="width: 100%;"
+              >
+                <el-table-column label="店铺名称" prop="userName" align="left" min-width="30%">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="mini" @click="handleUseAreaDelStore(scope.$index)">
+                      删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+
+            </div>
+
+          </div>
+          <div v-if="form.useAreaType==3" style="margin-top:10px">
+            <div>
+              <el-cascader
+                v-model="temp.productKindIds"
+                :options="temp.options_productkinds"
+                placeholder="请选择商品分类"
+                style="width: 75%"
+                size="medium"
+                clearable
+                @change="handleUseAreaSelProductKind"
+              />
+              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProductKind">添加</el-button>
+            </div>
+
+            <div>
+              <el-table
+                key="list_usearea_productkinds"
+                :data="temp.list_usearea_productkinds"
+                fit
+                highlight-current-row
+                style="width: 100%;"
+              >
+                <el-table-column label="分类名称" prop="userName" align="left" min-width="30%">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="mini" @click="handleUseAreaDelProductKind(scope.$index)">
+                      删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+          <div v-if="form.useAreaType==4" style="margin-top:10px">
+
+            <div>
+              <el-autocomplete
+                v-model="temp.productSearchKey"
+                :fetch-suggestions="productSearchAsync"
+                placeholder="商品名称/编码/条形码/首拼音母"
+                clearable
+                style="width: 75%"
+                size="medium"
+                @select="handleUseAreaSelProduct"
+              />
+              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProduct">添加</el-button>
+            </div>
+
+            <div>
+              <el-table
+                key="list_usearea_products"
+                :data="temp.list_usearea_products"
+                fit
+                highlight-current-row
+                style="width: 100%;"
+              >
+                <el-table-column label="商品名称" prop="userName" align="left" min-width="30%">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="mini" @click="handleUseAreaDelProduct(scope.$index)">
+                      删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
+          </div>
+        </div>
+      </el-form-item>
+      <el-form-item label="描述" prop="description">
+        <el-input
+          v-model="form.description"
+          type="textarea"
+          placeholder="请输入内容"
+          maxlength="500"
+          show-word-limit
+        /></el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">保存</el-button>
+      </el-form-item>
+      </el-form-item></el-form>
+  </div>
+</template>
+
+<script>
+import { MessageBox } from 'element-ui'
+import { edit, initEdit } from '@/api/coupon'
+import { search } from '@/api/prdproduct'
+import fromReg from '@/utils/formReg'
+import { getUrlParam, goBack } from '@/utils/commonUtil'
+export default {
+  data() {
+    return {
+      loading: false,
+      form: {
+        category: 1,
+        name: '',
+        useMode: 1,
+        issueQuantity: 1,
+        faceType: 1,
+        faceValue: '',
+        perLimitNum: 1,
+        validDate: [],
+        useAreaType: 1,
+        useAreaValue: [],
+        useTimeType: 1,
+        useTimeValue: [],
+        description: ''
+      },
+      temp: {
+        options_stores: [],
+        options_productkinds: [],
+        cur_sel_usearea_store: { id: '', name: '' },
+        cur_sel_usearea_productkind: { id: '', name: '' },
+        cur_sel_usearea_product: { id: '', name: '' },
+        list_usearea_stores: [],
+        list_usearea_productkinds: [],
+        list_usearea_products: [],
+        productKindIds: [],
+        productSearchKey: ''
+      },
+      rules: {
+        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1, isShow: true }],
+        faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
+        perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
+        atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
+        validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
+        useTimeValue: [{ required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
+        useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]
+      },
+      errors: {
+        useTimeValue: { isShow: false, message: '' }
+      },
+      options_category: [{
+        value: 1,
+        label: '全场赠券'
+      }, {
+        value: 2,
+        label: '新用户赠券'
+      }, {
+        value: 3,
+        label: '会员赠券'
+      }, {
+        value: 4,
+        label: '购物赠券'
+      }]
+    }
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    init() {
+      this.loading = true
+      var id = getUrlParam('id')
+      initEdit({ id: id }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+
+          this.form = d.coupon
+
+          this.form.issueQuantity = d.coupon.issueQuantity + ''
+          this.form.perLimitNum = d.coupon.perLimitNum + ''
+
+          if (d.coupon.useAreaType === 2) {
+            this.temp.list_usearea_stores = d.coupon.useAreaValue
+          } else if (d.coupon.useAreaType === 3) {
+            this.temp.list_usearea_productkinds = d.coupon.useAreaValue
+          } else if (d.coupon.useAreaType === 4) {
+            this.temp.list_usearea_products = d.coupon.useAreaValue
+          }
+
+          this.handleCategoryChange(d.coupon.category)
+          this.handleUseTimeTypeChange(d.coupon.useTimeType)
+
+          this.temp.options_stores = d.optionsStores
+          this.temp.options_productkinds = d.optionsProductKinds
+        }
+        this.loading = false
+      })
+    },
+    onSubmit() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            console.log(JSON.stringify(this.form))
+            edit(this.form).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                goBack(this)
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
+    },
+    handleCategoryChange(value) {
+      value = parseInt(value)
+      this.form.category = value
+      if (value === 1 || value === 4) {
+        this.rules.issueQuantity[0].required = true
+        this.rules.issueQuantity[0].isShow = true
+        this.rules.issueQuantity[0].pattern = fromReg.intege1
+      } else {
+        this.rules.issueQuantity[0].required = false
+        this.rules.issueQuantity[0].isShow = false
+        this.rules.issueQuantity[0].pattern = null
+      }
+    },
+    handleUseTimeTypeChange(value) {
+      if (parseInt(value) === 1) {
+        if (typeof this.form.useTimeValue === 'object') {
+          this.form.useTimeValue = ''
+        } else {
+          this.form.useTimeValue = this.form.useTimeValue + ''
+        }
+        this.form.useTimeType = 1
+        this.rules.useTimeValue[0].pattern = fromReg.intege1
+        this.rules.useTimeValue[0].type = null
+        this.rules.useTimeValue[0].required = true
+        this.rules.useTimeValue[0].message = '只能输入正整数'
+        this.rules.useTimeValue[0].isShow = true
+      } else {
+        if (typeof this.form.useTimeValue !== 'object') {
+          this.form.useTimeValue = ''
+        }
+        this.form.useTimeType = 2
+        this.rules.useTimeValue[0].pattern = null
+        this.rules.useTimeValue[0].type = 'array'
+        this.rules.useTimeValue[0].required = true
+        this.rules.useTimeValue[0].message = '请选择日期'
+        this.rules.useTimeValue[0].isShow = true
+      }
+    },
+    handleUseAreaTypeChange(value) {
+      value = parseInt(value)
+      if (value === 1) {
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      } else {
+        if (value === 2) {
+          this.form.useAreaValue = this.temp.list_usearea_stores
+        } else if (value === 3) {
+          this.form.useAreaValue = this.temp.list_usearea_productkinds
+        } else if (value === 4) {
+          this.form.useAreaValue = this.temp.list_usearea_products
+        }
+        if (this.form.useAreaValue == null || this.form.useAreaValue.length === 0) {
+          this.rules.useAreaValue[0].required = true
+          this.rules.useAreaValue[0].isShow = true
+          this.rules.useAreaValue[0].message = '请选择.'
+        } else {
+          this.rules.useAreaValue[0].required = false
+          this.rules.useAreaValue[0].isShow = false
+          this.rules.useAreaValue[0].message = ''
+        }
+      }
+    },
+    productSearchAsync(queryString, cb) {
+      console.log('queryString:' + queryString)
+      search({ key: queryString }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          var restaurants = []
+          for (var j = 0; j < d.length; j++) {
+            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId })
+          }
+
+          cb(restaurants)
+        }
+      })
+    },
+    handleUseAreaSelProduct(item) {
+      this.temp.cur_sel_usearea_product.id = item.productId
+      this.temp.cur_sel_usearea_product.name = item.name
+    },
+    handleUseAreaAddProduct(item) {
+      var list = this.temp.list_usearea_products
+      var id = this.temp.cur_sel_usearea_product.id
+      var name = this.temp.cur_sel_usearea_product.name
+
+      if (id === '') {
+        this.$message('请选择商品')
+        return
+      }
+      const is_has = list.find((item) => {
+        return item.id === id
+      })
+
+      if (is_has != null) {
+        this.$message('商品已存在')
+        return
+      }
+      list.push({ id: id, name: name, type: 'product_spu' })
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    },
+    handleUseAreaDelProduct(index) {
+      var list = this.temp.list_usearea_products
+      list.splice(index, 1)
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    },
+    handleUseAreaSelStore(val) {
+      const sel_obj = this.temp.options_stores.find((item) => {
+        return item.value === val
+      })
+
+      this.temp.cur_sel_usearea_store.id = sel_obj.value
+      this.temp.cur_sel_usearea_store.name = sel_obj.label
+    },
+    handleUseAreaAddStore(e) {
+      var list = this.temp.list_usearea_stores
+      var id = this.temp.cur_sel_usearea_store.id
+      var name = this.temp.cur_sel_usearea_store.name
+
+      if (id === '') {
+        this.$message('请选择店铺')
+        return
+      }
+      const is_has = list.find((item) => {
+        return item.id === id
+      })
+
+      if (is_has != null) {
+        this.$message('店铺已存在')
+        return
+      }
+      list.push({ id: id, name: name, type: 'store' })
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].message = '请选择'
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    },
+    handleUseAreaDelStore(index) {
+      var list = this.temp.list_usearea_stores
+      list.splice(index, 1)
+
+      if (list == null || list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].message = '请选择'
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    },
+    handleUseAreaSelProductKind(val) {
+      let name1
+      let name2
+      let name3
+      var productkinds = this.temp.options_productkinds
+      for (let i = 0; i < productkinds.length; i++) {
+        if (productkinds[i].value === val[0]) {
+          name1 = productkinds[i].label
+          for (let j = 0; j < productkinds[i].children.length; j++) {
+            if (productkinds[i].children[j].value === val[1]) {
+              name2 = productkinds[i].children[j].label
+
+              for (let x = 0; x < productkinds[i].children[j].children.length; x++) {
+                if (productkinds[i].children[j].children[x].value === val[2]) {
+                  name3 = productkinds[i].children[j].children[x].label
+                }
+              }
+            }
+          }
+        }
+      }
+
+      console.log('id:' + val[2] + ',name1:' + name1 + ',name2' + name2 + ',name3:' + name3)
+      // const resultArr = this.options_productKinds.find((item) => {
+      //   item.chhi
+      //   return item.value === val
+      // })
+      this.temp.cur_sel_usearea_productkind.id = val[2]
+      this.temp.cur_sel_usearea_productkind.name = name1 + '/' + name2 + '/' + name3
+    },
+    handleUseAreaAddProductKind(e) {
+      var list = this.temp.list_usearea_productkinds
+      var id = this.temp.cur_sel_usearea_productkind.id
+      var name = this.temp.cur_sel_usearea_productkind.name
+
+      if (id === '') {
+        this.$message('请选择分类')
+        return
+      }
+      const is_has = list.find((item) => {
+        return item.id === id
+      })
+
+      if (is_has != null) {
+        this.$message('分类已存在')
+        return
+      }
+      list.push({ id: id, name: name, type: 'product_kind' })
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    },
+    handleUseAreaDelProductKind(index) {
+      var list = this.temp.list_usearea_productkinds
+      list.splice(index, 1)
+
+      if (list.length === 0) {
+        this.form.useAreaValue = null
+        this.rules.useAreaValue[0].required = true
+        this.rules.useAreaValue[0].isShow = true
+        this.rules.useAreaValue[0].message = '请选择'
+      } else {
+        this.form.useAreaValue = list
+        this.rules.useAreaValue[0].required = false
+        this.rules.useAreaValue[0].isShow = false
+        this.rules.useAreaValue[0].message = ''
+      }
+    }
+  }
+}
+</script>
+
+<style  lang="scss"  scoped>
+
+#user_add{
+   max-width: 600px;
+.line {
+  text-align: center;
+}
+
+.is-leaf{
+  display: none !important;
+  width: 0px !important;
+}
+}
+</style>
+

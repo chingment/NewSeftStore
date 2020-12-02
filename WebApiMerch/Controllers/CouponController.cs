@@ -32,5 +32,19 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Coupon.Add(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse InitEdit([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.Coupon.InitEdit(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Edit([FromBody]RupCouponEdit rop)
+        {
+            IResult result = MerchServiceFactory.Coupon.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

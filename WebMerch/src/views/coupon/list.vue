@@ -75,10 +75,13 @@
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleDetails(row)">
+          <!-- <el-button type="primary" size="mini" @click="handleDetails(row)">
             查看
+          </el-button> -->
+          <el-button type="primary" size="mini" @click="handleEdit(row)">
+            修改
           </el-button>
         </template>
       </el-table-column>
@@ -134,7 +137,12 @@ export default {
     },
     handleDetails(row) {
       this.$router.push({
-        path: '/clientuser/details?id=' + row.id
+        path: '/coupon/details?id=' + row.id
+      })
+    },
+    handleEdit(row) {
+      this.$router.push({
+        path: '/coupon/edit?id=' + row.id
       })
     },
     handleCreate(row) {

@@ -172,6 +172,7 @@ namespace Lumos
 
         }
 
+
         public static bool IsNumber(string str)
         {
             if (str == null || str.Length == 0)    //验证这个参数是否为空  

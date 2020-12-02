@@ -24,8 +24,26 @@ export function add(data) {
   })
 }
 
+export function initEdit(params) {
+  return request({
+    url: '/coupon/initEdit',
+    method: 'get',
+    params
+  })
+}
+
+export function edit(data) {
+  return request({
+    url: '/coupon/edit',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   add: add,
-  initAdd: initAdd
+  initAdd: initAdd,
+  edit: edit,
+  initEdit: initEdit
 }

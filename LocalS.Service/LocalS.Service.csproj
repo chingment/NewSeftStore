@@ -180,6 +180,7 @@
     <Compile Include="Api\Merch\CouponService.cs" />
     <Compile Include="Api\Merch\LogService.cs" />
     <Compile Include="Api\Merch\MachineService.cs" />
+    <Compile Include="Api\Merch\Models\CouponModel.cs" />
     <Compile Include="Api\Merch\Models\MachineModel.cs" />
     <Compile Include="Api\Merch\Models\OnSaleStoreModel.cs" />
     <Compile Include="Api\Merch\Models\ProductSkuInStoreModel.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\ReportService.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RetCouponInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetailsByMachineSelfTake.cs" />
     <Compile Include="Api\Merch\RModels\RetPayRefundHandleDetails.cs" />
@@ -254,7 +256,9 @@
     <Compile Include="Api\Merch\RModels\RupClientDetailsOrdersGetOrderList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RupCouponEdit.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupCouponInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByOperate.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByRelStock.cs" />
     <Compile Include="Api\Merch\RModels\RupLogGetListByStock.cs" />

@@ -26,7 +26,9 @@
           <span>不限制</span>
         </template>
         <template v-else>
-          <el-input v-model="form.issueQuantity" clearable="" />
+          <el-input v-model="form.issueQuantity" placeholder="" style="max-width:250px">
+            <template slot="append">张</template>
+          </el-input>
         </template>
       </el-form-item>
 
@@ -38,17 +40,17 @@
       </el-form-item>
 
       <el-form-item label="券值" prop="faceValue">
-        <el-input v-model="form.faceValue" placeholder="">
+        <el-input v-model="form.faceValue" placeholder="" style="max-width:250px">
           <template slot="append">{{ form.faceType==1?"元":"折" }}</template>
         </el-input>
       </el-form-item>
       <el-form-item label="每人限领" prop="perLimitNum">
-        <el-input v-model="form.perLimitNum" placeholder="">
+        <el-input v-model="form.perLimitNum" placeholder="" style="max-width:250px">
           <template slot="append">张</template>
         </el-input>
       </el-form-item>
       <el-form-item label="使用门槛" prop="atLeastAmount">
-        <el-input v-model="form.atLeastAmount" placeholder="">
+        <el-input v-model="form.atLeastAmount" placeholder="" style="max-width:250px">
           <template slot="prepend">满</template>
           <template slot="append">元可使用</template>
         </el-input>
@@ -85,7 +87,7 @@
           </div>
 
           <div v-else-if="form.useTimeType==1">
-            <el-input v-model="form.useTimeValue" placeholder="">
+            <el-input v-model="form.useTimeValue" placeholder="" style="max-width:250px">
               <template slot="append">日无效</template>
             </el-input>
           </div>
@@ -278,10 +280,13 @@ export default {
         issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1, isShow: true }],
         faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
         perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
-        atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
+        atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money1 }],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
-        useTimeValue: [{ type: 'string', required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
+        useTimeValue: [{ required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
         useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]
+      },
+      errors: {
+        useTimeValue: { isShow: false, message: '' }
       },
       options_category: [{
         value: 1,
@@ -314,15 +319,6 @@ export default {
         this.loading = false
       })
     },
-    resetForm() {
-      this.form = {
-        userName: '',
-        password: '',
-        fullName: '',
-        phoneNumber: '',
-        email: ''
-      }
-    },
     onSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -344,20 +340,21 @@ export default {
       })
     },
     handleCategoryChange(value) {
+      value = parseInt(value)
+      this.form.category = value
       if (value === 1 || value === 4) {
         this.rules.issueQuantity[0].required = true
         this.rules.issueQuantity[0].isShow = true
+        this.rules.issueQuantity[0].pattern = fromReg.intege1
       } else {
         this.rules.issueQuantity[0].required = false
         this.rules.issueQuantity[0].isShow = false
+        this.rules.issueQuantity[0].pattern = null
       }
     },
     handleUseTimeTypeChange(value) {
       this.form.useTimeValue = ''
-
       if (parseInt(value) === 1) {
-        // this.rules.useTimeValue[0]., = [{ type: 'string', required: true, message: '只能输入正整数', isShow: true }]
-
         this.form.useTimeType = 1
         this.rules.useTimeValue[0].pattern = fromReg.intege1
         this.rules.useTimeValue[0].type = 'string'
@@ -365,8 +362,6 @@ export default {
         this.rules.useTimeValue[0].message = '只能输入正整数'
         this.rules.useTimeValue[0].isShow = true
       } else {
-        // this.rules.useTimeValue = [{ type: 'array', required: true, message: '请选择日期', isShow: true }]
-
         this.form.useTimeType = 2
         this.rules.useTimeValue[0].pattern = null
         this.rules.useTimeValue[0].type = 'array'
@@ -376,20 +371,19 @@ export default {
       }
     },
     handleUseAreaTypeChange(value) {
-      if (value === '1') {
-        console.log('a1')
+      value = parseInt(value)
+      if (value === 1) {
         this.rules.useAreaValue[0].required = false
         this.rules.useAreaValue[0].isShow = false
         this.rules.useAreaValue[0].message = ''
       } else {
-        if (value === '2') {
+        if (value === 2) {
           this.form.useAreaValue = this.temp.list_usearea_stores
-        } else if (value === '3') {
+        } else if (value === 3) {
           this.form.useAreaValue = this.temp.list_usearea_productkinds
-        } else if (value === '4') {
+        } else if (value === 4) {
           this.form.useAreaValue = this.temp.list_usearea_products
         }
-
         if (this.form.useAreaValue == null || this.form.useAreaValue.length === 0) {
           this.rules.useAreaValue[0].required = true
           this.rules.useAreaValue[0].isShow = true
