@@ -122,9 +122,10 @@ export function generateRoutes(data) {
             path = item.path.split('?')[0]
           }
 
+          const component = resolve => require([`@/views${item.component}`], resolve)
           var _router = {
             path: path,
-            component: () => import(`@/views${item.component}`),
+            component: component,
             children: undefined,
             hidden: item.hidden,
             name: item.name,

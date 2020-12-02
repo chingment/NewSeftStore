@@ -356,20 +356,23 @@ export default {
       }
     },
     handleUseTimeTypeChange(value) {
-      // this.form.useTimeValue = ''
-      console.log('handleUseTimeTypeChange：' + value)
+      this.form.useTimeValue = ''
+
       if (parseInt(value) === 1) {
         // this.rules.useTimeValue[0]., = [{ type: 'string', required: true, message: '只能输入正整数', isShow: true }]
 
-        // console.log('handleUseTimeTypeChange2：1')
-        // this.rules.useTimeValue[0].required = true
+        this.form.useTimeType=1
+        this.rules.useTimeValue[0].required = true
         this.rules.useTimeValue[0].message = '只能输入正整数'
+        this.rules.useTimeValue[0].isShow=true
       } else {
         // this.rules.useTimeValue = [{ type: 'array', required: true, message: '请选择日期', isShow: true }]
-        // console.log('handleUseTimeTypeChange2：2')
+       
         // this.rules.useTimeValue[0].type = 'string'
-        // this.rules.useTimeValue[0].required = true
+        this.form.useTimeType=2
+        this.rules.useTimeValue[0].required = true
         this.rules.useTimeValue[0].message = '请选择日期'
+        this.rules.useTimeValue[0].isShow=true
       }
     },
     handleUseAreaTypeChange(value) {
