@@ -212,12 +212,12 @@
 
           </el-form-item>
           <el-form-item label="退款金额:" prop="amount">
-            <el-input v-model="formByApply.amount" style="width:160px">
+            <el-input v-model="formByApply.amount" clearable style="width:160px">
               <template slot="prepend">￥</template>
             </el-input>
           </el-form-item>
           <el-form-item label="原因:" prop="remark">
-            <el-input v-model="formByApply.remark" />
+            <el-input v-model="formByApply.remark" clearable />
           </el-form-item>
           <el-form-item label="" prop="">
             <el-button type="primary" @click="_apply()">

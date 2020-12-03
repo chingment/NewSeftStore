@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="优惠券名称" prop="name">
-        <el-input v-model="form.name" clearable="" />
+        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="使用方式" prop="useMode">
         <el-radio-group v-model="form.useMode">
@@ -26,7 +26,7 @@
           <span>不限制</span>
         </template>
         <template v-else>
-          <el-input v-model="form.issueQuantity" placeholder="" style="max-width:250px">
+          <el-input v-model="form.issueQuantity" placeholder="" clearable style="max-width:250px">
             <template slot="append">张</template>
           </el-input>
         </template>
@@ -40,17 +40,17 @@
       </el-form-item>
 
       <el-form-item label="券值" prop="faceValue">
-        <el-input v-model="form.faceValue" placeholder="" style="max-width:250px">
+        <el-input v-model="form.faceValue" placeholder="" clearable style="max-width:250px">
           <template slot="append">{{ form.faceType==1?"元":"折" }}</template>
         </el-input>
       </el-form-item>
       <el-form-item label="每人限领" prop="perLimitNum">
-        <el-input v-model="form.perLimitNum" placeholder="" style="max-width:250px">
+        <el-input v-model="form.perLimitNum" placeholder="" clearable style="max-width:250px">
           <template slot="append">张</template>
         </el-input>
       </el-form-item>
       <el-form-item label="使用门槛" prop="atLeastAmount">
-        <el-input v-model="form.atLeastAmount" placeholder="" style="max-width:250px">
+        <el-input v-model="form.atLeastAmount" placeholder="" clearable style="max-width:250px">
           <template slot="prepend">满</template>
           <template slot="append">元可使用</template>
         </el-input>
@@ -74,7 +74,12 @@
           </el-radio-group>
         </div>
         <div style="margin-top:10px">
-          <div v-if="form.useTimeType==2">
+          <div v-if="form.useTimeType==1">
+            <el-input v-model="form.useTimeValue" clearable placeholder="" style="max-width:250px">
+              <template slot="append">日后无效</template>
+            </el-input>
+          </div>
+          <div v-else-if="form.useTimeType==2">
             <el-date-picker
               v-model="form.useTimeValue"
               type="daterange"
@@ -84,12 +89,7 @@
               value-format="yyyy-MM-dd"
               style="width: 100%"
             />
-          </div>
 
-          <div v-else-if="form.useTimeType==1">
-            <el-input v-model="form.useTimeValue" placeholder="" style="max-width:250px">
-              <template slot="append">日后无效</template>
-            </el-input>
           </div>
 
         </div>
@@ -228,6 +228,7 @@
           placeholder="请输入内容"
           maxlength="500"
           show-word-limit
+          clearable
         /></el-form-item>
 
       <el-form-item>

@@ -44,6 +44,7 @@
           :options="kind_options"
           placeholder="请选择"
           style="width:300px"
+          clearable
         />
         <el-alert
           show-icon
@@ -82,7 +83,7 @@
       </el-form-item>
 
       <el-form-item v-show="!isOpenAddMultiSpecs" label="默认销售价" prop="singleSkuSalePrice">
-        <el-input v-model="form.singleSkuSalePrice" style="width:160px">
+        <el-input v-model="form.singleSkuSalePrice" clearable style="width:160px">
           <template slot="prepend">￥</template>
         </el-input>
 
@@ -209,7 +210,7 @@
 
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
-        <el-input v-model="form.briefDes" type="text" maxlength="200" show-word-limit />
+        <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
       </el-form-item>
       <el-form-item label="详情图片" prop="detailsDes">
 

@@ -11,7 +11,7 @@
       <el-form-item v-show="isOpenEditPassword" label="密码" prop="password">
         <div style="display:flex">
           <div style="flex:1">
-            <el-input v-model="form.password" type="password" />
+            <el-input v-model="form.password" type="password" clearable />
           </div>
           <div style="width:50px;text-align: center;">
             <span @click="openEditPassword()">取消</span>
@@ -39,16 +39,16 @@
         <div class="remark-tip"><span class="sign">*注</span>：格式为500*500</div>
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
-        <el-input v-model="form.nickName" />
+        <el-input v-model="form.nickName" clearable />
       </el-form-item>
       <el-form-item label="姓名" prop="fullName">
-        <el-input v-model="form.fullName" />
+        <el-input v-model="form.fullName" clearable />
       </el-form-item>
       <el-form-item label="手机号码" prop="phoneNumber">
-        <el-input v-model="form.phoneNumber" />
+        <el-input v-model="form.phoneNumber" clearable />
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" />
+        <el-input v-model="form.email" clearable />
       </el-form-item>
       <el-form-item label="音视频">
         <el-switch v-model="form.imIsUse" />

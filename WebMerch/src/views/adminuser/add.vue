@@ -2,10 +2,10 @@
   <div id="user_add" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName" />
+        <el-input v-model="form.userName" clearable />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" />
+        <el-input v-model="form.password" type="password" clearable />
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
         <el-input :value="form.avatar" style="display:none" />
@@ -28,16 +28,16 @@
         <div class="remark-tip"><span class="sign">*注</span>：格式为500*500</div>
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
-        <el-input v-model="form.nickName" />
+        <el-input v-model="form.nickName" clearable />
       </el-form-item>
       <el-form-item label="姓名" prop="fullName">
-        <el-input v-model="form.fullName" />
+        <el-input v-model="form.fullName" clearable />
       </el-form-item>
       <el-form-item label="手机号码" prop="phoneNumber">
-        <el-input v-model="form.phoneNumber" />
+        <el-input v-model="form.phoneNumber" clearable />
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" />
+        <el-input v-model="form.email" clearable />
       </el-form-item>
       <el-form-item label="音视频">
         <el-switch v-model="form.imIsUse" />
