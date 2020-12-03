@@ -71,6 +71,21 @@ namespace LocalS.BLL
                     {
                         r_spu.SpecIdxSkus.Add(new SpecIdxSku { SkuId = d_sku.Id, SpecIdx = d_sku.SpecIdx });
                     }
+
+                    if (!string.IsNullOrEmpty(r_spu.PinYinIndex))
+                    {
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId), string.Format("PY:{0}:{1}", r_spu.PinYinIndex.ToUpper(), productId), productId, StackExchange.Redis.When.Always);
+                    }
+
+                    if (!string.IsNullOrEmpty(r_spu.Name))
+                    {
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId), string.Format("NA:{0}:{1}", r_spu.Name.ToUpper(), productId), productId, StackExchange.Redis.When.Always);
+                    }
+
+                    if (!string.IsNullOrEmpty(r_spu.SpuCode))
+                    {
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId), string.Format("SC:{0}:{1}", r_spu.SpuCode.ToUpper(), productId), productId, StackExchange.Redis.When.Always);
+                    }
                 }
 
                 RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId), productId, JsonConvertUtil.SerializeObject(r_spu), StackExchange.Redis.When.Always);
