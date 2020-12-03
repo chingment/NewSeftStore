@@ -1,5 +1,6 @@
 const config = require('../../config')
 const toast = require('../../utils/toastutil')
+const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
@@ -97,7 +98,7 @@ Component({
           _this.setData({
             shopMode: shopMode,
             shopModes: d.shopModes,
-            singleStore: typeof config.storeId == "undefined" ? false : true,
+            singleStore: typeof storeage.getStoreId() == "undefined" ? false : true,
             currentStore: d.store,
             banner: d.banner,
             pdArea: d.pdArea,

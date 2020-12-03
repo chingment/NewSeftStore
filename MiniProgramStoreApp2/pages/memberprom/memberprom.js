@@ -5,7 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isShowButtonBottom: false
+    isShowButtonBottom: false,
+    timespan:(new Date()).getTime()
   },
 
   /**
@@ -91,5 +92,20 @@ Page({
         isShowButtonBottom: isShowButtonBottom
       })
     }, 0)
+  },
+  navigateToClick: function (e) {
+    // var ischecklogin = e.currentTarget.dataset.ischecklogin
+    // if (ischecklogin == "true") {
+    //   if (!ownRequest.isLogin()) {
+    //     ownRequest.goLogin()
+    //     return
+    //   }
+    // }
+
+    var right = e.currentTarget.dataset.right
+    var title = e.currentTarget.dataset.tilte
+    wx.navigateTo({
+      url: '/pages/memberrightdesc/memberrightdesc?right='+right+'&title='
+    })
   }
 })

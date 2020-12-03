@@ -40,10 +40,10 @@ export function getSideBars() {
     }
   })
 
-  // console.log('sildeBar:'+JSON.stringify(sildeBar))
+  console.log('sildeBar:' + JSON.stringify(sildeBar))
   var data = toTree(sildeBar)
 
-  // console.log('arr:'+JSON.stringify(data))
+  console.log('arr:' + JSON.stringify(data))
 
   var routers = []
   function _generateRoutes(routers, menus) {

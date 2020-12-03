@@ -31,6 +31,27 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
+        public WxAppInfoConfig GetWxMpAppInfoConfigByAppId(string appId)
+        {
+
+            var config = new WxAppInfoConfig();
+
+            var merch = CurrentDb.Merch.Where(m => m.WxMpAppId == appId).FirstOrDefault();
+            if (merch == null)
+                return null;
+
+
+            config.AppId = merch.WxMpAppId;
+            config.AppSecret = merch.WxMpAppSecret;
+            config.PayMchId = merch.WxPayMchId;
+            config.PayKey = merch.WxPayKey;
+            config.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+
+            config.MyMerchId = merch.Id;
+
+            return config;
+        }
+
         //public WxAppInfoConfig GetWxPaAppInfoConfig(string merchId)
         //{
 

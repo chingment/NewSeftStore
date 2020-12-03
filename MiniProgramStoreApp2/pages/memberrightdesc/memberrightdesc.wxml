@@ -1,0 +1,5 @@
+<view class="page-ct memberrightdesc">
+  <view class="bg_1">
+    <image class="bg_img" src="http://file.17fanju.com/upload/memberprom/1/right_desc_{{right}}.jpg"></image>
+  </view>
+</view>

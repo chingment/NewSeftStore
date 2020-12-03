@@ -40,5 +40,9 @@ namespace MyWeiXinSdk
                 _sslCert_Password = value;
             }
         }
+
+        public string MyMerchId { get; set; }
+
+        public string MyStoreId { get; set; }
     }
 }

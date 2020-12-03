@@ -10,6 +10,7 @@ Page({
     isAuthUserInfo: false
   },
   onLoad: function (options) {
+
     var _this = this;
     // 查看是否授权
     wx.getSetting({
@@ -31,21 +32,26 @@ Page({
       }
     })
 
+    const accountInfo = wx.getAccountInfoSync()
+    console.log(accountInfo.miniProgram.appId)
+    var appId = accountInfo.miniProgram.appId
     wx.login({
       success: function (res) {
         console.log("minProgram:login")
         if (res.code) {
           console.log(res)
           apiOwn.WxApiCode2Session({
-            merchId: config.merchId,
-            appId: config.appId,
+            appId: appId,
             code: res.code,
           }).then(function (res2) {
             console.log(res2)
             if (res2.result == 1) {
               var d = res2.data
-              app.globalData.openid = d.openid
-              app.globalData.session_key = d.session_key
+
+              storeage.setOpenId(d.openid)
+              storeage.setSessionKey(d.session_key)
+              storeage.setMerchId(d.merchid)
+
             } else {
               toast.show({
                 title: res2.message
@@ -62,9 +68,12 @@ Page({
   onShow: function () { },
   login: function (openId, phoneNumber) {
 
+    const accountInfo = wx.getAccountInfoSync()
+    console.log(accountInfo.miniProgram.appId)
+    
     apiOwn.loginByMinProgram({
-      merchId: config.merchId,
-      appId: config.appId,
+      appId: accountInfo.miniProgram.appId,
+      merchId:storeage.getMerchId(),
       openId: openId,
       phoneNumber: phoneNumber,
     }).then(function (res) {
@@ -117,13 +126,13 @@ Page({
       apiOwn.wxPhoneNumber({
         encryptedData: e.detail.encryptedData,
         iv: e.detail.iv,
-        session_key: app.globalData.session_key,
+        session_key: storeage.getSessionKey(),
       }).then(function (res2) {
         console.log(res2)
 
         if (res2.result == 1) {
           var d = res2.data
-          _this.login(app.globalData.openid, d.phoneNumber)
+          _this.login(storeage.getOpenId(), d.phoneNumber)
         }
         else {
           toast.show({

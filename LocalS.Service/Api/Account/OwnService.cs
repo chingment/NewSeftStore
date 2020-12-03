@@ -853,7 +853,8 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
-            var config = BizFactory.Merch.GetWxMpAppInfoConfig(rop.MerchId);
+
+            var config = BizFactory.Merch.GetWxMpAppInfoConfigByAppId(rop.AppId);
 
             if (config == null)
             {
@@ -867,11 +868,34 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key, merchid = config.MyMerchId });
 
             return result;
         }
 
+        public CustomJsonResult GetConfig(RopWxApiCode2Session rop)
+        {
+            var result = new CustomJsonResult();
+
+
+            var config = BizFactory.Merch.GetWxMpAppInfoConfigByAppId(rop.AppId);
+
+            if (config == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "配置信息失败");
+            }
+
+            var ret = SdkFactory.Wx.GetJsCode2Session(config, rop.Code);
+
+            if (ret == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key, merchid = config.MyMerchId, storeid = "21ae9399b1804dbc9ddd3c29e8b5c670" });
+
+            return result;
+        }
 
         public CustomJsonResult GetWxPhoneNumber(RopWxGetPhoneNumber rop)
         {

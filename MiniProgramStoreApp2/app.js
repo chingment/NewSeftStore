@@ -20,7 +20,7 @@ App({
     wx.onNetworkStatusChange(function (res) {
       console.log(res)
       if (!res.isConnected) {
-        
+
       }
     })
 
@@ -35,21 +35,28 @@ App({
       }
     })
 
+    const accountInfo = wx.getAccountInfoSync()
+    console.log(accountInfo.miniProgram.appId)
+
+    var appId = accountInfo.miniProgram.appId
     wx.login({
       success: function (res) {
         console.log("minProgram:login")
         if (res.code) {
           console.log(res)
           apiOwn.WxApiCode2Session({
-            merchId: config.merchId,
-            appId: config.appId,
+            appId: appId,
             code: res.code,
           }).then(function (res2) {
             console.log(res2)
             if (res2.result == 1) {
               var d = res2.data
-              _this.globalData.openid = d.openid
-              _this.globalData.session_key = d.session_key
+
+              storeage.setOpenId(d.openid)
+              storeage.setSessionKey(d.session_key)
+              storeage.setMerchId(d.merchid)
+              storeage.setStoreId(d.storeid)//指定设置单店铺模式，为NULL 多店铺模式
+              storeage.setCurrentStoreId(d.storeid) //设置当前店铺
             } else {
               toast.show({
                 title: res2.message
@@ -61,8 +68,10 @@ App({
     });
   },
   globalData: {
-    openid: null,
-    session_key: null,
+    // openid: null,
+    // merchid: null,
+    // storeid: null,
+    // session_key: null,
     userInfo: null,
     //mainTabBarIndex: 0,
     currentShopMode: 0,

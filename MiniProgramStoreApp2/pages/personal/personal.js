@@ -1,5 +1,6 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiPersonal = require('../../api/personal.js')
+const app = getApp()
 Component({
   options: {
     addGlobalClass: true,
@@ -62,8 +63,6 @@ Component({
     onShow() {
       var _this = this
       console.log("personal.onShow")
-
-      
     }
   }
 })

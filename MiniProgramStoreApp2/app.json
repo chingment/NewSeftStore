@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/memberprom/memberprom",
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",
@@ -17,7 +16,9 @@
     "pages/notopen/notopen",
     "pages/orderdetails/orderdetails",
     "pages/search/search",
-    "pages/receipttimeaxis/receipttimeaxis"
+    "pages/receipttimeaxis/receipttimeaxis",
+    "pages/memberprom/memberprom",
+    "pages/memberrightdesc/memberrightdesc"
   ],
   "window": {
     "backgroundTextStyle": "light",
