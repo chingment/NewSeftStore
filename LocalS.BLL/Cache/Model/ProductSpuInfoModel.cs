@@ -29,6 +29,7 @@ namespace LocalS.BLL
         public string Producer { get; set; }
         public string PinYinIndex { get; set; }
         public string Name { get; set; }
+        public string SpuCode { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public List<ImgSet> DetailsDes { get; set; }

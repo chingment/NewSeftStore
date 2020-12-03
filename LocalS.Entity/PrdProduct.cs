@@ -15,6 +15,7 @@ namespace LocalS.Entity
         public int PrdKindId2 { get; set; }
         public int PrdKindId3 { get; set; }
         public string Name { get; set; }
+        public string SpuCode { get; set; }
         public string PinYinIndex { get; set; }
         public string MainImgUrl { get; set; }
         public string DisplayImgUrls { get; set; }

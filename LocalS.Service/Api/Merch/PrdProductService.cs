@@ -67,7 +67,7 @@ namespace LocalS.Service.Api.Merch
             string[] productIds = null;
             if (!string.IsNullOrEmpty(rup.Key))
             {
-                var search = CacheServiceFactory.Product.Search(merchId, "All", rup.Key);
+                var search = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key);
                 if (search != null)
                 {
                     productIds = search.Select(m => m.ProductId).Distinct().ToArray();
@@ -77,7 +77,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.PrdProduct
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.BriefDes, u.PrdKindIds, u.PrdKindId1, u.PrdKindId2, u.PrdKindId3, u.CreateTime, u.DisplayImgUrls });
+                         select new { u.Id, u.Name, u.SpuCode, u.BriefDes, u.PrdKindIds, u.PrdKindId1, u.PrdKindId2, u.PrdKindId3, u.CreateTime, u.DisplayImgUrls });
 
             if (productIds != null)
             {
@@ -120,6 +120,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.Id,
                     Name = item.Name,
+                    SpuCode = item.SpuCode,
                     BriefDes = item.BriefDes,
                     MainImgUrl = ImgSet.GetMain_S(item.DisplayImgUrls),
                     KindNames = str_prdKindNames,
@@ -195,6 +196,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.Id = IdWorker.Build(IdType.NewGuid);
                 prdProduct.MerchId = merchId;
                 prdProduct.Name = rop.Name.Trim2();
+                prdProduct.SpuCode = rop.SpuCode.Trim2();
                 prdProduct.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
                 prdProduct.PrdKindId1 = rop.KindIds[0];
                 prdProduct.PrdKindId2 = rop.KindIds[1];
@@ -262,7 +264,7 @@ namespace LocalS.Service.Api.Merch
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
-            if(result.Result== ResultType.Success)
+            if (result.Result == ResultType.Success)
             {
                 foreach (var productSkuId in productSkuIds)
                 {
@@ -337,7 +339,7 @@ namespace LocalS.Service.Api.Merch
                 var prdProduct = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 prdProduct.Name = rop.Name;
-
+                prdProduct.SpuCode = rop.SpuCode;
                 prdProduct.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
                 prdProduct.PrdKindId1 = rop.KindIds[0];
                 prdProduct.PrdKindId2 = rop.KindIds[1];
@@ -403,7 +405,7 @@ namespace LocalS.Service.Api.Merch
             }
 
             CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
-  
+
             if (result.Result == ResultType.Success)
             {
 
@@ -490,7 +492,7 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult Search(string operater, string merchId, string key)
         {
-            var productSkus = CacheServiceFactory.Product.Search(merchId, "All", key);
+            var productSkus = CacheServiceFactory.Product.SearchSku(merchId, "All", key);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkus);
         }

@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class ProductSkuInfoBySearchModel
+    public class ProductSpuInfoBySearchModel
     {
-        public string ProductSkuId { get; set; }
         public string ProductId { get; set; }
-        public string CumCode { get; set; }
         public string SpuCode { get; set; }
         public string BarCode { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
-
-        public string SpecDes { get; set; }
     }
 }

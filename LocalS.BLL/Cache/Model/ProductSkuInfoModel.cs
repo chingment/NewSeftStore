@@ -12,6 +12,7 @@ namespace LocalS.BLL
     {
         public string Id { get; set; }
         public string BarCode { get; set; }
+        public string SpuCode { get; set; }
         public string CumCode { get; set; }
         public string Producer { get; set; }
         public string PinYinIndex { get; set; }

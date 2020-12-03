@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            ret.ProductSkus = CacheServiceFactory.Product.Search(store.MerchId, "All", rup.Key);
+            ret.ProductSkus = CacheServiceFactory.Product.SearchSku(store.MerchId, "All", rup.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

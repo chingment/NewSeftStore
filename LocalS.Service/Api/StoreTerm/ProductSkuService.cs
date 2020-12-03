@@ -93,7 +93,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
             }
 
 
-            ret.ProductSkus = CacheServiceFactory.Product.Search(machine.MerchId, "All", rup.Key);
+            ret.ProductSkus = CacheServiceFactory.Product.SearchSku(machine.MerchId, "All", rup.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

@@ -19,7 +19,7 @@ namespace LocalS.Service.Api.Merch
         }
 
         public string Name { get; set; }
-        public string SimpleCode { get; set; }
+        public string SpuCode { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public List<ImgSet> DetailsDes { get; set; }
         public string BriefDes { get; set; }
