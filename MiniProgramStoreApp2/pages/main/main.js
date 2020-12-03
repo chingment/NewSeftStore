@@ -100,7 +100,9 @@ Page({
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
-    mainTabBarSwitch(_this.data.tabBarIndex)
+
+    var tabBarIndex= wx.getStorageSync('main_tabbar_index') || 0
+    mainTabBarSwitch(tabBarIndex)
     apiCart.pageData()
   },
   mainTabBarItemClick(e) {
@@ -131,6 +133,8 @@ function mainTabBarSwitch(index) {
               title: s.navTitle
             })
           }, 1)
+
+          wx.setStorageSync('main_tabbar_index',index)
           pages[i].setData({tabBarIndex:index})
         } else {
           tabBar[j].selected = false

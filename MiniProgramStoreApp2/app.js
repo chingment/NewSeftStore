@@ -55,8 +55,10 @@ App({
               storeage.setOpenId(d.openid)
               storeage.setSessionKey(d.session_key)
               storeage.setMerchId(d.merchid)
-              storeage.setStoreId(d.storeid)//指定设置单店铺模式，为NULL 多店铺模式
-              storeage.setCurrentStoreId(d.storeid) //设置当前店铺
+              storeage.setStoreId(d.storeid) //指定设置单店铺模式，为NULL 多店铺模式
+              if (d.storeid != null) {
+                storeage.setCurrentStoreId(d.storeid) //设置当前店铺
+              }
             } else {
               toast.show({
                 title: res2.message
