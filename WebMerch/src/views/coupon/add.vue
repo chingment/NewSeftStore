@@ -191,7 +191,16 @@
                 style="width: 75%"
                 size="medium"
                 @select="handleUseAreaSelProduct"
-              />
+              >
+
+                <template slot-scope="{ item }">
+                  <div class="spu-search">
+                    <div class="name">{{ item.name }}</div>
+                    <div class="desc">[{{ item.spuCode }}]</div>
+                  </div>
+                </template>
+              </el-autocomplete>
+
               <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProduct">添加</el-button>
             </div>
 
@@ -203,9 +212,14 @@
                 highlight-current-row
                 style="width: 100%;"
               >
-                <el-table-column label="商品名称" prop="userName" align="left" min-width="30%">
+                <el-table-column label="商品名称" prop="userName" align="left" min-width="50%">
                   <template slot-scope="scope">
                     <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="货号" prop="userName" align="left" min-width="50%">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.spuCode }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
@@ -241,7 +255,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { add, initAdd } from '@/api/coupon'
-import { search } from '@/api/prdproduct'
+import { searchSpu } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
 import { goBack } from '@/utils/commonUtil'
 export default {
@@ -268,7 +282,7 @@ export default {
         options_productkinds: [],
         cur_sel_usearea_store: { id: '', name: '' },
         cur_sel_usearea_productkind: { id: '', name: '' },
-        cur_sel_usearea_product: { id: '', name: '' },
+        cur_sel_usearea_product: { id: '', name: '', spuCode: '' },
         list_usearea_stores: [],
         list_usearea_productkinds: [],
         list_usearea_products: [],
@@ -393,12 +407,12 @@ export default {
     },
     handleUseAreaSrhProduct(queryString, cb) {
       console.log('queryString:' + queryString)
-      search({ key: queryString }).then(res => {
+      searchSpu({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
           var restaurants = []
           for (var j = 0; j < d.length; j++) {
-            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId })
+            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId, 'spuCode': d[j].spuCode })
           }
 
           cb(restaurants)
@@ -408,12 +422,13 @@ export default {
     handleUseAreaSelProduct(item) {
       this.temp.cur_sel_usearea_product.id = item.productId
       this.temp.cur_sel_usearea_product.name = item.name
+      this.temp.cur_sel_usearea_product.spuCode = item.spuCode
     },
     handleUseAreaAddProduct(item) {
       var list = this.temp.list_usearea_products
       var id = this.temp.cur_sel_usearea_product.id
       var name = this.temp.cur_sel_usearea_product.name
-
+      var spuCode = this.temp.cur_sel_usearea_product.spuCode
       if (id === '' || typeof id === 'undefined') {
         this.$message('请选择商品')
         return
@@ -426,7 +441,7 @@ export default {
         this.$message('商品已存在')
         return
       }
-      list.push({ id: id, name: name, type: 'product_spu' })
+      list.push({ id: id, name: name, type: 'product_spu', spuCode: spuCode })
 
       this.handleUseAreaCheckSel(list)
     },

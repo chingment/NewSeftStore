@@ -62,10 +62,18 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse Search(string key)
+        public OwnApiHttpResponse SearchSpu(string key)
         {
         
-            IResult result = MerchServiceFactory.PrdProduct.Search(this.CurrentUserId, this.CurrentMerchId, key);
+            IResult result = MerchServiceFactory.PrdProduct.SearchSpu(this.CurrentUserId, this.CurrentMerchId, key);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse SearchSku(string key)
+        {
+
+            IResult result = MerchServiceFactory.PrdProduct.SearchSku(this.CurrentUserId, this.CurrentMerchId, key);
             return new OwnApiHttpResponse(result);
         }
 

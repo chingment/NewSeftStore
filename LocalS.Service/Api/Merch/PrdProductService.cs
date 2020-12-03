@@ -67,7 +67,7 @@ namespace LocalS.Service.Api.Merch
             string[] productIds = null;
             if (!string.IsNullOrEmpty(rup.Key))
             {
-                var search = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key);
+                var search = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
                 if (search != null)
                 {
                     productIds = search.Select(m => m.ProductId).Distinct().ToArray();
@@ -121,10 +121,10 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Name = item.Name,
                     SpuCode = item.SpuCode,
+                    Skus = list_Sku,
                     BriefDes = item.BriefDes,
                     MainImgUrl = ImgSet.GetMain_S(item.DisplayImgUrls),
                     KindNames = str_prdKindNames,
-                    Skus = list_Sku,
                     CreateTime = item.CreateTime,
                 });
             }
@@ -283,6 +283,7 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.Id = prdProduct.Id;
                 ret.Name = prdProduct.Name;
+                ret.SpuCode = prdProduct.SpuCode;
                 ret.DetailsDes = prdProduct.DetailsDes.ToJsonObject<List<ImgSet>>();
                 ret.BriefDes = prdProduct.BriefDes;
                 ret.KindIds = string.IsNullOrEmpty(prdProduct.PrdKindIds) ? new List<string>() : prdProduct.PrdKindIds.Split(',').ToList();
@@ -490,7 +491,14 @@ namespace LocalS.Service.Api.Merch
             return BizFactory.ProductSku.AdjustStockSalePrice(operater, AppId.MERCH, merchId, rop.StoreId, rop.ProductSkuId, rop.ProductSkuSalePrice, rop.ProductSkuIsOffSell);
         }
 
-        public CustomJsonResult Search(string operater, string merchId, string key)
+        public CustomJsonResult SearchSpu(string operater, string merchId, string key)
+        {
+            var products = CacheServiceFactory.Product.SearchSpu(merchId, "All", key);
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", products);
+        }
+
+        public CustomJsonResult SearchSku(string operater, string merchId, string key)
         {
             var productSkus = CacheServiceFactory.Product.SearchSku(merchId, "All", key);
 

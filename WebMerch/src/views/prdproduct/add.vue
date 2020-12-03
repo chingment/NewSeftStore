@@ -4,6 +4,9 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
+      <el-form-item label="货号" prop="spuCode">
+        <el-input v-model="form.spuCode" clearable />
+      </el-form-item>
       <el-form-item v-show="!isOpenAddMultiSpecs" label="编码" prop="singleSkuCumCode">
         <el-input v-model="form.singleSkuCumCode" clearable />
       </el-form-item>
@@ -278,6 +281,7 @@ export default {
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        spuCode: [{ required: true, min: 1, max: 50, message: '必填,且不能超过50个字符', trigger: 'change' }],
         singleSkuCumCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         singleSkuBarCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         kindIds: [{ type: 'array', required: true, message: '请选择一个三级商品分类', min: 3, max: 3 }],
@@ -395,6 +399,7 @@ export default {
 
           var _form = {}
           _form.name = this.form.name
+          _form.spuCode = this.form.spuCode
           _form.kindIds = this.form.kindIds
           _form.detailsDes = this.form.detailsDes
           _form.briefDes = this.form.briefDes

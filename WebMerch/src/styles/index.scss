@@ -327,3 +327,20 @@ font-size: 24px;
 .c-mode-2{
   color: #e1b11e
 }
+
+.spu-search{
+  display: flex;
+}
+
+.spu-search .name{
+width: 300px;
+display: flex;
+overflow: hidden;
+}
+
+.spu-search .desc{
+  flex: 1;
+  display: flex;
+  color: #88B7E0;
+
+}

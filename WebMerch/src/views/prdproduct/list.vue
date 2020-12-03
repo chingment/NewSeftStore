@@ -7,11 +7,11 @@
 
           <el-autocomplete
             v-model="listQuery.key"
-            :fetch-suggestions="productSearchAsync"
+            :fetch-suggestions="handleProductSrh"
             placeholder="商品名称/编码/条形码/首拼音母"
             clearable
             style="width: 100%"
-            @select="productSearchSelect"
+            @select="handleProductSel"
             @keyup.enter.native="handleFilter"
             @clear="handleFilter"
           />
@@ -48,27 +48,27 @@
           <img :src="scope.row.mainImgUrl" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="left" min-width="20%">
+      <el-table-column label="名称" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="编码" min-width="20%">
+      <el-table-column label="货号" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.skus[0].cumCode }}</span>
+          <span>{{ scope.row.spuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="条形码" align="left" min-width="20%">
+      <el-table-column v-if="isDesktop" label="条形码" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.skus[0].barCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="分类" align="left" min-width="30%">
+      <el-table-column v-if="isDesktop" label="分类" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="默认销售价" align="left" min-width="30%">
+      <el-table-column v-if="isDesktop" label="默认销售价" align="left" min-width="10%">
         <template slot-scope="{row}">
           <el-button type="text" @click="handleSalePrice(row)">{{ row.skus[0].salePrice }}</el-button>
 
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { getList, search } from '@/api/prdproduct'
+import { getList, searchSku } from '@/api/prdproduct'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -146,9 +146,9 @@ export default {
         path: '/prdproduct/manage?id=' + row.id + '&tab=tabStoreSale'
       })
     },
-    productSearchAsync(queryString, cb) {
+    handleProductSrh(queryString, cb) {
       console.log('queryString:' + queryString)
-      search({ key: queryString }).then(res => {
+      searchSku({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
           var restaurants = []
@@ -160,7 +160,7 @@ export default {
         }
       })
     },
-    productSearchSelect(item) {
+    handleProductSel(item) {
       this.listQuery.key = item.name
       getList(this.listQuery).then(res => {
         if (res.result === 1) {

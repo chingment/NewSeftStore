@@ -56,9 +56,17 @@ export function editSalePriceOnStore(data) {
   })
 }
 
-export function search(params) {
+export function searchSku(params) {
   return request({
-    url: '/prdproduct/search',
+    url: '/prdproduct/searchSku',
+    method: 'get',
+    params
+  })
+}
+
+export function searchSpu(params) {
+  return request({
+    url: '/prdproduct/searchSpu',
     method: 'get',
     params
   })
@@ -80,6 +88,7 @@ export default {
   edit: edit,
   getOnSaleStores: getOnSaleStores,
   editSalePriceOnStore: editSalePriceOnStore,
-  search: search,
+  searchSpu: searchSpu,
+  searchSku: searchSku,
   getSpecs: getSpecs
 }

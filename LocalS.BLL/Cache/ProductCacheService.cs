@@ -70,7 +70,13 @@ namespace LocalS.BLL
                     foreach (var d_sku in d_skus)
                     {
                         r_spu.SpecIdxSkus.Add(new SpecIdxSku { SkuId = d_sku.Id, SpecIdx = d_sku.SpecIdx });
+
+                        if (!string.IsNullOrEmpty(d_sku.CumCode))
+                        {
+                            RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId), string.Format("CC:{0}:{1}", d_sku.CumCode.ToUpper(), productId), productId, StackExchange.Redis.When.Always);
+                        }
                     }
+
 
                     if (!string.IsNullOrEmpty(r_spu.PinYinIndex))
                     {
