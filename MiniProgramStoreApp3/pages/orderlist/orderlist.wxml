@@ -1,0 +1,148 @@
+<view class="page-ct">
+	<block wx:if="{{tabs.length>1}}">
+		<scroll-view class="tabbar-scroll" scroll-x="false" scroll-left="{{100*tabsSliderIndex}}">
+			<view class="tabbar-items" style="width:100%">
+				<view class="container" style="display:flex;width:100%">
+					<block wx:for-items="{{tabs}}" wx:for-item="item" wx:key="index">
+						<view id="{{index}}" style="width:100%;flex:1;font-size:30rpx" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
+							<view class="title">{{item.name}}</view>
+							<view class='seleced-bottom'></view>
+
+						</view>
+					</block>
+				</view>
+
+			</view>
+		</scroll-view>
+	</block>
+	<swiper class="tabbar-contents" current="{{tabsSliderIndex}}" duration="300" style="height:{{scrollHeight}}px">
+		<block wx:for="{{tabs}}" wx:for-item="tab" wx:key="index">
+			<swiper-item class="item" catchtouchmove="stopTouchMove">
+				<own-scroll data-reply-index="{{index}}" pulldownDistance="100" emptyTipText="暂未找到相关订单" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
+					<view class='list'>
+						<block wx:for="{{tab.list.items}}" wx:for-index="i" wx:for-item="item2" wx:key="list">
+
+							<view class="it pd-com it-ordbk">
+
+								<view class="it-tag">
+									<view class="tag-name">
+
+										<view class="icon">
+											<image class="img" src="/content/default/images/store_address.png"></image>
+										</view>
+										<view class="content">
+											<text class="txt">{{item2.tag.name.content}}</text>
+										</view>
+
+									</view>
+									<view class="tag-desc">
+										<view class="content">
+											<text class="txt">{{item2.tag.desc.title.content}}</text>
+											<text class="txt">{{item2.tag.desc.value.content}}</text>
+										</view>
+
+									</view>
+								</view>
+
+
+								<view class="it-blocks">
+
+									<block wx:for="{{item2.blocks}}" wx:for-index="j" wx:for-item="block" wx:key="list">
+										<view class="block">
+											<view class="block-tag">
+
+												<view class="tag-name">
+
+													<view class="content">
+														<text class="txt">{{block.tag.name.content}}</text>
+													</view>
+
+												</view>
+												<view class="tag-desc">
+													<view class="content">
+														<text class="t">{{block.tag.desc.title.content}}</text>
+														<text class="c" style="color:{{block.tag.desc.value.color}}" >{{block.tag.desc.value.content}}</text>
+													</view>
+
+												</view>
+											</view>
+
+
+											<!-- <view wx:if="{{block.qrcode.code!=null&&block.qrcode.code!=''}}" class="block-qrcode">
+												<canvas class="qrimg" canvas-id="qrcode-{{i}}-{{j}}"></canvas>
+												<text class="remark">{{block.qrcode.remark}}</text>
+											</view> -->
+
+											<view wx:if="{{block.receiptInfo!=null}}" class="block-receiptinfo">
+												<navigator class="ct" hover-class="none" url="/pages/receipttimeaxis/receipttimeaxis?uniqueId={{block.uniqueId}}&uniqueType={{block.uniqueType}}">
+													<view class="content">
+														<view class="des">
+															<image class="img" src="/content/default/images/icon_express.png"></image> <text class="txt">{{block.receiptInfo.description}}</text>
+														</view>
+														<view class="time">
+															<text class="txt">{{block.receiptInfo.lastTime}}</text>
+														</view>
+													</view>
+													<view class="more">
+														<image class="img" src="/content/default/images/col_nav_right.png"></image>
+													</view>
+												</navigator>
+											</view>
+
+
+											<view class="block-field">
+
+
+												<view class="its-odcskus">
+													<block wx:for="{{block.data}}" wx:for-index="x" wx:for-item="skusitem" wx:key="list">
+														<view class="it">
+															<view class="it-l">
+																<view class="imgUrl">
+																	<image class="img" src="{{skusitem.value.mainImgUrl}}"></image>
+																</view>
+															</view>
+															<view class="it-m">
+																<view class="it-ml">
+																	<view>
+																		<text class='name'>{{skusitem.value.name}}</text>
+																	</view>
+																	<view>
+																		<text class='statusname'>{{skusitem.value.statusName}}</text>
+																	</view>
+																</view>
+																<view class="it-mr">
+																	<text class='quantity'> x {{skusitem.value.quantity}}</text>
+																</view>
+															</view>
+															<view class="it-r">
+																<text class='salePrice'> {{skusitem.value.chargeAmount}}</text>
+															</view>
+														</view>
+													</block>
+												</view>
+
+											</view>
+										</view>
+									</block>
+								</view>
+								<view class="it-message">
+
+								</view>
+								<view class="it-buttons">
+
+									<block wx:for="{{item2.buttons}}" wx:for-index="index" wx:for-item="button" wx:key="list">
+										<view class="btnbox">
+											<view class="btn" bindtap="operate" data-reply-opval="{{button.opVal}}" data-reply-optype="{{button.opType}}" data-reply-id="{{item2.id}}" style="color:{{button.name.color}}; border:1px solid {{button.name.color}};">{{button.name.content}}</view>
+										</view>
+									</block>
+
+								</view>
+							</view>
+							<view class="line-space"></view>
+						</block>
+					</view>
+				</own-scroll>
+			</swiper-item>
+		</block>
+	</swiper>
+</view>

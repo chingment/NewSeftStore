@@ -1,0 +1,61 @@
+<wxs module="filters" src="booktimedialog.wxs"></wxs>
+
+<view class="cumUpDialog booktimeDialog" wx:if="{{myShow}}">
+	<view class='wrapper' animation='{{myAnimationData}}'>
+		<view class="topinfo">
+		  <view class="title">
+			  选择时间
+			</view>
+			<view class='close' bindtap='_dialogClose'>
+				<image class="img" src='/content/default/images/icon_close.png'></image>
+			</view>
+		</view>
+		<scroll-view class="contentinfo" scroll-y="true">
+			<view class="wrapper">
+				<scroll-view class="scroll-view_H" scroll-x>
+					<view class='list' style='width:{{ width }}rpx'>
+						<view bindtap="_selectDate" wx:for="{{ dateArea }}" wx:for-item="item" wx:for-index="index"
+							wx:for-key="{{key_index}}" wx:key="index" data-index="{{ index }}"
+							class='listItem {{index==curDateAreaIndex? "current":""}}'>
+							<text class='name'>{{ item.week }}</text>
+							<text class='date'>{{ item.date }}</text>
+						</view>
+					</view>
+				</scroll-view>
+				<view class='time'>
+
+					<!-- <block wx:for="{{timeArea}}" wx:for-index="timeIndex" wx:for-item="timeItem" wx:key="timeIndex">
+
+
+						<view   data-Tindex="{{timeIndex}}"
+						bindtap='_selectTime' class='listItem {{ curTimeAreaIndex==timeIndex? "current":"" }}'>
+						<text>{{ timeItem.time }}</text>
+						<text>{{ timeItem.tip }}</text>
+					</view>
+
+					</block> -->
+
+					<block wx:for="{{timeArea.length%4?filters.toFix(timeArea.length/4)+1:timeArea.length/4}}" wx:for-index="i"
+						wx:for-key="{{i}}" wx:key="i">
+						<view class="time-row">
+							<block wx:for="{{4}}" wx:for-index="j" wx:for-item="{{item_j}}" wx:for-key="key_j" wx:key="j">
+								<view wx:if="{{timeArea[i*4+j].time}}" bindtap='_selectTime' data-Tindex="{{i*4+j}}" class='time-item'>
+									<view class='screen-data {{ curTimeAreaIndex==(i*4+j)? "current":"" }}'>
+										<text>{{ timeArea[i*4+j].time }}</text>
+										<text>{{ timeArea[i*4+j].tip }}</text>
+									</view>
+								</view>
+							</block>
+						</view>
+					</block>
+				</view>
+
+			</view>
+		</scroll-view>
+		<view class="bottominfo">
+			<view class="wrapper">
+				<button bindtap="_confirm" class='btn bg-main'>确定</button>
+			</view>
+		</view>
+	</view>
+</view>

@@ -1,0 +1,69 @@
+<import src="/template/showToast.wxml" />
+<template is="showToast" data="{{showToast: showToast}}" />
+<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<cartdialog id="cart" isShow="{{cartDialog.isShow}}"></cartdialog>
+
+<view class="page-ct skeleton">
+
+	<view class="search-condition" style="height:62rpx">
+		<block wx:if="{{condition_Kinds.length>1}}">
+			<scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{100*condition_Kinds_index}}">
+				<view style="width:{{condition_Kinds.length*100}}px;height:62rpx;" class="tabbar-items">
+					<view class="container">
+						<block wx:for-items="{{condition_Kinds}}" wx:for-item="item" wx:key="index">
+							<view id="{{index}}" style="width:80px" class="item {{condition_Kinds_index==index?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClickByKind">
+								<view class="title skeleton-rect">{{item.name}}</view>
+								<view class='seleced-bottom'></view>
+							</view>
+						</block>
+					</view>
+				</view>
+			</scroll-view>
+		</block>
+	</view>
+
+	<view class="tabbar-contents" current="0" style="height:{{scrollHeight}}px">
+		<own-scroll pulldownDistance="100" emptyTipText="暂未找到相关商品" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{dataList.allloaded}}" isEmpty="{{dataList.isEmpty}}">
+			<view class='list-data prd-list-1'>
+				<block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+					<view class='it it-{{index%2}}'>
+						<navigator class='imgurl skeleton-rect' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+							<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+								<view class="isOffSell-tip">已下架</view>
+							</view>
+							<image class="img" src="{{item.mainImgUrl}}"></image>
+						</navigator>
+						<text class="name font-gray skeleton-rect" >{{item.name}}</text>
+						<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
+						<view class="area2">
+							<view class="price skeleton-rect">
+								<text class="saleprice font-black">{{item.salePrice}}</text>
+								<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
+							</view>
+							<view class="operate skeleton-circle">
+
+								<block wx:if="{{item.specIdxSkus.length<=1}}">
+									<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+								</block>
+
+								<block wx:else>
+
+									<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
+
+								</block>
+
+							</view>
+						</view>
+					</view>
+				</block>
+			</view>
+		</own-scroll>
+	</view>
+
+
+	<view wx:if="{{cart.count>0}}" class="carttips" bindtap="goCart">
+		<view class="number">{{cart.count}}</view>
+		<image class="img" src="/content/default/images/cart.png"></image>
+	</view>
+
+</view>

@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "own-scroll": "/components/ownscroll/ownscroll",
+    "specsdialog": "../../components/specsdialog/specsdialog"
+  }
+}

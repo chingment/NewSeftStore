@@ -1,0 +1,149 @@
+.cumUpDialog {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, .4);
+  z-index: 9999;
+}
+
+.cumUpDialog>.wrapper {
+  width: 100%;
+  height: 800rpx;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: #fff;
+  border-top-left-radius: 15rpx;
+  border-top-right-radius: 15rpx;
+}
+
+.cumUpDialog .topinfo {
+  height: 70rpx;
+}
+
+.cumUpDialog .topinfo .title {
+  top: 12rpx;
+  left: 25rpx;
+  width: 200rpx;
+  height: 45rpx;
+  line-height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
+
+.cumUpDialog .topinfo .close {
+  top: 12rpx;
+  right: 15rpx;
+  width: 45rpx;
+  height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
+
+.cumUpDialog .contentinfo {
+  height: 607rpx;
+}
+
+.cumUpDialog .contentinfo .wrapper {
+  padding:0 25rpx;
+}
+
+.cumUpDialog .bottominfo {
+  height: 120rpx;
+  width: 100%;
+  background: #fff;
+}
+
+.cumUpDialog .bottominfo>.wrapper {
+  border-top: 3rpx solid #f8f8f8;
+  padding: 15rpx 25rpx;
+  display: flex;
+}
+
+.cumUpDialog .bottominfo .btn {
+  width: 100%;
+  color: #f8f8f8;
+}
+
+/* pages/orderTime/index.wxss */
+.scroll-view_H {
+  height: 128rpx;
+
+  width: 100%;
+}
+
+.scroll-view_H .list {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 1302rpx;
+}
+
+.scroll-view_H .listItem {
+  text-align: center;
+  width: 186rpx;
+  height: 128rpx;
+  background-color: #f1f2f6;
+  padding-top: 30rpx;
+  box-sizing: border-box;
+  /* float: left; */
+  display: inline-block;
+}
+
+.scroll-view_H .listItem .name {
+  font-size: 24rpx;
+  display: block;
+}
+
+.scroll-view_H .listItem .date {
+  margin-top: 5rpx;
+  font-size: 24rpx;
+  display: block;
+}
+
+.scroll-view_H .current {
+  background-color: #ffb101;
+}
+
+.scroll-view_H .current .name, .scroll-view_H .current .date{
+  color: #fff;
+}
+
+.time {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0 auto;
+}
+
+.time-row {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.time-item {
+  margin-top: 24rpx;
+  width: 25%;
+}
+
+.time-item .screen-data {
+  margin: 12rpx;
+  padding: 12rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  border: 3rpx solid #f8f8f8;
+  background-color: #f8f8f8;
+  color: #2b2b2b;
+}
+
+.time-item .current {
+  background-color: #ffb101;
+  color: #fff;
+  border: 3rpx solid #ffb101;
+}

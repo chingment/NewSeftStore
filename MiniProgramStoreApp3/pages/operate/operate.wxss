@@ -1,0 +1,56 @@
+
+.operate-result .imgbox {
+  text-align: center;
+  margin-top: 100rpx;
+}
+
+.operate-result .imgbox .img {
+  width: 200rpx;
+  height: 200rpx;
+  display: inline-block;
+}
+
+.operate-result .it-message {
+  text-align: center;
+  margin-top: 10rpx;
+}
+
+.operate-result .it-message .txt {
+  font-size: 28rpx;
+  line-height: 28rpx;
+  color: #ff6c8d;
+}
+
+.operate-result .it-remarks {
+  margin-top: 10rpx;
+}
+
+.operate-result .it-remarks .txt {
+  font-size: 26rpx;
+  line-height: 26rpx;
+}
+
+.operate-result .it-btns {
+  display: flex;
+  padding: 20rpx 0;
+}
+
+.operate-result .it-btns .btnbox {
+  flex: 1;
+  text-align: center;
+}
+
+.operate-result .btn {
+  border: 3rpx solid #000;
+  border-radius: 12rpx;
+  padding: 14rpx 42rpx;
+  display: inline-block;
+  font-size: 24rpx;
+  line-height: 24rpx;
+}
+
+.operate-check .it-message {
+  text-align: center;
+  font-size: 21rpx;
+  color: #333;
+}

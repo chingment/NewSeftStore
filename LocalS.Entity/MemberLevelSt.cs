@@ -4,16 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("MemberCardTemplate")]
-    public class MemberCardTemplate
+    [Table("MemberLevelSt")]
+    public class MemberLevelSt
     {
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        [MaxLength(128)]
         public string Name { get; set; }
-        public string Category { get; set; }
-        public decimal Fee { get; set; }
+        //Level 越大级别越大
+        public int Level { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

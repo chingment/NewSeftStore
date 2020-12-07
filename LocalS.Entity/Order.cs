@@ -119,5 +119,6 @@ namespace LocalS.Entity
         public E_PayPartner PayPartner { get; set; }
         public DateTime? BookStartTime { get; set; }
         public DateTime? BookEndTime { get; set; }
+        public bool IsNoDisplayClient { get; set; }
     }
 }

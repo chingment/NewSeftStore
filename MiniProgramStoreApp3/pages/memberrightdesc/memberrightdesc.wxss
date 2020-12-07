@@ -1,0 +1,24 @@
+.bg_1 {
+  width: 100%;
+  height: 800rpx;
+}
+
+.bg_img {
+  width: 100%;
+  height: 100%;
+}
+
+.btnbox{
+  display: flex;
+  justify-content: center;
+}
+
+ .btn {
+  border: 4rpx solid #ffbb0d;
+  color: #ffbb0d;
+  border-radius: 12rpx;
+  padding: 24rpx 130rpx;
+  display: inline-block;
+  font-size: 38rpx;
+  line-height: 38rpx;
+}

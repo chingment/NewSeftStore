@@ -1,0 +1,12 @@
+<import src="../../template/showToast.wxml" />
+<template is="showToast" data="{{showToast: showToast}}" />
+
+<view class='page-ct login-box'>
+  <view class="logo">
+    <image class="img" src='/content/default/images/logo.jpg'></image>
+  </view>
+
+  <!-- <button class="btn bg-main btn-login" open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button> -->
+  <button class="btn bg-main btn-login" open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">微信授权登录</button>
+   
+</view>

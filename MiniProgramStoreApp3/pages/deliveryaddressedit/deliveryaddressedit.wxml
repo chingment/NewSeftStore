@@ -1,0 +1,52 @@
+<import src="../../template/showToast.wxml" />
+<template is="showToast" data="{{showToast: showToast}}" />
+<import src="../../template/area_select.wxml" />
+
+<view class="page-ct">
+	<form bindsubmit="formSubmit">
+		<input name="hidden" class="hide" name="deliveryAddress_id" value="{{deliveryAddress.id}}" />
+		<view class="its-form">
+			<view class="ct">
+				<view class="it">
+					<view class="it-m">
+						<input class="input" name="deliveryAddress_consignee" placeholder="姓名" maxlength="20" value="{{deliveryAddress.consignee}}" />
+					</view>
+				</view>
+				<view class="it">
+					<view class="it-m">
+						<input class="input" name="deliveryAddress_phoneNumber" type="number" maxlength="11" placeholder="手机号码" value="{{deliveryAddress.phoneNumber}}" />
+					</view>
+				</view>
+				<view class="it">
+					<view class="it-m">
+						<input class="input" name="deliveryAddress_areaName" disabled='disabled' placeholder="省份，城市，区县" bindtap="choosearea" value="{{address.area}}" />
+					</view>
+				</view>
+				<view class="it">
+					<view class="it-m">
+						<input class="input" name="deliveryAddress_address" placeholder="详细地址，如楼道，楼盘等" value="{{deliveryAddress.address}}" />
+					</view>
+				</view>
+				<view class="it">
+					<view class="it-m">
+
+						<view class="ownradio-box">
+							<label class="radio" catchtap="isDefaultEvent">
+								<image src='/content/default/images/{{deliveryAddress_isDefault==false?"checkedoff":"checkedon"}}.png'></image>
+								<text >默认地址</text>
+								<input name="hidden" class="hide" name="deliveryAddress_isDefault" value="{{deliveryAddress_isDefault}}" />
+							</label>
+						</view>
+
+					</view>
+				</view>
+			</view>
+		</view>
+		<template is="area_select" data="{{showArea,resideprovince,residecity,country,currentTab,curr_pro,curr_cit,curr_cou}}" />
+
+
+		<button class="bottom-btn bg-main" form-type="submit">保存</button>
+
+
+	</form>
+</view>

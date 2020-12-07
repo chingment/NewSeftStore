@@ -1,0 +1,3 @@
+@import 'content/default/base.wxss';
+@import "components/wxParse/wxParse.wxss";
+@import "components/ownscroll/ownscroll.wxss";

@@ -1,0 +1,25 @@
+page{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+
+.swiper_item {
+  float: left;
+}
+
+.its-orderlist > .it {
+  padding: 0 10rpx;
+}
+
+
+.nomore-tip{
+  text-align: center;
+  color: #dbdbdb;
+  padding: 60rpx;
+  font-size: 24rpx;
+}

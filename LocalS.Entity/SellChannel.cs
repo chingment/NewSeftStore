@@ -17,7 +17,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Mall = 1,//商城
         Machine = 3,//机器
-        Platform = 4 //平台，不占用库存
+        MemberFee = 4 //会员费
     }
 
     public enum E_ReceiveMode
@@ -26,7 +26,7 @@ namespace LocalS.Entity
         Delivery = 1,
         StoreSelfTake = 2,
         MachineSelfTake = 3,
-        Platform = 4 //平台，不占用库存
+        MemberFee = 4 //会员费
     }
 
 }

@@ -9,7 +9,7 @@ namespace LocalS.Entity
     {
 
         public const string MallSellChannelRefId = "000000000000";
-
+        public const string MemberFeeSellChannelRefId = "000000000001";
 
         [Key]
         public string Id { get; set; }

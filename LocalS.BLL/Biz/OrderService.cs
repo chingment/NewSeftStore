@@ -359,17 +359,18 @@ namespace LocalS.BLL.Biz
                             //}
 
 
-                            #region Mall,Machine
 
-                            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
 
-                            if (bizProductSku == null)
+                            if (productSku.ShopMode == E_SellChannelRefType.Mall || productSku.ShopMode == E_SellChannelRefType.Machine)
                             {
-                                warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
-                            }
-                            else
-                            {
-                                if (productSku.ShopMode == E_SellChannelRefType.Mall || productSku.ShopMode == E_SellChannelRefType.Machine)
+                                #region Mall,Machine
+                                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, productSku.Id);
+
+                                if (bizProductSku == null)
+                                {
+                                    warn_tips.Add(string.Format("{0}商品信息不存在", bizProductSku.Name));
+                                }
+                                else
                                 {
                                     if (bizProductSku.Stocks.Count == 0)
                                     {
@@ -393,29 +394,82 @@ namespace LocalS.BLL.Biz
                                             }
                                         }
                                     }
+
+
+                                    var buildOrderSku = new BuildOrder.ProductSku();
+                                    buildOrderSku.Id = productSku.Id;
+                                    buildOrderSku.ProductId = bizProductSku.ProductId;
+                                    buildOrderSku.Name = bizProductSku.Name;
+                                    buildOrderSku.MainImgUrl = bizProductSku.MainImgUrl;
+                                    buildOrderSku.BarCode = bizProductSku.BarCode;
+                                    buildOrderSku.CumCode = bizProductSku.CumCode;
+                                    buildOrderSku.SpecDes = bizProductSku.SpecDes;
+                                    buildOrderSku.Producer = bizProductSku.Producer;
+                                    buildOrderSku.Quantity = productSku.Quantity;
+                                    buildOrderSku.ShopMode = productSku.ShopMode;
+                                    buildOrderSku.Stocks = bizProductSku.Stocks;
+                                    buildOrderSku.CartId = productSku.CartId;
+                                    buildOrderSku.SvcConsulterId = productSku.SvcConsulterId;
+                                    buildOrderSku.KindId1 = bizProductSku.KindId1;
+                                    buildOrderSku.KindId2 = bizProductSku.KindId2;
+                                    buildOrderSku.KindId3 = bizProductSku.KindId3;
+                                    buildOrderSkus.Add(buildOrderSku);
                                 }
 
-                                var buildOrderSku = new BuildOrder.ProductSku();
-                                buildOrderSku.Id = productSku.Id;
-                                buildOrderSku.ProductId = bizProductSku.ProductId;
-                                buildOrderSku.Name = bizProductSku.Name;
-                                buildOrderSku.MainImgUrl = bizProductSku.MainImgUrl;
-                                buildOrderSku.BarCode = bizProductSku.BarCode;
-                                buildOrderSku.CumCode = bizProductSku.CumCode;
-                                buildOrderSku.SpecDes = bizProductSku.SpecDes;
-                                buildOrderSku.Producer = bizProductSku.Producer;
-                                buildOrderSku.Quantity = productSku.Quantity;
-                                buildOrderSku.ShopMode = productSku.ShopMode;
-                                buildOrderSku.Stocks = bizProductSku.Stocks;
-                                buildOrderSku.CartId = productSku.CartId;
-                                buildOrderSku.SvcConsulterId = productSku.SvcConsulterId;
-                                buildOrderSku.KindId1 = bizProductSku.KindId1;
-                                buildOrderSku.KindId2 = bizProductSku.KindId2;
-                                buildOrderSku.KindId3 = bizProductSku.KindId3;
-                                buildOrderSkus.Add(buildOrderSku);
+                                #endregion
+                            }
+                            else if (productSku.ShopMode == E_SellChannelRefType.MemberFee)
+                            {
+                                #region MemberFee
+
+                                var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.Id == productSku.Id).FirstOrDefault();
+                                if (memberFeeSt == null)
+                                {
+                                    warn_tips.Add(string.Format("{0}商品信息不存在", "服务"));
+                                }
+                                else
+                                {
+                                    var stocks = new List<ProductSkuStockModel>();
+                                    var stock = new ProductSkuStockModel();
+
+                                    stock.RefType = E_SellChannelRefType.MemberFee;
+                                    stock.RefId = SellChannelStock.MemberFeeSellChannelRefId;
+                                    stock.CabinetId = "";
+                                    stock.SlotId = "";
+                                    stock.SumQuantity = 0;
+                                    stock.LockQuantity = 0;
+                                    stock.SellQuantity = 0;
+                                    stock.IsOffSell = false;
+                                    stock.SalePrice = memberFeeSt.FeeValue;
+                                    stock.SalePriceByVip = memberFeeSt.FeeValue;
+
+                                    stocks.Add(stock);
+
+                                    var buildOrderSku = new BuildOrder.ProductSku();
+                                    buildOrderSku.Id = productSku.Id;
+                                    buildOrderSku.ProductId = "";
+                                    buildOrderSku.Name = memberFeeSt.Name;
+                                    buildOrderSku.MainImgUrl = memberFeeSt.MainImgUrl;
+                                    buildOrderSku.BarCode = "";
+                                    buildOrderSku.CumCode = "";
+                                    buildOrderSku.SpecDes = null;
+                                    buildOrderSku.Producer = "";
+                                    buildOrderSku.Quantity = productSku.Quantity;
+                                    buildOrderSku.ShopMode = productSku.ShopMode;
+                                    buildOrderSku.Stocks = stocks;
+                                    buildOrderSku.CartId = "";
+                                    buildOrderSku.SvcConsulterId = "";
+                                    buildOrderSku.KindId1 = 0;
+                                    buildOrderSku.KindId2 = 0;
+                                    buildOrderSku.KindId3 = 0;
+                                    buildOrderSkus.Add(buildOrderSku);
+
+                                }
+
+                                #endregion
+
                             }
 
-                            #endregion
 
                         }
                     }
@@ -584,9 +638,11 @@ namespace LocalS.BLL.Biz
                                 }
                                 #endregion 
                                 break;
-                            case E_SellChannelRefType.Platform:
-                                #region Platform
-                                order.ReceiveMode = E_ReceiveMode.Platform;
+                            case E_SellChannelRefType.MemberFee:
+                                #region MemberFee
+                                order.ReceiveMode = E_ReceiveMode.MemberFee;
+                                order.ReceiveModeName = "会员费";
+                                order.IsNoDisplayClient = true;
                                 #endregion
                                 break;
                         }
@@ -700,6 +756,20 @@ namespace LocalS.BLL.Biz
 
 
                     if (shopMode == E_SellChannelRefType.Mall)
+                    {
+                        var buildOrderSubChild = new BuildOrder.Child();
+                        buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
+                        buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
+                        buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
+                        buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
+                        buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
+                        buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
+                        buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
+                        buildOrderSubChild.SalePriceByVip = productSku_Stocks[0].SalePriceByVip;
+                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * productSku_Stocks[0].SalePrice;
+                        buildOrderSubChilds.Add(buildOrderSubChild);
+                    }
+                    if (shopMode == E_SellChannelRefType.MemberFee)
                     {
                         var buildOrderSubChild = new BuildOrder.Child();
                         buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;

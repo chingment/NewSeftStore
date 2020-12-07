@@ -1,0 +1,105 @@
+{
+  "description": "项目配置文件。",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": false,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": false,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": false,
+    "useApiHook": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "bundle": false,
+    "useIsolateContext": true,
+    "useCompilerModule": true,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.6.5",
+  "appid": "wx969a817779af7b53",
+  "projectname": "MiniProgramStoreApp2",
+  "isGameTourist": false,
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "id": 1,
+          "name": "操作结果",
+          "pathName": "pages/operate/operate",
+          "query": "id=ce9834e30971490ba7984e89f7e4b582&type=1"
+        },
+        {
+          "id": 1,
+          "name": "启动清理缓存",
+          "pathName": "pages/store/store",
+          "query": "isClearCache=true",
+          "scene": null
+        },
+        {
+          "id": 2,
+          "name": "商品详情",
+          "pathName": "pages/productdetails/productdetails",
+          "query": "skuId=0a8cc495b3714c6eb8fff32043801ed5&storeId=21ae9399b1804dbc9ddd3c29e8b5c670",
+          "scene": null
+        },
+        {
+          "id": 3,
+          "name": "订单列表",
+          "pathName": "pages/orderlist/orderlist",
+          "query": "status=2000",
+          "scene": null
+        },
+        {
+          "id": 5,
+          "name": "商品搜索",
+          "pathName": "pages/search/search",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "时间轴",
+          "pathName": "pages/receipttimeaxis/receipttimeaxis",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "商城主页",
+          "pathName": "pages/main/main",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

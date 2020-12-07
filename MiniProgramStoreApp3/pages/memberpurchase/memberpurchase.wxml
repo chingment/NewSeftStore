@@ -1,0 +1,3 @@
+<!--pages/memberpurchase/memberpurchase.wxml-->
+<text>pages/memberpurchase/memberpurchase.wxml</text>
+<button bindtap="clickToPurchase" class='tui-btn-open btn-open'>立即开通</button>

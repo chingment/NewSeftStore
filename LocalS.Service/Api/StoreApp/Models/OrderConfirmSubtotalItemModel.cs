@@ -51,7 +51,8 @@ namespace LocalS.Service.Api.StoreApp
         Delivery = 1,
         StoreSelfTake = 2,
         DeliveryAndStoreSelfTake = 3,
-        MachineSelfTake = 4
+        MachineSelfTake = 4,
+        MemerbFee = 5
     }
 
     public class BookTimeModel

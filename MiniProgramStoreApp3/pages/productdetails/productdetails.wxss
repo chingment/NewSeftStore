@@ -1,0 +1,172 @@
+.details-main{
+   margin-bottom:88rpx;
+   padding-bottom: 88rpx;
+}
+
+swiper {
+  height: 500rpx;
+}
+
+.swiper-img{
+  display: flex;
+  justify-content:center;
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-img image{
+  height: 100%;
+}
+
+.details-info1 {
+  border-top: 3rpx solid #f8f8f8;
+  border-bottom: 3rpx solid #f8f8f8;
+  margin: 22rpx 22rpx;
+}
+
+.details-info1 .item-name {
+  font-weight: bold;
+  font-size: 36rpx;
+  line-height: 42rpx;
+  padding-top: 18rpx;
+}
+
+.details-info1 .item-briefIntro {
+  font-size: 28rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+
+.details-info1 .item-price {
+  height: 62rpx;
+  line-height: 62rpx;
+}
+
+.details-info1 .item-price .unitPrice {
+  font-size: 38rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-weight: bold;
+  color: #f18d00;
+}
+
+.details-info1 .item-price .showPrice {
+  font-size: 22rpx;
+  margin-left: 20rpx;
+  text-decoration: line-through;
+}
+
+.details-info1 .item-isOffSell .txt{
+
+  font-size: 26rpx;
+  color: #f00;
+}
+
+.details-info2 {
+}
+
+.details-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  float: left;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-top: 3rpx #dbdbdb solid;
+  overflow: hidden;
+  z-index: 999
+}
+
+.details-nav .item-home {
+  text-align: center;
+  width: 100rpx;
+  line-height: 100rpx;
+  height: 88rpx;
+  padding-left: 35rpx;
+}
+
+.details-nav .item-home image {
+  width: 38rpx;
+  height: 38rpx;
+}
+
+.details-nav .item-cart {
+  width: 100rpx;
+  text-align: center;
+  line-height: 100rpx;
+  height: 88rpx;
+  padding-right: 35rpx;
+  position: relative;
+}
+
+.details-nav .item-cart image {
+  width: 38rpx;
+  height: 38rpx;
+}
+
+.details-nav .item-increase {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: #fff;
+}
+
+.details-nav .item-buy {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: #fff;
+}
+
+.details-nav .item-cart .number {
+  width: 45rpx;
+  height: 32rpx;
+  border: 0 solid #f00;
+  background-color: #f10b2e;
+  color: #fff;
+  right: 40rpx;
+  border-radius: 30rpx;
+  line-height: 34rpx;
+  z-index: 999;
+  top: 8rpx;
+  position:absolute;
+  font-size: 20rpx;
+}
+
+.details-info3{
+  margin: 0 22rpx;
+}
+
+.its-option .it{
+  display: flex;
+}
+
+.its-option .title{
+  width: 70rpx;
+  font-weight: 800;
+  color: #000;
+  display: flex;
+align-items: center;
+justify-content: flex-start;
+}
+
+.its-option .content{
+  flex: 1;
+  width: 200rpx;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+.its-option .icon{
+  width: 200rpx;
+  display: flex;
+  justify-content: flex-end;
+}

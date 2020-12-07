@@ -1,0 +1,296 @@
+<import src="../../template/showToast.wxml" />
+<template is="showToast" data="{{showToast: showToast}}" />
+<booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}">
+</booktimedialog>
+
+<!-- <view class='tag-address'>
+	<image class="img" src="/content/default/images/tag_address.png"></image>
+</view> -->
+
+<view class="page-ct">
+	<view class="ord-block">
+		<block wx:for="{{blocks}}" wx:for-item="item" wx:key="index">
+			<view class="ct pd-com">
+
+				<block wx:if="{{item.shopMode==1}}">
+
+					<view class="tab-double">
+						<view class="tab-title">
+							<view class="title-left {{item.receiveMode==1?'selected':''}}" bindtap="tabMallReceiveModeClick"
+								data-reply-blockindex="{{index}}" data-reply-receivemode="1" data-reply-tabmode="{{item.tabMode}}">
+								<view class="txt">
+									<text wx:if="{{item.tabMode==1||item.tabMode==3}}">配送地址</text>
+								</view>
+								<view class="left-triangle">
+								</view>
+							</view>
+
+							<view class="title-right {{item.receiveMode==2?'selected':''}}" bindtap="tabMallReceiveModeClick"
+								data-reply-blockindex="{{index}}" data-reply-receivemode="2" data-reply-tabmode="{{item.tabMode}}">
+								<view class="right-triangle">
+
+								</view>
+								<view class="txt">
+									<text wx:if="{{item.tabMode==2||item.tabMode==3}}">到店自取</text>
+								</view>
+							</view>
+						</view>
+
+						<view class="tab-content">
+							<view class="content-item {{item.receiveMode==1?'selected':''}}">
+
+								<view class="its-a">
+									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
+										data-reply-deliveryaddressid="{{item.delivery.id}}">
+										<view class="it-l">
+											<text class='txt-h1'>{{item.delivery.consignee}}</text>
+											<text class="txt-h2 isDefault" wx:if="{{item.delivery.isDefault}}">默认</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt-h1 bold'>{{item.delivery.phoneNumber}}</text>
+												<text class='txt-h2'>{{item.delivery.areaName}} {{item.delivery.address}}</text>
+											</view>
+										</view>
+										<view class='it-r' bindtap="goSelect">
+											<view class="icon">
+												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											</view>
+										</view>
+									</view>
+								</view>
+							</view>
+							<view class="content-item {{item.receiveMode==2?'selected':''}}">
+								<view class="its-a">
+									<view class="it">
+										<view class="it-l">
+											<text class='txt-h1'>自取地址</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt-h1 bold'>{{item.selfTake.storeName}}</text>
+												<text class='txt-h2'>{{item.selfTake.storeAddress}}</text>
+											</view>
+										</view>
+									</view>
+
+									<view class="it" bindtap="booktimeSelect" data-reply-index="{{index}}">
+										<view class="it-l">
+											<text class='txt-h1'>预约时间</text>
+											<text class="txt-h2 isDefault">预约</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt bold'>
+													<block wx:if="{{item.bookTime.value==null}}">选择</block>
+													<block wx:else>{{item.bookTime.text}}</block>
+												</text>
+											</view>
+										</view>
+										<view class='it-r'>
+											<view class="icon">
+												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											</view>
+										</view>
+									</view>
+
+								</view>
+							</view>
+						</view>
+						<view class="its-odcskus" style="padding: 18rpx;">
+							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+								<view class="it">
+									<view class="it-l">
+										<view class="imgUrl">
+											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
+										</view>
+									</view>
+									<view class="it-m">
+										<view class="it-ml">
+											<text class='name'>{{skusitem.name}}</text>
+										</view>
+										<view class="it-mr">
+											<text class='quantity'> x {{skusitem.quantity}}</text>
+										</view>
+									</view>
+									<view class="it-r">
+										<text class='salePrice'> {{skusitem.salePrice}}</text>
+									</view>
+								</view>
+							</block>
+						</view>
+
+
+					</view>
+
+
+
+
+				</block>
+				<block wx:elif="{{item.shopMode==3}}">
+
+					<view class="tab-double">
+						<view class="tab-title">
+							<view class="title-left selected">
+								<view class="txt">
+									<text>机器自提</text>
+								</view>
+								<view class="left-triangle">
+								</view>
+							</view>
+
+							<view class="title-right">
+								<view class="right-triangle">
+
+								</view>
+								<view class="txt">
+
+								</view>
+							</view>
+						</view>
+
+						<view class="tab-content">
+							<view class="content-item selected">
+
+								<view class="its-a">
+									<view class="it">
+										<view class="it-l">
+											<text class='txt-h1'>机器地址</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt-h1 bold'>{{item.selfTake.storeName}}</text>
+												<text class='txt-h2'> {{item.selfTake.storeAddress}}</text>
+											</view>
+										</view>
+									</view>
+								</view>
+							</view>
+							<view class="content-item">
+
+							</view>
+
+						</view>
+						<view class="its-odcskus" style="padding: 18rpx;">
+							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+								<view class="it">
+									<view class="it-l">
+										<view class="imgUrl">
+											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
+										</view>
+									</view>
+									<view class="it-m">
+										<view class="it-ml">
+											<text class='name'>{{skusitem.name}}</text>
+										</view>
+										<view class="it-mr">
+											<text class='quantity'> x {{skusitem.quantity}}</text>
+										</view>
+									</view>
+									<view class="it-r">
+										<text class='salePrice'> {{skusitem.salePrice}}</text>
+									</view>
+								</view>
+							</block>
+						</view>
+
+
+					</view>
+
+
+
+
+				</block>
+				<block wx:elif="{{item.shopMode==4}}">
+
+					<view class="tab-double">
+						<view class="tab-title">
+							<view class="title-left selected">
+								<view class="txt">
+									<text>订单信息</text>
+								</view>
+								<view class="left-triangle">
+								</view>
+							</view>
+
+							<view class="title-right">
+								<view class="right-triangle">
+
+								</view>
+								<view class="txt">
+
+								</view>
+							</view>
+						</view>
+
+		
+						<view class="its-odcskus" style="padding: 18rpx;">
+							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+								<view class="it">
+									<view class="it-l">
+										<view class="imgUrl">
+											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
+										</view>
+									</view>
+									<view class="it-m">
+										<view class="it-ml">
+											<text class='name'>{{skusitem.name}}</text>
+										</view>
+										<view class="it-mr">
+											<text class='quantity'> x {{skusitem.quantity}}</text>
+										</view>
+									</view>
+									<view class="it-r">
+										<text class='salePrice'> {{skusitem.salePrice}}</text>
+									</view>
+								</view>
+							</block>
+						</view>
+
+
+					</view>
+
+
+
+
+				</block>
+				<view class="line-space-ncolor"></view>
+
+			</view>
+
+
+		</block>
+		<view class="pd-com">
+			<view class="its-a fieldBlock pd-com">
+				<block wx:for="{{payOption.options}}" wx:key="caller">
+					<view class="it">
+						<view class="it-l">
+							<view class="icon">
+								<image class="img" style="width:38px;height:38px"
+									src='/content/default/images/paycaller_{{item.payCaller}}.png'></image>
+							</view>
+						</view>
+						<view class="it-m">
+							<view class="it-ml w100">
+								<text class="txt">{{item.title}}</text>
+							</view>
+							<view class="it-mr flex1">
+								<text class="txt">{{item.desc}}</text>
+							</view>
+						</view>
+
+						<view class="it-r" style="width:80rpx">
+							<view class="icon">
+								<image class="img" style="width:42rpx;height:42rpx"
+									src='/content/default/images/{{item.selected==false?"checkedoff":"checkedon"}}.png'></image>
+							</view>
+						</view>
+
+					</view>
+				</block>
+			</view>
+		</view>
+		<view class="line-space-ncolor"></view>
+	</view>
+	<button bindtap="unifiedOrder" class="btn-bottom bg-main">立即支付({{actualAmount}})</button>
+</view>

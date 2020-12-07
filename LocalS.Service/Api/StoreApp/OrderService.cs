@@ -131,13 +131,14 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult();
 
             var ret = new RetOrderConfirm();
-            var subtotalItem = new List<OrderConfirmSubtotalItemModel>();
-            var skus = new List<OrderConfirmProductSkuModel>();
 
-            decimal skuAmountByActual = 0;//实际总价
-            decimal skuAmountByOriginal = 0;//原总价
-            decimal skuAmountByMemebr = 0;//普通用户总价
-            decimal skuAmountByVip = 0;//会员总价
+            var c_subtotalItems = new List<OrderConfirmSubtotalItemModel>();
+            var c_prodcutSkus = new List<OrderConfirmProductSkuModel>();
+
+            decimal amount_actual = 0;//实际总价
+            decimal amount_original = 0;//原总价
+            decimal amount_memebr = 0;//普通用户总价
+            decimal amount_vip = 0;//会员总价
 
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
@@ -151,29 +152,50 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
                 }
 
-
                 store = BizFactory.Store.GetOne(rop.StoreId);
 
-                foreach (var item in rop.ProductSkus)
+                foreach (var productSku in rop.ProductSkus)
                 {
-                    var productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(item.ShopMode), item.Id);
-                    if (productSku != null)
+                    if (productSku.ShopMode == E_SellChannelRefType.Machine || productSku.ShopMode == E_SellChannelRefType.Mall)
                     {
-                        item.Name = productSku.Name;
-                        item.MainImgUrl = productSku.MainImgUrl;
-
-                        if (productSku.Stocks.Count > 0)
+                        var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
+                        if (r_productSku != null)
                         {
-                            item.SalePrice = productSku.Stocks[0].SalePrice;
-                            skuAmountByOriginal += (productSku.Stocks[0].SalePrice * item.Quantity);
-                            skuAmountByMemebr += (productSku.Stocks[0].SalePrice * item.Quantity);
-                            skuAmountByVip += (productSku.Stocks[0].SalePriceByVip * item.Quantity);
-                            skus.Add(item);
+                            productSku.Name = r_productSku.Name;
+                            productSku.MainImgUrl = r_productSku.MainImgUrl;
+
+                            if (r_productSku.Stocks.Count > 0)
+                            {
+                                productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                                productSku.SalePriceByVip = r_productSku.Stocks[0].SalePriceByVip;
+
+                                c_prodcutSkus.Add(productSku);
+
+                                amount_original += (productSku.SalePrice * productSku.Quantity);
+                                amount_memebr += (productSku.SalePrice * productSku.Quantity);
+                                amount_vip += (productSku.SalePriceByVip * productSku.Quantity);
+                            }
+                        }
+                    }
+                    else if (productSku.ShopMode == E_SellChannelRefType.MemberFee)
+                    {
+                        var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == store.MerchId && m.Id == productSku.Id).FirstOrDefault();
+                        if (memberFeeSt != null)
+                        {
+                            productSku.Name = memberFeeSt.Name;
+                            productSku.MainImgUrl = memberFeeSt.MainImgUrl;
+                            productSku.SalePrice = memberFeeSt.FeeValue;
+
+                            c_prodcutSkus.Add(productSku);
+
+                            amount_original += (productSku.SalePrice * productSku.Quantity);
+                            amount_memebr += (productSku.SalePrice * productSku.Quantity);
+                            amount_vip += (productSku.SalePrice * productSku.Quantity);
                         }
                     }
                     else
                     {
-                        LogUtil.Info("商品Id ：" + item.Id + ",信息为空");
+                        LogUtil.Info("商品Id ：" + productSku.Id + ",信息为空");
                     }
                 }
 
@@ -251,16 +273,16 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var l_orderSubChilds = orderSubs.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
 
-                    var orderConfirmSkuModel = new OrderConfirmProductSkuModel();
-                    orderConfirmSkuModel.Id = l_orderSubChilds[0].PrdProductSkuId;
-                    orderConfirmSkuModel.Name = l_orderSubChilds[0].PrdProductSkuName;
-                    orderConfirmSkuModel.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
-                    orderConfirmSkuModel.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
-                    orderConfirmSkuModel.SalePrice = l_orderSubChilds[0].SalePrice;
-                    orderConfirmSkuModel.ShopMode = shopModeSku.SellChannelRefType;
-                    skuAmountByOriginal += (l_orderSubChilds[0].SalePrice * orderConfirmSkuModel.Quantity);
-                    skuAmountByMemebr += (l_orderSubChilds[0].SalePriceByVip * orderConfirmSkuModel.Quantity);
-                    skus.Add(orderConfirmSkuModel);
+                    var c_prodcutSku = new OrderConfirmProductSkuModel();
+                    c_prodcutSku.Id = l_orderSubChilds[0].PrdProductSkuId;
+                    c_prodcutSku.Name = l_orderSubChilds[0].PrdProductSkuName;
+                    c_prodcutSku.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
+                    c_prodcutSku.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
+                    c_prodcutSku.SalePrice = l_orderSubChilds[0].SalePrice;
+                    c_prodcutSku.ShopMode = shopModeSku.SellChannelRefType;
+                    amount_original += (l_orderSubChilds[0].SalePrice * c_prodcutSku.Quantity);
+                    amount_memebr += (l_orderSubChilds[0].SalePriceByVip * c_prodcutSku.Quantity);
+                    c_prodcutSkus.Add(c_prodcutSku);
                 }
             }
 
@@ -276,19 +298,19 @@ namespace LocalS.Service.Api.StoreApp
 
             if (memberLevel > 0)
             {
-                skuAmountByActual = skuAmountByVip;//会员用户总价 为 实际总价
+                amount_actual = amount_vip;//会员用户总价 为 实际总价
 
-                subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", (skuAmountByOriginal - skuAmountByVip).ToF2Price()), IsDcrease = true });
+                c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", (amount_original - amount_vip).ToF2Price()), IsDcrease = true });
             }
             else
             {
-                skuAmountByActual = skuAmountByMemebr;
+                amount_actual = amount_memebr;
             }
 
 
             var orderBlock = new List<OrderBlockModel>();
 
-            var skus_Mall = skus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
+            var skus_Mall = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
             if (skus_Mall.Count > 0)
             {
                 var orderBlock_Mall = new OrderBlockModel();
@@ -325,7 +347,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            var skus_Machine = skus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
+            var skus_Machine = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
             if (skus_Machine.Count > 0)
             {
                 var orderBlock_Machine = new OrderBlockModel();
@@ -337,6 +359,21 @@ namespace LocalS.Service.Api.StoreApp
                 orderBlock_Machine.SelfTake.StoreName = store.Name;
                 orderBlock_Machine.SelfTake.StoreAddress = store.Address;
                 orderBlock.Add(orderBlock_Machine);
+            }
+
+            var skus_MemberFee = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.MemberFee).ToList();
+
+            if (skus_MemberFee.Count > 0)
+            {
+                var orderBlock_MemberFee = new OrderBlockModel();
+                orderBlock_MemberFee.TagName = "会员费";
+                orderBlock_MemberFee.Skus = skus_MemberFee;
+                orderBlock_MemberFee.TabMode = E_TabMode.MemerbFee;
+                orderBlock_MemberFee.ShopMode = E_SellChannelRefType.MemberFee;
+                orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.MemberFee;
+                orderBlock_MemberFee.SelfTake.StoreName = store.Name;
+                orderBlock_MemberFee.SelfTake.StoreAddress = store.Address;
+                orderBlock.Add(orderBlock_MemberFee);
             }
 
             ret.Blocks = orderBlock;
@@ -399,11 +436,11 @@ namespace LocalS.Service.Api.StoreApp
             //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
             //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
 
-            ret.SubtotalItems = subtotalItem;
+            ret.SubtotalItems = c_subtotalItems;
 
-            ret.ActualAmount = skuAmountByActual.ToF2Price();
+            ret.ActualAmount = amount_actual.ToF2Price();
 
-            ret.OriginalAmount = skuAmountByOriginal.ToF2Price();
+            ret.OriginalAmount = amount_original.ToF2Price();
 
             ret.OrderIds = rop.OrderIds;
 
@@ -428,7 +465,7 @@ namespace LocalS.Service.Api.StoreApp
 
 
             var query = (from o in CurrentDb.Order
-                         where o.ClientUserId == clientUserId
+                         where (o.ClientUserId == clientUserId && o.IsNoDisplayClient == false)
                          select new
                          {
                              Id = o.Id,
@@ -454,6 +491,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 query = query.Where(m => m.Status == rup.Status);
             }
+
 
             int pageSize = 10;
 
@@ -733,7 +771,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return result;
         }
-
 
         public CustomJsonResult BuildBookTimeArea(string operater, string clientUserId, RupOrderBuildBookTimeArea rup)
         {

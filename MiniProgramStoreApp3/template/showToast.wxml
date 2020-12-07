@@ -1,0 +1,13 @@
+<template name="showToast">
+  
+    <block wx:if="{{showToast.isShow==true?true: false}}">
+       <view class="toast-bg" wx:if="{{showToast.mask==false? false : true}}"></view>
+      <view class="toast-center">
+        <view class="toast">
+          <image class="toast-icon" src="{{showToast.icon}}" mode="scaleToFill" binderror="errImg" data-err-img="showToast.icon" data-err-type="showToast" wx:if="{{showToast.icon}}" />
+          <text class="toast-text">{{showToast.title}}</text>
+        </view>
+      </view> 
+    </block>
+  
+</template>

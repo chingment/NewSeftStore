@@ -1,0 +1,229 @@
+.cumUpDialog {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, .4);
+  z-index: 9999;
+}
+
+.cumUpDialog>.wrapper {
+  width: 100%;
+  height: 800rpx;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: #fff;
+  border-top-left-radius: 15rpx;
+  border-top-right-radius: 15rpx;
+}
+
+.cumUpDialog .topinfo {
+  height: 70rpx;
+}
+
+.cumUpDialog .topinfo .title {
+  top: 12rpx;
+  left: 25rpx;
+  width: 200rpx;
+  height: 45rpx;
+  line-height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
+
+.cumUpDialog .topinfo .close {
+  top: 12rpx;
+  right: 15rpx;
+  width: 45rpx;
+  height: 45rpx;
+  position: fixed;
+  z-index: 999;
+}
+
+.cumUpDialog .contentinfo {
+  height: 607rpx;
+  padding: 0 25rpx;
+}
+
+.cumUpDialog .contentinfo .wrapper {
+  padding: 25rpx;
+}
+
+.cumUpDialog .bottominfo {
+  height: 120rpx;
+  width: 100%;
+  background: #fff;
+}
+
+.cumUpDialog .bottominfo>.wrapper {
+  border-top: 3rpx solid #f8f8f8;
+  padding: 15rpx 25rpx;
+  display: flex;
+}
+
+.cumUpDialog .bottominfo .btn {
+  width: 100%;
+  color: #f8f8f8;
+}
+
+  .prdinfo{
+    display: flex;
+    height: 250rpx;
+  }
+
+  .prdinfo .mainimg{
+    width: 250rpx;
+    height: 250rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .prdinfo .mainimg .img{
+    height: 100%;
+    width: 100%;
+  }
+
+  .prdinfo .detail{
+    flex: 1;
+  }
+
+  .prdinfo .detail .name{
+    font-size: 32rpx;
+    font-weight: 800;
+  }
+
+  .prdinfo .detail .field{
+    font-size: 26rpx;
+    color: #9d9d9d;
+  }
+
+  .prdinfo .detail .value{
+    font-size: 26rpx;
+    color: #9d9d9d;
+  }
+
+  .prdinfo .detail .price{
+    line-height: 60rpx;
+    height: 60rpx;
+  }
+
+  .prdinfo .detail .saleprice{
+    font-size: 42rpx;
+    color:#ffb101;
+  }
+
+  .prdinfo .detail .isOffSell{
+    line-height: 60rpx;
+    height: 60rpx;
+  }
+
+  .prdinfo .detail .isOffSell .txt{
+    font-size: 28rpx;
+    color:#f00;
+  }
+
+  .qtyinfo {
+    display: flex;
+    height: 50rpx;
+  }
+
+  .qtyinfo .field{
+    width: 120rpx;
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+  }
+
+  .qtyinfo .oparea{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  .qtyinfo .quantity {
+    width: 50rpx;
+    font-size: 28rpx;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .qtyinfo .increase {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .qtyinfo .increase .img{
+    width: 50rpx;
+height: 50rpx;
+  }
+  
+  .qtyinfo .decrease {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center
+  }
+
+  .qtyinfo .decrease .img{
+    width: 50rpx;
+    height: 50rpx;
+  } 
+
+  .scroll-specinfo{
+    height: 380rpx;
+  }
+
+  .specinfo{
+    display: block;
+    overflow: hidden;
+   }
+   
+   .spect-item {
+     color: #323232;
+   }
+   
+   .spect-item-name {
+     font-size: 28rpx;
+     display: block;
+     color: #636363;
+     padding: 12rpx 0;
+   }
+   
+   .spect-item-values {
+    display: flex;
+   }
+   
+   .spect-item-value {
+     border: 3rpx solid #f8f8f8;
+     background-color: #f8f8f8;
+     border-radius: 6rpx;
+     color: #2b2b2b;
+     text-align: center;
+     float: left;
+     min-width: 100rpx;
+     margin-right: 24rpx;
+     padding: 12rpx 42rpx;
+     font-size: 24rpx;
+
+   }
+   
+   .spect-item-values  .active {
+     background-color: #ffb101;
+     color: #fff;
+     border: 3rpx solid #ffb101;
+   }
+   
+   .spect-item-values  .invalid {
+     background-color: #ccc;
+     opacity: 0.4;
+     color: #000;
+     pointer-events: none;
+   }
+   

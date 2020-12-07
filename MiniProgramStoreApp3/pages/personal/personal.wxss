@@ -1,0 +1,135 @@
+.personal {
+  border-radius: 5.21px;
+  height: 335rpx;
+  position: relative;
+  box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+.st-personal {
+  padding: 0px 16px;
+}
+
+.personal-userinfo {
+  height: 200rpx;
+  display: flex;
+  flex-direction: row;
+  padding: 0rpx 20rpx;
+}
+
+.personal-userinfo .item-left {
+  flex: 1;
+  height: 180rpx;
+  width: 70%;
+  padding: 20rpx 0rpx 0rpx 0rpx;
+}
+
+.personal-userinfo .item-right {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 200rpx;
+
+}
+
+.personal-userinfo .item-right .img {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+ .personal-userinfo .item-nickname {
+  height: 62rpx;
+  line-height: 62rpx;
+}
+
+.item-member{
+  display: flex;
+}
+
+.personal-userinfo .item-member {
+  height: 32rpx;
+  line-height: 32rpx;
+  margin-top: 8rpx;
+}
+.personal-userinfo .item-member .img{
+  height: 32rpx;
+  width: 32rpx;
+  float: left;
+  display: block;
+  margin-left: -6rpx;
+}
+
+ .personal-userinfo .item-member .txt {
+  width: 120rpx;
+  float: left;
+  display: block;
+  font-size: 12px;
+  margin-left: 10rpx;
+  color: #9d9d9d;
+}
+
+.personal-userinfo .item-phone {
+  height: 48rpx;
+  line-height: 48rpx;
+  margin-top: 16rpx;
+}
+
+.personal-userinfo .item-phone .img {
+  height: 32rpx;
+  width: 21rpx;
+  float: left;
+  display: block;
+}
+
+
+.personal-userinfo .item-phone .txt {
+  height: 28rpx;
+  line-height: 30rpx;
+  width: 120rpx;
+  float: left;
+  display: block;
+  font-size: 12px;
+  margin-left: 10rpx;
+}
+
+.personal-orderstatus {
+  display: flex;
+  flex-direction: row;
+  border-top: 3rpx solid #f8f8f8;
+  padding: 10px 5px 5px 5px;
+}
+
+.personal-orderstatus .item {
+  flex: 1;
+  height: 100rpx;
+  text-align: center;
+}
+
+.personal-orderstatus .item-img {
+  width: 60rpx;
+  height: 60rpx;
+  display: inline-block;
+}
+
+.personal-orderstatus .item-title {
+  height: 60rpx;
+  display: block;
+  text-align: center;
+  font-size: 24rpx;
+  color: #676767;
+}
+
+.item-logintip {
+  height: 32rpx;
+  line-height: 32rpx;
+  font-size: 28rpx;
+}
+
+.item-logingo {
+  height: 50rpx;
+  line-height: 50rpx;
+  font-size: 32rpx;
+}  

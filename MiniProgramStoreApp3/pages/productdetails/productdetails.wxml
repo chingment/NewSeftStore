@@ -1,0 +1,77 @@
+<import src="/template/showToast.wxml" />
+<template is="showToast" data="{{showToast: showToast}}" />
+
+<specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}" ></cartdialog>
+
+<view class="page-ct details">
+	<view class="details-main">
+		<swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
+			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="index">
+				<swiper-item>
+					<view class="swiper-img">
+						<image src="{{item.url}}"></image>
+					</view>
+				</swiper-item>
+			</block>
+		</swiper>
+
+		<scroll-view scroll-y="true">
+			<view class="details-info">
+				<view class="details-info1">
+					<view class='container'>
+						<view class="item-name">
+							<text class="name" >{{productSku.name}}</text>
+						</view>
+						<view class="item-briefIntro font-gray">
+							<text class="briefIntro">{{productSku.briefDes}}</text>
+						</view>
+						<view wx:if="{{productSku.isOffSell}}" class="item-isOffSell">
+							<text class="txt">已下架</text>
+						</view>
+						<view wx:else class="item-price">
+							<text class="unitPrice">{{productSku.salePrice}}</text>
+							<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
+						</view>
+					</view>
+				</view>
+				<view wx:if="{{productSku.specIdxSkus.length>1}}" bindtap="selectSpecs"  class="details-info3 its-option">
+					<view class="it">
+						<view class="title"><text>已选</text> </view>
+						<view class="content">{{productSku.specIdx}}</view>
+						<view class="icon">
+							<image class="img" style="width:60rpx;height:60rpx" src='/content/default/images/icon_more1.png'></image>
+						</view>
+					</view>
+				</view>
+				<view class="details-info2">
+					<view style='height:100vh'>
+						<block wx:if="{{productSku.detailsDes!=null}}">
+							<block wx:for-items="{{productSku.detailsDes}}" wx:for-item="item" wx:key="index">
+								<image src="{{item.url}}" style="width:100%;height:100%;" mode="widthFix"></image>
+							</block>
+
+						</block>
+					</view>
+
+				</view>
+			</view>
+		</scroll-view>
+
+	</view>
+	<view class="details-nav">
+		<view bindtap="goHome" class="item-home">
+			<image src="/content/default/images/home.png" />
+		</view>
+		<view bindtap="goCart" class="item-cart">
+			<view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
+			<image src="/content/default/images/cart.png" />
+		</view>
+		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}' data-reply-skuid="{{productSku.id}}">
+			<text>加入购物车</text>
+		</view>
+		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}">
+			<text>立即购买</text>
+		</view>
+	</view>
+</view>
