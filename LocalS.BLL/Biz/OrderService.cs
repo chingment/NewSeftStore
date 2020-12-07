@@ -1036,6 +1036,9 @@ namespace LocalS.BLL.Biz
                                 order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", order.ReceptionMarkName, order.SellChannelRefId, order.PickupCode);
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
+                            case E_ReceiveMode.MemberFee:
+                                order.IsNoDisplayClient = true;
+                                break;
                         }
 
                         var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
