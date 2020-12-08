@@ -83,7 +83,8 @@ Page({
     personal: {
       isLogin: false,
       userInfo: null
-    }
+    },
+    isOnLoad:false
   },
   onLoad: function (options) {
     var _this = this;
@@ -96,6 +97,13 @@ Page({
 
     if (app.globalData.checkConfig) {
       console.log("call>>1")
+      if (!ownRequest.isSelectedStore(true)) {
+        return
+      }
+      apiCart.pageData()
+      var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+      mainTabBarSwitch(tabBarIndex)
+
     } else {
       console.log("call>>2")
       app.checkConfigReadyCallback = res => {
@@ -106,6 +114,7 @@ Page({
         apiCart.pageData()
         var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
         mainTabBarSwitch(tabBarIndex)
+  
       }
     }
   },
@@ -114,9 +123,18 @@ Page({
     var _this = this
 
 
+    // if(_this.data.isOnLoad){
+    //   if (!ownRequest.isSelectedStore(true)) {
+    //     return
+    //   }
+    //   apiCart.pageData()
+    //   var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //   mainTabBarSwitch(tabBarIndex)
+    // }
 
 
   },
+
   mainTabBarItemClick(e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
