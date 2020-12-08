@@ -49,6 +49,14 @@ namespace LocalS.BLL.Biz
 
             config.MyMerchId = merch.Id;
 
+            if (!string.IsNullOrEmpty(merch.MctMode))
+            {
+                if (merch.MctMode.IndexOf("S") > -1)
+                {
+                    config.MyStoreId = merch.MctStoreId;
+                }
+            }
+
             return config;
         }
 

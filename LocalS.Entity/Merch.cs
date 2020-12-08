@@ -62,5 +62,8 @@ namespace LocalS.Entity
         //线上商城+线下机器，单店铺 FKS
         //线上商城+线下机器，多店铺 FKM
         public string MctMode { get; set; }
+
+        //单店铺模式下，指定的店铺ID
+        public string MctStoreId { get; set; }
     }
 }
