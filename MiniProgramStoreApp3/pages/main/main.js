@@ -14,7 +14,7 @@ Page({
     tag: "main",
     tabBarContentHeight: 0,
     name: "index",
-    tabBarIndex:0,
+    tabBarIndex: 0,
     tabBar: [{
       id: "cp_index",
       name: "index",
@@ -93,17 +93,29 @@ Page({
         tabBarContentHeight: wHeight - rect[0].height
       });
     }).exec()
+
+    if (app.globalData.checkConfig) {
+      console.log("call>>1")
+    } else {
+      console.log("call>>2")
+      app.checkConfigReadyCallback = res => {
+        console.log("call>>3,"+JSON.stringify(res))
+        if (!ownRequest.isSelectedStore(true)) {
+          return
+        }
+        apiCart.pageData()
+        var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+        mainTabBarSwitch(tabBarIndex)
+      }
+    }
   },
   onShow: function () {
     console.log("mian.onShow")
     var _this = this
-    if (!ownRequest.isSelectedStore(true)) {
-      return
-    }
 
-    var tabBarIndex= wx.getStorageSync('main_tabbar_index') || 0
-    mainTabBarSwitch(tabBarIndex)
-    apiCart.pageData()
+
+
+
   },
   mainTabBarItemClick(e) {
     var _this = this
@@ -134,8 +146,10 @@ function mainTabBarSwitch(index) {
             })
           }, 1)
 
-          wx.setStorageSync('main_tabbar_index',index)
-          pages[i].setData({tabBarIndex:index})
+          wx.setStorageSync('main_tabbar_index', index)
+          pages[i].setData({
+            tabBarIndex: index
+          })
         } else {
           tabBar[j].selected = false
         }

@@ -46,21 +46,21 @@ App({
     userInfo: null,
     //mainTabBarIndex: 0,
     currentShopMode: 0,
-    skeletonPage: null
+    skeletonPage: null,
+    checkConfig: false
   },
   getConfig: function () {
+    var _this=this
     const accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
     wx.login({
       success: function (res) {
-
         if (res.code) {
-
           apiOwn.wxConfig({
             appId: appId,
             code: res.code,
           }).then(function (res2) {
-
+           
             if (res2.result == 1) {
               var d = res2.data
 
@@ -71,6 +71,12 @@ App({
               if (d.storeId != null) {
                 storeage.setCurrentStoreId(d.storeId) //设置当前店铺
               }
+
+              _this.globalData.checkConfig = true
+              if (_this.checkConfigReadyCallback){
+                _this.checkConfigReadyCallback(d);
+             }
+            
             } else {
               toast.show({
                 title: res2.message
