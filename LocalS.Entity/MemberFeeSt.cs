@@ -14,8 +14,9 @@ namespace LocalS.Entity
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public string LevelStId { get; set; }
-        public string FeeType { get; set; }
+        public int FeeType { get; set; }
         public decimal FeeValue { get; set; }
+        public string LayoutWeight { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

@@ -152,6 +152,7 @@
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\OperateController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />

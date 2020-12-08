@@ -62,7 +62,8 @@ namespace LocalS.DAL
         public IDbSet<CouponUseAreaObj> CouponUseAreaObj { get; set; }
 
         public IDbSet<MemberFeeSt> MemberFeeSt { get; set; }
-
+        public IDbSet<MemberLevelSt> MemberLevelSt { get; set; }
+      
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

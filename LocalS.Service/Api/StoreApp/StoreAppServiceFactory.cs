@@ -104,5 +104,13 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
+        public static MemberService Member
+        {
+            get
+            {
+                return new MemberService();
+            }
+        }
+
     }
 }

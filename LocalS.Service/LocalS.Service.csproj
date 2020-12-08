@@ -282,6 +282,7 @@
     <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\AdminUserService.cs" />
     <Compile Include="Api\StoreApp\GlobalService.cs" />
+    <Compile Include="Api\StoreApp\MemberService.cs" />
     <Compile Include="Api\StoreApp\Models\BannerModel.cs" />
     <Compile Include="Api\StoreApp\Models\BookTimeDateAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\BookTimeTimeAreaModel.cs" />
@@ -373,6 +374,7 @@
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetImServiceSeats.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineGetRunExHandleItems.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetMemberPayLevelSt.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderSearchByPickupCode.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetStockSettingGetSlots.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineInitData.cs" />
