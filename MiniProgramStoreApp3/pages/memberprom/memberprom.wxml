@@ -1,15 +1,15 @@
 <view class="page-ct memberprom">
-  <view class="bg_1">
-    <image class="bg_img" src="http://file.17fanju.com/upload/memberprom/1/bg_1.png"></image>
+  <view class="bg-1">
+    <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_1.png?ts={{timespan}}"></image>
   </view>
-  <view class="bg_2" style="height:{{isMember?'650rpx':'847rpx'}};">
-    <image class="bg_img" src="http://file.17fanju.com/upload/memberprom/1/bg_2.png?ts={{timespan}}"></image>
+  <view class="bg-2" style="height:{{isMember?'650rpx':'847rpx'}};">
+    <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_2.png?ts={{timespan}}"></image>
 
     <view class="section">
       <view class="tui-table-view">
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="1" data-title="心晓智能健康监测">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_1.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_1.png?ts={{timespan}}"></image>
           </view>
           <view class="title"><text> 心晓智能
               健康监测</text></view>
@@ -17,56 +17,56 @@
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="2" data-title="会员折扣">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_2.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_2.png?ts={{timespan}}"></image>
           </view>
           <view class="title">会员折扣</view>
           <view class="tip">7.8折起</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="3" data-title="免费讲座">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_3.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_3.png?ts={{timespan}}"></image>
           </view>
           <view class="title">免费讲座</view>
           <view class="tip">名医专场</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="4" data-title="大额优惠券">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_4.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_4.png?ts={{timespan}}"></image>
           </view>
           <view class="title">大额优惠券</view>
           <view class="tip">同门槛，更省钱</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="5" data-title="生日礼">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_5.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_5.png?ts={{timespan}}"></image>
           </view>
           <view class="title">生日礼</view>
           <view class="tip">专属礼遇</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="6" data-title="会员日">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_6.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_6.png?ts={{timespan}}"></image>
           </view>
           <view class="title">会员日</view>
           <view class="tip">省钱有益</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="7" data-title="VIP客服">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_7.png"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_7.png?ts={{timespan}}"></image>
           </view>
           <view class="title">VIP客服</view>
           <view class="tip">贴心服务</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="8" data-title="门店服务">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_8.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_8.png?ts={{timespan}}"></image>
           </view>
           <view class="title">门店服务</view>
           <view class="tip">专业安心</view>
         </view>
         <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="9" data-title="更多权益">
           <view class="icon-box">
-            <image class="icon" src="http://file.17fanju.com/upload/memberprom/1/ng_9.png?ts={{timespan}}"></image>
+            <image class="icon" src="http://file.17fanju.com/upload/membertheme/1/prom/ng_9.png?ts={{timespan}}"></image>
           </view>
           <view class="title">更多权益</view>
           <view class="tip">敬请期待</view>
@@ -74,20 +74,20 @@
       </view>
       <view class="tui-btn-view" wx:if="{{!isMember}}">
         <view class="wrapper">
-          <image class="tui-btn-tip" src="http://file.17fanju.com/upload/memberprom/1/btn_tip1.png?ts={{timespan}}">
+          <image class="tui-btn-tip" src="http://file.17fanju.com/upload/membertheme/1/prom/btn_tip1.png?ts={{timespan}}">
           </image>
-          <button bindtap="clickToPurchase" class='tui-btn-open btn-open'>立即开通</button>
+          <button bindtap="clickToCenter" class='tui-btn-open btn-open'>立即开通</button>
         </view>
       </view>
     </view>
   </view>
-  <view class="bg_3">
-    <image class="bg_img" src="http://file.17fanju.com/upload/memberprom/1/bg_3.png?ts={{timespan}}"></image>
+  <view class="bg-3">
+    <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_3.png?ts={{timespan}}"></image>
   </view>
 
   <view class="bg-bottom" wx:if="{{isShowButtonBottom&&!isMember}}">
     <view class="wrapper">
-      <button bindtap="clickToPurchase" class='btn-open'>立即开通</button>
+      <button bindtap="clickToCenter" class='btn-open'>立即开通</button>
       <view class="btn-tip">
         <text class="tip1">*开通即代表同意</text>
         <text class="tip2">《会员协议》</text>

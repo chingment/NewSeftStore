@@ -2,7 +2,7 @@
   "pages": [
     "pages/memberprom/memberprom",
     "pages/memberrightdesc/memberrightdesc",
-    "pages/memberpurchase/memberpurchase",
+    "pages/membercenter/membercenter",
     "pages/main/main",
     "pages/login/login",
     "pages/store/store",

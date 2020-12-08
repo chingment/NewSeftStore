@@ -868,7 +868,7 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key, merchid = config.MyMerchId });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key, merchid = config.MyMerchId, storeid = config.MyStoreId });
 
             return result;
         }

@@ -25,6 +25,7 @@
       "disablePlugins": [],
       "outputPath": ""
     },
+    "enableEngineNative": false,
     "bundle": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
@@ -36,7 +37,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.6.5",
-  "appid": "wx969a817779af7b53",
+  "appid": "wx80caad9ea41a00fc",
   "projectname": "MiniProgramStoreApp2",
   "isGameTourist": false,
   "simulatorType": "wechat",

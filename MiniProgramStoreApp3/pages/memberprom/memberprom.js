@@ -109,9 +109,9 @@ Page({
       url: '/pages/memberrightdesc/memberrightdesc?right='+right+'&title='+title
     })
   },
-  clickToPurchase:function(e){
+  clickToCenter:function(e){
     wx.navigateTo({
-      url: '/pages/memberpurchase/memberpurchase'
+      url: '/pages/membercenter/membercenter'
     })
   }
 })

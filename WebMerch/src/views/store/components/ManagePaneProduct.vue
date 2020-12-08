@@ -284,7 +284,7 @@ white-space: nowrap;
 <script>
 import { MessageBox } from 'element-ui'
 import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind, removeKindSpu, getKindSpuInfo } from '@/api/store'
-import { search, getSpecs } from '@/api/prdproduct'
+import { searchSpu, getSpecs } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
@@ -535,7 +535,7 @@ export default {
     },
     productSearchAsync(queryString, cb) {
       console.log('queryString:' + queryString)
-      search({ key: queryString }).then(res => {
+      searchSpu({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
           var restaurants = []

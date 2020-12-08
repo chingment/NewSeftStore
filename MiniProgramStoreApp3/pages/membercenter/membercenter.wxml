@@ -1,0 +1,83 @@
+<view class="pg-ct membercenter">
+   <view class="bg-1">
+      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_1.png?ts={{timespan}}"></image>
+      <view class="section">
+         <view class='nav' style='height:{{navH}}px'>
+            <view class="nav-ct" style='padding-top:{{statusBarHeight}}px;height:{{navH-statusBarHeight}}px'>
+               <view class="nav-goback" bindtap="clickToNavGoBack">
+                  <image class="img" src="/content/default/images/arrow_navback.png"></image>
+               </view>
+               <view class='nav-title'>
+                  <text>会员中心</text>
+               </view>
+            </view>
+         </view>
+         <view class="own-info">
+
+            <view class="it-left">
+               <view class="it-avatar">
+                  <view class="img">
+                     <open-data type="userAvatarUrl"></open-data>
+                  </view>
+               </view>
+               <view class='it-nickname'>
+                  <view class="txt">
+                     <open-data type="userNickName"></open-data>
+                  </view>
+               </view>
+            </view>
+            <view class="it-right">
+
+            </view>
+
+         </view>
+      </view>
+   </view>
+   <view class="bg-2">
+
+      <view class="tab-double">
+         <view class="tab-title">
+            <view class="title-left {{level==1?'selected':''}}" bindtap="clickToTabLevel"  data-reply-level="1" >
+               <view class="txt">
+                  <text>翡翠会员</text>
+               </view>
+               <view class="left-triangle">
+               </view>
+            </view>
+
+            <view class="title-right {{level==2?'selected':''}}" bindtap="clickToTabLevel" data-reply-level="2" >
+               <view class="right-triangle">
+
+               </view>
+               <view class="txt">
+                  <text>钻石会员</text>
+               </view>
+            </view>
+         </view>
+
+         <view class="tab-content">
+            <view class="content-item {{level==1?'selected':''}}">
+               a
+
+            </view>
+            <view class="content-item {{level==2?'selected':''}}">
+               b
+            </view>
+         </view>
+
+      </view>
+
+
+
+   </view>
+   <view class="bg-3">
+      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_3.png?ts={{timespan}}"></image>
+
+
+   </view>
+</view>
+
+
+
+
+<button bindtap="clickToPurchase" class='tui-btn-open btn-open'>立即开通</button>

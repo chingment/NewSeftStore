@@ -7,14 +7,30 @@ Page({
    * 页面的初始数据
    */
   data: {
-    
+    navH: 40,
+    statusBarHeight: 0,
+    level: 1
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    var _this = this
+    wx.getSystemInfo({
+      success: res => {
+        //导航高度
+        var statusBarHeight = res.statusBarHeight
+        var navHeight = statusBarHeight + 46
+        _this.setData({
+          statusBarHeight: statusBarHeight,
+          navH: navHeight
+        })
+      },
+      fail(err) {
+        console.log(err);
+      }
+    })
   },
 
   /**
@@ -65,8 +81,8 @@ Page({
   onShareAppMessage: function () {
 
   },
-  clickToPurchase:function(e){
-    
+  clickToPurchase: function (e) {
+
     var _this = this
 
     if (!ownRequest.isLogin()) {
@@ -88,6 +104,21 @@ Page({
         // success
       },
     })
+  },
+  clickToNavGoBack: function () {
+    wx.navigateBack({
+      complete: (res) => {},
+    })
+  },
+  clickToTabLevel(e) {
+    var _this = this
+    var level = e.currentTarget.dataset.replyLevel
 
-  }
+    console.log("level:" + level)
+
+    _this.setData({
+      level: level
+    })
+
+  },
 })
