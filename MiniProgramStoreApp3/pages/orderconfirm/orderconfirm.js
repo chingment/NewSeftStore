@@ -152,7 +152,7 @@ Page({
       var bookTime = null
       if (_blocks[i].shopMode == 1) {
         if (_blocks[i].receiveMode == 1) {
-          if (util.isEmptyOrNull(_delivery.id)) {
+          if (util.isEmptyOrNull(_delivery.phoneNumber)) {
             toast.show({
               title: '请选择快寄地址'
             })

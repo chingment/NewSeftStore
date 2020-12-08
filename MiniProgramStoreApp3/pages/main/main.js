@@ -22,7 +22,7 @@ Page({
       iconPath: "/content/default/images/home.png",
       selectedIconPath: "/content/default/images/home_fill.png",
       text: "首页",
-      navTitle: "贩聚社团",
+      navTitle: "首页",
       selected: true,
       number: 0
     }, {
