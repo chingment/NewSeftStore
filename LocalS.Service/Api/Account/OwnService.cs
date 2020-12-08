@@ -848,7 +848,6 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-
         public CustomJsonResult GetWxApiCode2Session(RopWxApiCode2Session rop)
         {
             var result = new CustomJsonResult();
@@ -874,7 +873,7 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-        public CustomJsonResult GetConfig(RopWxApiCode2Session rop)
+        public CustomJsonResult GetConfig(RopGetConfig rop)
         {
             var result = new CustomJsonResult();
 
@@ -893,7 +892,7 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key, merchid = config.MyMerchId, storeid = "21ae9399b1804dbc9ddd3c29e8b5c670" });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = config.MyMerchId, storeId = config.MyStoreId });
 
             return result;
         }

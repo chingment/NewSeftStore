@@ -26,7 +26,7 @@ namespace WebApiStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public OwnApiHttpResponse Config(RopWxApiCode2Session rop)
+        public OwnApiHttpResponse Config(RopGetConfig rop)
         {
             IResult result = AccountServiceFactory.Own.GetConfig(rop);
             return new OwnApiHttpResponse(result);

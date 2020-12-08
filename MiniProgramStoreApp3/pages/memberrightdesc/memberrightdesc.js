@@ -73,7 +73,7 @@ Page({
   },
   clickToPurchase: function (e) {
     wx.navigateTo({
-      url: '/pages/memberpurchase/memberpurchase'
+      url: '/pages/membercenter/membercenter'
     })
   }
 })

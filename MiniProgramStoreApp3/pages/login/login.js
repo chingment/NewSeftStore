@@ -48,7 +48,7 @@ Page({
         console.log("minProgram:login")
         if (res.code) {
           console.log(res)
-          apiOwn.WxApiCode2Session({
+          apiOwn.wxConfig({
             appId: appId,
             code: res.code,
           }).then(function (res2) {
@@ -56,9 +56,9 @@ Page({
             if (res2.result == 1) {
               var d = res2.data
 
-              storeage.setOpenId(d.openid)
-              storeage.setSessionKey(d.session_key)
-              storeage.setMerchId(d.merchid)
+              storeage.setOpenId(d.openId)
+              storeage.setSessionKey(d.sessionKey)
+              storeage.setMerchId(d.merchId)
 
             } else {
               toast.show({

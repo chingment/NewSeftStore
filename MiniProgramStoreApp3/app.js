@@ -11,63 +11,27 @@ App({
     var _this = this
     console.log('app.onLaunch')
     _this.autoUpdate()
+    //_this.getConfig()
+
     // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    // var logs = wx.getStorageSync('logs') || []
+    // logs.unshift(Date.now())
+    // wx.setStorageSync('logs', logs)
 
 
-    wx.onNetworkStatusChange(function (res) {
-      console.log(res)
-      if (!res.isConnected) {
+    // wx.onNetworkStatusChange(function (res) {
+    //   console.log(res)
+    //   if (!res.isConnected) {
 
-      }
-    })
+    //   }
+    // })
 
   },
   onShow: function () {
     var _this = this
     console.log('app.onShow')
 
-    wx.getNetworkType({
-      success: function (res) {
-        console.log(res)
-      }
-    })
-
-    const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-
-    var appId = accountInfo.miniProgram.appId
-    wx.login({
-      success: function (res) {
-        console.log("minProgram:login")
-        if (res.code) {
-          console.log(res)
-          apiOwn.WxApiCode2Session({
-            appId: appId,
-            code: res.code,
-          }).then(function (res2) {
-            console.log(res2)
-            if (res2.result == 1) {
-              var d = res2.data
-
-              storeage.setOpenId(d.openid)
-              storeage.setSessionKey(d.session_key)
-              storeage.setMerchId(d.merchid)
-              storeage.setStoreId(d.storeid) //指定设置单店铺模式，为NULL 多店铺模式
-              if (d.storeid != null) {
-                storeage.setCurrentStoreId(d.storeid) //设置当前店铺
-              }
-            } else {
-              toast.show({
-                title: res2.message
-              })
-            }
-          })
-        }
-      }
-    });
+    _this.getConfig()
   },
   globalData: {
     // openid: null,
@@ -78,6 +42,40 @@ App({
     //mainTabBarIndex: 0,
     currentShopMode: 0,
     skeletonPage: null
+  },
+  getConfig: function () {
+    const accountInfo = wx.getAccountInfoSync()
+
+    var appId = accountInfo.miniProgram.appId
+    wx.login({
+      success: function (res) {
+
+        if (res.code) {
+
+          apiOwn.wxConfig({
+            appId: appId,
+            code: res.code,
+          }).then(function (res2) {
+
+            if (res2.result == 1) {
+              var d = res2.data
+
+              storeage.setOpenId(d.openId)
+              storeage.setSessionKey(d.sessionKey)
+              storeage.setMerchId(d.merchId)
+              storeage.setStoreId(d.storeId) //指定设置单店铺模式，为NULL 多店铺模式
+              if (d.storeId != null) {
+                storeage.setCurrentStoreId(d.storeId) //设置当前店铺
+              }
+            } else {
+              toast.show({
+                title: res2.message
+              })
+            }
+          })
+        }
+      }
+    })
   },
   // mainTabBarSetNumber(index, num) {
   //   var pages = getCurrentPages();

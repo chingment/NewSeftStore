@@ -16,6 +16,7 @@ var config = {
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     ownWxApiCode2Session: `${host}/Own/WxApiCode2Session`,
+    ownConfig: `${host}/Own/Config`,
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
     globalDataSet: `${host}/Global/DataSet`,
     indexPageData: `${host}/Index/PageData`,
