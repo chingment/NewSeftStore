@@ -1,6 +1,7 @@
 const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
-
+const config = require('../../config')
+const apiMember = require('../../api/member.js')
 Page({
 
   /**
@@ -29,6 +30,15 @@ Page({
       },
       fail(err) {
         console.log(err);
+      }
+    })
+
+    var _this = this
+    apiMember.getPayLevelSt({
+      appCaller: 1
+    }).then(function (res) {
+      if (res.result == 1) {
+       
       }
     })
   },

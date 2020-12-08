@@ -17,6 +17,7 @@ namespace LocalS.Entity
         public int FeeType { get; set; }
         public decimal FeeValue { get; set; }
         public string LayoutWeight { get; set; }
+        public string DesPoints { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

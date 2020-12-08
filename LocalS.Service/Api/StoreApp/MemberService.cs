@@ -24,9 +24,11 @@ namespace LocalS.Service.Api.StoreApp
 
             if (d_memberLevelSt_1 != null)
             {
+                LogUtil.Info("A1");
                 var d_memberLevelSt_1_FeeSts = d_memberFeeSts.Where(m => m.LevelStId == d_memberLevelSt_1.Id).ToList();
                 if (d_memberLevelSt_1_FeeSts.Count > 0)
                 {
+                    LogUtil.Info("A2");
                     var m_levelSt1 = new RetMemberPayLevelSt.LevelStModel();
                     m_levelSt1.Id = d_memberLevelSt_1.Id;
                     m_levelSt1.Tag = d_memberLevelSt_1.Name;
@@ -34,15 +36,18 @@ namespace LocalS.Service.Api.StoreApp
 
                     foreach(var d_memberLevelSt_1_FeeSt in d_memberLevelSt_1_FeeSts)
                     {
-
+                        LogUtil.Info("A3");
                         var m_feeSt = new RetMemberPayLevelSt.FeeStModel();
                         m_feeSt.Id = d_memberLevelSt_1_FeeSt.Id;
                         m_feeSt.Tag = d_memberLevelSt_1_FeeSt.Name;
                         m_feeSt.FeeValue = new UI.FsText(d_memberLevelSt_1_FeeSt.FeeValue.ToF2Price(), "");
-                        m_feeSt.DesPoints = d_memberLevelSt_1_FeeSt.ToJsonObject<List<FsField>>();
+                        m_feeSt.DesPoints = d_memberLevelSt_1_FeeSt.DesPoints.ToJsonObject<List<FsField>>();
                         m_feeSt.LayoutWeight = d_memberLevelSt_1_FeeSt.LayoutWeight;
+
+                        m_levelSt1.FeeSts.Add(m_feeSt);
                     }
 
+                    LogUtil.Info("A4");
                     ret.LevelSt1 = m_levelSt1;
 
 
@@ -75,6 +80,8 @@ namespace LocalS.Service.Api.StoreApp
                     ret.LevelSt2 = m_levelSt2;
                 }
             }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

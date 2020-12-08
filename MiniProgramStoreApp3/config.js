@@ -44,6 +44,7 @@ var config = {
     kindPageData: `${host}/Kind/PageData`,
     personalPageData: `${host}/Personal/PageData`,
     tobeSearch: `${host}/Search/TobeSearch`,
+    getPayLevelSt: `${host}/Member/GetPayLevelSt`,
   }
 
 };
