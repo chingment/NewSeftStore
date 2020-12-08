@@ -3,7 +3,7 @@
 
 <view class='page-ct login-box'>
   <view class="logo">
-    <image class="img" src='/content/default/images/logo.jpg'></image>
+    <image class="img" src='http://file.17fanju.com/upload/logo/logo_{{appId}}.png'></image>
   </view>
 
   <!-- <button class="btn bg-main btn-login" open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button> -->

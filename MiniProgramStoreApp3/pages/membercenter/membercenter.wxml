@@ -70,10 +70,8 @@
 
 
    </view>
-   <view class="bg-3">
-      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_3.png?ts={{timespan}}"></image>
-
-
+   <view class="bg-3-{{level}}">
+      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_3_{{level}}.png?ts={{timespan}}"></image>
    </view>
 </view>
 

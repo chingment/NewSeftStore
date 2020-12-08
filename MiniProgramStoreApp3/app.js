@@ -11,6 +11,11 @@ App({
     var _this = this
     console.log('app.onLaunch')
     _this.autoUpdate()
+
+    const accountInfo = wx.getAccountInfoSync()
+    var appId = accountInfo.miniProgram.appId
+
+    _this.globalData.appId=appId
     //_this.getConfig()
 
     // 展示本地存储能力
@@ -34,7 +39,7 @@ App({
     _this.getConfig()
   },
   globalData: {
-    // openid: null,
+     appId: null,
     // merchid: null,
     // storeid: null,
     // session_key: null,
@@ -45,7 +50,6 @@ App({
   },
   getConfig: function () {
     const accountInfo = wx.getAccountInfoSync()
-
     var appId = accountInfo.miniProgram.appId
     wx.login({
       success: function (res) {

@@ -10,9 +10,14 @@
   position: relative;
 }
 
-.bg-3{
+.bg-3-1{
   width: 100%;
-  height: 1647rpx;
+  height: 2142rpx;
+}
+
+.bg-3-2{
+  width: 100%;
+  height: 1783rpx;
 }
 
 .bg-1 .section {

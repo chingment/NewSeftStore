@@ -6,6 +6,7 @@ const apiOwn = require('../../api/own.js')
 const app = getApp()
 Page({
   data: {
+    appId:'',
     tag: "login",
     isAuthUserInfo: false,
     returnUrl: ''
@@ -14,9 +15,14 @@ Page({
 
     var _this = this
 
+    //var accountInfo = wx.getAccountInfoSync()
+
+    //var appId = accountInfo.miniProgram.appId
+
     var returnUrl = typeof options.returnUrl == 'undefined'?'':options.returnUrl
 
     _this.setData({
+      appId:app.globalData.appId,
       returnUrl: returnUrl
     })
 
