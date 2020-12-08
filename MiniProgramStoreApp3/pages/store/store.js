@@ -46,8 +46,6 @@ Page({
       }
     })
 
-
-
     getStoreList(loaction.lat, loaction.lng)
   },
   selectStore: function (e) {

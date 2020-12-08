@@ -123,14 +123,14 @@ Page({
     var _this = this
 
 
-    // if(_this.data.isOnLoad){
-    //   if (!ownRequest.isSelectedStore(true)) {
-    //     return
-    //   }
-    //   apiCart.pageData()
-    //   var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    //   mainTabBarSwitch(tabBarIndex)
-    // }
+    if(_this.data.isOnLoad){
+      if (!ownRequest.isSelectedStore(true)) {
+        return
+      }
+      apiCart.pageData()
+      var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+      mainTabBarSwitch(tabBarIndex)
+    }
 
 
   },
