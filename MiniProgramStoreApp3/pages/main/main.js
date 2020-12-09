@@ -125,14 +125,14 @@ Page({
     console.log("mian.onShow")
     var _this = this
 
-    
-      if (!ownRequest.isSelectedStore(true)) {
-        return
-      }
-      apiCart.pageData()
-      var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-      mainTabBarSwitch(tabBarIndex)
-    
+
+    if (!ownRequest.isSelectedStore(true)) {
+      return
+    }
+    apiCart.pageData()
+    var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    mainTabBarSwitch(tabBarIndex)
+
 
   },
 
