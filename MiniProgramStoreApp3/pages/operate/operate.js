@@ -40,9 +40,7 @@ Page({
     var _id = options.id == undefined ? "" : options.id
     var _type = options.type == undefined ? "" : options.type
     var _caller = options.caller == undefined ? "" : options.caller
-    var _action= options.action == undefined ? "" : options.action
-
-    console.log("_action:"+_action)
+    var _action = options.action == undefined ? "" : options.action
 
     var step = 1, //计数动画次数
       num = 0, //计数倒计时秒数（n - num）

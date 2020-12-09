@@ -36,9 +36,9 @@ Page({
     }
 
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
-    var action = options.action == undefined ? null : options.action
+    var _action = options.action == undefined ? null : options.action
     console.log('orderIds:' + _orderIds)
-    console.log('action:' + action)
+
     var orderIds = []
     if (_orderIds != null) {
       var arr_order = _orderIds.split(',')
@@ -55,7 +55,7 @@ Page({
       storeId: ownRequest.getCurrentStoreId(),
       orderIds: orderIds,
       productSkus: productSkus,
-      action: action
+      action: _action
     })
     _this.buildPayOptions()
     _this.getConfirmData()
@@ -247,7 +247,7 @@ Page({
   },
   goPay: function (payOption, blocks) {
     var _this = this
-    console.log('_this.data.action:'+_this.data.action)
+    console.log('_this.data.action:' + _this.data.action)
     apiOrder.buildPayParams({
       orderIds: _this.data.orderIds,
       payCaller: payOption.payCaller,
@@ -270,12 +270,12 @@ Page({
           'paySign': d.paySign,
           'success': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action='+_this.data.action
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + _this.data.action
             })
           },
           'fail': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action='+_this.data.action
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action=' + _this.data.action
             })
           }
         })

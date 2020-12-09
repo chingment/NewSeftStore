@@ -95,36 +95,44 @@ Page({
       });
     }).exec()
 
-    if (app.globalData.checkConfig) {
-      console.log("call>>1")
+    // if (app.globalData.checkConfig) {
+    //   console.log("call>>1")
+    //   if (!ownRequest.isSelectedStore(true)) {
+    //     return
+    //   }
+    //   apiCart.pageData()
+    //   var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //   mainTabBarSwitch(tabBarIndex)
+  
+
+    // } else {
+    //   console.log("call>>2")
+    //   app.checkConfigReadyCallback = res => { 
+    //     app.globalData.checkConfig=true
+    //     console.log("call>>3," + JSON.stringify(res))
+    //     if (!ownRequest.isSelectedStore(true)) {
+    //       return
+    //     }
+    //     apiCart.pageData()
+    //     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //     mainTabBarSwitch(tabBarIndex)
+    
+
+    //   }
+    // }
+  },
+  onShow: function () {
+    console.log("mian.onShow")
+    var _this = this
+
+    if(_this.data.isOnLoad){
       if (!ownRequest.isSelectedStore(true)) {
         return
       }
       apiCart.pageData()
       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
       mainTabBarSwitch(tabBarIndex)
-  
-
-    } else {
-      console.log("call>>2")
-      app.checkConfigReadyCallback = res => {
-        console.log("call>>3," + JSON.stringify(res))
-        if (!ownRequest.isSelectedStore(true)) {
-          return
-        }
-        apiCart.pageData()
-        var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-        mainTabBarSwitch(tabBarIndex)
-    
-
-      }
     }
-  },
-  onShow: function () {
-    console.log("mian.onShow")
-    var _this = this
-
-
 
   },
 

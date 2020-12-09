@@ -144,10 +144,6 @@ namespace LocalS.Service.Api.StoreApp
                 ret.IsComplete = true;
                 ret.Message = "您已取消支付操作";
 
-                if (rup.Action == "")
-                {
-
-                }
                 string action = rup.Action.ToLower();
 
                 switch (action)
