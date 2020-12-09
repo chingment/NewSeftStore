@@ -11,6 +11,8 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string Name { get; set; }
+
+        public string Tag { get; set; }
         //Level 越大级别越大
         public int Level { get; set; }
         public string Creator { get; set; }

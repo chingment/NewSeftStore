@@ -10,7 +10,10 @@ Page({
   data: {
     navH: 40,
     statusBarHeight: 0,
-    level: 1
+    curlevelSt: 1,
+    levelSt1: null,
+    levelSt2: null,
+    isMember: false
   },
 
   /**
@@ -33,12 +36,18 @@ Page({
       }
     })
 
-    var _this = this
+
     apiMember.getPayLevelSt({
       appCaller: 1
     }).then(function (res) {
       if (res.result == 1) {
-       
+
+        var d = res.data
+
+        _this.setData({
+          levelSt1: d.levelSt1,
+          levelSt2: d.levelSt2
+        })
       }
     })
   },
@@ -100,7 +109,19 @@ Page({
       return
     }
 
-    var skuId = '00000000000000000000000000000000' //对应页面data-reply-index
+    var curFeeSt
+    if (_this.data.curlevelSt == 1) {
+      console.log("1")
+      curFeeSt = _this.data.levelSt1.feeSts[_this.data.levelSt1.curFeeStIdx]
+    } else if (_this.data.curlevelSt == 2) {
+      console.log("2")
+      curFeeSt = _this.data.levelSt2.feeSts[_this.data.levelSt2.curFeeStIdx]
+    }
+
+    console.log("_this.data.curlevelSt:"+_this.data.curlevelSt)
+    console.log("curFeeSt:"+JSON.stringify(curFeeSt))
+
+    var skuId = curFeeSt.id //对应页面data-reply-index
     var productSkus = []
     productSkus.push({
       cartId: 0,
@@ -123,12 +144,23 @@ Page({
   clickToTabLevel(e) {
     var _this = this
     var level = e.currentTarget.dataset.replyLevel
-
     console.log("level:" + level)
-
     _this.setData({
-      level: level
+      curlevelSt: level
     })
-
   },
+  clickToFeeSt(e) {
+    var _this = this
+    var level = e.currentTarget.dataset.replyLevel
+    var feeStIdx = e.currentTarget.dataset.replyFeestidx
+
+    if (level == 1) {
+      var levelSt1 = _this.data.levelSt1
+      levelSt1.curFeeStIdx = feeStIdx
+      _this.setData({
+        levelSt1: levelSt1
+      })
+    }
+    console.log("level:" + level + ",feeStIdx:" + feeStIdx)
+  }
 })

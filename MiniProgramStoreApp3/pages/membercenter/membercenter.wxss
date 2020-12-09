@@ -10,6 +10,7 @@
   position: relative;
 }
 
+
 .bg-3-1{
   width: 100%;
   height: 2142rpx;
@@ -108,6 +109,15 @@
   display:flex;
 }
 
+.tab-double .tab-title  .icon{
+   width: 35rpx;
+   height: 35rpx;
+}
+
+.tab-double .tab-title  .txt{
+   margin-left: 8rpx;
+}
+
 .tab-double .tab-title .title-left{
   flex:1;display:flex;
   margin-right: -80rpx;
@@ -115,7 +125,7 @@
 }
 
 
-.tab-double .tab-title .title-left  .txt{
+.tab-double .tab-title .title-left  .title{
   flex:1;
   background-color:#878497;
   display: flex;
@@ -149,7 +159,7 @@
   border-left: 80rpx solid transparent;
 }
 
-.tab-double .tab-title .title-right .txt{
+.tab-double .tab-title .title-right .title{
   flex:1; 
   background-color:#878497;
   display: flex;
@@ -172,7 +182,7 @@
   border-left: 80rpx solid transparent;
 }
 
-.tab-double .tab-title  .selected .txt{
+.tab-double .tab-title  .selected .title{
   background-color:#ffc520;
   padding: 0;
   color: #000;
@@ -198,4 +208,100 @@
 }
 .tab-double .tab-content .selected{
   display: block;
+}
+
+.levelst .it-tag{
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.levelst .it-feests {
+   display: flex;
+}
+
+.levelst .feest{
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+  padding: 20rpx;
+  margin: 20rpx;
+  border-radius: 3%;
+  border:1px solid #e9e9e9;
+  height: 260rpx;
+}
+
+.it-feests > .selected{
+  border:1px solid #ffbb0d;
+  background-color: #fffaf1;
+}
+
+.feest-tag{
+  font-size: 32rpx;
+  height: 50rpx;
+  font-weight: 800;
+}
+
+.feest-feevalue{
+  font-size: 32rpx;
+  height: 50rpx;
+  color: #ffb808;
+  font-weight: 600;
+}
+
+.despoint{
+  display: flex;
+  font-size: 22rpx;
+  color:#99989d;
+}
+
+.despoint .field{
+  flex:1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.despoint .value{
+  flex:1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-open {
+  background-color: #ffbb0d;
+  color: #fff;
+  border-radius: 50rpx;
+  font-weight: 800;
+  height: 85rpx;
+  line-height: 85rpx;
+}
+
+
+.bg-bottom {
+  position: fixed;
+  bottom: 0rpx;
+  width: 100%;
+  background-color: #fff;
+}
+
+.bg-bottom>.wrapper {
+  padding: 12rpx;
+}
+
+.bg-bottom .btn-open {
+  width: 95%;
+}
+
+.bg-bottom .btn-tip {
+  text-align: center;
+  padding: 12prx 0;
+}
+
+.bg-bottom .tip1 {
+  color: #797979;
+  font-size: 21rpx;
+}
+
+.bg-bottom .tip2 {
+  color: #ffbb0d;
+  font-size: 21rpx;
 }

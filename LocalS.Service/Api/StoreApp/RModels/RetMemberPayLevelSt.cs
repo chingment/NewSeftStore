@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetMemberPayLevelSt()
         {
-   
+
         }
 
         public LevelStModel LevelSt1 { get; set; }
@@ -25,6 +25,7 @@ namespace LocalS.Service.Api.StoreApp
             public string Id { get; set; }
             public string Tag { get; set; }
             public int Level { get; set; }
+            public int CurFeeStIdx { get; set; }
             public List<FeeStModel> FeeSts { get; set; }
         }
         public class FeeStModel

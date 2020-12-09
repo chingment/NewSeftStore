@@ -37,45 +37,82 @@
 
       <view class="tab-double">
          <view class="tab-title">
-            <view class="title-left {{level==1?'selected':''}}" bindtap="clickToTabLevel"  data-reply-level="1" >
-               <view class="txt">
-                  <text>翡翠会员</text>
+            <view class="title-left {{curlevelSt==1?'selected':''}}" bindtap="clickToTabLevel" data-reply-level="1">
+               <view class="title">
+                  <image class='icon' src='/content/default/images/icon_pan.png'></image>
+                  <text class="txt">{{levelSt1.tag}}</text>
                </view>
                <view class="left-triangle">
                </view>
             </view>
-
-            <view class="title-right {{level==2?'selected':''}}" bindtap="clickToTabLevel" data-reply-level="2" >
+            <view class="title-right {{curlevelSt==2?'selected':''}}" bindtap="clickToTabLevel" data-reply-level="2">
                <view class="right-triangle">
 
                </view>
-               <view class="txt">
-                  <text>钻石会员</text>
+               <view class="title">
+                  <image class='icon' src='/content/default/images/icon_diamen.png'></image>
+                  <text class="txt">钻石会员</text>
                </view>
             </view>
          </view>
 
          <view class="tab-content">
-            <view class="content-item {{level==1?'selected':''}}">
-               a
+            <view class="content-item {{curlevelSt==1?'selected':''}} levelst">
+               <view class="it-tag">开通{{levelSt1.tag}}</view>
+               <view class="it-feests">
+                  <block wx:for="{{levelSt1.feeSts}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+                     <view class="feest {{levelSt1.curFeeStIdx==index?'selected':''}}" data-reply-level="1"
+                        data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
+                        <view class="wrapper">
+                           <view class="feest-tag">{{item.tag}}</view>
+                           <view class="feest-feevalue">{{item.feeValue.content}}</view>
+                           <view class="feest-despoints">
 
+                              <view class="despoint">
+                                <view class="field">押金</view>
+                                <view class="value">20000</view>
+                              </view>
+                              <view class="despoint">
+                                <view class="field">租金</view>
+                                <view class="value">50每月</view>
+                              </view>
+                           </view>
+                        </view>
+                     </view>
+                  </block>
+               </view>
             </view>
-            <view class="content-item {{level==2?'selected':''}}">
-               b
+            <view class="content-item {{curlevelSt==2?'selected':''}} levelst">
+               <view class="it-tag">开通{{levelSt2.tag}}</view>
+               <view class="it-feests">
+                  <block wx:for="{{levelSt2.feeSts}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+                     <view class="feest {{levelSt2.curFeeStIdx==index?'selected':''}}" data-reply-level="2"
+                        data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
+                        <view class="wrapper">
+                           <view class="feest-tag">{{item.tag}}</view>
+                           <view class="feest-feevalue">{{item.feeValue.content}}</view>
+
+                        </view>
+                     </view>
+                  </block>
+               </view>
             </view>
          </view>
-
       </view>
-
-
-
    </view>
-   <view class="bg-3-{{level}}">
-      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_3_{{level}}.png?ts={{timespan}}"></image>
+   <view class="bg-3-{{curlevelSt}}">
+      <image class="bg-img"
+         src="http://file.17fanju.com/upload/membertheme/1/center/bg_3_{{curlevelSt}}.png?ts={{timespan}}"></image>
    </view>
+
+   <view class="bg-bottom" wx:if="{{!isMember}}">
+      <view class="wrapper">
+         <button bindtap="clickToPurchase" class='btn-open'>立即开通</button>
+         <view class="btn-tip">
+            <text class="tip1">*开通即代表同意</text>
+            <text class="tip2">《会员协议》</text>
+         </view>
+      </view>
+   </view>
+
 </view>
-
-
-
-
-<button bindtap="clickToPurchase" class='tui-btn-open btn-open'>立即开通</button>

@@ -31,15 +31,15 @@ namespace LocalS.Service.Api.StoreApp
                     LogUtil.Info("A2");
                     var m_levelSt1 = new RetMemberPayLevelSt.LevelStModel();
                     m_levelSt1.Id = d_memberLevelSt_1.Id;
-                    m_levelSt1.Tag = d_memberLevelSt_1.Name;
+                    m_levelSt1.Tag = d_memberLevelSt_1.Tag;
                     m_levelSt1.Level = d_memberLevelSt_1.Level;
-
-                    foreach(var d_memberLevelSt_1_FeeSt in d_memberLevelSt_1_FeeSts)
+                    m_levelSt1.CurFeeStIdx = 0;
+                    foreach (var d_memberLevelSt_1_FeeSt in d_memberLevelSt_1_FeeSts)
                     {
                         LogUtil.Info("A3");
                         var m_feeSt = new RetMemberPayLevelSt.FeeStModel();
                         m_feeSt.Id = d_memberLevelSt_1_FeeSt.Id;
-                        m_feeSt.Tag = d_memberLevelSt_1_FeeSt.Name;
+                        m_feeSt.Tag = d_memberLevelSt_1_FeeSt.Tag;
                         m_feeSt.FeeValue = new UI.FsText(d_memberLevelSt_1_FeeSt.FeeValue.ToF2Price(), "");
                         m_feeSt.DesPoints = d_memberLevelSt_1_FeeSt.DesPoints.ToJsonObject<List<FsField>>();
                         m_feeSt.LayoutWeight = d_memberLevelSt_1_FeeSt.LayoutWeight;
@@ -63,7 +63,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var m_levelSt2 = new RetMemberPayLevelSt.LevelStModel();
                     m_levelSt2.Id = d_memberLevelSt_2.Id;
-                    m_levelSt2.Tag = d_memberLevelSt_2.Name;
+                    m_levelSt2.Tag = d_memberLevelSt_2.Tag;
                     m_levelSt2.Level = d_memberLevelSt_2.Level;
 
                     foreach (var d_memberLevelSt_2_FeeSt in d_memberLevelSt_2_FeeSts)
@@ -71,10 +71,12 @@ namespace LocalS.Service.Api.StoreApp
 
                         var m_feeSt = new RetMemberPayLevelSt.FeeStModel();
                         m_feeSt.Id = d_memberLevelSt_2_FeeSt.Id;
-                        m_feeSt.Tag = d_memberLevelSt_2_FeeSt.Name;
+                        m_feeSt.Tag = d_memberLevelSt_2_FeeSt.Tag;
                         m_feeSt.FeeValue = new UI.FsText(d_memberLevelSt_2_FeeSt.FeeValue.ToF2Price(), "");
                         m_feeSt.DesPoints = d_memberLevelSt_2_FeeSt.ToJsonObject<List<FsField>>();
                         m_feeSt.LayoutWeight = d_memberLevelSt_2_FeeSt.LayoutWeight;
+
+                        m_levelSt2.FeeSts.Add(m_feeSt);
                     }
 
                     ret.LevelSt2 = m_levelSt2;
