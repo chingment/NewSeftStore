@@ -60,5 +60,7 @@ namespace LocalS.Entity
         public int PrdKindId2 { get; set; }
         public int PrdKindId3 { get; set; }
         public bool IsTestMode { get; set; }
+        public string RetailerId { get; set; }
+
     }
 }

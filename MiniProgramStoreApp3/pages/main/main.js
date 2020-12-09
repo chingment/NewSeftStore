@@ -84,7 +84,7 @@ Page({
       isLogin: false,
       userInfo: null
     },
-    isOnLoad:false
+    isOnLoad: false
   },
   onLoad: function (options) {
     var _this = this;
@@ -103,18 +103,20 @@ Page({
       apiCart.pageData()
       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
       mainTabBarSwitch(tabBarIndex)
+  
 
     } else {
       console.log("call>>2")
       app.checkConfigReadyCallback = res => {
-        console.log("call>>3,"+JSON.stringify(res))
+        console.log("call>>3," + JSON.stringify(res))
         if (!ownRequest.isSelectedStore(true)) {
           return
         }
         apiCart.pageData()
         var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
         mainTabBarSwitch(tabBarIndex)
-  
+    
+
       }
     }
   },
@@ -122,15 +124,6 @@ Page({
     console.log("mian.onShow")
     var _this = this
 
-
-    if(_this.data.isOnLoad){
-      if (!ownRequest.isSelectedStore(true)) {
-        return
-      }
-      apiCart.pageData()
-      var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-      mainTabBarSwitch(tabBarIndex)
-    }
 
 
   },

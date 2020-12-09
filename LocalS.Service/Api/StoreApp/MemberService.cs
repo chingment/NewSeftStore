@@ -75,7 +75,7 @@ namespace LocalS.Service.Api.StoreApp
                         m_feeSt.Id = d_memberLevelSt_2_FeeSt.Id;
                         m_feeSt.Tag = d_memberLevelSt_2_FeeSt.Tag;
                         m_feeSt.FeeValue = new UI.FsText(d_memberLevelSt_2_FeeSt.FeeValue.ToF2Price(), "");
-                        m_feeSt.DesPoints = d_memberLevelSt_2_FeeSt.ToJsonObject<List<FsField>>();
+                        m_feeSt.DesPoints = d_memberLevelSt_2_FeeSt.DesPoints.ToJsonObject<List<FsField>>();
                         m_feeSt.LayoutWeight = d_memberLevelSt_2_FeeSt.LayoutWeight;
 
                         m_levelSt2.FeeSts.Add(m_feeSt);

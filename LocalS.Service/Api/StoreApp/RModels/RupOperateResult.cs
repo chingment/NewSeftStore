@@ -20,5 +20,6 @@ namespace LocalS.Service.Api.StoreApp
         public E_OperateType Type { get; set; }
         public E_AppCaller Caller { get; set; }
         public bool IsTimeOut { get; set; }
+        public string Action { get; set; }
     }
 }

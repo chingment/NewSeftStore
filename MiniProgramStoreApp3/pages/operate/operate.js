@@ -13,7 +13,7 @@ Page({
       isShowContactButton:false
     }
   },
-  getResult: function (id, tp, caller,isTimeout) {
+  getResult: function (id, tp, caller,isTimeout,action) {
 
     var _this = this;
 
@@ -21,7 +21,8 @@ Page({
       id: id,
       type: tp,
       caller: caller,
-      isTimeout: isTimeout
+      isTimeout: isTimeout,
+      action:action
     }).then(function (res) {
       if (res.result == 1) {
         if (res.data.isComplete) {
@@ -39,6 +40,9 @@ Page({
     var _id = options.id == undefined ? "" : options.id
     var _type = options.type == undefined ? "" : options.type
     var _caller = options.caller == undefined ? "" : options.caller
+    var _action= options.action == undefined ? "" : options.action
+
+    console.log("_action:"+_action)
 
     var step = 1, //计数动画次数
       num = 0, //计数倒计时秒数（n - num）
@@ -54,9 +58,9 @@ Page({
         end = end + 2 * Math.PI / n;
         ringMove(start, end);
         step++;
-        _this.getResult(_id, _type, _caller,false)
+        _this.getResult(_id, _type, _caller,false,_action)
       } else {
-        _this.getResult(_id, _type, _caller, true)
+        _this.getResult(_id, _type, _caller, true,_action)
         clearInterval(time);
       }
     };

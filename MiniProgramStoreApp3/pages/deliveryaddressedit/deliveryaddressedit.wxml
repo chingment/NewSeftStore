@@ -45,7 +45,7 @@
 		<template is="area_select" data="{{showArea,resideprovince,residecity,country,currentTab,curr_pro,curr_cit,curr_cou}}" />
 
 
-		<button class="bottom-btn bg-main" form-type="submit">保存</button>
+		<button class="btn-bottom bg-main" form-type="submit">保存</button>
 
 
 	</form>

@@ -143,7 +143,24 @@ namespace LocalS.Service.Api.StoreApp
                 ret.Result = RetOperateResult.ResultType.Tips;
                 ret.IsComplete = true;
                 ret.Message = "您已取消支付操作";
-                ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
+
+                if (rup.Action == "")
+                {
+
+                }
+                string action = rup.Action.ToLower();
+
+                switch (action)
+                {
+                    case "memberfee":
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "会员中心", Color = "red" }, OpType = "URL", OpVal = GetMemberCenterUrl(rup.Caller) });
+                        break;
+                    default:
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
+                        break;
+                }
+
+
                 ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "继续支付", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, payTrans.OrderIds, payTrans.PayStatus) });
                 ret.Fields.Add(new FsField("交易号", "", payTrans.Id, ""));
                 ret.Fields.Add(new FsField("提交时间", "", payTrans.SubmittedTime.ToUnifiedFormatDateTime(), ""));
@@ -175,5 +192,20 @@ namespace LocalS.Service.Api.StoreApp
 
             return url;
         }
+
+        public static string GetMemberCenterUrl(E_AppCaller caller)
+        {
+            string url = "";
+            switch (caller)
+            {
+                case E_AppCaller.Wxmp:
+                    url = "/pages/membercenter/membercenter";
+                    break;
+            }
+
+            return url;
+        }
+
+
     }
 }

@@ -22,7 +22,7 @@ Page({
     },
     cartDialog: {
       isShow: false,
-      dataS:{}
+      dataS: {}
     }
   },
 
@@ -31,6 +31,7 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
+    app.checkConfigReadyCallback = null
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? undefined : options.shopMode
@@ -79,7 +80,11 @@ Page({
   goCart: function (e) {
     console.log("goCart")
     var _this = this
-    _this.setData({ cartDialog: {isShow:true} })
+    _this.setData({
+      cartDialog: {
+        isShow: true
+      }
+    })
   },
   addToCart: function (e) {
     var _this = this
@@ -110,12 +115,14 @@ Page({
         toast.show({
           title: '加入购物车成功'
         })
-  
-        var cartDialog=_this.data.cartDialog
-        cartDialog.dataS=res.data
-        cartDialog.isShow=false
-        console.log('cartDialog.ishow:'+cartDialog.isShow)
-        _this.setData({cartDialog:cartDialog})
+
+        var cartDialog = _this.data.cartDialog
+        cartDialog.dataS = res.data
+        cartDialog.isShow = false
+        console.log('cartDialog.ishow:' + cartDialog.isShow)
+        _this.setData({
+          cartDialog: cartDialog
+        })
       } else {
         toast.show({
           title: res.message
@@ -174,7 +181,7 @@ Page({
       path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this.data.shopMode + '&storeId=' + _this.data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
       imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
-        if (res.errMsg == 'shareAppMessage:ok') { }
+        if (res.errMsg == 'shareAppMessage:ok') {}
       },
       fail: function () { // 转发失败之后的回调
         if (res.errMsg == 'shareAppMessage:fail cancel') {
@@ -213,7 +220,9 @@ Page({
     productSku.sellQuantity = selSku.sellQuantity
     productSku.specIdx = selSku.specIdx
 
-    _this.setData({ productSku: productSku })
+    _this.setData({
+      productSku: productSku
+    })
 
   }
 })

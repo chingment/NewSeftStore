@@ -15,7 +15,7 @@ App({
     const accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
 
-    _this.globalData.appId=appId
+    _this.globalData.appId = appId
     //_this.getConfig()
 
     // 展示本地存储能力
@@ -39,7 +39,7 @@ App({
     _this.getConfig()
   },
   globalData: {
-     appId: null,
+    appId: null,
     // merchid: null,
     // storeid: null,
     // session_key: null,
@@ -50,7 +50,7 @@ App({
     checkConfig: false
   },
   getConfig: function () {
-    var _this=this
+    var _this = this
     const accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
     wx.login({
@@ -60,7 +60,7 @@ App({
             appId: appId,
             code: res.code,
           }).then(function (res2) {
-           
+
             if (res2.result == 1) {
               var d = res2.data
 
@@ -73,10 +73,10 @@ App({
               }
 
               _this.globalData.checkConfig = true
-              if (_this.checkConfigReadyCallback){
+              if (_this.checkConfigReadyCallback) {
                 _this.checkConfigReadyCallback(d);
-             }
-            
+              }
+
             } else {
               toast.show({
                 title: res2.message

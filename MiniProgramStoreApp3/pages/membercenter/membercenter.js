@@ -130,7 +130,7 @@ Page({
       shopMode: 4
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus)+"&action=memberfee",
       success: function (res) {
         // success
       },

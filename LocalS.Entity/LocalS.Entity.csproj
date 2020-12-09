@@ -83,6 +83,7 @@
     <Compile Include="EventCodeRemarkAttribute.cs" />
     <Compile Include="SellChannel.cs" />
     <Compile Include="SellChannelStockDateHis.cs" />
+    <Compile Include="Retailer.cs" />
     <Compile Include="Spg\SpgItem.cs" />
     <Compile Include="Spg\SpgItemSub.cs" />
     <Compile Include="Store.cs" />

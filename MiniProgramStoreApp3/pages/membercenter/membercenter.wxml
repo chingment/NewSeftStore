@@ -66,16 +66,14 @@
                         <view class="wrapper">
                            <view class="feest-tag">{{item.tag}}</view>
                            <view class="feest-feevalue">{{item.feeValue.content}}</view>
-                           <view class="feest-despoints">
-
-                              <view class="despoint">
-                                 <view class="field">押金</view>
-                                 <view class="value">20000</view>
-                              </view>
-                              <view class="despoint">
-                                 <view class="field">租金</view>
-                                 <view class="value">50每月</view>
-                              </view>
+                           <view class="feest-despoints" wx:if="{{item.desPoints!=null&&item.desPoints.length>0}}">
+                              <block wx:for="{{item.desPoints}}" wx:for-index="index2" wx:for-item="item2"
+                                 wx:key="list2">
+                                 <view class="despoint">
+                                    <view class="field" style="color:{{item2.title.color}};">{{item2.title.content}}</view>
+                                    <view class="value" style="color:{{item2.title.color}};">{{item2.value.content}}</view>
+                                 </view>
+                              </block>
                            </view>
                         </view>
                      </view>
@@ -94,7 +92,15 @@
                         <view class="wrapper">
                            <view class="feest-tag">{{item.tag}}</view>
                            <view class="feest-feevalue">{{item.feeValue.content}}</view>
-
+                           <view class="feest-despoints" wx:if="{{item.desPoints!=null&&item.desPoints.length>0}}">
+                              <block wx:for="{{item.desPoints}}" wx:for-index="index2" wx:for-item="item2"
+                                 wx:key="list2">
+                                 <view class="despoint">
+                                    <view class="field" style="color:{{item2.title.color}};">{{item2.title.content}}</view>
+                                    <view class="value" style="color:{{item2.title.color}};">{{item2.value.content}}</view>
+                                 </view>
+                              </block>
+                           </view>
                         </view>
                      </view>
                   </block>
