@@ -81,7 +81,7 @@
                      </view>
                   </block>
                </view>
-               <view class="it-detailsdes">
+               <view class="it-detailsdes" wx:if="{{levelSt1.detailsDes!=null}}">
                   <image class="bg-img" mode="widthFix" src="{{levelSt1.detailsDes}}?ts={{timespan}}"></image>
                </view>
             </view>
@@ -99,7 +99,7 @@
                      </view>
                   </block>
                </view>
-               <view class="it-detailsdes">
+               <view class="it-detailsdes" wx:if="{{levelSt2.detailsDes!=null}}">
                   <image class="bg-img" mode="widthFix" src="{{levelSt2.detailsDes}}?ts={{timespan}}"></image>
                </view>
             </view>
