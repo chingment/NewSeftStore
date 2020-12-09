@@ -69,17 +69,20 @@
                            <view class="feest-despoints">
 
                               <view class="despoint">
-                                <view class="field">押金</view>
-                                <view class="value">20000</view>
+                                 <view class="field">押金</view>
+                                 <view class="value">20000</view>
                               </view>
                               <view class="despoint">
-                                <view class="field">租金</view>
-                                <view class="value">50每月</view>
+                                 <view class="field">租金</view>
+                                 <view class="value">50每月</view>
                               </view>
                            </view>
                         </view>
                      </view>
                   </block>
+               </view>
+               <view class="it-detailsdes">
+                  <image class="bg-img" mode="widthFix" src="{{levelSt1.detailsDes}}?ts={{timespan}}"></image>
                </view>
             </view>
             <view class="content-item {{curlevelSt==2?'selected':''}} levelst">
@@ -96,14 +99,14 @@
                      </view>
                   </block>
                </view>
+               <view class="it-detailsdes">
+                  <image class="bg-img" mode="widthFix" src="{{levelSt2.detailsDes}}?ts={{timespan}}"></image>
+               </view>
             </view>
          </view>
       </view>
    </view>
-   <view class="bg-3-{{curlevelSt}}">
-      <image class="bg-img"
-         src="http://file.17fanju.com/upload/membertheme/1/center/bg_3_{{curlevelSt}}.png?ts={{timespan}}"></image>
-   </view>
+
 
    <view class="bg-bottom" wx:if="{{!isMember}}">
       <view class="wrapper">

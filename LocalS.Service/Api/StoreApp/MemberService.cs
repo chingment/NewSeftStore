@@ -33,6 +33,7 @@ namespace LocalS.Service.Api.StoreApp
                     m_levelSt1.Id = d_memberLevelSt_1.Id;
                     m_levelSt1.Tag = d_memberLevelSt_1.Tag;
                     m_levelSt1.Level = d_memberLevelSt_1.Level;
+                    m_levelSt1.DetailsDes = d_memberLevelSt_1.DetailsDes;
                     m_levelSt1.CurFeeStIdx = 0;
                     foreach (var d_memberLevelSt_1_FeeSt in d_memberLevelSt_1_FeeSts)
                     {
@@ -65,7 +66,8 @@ namespace LocalS.Service.Api.StoreApp
                     m_levelSt2.Id = d_memberLevelSt_2.Id;
                     m_levelSt2.Tag = d_memberLevelSt_2.Tag;
                     m_levelSt2.Level = d_memberLevelSt_2.Level;
-
+                    m_levelSt2.DetailsDes = d_memberLevelSt_2.DetailsDes;
+                    m_levelSt2.CurFeeStIdx = 0;
                     foreach (var d_memberLevelSt_2_FeeSt in d_memberLevelSt_2_FeeSts)
                     {
 

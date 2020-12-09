@@ -25,6 +25,7 @@ namespace LocalS.Service.Api.StoreApp
             public string Id { get; set; }
             public string Tag { get; set; }
             public int Level { get; set; }
+            public string DetailsDes { get; set; }
             public int CurFeeStIdx { get; set; }
             public List<FeeStModel> FeeSts { get; set; }
         }
