@@ -20,7 +20,11 @@ namespace WebApiStoreApp
             get
             {
                 var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-                var token = request.QueryString["token"];
+                string token = request.QueryString["token"];
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = request.Headers["token"];
+                }
                 return token;
             }
         }
