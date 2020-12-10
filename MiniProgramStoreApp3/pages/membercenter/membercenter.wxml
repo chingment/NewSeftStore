@@ -118,17 +118,17 @@
                </view>
             </view>
 
-            <view class="content-saleoutlet">
+            <view wx:if="{{isOptSaleOutlet}}" class="content-saleoutlet">
                <view class="its-a">
                   <view class="it">
                      <view class="it-l">
-                        <text class='txt-h1'>服务网点</text>
-                        <text class="txt-h2 isDefault">选择</text>
+                        <text class='txt-h1'>{{curSaleOutlet.tagName}}</text>
+                        <text class="txt-h2 isDefault">{{curSaleOutlet.tagTip}}</text>
                      </view>
                      <view class="it-m">
                         <view class="it-ml">
-                           <text class='txt-h1 bold'>越秀区</text>
-                           <text class='txt-h2'>休息休息</text>
+                           <text class='txt-h1 bold'>{{curSaleOutlet.contentBm}}</text>
+                           <text class='txt-h2'>{{curSaleOutlet.cntentSm}}</text>
                         </view>
                      </view>
                      <view class='it-r' bindtap="goSelect">

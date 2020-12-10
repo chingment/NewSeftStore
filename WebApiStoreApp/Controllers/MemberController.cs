@@ -13,9 +13,9 @@ namespace WebApiStoreApp.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public OwnApiHttpResponse GetPayLevelSt()
+        public OwnApiHttpResponse GetPayLevelSt([FromUri]RupMemberGetPayLevelSt rup)
         {
-            IResult result = StoreAppServiceFactory.Member.GetPayLevelSt(this.CurrentUserId);
+            IResult result = StoreAppServiceFactory.Member.GetPayLevelSt(this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

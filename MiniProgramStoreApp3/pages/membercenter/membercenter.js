@@ -25,9 +25,13 @@ Page({
     levelSt1: null,
     levelSt2: null,
     isMember: false,
+    isOptSaleOutlet: false,
     curSaleOutlet: {
       id: '',
-      name: ''
+      tagName: '',
+      tagTip: '',
+      contentBm: '',
+      cntentSm: ''
     }
   },
 
@@ -67,7 +71,7 @@ Page({
     app.globalData.skeletonPage = _this
 
     apiMember.getPayLevelSt({
-      appCaller: 1
+      saleOutletId: 'dsa'
     }).then(function (res) {
       if (res.result == 1) {
 
@@ -76,6 +80,8 @@ Page({
         _this.setData({
           levelSt1: d.levelSt1,
           levelSt2: d.levelSt2,
+          isOptSaleOutlet: d.isOptSaleOutlet,
+          curSaleOutlet: d.curSaleOutlet,
           pageIsReady: true
         })
       }
@@ -120,28 +126,31 @@ Page({
 
     var _this = this
 
+    var _data = _this.data
     if (!ownRequest.isLogin()) {
       ownRequest.goLogin()
       return
     }
 
-    if (util.isEmptyOrNull(_this.data.curSaleOutlet.id)) {
-      toast.show({
-        title: '请选择服务网点'
-      })
-      return
+    if (_data.isOptSaleOutlet) {
+      if (util.isEmptyOrNull(_data.curSaleOutlet.id)) {
+        toast.show({
+          title: '请选择服务网点'
+        })
+        return
+      }
     }
 
     var curFeeSt
-    if (_this.data.curlevelSt == 1) {
+    if (_data.curlevelSt == 1) {
       console.log("1")
-      curFeeSt = _this.data.levelSt1.feeSts[_this.data.levelSt1.curFeeStIdx]
+      curFeeSt = _data.levelSt1.feeSts[_data.levelSt1.curFeeStIdx]
     } else if (_this.data.curlevelSt == 2) {
       console.log("2")
-      curFeeSt = _this.data.levelSt2.feeSts[_this.data.levelSt2.curFeeStIdx]
+      curFeeSt = _data.levelSt2.feeSts[_data.levelSt2.curFeeStIdx]
     }
 
-    console.log("_this.data.curlevelSt:" + _this.data.curlevelSt)
+    console.log("_this.data.curlevelSt:" + _data.curlevelSt)
     console.log("curFeeSt:" + JSON.stringify(curFeeSt))
 
     var skuId = curFeeSt.id //对应页面data-reply-index
@@ -153,7 +162,7 @@ Page({
       shopMode: 4
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&action=memberfee&saleOutletId="+_this.data.curSaleOutlet.id,
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&action=memberfee&saleOutletId=" + _data.curSaleOutlet.id,
       success: function (res) {
         // success
       },

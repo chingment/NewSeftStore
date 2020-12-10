@@ -11,15 +11,13 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetMemberPayLevelSt()
         {
-            this.SaleOutlets = new List<SaleOutletModel>();
+            //this.SaleOutlets = new List<SaleOutletModel>();
             this.CurSaleOutlet = new SaleOutletModel();
         }
 
-        public List<SaleOutletModel> SaleOutlets { get; set; }
+        //public List<SaleOutletModel> SaleOutlets { get; set; }
         public bool IsOptSaleOutlet { get; set; }
-
         public SaleOutletModel CurSaleOutlet { get; set; }
-
         public LevelStModel LevelSt1 { get; set; }
         public LevelStModel LevelSt2 { get; set; }
         public class LevelStModel
@@ -51,7 +49,10 @@ namespace LocalS.Service.Api.StoreApp
         public class SaleOutletModel
         {
             public string Id { get; set; }
-            public string Name { get; set; }
+            public string TagName { get; set; }
+            public string TagTip { get; set; }
+            public string ContentBm { get; set; }
+            public string ContentSm { get; set; }
         }
     }
 }

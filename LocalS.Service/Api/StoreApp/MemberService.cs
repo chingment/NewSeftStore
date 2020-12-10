@@ -11,7 +11,8 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class MemberService : BaseDbContext
     {
-        public CustomJsonResult GetPayLevelSt(string operater)
+
+        public CustomJsonResult GetPayLevelSt(string operater, RupMemberGetPayLevelSt rup)
         {
             var merchId = "35129159f53249efabd4f0bc9a65810c";
             var result = new CustomJsonResult();
@@ -20,17 +21,18 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.IsOptSaleOutlet = true;
 
-            var d_saleOutlets = CurrentDb.SaleOutlet.Where(m => m.MerchId == merchId).ToList();
 
-            foreach(var d_saleOutlet in d_saleOutlets)
+            var d_saleOutlet = CurrentDb.SaleOutlet.Where(m => m.MerchId == merchId && m.Id == rup.SaleOutletId).FirstOrDefault();
+            if (d_saleOutlet == null)
             {
-                var m_saleOutlet = new RetMemberPayLevelSt.SaleOutletModel();
-                m_saleOutlet.Id = d_saleOutlet.Id;
-                m_saleOutlet.Name = d_saleOutlet.Name;
-
-                ret.SaleOutlets.Add(m_saleOutlet);
+                ret.CurSaleOutlet = new RetMemberPayLevelSt.SaleOutletModel { Id = "", TagName = "服务网点", TagTip = "地址信息", ContentBm = "请选择", ContentSm = "" };
+            }
+            else
+            {
+                ret.CurSaleOutlet = new RetMemberPayLevelSt.SaleOutletModel { Id = d_saleOutlet.Id, TagName = "服务网点", TagTip = "地址信息", ContentBm = d_saleOutlet.Name, ContentSm = d_saleOutlet.ContactAddress };
             }
 
+        
             var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId).ToList();
             var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == merchId).ToList();
 
