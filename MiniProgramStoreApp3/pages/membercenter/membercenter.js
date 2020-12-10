@@ -3,6 +3,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const config = require('../../config')
 const apiMember = require('../../api/member.js')
 const skeletonData = require('./skeletonData')
+const util = require('../../utils/util')
 
 const app = getApp()
 
@@ -23,7 +24,11 @@ Page({
     curlevelSt: 1,
     levelSt1: null,
     levelSt2: null,
-    isMember: false
+    isMember: false,
+    curSaleOutlet: {
+      id: '',
+      name: ''
+    }
   },
 
   /**
@@ -71,7 +76,7 @@ Page({
         _this.setData({
           levelSt1: d.levelSt1,
           levelSt2: d.levelSt2,
-          pageIsReady:true
+          pageIsReady: true
         })
       }
     })
@@ -120,6 +125,13 @@ Page({
       return
     }
 
+    if (util.isEmptyOrNull(_this.data.curSaleOutlet.id)) {
+      toast.show({
+        title: '请选择服务网点'
+      })
+      return
+    }
+
     var curFeeSt
     if (_this.data.curlevelSt == 1) {
       console.log("1")
@@ -129,8 +141,8 @@ Page({
       curFeeSt = _this.data.levelSt2.feeSts[_this.data.levelSt2.curFeeStIdx]
     }
 
-    console.log("_this.data.curlevelSt:"+_this.data.curlevelSt)
-    console.log("curFeeSt:"+JSON.stringify(curFeeSt))
+    console.log("_this.data.curlevelSt:" + _this.data.curlevelSt)
+    console.log("curFeeSt:" + JSON.stringify(curFeeSt))
 
     var skuId = curFeeSt.id //对应页面data-reply-index
     var productSkus = []
@@ -141,7 +153,7 @@ Page({
       shopMode: 4
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus)+"&action=memberfee",
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&action=memberfee&saleOutletId="+_this.data.curSaleOutlet.id,
       success: function (res) {
         // success
       },

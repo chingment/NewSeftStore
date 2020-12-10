@@ -6,7 +6,6 @@
 .bg-1{
   width: 100%;
   height: 424rpx;
-  background-color: #242424;
   position: relative;
 }
 
@@ -187,8 +186,6 @@
   padding: 0;
   color: #000;
   font-weight: 800;
-
-
 }
 
 
@@ -209,6 +206,10 @@
   display: block;
 }
 
+.content-saleoutlet{
+  margin:0rpx 15rpx 25rpx 15rpx;
+}
+
 .levelst .it-tag{
   font-size: 38rpx;
   font-weight: 800;
@@ -224,7 +225,7 @@
   justify-content: center;
   text-align: center;
   padding: 20rpx;
-  margin: 0 15rpx 20rpx 15rpx;
+  margin: 0 15rpx 15rpx 15rpx;
   border-radius: 3%;
   border:1px solid #e9e9e9;
   height: 260rpx;
@@ -274,7 +275,6 @@
   height: 85rpx;
   line-height: 85rpx;
 }
-
 
 .bg-bottom {
   position: fixed;

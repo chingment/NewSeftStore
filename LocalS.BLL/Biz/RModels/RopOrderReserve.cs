@@ -18,7 +18,7 @@ namespace LocalS.BLL.Biz
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }
         public string SvcAnswererId { get; set; }
-        public string RetailerId { get; set; }
+        public string SaleOutletId { get; set; }
         public E_OrderSource Source { get; set; }
         public List<OrderReserveBlockModel> Blocks { get; set; }
         public bool IsTestMode { get; set; }

@@ -121,6 +121,6 @@ namespace LocalS.Entity
         public DateTime? BookEndTime { get; set; }
         public bool IsNoDisplayClient { get; set; }
 
-        public string RetailerId { get; set; }
+        public string SaleOutletId{ get; set; }
     }
 }

@@ -1,7 +1,7 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
-  data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
-  
-<view class="pg-ct membercenter skeleton"  wx:if="{{ pageIsReady }}">
+   data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
+
+<view class="pg-ct membercenter skeleton" wx:if="{{ pageIsReady }}">
    <view class="bg-1 skeleton-bg">
       <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_1.png?ts={{timespan}}"></image>
       <view class="section">
@@ -40,7 +40,8 @@
 
       <view class="tab-double">
          <view class="tab-title">
-            <view class="title-left {{curlevelSt==1?'selected':''}} skeleton-bg" bindtap="clickToTabLevel" data-reply-level="1">
+            <view class="title-left {{curlevelSt==1?'selected':''}} skeleton-bg" bindtap="clickToTabLevel"
+               data-reply-level="1">
                <view class="title">
                   <image class='icon skeleton-circle' src='/content/default/images/icon_pan.png'></image>
                   <text class="txt skeleton-rect">{{levelSt1.tag}}</text>
@@ -48,7 +49,8 @@
                <view class="left-triangle">
                </view>
             </view>
-            <view class="title-right {{curlevelSt==2?'selected':''}} skeleton-bg" bindtap="clickToTabLevel" data-reply-level="2">
+            <view class="title-right {{curlevelSt==2?'selected':''}} skeleton-bg" bindtap="clickToTabLevel"
+               data-reply-level="2">
                <view class="right-triangle">
 
                </view>
@@ -62,14 +64,14 @@
          <view class="tab-content">
             <view class="content-item {{curlevelSt==1?'selected':''}} levelst">
                <view class="it-tag skeleton-rect">
-              
+
                   开通{{levelSt1.tag}}
-               
+
                </view>
                <view class="it-feests">
                   <block wx:for="{{levelSt1.feeSts}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-                     <view class="feest {{levelSt1.curFeeStIdx==index?'selected':''}} skeleton-rect" data-reply-level="1"
-                        data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
+                     <view class="feest {{levelSt1.curFeeStIdx==index?'selected':''}} skeleton-rect"
+                        data-reply-level="1" data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
                         <view class="wrapper">
                            <view class="feest-tag">{{item.tag}}</view>
                            <view class="feest-feevalue">{{item.feeValue.content}}</view>
@@ -77,8 +79,10 @@
                               <block wx:for="{{item.desPoints}}" wx:for-index="index2" wx:for-item="item2"
                                  wx:key="list2">
                                  <view class="despoint">
-                                    <view class="field" style="color:{{item2.title.color}};">{{item2.title.content}}</view>
-                                    <view class="value" style="color:{{item2.title.color}};">{{item2.value.content}}</view>
+                                    <view class="field" style="color:{{item2.title.color}};">{{item2.title.content}}
+                                    </view>
+                                    <view class="value" style="color:{{item2.title.color}};">{{item2.value.content}}
+                                    </view>
                                  </view>
                               </block>
                            </view>
@@ -86,9 +90,7 @@
                      </view>
                   </block>
                </view>
-               <view class="it-detailsdes skeleton-rect" wx:if="{{levelSt1.detailsDes!=null}}">
-                  <image class="bg-img" mode="widthFix" src="{{levelSt1.detailsDes}}?ts={{timespan}}"></image>
-               </view>
+
             </view>
             <view class="content-item {{curlevelSt==2?'selected':''}} levelst">
                <view class="it-tag">开通{{levelSt2.tag}}</view>
@@ -103,8 +105,10 @@
                               <block wx:for="{{item.desPoints}}" wx:for-index="index2" wx:for-item="item2"
                                  wx:key="list2">
                                  <view class="despoint">
-                                    <view class="field" style="color:{{item2.title.color}};">{{item2.title.content}}</view>
-                                    <view class="value" style="color:{{item2.title.color}};">{{item2.value.content}}</view>
+                                    <view class="field" style="color:{{item2.title.color}};">{{item2.title.content}}
+                                    </view>
+                                    <view class="value" style="color:{{item2.title.color}};">{{item2.value.content}}
+                                    </view>
                                  </view>
                               </block>
                            </view>
@@ -112,12 +116,45 @@
                      </view>
                   </block>
                </view>
-               <view class="it-detailsdes skeleton-rect" wx:if="{{levelSt2.detailsDes!=null}}">
+            </view>
+
+            <view class="content-saleoutlet">
+               <view class="its-a">
+                  <view class="it">
+                     <view class="it-l">
+                        <text class='txt-h1'>服务网点</text>
+                        <text class="txt-h2 isDefault">选择</text>
+                     </view>
+                     <view class="it-m">
+                        <view class="it-ml">
+                           <text class='txt-h1 bold'>越秀区</text>
+                           <text class='txt-h2'>休息休息</text>
+                        </view>
+                     </view>
+                     <view class='it-r' bindtap="goSelect">
+                        <view class="icon">
+                           <image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+                        </view>
+                     </view>
+                  </view>
+               </view>
+            </view>
+
+            <view class="content-detailsdes">
+               <view class="it-detailsdes skeleton-rect" wx:if="{{levelSt1.detailsDes!=null&&curlevelSt==1}}">
+                  <image class="bg-img" mode="widthFix" src="{{levelSt1.detailsDes}}?ts={{timespan}}"></image>
+               </view>
+
+               <view class="it-detailsdes skeleton-rect" wx:if="{{levelSt2.detailsDes!=null&&curlevelSt==2}}">
                   <image class="bg-img" mode="widthFix" src="{{levelSt2.detailsDes}}?ts={{timespan}}"></image>
                </view>
             </view>
+
+
          </view>
       </view>
+
+
    </view>
 
 

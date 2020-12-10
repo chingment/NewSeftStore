@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public string StoreId { get; set; }
 
-        public string RetailerId { get; set; }
+        public string SaleOutletId { get; set; }
         public List<OrderReserveBlockModel> Blocks { get; set; }
         public E_OrderSource Source { get; set; }
    

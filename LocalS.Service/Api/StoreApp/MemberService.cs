@@ -13,12 +13,26 @@ namespace LocalS.Service.Api.StoreApp
     {
         public CustomJsonResult GetPayLevelSt(string operater)
         {
+            var merchId = "35129159f53249efabd4f0bc9a65810c";
             var result = new CustomJsonResult();
 
             var ret = new RetMemberPayLevelSt();
 
-            var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == "35129159f53249efabd4f0bc9a65810c").ToList();
-            var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == "35129159f53249efabd4f0bc9a65810c").ToList();
+            ret.IsOptSaleOutlet = true;
+
+            var d_saleOutlets = CurrentDb.SaleOutlet.Where(m => m.MerchId == merchId).ToList();
+
+            foreach(var d_saleOutlet in d_saleOutlets)
+            {
+                var m_saleOutlet = new RetMemberPayLevelSt.SaleOutletModel();
+                m_saleOutlet.Id = d_saleOutlet.Id;
+                m_saleOutlet.Name = d_saleOutlet.Name;
+
+                ret.SaleOutlets.Add(m_saleOutlet);
+            }
+
+            var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId).ToList();
+            var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == merchId).ToList();
 
             var d_memberLevelSt_1 = d_memberLevelSts.Where(m => m.Level == 1).FirstOrDefault();
 

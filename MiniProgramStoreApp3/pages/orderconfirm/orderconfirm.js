@@ -25,7 +25,8 @@ Page({
       isShow: false
     },
     booktimeSelectBlockIndex: -1,
-    action: ''
+    action: '',
+    saleOutletId: ''
   },
   onLoad: function (options) {
     var _this = this
@@ -37,6 +38,7 @@ Page({
 
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
     var _action = options.action == undefined ? null : options.action
+    var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
     console.log('orderIds:' + _orderIds)
 
     var orderIds = []
@@ -55,7 +57,8 @@ Page({
       storeId: ownRequest.getCurrentStoreId(),
       orderIds: orderIds,
       productSkus: productSkus,
-      action: _action
+      action: _action,
+      saleOutletId: _saleOutletId
     })
     _this.buildPayOptions()
     _this.getConfirmData()
@@ -217,7 +220,8 @@ Page({
       apiOrder.reserve({
         storeId: _this.data.storeId,
         blocks: blocks,
-        source: 3
+        source: 3,
+        saleOutletId:_this.data.saleOutletId
       }).then(function (res) {
         if (res.result == 1) {
           var d = res.data

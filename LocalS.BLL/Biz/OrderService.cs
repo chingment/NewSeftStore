@@ -533,7 +533,7 @@ namespace LocalS.BLL.Biz
                         order.StoreName = store.Name;
                         order.SellChannelRefType = buildOrder.SellChannelRefType;
                         order.SellChannelRefId = buildOrder.SellChannelRefId;
-                        order.RetailerId = rop.RetailerId;
+                        order.SaleOutletId = rop.SaleOutletId;
                         order.PayExpireTime = DateTime.Now.AddSeconds(300);
                         order.PickupCode = IdWorker.BuildPickupCode();
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
@@ -701,7 +701,7 @@ namespace LocalS.BLL.Biz
                             orderSub.PayStatus = E_PayStatus.WaitPay;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
                             orderSub.SvcConsulterId = productSku.SvcConsulterId;
-                            orderSub.RetailerId = rop.RetailerId;
+                            orderSub.SaleOutletId = rop.SaleOutletId;
                             orderSub.IsTestMode = rop.IsTestMode;
                             orderSub.Creator = operater;
                             orderSub.CreateTime = DateTime.Now;

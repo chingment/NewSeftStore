@@ -111,7 +111,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
-            bizRop.RetailerId = rop.RetailerId;
+            bizRop.SaleOutletId = rop.SaleOutletId;
             bizRop.IsTestMode = store.IsTestMode;
             bizRop.Blocks = rop.Blocks;
 

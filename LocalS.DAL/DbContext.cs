@@ -63,7 +63,9 @@ namespace LocalS.DAL
 
         public IDbSet<MemberFeeSt> MemberFeeSt { get; set; }
         public IDbSet<MemberLevelSt> MemberLevelSt { get; set; }
-      
+
+        public IDbSet<SaleOutlet> SaleOutlet { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
