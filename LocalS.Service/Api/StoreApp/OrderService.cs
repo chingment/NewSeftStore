@@ -37,8 +37,10 @@ namespace LocalS.Service.Api.StoreApp
                     block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", order.SellChannelRefId) };
                 }
 
-                block.ReceiptInfo = new FsReceiptInfo { LastTime = order.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = order.PickupFlowLastDesc };
-
+                if (order.SellChannelRefType == E_SellChannelRefType.Machine || order.SellChannelRefType == E_SellChannelRefType.Mall)
+                {
+                    block.ReceiptInfo = new FsReceiptInfo { LastTime = order.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = order.PickupFlowLastDesc };
+                }
             }
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
@@ -538,8 +540,11 @@ namespace LocalS.Service.Api.StoreApp
                         block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
                     }
 
-                    block.ReceiptInfo = new FsReceiptInfo { LastTime = item.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = item.PickupFlowLastDesc };
+                    if (item.SellChannelRefType == E_SellChannelRefType.Machine || item.SellChannelRefType == E_SellChannelRefType.Mall)
+                    {
+                        block.ReceiptInfo = new FsReceiptInfo { LastTime = item.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = item.PickupFlowLastDesc };
 
+                    }
                 }
 
                 var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).ToList();
