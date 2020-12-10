@@ -2,12 +2,22 @@ const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const config = require('../../config')
 const apiMember = require('../../api/member.js')
+const skeletonData = require('./skeletonData')
+
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     navH: 40,
     statusBarHeight: 0,
     curlevelSt: 1,
@@ -35,21 +45,6 @@ Page({
         console.log(err);
       }
     })
-
-
-    apiMember.getPayLevelSt({
-      appCaller: 1
-    }).then(function (res) {
-      if (res.result == 1) {
-
-        var d = res.data
-
-        _this.setData({
-          levelSt1: d.levelSt1,
-          levelSt2: d.levelSt2
-        })
-      }
-    })
   },
 
   /**
@@ -63,7 +58,23 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var _this = this
+    app.globalData.skeletonPage = _this
 
+    apiMember.getPayLevelSt({
+      appCaller: 1
+    }).then(function (res) {
+      if (res.result == 1) {
+
+        var d = res.data
+
+        _this.setData({
+          levelSt1: d.levelSt1,
+          levelSt2: d.levelSt2,
+          pageIsReady:true
+        })
+      }
+    })
   },
 
   /**

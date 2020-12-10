@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "skeleton": "../../components/skeleton/skeleton"
+  },
   "navigationBarTitleText": "会员服务"
 }

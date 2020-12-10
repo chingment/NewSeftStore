@@ -1,5 +1,8 @@
-<view class="pg-ct membercenter">
-   <view class="bg-1">
+<skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
+  data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
+  
+<view class="pg-ct membercenter skeleton"  wx:if="{{ pageIsReady }}">
+   <view class="bg-1 skeleton-bg">
       <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_1.png?ts={{timespan}}"></image>
       <view class="section">
          <view class='nav' style='height:{{navH}}px'>
@@ -15,13 +18,13 @@
          <view class="own-info">
 
             <view class="it-left">
-               <view class="it-avatar">
+               <view class="it-avatar skeleton-circle">
                   <view class="img">
                      <open-data type="userAvatarUrl"></open-data>
                   </view>
                </view>
                <view class='it-nickname'>
-                  <view class="txt">
+                  <view class="txt skeleton-rect">
                      <open-data type="userNickName"></open-data>
                   </view>
                </view>
@@ -37,31 +40,35 @@
 
       <view class="tab-double">
          <view class="tab-title">
-            <view class="title-left {{curlevelSt==1?'selected':''}}" bindtap="clickToTabLevel" data-reply-level="1">
+            <view class="title-left {{curlevelSt==1?'selected':''}} skeleton-bg" bindtap="clickToTabLevel" data-reply-level="1">
                <view class="title">
-                  <image class='icon' src='/content/default/images/icon_pan.png'></image>
-                  <text class="txt">{{levelSt1.tag}}</text>
+                  <image class='icon skeleton-circle' src='/content/default/images/icon_pan.png'></image>
+                  <text class="txt skeleton-rect">{{levelSt1.tag}}</text>
                </view>
                <view class="left-triangle">
                </view>
             </view>
-            <view class="title-right {{curlevelSt==2?'selected':''}}" bindtap="clickToTabLevel" data-reply-level="2">
+            <view class="title-right {{curlevelSt==2?'selected':''}} skeleton-bg" bindtap="clickToTabLevel" data-reply-level="2">
                <view class="right-triangle">
 
                </view>
                <view class="title">
-                  <image class='icon' src='/content/default/images/icon_diamen.png'></image>
-                  <text class="txt">钻石会员</text>
+                  <image class='icon skeleton-circle' src='/content/default/images/icon_diamen.png'></image>
+                  <text class="txt skeleton-rect">钻石会员</text>
                </view>
             </view>
          </view>
 
          <view class="tab-content">
             <view class="content-item {{curlevelSt==1?'selected':''}} levelst">
-               <view class="it-tag">开通{{levelSt1.tag}}</view>
+               <view class="it-tag skeleton-rect">
+              
+                  开通{{levelSt1.tag}}
+               
+               </view>
                <view class="it-feests">
                   <block wx:for="{{levelSt1.feeSts}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-                     <view class="feest {{levelSt1.curFeeStIdx==index?'selected':''}}" data-reply-level="1"
+                     <view class="feest {{levelSt1.curFeeStIdx==index?'selected':''}} skeleton-rect" data-reply-level="1"
                         data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
                         <view class="wrapper">
                            <view class="feest-tag">{{item.tag}}</view>
@@ -79,7 +86,7 @@
                      </view>
                   </block>
                </view>
-               <view class="it-detailsdes" wx:if="{{levelSt1.detailsDes!=null}}">
+               <view class="it-detailsdes skeleton-rect" wx:if="{{levelSt1.detailsDes!=null}}">
                   <image class="bg-img" mode="widthFix" src="{{levelSt1.detailsDes}}?ts={{timespan}}"></image>
                </view>
             </view>
@@ -105,7 +112,7 @@
                      </view>
                   </block>
                </view>
-               <view class="it-detailsdes" wx:if="{{levelSt2.detailsDes!=null}}">
+               <view class="it-detailsdes skeleton-rect" wx:if="{{levelSt2.detailsDes!=null}}">
                   <image class="bg-img" mode="widthFix" src="{{levelSt2.detailsDes}}?ts={{timespan}}"></image>
                </view>
             </view>

@@ -212,7 +212,7 @@
 .levelst .it-tag{
   font-size: 38rpx;
   font-weight: 800;
-  padding: 15rpx;
+  margin: 15rpx;
 }
 
 .levelst .it-feests {

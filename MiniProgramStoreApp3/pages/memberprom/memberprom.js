@@ -1,13 +1,23 @@
 // pages/memberprom/memberprom.js
+const skeletonData = require('./skeletonData');
+
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     isShowButtonBottom: false,
-    isMember:false,
-    timespan:(new Date()).getTime()
+    isMember: false,
+    timespan: (new Date()).getTime()
   },
 
   /**
@@ -28,7 +38,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var _this = this
 
+    app.globalData.skeletonPage = _this
+
+    _this.setData({
+      pageIsReady: true
+    })
   },
 
   /**
@@ -106,10 +122,10 @@ Page({
     var right = e.currentTarget.dataset.right
     var title = e.currentTarget.dataset.title
     wx.navigateTo({
-      url: '/pages/memberrightdesc/memberrightdesc?right='+right+'&title='+title
+      url: '/pages/memberrightdesc/memberrightdesc?right=' + right + '&title=' + title
     })
   },
-  clickToCenter:function(e){
+  clickToCenter: function (e) {
     wx.navigateTo({
       url: '/pages/membercenter/membercenter'
     })
