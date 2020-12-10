@@ -4,6 +4,7 @@ using System.Configuration;
 using Lumos.Web.Http;
 using Lumos.Session;
 using System.IO;
+using System;
 
 namespace WebApiStoreApp
 {
@@ -14,23 +15,31 @@ namespace WebApiStoreApp
         {
             LogUtil.SetTrackId();
         }
-
         public string Token
         {
             get
             {
                 var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
                 var token = request.QueryString["token"];
-                if (string.IsNullOrEmpty(token))
-                {
-                    token = request.Headers["X-Token"];
-                    if (token != null)
-                    {
-                        token = request.Headers["X-Token"].ToString();
-                    }
-                }
-
                 return token;
+            }
+        }
+        public string AppId
+        {
+            get
+            {
+                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                string open_id = request.Headers["app_id"];
+                return open_id;
+            }
+        }
+        public string OpenId
+        {
+            get
+            {
+                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                string open_id = request.Headers["open_id"];
+                return open_id;
             }
         }
         private TokenInfo TokenInfo
@@ -46,7 +55,6 @@ namespace WebApiStoreApp
                 return tokenInfo;
             }
         }
-
         public string CurrentUserId
         {
             get
@@ -54,7 +62,6 @@ namespace WebApiStoreApp
                 return this.TokenInfo.UserId;
             }
         }
-
         public string GetRequestContent()
         {
             string content = null;

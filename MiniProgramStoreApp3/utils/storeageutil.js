@@ -45,7 +45,7 @@ function setCart(cart) {
 }
 
 function getAccessToken() {
-  return wx.getStorageSync(key_accesstoken) || []
+  return wx.getStorageSync(key_accesstoken) || ''
 }
 
 function setAccessToken(accesstoken) {

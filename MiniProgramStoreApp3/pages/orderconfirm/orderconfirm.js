@@ -221,7 +221,7 @@ Page({
         storeId: _this.data.storeId,
         blocks: blocks,
         source: 3,
-        saleOutletId:_this.data.saleOutletId
+        saleOutletId: _this.data.saleOutletId
       }).then(function (res) {
         if (res.result == 1) {
           var d = res.data

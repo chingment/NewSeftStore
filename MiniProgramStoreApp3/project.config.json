@@ -98,6 +98,12 @@
         {
           "name": "商城主页",
           "pathName": "pages/main/main",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "会员推广页面",
+          "pathName": "pages/memberprom/memberprom",
           "scene": null
         }
       ]

@@ -113,7 +113,7 @@ function isPlainObject(obj) {
 
   // Own properties are enumerated firstly, so to speed up,
   // if last one is own, then all properties are own.
-  for (key in obj) { }
+  for (key in obj) {}
 
   return key === undefined || hasOwn.call(obj, key);
 }
@@ -224,7 +224,7 @@ const myWxRequest = (opts) => {
     }
 
     const accountInfo = wx.getAccountInfoSync()
-  
+
 
     _url += "appId=" + accountInfo.miniProgram.appId + "&merchId=" + storeage.getMerchId() + "&token=" + storeage.getAccessToken()
 
@@ -244,11 +244,19 @@ const myWxRequest = (opts) => {
       console.log("wxRequest.dataParams->>>" + JSON.stringify(_dataParams))
     }
 
+    var header = {
+      'content-type': 'application/json; charset=utf-8',
+      'app_id': accountInfo.miniProgram.appId,
+      'token': storeage.getAccessToken(),
+      'open_id': storeage.getOpenId()
+    };
+
     wx.request({
       url: _url,
       data: _dataParams,
       method: _method,
       dataType: "json",
+      header: header,
       success: function (res) {
         console.log("wxRequest.success->>>");
         console.log("wxRequest.success->>>" + JSON.stringify(res));
@@ -256,15 +264,14 @@ const myWxRequest = (opts) => {
           var d = res.data
           if (d.code == "2501") {
             storeage.setAccessToken("")
-            
-            if(_method=="POST"){
-            ownRequest.goLogin()
+
+            if (_method == "POST") {
+              ownRequest.goLogin()
             }
-          }
-          else {
+          } else {
             resolve(d);
           }
-        } else {//返回错误提示信息
+        } else { //返回错误提示信息
           reject(res.errMsg);
         }
       },
@@ -279,7 +286,7 @@ const myWxRequest = (opts) => {
           wx.hideLoading()
         }
 
-     }
+      }
     })
   })
 

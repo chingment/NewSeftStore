@@ -5,6 +5,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Web;
@@ -92,6 +96,49 @@ namespace WebApiStoreTerm.Controllers
 
         public ActionResult Index()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            HttpWebRequest webRequest = WebRequest.Create("http://localhost:18665/Api/Machine/InitData") as HttpWebRequest;
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.Method = "POST";
+            webRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; Maxthon 2.0)";
+            webRequest.Accept = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+            webRequest.Headers.Add("Accept-Encoding", "gzip,deflate,sdch");
+            webRequest.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
+            webRequest.Headers.Add("Accept-Charset", "utf-8,GBK;q=0.7,*;q=0.3");
+
+            byte[] bytes = Encoding.ASCII.GetBytes("{dsadsad}");
+            Stream stream = null;
+            try
+            {
+                webRequest.ContentLength = bytes.Length;
+                stream = webRequest.GetRequestStream();
+                stream.Write(bytes, 0, bytes.Length);         //Send it
+                WebResponse webResponse = webRequest.GetResponse();
+
+
+                stream = webResponse.GetResponseStream();
+
+                var streamReader = new StreamReader(stream, Encoding.UTF8);
+                if (webResponse.Headers["Content-Encoding"] != null && webResponse.Headers["Content-Encoding"].Equals("gzip"))
+                {
+                    var gzipStream = new GZipStream(stream, CompressionMode.Decompress);
+                    streamReader = new StreamReader(gzipStream);
+                }
+                string abc = streamReader.ReadToEnd().Trim();
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("HttpPost 错误", ex);
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Close();
+                }
+            }
+
 
             string s = "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";
 
