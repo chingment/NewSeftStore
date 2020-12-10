@@ -1016,7 +1016,6 @@ namespace LocalS.BLL.Biz
                         order.PayedTime = payTrans.PayedTime;
                         order.PayStatus = payTrans.PayStatus;
                         order.PayWay = payTrans.PayWay;
-                        order.Status = E_OrderStatus.Payed;
                         order.PayPartner = payPartner;
                         order.PayPartnerPayTransId = payPartnerPayTransId;
 
@@ -1027,19 +1026,25 @@ namespace LocalS.BLL.Biz
                         switch (order.ReceiveMode)
                         {
                             case E_ReceiveMode.Delivery:
+                                order.Status = E_OrderStatus.Payed;
                                 order.PickupFlowLastDesc = "您已成功支付，等待发货";
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.StoreSelfTake:
+                                order.Status = E_OrderStatus.Payed;
                                 order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", order.ReceptionMarkName, order.PickupCode);
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.MachineSelfTake:
+                                order.Status = E_OrderStatus.Payed;
                                 order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", order.ReceptionMarkName, order.SellChannelRefId, order.PickupCode);
                                 order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.MemberFee:
-                                order.IsNoDisplayClient = true;
+                                order.Status = E_OrderStatus.Completed;
+                                order.PickupFlowLastDesc = "您已成功支付";
+                                order.PickupFlowLastTime = DateTime.Now;
+                                order.IsNoDisplayClient = false;
                                 break;
                         }
 
@@ -1052,16 +1057,23 @@ namespace LocalS.BLL.Biz
                             orderSub.PayWay = order.PayWay;
                             orderSub.PayStatus = order.PayStatus;
                             orderSub.PayedTime = order.PayedTime;
-                            orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                             orderSub.ClientUserId = order.ClientUserId;
-                            orderSub.PickupFlowLastDesc = order.PickupFlowLastDesc;
-                            orderSub.PickupFlowLastTime = order.PickupFlowLastTime;
                             orderSub.Mender = operater;
                             orderSub.MendTime = DateTime.Now;
 
                             if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall || orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                             {
+                                orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                orderSub.PickupFlowLastDesc = order.PickupFlowLastDesc;
+                                orderSub.PickupFlowLastTime = order.PickupFlowLastTime;
+
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                            }
+                            else if (orderSub.SellChannelRefType == E_SellChannelRefType.MemberFee)
+                            {
+                                orderSub.PickupStatus = E_OrderPickupStatus.Taked;
+                                orderSub.PickupFlowLastDesc = order.PickupFlowLastDesc;
+                                orderSub.PickupFlowLastTime = order.PickupFlowLastTime;
                             }
                         }
 

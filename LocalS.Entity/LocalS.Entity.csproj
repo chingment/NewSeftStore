@@ -81,6 +81,7 @@
     <Compile Include="PrdProductSkuBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventCodeRemarkAttribute.cs" />
+    <Compile Include="SaleOutlet.cs" />
     <Compile Include="SellChannel.cs" />
     <Compile Include="SellChannelStockDateHis.cs" />
     <Compile Include="Retailer.cs" />
