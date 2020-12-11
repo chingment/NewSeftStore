@@ -381,7 +381,9 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.Blocks = orderBlock;
 
-            #region 暂时不开通 Coupon
+            decimal couponAmount = 0;
+
+
 
             if (rop.CouponIds == null || rop.CouponIds.Count == 0)
             {
@@ -398,8 +400,6 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                decimal couponAmount = 0;
-
                 var coupons = (from u in CurrentDb.ClientCoupon
                                join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
                                from tt in temp.DefaultIfEmpty()
@@ -422,16 +422,13 @@ namespace LocalS.Service.Api.StoreApp
 
             }
 
-            #endregion
-
-
 
             //c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
             //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
 
             ret.SubtotalItems = c_subtotalItems;
 
-            ret.ActualAmount = amount_actual.ToF2Price();
+            ret.ActualAmount = (amount_actual- couponAmount).ToF2Price();
 
             ret.OriginalAmount = amount_original.ToF2Price();
 
