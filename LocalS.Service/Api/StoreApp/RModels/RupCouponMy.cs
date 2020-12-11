@@ -14,11 +14,12 @@ namespace LocalS.Service.Api.StoreApp
         Hire = 2
     }
 
-    public class RupCouponMy
+    public class RopCouponMy
     {
         public bool IsGetHis { get; set; }
-        public List<string> ProductSkuIds { get; set; }
         public List<string> CouponIds { get; set; }
         public E_ShopMethod ShopMethod { get; set; }
+        public string StoreId { get; set; }
+        public List<OrderConfirmProductSkuModel> ProductSkus { get; set; }
     }
 }

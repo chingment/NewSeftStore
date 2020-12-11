@@ -38,6 +38,7 @@
 .item-top .amount, .item-top .name {
   height: 80rpx;
   line-height: 80rpx;
+  overflow: hidden;
 }
 
 .item-top .facetip, .item-top .validdate {

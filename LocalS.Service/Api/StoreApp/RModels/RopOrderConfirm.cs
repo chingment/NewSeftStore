@@ -14,5 +14,6 @@ namespace LocalS.Service.Api.StoreApp
         public List<OrderConfirmProductSkuModel> ProductSkus { get; set; }
         public E_AppCaller Caller { get; set; }
         public List<string> CouponIds { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
     }
 }

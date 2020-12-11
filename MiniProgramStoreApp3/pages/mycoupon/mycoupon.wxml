@@ -20,7 +20,7 @@
 							<block wx:if="{{item.canSelected}}">
 								<image src='/content/default/images/{{item.isSelected==false?"checkedoff":"checkedon"}}.png'></image>
 							</block>
-							<block>
+							<block wx:else>
 								<image src='/content/default/images/checkeddisable.png'></image>
 							</block>
 						</label>

@@ -385,7 +385,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (rop.CouponIds == null || rop.CouponIds.Count == 0)
             {
-                var couponsCount = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.Status ==E_ClientCouponStatus.WaitUse && m.ValidEndTime > DateTime.Now).Count();
+                var couponsCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, rop.StoreId, rop.ProductSkus, clientUserId);
 
                 if (couponsCount == 0)
                 {
@@ -398,46 +398,36 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
+                decimal couponAmount = 0;
 
-                //var coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && rop.CouponIds.Contains(m.Id)).ToList();
+                var coupons = (from u in CurrentDb.ClientCoupon
+                               join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
+                               from tt in temp.DefaultIfEmpty()
+                               where u.ClientUserId == clientUserId && rop.CouponIds.Contains(u.Id)
+                               select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).ToList();
 
-                //foreach (var item in coupons)
-                //{
-                //    var amount = 0m;
-                //    switch (item.Type)
-                //    {
-                //        case Enumeration.CouponType.FullCut:
-                //        case Enumeration.CouponType.UnLimitedCut:
-                //            if (skuAmountByActual >= item.LimitAmount)
-                //            {
-                //                amount = -item.Discount;
-                //                skuAmountByActual = skuAmountByActual - item.Discount;
+                foreach (var item in coupons)
+                {
+                    switch(item.FaceType)
+                    {
+                        case E_Coupon_FaceType.ShopVoucher:
+                        case E_Coupon_FaceType.DepositVoucher:
+                        case E_Coupon_FaceType.RentVoucher:
+                            couponAmount += item.FaceValue;
+                            break;
+                    }
+                }
 
-                //                //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
-
-                //                ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
-
-                //            }
-
-                //            break;
-                //        case Enumeration.CouponType.Discount:
-
-                //            amount = skuAmountByActual - (skuAmountByActual * (item.Discount / 10));
-
-                //            skuAmountByActual = skuAmountByActual * (item.Discount / 10);
-
-                //            // subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
-                //            ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
-                //            break;
-                //    }
-                //}
+                ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", couponAmount.ToF2Price()), TipType = TipType.InUse };
 
             }
 
             #endregion
 
+
+
+            //c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
             //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
-            //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
 
             ret.SubtotalItems = c_subtotalItems;
 

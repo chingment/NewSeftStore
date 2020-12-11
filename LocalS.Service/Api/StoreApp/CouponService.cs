@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.Entity;
 using Lumos;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,133 @@ namespace LocalS.Service.Api.StoreApp
 
     public class CouponService : BaseDbContext
     {
-        public CustomJsonResult My(string operater, string clientUserId, RupCouponMy rup)
+
+        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, string merchId, string storeId, List<OrderConfirmProductSkuModel> productSkus)
         {
-            var result = new CustomJsonResult();
+            if (useAreaType == E_Coupon_UseAreaType.All)
+            {
+                return true;
+            }
+            else if (useAreaType == E_Coupon_UseAreaType.Store)
+            {
+                string[] arr_useAreaValue = useAreaValue.ToJsonObject<string[]>();
+
+                if (arr_useAreaValue != null)
+                {
+                    if (arr_useAreaValue.Contains(storeId))
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (useAreaType == E_Coupon_UseAreaType.ProductKind)
+            {
+                var kinds1 = useAreaValue.ToJsonObject<JArray>();
+
+                List<string> kindIds2 = new List<string>();
+
+                var productSkuIds = productSkus.Select(m => m.Id).ToList();
+
+                foreach (var productSkuId in productSkuIds)
+                {
+                    var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+
+                    if (r_productSku != null)
+                    {
+                        foreach (var kind1 in kinds1)
+                        {
+                            if (kind1["id"].ToString() == r_productSku.KindId3.ToString())
+                                return true;
+                        }
+                    }
+                }
+
+            }
+            else if (useAreaType == E_Coupon_UseAreaType.ProductSpu)
+            {
+
+                var prodcuts1 = useAreaValue.ToJsonObject<JArray>();
+
+                var productSkuIds = productSkus.Select(m => m.Id).ToList();
+
+                foreach (var productSkuId in productSkuIds)
+                {
+                    var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+
+                    if (r_productSku != null)
+                    {
+                        foreach (var prodcut1 in prodcuts1)
+                        {
+                            if (prodcut1["id"].ToString() == r_productSku.ProductId)
+                                return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool GetCanSelected(E_ShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, string merchId, string storeId, List<OrderConfirmProductSkuModel> productSkus)
+        {
+
+            if (shopMethod == E_ShopMethod.Unknow)
+                return false;
+            if (useAreaType == E_Coupon_UseAreaType.Unknow)
+                return false;
+            if (faceType == E_Coupon_FaceType.Unknow)
+                return false;
+            if (productSkus == null || productSkus.Count == 0)
+                return false;
+
+            if (shopMethod == E_ShopMethod.Shopping)
+            {
+                if (faceType == E_Coupon_FaceType.ShopVoucher || faceType == E_Coupon_FaceType.ShopDiscount)
+                {
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, merchId, storeId, productSkus);
+                }
+            }
+            else if (shopMethod == E_ShopMethod.Hire)
+            {
+                if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
+                {
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, merchId, storeId, productSkus);
+                }
+            }
+
+            return false;
+        }
+
+        public int GetCanUseCount(E_ShopMethod shopMethod, string storeId, List<OrderConfirmProductSkuModel> productSkus, string clientUserId)
+        {
+            RopCouponMy rup = new RopCouponMy();
+            rup.StoreId = storeId;
+            rup.ShopMethod = shopMethod;
+            rup.ProductSkus = productSkus;
+
+            var ret = My("", clientUserId, rup);
+
+            if (ret == null)
+                return 0;
+
+            if (ret.Result != ResultType.Success)
+                return 0;
+
+            return ret.Data.Coupons.Where(m => m.CanSelected).Count();
+        }
+
+        public CustomJsonResult<RetCouponMy> My(string operater, string clientUserId, RopCouponMy rop)
+        {
+            var result = new CustomJsonResult<RetCouponMy>();
 
             var ret = new RetCouponMy();
 
             var query = (from u in CurrentDb.ClientCoupon
                          join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
                          from tt in temp.DefaultIfEmpty()
-                         select new { u.Id, u.ClientUserId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount });
+                         select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount });
 
-            if (!rup.IsGetHis)
+            if (!rop.IsGetHis)
             {
                 query = query.Where(u => u.ClientUserId == clientUserId && u.Status == E_ClientCouponStatus.WaitUse && u.ValidEndTime > DateTime.Now);
             }
@@ -114,29 +230,23 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                if (rup.CouponIds != null)
+                if (rop.CouponIds != null)
                 {
-                    if (rup.CouponIds.Contains(item.Id))
+                    if (rop.CouponIds.Contains(item.Id))
                     {
                         couponModel.IsSelected = true;
                     }
                 }
 
-                if (rup.ShopMethod == E_ShopMethod.Unknow)
-                {
-                    couponModel.CanSelected = false;
-                }
-                else
-                {
-                    couponModel.CanSelected = true;
-                }
+                couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.MerchId, rop.StoreId, rop.ProductSkus);
 
                 ret.Coupons.Add(couponModel);
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult<RetCouponMy>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
+
     }
 }

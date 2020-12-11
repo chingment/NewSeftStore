@@ -21,10 +21,11 @@ Page({
     var operate = parseInt(options.operate)
 
     var operateIndex = parseInt(options.operateIndex)
-    var productSkuIds = options.productSkuIds == undefined ? [] : JSON.parse(options.productSkuIds)
+    var productSkus = options.productSkus == undefined ? [] : JSON.parse(options.productSkus)
     var isGetHis = options.isGetHis
     var couponIds = options.couponIds == undefined ? [] : JSON.parse(options.couponIds)
-    var shopMethod = options.shopMethod == undefined ? [] : options.shopMethod
+    var shopMethod = options.shopMethod == undefined ? 0 : options.shopMethod
+    var storeId = options.storeId == undefined ? '' : options.storeId
     var title = ""
     switch (operate) {
       case 1:
@@ -46,8 +47,9 @@ Page({
     apiCoupon.my({
       isGetHis: isGetHis,
       couponIds: couponIds,
-      productSkuIds: productSkuIds,
-      shopMethod: shopMethod
+      productSkus: productSkus,
+      shopMethod: shopMethod,
+      storeId: storeId
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -68,7 +70,7 @@ Page({
     if (operate == 1) {
       app.switchTab(0)
     } else if (operate == 2) {
-      if(!coupon.canSelected){
+      if (!coupon.canSelected) {
         toast.show({
           title: '抱歉，不能使用该优惠券'
         })

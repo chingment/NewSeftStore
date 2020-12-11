@@ -27,7 +27,7 @@ Page({
     booktimeSelectBlockIndex: -1,
     action: '',
     saleOutletId: '',
-    shopMethod: 4
+    shopMethod: 1
   },
   onLoad: function (options) {
     var _this = this
@@ -40,7 +40,7 @@ Page({
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
-    var _shopMethod = options.shopMethod == undefined ? null : options.shopMethod
+    var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
     console.log('orderIds:' + _orderIds)
 
     var orderIds = []
@@ -118,8 +118,9 @@ Page({
     var couponIds = _this.data.couponIds
     var productSkus = _this.data.productSkus
     var shopMethod = _this.data.shopMethod
+    var storeId = _this.data.storeId
     wx.navigateTo({
-      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod,
+      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod + "&storeId=" + storeId,
       success: function (res) {
         // success
       },
@@ -340,7 +341,8 @@ Page({
       orderIds: _data.orderIds,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
-      couponIds: _data.couponIds
+      couponIds: _data.couponIds,
+      shopMethod: _data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data

@@ -220,6 +220,11 @@ page{
   padding: 5rpx 10rpx;
   font-size: 28rpx;
   border-radius: 8%;
+
+}
+
+.coupontip1{
+  color: #99989d;
 }
 
 .coupontip2 {
