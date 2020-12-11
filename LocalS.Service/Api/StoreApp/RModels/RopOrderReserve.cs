@@ -14,12 +14,11 @@ namespace LocalS.Service.Api.StoreApp
         {
             this.Blocks = new List<OrderReserveBlockModel>();
         }
-
         public string StoreId { get; set; }
-
         public string SaleOutletId { get; set; }
         public List<OrderReserveBlockModel> Blocks { get; set; }
         public E_OrderSource Source { get; set; }
         public E_ShopMethod ShopMethod { get; set; }
+        public List<string> CouponIds { get; set; }
     }
 }

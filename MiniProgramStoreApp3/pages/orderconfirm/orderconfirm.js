@@ -268,16 +268,35 @@ Page({
   },
   goPay: function (payOption, blocks) {
     var _this = this
-    console.log('_this.data.action:' + _this.data.action)
+    if (parseInt(_this.data.actualAmount) == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '确定要支付吗？',
+        success: function (sm) {
+          if (sm.confirm) {
+            _this.goPayCofirm(payOption, blocks)
+          }
+        }
+      })
+    } else {
+      _this.goPayCofirm(payOption, blocks)
+    }
+  },
+  goPayCofirm: function (payOption, blocks) {
+    var _this = this
+    var data = _this.data
+    console.log('_this.data.action:' + data.action)
     apiOrder.buildPayParams({
-      orderIds: _this.data.orderIds,
+      orderIds: data.orderIds,
       payCaller: payOption.payCaller,
       blocks: blocks,
-      payPartner: payOption.payPartner
+      payPartner: payOption.payPartner,
+      couponIds: data.couponIds,
+      shopMethod: data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
 
-        var d = res.data;
+        var d = res.data
 
         _this.setData({
           payTransId: d.payTransId
@@ -291,12 +310,12 @@ Page({
           'paySign': d.paySign,
           'success': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + _this.data.action
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
             })
           },
           'fail': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action=' + _this.data.action
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action=' + data.action
             })
           }
         })
