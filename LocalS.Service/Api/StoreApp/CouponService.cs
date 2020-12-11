@@ -19,57 +19,120 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetCouponMy();
 
+            var query = (from u in CurrentDb.ClientCoupon
+                         join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         select new { u.Id, u.ClientUserId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount });
 
-            //List<ClientCoupon> coupons;
-            //if (!rup.IsGetHis)
-            //{
-            //    coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.Status == E_ClientCouponStatus.WaitUse && m.EndTime > DateTime.Now).ToList();
-            //}
-            //else
-            //{
-            //    coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && (m.Status == E_ClientCouponStatus.Used || m.Status == E_ClientCouponStatus.Expired) && m.EndTime < DateTime.Now).ToList();
-            //}
+            if (!rup.IsGetHis)
+            {
+                query = query.Where(u => u.ClientUserId == clientUserId && u.Status == E_ClientCouponStatus.WaitUse && u.ValidEndTime > DateTime.Now);
+            }
+            else
+            {
+                query = query.Where(m => m.ClientUserId == clientUserId && (m.Status == E_ClientCouponStatus.Used || m.Status == E_ClientCouponStatus.Expired) && m.ValidEndTime < DateTime.Now);
+            }
 
-            //foreach (var item in coupons)
-            //{
-            //    if (item.EndTime < DateTime.Now)
-            //    {
-            //        item.Status = E_ClientCouponStatus.Expired;
-            //        CurrentDb.SaveChanges();
-            //    }
+            var list = query.OrderBy(m => m.Name).ToList();
 
-            //    var couponModel = new CouponModel();
+            foreach (var item in list)
+            {
+                var couponModel = new CouponModel();
+                couponModel.Id = item.Id;
+                couponModel.Name = item.Name;
 
-            //    couponModel.Id = item.Id;
-            //    couponModel.Name = item.Name;
-            //    switch (item.Type)
-            //    {
-            //        case E_ClientCouponType.FullCut:
-            //        case E_ClientCouponType.UnLimitedCut:
-            //            couponModel.Discount = item.Discount.ToF2Price();
-            //            couponModel.DiscountUnit = "元";
-            //            couponModel.DiscountTip = "满减卷";
-            //            break;
-            //        case E_ClientCouponType.Discount:
-            //            couponModel.Discount = item.Discount.ToF2Price();
-            //            couponModel.DiscountUnit = "折";
-            //            couponModel.DiscountTip = "折扣卷";
-            //            break;
-            //    }
+                switch (item.FaceType)
+                {
+                    case E_Coupon_FaceType.ShopVoucher:
+                        couponModel.FaceValue = item.FaceValue.ToF2Price();
+                        couponModel.FaceUnit = "元";
+                        if (item.AtLeastAmount > 0)
+                        {
+                            couponModel.FaceTip = string.Format("满{0}元使用");
+                        }
+                        else
+                        {
+                            couponModel.FaceTip = string.Format("代金券");
+                        }
+                        break;
+                    case E_Coupon_FaceType.ShopDiscount:
+                        couponModel.FaceValue = item.FaceValue.ToF2Price();
+                        couponModel.FaceUnit = "元";
+                        if (item.AtLeastAmount > 0)
+                        {
+                            couponModel.FaceTip = string.Format("满{0}元使用");
+                        }
+                        else
+                        {
+                            couponModel.FaceTip = string.Format("代金券");
+                        }
+                        break;
+                    case E_Coupon_FaceType.RentVoucher:
+                        couponModel.FaceValue = item.FaceValue.ToF2Price();
+                        couponModel.FaceUnit = "元";
+                        if (item.AtLeastAmount > 0)
+                        {
+                            couponModel.FaceTip = string.Format("满{0}元使用");
+                        }
+                        else
+                        {
+                            couponModel.FaceTip = string.Format("代金券");
+                        }
+                        break;
+                    case E_Coupon_FaceType.DepositVoucher:
+                        couponModel.FaceValue = item.FaceValue.ToF2Price();
+                        couponModel.FaceUnit = "元";
+                        if (item.AtLeastAmount > 0)
+                        {
+                            couponModel.FaceTip = string.Format("满{0}元使用");
+                        }
+                        else
+                        {
+                            couponModel.FaceTip = string.Format("代金券");
+                        }
+                        break;
+                }
 
-            //    couponModel.ValidDate = "有效到" + item.EndTime.ToUnifiedFormatDate();
-            //    couponModel.Description = "全场使用";
 
-            //    if (rup.CouponId != null)
-            //    {
-            //        if (rup.CouponId.Contains(item.Id))
-            //        {
-            //            couponModel.IsSelected = true;
-            //        }
-            //    }
+                couponModel.ValidDate = "有效到" + item.ValidEndTime.ToUnifiedFormatDate();
 
-            //    ret.Coupons.Add(couponModel);
-            //}
+
+                switch (item.UseAreaType)
+                {
+                    case E_Coupon_UseAreaType.All:
+                        couponModel.Description = "全场使用";
+                        break;
+                    case E_Coupon_UseAreaType.Store:
+                        couponModel.Description = "指定店铺使用";
+                        break;
+                    case E_Coupon_UseAreaType.ProductKind:
+                        couponModel.Description = "指定商品品类使用";
+                        break;
+                    case E_Coupon_UseAreaType.ProductSpu:
+                        couponModel.Description = "指定商品使用";
+                        break;
+                }
+
+
+                if (rup.CouponIds != null)
+                {
+                    if (rup.CouponIds.Contains(item.Id))
+                    {
+                        couponModel.IsSelected = true;
+                    }
+                }
+
+                if (rup.ShopMethod == E_ShopMethod.Unknow)
+                {
+                    couponModel.CanSelected = false;
+                }
+                else
+                {
+                    couponModel.CanSelected = true;
+                }
+
+                ret.Coupons.Add(couponModel);
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

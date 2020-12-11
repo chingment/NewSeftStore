@@ -215,3 +215,14 @@ page{
   box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
 
 }
+
+.coupontip {
+  padding: 5rpx 10rpx;
+  font-size: 28rpx;
+  border-radius: 8%;
+}
+
+.coupontip2 {
+  background: #f50;
+  color: #fff;
+}

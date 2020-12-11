@@ -132,14 +132,14 @@ Page({
       return
     }
 
-    if (_data.isOptSaleOutlet) {
-      if (util.isEmptyOrNull(_data.curSaleOutlet.id)) {
-        toast.show({
-          title: '请选择服务网点'
-        })
-        return
-      }
-    }
+    // if (_data.isOptSaleOutlet) {
+    //   if (util.isEmptyOrNull(_data.curSaleOutlet.id)) {
+    //     toast.show({
+    //       title: '请选择服务网点'
+    //     })
+    //     return
+    //   }
+    // }
 
     var curFeeSt
     if (_data.curlevelSt == 1) {

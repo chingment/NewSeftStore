@@ -383,56 +383,56 @@ namespace LocalS.Service.Api.StoreApp
 
             #region 暂时不开通 Coupon
 
-            //if (rop.CouponId == null || rop.CouponId.Count == 0)
-            //{
-            //    var couponsCount = CurrentDb.ClientCoupon.Where(m => m.ClientId == pClientId && m.Status == Entity.Enumeration.CouponStatus.WaitUse && m.EndTime > DateTime.Now).Count();
+            if (rop.CouponIds == null || rop.CouponIds.Count == 0)
+            {
+                var couponsCount = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.Status ==E_ClientCouponStatus.WaitUse && m.ValidEndTime > DateTime.Now).Count();
 
-            //    if (couponsCount == 0)
-            //    {
-            //        ret.Coupon = new OrderConfirmCouponModel { TipMsg = "暂无可用优惠卷", TipType = TipType.NoCanUse };
-            //    }
-            //    else
-            //    {
-            //        ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponsCount), TipType = TipType.CanUse };
-            //    }
-            //}
-            //else
-            //{
+                if (couponsCount == 0)
+                {
+                    ret.Coupon = new OrderConfirmCouponModel { TipMsg = "暂无可用优惠卷", TipType = TipType.NoCanUse };
+                }
+                else
+                {
+                    ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponsCount), TipType = TipType.CanUse };
+                }
+            }
+            else
+            {
 
-            //    var coupons = CurrentDb.ClientCoupon.Where(m => m.ClientId == pClientId && rop.CouponId.Contains(m.Id)).ToList();
+                //var coupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && rop.CouponIds.Contains(m.Id)).ToList();
 
-            //    foreach (var item in coupons)
-            //    {
-            //        var amount = 0m;
-            //        switch (item.Type)
-            //        {
-            //            case Enumeration.CouponType.FullCut:
-            //            case Enumeration.CouponType.UnLimitedCut:
-            //                if (skuAmountByActual >= item.LimitAmount)
-            //                {
-            //                    amount = -item.Discount;
-            //                    skuAmountByActual = skuAmountByActual - item.Discount;
+                //foreach (var item in coupons)
+                //{
+                //    var amount = 0m;
+                //    switch (item.Type)
+                //    {
+                //        case Enumeration.CouponType.FullCut:
+                //        case Enumeration.CouponType.UnLimitedCut:
+                //            if (skuAmountByActual >= item.LimitAmount)
+                //            {
+                //                amount = -item.Discount;
+                //                skuAmountByActual = skuAmountByActual - item.Discount;
 
-            //                    //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
+                //                //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
 
-            //                    ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
+                //                ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
 
-            //                }
+                //            }
 
-            //                break;
-            //            case Enumeration.CouponType.Discount:
+                //            break;
+                //        case Enumeration.CouponType.Discount:
 
-            //                amount = skuAmountByActual - (skuAmountByActual * (item.Discount / 10));
+                //            amount = skuAmountByActual - (skuAmountByActual * (item.Discount / 10));
 
-            //                skuAmountByActual = skuAmountByActual * (item.Discount / 10);
+                //            skuAmountByActual = skuAmountByActual * (item.Discount / 10);
 
-            //                // subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
-            //                ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
-            //                break;
-            //        }
-            //    }
+                //            // subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
+                //            ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
+                //            break;
+                //    }
+                //}
 
-            //}
+            }
 
             #endregion
 

@@ -15,7 +15,7 @@ Page({
     storeId: undefined,
     orderIds: null,
     blocks: [],
-    couponId: [],
+    couponIds: [],
     payOption: {
       title: '支付方式',
       options: []
@@ -26,7 +26,8 @@ Page({
     },
     booktimeSelectBlockIndex: -1,
     action: '',
-    saleOutletId: ''
+    saleOutletId: '',
+    shopMethod: 4
   },
   onLoad: function (options) {
     var _this = this
@@ -39,6 +40,7 @@ Page({
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
+    var _shopMethod = options.shopMethod == undefined ? null : options.shopMethod
     console.log('orderIds:' + _orderIds)
 
     var orderIds = []
@@ -58,7 +60,8 @@ Page({
       orderIds: orderIds,
       productSkus: productSkus,
       action: _action,
-      saleOutletId: _saleOutletId
+      saleOutletId: _saleOutletId,
+      shopMethod: _shopMethod
     })
     _this.buildPayOptions()
     _this.getConfirmData()
@@ -67,7 +70,11 @@ Page({
     var _this = this
 
   },
-  onShow: function () {},
+  onShow: function () {
+    var _this = this
+    _this.getConfirmData()
+
+  },
   onHide: function () {
 
   },
@@ -108,10 +115,11 @@ Page({
   couponSelect: function (e) {
     var _this = this
 
-    var couponId = _this.data.couponId
+    var couponIds = _this.data.couponIds
     var productSkus = _this.data.productSkus
+    var shopMethod = _this.data.shopMethod
     wx.navigateTo({
-      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponId=" + JSON.stringify(couponId),
+      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod,
       success: function (res) {
         // success
       },
@@ -332,7 +340,7 @@ Page({
       orderIds: _data.orderIds,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
-      couponId: _data.couponId
+      couponIds: _data.couponIds
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
