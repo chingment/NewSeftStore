@@ -142,8 +142,8 @@ namespace LocalS.Service.Api.StoreApp
 
             decimal amount_actual = 0;//实际总价
             decimal amount_original = 0;//原总价
-            decimal amount_memebr = 0;//普通用户总价
-            decimal amount_vip = 0;//会员总价
+            decimal amount_user = 0;//普通用户总价
+            decimal amount_member = 0;//会员总价
 
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
@@ -161,26 +161,31 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
+                    if (productSku.ShopMode == E_SellChannelRefType.Unknow)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "系统发生异常01", ret);
+                    }
+
                     if (productSku.ShopMode == E_SellChannelRefType.Machine || productSku.ShopMode == E_SellChannelRefType.Mall)
                     {
                         var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
-                        if (r_productSku != null)
+
+                        if (r_productSku == null)
                         {
-                            productSku.Name = r_productSku.Name;
-                            productSku.MainImgUrl = r_productSku.MainImgUrl;
-
-                            if (r_productSku.Stocks.Count > 0)
-                            {
-                                productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                                productSku.SalePriceByVip = r_productSku.Stocks[0].SalePriceByVip;
-
-                                c_prodcutSkus.Add(productSku);
-
-                                amount_original += (productSku.SalePrice * productSku.Quantity);
-                                amount_memebr += (productSku.SalePrice * productSku.Quantity);
-                                amount_vip += (productSku.SalePriceByVip * productSku.Quantity);
-                            }
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "系统发生异常02", ret);
                         }
+
+                        productSku.Name = r_productSku.Name;
+                        productSku.MainImgUrl = r_productSku.MainImgUrl;
+
+                        if (r_productSku.Stocks.Count > 0)
+                        {
+                            productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                            productSku.SalePriceByVip = r_productSku.Stocks[0].SalePriceByVip;
+
+                            c_prodcutSkus.Add(productSku);
+                        }
+
                     }
                     else if (productSku.ShopMode == E_SellChannelRefType.MemberFee)
                     {
@@ -190,22 +195,15 @@ namespace LocalS.Service.Api.StoreApp
                             productSku.Name = memberFeeSt.Name;
                             productSku.MainImgUrl = memberFeeSt.MainImgUrl;
                             productSku.SalePrice = memberFeeSt.FeeValue;
+                            productSku.SalePriceByVip = memberFeeSt.FeeValue;
 
                             c_prodcutSkus.Add(productSku);
-
-                            amount_original += (productSku.SalePrice * productSku.Quantity);
-                            amount_memebr += (productSku.SalePrice * productSku.Quantity);
-                            amount_vip += (productSku.SalePrice * productSku.Quantity);
                         }
-                    }
-                    else
-                    {
-                        LogUtil.Info("商品Id ：" + productSku.Id + ",信息为空");
                     }
                 }
 
-                var shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
-                if (shippingAddress == null)
+                var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
+                if (d_shippingAddress == null)
                 {
                     dliveryModel.Id = "";
                     dliveryModel.Consignee = "配送地址";
@@ -216,12 +214,12 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else
                 {
-                    dliveryModel.Id = shippingAddress.Id;
-                    dliveryModel.Consignee = shippingAddress.Consignee;
-                    dliveryModel.PhoneNumber = shippingAddress.PhoneNumber;
-                    dliveryModel.AreaName = shippingAddress.AreaName;
-                    dliveryModel.Address = shippingAddress.Address;
-                    dliveryModel.IsDefault = shippingAddress.IsDefault;
+                    dliveryModel.Id = d_shippingAddress.Id;
+                    dliveryModel.Consignee = d_shippingAddress.Consignee;
+                    dliveryModel.PhoneNumber = d_shippingAddress.PhoneNumber;
+                    dliveryModel.AreaName = d_shippingAddress.AreaName;
+                    dliveryModel.Address = d_shippingAddress.Address;
+                    dliveryModel.IsDefault = d_shippingAddress.IsDefault;
                 }
 
             }
@@ -284,12 +282,15 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
                     c_prodcutSku.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
                     c_prodcutSku.SalePrice = l_orderSubChilds[0].SalePrice;
+                    c_prodcutSku.SalePriceByVip = l_orderSubChilds[0].SalePriceByVip;
                     c_prodcutSku.ShopMode = shopModeSku.SellChannelRefType;
-                    amount_original += (l_orderSubChilds[0].SalePrice * c_prodcutSku.Quantity);
-                    amount_memebr += (l_orderSubChilds[0].SalePriceByVip * c_prodcutSku.Quantity);
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
             }
+
+            amount_original = c_prodcutSkus.Sum(m => m.SalePrice);
+            amount_user = c_prodcutSkus.Sum(m => m.SalePrice);
+            amount_member = c_prodcutSkus.Sum(m => m.SalePriceByVip);
 
 
             var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
@@ -300,16 +301,15 @@ namespace LocalS.Service.Api.StoreApp
                 memberLevel = clientUser.MemberLevel;
             }
 
-
             if (memberLevel > 0)
             {
-                amount_actual = amount_vip;//会员用户总价 为 实际总价
+                amount_actual = amount_member;//会员用户总价 为 实际总价
 
-                c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", (amount_original - amount_vip).ToF2Price()), IsDcrease = true });
+                c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", (amount_original - amount_member).ToF2Price()), IsDcrease = true });
             }
             else
             {
-                amount_actual = amount_memebr;
+                amount_actual = amount_user;
             }
 
 
@@ -383,44 +383,46 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.Blocks = orderBlock;
 
-            decimal couponAmount = 0;
-
-
+            decimal amount_coupon = 0;
 
             if (rop.CouponIds == null || rop.CouponIds.Count == 0)
             {
-                var couponsCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, rop.StoreId, rop.ProductSkus, clientUserId);
+                var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, rop.StoreId, rop.ProductSkus, clientUserId);
 
-                if (couponsCount == 0)
+                if (couponCanUseCount == 0)
                 {
                     ret.Coupon = new OrderConfirmCouponModel { TipMsg = "暂无可用优惠卷", TipType = TipType.NoCanUse };
                 }
                 else
                 {
-                    ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponsCount), TipType = TipType.CanUse };
+                    ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponCanUseCount), TipType = TipType.CanUse };
                 }
             }
             else
             {
-                var coupons = (from u in CurrentDb.ClientCoupon
-                               join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
-                               from tt in temp.DefaultIfEmpty()
-                               where u.ClientUserId == clientUserId && rop.CouponIds.Contains(u.Id)
-                               select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).ToList();
-
-                foreach (var item in coupons)
+                //只能使用一张优惠券
+                var coupon = (from u in CurrentDb.ClientCoupon
+                              join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
+                              from tt in temp.DefaultIfEmpty()
+                              where u.ClientUserId == clientUserId && rop.CouponIds.Contains(u.Id)
+                              select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
+                if (coupon != null)
                 {
-                    switch(item.FaceType)
+                    switch (coupon.FaceType)
                     {
                         case E_Coupon_FaceType.ShopVoucher:
                         case E_Coupon_FaceType.DepositVoucher:
                         case E_Coupon_FaceType.RentVoucher:
-                            couponAmount += item.FaceValue;
+                            amount_coupon += coupon.FaceValue;
+                            break;
+                        case E_Coupon_FaceType.ShopDiscount:
+                            amount_coupon = amount_coupon * coupon.FaceValue;
                             break;
                     }
+
                 }
 
-                ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", couponAmount.ToF2Price()), TipType = TipType.InUse };
+                ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_coupon.ToF2Price()), TipType = TipType.InUse };
 
             }
 
@@ -430,7 +432,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.SubtotalItems = c_subtotalItems;
 
-            ret.ActualAmount = (amount_actual- couponAmount).ToF2Price();
+            ret.ActualAmount = (amount_actual - amount_coupon).ToF2Price();
 
             ret.OriginalAmount = amount_original.ToF2Price();
 

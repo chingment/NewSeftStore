@@ -495,6 +495,33 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
 
+                    decimal couponAmount = 0;
+
+                    //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
+                    //{
+                    //    //只能使用一张优惠券
+                    //    var coupon = (from u in CurrentDb.ClientCoupon
+                    //                  join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
+                    //                  from tt in temp.DefaultIfEmpty()
+                    //                  where u.ClientUserId == rop.ClientUserId && rop.CouponIds.Contains(u.Id)
+                    //                  select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
+                    //    if (coupon != null)
+                    //    {
+                    //        switch (coupon.FaceType)
+                    //        {
+                    //            case E_Coupon_FaceType.ShopVoucher:
+                    //            case E_Coupon_FaceType.DepositVoucher:
+                    //            case E_Coupon_FaceType.RentVoucher:
+                    //                couponAmount += coupon.FaceValue;
+                    //                break;
+                    //            case E_Coupon_FaceType.ShopDiscount:
+                    //                couponAmount = couponAmount * coupon.FaceValue;
+                    //                break;
+                    //        }
+
+                    //    }
+                    //}
+
                     List<Order> orders = new List<Order>();
 
                     foreach (var buildOrder in buildOrders)
@@ -626,7 +653,8 @@ namespace LocalS.BLL.Biz
 
                         order.OriginalAmount = buildOrder.OriginalAmount;
                         order.DiscountAmount = buildOrder.DiscountAmount;
-                        order.ChargeAmount = buildOrder.ChargeAmount;
+                        order.CouponAmount = couponAmount;
+                        order.ChargeAmount = buildOrder.ChargeAmount - couponAmount;
                         order.Quantity = buildOrder.Quantity;
                         order.PayStatus = E_PayStatus.WaitPay;
                         order.Status = E_OrderStatus.WaitPay;

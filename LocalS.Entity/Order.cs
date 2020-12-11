@@ -75,6 +75,7 @@ namespace LocalS.Entity
         public DateTime? ReceptionBookTime { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
+        public decimal CouponAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public int Quantity { get; set; }
         public string PickupCode { get; set; }
