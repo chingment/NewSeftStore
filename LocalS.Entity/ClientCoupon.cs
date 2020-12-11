@@ -19,18 +19,14 @@ namespace LocalS.Entity
     {
 
         Unknow = 0,
-        Receive = 1,
-        Give = 2
+        //自取
+        SelfTake = 1,
+        //系统赠送
+        SysGive = 2,
+        //后台工作人赠送
+        WorGive = 3
     }
 
-    public enum E_ClientCouponType
-    {
-
-        Unknow = 0,
-        FullCut = 1,
-        UnLimitedCut = 2,
-        Discount = 3
-    }
 
     [Table("ClientCoupon")]
     public class ClientCoupon
@@ -41,21 +37,17 @@ namespace LocalS.Entity
         public string Sn { get; set; }
         public string MerchId { get; set; }
         public string ClientUserId { get; set; }
-        [MaxLength(128)]
-        public string Name { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public string CouponId { get; set; }
+        public DateTime? ValidStartTime { get; set; }
+        public DateTime? ValidEndTime { get; set; }
         public E_ClientCouponStatus Status { get; set; }
         public E_ClientCouponSourceType SourceType { get; set; }
-        public string SourceUserId { get; set; }
+        public string SourceObjType { get; set; }
+        public string SourceObjId { get; set; }
+        public string SourcePoint { get; set; }
         public DateTime? SourceTime { get; set; }
         [MaxLength(512)]
-        public string SourceDescription { get; set; }
-        public E_ClientCouponType Type { get; set; }
-        public decimal LimitAmount { get; set; }
-        public decimal Discount { get; set; }
-        [MaxLength(1024)]
-        public string LimitTarget { get; set; }
+        public string SourceDes { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

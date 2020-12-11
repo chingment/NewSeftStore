@@ -34,14 +34,16 @@
 
       <el-form-item label="券种" prop="faceType">
         <el-radio-group v-model="form.faceType">
-          <el-radio-button label="1">代金券</el-radio-button>
-          <el-radio-button label="2">折扣券</el-radio-button>
+          <el-radio-button label="1">购物代金券</el-radio-button>
+          <el-radio-button label="2">购物折扣券</el-radio-button>
+          <el-radio-button label="3">租金代金券</el-radio-button>
+          <el-radio-button label="4">押金代金券</el-radio-button>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="券值" prop="faceValue">
         <el-input v-model="form.faceValue" placeholder="" clearable style="max-width:250px">
-          <template slot="append">{{ form.faceType==1?"元":"折" }}</template>
+          <template slot="append">{{ form.faceType==2?"折":"元" }}</template>
         </el-input>
       </el-form-item>
       <el-form-item label="每人限领" prop="perLimitNum">
@@ -306,7 +308,7 @@ export default {
         issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1, isShow: true }],
         faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
         perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
-        atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
+        atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money1 }],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
         useTimeValue: [{ required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
         useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]

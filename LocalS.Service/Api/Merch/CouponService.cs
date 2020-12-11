@@ -69,11 +69,17 @@ namespace LocalS.Service.Api.Merch
             string name = "";
             switch (faceType)
             {
-                case E_Coupon_FaceType.Voucher:
-                    name = "代金券";
+                case E_Coupon_FaceType.ShopVoucher:
+                    name = "购物代金券";
                     break;
-                case E_Coupon_FaceType.Discount:
-                    name = "折扣券";
+                case E_Coupon_FaceType.ShopDiscount:
+                    name = "购物折扣券";
+                    break;
+                case E_Coupon_FaceType.RentVoucher:
+                    name = "租金代金券";
+                    break;
+                case E_Coupon_FaceType.DepositVoucher:
+                    name = "押金代金券";
                     break;
                 default:
                     name = "未知";
@@ -131,11 +137,19 @@ namespace LocalS.Service.Api.Merch
 
                 string faceValue = "";
 
-                if (item.FaceType == E_Coupon_FaceType.Voucher)
+                if (item.FaceType == E_Coupon_FaceType.ShopVoucher)
                 {
                     faceValue = string.Format("{0}元", item.FaceValue);
                 }
-                else if (item.FaceType == E_Coupon_FaceType.Discount)
+                else if (item.FaceType == E_Coupon_FaceType.DepositVoucher)
+                {
+                    faceValue = string.Format("{0}折", item.FaceValue);
+                }
+                else if (item.FaceType == E_Coupon_FaceType.RentVoucher)
+                {
+                    faceValue = string.Format("{0}折", item.FaceValue);
+                }
+                else if (item.FaceType == E_Coupon_FaceType.DepositVoucher)
                 {
                     faceValue = string.Format("{0}折", item.FaceValue);
                 }

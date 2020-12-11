@@ -971,30 +971,29 @@ namespace LocalS.BLL.Biz
             {
                 LogUtil.Info("payTransId:" + payTransId);
 
-                var payTrans = CurrentDb.PayTrans.Where(m => m.Id == payTransId).FirstOrDefault();
+                var d_payTrans = CurrentDb.PayTrans.Where(m => m.Id == payTransId).FirstOrDefault();
 
-                if (payTrans == null)
+                if (d_payTrans == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", payTransId));
                 }
 
-                if (payTrans.PayStatus == E_PayStatus.PaySuccess)
+                if (d_payTrans.PayStatus == E_PayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", payTransId));
                 }
 
-
-                if (payTrans.PayStatus == E_PayStatus.WaitPay || payTrans.PayStatus == E_PayStatus.Paying)
+                if (d_payTrans.PayStatus == E_PayStatus.WaitPay || d_payTrans.PayStatus == E_PayStatus.Paying)
                 {
                     LogUtil.Info("进入PaySuccess修改订单,开始");
 
-                    operater = payTrans.Creator;
+                    operater = d_payTrans.Creator;
 
-                    payTrans.PayPartner = payPartner;
-                    payTrans.PayPartnerPayTransId = payPartnerPayTransId;
-                    payTrans.PayWay = payWay;
-                    payTrans.PayStatus = E_PayStatus.PaySuccess;
-                    payTrans.PayedTime = DateTime.Now;
+                    d_payTrans.PayPartner = payPartner;
+                    d_payTrans.PayPartnerPayTransId = payPartnerPayTransId;
+                    d_payTrans.PayWay = payWay;
+                    d_payTrans.PayStatus = E_PayStatus.PaySuccess;
+                    d_payTrans.PayedTime = DateTime.Now;
 
                     if (pms != null)
                     {
@@ -1002,97 +1001,140 @@ namespace LocalS.BLL.Biz
                         {
                             if (!string.IsNullOrEmpty(pms["clientUserName"]))
                             {
-                                payTrans.ClientUserName = pms["clientUserName"];
+                                d_payTrans.ClientUserName = pms["clientUserName"];
                             }
                         }
                     }
 
-                    var orderIds = payTrans.OrderIds.Split(',');
-                    var orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
-                    foreach (var order in orders)
+                    var orderIds = d_payTrans.OrderIds.Split(',');
+                    var d_orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
+                    foreach (var d_order in d_orders)
                     {
-                        order.ClientUserId = payTrans.ClientUserId;
-                        order.ClientUserName = payTrans.ClientUserName;
-                        order.PayedTime = payTrans.PayedTime;
-                        order.PayStatus = payTrans.PayStatus;
-                        order.PayWay = payTrans.PayWay;
-                        order.PayPartner = payPartner;
-                        order.PayPartnerPayTransId = payPartnerPayTransId;
+                        d_order.ClientUserId = d_payTrans.ClientUserId;
+                        d_order.ClientUserName = d_payTrans.ClientUserName;
+                        d_order.PayedTime = d_payTrans.PayedTime;
+                        d_order.PayStatus = d_payTrans.PayStatus;
+                        d_order.PayWay = d_payTrans.PayWay;
+                        d_order.PayPartner = payPartner;
+                        d_order.PayPartnerPayTransId = payPartnerPayTransId;
 
-                        LogUtil.Info("payTrans.PayedTime:" + payTrans.PayedTime.ToUnifiedFormatDateTime());
-                        LogUtil.Info("payTrans.PayStatus:" + payTrans.PayStatus);
-                        LogUtil.Info("payTrans.PayWay:" + payTrans.PayWay);
+                        LogUtil.Info("payTrans.PayedTime:" + d_payTrans.PayedTime.ToUnifiedFormatDateTime());
+                        LogUtil.Info("payTrans.PayStatus:" + d_payTrans.PayStatus);
+                        LogUtil.Info("payTrans.PayWay:" + d_payTrans.PayWay);
 
-                        switch (order.ReceiveMode)
+                        switch (d_order.ReceiveMode)
                         {
                             case E_ReceiveMode.Delivery:
-                                order.Status = E_OrderStatus.Payed;
-                                order.PickupFlowLastDesc = "您已成功支付，等待发货";
-                                order.PickupFlowLastTime = DateTime.Now;
+                                d_order.Status = E_OrderStatus.Payed;
+                                d_order.PickupFlowLastDesc = "您已成功支付，等待发货";
+                                d_order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.StoreSelfTake:
-                                order.Status = E_OrderStatus.Payed;
-                                order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", order.ReceptionMarkName, order.PickupCode);
-                                order.PickupFlowLastTime = DateTime.Now;
+                                d_order.Status = E_OrderStatus.Payed;
+                                d_order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_order.ReceptionMarkName, d_order.PickupCode);
+                                d_order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.MachineSelfTake:
-                                order.Status = E_OrderStatus.Payed;
-                                order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", order.ReceptionMarkName, order.SellChannelRefId, order.PickupCode);
-                                order.PickupFlowLastTime = DateTime.Now;
+                                d_order.Status = E_OrderStatus.Payed;
+                                d_order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", d_order.ReceptionMarkName, d_order.SellChannelRefId, d_order.PickupCode);
+                                d_order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.MemberFee:
-                                order.Status = E_OrderStatus.Completed;
-                                order.PickupFlowLastDesc = "您已成功支付";
-                                order.PickupFlowLastTime = DateTime.Now;
-                                order.IsNoDisplayClient = false;
+                                d_order.Status = E_OrderStatus.Completed;
+                                d_order.PickupFlowLastDesc = "您已成功支付";
+                                d_order.PickupFlowLastTime = DateTime.Now;
+                                d_order.IsNoDisplayClient = false;
                                 break;
                         }
 
-                        var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+                        var d_orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_order.Id).ToList();
 
-                        foreach (var orderSub in orderSubs)
+                        foreach (var d_orderSub in d_orderSubs)
                         {
-                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + orderSub.PrdProductSkuId + ",Quantity:" + orderSub.Quantity);
+                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + d_orderSub.PrdProductSkuId + ",Quantity:" + d_orderSub.Quantity);
 
-                            orderSub.PayWay = order.PayWay;
-                            orderSub.PayStatus = order.PayStatus;
-                            orderSub.PayedTime = order.PayedTime;
-                            orderSub.ClientUserId = order.ClientUserId;
-                            orderSub.Mender = operater;
-                            orderSub.MendTime = DateTime.Now;
+                            d_orderSub.PayWay = d_order.PayWay;
+                            d_orderSub.PayStatus = d_order.PayStatus;
+                            d_orderSub.PayedTime = d_order.PayedTime;
+                            d_orderSub.ClientUserId = d_order.ClientUserId;
+                            d_orderSub.Mender = operater;
+                            d_orderSub.MendTime = DateTime.Now;
 
-                            if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall || orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
+                            if (d_orderSub.SellChannelRefType == E_SellChannelRefType.Mall || d_orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                             {
-                                orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                                orderSub.PickupFlowLastDesc = order.PickupFlowLastDesc;
-                                orderSub.PickupFlowLastTime = order.PickupFlowLastTime;
+                                d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
+                                d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
 
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.MerchId, d_order.StoreId, d_orderSub.SellChannelRefId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                             }
-                            else if (orderSub.SellChannelRefType == E_SellChannelRefType.MemberFee)
+                            else if (d_orderSub.SellChannelRefType == E_SellChannelRefType.MemberFee)
                             {
-                                orderSub.PickupStatus = E_OrderPickupStatus.Taked;
-                                orderSub.PickupFlowLastDesc = order.PickupFlowLastDesc;
-                                orderSub.PickupFlowLastTime = order.PickupFlowLastTime;
+                                d_orderSub.PickupStatus = E_OrderPickupStatus.Taked;
+                                d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
+                                d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
+
+
+                                var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_orderSub.MerchId && m.Id == d_orderSub.PrdProductSkuId).FirstOrDefault();
+                                if (d_memberFeeSt != null)
+                                {
+                                    string[] couponIds = d_memberFeeSt.CouponIds.ToJsonObject<string[]>();
+
+                                    if (couponIds != null && couponIds.Length > 0)
+                                    {
+                                        var d_coupons = CurrentDb.Coupon.Where(m => couponIds.Contains(m.Id) && m.MerchId == d_orderSub.MerchId).ToList();
+
+                                        foreach (var d_coupon in d_coupons)
+                                        {
+
+                                            for (int i = 0; i < d_coupon.PerLimitNum; i++)
+                                            {
+                                                var d_clientCoupon = new ClientCoupon();
+                                                d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
+                                                d_clientCoupon.Sn = "";
+                                                d_clientCoupon.MerchId = d_orderSub.MerchId;
+                                                d_clientCoupon.ClientUserId = d_orderSub.ClientUserId;
+                                                d_clientCoupon.CouponId = d_coupon.Id;
+                                                if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+                                                {
+                                                    d_clientCoupon.ValidStartTime = DateTime.Now;
+                                                    d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
+                                                }
+                                                d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
+                                                d_clientCoupon.SourceType = E_ClientCouponSourceType.SysGive;
+                                                d_clientCoupon.SourceObjType = "system";
+                                                d_clientCoupon.SourceObjId = IdWorker.Build(IdType.EmptyGuid);
+                                                d_clientCoupon.SourcePoint = "paysuccess";
+                                                d_clientCoupon.SourceTime = DateTime.Now;
+                                                d_clientCoupon.SourceDes = "开通会员赠送";
+                                                d_clientCoupon.Creator = operater;
+                                                d_clientCoupon.CreateTime = DateTime.Now;
+                                                CurrentDb.ClientCoupon.Add(d_clientCoupon);
+                                                CurrentDb.SaveChanges();
+
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
 
-                        order.MendTime = DateTime.Now;
-                        order.Mender = operater;
+                        d_order.MendTime = DateTime.Now;
+                        d_order.Mender = operater;
 
-                        var orderPickupLog = new OrderPickupLog();
-                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                        orderPickupLog.OrderId = order.Id;
-                        orderPickupLog.SellChannelRefType = order.SellChannelRefType;
-                        orderPickupLog.SellChannelRefId = order.SellChannelRefId;
-                        orderPickupLog.UniqueId = order.Id;
-                        orderPickupLog.UniqueType = E_UniqueType.Order;
-                        orderPickupLog.ActionRemark = order.PickupFlowLastDesc;
-                        orderPickupLog.ActionTime = order.PickupFlowLastTime;
-                        orderPickupLog.Remark = "";
-                        orderPickupLog.CreateTime = DateTime.Now;
-                        orderPickupLog.Creator = operater;
-                        CurrentDb.OrderPickupLog.Add(orderPickupLog);
+                        var d_orderPickupLog = new OrderPickupLog();
+                        d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                        d_orderPickupLog.OrderId = d_order.Id;
+                        d_orderPickupLog.SellChannelRefType = d_order.SellChannelRefType;
+                        d_orderPickupLog.SellChannelRefId = d_order.SellChannelRefId;
+                        d_orderPickupLog.UniqueId = d_order.Id;
+                        d_orderPickupLog.UniqueType = E_UniqueType.Order;
+                        d_orderPickupLog.ActionRemark = d_order.PickupFlowLastDesc;
+                        d_orderPickupLog.ActionTime = d_order.PickupFlowLastTime;
+                        d_orderPickupLog.Remark = "";
+                        d_orderPickupLog.CreateTime = DateTime.Now;
+                        d_orderPickupLog.Creator = operater;
+                        CurrentDb.OrderPickupLog.Add(d_orderPickupLog);
                         CurrentDb.SaveChanges();
                     }
 
@@ -1103,12 +1145,12 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("进入PaySuccess修改订单,结束");
 
 
-                    Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, payTrans.Id);
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_payTrans.Id);
 
-                    foreach (var order in orders)
+                    foreach (var d_order in d_orders)
                     {
-                        Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, order.Id);
-                        MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", order.Id));
+                        Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
+                        MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", d_order.Id));
 
                     }
                 }

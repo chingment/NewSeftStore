@@ -29,10 +29,14 @@ namespace LocalS.Entity
     {
 
         Unknow = 0,
-        //代金券
-        Voucher = 1,
-        //折扣券
-        Discount = 2
+        //购物代金券
+        ShopVoucher = 1,
+        //购物折扣券
+        ShopDiscount = 2,
+        //租金代金券
+        RentVoucher = 3,
+        //押金代金券
+        DepositVoucher = 4
     }
 
     public enum E_Coupon_Category
