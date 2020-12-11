@@ -495,7 +495,7 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
 
-                    decimal couponAmount = 0;
+                    //decimal couponAmount = 0;
 
                     //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
                     //{

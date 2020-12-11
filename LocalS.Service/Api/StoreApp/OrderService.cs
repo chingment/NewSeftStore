@@ -181,8 +181,9 @@ namespace LocalS.Service.Api.StoreApp
                         if (r_productSku.Stocks.Count > 0)
                         {
                             productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                            productSku.SalePriceByVip = r_productSku.Stocks[0].SalePriceByVip;
-
+                            productSku.MemberPrice = r_productSku.Stocks[0].SalePrice;
+                            productSku.SumSalePrice = productSku.Quantity * productSku.SalePrice;
+                            productSku.SumMemberPrice = productSku.Quantity * productSku.MemberPrice;
                             c_prodcutSkus.Add(productSku);
                         }
 
@@ -195,8 +196,9 @@ namespace LocalS.Service.Api.StoreApp
                             productSku.Name = memberFeeSt.Name;
                             productSku.MainImgUrl = memberFeeSt.MainImgUrl;
                             productSku.SalePrice = memberFeeSt.FeeValue;
-                            productSku.SalePriceByVip = memberFeeSt.FeeValue;
-
+                            productSku.MemberPrice = memberFeeSt.FeeValue;
+                            productSku.SumSalePrice = productSku.Quantity * productSku.SalePrice;
+                            productSku.SumMemberPrice = productSku.Quantity * productSku.MemberPrice;
                             c_prodcutSkus.Add(productSku);
                         }
                     }
@@ -282,15 +284,17 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
                     c_prodcutSku.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
                     c_prodcutSku.SalePrice = l_orderSubChilds[0].SalePrice;
-                    c_prodcutSku.SalePriceByVip = l_orderSubChilds[0].SalePriceByVip;
+                    c_prodcutSku.MemberPrice = l_orderSubChilds[0].SalePrice;
+                    c_prodcutSku.SumSalePrice = c_prodcutSku.Quantity * c_prodcutSku.SalePrice;
+                    c_prodcutSku.SumMemberPrice = c_prodcutSku.Quantity * c_prodcutSku.MemberPrice;
                     c_prodcutSku.ShopMode = shopModeSku.SellChannelRefType;
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
             }
 
-            amount_original = c_prodcutSkus.Sum(m => m.SalePrice);
-            amount_user = c_prodcutSkus.Sum(m => m.SalePrice);
-            amount_member = c_prodcutSkus.Sum(m => m.SalePriceByVip);
+            amount_original = c_prodcutSkus.Sum(m => m.SumSalePrice);
+            amount_user = c_prodcutSkus.Sum(m => m.SumSalePrice);
+            amount_member = c_prodcutSkus.Sum(m => m.SumMemberPrice);
 
 
             var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();

@@ -13,8 +13,9 @@ namespace LocalS.Service.Api.StoreApp
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public decimal SalePrice { get; set; }
-        public decimal ShowPrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
+        public decimal MemberPrice { get; set; }
+        public decimal SumSalePrice { get; set; }
+        public decimal SumMemberPrice { get; set; }
         public string BriefDes { get; set; }
         public string SpecDes { get; set; }
         public string CartId { get; set; }
