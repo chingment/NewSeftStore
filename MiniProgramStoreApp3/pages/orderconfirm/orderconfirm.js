@@ -5,11 +5,18 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiOrder = require('../../api/order.js')
+const skeletonData = require('./skeletonData')
 const app = getApp()
 
 Page({
   data: {
     tag: 'orderconfirm',
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     storeId: undefined,
@@ -72,6 +79,7 @@ Page({
   },
   onShow: function () {
     var _this = this
+    app.globalData.skeletonPage = _this
     _this.getConfirmData()
 
   },
@@ -366,7 +374,8 @@ Page({
           subtotalItems: d.subtotalItems,
           actualAmount: d.actualAmount,
           originalAmount: d.originalAmount,
-          coupon: d.coupon
+          coupon: d.coupon,
+          pageIsReady: true
         })
       }
     })

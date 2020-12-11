@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "确认订单",
   "usingComponents": {
-      "booktimedialog": "/components/booktimedialog/booktimedialog"
+      "booktimedialog": "/components/booktimedialog/booktimedialog",
+      "skeleton": "../../components/skeleton/skeleton"
   }
 }

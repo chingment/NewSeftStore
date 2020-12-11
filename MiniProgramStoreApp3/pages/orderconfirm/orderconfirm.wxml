@@ -1,3 +1,6 @@
+<skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
+	 data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
+	 
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 <booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}">
@@ -7,30 +10,30 @@
 	<image class="img" src="/content/default/images/tag_address.png"></image>
 </view> -->
 
-<view class="page-ct">
+<view class="page-ct skeleton" wx:if="{{ pageIsReady }}">
 	<view class="ord-block">
 		<block wx:for="{{blocks}}" wx:for-item="item" wx:key="index">
 			<view class="ct pd-com">
 
 				<block wx:if="{{item.shopMode==1}}">
 
-					<view class="tab-double">
+					<view class="tab-double ">
 						<view class="tab-title">
-							<view class="title-left {{item.receiveMode==1?'selected':''}}" bindtap="tabMallReceiveModeClick"
+							<view class="title-left {{item.receiveMode==1?'selected':''}} skeleton-bg" bindtap="tabMallReceiveModeClick"
 								data-reply-blockindex="{{index}}" data-reply-receivemode="1" data-reply-tabmode="{{item.tabMode}}">
-								<view class="txt">
+								<view class="txt skeleton-rect">
 									<text wx:if="{{item.tabMode==1||item.tabMode==3}}">配送地址</text>
 								</view>
 								<view class="left-triangle">
 								</view>
 							</view>
 
-							<view class="title-right {{item.receiveMode==2?'selected':''}}" bindtap="tabMallReceiveModeClick"
+							<view class="title-right {{item.receiveMode==2?'selected':''}} skeleton-bg" bindtap="tabMallReceiveModeClick"
 								data-reply-blockindex="{{index}}" data-reply-receivemode="2" data-reply-tabmode="{{item.tabMode}}">
 								<view class="right-triangle">
 
 								</view>
-								<view class="txt">
+								<view class="txt skeleton-rect">
 									<text wx:if="{{item.tabMode==2||item.tabMode==3}}">到店自取</text>
 								</view>
 							</view>
@@ -43,18 +46,18 @@
 									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
 										data-reply-deliveryaddressid="{{item.delivery.id}}">
 										<view class="it-l">
-											<text class='txt-h1'>{{item.delivery.consignee}}</text>
-											<text class="txt-h2 isDefault" wx:if="{{item.delivery.isDefault}}">默认</text>
+											<text class='txt-h1 skeleton-rect'>{{item.delivery.consignee}}</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.isDefault}}">默认</text>
 										</view>
 										<view class="it-m">
-											<view class="it-ml">
+											<view class="it-ml skeleton-rect">
 												<text class='txt-h1 bold'>{{item.delivery.phoneNumber}}</text>
-												<text class='txt-h2'>{{item.delivery.areaName}} {{item.delivery.address}}</text>
+												<text class='txt-h2 '>{{item.delivery.areaName}} {{item.delivery.address}}</text>
 											</view>
 										</view>
 										<view class='it-r' bindtap="goSelect">
-											<view class="icon">
-												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'></image>
 											</view>
 										</view>
 									</view>
@@ -101,31 +104,25 @@
 							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
 								<view class="it">
 									<view class="it-l">
-										<view class="imgUrl">
+										<view class="imgUrl skeleton-rect">
 											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
 										</view>
 									</view>
 									<view class="it-m">
 										<view class="it-ml">
-											<text class='name'>{{skusitem.name}}</text>
+											<text class='name skeleton-rect'>{{skusitem.name}}</text>
 										</view>
 										<view class="it-mr">
-											<text class='quantity'> x {{skusitem.quantity}}</text>
+											<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
 										</view>
 									</view>
 									<view class="it-r">
-										<text class='salePrice'> {{skusitem.salePrice}}</text>
+										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
 									</view>
 								</view>
 							</block>
 						</view>
-
-
 					</view>
-
-
-
-
 				</block>
 				<block wx:elif="{{item.shopMode==3}}">
 
@@ -260,23 +257,23 @@
 					<view class="it" bindtap="couponSelect">
 						<view class="it-l">
 							<view class="icon">
-								<image class="img" style="width:38px;height:38px"
+								<image class="img skeleton-rect" style="width:38px;height:38px" 
 									src='/content/default/images/col_nav_icon_coupon.png'></image>
 							</view>
 						</view>
 						<view class="it-m">
 							<view class="it-ml w100">
-								<text class="txt">优惠券</text>
+								<text class="txt skeleton-rect">优惠券</text>
 							</view>
 							<view class="it-mr flex1">
-								<text class="coupontip coupontip{{coupon.tipType}}">{{coupon.tipMsg}}</text>
+								<text class="coupontip coupontip{{coupon.tipType}} skeleton-rect">{{coupon.tipMsg}}</text>
 							</view>
 						</view>
 
 						<view class="it-r" style="width:80rpx">
 			
 							<view class="icon">
-								<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+								<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 							</view>
 						</view>
 
@@ -289,17 +286,17 @@
 				<block wx:for="{{payOption.options}}" wx:key="caller">
 					<view class="it">
 						<view class="it-l">
-							<view class="icon">
+							<view class="icon skeleton-rect">
 								<image class="img" style="width:38px;height:38px"
 									src='/content/default/images/paycaller_{{item.payCaller}}.png'></image>
 							</view>
 						</view>
 						<view class="it-m">
 							<view class="it-ml w100">
-								<text class="txt">{{item.title}}</text>
+								<text class="txt skeleton-rect">{{item.title}}</text>
 							</view>
 							<view class="it-mr flex1">
-								<text class="txt">{{item.desc}}</text>
+								<text class="txt skeleton-rect">{{item.desc}}</text>
 							</view>
 						</view>
 

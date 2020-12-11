@@ -41,6 +41,7 @@ page{
 .its-odcskus .it-l .imgUrl {
   align-items: center;
   display: flex;
+  margin-right:10rpx;
 }
 
 .its-odcskus .it-l .imgUrl .img {
@@ -224,7 +225,7 @@ page{
 }
 
 .coupontip1{
-  color: #99989d;
+  color: #f3e7cf;
 }
 
 .coupontip2 {
