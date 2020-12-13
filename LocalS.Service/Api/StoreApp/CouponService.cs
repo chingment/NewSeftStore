@@ -15,8 +15,7 @@ namespace LocalS.Service.Api.StoreApp
 
     public class CouponService : BaseDbContext
     {
-
-        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, string merchId, string storeId, List<OrderConfirmProductSkuModel> productSkus)
+        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId,string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
         {
             if (useAreaType == E_Coupon_UseAreaType.All)
             {
@@ -59,7 +58,6 @@ namespace LocalS.Service.Api.StoreApp
             }
             else if (useAreaType == E_Coupon_UseAreaType.ProductSpu)
             {
-
                 var prodcuts1 = useAreaValue.ToJsonObject<JArray>();
 
                 var productSkuIds = productSkus.Select(m => m.Id).ToList();
@@ -82,7 +80,7 @@ namespace LocalS.Service.Api.StoreApp
             return false;
         }
 
-        public bool GetCanSelected(E_ShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, string merchId, string storeId, List<OrderConfirmProductSkuModel> productSkus)
+        public bool GetCanSelected(E_ShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
         {
 
             if (shopMethod == E_ShopMethod.Unknow)
@@ -93,26 +91,40 @@ namespace LocalS.Service.Api.StoreApp
                 return false;
             if (productSkus == null || productSkus.Count == 0)
                 return false;
+            if (couponStatus == E_ClientCouponStatus.Unknow)
+                return false;
+
+            if (couponStatus == E_ClientCouponStatus.Delete || couponStatus == E_ClientCouponStatus.Used || couponStatus == E_ClientCouponStatus.Expired || couponStatus == E_ClientCouponStatus.Frozen)
+                return false;
+
+            if (validTimeStart > DateTime.Now)
+                return false;
+
+            if (validTimeEnd < DateTime.Now)
+                return false;
+
+            if (string.IsNullOrEmpty(merchId) || string.IsNullOrEmpty(storeId) || string.IsNullOrEmpty(clientUserId))
+                return false;
 
             if (shopMethod == E_ShopMethod.Shopping)
             {
                 if (faceType == E_Coupon_FaceType.ShopVoucher || faceType == E_Coupon_FaceType.ShopDiscount)
                 {
-                    return GetCanSelected(useAreaType, useAreaValue, faceType, merchId, storeId, productSkus);
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
                 }
             }
             else if (shopMethod == E_ShopMethod.Hire)
             {
                 if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
                 {
-                    return GetCanSelected(useAreaType, useAreaValue, faceType, merchId, storeId, productSkus);
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
                 }
             }
 
             return false;
         }
 
-        public int GetCanUseCount(E_ShopMethod shopMethod, string storeId, List<OrderConfirmProductSkuModel> productSkus, string clientUserId)
+        public int GetCanUseCount(E_ShopMethod shopMethod, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId)
         {
             RopCouponMy rup = new RopCouponMy();
             rup.StoreId = storeId;
@@ -239,7 +251,7 @@ namespace LocalS.Service.Api.StoreApp
                     }
                 }
 
-                couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.MerchId, rop.StoreId, rop.ProductSkus);
+                couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.Status, item.ValidStartTime, item.ValidEndTime, item.MerchId, rop.StoreId, clientUserId, rop.ProductSkus);
 
                 ret.Coupons.Add(couponModel);
             }

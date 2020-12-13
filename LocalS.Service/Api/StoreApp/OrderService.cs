@@ -389,7 +389,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (rop.CouponIds == null || rop.CouponIds.Count == 0)
             {
-                var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, rop.StoreId, rop.ProductSkus, clientUserId);
+                var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, rop.ProductSkus, store.MerchId, store.StoreId, clientUserId);
 
                 if (couponCanUseCount == 0)
                 {
@@ -425,9 +425,9 @@ namespace LocalS.Service.Api.StoreApp
                                     amount_coupon += coupon.FaceValue;
                                     break;
                                 case E_Coupon_UseAreaType.ProductKind:
-                                   // c_prodcutSkus.OrderBy(m=>m.SumSalePrice)
+                                    // c_prodcutSkus.OrderBy(m=>m.SumSalePrice)
 
-                                    
+
                                     break;
                                 case E_Coupon_UseAreaType.ProductSpu:
 

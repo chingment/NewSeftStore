@@ -130,7 +130,6 @@ namespace LocalS.BLL.Biz
             return config;
         }
 
-
         public string GetMerchName(string merchId)
         {
 

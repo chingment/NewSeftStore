@@ -6,7 +6,6 @@ namespace LocalS.Entity
 {
     public enum E_ClientCouponStatus
     {
-
         Unknow = 0,
         WaitUse = 1,
         Used = 2,
@@ -38,8 +37,8 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string ClientUserId { get; set; }
         public string CouponId { get; set; }
-        public DateTime? ValidStartTime { get; set; }
-        public DateTime? ValidEndTime { get; set; }
+        public DateTime ValidStartTime { get; set; }
+        public DateTime ValidEndTime { get; set; }
         public E_ClientCouponStatus Status { get; set; }
         public E_ClientCouponSourceType SourceType { get; set; }
         public string SourceObjType { get; set; }
