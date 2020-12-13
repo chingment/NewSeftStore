@@ -17,6 +17,36 @@ namespace LocalS.Service.Api.StoreApp
     {
         private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId,string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
         {
+            //foreach (var productSku in productSkus)
+            //{
+            //    if (productSku.ShopMode == E_SellChannelRefType.Machine || productSku.ShopMode == E_SellChannelRefType.Mall)
+            //    {
+            //        var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, storeId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
+
+            //        productSku.Name = r_productSku.Name;
+            //        productSku.MainImgUrl = r_productSku.MainImgUrl;
+            //        productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+            //        productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
+            //        productSku.SumSalePrice = productSku.Quantity * productSku.SalePrice;
+            //        productSku.SumOriginalPrice = productSku.Quantity * productSku.OriginalPrice;
+
+            //    }
+            //    else if (productSku.ShopMode == E_SellChannelRefType.MemberFee)
+            //    {
+            //        var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == merchId && m.Id == productSku.Id).FirstOrDefault();
+            //        if (memberFeeSt != null)
+            //        {
+            //            productSku.Name = memberFeeSt.Name;
+            //            productSku.MainImgUrl = memberFeeSt.MainImgUrl;
+            //            productSku.SalePrice = memberFeeSt.FeeValue;
+            //            productSku.OriginalPrice = memberFeeSt.FeeValue;
+            //            productSku.SumSalePrice = productSku.Quantity * productSku.SalePrice;
+            //            productSku.SumOriginalPrice = productSku.Quantity * productSku.SumOriginalPrice;
+            //        }
+            //    }
+            //}
+
+
             if (useAreaType == E_Coupon_UseAreaType.All)
             {
                 return true;

@@ -389,7 +389,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (rop.CouponIds == null || rop.CouponIds.Count == 0)
             {
-                var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, rop.ProductSkus, store.MerchId, store.StoreId, clientUserId);
+                var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
 
                 if (couponCanUseCount == 0)
                 {
