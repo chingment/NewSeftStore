@@ -419,18 +419,16 @@ namespace LocalS.Service.Api.StoreApp
                             switch (coupon.UseAreaType)
                             {
                                 case E_Coupon_UseAreaType.All:
-                                    amount_coupon += coupon.FaceValue;
+                                    amount_coupon = coupon.FaceValue;
                                     break;
                                 case E_Coupon_UseAreaType.Store:
-                                    amount_coupon += coupon.FaceValue;
+                                    amount_coupon = coupon.FaceValue;
                                     break;
                                 case E_Coupon_UseAreaType.ProductKind:
-                                    // c_prodcutSkus.OrderBy(m=>m.SumSalePrice)
-
-
+                                    amount_coupon = coupon.FaceValue;
                                     break;
                                 case E_Coupon_UseAreaType.ProductSpu:
-
+                                    amount_coupon = coupon.FaceValue;
                                     break;
                             }
                             break;
