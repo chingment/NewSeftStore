@@ -495,7 +495,7 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
 
-                    //decimal couponAmount = 0;
+                    decimal couponAmount = 0;
 
                     //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
                     //{
@@ -653,7 +653,7 @@ namespace LocalS.BLL.Biz
 
                         order.OriginalAmount = buildOrder.OriginalAmount;
                         order.DiscountAmount = buildOrder.DiscountAmount;
-                        order.CouponAmount = couponAmount;
+                       // order.CouponAmount = couponAmount;
                         order.ChargeAmount = buildOrder.ChargeAmount - couponAmount;
                         order.Quantity = buildOrder.Quantity;
                         order.PayStatus = E_PayStatus.WaitPay;
