@@ -31,7 +31,8 @@ namespace LocalS.Entity
         public string PrdProductSkuMainImgUrl { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
+        public decimal SaleAmount { get; set; }
+        public decimal OriginalPrice { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }

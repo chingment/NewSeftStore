@@ -20,7 +20,6 @@ namespace LocalS.Service.Api.StoreApp
         public string BriefDes { get; set; }
         public bool IsShowPrice { get; set; }
         public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
         public decimal ShowPrice { get; set; }
 
         public int SellQuantity { get; set; }

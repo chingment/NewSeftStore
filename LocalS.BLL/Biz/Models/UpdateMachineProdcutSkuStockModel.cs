@@ -10,7 +10,6 @@ namespace LocalS.BLL.Biz
     {
         public string ProductSkuId { get; set; }
         public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
         public bool IsOffSell { get; set; }
         public int SumQuantity { get; set; }
         public int LockQuantity { get; set; }

@@ -108,7 +108,6 @@ namespace LocalS.Service.Api.StoreApp
                     {
                         productSkuModel.IsShowPrice = false;
                         productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                        productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
                         productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
 
                         pageEntiy.Items.Add(productSkuModel);
@@ -145,7 +144,6 @@ namespace LocalS.Service.Api.StoreApp
             {
                 productSkuDetailsModel.IsShowPrice = false;
                 productSkuDetailsModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                productSkuDetailsModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
                 productSkuDetailsModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                 productSkuDetailsModel.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
             }
@@ -166,18 +164,16 @@ namespace LocalS.Service.Api.StoreApp
             bool isOffSell = true;
             bool isShowPrice = false;
             decimal salePrice = 0m;
-            decimal salePriceByVip = 0m;
             int sellQuantity = 0;
             if (bizProductSku.Stocks.Count > 0)
             {
                 isShowPrice = false;
                 salePrice = bizProductSku.Stocks[0].SalePrice;
-                salePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
                 isOffSell = bizProductSku.Stocks[0].IsOffSell;
                 sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
             }
 
-            var data = new { skuId = rup.SkuId, name = bizProductSku.Name, salePrice = salePrice, isShowPrice = isShowPrice, salePriceByVip = salePriceByVip, isOffSell = isOffSell, sellQuantity = sellQuantity };
+            var data = new { skuId = rup.SkuId, name = bizProductSku.Name, salePrice = salePrice, isShowPrice = isShowPrice,isOffSell = isOffSell, sellQuantity = sellQuantity };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", data);
 

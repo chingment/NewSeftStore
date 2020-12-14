@@ -255,7 +255,7 @@
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
 					<view class="it" bindtap="couponSelect">
-						<view class="it-l">
+						<view class="it-l" style="width:60rpx">
 							<view class="icon">
 								<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0" 
 									src='/content/default/images/col_nav_icon_coupon.png'></image>
@@ -279,13 +279,14 @@
 
 					</view>
 			</view>
+			<view class="line-space-ncolor"></view>
 		</view>
 
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
 				<block wx:for="{{payOption.options}}" wx:key="caller">
 					<view class="it">
-						<view class="it-l">
+						<view class="it-l" style="width:60rpx">
 							<view class="icon skeleton-rect">
 								<image class="img" style="width:48rpx;height:48rpx;"
 									src='/content/default/images/paycaller_{{item.payCaller}}.png'></image>

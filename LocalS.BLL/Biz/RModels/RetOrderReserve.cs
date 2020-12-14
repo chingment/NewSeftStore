@@ -33,6 +33,7 @@ namespace LocalS.BLL.Biz
         public string SellChannelRefId { get; set; }
         public int Quantity { get; set; }
         public decimal OriginalAmount { get; set; }
+        public decimal SaleAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public List<Child> Childs { get; set; }
@@ -42,9 +43,10 @@ namespace LocalS.BLL.Biz
             public string SellChannelRefId { get; set; }
             public string ProductSkuId { get; set; }
             public decimal SalePrice { get; set; }
-            public decimal SalePriceByVip { get; set; }
+            public decimal OriginalPrice { get; set; }
             public int Quantity { get; set; }
             public decimal OriginalAmount { get; set; }
+            public decimal SaleAmount { get; set; }
             public decimal DiscountAmount { get; set; }
             public decimal ChargeAmount { get; set; }
             public string CabinetId { get; set; }

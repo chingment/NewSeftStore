@@ -31,7 +31,6 @@ namespace LocalS.BLL.Biz
                         updateProdcutSkuStock.ProductSkuId = bizProductSku.Id;
                         updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                         updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                        updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
                         updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
                         updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                         updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
@@ -136,7 +135,6 @@ namespace LocalS.BLL.Biz
                         sellChannelStock.HoldQuantity = 0;
                         sellChannelStock.IsOffSell = false;
                         sellChannelStock.SalePrice = productSku.SalePrice;
-                        sellChannelStock.SalePriceByVip = productSku.SalePrice;
                         sellChannelStock.Version = 0;
                         sellChannelStock.MaxQuantity = 10;
                         sellChannelStock.CreateTime = DateTime.Now;
@@ -202,7 +200,6 @@ namespace LocalS.BLL.Biz
                             sellChannelStock.PrdProductSkuId = productSkuId;
                             sellChannelStock.IsOffSell = false;
                             sellChannelStock.SalePrice = productSku.SalePrice;
-                            sellChannelStock.SalePriceByVip = productSku.SalePrice;
                             sellChannelStock.SumQuantity = 0;
                             sellChannelStock.WaitPayLockQuantity = 0;
                             sellChannelStock.WaitPickupLockQuantity = 0;

@@ -73,6 +73,8 @@ namespace LocalS.Entity
         public string ReceptionAreaName { get; set; }
         public string ReceptionMarkName { get; set; }
         public DateTime? ReceptionBookTime { get; set; }
+
+        public decimal SaleAmount { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
        // public decimal CouponAmount { get; set; }
@@ -123,5 +125,7 @@ namespace LocalS.Entity
         public bool IsNoDisplayClient { get; set; }
 
         public string SaleOutletId{ get; set; }
+
+        public string CouponIds { get; set; }
     }
 }

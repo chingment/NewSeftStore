@@ -55,7 +55,6 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                 {
                     productSkuModel.IsShowPrice = false;
                     productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                    productSkuModel.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
                     productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                     productSkuModel.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                 }

@@ -420,7 +420,6 @@ namespace LocalS.BLL.Biz
                                     stock.SellQuantity = 0;
                                     stock.IsOffSell = false;
                                     stock.SalePrice = memberFeeSt.FeeValue;
-                                    stock.SalePriceByVip = memberFeeSt.FeeValue;
 
                                     stocks.Add(stock);
 
@@ -495,32 +494,41 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
 
-                    decimal couponAmount = 0;
+                    // decimal couponAmount = 0;
 
-                    //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
-                    //{
-                    //    //只能使用一张优惠券
-                    //    var coupon = (from u in CurrentDb.ClientCoupon
-                    //                  join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
-                    //                  from tt in temp.DefaultIfEmpty()
-                    //                  where u.ClientUserId == rop.ClientUserId && rop.CouponIds.Contains(u.Id)
-                    //                  select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
-                    //    if (coupon != null)
-                    //    {
-                    //        switch (coupon.FaceType)
-                    //        {
-                    //            case E_Coupon_FaceType.ShopVoucher:
-                    //            case E_Coupon_FaceType.DepositVoucher:
-                    //            case E_Coupon_FaceType.RentVoucher:
-                    //                couponAmount += coupon.FaceValue;
-                    //                break;
-                    //            case E_Coupon_FaceType.ShopDiscount:
-                    //                couponAmount = couponAmount * coupon.FaceValue;
-                    //                break;
-                    //        }
+                    if (rop.CouponIds != null && rop.CouponIds.Count > 0)
+                    {
+                        var coupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIds[0]).FirstOrDefault();
+                        if (coupon != null)
+                        {
+                            coupon.Status = E_ClientCouponStatus.Frozen;
+                            coupon.MendTime = DateTime.Now;
+                            coupon.Mender = operater;
+                            CurrentDb.SaveChanges();
+                        }
 
-                    //    }
-                    //}
+                        //    //只能使用一张优惠券
+                        //    var coupon = (from u in CurrentDb.ClientCoupon
+                        //                  join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
+                        //                  from tt in temp.DefaultIfEmpty()
+                        //                  where u.ClientUserId == rop.ClientUserId && rop.CouponIds.Contains(u.Id)
+                        //                  select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
+                        //    if (coupon != null)
+                        //    {
+                        //        switch (coupon.FaceType)
+                        //        {
+                        //            case E_Coupon_FaceType.ShopVoucher:
+                        //            case E_Coupon_FaceType.DepositVoucher:
+                        //            case E_Coupon_FaceType.RentVoucher:
+                        //                couponAmount += coupon.FaceValue;
+                        //                break;
+                        //            case E_Coupon_FaceType.ShopDiscount:
+                        //                couponAmount = couponAmount * coupon.FaceValue;
+                        //                break;
+                        //        }
+
+                        //    }
+                    }
 
                     List<Order> orders = new List<Order>();
 
@@ -541,7 +549,7 @@ namespace LocalS.BLL.Biz
                         order.PickupCode = IdWorker.BuildPickupCode();
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
-
+                        order.CouponIds = rop.CouponIds.ToJsonString();
                         switch (buildOrder.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
@@ -651,10 +659,10 @@ namespace LocalS.BLL.Biz
                                 break;
                         }
 
+                        order.SaleAmount = buildOrder.SaleAmount;
                         order.OriginalAmount = buildOrder.OriginalAmount;
                         order.DiscountAmount = buildOrder.DiscountAmount;
-                       // order.CouponAmount = couponAmount;
-                        order.ChargeAmount = buildOrder.ChargeAmount - couponAmount;
+                        order.ChargeAmount = buildOrder.ChargeAmount;
                         order.Quantity = buildOrder.Quantity;
                         order.PayStatus = E_PayStatus.WaitPay;
                         order.Status = E_OrderStatus.WaitPay;
@@ -696,9 +704,10 @@ namespace LocalS.BLL.Biz
                             orderSub.PrdKindId1 = productSku.KindId1;
                             orderSub.PrdKindId2 = productSku.KindId2;
                             orderSub.PrdKindId3 = productSku.KindId3;
-                            orderSub.SalePrice = buildOrderSub.SalePrice;
-                            orderSub.SalePriceByVip = buildOrderSub.SalePriceByVip;
                             orderSub.Quantity = buildOrderSub.Quantity;
+                            orderSub.SalePrice = buildOrderSub.SalePrice;
+                            orderSub.OriginalPrice = buildOrderSub.OriginalPrice;
+                            orderSub.SaleAmount = buildOrderSub.SaleAmount;
                             orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
                             orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
                             orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
@@ -770,9 +779,11 @@ namespace LocalS.BLL.Biz
                         buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
                         buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
                         buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
+                        //todo 
                         buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                        buildOrderSubChild.SalePriceByVip = productSku_Stocks[0].SalePriceByVip;
-                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * productSku_Stocks[0].SalePrice;
+                        buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
+                        buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
+                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
                         buildOrderSubChilds.Add(buildOrderSubChild);
                     }
                     if (shopMode == E_SellChannelRefType.MemberFee)
@@ -783,10 +794,13 @@ namespace LocalS.BLL.Biz
                         buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
                         buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
                         buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
+
                         buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
                         buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                        buildOrderSubChild.SalePriceByVip = productSku_Stocks[0].SalePriceByVip;
-                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * productSku_Stocks[0].SalePrice;
+                        buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
+                        buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
+                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
+
                         buildOrderSubChilds.Add(buildOrderSubChild);
                     }
                     else if (shopMode == E_SellChannelRefType.Machine)
@@ -808,8 +822,9 @@ namespace LocalS.BLL.Biz
                                     buildOrderSubChild.SlotId = item.SlotId;
                                     buildOrderSubChild.Quantity = 1;
                                     buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                                    buildOrderSubChild.SalePriceByVip = productSku_Stocks[0].SalePriceByVip;
-                                    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * productSku_Stocks[0].SalePrice;
+                                    buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
+                                    buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
+                                    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
                                     buildOrderSubChilds.Add(buildOrderSubChild);
                                 }
                                 else
@@ -861,6 +876,7 @@ namespace LocalS.BLL.Biz
                 buildOrderSub.SellChannelRefType = orderSub.SellChannelRefType;
                 buildOrderSub.SellChannelRefId = orderSub.SellChannelRefId;
                 buildOrderSub.Quantity = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.Quantity);
+                buildOrderSub.SaleAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.SaleAmount);
                 buildOrderSub.OriginalAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.OriginalAmount);
                 buildOrderSub.DiscountAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.DiscountAmount);
                 buildOrderSub.ChargeAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.ChargeAmount);

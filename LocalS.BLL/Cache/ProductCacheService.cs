@@ -120,7 +120,6 @@ namespace LocalS.BLL
                 productSkuStock.SellQuantity = sellChannelStock.SellQuantity;
                 productSkuStock.IsOffSell = sellChannelStock.IsOffSell;
                 productSkuStock.SalePrice = sellChannelStock.SalePrice;
-                productSkuStock.SalePriceByVip = sellChannelStock.SalePriceByVip;
                 productSkuStocks.Add(productSkuStock);
             }
 

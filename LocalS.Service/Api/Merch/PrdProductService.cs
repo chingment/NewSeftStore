@@ -428,7 +428,6 @@ namespace LocalS.Service.Api.Merch
                             updateProdcutSkuStock.ProductSkuId = bizProductSku.Id;
                             updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
                             updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                            updateProdcutSkuStock.SalePriceByVip = bizProductSku.Stocks[0].SalePriceByVip;
                             updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
                             updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
                             updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
@@ -449,7 +448,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SellChannelStock
                          where u.PrdProductId == productId
                          && u.MerchId == merchId
-                         select new { u.StoreId, u.PrdProductId, u.PrdProductSkuId, u.IsOffSell, u.SalePrice, u.SalePriceByVip }).Distinct();
+                         select new { u.StoreId, u.PrdProductId, u.PrdProductSkuId, u.IsOffSell, u.SalePrice }).Distinct();
 
 
             int total = query.Count();
@@ -475,8 +474,7 @@ namespace LocalS.Service.Api.Merch
                     ProductSkuName = productSku.Name,
                     ProductSkuMainImgUrl = productSku.MainImgUrl,
                     ProductSkuIsOffSell = item.IsOffSell,
-                    ProductSkuSalePrice = item.SalePrice,
-                    ProductSkuSalePriceByVip = item.SalePriceByVip,
+                    ProductSkuSalePrice = item.SalePrice
                 });
             }
 

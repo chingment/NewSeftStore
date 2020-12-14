@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
 
     public class CouponService : BaseDbContext
     {
-        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId,string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
+        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
         {
             //foreach (var productSku in productSkus)
             //{
@@ -189,7 +189,7 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                query = query.Where(m => m.ClientUserId == clientUserId && (m.Status == E_ClientCouponStatus.Used || m.Status == E_ClientCouponStatus.Expired) && m.ValidEndTime < DateTime.Now);
+                query = query.Where(m => m.ClientUserId == clientUserId && (m.Status == E_ClientCouponStatus.Used || m.Status != E_ClientCouponStatus.Expired) && m.ValidEndTime < DateTime.Now);
             }
 
             var list = query.OrderBy(m => m.Name).ToList();
@@ -259,13 +259,13 @@ namespace LocalS.Service.Api.StoreApp
                 switch (item.UseAreaType)
                 {
                     case E_Coupon_UseAreaType.All:
-                        couponModel.Description = "全场使用";
+                        couponModel.Description = "全场通用";
                         break;
                     case E_Coupon_UseAreaType.Store:
                         couponModel.Description = "指定店铺使用";
                         break;
                     case E_Coupon_UseAreaType.ProductKind:
-                        couponModel.Description = "指定商品品类使用";
+                        couponModel.Description = "指定品类使用";
                         break;
                     case E_Coupon_UseAreaType.ProductSpu:
                         couponModel.Description = "指定商品使用";

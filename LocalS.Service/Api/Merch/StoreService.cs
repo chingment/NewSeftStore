@@ -559,7 +559,6 @@ namespace LocalS.Service.Api.Merch
                                 sellChannelStock.PrdProductId = rop.ProductId;
                                 sellChannelStock.PrdProductSkuId = stock.SkuId;
                                 sellChannelStock.SalePrice = stock.SalePrice;
-                                sellChannelStock.SalePriceByVip = stock.SalePrice;
                                 sellChannelStock.IsOffSell = stock.IsOffSell;
                                 sellChannelStock.SellQuantity = stock.SumQuantity;
                                 sellChannelStock.WaitPayLockQuantity = 0;
@@ -573,7 +572,6 @@ namespace LocalS.Service.Api.Merch
                             else
                             {
                                 sellChannelStock.SalePrice = stock.SalePrice;
-                                sellChannelStock.SalePriceByVip = stock.SalePrice;
                                 sellChannelStock.IsOffSell = stock.IsOffSell;
                                 sellChannelStock.SumQuantity = stock.SumQuantity;
                                 sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;

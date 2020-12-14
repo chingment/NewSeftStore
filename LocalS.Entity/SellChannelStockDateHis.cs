@@ -24,7 +24,6 @@ namespace LocalS.Entity
         public int MaxQuantity { get; set; }
         public bool IsOffSell { get; set; }
         public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
         public string StockDate{ get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
