@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.StoreApp
                 userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(user.PhoneNumber);
                 userInfo.Avatar = user.Avatar;
                 userInfo.MemberLevel = user.MemberLevel;
-                userInfo.MemberTag = "普通会员";
+                userInfo.MemberTag = "普通用户";
                 userInfo.MemberExpireTime = user.MemberExpireTime.ToUnifiedFormatDate();
                 var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == user.MerchId && m.Level == user.MemberLevel).FirstOrDefault();
                 if (memberLevelSt != null)
