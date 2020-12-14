@@ -32,14 +32,6 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public OwnApiHttpResponse GetInfoByWxOpenId(string openId)
-        {
-            IResult result = AccountServiceFactory.Own.GetInfoByWxOpenId("", openId);
-            return new OwnApiHttpResponse(result);
-        }
-
 
         [AllowAnonymous]
         [HttpPost]
