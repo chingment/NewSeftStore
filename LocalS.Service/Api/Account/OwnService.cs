@@ -685,30 +685,30 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
-            string userId = "";
-            string nickName = "";
-            var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == openId).FirstOrDefault();
-            if (wxUserInfo != null)
-            {
+            //string userId = "";
+            //string nickName = "";
+            //var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == openId).FirstOrDefault();
+            //if (wxUserInfo != null)
+            //{
 
-            }
+            //}
 
-            //var ret = new RetOwnGetInfo();
-            //ret.
-            var userInfo = new UserInfoModel();
-            userInfo.UserId = user.Id;
-            userInfo.NickName = user.NickName;
-            userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(user.PhoneNumber);
-            userInfo.Avatar = user.Avatar;
-            userInfo.MemberLevel = user.MemberLevel;
-            userInfo.MemberTag = "普通用户";
-            userInfo.MemberExpireTime = user.MemberExpireTime.ToUnifiedFormatDate();
-            var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == user.MerchId && m.Level == user.MemberLevel).FirstOrDefault();
-            if (memberLevelSt != null)
-            {
-                userInfo.MemberTag = memberLevelSt.Name;
-            }
-            ret.UserInfo = userInfo;
+            ////var ret = new RetOwnGetInfo();
+            ////ret.
+            //var userInfo = new UserInfoModel();
+            //userInfo.UserId = user.Id;
+            //userInfo.NickName = user.NickName;
+            //userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(user.PhoneNumber);
+            //userInfo.Avatar = user.Avatar;
+            //userInfo.MemberLevel = user.MemberLevel;
+            //userInfo.MemberTag = "普通用户";
+            //userInfo.MemberExpireTime = user.MemberExpireTime.ToUnifiedFormatDate();
+            //var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == user.MerchId && m.Level == user.MemberLevel).FirstOrDefault();
+            //if (memberLevelSt != null)
+            //{
+            //    userInfo.MemberTag = memberLevelSt.Name;
+            //}
+            //ret.UserInfo = userInfo;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { });
 
@@ -927,7 +927,7 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            int MemberLevel
+          //  int MemberLevel
             var d_wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == ret.openid).FirstOrDefault();
             if (d_wxUserInfo != null)
             {
