@@ -8,10 +8,10 @@ namespace LocalS.Entity
     public enum E_MemberFeeSt_FeeType
     {
         Unknow = 0,
-        Year = 1,
-        Quarter = 2,
-        Month = 3,
-        LongTerm = 4
+        LongTerm = 1,
+        Year = 2,
+        Quarter = 3,
+        Month = 5,
     }
 
     [Table("MemberFeeSt")]
