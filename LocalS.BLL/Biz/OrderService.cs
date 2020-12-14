@@ -844,13 +844,13 @@ namespace LocalS.BLL.Biz
 
             }
 
-            var sumOriginalAmount = buildOrderSubChilds.Sum(m => m.OriginalAmount);
+            var sumSaleAmount = buildOrderSubChilds.Sum(m => m.SaleAmount);
             var sumDiscountAmount = 0m;
             for (int i = 0; i < buildOrderSubChilds.Count; i++)
             {
-                decimal scale = (sumOriginalAmount == 0 ? 0 : (buildOrderSubChilds[i].OriginalAmount / sumOriginalAmount));
+                decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderSubChilds[i].SaleAmount / sumSaleAmount));
                 buildOrderSubChilds[i].DiscountAmount = Decimal.Round(scale * sumDiscountAmount, 2);
-                buildOrderSubChilds[i].ChargeAmount = buildOrderSubChilds[i].OriginalAmount - buildOrderSubChilds[i].DiscountAmount;
+                buildOrderSubChilds[i].ChargeAmount = buildOrderSubChilds[i].SaleAmount - buildOrderSubChilds[i].DiscountAmount;
             }
 
             var sumDiscountAmount2 = buildOrderSubChilds.Sum(m => m.DiscountAmount);
@@ -859,7 +859,7 @@ namespace LocalS.BLL.Biz
                 var diff = sumDiscountAmount - sumDiscountAmount2;
 
                 buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount = buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount + diff;
-                buildOrderSubChilds[buildOrderSubChilds.Count - 1].ChargeAmount = buildOrderSubChilds[buildOrderSubChilds.Count - 1].OriginalAmount - buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount;
+                buildOrderSubChilds[buildOrderSubChilds.Count - 1].SaleAmount = buildOrderSubChilds[buildOrderSubChilds.Count - 1].SaleAmount - buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount;
             }
 
             var l_OrderSubs = (from c in buildOrderSubChilds
