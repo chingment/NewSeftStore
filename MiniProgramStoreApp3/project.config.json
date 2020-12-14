@@ -30,7 +30,6 @@
     "useIsolateContext": true,
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": false,
-    "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true
@@ -38,7 +37,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.6.5",
   "appid": "wx80caad9ea41a00fc",
-  "projectname": "MiniProgramStoreApp2",
+  "projectname": "MiniProgramStoreApp3",
   "isGameTourist": false,
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
