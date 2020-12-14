@@ -93,7 +93,6 @@
     <Compile Include="Entity\SysUserRole.cs" />
     <Compile Include="Entity\WxAutoReply.cs" />
     <Compile Include="Entity\WxMsgPushLog.cs" />
-    <Compile Include="Entity\WxUserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enumeration.cs" />
   </ItemGroup>

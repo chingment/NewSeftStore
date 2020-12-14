@@ -11,5 +11,7 @@ namespace Lumos.DbRelay
         public int MemberLevel { get; set; }
         public DateTime? MemberExpireTime { get; set; }
         public string MerchId { get; set; }
+        public string WxMpOpenId { get; set; }
+        public string WxMpAppId { get; set; }
     }
 }

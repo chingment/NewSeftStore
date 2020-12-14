@@ -1433,6 +1433,8 @@ namespace LocalS.BLL.Biz
 
                 var orderAttach = new BLL.Biz.OrderAttachModel();
 
+                var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == payTrans.ClientUserId).FirstOrDefault();
+
                 switch (rop.PayPartner)
                 {
                     case E_PayPartner.Wx:
@@ -1461,9 +1463,8 @@ namespace LocalS.BLL.Biz
                                 payTrans.PayPartner = E_PayPartner.Wx;
                                 payTrans.PayWay = E_PayWay.Wx;
                                 payTrans.PayStatus = E_PayStatus.Paying;
-                                var wxByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == payTrans.ClientUserId).FirstOrDefault();
 
-                                if (wxByMp_UserInfo == null)
+                                if (d_clientUser == null)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                 }
@@ -1479,7 +1480,7 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = payTrans.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, payTrans.MerchId, "", "", wxByMp_UserInfo.OpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {
@@ -1587,9 +1588,8 @@ namespace LocalS.BLL.Biz
                                 payTrans.PayPartner = E_PayPartner.Wx;
                                 payTrans.PayWay = E_PayWay.Wx;
                                 payTrans.PayStatus = E_PayStatus.Paying;
-                                var wxByMp_UserInfo = CurrentDb.WxUserInfo.Where(m => m.ClientUserId == payTrans.ClientUserId).FirstOrDefault();
 
-                                if (wxByMp_UserInfo == null)
+                                if (d_clientUser == null)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                 }
@@ -1598,7 +1598,7 @@ namespace LocalS.BLL.Biz
                                 orderAttach.StoreId = payTrans.StoreId;
                                 orderAttach.PayCaller = rop.PayCaller;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", wxByMp_UserInfo.AppId, wxByMp_UserInfo.OpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
+                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpAppId, d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 
                                 if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
                                 {

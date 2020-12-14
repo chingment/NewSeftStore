@@ -263,8 +263,6 @@ namespace LocalS.Service.Api.Account
             var result = new CustomJsonResult();
             var ret = new RetOwnLoginByMinProgram();
 
-            WxUserInfo wxUserInfo = null;
-
             var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
 
             if (merch == null)
@@ -288,71 +286,58 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败");
             }
 
-            wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == rop.OpenId).FirstOrDefault();
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == rop.OpenId).FirstOrDefault();
 
-            if (wxUserInfo == null)
+            if (d_clientUser == null)
             {
-                string sysClientUserId = IdWorker.Build(IdType.NewGuid);
-
-                var sysClientUser = new SysClientUser();
-
-                sysClientUser.Id = sysClientUserId;
-                sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
-                sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
-                sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
-                sysClientUser.RegisterTime = DateTime.Now;
-                sysClientUser.NickName = wxUserInfoByMinProram.nickname;
-                sysClientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
-                sysClientUser.Province = wxUserInfoByMinProram.province;
-                sysClientUser.City = wxUserInfoByMinProram.city;
-                sysClientUser.Country = wxUserInfoByMinProram.country;
-                sysClientUser.Avatar = wxUserInfoByMinProram.headimgurl;
-                sysClientUser.PhoneNumber = rop.PhoneNumber;
-                sysClientUser.MemberLevel = 0;
-                sysClientUser.CreateTime = DateTime.Now;
-                sysClientUser.Creator = sysClientUserId;
-                sysClientUser.BelongType = Enumeration.BelongType.Client;
-                sysClientUser.MerchId = rop.MerchId;
-                CurrentDb.SysClientUser.Add(sysClientUser);
+                d_clientUser = new SysClientUser();
+                d_clientUser.Id = IdWorker.Build(IdType.NewGuid);
+                d_clientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
+                d_clientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+                d_clientUser.SecurityStamp = Guid.NewGuid().ToString();
+                d_clientUser.RegisterTime = DateTime.Now;
+                d_clientUser.NickName = wxUserInfoByMinProram.nickname;
+                d_clientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
+                d_clientUser.Province = wxUserInfoByMinProram.province;
+                d_clientUser.City = wxUserInfoByMinProram.city;
+                d_clientUser.Country = wxUserInfoByMinProram.country;
+                d_clientUser.Avatar = wxUserInfoByMinProram.headimgurl;
+                d_clientUser.PhoneNumber = rop.PhoneNumber;
+                d_clientUser.MemberLevel = 0;
+                d_clientUser.CreateTime = DateTime.Now;
+                d_clientUser.Creator = d_clientUser.Id;
+                d_clientUser.BelongType = Enumeration.BelongType.Client;
+                d_clientUser.MerchId = rop.MerchId;
+                d_clientUser.WxMpOpenId = rop.OpenId;
+                d_clientUser.WxMpAppId = rop.AppId;
+                CurrentDb.SysClientUser.Add(d_clientUser);
                 CurrentDb.SaveChanges();
 
-                wxUserInfo = new WxUserInfo();
-                wxUserInfo.Id = IdWorker.Build(IdType.NewGuid);
-                wxUserInfo.MerchId = rop.MerchId;
-                wxUserInfo.AppId = rop.AppId;
-                wxUserInfo.ClientUserId = sysClientUser.Id;
-                wxUserInfo.OpenId = rop.OpenId;
-                wxUserInfo.CreateTime = DateTime.Now;
-                wxUserInfo.Creator = sysClientUserId;
-                CurrentDb.WxUserInfo.Add(wxUserInfo);
-                CurrentDb.SaveChanges();
             }
             else
             {
-                var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
-                if (sysClientUser != null)
-                {
-                    sysClientUser.NickName = wxUserInfoByMinProram.nickname;
-                    sysClientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
-                    sysClientUser.Province = wxUserInfoByMinProram.province;
-                    sysClientUser.City = wxUserInfoByMinProram.city;
-                    sysClientUser.Country = wxUserInfoByMinProram.country;
-                    sysClientUser.Avatar = wxUserInfoByMinProram.headimgurl;
-                    sysClientUser.PhoneNumber = rop.PhoneNumber;
-                }
+                d_clientUser.NickName = wxUserInfoByMinProram.nickname;
+                d_clientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
+                d_clientUser.Province = wxUserInfoByMinProram.province;
+                d_clientUser.City = wxUserInfoByMinProram.city;
+                d_clientUser.Country = wxUserInfoByMinProram.country;
+                d_clientUser.Avatar = wxUserInfoByMinProram.headimgurl;
+                d_clientUser.PhoneNumber = rop.PhoneNumber;
+                d_clientUser.MendTime = DateTime.Now;
+                d_clientUser.Mender = d_clientUser.Id;
                 CurrentDb.SaveChanges();
             }
 
 
             var tokenInfo = new TokenInfo();
             ret.Token = IdWorker.Build(IdType.NewGuid);
-            ret.OpenId = wxUserInfo.OpenId;
+            ret.OpenId = d_clientUser.WxMpOpenId;
 
-            tokenInfo.UserId = wxUserInfo.ClientUserId;
+            tokenInfo.UserId = d_clientUser.Id;
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
-            MqFactory.Global.PushEventNotify(wxUserInfo.Id, rop.AppId, wxUserInfo.MerchId, "", "", EventCode.Login, "登录成功");
+            MqFactory.Global.PushEventNotify(d_clientUser.Id, rop.AppId, d_clientUser.MerchId, "", "", EventCode.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -624,8 +609,6 @@ namespace LocalS.Service.Api.Account
                 userName = sysUser.UserName;
 
             }
-
-
 
             SSOUtil.Quit(rop.Token);
 
@@ -927,13 +910,13 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-          //  int MemberLevel
-            var d_wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == ret.openid).FirstOrDefault();
-            if (d_wxUserInfo != null)
-            {
-                var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_wxUserInfo.ClientUserId).FirstOrDefault();
+            //var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == ret.openid).FirstOrDefault();
+            //if (d_clientUser != null)
+            //{
+            //    var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_wxUserInfo.ClientUserId).FirstOrDefault();
 
-            }
+            //}
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = config.MyMerchId, storeId = config.MyStoreId });
 
             return result;

@@ -10,7 +10,6 @@ namespace Lumos.DbRelay
     {
         [Key]
         public string Id { get; set; }
-
         public string PId { get; set; }
         [MaxLength(128)]
         public string UserName { get; set; }

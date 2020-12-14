@@ -37,55 +37,45 @@ namespace LocalS.BLL.Task
                         {
                             using (TransactionScope ts = new TransactionScope())
                             {
-                                var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == openId).FirstOrDefault();
-                                if (wxUserInfo == null)
-                                {
-                                    string sysClientUserId = IdWorker.Build(IdType.NewGuid);
-                                    var sysClientUser = new SysClientUser();
-                                    sysClientUser.Id = sysClientUserId;
-                                    sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
-                                    sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
-                                    sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
-                                    sysClientUser.RegisterTime = DateTime.Now;
-                                    sysClientUser.NickName = apiUserInfo.nickname;
-                                    sysClientUser.Sex = apiUserInfo.sex == 1 ? "男" : "女";
-                                    sysClientUser.Province = apiUserInfo.province;
-                                    sysClientUser.City = apiUserInfo.city;
-                                    sysClientUser.Country = apiUserInfo.country;
-                                    sysClientUser.Avatar = apiUserInfo.headimgurl;
-                                    sysClientUser.MemberLevel = 0;
-                                    sysClientUser.CreateTime = DateTime.Now;
-                                    sysClientUser.Creator = sysClientUserId;
-                                    sysClientUser.BelongType = Enumeration.BelongType.Client;
-                                    sysClientUser.MerchId = merchId;
-                                    CurrentDb.SysClientUser.Add(sysClientUser);
-                                    CurrentDb.SaveChanges();
+                                //var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == openId).FirstOrDefault();
+                                //if (wxUserInfo == null)
+                                //{
+                                //    string sysClientUserId = IdWorker.Build(IdType.NewGuid);
+                                //    var sysClientUser = new SysClientUser();
+                                //    sysClientUser.Id = sysClientUserId;
+                                //    sysClientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
+                                //    sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+                                //    sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
+                                //    sysClientUser.RegisterTime = DateTime.Now;
+                                //    sysClientUser.NickName = apiUserInfo.nickname;
+                                //    sysClientUser.Sex = apiUserInfo.sex == 1 ? "男" : "女";
+                                //    sysClientUser.Province = apiUserInfo.province;
+                                //    sysClientUser.City = apiUserInfo.city;
+                                //    sysClientUser.Country = apiUserInfo.country;
+                                //    sysClientUser.Avatar = apiUserInfo.headimgurl;
+                                //    sysClientUser.MemberLevel = 0;
+                                //    sysClientUser.CreateTime = DateTime.Now;
+                                //    sysClientUser.Creator = sysClientUserId;
+                                //    sysClientUser.BelongType = Enumeration.BelongType.Client;
+                                //    sysClientUser.MerchId = merchId;
+                                //    CurrentDb.SysClientUser.Add(sysClientUser);
+                                //    CurrentDb.SaveChanges();
 
-                                    wxUserInfo = new WxUserInfo();
-                                    wxUserInfo.Id = IdWorker.Build(IdType.NewGuid);
-                                    wxUserInfo.MerchId = merchId;
-                                    wxUserInfo.AppId = wxAppInfoConfig.AppId;
-                                    wxUserInfo.ClientUserId = sysClientUser.Id;
-                                    wxUserInfo.OpenId = openId;
-                                    wxUserInfo.CreateTime = DateTime.Now;
-                                    wxUserInfo.Creator = sysClientUserId;
-                                    CurrentDb.WxUserInfo.Add(wxUserInfo);
-                                    CurrentDb.SaveChanges();
-                                }
-                                else
-                                {
+                                //}
+                                //else
+                                //{
 
-                                    var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
-                                    if (sysClientUser != null)
-                                    {
-                                        sysClientUser.Sex = apiUserInfo.sex == 1 ? "男" : "女";
-                                        sysClientUser.Province = apiUserInfo.province;
-                                        sysClientUser.City = apiUserInfo.city;
-                                        sysClientUser.Country = apiUserInfo.country;
-                                        sysClientUser.Avatar = apiUserInfo.headimgurl;
-                                        CurrentDb.SaveChanges();
-                                    }
-                                }
+                                //    var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == wxUserInfo.ClientUserId).FirstOrDefault();
+                                //    if (sysClientUser != null)
+                                //    {
+                                //        sysClientUser.Sex = apiUserInfo.sex == 1 ? "男" : "女";
+                                //        sysClientUser.Province = apiUserInfo.province;
+                                //        sysClientUser.City = apiUserInfo.city;
+                                //        sysClientUser.Country = apiUserInfo.country;
+                                //        sysClientUser.Avatar = apiUserInfo.headimgurl;
+                                //        CurrentDb.SaveChanges();
+                                //    }
+                                //}
 
                                 ts.Complete();
                             }

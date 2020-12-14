@@ -45,11 +45,9 @@ namespace Lumos.DbRelay
         public IDbSet<SysSmsSendHis> SysSmsSendHis { get; set; }
         public IDbSet<SysAgentUser> SysAgentUser { get; set; }
         public IDbSet<WxMsgPushLog> WxMsgPushLog { get; set; }
-        public IDbSet<WxUserInfo> WxUserInfo { get; set; }
         public IDbSet<BackgroundJob> BackgroundJob { get; set; }
         public IDbSet<BackgroundJobLog> BackgroundJobLog { get; set; }
         public IDbSet<SysUserFingerVein> SysUserFingerVein { get; set; }
-
         public AuthorizeRelayDbContext(string nameOrConnectionString)
                 : base(nameOrConnectionString)
         {
