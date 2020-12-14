@@ -681,6 +681,41 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
+        public CustomJsonResult GetInfoByWxOpenId(string operater, string openId)
+        {
+            var result = new CustomJsonResult();
+
+            string userId = "";
+            string nickName = "";
+            var wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == openId).FirstOrDefault();
+            if (wxUserInfo != null)
+            {
+
+            }
+
+            //var ret = new RetOwnGetInfo();
+            //ret.
+            var userInfo = new UserInfoModel();
+            userInfo.UserId = user.Id;
+            userInfo.NickName = user.NickName;
+            userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(user.PhoneNumber);
+            userInfo.Avatar = user.Avatar;
+            userInfo.MemberLevel = user.MemberLevel;
+            userInfo.MemberTag = "普通用户";
+            userInfo.MemberExpireTime = user.MemberExpireTime.ToUnifiedFormatDate();
+            var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == user.MerchId && m.Level == user.MemberLevel).FirstOrDefault();
+            if (memberLevelSt != null)
+            {
+                userInfo.MemberTag = memberLevelSt.Name;
+            }
+            ret.UserInfo = userInfo;
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { });
+
+            return result;
+        }
+
+
         public CustomJsonResult CheckPermission(string operater, string userId, string token, RupOwnCheckPermission rup)
         {
             var result = new CustomJsonResult();
@@ -892,6 +927,13 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
+            int MemberLevel
+            var d_wxUserInfo = CurrentDb.WxUserInfo.Where(m => m.OpenId == ret.openid).FirstOrDefault();
+            if (d_wxUserInfo != null)
+            {
+                var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_wxUserInfo.ClientUserId).FirstOrDefault();
+
+            }
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = config.MyMerchId, storeId = config.MyStoreId });
 
             return result;
@@ -912,5 +954,6 @@ namespace LocalS.Service.Api.Account
 
             return result;
         }
+
     }
 }

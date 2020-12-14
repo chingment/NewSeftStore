@@ -13,6 +13,16 @@ namespace WebApiStoreApp.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
+        public OwnApiHttpResponse GetPromt([FromUri]RupMemberGetPayLevelSt rup)
+        {
+            IResult result = StoreAppServiceFactory.Member.GetPayLevelSt(this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
         public OwnApiHttpResponse GetPayLevelSt([FromUri]RupMemberGetPayLevelSt rup)
         {
             IResult result = StoreAppServiceFactory.Member.GetPayLevelSt(this.CurrentUserId, rup);
