@@ -24,9 +24,14 @@ namespace LocalS.Service.Api.StoreApp
                 userInfo.NickName = user.NickName;
                 userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(user.PhoneNumber);
                 userInfo.Avatar = user.Avatar;
-                userInfo.IsVip = user.MemberLevel > 0 ? true : false;
                 userInfo.MemberLevel = user.MemberLevel;
                 userInfo.MemberTag = "普通会员";
+                userInfo.MemberExpireTime = user.MemberExpireTime.ToUnifiedFormatDate();
+                var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == user.MerchId && m.Level == user.MemberLevel).FirstOrDefault();
+                if (memberLevelSt != null)
+                {
+                    userInfo.MemberTag = memberLevelSt.Name;
+                }
                 ret.UserInfo = userInfo;
             }
 
