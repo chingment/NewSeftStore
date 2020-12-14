@@ -456,6 +456,24 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
+                    //decimal couponAmount = 0;
+
+                    //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
+                    //{
+                    //    var clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIds[0]).FirstOrDefault();
+                    //    var coupon = CurrentDb.Coupon.Where(m => m.Id == clientCoupon.CouponId).FirstOrDefault();
+                    //    if (coupon != null && clientCoupon != null)
+                    //    {
+                    //        clientCoupon.Status = E_ClientCouponStatus.Frozen;
+                    //        clientCoupon.MendTime = DateTime.Now;
+                    //        clientCoupon.Mender = operater;
+
+                    //        couponAmount = coupon.FaceValue;
+
+                    //        CurrentDb.SaveChanges();
+                    //    }
+                    //}
+
                     LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
                     var buildOrders = BuildOrders(buildOrderSkus);
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
@@ -493,43 +511,6 @@ namespace LocalS.BLL.Biz
 
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
-
-                    // decimal couponAmount = 0;
-
-                    if (rop.CouponIds != null && rop.CouponIds.Count > 0)
-                    {
-                        var coupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIds[0]).FirstOrDefault();
-                        if (coupon != null)
-                        {
-                            coupon.Status = E_ClientCouponStatus.Frozen;
-                            coupon.MendTime = DateTime.Now;
-                            coupon.Mender = operater;
-                            CurrentDb.SaveChanges();
-                        }
-
-                        //    //只能使用一张优惠券
-                        //    var coupon = (from u in CurrentDb.ClientCoupon
-                        //                  join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
-                        //                  from tt in temp.DefaultIfEmpty()
-                        //                  where u.ClientUserId == rop.ClientUserId && rop.CouponIds.Contains(u.Id)
-                        //                  select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
-                        //    if (coupon != null)
-                        //    {
-                        //        switch (coupon.FaceType)
-                        //        {
-                        //            case E_Coupon_FaceType.ShopVoucher:
-                        //            case E_Coupon_FaceType.DepositVoucher:
-                        //            case E_Coupon_FaceType.RentVoucher:
-                        //                couponAmount += coupon.FaceValue;
-                        //                break;
-                        //            case E_Coupon_FaceType.ShopDiscount:
-                        //                couponAmount = couponAmount * coupon.FaceValue;
-                        //                break;
-                        //        }
-
-                        //    }
-                    }
-
                     List<Order> orders = new List<Order>();
 
                     foreach (var buildOrder in buildOrders)
@@ -550,6 +531,7 @@ namespace LocalS.BLL.Biz
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
                         order.CouponIds = rop.CouponIds.ToJsonString();
+
                         switch (buildOrder.SellChannelRefType)
                         {
                             case E_SellChannelRefType.Machine:
@@ -1026,6 +1008,8 @@ namespace LocalS.BLL.Biz
                         }
                     }
 
+                    var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_payTrans.ClientUserId).FirstOrDefault();
+
                     var orderIds = d_payTrans.OrderIds.Split(',');
                     var d_orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
                     foreach (var d_order in d_orders)
@@ -1130,11 +1114,41 @@ namespace LocalS.BLL.Biz
                                                 d_clientCoupon.Creator = operater;
                                                 d_clientCoupon.CreateTime = DateTime.Now;
                                                 CurrentDb.ClientCoupon.Add(d_clientCoupon);
+
+                                                d_coupon.ReceivedQuantity += 1;
                                                 CurrentDb.SaveChanges();
 
                                             }
                                         }
                                     }
+
+                                    if (d_clientUser != null)
+                                    {
+                                        var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.Id == d_memberFeeSt.LevelStId).FirstOrDefault();
+                                        if (memberLevelSt != null)
+                                        {
+                                            d_clientUser.MemberLevel = memberLevelSt.Level;
+
+                                            switch (d_memberFeeSt.FeeType)
+                                            {
+                                                case E_MemberFeeSt_FeeType.Year:
+                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddYears(1);
+                                                    break;
+                                                case E_MemberFeeSt_FeeType.Quarter:
+                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(3);
+                                                    break;
+                                                case E_MemberFeeSt_FeeType.Month:
+                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(1);
+                                                    break;
+                                                case E_MemberFeeSt_FeeType.LongTerm:
+                                                    d_clientUser.MemberExpireTime = DateTime.Parse("2099-12-31");
+                                                    break;
+                                            }
+
+                                            CurrentDb.SaveChanges();
+                                        }
+                                    }
+
                                 }
                             }
                         }

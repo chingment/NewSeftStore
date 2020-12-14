@@ -4,6 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+
+    public enum E_MemberFeeSt_FeeType
+    {
+        Unknow = 0,
+        Year = 1,
+        Quarter = 2,
+        Month = 3,
+        LongTerm = 4
+    }
+
     [Table("MemberFeeSt")]
     public class MemberFeeSt
     {
@@ -15,7 +25,7 @@ namespace LocalS.Entity
         public string Tag { get; set; }
         public string MainImgUrl { get; set; }
         public string LevelStId { get; set; }
-        public int FeeType { get; set; }
+        public E_MemberFeeSt_FeeType FeeType { get; set; }
         public decimal FeeValue { get; set; }
         public string LayoutWeight { get; set; }
         public string DesPoints { get; set; }
