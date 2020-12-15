@@ -298,7 +298,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     amount_charge = amount_original;//会员用户总价 为 实际总价
 
-                    //c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", (amount_original - amount_charge).ToF2Price()), IsDcrease = true });
+                    c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", (amount_original - amount_sale).ToF2Price()), IsDcrease = true });
                 }
                 else
                 {

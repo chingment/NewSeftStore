@@ -771,12 +771,12 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            //var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == ret.openid).FirstOrDefault();
-            //if (d_clientUser != null)
-            //{
-            //    var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_wxUserInfo.ClientUserId).FirstOrDefault();
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == ret.openid).FirstOrDefault();
+            if (d_clientUser != null)
+            {
+               
 
-            //}
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = config.MyMerchId, storeId = config.MyStoreId });
 
