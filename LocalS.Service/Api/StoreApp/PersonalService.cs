@@ -16,23 +16,31 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetPersonalPageData();
 
-            var user = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
-            if (user != null)
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            if (d_clientUser != null)
             {
-                var userInfo = new UserInfoModel();
-                userInfo.UserId = user.Id;
-                userInfo.NickName = user.NickName;
-                userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(user.PhoneNumber);
-                userInfo.Avatar = user.Avatar;
-                userInfo.MemberLevel = user.MemberLevel;
-                userInfo.MemberTag = "普通用户";
-                userInfo.MemberExpireTime = user.MemberExpireTime.ToUnifiedFormatDate();
-                var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == user.MerchId && m.Level == user.MemberLevel).FirstOrDefault();
+                var m_userInfo = new UserInfoModel();
+                m_userInfo.UserId = d_clientUser.Id;
+                m_userInfo.NickName = d_clientUser.NickName;
+                m_userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(d_clientUser.PhoneNumber);
+                m_userInfo.Avatar = d_clientUser.Avatar;
+                m_userInfo.MemberLevel = d_clientUser.MemberLevel;
+                m_userInfo.MemberTag = "普通用户";
+                if (d_clientUser.MemberLevel == 1)
+                {
+                    m_userInfo.MemberExpireTip = string.Format("{0}天后过期", Convert.ToInt16((d_clientUser.MemberExpireTime.Value - DateTime.Now).TotalDays));
+                }
+                else if (d_clientUser.MemberLevel == 2)
+                {
+                    m_userInfo.MemberExpireTip = "永久";
+                }
+                var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == d_clientUser.MerchId && m.Level == d_clientUser.MemberLevel).FirstOrDefault();
                 if (memberLevelSt != null)
                 {
-                    userInfo.MemberTag = memberLevelSt.Name;
+                    m_userInfo.MemberTag = memberLevelSt.Name;
                 }
-                ret.UserInfo = userInfo;
+
+                ret.UserInfo = m_userInfo;
             }
 
 

@@ -14,6 +14,6 @@ namespace LocalS.Service.Api.StoreApp
         public string Avatar { get; set; }
         public int MemberLevel { get; set; }
         public string MemberTag { get; set; }
-        public string MemberExpireTime { get; set; }
+        public string MemberExpireTip { get; set; }
     }
 }
