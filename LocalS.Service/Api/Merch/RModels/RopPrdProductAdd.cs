@@ -29,6 +29,7 @@ namespace LocalS.Service.Api.Merch
         public List<Sku> Skus { get; set; }
         public List<SpecItem> SpecItems { get; set; }
 
+        public string SupplierId { get; set; }
         public class Sku
         {
             public string Id { get; set; }

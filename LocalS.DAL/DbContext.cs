@@ -66,6 +66,8 @@ namespace LocalS.DAL
 
         public IDbSet<SaleOutlet> SaleOutlet { get; set; }
 
+        public IDbSet<Supplier> Supplier { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

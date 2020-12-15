@@ -33,6 +33,8 @@ namespace LocalS.Service.Api.Merch
         public List<string> CharTags { get; set; }
         public bool IsTrgVideoService { get; set; }
         public List<Sku> Skus { get; set; }
+        public string SupplierId { get; set; }
+        public string SupplierName { get; set; }
         public class Sku
         {
             public string Id { get; set; }

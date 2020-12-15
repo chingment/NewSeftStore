@@ -29,6 +29,7 @@ namespace LocalS.Service.Api.Merch
 
         public bool IsTrgVideoService { get; set; }
 
+        public string SupplierId { get; set; }
         public List<string> CharTags { get; set; }
 
         public List<int> KindIds { get; set; }

@@ -281,6 +281,7 @@
     <Compile Include="Api\Merch\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\AdminUserService.cs" />
+    <Compile Include="Api\Merch\SupplierService.cs" />
     <Compile Include="Api\StoreApp\GlobalService.cs" />
     <Compile Include="Api\StoreApp\MemberService.cs" />
     <Compile Include="Api\StoreApp\Models\BannerModel.cs" />

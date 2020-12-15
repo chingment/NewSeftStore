@@ -209,6 +209,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
                 prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
+                prdProduct.SupplierId = rop.SupplierId;
                 prdProduct.Creator = operater;
                 prdProduct.CreateTime = DateTime.Now;
 
@@ -291,6 +292,17 @@ namespace LocalS.Service.Api.Merch
                 ret.DisplayImgUrls = prdProduct.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 ret.Kinds = GetKindTree();
                 ret.IsTrgVideoService = prdProduct.IsTrgVideoService;
+
+                if (!string.IsNullOrEmpty(prdProduct.SupplierId))
+                {
+                    var supplier = CurrentDb.Supplier.Where(m => m.Id == prdProduct.SupplierId).FirstOrDefault();
+                    if (supplier != null)
+                    {
+                        ret.SupplierId = supplier.Id;
+                        ret.SupplierName = supplier.Name;
+                    }
+                }
+
                 var prdProductSkus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == prdProduct.Id).OrderBy(m => m.SpecDes).ToList();
 
                 foreach (var prdProductSku in prdProductSkus)
@@ -351,6 +363,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
+                prdProduct.SupplierId = rop.SupplierId;
                 prdProduct.Mender = operater;
                 prdProduct.MendTime = DateTime.Now;
 

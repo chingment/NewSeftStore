@@ -7,6 +7,26 @@
       <el-form-item label="货号" prop="spuCode">
         <el-input v-model="form.spuCode" clearable />
       </el-form-item>
+      <el-form-item label="供应商">
+        <el-select
+          v-model="form.supplierId"
+          clearable
+          filterable
+          remote
+          reserve-keyword
+          placeholder="代码/名称"
+          :remote-method="searchSupplier"
+          :loading="supplier_option_loading"
+          style="width:300px"
+        >
+          <el-option
+            v-for="item in supplier_options"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
@@ -180,6 +200,7 @@
 
 import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/prdproduct'
+import supplier from '@/api/supplier'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, strLen, isMoney } from '@/utils/commonUtil'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -193,6 +214,7 @@ export default {
         id: '',
         name: '',
         spuCode: '',
+        supplierId: '',
         kindIds: [],
         subjectIds: [],
         detailsDes: [],
@@ -212,6 +234,8 @@ export default {
         charTags: [{ type: 'array', required: false, message: '不能超过5个', max: 3 }]
       },
       kind_options: [],
+      supplier_options: [],
+      supplier_option_loading: false,
       uploadImglistByDisplayImgUrls: [],
       uploadImgPreImgDialogUrlByDisplayImgUrls: '',
       uploadImgPreImgDialogVisibleByDisplayImgUrls: false,
@@ -253,6 +277,8 @@ export default {
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
           this.kind_options = d.kinds
+          this.supplier_options = [{ id: d.supplierId, name: d.supplierName }]
+          this.form.supplierId = d.supplierId
         }
         this.loading = false
       })
@@ -298,7 +324,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.skus = this.form.skus
-
+          _form.supplierId = this.form.supplierId
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -477,6 +503,21 @@ export default {
       }
       this.charTagsInputVisible = false
       this.charTagsInputValue = ''
+    },
+    searchSupplier(query) {
+      if (query != null && query !== '') {
+        this.supplier_option_loading = true
+
+        supplier.search({ key: query }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.supplier_options = d.items
+          }
+          this.supplier_option_loading = false
+        })
+      } else {
+        this.supplier_options = []
+      }
     }
   }
 }

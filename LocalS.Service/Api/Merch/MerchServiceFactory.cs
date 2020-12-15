@@ -111,5 +111,13 @@ namespace LocalS.Service.Api.Merch
                 return new CouponService();
             }
         }
+
+        public static SupplierService Supplier
+        {
+            get
+            {
+                return new SupplierService();
+            }
+        }
     }
 }

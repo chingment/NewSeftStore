@@ -7,6 +7,26 @@
       <el-form-item label="货号" prop="spuCode">
         <el-input v-model="form.spuCode" clearable />
       </el-form-item>
+      <el-form-item label="供应商">
+        <el-select
+          v-model="form.supplierId"
+          clearable
+          filterable
+          remote
+          reserve-keyword
+          placeholder="代码/名称"
+          :remote-method="searchSupplier"
+          :loading="supplier_option_loading"
+          style="width:300px"
+        >
+          <el-option
+            v-for="item in supplier_options"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item v-show="!isOpenAddMultiSpecs" label="编码" prop="singleSkuCumCode">
         <el-input v-model="form.singleSkuCumCode" clearable />
       </el-form-item>
@@ -254,6 +274,7 @@
 
 import { MessageBox } from 'element-ui'
 import { add, initAdd } from '@/api/prdproduct'
+import supplier from '@/api/supplier'
 import fromReg from '@/utils/formReg'
 import { goBack, strLen, isMoney } from '@/utils/commonUtil'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -272,6 +293,7 @@ export default {
         detailsDes: [],
         charTags: [],
         briefDes: '',
+        supplierId: '',
         isTrgVideoService: false,
         displayImgUrls: [],
         singleSkuCumCode: '',
@@ -302,6 +324,8 @@ export default {
       uploadImgPreImgDialogVisibleByDetailsDes: false,
       uploadImgPmsByByDetailsDes: { folder: 'product', isBuildms: 'false' },
       kind_options: [],
+      supplier_options: [],
+      supplier_option_loading: false,
       multiSpecsItems: [],
       multiSpecsInputVisible: false,
       multiSpecsInputValue: '',
@@ -704,6 +728,21 @@ export default {
       }
       this.charTagsInputVisible = false
       this.charTagsInputValue = ''
+    },
+    searchSupplier(query) {
+      if (query !== '') {
+        this.supplier_option_loading = true
+
+        supplier.search({ key: query }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.supplier_options = d.items
+          }
+          this.supplier_option_loading = false
+        })
+      } else {
+        this.supplier_options = []
+      }
     }
   }
 }
