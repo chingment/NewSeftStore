@@ -11,6 +11,41 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class MemberService : BaseDbContext
     {
+        public CustomJsonResult GetPromSt(string operater, RupMemberGetPromSt rup)
+        {
+
+            var result = new CustomJsonResult();
+
+            var ret = new RetMemberPromSt();
+
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == rup.OpenId).FirstOrDefault();
+
+            if (d_clientUser != null)
+            {
+                ret.MemberLevel = d_clientUser.MemberLevel;
+
+
+                if (d_clientUser.MemberLevel == 1)
+                {
+                    ret.MemberExpireTip = string.Format("{0}天后过期", Convert.ToInt16((d_clientUser.MemberExpireTime.Value - DateTime.Now).TotalDays));
+                }
+                else if (d_clientUser.MemberLevel == 2)
+                {
+                    ret.MemberExpireTip = "永久";
+                }
+
+
+                var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == rup.MerchId && m.Level == d_clientUser.MemberLevel).FirstOrDefault();
+                if (memberLevelSt != null)
+                {
+                    ret.MemberTag = memberLevelSt.Name;
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
 
         public CustomJsonResult GetPayLevelSt(string operater, RupMemberGetPayLevelSt rup)
         {
@@ -32,7 +67,7 @@ namespace LocalS.Service.Api.StoreApp
                 ret.CurSaleOutlet = new RetMemberPayLevelSt.SaleOutletModel { Id = d_saleOutlet.Id, TagName = "服务网点", TagTip = "地址信息", ContentBm = d_saleOutlet.Name, ContentSm = d_saleOutlet.ContactAddress };
             }
 
-        
+
             var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId).ToList();
             var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == merchId).ToList();
 

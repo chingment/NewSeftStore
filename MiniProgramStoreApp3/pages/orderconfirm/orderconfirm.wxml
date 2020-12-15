@@ -1,6 +1,6 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
-	 data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
-	 
+	data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
+
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 <booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}">
@@ -19,8 +19,9 @@
 
 					<view class="tab-double ">
 						<view class="tab-title">
-							<view class="title-left {{item.receiveMode==1?'selected':''}} skeleton-bg" bindtap="tabMallReceiveModeClick"
-								data-reply-blockindex="{{index}}" data-reply-receivemode="1" data-reply-tabmode="{{item.tabMode}}">
+							<view class="title-left {{item.receiveMode==1?'selected':''}} skeleton-bg"
+								bindtap="tabMallReceiveModeClick" data-reply-blockindex="{{index}}" data-reply-receivemode="1"
+								data-reply-tabmode="{{item.tabMode}}">
 								<view class="txt skeleton-rect">
 									<text wx:if="{{item.tabMode==1||item.tabMode==3}}">配送地址</text>
 								</view>
@@ -28,8 +29,9 @@
 								</view>
 							</view>
 
-							<view class="title-right {{item.receiveMode==2?'selected':''}} skeleton-bg" bindtap="tabMallReceiveModeClick"
-								data-reply-blockindex="{{index}}" data-reply-receivemode="2" data-reply-tabmode="{{item.tabMode}}">
+							<view class="title-right {{item.receiveMode==2?'selected':''}} skeleton-bg"
+								bindtap="tabMallReceiveModeClick" data-reply-blockindex="{{index}}" data-reply-receivemode="2"
+								data-reply-tabmode="{{item.tabMode}}">
 								<view class="right-triangle">
 
 								</view>
@@ -57,7 +59,8 @@
 										</view>
 										<view class='it-r' bindtap="goSelect">
 											<view class="icon ">
-												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'></image>
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
 											</view>
 										</view>
 									</view>
@@ -218,7 +221,7 @@
 							</view>
 						</view>
 
-		
+
 						<view class="its-odcskus" style="padding: 18rpx;">
 							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
 								<view class="it">
@@ -254,30 +257,50 @@
 
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
-					<view class="it" bindtap="couponSelect">
+				<view class="it" bindtap="couponSelect">
+					<view class="it-l" style="width:60rpx">
+						<view class="icon">
+							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
+								src='/content/default/images/col_nav_icon_coupon.png'></image>
+						</view>
+					</view>
+					<view class="it-m">
+						<view class="it-ml w100">
+							<text class="txt skeleton-rect">优惠券</text>
+						</view>
+						<view class="it-mr flex1">
+							<text class="coupontip coupontip{{coupon.tipType}} skeleton-rect">{{coupon.tipMsg}}</text>
+						</view>
+					</view>
+
+					<view class="it-r" style="width:80rpx">
+
+						<view class="icon">
+							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</view>
+
+				</view>
+
+				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+					<view class="it">
 						<view class="it-l" style="width:60rpx">
 							<view class="icon">
-								<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0" 
-									src='/content/default/images/col_nav_icon_coupon.png'></image>
+								
 							</view>
 						</view>
 						<view class="it-m">
 							<view class="it-ml w100">
-								<text class="txt skeleton-rect">优惠券</text>
+								<text class="txt">{{item.name}}</text>
 							</view>
 							<view class="it-mr flex1">
-								<text class="coupontip coupontip{{coupon.tipType}} skeleton-rect">{{coupon.tipMsg}}</text>
+								<text class="txt"> {{item.amount}}</text>
 							</view>
 						</view>
-
-						<view class="it-r" style="width:80rpx">
-			
-							<view class="icon">
-								<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
-							</view>
-						</view>
-
 					</view>
+				</block>
+
+
 			</view>
 			<view class="line-space-ncolor"></view>
 		</view>

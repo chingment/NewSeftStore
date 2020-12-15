@@ -298,6 +298,7 @@
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetMemberPromSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderReceiptTimeAxis.cs" />
     <Compile Include="Api\StoreApp\RModels\RetProductInitSearch.cs" />
@@ -318,6 +319,7 @@
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupMemberGetPayLevelSt.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupMemberGetPromSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildPayOptions.cs" />

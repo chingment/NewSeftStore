@@ -1,6 +1,7 @@
 // pages/memberprom/memberprom.js
-const skeletonData = require('./skeletonData');
-
+const skeletonData = require('./skeletonData')
+const apiMember = require('../../api/member.js')
+const storeage = require('../../utils/storeageutil.js')
 const app = getApp()
 
 Page({
@@ -16,17 +17,46 @@ Page({
     skeletonData,
     pageIsReady: false,
     isShowButtonBottom: false,
-    isMember: false,
-    timespan: (new Date()).getTime()
+    timespan: (new Date()).getTime(),
+    memberLevel: 0,
+    memberExpireTip: '',
+    memberTag: '',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var _this = this
+
+
+    if (app.globalData.checkConfig) {
+      _this.getPromSt()
+    } else {
+      app.checkConfigReadyCallback = res => {
+        _this.getPromSt()
+      }
+    }
 
   },
+  getPromSt: function () {
+    var _this = this
+    apiMember.getPromSt({
+      openId: storeage.getOpenId()
+    }).then(function (res) {
+      if (res.result == 1) {
 
+        var d = res.data
+        _this.setData({
+          pageIsReady: true,
+          memberLevel: d.memberLevel,
+          memberExpireTip: d.memberExpireTip,
+          memberTag: d.memberTag
+        })
+      }
+    })
+
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -42,9 +72,7 @@ Page({
 
     app.globalData.skeletonPage = _this
 
-    _this.setData({
-      pageIsReady: true
-    })
+
   },
 
   /**

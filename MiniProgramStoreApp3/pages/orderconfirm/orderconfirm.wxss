@@ -221,7 +221,7 @@ page{
   padding: 5rpx 10rpx;
   font-size: 28rpx;
   border-radius: 8%;
-
+  font-weight: bold;
 }
 
 .coupontip1{

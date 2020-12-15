@@ -45,6 +45,7 @@ var config = {
     personalPageData: `${host}/Personal/PageData`,
     tobeSearch: `${host}/Search/TobeSearch`,
     getPayLevelSt: `${host}/Member/GetPayLevelSt`,
+    getPromSt: `${host}/Member/GetPromSt`,
   }
 
 };
