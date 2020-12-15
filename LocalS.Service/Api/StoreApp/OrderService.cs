@@ -143,12 +143,13 @@ namespace LocalS.Service.Api.StoreApp
             decimal amount_charge = 0;//实际支付总价
             decimal amount_original = 0;//原来的支付总价
             decimal amount_sale = 0;//用户的支付总价
-            decimal amount_discount = 0;//优惠总额
-
+                                    // decimal amount_discount = 0;//折扣总额
+            decimal amount_coupon = 0;//优惠总额
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
             E_ReceiveMode receiveMode_Mall = E_ReceiveMode.Delivery;
             BookTimeModel bookTimeModel = new BookTimeModel();
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
             if (rop.OrderIds == null || rop.OrderIds.Count == 0)
             {
 
@@ -177,11 +178,26 @@ namespace LocalS.Service.Api.StoreApp
 
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
+                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.Kind3 = r_productSku.KindId3;
 
                         if (r_productSku.Stocks.Count > 0)
                         {
-                            //todo 根据会员身份 或者 折扣身份 显示不同
+
                             productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+
+                            LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
+                            //切换会员价
+                            if (clientUser.MemberLevel > 0)
+                            {
+                                var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
+                                if (memberProductSkuSt != null)
+                                {
+                                    productSku.SalePrice = memberProductSkuSt.MemberPrice;
+                                    LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
+                                }
+                            }
+
                             productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                             productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
@@ -200,6 +216,8 @@ namespace LocalS.Service.Api.StoreApp
                             productSku.OriginalPrice = memberFeeSt.FeeValue;
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                             productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
+                            productSku.ProductId = "";
+                            productSku.Kind3 = 0;
                             c_prodcutSkus.Add(productSku);
                         }
                     }
@@ -225,6 +243,10 @@ namespace LocalS.Service.Api.StoreApp
                     dliveryModel.IsDefault = d_shippingAddress.IsDefault;
                 }
 
+                amount_original = c_prodcutSkus.Sum(m => m.OriginalAmount);
+                amount_sale = c_prodcutSkus.Sum(m => m.SaleAmount);
+                amount_coupon = 0;
+
                 if (rop.CouponIds == null || rop.CouponIds.Count == 0)
                 {
                     var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
@@ -240,7 +262,6 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else
                 {
-
                     //只能使用一张优惠券
                     var coupon = (from u in CurrentDb.ClientCoupon
                                   join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
@@ -249,42 +270,23 @@ namespace LocalS.Service.Api.StoreApp
                                   select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
                     if (coupon != null)
                     {
-                        switch (coupon.FaceType)
+
+                        //若有优惠券重新计算优惠金额
+                        foreach (var productSku in rop.ProductSkus)
                         {
-                            case E_Coupon_FaceType.ShopVoucher:
-                            case E_Coupon_FaceType.DepositVoucher:
-                            case E_Coupon_FaceType.RentVoucher:
-                                switch (coupon.UseAreaType)
-                                {
-                                    case E_Coupon_UseAreaType.All:
-                                        amount_discount = coupon.FaceValue;
-                                        break;
-                                    case E_Coupon_UseAreaType.Store:
-                                        amount_discount = coupon.FaceValue;
-                                        break;
-                                    case E_Coupon_UseAreaType.ProductKind:
-                                        amount_discount = coupon.FaceValue;
-                                        break;
-                                    case E_Coupon_UseAreaType.ProductSpu:
-                                        amount_discount = coupon.FaceValue;
-                                        break;
-                                }
-                                break;
-                            case E_Coupon_FaceType.ShopDiscount:
-                                amount_discount = amount_discount * coupon.FaceValue;
+                            bool isCalComplete = false;
+                            productSku.CouponAmount = BizFactory.Order.CalCouponAmount(amount_original, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, productSku.ProductId, productSku.Kind3, productSku.SaleAmount, out isCalComplete);
+                            if (isCalComplete)
                                 break;
                         }
 
+                        amount_coupon = rop.ProductSkus.Sum(m => m.CouponAmount);
 
-                        ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_discount.ToF2Price()), TipType = TipType.InUse };
+                        ret.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_coupon.ToF2Price()), TipType = TipType.InUse };
                     }
                 }
 
-                amount_original = c_prodcutSkus.Sum(m => m.OriginalAmount);
 
-                amount_sale = c_prodcutSkus.Sum(m => m.SaleAmount);
-
-                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
                 int memberLevel = 0;
 
                 if (clientUser != null)
@@ -303,7 +305,7 @@ namespace LocalS.Service.Api.StoreApp
                     amount_charge = amount_original;
                 }
 
-                amount_charge -= amount_discount;
+                amount_charge -= amount_coupon;
 
             }
             else
@@ -375,7 +377,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
                 amount_sale = orders.Sum(m => m.SaleAmount);
-                amount_discount = orders.Sum(m => m.DiscountAmount);
+                amount_coupon = orders.Sum(m => m.DiscountAmount);
                 amount_charge = orders.Sum(m => m.ChargeAmount);
             }
 

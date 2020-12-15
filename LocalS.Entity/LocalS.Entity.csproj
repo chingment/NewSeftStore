@@ -65,6 +65,7 @@
     <Compile Include="MemberFeeSt.cs" />
     <Compile Include="MemberLevelSt.cs" />
     <Compile Include="MemberBagSt.cs" />
+    <Compile Include="MemberProductSkuSt.cs" />
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />

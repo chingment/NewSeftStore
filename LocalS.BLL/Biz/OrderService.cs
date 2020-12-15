@@ -19,6 +19,12 @@ using System.IO;
 
 namespace LocalS.BLL.Biz
 {
+    public class UseAreaModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+    }
     public class OrderService : BaseDbContext
     {
         public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
@@ -280,6 +286,49 @@ namespace LocalS.BLL.Biz
             if (string.IsNullOrEmpty(imgId))
                 return null;
             return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
+        }
+
+        public decimal CalCouponAmount(decimal sum_amount, decimal atLeastAmount, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, string productId, int kindId2, decimal saleAmount, out bool isCalComplete)
+        {
+            LogUtil.Info("=>1");
+            if (atLeastAmount > sum_amount)
+            {
+                isCalComplete = true;
+                return 0;
+            }
+            LogUtil.Info("=>2");
+            decimal couponAmount = 0;
+            List<UseAreaModel> arr_useArea = null;
+            switch (useAreaType)
+            {
+                case E_Coupon_UseAreaType.ProductSpu:
+                    LogUtil.Info("=>3");
+                    arr_useArea = useAreaValue.ToJsonObject<List<UseAreaModel>>();
+                    if (arr_useArea != null)
+                    {
+                        LogUtil.Info("=>4");
+                        var obj_useArea = arr_useArea.Where(m => m.Id == productId).FirstOrDefault();
+                        if (obj_useArea != null)
+                        {
+                            LogUtil.Info("=>5");
+                            switch (faceType)
+                            {
+                                case E_Coupon_FaceType.ShopVoucher:
+                                    LogUtil.Info("=>6,saleAmount："+ saleAmount+ ",faceValue"+ faceValue);
+                                    couponAmount = faceValue;
+                                    LogUtil.Info("=>7,couponAmount：" + couponAmount);
+                                    isCalComplete = true;
+                                    break;
+                            }
+                        }
+                    }
+
+                    break;
+            }
+
+            isCalComplete = true;
+
+            return couponAmount;
         }
 
         private static readonly object lock_Reserve = new object();
