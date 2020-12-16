@@ -64,7 +64,9 @@ namespace LocalS.DAL
         public IDbSet<MemberFeeSt> MemberFeeSt { get; set; }
         public IDbSet<MemberLevelSt> MemberLevelSt { get; set; }
         public IDbSet<MemberProductSkuSt> MemberProductSkuSt { get; set; }
-        
+
+        public IDbSet<MemberDaySt> MemberDaySt { get; set; }
+
         public IDbSet<SaleOutlet> SaleOutlet { get; set; }
 
         public IDbSet<Supplier> Supplier { get; set; }

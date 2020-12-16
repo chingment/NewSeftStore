@@ -62,9 +62,9 @@
     <Compile Include="Agent.cs" />
     <Compile Include="Machine.cs" />
     <Compile Include="MachineCabinet.cs" />
+    <Compile Include="MemberDaySt.cs" />
     <Compile Include="MemberFeeSt.cs" />
     <Compile Include="MemberLevelSt.cs" />
-    <Compile Include="MemberBagSt.cs" />
     <Compile Include="MemberProductSkuSt.cs" />
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />

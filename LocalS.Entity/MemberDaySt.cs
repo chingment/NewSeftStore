@@ -16,7 +16,7 @@ namespace LocalS.Entity
         public decimal Discount { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
-        public string Mender { get; set; }
+        public string Mender { get;  set; }
         public DateTime? MendTime { get; set; }
     }
 }
