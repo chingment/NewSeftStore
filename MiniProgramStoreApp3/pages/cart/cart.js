@@ -225,10 +225,10 @@ Component({
     },
     onReady:function(){
       var _this = this
-      console.log("cart.onReady")
-      if(!_this.data.isOnReady){
-        _this.setData({isOnReady:true})
-      }
+      // console.log("cart.onReady")
+      // if(!_this.data.isOnReady){
+      //   _this.setData({isOnReady:true})
+      // }
     },
     onShow() {
       console.log("cart.onShow")
@@ -250,6 +250,8 @@ Component({
         }
 
       }).exec()
+
+      _this.getPageData()
 
     }
   }

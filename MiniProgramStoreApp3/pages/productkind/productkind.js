@@ -16,7 +16,7 @@ Component({
     }
   },
   data: {
-    tag:'productkind',
+    tag: 'productkind',
     isOnReady: false,
     shopMode: 0,
     specsDialog: {
@@ -36,7 +36,9 @@ Component({
           tabs[i].selected = false
         }
       }
-      _this.setData({tabs:tabs})
+      _this.setData({
+        tabs: tabs
+      })
     },
     addToCart: function (e) {
       var _this = this
@@ -58,22 +60,21 @@ Component({
           toast.show({
             title: '加入购物车成功'
           })
-        }
-        else {
+        } else {
           toast.show({
             title: res.message
           })
         }
       })
     },
-    selectSpecs:function(e){
+    selectSpecs: function (e) {
       var _this = this
-      var sku= e.currentTarget.dataset.replySku
+      var sku = e.currentTarget.dataset.replySku
       _this.setData({
         specsDialog: {
           isShow: true,
-          productSku:sku,
-          shopMode:_this.data.shopMode,
+          productSku: sku,
+          shopMode: _this.data.shopMode,
           storeId: _this.data.storeId,
         }
       })
@@ -118,42 +119,30 @@ Component({
     getPageData: function () {
       var _this = this
 
-        apiKind.pageData({
-          storeId: _this.data.storeId,
-          shopMode: _this.data.shopMode
-        }).then(function (res) {
+      apiKind.pageData({
+        storeId: _this.data.storeId,
+        shopMode: _this.data.shopMode
+      }).then(function (res) {
 
-          if (res.result === 1) {
-            var d = res.data
-            var searchtips = [
-              "商品搜索",
-              "热销商品",
-            ];
+        if (res.result === 1) {
+          var d = res.data
+          var searchtips = [
+            "商品搜索",
+            "热销商品",
+          ];
 
 
-            _this.setData({
-              searchtips: searchtips,
-              tabs: d.tabs
-            })
+          _this.setData({
+            searchtips: searchtips,
+            tabs: d.tabs
+          })
 
-          }
-        })
+        }
+      })
     },
     onReady: function () {
       var _this = this;
       console.log("productkind.onReady")
-
-      if (!_this.data.isOnReady) {
-        var shopMode=app.globalData.currentShopMode
-    
-        if (_this.data.shopMode != shopMode) {
-          _this.setData({
-            shopMode: shopMode,
-            storeId:ownRequest.getCurrentStoreId()
-          })
-          _this.getPageData()
-        }
-      }
     },
     onShow() {
       console.log("productKind.onShow")
@@ -167,9 +156,21 @@ Component({
         // console.log("rect.height:" + rect.height)
         // console.log("height:" + height)
         // _this.data["scrollHeight"] = height
-        _this.setData({scrollHeight:height})
+        _this.setData({
+          scrollHeight: height
+        })
 
       }).exec()
+
+
+      var shopMode = app.globalData.currentShopMode
+
+      _this.setData({
+        shopMode: shopMode,
+        storeId: ownRequest.getCurrentStoreId()
+      })
+      _this.getPageData()
+
 
 
     },
@@ -192,7 +193,9 @@ Component({
 
       _this.data.tabs[currentTabIndex].list.loading = true
 
-      _this.setData({ tabs: _this.data.tabs })
+      _this.setData({
+        tabs: _this.data.tabs
+      })
 
       var pageIndex = currentTab.list.pageIndex
       var pageSize = currentTab.list.pageSize
@@ -205,7 +208,7 @@ Component({
         kindId: kindId,
         shopMode: _this.data.shopMode,
         name: ""
-      },false).then(function (res) {
+      }, false).then(function (res) {
         if (res.result == 1) {
           var d = res.data
           var items = []

@@ -8,7 +8,8 @@ function pageData(params) {
 
   return lumos.getJson({
     url: config.apiUrl.personalPageData,
-    urlParams: params
+    urlParams: params,
+    isShowLoading:false
   })
 }
 

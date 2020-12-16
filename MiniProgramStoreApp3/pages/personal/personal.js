@@ -13,8 +13,8 @@ Component({
   },
   data: {
     tag: "personal",
-    isOnReady:false,
-    isLogin:false
+    isOnReady: false,
+    isLogin: false
   },
   methods: {
     goLogin: function (e) {
@@ -30,7 +30,7 @@ Component({
         }
       }
 
-  
+
       wx.navigateTo({
         url: url
       })
@@ -49,21 +49,17 @@ Component({
         })
       }
     },
-    onReady:function(){
+    onReady: function () {
       var _this = this
       console.log("personal.onReady")
-      if(!_this.data.isOnReady){
-        _this.setData({isOnReady:true})
-        _this.getPageData()
-      }
-      
-        _this.setData({
-          isLogin:ownRequest.isLogin()
-        })
     },
     onShow() {
       var _this = this
       console.log("personal.onShow")
+      _this.setData({
+        isLogin: ownRequest.isLogin()
+      })
+      _this.getPageData()
     }
   }
 })
