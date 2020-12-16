@@ -141,7 +141,7 @@ Component({
     },
     onReady: function () {
       var _this = this;
-      console.log("personal.onReady")
+      console.log("productkind.onReady")
 
       if (!_this.data.isOnReady) {
         var shopMode=app.globalData.currentShopMode
