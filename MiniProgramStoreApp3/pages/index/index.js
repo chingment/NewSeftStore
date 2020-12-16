@@ -22,6 +22,7 @@ Component({
     tag: "index",
     storeId: undefined,
     isOnLoad: false,
+    isOnReady: false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
@@ -56,8 +57,7 @@ Component({
           toast.show({
             title: '加入购物车成功'
           })
-        }
-        else {
+        } else {
           toast.show({
             title: res.message
           })
@@ -104,10 +104,9 @@ Component({
             pdArea: d.pdArea,
             pageIsReady: true
           })
-        }
-        else if (res.result == 2) {
-          if (res.code == '2404') {//当前店铺无效，重新选择
-            wx.navigateTo({ 
+        } else if (res.result == 2) {
+          if (res.code == '2404') { //当前店铺无效，重新选择
+            wx.navigateTo({
               url: "/pages/store/store"
             })
           }
@@ -128,7 +127,9 @@ Component({
     switchShopMode: function (e) {
       var _this = this
       var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面\
-      _this.setData({ shopMode: shopMode })
+      _this.setData({
+        shopMode: shopMode
+      })
       _this.getPageData()
 
     },

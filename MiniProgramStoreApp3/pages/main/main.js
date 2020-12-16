@@ -144,10 +144,10 @@ Page({
     //   return
     // }
     // apiCart.pageData()
-    // var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    // mainTabBarSwitch(tabBarIndex)
 
-
+    //var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //let cp = _this.selectComponent('#' +_this.data.tabBar[tabBarIndex].id);
+    //cp.onShow()
   },
 
   mainTabBarItemClick(e) {
@@ -189,7 +189,10 @@ function mainTabBarSwitch(index) {
       }
 
       let cp = pages[i].selectComponent('#' + tabBar[index].id);
-      cp.onReady()
+      if (!cp.data.isOnReady) {
+        cp.onReady()
+        cp.setData({isOnReady:true})
+      }
 
       pages[i].setData({
         tabBar: tabBar
