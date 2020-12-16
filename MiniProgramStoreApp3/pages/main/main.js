@@ -87,7 +87,58 @@ Page({
     isOnLoad: false
   },
   onLoad: function (options) {
-    var _this = this;
+    // var _this = this;
+    // wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
+    //   var wHeight = wx.getSystemInfoSync().windowHeight;
+    //   _this.setData({
+    //     tabBarContentHeight: wHeight - rect[0].height
+    //   });
+    // }).exec()
+
+    // if (app.globalData.checkConfig) {
+    //   console.log("call>>1")
+    //   if (!ownRequest.isSelectedStore(true)) {
+    //     return
+    //   }
+    //   apiCart.pageData()
+    //   // if (!_this.data.isOnLoad) {
+    //   //var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //   //mainTabBarSwitch(tabBarIndex)
+    //   // }
+
+
+    //   _this.setData({
+    //     isOnLoad: true
+    //   })
+
+    // } else {
+    //   console.log("call>>2")
+    //   app.checkConfigReadyCallback = res => {
+
+    //     console.log("call>>3," + JSON.stringify(res))
+    //     if (!ownRequest.isSelectedStore(true)) {
+    //       return
+    //     }
+
+
+    //     apiCart.pageData()
+
+    //     if (!_this.data.isOnLoad) {
+    //       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //       mainTabBarSwitch(tabBarIndex)
+
+    //       _this.setData({
+    //         isOnLoad: true
+    //       })
+    //     }
+
+    //   }
+    // }
+  },
+  onShow: function () {
+    console.log("mian.onShow")
+    var _this = this
+
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
       _this.setData({
@@ -101,15 +152,13 @@ Page({
         return
       }
       apiCart.pageData()
-      // if (!_this.data.isOnLoad) {
-       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-        mainTabBarSwitch(tabBarIndex)
-      // }
 
+      var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+      mainTabBarSwitch(tabBarIndex)
 
-      // _this.setData({
-      //   isOnLoad: true
-      // })
+      _this.setData({
+        isOnLoad: true
+      })
 
     } else {
       console.log("call>>2")
@@ -119,35 +168,24 @@ Page({
         if (!ownRequest.isSelectedStore(true)) {
           return
         }
-
-
         apiCart.pageData()
 
-        if (!_this.data.isOnLoad) {
-          var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-          mainTabBarSwitch(tabBarIndex)
-
-          _this.setData({
-            isOnLoad: true
-          })
-        }
+        var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+        mainTabBarSwitch(tabBarIndex)
 
       }
     }
-  },
-  onShow: function () {
-    console.log("mian.onShow")
-    var _this = this
 
 
     // if (!ownRequest.isSelectedStore(true)) {
     //   return
     // }
     // apiCart.pageData()
-
-    //var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    //let cp = _this.selectComponent('#' +_this.data.tabBar[tabBarIndex].id);
-    //cp.onShow()
+    // if (_this.data.isOnLoad) {
+    //     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //     let cp = _this.selectComponent('#' + _this.data.tabBar[tabBarIndex].id);
+    //     cp.onShow()
+    //  // }
   },
 
   mainTabBarItemClick(e) {
@@ -191,7 +229,9 @@ function mainTabBarSwitch(index) {
       let cp = pages[i].selectComponent('#' + tabBar[index].id);
       if (!cp.data.isOnReady) {
         cp.onReady()
-        cp.setData({isOnReady:true})
+        cp.setData({
+          isOnReady: true
+        })
       }
 
       pages[i].setData({
