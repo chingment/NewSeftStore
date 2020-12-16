@@ -21,7 +21,6 @@ Component({
   data: {
     tag: "index",
     storeId: undefined,
-    isOnLoad: false,
     isOnReady: false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
@@ -141,13 +140,10 @@ Component({
       var _this = this
       app.globalData.skeletonPage = _this;
 
-      if (!_this.data.isOnLoad) {
-        _this.setData({
-          isOnLoad: true,
-          storeId: ownRequest.getCurrentStoreId()
-        })
-        _this.getPageData()
-      }
+      _this.setData({
+        storeId: ownRequest.getCurrentStoreId()
+      })
+      _this.getPageData()
 
     },
     imageOnloadError: function (e) {

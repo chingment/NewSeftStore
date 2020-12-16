@@ -258,7 +258,6 @@ const myWxRequest = (opts) => {
       dataType: "json",
       header: header,
       success: function (res) {
-        console.log("wxRequest.success->>>");
         console.log("wxRequest.success->>>" + JSON.stringify(res));
         if (res.statusCode == 200) {
           var d = res.data

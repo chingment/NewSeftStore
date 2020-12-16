@@ -56,7 +56,7 @@ Component({
         _this.setData({isOnReady:true})
         _this.getPageData()
       }
-     
+      
         _this.setData({
           isLogin:ownRequest.isLogin()
         })

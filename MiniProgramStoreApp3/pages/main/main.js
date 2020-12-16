@@ -101,15 +101,15 @@ Page({
         return
       }
       apiCart.pageData()
-      if (!_this.data.isOnLoad) {
-        var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+      // if (!_this.data.isOnLoad) {
+       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
         mainTabBarSwitch(tabBarIndex)
-      }
+      // }
 
 
-      _this.setData({
-        isOnLoad: true
-      })
+      // _this.setData({
+      //   isOnLoad: true
+      // })
 
     } else {
       console.log("call>>2")
