@@ -298,6 +298,7 @@
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetGlobalMsgTips.cs" />
     <Compile Include="Api\StoreApp\RModels\RetMemberPromSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderReceiptTimeAxis.cs" />
@@ -317,6 +318,7 @@
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupGlobalMsgTips.cs" />
     <Compile Include="Api\StoreApp\RModels\RupIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupMemberGetPayLevelSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RupMemberGetPromSt.cs" />
@@ -409,6 +411,7 @@
     <Compile Include="Api\StoreTerm\StockSettingService.cs" />
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Badge.cs" />
     <Compile Include="UI\FsBlock.cs" />
     <Compile Include="UI\FsBlockByField.cs" />
     <Compile Include="UI\FsButton.cs" />

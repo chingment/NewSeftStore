@@ -16,5 +16,15 @@ namespace WebApiStoreApp.Controllers
 
             return new OwnApiHttpResponse(result);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public OwnApiHttpResponse MsgTips([FromUri]RupGlobalMsgTips rup)
+        {
+            IResult result = StoreAppServiceFactory.Global.MsgTips(this.CurrentUserId, this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }
