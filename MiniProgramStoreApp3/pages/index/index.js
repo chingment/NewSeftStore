@@ -92,8 +92,9 @@ Component({
               shopMode = item.id
             }
           })
-          app.globalData.currentShopMode = shopMode
 
+          storeage.setCurrentShopMode(shopMode)
+         
           _this.setData({
             shopMode: shopMode,
             shopModes: d.shopModes,

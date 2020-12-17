@@ -43,7 +43,6 @@ App({
   globalData: {
     appId: null,
     userInfo: null,
-    currentShopMode: 0,
     skeletonPage: null,
     checkConfig: false
   },

@@ -5,9 +5,7 @@
     <image class="bg-img"
       src="http://file.17fanju.com/upload/membertheme/1/prom/bg_1_{{memberLevel==0?'0':'1'}}.png?ts={{timespan}}">
     </image>
-
-    <view class="section">
-
+    <view class="section" wx:if="{{memberLevel>0}}">
       <view class="info">
         <view class="avatarUrl">
           <open-data type="userAvatarUrl"></open-data>
@@ -17,7 +15,6 @@
           <view class="t2">[{{memberExpireTip}}]</view>
         </view>
       </view>
-
     </view>
   </view>
   <view class="bg-2" style="height:{{memberLevel==0?'847rpx':'650rpx'}};">

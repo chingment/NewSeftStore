@@ -7,6 +7,7 @@ const key_open_id = "key_open_id"
 const key_merch_id = "key_merch_id"
 const key_session_key = "session_key"
 const key_cur_store_id = "key_cur_store_id"
+const key_cur_shop_model = "key_cur_shop_model"
 
 function getCart() {
   return wx.getStorageSync(key_cart) || []
@@ -91,6 +92,14 @@ function setCurrentStoreId(store_id) {
   wx.setStorageSync(key_cur_store_id, store_id)
 }
 
+function getCurrentShopMode() {
+  return wx.getStorageSync(key_cur_shop_model) || undefined
+}
+
+function setCurrentShopMode(shopMode) {
+  wx.setStorageSync(key_cur_shop_model, shopMode)
+}
+
 
 module.exports = {
   getCart: getCart,
@@ -107,4 +116,6 @@ module.exports = {
   setSessionKey: setSessionKey,
   getCurrentStoreId: getCurrentStoreId,
   setCurrentStoreId: setCurrentStoreId,
+  getCurrentShopMode: getCurrentShopMode,
+  setCurrentShopMode: setCurrentShopMode
 }

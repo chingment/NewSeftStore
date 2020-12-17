@@ -41,7 +41,7 @@ Page({
     var _this = this
 
     _this.setData({
-      shopMode: app.globalData.currentShopMode,
+      shopMode: storeage.getCurrentShopMode(),
       storeId: ownRequest.getCurrentStoreId()
     })
 
@@ -260,7 +260,7 @@ Page({
     if (ownRequest.isLogin()) {
 
       apiCart.getCartData({
-        shopMode: app.globalData.currentShopMode,
+        shopMode: storeage.getCurrentShopMode(),
         storeId: ownRequest.getCurrentStoreId()
       }).then(function (res) {
         if (res.result == 1) {

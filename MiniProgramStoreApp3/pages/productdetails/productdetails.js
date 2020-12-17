@@ -4,7 +4,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
 const config = require('../../config');
-const pageMain = require('../../pages/main/main.js');
+const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
 Page({
@@ -46,10 +46,10 @@ Page({
     }
 
     if (shopMode == undefined) {
-      shopMode = app.globalData.currentShopMode
+      shopMode = storeage.getCurrentShopMode()
     }
 
-    app.globalData.currentShopMode = shopMode
+    storeage.setCurrentShopMode(shopMode)
 
     ownRequest.setCurrentStoreId(storeId)
 

@@ -1,5 +1,6 @@
 const ownRequest = require('../../own/ownRequest.js')
 const toast = require('../../utils/toastutil')
+const storeage = require('../../utils/storeageutil.js')
 const apiKind = require('../../api/kind.js')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
@@ -163,7 +164,7 @@ Component({
       }).exec()
 
 
-      var shopMode = app.globalData.currentShopMode
+      var shopMode = storeage.getCurrentShopMode()
 
       _this.setData({
         shopMode: shopMode,
