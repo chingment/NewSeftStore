@@ -9,6 +9,8 @@ const app = getApp()
 Page({
   data: {
     tag: "productsearch",
+    condition_Kinds: [],
+    condition_Kinds_index: 0,
     dataList: {
       isEmpty: false,
       allloaded: false,
@@ -66,7 +68,7 @@ Page({
             condition_Kinds_index = i
           }
         }
-
+        console.log(">>>condition_Kinds:" + JSON.stringify(d.condition_Kinds))
         _this.setData({
           condition_Kinds: d.condition_Kinds,
           condition_Kinds_index: condition_Kinds_index,
