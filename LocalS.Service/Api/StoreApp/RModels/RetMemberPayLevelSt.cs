@@ -11,11 +11,9 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetMemberPayLevelSt()
         {
-            //this.SaleOutlets = new List<SaleOutletModel>();
             this.CurSaleOutlet = new SaleOutletModel();
         }
 
-        //public List<SaleOutletModel> SaleOutlets { get; set; }
         public bool IsOptSaleOutlet { get; set; }
         public SaleOutletModel CurSaleOutlet { get; set; }
         public LevelStModel LevelSt1 { get; set; }
@@ -42,6 +40,7 @@ namespace LocalS.Service.Api.StoreApp
             public string Id { get; set; }
             public string Tag { get; set; }
             public FsText FeeValue { get; set; }
+            public FsText ShowFeeValue { get; set; }
             public List<FsField> DesPoints { get; set; }
             public string LayoutWeight { get; set; }
         }

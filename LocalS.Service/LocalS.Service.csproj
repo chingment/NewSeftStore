@@ -331,7 +331,9 @@
     <Compile Include="Api\StoreApp\RModels\RupPersonalPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductInitSearchPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductKindPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupSaleOutletList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSearchTobeSearch.cs" />
+    <Compile Include="Api\StoreApp\SaleOutletService.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />

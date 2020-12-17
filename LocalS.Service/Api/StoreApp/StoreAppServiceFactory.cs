@@ -112,5 +112,13 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
+        public static SaleOutletService SaleOutlet
+        {
+            get
+            {
+                return new SaleOutletService();
+            }
+        }
+
     }
 }

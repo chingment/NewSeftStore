@@ -1,6 +1,8 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
    data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
 
+<saleoutletdialog id="saleoutlet" isShow="{{saleOutletDialog.isShow}}" dataS="{{saleOutletDialog.dataS}}"></saleoutletdialog>
+
 <view class="pg-ct membercenter skeleton" wx:if="{{ pageIsReady }}">
    <view class="bg-1 skeleton-bg">
       <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/center/bg_1.png?ts={{timespan}}"></image>
@@ -118,7 +120,7 @@
                </view>
             </view>
 
-            <view wx:if="{{isOptSaleOutlet}}" class="content-saleoutlet">
+            <view wx:if="{{isOptSaleOutlet}}" bindtap="clickToOpenSaleOutletDialog"  class="content-saleoutlet" >
                <view class="its-a">
                   <view class="it">
                      <view class="it-l">

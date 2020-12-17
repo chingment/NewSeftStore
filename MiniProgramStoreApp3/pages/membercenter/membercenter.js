@@ -32,6 +32,11 @@ Page({
       tagTip: '',
       contentBm: '',
       cntentSm: ''
+    },
+    saleOutletDialog:{
+      isShow: false,
+      dataS: {
+      }
     }
   },
 
@@ -194,5 +199,14 @@ Page({
       })
     }
     console.log("level:" + level + ",feeStIdx:" + feeStIdx)
-  }
+  },
+  clickToOpenSaleOutletDialog: function (e) {
+    console.log("goCart")
+    var _this = this
+    var saleOutletDialog = _this.data.saleOutletDialog
+    saleOutletDialog.isShow = true
+    _this.setData({
+      saleOutletDialog: saleOutletDialog
+    })
+  },
 })
