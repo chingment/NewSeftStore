@@ -288,6 +288,7 @@
     <Compile Include="Api\StoreApp\Models\BookTimeDateAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\BookTimeTimeAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
+    <Compile Include="Api\StoreApp\Models\CartDataModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmCouponModel.cs" />
@@ -317,6 +318,7 @@
     <Compile Include="Api\StoreApp\RModels\RetCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupCartGetCartData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalMsgTips.cs" />
     <Compile Include="Api\StoreApp\RModels\RupIndexPageData.cs" />

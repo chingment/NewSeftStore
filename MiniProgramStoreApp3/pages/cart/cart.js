@@ -14,11 +14,17 @@ Component({
     }
   },
   data: {
-    tag:'cart',
-    isOnReady:false,
-    isLogin:false,
-    storeId:undefined,
-    blocks:[]
+    tag: 'cart',
+    isOnReady: false,
+    isLogin: false,
+    storeId: undefined,
+    cartData: {
+      blocks: [],
+      count: 0,
+      sumPrice: 0,
+      countBySelected: 0,
+      sumPriceBySelected: 0
+    }
   },
   methods: {
     itemOperate: util.throttle(function (e) {
@@ -29,7 +35,7 @@ Component({
       var operate = e.currentTarget.dataset.replyOperate
 
 
-      var productSku = _this.data.blocks[pIndex].productSkus[cIndex];
+      var productSku = _this.data.cartData.blocks[pIndex].productSkus[cIndex];
 
       switch (operate) {
         case "1":
@@ -55,11 +61,10 @@ Component({
           storeId: _this.data.storeId,
           operate: operate,
           productSkus: operateProductSkus
-        }).then( function (res) {
+        }).then(function (res) {
           if (res.result == 1) {
 
-          }
-          else {
+          } else {
             toast.show({
               title: res.message
             })
@@ -74,8 +79,7 @@ Component({
           success: function (sm) {
             if (sm.confirm) {
               _operate()
-            } else if (sm.cancel) {
-            }
+            } else if (sm.cancel) {}
           }
         })
 
@@ -86,7 +90,7 @@ Component({
     immeBuy: function (e) {
       var _this = this
 
-      var blocks = _this.data.blocks
+      var blocks = _this.data.cartData.blocks
 
       var productSkus = []
 
@@ -122,10 +126,12 @@ Component({
       //开始触摸时 重置所有删除
       var _this = this
 
-      for (var i = 0; i < _this.data.blocks.length; i++) {
-        for (var j = 0; j < _this.data.blocks[i].productSkus.length; j++) {
-          if (_this.data.blocks[i].productSkus[j].isTouchMove) {
-            _this.data.blocks[i].productSkus[j].isTouchMove = false;
+      var cartData = _this.data.cartData
+
+      for (var i = 0; i < cartData.blocks.length; i++) {
+        for (var j = 0; j < cartData.blocks[i].productSkus.length; j++) {
+          if (cartData.blocks[i].productSkus[j].isTouchMove) {
+            cartData.blocks[i].productSkus[j].isTouchMove = false;
           }
         }
       }
@@ -133,7 +139,7 @@ Component({
       this.setData({
         startX: e.changedTouches[0].clientX,
         startY: e.changedTouches[0].clientY,
-        blocks: _this.data.blocks
+        cartData: cartData
       })
 
     },
@@ -161,24 +167,26 @@ Component({
           Y: touchMoveY
         });
 
-      for (var i = 0; i < _this.data.blocks.length; i++) {
-        for (var j = 0; j < _this.data.blocks[i].productSkus.length; j++) {
+        var cartData = _this.data.cartData
 
-          _this.data.blocks[i].productSkus[j].isTouchMove = false
+      for (var i = 0; i <cartData.blocks.length; i++) {
+        for (var j = 0; j <cartData.blocks[i].productSkus.length; j++) {
+
+          cartData.blocks[i].productSkus[j].isTouchMove = false
 
           //滑动超过30度角 return
 
           if (Math.abs(angle) > 30) return;
 
-          if (cartId == _this.data.blocks[i].productSkus[j].cartId) {
+          if (cartId == cartData.blocks[i].productSkus[j].cartId) {
 
             if (touchMoveX > startX) //右滑
 
-              _this.data.blocks[i].productSkus[j].isTouchMove = false
+            cartData.blocks[i].productSkus[j].isTouchMove = false
 
             else //左滑
 
-              _this.data.blocks[i].productSkus[j].isTouchMove = true
+            cartData.blocks[i].productSkus[j].isTouchMove = true
 
           }
         }
@@ -187,7 +195,7 @@ Component({
       //更新数据
       // console.log(JSON.stringify(_this.data.cart))
       _this.setData({
-        blocks: _this.data.blocks
+        cartData: cartData
       })
 
     },
@@ -204,26 +212,32 @@ Component({
     },
     getPageData: function (e) {
       var _this = this
-        apiCart.pageData().then(function (res) {
-          if (res.result == 1) {
-            var d = res.data
+      apiCart.pageData().then(function (res) {
+        if (res.result == 1) {
+          var d = res.data
 
-            _this.setData({
-              scrollHeight: 500,
-              blocks: d.blocks,
-              count: d.count,
-              sumPrice: d.sumPrice,
-              countBySelected: d.countBySelected,
-              sumPriceBySelected: d.sumPriceBySelected
-            })
 
-          }
-        })
+          var d_cartData = d.cartData
+          var p_cartData = _this.data.cartData
+          p_cartData.blocks = d_cartData.blocks
+          p_cartData.count = d_cartData.count
+          p_cartData.sumPrice = d_cartData.sumPrice
+          p_cartData.countBySelected = d_cartData.countBySelected
+          p_cartData.sumPriceBySelected = d_cartData.sumPriceBySelected
+     
+
+          _this.setData({
+            scrollHeight: 500,
+            cartData: p_cartData
+          })
+
+        }
+      })
     },
     goLogin: function (e) {
       ownRequest.goLogin()
     },
-    onReady:function(){
+    onReady: function () {
       var _this = this
       // console.log("cart.onReady")
       // if(!_this.data.isOnReady){
@@ -235,8 +249,8 @@ Component({
       var _this = this
 
       _this.setData({
-        storeId:ownRequest.getCurrentStoreId(),
-        isLogin:ownRequest.isLogin()
+        storeId: ownRequest.getCurrentStoreId(),
+        isLogin: ownRequest.isLogin()
       })
 
       const query = wx.createSelectorQuery().in(_this)
@@ -245,7 +259,9 @@ Component({
         if (rect != null) {
           if (rect.height != null) {
             var height = _this.data.height - rect.height
-            _this.setData({scrollHeight:height})
+            _this.setData({
+              scrollHeight: height
+            })
           }
         }
 

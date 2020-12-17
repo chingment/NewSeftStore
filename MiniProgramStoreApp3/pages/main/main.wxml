@@ -5,10 +5,18 @@
   <view class="content" style="height:{{tabBarContentHeight}}px;overflow: hidden;">
     <view class="ct">
       <view class="its">
-          <page-index id="{{tabBar[0].id}}" initdata="{{index}}" height="{{tabBarContentHeight}}" class='it {{tabBar[0].selected==false?"hidden":""}}' data-reply-index="{{0}}" data-reply-name="{{tabBar[0].name}}"></page-index>
-          <page-productkind id="{{tabBar[1].id}}"  initdata="{{productKind}}" height="{{tabBarContentHeight}}" class='it {{tabBar[1].selected==false?"hidden":""}}' data-reply-index="{{1}}" data-reply-name="{{tabBar[1].name}}"></page-productkind>
-          <page-cart id="{{tabBar[2].id}}" initdata="{{cart}}" height="{{tabBarContentHeight}}" style="overflow:hidden" class='it {{tabBar[2].selected==false?"hidden":""}}' data-reply-index="{{2}}" data-reply-name="{{tabBar[2].name}}"></page-cart>
-          <page-personal id="{{tabBar[3].id}}" initdata="{{personal}}" height="{{tabBarContentHeight}}" class='it {{tabBar[3].selected==false?"hidden":""}}' data-reply-index="{{3}}" data-reply-name="{{tabBar[3].name}}"></page-personal>
+        <page-index id="{{tabBar[0].id}}" initdata="{{index}}" height="{{tabBarContentHeight}}"
+          class='it {{tabBar[0].selected==false?"hidden":""}}' data-reply-index="{{0}}"
+          data-reply-name="{{tabBar[0].name}}"></page-index>
+        <page-productkind id="{{tabBar[1].id}}" initdata="{{productKind}}" height="{{tabBarContentHeight}}"
+          class='it {{tabBar[1].selected==false?"hidden":""}}' data-reply-index="{{1}}"
+          data-reply-name="{{tabBar[1].name}}"></page-productkind>
+        <page-cart id="{{tabBar[2].id}}" initdata="{{cart}}" height="{{tabBarContentHeight}}" style="overflow:hidden"
+          class='it {{tabBar[2].selected==false?"hidden":""}}' data-reply-index="{{2}}"
+          data-reply-name="{{tabBar[2].name}}"></page-cart>
+        <page-personal id="{{tabBar[3].id}}" initdata="{{personal}}" height="{{tabBarContentHeight}}"
+          class='it {{tabBar[3].selected==false?"hidden":""}}' data-reply-index="{{3}}"
+          data-reply-name="{{tabBar[3].name}}"></page-personal>
       </view>
     </view>
   </view>
@@ -18,7 +26,9 @@
         <block wx:for="{{tabBar}}" wx:for-index="index" wx:for-item="item" wx:key="tabBar">
           <view class="it" catchtap='mainTabBarItemClick' data-reply-index="{{index}}">
             <view class="icon">
-              <view class='number {{item.number==0?"hidden":""}}'>{{item.number}}</view>
+              <view class='type-{{item.badge.type}}'>
+                <text class="number" wx:if="{{item.badge.type=='number'&& item.badge.value!='0'}}">{{item.badge.value}}</text>
+              </view>
               <image class="img" src='{{item.selected==false?item.iconPath:item.selectedIconPath}}'></image>
             </view>
             <view class="title">{{item.text}}</view>

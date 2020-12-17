@@ -19,6 +19,7 @@ var config = {
     ownConfig: `${host}/Own/Config`,
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
     globalDataSet: `${host}/Global/DataSet`,
+    globalMsgTips: `${host}/Global/MsgTips`,
     indexPageData: `${host}/Index/PageData`,
     productKindPageData:`${host}/ProductKind/PageData`,
     cartOperate: `${host}/Cart/Operate`,

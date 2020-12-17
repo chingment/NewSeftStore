@@ -125,30 +125,30 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
+            var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
 
-            var productSkuDetailsModel = new ProductSkuDetailsModel();
-            productSkuDetailsModel.Id = bizProductSku.Id;
-            productSkuDetailsModel.ProductId = bizProductSku.ProductId;
-            productSkuDetailsModel.Name = bizProductSku.Name;
-            productSkuDetailsModel.MainImgUrl = bizProductSku.MainImgUrl;
-            productSkuDetailsModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
-            productSkuDetailsModel.DetailsDes = bizProductSku.DetailsDes;
-            productSkuDetailsModel.BriefDes = bizProductSku.BriefDes;
-            productSkuDetailsModel.SpecItems = bizProductSku.SpecItems;
-            productSkuDetailsModel.SpecIdx = bizProductSku.SpecIdx;
-            productSkuDetailsModel.SpecIdxSkus = bizProductSku.SpecIdxSkus;
+            var m_ProductSkuDetails = new ProductSkuDetailsModel();
+            m_ProductSkuDetails.Id = r_productSku.Id;
+            m_ProductSkuDetails.ProductId = r_productSku.ProductId;
+            m_ProductSkuDetails.Name = r_productSku.Name;
+            m_ProductSkuDetails.MainImgUrl = r_productSku.MainImgUrl;
+            m_ProductSkuDetails.DisplayImgUrls = r_productSku.DisplayImgUrls;
+            m_ProductSkuDetails.DetailsDes = r_productSku.DetailsDes;
+            m_ProductSkuDetails.BriefDes = r_productSku.BriefDes;
+            m_ProductSkuDetails.SpecItems = r_productSku.SpecItems;
+            m_ProductSkuDetails.SpecIdx = r_productSku.SpecIdx;
+            m_ProductSkuDetails.SpecIdxSkus = r_productSku.SpecIdxSkus;
 
 
-            if (bizProductSku.Stocks.Count > 0)
+            if (r_productSku.Stocks.Count > 0)
             {
-                productSkuDetailsModel.IsShowPrice = false;
-                productSkuDetailsModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                productSkuDetailsModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                productSkuDetailsModel.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                m_ProductSkuDetails.IsShowPrice = false;
+                m_ProductSkuDetails.SalePrice = r_productSku.Stocks[0].SalePrice;
+                m_ProductSkuDetails.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                m_ProductSkuDetails.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkuDetailsModel);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_ProductSkuDetails);
 
             return result;
         }

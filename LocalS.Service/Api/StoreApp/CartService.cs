@@ -14,78 +14,99 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class CartService : BaseDbContext
     {
+
+        private CartDataModel GetCartData(string clientUserId, string storeId, E_SellChannelRefType ShopMode)
+        {
+            var m_cartData = new CartDataModel();
+
+            var m_store = BizFactory.Store.GetOne(storeId);
+
+            var d_clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == storeId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
+
+            //构建购物车商品信息
+            var m_cartProductSkus = new List<CartProductSkuModel>();
+
+            foreach (var d_clientCart in d_clientCarts)
+            {
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.MerchId, d_clientCart.StoreId, m_store.GetSellChannelRefIds(d_clientCart.ShopMode), d_clientCart.PrdProductSkuId);
+                if (r_productSku != null)
+                {
+                    if (r_productSku.Stocks.Count > 0)
+                    {
+                        var m_cartProductSku = new CartProductSkuModel();
+                        m_cartProductSku.CartId = d_clientCart.Id;
+                        m_cartProductSku.Id = d_clientCart.PrdProductSkuId;
+                        m_cartProductSku.ProductId = d_clientCart.PrdProductId;
+                        m_cartProductSku.Name = r_productSku.Name;
+                        m_cartProductSku.MainImgUrl = r_productSku.MainImgUrl;
+                        m_cartProductSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                        m_cartProductSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                        m_cartProductSku.Quantity = d_clientCart.Quantity;
+                        m_cartProductSku.SumPrice = d_clientCart.Quantity * m_cartProductSku.SalePrice;
+                        m_cartProductSku.Selected = d_clientCart.Selected;
+                        m_cartProductSku.ShopMode = d_clientCart.ShopMode;
+                        m_cartProductSkus.Add(m_cartProductSku);
+                    }
+                }
+            }
+
+            //分类块，自取或快递 各构建
+            var m_shopModes = (from c in d_clientCarts select c.ShopMode).Distinct().ToList();
+
+            foreach (var m_shopMode in m_shopModes)
+            {
+                var m_carBlock = new CartBlockModel();
+                m_carBlock.ShopMode = m_shopMode;
+                m_carBlock.ProductSkus = m_cartProductSkus.Where(m => m.ShopMode == m_shopMode).ToList();
+                switch (m_shopMode)
+                {
+                    case E_SellChannelRefType.Mall:
+                        m_carBlock.TagName = "线上商城";
+                        break;
+                    case E_SellChannelRefType.Machine:
+                        m_carBlock.TagName = "线下机器";
+                        break;
+                }
+
+                if (m_carBlock.ProductSkus.Count > 0)
+                {
+                    m_cartData.Blocks.Add(m_carBlock);
+                }
+            }
+
+            m_cartData.Count = m_cartProductSkus.Sum(m => m.Quantity);
+            m_cartData.SumPrice = m_cartProductSkus.Sum(m => m.SumPrice);
+            m_cartData.SumPriceBySelected = m_cartProductSkus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
+            m_cartData.CountBySelected = m_cartProductSkus.Where(m => m.Selected == true).Count();
+
+
+            return m_cartData;
+        }
+
+
+        public CustomJsonResult GetCartData(string operater, string clientUserId, RupCartGetCartData rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = GetCartData(clientUserId, rup.StoreId, rup.ShopMode);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
         public CustomJsonResult<RetCartPageData> PageData(string operater, string clientUserId, RupCartPageData rup)
         {
             var result = new CustomJsonResult<RetCartPageData>();
 
             var ret = new RetCartPageData();
 
-            var store = BizFactory.Store.GetOne(rup.StoreId);
-
-            var clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
-
-            //构建购物车商品信息
-            var cartProductSkuModels = new List<CartProductSkuModel>();
-
-            foreach (var clientCart in clientCarts)
-            {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(clientCart.MerchId, store.StoreId, store.GetSellChannelRefIds(clientCart.ShopMode), clientCart.PrdProductSkuId);
-                if (bizProductSku != null)
-                {
-                    if (bizProductSku.Stocks.Count > 0)
-                    {
-                        var cartProcudtSkuModel = new CartProductSkuModel();
-                        cartProcudtSkuModel.CartId = clientCart.Id;
-                        cartProcudtSkuModel.Id = clientCart.PrdProductSkuId;
-                        cartProcudtSkuModel.ProductId = clientCart.PrdProductId;
-                        cartProcudtSkuModel.Name = bizProductSku.Name;
-                        cartProcudtSkuModel.MainImgUrl = bizProductSku.MainImgUrl;
-                        cartProcudtSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                        cartProcudtSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                        cartProcudtSkuModel.Quantity = clientCart.Quantity;
-                        cartProcudtSkuModel.SumPrice = clientCart.Quantity * cartProcudtSkuModel.SalePrice;
-                        cartProcudtSkuModel.Selected = clientCart.Selected;
-                        cartProcudtSkuModel.ShopMode = clientCart.ShopMode;
-                        cartProductSkuModels.Add(cartProcudtSkuModel);
-                    }
-                }
-            }
-
-            //分类块，自取或快递 各构建
-            var shopModes = (from c in clientCarts select c.ShopMode).Distinct().ToList();
-
-            foreach (var shopMode in shopModes)
-            {
-                var carBlock = new CartBlockModel();
-                carBlock.ShopMode = shopMode;
-                carBlock.ProductSkus = cartProductSkuModels.Where(m => m.ShopMode == shopMode).ToList();
-                switch (shopMode)
-                {
-                    case E_SellChannelRefType.Mall:
-                        carBlock.TagName = "线上商城";
-                        break;
-                    case E_SellChannelRefType.Machine:
-                        carBlock.TagName = "线下机器";
-                        break;
-                }
-
-                if (carBlock.ProductSkus.Count > 0)
-                {
-                    ret.Blocks.Add(carBlock);
-                }
-            }
-
-            ret.Count = cartProductSkuModels.Sum(m => m.Quantity);
-            ret.SumPrice = cartProductSkuModels.Sum(m => m.SumPrice);
-            ret.SumPriceBySelected = cartProductSkuModels.Where(m => m.Selected == true).Sum(m => m.SumPrice);
-            ret.CountBySelected = cartProductSkuModels.Where(m => m.Selected == true).Count();
+            ret.CartData = GetCartData(clientUserId, rup.StoreId, rup.ShopMode);
 
             result = new CustomJsonResult<RetCartPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
-
-
 
         private static readonly object lock_Operate = new object();
         public CustomJsonResult Operate(string operater, string clientUserId, RopCartOperate rop)
@@ -180,6 +201,11 @@ namespace LocalS.Service.Api.StoreApp
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
                 }
+            }
+
+            if (result.Result == ResultType.Success)
+            {
+                result.Data = GetCartData(clientUserId, rop.StoreId, rop.ShopMode);
             }
 
             return result;

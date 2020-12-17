@@ -5,7 +5,6 @@ const util = require('../../utils/util')
 const ownRequest = require('../../own/ownRequest.js')
 const apiGlobal = require('../../api/global.js')
 const apiOwn = require('../../api/own.js')
-const apiCart = require('../../api/cart.js')
 var app = getApp()
 
 Page({
@@ -24,7 +23,10 @@ Page({
       text: "首页",
       navTitle: "首页",
       selected: true,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }, {
       id: "cp_productkind",
       name: "productkind",
@@ -34,7 +36,10 @@ Page({
       text: "分类",
       navTitle: "分类",
       selected: false,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }, {
       id: "cp_cart",
       name: "cart",
@@ -44,7 +49,10 @@ Page({
       text: "购物车",
       navTitle: "购物车",
       selected: false,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }, {
       id: "cp_personal",
       name: "personal",
@@ -54,7 +62,10 @@ Page({
       text: "个人",
       navTitle: "个人",
       selected: false,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }],
     index: {
       store: {
@@ -148,31 +159,12 @@ Page({
 
     if (app.globalData.checkConfig) {
       console.log("call>>1")
-      if (!ownRequest.isSelectedStore(true)) {
-        return
-      }
-      apiCart.pageData()
-
-      var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-      mainTabBarSwitch(tabBarIndex)
-
-      _this.setData({
-        isOnLoad: true
-      })
-
+      _this._onShow()
     } else {
       console.log("call>>2")
       app.checkConfigReadyCallback = res => {
-
         console.log("call>>3," + JSON.stringify(res))
-        if (!ownRequest.isSelectedStore(true)) {
-          return
-        }
-        apiCart.pageData()
-
-        var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-        mainTabBarSwitch(tabBarIndex)
-
+        _this._onShow()
       }
     }
 
@@ -187,7 +179,21 @@ Page({
     //     cp.onShow()
     //  // }
   },
+  _onShow() {
+    var _this = this
+    if (!ownRequest.isSelectedStore(true)) {
+      return
+    }
 
+    apiGlobal.msgTips({
+      storeId: ownRequest.getCurrentStoreId()
+    })
+
+    var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    mainTabBarSwitch(tabBarIndex)
+
+
+  },
   mainTabBarItemClick(e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex

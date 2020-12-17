@@ -11,33 +11,25 @@ function getCart() {
   return wx.getStorageSync(key_cart) || []
 }
 
-function setCart(cart) {
-  wx.setStorageSync(key_cart, cart)
+function setCart(cartData) {
+  wx.setStorageSync(key_cart, cartData)
 
   //设置页面的标志点
   var pages = getCurrentPages();
   for (var i = 0; i < pages.length; i++) {
     if (pages[i].data.tag == "main") {
-      pages[i].data.tabBar[2].number = cart.count
 
       pages[i].selectComponent('#cp_cart').setData({
-        blocks: cart.blocks,
-        count: cart.count,
-        sumPrice: cart.sumPrice,
-        countBySelected: cart.countBySelected,
-        sumPriceBySelected: cart.sumPriceBySelected
+        cartData: cartData
       });
 
-      pages[i].setData({
-        tabBar: pages[i].data.tabBar
-      })
     } else if (pages[i].data.tag == "productdetails") {
       pages[i].setData({
-        cart: cart
+        cartData: cartData
       })
     } else if (pages[i].data.tag == "productsearch") {
       pages[i].setData({
-        cart: cart
+        cartData: cartData
       })
     }
   }

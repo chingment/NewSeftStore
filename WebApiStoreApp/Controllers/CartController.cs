@@ -24,5 +24,13 @@ namespace WebApiStoreApp.Controllers
 
             return new OwnApiHttpResponse<RetCartPageData>(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetCartData([FromUri]RupCartGetCartData rup)
+        {
+            IResult result = StoreAppServiceFactory.Cart.GetCartData(this.CurrentUserId, this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

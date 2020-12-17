@@ -10,17 +10,10 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetCartPageData()
         {
-            this.Blocks = new List<CartBlockModel>();
+            this.CartData = new CartDataModel();
         }
 
-        public List<CartBlockModel> Blocks { get; set; }
 
-        public int Count { get; set; }
-
-        public decimal SumPrice { get; set; }
-
-        public int CountBySelected { get; set; }
-
-        public decimal SumPriceBySelected { get; set; }
+        public CartDataModel CartData { get; set; }
     }
 }
