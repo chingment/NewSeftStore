@@ -26,7 +26,7 @@ Component({
       observer: function (newVal, oldVal) {
         if (newVal == null)
           return
-        console.log('dataS:' + newVal)
+        console.log('dataS:' + JSON.stringify(newVal))
         this.setData({
           myCart: newVal
         })
@@ -69,9 +69,9 @@ Component({
         })
       }, 100)
 
-      _this.setData({
-        myCart: storeage.getCart()
-      })
+      // _this.setData({
+      //   myCart: storeage.getCart()
+      // })
     },
     _dialogClose: function (e) {
       var _this = this;
@@ -125,10 +125,10 @@ Component({
           productSkus: operateProductSkus
         }).then(function (res) {
           if (res.result == 1) {
-            console.log("storeage.getCart():" + JSON.stringify(storeage.getCart()))
-            _this.setData({
-              myCart: storeage.getCart()
-            })
+            //console.log("storeage.getCart():" + JSON.stringify(storeage.getCart()))
+            //_this.setData({
+            //  myCart: storeage.getCart()
+           // })
           } else {
             toast.show({
               title: res.message

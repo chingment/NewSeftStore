@@ -26,13 +26,13 @@ function setCart(cartData) {
 
     } else if (pages[i].data.tag == "productdetails") {
       var cartDialog = pages[i].data.cartDialog
-      cartDialog.cartData = cartData
+      cartDialog.dataS = cartData
       pages[i].setData({
         cartDialog: cartDialog
       })
     } else if (pages[i].data.tag == "productsearch") {
       var cartDialog = pages[i].data.cartDialog
-      cartDialog.cartData = cartData
+      cartDialog.dataS = cartData
       pages[i].setData({
         cartDialog: cartDialog
       })

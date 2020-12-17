@@ -1,7 +1,8 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
-<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-<cartdialog id="cart" isShow="{{cartDialog.isShow}}"></cartdialog>
+<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}"
+	shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}"></cartdialog>
 
 <view class="page-ct skeleton">
 
@@ -11,7 +12,8 @@
 				<view style="width:{{condition_Kinds.length*100}}px;height:62rpx;" class="tabbar-items">
 					<view class="container">
 						<block wx:for-items="{{condition_Kinds}}" wx:for-item="item" wx:key="index">
-							<view id="{{index}}" style="width:80px" class="item {{condition_Kinds_index==index?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClickByKind">
+							<view id="{{index}}" style="width:80px" class="item {{condition_Kinds_index==index?'item-seleced':''}}"
+								data-reply-index="{{index}}" bindtap="tabBarClickByKind">
 								<view class="title skeleton-rect">{{item.name}}</view>
 								<view class='seleced-bottom'></view>
 							</view>
@@ -23,7 +25,10 @@
 	</view>
 
 	<view class="tabbar-contents" current="0" style="height:{{scrollHeight}}px">
-		<own-scroll pulldownDistance="100" emptyTipText="暂未找到相关商品" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{dataList.allloaded}}" isEmpty="{{dataList.isEmpty}}">
+		<own-scroll pulldownDistance="100" emptyTipText="暂未找到相关商品" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试"
+			refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore
+			bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{dataList.allloaded}}"
+			isEmpty="{{dataList.isEmpty}}">
 			<view class='list-data prd-list-1'>
 				<block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 					<view class='it it-{{index%2}}'>
@@ -33,7 +38,7 @@
 							</view>
 							<image class="img" src="{{item.mainImgUrl}}"></image>
 						</navigator>
-						<text class="name font-gray skeleton-rect" >{{item.name}}</text>
+						<text class="name font-gray skeleton-rect">{{item.name}}</text>
 						<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
 						<view class="area2">
 							<view class="price skeleton-rect">
@@ -43,12 +48,14 @@
 							<view class="operate skeleton-circle">
 
 								<block wx:if="{{item.specIdxSkus.length<=1}}">
-									<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+									<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuId="{{item.id}}" class="increase"
+										src='/content/default/images/increase.png'></image>
 								</block>
 
 								<block wx:else>
 
-									<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
+									<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}"
+										data-reply-sku="{{item}}">选规格</text>
 
 								</block>
 
