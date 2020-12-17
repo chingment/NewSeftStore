@@ -15,7 +15,8 @@ function msgTips(urlParams) {
 
  lumos.getJson({
     url: config.apiUrl.globalMsgTips,
-    urlParams: urlParams
+    urlParams: urlParams,
+    isShowLoading: false
   }).then(function (res) {
     if (res.result == 1) {
       var d = res.data

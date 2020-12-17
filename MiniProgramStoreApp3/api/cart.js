@@ -9,7 +9,7 @@ function operate(params) {
   var promise = new Promise((resolve, reject) => {
     lumos.postJson({
       url: config.apiUrl.cartOperate,
-      dataParams: params
+      dataParams: params,
     }).then(function (res) {
 
       if (res.result == 1) {

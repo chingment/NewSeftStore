@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetGlobalMsgTips();
 
-            var d_clientCart_Quantity = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).Sum(m => m.Quantity);
+            var d_clientCart_Quantity = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList().Sum(m => m.Quantity);
 
             ret.BadgeByCart = new UI.Badge { Type = "number", Value = d_clientCart_Quantity.ToString() };
 

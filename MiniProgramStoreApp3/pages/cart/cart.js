@@ -62,13 +62,10 @@ Component({
           operate: operate,
           productSkus: operateProductSkus
         }).then(function (res) {
-          if (res.result == 1) {
+          toast.show({
+            title: res.message
+          })
 
-          } else {
-            toast.show({
-              title: res.message
-            })
-          }
         })
       }
 
