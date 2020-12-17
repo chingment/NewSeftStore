@@ -24,6 +24,7 @@ var config = {
     productKindPageData:`${host}/ProductKind/PageData`,
     cartOperate: `${host}/Cart/Operate`,
     cartPageData: `${host}/Cart/PageData`,
+    cartGetCartData: `${host}/Cart/GetCartData`,
     productInitSearchPageData: `${host}/Product/InitSearchPageData`,
     productSearch: `${host}/Product/Search`,
     productDetails: `${host}/Product/Details`,

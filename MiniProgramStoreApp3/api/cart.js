@@ -49,7 +49,17 @@ function pageData() {
   return promise
 }
 
+function getCartData(urlParams) {
+
+  return lumos.getJson({
+    url: config.apiUrl.cartGetCartData,
+    urlParams: urlParams,
+    isShowLoading: false
+  })
+}
+
 module.exports = {
   operate: operate,
-  pageData: pageData
+  pageData: pageData,
+  getCartData: getCartData
 }

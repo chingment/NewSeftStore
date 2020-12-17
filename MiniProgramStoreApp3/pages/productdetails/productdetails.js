@@ -14,7 +14,6 @@ Page({
    */
   data: {
     tag: "productdetails",
-    cartIsShow: false,
     storeId: null,
     shopMode: null,
     specsDialog: {
@@ -22,7 +21,13 @@ Page({
     },
     cartDialog: {
       isShow: false,
-      dataS: {}
+      dataS: {
+        blocks: [],
+        count: 0,
+        sumPrice: 0,
+        countBySelected: 0,
+        sumPriceBySelected: 0
+      }
     }
   },
 
@@ -53,11 +58,21 @@ Page({
       shopMode: shopMode
     })
 
-    var cart = {
-      count: 0
-    }
+
     if (ownRequest.isLogin()) {
-      cart = storeage.getCart()
+
+      apiCart.getCartData({
+        storeId: storeId,
+        shopMode: shopMode
+      }).then(function (res) {
+        if (res.result == 1) {
+          var cartDialog = _this.data.cartDialog
+          cartDialog.dataS = res.data
+          _this.setData({
+            cartDialog: cartDialog
+          })
+        }
+      })
     }
 
     apiProduct.details({
@@ -67,8 +82,7 @@ Page({
     }).then(function (res) {
       if (res.result == 1) {
         _this.setData({
-          productSku: res.data,
-          cart: cart,
+          productSku: res.data
         })
       }
     })
@@ -80,10 +94,10 @@ Page({
   goCart: function (e) {
     console.log("goCart")
     var _this = this
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = true
     _this.setData({
-      cartDialog: {
-        isShow: true
-      }
+      cartDialog: cartDialog
     })
   },
   addToCart: function (e) {

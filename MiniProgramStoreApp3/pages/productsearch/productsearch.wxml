@@ -61,8 +61,8 @@
 	</view>
 
 
-	<view wx:if="{{cart.count>0}}" class="carttips" bindtap="goCart">
-		<view class="number">{{cart.count}}</view>
+	<view wx:if="{{cartDialog.dataS.count>0}}" class="carttips" bindtap="goCart">
+		<view class="number">{{cartDialog.dataS.count}}</view>
 		<image class="img" src="/content/default/images/cart.png"></image>
 	</view>
 

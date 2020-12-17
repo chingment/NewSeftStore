@@ -64,7 +64,7 @@
 			<image src="/content/default/images/home.png" />
 		</view>
 		<view bindtap="goCart" class="item-cart">
-			<view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
+			<view class='number {{cartDialog.dataS.count==0?"hidden":""}}'>{{cartDialog.dataS.count}}</view>
 			<image src="/content/default/images/cart.png" />
 		</view>
 		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}' data-reply-skuid="{{productSku.id}}">

@@ -7,6 +7,7 @@ const key_open_id = "key_open_id"
 const key_merch_id = "key_merch_id"
 const key_session_key = "session_key"
 const key_cur_store_id = "key_cur_store_id"
+
 function getCart() {
   return wx.getStorageSync(key_cart) || []
 }
@@ -24,12 +25,16 @@ function setCart(cartData) {
       });
 
     } else if (pages[i].data.tag == "productdetails") {
+      var cartDialog = pages[i].data.cartDialog
+      cartDialog.cartData = cartData
       pages[i].setData({
-        cartData: cartData
+        cartDialog: cartDialog
       })
     } else if (pages[i].data.tag == "productsearch") {
+      var cartDialog = pages[i].data.cartDialog
+      cartDialog.cartData = cartData
       pages[i].setData({
-        cartData: cartData
+        cartDialog: cartDialog
       })
     }
   }
