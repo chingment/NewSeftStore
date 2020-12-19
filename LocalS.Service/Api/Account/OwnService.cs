@@ -279,6 +279,7 @@ namespace LocalS.Service.Api.Account
             wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
             wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
 
+           // var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.OpenId);
             var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByApiToken(wxAppInfoConfig, rop.OpenId);
 
             if (wxUserInfoByMinProram == null)

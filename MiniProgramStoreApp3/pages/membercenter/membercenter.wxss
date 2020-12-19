@@ -221,7 +221,7 @@
 }
 
 .levelst .feest{
-  flex: 1;
+  width: 32%;
   justify-content: center;
   text-align: center;
   padding: 20rpx;

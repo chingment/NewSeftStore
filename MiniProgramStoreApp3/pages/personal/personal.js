@@ -1,5 +1,6 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiPersonal = require('../../api/personal.js')
+const storeageutil = require('../../utils/storeageutil.js')
 const app = getApp()
 Component({
   options: {
@@ -14,7 +15,8 @@ Component({
   data: {
     tag: "personal",
     isOnReady: false,
-    isLogin: false
+    isLogin: false,
+    userInfo: {}
   },
   methods: {
     goLogin: function (e) {
@@ -38,7 +40,7 @@ Component({
     getPageData: function (e) {
       var _this = this
       if (ownRequest.getCurrentStoreId() != undefined) {
-        apiPersonal.pageData().then(function (res) {
+        apiPersonal.pageData({openId:storeageutil.getOpenId()}).then(function (res) {
           if (res.result == 1) {
             var d = res.data
             _this.setData({

@@ -27,7 +27,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var m_userInfo = new UserInfoModel();
 
-            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId || m.WxMpOpenId == openId).FirstOrDefault();
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId || (m.WxMpOpenId != null && m.WxMpOpenId == openId)).FirstOrDefault();
             if (d_clientUser != null)
             {
                 m_userInfo.UserId = d_clientUser.Id;
@@ -36,13 +36,9 @@ namespace LocalS.Service.Api.StoreApp
                 m_userInfo.Avatar = d_clientUser.Avatar;
                 m_userInfo.MemberLevel = d_clientUser.MemberLevel;
                 m_userInfo.MemberTag = "普通用户";
-                if (d_clientUser.MemberLevel == 1)
+                if (d_clientUser.MemberLevel > 0)
                 {
                     m_userInfo.MemberExpireTip = string.Format("{0}天后过期", Convert.ToInt16((d_clientUser.MemberExpireTime.Value - DateTime.Now).TotalDays));
-                }
-                else if (d_clientUser.MemberLevel == 2)
-                {
-                    m_userInfo.MemberExpireTip = "永久";
                 }
                 var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == d_clientUser.MerchId && m.Level == d_clientUser.MemberLevel).FirstOrDefault();
                 if (memberLevelSt != null)
