@@ -78,7 +78,19 @@ namespace LocalS.Service.Api.StoreApp
                         ret.Message = "支付成功";
                         ret.IsComplete = true;
 
-                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
+                        string action = rup.Action.ToLower();
+
+                        switch (action)
+                        {
+                            case "memberfee":
+                                ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "会员中心", Color = "red" }, OpType = "URL", OpVal = GetMemberPromUrl(rup.Caller) });
+                                break;
+                            default:
+                                ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
+                                break;
+                        }
+
+
                         ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "查看详情", Color = "green" }, OpType = "URL", OpVal = GetOrderDetailsUrl(rup.Caller, payTrans.OrderIds, payTrans.PayStatus) });
 
                         ret.Fields.Add(new FsField("交易号", "", payTrans.Id, ""));
@@ -149,7 +161,7 @@ namespace LocalS.Service.Api.StoreApp
                 switch (action)
                 {
                     case "memberfee":
-                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "会员中心", Color = "red" }, OpType = "URL", OpVal = GetMemberCenterUrl(rup.Caller) });
+                        ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "会员中心", Color = "red" }, OpType = "URL", OpVal = GetMemberPromUrl(rup.Caller) });
                         break;
                     default:
                         ret.Buttons.Add(new FsButton() { Name = new FsText() { Content = "回到首页", Color = "red" }, OpType = "FUN", OpVal = "goHome" });
@@ -196,6 +208,19 @@ namespace LocalS.Service.Api.StoreApp
             {
                 case E_AppCaller.Wxmp:
                     url = "/pages/membercenter/membercenter";
+                    break;
+            }
+
+            return url;
+        }
+
+        public static string GetMemberPromUrl(E_AppCaller caller)
+        {
+            string url = "";
+            switch (caller)
+            {
+                case E_AppCaller.Wxmp:
+                    url = "/pages/memberprom/memberprom";
                     break;
             }
 

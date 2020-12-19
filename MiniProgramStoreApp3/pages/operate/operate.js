@@ -10,10 +10,10 @@ Page({
     result: {
       isComplete: false,
       message: "正在处理，请耐心等候",
-      isShowContactButton:false
+      isShowContactButton: false
     }
   },
-  getResult: function (id, tp, caller,isTimeout,action) {
+  getResult: function (id, tp, caller, isTimeout, action) {
 
     var _this = this;
 
@@ -22,7 +22,7 @@ Page({
       type: tp,
       caller: caller,
       isTimeout: isTimeout,
-      action:action
+      action: action
     }).then(function (res) {
       if (res.result == 1) {
         if (res.data.isComplete) {
@@ -56,9 +56,9 @@ Page({
         end = end + 2 * Math.PI / n;
         ringMove(start, end);
         step++;
-        _this.getResult(_id, _type, _caller,false,_action)
+        _this.getResult(_id, _type, _caller, false, _action)
       } else {
-        _this.getResult(_id, _type, _caller, true,_action)
+        _this.getResult(_id, _type, _caller, true, _action)
         clearInterval(time);
       }
     };
@@ -122,8 +122,8 @@ Page({
   },
   onHide: function () {
     var _this = this
-    if (_this.countDown){
-    clearInterval(_this.countDown);
+    if (_this.countDown) {
+      clearInterval(_this.countDown);
     }
   },
 
@@ -150,9 +150,9 @@ Page({
         }
         break;
       case "URL":
-        wx.redirectTo({
+        wx.reLaunch({
           url: opVal
-        })
+        });
         break;
     }
   }
