@@ -12,6 +12,7 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
+        var _this=this
         console.log('isShow:' + newVal)
         if (newVal) {
           this._dialogOpen()
@@ -75,6 +76,7 @@ Component({
     },
     _dialogClose: function (e) {
       var _this = this;
+
       var animation = wx.createAnimation({
         duration: 300,
         timingFunction: 'linear'
@@ -90,6 +92,7 @@ Component({
           isShow: false,
           myStop: true,
         })
+        _this.triggerEvent('cartdialogClose')
       }, 300)
     },
     _itemOperate(e) {

@@ -26,7 +26,8 @@ namespace LocalS.Entity
         public string MainImgUrl { get; set; }
         public string LevelStId { get; set; }
         public E_MemberFeeSt_FeeType FeeType { get; set; }
-        public decimal FeeValue { get; set; }
+        public decimal FeeOriginalValue { get; set; }
+        public decimal FeeSaleValue { get; set; }
         public string LayoutWeight { get; set; }
         public string DesPoints { get; set; }
         public string Creator { get; set; }

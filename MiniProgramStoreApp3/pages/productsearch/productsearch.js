@@ -272,6 +272,13 @@ Page({
         }
       })
     }
-
+  },
+  cartdialogClose: function () {
+    var _this = this
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = false
+    _this.setData({
+      cartDialog: cartDialog
+    })
   }
 })

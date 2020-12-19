@@ -242,11 +242,21 @@
   font-weight: 800;
 }
 
-.feest-feevalue{
-  font-size: 32rpx;
+.feest-feesalevalue{
+  font-size: 46rpx;
   height: 50rpx;
+  line-height: 50rpx;
   color: #ffb808;
   font-weight: 600;
+}
+
+.feest-feeoriginalvalue{
+  font-size: 32rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #99989d;
+  font-weight: 600;
+  text-decoration: line-through;
 }
 
 .despoint{

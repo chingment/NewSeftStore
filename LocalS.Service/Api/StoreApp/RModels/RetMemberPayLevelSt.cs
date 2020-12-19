@@ -39,8 +39,8 @@ namespace LocalS.Service.Api.StoreApp
             }
             public string Id { get; set; }
             public string Tag { get; set; }
-            public FsText FeeValue { get; set; }
-            public FsText ShowFeeValue { get; set; }
+            public FsText FeeSaleValue { get; set; }
+            public FsText FeeOriginalValue { get; set; }
             public List<FsField> DesPoints { get; set; }
             public string LayoutWeight { get; set; }
         }

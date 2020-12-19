@@ -212,8 +212,8 @@ namespace LocalS.Service.Api.StoreApp
                         {
                             productSku.Name = memberFeeSt.Name;
                             productSku.MainImgUrl = memberFeeSt.MainImgUrl;
-                            productSku.SalePrice = memberFeeSt.FeeValue;
-                            productSku.OriginalPrice = memberFeeSt.FeeValue;
+                            productSku.SalePrice = memberFeeSt.FeeSaleValue;
+                            productSku.OriginalPrice = memberFeeSt.FeeSaleValue;
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                             productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
                             productSku.ProductId = "";

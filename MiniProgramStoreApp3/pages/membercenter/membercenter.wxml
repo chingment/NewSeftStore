@@ -76,7 +76,8 @@
                         data-reply-level="1" data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
                         <view class="wrapper">
                            <view class="feest-tag">{{item.tag}}</view>
-                           <view class="feest-feevalue">{{item.feeValue.content}}</view>
+                           <view class="feest-feesalevalue">{{item.feeSaleValue.content}}</view>
+                           <view class="feest-feeoriginalvalue">{{item.feeOriginalValue.content}}</view>
                            <view class="feest-despoints" wx:if="{{item.desPoints!=null&&item.desPoints.length>0}}">
                               <block wx:for="{{item.desPoints}}" wx:for-index="index2" wx:for-item="item2"
                                  wx:key="list2">
@@ -102,7 +103,8 @@
                         data-reply-feestidx="{{index}}" bindtap="clickToFeeSt">
                         <view class="wrapper">
                            <view class="feest-tag">{{item.tag}}</view>
-                           <view class="feest-feevalue">{{item.feeValue.content}}</view>
+                           <view class="feest-feesalevalue">{{item.feeSaleValue.content}}</view>
+                           <view class="feest-feeoriginalvalue">{{item.feeOriginalValue.content}}</view>
                            <view class="feest-despoints" wx:if="{{item.desPoints!=null&&item.desPoints.length>0}}">
                               <block wx:for="{{item.desPoints}}" wx:for-index="index2" wx:for-item="item2"
                                  wx:key="list2">

@@ -48,6 +48,7 @@ var config = {
     tobeSearch: `${host}/Search/TobeSearch`,
     getPayLevelSt: `${host}/Member/GetPayLevelSt`,
     getPromSt: `${host}/Member/GetPromSt`,
+    saleOutletList: `${host}/SaleOutlet/List`,
   }
 
 };

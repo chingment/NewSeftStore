@@ -468,7 +468,7 @@ namespace LocalS.BLL.Biz
                                     stock.LockQuantity = 0;
                                     stock.SellQuantity = 0;
                                     stock.IsOffSell = false;
-                                    stock.SalePrice = memberFeeSt.FeeValue;
+                                    stock.SalePrice = memberFeeSt.FeeSaleValue;
 
                                     stocks.Add(stock);
 
