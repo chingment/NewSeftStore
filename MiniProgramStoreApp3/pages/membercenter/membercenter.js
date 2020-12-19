@@ -4,6 +4,7 @@ const config = require('../../config')
 const apiMember = require('../../api/member.js')
 const skeletonData = require('./skeletonData')
 const util = require('../../utils/util')
+const storeage = require('../../utils/storeageutil.js')
 
 const app = getApp()
 
@@ -60,7 +61,7 @@ Page({
     })
 
     apiMember.getPayLevelSt({
-      saleOutletId: 'dsa'
+      saleOutletId: storeage.getLastSaleOutletId()
     }).then(function (res) {
       if (res.result == 1) {
 
@@ -223,5 +224,7 @@ Page({
     _this.setData({
       curSaleOutlet: curSaleOutlet
     })
+
+    storeage.setLastSaleOutletId(saleOutlet.id)
   }
 })

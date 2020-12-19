@@ -8,6 +8,7 @@ const key_merch_id = "key_merch_id"
 const key_session_key = "session_key"
 const key_cur_store_id = "key_cur_store_id"
 const key_cur_shop_model = "key_cur_shop_model"
+const key_last_saleoutlet_id = "key_last_saleoutlet_id"
 
 function getCart() {
   return wx.getStorageSync(key_cart) || []
@@ -100,6 +101,14 @@ function setCurrentShopMode(shopMode) {
   wx.setStorageSync(key_cur_shop_model, shopMode)
 }
 
+function getLastSaleOutletId() {
+  return wx.getStorageSync(key_last_saleoutlet_id) || ''
+}
+
+function setLastSaleOutletId(saleoutlet_id) {
+  wx.setStorageSync(key_last_saleoutlet_id, saleoutlet_id)
+}
+
 
 module.exports = {
   getCart: getCart,
@@ -117,5 +126,7 @@ module.exports = {
   getCurrentStoreId: getCurrentStoreId,
   setCurrentStoreId: setCurrentStoreId,
   getCurrentShopMode: getCurrentShopMode,
-  setCurrentShopMode: setCurrentShopMode
+  setCurrentShopMode: setCurrentShopMode,
+  getLastSaleOutletId: getLastSaleOutletId,
+  setLastSaleOutletId: setLastSaleOutletId
 }
