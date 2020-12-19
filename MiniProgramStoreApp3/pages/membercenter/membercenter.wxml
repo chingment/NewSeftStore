@@ -1,7 +1,10 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
    data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
 
-<saleoutletdialog id="saleoutlet" isShow="{{saleOutletDialog.isShow}}" dataS="{{saleOutletDialog.dataS}}"></saleoutletdialog>
+<saleoutletdialog id="saleoutlet" isShow="{{saleOutletDialog.isShow}}"
+
+bind:_selectSaleoutletItem="selectSaleoutletItem"
+ dataS="{{saleOutletDialog.dataS}}"></saleoutletdialog>
 
 <view class="pg-ct membercenter skeleton" wx:if="{{ pageIsReady }}">
    <view class="bg-1 skeleton-bg">
@@ -132,7 +135,7 @@
                      <view class="it-m">
                         <view class="it-ml">
                            <text class='txt-h1 bold'>{{curSaleOutlet.contentBm}}</text>
-                           <text class='txt-h2'>{{curSaleOutlet.cntentSm}}</text>
+                           <text class='txt-h2'>{{curSaleOutlet.contentSm}}</text>
                         </view>
                      </view>
                      <view class='it-r' bindtap="goSelect">

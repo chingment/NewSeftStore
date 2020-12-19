@@ -12,8 +12,8 @@
 			<view class="wrapper">
 				<view class="its-a">
 					<block wx:for="{{myDataS.list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-						<view class="it" bindtap="selectStore"
-							data-reply-store="{{item}}">
+						<view class="it {{item.id==myDataS.curSaleOutletId?'it-selected':''}}" bindtap="_selectItem"
+							data-reply-item="{{item}}">
 							<view class="it-l hide">
 								<view class="icon">
 									<image class="img" src='/content/default/images/list_icon_withdraw.png'></image>

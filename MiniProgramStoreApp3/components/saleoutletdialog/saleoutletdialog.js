@@ -38,6 +38,7 @@ Component({
     myShow: false,
     myStop: true,
     myDataS: {
+      curSaleOutletId: '',
       list: []
     }
   },
@@ -97,6 +98,18 @@ Component({
           myStop: true,
         })
       }, 300)
+    },
+    _selectItem: function (e) {
+      var _this = this
+      var item = e.currentTarget.dataset.replyItem
+      console.log(JSON.stringify(item))
+
+      _this.triggerEvent('_selectSaleoutletItem', {
+        saleOutlet: item
+      })
+
+      _this._dialogClose()
+
     }
   }
 })

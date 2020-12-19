@@ -31,12 +31,11 @@ Page({
       tagName: '',
       tagTip: '',
       contentBm: '',
-      cntentSm: ''
+      contentSm: ''
     },
-    saleOutletDialog:{
+    saleOutletDialog: {
       isShow: false,
-      dataS: {
-      }
+      dataS: {}
     }
   },
 
@@ -137,14 +136,14 @@ Page({
       return
     }
 
-    // if (_data.isOptSaleOutlet) {
-    //   if (util.isEmptyOrNull(_data.curSaleOutlet.id)) {
-    //     toast.show({
-    //       title: '请选择服务网点'
-    //     })
-    //     return
-    //   }
-    // }
+    if (_data.isOptSaleOutlet) {
+      if (util.isEmptyOrNull(_data.curSaleOutlet.id)) {
+        toast.show({
+          title: '请选择服务网点'
+        })
+        return
+      }
+    }
 
     var curFeeSt
     if (_data.curlevelSt == 1) {
@@ -205,8 +204,21 @@ Page({
     var _this = this
     var saleOutletDialog = _this.data.saleOutletDialog
     saleOutletDialog.isShow = true
+    saleOutletDialog.dataS.curSaleOutletId = _this.data.curSaleOutlet.id
     _this.setData({
       saleOutletDialog: saleOutletDialog
     })
   },
+  selectSaleoutletItem: function (e) {
+    var _this = this
+    var saleOutlet = e.detail.saleOutlet
+    console.log("saleOutlet:" + JSON.stringify(saleOutlet))
+    var curSaleOutlet = _this.data.curSaleOutlet
+    curSaleOutlet.id = saleOutlet.id
+    curSaleOutlet.contentBm = saleOutlet.name
+    curSaleOutlet.contentSm = saleOutlet.contactAddress
+    _this.setData({
+      curSaleOutlet: curSaleOutlet
+    })
+  }
 })
