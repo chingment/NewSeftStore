@@ -14,10 +14,14 @@ namespace LocalS.Service.Api.StoreApp
             this.CurSaleOutlet = new SaleOutletModel();
         }
 
+        public UserInfoModel UserInfo { get; set; }
+
         public bool IsOptSaleOutlet { get; set; }
         public SaleOutletModel CurSaleOutlet { get; set; }
         public LevelStModel LevelSt1 { get; set; }
         public LevelStModel LevelSt2 { get; set; }
+
+
         public class LevelStModel
         {
             public LevelStModel()
@@ -44,7 +48,6 @@ namespace LocalS.Service.Api.StoreApp
             public List<FsField> DesPoints { get; set; }
             public string LayoutWeight { get; set; }
         }
-
         public class SaleOutletModel
         {
             public string Id { get; set; }

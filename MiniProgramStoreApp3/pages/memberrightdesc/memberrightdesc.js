@@ -1,10 +1,14 @@
-// pages/memberrightdesc/memberrightdesc.js
+const apiMember = require('../../api/member.js')
+const storeage = require('../../utils/storeageutil.js')
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    pageIsReady: false,
     right: 1,
     isMember: false,
     timespan: (new Date()).getTime()
@@ -21,8 +25,35 @@ Page({
       right: right
     })
 
-  },
+    var _this = this
 
+
+    if (app.globalData.checkConfig) {
+      _this.getRightDescSt()
+    } else {
+      app.checkConfigReadyCallback = res => {
+        _this.getRightDescSt()
+      }
+    }
+
+
+  },
+  getRightDescSt: function () {
+    var _this = this
+    apiMember.getRightDescSt({
+      openId: storeage.getOpenId()
+    }).then(function (res) {
+      if (res.result == 1) {
+
+        var d = res.data
+        _this.setData({
+          pageIsReady: true,
+          userInfo: d.userInfo
+        })
+      }
+    })
+
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

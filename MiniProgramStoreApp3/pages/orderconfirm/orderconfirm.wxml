@@ -185,11 +185,16 @@
 										</view>
 									</view>
 									<view class="it-m">
-										<view class="it-ml">
-											<text class='name'>{{skusitem.name}}</text>
+										<view class="it-ml" style="display:block">
+											<view style="height:100rpx;">
+											<text class='name skeleton-rect'>{{skusitem.name}}</text>
+										</view>
+										<view style="height:50rpx;">
+											<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+										</view>
 										</view>
 										<view class="it-mr">
-											<text class='quantity'> x {{skusitem.quantity}}</text>
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}" class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
 										</view>
 									</view>
 									<view class="it-r">
@@ -236,11 +241,16 @@
 										</view>
 									</view>
 									<view class="it-m">
-										<view class="it-ml">
-											<text class='name'>{{skusitem.name}}</text>
+										<view class="it-ml" style="display:block">
+											<view style="height:100rpx;">
+											<text class='name skeleton-rect'>{{skusitem.name}}</text>
+										</view>
+										<view style="height:50rpx;">
+											<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+										</view>
 										</view>
 										<view class="it-mr">
-											<text class='quantity'> x {{skusitem.quantity}}</text>
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}" class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
 										</view>
 									</view>
 									<view class="it-r">

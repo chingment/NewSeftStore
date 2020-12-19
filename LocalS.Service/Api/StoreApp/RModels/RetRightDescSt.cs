@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RetMemberPromSt
+   public class RetRightDescSt
     {
         public UserInfoModel UserInfo { get; set; }
     }

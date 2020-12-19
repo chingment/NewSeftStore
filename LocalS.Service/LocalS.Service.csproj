@@ -304,6 +304,7 @@
     <Compile Include="Api\StoreApp\RModels\RetOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOrderReceiptTimeAxis.cs" />
     <Compile Include="Api\StoreApp\RModels\RetProductInitSearch.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetRightDescSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RetSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RetOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RetPersonalPageData.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Api\StoreApp\RModels\RupIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupMemberGetPayLevelSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RupMemberGetPromSt.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupMemberGetRightDescSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildPayOptions.cs" />

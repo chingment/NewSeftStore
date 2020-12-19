@@ -3,21 +3,21 @@
 <view class="page-ct memberprom skeleton" wx:if="{{ pageIsReady }}">
   <view class="bg-1 skeleton-rect">
     <image class="bg-img"
-      src="http://file.17fanju.com/upload/membertheme/1/prom/bg_1_{{memberLevel==0?'0':'1'}}.png?ts={{timespan}}">
+      src="http://file.17fanju.com/upload/membertheme/1/prom/bg_1_{{userInfo.memberLevel==0?'0':'1'}}.png?ts={{timespan}}">
     </image>
-    <view class="section" wx:if="{{memberLevel>0}}">
+    <view class="section" wx:if="{{userInfo.memberLevel>0}}">
       <view class="info">
         <view class="avatarUrl">
           <open-data type="userAvatarUrl"></open-data>
         </view>
         <view class="hello">
-          <view class="t1">尊敬的 <text class="memberTag">{{memberTag}}</text>,您好!</view>
-          <view class="t2">[{{memberExpireTip}}]</view>
+          <view class="t1">尊敬的 <text class="memberTag">{{userInfo.memberTag}}</text>,您好!</view>
+          <view class="t2">[{{userInfo.memberExpireTip}}]</view>
         </view>
       </view>
     </view>
   </view>
-  <view class="bg-2" style="height:{{memberLevel==0?'847rpx':'650rpx'}};">
+  <view class="bg-2" style="height:{{userInfo.memberLevel==0?'847rpx':'650rpx'}};">
     <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_2.png?ts={{timespan}}"></image>
 
     <view class="section">
@@ -115,7 +115,7 @@
           </view>
         </view>
       </view>
-      <view class="tui-btn-view" wx:if="{{memberLevel==0}}">
+      <view class="tui-btn-view" wx:if="{{userInfo.memberLevel==0}}">
         <view class="wrapper">
           <image class="tui-btn-tip"
             src="http://file.17fanju.com/upload/membertheme/1/prom/btn_tip1.png?ts={{timespan}}">
@@ -129,7 +129,7 @@
     <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_3.png?ts={{timespan}}"></image>
   </view>
 
-  <view class="bg-bottom" wx:if="{{isShowButtonBottom&&memberLevel==0}}">
+  <view class="bg-bottom" wx:if="{{isShowButtonBottom&&userInfo.memberLevel==0}}">
     <view class="wrapper">
       <button bindtap="clickToCenter" class='btn-open'>立即开通</button>
       <view class="btn-tip">

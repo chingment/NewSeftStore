@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RupMemberGetPayLevelSt
+    public class RupMemberGetRightDescSt
     {
         public string MerchId { get; set; }
-        public string SaleOutletId { get; set; }
-
+        public string StoreId { get; set; }
         public string OpenId { get; set; }
 
-        public RupMemberGetPayLevelSt()
-        {
-            this.SaleOutletId = "";
-        }
+        public string Right { get; set; }
     }
 }

@@ -16,10 +16,20 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetPersonalPageData();
 
-            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            ret.UserInfo = GetUserInfo(clientUserId, rup.OpenId);
+
+            result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+        public UserInfoModel GetUserInfo(string clientUserId, string openId)
+        {
+            var m_userInfo = new UserInfoModel();
+
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId || m.WxMpOpenId == openId).FirstOrDefault();
             if (d_clientUser != null)
             {
-                var m_userInfo = new UserInfoModel();
                 m_userInfo.UserId = d_clientUser.Id;
                 m_userInfo.NickName = d_clientUser.NickName;
                 m_userInfo.PhoneNumber = CommonUtil.GetEncryptionPhoneNumber(d_clientUser.PhoneNumber);
@@ -39,14 +49,10 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     m_userInfo.MemberTag = memberLevelSt.Name;
                 }
-
-                ret.UserInfo = m_userInfo;
             }
 
+            return m_userInfo;
 
-            result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);
-
-            return result;
         }
     }
 }

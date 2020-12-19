@@ -46,8 +46,9 @@ var config = {
     kindPageData: `${host}/Kind/PageData`,
     personalPageData: `${host}/Personal/PageData`,
     tobeSearch: `${host}/Search/TobeSearch`,
-    getPayLevelSt: `${host}/Member/GetPayLevelSt`,
-    getPromSt: `${host}/Member/GetPromSt`,
+    memberGetPayLevelSt: `${host}/Member/GetPayLevelSt`,
+    memberGetPromSt: `${host}/Member/GetPromSt`,
+    memberGetRightDescSt: `${host}/Member/GetRightDescSt`,
     saleOutletList: `${host}/SaleOutlet/List`,
   }
 

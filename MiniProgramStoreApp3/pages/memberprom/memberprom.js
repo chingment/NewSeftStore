@@ -18,9 +18,7 @@ Page({
     pageIsReady: false,
     isShowButtonBottom: false,
     timespan: (new Date()).getTime(),
-    memberLevel: 0,
-    memberExpireTip: '',
-    memberTag: '',
+    userInfo: {},
   },
 
   /**
@@ -49,9 +47,7 @@ Page({
         var d = res.data
         _this.setData({
           pageIsReady: true,
-          memberLevel: d.memberLevel,
-          memberExpireTip: d.memberExpireTip,
-          memberTag: d.memberTag
+          userInfo: d.userInfo
         })
       }
     })
