@@ -294,17 +294,17 @@ namespace LocalS.Service.Api.StoreApp
                     memberLevel = clientUser.MemberLevel;
                 }
 
-                if (memberLevel > 0)
-                {
+                //if (memberLevel > 0)
+                //{
                     amount_charge = amount_sale;//会员用户总价 为 实际总价
 
                     //decimal member_coupon = amount_original - amount_sale;
                     // c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", , IsDcrease = true });
-                }
-                else
-                {
-                    amount_charge = amount_original;
-                }
+                //}
+                //else
+                //{
+                  //  amount_charge = amount_original;
+                //}
 
                 amount_charge -= amount_coupon;
 

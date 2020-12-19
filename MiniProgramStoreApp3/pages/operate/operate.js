@@ -136,7 +136,7 @@ Page({
   },
 
   operate: function (e) {
-
+    //app.checkConfigReadyCallback=null
     var opType = e.currentTarget.dataset.replyOptype
     var opVal = e.currentTarget.dataset.replyOpval
 

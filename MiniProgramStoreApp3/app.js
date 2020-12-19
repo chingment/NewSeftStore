@@ -19,7 +19,7 @@ App({
 
     console.log('>>'+appId)
 
-    //_this.getConfig()
+    _this.getConfig()
 
     // 展示本地存储能力
     // var logs = wx.getStorageSync('logs') || []
@@ -36,9 +36,9 @@ App({
 
   },
   onShow: function () {
-    var _this = this
-    console.log('app.onShow')
-    _this.getConfig()
+    //var _this = this
+   // console.log('app.onShow')
+   // _this.getConfig()
   },
   globalData: {
     appId: null,

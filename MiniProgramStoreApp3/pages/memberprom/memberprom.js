@@ -29,9 +29,12 @@ Page({
 
 
     if (app.globalData.checkConfig) {
+       console.log('a1')
       _this.getPromSt()
     } else {
+      console.log('a2')
       app.checkConfigReadyCallback = res => {
+         console.log('a3')
         _this.getPromSt()
       }
     }
