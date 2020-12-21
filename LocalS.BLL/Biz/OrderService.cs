@@ -314,7 +314,7 @@ namespace LocalS.BLL.Biz
                             switch (faceType)
                             {
                                 case E_Coupon_FaceType.ShopVoucher:
-                                    LogUtil.Info("=>6,saleAmount："+ saleAmount+ ",faceValue"+ faceValue);
+                                    LogUtil.Info("=>6,saleAmount：" + saleAmount + ",faceValue" + faceValue);
                                     couponAmount = faceValue;
                                     LogUtil.Info("=>7,couponAmount：" + couponAmount);
                                     isCalComplete = true;
@@ -579,7 +579,9 @@ namespace LocalS.BLL.Biz
                         order.PickupCode = IdWorker.BuildPickupCode();
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
-                        order.CouponIds = rop.CouponIds.ToJsonString();
+                        order.CouponIdsByShop = rop.CouponIdsByShop.ToJsonString();
+                        order.CouponIdByRent = rop.CouponIdByRent;
+                        order.CouponIdByDeposit = rop.CouponIdByDeposit;
 
                         switch (buildOrder.SellChannelRefType)
                         {

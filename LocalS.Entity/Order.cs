@@ -130,11 +130,10 @@ namespace LocalS.Entity
         public DateTime? BookStartTime { get; set; }
         public DateTime? BookEndTime { get; set; }
         public bool IsNoDisplayClient { get; set; }
-
         public string SaleOutletId{ get; set; }
-
-        public string CouponIds { get; set; }
-
+        public string CouponIdsByShop { get; set; }
+        public string CouponIdByRent { get; set; }
+        public string CouponIdByDeposit { get; set; }
         public E_OrderShopMethod ShopMethod { get; set; }
     }
 }

@@ -304,6 +304,8 @@ Page({
       blocks: blocks,
       payPartner: payOption.payPartner,
       couponIdsByShop: data.couponIdsByShop,
+      couponIdByDeposit: data.couponIdByDeposit,
+      couponByRent: data.couponIdByRent,
       shopMethod: data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {

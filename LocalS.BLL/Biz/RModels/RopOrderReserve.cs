@@ -20,7 +20,9 @@ namespace LocalS.BLL.Biz
         public string ClientUserId { get; set; }
         public string SvcAnswererId { get; set; }
         public string SaleOutletId { get; set; }
-        public List<string> CouponIds { get; set; }
+        public List<string> CouponIdsByShop { get; set; }
+        public string CouponIdByRent { get; set; }
+        public string CouponIdByDeposit { get; set; }
         public E_OrderShopMethod ShopMethod { get; set; }
         public E_OrderSource Source { get; set; }
         public List<OrderReserveBlockModel> Blocks { get; set; }
