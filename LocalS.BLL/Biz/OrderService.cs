@@ -582,6 +582,7 @@ namespace LocalS.BLL.Biz
                         order.CouponIdsByShop = rop.CouponIdsByShop.ToJsonString();
                         order.CouponIdByRent = rop.CouponIdByRent;
                         order.CouponIdByDeposit = rop.CouponIdByDeposit;
+                        order.ShopMethod = rop.ShopMethod;
 
                         switch (buildOrder.SellChannelRefType)
                         {

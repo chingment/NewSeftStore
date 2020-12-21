@@ -250,7 +250,11 @@ Page({
         storeId: _this.data.storeId,
         blocks: blocks,
         source: 3,
-        saleOutletId: _this.data.saleOutletId
+        saleOutletId: _this.data.saleOutletId,
+        couponIdsByShop: _this.data.couponIdsByShop,
+        couponIdByDeposit: _this.data.couponIdByDeposit,
+        couponIdByRent: _this.data.couponIdByRent,
+        shopMethod: _this.data.shopMethod
       }).then(function (res) {
         if (res.result == 1) {
           var d = res.data
@@ -305,7 +309,7 @@ Page({
       payPartner: payOption.payPartner,
       couponIdsByShop: data.couponIdsByShop,
       couponIdByDeposit: data.couponIdByDeposit,
-      couponByRent: data.couponIdByRent,
+      couponIdByRent: data.couponIdByRent,
       shopMethod: data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
