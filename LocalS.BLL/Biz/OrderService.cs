@@ -505,6 +505,47 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
+
+                    decimal couponAmountByDeposit = 0;
+                    decimal couponAmountByRent = 0;
+                    decimal couponAmountByShop = 0;
+
+                    if (!string.IsNullOrEmpty(rop.CouponIdByDeposit))
+                    {
+                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByDeposit).FirstOrDefault();
+                        if (d_clientCoupon != null)
+                        {
+                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+
+                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                            if (d_coupon != null)
+                            {
+                                if (d_coupon.FaceType == E_Coupon_FaceType.DepositVoucher)
+                                {
+                                    couponAmountByDeposit = d_coupon.FaceValue;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(rop.CouponIdByRent))
+                    {
+                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
+                        if (d_clientCoupon != null)
+                        {
+                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+
+                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                            if (d_coupon != null)
+                            {
+                                if (d_coupon.FaceType == E_Coupon_FaceType.RentVoucher)
+                                {
+                                    couponAmountByRent = d_coupon.FaceValue;
+                                }
+                            }
+                        }
+                    }
+
                     //decimal couponAmount = 0;
 
                     //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
@@ -580,8 +621,11 @@ namespace LocalS.BLL.Biz
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
                         order.CouponIdsByShop = rop.CouponIdsByShop.ToJsonString();
+                        order.CouponAmountByShop = couponAmountByShop;
                         order.CouponIdByRent = rop.CouponIdByRent;
+                        order.CouponAmountByRent = couponAmountByRent;
                         order.CouponIdByDeposit = rop.CouponIdByDeposit;
+                        order.CouponAmountByDeposit = couponAmountByDeposit;
                         order.ShopMethod = rop.ShopMethod;
 
                         switch (buildOrder.SellChannelRefType)
@@ -1208,6 +1252,39 @@ namespace LocalS.BLL.Biz
                         d_order.MendTime = DateTime.Now;
                         d_order.Mender = operater;
 
+
+                        if (!string.IsNullOrEmpty(d_order.CouponIdsByShop))
+                        {
+                            string[] l_couponIdsByShops = d_order.CouponIdsByShop.ToJsonObject<string[]>();
+
+                            foreach (var l_couponIdByShop in l_couponIdsByShops)
+                            {
+                                var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == l_couponIdByShop).FirstOrDefault();
+                                if (d_clientCoupon != null)
+                                {
+                                    d_clientCoupon.Status = E_ClientCouponStatus.Used;
+                                }
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(d_order.CouponIdByRent))
+                        {
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_order.CouponIdByRent).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                d_clientCoupon.Status = E_ClientCouponStatus.Used;
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(d_order.CouponIdByDeposit))
+                        {
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_order.CouponIdByDeposit).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                d_clientCoupon.Status = E_ClientCouponStatus.Used;
+                            }
+                        }
+
                         var d_orderPickupLog = new OrderPickupLog();
                         d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         d_orderPickupLog.OrderId = d_order.Id;
@@ -1273,87 +1350,119 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+                var d_order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
-                if (order == null)
+                if (d_order == null)
                 {
                     LogUtil.Info(string.Format("该订单号:{0},找不到", orderId));
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该订单号:{0},找不到", orderId));
                 }
 
-                if (order.PayStatus == E_PayStatus.PayCancle)
+                if (d_order.PayStatus == E_PayStatus.PayCancle)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经取消");
                 }
 
-                if (order.PayStatus == E_PayStatus.PayTimeout)
+                if (d_order.PayStatus == E_PayStatus.PayTimeout)
                 {
                     return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经超时");
                 }
 
-                if (order.PayStatus == E_PayStatus.PaySuccess)
+                if (d_order.PayStatus == E_PayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经支付成功");
                 }
 
 
-                operater = order.Creator;
+                operater = d_order.Creator;
 
-                if (order.PayStatus != E_PayStatus.PaySuccess)
+                if (d_order.PayStatus != E_PayStatus.PaySuccess)
                 {
-                    order.Status = E_OrderStatus.Canceled;
-                    order.CancelOperator = operater;
-                    order.CanceledTime = DateTime.Now;
-                    order.CancelReason = cancelReason;
-                    order.Mender = operater;
-                    order.MendTime = DateTime.Now;
+                    d_order.Status = E_OrderStatus.Canceled;
+                    d_order.CancelOperator = operater;
+                    d_order.CanceledTime = DateTime.Now;
+                    d_order.CancelReason = cancelReason;
+                    d_order.Mender = operater;
+                    d_order.MendTime = DateTime.Now;
 
                     if (cancleType == E_OrderCancleType.PayCancle)
                     {
-                        order.PayStatus = E_PayStatus.PayCancle;
+                        d_order.PayStatus = E_PayStatus.PayCancle;
                     }
                     else if (cancleType == E_OrderCancleType.PayTimeout)
                     {
-                        order.PayStatus = E_PayStatus.PayTimeout;
+                        d_order.PayStatus = E_PayStatus.PayTimeout;
                     }
 
-                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+                    var d_orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_order.Id).ToList();
 
-                    foreach (var orderSub in orderSubs)
+                    foreach (var d_orderSub in d_orderSubs)
                     {
 
-                        orderSub.Mender = operater;
-                        orderSub.MendTime = DateTime.Now;
+                        d_orderSub.Mender = operater;
+                        d_orderSub.MendTime = DateTime.Now;
 
                         if (cancleType == E_OrderCancleType.PayCancle)
                         {
-                            orderSub.PayStatus = E_PayStatus.PayCancle;
+                            d_orderSub.PayStatus = E_PayStatus.PayCancle;
                         }
                         else if (cancleType == E_OrderCancleType.PayTimeout)
                         {
-                            orderSub.PayStatus = E_PayStatus.PayTimeout;
+                            d_orderSub.PayStatus = E_PayStatus.PayTimeout;
                         }
 
-                        orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
+                        d_orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
 
-                        if (orderSub.SellChannelRefType == E_SellChannelRefType.Mall || orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
+                        if (d_orderSub.SellChannelRefType == E_SellChannelRefType.Mall || d_orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, order.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, d_order.MerchId, d_order.StoreId, d_orderSub.SellChannelRefId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                         }
 
+                    }
+
+                    if (!string.IsNullOrEmpty(d_order.CouponIdsByShop))
+                    {
+                        string[] l_couponIdsByShops = d_order.CouponIdsByShop.ToJsonObject<string[]>();
+
+                        foreach (var l_couponIdByShop in l_couponIdsByShops)
+                        {
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == l_couponIdByShop).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(d_order.CouponIdByRent))
+                    {
+                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_order.CouponIdByRent).FirstOrDefault();
+                        if (d_clientCoupon != null)
+                        {
+                            d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(d_order.CouponIdByDeposit))
+                    {
+                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_order.CouponIdByDeposit).FirstOrDefault();
+                        if (d_clientCoupon != null)
+                        {
+                            d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
+                        }
                     }
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, order.Id);
+                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
 
-                    if (!string.IsNullOrEmpty(order.PayTransId))
+                    if (!string.IsNullOrEmpty(d_order.PayTransId))
                     {
-                        Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, order.PayTransId);
+                        Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
                     }
 
-                    MqFactory.Global.PushEventNotify(operater, order.AppId, order.MerchId, order.StoreId, "", EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", order.Id));
+                    MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, "", EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_order.Id));
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }

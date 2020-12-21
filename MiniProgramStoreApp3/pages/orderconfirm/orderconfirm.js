@@ -20,7 +20,7 @@ Page({
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     storeId: undefined,
-    orderIds: null,
+    orderIds: [],
     blocks: [],
     couponIdsByShop: [],
     couponIdByRent: '',
@@ -124,6 +124,11 @@ Page({
   },
   couponSelect: function (e) {
     var _this = this
+    
+    if (_this.data.orderIds.length > 0) {
+      return
+    }
+    
     var faceTypes = e.currentTarget.dataset.replyFacetypes
     console.log('faceTypes:' + faceTypes)
     var couponIds
@@ -416,6 +421,7 @@ Page({
           couponByShop: d.couponByShop,
           couponByRent: d.couponByRent,
           couponByDeposit: d.couponByDeposit,
+          shopMethod: d.shopMethod,
           pageIsReady: true
         })
       }

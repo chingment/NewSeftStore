@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,8 +29,8 @@ namespace LocalS.Service.Api.StoreApp
         public string ActualAmount { get; set; }
         //原金额
         public string OriginalAmount { get; set; }
-
         public List<string> OrderIds { get; set; }
+        public E_OrderShopMethod ShopMethod { get; set; }
 
     }
 }

@@ -276,7 +276,7 @@
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
 
-				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1}}" data-reply-facetypes="1,2" >
+				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1}}" data-reply-facetypes="1,2">
 					<view class="it-l" style="width:60rpx">
 						<view class="icon">
 							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
@@ -292,7 +292,7 @@
 						</view>
 					</view>
 
-					<view class="it-r" style="width:80rpx">
+					<view class="it-r" style="width:80rpx" wx:if="{{orderIds.length==0}}">
 
 						<view class="icon">
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
@@ -312,10 +312,11 @@
 							<text class="txt skeleton-rect">押金券</text>
 						</view>
 						<view class="it-mr flex1">
-							<text class="coupontip coupontip{{couponByDeposit.tipType}} skeleton-rect">{{couponByDeposit.tipMsg}}</text>
+							<text
+								class="coupontip coupontip{{couponByDeposit.tipType}} skeleton-rect">{{couponByDeposit.tipMsg}}</text>
 						</view>
 					</view>
-					<view class="it-r" style="width:80rpx">
+					<view class="it-r" style="width:80rpx" wx:if="{{orderIds.length==0}}">
 						<view class="icon">
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 						</view>
@@ -337,7 +338,7 @@
 							<text class="coupontip coupontip{{couponByRent.tipType}} skeleton-rect">{{couponByRent.tipMsg}}</text>
 						</view>
 					</view>
-					<view class="it-r" style="width:80rpx">
+					<view class="it-r" style="width:80rpx" wx:if="{{orderIds.length==0}}">
 						<view class="icon">
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 						</view>

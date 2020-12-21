@@ -399,6 +399,7 @@ namespace LocalS.Service.Api.StoreApp
                     amount_charge = 0;
                 }
 
+                ret.ShopMethod = rop.ShopMethod;
             }
             else
             {
@@ -466,6 +467,12 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.ShopMode = shopModeSku.SellChannelRefType;
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
+
+                ret.ShopMethod = orders[0].ShopMethod;
+
+                ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", orders.Sum(m => m.CouponAmountByShop).ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", orders.Sum(m => m.CouponAmountByDeposit).ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", orders.Sum(m => m.CouponAmountByRent).ToF2Price()), TipType = TipType.InUse };
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
                 amount_sale = orders.Sum(m => m.SaleAmount);

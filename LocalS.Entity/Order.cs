@@ -84,7 +84,7 @@ namespace LocalS.Entity
         public decimal SaleAmount { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
-       // public decimal CouponAmount { get; set; }
+        // public decimal CouponAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public int Quantity { get; set; }
         public string PickupCode { get; set; }
@@ -130,10 +130,13 @@ namespace LocalS.Entity
         public DateTime? BookStartTime { get; set; }
         public DateTime? BookEndTime { get; set; }
         public bool IsNoDisplayClient { get; set; }
-        public string SaleOutletId{ get; set; }
+        public string SaleOutletId { get; set; }
         public string CouponIdsByShop { get; set; }
+        public decimal CouponAmountByShop { get; set; }
         public string CouponIdByRent { get; set; }
+        public decimal CouponAmountByRent { get; set; }
         public string CouponIdByDeposit { get; set; }
+        public decimal CouponAmountByDeposit { get; set; }
         public E_OrderShopMethod ShopMethod { get; set; }
     }
 }

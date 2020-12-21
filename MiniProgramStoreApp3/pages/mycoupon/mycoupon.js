@@ -28,7 +28,11 @@ Page({
     var shopMethod = options.shopMethod == undefined ? 0 : options.shopMethod
     var storeId = options.storeId == undefined ? '' : options.storeId
     var op_faceTypes = options.faceTypes == undefined ? '' : options.faceTypes
-    var faceTypes = op_faceTypes.split(',')
+
+    var faceTypes
+    if (op_faceTypes != '') {
+      faceTypes = op_faceTypes.split(',')
+    }
 
     _this.setData({
       op_faceTypes: op_faceTypes
@@ -83,6 +87,7 @@ Page({
   },
   goSelect: function (e) {
     var _this = this
+
     var index = e.currentTarget.dataset.replyIndex //对应页面data-reply-index
     var coupon = _this.data.coupons[index]
     var operate = _this.data.operate
