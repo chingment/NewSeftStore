@@ -52,7 +52,7 @@
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-newuser.png'></image>
 							</view>
 							<view class="title skeleton-rect">
-								<text class='txt'> 新人专享</text>
+								<text class='txt'>领券中心</text>
 							</view>
 						</navigator>
 						<navigator url="/pages/notopen/notopen" class="it" hover-class="none">

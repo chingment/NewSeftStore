@@ -51,6 +51,13 @@ namespace LocalS.Entity
         UnTaked = 2
     }
 
+    public enum E_OrderShopMethod
+    {
+
+        Unknow = 0,
+        Shop = 1,
+        Rent = 2
+    }
 
     [Table("Order")]
     public class Order
@@ -127,5 +134,7 @@ namespace LocalS.Entity
         public string SaleOutletId{ get; set; }
 
         public string CouponIds { get; set; }
+
+        public E_OrderShopMethod ShopMethod { get; set; }
     }
 }

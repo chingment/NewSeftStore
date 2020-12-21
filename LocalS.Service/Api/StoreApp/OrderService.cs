@@ -165,7 +165,7 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品指定的购物模式有误");
                 }
 
-                if (rop.ShopMethod == E_ShopMethod.Unknow)
+                if (rop.ShopMethod == E_OrderShopMethod.Unknow)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择购物类型");
                 }
@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
                         productSku.DepositPrice = r_productSku.Stocks[0].RentMhPrice;
 
-                        if (rop.ShopMethod == E_ShopMethod.Shop)
+                        if (rop.ShopMethod == E_OrderShopMethod.Shop)
                         {
                             productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
 
@@ -215,7 +215,7 @@ namespace LocalS.Service.Api.StoreApp
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                             productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
                         }
-                        else if (rop.ShopMethod == E_ShopMethod.Rent)
+                        else if (rop.ShopMethod == E_OrderShopMethod.Rent)
                         {
                             productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
                             productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
@@ -269,7 +269,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 amount_sale = c_prodcutSkus.Sum(m => m.SaleAmount);
 
-                if (rop.ShopMethod == E_ShopMethod.Shop)
+                if (rop.ShopMethod == E_OrderShopMethod.Shop)
                 {
                     if (rop.CouponIdsByShop == null || rop.CouponIdsByShop.Count == 0)
                     {
@@ -310,7 +310,7 @@ namespace LocalS.Service.Api.StoreApp
                         }
                     }
                 }
-                else if (rop.ShopMethod == E_ShopMethod.Rent)
+                else if (rop.ShopMethod == E_OrderShopMethod.Rent)
                 {
                     if (string.IsNullOrEmpty(rop.CouponIdByRent))
                     {

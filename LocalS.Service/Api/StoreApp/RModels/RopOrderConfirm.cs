@@ -17,6 +17,6 @@ namespace LocalS.Service.Api.StoreApp
         public List<string> CouponIdsByShop { get; set; }
         public string CouponIdByRent { get; set; }
         public string CouponIdByDeposit { get; set; }
-        public E_ShopMethod ShopMethod { get; set; }
+        public E_OrderShopMethod ShopMethod { get; set; }
     }
 }
