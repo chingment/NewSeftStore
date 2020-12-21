@@ -73,8 +73,5 @@
 		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}">
 			<text>立即购买</text>
 		</view>
-		<view bindtap="immeRent" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}">
-			<text>立即租用</text>
-		</view>
 	</view>
 </view>

@@ -19,6 +19,15 @@ namespace WebApiStoreApp.Controllers
 
             return new OwnApiHttpResponse<RetIndexPageData>(result);
         }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        public OwnApiHttpResponse SugProducts([FromUri]RupIndexSugProducts rup)
+        {
+            IResult result = StoreAppServiceFactory.Index.SugProducts(this.CurrentUserId, this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+        }
 
     }
 }

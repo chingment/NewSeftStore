@@ -1086,3 +1086,11 @@ page {
     font-size: 24rpx;
     color:#fff ;
   }
+
+  .btn-rent{
+    background: #49e;
+    padding: 12rpx 26rpx;
+    border-radius: 10rpx;
+    font-size: 24rpx;
+    color:#fff ;
+  }

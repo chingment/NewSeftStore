@@ -95,7 +95,7 @@ namespace LocalS.Service.Api.StoreApp
                 productSkuModel.Id = item.PrdProductSkuId;
                 productSkuModel.ProductId = item.PrdProductId;
                 productSkuModel.Name = bizProductSku.Name;
-                productSkuModel.MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
+                productSkuModel.MainImgUrl = ImgSet.Convert_B(bizProductSku.MainImgUrl);
                 productSkuModel.BriefDes = bizProductSku.BriefDes;
                 productSkuModel.CharTags = bizProductSku.CharTags;
                 productSkuModel.SpecDes = bizProductSku.SpecDes;

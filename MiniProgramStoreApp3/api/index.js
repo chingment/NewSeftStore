@@ -7,10 +7,19 @@ function pageData(params) {
   return lumos.getJson({
     url: config.apiUrl.indexPageData,
     urlParams: params,
-    isShowLoading:false
+    isShowLoading: false
+  })
+}
+
+function sugProducts(params) {
+  return lumos.getJson({
+    url: config.apiUrl.indexSugProducts,
+    urlParams: params,
+    isShowLoading: false
   })
 }
 
 module.exports = {
-  pageData: pageData
+  pageData: pageData,
+  sugProducts: sugProducts
 }

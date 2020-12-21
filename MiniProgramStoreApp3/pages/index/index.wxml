@@ -1,5 +1,7 @@
-<skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}" data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
-<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
+<skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
+	data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
+<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}"
+	shopMode="{{specsDialog.shopMode}}"></specsdialog>
 
 <scroll-view scroll-y="true" style="height:{{height}}px;">
 	<view class="page st-index pd-com skeleton" wx:if="{{ pageIsReady }}">
@@ -15,8 +17,9 @@
 					<view class="radio-grp">
 						<block wx:for="{{shopModes}}" wx:for-item="item" wx:key="index">
 							<view class="radio-item" bindtap="switchShopMode" data-reply-shopmodeid="{{item.id}}">
-								<image class="img skeleton-circle" src='/content/default/images/{{item.selected==false?"radio_off":"radio_on"}}.png'></image>
-								<text  class='txt {{item.selected==false?"txt-off":"txt-on"}} skeleton-rect'>{{item.name}}</text>
+								<image class="img skeleton-circle"
+									src='/content/default/images/{{item.selected==false?"radio_off":"radio_on"}}.png'></image>
+								<text class='txt {{item.selected==false?"txt-off":"txt-on"}} skeleton-rect'>{{item.name}}</text>
 							</view>
 						</block>
 					</view>
@@ -25,7 +28,8 @@
 			<view class="banner skeleton-rect">
 				<view class="ct">
 					<block wx:if="{{banner.imgs.length>0}}">
-						<swiper class="its-swiper" autoplay="true" interval="2000" duration="500" circular="true" indicator-dots="true">
+						<swiper class="its-swiper" autoplay="true" interval="2000" duration="500" circular="true"
+							indicator-dots="true">
 							<block wx:for="{{banner.imgs}}" wx:key="item">
 								<swiper-item class="it">
 									<image lazy-load class="img" src="{{item.url}}"></image>
@@ -78,6 +82,51 @@
 					</view>
 				</view>
 			</view>
+
+			<view class="pdRent">
+				<view class="ct">
+					<view class="its-pdRent">
+						<view class="it">
+							<view class="it-a1">
+								<view class="title">
+									<text class='txt skeleton-rect'>{{pdRent.name}}</text>
+								</view>
+
+							</view>
+
+							<view class="it-a3 prd-list-3">
+								<block wx:for="{{pdRent.list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+									<view class='it'>
+										<view class="it-left">
+											<view class='imgurl skeleton-rect'>
+												<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
+													<view class="isOffSell-tip">已下架</view>
+												</view>
+												<image lazy-load class="img" src="{{item.mainImgUrl}}"></image>
+											</view>
+										</view>
+										<view class="it-rigt">
+											<text class="name font-gray skeleton-rect">{{item.name}}</text>
+											<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
+											<view class="price skeleton-rect ">
+												<text class="rentMhPrice">{{item.rentMhPrice}}</text>
+												<text class="rentMhPriceUnit">/月</text>
+											</view>
+											<view class="area2">
+												<view class="operate skeleton-rect">
+													<text class="btn-rent" bindtap="clickToRent" data-reply-skuid="{{item.id}}"
+														data-reply-sku="{{item}}">立即租用</text>
+												</view>
+											</view>
+										</view>
+									</view>
+								</block>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+
 			<view class="pdArea">
 				<view class="ct">
 					<view class="its-pdArea">
@@ -104,7 +153,8 @@
 
 										<view class='it it-{{index%2}}'>
 
-											<navigator class='imgurl skeleton-rect' url="/pages/productdetails/productdetails?skuId={{item.id}}">
+											<navigator class='imgurl skeleton-rect'
+												url="/pages/productdetails/productdetails?skuId={{item.id}}">
 												<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 													<view class="isOffSell-tip">已下架</view>
 												</view>
@@ -121,23 +171,26 @@
 
 													<block wx:if="{{item.specIdxSkus.length<=1}}">
 
-	
-												<!-- <view class="decrease">
+
+														<!-- <view class="decrease">
                           <image class="img" bindtap="addToCart" data-reply-operate="3" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  src='/content/default/images/decrease.png'></image>
                         </view>
                         <text class="quantity">0</text> -->
 
-                        <view class="increase">
-                          <image wx:if="{{!item.isOffSell}}" class="img" bindtap="addToCart"  data-reply-operate="2" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  src='/content/default/images/increase.png'></image>
-                        </view>
-												
-												
-												
+														<view class="increase">
+															<image wx:if="{{!item.isOffSell}}" class="img" bindtap="addToCart" data-reply-operate="2"
+																data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"
+																src='/content/default/images/increase.png'></image>
+														</view>
+
+
+
 													</block>
 
 													<block wx:else>
 
-														<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"  >选规格</text>
+														<text class="btn-selectSpecs" bindtap="selectSpecs" data-reply-skuid="{{item.id}}"
+															data-reply-sku="{{item}}">选规格</text>
 
 													</block>
 

@@ -94,26 +94,90 @@ namespace LocalS.Service.Api.StoreApp
             ret.Banner = bannerModel;
 
 
-            var pdAreaModel = new PdAreaModel();
+            //var pdAreaModel = new PdAreaModel();
 
-            var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == store.Id && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            //var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == store.Id && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            foreach (var prdKind in prdKinds)
+            //foreach (var prdKind in prdKinds)
+            //{
+            //    var tab = new PdAreaModel.Tab();
+            //    tab.Id = prdKind.Id;
+            //    tab.Name = prdKind.Name;
+            //    tab.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
+            //    tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, prdKind.Id);
+            //    if (tab.List.Items.Count > 0)
+            //    {
+            //        pdAreaModel.Tabs.Add(tab);
+            //    }
+            //}
+
+            //ret.PdArea = pdAreaModel;
+
+            result = new CustomJsonResult<RetIndexPageData>(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+        public CustomJsonResult SugProducts(string operater, string clientUserId, RupIndexSugProducts rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetIndexSugProducts();
+
+            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.IsUseRent == true).Take(2).ToList();
+
+            var m_pdRent = new PdRentModel();
+
+            m_pdRent.Name = "租用市场";
+
+            foreach (var d_sellChannelStock in d_sellChannelStocks)
+            {
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.MerchId, rup.StoreId, new string[] { SellChannelStock.MallSellChannelRefId }, d_sellChannelStock.PrdProductSkuId);
+                if (r_productSku != null && r_productSku.Stocks != null && r_productSku.Stocks.Count > 0)
+                {
+                    var m_productSku = new ProductSkuModel();
+                    m_productSku.Id = r_productSku.Id;
+                    m_productSku.ProductId = r_productSku.ProductId;
+                    m_productSku.Name = r_productSku.Name;
+                    m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
+                    m_productSku.BriefDes = r_productSku.BriefDes;
+                    m_productSku.CharTags = r_productSku.CharTags;
+                    m_productSku.SpecDes = r_productSku.SpecDes;
+                    m_productSku.SpecItems = r_productSku.SpecItems;
+                    m_productSku.SpecIdx = r_productSku.SpecIdx;
+                    m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
+                    m_productSku.IsShowPrice = false;
+                    m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                    m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                    m_productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
+                    m_productSku.DepositPrice = r_productSku.Stocks[0].DepositPrice;
+                    m_pdRent.List.Add(m_productSku);
+                }
+
+            }
+
+
+            var m_pdArea = new PdAreaModel();
+
+            var d_storeKinds = CurrentDb.StoreKind.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+
+            foreach (var d_storeKind in d_storeKinds)
             {
                 var tab = new PdAreaModel.Tab();
-                tab.Id = prdKind.Id;
-                tab.Name = prdKind.Name;
-                tab.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
-                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, prdKind.Id);
+                tab.Id = d_storeKind.Id;
+                tab.Name = d_storeKind.Name;
+                tab.MainImgUrl = ImgSet.GetMain_O(d_storeKind.DisplayImgUrls);
+                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, d_storeKind.Id);
                 if (tab.List.Items.Count > 0)
                 {
-                    pdAreaModel.Tabs.Add(tab);
+                    m_pdArea.Tabs.Add(tab);
                 }
             }
 
-            ret.PdArea = pdAreaModel;
+            ret.PdRent = m_pdRent;
+            ret.PdArea = m_pdArea;
 
-            result = new CustomJsonResult<RetIndexPageData>(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

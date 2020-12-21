@@ -94,22 +94,41 @@ Component({
           })
 
           storeage.setCurrentShopMode(shopMode)
-         
+
           _this.setData({
             shopMode: shopMode,
             shopModes: d.shopModes,
             singleStore: typeof storeage.getStoreId() == "undefined" ? false : true,
             currentStore: d.store,
             banner: d.banner,
-            pdArea: d.pdArea,
             pageIsReady: true
           })
+
+          _this.getSugProducts()
+
         } else if (res.result == 2) {
           if (res.code == '2404') { //当前店铺无效，重新选择
             wx.navigateTo({
               url: "/pages/store/store"
             })
           }
+        }
+      })
+    },
+    getSugProducts: function () {
+      var _this = this
+      apiIndex.sugProducts({
+        storeId: _this.data.storeId,
+        shopMode: _this.data.shopMode
+      }).then(function (res) {
+
+        if (res.result === 1) {
+          var d = res.data
+          _this.setData({
+            pdRent: d.pdRent,
+            pdArea: d.pdArea
+          })
+
         }
       })
     },
@@ -149,6 +168,40 @@ Component({
     },
     imageOnloadError: function (e) {
       console.log('das')
+    },
+    clickToRent: function (e) {
+
+      var _this = this
+
+      var sku = e.currentTarget.dataset.replySku
+
+      if (sku.isOffSell) {
+        toast.show({
+          title: '商品已下架'
+        })
+        return
+      }
+
+      if (!ownRequest.isLogin()) {
+        ownRequest.goLogin()
+        return
+      }
+
+      var skuId = sku.id //对应页面data-reply-index
+      var productSkus = []
+      productSkus.push({
+        cartId: 0,
+        id: skuId,
+        quantity: 1,
+        shopMode: _this.data.shopMode
+      })
+      wx.navigateTo({
+        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
+        success: function (res) {
+          // success
+        },
+      })
+
     }
   }
 })

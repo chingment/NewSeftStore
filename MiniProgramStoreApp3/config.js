@@ -21,6 +21,7 @@ var config = {
     globalDataSet: `${host}/Global/DataSet`,
     globalMsgTips: `${host}/Global/MsgTips`,
     indexPageData: `${host}/Index/PageData`,
+    indexSugProducts: `${host}/Index/SugProducts`,
     productKindPageData:`${host}/ProductKind/PageData`,
     cartOperate: `${host}/Cart/Operate`,
     cartPageData: `${host}/Cart/PageData`,
