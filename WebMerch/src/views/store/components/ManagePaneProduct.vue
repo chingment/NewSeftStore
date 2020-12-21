@@ -216,10 +216,10 @@
                   <el-checkbox v-model="item.isUseRent" />
                 </td>
                 <td>
-                  <el-input v-model="item.rentMhPrice" clearable style="width:90%" />
+                  <el-input v-model="item.depositPrice" clearable style="width:90%" />
                 </td>
                 <td>
-                  <el-input v-model="item.depositPrice" clearable style="width:90%" />
+                  <el-input v-model="item.rentMhPrice" clearable style="width:90%" />
                 </td>
                 <td>
                   <el-checkbox v-model="item.isOffSell" />
