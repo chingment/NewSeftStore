@@ -19,5 +19,6 @@ namespace WebApiStoreApp.Controllers
 
             return new OwnApiHttpResponse<RetIndexPageData>(result);
         }
+
     }
 }

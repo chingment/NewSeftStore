@@ -136,14 +136,14 @@ namespace LocalS.Service.Api.StoreApp
             if (string.IsNullOrEmpty(merchId) || string.IsNullOrEmpty(storeId) || string.IsNullOrEmpty(clientUserId))
                 return false;
 
-            if (shopMethod == E_ShopMethod.Shopping)
+            if (shopMethod == E_ShopMethod.Shop)
             {
                 if (faceType == E_Coupon_FaceType.ShopVoucher || faceType == E_Coupon_FaceType.ShopDiscount)
                 {
                     return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
                 }
             }
-            else if (shopMethod == E_ShopMethod.Hire)
+            else if (shopMethod == E_ShopMethod.Rent)
             {
                 if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
                 {
@@ -154,12 +154,13 @@ namespace LocalS.Service.Api.StoreApp
             return false;
         }
 
-        public int GetCanUseCount(E_ShopMethod shopMethod, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId)
+        public int GetCanUseCount(E_ShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId)
         {
             RopCouponMy rup = new RopCouponMy();
             rup.StoreId = storeId;
             rup.ShopMethod = shopMethod;
             rup.ProductSkus = productSkus;
+            rup.FaceTypes = faceTypes;
 
             var ret = My("", clientUserId, rup);
 
@@ -191,6 +192,12 @@ namespace LocalS.Service.Api.StoreApp
             {
                 query = query.Where(m => m.ClientUserId == clientUserId && (m.Status == E_ClientCouponStatus.Used || m.Status != E_ClientCouponStatus.Expired) && m.ValidEndTime < DateTime.Now);
             }
+
+            if (rop.FaceTypes != null)
+            {
+                query = query.Where(m => rop.FaceTypes.Contains(m.FaceType));
+            }
+
 
             var list = query.OrderBy(m => m.Name).ToList();
 

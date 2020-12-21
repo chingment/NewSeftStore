@@ -22,7 +22,9 @@ Page({
     storeId: undefined,
     orderIds: null,
     blocks: [],
-    couponIds: [],
+    couponIdsByShop: [],
+    couponIdByRent: '',
+    couponIdByDeposit: '',
     payOption: {
       title: '支付方式',
       options: []
@@ -122,13 +124,23 @@ Page({
   },
   couponSelect: function (e) {
     var _this = this
+    var faceTypes = e.currentTarget.dataset.replyFacetypes
+    console.log('faceTypes:' + faceTypes)
+    var couponIds
+    if (faceTypes == '1,2') {
+      couponIds = _this.data.couponIdsByShop
+    } else if (faceTypes == '3') {
+      couponIds = [_this.data.couponIdByRent]
+    } else if (faceTypes == '4') {
+      couponIds = [_this.data.couponIdByDeposit]
+    }
 
-    var couponIds = _this.data.couponIds
     var productSkus = _this.data.productSkus
     var shopMethod = _this.data.shopMethod
     var storeId = _this.data.storeId
+
     wx.navigateTo({
-      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod + "&storeId=" + storeId,
+      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod + "&storeId=" + storeId + '&faceTypes=' + faceTypes,
       success: function (res) {
         // success
       },
@@ -291,7 +303,7 @@ Page({
       payCaller: payOption.payCaller,
       blocks: blocks,
       payPartner: payOption.payPartner,
-      couponIds: data.couponIds,
+      couponIdsByShop: data.couponIdsByShop,
       shopMethod: data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
@@ -368,7 +380,9 @@ Page({
       orderIds: _data.orderIds,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
-      couponIds: _data.couponIds,
+      couponIdsByShop: _data.couponIdsByShop,
+      couponIdByRent: _data.couponIdByRent,
+      couponIdByDeposit: _data.couponIdByDeposit,
       shopMethod: _data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
@@ -393,7 +407,9 @@ Page({
           subtotalItems: d.subtotalItems,
           actualAmount: d.actualAmount,
           originalAmount: d.originalAmount,
-          coupon: d.coupon,
+          couponByShop: d.couponByShop,
+          couponByRent: d.couponByRent,
+          couponByDeposit: d.couponByDeposit,
           pageIsReady: true
         })
       }

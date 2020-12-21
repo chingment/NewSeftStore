@@ -114,14 +114,15 @@
 									<view class="it-m">
 										<view class="it-ml" style="display:block">
 											<view style="height:100rpx;">
-											<text class='name skeleton-rect'>{{skusitem.name}}</text>
-										</view>
-										<view style="height:50rpx;">
-											<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
-										</view>
+												<text class='name skeleton-rect'>{{skusitem.name}}</text>
+											</view>
+											<view style="height:50rpx;">
+												<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+											</view>
 										</view>
 										<view class="it-mr">
-											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}" class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}"
+												class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
 										</view>
 									</view>
 									<view class="it-r">
@@ -187,14 +188,15 @@
 									<view class="it-m">
 										<view class="it-ml" style="display:block">
 											<view style="height:100rpx;">
-											<text class='name skeleton-rect'>{{skusitem.name}}</text>
-										</view>
-										<view style="height:50rpx;">
-											<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
-										</view>
+												<text class='name skeleton-rect'>{{skusitem.name}}</text>
+											</view>
+											<view style="height:50rpx;">
+												<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+											</view>
 										</view>
 										<view class="it-mr">
-											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}" class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}"
+												class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
 										</view>
 									</view>
 									<view class="it-r">
@@ -243,14 +245,15 @@
 									<view class="it-m">
 										<view class="it-ml" style="display:block">
 											<view style="height:100rpx;">
-											<text class='name skeleton-rect'>{{skusitem.name}}</text>
-										</view>
-										<view style="height:50rpx;">
-											<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
-										</view>
+												<text class='name skeleton-rect'>{{skusitem.name}}</text>
+											</view>
+											<view style="height:50rpx;">
+												<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+											</view>
 										</view>
 										<view class="it-mr">
-											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}" class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}"
+												class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
 										</view>
 									</view>
 									<view class="it-r">
@@ -272,7 +275,8 @@
 
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
-				<view class="it" bindtap="couponSelect">
+
+				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1}}" data-reply-facetypes="1,2" >
 					<view class="it-l" style="width:60rpx">
 						<view class="icon">
 							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
@@ -284,7 +288,7 @@
 							<text class="txt skeleton-rect">优惠券</text>
 						</view>
 						<view class="it-mr flex1">
-							<text class="coupontip coupontip{{coupon.tipType}} skeleton-rect">{{coupon.tipMsg}}</text>
+							<text class="coupontip coupontip{{couponByShop.tipType}} skeleton-rect">{{couponByShop.tipMsg}}</text>
 						</view>
 					</view>
 
@@ -294,8 +298,52 @@
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 						</view>
 					</view>
-
 				</view>
+
+				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==2}}" data-reply-facetypes="4">
+					<view class="it-l" style="width:60rpx">
+						<view class="icon">
+							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
+								src='/content/default/images/col_nav_icon_coupon.png'></image>
+						</view>
+					</view>
+					<view class="it-m">
+						<view class="it-ml w100">
+							<text class="txt skeleton-rect">押金券</text>
+						</view>
+						<view class="it-mr flex1">
+							<text class="coupontip coupontip{{couponByDeposit.tipType}} skeleton-rect">{{couponByDeposit.tipMsg}}</text>
+						</view>
+					</view>
+					<view class="it-r" style="width:80rpx">
+						<view class="icon">
+							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</view>
+				</view>
+
+				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==2}}" data-reply-facetypes="3">
+					<view class="it-l" style="width:60rpx">
+						<view class="icon">
+							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
+								src='/content/default/images/col_nav_icon_coupon.png'></image>
+						</view>
+					</view>
+					<view class="it-m">
+						<view class="it-ml w100">
+							<text class="txt skeleton-rect">租金券</text>
+						</view>
+						<view class="it-mr flex1">
+							<text class="coupontip coupontip{{couponByRent.tipType}} skeleton-rect">{{couponByRent.tipMsg}}</text>
+						</view>
+					</view>
+					<view class="it-r" style="width:80rpx">
+						<view class="icon">
+							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</view>
+				</view>
+
 
 				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 					<view class="it">

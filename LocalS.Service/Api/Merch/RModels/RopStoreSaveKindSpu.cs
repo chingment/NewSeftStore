@@ -20,8 +20,10 @@ namespace LocalS.Service.Api.Merch
             public string SkuId { get; set; }
             public decimal SalePrice { get; set; }
             public int SumQuantity { get; set; }
-
             public bool IsOffSell { get; set; }
+            public bool IsUseRent { get; set; }
+            public decimal RentMhPrice { get; set; }
+            public decimal DepositPrice { get; set; }
         }
     }
 }

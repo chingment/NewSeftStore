@@ -12,7 +12,7 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
-        var _this=this
+        var _this = this
         console.log('isShow:' + newVal)
         if (newVal) {
           this._dialogOpen()
@@ -131,7 +131,7 @@ Component({
             //console.log("storeage.getCart():" + JSON.stringify(storeage.getCart()))
             //_this.setData({
             //  myCart: storeage.getCart()
-           // })
+            // })
           } else {
             toast.show({
               title: res.message
@@ -273,6 +273,12 @@ Component({
 
       return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
 
+    },
+    myClose: function (e) {
+      var self = e.target.dataset.ref
+      if (self == 'self') {
+        this._dialogClose()
+      }
     }
   }
 })

@@ -11,6 +11,7 @@ Page({
    */
   data: {
     tag: "mycoupon",
+    op_faceTypes: ''
   },
 
   /**
@@ -26,6 +27,13 @@ Page({
     var couponIds = options.couponIds == undefined ? [] : JSON.parse(options.couponIds)
     var shopMethod = options.shopMethod == undefined ? 0 : options.shopMethod
     var storeId = options.storeId == undefined ? '' : options.storeId
+    var op_faceTypes = options.faceTypes == undefined ? '' : options.faceTypes
+    var faceTypes = op_faceTypes.split(',')
+
+    _this.setData({
+      op_faceTypes: op_faceTypes
+    })
+
     var title = ""
     switch (operate) {
       case 1:
@@ -33,6 +41,17 @@ Page({
         break;
       case 2:
         title = "选择优惠卷";
+        switch (op_faceTypes) {
+          case '1,2':
+            title = "选择优惠卷";
+            break;
+          case '3':
+            title = "选择租金卷";
+            break;
+          case '4':
+            title = "选择押金卷";
+            break;
+        }
         break;
       case 3:
         title = "历史优惠卷";
@@ -49,7 +68,8 @@ Page({
       couponIds: couponIds,
       productSkus: productSkus,
       shopMethod: shopMethod,
-      storeId: storeId
+      storeId: storeId,
+      faceTypes: faceTypes
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -87,11 +107,23 @@ Page({
         couponIds.push(coupon.id)
       }
 
+      console.log(">>>" + JSON.stringify(couponIds))
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
-      prevPage.setData({
-        couponIds: couponIds
-      })
+
+      if (_this.data.op_faceTypes == '1,2') {
+        prevPage.setData({
+          couponIdsByShop: couponIds
+        })
+      } else if (_this.data.op_faceTypes == '3') {
+        prevPage.setData({
+          couponIdByRent: couponIds.length > 0 ? couponIds[0] : ''
+        })
+      } else if (_this.data.op_faceTypes == '4') {
+        prevPage.setData({
+          couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : ''
+        })
+      }
       wx.navigateBack()
     }
   },

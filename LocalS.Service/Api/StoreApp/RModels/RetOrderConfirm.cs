@@ -14,8 +14,12 @@ namespace LocalS.Service.Api.StoreApp
             this.Blocks = new List<OrderBlockModel>();
         }
 
-        //选择的优惠卷
-        public OrderConfirmCouponModel Coupon { get; set; }
+        //购物优惠卷
+        public OrderConfirmCouponModel CouponByShop { get; set; }
+        //租金优惠券
+        public OrderConfirmCouponModel CouponByRent { get; set; }
+        //押金优惠券
+        public OrderConfirmCouponModel CouponByDeposit { get; set; }
         //订单块
         public List<OrderBlockModel> Blocks { get; set; }
         //小计项目

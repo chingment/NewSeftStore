@@ -565,6 +565,9 @@ namespace LocalS.Service.Api.Merch
                                 sellChannelStock.WaitPickupLockQuantity = 0;
                                 sellChannelStock.SumQuantity = stock.SumQuantity;
                                 sellChannelStock.MaxQuantity = stock.SumQuantity;
+                                sellChannelStock.IsUseRent = stock.IsUseRent;
+                                sellChannelStock.RentMhPrice = stock.RentMhPrice;
+                                sellChannelStock.DepositPrice = stock.DepositPrice;
                                 sellChannelStock.CreateTime = DateTime.Now;
                                 sellChannelStock.Creator = operater;
                                 CurrentDb.SellChannelStock.Add(sellChannelStock);
@@ -576,6 +579,9 @@ namespace LocalS.Service.Api.Merch
                                 sellChannelStock.SumQuantity = stock.SumQuantity;
                                 sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
                                 sellChannelStock.MaxQuantity = stock.SumQuantity;
+                                sellChannelStock.IsUseRent = stock.IsUseRent;
+                                sellChannelStock.RentMhPrice = stock.RentMhPrice;
+                                sellChannelStock.DepositPrice = stock.DepositPrice;
                                 sellChannelStock.MendTime = DateTime.Now;
                                 sellChannelStock.Mender = operater;
                             }
@@ -621,11 +627,11 @@ namespace LocalS.Service.Api.Merch
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == productSku.Id).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
-                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice, IsOffSell = false });
+                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice, IsOffSell = false, IsUseRent = false, RentMhPrice = 0, DepositPrice = 0 });
                 }
                 else
                 {
-                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = productSku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell });
+                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = productSku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell, IsUseRent = sellChannelStock.IsUseRent, RentMhPrice = sellChannelStock.RentMhPrice, DepositPrice = sellChannelStock.DepositPrice });
                 }
             }
 

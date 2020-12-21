@@ -231,7 +231,7 @@ page{
 }
 
 .coupontip1{
-  color: #f3e7cf;
+  color: #999;
 }
 
 .coupontip2 {

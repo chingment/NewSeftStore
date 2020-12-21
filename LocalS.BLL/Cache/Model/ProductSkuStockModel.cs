@@ -18,5 +18,9 @@ namespace LocalS.BLL
         public int SellQuantity { get; set; }
         public bool IsOffSell { get; set; }
         public decimal SalePrice { get; set; }
+
+        public bool IsUseRent { get; set; }
+        public decimal RentMhPrice { get; set; }
+        public decimal DepositPrice { get; set; }
     }
 }

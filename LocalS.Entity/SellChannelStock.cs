@@ -30,11 +30,13 @@ namespace LocalS.Entity
         public int HoldQuantity { get; set; }
         public bool IsOffSell { get; set; }
         public decimal SalePrice { get; set; }
+        public bool IsUseRent { get; set; }
+        public decimal RentMhPrice { get; set; }
+        public decimal DepositPrice { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
         public int Version { get; set; }
     }
 }

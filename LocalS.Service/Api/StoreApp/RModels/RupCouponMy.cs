@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace LocalS.Service.Api.StoreApp
         public E_ShopMethod ShopMethod { get; set; }
         public string StoreId { get; set; }
         public List<OrderConfirmProductSkuModel> ProductSkus { get; set; }
+        public E_Coupon_FaceType[] FaceTypes { get; set; }
     }
 }

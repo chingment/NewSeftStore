@@ -11,8 +11,8 @@ namespace LocalS.BLL.Biz
     {
 
         Unknow = 0,
-        Shopping = 1,
-        Hire = 2
+        Shop = 1,
+        Rent = 2
     }
 
     public class RopOrderReserve

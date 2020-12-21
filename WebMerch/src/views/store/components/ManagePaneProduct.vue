@@ -3,8 +3,12 @@
     <el-container style="min-height:300px">
       <el-aside width="200px;">
         <div style="padding:4px;0px;text-align: center;">
-          <el-button type="text" icon="el-icon-plus" style="font-size: 18px;color:#000;" @click="dialogKindOpen(false)">新建分类</el-button>
-
+          <el-button
+            type="text"
+            icon="el-icon-plus"
+            style="font-size: 18px;color:#000;"
+            @click="dialogKindOpen(false)"
+          >新建分类</el-button>
         </div>
 
         <el-menu
@@ -15,26 +19,41 @@
           <el-menu-item v-for="(item,index) in listDataByKinds" :key="item.id" :index="index+''">
             <span slot="title">{{ item.name }}</span>
           </el-menu-item>
-
         </el-menu>
-
       </el-aside>
 
       <el-container>
         <el-header style="text-align: left; font-size: 12px;background-color: #fff">
-          <el-button type="text" icon="el-icon-edit" size="small" style="font-size: 18px;color:#000;" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">{{ currentKindName }}</el-button>
+          <el-button
+            type="text"
+            icon="el-icon-edit"
+            size="small"
+            style="font-size: 18px;color:#000;"
+            :disabled="kindEditBtnDisabled"
+            @click="dialogKindOpen(true)"
+          >{{ currentKindName }}</el-button>
 
           <!-- <el-link @click="dialogKindOpen(true)">{{ currentKindName }}<i class="el-icon-edit" /> </el-link> -->
           <!-- <span style="font-size: 21px;display: block; float: left;margin-right: 20px;width: 130px;">{{ currentKindName }} </span> -->
 
           <!-- <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">编辑分类</el-button> -->
 
-          <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindSpuOpen(false,null)">添加商品</el-button>
-
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            size="small"
+            :disabled="kindEditBtnDisabled"
+            @click="dialogKindSpuOpen(false,null)"
+          >添加商品</el-button>
         </el-header>
         <el-main>
           <el-row v-loading="isLoaingByKindSpus" :gutter="20">
-            <el-col v-for="item in listDataByKindSpus" :key="item.id" :span="5" style="margin-bottom:20px;">
+            <el-col
+              v-for="item in listDataByKindSpus"
+              :key="item.id"
+              :span="5"
+              style="margin-bottom:20px;"
+            >
               <el-card class="box-card box-card-product">
                 <div slot="header" class="it-header clearfix">
                   <div class="left">
@@ -45,21 +64,39 @@
                   </div>
                 </div>
                 <div class="it-component">
-                  <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
+                  <div class="img">
+                    <img :src="item.mainImgUrl" alt>
+                  </div>
                   <div class="describe" />
                 </div>
               </el-card>
             </el-col>
           </el-row>
-          <pagination v-show="listTotalByKindSpus>0" :total="listTotalByKindSpus" :page.sync="listQueryByGetKindSpus.page" :limit.sync="listQueryByGetKindSpus.limit" @pagination="_getKindSpus" />
+          <pagination
+            v-show="listTotalByKindSpus>0"
+            :total="listTotalByKindSpus"
+            :page.sync="listQueryByGetKindSpus.page"
+            :limit.sync="listQueryByGetKindSpus.limit"
+            @pagination="_getKindSpus"
+          />
 
           <span v-show="listTotalByKindSpus==0">该分类没有相关产品，请添加商品</span>
         </el-main>
       </el-container>
     </el-container>
 
-    <el-dialog title="店铺分类" :visible.sync="dialogKindIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <el-form ref="kindForm" v-loading="dialogKindIsLoading" :model="kindForm" :rules="kindRules" label-width="75px">
+    <el-dialog
+      title="店铺分类"
+      :visible.sync="dialogKindIsVisible"
+      :width="isDesktop==true?'800px':'90%'"
+    >
+      <el-form
+        ref="kindForm"
+        v-loading="dialogKindIsLoading"
+        :model="kindForm"
+        :rules="kindRules"
+        label-width="75px"
+      >
         <el-form-item label="名称" prop="name">
           <el-input v-model="kindForm.name" clearable style="width:300px" />
         </el-form-item>
@@ -79,7 +116,7 @@
             <i class="el-icon-plus" />
           </el-upload>
           <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByKindDisplayImgUrls">
-            <img width="100%" :src="uploadImgPreImgDialogUrlByKindDisplayImgUrls" alt="">
+            <img width="100%" :src="uploadImgPreImgDialogUrlByKindDisplayImgUrls" alt>
           </el-dialog>
           <el-alert
             title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
@@ -98,11 +135,25 @@
       </span>
     </el-dialog>
 
-    <el-dialog :title="dialogKindSpuIsEdit?'编辑商品':'添加商品'" :visible.sync="dialogKindSpuIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <el-form ref="kindSpuForm" v-loading="dialogKindSpuIsLoading" :model="kindSpuForm" :rules="kindSpuRules" label-width="80px">
-
+    <el-dialog
+      :title="dialogKindSpuIsEdit?'编辑商品':'添加商品'"
+      :visible.sync="dialogKindSpuIsVisible"
+      :width="isDesktop==true?'800px':'90%'"
+    >
+      <el-form
+        ref="kindSpuForm"
+        v-loading="dialogKindSpuIsLoading"
+        :model="kindSpuForm"
+        :rules="kindSpuRules"
+        label-width="80px"
+      >
         <el-form-item label="所属分类">
-          <el-select v-model="kindSpuForm.kindId" :disabled="dialogKindSpuIsEdit?true:false" placeholder="请选择" style="width:300px">
+          <el-select
+            v-model="kindSpuForm.kindId"
+            :disabled="dialogKindSpuIsEdit?true:false"
+            placeholder="请选择"
+            style="width:300px"
+          >
             <el-option
               v-for="item in listDataByKinds"
               :key="item.id"
@@ -125,11 +176,7 @@
           <span>{{ productSearchName }}</span>
         </el-form-item>
         <el-form-item label="商品图片">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="productSearchMainImgUrl"
-            fit="fit"
-          />
+          <el-image style="width: 100px; height: 100px" :src="productSearchMainImgUrl" fit="fit" />
         </el-form-item>
         <el-form-item label="线上商城">
           <el-checkbox v-model="kindSpuForm.isSellMall">开启</el-checkbox>
@@ -145,39 +192,34 @@
           <table class="list-tb" cellpadding="0" cellspacing="0">
             <thead>
               <tr>
-                <th>
-                  规格
-                </th>
-                <th style="width:180px">
-                  编码
-                </th>
-                <th style="width:180px">
-                  库存
-                </th>
-                <th style="width:100px">
-                  价格
-                </th>
-                <th style="width:100px">
-                  下架
-                </th>
+                <th style="width:100px">规格</th>
+                <th style="width:100px">编码</th>
+                <th style="width:100px">库存</th>
+                <th style="width:100px">价格</th>
+                <th style="width:50px">租用</th>
+                <th style="width:100px">押金</th>
+                <th style="width:100px">月租</th>
+                <th style="width:50px">下架</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(item,x) in kindSpuForm.stocks"
-                :key="x"
-              >
-                <td>
-                  {{ item.specIdx }}
-                </td>
-                <td>
-                  {{ item.cumCode }}
-                </td>
+              <tr v-for="(item,x) in kindSpuForm.stocks" :key="x">
+                <td>{{ item.specIdx }}</td>
+                <td>{{ item.cumCode }}</td>
                 <td>
                   <el-input v-model="item.sumQuantity" clearable style="width:90%" />
                 </td>
                 <td>
                   <el-input v-model="item.salePrice" clearable style="width:90%" />
+                </td>
+                <td>
+                  <el-checkbox v-model="item.isUseRent" />
+                </td>
+                <td>
+                  <el-input v-model="item.rentMhPrice" clearable style="width:90%" />
+                </td>
+                <td>
+                  <el-input v-model="item.depositPrice" clearable style="width:90%" />
                 </td>
                 <td>
                   <el-checkbox v-model="item.isOffSell" />
@@ -193,97 +235,99 @@
         <el-button @click="dialogKindSpuIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
-
   </div>
-
 </template>
 <style lang="scss" scoped>
-
-.prodcut-list   .el-menu{
-    border-right: solid 0px #e6e6e6;
+.prodcut-list .el-menu {
+  border-right: solid 0px #e6e6e6;
 }
 
-.prodcut-list .el-col-5{
+.prodcut-list .el-col-5 {
   width: 20%;
 }
 
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
+.el-header {
+  background-color: #b3c0d1;
+  color: #333;
+  line-height: 60px;
+}
 
-  .el-aside {
-    color: #333;
-  }
+.el-aside {
+  color: #333;
+}
 
-.box-card-product{
-  .it-header{
+.box-card-product {
+  .it-header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     position: relative;
-    height:20px ;
-    .left{
+    height: 20px;
+    .left {
       flex: 1;
       justify-content: flex-start;
       align-items: center;
       display: block;
       height: 100%;
-    overflow: hidden;
-text-overflow:ellipsis;
-white-space: nowrap;
-    .name{
-    padding: 0px 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      .name {
+        padding: 0px 5px;
+      }
     }
-    }
-    .right{
+    .right {
       width: 100px;
       display: flex;
       justify-content: flex-end;
       align-items: center;
     }
-
   }
-  .it-component{
+  .it-component {
     min-height: 100px;
     display: flex;
-    .img{
+    .img {
       width: 120px;
       height: 120px;
 
-      img{
+      img {
         width: 100%;
         height: 100%;
       }
     }
 
-    .describe{
+    .describe {
       flex: 1;
       padding: 0px;
       font-size: 12px;
 
-      ul{
+      ul {
         padding: 0px;
         margin: 0px;
         list-style: none;
-         li{
-           width: 100%;
-           text-align: right;
-        height: 26px;
-        line-height: 26px;
-      }
+        li {
+          width: 100%;
+          text-align: right;
+          height: 26px;
+          line-height: 26px;
+        }
       }
     }
-
   }
-  }
-
+}
 </style>
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getKinds, saveKind, saveKindSpu, getKindSpus, removeKind, removeKindSpu, getKindSpuInfo } from '@/api/store'
+import {
+  getKinds,
+  saveKind,
+  saveKindSpu,
+  getKindSpus,
+  removeKind,
+  removeKindSpu,
+  getKindSpuInfo
+} from '@/api/store'
 import { searchSpu, getSpecs } from '@/api/prdproduct'
 import { getUrlParam } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -311,9 +355,32 @@ export default {
         displayImgUrls: []
       },
       kindRules: {
-        name: [{ required: true, min: 1, max: 6, message: '必填,且不能超过6个字符', trigger: 'change' }],
-        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
-        description: [{ required: false, min: 0, max: 500, message: '不能超过500个字符', trigger: 'change' }]
+        name: [
+          {
+            required: true,
+            min: 1,
+            max: 6,
+            message: '必填,且不能超过6个字符',
+            trigger: 'change'
+          }
+        ],
+        displayImgUrls: [
+          {
+            type: 'array',
+            required: true,
+            message: '至少上传一张,且必须少于5张',
+            max: 4
+          }
+        ],
+        description: [
+          {
+            required: false,
+            min: 0,
+            max: 500,
+            message: '不能超过500个字符',
+            trigger: 'change'
+          }
+        ]
       },
       dialogKindSpuIsVisible: false,
       dialogKindSpuIsLoading: false,
@@ -327,9 +394,30 @@ export default {
         isSellMall: false
       },
       kindSpuRules: {
-        storeId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
-        kindId: [{ required: true, min: 1, message: '必填,且不能超过6个字符', trigger: 'change' }],
-        productId: [{ required: true, min: 1, message: '请搜索商品后选择', trigger: 'change' }]
+        storeId: [
+          {
+            required: true,
+            min: 1,
+            message: '必填,且不能超过6个字符',
+            trigger: 'change'
+          }
+        ],
+        kindId: [
+          {
+            required: true,
+            min: 1,
+            message: '必填,且不能超过6个字符',
+            trigger: 'change'
+          }
+        ],
+        productId: [
+          {
+            required: true,
+            min: 1,
+            message: '请搜索商品后选择',
+            trigger: 'change'
+          }
+        ]
       },
       listQueryByGetKindSpus: {
         page: 1,
@@ -350,7 +438,7 @@ export default {
     }
   },
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       this.init()
     }
   },
@@ -402,21 +490,22 @@ export default {
       this._getKindSpus()
     },
     _saveKind() {
-      this.$refs['kindForm'].validate((valid) => {
+      this.$refs['kindForm'].validate(valid => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then(() => {
-            saveKind(this.kindForm).then(res => {
-              this.$message(res.message)
-              if (res.result === 1) {
-                this._getKinds()
-              }
-            })
-          }).catch(() => {
           })
+            .then(() => {
+              saveKind(this.kindForm).then(res => {
+                this.$message(res.message)
+                if (res.result === 1) {
+                  this._getKinds()
+                }
+              })
+            })
+            .catch(() => {})
         }
       })
     },
@@ -425,34 +514,39 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        removeKind({ storeId: this.storeId, kindId: this.kindForm.kindId }).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            this._getKinds()
-            this.dialogKindIsVisible = false
-          }
-        })
-      }).catch(() => {
       })
+        .then(() => {
+          removeKind({
+            storeId: this.storeId,
+            kindId: this.kindForm.kindId
+          }).then(res => {
+            this.$message(res.message)
+            if (res.result === 1) {
+              this._getKinds()
+              this.dialogKindIsVisible = false
+            }
+          })
+        })
+        .catch(() => {})
     },
     _saveKindSpu() {
-      this.$refs['kindSpuForm'].validate((valid) => {
+      this.$refs['kindSpuForm'].validate(valid => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then(() => {
-            saveKindSpu(this.kindSpuForm).then(res => {
-              this.$message(res.message)
-              if (res.result === 1) {
-                this.dialogKindSpuIsVisible = false
-                this._getKindSpus()
-              }
-            })
-          }).catch(() => {
           })
+            .then(() => {
+              saveKindSpu(this.kindSpuForm).then(res => {
+                this.$message(res.message)
+                if (res.result === 1) {
+                  this.dialogKindSpuIsVisible = false
+                  this._getKindSpus()
+                }
+              })
+            })
+            .catch(() => {})
         }
       })
     },
@@ -461,16 +555,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        removeKindSpu({ storeId: this.kindSpuForm.storeId, kindId: this.kindSpuForm.kindId, productId: this.kindSpuForm.productId }).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            this.dialogKindSpuIsVisible = false
-            this._getKindSpus()
-          }
-        })
-      }).catch(() => {
       })
+        .then(() => {
+          removeKindSpu({
+            storeId: this.kindSpuForm.storeId,
+            kindId: this.kindSpuForm.kindId,
+            productId: this.kindSpuForm.productId
+          }).then(res => {
+            this.$message(res.message)
+            if (res.result === 1) {
+              this.dialogKindSpuIsVisible = false
+              this._getKindSpus()
+            }
+          })
+        })
+        .catch(() => {})
     },
     _getKindSpus() {
       var kind = this.listDataByKinds[this.currentKindIndex]
@@ -496,7 +595,9 @@ export default {
         this.kindForm.name = kind.name
         this.kindForm.description = kind.description
         this.kindForm.displayImgUrls = kind.displayImgUrls
-        this.uploadImglistByKindDisplayImgUrls = this.getUploadImglist(kind.displayImgUrls)
+        this.uploadImglistByKindDisplayImgUrls = this.getUploadImglist(
+          kind.displayImgUrls
+        )
       } else {
         this.kindRemoveBtnShow = false
         this.kindForm.kindId = ''
@@ -509,11 +610,15 @@ export default {
     dialogKindSpuOpen(isEdit, item) {
       this.dialogKindSpuIsEdit = isEdit
       this.dialogKindSpuIsVisible = true
-      var kind = this.listDataByKinds[ this.currentKindIndex]
+      var kind = this.listDataByKinds[this.currentKindIndex]
       this.kindSpuForm.kindId = kind.id
       if (isEdit) {
         this.kindSpuRemoveBtnShow = true
-        getKindSpuInfo({ storeId: item.storeId, productId: item.productId, kindId: item.kindId }).then(res => {
+        getKindSpuInfo({
+          storeId: item.storeId,
+          productId: item.productId,
+          kindId: item.kindId
+        }).then(res => {
           if (res.result === 1) {
             var d = res.data
             this.kindSpuForm.productId = item.productId
@@ -540,7 +645,12 @@ export default {
           var d = res.data
           var restaurants = []
           for (var j = 0; j < d.length; j++) {
-            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId })
+            restaurants.push({
+              value: d[j].name,
+              mainImgUrl: d[j].mainImgUrl,
+              name: d[j].name,
+              productId: d[j].productId
+            })
           }
 
           cb(restaurants)
@@ -565,7 +675,13 @@ export default {
     getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
       for (var i = 0; i < displayImgUrls.length; i++) {
-        _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
+        _uploadImglist.push({
+          status: 'success',
+          url: displayImgUrls[i].url,
+          response: {
+            data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }
+          }
+        })
       }
 
       return _uploadImglist
@@ -574,7 +690,10 @@ export default {
       var _displayImgUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _displayImgUrls.push({
+            name: fileList[i].response.data.name,
+            url: fileList[i].response.data.url
+          })
         }
       }
       return _displayImgUrls

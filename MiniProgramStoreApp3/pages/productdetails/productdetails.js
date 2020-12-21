@@ -187,6 +187,36 @@ Page({
       },
     })
   },
+  immeRent: function (e) {
+    var _this = this
+
+    if (_this.data.productSku.isOffSell) {
+      toast.show({
+        title: '商品已下架'
+      })
+      return
+    }
+
+    if (!ownRequest.isLogin()) {
+      ownRequest.goLogin()
+      return
+    }
+
+    var skuId = _this.data.productSku.id //对应页面data-reply-index
+    var productSkus = []
+    productSkus.push({
+      cartId: 0,
+      id: skuId,
+      quantity: 1,
+      shopMode: _this.data.shopMode
+    })
+    wx.navigateTo({
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus)+'&shopMethod=2',
+      success: function (res) {
+        // success
+      },
+    })
+  },
   onShareAppMessage: function (options) {
     var _this = this;
     // 设置转发内容
