@@ -77,13 +77,13 @@ page {
 
 .coupon-money,
 .coupon-time {
-  margin-top: 12px;
+  
 }
 
 .coupon-money-name {
   font-size: 18px;
   overflow: hidden;
-  height: 42rpx;
+  height: 44rpx;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -198,6 +198,7 @@ page {
   text-align: center;
   display: inline-block;
   font-size: 24rpx;
+  margin-top: 2px;
 }
 
 /*灰色*/
@@ -210,3 +211,8 @@ page {
   background: #c3c3c3;
   color: #666;
 }
+
+.face{
+  margin-top: 8px;
+}
+

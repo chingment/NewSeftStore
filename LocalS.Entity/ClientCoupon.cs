@@ -44,7 +44,7 @@ namespace LocalS.Entity
         public string SourceObjType { get; set; }
         public string SourceObjId { get; set; }
         public string SourcePoint { get; set; }
-        public DateTime? SourceTime { get; set; }
+        public DateTime SourceTime { get; set; }
         [MaxLength(512)]
         public string SourceDes { get; set; }
         public string Creator { get; set; }

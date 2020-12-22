@@ -19,7 +19,16 @@ function revCenterSt(params) {
   })
 }
 
+function receive(params) {
+
+  return lumos.postJson({
+    url: config.apiUrl.couponReceive,
+    dataParams: params
+  })
+}
+
 module.exports = {
   my: my,
-  revCenterSt: revCenterSt
+  revCenterSt: revCenterSt,
+  receive: receive
 }

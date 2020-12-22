@@ -24,7 +24,7 @@ namespace WebApiStoreApp.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Receive([FromUri]RopCouponReceive rop)
+        public OwnApiHttpResponse Receive([FromBody]RopCouponReceive rop)
         {
             IResult result = StoreAppServiceFactory.Coupon.Receive(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);

@@ -1,7 +1,9 @@
 const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCoupon = require('../../api/coupon.js')
+const skeletonData = require('./skeletonData')
 const toast = require('../../utils/toastutil')
+const storeageutil = require('../../utils/storeageutil')
 const app = getApp()
 
 Page({
@@ -10,6 +12,12 @@ Page({
    * 页面的初始数据
    */
   data: {
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     topImgUrl: '',
     coupons: []
   },
@@ -19,18 +27,8 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
-    apiCoupon.revCenterSt({}).then(function (res) {
-      if (res.result == 1) {
-        var d = res.data
-
-
-        _this.setData({
-          topImgUrl: d.topImgUrl,
-          coupons: d.coupons
-        })
-      }
-    })
-
+    
+    _this.getCoupons()
   },
 
   /**
@@ -44,7 +42,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    var _this = this
+    app.globalData.skeletonPage = _this
   },
 
   /**
@@ -79,6 +78,40 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+
+  },
+  getCoupons: function () {
+    var _this = this
+    apiCoupon.revCenterSt({}).then(function (res) {
+      if (res.result == 1) {
+        var d = res.data
+
+        _this.setData({
+          topImgUrl: d.topImgUrl,
+          coupons: d.coupons,
+          pageIsReady:true
+        })
+      }
+    })
+
+  },
+  clickToReceive: function (e) {
+    var _this = this
+
+    var coupon = e.currentTarget.dataset.replyItem
+
+    apiCoupon.receive({
+      couponId: coupon.id
+    }).then(function (res) {
+
+      toast.show({
+        title: res.message
+      })
+
+      if (res.result == 1) {
+        _this.getCoupons()
+      }
+    })
 
   }
 })

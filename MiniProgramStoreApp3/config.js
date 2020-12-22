@@ -34,6 +34,7 @@ var config = {
     deliveryAddressMy: `${host}/DeliveryAddress/My`,
     couponMy: `${host}/Coupon/My`,
     couponRevCenterSt: `${host}/Coupon/RevCenterSt`,
+    couponReceive: `${host}/Coupon/Receive`,
     storeList: `${host}/Store/List`,
     operateResult: `${host}/Operate/Result`,
     orderConfirm: `${host}/Order/Confirm`,

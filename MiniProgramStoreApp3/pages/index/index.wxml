@@ -47,20 +47,20 @@
 			<view class="fc">
 				<view class="ct">
 					<view class='its-fc'>
-						<navigator url="/pages/couponrevcenter/couponrevcenter" class="it" hover-class="none">
-							<view class="icon">
-								<image class='img skeleton-circle' src='/content/default/images/index-fc-newuser.png'></image>
-							</view>
-							<view class="title skeleton-rect">
-								<text class='txt'>领券中心</text>
-							</view>
-						</navigator>
-						<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						<navigator url="/pages/notopen/notopen" class="it">
 							<view class="icon">
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-seckill.png'></image>
 							</view>
 							<view class="title skeleton-rect">
 								<text class='txt'>限时秒杀</text>
+							</view>
+						</navigator>
+						<navigator url="/pages/couponrevcenter/couponrevcenter" class="it" style="display:block" hover-class="none">
+							<view class="icon">
+								<image class='img skeleton-circle' src='/content/default/images/index-fc-newuser.png'></image>
+							</view>
+							<view class="title skeleton-rect">
+								<text class='txt'>领券中心</text>
 							</view>
 						</navigator>
 						<navigator url="/pages/memberprom/memberprom" class="it" hover-class="none">
