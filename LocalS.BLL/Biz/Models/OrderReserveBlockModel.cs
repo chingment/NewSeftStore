@@ -19,7 +19,6 @@ namespace LocalS.BLL.Biz
 
         }
         public E_ReceiveMode ReceiveMode { get; set; }
-        public E_SellChannelRefType ShopMode { get; set; }
         public DeliveryModel Delivery { get; set; }
         public SelfTakeModel SelfTake { get; set; }
         public BookTimeModel BookTime { get; set; }

@@ -531,7 +531,7 @@ namespace LocalS.BLL.Biz
                                     stock.SellQuantity = 0;
                                     stock.IsOffSell = false;
                                     stock.SalePrice = memberFeeSt.FeeSaleValue;
-                                    
+
                                     stocks.Add(stock);
 
                                     var buildOrderSku = new BuildOrder.ProductSku();
@@ -701,7 +701,7 @@ namespace LocalS.BLL.Biz
                                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
                                     }
 
-                                    var shopModeByMachine = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Machine).FirstOrDefault();
+                                    var shopModeByMachine = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).FirstOrDefault();
 
                                     if (shopModeByMachine == null || shopModeByMachine.SelfTake == null)
                                     {
@@ -724,7 +724,8 @@ namespace LocalS.BLL.Biz
                                 case E_SellChannelRefType.Mall:
                                     #region Mall
 
-                                    var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
+
+                                    var shopModeByMall = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery || m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
                                     if (shopModeByMall == null)
                                     {
                                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式数据为空", null);
@@ -1577,10 +1578,10 @@ namespace LocalS.BLL.Biz
                         {
                             switch (l_order.ShopMethod)
                             {
-                                case  E_OrderShopMethod.Shop:
+                                case E_OrderShopMethod.Shop:
                                 case E_OrderShopMethod.Rent:
 
-                                    var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
+                                    var shopModeByMall = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery || m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
                                     if (shopModeByMall == null)
                                     {
                                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式数据为空");

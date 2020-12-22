@@ -124,11 +124,11 @@ Page({
   },
   couponSelect: function (e) {
     var _this = this
-    
+
     if (_this.data.orderIds.length > 0) {
       return
     }
-    
+
     var faceTypes = e.currentTarget.dataset.replyFacetypes
     console.log('faceTypes:' + faceTypes)
     var couponIds
@@ -180,7 +180,8 @@ Page({
           cartId: _skus[j].cartId,
           id: _skus[j].id,
           quantity: _skus[j].quantity,
-          shopMode: _skus[j].shopMode
+          shopMode: _skus[j].shopMode,
+          shopMethod: _skus[j].shopMethod
         })
       }
 
@@ -191,44 +192,43 @@ Page({
       var delivery = null
       var selfTake = null
       var bookTime = null
-      if (_blocks[i].shopMode == 1) {
-        if (_blocks[i].receiveMode == 1) {
-          if (util.isEmptyOrNull(_delivery.phoneNumber)) {
-            toast.show({
-              title: '请选择快寄地址'
-            })
-            return
-          }
-          delivery = {
-            id: _delivery.id,
-            consignee: _delivery.consignee,
-            phoneNumber: _delivery.phoneNumber,
-            areaName: _delivery.areaName,
-            areaCode: _delivery.areaCode,
-            address: _delivery.address
-          }
-        } else if (_blocks[i].receiveMode == 2) {
 
-          if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
-            toast.show({
-              title: '请选择预约时间'
-            })
-            return
-          }
-
-          bookTime = {
-            type: _blocks[i].bookTime.type,
-            value: _blocks[i].bookTime.value
-          }
-
-          selfTake = {
-            storeName: _selfTake.storeName,
-            storeAddress: _selfTake.storeAddress,
-            areaCode: _selfTake.areaCode,
-            address: _selfTake.address
-          }
+      if (_blocks[i].receiveMode == 1) {
+        if (util.isEmptyOrNull(_delivery.phoneNumber)) {
+          toast.show({
+            title: '请选择快寄地址'
+          })
+          return
         }
-      } else if (_blocks[i].shopMode == 3) {
+        delivery = {
+          id: _delivery.id,
+          consignee: _delivery.consignee,
+          phoneNumber: _delivery.phoneNumber,
+          areaName: _delivery.areaName,
+          areaCode: _delivery.areaCode,
+          address: _delivery.address
+        }
+      } else if (_blocks[i].receiveMode == 2) {
+
+        if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
+          toast.show({
+            title: '请选择预约时间'
+          })
+          return
+        }
+
+        bookTime = {
+          type: _blocks[i].bookTime.type,
+          value: _blocks[i].bookTime.value
+        }
+
+        selfTake = {
+          storeName: _selfTake.storeName,
+          storeAddress: _selfTake.storeAddress,
+          areaCode: _selfTake.areaCode,
+          address: _selfTake.address
+        }
+      } else if (_blocks[i].receiveMode == 3) {
         selfTake = {
           storeName: _selfTake.storeName,
           storeAddress: _selfTake.storeAddress,
@@ -236,6 +236,8 @@ Page({
           address: _selfTake.address
         }
       }
+
+
 
       blocks.push({
         shopMode: _blocks[i].shopMode,
