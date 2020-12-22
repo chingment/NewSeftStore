@@ -47,7 +47,7 @@
 			<view class="fc">
 				<view class="ct">
 					<view class='its-fc'>
-						<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						<navigator url="/pages/couponrevcenter/couponrevcenter" class="it" hover-class="none">
 							<view class="icon">
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-newuser.png'></image>
 							</view>

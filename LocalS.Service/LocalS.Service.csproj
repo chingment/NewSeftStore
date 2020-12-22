@@ -300,6 +300,7 @@
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetCouponRevCenterSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RetGlobalMsgTips.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexSugProducts.cs" />
     <Compile Include="Api\StoreApp\RModels\RetMemberPromSt.cs" />
@@ -321,6 +322,7 @@
     <Compile Include="Api\StoreApp\RModels\RetCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupCouponRevCenterSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCartGetCartData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RupGlobalMsgTips.cs" />

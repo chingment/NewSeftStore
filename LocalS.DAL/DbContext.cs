@@ -60,6 +60,7 @@ namespace LocalS.DAL
 
         public IDbSet<Coupon> Coupon { get; set; }
         public IDbSet<CouponUseAreaObj> CouponUseAreaObj { get; set; }
+        public IDbSet<CouponRevCenterSt> CouponRevCenterSt { get; set; }
 
         public IDbSet<MemberFeeSt> MemberFeeSt { get; set; }
         public IDbSet<MemberLevelSt> MemberLevelSt { get; set; }

@@ -173,6 +173,85 @@ namespace LocalS.Service.Api.StoreApp
             return ret.Data.Coupons.Where(m => m.CanSelected).Count();
         }
 
+
+        private CouponModel CovertCouponModel(string id, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount)
+        {
+            var model = new CouponModel();
+
+            model.Id = id;
+            model.Name = name;
+
+            switch (faceType)
+            {
+                case E_Coupon_FaceType.ShopVoucher:
+                    model.FaceValue = faceValue.ToF2Price();
+                    model.FaceUnit = "元";
+                    if (atLeastAmount > 0)
+                    {
+                        model.FaceTip = string.Format("满{0}元使用");
+                    }
+                    else
+                    {
+                        model.FaceTip = string.Format("代金券");
+                    }
+                    break;
+                case E_Coupon_FaceType.ShopDiscount:
+                    model.FaceValue = faceValue.ToF2Price();
+                    model.FaceUnit = "元";
+                    if (atLeastAmount > 0)
+                    {
+                        model.FaceTip = string.Format("满{0}元使用");
+                    }
+                    else
+                    {
+                        model.FaceTip = string.Format("代金券");
+                    }
+                    break;
+                case E_Coupon_FaceType.RentVoucher:
+                    model.FaceValue = faceValue.ToF2Price();
+                    model.FaceUnit = "元";
+                    if (atLeastAmount > 0)
+                    {
+                        model.FaceTip = string.Format("满{0}元使用");
+                    }
+                    else
+                    {
+                        model.FaceTip = string.Format("代金券");
+                    }
+                    break;
+                case E_Coupon_FaceType.DepositVoucher:
+                    model.FaceValue = faceValue.ToF2Price();
+                    model.FaceUnit = "元";
+                    if (atLeastAmount > 0)
+                    {
+                        model.FaceTip = string.Format("满{0}元使用");
+                    }
+                    else
+                    {
+                        model.FaceTip = string.Format("代金券");
+                    }
+                    break;
+            }
+
+            switch (useAreaType)
+            {
+                case E_Coupon_UseAreaType.All:
+                    model.Description = "全场通用";
+                    break;
+                case E_Coupon_UseAreaType.Store:
+                    model.Description = "指定店铺使用";
+                    break;
+                case E_Coupon_UseAreaType.ProductKind:
+                    model.Description = "指定品类使用";
+                    break;
+                case E_Coupon_UseAreaType.ProductSpu:
+                    model.Description = "指定商品使用";
+                    break;
+            }
+
+            return model;
+        }
+
         public CustomJsonResult<RetCouponMy> My(string operater, string clientUserId, RopCouponMy rop)
         {
             var result = new CustomJsonResult<RetCouponMy>();
@@ -203,82 +282,9 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var couponModel = new CouponModel();
-                couponModel.Id = item.Id;
-                couponModel.Name = item.Name;
-
-                switch (item.FaceType)
-                {
-                    case E_Coupon_FaceType.ShopVoucher:
-                        couponModel.FaceValue = item.FaceValue.ToF2Price();
-                        couponModel.FaceUnit = "元";
-                        if (item.AtLeastAmount > 0)
-                        {
-                            couponModel.FaceTip = string.Format("满{0}元使用");
-                        }
-                        else
-                        {
-                            couponModel.FaceTip = string.Format("代金券");
-                        }
-                        break;
-                    case E_Coupon_FaceType.ShopDiscount:
-                        couponModel.FaceValue = item.FaceValue.ToF2Price();
-                        couponModel.FaceUnit = "元";
-                        if (item.AtLeastAmount > 0)
-                        {
-                            couponModel.FaceTip = string.Format("满{0}元使用");
-                        }
-                        else
-                        {
-                            couponModel.FaceTip = string.Format("代金券");
-                        }
-                        break;
-                    case E_Coupon_FaceType.RentVoucher:
-                        couponModel.FaceValue = item.FaceValue.ToF2Price();
-                        couponModel.FaceUnit = "元";
-                        if (item.AtLeastAmount > 0)
-                        {
-                            couponModel.FaceTip = string.Format("满{0}元使用");
-                        }
-                        else
-                        {
-                            couponModel.FaceTip = string.Format("代金券");
-                        }
-                        break;
-                    case E_Coupon_FaceType.DepositVoucher:
-                        couponModel.FaceValue = item.FaceValue.ToF2Price();
-                        couponModel.FaceUnit = "元";
-                        if (item.AtLeastAmount > 0)
-                        {
-                            couponModel.FaceTip = string.Format("满{0}元使用");
-                        }
-                        else
-                        {
-                            couponModel.FaceTip = string.Format("代金券");
-                        }
-                        break;
-                }
-
+                var couponModel = CovertCouponModel(item.Id, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
 
                 couponModel.ValidDate = "有效到" + item.ValidEndTime.ToUnifiedFormatDate();
-
-
-                switch (item.UseAreaType)
-                {
-                    case E_Coupon_UseAreaType.All:
-                        couponModel.Description = "全场通用";
-                        break;
-                    case E_Coupon_UseAreaType.Store:
-                        couponModel.Description = "指定店铺使用";
-                        break;
-                    case E_Coupon_UseAreaType.ProductKind:
-                        couponModel.Description = "指定品类使用";
-                        break;
-                    case E_Coupon_UseAreaType.ProductSpu:
-                        couponModel.Description = "指定商品使用";
-                        break;
-                }
-
 
                 if (rop.CouponIds != null)
                 {
@@ -298,5 +304,40 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+        public CustomJsonResult RevCenterSt(string operater, string clientUserId, RupCouponRevCenterSt rup)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new RetCouponRevCenterSt();
+
+            var d_couponRevCenterSt = CurrentDb.CouponRevCenterSt.Where(m => m.MerchId == rup.MerchId).FirstOrDefault();
+
+            if (d_couponRevCenterSt != null)
+            {
+                List<string> l_couponIds = d_couponRevCenterSt.CouponIds.ToJsonObject<List<string>>();
+
+
+                var query = (from u in CurrentDb.Coupon
+                             where l_couponIds.Contains(u.Id)
+                             select new { u.Id, u.MerchId, u.Name, u.UseAreaType, u.UseAreaValue, u.FaceType, u.FaceValue, u.AtLeastAmount });
+
+                var list = query.OrderBy(m => m.Name).ToList();
+
+                foreach (var item in list)
+                {
+                    var couponModel = CovertCouponModel(item.Id, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
+
+  
+                    ret.Coupons.Add(couponModel);
+                }
+
+            }
+
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
     }
 }
