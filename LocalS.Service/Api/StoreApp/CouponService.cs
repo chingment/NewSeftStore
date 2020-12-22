@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-
-
     public class CouponService : BaseDbContext
     {
         private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
@@ -174,7 +172,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return ret.Data.Coupons.Where(m => m.CanSelected).Count();
         }
-
 
         private CouponModel CovertCouponModel(string id, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount)
         {
@@ -343,7 +340,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return result;
         }
-
 
         public CustomJsonResult Receive(string operater, string clientUserId, RopCouponReceive rop)
         {
