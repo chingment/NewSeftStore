@@ -47,38 +47,38 @@
 			<view class="fc">
 				<view class="ct">
 					<view class='its-fc'>
-						<navigator url="/pages/notopen/notopen" class="it">
+						<view  class="it" bindtap="clickToFc" data-ischecklogin="false" data-url="/pages/notopen/notopen"  >
 							<view class="icon">
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-seckill.png'></image>
 							</view>
 							<view class="title skeleton-rect">
 								<text class='txt'>限时秒杀</text>
 							</view>
-						</navigator>
-						<navigator url="/pages/couponrevcenter/couponrevcenter" class="it" style="display:block" hover-class="none">
+						</view>
+						<view class="it" bindtap="clickToFc" data-ischecklogin="false" data-url="/pages/couponrevcenter/couponrevcenter" >
 							<view class="icon">
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-newuser.png'></image>
 							</view>
 							<view class="title skeleton-rect">
 								<text class='txt'>领券中心</text>
 							</view>
-						</navigator>
-						<navigator url="/pages/memberprom/memberprom" class="it" hover-class="none">
+						</view>
+						<view class="it" bindtap="clickToFc" data-ischecklogin="false" data-url="/pages/memberprom/memberprom" >
 							<view class="icon">
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-member.png'></image>
 							</view>
 							<view class="title skeleton-rect">
 								<text class='txt'>会员专区</text>
 							</view>
-						</navigator>
-						<navigator url="/pages/notopen/notopen" class="it" hover-class="none">
+						</view>
+						<view class="it" bindtap="clickToFc" data-ischecklogin="true" data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false">
 							<view class="icon">
 								<image class='img skeleton-circle' src='/content/default/images/index-fc-coupon.png'></image>
 							</view>
 							<view class="title skeleton-rect">
-								<text class='txt'>优惠券</text>
+								<text class='txt'>我的优惠券</text>
 							</view>
-						</navigator>
+						</view>
 					</view>
 				</view>
 			</view>

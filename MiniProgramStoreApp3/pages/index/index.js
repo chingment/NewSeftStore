@@ -202,6 +202,20 @@ Component({
         },
       })
 
-    }
+    },
+    clickToFc: function (e) {
+      var url = e.currentTarget.dataset.url
+      var ischecklogin = e.currentTarget.dataset.ischecklogin
+      if (ischecklogin == "true") {
+        if (!ownRequest.isLogin()) {
+          ownRequest.goLogin(url)
+          return
+        }
+      }
+
+      wx.navigateTo({
+        url: url
+      })
+    },
   }
 })
