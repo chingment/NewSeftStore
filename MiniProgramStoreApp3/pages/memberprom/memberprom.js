@@ -30,6 +30,7 @@ Page({
 
     if (app.globalData.checkConfig) {
        console.log('a1')
+       
       _this.getPromSt()
     } else {
       console.log('a2')

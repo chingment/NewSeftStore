@@ -36,7 +36,7 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
-    app.checkConfigReadyCallback = null
+   
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? undefined : options.shopMode
