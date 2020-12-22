@@ -24,7 +24,6 @@ namespace LocalS.Entity
         //指定商品
         ProductSpu = 4
     }
-
     public enum E_Coupon_FaceType
     {
 
@@ -38,7 +37,6 @@ namespace LocalS.Entity
         //押金代金券
         DepositVoucher = 4
     }
-
     public enum E_Coupon_Category
     {
 
@@ -48,7 +46,6 @@ namespace LocalS.Entity
         Memeber = 3,
         Shopping = 4
     }
-
     public enum E_Coupon_ShopMode
     {
 
@@ -56,7 +53,6 @@ namespace LocalS.Entity
         Mall = 1,
         Machine = 3
     }
-
     public enum E_Coupon_UseTimeType
     {
 
@@ -65,6 +61,17 @@ namespace LocalS.Entity
         ValidDay = 1,
         //时间段
         TimeArea = 2
+    }
+    public enum E_Coupon_PerLimitTimeType
+    {
+
+        Unknow = 0,
+        //无限制
+        UnLimit = 1,
+        //日
+        Day = 2,
+        //月
+        Month = 2,
     }
 
     [Table("Coupon")]
@@ -82,6 +89,9 @@ namespace LocalS.Entity
         public E_Coupon_FaceType FaceType { get; set; }
         public decimal FaceValue { get; set; }
         public int PerLimitNum { get; set; }
+        public E_Coupon_PerLimitTimeType PerLimitTimeType { get; set; }
+        public int PerLimitTimeNum { get; set; }
+        public string LimitMemberLevels { get; set; }
         public decimal AtLeastAmount { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

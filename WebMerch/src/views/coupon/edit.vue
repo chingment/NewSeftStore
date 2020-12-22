@@ -51,6 +51,28 @@
           <template slot="append">张</template>
         </el-input>
       </el-form-item>
+      <el-form-item label="限领方式" prop="perLimitTimeType">
+        <el-radio-group v-model="form.perLimitTimeType">
+          <el-radio-button label="1">不限制</el-radio-button>
+          <el-radio-button label="2">按日</el-radio-button>
+          <el-radio-button label="3">按月</el-radio-button>
+        </el-radio-group>
+        <el-input
+          v-show="form.perLimitTimeType!=1"
+          v-model="form.perLimitTimeNum"
+          placeholder
+          clearable
+          style="width:180px"
+        >
+          <template slot="prepend">限领</template>
+          <template slot="append">张</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="限领用户">
+        <el-checkbox-group v-model="form.limitMemberLevels">
+          <el-checkbox v-for="option in temp.options_memberlevels" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item label="使用门槛" prop="atLeastAmount">
         <el-input v-model="form.atLeastAmount" placeholder="" clearable style="max-width:250px">
           <template slot="prepend">满</template>
@@ -271,6 +293,9 @@ export default {
         faceType: 1,
         faceValue: '',
         perLimitNum: 1,
+        perLimitTimeType: 1,
+        perLimitTimeNum: 0,
+        limitMemberLevels: ['0'],
         validDate: [],
         useAreaType: 1,
         useAreaValue: [],
@@ -279,6 +304,7 @@ export default {
         description: ''
       },
       temp: {
+        options_memberlevels: [],
         options_stores: [],
         options_productkinds: [],
         cur_sel_usearea_store: { id: '', name: '' },
@@ -326,10 +352,13 @@ export default {
         if (res.result === 1) {
           var d = res.data
 
+          d.coupon.limitMemberLevels = d.coupon.limitMemberLevels == null ? [] : d.coupon.limitMemberLevels
+
           this.form = d.coupon
 
           this.form.issueQuantity = d.coupon.issueQuantity + ''
           this.form.perLimitNum = d.coupon.perLimitNum + ''
+          this.form.perLimitTimeType = d.coupon.perLimitTimeType + ''
 
           if (d.coupon.useAreaType === 2) {
             this.temp.list_usearea_stores = d.coupon.useAreaValue
@@ -344,6 +373,7 @@ export default {
 
           this.temp.options_stores = d.optionsStores
           this.temp.options_productkinds = d.optionsProductKinds
+          this.temp.options_memberlevels = d.optionsMemberLevels
         }
         this.loading = false
       })

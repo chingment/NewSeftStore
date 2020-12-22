@@ -200,15 +200,26 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetCouponInitAdd();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
-            foreach (var store in stores)
+            foreach (var d_store in d_stores)
             {
                 var optionsStore = new OptionNode();
-
-                optionsStore.Value = store.Id;
-                optionsStore.Label = store.Name;
+                optionsStore.Value = d_store.Id;
+                optionsStore.Label = d_store.Name;
                 ret.OptionsStores.Add(optionsStore);
+            }
+
+            ret.OptionsMemberLevels.Add(new OptionNode { Label = "普通用户", Value = "0" });
+
+            var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId).ToList();
+
+            foreach (var d_memberLevelSt in d_memberLevelSts)
+            {
+                var optionsStore = new OptionNode();
+                optionsStore.Value = d_memberLevelSt.Level.ToString();
+                optionsStore.Label = d_memberLevelSt.Name;
+                ret.OptionsMemberLevels.Add(optionsStore);
             }
 
             ret.OptionsProductKinds = MerchServiceFactory.PrdProduct.GetKindTree();
@@ -302,6 +313,17 @@ namespace LocalS.Service.Api.Merch
                     d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
                 }
 
+                d_coupon.PerLimitTimeType = rop.PerLimitTimeType;
+
+                if (rop.PerLimitTimeType == E_Coupon_PerLimitTimeType.UnLimit)
+                {
+                    d_coupon.PerLimitTimeNum = 0;
+                }
+                else
+                {
+                    d_coupon.PerLimitTimeNum = rop.PerLimitTimeNum;
+                }
+                d_coupon.LimitMemberLevels = rop.LimitMemberLevels.ToJsonString();
                 d_coupon.IsSuperposition = false;
                 d_coupon.IsDelete = false;
                 d_coupon.Description = rop.Description;
@@ -350,50 +372,65 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetCouponInitEdit();
 
-            var coupon = CurrentDb.Coupon.Where(m => m.Id == couponId && m.MerchId == merchId).FirstOrDefault();
+            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == couponId && m.MerchId == merchId).FirstOrDefault();
 
-            if (coupon != null)
+            if (d_coupon != null)
             {
-                ret.Coupon.Id = coupon.Id;
-                ret.Coupon.Name = coupon.Name;
-                ret.Coupon.Category = coupon.Category;
-                ret.Coupon.ShopMode = coupon.ShopMode;
-                ret.Coupon.IssueQuantity = coupon.IssueQuantity;
-                ret.Coupon.FaceType = coupon.FaceType;
-                ret.Coupon.FaceValue = coupon.FaceValue;
-                ret.Coupon.PerLimitNum = coupon.PerLimitNum;
-                ret.Coupon.AtLeastAmount = coupon.AtLeastAmount;
-                ret.Coupon.ValidDate = new string[2] { coupon.StartTime.ToUnifiedFormatDate(), coupon.EndTime.ToUnifiedFormatDate() };
-                ret.Coupon.UseAreaType = coupon.UseAreaType;
-                if (coupon.UseAreaType != E_Coupon_UseAreaType.All)
+                ret.Coupon.Id = d_coupon.Id;
+                ret.Coupon.Name = d_coupon.Name;
+                ret.Coupon.Category = d_coupon.Category;
+                ret.Coupon.ShopMode = d_coupon.ShopMode;
+                ret.Coupon.IssueQuantity = d_coupon.IssueQuantity;
+                ret.Coupon.FaceType = d_coupon.FaceType;
+                ret.Coupon.FaceValue = d_coupon.FaceValue;
+                ret.Coupon.PerLimitNum = d_coupon.PerLimitNum;
+                ret.Coupon.AtLeastAmount = d_coupon.AtLeastAmount;
+                ret.Coupon.ValidDate = new string[2] { d_coupon.StartTime.ToUnifiedFormatDate(), d_coupon.EndTime.ToUnifiedFormatDate() };
+                ret.Coupon.UseAreaType = d_coupon.UseAreaType;
+                if (d_coupon.UseAreaType != E_Coupon_UseAreaType.All)
                 {
-                    ret.Coupon.UseAreaValue = coupon.UseAreaValue.ToJsonObject<object>();
+                    ret.Coupon.UseAreaValue = d_coupon.UseAreaValue.ToJsonObject<object>();
                 }
 
-                ret.Coupon.UseMode = coupon.UseMode;
-                ret.Coupon.UseTimeType = coupon.UseTimeType;
-                if (coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+                ret.Coupon.UseMode = d_coupon.UseMode;
+                ret.Coupon.UseTimeType = d_coupon.UseTimeType;
+                if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
                 {
-                    ret.Coupon.UseTimeValue = int.Parse(coupon.UseTimeValue);
+                    ret.Coupon.UseTimeValue = int.Parse(d_coupon.UseTimeValue);
                 }
-                else if (coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+                else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
                 {
-                    ret.Coupon.UseTimeValue = coupon.UseTimeValue.ToJsonObject<string[]>();
+                    ret.Coupon.UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
                 }
 
-                ret.Coupon.Description = coupon.Description;
-                ret.Coupon.IsSuperposition = coupon.IsSuperposition;
+                ret.Coupon.PerLimitTimeType = d_coupon.PerLimitTimeType;
+                ret.Coupon.PerLimitTimeNum = d_coupon.PerLimitTimeNum;
+                ret.Coupon.LimitMemberLevels = d_coupon.LimitMemberLevels.ToJsonObject<List<string>>();
+                ret.Coupon.Description = d_coupon.Description;
+                ret.Coupon.IsSuperposition = d_coupon.IsSuperposition;
             }
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
-            foreach (var store in stores)
+            foreach (var d_store in d_stores)
             {
                 var optionsStore = new OptionNode();
 
-                optionsStore.Value = store.Id;
-                optionsStore.Label = store.Name;
+                optionsStore.Value = d_store.Id;
+                optionsStore.Label = d_store.Name;
                 ret.OptionsStores.Add(optionsStore);
+            }
+
+            ret.OptionsMemberLevels.Add(new OptionNode { Label = "普通用户", Value = "0" });
+
+            var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId).ToList();
+
+            foreach (var d_memberLevelSt in d_memberLevelSts)
+            {
+                var optionsStore = new OptionNode();
+                optionsStore.Value = d_memberLevelSt.Level.ToString();
+                optionsStore.Label = d_memberLevelSt.Name;
+                ret.OptionsMemberLevels.Add(optionsStore);
             }
 
             ret.OptionsProductKinds = MerchServiceFactory.PrdProduct.GetKindTree();
@@ -488,6 +525,19 @@ namespace LocalS.Service.Api.Merch
                 {
                     d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
                 }
+
+                d_coupon.PerLimitTimeType = rop.PerLimitTimeType;
+
+                if (rop.PerLimitTimeType == E_Coupon_PerLimitTimeType.UnLimit)
+                {
+                    d_coupon.PerLimitTimeNum = 0;
+                }
+                else
+                {
+                    d_coupon.PerLimitTimeNum = rop.PerLimitTimeNum;
+                }
+
+                d_coupon.LimitMemberLevels = rop.LimitMemberLevels.ToJsonString();
 
                 d_coupon.IsSuperposition = false;
                 d_coupon.IsDelete = false;

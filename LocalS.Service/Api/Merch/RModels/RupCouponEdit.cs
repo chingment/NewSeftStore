@@ -26,5 +26,8 @@ namespace LocalS.Service.Api.Merch
         public object UseTimeValue { get; set; }
         public string Description { get; set; }
         public bool IsSuperposition { get; set; }
+        public E_Coupon_PerLimitTimeType PerLimitTimeType { get; set; }
+        public int PerLimitTimeNum { get; set; }
+        public List<string> LimitMemberLevels { get; set; }
     }
 }

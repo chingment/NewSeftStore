@@ -13,9 +13,11 @@ namespace LocalS.Service.Api.Merch
         {
             this.OptionsStores = new List<OptionNode>();
             this.OptionsProductKinds = new List<TreeNode>();
+            this.OptionsMemberLevels = new List<OptionNode>();
         }
 
         public List<OptionNode> OptionsStores { get; set; }
         public List<TreeNode> OptionsProductKinds { get; set; }
+        public List<OptionNode> OptionsMemberLevels { get; set; }
     }
 }

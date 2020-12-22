@@ -21,12 +21,11 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="发行总量" prop="issueQuantity" :show-message="rules.issueQuantity[0].isShow">
-
         <template v-if="form.category==2||form.category==3">
           <span>不限制</span>
         </template>
         <template v-else>
-          <el-input v-model="form.issueQuantity" placeholder="" clearable style="max-width:250px">
+          <el-input v-model="form.issueQuantity" placeholder clearable style="max-width:250px">
             <template slot="append">张</template>
           </el-input>
         </template>
@@ -42,17 +41,39 @@
       </el-form-item>
 
       <el-form-item label="券值" prop="faceValue">
-        <el-input v-model="form.faceValue" placeholder="" clearable style="max-width:250px">
+        <el-input v-model="form.faceValue" placeholder clearable style="max-width:250px">
           <template slot="append">{{ form.faceType==2?"折":"元" }}</template>
         </el-input>
       </el-form-item>
       <el-form-item label="每人限领" prop="perLimitNum">
-        <el-input v-model="form.perLimitNum" placeholder="" clearable style="max-width:250px">
+        <el-input v-model="form.perLimitNum" placeholder clearable style="max-width:250px">
           <template slot="append">张</template>
         </el-input>
       </el-form-item>
+      <el-form-item label="限领方式" prop="perLimitTimeType">
+        <el-radio-group v-model="form.perLimitTimeType">
+          <el-radio-button label="1">不限制</el-radio-button>
+          <el-radio-button label="2">按日</el-radio-button>
+          <el-radio-button label="3">按月</el-radio-button>
+        </el-radio-group>
+        <el-input
+          v-show="form.perLimitTimeType!=1"
+          v-model="form.perLimitTimeNum"
+          placeholder
+          clearable
+          style="width:180px"
+        >
+          <template slot="prepend">限领</template>
+          <template slot="append">张</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="限领用户">
+        <el-checkbox-group v-model="form.limitMemberLevels">
+          <el-checkbox v-for="option in temp.options_memberlevels" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item label="使用门槛" prop="atLeastAmount">
-        <el-input v-model="form.atLeastAmount" placeholder="" clearable style="max-width:250px">
+        <el-input v-model="form.atLeastAmount" placeholder clearable style="max-width:250px">
           <template slot="prepend">满</template>
           <template slot="append">元可使用</template>
         </el-input>
@@ -77,7 +98,7 @@
         </div>
         <div style="margin-top:10px">
           <div v-if="form.useTimeType==1">
-            <el-input v-model="form.useTimeValue" clearable placeholder="" style="max-width:250px">
+            <el-input v-model="form.useTimeValue" clearable placeholder style="max-width:250px">
               <template slot="append">日后无效</template>
             </el-input>
           </div>
@@ -91,12 +112,15 @@
               value-format="yyyy-MM-dd"
               style="width: 100%"
             />
-
           </div>
-
         </div>
       </el-form-item>
-      <el-form-item label="可使用范围" prop="useAreaValue" :show-message="rules.useAreaValue[0].isShow" :error="rules.useAreaValue[0].message">
+      <el-form-item
+        label="可使用范围"
+        prop="useAreaValue"
+        :show-message="rules.useAreaValue[0].isShow"
+        :error="rules.useAreaValue[0].message"
+      >
         <div>
           <el-radio-group v-model="form.useAreaType" @change="handleUseAreaTypeChange">
             <el-radio-button label="1">全场通用</el-radio-button>
@@ -108,7 +132,14 @@
         <div style="margin-top:10px">
           <div v-if="form.useAreaType==2">
             <div>
-              <el-select v-model="temp.cur_sel_usearea_store.id" placeholder="选择店铺" style="width: 75%" size="medium" clearable @change="handleUseAreaSelStore">
+              <el-select
+                v-model="temp.cur_sel_usearea_store.id"
+                placeholder="选择店铺"
+                style="width: 75%"
+                size="medium"
+                clearable
+                @change="handleUseAreaSelStore"
+              >
                 <el-option
                   v-for="item in temp.options_stores"
                   :key="item.value"
@@ -120,7 +151,6 @@
             </div>
 
             <div>
-
               <el-table
                 key="list_usearea_stores"
                 :data="temp.list_usearea_stores"
@@ -133,17 +163,22 @@
                     <span>{{ scope.row.name }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                <el-table-column
+                  label="操作"
+                  align="right"
+                  width="180"
+                  class-name="small-padding fixed-width"
+                >
                   <template slot-scope="scope">
-                    <el-button type="text" size="mini" @click="handleUseAreaDelStore(scope.$index)">
-                      删除
-                    </el-button>
+                    <el-button
+                      type="text"
+                      size="mini"
+                      @click="handleUseAreaDelStore(scope.$index)"
+                    >删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
-
             </div>
-
           </div>
           <div v-if="form.useAreaType==3">
             <div>
@@ -172,18 +207,24 @@
                     <span>{{ scope.row.name }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                <el-table-column
+                  label="操作"
+                  align="right"
+                  width="180"
+                  class-name="small-padding fixed-width"
+                >
                   <template slot-scope="scope">
-                    <el-button type="text" size="mini" @click="handleUseAreaDelProductKind(scope.$index)">
-                      删除
-                    </el-button>
+                    <el-button
+                      type="text"
+                      size="mini"
+                      @click="handleUseAreaDelProductKind(scope.$index)"
+                    >删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
             </div>
           </div>
           <div v-if="form.useAreaType==4">
-
             <div>
               <el-autocomplete
                 v-model="temp.productSearchKey"
@@ -194,7 +235,6 @@
                 size="medium"
                 @select="handleUseAreaSelProduct"
               >
-
                 <template slot-scope="{ item }">
                   <div class="spu-search">
                     <div class="name">{{ item.name }}</div>
@@ -224,16 +264,22 @@
                     <span>{{ scope.row.spuCode }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
+                <el-table-column
+                  label="操作"
+                  align="right"
+                  width="180"
+                  class-name="small-padding fixed-width"
+                >
                   <template slot-scope="scope">
-                    <el-button type="text" size="mini" @click="handleUseAreaDelProduct(scope.$index)">
-                      删除
-                    </el-button>
+                    <el-button
+                      type="text"
+                      size="mini"
+                      @click="handleUseAreaDelProduct(scope.$index)"
+                    >删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
             </div>
-
           </div>
         </div>
       </el-form-item>
@@ -245,7 +291,8 @@
           maxlength="500"
           show-word-limit
           clearable
-        /></el-form-item>
+        />
+      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -272,6 +319,9 @@ export default {
         faceType: 1,
         faceValue: '',
         perLimitNum: '',
+        perLimitTimeType: 1,
+        perLimitTimeNum: 0,
+        limitMemberLevels: ['0'],
         validDate: [],
         useAreaType: 1,
         useAreaValue: [],
@@ -280,6 +330,7 @@ export default {
         description: ''
       },
       temp: {
+        options_memberlevels: [],
         options_stores: [],
         options_productkinds: [],
         cur_sel_usearea_store: { id: '', name: '' },
@@ -290,29 +341,68 @@ export default {
         list_usearea_products: [],
         productKindIds: [],
         productSearchKey: '',
-        options_category: [{
-          value: 1,
-          label: '全场赠券'
-        }, {
-          value: 2,
-          label: '新用户赠券'
-        }, {
-          value: 3,
-          label: '会员赠券'
-        }, {
-          value: 4,
-          label: '购物赠券'
-        }]
+        options_category: [
+          {
+            value: 1,
+            label: '全场赠券'
+          },
+          {
+            value: 2,
+            label: '新用户赠券'
+          },
+          {
+            value: 3,
+            label: '会员赠券'
+          },
+          {
+            value: 4,
+            label: '购物赠券'
+          }
+        ]
       },
       rules: {
-        name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1, isShow: true }],
-        faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
-        perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
-        atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money1 }],
+        name: [
+          {
+            required: true,
+            min: 1,
+            max: 200,
+            message: '必填,且不能超过200个字符',
+            trigger: 'change'
+          }
+        ],
+        issueQuantity: [
+          {
+            required: true,
+            message: '只能输入正整数',
+            pattern: fromReg.intege1,
+            isShow: true
+          }
+        ],
+        faceValue: [
+          { required: true, message: '格式,eg:88.88', pattern: fromReg.money }
+        ],
+        perLimitNum: [
+          {
+            required: true,
+            message: '只能输入正整数',
+            pattern: fromReg.intege1
+          }
+        ],
+        atLeastAmount: [
+          { required: true, message: '格式,eg:88.88', pattern: fromReg.money1 }
+        ],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
-        useTimeValue: [{ required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
-        useAreaValue: [{ type: 'array', required: false, message: '请选择', isShow: false }]
+        useTimeValue: [
+          {
+            required: true,
+            message: '请输入正整数',
+            isShow: true,
+            pattern: fromReg.intege1
+          }
+        ],
+        useAreaValue: [
+          { type: 'array', required: false, message: '请选择', isShow: false }
+        ]
       }
     }
   },
@@ -327,26 +417,28 @@ export default {
           var d = res.data
           this.temp.options_stores = d.optionsStores
           this.temp.options_productkinds = d.optionsProductKinds
+          this.temp.options_memberlevels = d.optionsMemberLevels
         }
         this.loading = false
       })
     },
     onSubmit() {
-      this.$refs['form'].validate((valid) => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then(() => {
-            add(this.form).then(res => {
-              this.$message(res.message)
-              if (res.result === 1) {
-                goBack(this)
-              }
-            })
-          }).catch(() => {
           })
+            .then(() => {
+              add(this.form).then(res => {
+                this.$message(res.message)
+                if (res.result === 1) {
+                  goBack(this)
+                }
+              })
+            })
+            .catch(() => {})
         }
       })
     },
@@ -396,7 +488,10 @@ export default {
           this.form.useAreaValue = this.temp.list_usearea_products
         }
 
-        if (this.form.useAreaValue == null || this.form.useAreaValue.length === 0) {
+        if (
+          this.form.useAreaValue == null ||
+          this.form.useAreaValue.length === 0
+        ) {
           this.rules.useAreaValue[0].required = true
           this.rules.useAreaValue[0].isShow = true
           this.rules.useAreaValue[0].message = '请选择.'
@@ -414,7 +509,13 @@ export default {
           var d = res.data
           var restaurants = []
           for (var j = 0; j < d.length; j++) {
-            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId, 'spuCode': d[j].spuCode })
+            restaurants.push({
+              value: d[j].name,
+              mainImgUrl: d[j].mainImgUrl,
+              name: d[j].name,
+              productId: d[j].productId,
+              spuCode: d[j].spuCode
+            })
           }
 
           cb(restaurants)
@@ -435,7 +536,7 @@ export default {
         this.$message('请选择商品')
         return
       }
-      const is_has = list.find((item) => {
+      const is_has = list.find(item => {
         return item.id === id
       })
 
@@ -454,7 +555,7 @@ export default {
       this.handleUseAreaCheckSel(list)
     },
     handleUseAreaSelStore(val) {
-      const sel_obj = this.temp.options_stores.find((item) => {
+      const sel_obj = this.temp.options_stores.find(item => {
         return item.value === val
       })
 
@@ -470,7 +571,7 @@ export default {
         this.$message('请选择店铺')
         return
       }
-      const is_has = list.find((item) => {
+      const is_has = list.find(item => {
         return item.id === id
       })
 
@@ -499,7 +600,11 @@ export default {
             if (productkinds[i].children[j].value === val[1]) {
               name2 = productkinds[i].children[j].label
 
-              for (let x = 0; x < productkinds[i].children[j].children.length; x++) {
+              for (
+                let x = 0;
+                x < productkinds[i].children[j].children.length;
+                x++
+              ) {
                 if (productkinds[i].children[j].children[x].value === val[2]) {
                   name3 = productkinds[i].children[j].children[x].label
                 }
@@ -509,13 +614,23 @@ export default {
         }
       }
 
-      console.log('id:' + val[2] + ',name1:' + name1 + ',name2' + name2 + ',name3:' + name3)
+      console.log(
+        'id:' +
+          val[2] +
+          ',name1:' +
+          name1 +
+          ',name2' +
+          name2 +
+          ',name3:' +
+          name3
+      )
       // const resultArr = this.options_productKinds.find((item) => {
       //   item.chhi
       //   return item.value === val
       // })
       this.temp.cur_sel_usearea_productkind.id = val[2]
-      this.temp.cur_sel_usearea_productkind.name = name1 + '/' + name2 + '/' + name3
+      this.temp.cur_sel_usearea_productkind.name =
+        name1 + '/' + name2 + '/' + name3
     },
     handleUseAreaAddProductKind(e) {
       var list = this.temp.list_usearea_productkinds
@@ -526,7 +641,7 @@ export default {
         this.$message('请选择分类')
         return
       }
-      const is_has = list.find((item) => {
+      const is_has = list.find(item => {
         return item.id === id
       })
 
@@ -564,17 +679,16 @@ export default {
 </script>
 
 <style  lang="scss"  scoped>
+#user_add {
+  max-width: 600px;
+  .line {
+    text-align: center;
+  }
 
-#user_add{
-   max-width: 600px;
-.line {
-  text-align: center;
-}
-
-.is-leaf{
-  display: none !important;
-  width: 0px !important;
-}
+  .is-leaf {
+    display: none !important;
+    width: 0px !important;
+  }
 }
 </style>
 

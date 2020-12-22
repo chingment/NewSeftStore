@@ -14,10 +14,13 @@ namespace LocalS.Service.Api.Merch
             this.Coupon = new CouponModel();
             this.OptionsStores = new List<OptionNode>();
             this.OptionsProductKinds = new List<TreeNode>();
+            this.OptionsMemberLevels = new List<OptionNode>();
         }
 
         public CouponModel Coupon { get; set; }
         public List<OptionNode> OptionsStores { get; set; }
         public List<TreeNode> OptionsProductKinds { get; set; }
+
+        public List<OptionNode> OptionsMemberLevels { get; set; }
     }
 }
