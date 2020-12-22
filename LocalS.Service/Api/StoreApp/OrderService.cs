@@ -176,7 +176,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    if (productSku.ShopMode == E_SellChannelRefType.Machine || productSku.ShopMode == E_SellChannelRefType.Mall)
+                    if (rop.ShopMethod == E_OrderShopMethod.Shop)
                     {
                         var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
 
@@ -195,41 +195,55 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.Kind3 = r_productSku.KindId3;
                         productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
-                        productSku.DepositPrice = r_productSku.Stocks[0].RentMhPrice;
+                        productSku.DepositPrice = r_productSku.Stocks[0].DepositPrice;
+                        productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
 
-                        if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                        LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
+                        //切换会员价
+                        if (clientUser.MemberLevel > 0)
                         {
-                            productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-
-                            LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
-                            //切换会员价
-                            if (clientUser.MemberLevel > 0)
+                            var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
+                            if (memberProductSkuSt != null)
                             {
-                                var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
-                                if (memberProductSkuSt != null)
-                                {
-                                    productSku.SalePrice = memberProductSkuSt.MemberPrice;
-                                    LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
-                                }
+                                productSku.SalePrice = memberProductSkuSt.MemberPrice;
+                                LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
                             }
-
-                            productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
-                            productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
-                            productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
-                        }
-                        else if (rop.ShopMethod == E_OrderShopMethod.Rent)
-                        {
-                            productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
-                            productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
-                            productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
-                            productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
                         }
 
+                        productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
+                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
+                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
 
                         c_prodcutSkus.Add(productSku);
-
                     }
-                    else if (productSku.ShopMode == E_SellChannelRefType.MemberFee)
+                    else if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                    {
+                        var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
+
+                        if (r_productSku == null)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "系统发生异常01", ret);
+                        }
+
+                        if (r_productSku.Stocks.Count == 0)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "系统发生异常02", ret);
+                        }
+
+                        productSku.Name = r_productSku.Name;
+                        productSku.MainImgUrl = r_productSku.MainImgUrl;
+                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
+                        productSku.DepositPrice = r_productSku.Stocks[0].DepositPrice;
+                        productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
+                        productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
+                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
+                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
+
+                        c_prodcutSkus.Add(productSku);
+                    }
+                    else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
                     {
                         var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == store.MerchId && m.Id == productSku.Id).FirstOrDefault();
                         if (memberFeeSt != null)
@@ -271,7 +285,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 amount_sale = c_prodcutSkus.Sum(m => m.SaleAmount);
 
-                if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.MemberFee)
                 {
                     if (rop.CouponIdsByShop == null || rop.CouponIdsByShop.Count == 0)
                     {
@@ -534,26 +548,7 @@ namespace LocalS.Service.Api.StoreApp
                 orderBlock.Add(orderBlock_Machine);
             }
 
-            var skus_MemberFee = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.MemberFee).ToList();
-
-            if (skus_MemberFee.Count > 0)
-            {
-                var orderBlock_MemberFee = new OrderBlockModel();
-                orderBlock_MemberFee.TagName = "会员费";
-                orderBlock_MemberFee.Skus = skus_MemberFee;
-                orderBlock_MemberFee.TabMode = E_TabMode.MemerbFee;
-                orderBlock_MemberFee.ShopMode = E_SellChannelRefType.MemberFee;
-                orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.MemberFee;
-                orderBlock_MemberFee.SelfTake.StoreName = store.Name;
-                orderBlock_MemberFee.SelfTake.StoreAddress = store.Address;
-                orderBlock.Add(orderBlock_MemberFee);
-            }
-
             ret.Blocks = orderBlock;
-
-
-            //c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
-            //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
 
             ret.SubtotalItems = c_subtotalItems;
 

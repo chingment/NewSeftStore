@@ -370,9 +370,9 @@ namespace LocalS.BLL.Biz
 
                         foreach (var sku in skus)
                         {
-                            if (sku.ShopMode == E_SellChannelRefType.Mall || sku.ShopMode == E_SellChannelRefType.Machine)
+                            if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.Rent)
                             {
-                                #region Mall,Machine
+                                #region Shop,Rent
 
                                 string[] sellChannelRefIds = new string[] { };
 
@@ -436,6 +436,7 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.Quantity = sku.Quantity;
                                     buildOrderSku.ShopMode = sku.ShopMode;
                                     buildOrderSku.Stocks = r_sku.Stocks;
+
                                     buildOrderSku.CartId = sku.CartId;
                                     buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
                                     buildOrderSku.KindId1 = r_sku.KindId1;
@@ -446,7 +447,7 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                             }
-                            else if (sku.ShopMode == E_SellChannelRefType.MemberFee)
+                            else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
                             {
                                 #region MemberFee
 
@@ -460,7 +461,7 @@ namespace LocalS.BLL.Biz
                                     var stocks = new List<ProductSkuStockModel>();
                                     var stock = new ProductSkuStockModel();
 
-                                    stock.RefType = E_SellChannelRefType.MemberFee;
+                                    stock.RefType = E_SellChannelRefType.Mall;
                                     stock.RefId = SellChannelStock.MemberFeeSellChannelRefId;
                                     stock.CabinetId = "";
                                     stock.SlotId = "";
@@ -565,7 +566,7 @@ namespace LocalS.BLL.Biz
                     //}
 
                     LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
-                    var buildOrders = BuildOrders(buildOrderSkus);
+                    var buildOrders = BuildOrders(rop.ShopMethod, buildOrderSkus, couponAmountByShop, couponAmountByDeposit, couponAmountByRent);
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
                     #region 更改购物车标识
@@ -728,13 +729,13 @@ namespace LocalS.BLL.Biz
                                 }
                                 #endregion 
                                 break;
-                            case E_SellChannelRefType.MemberFee:
-                                #region MemberFee
-                                order.ReceiveMode = E_ReceiveMode.MemberFee;
-                                order.ReceiveModeName = "会员费";
-                                order.IsNoDisplayClient = true;
-                                #endregion
-                                break;
+                                //case E_SellChannelRefType.MemberFee:
+                                //    #region MemberFee
+                                //    order.ReceiveMode = E_ReceiveMode.MemberFee;
+                                //    order.ReceiveModeName = "会员费";
+                                //    order.IsNoDisplayClient = true;
+                                //    #endregion
+                                //    break;
                         }
 
                         order.SaleAmount = buildOrder.SaleAmount;
@@ -796,10 +797,11 @@ namespace LocalS.BLL.Biz
                             orderSub.IsTestMode = rop.IsTestMode;
                             orderSub.Creator = operater;
                             orderSub.CreateTime = DateTime.Now;
+                            orderSub.ShopMethod = rop.ShopMethod;
                             CurrentDb.OrderSub.Add(orderSub);
 
-                            //判断SellChannelRefType 是 Machine，Mall 才进行库存操作
-                            if (orderSub.SellChannelRefType == E_SellChannelRefType.Machine || orderSub.SellChannelRefType == E_SellChannelRefType.Mall)
+                            //判断ShopMethod 是 Shop 才进行库存操作
+                            if (orderSub.ShopMethod == E_OrderShopMethod.Shop)
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
                             }
@@ -826,7 +828,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        private List<BuildOrder> BuildOrders(List<BuildOrder.ProductSku> reserveProductSkus)
+        private List<BuildOrder> BuildOrders(E_OrderShopMethod shopMethod, List<BuildOrder.ProductSku> reserveProductSkus, decimal couponAmountByShop, decimal couponAmountByDeposit, decimal couponAmountByRent)
         {
             List<BuildOrder> buildOrders = new List<BuildOrder>();
 
@@ -839,14 +841,11 @@ namespace LocalS.BLL.Biz
 
             foreach (var shopMode in shopModes)
             {
-
                 var shopModeProductSkus = reserveProductSkus.Where(m => m.ShopMode == shopMode).ToList();
 
                 foreach (var shopModeProductSku in shopModeProductSkus)
                 {
-
                     var productSku_Stocks = shopModeProductSku.Stocks;
-
 
                     if (shopMode == E_SellChannelRefType.Mall)
                     {
@@ -863,23 +862,24 @@ namespace LocalS.BLL.Biz
                         buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
                         buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
                         buildOrderSubChilds.Add(buildOrderSubChild);
-                    }
-                    if (shopMode == E_SellChannelRefType.MemberFee)
-                    {
-                        var buildOrderSubChild = new BuildOrder.Child();
-                        buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
-                        buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
-                        buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
-                        buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
-                        buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
 
-                        buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
-                        buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                        buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
-                        buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
-                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
+                        //if (shopMode == E_SellChannelRefType.MemberFee)
+                        //{
+                        //    var buildOrderSubChild = new BuildOrder.Child();
+                        //    buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
+                        //    buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
+                        //    buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
+                        //    buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
+                        //    buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
 
-                        buildOrderSubChilds.Add(buildOrderSubChild);
+                        //    buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
+                        //    buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
+                        //    buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
+                        //    buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
+                        //    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
+
+                        //    buildOrderSubChilds.Add(buildOrderSubChild);
+                        //}
                     }
                     else if (shopMode == E_SellChannelRefType.Machine)
                     {
@@ -1160,7 +1160,7 @@ namespace LocalS.BLL.Biz
                             d_orderSub.Mender = operater;
                             d_orderSub.MendTime = DateTime.Now;
 
-                            if (d_orderSub.SellChannelRefType == E_SellChannelRefType.Mall || d_orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
+                            if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
                             {
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
@@ -1168,7 +1168,7 @@ namespace LocalS.BLL.Biz
 
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.MerchId, d_order.StoreId, d_orderSub.SellChannelRefId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                             }
-                            else if (d_orderSub.SellChannelRefType == E_SellChannelRefType.MemberFee)
+                            else if (d_orderSub.ShopMethod == E_OrderShopMethod.MemberFee)
                             {
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.Taked;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
@@ -1413,7 +1413,7 @@ namespace LocalS.BLL.Biz
 
                         d_orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
 
-                        if (d_orderSub.SellChannelRefType == E_SellChannelRefType.Mall || d_orderSub.SellChannelRefType == E_SellChannelRefType.Machine)
+                        if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
                         {
                             BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, d_order.MerchId, d_order.StoreId, d_orderSub.SellChannelRefId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                         }

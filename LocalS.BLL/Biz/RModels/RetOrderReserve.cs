@@ -63,7 +63,6 @@ namespace LocalS.BLL.Biz
             public int Quantity { get; set; }
             public E_SellChannelRefType ShopMode { get; set; }
             public List<ProductSkuStockModel> Stocks { get; set; }
-
             public string BarCode { get; set; }
             public string CumCode { get; set; }
             public string Producer { get; set; }
@@ -77,11 +76,8 @@ namespace LocalS.BLL.Biz
             public string BriefDes { get; set; }
             public List<SpecItem> SpecItems { get; set; }
             public string SpecIdx { get; set; }
-
             public string CartId { get; set; }
-
             public string SvcConsulterId { get; set; }
-
             public int KindId1 { get; set; }
             public int KindId2 { get; set; }
             public int KindId3 { get; set; }

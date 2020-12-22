@@ -56,7 +56,8 @@ namespace LocalS.Entity
 
         Unknow = 0,
         Shop = 1,
-        Rent = 2
+        Rent = 2,
+        MemberFee = 3
     }
 
     [Table("Order")]

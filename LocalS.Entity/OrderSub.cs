@@ -36,6 +36,8 @@ namespace LocalS.Entity
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
+        public decimal RentAmount { get; set; }
+        public decimal DepositAmount { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
@@ -62,6 +64,7 @@ namespace LocalS.Entity
         public int PrdKindId3 { get; set; }
         public bool IsTestMode { get; set; }
         public string SaleOutletId { get; set; }
+        public E_OrderShopMethod ShopMethod { get; set; }
 
     }
 }

@@ -167,10 +167,10 @@ Page({
       cartId: 0,
       id: skuId,
       quantity: 1,
-      shopMode: 4
+      shopMode: 1
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&action=memberfee&saleOutletId=" + _data.curSaleOutlet.id,
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&shopMethod=3&action=memberfee&saleOutletId=" + _data.curSaleOutlet.id,
       success: function (res) {
         // success
       },

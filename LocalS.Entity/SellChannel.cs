@@ -17,7 +17,6 @@ namespace LocalS.Entity
         Unknow = 0,
         Mall = 1,//商城
         Machine = 3,//机器
-        MemberFee = 4 //会员费
     }
 
     public enum E_ReceiveMode

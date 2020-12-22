@@ -16,7 +16,6 @@
 			<view class="ct pd-com">
 
 				<block wx:if="{{item.shopMode==1}}">
-
 					<view class="tab-double ">
 						<view class="tab-title">
 							<view class="title-left {{item.receiveMode==1?'selected':''}} skeleton-bg"
@@ -28,7 +27,6 @@
 								<view class="left-triangle">
 								</view>
 							</view>
-
 							<view class="title-right {{item.receiveMode==2?'selected':''}} skeleton-bg"
 								bindtap="tabMallReceiveModeClick" data-reply-blockindex="{{index}}" data-reply-receivemode="2"
 								data-reply-tabmode="{{item.tabMode}}">
@@ -125,8 +123,12 @@
 												class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
 										</view>
 									</view>
-									<view class="it-r">
+									<view class="it-r" wx:if="{{shopMethod==1||shopMethod==3}}">
 										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
+									</view>
+									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:200rpx">
+										<view><text>租金</text>  <text class='salePrice skeleton-rect'> {{skusitem.rentMhPrice}}/月</text></view>
+										<view><text>押金</text> <text class='salePrice skeleton-rect'> {{skusitem.depositPrice}}</text></view>
 									</view>
 								</view>
 							</block>
@@ -213,7 +215,7 @@
 
 
 				</block>
-				<block wx:elif="{{item.shopMode==4}}">
+				<!-- <block wx:elif="{{item.shopMode==4}}">
 
 					<view class="tab-double">
 						<view class="tab-title">
@@ -265,7 +267,7 @@
 
 					</view>
 
-				</block>
+				</block> -->
 				<view class="line-space-ncolor"></view>
 
 			</view>
@@ -276,7 +278,7 @@
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
 
-				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1}}" data-reply-facetypes="1,2">
+				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1||shopMethod==3}}" data-reply-facetypes="1,2">
 					<view class="it-l" style="width:60rpx">
 						<view class="icon">
 							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
