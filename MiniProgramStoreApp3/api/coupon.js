@@ -5,12 +5,21 @@ const lumos = require('../utils/lumos.minprogram.js')
 
 function my(params, requestHandler) {
 
- return lumos.postJson({
+  return lumos.postJson({
     url: config.apiUrl.couponMy,
     dataParams: params
   })
 }
 
+function revCenterSt(params) {
+
+  return lumos.getJson({
+    url: config.apiUrl.couponRevCenterSt,
+    urlParams: params
+  })
+}
+
 module.exports = {
-  my: my
+  my: my,
+  revCenterSt: revCenterSt
 }

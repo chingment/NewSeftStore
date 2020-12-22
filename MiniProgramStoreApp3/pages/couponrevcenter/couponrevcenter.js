@@ -1,17 +1,35 @@
-// Pages/couponrevcenter/couponrevcenter.js
+const config = require('../../config')
+const ownRequest = require('../../own/ownRequest.js')
+const apiCoupon = require('../../api/coupon.js')
+const toast = require('../../utils/toastutil')
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    topImgUrl: '',
+    coupons: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var _this = this
+    apiCoupon.revCenterSt({}).then(function (res) {
+      if (res.result == 1) {
+        var d = res.data
+
+
+        _this.setData({
+          topImgUrl: d.topImgUrl,
+          coupons: d.coupons
+        })
+      }
+    })
 
   },
 

@@ -314,6 +314,8 @@ namespace LocalS.Service.Api.StoreApp
 
             if (d_couponRevCenterSt != null)
             {
+                ret.TopImgUrl = d_couponRevCenterSt.TopImgUrl;
+
                 List<string> l_couponIds = d_couponRevCenterSt.CouponIds.ToJsonObject<List<string>>();
 
 
@@ -327,7 +329,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var couponModel = CovertCouponModel(item.Id, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
 
-  
+
                     ret.Coupons.Add(couponModel);
                 }
 
@@ -336,6 +338,65 @@ namespace LocalS.Service.Api.StoreApp
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+
+        public CustomJsonResult Receive(string operater, string clientUserId, RopCouponReceive rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == rop.CouponId).FirstOrDefault();
+
+            if (d_coupon == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效优惠券");
+            }
+
+            if (d_coupon.StartTime > DateTime.Now || d_coupon.EndTime < DateTime.Now)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效优惠券");
+            }
+
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+
+            var limitMemberLevels = d_coupon.LimitMemberLevels.ToJsonObject<List<string>>();
+
+            if (limitMemberLevels != null)
+            {
+                if (!limitMemberLevels.Contains(d_clientUser.MemberLevel.ToString()))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "无资格领取该优惠券");
+                }
+            }
+
+
+            var perLimitNum = d_coupon.PerLimitNum;
+
+            var d_clientCoupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.CouponId == d_coupon.Id).ToList();
+
+            if (perLimitNum == d_clientCoupons.Count)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "您领取的数量已经超过限制");
+            }
+
+            if (d_coupon.PerLimitTimeType == E_Coupon_PerLimitTimeType.Day)
+            {
+                DateTime start = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00"));
+                DateTime end = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 23:59:59"));
+
+                d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime >= start && m.SourceTime <= end).ToList();
+
+                if (d_coupon.PerLimitTimeNum == d_clientCoupons.Count)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当天领取已经超过大限制，请明天再试试");
+                }
+
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "领取成功");
 
             return result;
         }

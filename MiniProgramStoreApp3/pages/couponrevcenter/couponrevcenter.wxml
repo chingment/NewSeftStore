@@ -1,2 +1,34 @@
-<!--Pages/couponrevcenter/couponrevcenter.wxml-->
-<text>Pages/couponrevcenter/couponrevcenter.wxml</text>
+<view class='pt-couponrevcenter'>
+
+  <view class="topImgUrl">
+    <image class="img" mode="widthFix" src="{{topImgUrl}}"></image>
+  </view>
+
+  <view class="coupons"  wx:for="{{coupons}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+    <view class="coupon se{{voucher.color}}" bindtap='getvoucher' data-id="{{voucher.id}}" data-index="{{index}}">
+      <view class="coupon-left">
+        <view class="coupon-inner">
+          <view class="coupon-money-name">
+            {{item.name}}
+          </view>
+          <view class='coupon-least'>{{item.faceTip}}</view>
+          <view>
+            <view class='description'> {{item.description}} </view>
+          </view>
+        </view>
+      </view>
+      <view class="coupon-right">
+        <view class="coupon-inner">
+          <view class="coupon-time">
+            <span class="faceUnit">¥</span>
+            <span class="faceValue">{{item.faceValue}}</span>
+            <view class='lingqu'>立即领取</view>
+          </view>
+          <i class="coupon-circle top"></i>
+          <i class="coupon-circle bottom"></i>
+        </view>
+      </view>
+      <view class="coupon-light"></view>
+    </view>
+  </view>
+</view>

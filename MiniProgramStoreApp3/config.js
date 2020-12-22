@@ -33,6 +33,7 @@ var config = {
     deliveryAddressEdit: `${host}/DeliveryAddress/Edit`,
     deliveryAddressMy: `${host}/DeliveryAddress/My`,
     couponMy: `${host}/Coupon/My`,
+    couponRevCenterSt: `${host}/Coupon/RevCenterSt`,
     storeList: `${host}/Store/List`,
     operateResult: `${host}/Operate/Result`,
     orderConfirm: `${host}/Order/Confirm`,

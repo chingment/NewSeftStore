@@ -13,6 +13,8 @@ namespace LocalS.Service.Api.StoreApp
             this.Coupons = new List<CouponModel>();
         }
 
+        public string TopImgUrl { get; set; }
+
         public List<CouponModel> Coupons { get; set; }
     }
 }

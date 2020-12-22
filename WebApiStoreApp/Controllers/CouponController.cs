@@ -15,10 +15,18 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse<RetCouponMy>(result);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public OwnApiHttpResponse RevCenterSt([FromUri]RupCouponRevCenterSt rup)
         {
             IResult result = StoreAppServiceFactory.Coupon.RevCenterSt(this.CurrentUserId, this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Receive([FromUri]RopCouponReceive rop)
+        {
+            IResult result = StoreAppServiceFactory.Coupon.Receive(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

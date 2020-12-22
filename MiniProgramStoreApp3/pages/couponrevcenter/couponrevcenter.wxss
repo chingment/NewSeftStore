@@ -1,1 +1,212 @@
-/* Pages/couponrevcenter/couponrevcenter.wxss */
+page {
+  background-color: #f5f5f5;
+}
+
+
+.topImgUrl {
+  display: flex;
+}
+
+.topImgUrl .img {
+  width: 100%;
+}
+
+
+.coupons {
+  padding: 0 18rpx;
+}
+
+/*优惠券*/
+.coupon {
+  position: relative;
+  background: #fff;
+  color: #000;
+  width: 100%;
+  height: 95px;
+  line-height: 25px;
+  overflow: hidden;
+  margin-top: 18rpx;
+  border-radius: 5px;
+}
+
+.coupon-diabled {
+  background: #c3c3c3;
+  color: #666;
+}
+
+.coupon:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.faceUnit {
+  color: #ffb101
+}
+
+.faceValue {
+  font-size: 28px;
+  color: #ffb101
+}
+
+.coupon-left {
+  float: left;
+  text-align: left;
+  width: 60%;
+  font-size: 12px;
+}
+
+.coupon-right {
+  float: right;
+  text-align: center;
+  width: 40%;
+  font-size: 14px;
+}
+
+.coupon-inner {
+  padding: 20rpx 25rpx;
+  height: 75px;
+  position: relative;
+}
+
+.coupon-right .coupon-inner {
+  border-left: 2px dashed rgba(136, 128, 128, 0.5);
+}
+
+.coupon-money,
+.coupon-time {
+  margin-top: 12px;
+}
+
+.coupon-money-name {
+  font-size: 18px;
+  overflow: hidden;
+  height: 42rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coupon-circle {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #f5f5f5;
+  position: absolute;
+  left: -9px;
+  border-radius: 50%
+}
+
+.coupon-circle.top {
+  top: -8px;
+}
+
+.coupon-circle.bottom {
+  bottom: -8px;
+}
+
+.coupon-light {
+  position: absolute;
+  top: 20px;
+  left: 20%;
+  height: 150px;
+  width: 100%;
+  background: rgba(255, 255, 255, .2);
+  transform: rotate(-30deg);
+  -webkit-transform: rotate(-30deg);
+  -moz-transform: rotate(-30deg);
+}
+
+.coupon-least {
+  font-size: 12px;
+  padding-left: 10rpx;
+}
+
+/*领取*/
+.lingqu20 {
+  background: #ff495e;
+  border-radius: 20px;
+}
+
+/*已领取*/
+.ylingqu {
+  background: #c3c3c3;
+  border-radius: 20px;
+}
+
+.jiezhi {
+  margin-top: -2px;
+  font-size: 12px;
+}
+
+.description {
+  font-size: 12px;
+  padding-left: 10rpx;
+  color: #9d9d9d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flow-btn-min {
+  background: #fff;
+  border: 1rpx solid #ccc;
+  height: 30px;
+  line-height: 30px;
+  font-size: 28rpx;
+  width: 200rpx;
+  margin: 0 auto;
+  border-radius: 5px;
+  text-align: center;
+  color: #777;
+  margin-top: 25rpx;
+}
+
+/*蓝色*/
+.se10 {
+  background: #01AAED;
+}
+
+.lingqu10 {
+  background: #000099;
+  border-radius: 20px;
+}
+
+/*紫色*/
+.se30 {
+  background: #660099;
+}
+
+.lingqu30 {
+  background: #CC00FF;
+  border-radius: 20px;
+}
+
+/*黄色*/
+.se40 {
+  background: #FFB800;
+}
+
+.lingqu {
+  height: 52rpx;
+  width: 130rpx;
+  background: #f50;
+  color: #fff;
+  line-height: 52rpx;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block;
+  font-size: 24rpx;
+}
+
+/*灰色*/
+.se50 {
+  background: #c3c3c3;
+  color: #666;
+}
+
+.lingqu50 {
+  background: #c3c3c3;
+  color: #666;
+}
