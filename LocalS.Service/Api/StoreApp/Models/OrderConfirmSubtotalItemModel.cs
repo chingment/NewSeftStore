@@ -23,10 +23,7 @@ namespace LocalS.Service.Api.StoreApp
         /// Tab选项卡模式 Delivery 仅支持配送方式，SelfTake 仅支持自提方式 DeliveryAndSelfTake 支持配送和自提 
         /// </summary>
         public E_TabMode TabMode { get; set; }
-        /// <summary>
-        /// ShopMode 模式分 线上商城，线下机器
-        /// </summary>
-        public E_SellChannelRefType ShopMode { get; set; }
+
         /// <summary>
         /// 收货方式   Delivery SelfTake
         /// </summary>

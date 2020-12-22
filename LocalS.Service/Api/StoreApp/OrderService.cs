@@ -31,15 +31,16 @@ namespace LocalS.Service.Api.StoreApp
 
             if (order.PayStatus == E_PayStatus.PaySuccess)
             {
-                if (order.SellChannelRefType == E_SellChannelRefType.Machine)
+                if (order.ReceiveMode == E_ReceiveMode.MachineSelfTake)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
                     block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", order.SellChannelRefId) };
                 }
 
-                if (order.SellChannelRefType == E_SellChannelRefType.Machine || order.SellChannelRefType == E_SellChannelRefType.Mall)
+                if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.MachineSelfTake || order.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                 {
                     block.ReceiptInfo = new FsReceiptInfo { LastTime = order.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = order.PickupFlowLastDesc };
+
                 }
             }
 
@@ -154,6 +155,7 @@ namespace LocalS.Service.Api.StoreApp
             E_ReceiveMode receiveMode_Mall = E_ReceiveMode.Delivery;
             BookTimeModel bookTimeModel = new BookTimeModel();
             var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+
             if (rop.OrderIds == null || rop.OrderIds.Count == 0)
             {
 
@@ -176,8 +178,9 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                    if (productSku.ShopMethod == E_OrderShopMethod.Shop)
                     {
+                        #region Shop
                         var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
 
                         if (r_productSku == null)
@@ -194,8 +197,10 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.Kind3 = r_productSku.KindId3;
-                        productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
-                        productSku.DepositPrice = r_productSku.Stocks[0].DepositPrice;
+                        productSku.RentUnit = 2;
+                        productSku.RentUnitText = "月";
+                        productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                        productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
                         productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
 
                         LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
@@ -215,9 +220,12 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
 
                         c_prodcutSkus.Add(productSku);
+
+                        #endregion
                     }
-                    else if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                    else if (productSku.ShopMethod == E_OrderShopMethod.Rent)
                     {
+                        #region Rent
                         var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
 
                         if (r_productSku == null)
@@ -234,17 +242,22 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.Kind3 = r_productSku.KindId3;
-                        productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
-                        productSku.DepositPrice = r_productSku.Stocks[0].DepositPrice;
+                        productSku.RentUnitText = "月";
+                        productSku.RentUnit = 2;
+                        productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                        productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
                         productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
                         productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
                         productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                         productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
 
                         c_prodcutSkus.Add(productSku);
+
+                        #endregion
                     }
-                    else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
+                    else if (productSku.ShopMethod == E_OrderShopMethod.MemberFee)
                     {
+                        #region 
                         var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == store.MerchId && m.Id == productSku.Id).FirstOrDefault();
                         if (memberFeeSt != null)
                         {
@@ -258,6 +271,8 @@ namespace LocalS.Service.Api.StoreApp
                             productSku.Kind3 = 0;
                             c_prodcutSkus.Add(productSku);
                         }
+
+                        #endregion
                     }
                 }
 
@@ -287,6 +302,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.MemberFee)
                 {
+                    #region Shop,MemberFee
                     if (rop.CouponIdsByShop == null || rop.CouponIdsByShop.Count == 0)
                     {
                         var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
@@ -325,9 +341,12 @@ namespace LocalS.Service.Api.StoreApp
                             ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_couponByShop.ToF2Price()), TipType = TipType.InUse };
                         }
                     }
+                    #endregion
                 }
                 else if (rop.ShopMethod == E_OrderShopMethod.Rent)
                 {
+                    #region Rent
+
                     if (string.IsNullOrEmpty(rop.CouponIdByRent))
                     {
                         var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
@@ -384,27 +403,11 @@ namespace LocalS.Service.Api.StoreApp
                             ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_couponByDeposit.ToF2Price()), TipType = TipType.InUse };
                         }
                     }
+
+                    #endregion
                 }
 
-
-                int memberLevel = 0;
-
-                if (clientUser != null)
-                {
-                    memberLevel = clientUser.MemberLevel;
-                }
-
-                //if (memberLevel > 0)
-                //{
-                amount_charge = amount_sale;//会员用户总价 为 实际总价
-
-                //decimal member_coupon = amount_original - amount_sale;
-                // c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = string.Format("-{0}", , IsDcrease = true });
-                //}
-                //else
-                //{
-                //  amount_charge = amount_original;
-                //}
+                amount_charge = amount_sale;
 
                 amount_charge = amount_charge - amount_couponByShop - amount_couponByRent - amount_couponByDeposit;
 
@@ -417,10 +420,9 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-
-                store = BizFactory.Store.GetOne(rop.StoreId);
-
                 var orders = CurrentDb.Order.Where(m => rop.OrderIds.Contains(m.Id)).ToList();
+
+                store = BizFactory.Store.GetOne(orders[0].StoreId);
 
                 var orderByMall = orders.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
 
@@ -457,34 +459,30 @@ namespace LocalS.Service.Api.StoreApp
 
                 var orderSubs = CurrentDb.OrderSub.Where(m => rop.OrderIds.Contains(m.OrderId)).ToList();
 
-                var shopModeSkus = (from c in orderSubs
-                                    select new
-                                    {
-                                        c.SellChannelRefType,
-                                        c.PrdProductSkuId
-                                    }).Distinct().ToList();
-
-
-                foreach (var shopModeSku in shopModeSkus)
+                foreach (var orderSub in orderSubs)
                 {
-                    var l_orderSubChilds = orderSubs.Where(m => m.PrdProductSkuId == shopModeSku.PrdProductSkuId && m.SellChannelRefType == shopModeSku.SellChannelRefType).ToList();
-
                     var c_prodcutSku = new OrderConfirmProductSkuModel();
-                    c_prodcutSku.Id = l_orderSubChilds[0].PrdProductSkuId;
-                    c_prodcutSku.Name = l_orderSubChilds[0].PrdProductSkuName;
-                    c_prodcutSku.MainImgUrl = l_orderSubChilds[0].PrdProductSkuMainImgUrl;
-                    c_prodcutSku.Quantity = l_orderSubChilds.Sum(m => m.Quantity);
-                    c_prodcutSku.SalePrice = l_orderSubChilds[0].SalePrice;
-                    c_prodcutSku.OriginalPrice = l_orderSubChilds[0].OriginalPrice;
-                    c_prodcutSku.SaleAmount = l_orderSubChilds.Sum(m => m.SaleAmount);
-                    c_prodcutSku.OriginalAmount = l_orderSubChilds.Sum(m => m.OriginalAmount);
-                    c_prodcutSku.ShopMode = shopModeSku.SellChannelRefType;
+                    c_prodcutSku.Id = orderSub.PrdProductSkuId;
+                    c_prodcutSku.Name = orderSub.PrdProductSkuName;
+                    c_prodcutSku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                    c_prodcutSku.Quantity = orderSub.Quantity;
+                    c_prodcutSku.SalePrice = orderSub.SalePrice;
+                    c_prodcutSku.OriginalPrice = orderSub.OriginalPrice;
+                    c_prodcutSku.SaleAmount = orderSub.SaleAmount;
+                    c_prodcutSku.OriginalAmount = orderSub.OriginalAmount;
+                    c_prodcutSku.ShopMethod = orderSub.ShopMethod;
+                    c_prodcutSku.ShopMode = orderSub.SellChannelRefType;
+                    c_prodcutSku.RentUnitText = "月";
+                    c_prodcutSku.RentUnit = 2;
+                    c_prodcutSku.RentAmount = orderSub.RentAmount;
+                    c_prodcutSku.DepositAmount = orderSub.DepositAmount;
+                    c_prodcutSku.Kind3 = orderSub.PrdKindId3;
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
 
+
                 ret.ShopMethod = orders[0].ShopMethod;
 
-                ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", orders.Sum(m => m.CouponAmountByShop).ToF2Price()), TipType = TipType.InUse };
                 ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", orders.Sum(m => m.CouponAmountByDeposit).ToF2Price()), TipType = TipType.InUse };
                 ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", orders.Sum(m => m.CouponAmountByRent).ToF2Price()), TipType = TipType.InUse };
 
@@ -498,54 +496,71 @@ namespace LocalS.Service.Api.StoreApp
             var orderBlock = new List<OrderBlockModel>();
 
             var skus_Mall = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
+
             if (skus_Mall.Count > 0)
             {
-                var orderBlock_Mall = new OrderBlockModel();
-                orderBlock_Mall.TagName = "线上商城";
-                orderBlock_Mall.Skus = skus_Mall;
+                var skus_DeliveryOrStoreSelfTake = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.Shop || m.ShopMethod == E_OrderShopMethod.Rent).ToList();
 
-                if (store.SctMode.Contains("T1"))
+                if (skus_DeliveryOrStoreSelfTake.Count > 0)
                 {
-                    orderBlock_Mall.TabMode = E_TabMode.Delivery;
-                    orderBlock_Mall.ReceiveMode = E_ReceiveMode.Delivery;
-                }
-                else if (store.SctMode.Contains("T2"))
-                {
-                    orderBlock_Mall.TabMode = E_TabMode.StoreSelfTake;
-                    orderBlock_Mall.ReceiveMode = E_ReceiveMode.StoreSelfTake;
-                }
-                else if (store.SctMode.Contains("T3"))
-                {
-                    orderBlock_Mall.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
-                    orderBlock_Mall.ReceiveMode = receiveMode_Mall;
-                }
-                else
-                {
-                    orderBlock_Mall.TabMode = E_TabMode.Delivery;
-                    orderBlock_Mall.ReceiveMode = E_ReceiveMode.Delivery;
+                    var orderBlock_DeliveryOrStoreSelfTake = new OrderBlockModel();
+                    orderBlock_DeliveryOrStoreSelfTake.TagName = "线上商城";
+                    orderBlock_DeliveryOrStoreSelfTake.Skus = skus_DeliveryOrStoreSelfTake;
+
+                    if (store.SctMode.Contains("T1"))
+                    {
+                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.Delivery;
+                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
+                    }
+                    else if (store.SctMode.Contains("T2"))
+                    {
+                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.StoreSelfTake;
+                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                    }
+                    else if (store.SctMode.Contains("T3"))
+                    {
+                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
+                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = receiveMode_Mall;
+                    }
+                    else
+                    {
+                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.Delivery;
+                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
+                    }
+
+                    orderBlock_DeliveryOrStoreSelfTake.Delivery = dliveryModel;
+                    orderBlock_DeliveryOrStoreSelfTake.BookTime = bookTimeModel;
+                    orderBlock_DeliveryOrStoreSelfTake.SelfTake.StoreName = store.Name;
+                    orderBlock_DeliveryOrStoreSelfTake.SelfTake.StoreAddress = store.Address;
+                    orderBlock.Add(orderBlock_DeliveryOrStoreSelfTake);
                 }
 
-                orderBlock_Mall.ShopMode = E_SellChannelRefType.Mall;
-                orderBlock_Mall.Delivery = dliveryModel;
-                orderBlock_Mall.BookTime = bookTimeModel;
-                orderBlock_Mall.SelfTake.StoreName = store.Name;
-                orderBlock_Mall.SelfTake.StoreAddress = store.Address;
-                orderBlock.Add(orderBlock_Mall);
+
+                var skus_MemberFee = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.MemberFee).ToList();
+
+                if (skus_MemberFee.Count > 0)
+                {
+                    var orderBlock_MemberFee = new OrderBlockModel();
+                    orderBlock_MemberFee.TagName = "会员费";
+                    orderBlock_MemberFee.Skus = skus_Mall;
+                    orderBlock_MemberFee.TabMode = E_TabMode.MemerbFee;
+                    orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.MemberFee;
+                    orderBlock.Add(orderBlock_MemberFee);
+                }
+
             }
 
-
-            var skus_Machine = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
-            if (skus_Machine.Count > 0)
+            var skus_MachineSelfTake = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
+            if (skus_MachineSelfTake.Count > 0)
             {
-                var orderBlock_Machine = new OrderBlockModel();
-                orderBlock_Machine.TagName = "线下机器";
-                orderBlock_Machine.Skus = skus_Machine;
-                orderBlock_Machine.TabMode = E_TabMode.MachineSelfTake;
-                orderBlock_Machine.ShopMode = E_SellChannelRefType.Machine;
-                orderBlock_Machine.ReceiveMode = E_ReceiveMode.MachineSelfTake;
-                orderBlock_Machine.SelfTake.StoreName = store.Name;
-                orderBlock_Machine.SelfTake.StoreAddress = store.Address;
-                orderBlock.Add(orderBlock_Machine);
+                var orderBlock_MachineSelfTake = new OrderBlockModel();
+                orderBlock_MachineSelfTake.TagName = "线下机器";
+                orderBlock_MachineSelfTake.Skus = skus_MachineSelfTake;
+                orderBlock_MachineSelfTake.TabMode = E_TabMode.MachineSelfTake;
+                orderBlock_MachineSelfTake.ReceiveMode = E_ReceiveMode.MachineSelfTake;
+                orderBlock_MachineSelfTake.SelfTake.StoreName = store.Name;
+                orderBlock_MachineSelfTake.SelfTake.StoreAddress = store.Address;
+                orderBlock.Add(orderBlock_MachineSelfTake);
             }
 
             ret.Blocks = orderBlock;
@@ -591,12 +606,13 @@ namespace LocalS.Service.Api.StoreApp
                              CompletedTime = o.CompletedTime,
                              ChargeAmount = o.ChargeAmount,
                              CanceledTime = o.CanceledTime,
+                             ReceiveMode = o.ReceiveMode,
                              ReceiveModeName = o.ReceiveModeName,
-                             SellChannelRefType = o.SellChannelRefType,
                              SellChannelRefId = o.SellChannelRefId,
                              PickupFlowLastTime = o.PickupFlowLastTime,
                              PickupFlowLastDesc = o.PickupFlowLastDesc,
-                             PickupCode = o.PickupCode
+                             PickupCode = o.PickupCode,
+                             ShopMethod = o.ShopMethod,
                          }
              );
 
@@ -645,13 +661,13 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (item.PayStatus == E_PayStatus.PaySuccess)
                 {
-                    if (item.SellChannelRefType == E_SellChannelRefType.Machine)
+                    if (item.ReceiveMode == E_ReceiveMode.MachineSelfTake)
                     {
                         block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
                         block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
                     }
 
-                    if (item.SellChannelRefType == E_SellChannelRefType.Machine || item.SellChannelRefType == E_SellChannelRefType.Mall)
+                    if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.MachineSelfTake || item.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                     {
                         block.ReceiptInfo = new FsReceiptInfo { LastTime = item.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = item.PickupFlowLastDesc };
 

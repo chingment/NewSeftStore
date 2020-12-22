@@ -193,7 +193,8 @@ Component({
         cartId: 0,
         id: skuId,
         quantity: 1,
-        shopMode: _this.data.shopMode
+        shopMode: _this.data.shopMode,
+        shopMethod: 2
       })
       wx.navigateTo({
         url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',

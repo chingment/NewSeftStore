@@ -336,12 +336,14 @@ namespace LocalS.BLL.Biz
         {
             CustomJsonResult<RetOrderReserve> result = new CustomJsonResult<RetOrderReserve>();
 
+            if (rop.Blocks == null || rop.Blocks.Count == 0)
+            {
+                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
+            }
+
+
             lock (lock_Reserve)
             {
-                if (rop.Blocks == null || rop.Blocks.Count == 0)
-                {
-                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
-                }
 
                 var store = BizFactory.Store.GetOne(rop.StoreId);
 
@@ -370,9 +372,9 @@ namespace LocalS.BLL.Biz
 
                         foreach (var sku in skus)
                         {
-                            if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.Rent)
+                            if (rop.ShopMethod == E_OrderShopMethod.Shop)
                             {
-                                #region Shop,Rent
+                                #region Shop
 
                                 string[] sellChannelRefIds = new string[] { };
 
@@ -447,6 +449,64 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                             }
+                            if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                            {
+                                #region Rent
+
+                                var r_sku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, new string[] { SellChannelStock.MallSellChannelRefId }, sku.Id);
+
+                                if (r_sku == null)
+                                {
+                                    warn_tips.Add(string.Format("{0}商品信息不存在", r_sku.Name));
+                                }
+                                else
+                                {
+                                    if (r_sku.Stocks.Count == 0)
+                                    {
+                                        warn_tips.Add(string.Format("{0}商品库存信息不存在", r_sku.Name));
+                                    }
+                                    else
+                                    {
+                                        var sellQuantity = r_sku.Stocks.Sum(m => m.SellQuantity);
+
+                                        Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                                        if (r_sku.Stocks[0].IsOffSell)
+                                        {
+                                            warn_tips.Add(string.Format("{0}已经下架", r_sku.Name));
+                                        }
+                                        else
+                                        {
+                                            if (sellQuantity < sku.Quantity)
+                                            {
+                                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", r_sku.Name, sellQuantity));
+                                            }
+                                        }
+                                    }
+
+
+                                    var buildOrderSku = new BuildOrder.ProductSku();
+                                    buildOrderSku.Id = sku.Id;
+                                    buildOrderSku.ProductId = r_sku.ProductId;
+                                    buildOrderSku.Name = r_sku.Name;
+                                    buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
+                                    buildOrderSku.BarCode = r_sku.BarCode;
+                                    buildOrderSku.CumCode = r_sku.CumCode;
+                                    buildOrderSku.SpecDes = r_sku.SpecDes;
+                                    buildOrderSku.Producer = r_sku.Producer;
+                                    buildOrderSku.Quantity = sku.Quantity;
+                                    buildOrderSku.ShopMode = sku.ShopMode;
+                                    buildOrderSku.Stocks = r_sku.Stocks;
+                                    buildOrderSku.CartId = sku.CartId;
+                                    buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
+                                    buildOrderSku.KindId1 = r_sku.KindId1;
+                                    buildOrderSku.KindId2 = r_sku.KindId2;
+                                    buildOrderSku.KindId3 = r_sku.KindId3;
+                                    buildOrderSkus.Add(buildOrderSku);
+                                }
+
+                                #endregion
+                            }
                             else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
                             {
                                 #region MemberFee
@@ -459,6 +519,7 @@ namespace LocalS.BLL.Biz
                                 else
                                 {
                                     var stocks = new List<ProductSkuStockModel>();
+
                                     var stock = new ProductSkuStockModel();
 
                                     stock.RefType = E_SellChannelRefType.Mall;
@@ -470,7 +531,7 @@ namespace LocalS.BLL.Biz
                                     stock.SellQuantity = 0;
                                     stock.IsOffSell = false;
                                     stock.SalePrice = memberFeeSt.FeeSaleValue;
-
+                                    
                                     stocks.Add(stock);
 
                                     var buildOrderSku = new BuildOrder.ProductSku();
@@ -505,7 +566,6 @@ namespace LocalS.BLL.Biz
                     }
 
                     #endregion
-
 
                     decimal couponAmountByDeposit = 0;
                     decimal couponAmountByRent = 0;
@@ -1515,9 +1575,10 @@ namespace LocalS.BLL.Biz
                     {
                         if (rop.Blocks.Count > 0)
                         {
-                            switch (l_order.SellChannelRefType)
+                            switch (l_order.ShopMethod)
                             {
-                                case E_SellChannelRefType.Mall:
+                                case  E_OrderShopMethod.Shop:
+                                case E_OrderShopMethod.Rent:
 
                                     var shopModeByMall = rop.Blocks.Where(m => m.ShopMode == E_SellChannelRefType.Mall).FirstOrDefault();
                                     if (shopModeByMall == null)

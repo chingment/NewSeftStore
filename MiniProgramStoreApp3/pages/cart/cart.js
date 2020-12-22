@@ -98,7 +98,8 @@ Component({
               cartId: blocks[i].productSkus[j].cartId,
               id: blocks[i].productSkus[j].id,
               quantity: blocks[i].productSkus[j].quantity,
-              shopMode: blocks[i].productSkus[j].shopMode
+              shopMode: blocks[i].productSkus[j].shopMode,
+              shopMethod: 1
             })
           }
         }
@@ -164,10 +165,10 @@ Component({
           Y: touchMoveY
         });
 
-        var cartData = _this.data.cartData
+      var cartData = _this.data.cartData
 
-      for (var i = 0; i <cartData.blocks.length; i++) {
-        for (var j = 0; j <cartData.blocks[i].productSkus.length; j++) {
+      for (var i = 0; i < cartData.blocks.length; i++) {
+        for (var j = 0; j < cartData.blocks[i].productSkus.length; j++) {
 
           cartData.blocks[i].productSkus[j].isTouchMove = false
 
@@ -179,11 +180,11 @@ Component({
 
             if (touchMoveX > startX) //右滑
 
-            cartData.blocks[i].productSkus[j].isTouchMove = false
+              cartData.blocks[i].productSkus[j].isTouchMove = false
 
             else //左滑
 
-            cartData.blocks[i].productSkus[j].isTouchMove = true
+              cartData.blocks[i].productSkus[j].isTouchMove = true
 
           }
         }
@@ -221,7 +222,7 @@ Component({
           p_cartData.sumPrice = d_cartData.sumPrice
           p_cartData.countBySelected = d_cartData.countBySelected
           p_cartData.sumPriceBySelected = d_cartData.sumPriceBySelected
-     
+
 
           _this.setData({
             scrollHeight: 500,

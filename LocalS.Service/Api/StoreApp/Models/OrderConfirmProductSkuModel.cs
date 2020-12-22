@@ -23,9 +23,12 @@ namespace LocalS.Service.Api.StoreApp
         public string CartId { get; set; }
         public int Quantity { get; set; }
         public E_SellChannelRefType ShopMode { get; set; }
+        public E_OrderShopMethod ShopMethod { get; set; }
         public int Kind3 { get; set; }
-        public decimal RentMhPrice { get; set; }
-        public decimal DepositPrice { get; set; }
+        public int RentUnit { get; set; }
+        public string RentUnitText { get; set; }
+        public decimal RentAmount { get; set; }
+        public decimal DepositAmount{ get; set; }
     }
 }
 

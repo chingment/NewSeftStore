@@ -36,7 +36,7 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
-   
+
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? undefined : options.shopMode
@@ -178,7 +178,8 @@ Page({
       cartId: 0,
       id: skuId,
       quantity: 1,
-      shopMode: _this.data.shopMode
+      shopMode: _this.data.shopMode,
+      shopMethod: 1
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
@@ -211,7 +212,7 @@ Page({
       shopMode: _this.data.shopMode
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus)+'&shopMethod=2',
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
       success: function (res) {
         // success
       },

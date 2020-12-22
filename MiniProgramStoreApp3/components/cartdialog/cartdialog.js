@@ -117,7 +117,8 @@ Component({
         id: productSku.id,
         quantity: 1,
         selected: productSku.selected,
-        shopMode: productSku.shopMode
+        shopMode: productSku.shopMode,
+        shopMethod: 1
       });
 
       function _operate() {

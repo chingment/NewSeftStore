@@ -126,6 +126,7 @@ namespace LocalS.BLL
                 productSkuStocks.Add(productSkuStock);
             }
 
+
             productSkuInfo.Stocks = productSkuStocks;
 
             return productSkuInfo;

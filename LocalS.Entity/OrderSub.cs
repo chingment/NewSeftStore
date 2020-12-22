@@ -36,6 +36,7 @@ namespace LocalS.Entity
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
+        public int RentUnit { get; set; }
         public decimal RentAmount { get; set; }
         public decimal DepositAmount { get; set; }
         public string Creator { get; set; }

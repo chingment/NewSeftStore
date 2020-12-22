@@ -15,7 +15,7 @@
 		<block wx:for="{{blocks}}" wx:for-item="item" wx:key="index">
 			<view class="ct pd-com">
 
-				<block wx:if="{{item.shopMode==1}}">
+				<block wx:if="{{item.tabMode==1||item.tabMode==2||item.tabMode==3}}">
 					<view class="tab-double ">
 						<view class="tab-title">
 							<view class="title-left {{item.receiveMode==1?'selected':''}} skeleton-bg"
@@ -127,15 +127,15 @@
 										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
 									</view>
 									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:200rpx">
-										<view><text>租金</text>  <text class='salePrice skeleton-rect'> {{skusitem.rentMhPrice}}/月</text></view>
-										<view><text>押金</text> <text class='salePrice skeleton-rect'> {{skusitem.depositPrice}}</text></view>
+										<view><text>租金</text>  <text class='salePrice skeleton-rect'> {{skusitem.rentAmount}}/{{skusitem.rentUnitText}}</text></view>
+										<view><text>押金</text> <text class='salePrice skeleton-rect'> {{skusitem.depositAmount}}</text></view>
 									</view>
 								</view>
 							</block>
 						</view>
 					</view>
 				</block>
-				<block wx:elif="{{item.shopMode==3}}">
+				<block wx:elif="{{item.tabMode==4}}">
 
 					<view class="tab-double">
 						<view class="tab-title">
@@ -215,7 +215,7 @@
 
 
 				</block>
-				<!-- <block wx:elif="{{item.shopMode==4}}">
+				<block wx:elif="{{item.tabMode==5}}">
 
 					<view class="tab-double">
 						<view class="tab-title">
@@ -267,7 +267,7 @@
 
 					</view>
 
-				</block> -->
+				</block>
 				<view class="line-space-ncolor"></view>
 
 			</view>

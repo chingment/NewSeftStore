@@ -81,7 +81,6 @@ namespace LocalS.Entity
         public string ReceptionAreaName { get; set; }
         public string ReceptionMarkName { get; set; }
         public DateTime? ReceptionBookTime { get; set; }
-
         public decimal SaleAmount { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
