@@ -909,7 +909,7 @@ namespace LocalS.BLL.Biz
             if (reserveProductSkus == null || reserveProductSkus.Count == 0)
                 return buildOrders;
 
-            List<BuildOrder.Child> buildOrderSubChilds = new List<BuildOrder.Child>();
+            List<BuildOrder.Child> buildOrderChilds = new List<BuildOrder.Child>();
 
             var shopModes = reserveProductSkus.Select(m => m.ShopMode).Distinct().ToArray();
 
@@ -924,21 +924,21 @@ namespace LocalS.BLL.Biz
                     if (shopMode == E_SellChannelRefType.Mall)
                     {
                         //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
-                        var buildOrderSubChild = new BuildOrder.Child();
-                        buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
-                        buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
-                        buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
-                        buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
-                        buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
-                        buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
-                        buildOrderSubChild.SalePrice = shopModeProductSku.SalePrice;
-                        buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * shopModeProductSku.SalePrice;
-                        buildOrderSubChild.OriginalPrice = shopModeProductSku.OriginalPrice;
-                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * shopModeProductSku.OriginalPrice;
-                        buildOrderSubChild.RentUnit = shopModeProductSku.RentUnit;
-                        buildOrderSubChild.RentAmount = shopModeProductSku.RentAmount;
-                        buildOrderSubChild.DepositAmount = shopModeProductSku.DepositAmount;
-                        buildOrderSubChilds.Add(buildOrderSubChild);
+                        var buildOrderChild = new BuildOrder.Child();
+                        buildOrderChild.SellChannelRefType = productSku_Stocks[0].RefType;
+                        buildOrderChild.SellChannelRefId = productSku_Stocks[0].RefId;
+                        buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                        buildOrderChild.CabinetId = productSku_Stocks[0].CabinetId;
+                        buildOrderChild.SlotId = productSku_Stocks[0].SlotId;
+                        buildOrderChild.Quantity = shopModeProductSku.Quantity;
+                        buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
+                        buildOrderChild.SaleAmount = buildOrderChild.Quantity * shopModeProductSku.SalePrice;
+                        buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
+                        buildOrderChild.OriginalAmount = buildOrderChild.Quantity * shopModeProductSku.OriginalPrice;
+                        buildOrderChild.RentUnit = shopModeProductSku.RentUnit;
+                        buildOrderChild.RentAmount = shopModeProductSku.RentAmount;
+                        buildOrderChild.DepositAmount = shopModeProductSku.DepositAmount;
+                        buildOrderChilds.Add(buildOrderChild);
                     }
                     else if (shopMode == E_SellChannelRefType.Machine)
                     {
@@ -947,22 +947,22 @@ namespace LocalS.BLL.Biz
                             bool isFlag = false;
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
-                                int reservedQuantity = buildOrderSubChilds.Where(m => m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == shopMode).Sum(m => m.Quantity);//已订的数量
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == shopMode).Sum(m => m.Quantity);//已订的数量
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
-                                    var buildOrderSubChild = new BuildOrder.Child();
-                                    buildOrderSubChild.SellChannelRefType = item.RefType;
-                                    buildOrderSubChild.SellChannelRefId = item.RefId;
-                                    buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
-                                    buildOrderSubChild.CabinetId = item.CabinetId;
-                                    buildOrderSubChild.SlotId = item.SlotId;
-                                    buildOrderSubChild.Quantity = 1;
-                                    buildOrderSubChild.SalePrice = shopModeProductSku.SalePrice;
-                                    buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * shopModeProductSku.SalePrice;
-                                    buildOrderSubChild.OriginalPrice = shopModeProductSku.OriginalPrice;
-                                    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * shopModeProductSku.OriginalPrice;
-                                    buildOrderSubChilds.Add(buildOrderSubChild);
+                                    var buildOrderChild = new BuildOrder.Child();
+                                    buildOrderChild.SellChannelRefType = item.RefType;
+                                    buildOrderChild.SellChannelRefId = item.RefId;
+                                    buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                                    buildOrderChild.CabinetId = item.CabinetId;
+                                    buildOrderChild.SlotId = item.SlotId;
+                                    buildOrderChild.Quantity = 1;
+                                    buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
+                                    buildOrderChild.SaleAmount = buildOrderChild.Quantity * shopModeProductSku.SalePrice;
+                                    buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
+                                    buildOrderChild.OriginalAmount = buildOrderChild.Quantity * shopModeProductSku.OriginalPrice;
+                                    buildOrderChilds.Add(buildOrderChild);
                                 }
                                 else
                                 {
@@ -981,44 +981,44 @@ namespace LocalS.BLL.Biz
 
             }
 
-            var sumSaleAmount = buildOrderSubChilds.Sum(m => m.SaleAmount);
+            var sumSaleAmount = buildOrderChilds.Sum(m => m.SaleAmount);
             var sumDiscountAmount = 0m;
-            for (int i = 0; i < buildOrderSubChilds.Count; i++)
+            for (int i = 0; i < buildOrderChilds.Count; i++)
             {
-                decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderSubChilds[i].SaleAmount / sumSaleAmount));
-                buildOrderSubChilds[i].DiscountAmount = Decimal.Round(scale * sumDiscountAmount, 2);
-                buildOrderSubChilds[i].ChargeAmount = buildOrderSubChilds[i].SaleAmount - buildOrderSubChilds[i].DiscountAmount;
+                decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderChilds[i].SaleAmount / sumSaleAmount));
+                buildOrderChilds[i].DiscountAmount = Decimal.Round(scale * sumDiscountAmount, 2);
+                buildOrderChilds[i].ChargeAmount = buildOrderChilds[i].SaleAmount - buildOrderChilds[i].DiscountAmount;
             }
 
-            var sumDiscountAmount2 = buildOrderSubChilds.Sum(m => m.DiscountAmount);
+            var sumDiscountAmount2 = buildOrderChilds.Sum(m => m.DiscountAmount);
             if (sumDiscountAmount != sumDiscountAmount2)
             {
                 var diff = sumDiscountAmount - sumDiscountAmount2;
 
-                buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount = buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount + diff;
-                buildOrderSubChilds[buildOrderSubChilds.Count - 1].SaleAmount = buildOrderSubChilds[buildOrderSubChilds.Count - 1].SaleAmount - buildOrderSubChilds[buildOrderSubChilds.Count - 1].DiscountAmount;
+                buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount = buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount + diff;
+                buildOrderChilds[buildOrderChilds.Count - 1].SaleAmount = buildOrderChilds[buildOrderChilds.Count - 1].SaleAmount - buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount;
             }
 
-            var l_OrderSubs = (from c in buildOrderSubChilds
-                               select new
+            var l_buildOrders = (from c in buildOrderChilds
+                            select new
                                {
                                    c.SellChannelRefType,
                                    c.SellChannelRefId
                                }).Distinct().ToList();
 
 
-            foreach (var orderSub in l_OrderSubs)
+            foreach (var l_buildOrder in l_buildOrders)
             {
-                var buildOrderSub = new BuildOrder();
-                buildOrderSub.SellChannelRefType = orderSub.SellChannelRefType;
-                buildOrderSub.SellChannelRefId = orderSub.SellChannelRefId;
-                buildOrderSub.Quantity = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.Quantity);
-                buildOrderSub.SaleAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.SaleAmount);
-                buildOrderSub.OriginalAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.OriginalAmount);
-                buildOrderSub.DiscountAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.DiscountAmount);
-                buildOrderSub.ChargeAmount = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).Sum(m => m.ChargeAmount);
-                buildOrderSub.Childs = buildOrderSubChilds.Where(m => m.SellChannelRefId == orderSub.SellChannelRefId).ToList();
-                buildOrders.Add(buildOrderSub);
+                var buildOrder = new BuildOrder();
+                buildOrder.SellChannelRefType = l_buildOrder.SellChannelRefType;
+                buildOrder.SellChannelRefId = l_buildOrder.SellChannelRefId;
+                buildOrder.Quantity = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.Quantity);
+                buildOrder.SaleAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.SaleAmount);
+                buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.OriginalAmount);
+                buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.DiscountAmount);
+                buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.ChargeAmount);
+                buildOrder.Childs = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).ToList();
+                buildOrders.Add(buildOrder);
             }
 
 

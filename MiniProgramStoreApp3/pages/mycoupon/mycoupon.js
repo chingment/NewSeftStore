@@ -129,6 +129,9 @@ Page({
           couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : ''
         })
       }
+
+      prevPage.getConfirmData()
+      
       wx.navigateBack()
     }
   },
