@@ -438,12 +438,13 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.Quantity = sku.Quantity;
                                     buildOrderSku.ShopMode = sku.ShopMode;
                                     buildOrderSku.Stocks = r_sku.Stocks;
-
                                     buildOrderSku.CartId = sku.CartId;
                                     buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
                                     buildOrderSku.KindId1 = r_sku.KindId1;
                                     buildOrderSku.KindId2 = r_sku.KindId2;
                                     buildOrderSku.KindId3 = r_sku.KindId3;
+                                    buildOrderSku.SalePrice = r_sku.Stocks[0].SalePrice;
+                                    buildOrderSku.OriginalPrice = r_sku.Stocks[0].SalePrice;
                                     buildOrderSkus.Add(buildOrderSku);
                                 }
 
@@ -484,7 +485,6 @@ namespace LocalS.BLL.Biz
                                         }
                                     }
 
-
                                     var buildOrderSku = new BuildOrder.ProductSku();
                                     buildOrderSku.Id = sku.Id;
                                     buildOrderSku.ProductId = r_sku.ProductId;
@@ -502,6 +502,11 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.KindId1 = r_sku.KindId1;
                                     buildOrderSku.KindId2 = r_sku.KindId2;
                                     buildOrderSku.KindId3 = r_sku.KindId3;
+                                    buildOrderSku.SalePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
+                                    buildOrderSku.OriginalPrice = buildOrderSku.SalePrice;
+                                    buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice;
+                                    buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice;
+                                    buildOrderSku.RentUnit = 2;
                                     buildOrderSkus.Add(buildOrderSku);
                                 }
 
@@ -551,6 +556,8 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.KindId1 = 0;
                                     buildOrderSku.KindId2 = 0;
                                     buildOrderSku.KindId3 = 0;
+                                    buildOrderSku.SalePrice = memberFeeSt.FeeSaleValue;
+                                    buildOrderSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
                                     buildOrderSkus.Add(buildOrderSku);
 
                                 }
@@ -854,6 +861,9 @@ namespace LocalS.BLL.Biz
                             orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
                             orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
                             orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
+                            orderSub.RentUnit = buildOrderSub.RentUnit;
+                            orderSub.RentAmount = buildOrderSub.RentAmount;
+                            orderSub.DepositAmount = buildOrderSub.DepositAmount;
                             orderSub.PayStatus = E_PayStatus.WaitPay;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
                             orderSub.SvcConsulterId = productSku.SvcConsulterId;
@@ -913,6 +923,8 @@ namespace LocalS.BLL.Biz
 
                     if (shopMode == E_SellChannelRefType.Mall)
                     {
+                        //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
+
                         var buildOrderSubChild = new BuildOrder.Child();
                         buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
                         buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
@@ -920,30 +932,14 @@ namespace LocalS.BLL.Biz
                         buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
                         buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
                         buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
-                        //todo 
-                        buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                        buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
-                        buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
-                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
+                        buildOrderSubChild.SalePrice = shopModeProductSku.SalePrice;
+                        buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * shopModeProductSku.SalePrice;
+                        buildOrderSubChild.OriginalPrice = shopModeProductSku.OriginalPrice;
+                        buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * shopModeProductSku.OriginalPrice;
+                        buildOrderSubChild.RentUnit = shopModeProductSku.RentUnit;
+                        buildOrderSubChild.RentAmount = shopModeProductSku.RentAmount;
+                        buildOrderSubChild.DepositAmount = shopModeProductSku.DepositAmount;
                         buildOrderSubChilds.Add(buildOrderSubChild);
-
-                        //if (shopMode == E_SellChannelRefType.MemberFee)
-                        //{
-                        //    var buildOrderSubChild = new BuildOrder.Child();
-                        //    buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
-                        //    buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
-                        //    buildOrderSubChild.ProductSkuId = shopModeProductSku.Id;
-                        //    buildOrderSubChild.CabinetId = productSku_Stocks[0].CabinetId;
-                        //    buildOrderSubChild.SlotId = productSku_Stocks[0].SlotId;
-
-                        //    buildOrderSubChild.Quantity = shopModeProductSku.Quantity;
-                        //    buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                        //    buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
-                        //    buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
-                        //    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
-
-                        //    buildOrderSubChilds.Add(buildOrderSubChild);
-                        //}
                     }
                     else if (shopMode == E_SellChannelRefType.Machine)
                     {

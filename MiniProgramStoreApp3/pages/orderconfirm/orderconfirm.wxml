@@ -127,8 +127,19 @@
 										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
 									</view>
 									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:200rpx">
-										<view><text>租金</text>  <text class='salePrice skeleton-rect'> {{skusitem.rentAmount}}/{{skusitem.rentUnitText}}</text></view>
-										<view><text>押金</text> <text class='salePrice skeleton-rect'> {{skusitem.depositAmount}}</text></view>
+										<view class="dt">
+											<view class="dt1"> <text>租金</text> </view>
+											<view class="dt2">
+												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentUnitText}}</text>
+											</view>
+										</view>
+										<view class="dt">
+											<view class="dt1">
+												<text>押金</text></view>
+											<view class="dt2">
+												<text class='salePrice skeleton-rect'> {{skusitem.depositAmount}}</text>
+											</view>
+										</view>
 									</view>
 								</view>
 							</block>
@@ -293,9 +304,7 @@
 							<text class="coupontip coupontip{{couponByShop.tipType}} skeleton-rect">{{couponByShop.tipMsg}}</text>
 						</view>
 					</view>
-
-					<view class="it-r" style="width:80rpx" wx:if="{{orderIds.length==0}}">
-
+					<view class="it-r" style="width:58rpx" wx:if="{{orderIds.length==0}}">
 						<view class="icon">
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 						</view>
@@ -318,7 +327,7 @@
 								class="coupontip coupontip{{couponByDeposit.tipType}} skeleton-rect">{{couponByDeposit.tipMsg}}</text>
 						</view>
 					</view>
-					<view class="it-r" style="width:80rpx" wx:if="{{orderIds.length==0}}">
+					<view class="it-r" style="width:58rpx" wx:if="{{orderIds.length==0}}">
 						<view class="icon">
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 						</view>
@@ -340,13 +349,12 @@
 							<text class="coupontip coupontip{{couponByRent.tipType}} skeleton-rect">{{couponByRent.tipMsg}}</text>
 						</view>
 					</view>
-					<view class="it-r" style="width:80rpx" wx:if="{{orderIds.length==0}}">
+					<view class="it-r" style="width:58rpx" wx:if="{{orderIds.length==0}}">
 						<view class="icon">
 							<image class="img-nav-right skeleton-rect" src='/content/default/images/col_nav_right.png'></image>
 						</view>
 					</view>
 				</view>
-
 
 				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 					<view class="it">
@@ -365,7 +373,6 @@
 						</view>
 					</view>
 				</block>
-
 
 			</view>
 			<view class="line-space-ncolor"></view>
@@ -390,7 +397,7 @@
 							</view>
 						</view>
 
-						<view class="it-r" style="width:80rpx">
+						<view class="it-r" style="width:58rpx">
 							<view class="icon">
 								<image class="img" style="width:42rpx;height:42rpx"
 									src='/content/default/images/{{item.selected==false?"checkedoff":"checkedon"}}.png'></image>

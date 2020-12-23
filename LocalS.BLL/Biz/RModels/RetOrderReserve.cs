@@ -51,6 +51,9 @@ namespace LocalS.BLL.Biz
             public decimal ChargeAmount { get; set; }
             public string CabinetId { get; set; }
             public string SlotId { get; set; }
+            public int RentUnit { get; set; }
+            public decimal RentAmount { get; set; }
+            public decimal DepositAmount { get; set; }
         }
         public class ProductSku
         {
@@ -81,6 +84,11 @@ namespace LocalS.BLL.Biz
             public int KindId1 { get; set; }
             public int KindId2 { get; set; }
             public int KindId3 { get; set; }
+            public decimal SalePrice { get; set; }
+            public decimal OriginalPrice { get; set; }
+            public int RentUnit { get; set; }
+            public decimal RentAmount{ get; set; }
+            public decimal DepositAmount{ get; set; }
         }
 
     }

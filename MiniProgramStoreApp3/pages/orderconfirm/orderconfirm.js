@@ -82,7 +82,7 @@ Page({
   onShow: function () {
     var _this = this
     app.globalData.skeletonPage = _this
-    _this.getConfirmData()
+    //_this.getConfirmData()
 
   },
   onHide: function () {
