@@ -10,7 +10,7 @@
 			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="index">
 				<swiper-item>
 					<view class="swiper-img">
-						<image src="{{item.url}}"></image>
+						<image src="{{item.url}}" mode="heightFix"></image>
 					</view>
 				</swiper-item>
 			</block>
