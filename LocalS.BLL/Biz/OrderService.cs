@@ -924,7 +924,6 @@ namespace LocalS.BLL.Biz
                     if (shopMode == E_SellChannelRefType.Mall)
                     {
                         //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
-
                         var buildOrderSubChild = new BuildOrder.Child();
                         buildOrderSubChild.SellChannelRefType = productSku_Stocks[0].RefType;
                         buildOrderSubChild.SellChannelRefId = productSku_Stocks[0].RefId;
@@ -959,10 +958,10 @@ namespace LocalS.BLL.Biz
                                     buildOrderSubChild.CabinetId = item.CabinetId;
                                     buildOrderSubChild.SlotId = item.SlotId;
                                     buildOrderSubChild.Quantity = 1;
-                                    buildOrderSubChild.SalePrice = productSku_Stocks[0].SalePrice;
-                                    buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * buildOrderSubChild.SalePrice;
-                                    buildOrderSubChild.OriginalPrice = productSku_Stocks[0].SalePrice;
-                                    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * buildOrderSubChild.OriginalPrice;
+                                    buildOrderSubChild.SalePrice = shopModeProductSku.SalePrice;
+                                    buildOrderSubChild.SaleAmount = buildOrderSubChild.Quantity * shopModeProductSku.SalePrice;
+                                    buildOrderSubChild.OriginalPrice = shopModeProductSku.OriginalPrice;
+                                    buildOrderSubChild.OriginalAmount = buildOrderSubChild.Quantity * shopModeProductSku.OriginalPrice;
                                     buildOrderSubChilds.Add(buildOrderSubChild);
                                 }
                                 else
