@@ -492,11 +492,20 @@ namespace LocalS.Service.Api.StoreApp
                 d_clientCoupon.ValidStartTime = DateTime.Now;
                 d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
             }
+            else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+            {
+                string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
+                if (arr_UseTimeValue.Length == 2)
+                {
+                    d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
+                    d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
+                }
+            }
             d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
             d_clientCoupon.SourceType = E_ClientCouponSourceType.SelfTake;
-            d_clientCoupon.SourceObjType = "app";
+            d_clientCoupon.SourceObjType = "AppUser";
             d_clientCoupon.SourceObjId = clientUserId;
-            d_clientCoupon.SourcePoint = "revcouponcenter";
+            d_clientCoupon.SourcePoint = "RevCouponCenter";
             d_clientCoupon.SourceTime = DateTime.Now;
             d_clientCoupon.SourceDes = "领券中心";
             d_clientCoupon.Creator = operater;
@@ -504,6 +513,8 @@ namespace LocalS.Service.Api.StoreApp
             CurrentDb.ClientCoupon.Add(d_clientCoupon);
 
             d_coupon.ReceivedQuantity += 1;
+            d_coupon.Mender = operater;
+            d_coupon.MendTime = DateTime.Now;
 
             CurrentDb.SaveChanges();
 

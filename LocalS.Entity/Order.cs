@@ -65,6 +65,7 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
+        public string UnId { get; set; }
         public string ClientUserId { get; set; }
         public string MerchId { get; set; }
         public string MerchName { get; set; }
