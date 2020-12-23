@@ -4,7 +4,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
 const config = require('../../config');
-const pageMain = require('../../pages/main/main.js');
+const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
 Page({
@@ -14,7 +14,6 @@ Page({
    */
   data: {
     tag: "productdetails",
-    cartIsShow: false,
     storeId: null,
     shopMode: null,
     specsDialog: {
@@ -22,7 +21,13 @@ Page({
     },
     cartDialog: {
       isShow: false,
-      dataS:{}
+      dataS: {
+        blocks: [],
+        count: 0,
+        sumPrice: 0,
+        countBySelected: 0,
+        sumPriceBySelected: 0
+      }
     }
   },
 
@@ -31,6 +36,7 @@ Page({
    */
   onLoad: function (options) {
     var _this = this
+
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? undefined : options.shopMode
@@ -40,10 +46,10 @@ Page({
     }
 
     if (shopMode == undefined) {
-      shopMode = app.globalData.currentShopMode
+      shopMode = storeage.getCurrentShopMode()
     }
 
-    app.globalData.currentShopMode = shopMode
+    storeage.setCurrentShopMode(shopMode)
 
     ownRequest.setCurrentStoreId(storeId)
 
@@ -52,11 +58,21 @@ Page({
       shopMode: shopMode
     })
 
-    var cart = {
-      count: 0
-    }
+
     if (ownRequest.isLogin()) {
-      cart = storeage.getCart()
+
+      apiCart.getCartData({
+        storeId: storeId,
+        shopMode: shopMode
+      }).then(function (res) {
+        if (res.result == 1) {
+          var cartDialog = _this.data.cartDialog
+          cartDialog.dataS = res.data
+          _this.setData({
+            cartDialog: cartDialog
+          })
+        }
+      })
     }
 
     apiProduct.details({
@@ -66,8 +82,7 @@ Page({
     }).then(function (res) {
       if (res.result == 1) {
         _this.setData({
-          productSku: res.data,
-          cart: cart,
+          productSku: res.data
         })
       }
     })
@@ -79,7 +94,11 @@ Page({
   goCart: function (e) {
     console.log("goCart")
     var _this = this
-    _this.setData({ cartDialog: {isShow:true} })
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = true
+    _this.setData({
+      cartDialog: cartDialog
+    })
   },
   addToCart: function (e) {
     var _this = this
@@ -110,12 +129,14 @@ Page({
         toast.show({
           title: '加入购物车成功'
         })
-  
-        var cartDialog=_this.data.cartDialog
-        cartDialog.dataS=res.data
-        cartDialog.isShow=false
-        console.log('cartDialog.ishow:'+cartDialog.isShow)
-        _this.setData({cartDialog:cartDialog})
+
+        var cartDialog = _this.data.cartDialog
+        cartDialog.dataS = res.data
+        cartDialog.isShow = false
+        console.log('cartDialog.ishow:' + cartDialog.isShow)
+        _this.setData({
+          cartDialog: cartDialog
+        })
       } else {
         toast.show({
           title: res.message
@@ -157,10 +178,41 @@ Page({
       cartId: 0,
       id: skuId,
       quantity: 1,
-      shopMode: _this.data.shopMode
+      shopMode: _this.data.shopMode,
+      shopMethod: 1
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
+      success: function (res) {
+        // success
+      },
+    })
+  },
+  immeRent: function (e) {
+    var _this = this
+
+    if (_this.data.productSku.isOffSell) {
+      toast.show({
+        title: '商品已下架'
+      })
+      return
+    }
+
+    if (!ownRequest.isLogin()) {
+      ownRequest.goLogin()
+      return
+    }
+
+    var skuId = _this.data.productSku.id //对应页面data-reply-index
+    var productSkus = []
+    productSkus.push({
+      cartId: 0,
+      id: skuId,
+      quantity: 1,
+      shopMode: _this.data.shopMode
+    })
+    wx.navigateTo({
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
       success: function (res) {
         // success
       },
@@ -174,7 +226,7 @@ Page({
       path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this.data.shopMode + '&storeId=' + _this.data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
       imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
-        if (res.errMsg == 'shareAppMessage:ok') { }
+        if (res.errMsg == 'shareAppMessage:ok') {}
       },
       fail: function () { // 转发失败之后的回调
         if (res.errMsg == 'shareAppMessage:fail cancel') {
@@ -213,7 +265,16 @@ Page({
     productSku.sellQuantity = selSku.sellQuantity
     productSku.specIdx = selSku.specIdx
 
-    _this.setData({ productSku: productSku })
-
+    _this.setData({
+      productSku: productSku
+    })
+  },
+  cartdialogClose: function () {
+    var _this = this
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = false
+    _this.setData({
+      cartDialog: cartDialog
+    })
   }
 })

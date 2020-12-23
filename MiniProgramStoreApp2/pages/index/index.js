@@ -21,7 +21,7 @@ Component({
   data: {
     tag: "index",
     storeId: undefined,
-    isOnLoad: false,
+    isOnReady: false,
     pageIsReady: false,
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
@@ -56,8 +56,7 @@ Component({
           toast.show({
             title: '加入购物车成功'
           })
-        }
-        else {
+        } else {
           toast.show({
             title: res.message
           })
@@ -93,7 +92,8 @@ Component({
               shopMode = item.id
             }
           })
-          app.globalData.currentShopMode = shopMode
+
+          storeage.setCurrentShopMode(shopMode)
 
           _this.setData({
             shopMode: shopMode,
@@ -101,16 +101,34 @@ Component({
             singleStore: typeof storeage.getStoreId() == "undefined" ? false : true,
             currentStore: d.store,
             banner: d.banner,
-            pdArea: d.pdArea,
             pageIsReady: true
           })
-        }
-        else if (res.result == 2) {
-          if (res.code == '2404') {//当前店铺无效，重新选择
-            wx.navigateTo({ 
+
+          _this.getSugProducts()
+
+        } else if (res.result == 2) {
+          if (res.code == '2404') { //当前店铺无效，重新选择
+            wx.navigateTo({
               url: "/pages/store/store"
             })
           }
+        }
+      })
+    },
+    getSugProducts: function () {
+      var _this = this
+      apiIndex.sugProducts({
+        storeId: _this.data.storeId,
+        shopMode: _this.data.shopMode
+      }).then(function (res) {
+
+        if (res.result === 1) {
+          var d = res.data
+          _this.setData({
+            pdRent: d.pdRent,
+            pdArea: d.pdArea
+          })
+
         }
       })
     },
@@ -128,7 +146,9 @@ Component({
     switchShopMode: function (e) {
       var _this = this
       var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面\
-      _this.setData({ shopMode: shopMode })
+      _this.setData({
+        shopMode: shopMode
+      })
       _this.getPageData()
 
     },
@@ -140,17 +160,63 @@ Component({
       var _this = this
       app.globalData.skeletonPage = _this;
 
-      if (!_this.data.isOnLoad) {
-        _this.setData({
-          isOnLoad: true,
-          storeId: ownRequest.getCurrentStoreId()
-        })
-        _this.getPageData()
-      }
+      _this.setData({
+        storeId: ownRequest.getCurrentStoreId()
+      })
+      _this.getPageData()
 
     },
     imageOnloadError: function (e) {
       console.log('das')
-    }
+    },
+    clickToRent: function (e) {
+
+      var _this = this
+
+      var sku = e.currentTarget.dataset.replySku
+
+      if (sku.isOffSell) {
+        toast.show({
+          title: '商品已下架'
+        })
+        return
+      }
+
+      if (!ownRequest.isLogin()) {
+        ownRequest.goLogin()
+        return
+      }
+
+      var skuId = sku.id //对应页面data-reply-index
+      var productSkus = []
+      productSkus.push({
+        cartId: 0,
+        id: skuId,
+        quantity: 1,
+        shopMode: _this.data.shopMode,
+        shopMethod: 2
+      })
+      wx.navigateTo({
+        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
+        success: function (res) {
+          // success
+        },
+      })
+
+    },
+    clickToFc: function (e) {
+      var url = e.currentTarget.dataset.url
+      var ischecklogin = e.currentTarget.dataset.ischecklogin
+      if (ischecklogin == "true") {
+        if (!ownRequest.isLogin()) {
+          ownRequest.goLogin(url)
+          return
+        }
+      }
+
+      wx.navigateTo({
+        url: url
+      })
+    },
   }
 })

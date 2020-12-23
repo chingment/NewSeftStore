@@ -26,7 +26,7 @@ page {
 }
 
 .bg-main {
-  background: #f18d00;
+  background: #ffbb0d;
 }
 
 .bg-blue {
@@ -1082,6 +1082,14 @@ page {
   .btn-selectSpecs{
     background: #ffb101;
     padding: 6rpx 18rpx;
+    border-radius: 10rpx;
+    font-size: 24rpx;
+    color:#fff ;
+  }
+
+  .btn-rent{
+    background: #49e;
+    padding: 12rpx 26rpx;
     border-radius: 10rpx;
     font-size: 24rpx;
     color:#fff ;

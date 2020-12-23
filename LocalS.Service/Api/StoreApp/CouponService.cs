@@ -187,7 +187,7 @@ namespace LocalS.Service.Api.StoreApp
                     model.FaceUnit = "元";
                     if (atLeastAmount > 0)
                     {
-                        model.FaceTip = string.Format("满{0}元使用");
+                        model.FaceTip = string.Format("满{0}元使用", atLeastAmount);
                     }
                     else
                     {
@@ -199,7 +199,7 @@ namespace LocalS.Service.Api.StoreApp
                     model.FaceUnit = "元";
                     if (atLeastAmount > 0)
                     {
-                        model.FaceTip = string.Format("满{0}元使用");
+                        model.FaceTip = string.Format("满{0}元使用", atLeastAmount);
                     }
                     else
                     {
@@ -211,7 +211,7 @@ namespace LocalS.Service.Api.StoreApp
                     model.FaceUnit = "元";
                     if (atLeastAmount > 0)
                     {
-                        model.FaceTip = string.Format("满{0}元使用");
+                        model.FaceTip = string.Format("满{0}元使用", atLeastAmount);
                     }
                     else
                     {
@@ -223,7 +223,7 @@ namespace LocalS.Service.Api.StoreApp
                     model.FaceUnit = "元";
                     if (atLeastAmount > 0)
                     {
-                        model.FaceTip = string.Format("满{0}元使用");
+                        model.FaceTip = string.Format("满{0}元使用", atLeastAmount);
                     }
                     else
                     {

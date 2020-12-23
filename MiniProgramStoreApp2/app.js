@@ -11,54 +11,69 @@ App({
     var _this = this
     console.log('app.onLaunch')
     _this.autoUpdate()
+
+    const accountInfo = wx.getAccountInfoSync()
+    var appId = accountInfo.miniProgram.appId
+
+    _this.globalData.appId = appId
+
+    console.log('>>'+appId)
+
+    _this.getConfig()
+
     // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    // var logs = wx.getStorageSync('logs') || []
+    // logs.unshift(Date.now())
+    // wx.setStorageSync('logs', logs)
 
 
-    wx.onNetworkStatusChange(function (res) {
-      console.log(res)
-      if (!res.isConnected) {
+    // wx.onNetworkStatusChange(function (res) {
+    //   console.log(res)
+    //   if (!res.isConnected) {
 
-      }
-    })
+    //   }
+    // })
 
   },
   onShow: function () {
+    //var _this = this
+   // console.log('app.onShow')
+   // _this.getConfig()
+  },
+  globalData: {
+    appId: null,
+    userInfo: null,
+    skeletonPage: null,
+    checkConfig: false
+  },
+  getConfig: function () {
     var _this = this
-    console.log('app.onShow')
-
-    wx.getNetworkType({
-      success: function (res) {
-        console.log(res)
-      }
-    })
-
     const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-
     var appId = accountInfo.miniProgram.appId
     wx.login({
       success: function (res) {
-        console.log("minProgram:login")
         if (res.code) {
-          console.log(res)
-          apiOwn.WxApiCode2Session({
+          apiOwn.wxConfig({
             appId: appId,
             code: res.code,
           }).then(function (res2) {
-            console.log(res2)
+
             if (res2.result == 1) {
               var d = res2.data
 
-              storeage.setOpenId(d.openid)
-              storeage.setSessionKey(d.session_key)
-              storeage.setMerchId(d.merchid)
-              storeage.setStoreId(d.storeid) //指定设置单店铺模式，为NULL 多店铺模式
-              if (d.storeid != null) {
-                storeage.setCurrentStoreId(d.storeid) //设置当前店铺
+              storeage.setOpenId(d.openId)
+              storeage.setSessionKey(d.sessionKey)
+              storeage.setMerchId(d.merchId)
+              storeage.setStoreId(d.storeId) //指定设置单店铺模式，为NULL 多店铺模式
+              if (d.storeId != null) {
+                storeage.setCurrentStoreId(d.storeId) //设置当前店铺
               }
+
+              _this.globalData.checkConfig = true
+              if (_this.checkConfigReadyCallback) {
+                _this.checkConfigReadyCallback(d);
+              }
+
             } else {
               toast.show({
                 title: res2.message
@@ -67,84 +82,8 @@ App({
           })
         }
       }
-    });
+    })
   },
-  globalData: {
-    // openid: null,
-    // merchid: null,
-    // storeid: null,
-    // session_key: null,
-    userInfo: null,
-    //mainTabBarIndex: 0,
-    currentShopMode: 0,
-    skeletonPage: null
-  },
-  // mainTabBarSetNumber(index, num) {
-  //   var pages = getCurrentPages();
-  //   for (var i = 0; i < pages.length; i++) {
-  //     if (pages[i].data.tag == "main") {
-  //       pages[i].data.tabBar[index].number = num
-  //       pages[i].setData({
-  //         tabBar: pages[i].data.tabBar
-  //       })
-  //       break;
-  //     }
-  //   }
-  // },
-  // mainTabBarSwitch: function (index) {
-  //   var _this = this
-
-  //   var pages = getCurrentPages();
-  //   var isHasMain = false;
-  //   for (var i = 0; i < pages.length; i++) {
-  //     if (pages[i].data.tag == "main") {
-  //       isHasMain = true
-  //       var tabBar = pages[i].data.tabBar;
-
-  //       for (var j = 0; j < tabBar.length; j++) {
-  //         if (j == index) {
-  //           tabBar[j].selected = true
-  //           var s = tabBar[j];
-  //           setTimeout(function () {
-  //             wx.setNavigationBarTitle({
-  //               title: s.navTitle
-  //             })
-
-  //           }, 1)
-
-  //           _this.globalData.mainTabBarIndex = index
-
-  //         } else {
-  //           tabBar[j].selected = false
-  //         }
-  //       }
-
-  //       let cp = pages[i].selectComponent('#' + tabBar[index].id);
-  //       cp.onReady()
-
-  //       pages[i].setData({
-  //         tabBar: tabBar
-  //       })
-
-  //       cp = pages[i].selectComponent('#' + tabBar[index].id);
-  //       cp.onShow()
-  //       break
-  //     }
-  //   }
-
-  //   if (isHasMain) {
-  //     if (pages.length > 1) {
-  //       wx.navigateBack({
-  //         delta: pages.length
-  //       })
-  //     }
-  //   }
-  //   else {
-  //     wx.reLaunch({
-  //       url: '/pages/main/main'
-  //     })
-  //   }
-  // },
   autoUpdate: function () {
     console.log(new Date())
     var self = this

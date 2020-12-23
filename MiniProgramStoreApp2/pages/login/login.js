@@ -6,12 +6,26 @@ const apiOwn = require('../../api/own.js')
 const app = getApp()
 Page({
   data: {
+    appId:'',
     tag: "login",
-    isAuthUserInfo: false
+    isAuthUserInfo: false,
+    returnUrl: ''
   },
   onLoad: function (options) {
 
-    var _this = this;
+    var _this = this
+
+    //var accountInfo = wx.getAccountInfoSync()
+
+    //var appId = accountInfo.miniProgram.appId
+
+    var returnUrl = typeof options.returnUrl == 'undefined'?'':options.returnUrl
+
+    _this.setData({
+      appId:app.globalData.appId,
+      returnUrl: returnUrl
+    })
+
     // 查看是否授权
     wx.getSetting({
       success(res) {
@@ -24,10 +38,10 @@ Page({
     })
 
     wx.checkSession({
-      success () {
-       console.log('session 未过期')
+      success() {
+        console.log('session 未过期')
       },
-      fail () {
+      fail() {
         console.log('session 已过期')
       }
     })
@@ -40,7 +54,7 @@ Page({
         console.log("minProgram:login")
         if (res.code) {
           console.log(res)
-          apiOwn.WxApiCode2Session({
+          apiOwn.wxConfig({
             appId: appId,
             code: res.code,
           }).then(function (res2) {
@@ -48,9 +62,9 @@ Page({
             if (res2.result == 1) {
               var d = res2.data
 
-              storeage.setOpenId(d.openid)
-              storeage.setSessionKey(d.session_key)
-              storeage.setMerchId(d.merchid)
+              storeage.setOpenId(d.openId)
+              storeage.setSessionKey(d.sessionKey)
+              storeage.setMerchId(d.merchId)
 
             } else {
               toast.show({
@@ -64,16 +78,16 @@ Page({
 
 
   },
-  onReady: function () { },
-  onShow: function () { },
+  onReady: function () {},
+  onShow: function () {},
   login: function (openId, phoneNumber) {
 
     const accountInfo = wx.getAccountInfoSync()
     console.log(accountInfo.miniProgram.appId)
-    
+
     apiOwn.loginByMinProgram({
       appId: accountInfo.miniProgram.appId,
-      merchId:storeage.getMerchId(),
+      merchId: storeage.getMerchId(),
       openId: openId,
       phoneNumber: phoneNumber,
     }).then(function (res) {
@@ -133,15 +147,13 @@ Page({
         if (res2.result == 1) {
           var d = res2.data
           _this.login(storeage.getOpenId(), d.phoneNumber)
-        }
-        else {
+        } else {
           toast.show({
             title: res2.message
           })
         }
       })
-    }
-    else {
+    } else {
       toast.show({
         title: '您点击了拒绝授权登录！'
       })

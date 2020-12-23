@@ -10,7 +10,7 @@
 						<block wx:if="{{isLogin}}">
 							<view class="item-member">
 								<image class="img" src='/content/default/images/icon_member_{{userInfo.memberLevel>0?1:0}}.png'></image>
-								<text class='txt'>{{userInfo.memberTag}}</text>
+								<text class='txt level-{{userInfo.memberLevel}}'>{{userInfo.memberTag}}</text>
 							</view>
 							<view wx:if="{{userInfo.phoneNumber!=null}}" class='item-phone'>
 								<image class="img" src='/content/default/images/icon_phone.png'></image>

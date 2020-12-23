@@ -28,8 +28,17 @@ function wxPhoneNumber(dataParams) {
   })
 }
 
+function wxConfig(dataParams) {
+  return lumos.postJson({
+    url: config.apiUrl.ownConfig,
+    dataParams: dataParams,
+    isShowLoading:false
+  })
+}
+
 module.exports = {
   loginByMinProgram: loginByMinProgram,
   WxApiCode2Session: WxApiCode2Session,
+  wxConfig:wxConfig,
   wxPhoneNumber: wxPhoneNumber
 }

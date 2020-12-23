@@ -1,10 +1,10 @@
 <view class="page st-cart" style="height:{{height}}px;">
   <view class="page-ct ct" style="height:100%;position:relative">
 
-    <block wx:if="{{blocks.length>0}}">
+    <block wx:if="{{cartData.blocks.length>0}}">
       <scroll-view scroll-y="true" style="height:{{scrollHeight}}px;">
         <view class="cart-blocks its-blocks">
-          <block wx:for="{{blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
+          <block wx:for="{{cartData.blocks}}" wx:for-index="pindex" wx:for-item="item" wx:key="list">
             <view class="it">
               <view class="it-tag">
                 <image class="icon img" src='/content/default/images/cart_channel{{item.shopMode}}.png'></image>
@@ -54,17 +54,17 @@
       </scroll-view>
       <view class="cart-bottom">
         <view class="it-l">
-          <text class='font-gray'>已选({{countBySelected}})</text>
+          <text class='font-gray'>已选({{cartData.countBySelected}})</text>
         </view>
         <view class="it-m">
-          <text class="font-main" value="249" decimal="2">{{sumPriceBySelected}}</text>
+          <text class="font-main" value="249" decimal="2">{{cartData.sumPriceBySelected}}</text>
         </view>
         <view bindtap="immeBuy" class="bg-main it-r">
           <text>下单</text>
         </view>
       </view>
     </block>
-    <block wx:if="{{blocks.length==0}}">
+    <block wx:if="{{cartData.blocks.length==0}}">
 
       <view style='height:60%;display:flex;justify-content:center;align-items:center'>
         <image src='/content/default/images/cart_empty.png'></image>

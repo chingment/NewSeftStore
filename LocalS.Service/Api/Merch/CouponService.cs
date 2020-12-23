@@ -141,17 +141,17 @@ namespace LocalS.Service.Api.Merch
                 {
                     faceValue = string.Format("{0}元", item.FaceValue);
                 }
-                else if (item.FaceType == E_Coupon_FaceType.DepositVoucher)
+                else if (item.FaceType == E_Coupon_FaceType.ShopDiscount)
                 {
                     faceValue = string.Format("{0}折", item.FaceValue);
                 }
                 else if (item.FaceType == E_Coupon_FaceType.RentVoucher)
                 {
-                    faceValue = string.Format("{0}折", item.FaceValue);
+                    faceValue = string.Format("{0}元", item.FaceValue);
                 }
                 else if (item.FaceType == E_Coupon_FaceType.DepositVoucher)
                 {
-                    faceValue = string.Format("{0}折", item.FaceValue);
+                    faceValue = string.Format("{0}元", item.FaceValue);
                 }
 
                 string validDate = string.Format("{0}至{1}", item.StartTime.ToUnifiedFormatDate(), item.EndTime.ToUnifiedFormatDate());

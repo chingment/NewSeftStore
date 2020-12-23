@@ -1,24 +1,59 @@
-// pages/memberrightdesc/memberrightdesc.js
+const apiMember = require('../../api/member.js')
+const storeage = require('../../utils/storeageutil.js')
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    right:1
+    pageIsReady: false,
+    right: 1,
+    isMember: false,
+    timespan: (new Date()).getTime()
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var _this=this
+    var _this = this
     var right = parseInt(options.right)
 
-    _this.setData({right:right})
+    _this.setData({
+      right: right
+    })
+
+    var _this = this
+
+
+    if (app.globalData.checkConfig) {
+      _this.getRightDescSt()
+    } else {
+      app.checkConfigReadyCallback = res => {
+        _this.getRightDescSt()
+      }
+    }
+
 
   },
+  getRightDescSt: function () {
+    var _this = this
+    apiMember.getRightDescSt({
+      openId: storeage.getOpenId()
+    }).then(function (res) {
+      if (res.result == 1) {
 
+        var d = res.data
+        _this.setData({
+          pageIsReady: true,
+          userInfo: d.userInfo
+        })
+      }
+    })
+
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -66,5 +101,10 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  clickToPurchase: function (e) {
+    wx.navigateTo({
+      url: '/pages/membercenter/membercenter'
+    })
   }
 })

@@ -2,7 +2,7 @@
 <template is="showToast" data="{{showToast: showToast}}" />
 
 <specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-<cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}" ></cartdialog>
+<cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}"  bindcartdialogClose="cartdialogClose" ></cartdialog>
 
 <view class="page-ct details">
 	<view class="details-main">
@@ -10,7 +10,7 @@
 			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="index">
 				<swiper-item>
 					<view class="swiper-img">
-						<image src="{{item.url}}"></image>
+						<image src="{{item.url}}" mode="heightFix"></image>
 					</view>
 				</swiper-item>
 			</block>
@@ -64,7 +64,7 @@
 			<image src="/content/default/images/home.png" />
 		</view>
 		<view bindtap="goCart" class="item-cart">
-			<view class='number {{cart.count==0?"hidden":""}}'>{{cart.count}}</view>
+			<view class='number {{cartDialog.dataS.count==0?"hidden":""}}'>{{cartDialog.dataS.count}}</view>
 			<image src="/content/default/images/cart.png" />
 		</view>
 		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}' data-reply-skuid="{{productSku.id}}">

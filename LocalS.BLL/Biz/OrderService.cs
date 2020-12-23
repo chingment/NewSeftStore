@@ -301,6 +301,27 @@ namespace LocalS.BLL.Biz
             List<UseAreaModel> arr_useArea = null;
             switch (useAreaType)
             {
+                case E_Coupon_UseAreaType.All:
+
+                    switch (faceType)
+                    {
+                        case E_Coupon_FaceType.ShopVoucher:
+                            couponAmount = (faceValue) * (saleAmount / sum_amount);
+                            break;
+                        case E_Coupon_FaceType.ShopDiscount:
+                            couponAmount = (10 - faceValue) * 0.1m * saleAmount;
+                            break;
+                    }
+
+                    LogUtil.Info("faceValue:" + faceValue);
+                    LogUtil.Info("saleAmount:" + saleAmount);
+                    LogUtil.Info("sum_amount:" + sum_amount);
+
+                    LogUtil.Info("couponAmount:" + couponAmount);
+                    isCalComplete = false;
+
+                    return couponAmount;
+                    break;
                 case E_Coupon_UseAreaType.ProductSpu:
                     LogUtil.Info("=>3");
                     arr_useArea = useAreaValue.ToJsonObject<List<UseAreaModel>>();
@@ -322,7 +343,6 @@ namespace LocalS.BLL.Biz
                             }
                         }
                     }
-
                     break;
             }
 

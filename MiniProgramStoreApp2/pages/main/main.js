@@ -5,7 +5,6 @@ const util = require('../../utils/util')
 const ownRequest = require('../../own/ownRequest.js')
 const apiGlobal = require('../../api/global.js')
 const apiOwn = require('../../api/own.js')
-const apiCart = require('../../api/cart.js')
 var app = getApp()
 
 Page({
@@ -14,7 +13,7 @@ Page({
     tag: "main",
     tabBarContentHeight: 0,
     name: "index",
-    tabBarIndex:0,
+    tabBarIndex: 0,
     tabBar: [{
       id: "cp_index",
       name: "index",
@@ -22,9 +21,12 @@ Page({
       iconPath: "/content/default/images/home.png",
       selectedIconPath: "/content/default/images/home_fill.png",
       text: "首页",
-      navTitle: "贩聚社团",
+      navTitle: "首页",
       selected: true,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }, {
       id: "cp_productkind",
       name: "productkind",
@@ -34,7 +36,10 @@ Page({
       text: "分类",
       navTitle: "分类",
       selected: false,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }, {
       id: "cp_cart",
       name: "cart",
@@ -44,7 +49,10 @@ Page({
       text: "购物车",
       navTitle: "购物车",
       selected: false,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }, {
       id: "cp_personal",
       name: "personal",
@@ -54,7 +62,10 @@ Page({
       text: "个人",
       navTitle: "个人",
       selected: false,
-      number: 0
+      badge: {
+        value: "",
+        type: null
+      }
     }],
     index: {
       store: {
@@ -83,27 +94,105 @@ Page({
     personal: {
       isLogin: false,
       userInfo: null
-    }
+    },
+    isOnLoad: false
   },
   onLoad: function (options) {
-    var _this = this;
+    // var _this = this;
+    // wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
+    //   var wHeight = wx.getSystemInfoSync().windowHeight;
+    //   _this.setData({
+    //     tabBarContentHeight: wHeight - rect[0].height
+    //   });
+    // }).exec()
+
+    // if (app.globalData.checkConfig) {
+    //   console.log("call>>1")
+    //   if (!ownRequest.isSelectedStore(true)) {
+    //     return
+    //   }
+    //   apiCart.pageData()
+    //   // if (!_this.data.isOnLoad) {
+    //   //var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //   //mainTabBarSwitch(tabBarIndex)
+    //   // }
+
+
+    //   _this.setData({
+    //     isOnLoad: true
+    //   })
+
+    // } else {
+    //   console.log("call>>2")
+    //   app.checkConfigReadyCallback = res => {
+
+    //     console.log("call>>3," + JSON.stringify(res))
+    //     if (!ownRequest.isSelectedStore(true)) {
+    //       return
+    //     }
+
+
+    //     apiCart.pageData()
+
+    //     if (!_this.data.isOnLoad) {
+    //       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //       mainTabBarSwitch(tabBarIndex)
+
+    //       _this.setData({
+    //         isOnLoad: true
+    //       })
+    //     }
+
+    //   }
+    // }
+  },
+  onShow: function () {
+    console.log("mian.onShow")
+    var _this = this
+
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
       _this.setData({
         tabBarContentHeight: wHeight - rect[0].height
       });
     }).exec()
+
+    if (app.globalData.checkConfig) {
+      console.log("call>>1")
+      _this._onShow()
+    } else {
+      console.log("call>>2")
+      app.checkConfigReadyCallback = res => {
+        console.log("call>>3," + JSON.stringify(res))
+        _this._onShow()
+      }
+    }
+
+
+    // if (!ownRequest.isSelectedStore(true)) {
+    //   return
+    // }
+    // apiCart.pageData()
+    // if (_this.data.isOnLoad) {
+    //     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    //     let cp = _this.selectComponent('#' + _this.data.tabBar[tabBarIndex].id);
+    //     cp.onShow()
+    //  // }
   },
-  onShow: function () {
-    console.log("mian.onShow")
+  _onShow() {
     var _this = this
     if (!ownRequest.isSelectedStore(true)) {
       return
     }
 
-    var tabBarIndex= wx.getStorageSync('main_tabbar_index') || 0
+    apiGlobal.msgTips({
+      storeId: ownRequest.getCurrentStoreId()
+    })
+
+    var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
     mainTabBarSwitch(tabBarIndex)
-    apiCart.pageData()
+
+
   },
   mainTabBarItemClick(e) {
     var _this = this
@@ -134,15 +223,22 @@ function mainTabBarSwitch(index) {
             })
           }, 1)
 
-          wx.setStorageSync('main_tabbar_index',index)
-          pages[i].setData({tabBarIndex:index})
+          wx.setStorageSync('main_tabbar_index', index)
+          pages[i].setData({
+            tabBarIndex: index
+          })
         } else {
           tabBar[j].selected = false
         }
       }
 
       let cp = pages[i].selectComponent('#' + tabBar[index].id);
-      cp.onReady()
+      if (!cp.data.isOnReady) {
+        cp.onReady()
+        cp.setData({
+          isOnReady: true
+        })
+      }
 
       pages[i].setData({
         tabBar: tabBar

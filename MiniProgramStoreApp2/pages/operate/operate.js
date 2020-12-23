@@ -10,10 +10,10 @@ Page({
     result: {
       isComplete: false,
       message: "正在处理，请耐心等候",
-      isShowContactButton:false
+      isShowContactButton: false
     }
   },
-  getResult: function (id, tp, caller,isTimeout) {
+  getResult: function (id, tp, caller, isTimeout, action) {
 
     var _this = this;
 
@@ -21,7 +21,8 @@ Page({
       id: id,
       type: tp,
       caller: caller,
-      isTimeout: isTimeout
+      isTimeout: isTimeout,
+      action: action
     }).then(function (res) {
       if (res.result == 1) {
         if (res.data.isComplete) {
@@ -39,6 +40,7 @@ Page({
     var _id = options.id == undefined ? "" : options.id
     var _type = options.type == undefined ? "" : options.type
     var _caller = options.caller == undefined ? "" : options.caller
+    var _action = options.action == undefined ? "" : options.action
 
     var step = 1, //计数动画次数
       num = 0, //计数倒计时秒数（n - num）
@@ -54,9 +56,9 @@ Page({
         end = end + 2 * Math.PI / n;
         ringMove(start, end);
         step++;
-        _this.getResult(_id, _type, _caller,false)
+        _this.getResult(_id, _type, _caller, false, _action)
       } else {
-        _this.getResult(_id, _type, _caller, true)
+        _this.getResult(_id, _type, _caller, true, _action)
         clearInterval(time);
       }
     };
@@ -120,8 +122,8 @@ Page({
   },
   onHide: function () {
     var _this = this
-    if (_this.countDown){
-    clearInterval(_this.countDown);
+    if (_this.countDown) {
+      clearInterval(_this.countDown);
     }
   },
 
@@ -134,7 +136,7 @@ Page({
   },
 
   operate: function (e) {
-
+  
     var opType = e.currentTarget.dataset.replyOptype
     var opVal = e.currentTarget.dataset.replyOpval
 
@@ -148,9 +150,9 @@ Page({
         }
         break;
       case "URL":
-        wx.redirectTo({
+        wx.reLaunch({
           url: opVal
-        })
+        });
         break;
     }
   }

@@ -5,17 +5,26 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiOrder = require('../../api/order.js')
+const skeletonData = require('./skeletonData')
 const app = getApp()
 
 Page({
   data: {
     tag: 'orderconfirm',
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     storeId: undefined,
-    orderIds: null,
+    orderIds: [],
     blocks: [],
-    couponId: [],
+    couponIdsByShop: [],
+    couponIdByRent: '',
+    couponIdByDeposit: '',
     payOption: {
       title: '支付方式',
       options: []
@@ -24,12 +33,25 @@ Page({
     booktimeDialog: {
       isShow: false
     },
-    booktimeSelectBlockIndex: -1
+    booktimeSelectBlockIndex: -1,
+    action: '',
+    saleOutletId: '',
+    shopMethod: 1
   },
   onLoad: function (options) {
     var _this = this
+
+    var _this = this
+    if (!ownRequest.isSelectedStore(true)) {
+      return
+    }
+
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
+    var _action = options.action == undefined ? null : options.action
+    var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
+    var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
     console.log('orderIds:' + _orderIds)
+
     var orderIds = []
     if (_orderIds != null) {
       var arr_order = _orderIds.split(',')
@@ -45,7 +67,10 @@ Page({
     _this.setData({
       storeId: ownRequest.getCurrentStoreId(),
       orderIds: orderIds,
-      productSkus: productSkus
+      productSkus: productSkus,
+      action: _action,
+      saleOutletId: _saleOutletId,
+      shopMethod: _shopMethod
     })
     _this.buildPayOptions()
     _this.getConfirmData()
@@ -54,7 +79,12 @@ Page({
     var _this = this
 
   },
-  onShow: function () {},
+  onShow: function () {
+    var _this = this
+    app.globalData.skeletonPage = _this
+    //_this.getConfirmData()
+
+  },
   onHide: function () {
 
   },
@@ -95,10 +125,27 @@ Page({
   couponSelect: function (e) {
     var _this = this
 
-    var couponId = _this.data.couponId
+    if (_this.data.orderIds.length > 0) {
+      return
+    }
+
+    var faceTypes = e.currentTarget.dataset.replyFacetypes
+    console.log('faceTypes:' + faceTypes)
+    var couponIds
+    if (faceTypes == '1,2') {
+      couponIds = _this.data.couponIdsByShop
+    } else if (faceTypes == '3') {
+      couponIds = [_this.data.couponIdByRent]
+    } else if (faceTypes == '4') {
+      couponIds = [_this.data.couponIdByDeposit]
+    }
+
     var productSkus = _this.data.productSkus
+    var shopMethod = _this.data.shopMethod
+    var storeId = _this.data.storeId
+
     wx.navigateTo({
-      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponId=" + JSON.stringify(couponId),
+      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod + "&storeId=" + storeId + '&faceTypes=' + faceTypes,
       success: function (res) {
         // success
       },
@@ -133,7 +180,8 @@ Page({
           cartId: _skus[j].cartId,
           id: _skus[j].id,
           quantity: _skus[j].quantity,
-          shopMode: _skus[j].shopMode
+          shopMode: _skus[j].shopMode,
+          shopMethod: _skus[j].shopMethod
         })
       }
 
@@ -144,44 +192,43 @@ Page({
       var delivery = null
       var selfTake = null
       var bookTime = null
-      if (_blocks[i].shopMode == 1) {
-        if (_blocks[i].receiveMode == 1) {
-          if (util.isEmptyOrNull(_delivery.id)) {
-            toast.show({
-              title: '请选择快寄地址'
-            })
-            return
-          }
-          delivery = {
-            id: _delivery.id,
-            consignee: _delivery.consignee,
-            phoneNumber: _delivery.phoneNumber,
-            areaName: _delivery.areaName,
-            areaCode: _delivery.areaCode,
-            address: _delivery.address
-          }
-        } else if (_blocks[i].receiveMode == 2) {
 
-          if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
-            toast.show({
-              title: '请选择预约时间'
-            })
-            return
-          }
-
-          bookTime = {
-            type: _blocks[i].bookTime.type,
-            value: _blocks[i].bookTime.value
-          }
-
-          selfTake = {
-            storeName: _selfTake.storeName,
-            storeAddress: _selfTake.storeAddress,
-            areaCode: _selfTake.areaCode,
-            address: _selfTake.address
-          }
+      if (_blocks[i].receiveMode == 1) {
+        if (util.isEmptyOrNull(_delivery.phoneNumber)) {
+          toast.show({
+            title: '请选择快寄地址'
+          })
+          return
         }
-      } else if (_blocks[i].shopMode == 3) {
+        delivery = {
+          id: _delivery.id,
+          consignee: _delivery.consignee,
+          phoneNumber: _delivery.phoneNumber,
+          areaName: _delivery.areaName,
+          areaCode: _delivery.areaCode,
+          address: _delivery.address
+        }
+      } else if (_blocks[i].receiveMode == 2) {
+
+        if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
+          toast.show({
+            title: '请选择预约时间'
+          })
+          return
+        }
+
+        bookTime = {
+          type: _blocks[i].bookTime.type,
+          value: _blocks[i].bookTime.value
+        }
+
+        selfTake = {
+          storeName: _selfTake.storeName,
+          storeAddress: _selfTake.storeAddress,
+          areaCode: _selfTake.areaCode,
+          address: _selfTake.address
+        }
+      } else if (_blocks[i].receiveMode == 3) {
         selfTake = {
           storeName: _selfTake.storeName,
           storeAddress: _selfTake.storeAddress,
@@ -189,6 +236,8 @@ Page({
           address: _selfTake.address
         }
       }
+
+
 
       blocks.push({
         shopMode: _blocks[i].shopMode,
@@ -207,7 +256,12 @@ Page({
       apiOrder.reserve({
         storeId: _this.data.storeId,
         blocks: blocks,
-        source: 3
+        source: 3,
+        saleOutletId: _this.data.saleOutletId,
+        couponIdsByShop: _this.data.couponIdsByShop,
+        couponIdByDeposit: _this.data.couponIdByDeposit,
+        couponIdByRent: _this.data.couponIdByRent,
+        shopMethod: _this.data.shopMethod
       }).then(function (res) {
         if (res.result == 1) {
           var d = res.data
@@ -237,15 +291,37 @@ Page({
   },
   goPay: function (payOption, blocks) {
     var _this = this
+    if (parseInt(_this.data.actualAmount) == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '确定要支付吗？',
+        success: function (sm) {
+          if (sm.confirm) {
+            _this.goPayCofirm(payOption, blocks)
+          }
+        }
+      })
+    } else {
+      _this.goPayCofirm(payOption, blocks)
+    }
+  },
+  goPayCofirm: function (payOption, blocks) {
+    var _this = this
+    var data = _this.data
+    console.log('_this.data.action:' + data.action)
     apiOrder.buildPayParams({
-      orderIds: _this.data.orderIds,
+      orderIds: data.orderIds,
       payCaller: payOption.payCaller,
       blocks: blocks,
-      payPartner: payOption.payPartner
+      payPartner: payOption.payPartner,
+      couponIdsByShop: data.couponIdsByShop,
+      couponIdByDeposit: data.couponIdByDeposit,
+      couponIdByRent: data.couponIdByRent,
+      shopMethod: data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
 
-        var d = res.data;
+        var d = res.data
 
         _this.setData({
           payTransId: d.payTransId
@@ -259,12 +335,12 @@ Page({
           'paySign': d.paySign,
           'success': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1'
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
             })
           },
           'fail': function (res) {
             wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1'
+              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action=' + data.action
             })
           }
         })
@@ -317,7 +393,10 @@ Page({
       orderIds: _data.orderIds,
       storeId: _data.storeId,
       productSkus: _data.productSkus,
-      couponId: _data.couponId
+      couponIdsByShop: _data.couponIdsByShop,
+      couponIdByRent: _data.couponIdByRent,
+      couponIdByDeposit: _data.couponIdByDeposit,
+      shopMethod: _data.shopMethod
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -341,7 +420,11 @@ Page({
           subtotalItems: d.subtotalItems,
           actualAmount: d.actualAmount,
           originalAmount: d.originalAmount,
-          coupon: d.coupon
+          couponByShop: d.couponByShop,
+          couponByRent: d.couponByRent,
+          couponByDeposit: d.couponByDeposit,
+          shopMethod: d.shopMethod,
+          pageIsReady: true
         })
       }
     })

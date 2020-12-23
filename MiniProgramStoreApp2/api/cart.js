@@ -2,25 +2,23 @@ const config = require('../config');
 const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
+const apiGlobal = require('../api/global.js')
 
 function operate(params) {
 
   var promise = new Promise((resolve, reject) => {
     lumos.postJson({
       url: config.apiUrl.cartOperate,
-      dataParams: params
-    }).then(function (res1) {
+      dataParams: params,
+    }).then(function (res) {
 
-
-      if (res1.result == 1) {
-        pageData().then(function (res2) {
-          var res3={"result":1,"code":1000,"message":"操作成功",data:res2.data}
-          resolve(res3);
+      if (res.result == 1) {
+        storeage.setCart(res.data)
+        apiGlobal.msgTips({
+          storeId: ownRequest.getCurrentStoreId()
         })
       }
-      else{
-        resolve(res1);
-      }
+      resolve(res);
     })
   })
 
@@ -28,7 +26,6 @@ function operate(params) {
 }
 
 function pageData() {
-
 
   var promise = new Promise((resolve, reject) => {
     lumos.getJson({
@@ -52,7 +49,17 @@ function pageData() {
   return promise
 }
 
+function getCartData(urlParams) {
+
+  return lumos.getJson({
+    url: config.apiUrl.cartGetCartData,
+    urlParams: urlParams,
+    isShowLoading: false
+  })
+}
+
 module.exports = {
   operate: operate,
-  pageData: pageData
+  pageData: pageData,
+  getCartData: getCartData
 }

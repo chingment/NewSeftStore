@@ -1,14 +1,14 @@
-<view class="page-ct coupon">
-	<view class='list-data its-couponlist' wx:if="{{coupon.length>0}}">
-		<block wx:for="{{coupon}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+<view class="page-ct coupons">
+	<view class='list-data its-couponlist' wx:if="{{coupons.length>0}}">
+		<block wx:for="{{coupons}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 			<view class="item">
 				<view class="item-top">
 					<view class="item-left">
 						<view class="amount">
-							<text class="discount">{{item.discount}}</text>
-							<text class="discountunit">{{item.discountUnit}}</text>
+							<text class="facevalue">{{item.faceValue}}</text>
+							<text class="faceunit">{{item.faceUnit}}</text>
 						</view>
-						<view class="discounttip">{{item.discountTip}}</view>
+						<view class="facetip">{{item.faceTip}}</view>
 					</view>
 					<view class="item-middle">
 						<view class="name">{{item.name}}</view>
@@ -17,7 +17,12 @@
 					<view class="item-right" bindtap="goSelect" data-reply-index="{{index}}" data-reply-operate="{{operate}}">
 						<text wx:if="{{operate==1}}" class="btn">立即使用</text>
 						<label wx:elif="{{operate==2}}" class="radio">
-							<image src='/content/default/images/{{item.isSelected==false?"checkedoff":"checkedon"}}.png'></image>
+							<block wx:if="{{item.canSelected}}">
+								<image src='/content/default/images/{{item.isSelected==false?"checkedoff":"checkedon"}}.png'></image>
+							</block>
+							<block wx:else>
+								<image src='/content/default/images/checkeddisable.png'></image>
+							</block>
 						</label>
 					</view>
 				</view>
@@ -29,7 +34,6 @@
 					</view>
 				</view>
 			</view>
-
 		</block>
 	</view>
 	<view class="list-emptytips" wx:else>

@@ -1,5 +1,10 @@
 <view class="page-ct memberrightdesc">
   <view class="bg_1">
-    <image class="bg_img" src="http://file.17fanju.com/upload/memberprom/1/right_desc_{{right}}.jpg"></image>
+    <image class="bg_img" src="http://file.17fanju.com/upload/membertheme/1/rightdesc/right_desc_{{right}}.jpg?ts={{timespan}}"></image>
+  </view>
+  <view class="bg_2">
+    <view class="btnbox"  wx:if="{{userInfo.memberLevel==0}}">
+      <view class="btn" bindtap="clickToPurchase">立即开通</view>
+    </view>
   </view>
 </view>

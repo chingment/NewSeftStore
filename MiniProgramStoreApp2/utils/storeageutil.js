@@ -7,37 +7,36 @@ const key_open_id = "key_open_id"
 const key_merch_id = "key_merch_id"
 const key_session_key = "session_key"
 const key_cur_store_id = "key_cur_store_id"
+const key_cur_shop_model = "key_cur_shop_model"
+const key_last_saleoutlet_id = "key_last_saleoutlet_id"
+
 function getCart() {
   return wx.getStorageSync(key_cart) || []
 }
 
-function setCart(cart) {
-  wx.setStorageSync(key_cart, cart)
+function setCart(cartData) {
+  wx.setStorageSync(key_cart, cartData)
 
   //设置页面的标志点
   var pages = getCurrentPages();
   for (var i = 0; i < pages.length; i++) {
     if (pages[i].data.tag == "main") {
-      pages[i].data.tabBar[2].number = cart.count
 
       pages[i].selectComponent('#cp_cart').setData({
-        blocks: cart.blocks,
-        count: cart.count,
-        sumPrice: cart.sumPrice,
-        countBySelected: cart.countBySelected,
-        sumPriceBySelected: cart.sumPriceBySelected
+        cartData: cartData
       });
 
-      pages[i].setData({
-        tabBar: pages[i].data.tabBar
-      })
     } else if (pages[i].data.tag == "productdetails") {
+      var cartDialog = pages[i].data.cartDialog
+      cartDialog.dataS = cartData
       pages[i].setData({
-        cart: cart
+        cartDialog: cartDialog
       })
     } else if (pages[i].data.tag == "productsearch") {
+      var cartDialog = pages[i].data.cartDialog
+      cartDialog.dataS = cartData
       pages[i].setData({
-        cart: cart
+        cartDialog: cartDialog
       })
     }
   }
@@ -45,7 +44,7 @@ function setCart(cart) {
 }
 
 function getAccessToken() {
-  return wx.getStorageSync(key_accesstoken) || []
+  return wx.getStorageSync(key_accesstoken) || ''
 }
 
 function setAccessToken(accesstoken) {
@@ -94,6 +93,22 @@ function setCurrentStoreId(store_id) {
   wx.setStorageSync(key_cur_store_id, store_id)
 }
 
+function getCurrentShopMode() {
+  return wx.getStorageSync(key_cur_shop_model) || undefined
+}
+
+function setCurrentShopMode(shopMode) {
+  wx.setStorageSync(key_cur_shop_model, shopMode)
+}
+
+function getLastSaleOutletId() {
+  return wx.getStorageSync(key_last_saleoutlet_id) || ''
+}
+
+function setLastSaleOutletId(saleoutlet_id) {
+  wx.setStorageSync(key_last_saleoutlet_id, saleoutlet_id)
+}
+
 
 module.exports = {
   getCart: getCart,
@@ -110,4 +125,8 @@ module.exports = {
   setSessionKey: setSessionKey,
   getCurrentStoreId: getCurrentStoreId,
   setCurrentStoreId: setCurrentStoreId,
+  getCurrentShopMode: getCurrentShopMode,
+  setCurrentShopMode: setCurrentShopMode,
+  getLastSaleOutletId: getLastSaleOutletId,
+  setLastSaleOutletId: setLastSaleOutletId
 }

@@ -63,7 +63,11 @@ page{
   font-size: 21rpx;
 }
 
-.main-tabbar>.nav  .number {
+.main-tabbar>.nav .type-null{
+  display: none;
+}
+
+.main-tabbar>.nav .number {
   font-size: 21rpx;
   width: 50rpx;
   height: 32rpx;

@@ -18,7 +18,9 @@
     "pages/search/search",
     "pages/receipttimeaxis/receipttimeaxis",
     "pages/memberprom/memberprom",
-    "pages/memberrightdesc/memberrightdesc"
+    "pages/memberrightdesc/memberrightdesc",
+    "pages/membercenter/membercenter",
+    "pages/couponrevcenter/couponrevcenter"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,5 +1,6 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiPersonal = require('../../api/personal.js')
+const storeageutil = require('../../utils/storeageutil.js')
 const app = getApp()
 Component({
   options: {
@@ -13,23 +14,25 @@ Component({
   },
   data: {
     tag: "personal",
-    isOnReady:false,
-    isLogin:false
+    isOnReady: false,
+    isLogin: false,
+    userInfo: {}
   },
   methods: {
     goLogin: function (e) {
       ownRequest.goLogin()
     },
     navigateToClick: function (e) {
+      var url = e.currentTarget.dataset.url
       var ischecklogin = e.currentTarget.dataset.ischecklogin
       if (ischecklogin == "true") {
         if (!ownRequest.isLogin()) {
-          ownRequest.goLogin()
+          ownRequest.goLogin(url)
           return
         }
       }
 
-      var url = e.currentTarget.dataset.url
+
       wx.navigateTo({
         url: url
       })
@@ -37,7 +40,7 @@ Component({
     getPageData: function (e) {
       var _this = this
       if (ownRequest.getCurrentStoreId() != undefined) {
-        apiPersonal.pageData().then(function (res) {
+        apiPersonal.pageData({openId:storeageutil.getOpenId()}).then(function (res) {
           if (res.result == 1) {
             var d = res.data
             _this.setData({
@@ -48,21 +51,17 @@ Component({
         })
       }
     },
-    onReady:function(){
+    onReady: function () {
       var _this = this
       console.log("personal.onReady")
-      if(!_this.data.isOnReady){
-        _this.setData({isOnReady:true})
-        _this.getPageData()
-      }
-     
-        _this.setData({
-          isLogin:ownRequest.isLogin()
-        })
     },
     onShow() {
       var _this = this
       console.log("personal.onShow")
+      _this.setData({
+        isLogin: ownRequest.isLogin()
+      })
+      _this.getPageData()
     }
   }
 })

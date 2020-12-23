@@ -1,10 +1,11 @@
-.coupon > .item {
+.its-couponlist > .item {
   border-radius: 5.21px;
   height: 180rpx;
   position: relative;
   box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
   margin: 22rpx;
   padding: 12rpx 20rpx;
+
 }
 
 .item-top {
@@ -37,9 +38,10 @@
 .item-top .amount, .item-top .name {
   height: 80rpx;
   line-height: 80rpx;
+  overflow: hidden;
 }
 
-.item-top .discounttip, .item-top .validdate {
+.item-top .facetip, .item-top .validdate {
   height: 40rpx;
   line-height: 22rpx;
 }
@@ -66,19 +68,19 @@
   float: right;
 }
 
-.discount {
+.facevalue {
   color: #f50;
   font-weight: bold;
   font-size: 48rpx;
 }
 
-.discountunit {
+.faceunit {
   color: #f50;
   font-size: 32rpx;
   margin-left: 10rpx;
 }
 
-.discounttip, .validdate {
+.facetip, .validdate {
   color: #555;
   font-size: 22rpx;
 }
@@ -86,6 +88,8 @@
 .name {
   font-weight: bold;
   font-size: 32rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .description {

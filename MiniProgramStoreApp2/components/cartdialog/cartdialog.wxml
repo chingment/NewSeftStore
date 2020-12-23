@@ -1,4 +1,4 @@
-<view class="cumUpDialog" wx:if="{{myShow}}" catchtouchmove="ture">
+<view class="cumUpDialog" wx:if="{{myShow}}" data-ref="self" catchtouchmove="ture" bindtap="myClose">
 	<view class='wrapper' animation='{{myAnimationData}}'>
 		<view class="topinfo">
 		  <view class="title">

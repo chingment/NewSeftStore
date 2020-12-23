@@ -41,6 +41,7 @@ page{
 .its-odcskus .it-l .imgUrl {
   align-items: center;
   display: flex;
+  margin-right:10rpx;
 }
 
 .its-odcskus .it-l .imgUrl .img {
@@ -88,6 +89,12 @@ page{
 .its-odcskus .quantity {
   font-size: 28rpx;
   color: #999;
+}
+
+.its-odcskus .originalPrice {
+  color: #999;
+  font-size: 32rpx;
+  text-decoration:line-through;
 }
 
 .its-odcskus .salePrice {
@@ -214,4 +221,20 @@ page{
   border-radius: 10rpx;
   box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
 
+}
+
+.coupontip {
+  padding: 5rpx 10rpx;
+  font-size: 28rpx;
+  border-radius: 8%;
+  font-weight: bold;
+}
+
+.coupontip1{
+  color: #9d9d9d;
+}
+
+.coupontip2 {
+  background: #f50;
+  color: #fff;
 }

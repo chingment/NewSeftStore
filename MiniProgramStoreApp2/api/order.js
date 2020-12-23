@@ -6,7 +6,8 @@ const lumos = require('../utils/lumos.minprogram.js')
 function confirm(params, requestHandler) {
   return lumos.postJson({
     url: config.apiUrl.orderConfirm,
-    dataParams: params
+    dataParams: params,
+    isShowLoading:false
   })
 }
 
@@ -53,7 +54,8 @@ function buildPayOptions(urlParams) {
 
   return lumos.getJson({
     url: config.apiUrl.orderBuildPayOptions,
-    urlParams: urlParams
+    urlParams: urlParams,
+    isShowLoading:false
   })
 }
 

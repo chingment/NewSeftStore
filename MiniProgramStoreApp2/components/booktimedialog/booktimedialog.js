@@ -139,6 +139,12 @@ Component({
       var _this = this
       _this._getSelectBookTime()
       _this._dialogClose()
+    },
+    myClose: function (e) {
+      var self = e.target.dataset.ref
+      if (self == 'self') {
+        this._dialogClose()
+      }
     }
   }
 })

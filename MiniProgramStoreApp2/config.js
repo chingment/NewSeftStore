@@ -16,12 +16,16 @@ var config = {
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     ownWxApiCode2Session: `${host}/Own/WxApiCode2Session`,
+    ownConfig: `${host}/Own/Config`,
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
     globalDataSet: `${host}/Global/DataSet`,
+    globalMsgTips: `${host}/Global/MsgTips`,
     indexPageData: `${host}/Index/PageData`,
+    indexSugProducts: `${host}/Index/SugProducts`,
     productKindPageData:`${host}/ProductKind/PageData`,
     cartOperate: `${host}/Cart/Operate`,
     cartPageData: `${host}/Cart/PageData`,
+    cartGetCartData: `${host}/Cart/GetCartData`,
     productInitSearchPageData: `${host}/Product/InitSearchPageData`,
     productSearch: `${host}/Product/Search`,
     productDetails: `${host}/Product/Details`,
@@ -29,6 +33,8 @@ var config = {
     deliveryAddressEdit: `${host}/DeliveryAddress/Edit`,
     deliveryAddressMy: `${host}/DeliveryAddress/My`,
     couponMy: `${host}/Coupon/My`,
+    couponRevCenterSt: `${host}/Coupon/RevCenterSt`,
+    couponReceive: `${host}/Coupon/Receive`,
     storeList: `${host}/Store/List`,
     operateResult: `${host}/Operate/Result`,
     orderConfirm: `${host}/Order/Confirm`,
@@ -43,6 +49,10 @@ var config = {
     kindPageData: `${host}/Kind/PageData`,
     personalPageData: `${host}/Personal/PageData`,
     tobeSearch: `${host}/Search/TobeSearch`,
+    memberGetPayLevelSt: `${host}/Member/GetPayLevelSt`,
+    memberGetPromSt: `${host}/Member/GetPromSt`,
+    memberGetRightDescSt: `${host}/Member/GetRightDescSt`,
+    saleOutletList: `${host}/SaleOutlet/List`,
   }
 
 };

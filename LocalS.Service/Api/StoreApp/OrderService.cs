@@ -331,7 +331,7 @@ namespace LocalS.Service.Api.StoreApp
                             foreach (var productSku in rop.ProductSkus)
                             {
                                 bool isCalComplete = false;
-                                productSku.CouponAmount = BizFactory.Order.CalCouponAmount(amount_original, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, productSku.ProductId, productSku.Kind3, productSku.SaleAmount, out isCalComplete);
+                                productSku.CouponAmount = BizFactory.Order.CalCouponAmount(amount_sale, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, productSku.ProductId, productSku.Kind3, productSku.SaleAmount, out isCalComplete);
                                 if (isCalComplete)
                                     break;
                             }

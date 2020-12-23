@@ -1,21 +1,62 @@
 // pages/memberprom/memberprom.js
+const skeletonData = require('./skeletonData')
+const apiMember = require('../../api/member.js')
+const storeage = require('../../utils/storeageutil.js')
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     isShowButtonBottom: false,
-    timespan:(new Date()).getTime()
+    timespan: (new Date()).getTime(),
+    userInfo: {},
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var _this = this
+
+
+    if (app.globalData.checkConfig) {
+       console.log('a1')
+       
+      _this.getPromSt()
+    } else {
+      console.log('a2')
+      app.checkConfigReadyCallback = res => {
+         console.log('a3')
+        _this.getPromSt()
+      }
+    }
 
   },
+  getPromSt: function () {
+    var _this = this
+    apiMember.getPromSt({
+      openId: storeage.getOpenId()
+    }).then(function (res) {
+      if (res.result == 1) {
 
+        var d = res.data
+        _this.setData({
+          pageIsReady: true,
+          userInfo: d.userInfo
+        })
+      }
+    })
+
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -27,6 +68,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var _this = this
+
+    app.globalData.skeletonPage = _this
+
 
   },
 
@@ -93,7 +138,7 @@ Page({
       })
     }, 0)
   },
-  navigateToClick: function (e) {
+  clickToNgItem: function (e) {
     // var ischecklogin = e.currentTarget.dataset.ischecklogin
     // if (ischecklogin == "true") {
     //   if (!ownRequest.isLogin()) {
@@ -103,9 +148,14 @@ Page({
     // }
 
     var right = e.currentTarget.dataset.right
-    var title = e.currentTarget.dataset.tilte
+    var title = e.currentTarget.dataset.title
     wx.navigateTo({
-      url: '/pages/memberrightdesc/memberrightdesc?right='+right+'&title='
+      url: '/pages/memberrightdesc/memberrightdesc?right=' + right + '&title=' + title
+    })
+  },
+  clickToCenter: function (e) {
+    wx.navigateTo({
+      url: '/pages/membercenter/membercenter'
     })
   }
 })

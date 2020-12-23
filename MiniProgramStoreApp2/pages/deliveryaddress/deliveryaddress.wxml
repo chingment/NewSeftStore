@@ -32,7 +32,7 @@
 
 		</view>
 	</view>
-	<navigator url="/pages/deliveryaddressedit/deliveryaddressedit?id=" class="bottom-btn bg-main">
+	<navigator url="/pages/deliveryaddressedit/deliveryaddressedit?id=" class="btn-bottom bg-main">
 		<view class="container">
 			<text>添加新地址</text>
 		</view>

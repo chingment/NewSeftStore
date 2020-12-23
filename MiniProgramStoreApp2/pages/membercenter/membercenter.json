@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "skeleton": "../../components/skeleton/skeleton",
+    "saleoutletdialog": "../../components/saleoutletdialog/saleoutletdialog"
+  },
+  "navigationBarTitleText": "会员服务",
+  "navigationStyle": "custom"
+}

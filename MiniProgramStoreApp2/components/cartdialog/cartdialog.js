@@ -12,6 +12,7 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
+        var _this = this
         console.log('isShow:' + newVal)
         if (newVal) {
           this._dialogOpen()
@@ -26,7 +27,7 @@ Component({
       observer: function (newVal, oldVal) {
         if (newVal == null)
           return
-        console.log('dataS:' + newVal)
+        console.log('dataS:' + JSON.stringify(newVal))
         this.setData({
           myCart: newVal
         })
@@ -69,12 +70,13 @@ Component({
         })
       }, 100)
 
-      _this.setData({
-        myCart: storeage.getCart()
-      })
+      // _this.setData({
+      //   myCart: storeage.getCart()
+      // })
     },
     _dialogClose: function (e) {
       var _this = this;
+
       var animation = wx.createAnimation({
         duration: 300,
         timingFunction: 'linear'
@@ -90,6 +92,7 @@ Component({
           isShow: false,
           myStop: true,
         })
+        _this.triggerEvent('cartdialogClose')
       }, 300)
     },
     _itemOperate(e) {
@@ -114,7 +117,8 @@ Component({
         id: productSku.id,
         quantity: 1,
         selected: productSku.selected,
-        shopMode: productSku.shopMode
+        shopMode: productSku.shopMode,
+        shopMethod: 1
       });
 
       function _operate() {
@@ -125,10 +129,10 @@ Component({
           productSkus: operateProductSkus
         }).then(function (res) {
           if (res.result == 1) {
-            console.log("storeage.getCart():" + JSON.stringify(storeage.getCart()))
-            _this.setData({
-              myCart: storeage.getCart()
-            })
+            //console.log("storeage.getCart():" + JSON.stringify(storeage.getCart()))
+            //_this.setData({
+            //  myCart: storeage.getCart()
+            // })
           } else {
             toast.show({
               title: res.message
@@ -270,6 +274,12 @@ Component({
 
       return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
 
+    },
+    myClose: function (e) {
+      var self = e.target.dataset.ref
+      if (self == 'self') {
+        this._dialogClose()
+      }
     }
   }
 })

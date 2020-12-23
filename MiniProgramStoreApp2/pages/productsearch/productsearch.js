@@ -9,6 +9,8 @@ const app = getApp()
 Page({
   data: {
     tag: "productsearch",
+    condition_Kinds: [],
+    condition_Kinds_index: 0,
     dataList: {
       isEmpty: false,
       allloaded: false,
@@ -18,23 +20,29 @@ Page({
       pageCount: 0,
       items: []
     },
-    storeId:'',
-    shopMode:0,
-    cartIsShow:false,
+    storeId: '',
+    shopMode: 0,
     scrollHeight: 0,
     specsDialog: {
       isShow: false
     },
     cartDialog: {
-      isShow: false
+      isShow: false,
+      dataS: {
+        blocks: [],
+        count: 0,
+        sumPrice: 0,
+        countBySelected: 0,
+        sumPriceBySelected: 0
+      }
     }
   },
   onLoad: function (options) {
     var _this = this
 
     _this.setData({
-      shopMode:app.globalData.currentShopMode,
-      storeId:ownRequest.getCurrentStoreId()
+      shopMode: storeage.getCurrentShopMode(),
+      storeId: ownRequest.getCurrentStoreId()
     })
 
     var kindId = options.kindId == undefined ? "" : options.kindId
@@ -60,15 +68,14 @@ Page({
             condition_Kinds_index = i
           }
         }
-
+        console.log(">>>condition_Kinds:" + JSON.stringify(d.condition_Kinds))
         _this.setData({
           condition_Kinds: d.condition_Kinds,
           condition_Kinds_index: condition_Kinds_index,
-          cart: storeage.getCart()
         })
 
         _this.search()
-
+        _this.getCartData()
       }
     })
 
@@ -108,14 +115,18 @@ Page({
     _this.data.dataList.pageIndex = 0
     _this.data.dataList.loading = false
     _this.data.dataList.allloaded = false
-    _this.data.dataList.isEmpty=false
+    _this.data.dataList.isEmpty = false
     _this.search().then(res => {
       e.detail.success();
     });
   },
   goCart: function (e) {
-    var _this=this
-    _this.setData({cartDialog:{isShow:true}})
+    var _this = this
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = true
+    _this.setData({
+      cartDialog: cartDialog
+    })
   },
   addToCart: function (e) {
 
@@ -140,8 +151,7 @@ Page({
         toast.show({
           title: '加入购物车成功'
         })
-      }
-      else {
+      } else {
         toast.show({
           title: res.message
         })
@@ -150,14 +160,14 @@ Page({
     })
 
   },
-  selectSpecs:function(e){
+  selectSpecs: function (e) {
     var _this = this
-    var sku= e.currentTarget.dataset.replySku
+    var sku = e.currentTarget.dataset.replySku
     _this.setData({
       specsDialog: {
         isShow: true,
-        productSku:sku,
-        shopMode:_this.data.shopMode,
+        productSku: sku,
+        shopMode: _this.data.shopMode,
         storeId: _this.data.storeId,
       }
     })
@@ -169,7 +179,7 @@ Page({
     _this.data.dataList.pageIndex = 0
     _this.data.dataList.loading = false
     _this.data.dataList.allloaded = false
-    _this.data.dataList.isEmpty=false
+    _this.data.dataList.isEmpty = false
     _this.setData({
       condition_Kinds_index: index,
       dataList: _this.data.dataList
@@ -183,7 +193,9 @@ Page({
   search: function () {
     var _this = this
 
-    _this.setData({ loading: true })
+    _this.setData({
+      loading: true
+    })
 
     var pageIndex = _this.data.dataList.pageIndex
     var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
@@ -196,13 +208,13 @@ Page({
       subjectId: undefined,
       shopMode: _this.data.shopMode,
       name: ""
-    },false).then(function (res) {
+    }, false).then(function (res) {
       if (res.result == 1) {
         var d = res.data
         var items = []
         var allloaded = false
         var isEmpty = false
-        var list=_this.data.dataList
+        var list = _this.data.dataList
         if (d.pageIndex == 0) {
           items = d.items
         } else {
@@ -217,13 +229,13 @@ Page({
           allloaded = true
         }
 
-        new Promise(function (resolve, reject){
+        new Promise(function (resolve, reject) {
 
-          setTimeout(function(){
+          setTimeout(function () {
 
             console.log("我是异步")
 
-          },3000);
+          }, 3000);
 
         })
 
@@ -240,6 +252,33 @@ Page({
           dataList: list
         })
       }
+    })
+  },
+  getCartData: function () {
+    var _this = this
+
+    if (ownRequest.isLogin()) {
+
+      apiCart.getCartData({
+        shopMode: storeage.getCurrentShopMode(),
+        storeId: ownRequest.getCurrentStoreId()
+      }).then(function (res) {
+        if (res.result == 1) {
+          var cartDialog = _this.data.cartDialog
+          cartDialog.dataS = res.data
+          _this.setData({
+            cartDialog: cartDialog
+          })
+        }
+      })
+    }
+  },
+  cartdialogClose: function () {
+    var _this = this
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = false
+    _this.setData({
+      cartDialog: cartDialog
     })
   }
 })

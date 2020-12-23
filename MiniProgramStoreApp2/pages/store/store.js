@@ -34,6 +34,7 @@ Page({
       loaction = { lat: 0, lng: 0 }
     }
 
+    
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
@@ -45,8 +46,6 @@ Page({
         }
       }
     })
-
-
 
     getStoreList(loaction.lat, loaction.lng)
   },
