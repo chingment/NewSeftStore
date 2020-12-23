@@ -727,6 +727,14 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
+                 
+                    //foreach (var buildOrderSku in buildOrderSkus)
+                    //{
+                    //    if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                    //    {
+                    //        buildOrderSku.CouponAmountByShop=CalCouponAmount()
+                    //    }
+                    //}
 
                     //decimal couponAmount = 0;
 

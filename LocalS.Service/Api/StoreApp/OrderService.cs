@@ -326,12 +326,49 @@ namespace LocalS.Service.Api.StoreApp
                                       select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
                         if (coupon != null)
                         {
+                            decimal cal_sum_amount = 0;
+                            if (coupon.UseAreaType == E_Coupon_UseAreaType.All)
+                            {
+                                cal_sum_amount = c_prodcutSkus.Sum(m => m.SaleAmount);
+                            }
+                            else if (coupon.UseAreaType == E_Coupon_UseAreaType.Store)
+                            {
+                                cal_sum_amount = c_prodcutSkus.Sum(m => m.SaleAmount);
+                            }
+                            else if (coupon.UseAreaType == E_Coupon_UseAreaType.ProductKind)
+                            {
+                                var list = coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                                if (list != null)
+                                {
+                                    int[] ids = list.Select(s => Int32.Parse(s.Id)).ToArray();
+
+                                    if (ids != null)
+                                    {
+                                        cal_sum_amount = c_prodcutSkus.Where(m => ids.Contains(m.Kind3)).Sum(m => m.SaleAmount);
+                                    }
+                                }
+
+                            }
+                            else if (coupon.UseAreaType == E_Coupon_UseAreaType.ProductSpu)
+                            {
+                                var list = coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                                if (list != null)
+                                {
+                                    string[] ids = list.Select(m => m.Id).ToArray();
+
+                                    if (ids != null)
+                                    {
+                                        cal_sum_amount = c_prodcutSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
+                                    }
+                                }
+
+                            }
 
                             //若有优惠券重新计算优惠金额
                             foreach (var productSku in rop.ProductSkus)
                             {
                                 bool isCalComplete = false;
-                                productSku.CouponAmount = BizFactory.Order.CalCouponAmount(amount_sale, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, productSku.ProductId, productSku.Kind3, productSku.SaleAmount, out isCalComplete);
+                                productSku.CouponAmount = BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, productSku.ProductId, productSku.Kind3, productSku.SaleAmount, out isCalComplete);
                                 if (isCalComplete)
                                     break;
                             }
