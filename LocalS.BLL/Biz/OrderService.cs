@@ -1180,6 +1180,9 @@ namespace LocalS.BLL.Biz
                                     buildOrderChild.SaleAmount = buildOrderChild.Quantity * shopModeProductSku.SalePrice;
                                     buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
                                     buildOrderChild.OriginalAmount = buildOrderChild.Quantity * shopModeProductSku.OriginalPrice;
+                                    buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
+                                    buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
+                                    buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
                                     buildOrderChilds.Add(buildOrderChild);
                                 }
                                 else

@@ -262,7 +262,7 @@ namespace LocalS.Service.Api.StoreApp
                     }
                     else if (productSku.ShopMethod == E_OrderShopMethod.MemberFee)
                     {
-                        #region 
+                        #region MemberFee
                         var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == store.MerchId && m.Id == productSku.Id).FirstOrDefault();
                         if (memberFeeSt != null)
                         {
