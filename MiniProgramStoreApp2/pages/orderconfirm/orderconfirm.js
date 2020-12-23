@@ -323,27 +323,33 @@ Page({
 
         var d = res.data
 
-        _this.setData({
-          payTransId: d.payTransId
-        })
+        if (d.code == '1040') {
+          wx.redirectTo({
+            url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
+          })
+        } else {
+          _this.setData({
+            payTransId: d.payTransId
+          })
 
-        wx.requestPayment({
-          'timeStamp': d.timestamp,
-          'nonceStr': d.nonceStr,
-          'package': d.package,
-          'signType': d.signType,
-          'paySign': d.paySign,
-          'success': function (res) {
-            wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
-            })
-          },
-          'fail': function (res) {
-            wx.redirectTo({
-              url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action=' + data.action
-            })
-          }
-        })
+          wx.requestPayment({
+            'timeStamp': d.timestamp,
+            'nonceStr': d.nonceStr,
+            'package': d.package,
+            'signType': d.signType,
+            'paySign': d.paySign,
+            'success': function (res) {
+              wx.redirectTo({
+                url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
+              })
+            },
+            'fail': function (res) {
+              wx.redirectTo({
+                url: '/pages/operate/operate?id=' + d.payTransId + '&type=2&caller=1&action=' + data.action
+              })
+            }
+          })
+        }
       } else {
         toast.show({
           title: res.message

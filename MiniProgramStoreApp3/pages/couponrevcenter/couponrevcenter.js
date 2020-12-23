@@ -104,13 +104,14 @@ Page({
       couponId: coupon.id
     }).then(function (res) {
 
+      if (res.result == 1) {
+        _this.getCoupons()
+      }
+      
       toast.show({
         title: res.message
       })
 
-      if (res.result == 1) {
-        _this.getCoupons()
-      }
     })
 
   }

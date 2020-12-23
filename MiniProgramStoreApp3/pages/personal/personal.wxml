@@ -52,6 +52,10 @@
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_waitpay.png'></image>
 					<text class='item-title'>待支付</text>
+
+
+					<text class="number" wx:if="{{badgeByWaitPayOrders!=null}}">{{badgeByWaitPayOrders.value}}</text>
+
 				</div>
 				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000"
 					class="item" hover-class="none">

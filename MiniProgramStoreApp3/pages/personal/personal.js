@@ -16,7 +16,8 @@ Component({
     tag: "personal",
     isOnReady: false,
     isLogin: false,
-    userInfo: {}
+    userInfo: {},
+    badgeByWaitPayOrders: {}
   },
   methods: {
     goLogin: function (e) {
@@ -40,12 +41,15 @@ Component({
     getPageData: function (e) {
       var _this = this
       if (ownRequest.getCurrentStoreId() != undefined) {
-        apiPersonal.pageData({openId:storeageutil.getOpenId()}).then(function (res) {
+        apiPersonal.pageData({
+          openId: storeageutil.getOpenId()
+        }).then(function (res) {
           if (res.result == 1) {
             var d = res.data
             _this.setData({
               isLogin: ownRequest.isLogin(),
-              userInfo: d.userInfo
+              userInfo: d.userInfo,
+              badgeByWaitPayOrders:d.badgeByWaitPayOrders
             })
           }
         })

@@ -1817,221 +1817,237 @@ namespace LocalS.BLL.Biz
 
                 if (payTrans.IsTestMode)
                 {
-                    payTrans.ChargeAmount = 0.01m;
+                    if (payTrans.ChargeAmount > 0)
+                    {
+                        payTrans.ChargeAmount = 0.01m;
+                    }
                 }
 
-                var orderAttach = new BLL.Biz.OrderAttachModel();
-
-                var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == payTrans.ClientUserId).FirstOrDefault();
-
-                switch (rop.PayPartner)
+                if (payTrans.ChargeAmount > 0)
                 {
-                    case E_PayPartner.Wx:
-                        #region  微信商户支付
-                        switch (rop.PayCaller)
-                        {
-                            case E_PayCaller.WxByNt:
-                                #region WxByNt
-                                payTrans.PayPartner = E_PayPartner.Wx;
-                                payTrans.PayWay = E_PayWay.Wx;
-                                payTrans.PayStatus = E_PayStatus.Paying;
-                                var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
-                                var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_PayCaller.WxByNt, payTrans.MerchId, payTrans.StoreId, "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
-                                if (string.IsNullOrEmpty(wx_PayBuildQrCode.CodeUrl))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                                }
+                    var orderAttach = new BLL.Biz.OrderAttachModel();
 
-                                var wxByNt_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                    var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == payTrans.ClientUserId).FirstOrDefault();
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByNt_PayParams);
-                                #endregion
-                                break;
-                            case E_PayCaller.WxByMp:
-                                #region WxByMp
-                                payTrans.PayPartner = E_PayPartner.Wx;
-                                payTrans.PayWay = E_PayWay.Wx;
-                                payTrans.PayStatus = E_PayStatus.Paying;
+                    switch (rop.PayPartner)
+                    {
+                        case E_PayPartner.Wx:
+                            #region  微信商户支付
+                            switch (rop.PayCaller)
+                            {
+                                case E_PayCaller.WxByNt:
+                                    #region WxByNt
+                                    payTrans.PayPartner = E_PayPartner.Wx;
+                                    payTrans.PayWay = E_PayWay.Wx;
+                                    payTrans.PayStatus = E_PayStatus.Paying;
+                                    var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
+                                    var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_PayCaller.WxByNt, payTrans.MerchId, payTrans.StoreId, "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                                    if (string.IsNullOrEmpty(wx_PayBuildQrCode.CodeUrl))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                    }
 
-                                if (d_clientUser == null)
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
-                                }
+                                    var wxByNt_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = wx_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
-                                var wxByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByNt_PayParams);
+                                    #endregion
+                                    break;
+                                case E_PayCaller.WxByMp:
+                                    #region WxByMp
+                                    payTrans.PayPartner = E_PayPartner.Wx;
+                                    payTrans.PayWay = E_PayWay.Wx;
+                                    payTrans.PayStatus = E_PayStatus.Paying;
 
-                                if (wxByMp_AppInfoConfig == null)
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
-                                }
+                                    if (d_clientUser == null)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
+                                    }
 
-                                orderAttach.MerchId = payTrans.MerchId;
-                                orderAttach.StoreId = payTrans.StoreId;
-                                orderAttach.PayCaller = rop.PayCaller;
+                                    var wxByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
+                                    if (wxByMp_AppInfoConfig == null)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
+                                    }
 
-                                if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
-                                }
+                                    orderAttach.MerchId = payTrans.MerchId;
+                                    orderAttach.StoreId = payTrans.StoreId;
+                                    orderAttach.PayCaller = rop.PayCaller;
 
-                                wxByMp_PayBuildWxJsPayInfo.PayTransId = payTrans.Id;
+                                    var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
-                                #endregion
-                                break;
-                            default:
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                                    if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
+                                    }
 
-                        }
-                        #endregion 
-                        break;
-                    case E_PayPartner.Zfb:
-                        #region  支付宝商户支付
-                        switch (rop.PayCaller)
-                        {
-                            case E_PayCaller.ZfbByNt:
-                                #region ZfbByNt
-                                payTrans.PayPartner = E_PayPartner.Zfb;
-                                payTrans.PayWay = E_PayWay.Zfb;
-                                payTrans.PayStatus = E_PayStatus.Paying;
-                                var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
-                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
-                                if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                                }
+                                    wxByMp_PayBuildWxJsPayInfo.PayTransId = payTrans.Id;
 
-                                var zfbByNt_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = zfbByNt_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
+                                    #endregion
+                                    break;
+                                default:
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", zfbByNt_PayParams);
-                                #endregion
-                                break;
-                            default:
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
-                        }
-                        #endregion
-                        break;
-                    case E_PayPartner.Tg:
-                        #region 通莞商户支付
+                            }
+                            #endregion
+                            break;
+                        case E_PayPartner.Zfb:
+                            #region  支付宝商户支付
+                            switch (rop.PayCaller)
+                            {
+                                case E_PayCaller.ZfbByNt:
+                                    #region ZfbByNt
+                                    payTrans.PayPartner = E_PayPartner.Zfb;
+                                    payTrans.PayWay = E_PayWay.Zfb;
+                                    payTrans.PayStatus = E_PayStatus.Paying;
+                                    var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
+                                    var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                                    if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                    }
 
-                        var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(payTrans.MerchId);
+                                    var zfbByNt_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = zfbByNt_PayBuildQrCode.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
-                        payTrans.PayPartner = E_PayPartner.Tg;
-                        payTrans.PayStatus = E_PayStatus.Paying;
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", zfbByNt_PayParams);
+                                    #endregion
+                                    break;
+                                default:
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                            }
+                            #endregion
+                            break;
+                        case E_PayPartner.Tg:
+                            #region 通莞商户支付
 
-                        switch (rop.PayCaller)
-                        {
-                            case E_PayCaller.AggregatePayByNt:
-                                #region AggregatePayByNt
+                            var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(payTrans.MerchId);
 
-                                var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
-                                if (string.IsNullOrEmpty(tgPay_AllQrcodePay.CodeUrl))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                                }
+                            payTrans.PayPartner = E_PayPartner.Tg;
+                            payTrans.PayStatus = E_PayStatus.Paying;
 
-                                var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                            switch (rop.PayCaller)
+                            {
+                                case E_PayCaller.AggregatePayByNt:
+                                    #region AggregatePayByNt
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
+                                    var tgPay_AllQrcodePay = SdkFactory.TgPay.PayBuildQrCode(tgPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                                    if (string.IsNullOrEmpty(tgPay_AllQrcodePay.CodeUrl))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                    }
 
-                                #endregion
-                                break;
-                            default:
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
-                        }
-                        #endregion 
-                        break;
-                    case E_PayPartner.Xrt:
-                        #region Xrt支付
+                                    var tg_AllQrcodePay_PayParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = tgPay_AllQrcodePay.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
-                        // todo 发布去掉
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", tg_AllQrcodePay_PayParams);
 
-                        var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTrans.MerchId);
+                                    #endregion
+                                    break;
+                                default:
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                            }
+                            #endregion
+                            break;
+                        case E_PayPartner.Xrt:
+                            #region Xrt支付
 
-                        payTrans.PayPartner = E_PayPartner.Xrt;
-                        payTrans.PayStatus = E_PayStatus.Paying;
+                            // todo 发布去掉
 
-                        switch (rop.PayCaller)
-                        {
-                            case E_PayCaller.WxByNt:
-                                #region WxByNt
+                            var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTrans.MerchId);
 
-                                var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                            payTrans.PayPartner = E_PayPartner.Xrt;
+                            payTrans.PayStatus = E_PayStatus.Paying;
 
-                                if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                                }
+                            switch (rop.PayCaller)
+                            {
+                                case E_PayCaller.WxByNt:
+                                    #region WxByNt
 
-                                var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                    var xrtPay_WxPayBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
+                                    if (string.IsNullOrEmpty(xrtPay_WxPayBuildByNtResult.CodeUrl))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                    }
 
-                                #endregion
-                                break;
-                            case E_PayCaller.WxByMp:
-                                #region WxByMp
+                                    var xrtPay_WxPayBuildByNtResultParams = new { PayTransId = payTrans.Id, ParamType = "url", ParamData = xrtPay_WxPayBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
-                                payTrans.PayPartner = E_PayPartner.Wx;
-                                payTrans.PayWay = E_PayWay.Wx;
-                                payTrans.PayStatus = E_PayStatus.Paying;
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_WxPayBuildByNtResultParams);
 
-                                if (d_clientUser == null)
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
-                                }
+                                    #endregion
+                                    break;
+                                case E_PayCaller.WxByMp:
+                                    #region WxByMp
 
-                                orderAttach.MerchId = payTrans.MerchId;
-                                orderAttach.StoreId = payTrans.StoreId;
-                                orderAttach.PayCaller = rop.PayCaller;
+                                    payTrans.PayPartner = E_PayPartner.Wx;
+                                    payTrans.PayWay = E_PayWay.Wx;
+                                    payTrans.PayStatus = E_PayStatus.Paying;
 
-                                var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpAppId, d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
+                                    if (d_clientUser == null)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
+                                    }
 
-                                if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
-                                }
+                                    orderAttach.MerchId = payTrans.MerchId;
+                                    orderAttach.StoreId = payTrans.StoreId;
+                                    orderAttach.PayCaller = rop.PayCaller;
 
-                                wxByMp_PayBuildWxJsPayInfo.PayTransId = payTrans.Id;
+                                    var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpAppId, d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
+
+                                    if (string.IsNullOrEmpty(wxByMp_PayBuildWxJsPayInfo.Package))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付参数生成失败");
+                                    }
+
+                                    wxByMp_PayBuildWxJsPayInfo.PayTransId = payTrans.Id;
 
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", wxByMp_PayBuildWxJsPayInfo);
 
-                                #endregion
-                                break;
-                            case E_PayCaller.ZfbByNt:
-                                #region ZfbByNt
+                                    #endregion
+                                    break;
+                                case E_PayCaller.ZfbByNt:
+                                    #region ZfbByNt
 
-                                var xrtPay_ZfbByNtBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                                    var xrtPay_ZfbByNtBuildByNtResult = SdkFactory.XrtPay.PayBuildQrCode(xrtPayInfoConfig, rop.PayCaller, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
 
-                                if (string.IsNullOrEmpty(xrtPay_ZfbByNtBuildByNtResult.CodeUrl))
-                                {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
-                                }
+                                    if (string.IsNullOrEmpty(xrtPay_ZfbByNtBuildByNtResult.CodeUrl))
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
+                                    }
 
-                                var xrtPay_ZfbByNtBuildByNtResultParams = new { OrderId = payTrans.OrderIds, PayTransId = payTrans.Id, ParamType = "url", ParamData = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
+                                    var xrtPay_ZfbByNtBuildByNtResultParams = new { OrderId = payTrans.OrderIds, PayTransId = payTrans.Id, ParamType = "url", ParamData = xrtPay_ZfbByNtBuildByNtResult.CodeUrl, ChargeAmount = payTrans.ChargeAmount.ToF2Price() };
 
-                                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_ZfbByNtBuildByNtResultParams);
+                                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", xrtPay_ZfbByNtBuildByNtResultParams);
 
-                                #endregion
-                                break;
-                            default:
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
-                        }
-                        #endregion
-                        break;
-                    default:
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                                    #endregion
+                                    break;
+                                default:
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                            }
+                            #endregion
+                            break;
+                        default:
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支持该方式支付", null);
+                    }
+                }
+                else
+                {
+                    result = new CustomJsonResult(ResultType.Success, "1040", "操作成功");
                 }
 
                 CurrentDb.PayTrans.Add(payTrans);
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-
-                Task4Factory.Tim2Global.Enter(Task4TimType.PayTrans2CheckStatus, payTrans.Id, payTrans.PayExpireTime.Value, new PayTrans2CheckStatusModel { Id = payTrans.Id, MerchId = payTrans.MerchId, PayCaller = payTrans.PayCaller, PayPartner = payTrans.PayPartner });
+                if (payTrans.ChargeAmount > 0)
+                {
+                    Task4Factory.Tim2Global.Enter(Task4TimType.PayTrans2CheckStatus, payTrans.Id, payTrans.PayExpireTime.Value, new PayTrans2CheckStatusModel { Id = payTrans.Id, MerchId = payTrans.MerchId, PayCaller = payTrans.PayCaller, PayPartner = payTrans.PayPartner });
+                }
+                else
+                {
+                    PayTransSuccess(operater, payTrans.Id, E_PayPartner.MyAccount, "", E_PayWay.MyAccount, DateTime.Now);
+                }
             }
 
             return result;

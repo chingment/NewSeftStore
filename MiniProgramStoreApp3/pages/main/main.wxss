@@ -80,3 +80,16 @@ page{
   z-index: 999;
   top: 10rpx;
 }
+
+.main-tabbar>.nav .dot {
+  font-size: 21rpx;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background-color: #ffb101;
+  color: #fff;
+  position: absolute;
+  right: 50rpx;
+  z-index: 999;
+  top: 10rpx;
+}

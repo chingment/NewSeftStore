@@ -24,6 +24,7 @@ function msgTips(urlParams) {
       for (var i = 0; i < pages.length; i++) {
         if (pages[i].data.tag == "main") {
           pages[i].data.tabBar[2].badge = d.badgeByCart
+          pages[i].data.tabBar[3].badge = d.badgeByPersonal
           pages[i].setData({
             tabBar: pages[i].data.tabBar
           })

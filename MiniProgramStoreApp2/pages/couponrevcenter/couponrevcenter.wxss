@@ -72,7 +72,7 @@ page {
 }
 
 .coupon-right .coupon-inner {
-  border-left: 2px dashed rgba(136, 128, 128, 0.5);
+  border-left: 2px dashed rgba(220, 213, 213, 0.5);
 }
 
 .coupon-money,

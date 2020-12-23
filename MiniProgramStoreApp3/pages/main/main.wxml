@@ -28,6 +28,7 @@
             <view class="icon">
               <view class='type-{{item.badge.type}}'>
                 <text class="number" wx:if="{{item.badge.type=='number'&& item.badge.value!='0'}}">{{item.badge.value}}</text>
+                <text class="dot" wx:elif="{{item.badge.type=='dot'}}"></text>
               </view>
               <image class="img" src='{{item.selected==false?item.iconPath:item.selectedIconPath}}'></image>
             </view>

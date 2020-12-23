@@ -9,7 +9,8 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Wx = 1,//微信支付
-        Zfb = 2 //支付宝支付
+        Zfb = 2, //支付宝支付
+        MyAccount = 81,
     }
 
     public enum E_PayPartner
@@ -17,6 +18,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Wx = 1,//微信支付
         Zfb = 2, //支付宝支付
+        MyAccount = 81,
         Tg = 91, //通莞金服
         Xrt = 92 //深银联金服
     }

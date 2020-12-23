@@ -15,7 +15,8 @@ function revCenterSt(params) {
 
   return lumos.getJson({
     url: config.apiUrl.couponRevCenterSt,
-    urlParams: params
+    urlParams: params,
+    isShowLoading:false
   })
 }
 
