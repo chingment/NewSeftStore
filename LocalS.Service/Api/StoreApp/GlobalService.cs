@@ -39,6 +39,13 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.BadgeByCart = new UI.Badge { Type = "number", Value = d_clientCart_Quantity.ToString() };
 
+            var d_ordersByWaitpay_Count = CurrentDb.Order.Where(m => m.ClientUserId == clientUserId && m.Status == E_OrderStatus.WaitPay).Count();
+
+            if (d_ordersByWaitpay_Count > 0)
+            {
+                ret.BadgeByPersonal = new UI.Badge { Type = "dot", Value = "" };
+            }
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
         }

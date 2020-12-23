@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,13 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetPersonalPageData();
 
             ret.UserInfo = GetUserInfo(clientUserId, rup.OpenId);
+
+            var d_ordersByWaitpay_Count = CurrentDb.Order.Where(m => m.ClientUserId == clientUserId && m.Status == E_OrderStatus.WaitPay).Count();
+
+            if (d_ordersByWaitpay_Count > 0)
+            {
+                ret.BadgeByWaitPayOrders = new UI.Badge { Type = "number", Value = d_ordersByWaitpay_Count.ToString() };
+            }
 
             result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);
 

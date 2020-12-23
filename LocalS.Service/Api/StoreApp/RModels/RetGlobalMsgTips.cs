@@ -10,5 +10,7 @@ namespace LocalS.Service.Api.StoreApp
     public class RetGlobalMsgTips
     {
         public Badge BadgeByCart { get; set; }
+
+        public Badge BadgeByPersonal { get; set; }
     }
 }

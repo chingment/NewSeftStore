@@ -118,6 +118,7 @@
   flex: 1;
   height: 100rpx;
   text-align: center;
+  position: relative;
 }
 
 .personal-orderstatus .item-img {
@@ -145,3 +146,18 @@
   line-height: 50rpx;
   font-size: 32rpx;
 }  
+
+
+ .number {
+  font-size: 21rpx;
+  width: 32rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  border-radius: 50rpx;
+  background-color: #f00;
+  color: #fff;
+  position: absolute;
+  right: 30rpx;
+  z-index: 999;
+  top: -10rpx;
+}
