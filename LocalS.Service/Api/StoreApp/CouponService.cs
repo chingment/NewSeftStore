@@ -28,12 +28,17 @@ namespace LocalS.Service.Api.StoreApp
             }
             else if (useAreaType == E_Coupon_UseAreaType.Store)
             {
-                string[] arr_useAreaValue = useAreaValue.ToJsonObject<string[]>();
+                var arr_useAreaValue = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
 
                 if (arr_useAreaValue != null)
                 {
-                    if (arr_useAreaValue.Contains(storeId))
+                    if (arr_useAreaValue.Where(m => m.Id == storeId).Count() > 0)
                     {
+                        var sum_amount = productSkus.Sum(m => m.SaleAmount);
+
+                        if (atLeastAmount > sum_amount)
+                            return false;
+
                         return true;
                     }
                 }

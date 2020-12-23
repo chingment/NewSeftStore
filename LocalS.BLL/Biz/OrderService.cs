@@ -288,12 +288,11 @@ namespace LocalS.BLL.Biz
             return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
         }
 
-        public decimal CalCouponAmount(decimal sum_amount, decimal atLeastAmount, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, string productId, int kindId2, decimal saleAmount, out bool isCalComplete)
+        public decimal CalCouponAmount(decimal sum_amount, decimal atLeastAmount, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, string storeId, string productId, int kindId3, decimal saleAmount)
         {
             LogUtil.Info("=>1");
             if (atLeastAmount > sum_amount)
             {
-                isCalComplete = true;
                 return 0;
             }
             LogUtil.Info("=>2");
@@ -316,12 +315,54 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("faceValue:" + faceValue);
                     LogUtil.Info("saleAmount:" + saleAmount);
                     LogUtil.Info("sum_amount:" + sum_amount);
-
                     LogUtil.Info("couponAmount:" + couponAmount);
-                    isCalComplete = false;
+                    return couponAmount;
+                case E_Coupon_UseAreaType.Store:
+                    LogUtil.Info("=>a2");
+                    arr_useArea = useAreaValue.ToJsonObject<List<UseAreaModel>>();
+                    if (arr_useArea != null)
+                    {
+                        var obj_useArea = arr_useArea.Where(m => m.Id == storeId).FirstOrDefault();
+                        if (obj_useArea != null)
+                        {
+                            switch (faceType)
+                            {
+                                case E_Coupon_FaceType.ShopVoucher:
+                                    couponAmount = (faceValue) * (saleAmount / sum_amount);
+                                    break;
+                                case E_Coupon_FaceType.ShopDiscount:
+                                    couponAmount = (10 - faceValue) * 0.1m * saleAmount;
+                                    break;
+                            }
+                        }
+                    }
+                    LogUtil.Info("faceValue:" + faceValue);
+                    LogUtil.Info("saleAmount:" + saleAmount);
+                    LogUtil.Info("sum_amount:" + sum_amount);
+                    LogUtil.Info("couponAmount:" + couponAmount);
+                    return couponAmount;
+                case E_Coupon_UseAreaType.ProductKind:
+                    LogUtil.Info("=>3");
+                    arr_useArea = useAreaValue.ToJsonObject<List<UseAreaModel>>();
+                    if (arr_useArea != null)
+                    {
+                        LogUtil.Info("=>4");
+                        string str_kindId3 = kindId3.ToString();
+                        var obj_useArea = arr_useArea.Where(m => m.Id == str_kindId3).FirstOrDefault();
+                        if (obj_useArea != null)
+                            LogUtil.Info("=>5");
+                        switch (faceType)
+                        {
+                            case E_Coupon_FaceType.ShopVoucher:
+                                couponAmount = (faceValue) * (saleAmount / sum_amount);
+                                break;
+                            case E_Coupon_FaceType.ShopDiscount:
+                                couponAmount = (10 - faceValue) * 0.1m * saleAmount;
+                                break;
+                        }
+                    }
 
                     return couponAmount;
-                    break;
                 case E_Coupon_UseAreaType.ProductSpu:
                     LogUtil.Info("=>3");
                     arr_useArea = useAreaValue.ToJsonObject<List<UseAreaModel>>();
@@ -335,18 +376,16 @@ namespace LocalS.BLL.Biz
                             switch (faceType)
                             {
                                 case E_Coupon_FaceType.ShopVoucher:
-                                    LogUtil.Info("=>6,saleAmount：" + saleAmount + ",faceValue" + faceValue);
-                                    couponAmount = faceValue;
-                                    LogUtil.Info("=>7,couponAmount：" + couponAmount);
-                                    isCalComplete = true;
+                                    couponAmount = (faceValue) * (saleAmount / sum_amount);
+                                    break;
+                                case E_Coupon_FaceType.ShopDiscount:
+                                    couponAmount = (10 - faceValue) * 0.1m * saleAmount;
                                     break;
                             }
                         }
                     }
-                    break;
+                    return couponAmount;
             }
-
-            isCalComplete = true;
 
             return couponAmount;
         }
@@ -727,12 +766,12 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
-                 
+
                     //foreach (var buildOrderSku in buildOrderSkus)
                     //{
                     //    if (rop.ShopMethod == E_OrderShopMethod.Shop)
                     //    {
-                    //        buildOrderSku.CouponAmountByShop=CalCouponAmount()
+                    //        buildOrderSku.CouponAmountByShop = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, rop.StoreId, buildOrderSku.ProductId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
                     //    }
                     //}
 

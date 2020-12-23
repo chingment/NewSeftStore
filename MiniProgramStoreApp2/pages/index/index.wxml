@@ -83,7 +83,7 @@
 				</view>
 			</view>
 
-			<view class="pdRent">
+			<view class="pdRent" wx:if="{{pdRent.list.length>0}}">
 				<view class="ct">
 					<view class="its-pdRent">
 						<view class="it">

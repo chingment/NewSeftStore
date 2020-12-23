@@ -378,10 +378,7 @@ namespace LocalS.Service.Api.StoreApp
                             //若有优惠券重新计算优惠金额
                             foreach (var productSku in rop.ProductSkus)
                             {
-                                bool isCalComplete = false;
-                                productSku.CouponAmount = BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, productSku.ProductId, productSku.Kind3, productSku.SaleAmount, out isCalComplete);
-                                if (isCalComplete)
-                                    break;
+                                productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, rop.StoreId, productSku.ProductId, productSku.Kind3, productSku.SaleAmount),2);
                             }
 
                             amount_couponByShop = rop.ProductSkus.Sum(m => m.CouponAmount);
