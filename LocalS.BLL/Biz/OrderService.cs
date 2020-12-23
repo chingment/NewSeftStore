@@ -422,8 +422,6 @@ namespace LocalS.BLL.Biz
 
                     List<BuildOrder.ProductSku> buildOrderSkus = new List<BuildOrder.ProductSku>();
 
-                    decimal couponAmountByShop = 0;
-
                     decimal couponAmountByDeposit = 0;
                     E_Coupon_UseAreaType couponUseAreaTypeByDeposit = E_Coupon_UseAreaType.Unknow;
                     List<UseAreaValueModel> couponUseAreaValueByDeposit = null;
@@ -535,7 +533,6 @@ namespace LocalS.BLL.Biz
                                         }
                                     }
 
-
                                     var buildOrderSku = new BuildOrder.ProductSku();
                                     buildOrderSku.Id = sku.Id;
                                     buildOrderSku.ProductId = r_sku.ProductId;
@@ -545,18 +542,22 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.CumCode = r_sku.CumCode;
                                     buildOrderSku.SpecDes = r_sku.SpecDes;
                                     buildOrderSku.Producer = r_sku.Producer;
-                                    buildOrderSku.Quantity = sku.Quantity;
-                                    buildOrderSku.ShopMode = sku.ShopMode;
-                                    buildOrderSku.Stocks = r_sku.Stocks;
                                     buildOrderSku.CartId = sku.CartId;
                                     buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
                                     buildOrderSku.KindId1 = r_sku.KindId1;
                                     buildOrderSku.KindId2 = r_sku.KindId2;
                                     buildOrderSku.KindId3 = r_sku.KindId3;
-                                    buildOrderSku.SalePrice = r_sku.Stocks[0].SalePrice;
-                                    buildOrderSku.SaleAmount = r_sku.Stocks[0].SalePrice * sku.Quantity;
-                                    buildOrderSku.OriginalPrice = r_sku.Stocks[0].SalePrice;
-                                    buildOrderSku.OriginalAmount = r_sku.Stocks[0].SalePrice * sku.Quantity;
+                                    buildOrderSku.Quantity = sku.Quantity;
+                                    buildOrderSku.ShopMode = sku.ShopMode;
+                                    buildOrderSku.Stocks = r_sku.Stocks;
+                                    //todo 会员价 变换
+                                    decimal salePrice = r_sku.Stocks[0].SalePrice;
+                                    decimal originalPrice = r_sku.Stocks[0].SalePrice;
+
+                                    buildOrderSku.SalePrice = salePrice;
+                                    buildOrderSku.SaleAmount = salePrice * sku.Quantity;
+                                    buildOrderSku.OriginalPrice = originalPrice;
+                                    buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
                                     buildOrderSkus.Add(buildOrderSku);
                                 }
 
@@ -692,11 +693,12 @@ namespace LocalS.BLL.Biz
                                     #endregion
 
                                     decimal salePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
+                                    decimal originalPrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
 
                                     buildOrderSku.SalePrice = salePrice;
-                                    buildOrderSku.SaleAmount = salePrice;
-                                    buildOrderSku.OriginalPrice = salePrice;
-                                    buildOrderSku.OriginalAmount = salePrice;
+                                    buildOrderSku.SaleAmount = salePrice * sku.Quantity;
+                                    buildOrderSku.OriginalPrice = originalPrice;
+                                    buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
                                     buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice - couponAmountByDeposit;
                                     buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice - couponAmountByRent;
                                     buildOrderSku.RentUnit = 2;
@@ -743,14 +745,14 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.CumCode = "";
                                     buildOrderSku.SpecDes = null;
                                     buildOrderSku.Producer = "";
-                                    buildOrderSku.Quantity = sku.Quantity;
-                                    buildOrderSku.ShopMode = sku.ShopMode;
                                     buildOrderSku.Stocks = stocks;
                                     buildOrderSku.CartId = "";
                                     buildOrderSku.SvcConsulterId = "";
                                     buildOrderSku.KindId1 = 0;
                                     buildOrderSku.KindId2 = 0;
                                     buildOrderSku.KindId3 = 0;
+                                    buildOrderSku.Quantity = sku.Quantity;
+                                    buildOrderSku.ShopMode = sku.ShopMode;
                                     buildOrderSku.SalePrice = memberFeeSt.FeeSaleValue;
                                     buildOrderSku.SaleAmount = memberFeeSt.FeeSaleValue;
                                     buildOrderSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
@@ -888,12 +890,14 @@ namespace LocalS.BLL.Biz
                         order.PickupCode = IdWorker.BuildPickupCode();
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
+
                         order.CouponIdsByShop = rop.CouponIdsByShop.ToJsonString();
                         order.CouponAmountByShop = buildOrder.CouponAmountByShop;
                         order.CouponIdByRent = rop.CouponIdByRent;
-                        order.CouponAmountByRent = couponAmountByRent;
+                        order.CouponAmountByRent = buildOrder.CouponAmountByRent;
                         order.CouponIdByDeposit = rop.CouponIdByDeposit;
-                        order.CouponAmountByDeposit = couponAmountByDeposit;
+                        order.CouponAmountByDeposit = buildOrder.CouponAmountByDeposit;
+
                         order.ShopMethod = rop.ShopMethod;
 
                         if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.Rent)
@@ -1067,7 +1071,6 @@ namespace LocalS.BLL.Biz
                             orderSub.CouponAmountByDeposit = buildOrderSub.CouponAmountByDeposit;
                             orderSub.CouponAmountByShop = buildOrderSub.CouponAmountByShop;
                             orderSub.CouponAmountByRent = buildOrderSub.CouponAmountByRent;
-
                             orderSub.PayStatus = E_PayStatus.WaitPay;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
                             orderSub.SvcConsulterId = productSku.SvcConsulterId;
@@ -1083,7 +1086,6 @@ namespace LocalS.BLL.Biz
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.MerchId, order.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
                             }
-
                         }
                     }
 
@@ -1386,10 +1388,8 @@ namespace LocalS.BLL.Biz
                         d_order.PayWay = d_payTrans.PayWay;
                         d_order.PayPartner = payPartner;
                         d_order.PayPartnerPayTransId = payPartnerPayTransId;
-
-                        LogUtil.Info("payTrans.PayedTime:" + d_payTrans.PayedTime.ToUnifiedFormatDateTime());
-                        LogUtil.Info("payTrans.PayStatus:" + d_payTrans.PayStatus);
-                        LogUtil.Info("payTrans.PayWay:" + d_payTrans.PayWay);
+                        d_order.MendTime = DateTime.Now;
+                        d_order.Mender = operater;
 
                         switch (d_order.ReceiveMode)
                         {
@@ -1420,8 +1420,6 @@ namespace LocalS.BLL.Biz
 
                         foreach (var d_orderSub in d_orderSubs)
                         {
-                            LogUtil.Info("进入PaySuccess修改订单,SkuId:" + d_orderSub.PrdProductSkuId + ",Quantity:" + d_orderSub.Quantity);
-
                             d_orderSub.PayWay = d_order.PayWay;
                             d_orderSub.PayStatus = d_order.PayStatus;
                             d_orderSub.PayedTime = d_order.PayedTime;
@@ -1431,14 +1429,26 @@ namespace LocalS.BLL.Biz
 
                             if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
                             {
+                                #region Shop
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
                                 d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
 
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.MerchId, d_order.StoreId, d_orderSub.SellChannelRefId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
+
+                                #endregion 
+                            }
+                            else if (d_orderSub.ShopMethod == E_OrderShopMethod.Rent)
+                            {
+                                #region 
+                                d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
+                                d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
+                                #endregion
                             }
                             else if (d_orderSub.ShopMethod == E_OrderShopMethod.MemberFee)
                             {
+                                #region MemberFee
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.Taked;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
                                 d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
@@ -1515,12 +1525,10 @@ namespace LocalS.BLL.Biz
                                     }
 
                                 }
+
+                                #endregion
                             }
                         }
-
-                        d_order.MendTime = DateTime.Now;
-                        d_order.Mender = operater;
-
 
                         if (!string.IsNullOrEmpty(d_order.CouponIdsByShop))
                         {
@@ -1575,7 +1583,6 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
                     LogUtil.Info("进入PaySuccess修改订单,结束");
-
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_payTrans.Id);
 
