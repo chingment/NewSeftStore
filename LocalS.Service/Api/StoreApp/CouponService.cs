@@ -289,7 +289,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
-                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.KindId3 = r_productSku.KindId3;
                         productSku.RentUnit = 2;
                         productSku.RentUnitText = "月";
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
@@ -324,7 +324,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
-                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.KindId3 = r_productSku.KindId3;
                         productSku.RentUnitText = "月";
                         productSku.RentUnit = 2;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
@@ -350,7 +350,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                         productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
                         productSku.ProductId = "";
-                        productSku.Kind3 = 0;
+                        productSku.KindId3 = 0;
                     }
 
                     #endregion

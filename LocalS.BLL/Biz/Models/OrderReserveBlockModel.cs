@@ -49,7 +49,6 @@ namespace LocalS.BLL.Biz
             public int Quantity { get; set; }
             public E_SellChannelRefType ShopMode { get; set; }
             public string[] SellChannelRefIds { get; set; }
-
             public string SvcConsulterId { get; set; }
         }
         public class BookTimeModel

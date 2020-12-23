@@ -197,28 +197,33 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
-                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.KindId3 = r_productSku.KindId3;
                         productSku.RentUnit = 2;
                         productSku.RentUnitText = "月";
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
                         productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
-                        productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+
+                        decimal salePrice = r_productSku.Stocks[0].SalePrice;
+
+                        decimal originalPrice = salePrice;
 
                         LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
+
                         //切换会员价
                         if (clientUser.MemberLevel > 0)
                         {
                             var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
                             if (memberProductSkuSt != null)
                             {
-                                productSku.SalePrice = memberProductSkuSt.MemberPrice;
+                                salePrice = memberProductSkuSt.MemberPrice;
                                 LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
                             }
                         }
 
-                        productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
-                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
-                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
+                        productSku.SalePrice = salePrice;
+                        productSku.SaleAmount = productSku.Quantity * salePrice;
+                        productSku.OriginalPrice = originalPrice;
+                        productSku.OriginalAmount = productSku.Quantity * originalPrice;
 
                         c_prodcutSkus.Add(productSku);
 
@@ -242,7 +247,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
-                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.KindId3 = r_productSku.KindId3;
                         productSku.RentUnitText = "月";
                         productSku.RentUnit = 2;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
@@ -251,7 +256,6 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
                         productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
                         productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
-
                         c_prodcutSkus.Add(productSku);
 
                         #endregion
@@ -265,11 +269,11 @@ namespace LocalS.Service.Api.StoreApp
                             productSku.Name = memberFeeSt.Name;
                             productSku.MainImgUrl = memberFeeSt.MainImgUrl;
                             productSku.SalePrice = memberFeeSt.FeeSaleValue;
-                            productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
+                            productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
                             productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
                             productSku.ProductId = "";
-                            productSku.Kind3 = 0;
+                            productSku.KindId3 = 0;
                             c_prodcutSkus.Add(productSku);
                         }
 
@@ -345,7 +349,7 @@ namespace LocalS.Service.Api.StoreApp
 
                                     if (ids != null)
                                     {
-                                        cal_sum_amount = c_prodcutSkus.Where(m => ids.Contains(m.Kind3)).Sum(m => m.SaleAmount);
+                                        cal_sum_amount = c_prodcutSkus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
                                     }
                                 }
 
@@ -368,7 +372,7 @@ namespace LocalS.Service.Api.StoreApp
                             //若有优惠券重新计算优惠金额
                             foreach (var productSku in rop.ProductSkus)
                             {
-                                productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, rop.StoreId, productSku.ProductId, productSku.Kind3, productSku.SaleAmount),2);
+                                productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, rop.StoreId, productSku.ProductId, productSku.KindId3, productSku.SaleAmount), 2);
                             }
 
                             amount_couponByShop = rop.ProductSkus.Sum(m => m.CouponAmount);
@@ -511,7 +515,7 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.RentUnit = 2;
                     c_prodcutSku.RentAmount = orderSub.RentAmount;
                     c_prodcutSku.DepositAmount = orderSub.DepositAmount;
-                    c_prodcutSku.Kind3 = orderSub.PrdKindId3;
+                    c_prodcutSku.KindId3 = orderSub.PrdKindId3;
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
 
