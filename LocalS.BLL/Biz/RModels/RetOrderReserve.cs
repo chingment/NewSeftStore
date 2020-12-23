@@ -36,6 +36,9 @@ namespace LocalS.BLL.Biz
         public decimal SaleAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
+        public decimal CouponAmountByShop { get; set; }
+        public decimal CouponAmountByRent { get; set; }
+        public decimal CouponAmountByDeposit { get; set; }
         public List<Child> Childs { get; set; }
         public class Child
         {
@@ -88,7 +91,9 @@ namespace LocalS.BLL.Biz
             public int KindId2 { get; set; }
             public int KindId3 { get; set; }
             public decimal SalePrice { get; set; }
+            public decimal SaleAmount { get; set; }
             public decimal OriginalPrice { get; set; }
+            public decimal OriginalAmount { get; set; }
             public int RentUnit { get; set; }
             public decimal RentAmount{ get; set; }
             public decimal DepositAmount{ get; set; }

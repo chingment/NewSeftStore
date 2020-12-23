@@ -323,7 +323,7 @@ Page({
 
         var d = res.data
 
-        if (d.code == '1040') {
+        if (res.code == '1040') {
           wx.redirectTo({
             url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
           })

@@ -554,7 +554,9 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.KindId2 = r_sku.KindId2;
                                     buildOrderSku.KindId3 = r_sku.KindId3;
                                     buildOrderSku.SalePrice = r_sku.Stocks[0].SalePrice;
+                                    buildOrderSku.SaleAmount = r_sku.Stocks[0].SalePrice * sku.Quantity;
                                     buildOrderSku.OriginalPrice = r_sku.Stocks[0].SalePrice;
+                                    buildOrderSku.OriginalAmount = r_sku.Stocks[0].SalePrice * sku.Quantity;
                                     buildOrderSkus.Add(buildOrderSku);
                                 }
 
@@ -691,9 +693,10 @@ namespace LocalS.BLL.Biz
 
                                     decimal salePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
 
-                                    buildOrderSku.SalePrice = salePrice - couponAmountByRent - couponAmountByDeposit;
+                                    buildOrderSku.SalePrice = salePrice;
+                                    buildOrderSku.SaleAmount = salePrice;
                                     buildOrderSku.OriginalPrice = salePrice;
-
+                                    buildOrderSku.OriginalAmount = salePrice;
                                     buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice - couponAmountByDeposit;
                                     buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice - couponAmountByRent;
                                     buildOrderSku.RentUnit = 2;
@@ -749,7 +752,9 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.KindId2 = 0;
                                     buildOrderSku.KindId3 = 0;
                                     buildOrderSku.SalePrice = memberFeeSt.FeeSaleValue;
+                                    buildOrderSku.SaleAmount = memberFeeSt.FeeSaleValue;
                                     buildOrderSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
+                                    buildOrderSku.OriginalAmount = memberFeeSt.FeeOriginalValue;
                                     buildOrderSkus.Add(buildOrderSku);
 
                                 }
@@ -766,35 +771,69 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
+                    if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                    {
+                        if (rop.CouponIdsByShop != null && rop.CouponIdsByShop.Count > 0)
+                        {
+                            string couponIdByShop = rop.CouponIdsByShop[0];
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == couponIdByShop).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
 
-                    //foreach (var buildOrderSku in buildOrderSkus)
-                    //{
-                    //    if (rop.ShopMethod == E_OrderShopMethod.Shop)
-                    //    {
-                    //        buildOrderSku.CouponAmountByShop = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, rop.StoreId, buildOrderSku.ProductId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
-                    //    }
-                    //}
+                                var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                                if (d_coupon != null)
+                                {
+                                    decimal cal_sum_amount = 0;
+                                    if (d_coupon.UseAreaType == E_Coupon_UseAreaType.All)
+                                    {
+                                        cal_sum_amount = buildOrderSkus.Sum(m => m.SaleAmount);
+                                    }
+                                    else if (d_coupon.UseAreaType == E_Coupon_UseAreaType.Store)
+                                    {
+                                        cal_sum_amount = buildOrderSkus.Sum(m => m.SaleAmount);
+                                    }
+                                    else if (d_coupon.UseAreaType == E_Coupon_UseAreaType.ProductKind)
+                                    {
+                                        var list = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                                        if (list != null)
+                                        {
+                                            int[] ids = list.Select(s => Int32.Parse(s.Id)).ToArray();
 
-                    //decimal couponAmount = 0;
+                                            if (ids != null)
+                                            {
+                                                cal_sum_amount = buildOrderSkus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
+                                            }
+                                        }
 
-                    //if (rop.CouponIds != null && rop.CouponIds.Count > 0)
-                    //{
-                    //    var clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIds[0]).FirstOrDefault();
-                    //    var coupon = CurrentDb.Coupon.Where(m => m.Id == clientCoupon.CouponId).FirstOrDefault();
-                    //    if (coupon != null && clientCoupon != null)
-                    //    {
-                    //        clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                    //        clientCoupon.MendTime = DateTime.Now;
-                    //        clientCoupon.Mender = operater;
+                                    }
+                                    else if (d_coupon.UseAreaType == E_Coupon_UseAreaType.ProductSpu)
+                                    {
+                                        var list = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                                        if (list != null)
+                                        {
+                                            string[] ids = list.Select(m => m.Id).ToArray();
 
-                    //        couponAmount = coupon.FaceValue;
+                                            if (ids != null)
+                                            {
+                                                cal_sum_amount = buildOrderSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
+                                            }
+                                        }
 
-                    //        CurrentDb.SaveChanges();
-                    //    }
-                    //}
+                                    }
+
+                                    foreach (var buildOrderSku in buildOrderSkus)
+                                    {
+                                        buildOrderSku.CouponAmountByShop = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue, rop.StoreId, buildOrderSku.ProductId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
 
                     LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
-                    var buildOrders = BuildOrders(rop.ShopMethod, buildOrderSkus, couponAmountByShop, couponAmountByDeposit, couponAmountByRent);
+                    var buildOrders = BuildOrders(rop.ShopMethod, buildOrderSkus);
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
                     #region 更改购物车标识
@@ -850,7 +889,7 @@ namespace LocalS.BLL.Biz
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
                         order.CouponIdsByShop = rop.CouponIdsByShop.ToJsonString();
-                        order.CouponAmountByShop = couponAmountByShop;
+                        order.CouponAmountByShop = buildOrder.CouponAmountByShop;
                         order.CouponIdByRent = rop.CouponIdByRent;
                         order.CouponAmountByRent = couponAmountByRent;
                         order.CouponIdByDeposit = rop.CouponIdByDeposit;
@@ -1067,7 +1106,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        private List<BuildOrder> BuildOrders(E_OrderShopMethod shopMethod, List<BuildOrder.ProductSku> reserveProductSkus, decimal couponAmountByShop, decimal couponAmountByDeposit, decimal couponAmountByRent)
+        private List<BuildOrder> BuildOrders(E_OrderShopMethod shopMethod, List<BuildOrder.ProductSku> reserveProductSkus)
         {
             List<BuildOrder> buildOrders = new List<BuildOrder>();
 
@@ -1097,9 +1136,9 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.SlotId = productSku_Stocks[0].SlotId;
                         buildOrderChild.Quantity = shopModeProductSku.Quantity;
                         buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
-                        buildOrderChild.SaleAmount = buildOrderChild.Quantity * shopModeProductSku.SalePrice;
+                        buildOrderChild.SaleAmount = shopModeProductSku.SaleAmount;
                         buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
-                        buildOrderChild.OriginalAmount = buildOrderChild.Quantity * shopModeProductSku.OriginalPrice;
+                        buildOrderChild.OriginalAmount = shopModeProductSku.OriginalAmount;
                         buildOrderChild.RentUnit = shopModeProductSku.RentUnit;
                         buildOrderChild.RentAmount = shopModeProductSku.RentAmount;
                         buildOrderChild.DepositAmount = shopModeProductSku.DepositAmount;
@@ -1155,7 +1194,7 @@ namespace LocalS.BLL.Biz
             {
                 decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderChilds[i].SaleAmount / sumSaleAmount));
                 buildOrderChilds[i].DiscountAmount = Decimal.Round(scale * sumDiscountAmount, 2);
-                buildOrderChilds[i].ChargeAmount = buildOrderChilds[i].SaleAmount - buildOrderChilds[i].DiscountAmount;
+                buildOrderChilds[i].ChargeAmount = buildOrderChilds[i].SaleAmount - buildOrderChilds[i].DiscountAmount - buildOrderChilds[i].CouponAmountByShop - buildOrderChilds[i].CouponAmountByRent - buildOrderChilds[i].CouponAmountByDeposit;
             }
 
             var sumDiscountAmount2 = buildOrderChilds.Sum(m => m.DiscountAmount);
@@ -1185,6 +1224,9 @@ namespace LocalS.BLL.Biz
                 buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.OriginalAmount);
                 buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.DiscountAmount);
                 buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.ChargeAmount);
+                buildOrder.CouponAmountByDeposit = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.CouponAmountByDeposit);
+                buildOrder.CouponAmountByRent = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.CouponAmountByRent);
+                buildOrder.CouponAmountByShop = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.CouponAmountByShop);
                 buildOrder.Childs = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).ToList();
                 buildOrders.Add(buildOrder);
             }
@@ -1701,6 +1743,7 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
+            string payTransId = IdWorker.Build(IdType.PayTransId);
             using (TransactionScope ts = new TransactionScope())
             {
                 var orders = new List<Order>();
@@ -1711,7 +1754,7 @@ namespace LocalS.BLL.Biz
                 }
 
                 var payTrans = new PayTrans();
-                payTrans.Id = IdWorker.Build(IdType.PayTransId);
+                payTrans.Id = payTransId;
 
 
                 foreach (var orderId in rop.OrderIds)
@@ -2033,21 +2076,28 @@ namespace LocalS.BLL.Biz
                 }
                 else
                 {
-                    result = new CustomJsonResult(ResultType.Success, "1040", "操作成功");
+                    payTrans.PayPartner = E_PayPartner.MyAccount;
+                    payTrans.PayWay = E_PayWay.MyAccount;
+                    payTrans.PayStatus = E_PayStatus.Paying;
+
+                    result = new CustomJsonResult(ResultType.Success, "1040", "操作成功", new { payTransId = payTransId });
                 }
 
                 CurrentDb.PayTrans.Add(payTrans);
                 CurrentDb.SaveChanges();
+
                 ts.Complete();
 
                 if (payTrans.ChargeAmount > 0)
                 {
                     Task4Factory.Tim2Global.Enter(Task4TimType.PayTrans2CheckStatus, payTrans.Id, payTrans.PayExpireTime.Value, new PayTrans2CheckStatusModel { Id = payTrans.Id, MerchId = payTrans.MerchId, PayCaller = payTrans.PayCaller, PayPartner = payTrans.PayPartner });
                 }
-                else
-                {
-                    PayTransSuccess(operater, payTrans.Id, E_PayPartner.MyAccount, "", E_PayWay.MyAccount, DateTime.Now);
-                }
+
+            }
+
+            if (result.Code == "1040")
+            {
+                PayTransSuccess(operater, payTransId, E_PayPartner.MyAccount, "", E_PayWay.MyAccount, DateTime.Now);
             }
 
             return result;
