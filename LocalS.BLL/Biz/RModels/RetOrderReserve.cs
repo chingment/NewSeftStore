@@ -54,6 +54,9 @@ namespace LocalS.BLL.Biz
             public int RentUnit { get; set; }
             public decimal RentAmount { get; set; }
             public decimal DepositAmount { get; set; }
+            public decimal CouponAmountByShop { get; set; }
+            public decimal CouponAmountByRent { get; set; }
+            public decimal CouponAmountByDeposit { get; set; }
         }
         public class ProductSku
         {
@@ -89,6 +92,9 @@ namespace LocalS.BLL.Biz
             public int RentUnit { get; set; }
             public decimal RentAmount{ get; set; }
             public decimal DepositAmount{ get; set; }
+            public decimal CouponAmountByShop { get; set; }
+            public decimal CouponAmountByRent { get; set; }
+            public decimal CouponAmountByDeposit { get; set; }
         }
 
     }

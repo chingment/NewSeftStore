@@ -363,6 +363,57 @@ namespace LocalS.BLL.Biz
 
                     List<BuildOrder.ProductSku> buildOrderSkus = new List<BuildOrder.ProductSku>();
 
+                    decimal couponAmountByShop = 0;
+
+                    decimal couponAmountByDeposit = 0;
+                    E_Coupon_UseAreaType couponUseAreaTypeByDeposit = E_Coupon_UseAreaType.Unknow;
+                    List<UseAreaValueModel> couponUseAreaValueByDeposit = null;
+
+                    decimal couponAmountByRent = 0;
+                    E_Coupon_UseAreaType couponUseAreaTypeByRent = E_Coupon_UseAreaType.Unknow;
+                    List<UseAreaValueModel> couponUseAreaValueByRent = null;
+
+                    if (!string.IsNullOrEmpty(rop.CouponIdByDeposit))
+                    {
+                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByDeposit).FirstOrDefault();
+                        if (d_clientCoupon != null)
+                        {
+                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+
+                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                            if (d_coupon != null)
+                            {
+                                if (d_coupon.FaceType == E_Coupon_FaceType.DepositVoucher)
+                                {
+                                    couponAmountByDeposit = d_coupon.FaceValue;
+                                    couponUseAreaTypeByDeposit = d_coupon.UseAreaType;
+                                    couponUseAreaValueByDeposit = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                                }
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(rop.CouponIdByRent))
+                    {
+                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
+                        if (d_clientCoupon != null)
+                        {
+                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+
+                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                            if (d_coupon != null)
+                            {
+                                if (d_coupon.FaceType == E_Coupon_FaceType.RentVoucher)
+                                {
+                                    couponAmountByRent = d_coupon.FaceValue;
+                                    couponUseAreaTypeByRent = d_coupon.UseAreaType;
+                                    couponUseAreaValueByRent = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                                }
+                            }
+                        }
+                    }
+
+
                     #region 检查可售商品信息是否符合实际环境
                     List<string> warn_tips = new List<string>();
 
@@ -502,11 +553,93 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.KindId1 = r_sku.KindId1;
                                     buildOrderSku.KindId2 = r_sku.KindId2;
                                     buildOrderSku.KindId3 = r_sku.KindId3;
-                                    buildOrderSku.SalePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
-                                    buildOrderSku.OriginalPrice = buildOrderSku.SalePrice;
-                                    buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice;
-                                    buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice;
+
+                                    #region CouponAmountByDeposit
+                                    if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.All)
+                                    {
+                                        buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
+                                    }
+                                    else if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.Store)
+                                    {
+                                        if (couponUseAreaValueByDeposit != null)
+                                        {
+                                            if (couponUseAreaValueByDeposit.Where(m => m.Id == rop.StoreId).Count() > 0)
+                                            {
+                                                buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
+                                            }
+                                        }
+                                    }
+                                    else if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.ProductKind)
+                                    {
+                                        if (couponUseAreaValueByDeposit != null)
+                                        {
+                                            string kind3 = r_sku.KindId3.ToString();
+                                            if (couponUseAreaValueByDeposit.Where(m => m.Id == kind3).Count() > 0)
+                                            {
+                                                buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
+                                            }
+                                        }
+                                    }
+                                    else if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.ProductSpu)
+                                    {
+                                        if (couponUseAreaValueByDeposit != null)
+                                        {
+                                            if (couponUseAreaValueByDeposit.Where(m => m.Id == r_sku.ProductId).Count() > 0)
+                                            {
+                                                buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+
+                                    #region CouponAmountByRent
+                                    if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.All)
+                                    {
+                                        buildOrderSku.CouponAmountByRent = couponAmountByRent;
+                                    }
+                                    else if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.Store)
+                                    {
+                                        if (couponUseAreaValueByRent != null)
+                                        {
+                                            if (couponUseAreaValueByRent.Where(m => m.Id == rop.StoreId).Count() > 0)
+                                            {
+                                                buildOrderSku.CouponAmountByRent = couponAmountByRent;
+                                            }
+                                        }
+                                    }
+                                    else if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.ProductKind)
+                                    {
+                                        if (couponUseAreaValueByRent != null)
+                                        {
+                                            string kind3 = r_sku.KindId3.ToString();
+                                            if (couponUseAreaValueByRent.Where(m => m.Id == kind3).Count() > 0)
+                                            {
+                                                buildOrderSku.CouponAmountByRent = couponAmountByRent;
+                                            }
+                                        }
+                                    }
+                                    else if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.ProductSpu)
+                                    {
+                                        if (couponUseAreaValueByRent != null)
+                                        {
+                                            if (couponUseAreaValueByRent.Where(m => m.Id == r_sku.ProductId).Count() > 0)
+                                            {
+                                                buildOrderSku.CouponAmountByRent = couponAmountByRent;
+                                            }
+                                        }
+                                    }
+                                    #endregion
+
+                                    decimal salePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
+
+                                    buildOrderSku.SalePrice = salePrice - couponAmountByRent - couponAmountByDeposit;
+                                    buildOrderSku.OriginalPrice = salePrice;
+
+                                    buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice - couponAmountByDeposit;
+                                    buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice - couponAmountByRent;
                                     buildOrderSku.RentUnit = 2;
+
+
                                     buildOrderSkus.Add(buildOrderSku);
                                 }
 
@@ -574,45 +707,6 @@ namespace LocalS.BLL.Biz
 
                     #endregion
 
-                    decimal couponAmountByDeposit = 0;
-                    decimal couponAmountByRent = 0;
-                    decimal couponAmountByShop = 0;
-
-                    if (!string.IsNullOrEmpty(rop.CouponIdByDeposit))
-                    {
-                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByDeposit).FirstOrDefault();
-                        if (d_clientCoupon != null)
-                        {
-                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-
-                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                            if (d_coupon != null)
-                            {
-                                if (d_coupon.FaceType == E_Coupon_FaceType.DepositVoucher)
-                                {
-                                    couponAmountByDeposit = d_coupon.FaceValue;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(rop.CouponIdByRent))
-                    {
-                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
-                        if (d_clientCoupon != null)
-                        {
-                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-
-                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                            if (d_coupon != null)
-                            {
-                                if (d_coupon.FaceType == E_Coupon_FaceType.RentVoucher)
-                                {
-                                    couponAmountByRent = d_coupon.FaceValue;
-                                }
-                            }
-                        }
-                    }
 
                     //decimal couponAmount = 0;
 
@@ -864,6 +958,10 @@ namespace LocalS.BLL.Biz
                             orderSub.RentUnit = buildOrderSub.RentUnit;
                             orderSub.RentAmount = buildOrderSub.RentAmount;
                             orderSub.DepositAmount = buildOrderSub.DepositAmount;
+                            orderSub.CouponAmountByDeposit = buildOrderSub.CouponAmountByDeposit;
+                            orderSub.CouponAmountByShop = buildOrderSub.CouponAmountByShop;
+                            orderSub.CouponAmountByRent = buildOrderSub.CouponAmountByRent;
+
                             orderSub.PayStatus = E_PayStatus.WaitPay;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
                             orderSub.SvcConsulterId = productSku.SvcConsulterId;
@@ -938,6 +1036,9 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.RentUnit = shopModeProductSku.RentUnit;
                         buildOrderChild.RentAmount = shopModeProductSku.RentAmount;
                         buildOrderChild.DepositAmount = shopModeProductSku.DepositAmount;
+                        buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
+                        buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
+                        buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
                         buildOrderChilds.Add(buildOrderChild);
                     }
                     else if (shopMode == E_SellChannelRefType.Machine)
@@ -1000,11 +1101,11 @@ namespace LocalS.BLL.Biz
             }
 
             var l_buildOrders = (from c in buildOrderChilds
-                            select new
-                               {
-                                   c.SellChannelRefType,
-                                   c.SellChannelRefId
-                               }).Distinct().ToList();
+                                 select new
+                                 {
+                                     c.SellChannelRefType,
+                                     c.SellChannelRefId
+                                 }).Distinct().ToList();
 
 
             foreach (var l_buildOrder in l_buildOrders)
