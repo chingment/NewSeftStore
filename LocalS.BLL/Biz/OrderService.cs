@@ -1565,7 +1565,7 @@ namespace LocalS.BLL.Biz
                                     d_clientCoupon.Mender = operater;
                                     d_clientCoupon.MendTime = DateTime.Now;
 
-                                    var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.Id).FirstOrDefault();
+                                    var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                     if (d_copon != null)
                                     {
                                         d_copon.UsedQuantity += 1;
@@ -1586,7 +1586,7 @@ namespace LocalS.BLL.Biz
                                 d_clientCoupon.Mender = operater;
                                 d_clientCoupon.MendTime = DateTime.Now;
 
-                                var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.Id).FirstOrDefault();
+                                var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_copon != null)
                                 {
                                     d_copon.UsedQuantity += 1;
@@ -1606,7 +1606,7 @@ namespace LocalS.BLL.Biz
                                 d_clientCoupon.Mender = operater;
                                 d_clientCoupon.MendTime = DateTime.Now;
 
-                                var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.Id).FirstOrDefault();
+                                var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_copon != null)
                                 {
                                     d_copon.UsedQuantity += 1;

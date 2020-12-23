@@ -212,6 +212,8 @@ namespace LocalS.Service.Api.StoreApp
                     break;
             }
 
+            var arr = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+
             switch (useAreaType)
             {
                 case E_Coupon_UseAreaType.All:
@@ -219,12 +221,24 @@ namespace LocalS.Service.Api.StoreApp
                     break;
                 case E_Coupon_UseAreaType.Store:
                     model.Description = "指定店铺使用";
+                    if (arr != null && arr.Count > 0)
+                    {
+                        model.Description = string.Format("指定店铺[{0}]使用", string.Join(",", arr.Select(m => m.Name)));
+                    }
                     break;
                 case E_Coupon_UseAreaType.ProductKind:
                     model.Description = "指定品类使用";
+                    if (arr != null && arr.Count > 0)
+                    {
+                        model.Description = string.Format("指定品类[{0}]使用", string.Join(",", arr.Select(m => m.Name)));
+                    }
                     break;
                 case E_Coupon_UseAreaType.ProductSpu:
                     model.Description = "指定商品使用";
+                    if (arr != null && arr.Count > 0)
+                    {
+                        model.Description = string.Format("指定商品[{0}]使用", string.Join(",", arr.Select(m => m.Name)));
+                    }
                     break;
             }
 
