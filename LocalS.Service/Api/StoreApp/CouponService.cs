@@ -17,38 +17,13 @@ namespace LocalS.Service.Api.StoreApp
     {
         private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
         {
-            //foreach (var productSku in productSkus)
-            //{
-            //    if (productSku.ShopMode == E_SellChannelRefType.Machine || productSku.ShopMode == E_SellChannelRefType.Mall)
-            //    {
-            //        var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, storeId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
-
-            //        productSku.Name = r_productSku.Name;
-            //        productSku.MainImgUrl = r_productSku.MainImgUrl;
-            //        productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-            //        productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
-            //        productSku.SumSalePrice = productSku.Quantity * productSku.SalePrice;
-            //        productSku.SumOriginalPrice = productSku.Quantity * productSku.OriginalPrice;
-
-            //    }
-            //    else if (productSku.ShopMode == E_SellChannelRefType.MemberFee)
-            //    {
-            //        var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == merchId && m.Id == productSku.Id).FirstOrDefault();
-            //        if (memberFeeSt != null)
-            //        {
-            //            productSku.Name = memberFeeSt.Name;
-            //            productSku.MainImgUrl = memberFeeSt.MainImgUrl;
-            //            productSku.SalePrice = memberFeeSt.FeeValue;
-            //            productSku.OriginalPrice = memberFeeSt.FeeValue;
-            //            productSku.SumSalePrice = productSku.Quantity * productSku.SalePrice;
-            //            productSku.SumOriginalPrice = productSku.Quantity * productSku.SumOriginalPrice;
-            //        }
-            //    }
-            //}
-
-
             if (useAreaType == E_Coupon_UseAreaType.All)
             {
+                var sum_amount = productSkus.Sum(m => m.SaleAmount);
+
+                if (atLeastAmount > sum_amount)
+                    return false;
+
                 return true;
             }
             else if (useAreaType == E_Coupon_UseAreaType.Store)
@@ -278,6 +253,90 @@ namespace LocalS.Service.Api.StoreApp
 
 
             var list = query.OrderBy(m => m.Name).ToList();
+
+
+            var store = BizFactory.Store.GetOne(rop.StoreId);
+
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+
+            foreach (var productSku in rop.ProductSkus)
+            {
+                if (productSku.ShopMethod == E_OrderShopMethod.Shop)
+                {
+                    #region Shop
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
+                    if (r_productSku != null)
+                    {
+                        productSku.Name = r_productSku.Name;
+                        productSku.MainImgUrl = r_productSku.MainImgUrl;
+                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.RentUnit = 2;
+                        productSku.RentUnitText = "月";
+                        productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                        productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
+                        productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+
+                        LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
+                        //切换会员价
+                        if (clientUser.MemberLevel > 0)
+                        {
+                            var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
+                            if (memberProductSkuSt != null)
+                            {
+                                productSku.SalePrice = memberProductSkuSt.MemberPrice;
+                                LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
+                            }
+                        }
+                    }
+
+                    productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
+                    productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
+                    productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
+
+                    #endregion
+                }
+                else if (productSku.ShopMethod == E_OrderShopMethod.Rent)
+                {
+                    #region Rent
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
+                    if (r_productSku != null)
+                    {
+                        productSku.Name = r_productSku.Name;
+                        productSku.MainImgUrl = r_productSku.MainImgUrl;
+                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.Kind3 = r_productSku.KindId3;
+                        productSku.RentUnitText = "月";
+                        productSku.RentUnit = 2;
+                        productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                        productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
+                        productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
+                        productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
+                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
+                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
+                    }
+
+                    #endregion
+                }
+                else if (productSku.ShopMethod == E_OrderShopMethod.MemberFee)
+                {
+                    #region 
+                    var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == store.MerchId && m.Id == productSku.Id).FirstOrDefault();
+                    if (memberFeeSt != null)
+                    {
+                        productSku.Name = memberFeeSt.Name;
+                        productSku.MainImgUrl = memberFeeSt.MainImgUrl;
+                        productSku.SalePrice = memberFeeSt.FeeSaleValue;
+                        productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
+                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
+                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
+                        productSku.ProductId = "";
+                        productSku.Kind3 = 0;
+                    }
+
+                    #endregion
+                }
+            }
 
             foreach (var item in list)
             {

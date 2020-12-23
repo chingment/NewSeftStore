@@ -134,6 +134,16 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+        public List<OrderConfirmProductSkuModel> ReBuildProductSkus(List<OrderConfirmProductSkuModel> productSkus)
+        {
+            var list = new List<OrderConfirmProductSkuModel>();
+
+
+
+            return list;
+
+        }
+
         public CustomJsonResult Confrim(string operater, string clientUserId, RopOrderConfirm rop)
         {
             var result = new CustomJsonResult();
@@ -175,6 +185,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
                 store = BizFactory.Store.GetOne(rop.StoreId);
+
 
                 foreach (var productSku in rop.ProductSkus)
                 {
