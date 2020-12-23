@@ -39,6 +39,7 @@ namespace LocalS.Entity
         public string CouponId { get; set; }
         public DateTime ValidStartTime { get; set; }
         public DateTime ValidEndTime { get; set; }
+        public DateTime? UseTime { get; set; }
         public E_ClientCouponStatus Status { get; set; }
         public E_ClientCouponSourceType SourceType { get; set; }
         public string SourceObjType { get; set; }

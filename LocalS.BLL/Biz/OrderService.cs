@@ -1561,6 +1561,7 @@ namespace LocalS.BLL.Biz
                                 if (d_clientCoupon != null)
                                 {
                                     d_clientCoupon.Status = E_ClientCouponStatus.Used;
+                                    d_clientCoupon.UseTime = DateTime.Now;
                                     d_clientCoupon.Mender = operater;
                                     d_clientCoupon.MendTime = DateTime.Now;
 
@@ -1581,6 +1582,7 @@ namespace LocalS.BLL.Biz
                             if (d_clientCoupon != null)
                             {
                                 d_clientCoupon.Status = E_ClientCouponStatus.Used;
+                                d_clientCoupon.UseTime = DateTime.Now;
                                 d_clientCoupon.Mender = operater;
                                 d_clientCoupon.MendTime = DateTime.Now;
 
@@ -1600,6 +1602,7 @@ namespace LocalS.BLL.Biz
                             if (d_clientCoupon != null)
                             {
                                 d_clientCoupon.Status = E_ClientCouponStatus.Used;
+                                d_clientCoupon.UseTime = DateTime.Now;
                                 d_clientCoupon.Mender = operater;
                                 d_clientCoupon.MendTime = DateTime.Now;
 
