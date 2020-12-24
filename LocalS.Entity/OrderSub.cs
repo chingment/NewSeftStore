@@ -12,7 +12,6 @@ namespace LocalS.Entity
         public string ClientUserId { get; set; }
         public string ClientUserName { get; set; }
         public string MerchId { get; set; }
-
         public string MerchName { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
@@ -36,7 +35,8 @@ namespace LocalS.Entity
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal ChargeAmount { get; set; }
-        public int RentUnit { get; set; }
+        public E_RentTermUnit RentTermUnit { get; set; }
+        public int RentTermValue { get; set; }
         public decimal RentAmount { get; set; }
         public decimal DepositAmount { get; set; }
         public string Creator { get; set; }

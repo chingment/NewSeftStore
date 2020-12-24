@@ -198,8 +198,9 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.KindId3 = r_productSku.KindId3;
-                        productSku.RentUnit = 2;
-                        productSku.RentUnitText = "月";
+                        productSku.RentTermUnit = E_RentTermUnit.Month;
+                        productSku.RentTermUnitText = "月";
+                        productSku.RentTermValue = 1;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
                         productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
 
@@ -248,8 +249,9 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.KindId3 = r_productSku.KindId3;
-                        productSku.RentUnitText = "月";
-                        productSku.RentUnit = 2;
+                        productSku.RentTermUnit = E_RentTermUnit.Month;
+                        productSku.RentTermUnitText = "月";
+                        productSku.RentTermValue = 1;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
                         productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
                         productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
@@ -511,8 +513,9 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.OriginalAmount = orderSub.OriginalAmount;
                     c_prodcutSku.ShopMethod = orderSub.ShopMethod;
                     c_prodcutSku.ShopMode = orderSub.SellChannelRefType;
-                    c_prodcutSku.RentUnitText = "月";
-                    c_prodcutSku.RentUnit = 2;
+                    c_prodcutSku.RentTermUnitText = "月";
+                    c_prodcutSku.RentTermUnit = orderSub.RentTermUnit;
+                    c_prodcutSku.RentTermValue = orderSub.RentTermValue;
                     c_prodcutSku.RentAmount = orderSub.RentAmount;
                     c_prodcutSku.DepositAmount = orderSub.DepositAmount;
                     c_prodcutSku.KindId3 = orderSub.PrdKindId3;

@@ -290,8 +290,9 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.KindId3 = r_productSku.KindId3;
-                        productSku.RentUnit = 2;
-                        productSku.RentUnitText = "月";
+                        productSku.RentTermUnit = E_RentTermUnit.Month;
+                        productSku.RentTermUnitText = "月";
+                        productSku.RentTermValue = 1;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
                         productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
                         productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
@@ -325,8 +326,9 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.KindId3 = r_productSku.KindId3;
-                        productSku.RentUnitText = "月";
-                        productSku.RentUnit = 2;
+                        productSku.RentTermUnit = E_RentTermUnit.Month;
+                        productSku.RentTermUnitText = "月";
+                        productSku.RentTermValue = 1;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
                         productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
                         productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;

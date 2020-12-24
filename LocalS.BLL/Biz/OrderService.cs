@@ -703,11 +703,10 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.SaleAmount = salePrice * sku.Quantity;
                                     buildOrderSku.OriginalPrice = originalPrice;
                                     buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
-                                    buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice - couponAmountByDeposit;
-                                    buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice - couponAmountByRent;
-                                    buildOrderSku.RentUnit = 2;
-
-
+                                    buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice;
+                                    buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice;
+                                    buildOrderSku.RentTermUnit = E_RentTermUnit.Month;
+                                    buildOrderSku.RentTermValue = 1;
                                     buildOrderSkus.Add(buildOrderSku);
                                 }
 
@@ -1074,7 +1073,8 @@ namespace LocalS.BLL.Biz
                             orderSub.OriginalAmount = buildOrderSub.OriginalAmount;
                             orderSub.DiscountAmount = buildOrderSub.DiscountAmount;
                             orderSub.ChargeAmount = buildOrderSub.ChargeAmount;
-                            orderSub.RentUnit = buildOrderSub.RentUnit;
+                            orderSub.RentTermUnit = buildOrderSub.RentTermUnit;
+                            orderSub.RentTermValue = buildOrderSub.RentTermValue;
                             orderSub.RentAmount = buildOrderSub.RentAmount;
                             orderSub.DepositAmount = buildOrderSub.DepositAmount;
                             orderSub.CouponAmountByDeposit = buildOrderSub.CouponAmountByDeposit;
@@ -1089,6 +1089,7 @@ namespace LocalS.BLL.Biz
                             orderSub.CreateTime = DateTime.Now;
                             orderSub.ShopMethod = rop.ShopMethod;
                             CurrentDb.OrderSub.Add(orderSub);
+
 
                             //判断ShopMethod 是 Shop 才进行库存操作
                             if (orderSub.ShopMethod == E_OrderShopMethod.Shop)
@@ -1150,7 +1151,8 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.SaleAmount = shopModeProductSku.SaleAmount;
                         buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
                         buildOrderChild.OriginalAmount = shopModeProductSku.OriginalAmount;
-                        buildOrderChild.RentUnit = shopModeProductSku.RentUnit;
+                        buildOrderChild.RentTermUnit = shopModeProductSku.RentTermUnit;
+                        buildOrderChild.RentTermValue = shopModeProductSku.RentTermValue;
                         buildOrderChild.RentAmount = shopModeProductSku.RentAmount;
                         buildOrderChild.DepositAmount = shopModeProductSku.DepositAmount;
                         buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
@@ -1456,6 +1458,48 @@ namespace LocalS.BLL.Biz
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
                                 d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
+
+
+                                var d_rentOrder = new RentOrder();
+                                d_rentOrder.Id = IdWorker.Build(IdType.NewGuid);
+                                d_rentOrder.MerchId = d_orderSub.MerchId;
+                                d_rentOrder.OrdeId = d_orderSub.OrderId;
+                                d_rentOrder.ClientUserId = d_orderSub.ClientUserId;
+                                d_rentOrder.SpuId = d_orderSub.PrdProductId;
+                                d_rentOrder.SkuId = d_orderSub.PrdProductSkuId;
+                                d_rentOrder.SkuName = d_orderSub.PrdProductSkuName;
+                                d_rentOrder.SkuCumCode = d_orderSub.PrdProductSkuCumCode;
+                                d_rentOrder.SkuBarCode = d_orderSub.PrdProductSkuBarCode;
+                                d_rentOrder.SkuSpecDes = d_orderSub.PrdProductSkuSpecDes;
+                                d_rentOrder.SkuProducer = d_orderSub.PrdProductSkuProducer;
+                                d_rentOrder.SkuMainImgUrl = d_orderSub.PrdProductSkuMainImgUrl;
+                                d_rentOrder.DepositAmount = d_orderSub.ChargeAmount;
+                                d_rentOrder.IsPayDeposit = true;
+                                d_rentOrder.PayDepositTime = DateTime.Now;
+                                d_rentOrder.RentTermUnit = d_orderSub.RentTermUnit;
+                                d_rentOrder.RentTermValue = d_orderSub.RentTermValue;
+                                d_rentOrder.RentTermUnitText = "月";
+                                d_rentOrder.RentAmount = d_orderSub.RentAmount;
+                                d_rentOrder.NextPayRentTime = DateTime.Now.AddMonths(1);
+                                d_rentOrder.Creator = operater;
+                                d_rentOrder.CreateTime = DateTime.Now;
+                                CurrentDb.RentOrder.Add(d_rentOrder);
+
+                                var d_rentOrderTransRecord = new RentOrderTransRecord();
+                                d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
+                                d_rentOrderTransRecord.MerchId = d_orderSub.MerchId;
+                                d_rentOrderTransRecord.OrdeId = d_orderSub.OrderId;
+                                d_rentOrderTransRecord.RentOrderId = d_rentOrder.Id;
+                                d_rentOrderTransRecord.ClientUserId = d_orderSub.ClientUserId;
+                                d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
+                                d_rentOrderTransRecord.Amount = d_orderSub.ChargeAmount;
+                                d_rentOrderTransRecord.TransTime = DateTime.Now;
+                                d_rentOrderTransRecord.AmountType = E_RentAmountType.DepositAndRent;
+                                d_rentOrderTransRecord.NextPayRentTime =DateTime.Now.AddMonths(1);
+                                d_rentOrderTransRecord.Creator = operater;
+                                d_rentOrderTransRecord.CreateTime = DateTime.Now;
+                                CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
+
                                 #endregion
                             }
                             else if (d_orderSub.ShopMethod == E_OrderShopMethod.MemberFee)

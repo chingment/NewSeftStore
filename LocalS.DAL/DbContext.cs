@@ -71,6 +71,10 @@ namespace LocalS.DAL
         public IDbSet<SaleOutlet> SaleOutlet { get; set; }
 
         public IDbSet<Supplier> Supplier { get; set; }
+        public IDbSet<RentOrder> RentOrder { get; set; }
+
+        public IDbSet<RentOrderTransRecord> RentOrderTransRecord { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

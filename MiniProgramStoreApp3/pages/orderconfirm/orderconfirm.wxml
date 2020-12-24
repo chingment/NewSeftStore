@@ -130,7 +130,7 @@
 										<view class="dt">
 											<view class="dt1"> <text>租金</text> </view>
 											<view class="dt2">
-												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentUnitText}}</text>
+												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
 											</view>
 										</view>
 										<view class="dt">

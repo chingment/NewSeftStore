@@ -54,7 +54,8 @@ namespace LocalS.BLL.Biz
             public decimal ChargeAmount { get; set; }
             public string CabinetId { get; set; }
             public string SlotId { get; set; }
-            public int RentUnit { get; set; }
+            public E_RentTermUnit RentTermUnit { get; set; }
+            public int RentTermValue { get; set; }
             public decimal RentAmount { get; set; }
             public decimal DepositAmount { get; set; }
             public decimal CouponAmountByShop { get; set; }
@@ -94,9 +95,10 @@ namespace LocalS.BLL.Biz
             public decimal SaleAmount { get; set; }
             public decimal OriginalPrice { get; set; }
             public decimal OriginalAmount { get; set; }
-            public int RentUnit { get; set; }
-            public decimal RentAmount{ get; set; }
-            public decimal DepositAmount{ get; set; }
+            public E_RentTermUnit RentTermUnit { get; set; }
+            public int RentTermValue { get; set; }
+            public decimal RentAmount { get; set; }
+            public decimal DepositAmount { get; set; }
             public decimal CouponAmountByShop { get; set; }
             public decimal CouponAmountByRent { get; set; }
             public decimal CouponAmountByDeposit { get; set; }
