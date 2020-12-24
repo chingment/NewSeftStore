@@ -13,17 +13,13 @@ Page({
     code: ''
   },
   onLoad: function (options) {
-
     var _this = this
-
-    //var accountInfo = wx.getAccountInfoSync()
-
-    //var appId = accountInfo.miniProgram.appId
-
+    
+    var accountInfo = wx.getAccountInfoSync()
+    var appId = accountInfo.miniProgram.appId
     var returnUrl = typeof options.returnUrl == 'undefined' ? '' : options.returnUrl
-
     _this.setData({
-      appId: app.globalData.appId,
+      appId: appId,
       returnUrl: returnUrl
     })
 
@@ -47,75 +43,13 @@ Page({
       }
     })
 
-    const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-    var appId = accountInfo.miniProgram.appId
-    wx.login({
-      success: function (res) {
-        console.log("minProgram:login")
-        if (res.code) {
-          console.log(res)
-
-          _this.setData({
-            code: res.code
-          })
-          apiOwn.wxConfig({
-            appId: appId,
-            code: res.code,
-          }).then(function (res2) {
-            console.log(res2)
-            if (res2.result == 1) {
-              var d = res2.data
-
-              storeage.setOpenId(d.openId)
-              storeage.setSessionKey(d.sessionKey)
-              storeage.setMerchId(d.merchId)
-
-            } else {
-              toast.show({
-                title: res2.message
-              })
-            }
-          })
-        }
-      }
-    });
-
-
   },
   onReady: function () {},
   onShow: function () {},
-  login: function (openId, phoneNumber) {
-
-    const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-
-    apiOwn.loginByMinProgram({
-      appId: accountInfo.miniProgram.appId,
-      merchId: storeage.getMerchId(),
-      openId: openId,
-      phoneNumber: phoneNumber,
-    }).then(function (res) {
-      if (res.result == 1) {
-        storeage.setOpenId(res.data.openId);
-        storeage.setAccessToken(res.data.token);
-        wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
-          url: ownRequest.getReturnUrl()
-        })
-      } else {
-        toast.show({
-          title: res.message
-        })
-      }
-    })
-  },
   loginByMinProgram: function (openId, code, iv, encryptedData) {
-
-    const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-
+    var _this = this
     apiOwn.loginByMinProgram({
-      appId: accountInfo.miniProgram.appId,
+      appId: _this.data.appId,
       merchId: storeage.getMerchId(),
       openId: openId,
       code: code,
@@ -160,24 +94,20 @@ Page({
 
   },
   bindgetphonenumber: function (e) {
-    var _this = this;
-
-    console.log(e);
+    var _this = this
+    console.log(e)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
-
       apiOwn.wxPhoneNumber({
         encryptedData: e.detail.encryptedData,
         iv: e.detail.iv,
         session_key: storeage.getSessionKey(),
-      }).then(function (res2) {
-        console.log(res2)
-
-        if (res2.result == 1) {
-          var d = res2.data
-          _this.login(storeage.getOpenId(), d.phoneNumber)
+      }).then(function (res) {
+        console.log(res)
+        if (res.result == 1) {
+          var d = res.data
         } else {
           toast.show({
-            title: res2.message
+            title: res.message
           })
         }
       })
