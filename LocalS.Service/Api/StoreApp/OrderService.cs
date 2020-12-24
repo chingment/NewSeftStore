@@ -530,8 +530,8 @@ namespace LocalS.Service.Api.StoreApp
                 amount_couponByDeposit = orders.Sum(m => m.CouponAmountByDeposit);
 
                 ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = amount_couponByShop == 0 ? "无优惠" : string.Format("-{0}", amount_couponByShop.ToF2Price()), TipType = TipType.InUse };
-                ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = amount_couponByRent == 0 ? "无优惠" : string.Format("-{0}", amount_couponByDeposit.ToF2Price()), TipType = TipType.InUse };
-                ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = amount_couponByDeposit == 0 ? "无优惠" : string.Format("-{0}", amount_couponByRent.ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = amount_couponByDeposit == 0 ? "无优惠" : string.Format("-{0}", amount_couponByDeposit.ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = amount_couponByRent == 0 ? "无优惠" : string.Format("-{0}", amount_couponByRent.ToF2Price()), TipType = TipType.InUse };
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
                 amount_sale = orders.Sum(m => m.SaleAmount);

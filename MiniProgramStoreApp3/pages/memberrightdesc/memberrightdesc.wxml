@@ -1,10 +1,16 @@
 <view class="page-ct memberrightdesc">
   <view class="bg_1">
-    <image class="bg_img" src="http://file.17fanju.com/upload/membertheme/1/rightdesc/right_desc_{{right}}.jpg?ts={{timespan}}"></image>
+    <image class="bg_img"
+      src="http://file.17fanju.com/upload/membertheme/1/rightdesc/right_desc_{{right}}.jpg?ts={{timespan}}"></image>
   </view>
   <view class="bg_2">
-    <view class="btnbox"  wx:if="{{userInfo.memberLevel==0}}">
+    <view class="btnbox" wx:if="{{userInfo.memberLevel==0}}">
       <view class="btn" bindtap="clickToPurchase">立即开通</view>
     </view>
+
+    <view class="btnbox" wx:if="{{right==1}}" style="margin-top:10rpx" >
+      <view class="btn" bindtap="clickToTryUse">立即体验</view>
+    </view>
+
   </view>
 </view>

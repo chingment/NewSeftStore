@@ -16,6 +16,13 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse BindPhoneNumberByWx(RopOwnBindPhoneNumberByWx rop)
+        {
+            IResult result = AccountServiceFactory.Own.BindPhoneNumberByWx(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
         [AllowAnonymous]
         [HttpPost]
         public OwnApiHttpResponse WxApiCode2Session(RopWxApiCode2Session rop)

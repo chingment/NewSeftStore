@@ -106,5 +106,10 @@ Page({
     wx.navigateTo({
       url: '/pages/membercenter/membercenter'
     })
+  },
+  clickToTryUse:function(e){
+    wx.navigateTo({
+      url: '/pages/bindphonenumber/bindphonenumber'
+    })
   }
 })

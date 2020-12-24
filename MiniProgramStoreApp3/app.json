@@ -20,7 +20,8 @@
     "pages/memberprom/memberprom",
     "pages/memberrightdesc/memberrightdesc",
     "pages/membercenter/membercenter",
-    "pages/couponrevcenter/couponrevcenter"
+    "pages/couponrevcenter/couponrevcenter",
+    "pages/bindphonenumber/bindphonenumber"
   ],
   "window": {
     "backgroundTextStyle": "light",

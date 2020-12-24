@@ -6,10 +6,11 @@ const apiOwn = require('../../api/own.js')
 const app = getApp()
 Page({
   data: {
-    appId:'',
+    appId: '',
     tag: "login",
     isAuthUserInfo: false,
-    returnUrl: ''
+    returnUrl: '',
+    code: ''
   },
   onLoad: function (options) {
 
@@ -19,10 +20,10 @@ Page({
 
     //var appId = accountInfo.miniProgram.appId
 
-    var returnUrl = typeof options.returnUrl == 'undefined'?'':options.returnUrl
+    var returnUrl = typeof options.returnUrl == 'undefined' ? '' : options.returnUrl
 
     _this.setData({
-      appId:app.globalData.appId,
+      appId: app.globalData.appId,
       returnUrl: returnUrl
     })
 
@@ -54,6 +55,10 @@ Page({
         console.log("minProgram:login")
         if (res.code) {
           console.log(res)
+
+          _this.setData({
+            code: res.code
+          })
           apiOwn.wxConfig({
             appId: appId,
             code: res.code,
@@ -103,33 +108,56 @@ Page({
         })
       }
     })
-
   },
-  bindgetuserinfo: function (e) {
-    var _this = this
-    if (_this.data.isAuthUserInfo) {
-      _this.login(storeage.getOpenId(), '', '', e.detail.iv, e.detail.encryptedData)
-    } else {
-      if (e.detail.userInfo) {
-        wx.login({
-          success(res) {
-            console.log(JSON.stringify(res))
-            if (res.code) {
-              _this.login('', '', res.code, e.detail.iv, e.detail.encryptedData)
-            } else {
+  loginByMinProgram: function (openId, code, iv, encryptedData) {
 
-            }
-          },
-          fail() {
+    const accountInfo = wx.getAccountInfoSync()
+    console.log(accountInfo.miniProgram.appId)
 
-          }
+    apiOwn.loginByMinProgram({
+      appId: accountInfo.miniProgram.appId,
+      merchId: storeage.getMerchId(),
+      openId: openId,
+      code: code,
+      iv: iv,
+      encryptedData: encryptedData
+    }).then(function (res) {
+      if (res.result == 1) {
+        storeage.setOpenId(res.data.openId);
+        storeage.setAccessToken(res.data.token);
+        wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
+          url: ownRequest.getReturnUrl()
         })
       } else {
         toast.show({
-          title: '只有允许授权才能进行微信登录，请再次点击登录按钮'
+          title: res.message
         })
       }
+    })
+  },
+  bindgetuserinfo: function (e) {
+    var _this = this
+
+    if (e.detail.userInfo) {
+      wx.login({
+        success(res) {
+          console.log(JSON.stringify(res))
+          if (res.code) {
+            _this.loginByMinProgram(storeage.getOpenId(), res.code, e.detail.iv, e.detail.encryptedData)
+          } else {
+
+          }
+        },
+        fail() {
+
+        }
+      })
+    } else {
+      toast.show({
+        title: '只有允许授权才能进行微信登录，请再次点击登录按钮'
+      })
     }
+
   },
   bindgetphonenumber: function (e) {
     var _this = this;

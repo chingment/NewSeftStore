@@ -279,8 +279,7 @@ namespace LocalS.Service.Api.Account
             wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
             wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
 
-           // var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.OpenId);
-            var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByApiToken(wxAppInfoConfig, rop.OpenId);
+            var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
 
             if (wxUserInfoByMinProram == null)
             {
@@ -297,13 +296,12 @@ namespace LocalS.Service.Api.Account
                 d_clientUser.PasswordHash = PassWordHelper.HashPassword("888888");
                 d_clientUser.SecurityStamp = Guid.NewGuid().ToString();
                 d_clientUser.RegisterTime = DateTime.Now;
-                d_clientUser.NickName = wxUserInfoByMinProram.nickname;
-                d_clientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
+                d_clientUser.NickName = wxUserInfoByMinProram.nickName;
+                d_clientUser.Sex = wxUserInfoByMinProram.gender;
                 d_clientUser.Province = wxUserInfoByMinProram.province;
                 d_clientUser.City = wxUserInfoByMinProram.city;
                 d_clientUser.Country = wxUserInfoByMinProram.country;
-                d_clientUser.Avatar = wxUserInfoByMinProram.headimgurl;
-                d_clientUser.PhoneNumber = rop.PhoneNumber;
+                d_clientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
                 d_clientUser.MemberLevel = 0;
                 d_clientUser.CreateTime = DateTime.Now;
                 d_clientUser.Creator = d_clientUser.Id;
@@ -317,13 +315,12 @@ namespace LocalS.Service.Api.Account
             }
             else
             {
-                d_clientUser.NickName = wxUserInfoByMinProram.nickname;
-                d_clientUser.Sex = wxUserInfoByMinProram.sex == 1 ? "男" : "女";
+                d_clientUser.NickName = wxUserInfoByMinProram.nickName;
+                d_clientUser.Sex = wxUserInfoByMinProram.gender;
                 d_clientUser.Province = wxUserInfoByMinProram.province;
                 d_clientUser.City = wxUserInfoByMinProram.city;
                 d_clientUser.Country = wxUserInfoByMinProram.country;
-                d_clientUser.Avatar = wxUserInfoByMinProram.headimgurl;
-                d_clientUser.PhoneNumber = rop.PhoneNumber;
+                d_clientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
                 d_clientUser.MendTime = DateTime.Now;
                 d_clientUser.Mender = d_clientUser.Id;
                 CurrentDb.SaveChanges();
@@ -345,6 +342,23 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
+        public CustomJsonResult BindPhoneNumberByWx(string clientUserId, RopOwnBindPhoneNumberByWx rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            if (d_clientUser != null)
+            {
+                d_clientUser.PhoneNumber = rop.PhoneNumber;
+                d_clientUser.MendTime = DateTime.Now;
+                d_clientUser.Mender = d_clientUser.Id;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
+
+            return result;
+        }
 
         public CustomJsonResult LoginByFingerVein(RopOwnLoginByFingerVein rop)
         {
@@ -775,7 +789,7 @@ namespace LocalS.Service.Api.Account
             var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == ret.openid).FirstOrDefault();
             if (d_clientUser != null)
             {
-               
+
 
             }
 

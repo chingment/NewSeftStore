@@ -18,6 +18,7 @@ var config = {
     ownWxApiCode2Session: `${host}/Own/WxApiCode2Session`,
     ownConfig: `${host}/Own/Config`,
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
+    ownBindPhoneNumberByWx: `${host}/Own/BindPhoneNumberByWx`,
     globalDataSet: `${host}/Global/DataSet`,
     globalMsgTips: `${host}/Global/MsgTips`,
     indexPageData: `${host}/Index/PageData`,
@@ -53,6 +54,7 @@ var config = {
     memberGetPromSt: `${host}/Member/GetPromSt`,
     memberGetRightDescSt: `${host}/Member/GetRightDescSt`,
     saleOutletList: `${host}/SaleOutlet/List`,
+    
   }
 
 };
