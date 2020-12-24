@@ -14,7 +14,7 @@ Page({
   },
   onLoad: function (options) {
     var _this = this
-    
+
     var accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
     var returnUrl = typeof options.returnUrl == 'undefined' ? '' : options.returnUrl
@@ -40,6 +40,15 @@ Page({
       },
       fail() {
         console.log('session 已过期')
+      }
+    })
+
+    wx.login({
+      success(res) {
+        console.log('=>>login.code3:' + res.code)
+      },
+      fail() {
+
       }
     })
 
@@ -75,7 +84,8 @@ Page({
     if (e.detail.userInfo) {
       wx.login({
         success(res) {
-          console.log(JSON.stringify(res))
+          console.log('=>>login.code2:' + res.code)
+
           if (res.code) {
             _this.loginByMinProgram(storeage.getOpenId(), res.code, e.detail.iv, e.detail.encryptedData)
           } else {
