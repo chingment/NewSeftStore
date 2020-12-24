@@ -249,12 +249,10 @@ namespace LocalS.BLL
             }
         }
 
-
         public WxApiJsCode2SessionResult GetJsCode2Session(WxAppInfoConfig config, string code)
         {
             return OAuthApi.GetWxApiJsCode2Session(config.AppId, config.AppSecret, code);
         }
-
 
         public WxPhoneNumber GetWxPhoneNumber(string encryptedData, string iv, string session_key)
         {
