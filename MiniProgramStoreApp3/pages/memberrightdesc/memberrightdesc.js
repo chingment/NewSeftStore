@@ -1,5 +1,7 @@
 const apiMember = require('../../api/member.js')
 const storeage = require('../../utils/storeageutil.js')
+const toast = require('../../utils/toastutil')
+const util = require('../../utils/util')
 const app = getApp()
 
 Page({
@@ -11,7 +13,8 @@ Page({
     pageIsReady: false,
     right: 1,
     isMember: false,
-    timespan: (new Date()).getTime()
+    timespan: (new Date()).getTime(),
+    userInfo: {}
   },
 
   /**
@@ -107,7 +110,15 @@ Page({
       url: '/pages/membercenter/membercenter'
     })
   },
-  clickToTryUse:function(e){
+  clickToTryUse: function (e) {
+    var _this = this
+    if (!util.isEmptyOrNull(_this.data.userInfo.phoneNumber)) {
+      toast.show({
+        title: '欢迎体验'
+      })
+      return
+    }
+
     wx.navigateTo({
       url: '/pages/bindphonenumber/bindphonenumber'
     })
