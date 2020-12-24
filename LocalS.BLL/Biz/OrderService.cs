@@ -1480,7 +1480,7 @@ namespace LocalS.BLL.Biz
                                 d_rentOrder.RentTermValue = d_orderSub.RentTermValue;
                                 d_rentOrder.RentTermUnitText = "月";
                                 d_rentOrder.RentAmount = d_orderSub.RentAmount;
-                                d_rentOrder.NextPayRentTime = DateTime.Now.AddMonths(1);
+                                d_rentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_orderSub.RentTermValue);
                                 d_rentOrder.Creator = operater;
                                 d_rentOrder.CreateTime = DateTime.Now;
                                 CurrentDb.RentOrder.Add(d_rentOrder);
@@ -1495,9 +1495,10 @@ namespace LocalS.BLL.Biz
                                 d_rentOrderTransRecord.Amount = d_orderSub.ChargeAmount;
                                 d_rentOrderTransRecord.TransTime = DateTime.Now;
                                 d_rentOrderTransRecord.AmountType = E_RentAmountType.DepositAndRent;
-                                d_rentOrderTransRecord.NextPayRentTime =DateTime.Now.AddMonths(1);
+                                d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_orderSub.RentTermValue);
                                 d_rentOrderTransRecord.Creator = operater;
                                 d_rentOrderTransRecord.CreateTime = DateTime.Now;
+                                d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_orderSub.ChargeAmount);
                                 CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
 
                                 #endregion

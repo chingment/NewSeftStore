@@ -20,5 +20,6 @@ namespace LocalS.Entity
         public DateTime? NextPayRentTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
+        public string Description { get; set; }
     }
 }
