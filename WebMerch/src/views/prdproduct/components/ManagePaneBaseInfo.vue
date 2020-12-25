@@ -70,8 +70,9 @@
         />
       </el-form-item>
 
-      <el-form-item label="音视频咨询">
-        <el-checkbox v-model="form.isTrgVideoService" />
+      <el-form-item label="属性">
+        <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
+        <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
       </el-form-item>
       <el-form-item label="特色标签" prop="charTags">
         <el-tag
@@ -220,6 +221,7 @@ export default {
         detailsDes: [],
         charTags: [],
         isTrgVideoService: false,
+        isRevService: false,
         briefDes: '',
         displayImgUrls: [],
         isUnifyUpdateSalePrice: false,
@@ -273,6 +275,7 @@ export default {
           this.form.displayImgUrls = d.displayImgUrls
           this.form.skus = d.skus
           this.form.isTrgVideoService = d.isTrgVideoService
+          this.form.isRevService = d.isRevService
           this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
@@ -323,6 +326,7 @@ export default {
           _form.isUnifyUpdateSalePrice = this.form.isUnifyUpdateSalePrice
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
+          _form.isRevService = this.form.isRevService
           _form.skus = this.form.skus
           _form.supplierId = this.form.supplierId
           MessageBox.confirm('确定要保存', '提示', {

@@ -77,8 +77,10 @@
         />
       </el-form-item>
 
-      <el-form-item label="音视频咨询">
-        <el-checkbox v-model="form.isTrgVideoService" />
+      <el-form-item label="属性">
+        <el-checkbox v-model="isOpenAddMultiSpecs"> 多规格</el-checkbox>
+        <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
+        <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
       </el-form-item>
       <el-form-item label="特色标签" prop="charTags">
         <el-tag
@@ -101,10 +103,6 @@
         />
         <el-button v-else class="button-new-tag" size="small" @click="charTagsShowInput">+ 添加</el-button>
       </el-form-item>
-      <el-form-item label="开启多规格">
-        <el-checkbox v-model="isOpenAddMultiSpecs" />
-      </el-form-item>
-
       <el-form-item v-show="!isOpenAddMultiSpecs" label="默认销售价" prop="singleSkuSalePrice">
         <el-input v-model="form.singleSkuSalePrice" clearable style="width:160px">
           <template slot="prepend">￥</template>
@@ -295,6 +293,7 @@ export default {
         briefDes: '',
         supplierId: '',
         isTrgVideoService: false,
+        isRevService: false,
         displayImgUrls: [],
         singleSkuCumCode: '',
         singleSkuBarCode: '',
@@ -431,6 +430,7 @@ export default {
           _form.specItems = this.multiSpecsItems
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
+          _form.isRevService = this.form.isRevService
           _form.skus = skus
           console.log(JSON.stringify(_form))
           MessageBox.confirm('确定要保存', '提示', {
