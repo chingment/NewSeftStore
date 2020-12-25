@@ -146,6 +146,10 @@ namespace LocalS.Service.Api.StoreApp
                 m_ProductSkuDetails.SalePrice = r_productSku.Stocks[0].SalePrice;
                 m_ProductSkuDetails.IsOffSell = r_productSku.Stocks[0].IsOffSell;
                 m_ProductSkuDetails.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                m_ProductSkuDetails.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                m_ProductSkuDetails.RentTermUnit = E_RentTermUnit.Month;
+                m_ProductSkuDetails.RentTermUnitText = "月";
+                m_ProductSkuDetails.DepositAmount = r_productSku.Stocks[0].DepositPrice;
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_ProductSkuDetails);
@@ -173,7 +177,7 @@ namespace LocalS.Service.Api.StoreApp
                 sellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
             }
 
-            var data = new { skuId = rup.SkuId, name = bizProductSku.Name, salePrice = salePrice, isShowPrice = isShowPrice,isOffSell = isOffSell, sellQuantity = sellQuantity };
+            var data = new { skuId = rup.SkuId, name = bizProductSku.Name, salePrice = salePrice, isShowPrice = isShowPrice, isOffSell = isOffSell, sellQuantity = sellQuantity };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", data);
 

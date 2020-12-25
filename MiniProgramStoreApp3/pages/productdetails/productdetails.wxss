@@ -56,6 +56,34 @@ swiper {
   text-decoration: line-through;
 }
 
+.depositAmount {
+  font-size: 38rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-weight: bold;
+  color: #f18d00;
+}
+
+.rentAmount {
+  font-size: 38rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-weight: bold;
+  color: #f18d00;
+}
+
+.am-unit{
+ margin-right: 10rpx;
+}
+.rentAmount {
+  font-size: 38rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  font-weight: bold;
+  color: #f18d00;
+}
+
+
 .details-info1 .item-isOffSell .txt{
 
   font-size: 26rpx;
@@ -84,10 +112,9 @@ swiper {
 
 .details-nav .item-home {
   text-align: center;
-  width: 100rpx;
+  width: 150rpx;
   line-height: 100rpx;
   height: 88rpx;
-  padding-left: 35rpx;
 }
 
 .details-nav .item-home image {

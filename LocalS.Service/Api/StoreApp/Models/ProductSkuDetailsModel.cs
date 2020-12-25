@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -41,5 +42,10 @@ namespace LocalS.Service.Api.StoreApp
         public List<ImgSet> DisplayImgUrls { get; set; }
         public List<ImgSet> DetailsDes { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
+        public bool IsUseRent { get; set; }
+        public decimal RentAmount { get; set; }
+        public E_RentTermUnit RentTermUnit { get; set; }
+        public string RentTermUnitText { get; set; }
+        public decimal DepositAmount { get; set; }
     }
 }

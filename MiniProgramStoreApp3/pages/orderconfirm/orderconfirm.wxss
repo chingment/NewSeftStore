@@ -238,3 +238,7 @@ page{
   background: #f50;
   color: #fff;
 }
+
+.dt{
+  flex:1;
+}

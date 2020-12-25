@@ -6,7 +6,12 @@
     <image class="img" src='http://file.17fanju.com/upload/logo/logo_{{appId}}.png'></image>
   </view>
 
-  <button class="btn bg-main btn-login" lang='zh_CN' open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button> 
+  <view class="t">
+    <view class="t1">申请获得以下权限</view>
+    <view class="t2"><text class="dot">●</text>获得你的公开信息（昵称、头像、地区及性别）</view>
+  </view>
+  <button class="btn bg-main btn-login" lang='zh_CN' open-type="getUserInfo"
+    bindgetuserinfo="bindgetuserinfo">微信一键登录</button>
   <!-- <button class="btn bg-main btn-login" open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">微信授权登录</button> -->
-   
+
 </view>

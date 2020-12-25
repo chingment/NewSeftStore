@@ -39,7 +39,7 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.BadgeByCart = new UI.Badge { Type = "number", Value = d_clientCart_Quantity.ToString() };
 
-            var d_ordersByWaitpay_Count = CurrentDb.Order.Where(m => m.ClientUserId == clientUserId && m.Status == E_OrderStatus.WaitPay).Count();
+            var d_ordersByWaitpay_Count = CurrentDb.Order.Where(m => m.ClientUserId == clientUserId && m.Status == E_OrderStatus.WaitPay && m.IsNoDisplayClient == false).Count();
 
             if (d_ordersByWaitpay_Count > 0)
             {

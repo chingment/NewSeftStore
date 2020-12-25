@@ -1,8 +1,11 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
-<specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-<cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}"  bindcartdialogClose="cartdialogClose" ></cartdialog>
+<specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku"
+	productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}">
+</specsdialog>
+<cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}" bindcartdialogClose="cartdialogClose">
+</cartdialog>
 
 <view class="page-ct details">
 	<view class="details-main">
@@ -21,7 +24,7 @@
 				<view class="details-info1">
 					<view class='container'>
 						<view class="item-name">
-							<text class="name" >{{productSku.name}}</text>
+							<text class="name">{{productSku.name}}</text>
 						</view>
 						<view class="item-briefIntro font-gray">
 							<text class="briefIntro">{{productSku.briefDes}}</text>
@@ -29,13 +32,29 @@
 						<view wx:if="{{productSku.isOffSell}}" class="item-isOffSell">
 							<text class="txt">已下架</text>
 						</view>
-						<view wx:else class="item-price">
-							<text class="unitPrice">{{productSku.salePrice}}</text>
-							<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
+						<view wx:else>
+							<view wx:if="{{shopMethod==1}}" class="item-price">
+								<text class="unitPrice">{{productSku.salePrice}}</text>
+								<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
+							</view>
+
+							<view wx:if="{{shopMethod==2}}" class="item-rent">
+								<view>
+									<text class="am-unit">押金</text>
+									<text class="depositAmount">{{productSku.depositAmount}}</text>
+								</view>
+								<view>
+									<text class="am-unit">租金</text>
+									<text class="rentAmount">{{productSku.rentAmount}}</text>
+									<text class="rentTermUnit">/{{productSku.rentTermUnitText}}</text>
+								</view>
+							</view>
+
 						</view>
 					</view>
 				</view>
-				<view wx:if="{{productSku.specIdxSkus.length>1}}" bindtap="selectSpecs"  class="details-info3 its-option">
+				<view wx:if="{{shopMethod==1}}" wx:if="{{productSku.specIdxSkus.length>1}}" bindtap="selectSpecs"
+					class="details-info3 its-option">
 					<view class="it">
 						<view class="title"><text>已选</text> </view>
 						<view class="content">{{productSku.specIdx}}</view>
@@ -63,15 +82,21 @@
 		<view bindtap="goHome" class="item-home">
 			<image src="/content/default/images/home.png" />
 		</view>
-		<view bindtap="goCart" class="item-cart">
+		<view bindtap="goCart" class="item-cart" wx:if="{{shopMethod==1}}">
 			<view class='number {{cartDialog.dataS.count==0?"hidden":""}}'>{{cartDialog.dataS.count}}</view>
 			<image src="/content/default/images/cart.png" />
 		</view>
-		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}' data-reply-skuid="{{productSku.id}}">
+		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
+			wx:if="{{shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
 			<text>加入购物车</text>
 		</view>
-		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}' data-reply-skuid="{{productSku.id}}">
+		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}'
+			wx:if="{{shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
 			<text>立即购买</text>
+		</view>
+		<view bindtap="immeRent" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
+			wx:if="{{shopMethod==2}}" data-reply-skuid="{{productSku.id}}">
+			<text>立即租用</text>
 		</view>
 	</view>
 </view>

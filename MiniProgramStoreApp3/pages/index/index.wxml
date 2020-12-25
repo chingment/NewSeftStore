@@ -100,12 +100,13 @@
 								<block wx:for="{{pdRent.list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
 									<view class='it'>
 										<view class="it-left">
-											<view class='imgurl skeleton-rect'>
+											<navigator class='imgurl skeleton-rect'
+												url="/pages/productdetails/productdetails?skuId={{item.id}}&shopMethod=2">
 												<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 													<view class="isOffSell-tip">已下架</view>
 												</view>
 												<image lazy-load class="img" src="{{item.mainImgUrl}}"></image>
-											</view>
+											</navigator>
 										</view>
 										<view class="it-rigt">
 											<text class="name font-gray skeleton-rect">{{item.name}}</text>
@@ -156,7 +157,7 @@
 										<view class='it it-{{index%2}}'>
 
 											<navigator class='imgurl skeleton-rect'
-												url="/pages/productdetails/productdetails?skuId={{item.id}}">
+												url="/pages/productdetails/productdetails?skuId={{item.id}}&shopMethod=1">
 												<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 													<view class="isOffSell-tip">已下架</view>
 												</view>

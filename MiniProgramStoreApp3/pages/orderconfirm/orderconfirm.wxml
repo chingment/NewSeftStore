@@ -126,7 +126,7 @@
 									<view class="it-r" wx:if="{{shopMethod==1||shopMethod==3}}">
 										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
 									</view>
-									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:200rpx">
+									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:230rpx">
 										<view class="dt">
 											<view class="dt1"> <text>租金</text> </view>
 											<view class="dt2">

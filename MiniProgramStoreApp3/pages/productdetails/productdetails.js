@@ -16,6 +16,7 @@ Page({
     tag: "productdetails",
     storeId: null,
     shopMode: null,
+    shopMethod: 1,
     specsDialog: {
       isShow: false
     },
@@ -40,6 +41,7 @@ Page({
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? undefined : options.shopMode
+    var shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
 
     if (storeId == undefined) {
       storeId = ownRequest.getCurrentStoreId()
@@ -55,7 +57,8 @@ Page({
 
     _this.setData({
       storeId: storeId,
-      shopMode: shopMode
+      shopMode: shopMode,
+      shopMethod: shopMethod
     })
 
 
@@ -209,7 +212,8 @@ Page({
       cartId: 0,
       id: skuId,
       quantity: 1,
-      shopMode: _this.data.shopMode
+      shopMode: _this.data.shopMode,
+      shopMethod: _this.data.shopMethod
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
