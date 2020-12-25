@@ -61,6 +61,7 @@ namespace LocalS.BLL
                     r_spu.SpecItems = d_spu.SpecItems.ToJsonObject<List<SpecItem>>();
                     r_spu.CharTags = d_spu.CharTags.ToJsonObject<List<string>>();
                     r_spu.IsTrgVideoService = d_spu.IsTrgVideoService;
+                    r_spu.IsRevService = d_spu.IsRevService;
                     r_spu.KindId1 = d_spu.PrdKindId1;
                     r_spu.KindId2 = d_spu.PrdKindId2;
                     r_spu.KindId3 = d_spu.PrdKindId3;
@@ -163,6 +164,7 @@ namespace LocalS.BLL
                     r_sku.SpecIdx = d_sku.SpecIdx;
                     r_sku.SpecIdxSkus = r_spu.SpecIdxSkus;
                     r_sku.IsTrgVideoService = r_spu.IsTrgVideoService;
+                    r_sku.IsRevService = r_spu.IsRevService;
                     r_sku.KindId1 = r_spu.KindId1;
                     r_sku.KindId2 = r_spu.KindId2;
                     r_sku.KindId3 = r_spu.KindId3;

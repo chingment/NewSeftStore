@@ -23,6 +23,7 @@ namespace LocalS.Entity
         public string BriefDes { get; set; }
         public string SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
+        public bool IsRevService { get; set; }
         public string CharTags { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

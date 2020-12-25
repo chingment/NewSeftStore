@@ -26,6 +26,7 @@ namespace LocalS.BLL
         public List<SpecItem> SpecItems { get; set; }
         public string SpecIdx { get; set; }
         public bool IsTrgVideoService { get; set; }
+        public bool IsRevService { get; set; }
         public List<string> CharTags { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
         public List<ProductSkuStockModel> Stocks { get; set; }

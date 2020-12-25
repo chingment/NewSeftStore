@@ -31,6 +31,7 @@ namespace LocalS.Entity
         public bool IsOffSell { get; set; }
         public decimal OriginalPrice { get; set; }
         public decimal SalePrice { get; set; }
+        public decimal SevsPrice { get; set; }
         public bool IsUseRent { get; set; }
         public decimal RentMhPrice { get; set; }
         public decimal DepositPrice { get; set; }

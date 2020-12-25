@@ -28,6 +28,7 @@ namespace LocalS.Service.Api.Merch
         public string BriefDes { get; set; }
 
         public bool IsTrgVideoService { get; set; }
+        public bool IsRevService { get; set; }
 
         public string SupplierId { get; set; }
         public List<string> CharTags { get; set; }

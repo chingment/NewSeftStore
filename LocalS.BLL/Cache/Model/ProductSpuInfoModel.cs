@@ -36,6 +36,7 @@ namespace LocalS.BLL
         public string BriefDes { get; set; }
         public List<SpecItem> SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
+        public bool IsRevService { get; set; }
         public List<string> CharTags { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
 
