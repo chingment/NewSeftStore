@@ -593,6 +593,10 @@ namespace LocalS.BLL.Biz
                                         {
                                             warn_tips.Add(string.Format("{0}已经下架", r_sku.Name));
                                         }
+                                        else if (!r_sku.Stocks[0].IsUseRent)
+                                        {
+                                            warn_tips.Add(string.Format("{0}不支持租用", r_sku.Name));
+                                        }
                                         else
                                         {
                                             if (sellQuantity < sku.Quantity)
