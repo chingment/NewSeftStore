@@ -58,12 +58,16 @@
 										</view>
 									</view>
 								</view>
-
-
-
-
-
 							</view>
+
+							<view class="charTags" wx:if="{{productSku.charTags!=null&&productSku.charTags.length>1}}">
+								<view class="it-charTag" wx:for="{{productSku.charTags}}" wx:for-index='index'
+									wx:for-item="charTag" wx:key="x">
+									<image class="icon" src="/content/default/images/icon_chartag.png"></image>
+									<text class="txt">{{charTag}}</text>
+								</view>
+							</view>
+
 
 							<view wx:if="{{shopMethod==1&&productSku.isUseRent}}" class="item-renttip">
 

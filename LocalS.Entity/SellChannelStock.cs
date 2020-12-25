@@ -29,6 +29,7 @@ namespace LocalS.Entity
         public int WarnQuantity { get; set; }
         public int HoldQuantity { get; set; }
         public bool IsOffSell { get; set; }
+        public decimal OriginalPrice { get; set; }
         public decimal SalePrice { get; set; }
         public bool IsUseRent { get; set; }
         public decimal RentMhPrice { get; set; }

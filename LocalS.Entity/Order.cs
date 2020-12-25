@@ -53,11 +53,11 @@ namespace LocalS.Entity
 
     public enum E_OrderShopMethod
     {
-
         Unknow = 0,
         Shop = 1,
         Rent = 2,
-        MemberFee = 3
+        MemberFee = 3,
+        RevService = 4
     }
 
     [Table("Order")]

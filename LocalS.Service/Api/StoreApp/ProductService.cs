@@ -138,7 +138,7 @@ namespace LocalS.Service.Api.StoreApp
             m_ProductSkuDetails.SpecItems = r_productSku.SpecItems;
             m_ProductSkuDetails.SpecIdx = r_productSku.SpecIdx;
             m_ProductSkuDetails.SpecIdxSkus = r_productSku.SpecIdxSkus;
-
+            m_ProductSkuDetails.CharTags = r_productSku.CharTags;
 
             if (r_productSku.Stocks.Count > 0)
             {
