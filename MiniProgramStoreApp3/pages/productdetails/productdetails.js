@@ -185,7 +185,7 @@ Page({
       shopMethod: 1
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -216,7 +216,7 @@ Page({
       shopMethod: _this.data.shopMethod
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -227,7 +227,7 @@ Page({
     // 设置转发内容
     var shareObj = {
       title: _this.data.productSku.name,
-      path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this.data.shopMode + '&storeId=' + _this.data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this.data.shopMode + '&shopMethod=' + _this.data.shopMethod + '&storeId=' + _this.data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
       imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') {}
