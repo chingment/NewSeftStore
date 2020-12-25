@@ -159,8 +159,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (couponCanUses.Count == 0)
             {
-
-                model.TipMsg = "暂无可用券.";
+                model.TipMsg = "暂无可用券";
                 model.TipType = TipType.NoCanUse;
                 return model;
             }
