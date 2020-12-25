@@ -222,6 +222,18 @@ Page({
       },
     })
   },
+  immeSawRent: function (e) {
+    var _this = this
+    var skuId = _this.data.productSku.id //对应页面data-reply-index
+
+    wx.navigateTo({
+      url: '/pages/productdetails/productdetails?skuId=' + skuId + '&shopMethod=2',
+      success: function (res) {
+        // success
+      },
+    })
+
+  },
   onShareAppMessage: function (options) {
     var _this = this;
     // 设置转发内容

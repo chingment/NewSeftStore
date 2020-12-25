@@ -37,7 +37,6 @@
 								<text class="unitPrice">{{productSku.salePrice}}</text>
 								<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
 							</view>
-
 							<view wx:if="{{shopMethod==2}}" class="item-rent">
 								<view>
 									<text class="am-unit">押金</text>
@@ -49,6 +48,13 @@
 									<text class="rentTermUnit">/{{productSku.rentTermUnitText}}</text>
 								</view>
 							</view>
+
+							<view wx:if="{{shopMethod==1&&productSku.isUseRent}}" class="item-renttip">
+								 
+								<image class="icon" src="/content/default/images/icon_rent.png"></image>
+								
+								<text>该商品支持租赁方式，亲，试一试？</text><text class="btn-rent2" bindtap="immeSawRent" >点击立即租用</text></view>
+
 
 						</view>
 					</view>

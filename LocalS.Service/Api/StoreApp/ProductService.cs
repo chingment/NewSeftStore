@@ -146,6 +146,7 @@ namespace LocalS.Service.Api.StoreApp
                 m_ProductSkuDetails.SalePrice = r_productSku.Stocks[0].SalePrice;
                 m_ProductSkuDetails.IsOffSell = r_productSku.Stocks[0].IsOffSell;
                 m_ProductSkuDetails.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                m_ProductSkuDetails.IsUseRent = r_productSku.Stocks[0].IsUseRent;
                 m_ProductSkuDetails.RentAmount = r_productSku.Stocks[0].RentMhPrice;
                 m_ProductSkuDetails.RentTermUnit = E_RentTermUnit.Month;
                 m_ProductSkuDetails.RentTermUnitText = "月";
