@@ -291,6 +291,7 @@
     <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartDataModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
+    <Compile Include="Api\StoreApp\Models\CouponCanUseModel.cs" />
     <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmCouponModel.cs" />
     <Compile Include="Api\StoreApp\Models\OrderConfirmProductSkuModel.cs" />

@@ -22,9 +22,9 @@ Page({
     storeId: undefined,
     orderIds: [],
     blocks: [],
-    couponIdsByShop: [],
-    couponIdByRent: '',
-    couponIdByDeposit: '',
+    couponIdsByShop: null,
+    couponIdByRent: null,
+    couponIdByDeposit: null,
     payOption: {
       title: '支付方式',
       options: []
@@ -420,6 +420,24 @@ Page({
 
         console.log("tabShopModeByMall:" + tabShopModeByMall)
 
+
+        var couponIdsByShop = []
+        if (d.couponByShop != null) {
+          couponIdsByShop = d.couponByShop.selectedCouponIds
+        }
+
+        var couponIdByRent = ''
+        if (d.couponByRent != null) {
+          if (d.couponByRent.selectedCouponIds != null && d.couponByRent.selectedCouponIds.length > 0)
+            couponIdByRent = d.couponByRent.selectedCouponIds[0]
+        }
+
+        var couponIdByDeposit = ''
+        if (d.couponByDeposit != null) {
+          if (d.couponByDeposit.selectedCouponIds != null && d.couponByDeposit.selectedCouponIds.length > 0)
+            couponIdByDeposit = d.couponByDeposit.selectedCouponIds[0]
+        }
+
         _this.setData({
           tabShopModeByMall: tabShopModeByMall,
           blocks: d.blocks,
@@ -429,6 +447,9 @@ Page({
           couponByShop: d.couponByShop,
           couponByRent: d.couponByRent,
           couponByDeposit: d.couponByDeposit,
+          couponIdsByShop: couponIdsByShop,
+          couponIdByRent: couponIdByRent,
+          couponIdByDeposit: couponIdByDeposit,
           shopMethod: d.shopMethod,
           pageIsReady: true
         })

@@ -17,5 +17,7 @@ namespace LocalS.Service.Api.StoreApp
         public string Description { get; set; }
         public bool CanSelected { get; set; }
         public bool IsSelected { get; set; }
+
+        public decimal CouponAmount { get; set; }
     }
 }

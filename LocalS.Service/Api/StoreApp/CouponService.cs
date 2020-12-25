@@ -134,23 +134,81 @@ namespace LocalS.Service.Api.StoreApp
             return false;
         }
 
-        public int GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId)
+        public OrderConfirmCouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
         {
+            var model = new OrderConfirmCouponModel();
+
             RopCouponMy rup = new RopCouponMy();
             rup.StoreId = storeId;
             rup.ShopMethod = shopMethod;
             rup.ProductSkus = productSkus;
             rup.FaceTypes = faceTypes;
 
+            rup.SelectCouponIds = selectCouponIds;
+
             var ret = My("", clientUserId, rup);
 
-            if (ret == null)
-                return 0;
+            if (ret == null || ret.Result != ResultType.Success)
+            {
+                model.TipMsg = "暂无可用券";
+                model.TipType = TipType.NoCanUse;
+                return model;
+            }
 
-            if (ret.Result != ResultType.Success)
-                return 0;
+            var couponCanUses = ret.Data.Coupons.Where(m => m.CanSelected).ToList();
 
-            return ret.Data.Coupons.Where(m => m.CanSelected).Count();
+            if (couponCanUses.Count == 0)
+            {
+
+                model.TipMsg = "暂无可用券.";
+                model.TipType = TipType.NoCanUse;
+                return model;
+            }
+
+            if (selectCouponIds == null || selectCouponIds.Count == 0)
+            {
+                var first = couponCanUses.OrderByDescending(m => m.CouponAmount).FirstOrDefault();
+
+                List<string> firstId = new List<string>();
+                firstId.Add(first.Id);
+
+                model.TipMsg = string.Format("-{0}", first.CouponAmount);
+                model.TipType = TipType.InUse;
+                model.SelectedCouponIds = firstId;
+                model.CouponAmount = first.CouponAmount;
+
+                return model;
+            }
+            else
+            {
+                var selectCouponId = selectCouponIds[0];
+
+                var coupon = couponCanUses.Where(m => m.Id == selectCouponId).FirstOrDefault();
+                if (coupon == null)
+                {
+                    List<string> firstId = new List<string>();
+
+                    model.TipMsg = string.Format("{0}个可用", couponCanUses.Count);
+                    model.TipType = TipType.CanUse;
+                    model.SelectedCouponIds = firstId;
+                    model.CouponAmount = 0;
+                }
+                else
+                {
+                    List<string> firstId = new List<string>();
+                    firstId.Add(coupon.Id);
+
+                    model.TipMsg = string.Format("-{0}", coupon.CouponAmount);
+                    model.TipType = TipType.InUse;
+                    model.SelectedCouponIds = firstId;
+                    model.CouponAmount = coupon.CouponAmount;
+                }
+
+
+            }
+
+
+            return model;
         }
 
         private CouponModel CovertCouponModel(string id, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount)
@@ -270,6 +328,18 @@ namespace LocalS.Service.Api.StoreApp
                 query = query.Where(m => rop.FaceTypes.Contains(m.FaceType));
             }
 
+            List<string> selectCouponIds = new List<string>();
+
+            if (rop.SelectCouponIds != null && rop.SelectCouponIds.Count > 0)
+            {
+                foreach (var selectCouponId in rop.SelectCouponIds)
+                {
+                    if (selectCouponId != null)
+                    {
+                        selectCouponIds.Add(selectCouponId);
+                    }
+                }
+            }
 
             var list = query.OrderBy(m => m.Name).ToList();
 
@@ -365,6 +435,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 couponModel.ValidDate = "有效到" + item.ValidEndTime.ToUnifiedFormatDate();
 
+
                 if (rop.CouponIds != null)
                 {
                     if (rop.CouponIds.Contains(item.Id))
@@ -372,6 +443,58 @@ namespace LocalS.Service.Api.StoreApp
                         couponModel.IsSelected = true;
                     }
                 }
+
+
+                decimal cal_sum_amount = 0;
+                if (item.UseAreaType == E_Coupon_UseAreaType.All)
+                {
+                    cal_sum_amount = rop.ProductSkus.Sum(m => m.SaleAmount);
+                }
+                else if (item.UseAreaType == E_Coupon_UseAreaType.Store)
+                {
+                    cal_sum_amount = rop.ProductSkus.Sum(m => m.SaleAmount);
+                }
+                else if (item.UseAreaType == E_Coupon_UseAreaType.ProductKind)
+                {
+                    var olist = item.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                    if (olist != null)
+                    {
+                        int[] ids = olist.Select(s => Int32.Parse(s.Id)).ToArray();
+
+                        if (ids != null)
+                        {
+                            cal_sum_amount = rop.ProductSkus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
+                        }
+                    }
+
+                }
+                else if (item.UseAreaType == E_Coupon_UseAreaType.ProductSpu)
+                {
+                    var olist = item.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                    if (list != null)
+                    {
+                        string[] ids = olist.Select(m => m.Id).ToArray();
+
+                        if (ids != null)
+                        {
+                            cal_sum_amount = rop.ProductSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
+                        }
+                    }
+
+                }
+
+                LogUtil.Info("rop.ProductSkus:" + rop.ProductSkus.ToJsonString());
+
+                foreach (var productSku in rop.ProductSkus)
+                {
+                    productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, item.AtLeastAmount, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, rop.StoreId, productSku.ProductId, productSku.KindId3, productSku.SaleAmount), 2);
+                }
+
+                couponModel.CouponAmount = rop.ProductSkus.Sum(m => m.CouponAmount);
+
+                LogUtil.Info(" couponModel.CouponAmount:" + couponModel.CouponAmount);
+
+
 
                 couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.Status, item.ValidStartTime, item.ValidEndTime, item.MerchId, rop.StoreId, clientUserId, rop.ProductSkus);
 

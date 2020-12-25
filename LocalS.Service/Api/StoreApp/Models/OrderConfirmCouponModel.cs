@@ -31,6 +31,8 @@ namespace LocalS.Service.Api.StoreApp
         //public int CanUseQuantity { get; set; }
 
         public List<string> SelectedCouponIds { get; set; }
+
+        public decimal CouponAmount { get; set; }
     }
 
 

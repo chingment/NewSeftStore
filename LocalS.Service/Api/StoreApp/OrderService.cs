@@ -309,141 +309,32 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.MemberFee)
                 {
-                    #region Shop,MemberFee
-                    if (rop.CouponIdsByShop == null || rop.CouponIdsByShop.Count == 0)
-                    {
-                        var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
+                    ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
 
-                        if (couponCanUseCount == 0)
-                        {
-                            ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = "暂无可用优惠卷", TipType = TipType.NoCanUse };
-                        }
-                        else
-                        {
-                            ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponCanUseCount), TipType = TipType.CanUse };
-                        }
-                    }
-                    else
-                    {
-                        //只能使用一张优惠券
-                        var coupon = (from u in CurrentDb.ClientCoupon
-                                      join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
-                                      from tt in temp.DefaultIfEmpty()
-                                      where u.ClientUserId == clientUserId && rop.CouponIdsByShop.Contains(u.Id)
-                                      select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
-                        if (coupon != null)
-                        {
-                            decimal cal_sum_amount = 0;
-                            if (coupon.UseAreaType == E_Coupon_UseAreaType.All)
-                            {
-                                cal_sum_amount = c_prodcutSkus.Sum(m => m.SaleAmount);
-                            }
-                            else if (coupon.UseAreaType == E_Coupon_UseAreaType.Store)
-                            {
-                                cal_sum_amount = c_prodcutSkus.Sum(m => m.SaleAmount);
-                            }
-                            else if (coupon.UseAreaType == E_Coupon_UseAreaType.ProductKind)
-                            {
-                                var list = coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
-                                if (list != null)
-                                {
-                                    int[] ids = list.Select(s => Int32.Parse(s.Id)).ToArray();
-
-                                    if (ids != null)
-                                    {
-                                        cal_sum_amount = c_prodcutSkus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
-                                    }
-                                }
-
-                            }
-                            else if (coupon.UseAreaType == E_Coupon_UseAreaType.ProductSpu)
-                            {
-                                var list = coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
-                                if (list != null)
-                                {
-                                    string[] ids = list.Select(m => m.Id).ToArray();
-
-                                    if (ids != null)
-                                    {
-                                        cal_sum_amount = c_prodcutSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
-                                    }
-                                }
-
-                            }
-
-                            //若有优惠券重新计算优惠金额
-                            foreach (var productSku in rop.ProductSkus)
-                            {
-                                productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, coupon.AtLeastAmount, coupon.UseAreaType, coupon.UseAreaValue, coupon.FaceType, coupon.FaceValue, rop.StoreId, productSku.ProductId, productSku.KindId3, productSku.SaleAmount), 2);
-                            }
-
-                            amount_couponByShop = rop.ProductSkus.Sum(m => m.CouponAmount);
-
-                            ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_couponByShop.ToF2Price()), TipType = TipType.InUse };
-                        }
-                    }
-                    #endregion
+                    amount_couponByShop = ret.CouponByShop.CouponAmount;
                 }
                 else if (rop.ShopMethod == E_OrderShopMethod.Rent)
                 {
                     #region Rent
 
-                    if (string.IsNullOrEmpty(rop.CouponIdByRent))
+                    List<string> couponIdsByRent = new List<string>();
+                    if (rop.CouponIdByRent != null)
                     {
-                        var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
-
-                        if (couponCanUseCount == 0)
-                        {
-                            ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = "暂无可用租金券", TipType = TipType.NoCanUse };
-                        }
-                        else
-                        {
-                            ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponCanUseCount), TipType = TipType.CanUse };
-                        }
-                    }
-                    else
-                    {
-                        //只能使用一张优惠券
-                        var coupon = (from u in CurrentDb.ClientCoupon
-                                      join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
-                                      from tt in temp.DefaultIfEmpty()
-                                      where u.ClientUserId == clientUserId && u.Id == rop.CouponIdByRent
-                                      select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
-                        if (coupon != null)
-                        {
-                            amount_couponByRent = coupon.FaceValue;
-                            ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_couponByRent.ToF2Price()), TipType = TipType.InUse };
-                        }
+                        couponIdsByRent.Add(rop.CouponIdByRent);
                     }
 
-                    if (string.IsNullOrEmpty(rop.CouponIdByDeposit))
-                    {
-                        var couponCanUseCount = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.DepositVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId);
+                    ret.CouponByRent = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, couponIdsByRent);
 
-                        if (couponCanUseCount == 0)
-                        {
-                            ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = "暂无可用押金券", TipType = TipType.NoCanUse };
-                        }
-                        else
-                        {
-                            ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponCanUseCount), TipType = TipType.CanUse };
-                        }
-                    }
-                    else
-                    {
-                        //只能使用一张优惠券
-                        var coupon = (from u in CurrentDb.ClientCoupon
-                                      join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
-                                      from tt in temp.DefaultIfEmpty()
-                                      where u.ClientUserId == clientUserId && u.Id == rop.CouponIdByDeposit
-                                      select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount }).FirstOrDefault();
-                        if (coupon != null)
-                        {
-                            amount_couponByDeposit = coupon.FaceValue;
+                    amount_couponByRent = ret.CouponByRent.CouponAmount;
 
-                            ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = string.Format("-{0}", amount_couponByDeposit.ToF2Price()), TipType = TipType.InUse };
-                        }
+                    List<string> couponIdsByDeposit = new List<string>();
+                    if (rop.CouponIdByDeposit != null)
+                    {
+                        couponIdsByDeposit.Add(rop.CouponIdByDeposit);
                     }
+                    ret.CouponByDeposit = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.DepositVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, couponIdsByDeposit);
+
+                    amount_couponByDeposit = ret.CouponByDeposit.CouponAmount;
 
                     #endregion
                 }

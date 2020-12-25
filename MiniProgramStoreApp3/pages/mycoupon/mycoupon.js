@@ -117,21 +117,31 @@ Page({
       var prevPage = pages[pages.length - 2];
 
       if (_this.data.op_faceTypes == '1,2') {
+        var coupon = prevPage.data.couponByShop
+        coupon.selectedCouponIds = couponIds.length > 0 ? couponIds[0] : ['']
         prevPage.setData({
-          couponIdsByShop: couponIds
+          couponIdsByShop: couponIds.length > 0 ? couponIds[0] : [''],
+          couponByShop: coupon
         })
       } else if (_this.data.op_faceTypes == '3') {
+        var coupon = prevPage.data.couponByRent
+        coupon.selectedCouponIds = couponIds
         prevPage.setData({
-          couponIdByRent: couponIds.length > 0 ? couponIds[0] : ''
+          couponIdByRent: couponIds.length > 0 ? couponIds[0] : '',
+          couponByRent: coupon
         })
       } else if (_this.data.op_faceTypes == '4') {
+        var coupon = prevPage.data.couponByDeposit
+        coupon.selectedCouponIds = couponIds
+        console.log('couponIds>>'+couponIds)
         prevPage.setData({
-          couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : ''
+          couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : '',
+          couponByDeposit: coupon
         })
       }
 
       prevPage.getConfirmData()
-      
+
       wx.navigateBack()
     }
   },
