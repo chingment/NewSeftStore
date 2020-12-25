@@ -69,11 +69,6 @@
           :closable="false"
         />
       </el-form-item>
-
-      <el-form-item label="属性">
-        <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
-        <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
-      </el-form-item>
       <el-form-item label="特色标签" prop="charTags">
         <el-tag
           v-for="tag in form.charTags"
@@ -94,6 +89,10 @@
           @blur="charTagsHandleInputConfirm"
         />
         <el-button v-else class="button-new-tag" size="small" @click="charTagsShowInput">+ 添加</el-button>
+      </el-form-item>
+      <el-form-item label="属性">
+        <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
+        <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
       </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
 

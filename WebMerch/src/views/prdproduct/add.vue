@@ -77,11 +77,6 @@
         />
       </el-form-item>
 
-      <el-form-item label="属性">
-        <el-checkbox v-model="isOpenAddMultiSpecs"> 多规格</el-checkbox>
-        <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
-        <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
-      </el-form-item>
       <el-form-item label="特色标签" prop="charTags">
         <el-tag
           v-for="tag in form.charTags"
@@ -118,7 +113,11 @@
       <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" clearable />
       </el-form-item>
-
+      <el-form-item label="属性">
+        <el-checkbox v-model="isOpenAddMultiSpecs"> 多规格</el-checkbox>
+        <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
+        <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
+      </el-form-item>
       <el-form-item v-show="isOpenAddMultiSpecs" style="max-width:1000px">
 
         <div style="display:flex">
