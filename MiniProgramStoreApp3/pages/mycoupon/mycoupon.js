@@ -2,6 +2,7 @@ const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCoupon = require('../../api/coupon.js')
 const toast = require('../../utils/toastutil')
+const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
 Page({
@@ -93,7 +94,7 @@ Page({
     var operate = _this.data.operate
 
     if (operate == 1) {
-      app.switchTab(0)
+      pageMain.mainTabBarSwitch(0)
     } else if (operate == 2) {
       if (!coupon.canSelected) {
         toast.show({

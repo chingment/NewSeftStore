@@ -443,9 +443,16 @@ namespace LocalS.BLL.Biz
                         var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByDeposit).FirstOrDefault();
                         if (d_clientCoupon != null)
                         {
+                            if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
+                            {
+                                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                            }
+
+
                             d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
                             d_clientCoupon.Mender = operater;
                             d_clientCoupon.MendTime = DateTime.Now;
+
 
                             var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                             if (d_coupon != null)
@@ -465,6 +472,11 @@ namespace LocalS.BLL.Biz
                         var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
                         if (d_clientCoupon != null)
                         {
+                            if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
+                            {
+                                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                            }
+
                             d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
                             d_clientCoupon.Mender = operater;
                             d_clientCoupon.MendTime = DateTime.Now;
@@ -796,9 +808,15 @@ namespace LocalS.BLL.Biz
                             var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == couponIdByShop).FirstOrDefault();
                             if (d_clientCoupon != null)
                             {
+                                if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                                }
+
                                 d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
                                 d_clientCoupon.Mender = operater;
                                 d_clientCoupon.MendTime = DateTime.Now;
+
 
                                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_coupon != null)
