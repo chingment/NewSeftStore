@@ -96,7 +96,7 @@
       </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
 
-        <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新所有店铺销售信息</el-checkbox>
+        <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新所有店铺销售信息（价格，下架）</el-checkbox>
 
         <el-alert
           show-icon
