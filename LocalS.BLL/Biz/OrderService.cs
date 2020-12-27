@@ -1026,7 +1026,7 @@ namespace LocalS.BLL.Biz
                                             {
                                                 if (Lumos.CommonUtil.IsDateTime(shopModeByMall.BookTime.Value))
                                                 {
-                                                    order.BookStartTime = DateTime.Parse(shopModeByMall.BookTime.Value);
+                                                    order.ReceptionBookStartTime = DateTime.Parse(shopModeByMall.BookTime.Value);
                                                 }
                                             }
                                             else if (shopModeByMall.BookTime.Type == 2)
@@ -1036,12 +1036,12 @@ namespace LocalS.BLL.Biz
                                                 {
                                                     if (Lumos.CommonUtil.IsDateTime(arr_time[0]))
                                                     {
-                                                        order.BookStartTime = DateTime.Parse(arr_time[0]);
+                                                        order.ReceptionBookStartTime = DateTime.Parse(arr_time[0]);
                                                     }
 
                                                     if (Lumos.CommonUtil.IsDateTime(arr_time[1]))
                                                     {
-                                                        order.BookEndTime = DateTime.Parse(arr_time[1]);
+                                                        order.ReceptionBookEndTime = DateTime.Parse(arr_time[1]);
                                                     }
                                                 }
 

@@ -81,20 +81,24 @@ namespace LocalS.Entity
         public string ReceptionAreaCode { get; set; }
         public string ReceptionAreaName { get; set; }
         public string ReceptionMarkName { get; set; }
-        public DateTime? ReceptionBookTime { get; set; }
+        public DateTime? ReceptionBookStartTime { get; set; }
+        public DateTime? ReceptionBookEndTime { get; set; }
+        public string ExpressNumber { get; set; }
+        public string ExpressComName { get; set; }
+        public string ExpressComId { get; set; }
+        public string PickupCode { get; set; }
+        public DateTime? PickupCodeExpireTime { get; set; }
+        public string PickupFlowLastDesc { get; set; }
+        public DateTime? PickupFlowLastTime { get; set; }
+        public bool PickupIsTrg { get; set; }
+        public DateTime? PickupTrgTime { get; set; }
+
         public decimal SaleAmount { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         // public decimal CouponAmount { get; set; }
         public decimal ChargeAmount { get; set; }
         public int Quantity { get; set; }
-        public string PickupCode { get; set; }
-        public DateTime? PickupCodeExpireTime { get; set; }
-        /// <summary>
-        /// 是否触发过取货
-        /// </summary>
-        public bool PickupIsTrg { get; set; }
-        public DateTime? PickupTrgTime { get; set; }
         public E_PayStatus PayStatus { get; set; }
         public E_PayWay PayWay { get; set; }
         public DateTime? PayedTime { get; set; }
@@ -104,11 +108,6 @@ namespace LocalS.Entity
         public string ExImgUrls { get; set; }
         public DateTime? ExHandleTime { get; set; }
         public string ExHandleRemark { get; set; }
-        public string PickupFlowLastDesc { get; set; }
-        public DateTime? PickupFlowLastTime { get; set; }
-        public string ExpressNumber { get; set; }
-        public string ExpressComName { get; set; }
-        public string ExpressComId { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
@@ -128,8 +127,6 @@ namespace LocalS.Entity
         public string PayTransId { get; set; }
         public string PayPartnerPayTransId { get; set; }
         public E_PayPartner PayPartner { get; set; }
-        public DateTime? BookStartTime { get; set; }
-        public DateTime? BookEndTime { get; set; }
         public bool IsNoDisplayClient { get; set; }
         public string SaleOutletId { get; set; }
         public string CouponIdsByShop { get; set; }
