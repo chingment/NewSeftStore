@@ -295,6 +295,13 @@ namespace LocalS.BLL.Biz
             {
                 return 0;
             }
+
+            if (faceType != E_Coupon_FaceType.ShopDiscount)
+            {
+                if (sum_amount == 0)
+                    return 0;
+            }
+
             LogUtil.Info("=>2");
             decimal couponAmount = 0;
             List<UseAreaModel> arr_useArea = null;
@@ -307,6 +314,7 @@ namespace LocalS.BLL.Biz
                         case E_Coupon_FaceType.ShopVoucher:
                         case E_Coupon_FaceType.DepositVoucher:
                         case E_Coupon_FaceType.RentVoucher:
+
                             couponAmount = (faceValue) * (saleAmount / sum_amount);
                             break;
                         case E_Coupon_FaceType.ShopDiscount:
