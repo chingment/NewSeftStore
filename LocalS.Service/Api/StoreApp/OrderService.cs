@@ -199,6 +199,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.KindId3 = r_productSku.KindId3;
                         productSku.RentTermUnit = E_RentTermUnit.Month;
+                        productSku.SupReceiveMode = r_productSku.SupReceiveMode;
                         productSku.RentTermUnitText = "月";
                         productSku.RentTermValue = 1;
                         productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
@@ -249,6 +250,7 @@ namespace LocalS.Service.Api.StoreApp
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.ProductId = r_productSku.ProductId;
                         productSku.KindId3 = r_productSku.KindId3;
+                        productSku.SupReceiveMode = r_productSku.SupReceiveMode;
                         productSku.RentTermUnit = E_RentTermUnit.Month;
                         productSku.RentTermUnitText = "月";
                         productSku.RentTermValue = 1;
@@ -269,6 +271,7 @@ namespace LocalS.Service.Api.StoreApp
                         if (memberFeeSt != null)
                         {
                             productSku.Name = memberFeeSt.Name;
+                            productSku.SupReceiveMode =  E_SupReceiveMode.MemerbFee;
                             productSku.MainImgUrl = memberFeeSt.MainImgUrl;
                             productSku.SalePrice = memberFeeSt.FeeSaleValue;
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
@@ -393,6 +396,8 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var orderSub in orderSubs)
                 {
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, new string[] { orderSub.SellChannelRefId }, orderSub.PrdProductSkuId);
+
                     var c_prodcutSku = new OrderConfirmProductSkuModel();
                     c_prodcutSku.Id = orderSub.PrdProductSkuId;
                     c_prodcutSku.Name = orderSub.PrdProductSkuName;
@@ -404,6 +409,7 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.OriginalAmount = orderSub.OriginalAmount;
                     c_prodcutSku.ShopMethod = orderSub.ShopMethod;
                     c_prodcutSku.ShopMode = orderSub.SellChannelRefType;
+                    c_prodcutSku.SupReceiveMode = r_productSku.SupReceiveMode;
                     c_prodcutSku.RentTermUnitText = "月";
                     c_prodcutSku.RentTermUnit = orderSub.RentTermUnit;
                     c_prodcutSku.RentTermValue = orderSub.RentTermValue;
@@ -441,36 +447,56 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (skus_DeliveryOrStoreSelfTake.Count > 0)
                 {
-                    var orderBlock_DeliveryOrStoreSelfTake = new OrderBlockModel();
-                    orderBlock_DeliveryOrStoreSelfTake.TagName = "线上商城";
-                    orderBlock_DeliveryOrStoreSelfTake.Skus = skus_DeliveryOrStoreSelfTake;
+                    var skus_Delivery = skus_DeliveryOrStoreSelfTake.Where(m => m.SupReceiveMode ==  E_SupReceiveMode.Delivery).ToList();
+                    if (skus_Delivery.Count > 0)
+                    {
+                        var orderBlock_Delivery = new OrderBlockModel();
+                        orderBlock_Delivery.TagName = "线上商城[配送]";
+                        orderBlock_Delivery.Skus = skus_Delivery;
+                        orderBlock_Delivery.TabMode = E_TabMode.Delivery;
+                        orderBlock_Delivery.ReceiveMode = E_ReceiveMode.Delivery;
+                        orderBlock_Delivery.Delivery = dliveryModel;
+                        orderBlock_Delivery.BookTime = bookTimeModel;
+                        orderBlock_Delivery.SelfTake.StoreName = store.Name;
+                        orderBlock_Delivery.SelfTake.StoreAddress = store.Address;
+                        orderBlock.Add(orderBlock_Delivery);
 
-                    if (store.SctMode.Contains("T1"))
-                    {
-                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.Delivery;
-                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
                     }
-                    else if (store.SctMode.Contains("T2"))
+
+                    var skus_StoreSelfTake = skus_DeliveryOrStoreSelfTake.Where(m => m.SupReceiveMode ==  E_SupReceiveMode.StoreSelfTake).ToList();
+
+                    if (skus_StoreSelfTake.Count > 0)
                     {
-                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.StoreSelfTake;
-                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                        var orderBlock_StoreSelfTake = new OrderBlockModel();
+                        orderBlock_StoreSelfTake.TagName = "线上商城[自提]";
+                        orderBlock_StoreSelfTake.Skus = skus_StoreSelfTake;
+                        orderBlock_StoreSelfTake.TabMode = E_TabMode.StoreSelfTake;
+                        orderBlock_StoreSelfTake.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                        orderBlock_StoreSelfTake.Delivery = dliveryModel;
+                        orderBlock_StoreSelfTake.BookTime = bookTimeModel;
+                        orderBlock_StoreSelfTake.SelfTake.StoreName = store.Name;
+                        orderBlock_StoreSelfTake.SelfTake.StoreAddress = store.Address;
+                        orderBlock.Add(orderBlock_StoreSelfTake);
+
                     }
-                    else if (store.SctMode.Contains("T3"))
+
+                    var skus_DeliveryAndStoreSelfTake = skus_DeliveryOrStoreSelfTake.Where(m => m.SupReceiveMode == E_SupReceiveMode.DeliveryAndStoreSelfTake).ToList();
+
+                    if (skus_DeliveryAndStoreSelfTake.Count > 0)
                     {
+                        var orderBlock_DeliveryOrStoreSelfTake = new OrderBlockModel();
+                        orderBlock_DeliveryOrStoreSelfTake.TagName = "线上商城[配送或自提]";
+                        orderBlock_DeliveryOrStoreSelfTake.Skus = skus_DeliveryAndStoreSelfTake;
                         orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
-                        orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = receiveMode_Mall;
-                    }
-                    else
-                    {
-                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.Delivery;
                         orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
+                        orderBlock_DeliveryOrStoreSelfTake.Delivery = dliveryModel;
+                        orderBlock_DeliveryOrStoreSelfTake.BookTime = bookTimeModel;
+                        orderBlock_DeliveryOrStoreSelfTake.SelfTake.StoreName = store.Name;
+                        orderBlock_DeliveryOrStoreSelfTake.SelfTake.StoreAddress = store.Address;
+                        orderBlock.Add(orderBlock_DeliveryOrStoreSelfTake);
+
                     }
 
-                    orderBlock_DeliveryOrStoreSelfTake.Delivery = dliveryModel;
-                    orderBlock_DeliveryOrStoreSelfTake.BookTime = bookTimeModel;
-                    orderBlock_DeliveryOrStoreSelfTake.SelfTake.StoreName = store.Name;
-                    orderBlock_DeliveryOrStoreSelfTake.SelfTake.StoreAddress = store.Address;
-                    orderBlock.Add(orderBlock_DeliveryOrStoreSelfTake);
                 }
 
 
@@ -480,7 +506,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var orderBlock_MemberFee = new OrderBlockModel();
                     orderBlock_MemberFee.TagName = "会员费";
-                    orderBlock_MemberFee.Skus = skus_Mall;
+                    orderBlock_MemberFee.Skus = skus_MemberFee;
                     orderBlock_MemberFee.TabMode = E_TabMode.MemerbFee;
                     orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.MemberFee;
                     orderBlock.Add(orderBlock_MemberFee);

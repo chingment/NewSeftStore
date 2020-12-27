@@ -90,6 +90,13 @@
         />
         <el-button v-else class="button-new-tag" size="small" @click="charTagsShowInput">+ 添加</el-button>
       </el-form-item>
+      <el-form-item label="取货模式">
+        <el-radio-group v-model="form.supReceiveMode">
+          <el-radio-button label="1">仅配送</el-radio-button>
+          <el-radio-button label="2">仅店铺自取</el-radio-button>
+          <el-radio-button label="3">可配送或店铺自取</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="属性">
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
@@ -221,6 +228,7 @@ export default {
         charTags: [],
         isTrgVideoService: false,
         isRevService: false,
+        supReceiveMode:'1',
         briefDes: '',
         displayImgUrls: [],
         isUnifyUpdateSalePrice: false,
@@ -275,6 +283,7 @@ export default {
           this.form.skus = d.skus
           this.form.isTrgVideoService = d.isTrgVideoService
           this.form.isRevService = d.isRevService
+          this.form.supReceiveMode = d.supReceiveMode+''
           this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
@@ -326,6 +335,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
+          _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = this.form.skus
           _form.supplierId = this.form.supplierId
           MessageBox.confirm('确定要保存', '提示', {

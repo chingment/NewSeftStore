@@ -113,6 +113,13 @@
       <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" clearable />
       </el-form-item>
+       <el-form-item label="取货模式">
+        <el-radio-group v-model="form.supReceiveMode">
+          <el-radio-button label="1">仅配送</el-radio-button>
+          <el-radio-button label="2">仅店铺自取</el-radio-button>
+          <el-radio-button label="3">可配送或店铺自取</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="属性">
         <el-checkbox v-model="isOpenAddMultiSpecs"> 多规格</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
@@ -293,6 +300,7 @@ export default {
         supplierId: '',
         isTrgVideoService: false,
         isRevService: false,
+        supReceiveMode:'1',
         displayImgUrls: [],
         singleSkuCumCode: '',
         singleSkuBarCode: '',
@@ -430,6 +438,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
+          _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = skus
           console.log(JSON.stringify(_form))
           MessageBox.confirm('确定要保存', '提示', {

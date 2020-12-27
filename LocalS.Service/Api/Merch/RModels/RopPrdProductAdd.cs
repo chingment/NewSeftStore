@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace LocalS.Service.Api.Merch
         public List<int> KindIds { get; set; }
         public bool IsTrgVideoService { get; set; }
         public bool IsRevService { get; set; }
+        public E_SupReceiveMode SupReceiveMode { get; set; }
         public List<string> CharTags { get; set; }
         public List<Sku> Skus { get; set; }
         public List<SpecItem> SpecItems { get; set; }

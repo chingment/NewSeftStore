@@ -27,6 +27,7 @@ namespace LocalS.BLL
         public string SpecIdx { get; set; }
         public bool IsTrgVideoService { get; set; }
         public bool IsRevService { get; set; }
+        public E_SupReceiveMode SupReceiveMode { get; set; }
         public List<string> CharTags { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
         public List<ProductSkuStockModel> Stocks { get; set; }

@@ -1,4 +1,5 @@
-﻿using LocalS.Service.UI;
+﻿using LocalS.Entity;
+using LocalS.Service.UI;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace LocalS.Service.Api.Merch
         public List<string> CharTags { get; set; }
         public bool IsTrgVideoService { get; set; }
         public bool IsRevService { get; set; }
+        public E_SupReceiveMode SupReceiveMode { get; set; }
         public List<Sku> Skus { get; set; }
         public string SupplierId { get; set; }
         public string SupplierName { get; set; }

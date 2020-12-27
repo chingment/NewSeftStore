@@ -4,6 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_SupReceiveMode
+    {
+
+        Unknow = 0,
+        Delivery = 1,
+        StoreSelfTake = 2,
+        DeliveryAndStoreSelfTake = 3,
+        MachineSelfTake = 4,
+        MemerbFee = 5
+    }
+
     [Table("PrdProduct")]
     public class PrdProduct
     {
@@ -24,6 +35,7 @@ namespace LocalS.Entity
         public string SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
         public bool IsRevService { get; set; }
+        public E_SupReceiveMode SupReceiveMode { get; set; }
         public string CharTags { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
