@@ -467,6 +467,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     if (skus_StoreSelfTake.Count > 0)
                     {
+  
                         var orderBlock_StoreSelfTake = new OrderBlockModel();
                         orderBlock_StoreSelfTake.TagName = "线上商城[自提]";
                         orderBlock_StoreSelfTake.Skus = skus_StoreSelfTake;
