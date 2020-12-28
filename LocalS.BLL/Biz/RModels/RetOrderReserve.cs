@@ -39,6 +39,7 @@ namespace LocalS.BLL.Biz
         public decimal CouponAmountByShop { get; set; }
         public decimal CouponAmountByRent { get; set; }
         public decimal CouponAmountByDeposit { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
         public List<Child> Childs { get; set; }
         public class Child
         {
@@ -61,6 +62,7 @@ namespace LocalS.BLL.Biz
             public decimal CouponAmountByShop { get; set; }
             public decimal CouponAmountByRent { get; set; }
             public decimal CouponAmountByDeposit { get; set; }
+            public E_ReceiveMode ReceiveMode { get; set; }
         }
         public class ProductSku
         {
@@ -102,6 +104,7 @@ namespace LocalS.BLL.Biz
             public decimal CouponAmountByShop { get; set; }
             public decimal CouponAmountByRent { get; set; }
             public decimal CouponAmountByDeposit { get; set; }
+            public E_ReceiveMode ReceiveMode { get; set; }
         }
 
     }

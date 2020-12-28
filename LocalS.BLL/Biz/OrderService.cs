@@ -568,6 +568,7 @@ namespace LocalS.BLL.Biz
                                     var buildOrderSku = new BuildOrder.ProductSku();
                                     buildOrderSku.Id = sku.Id;
                                     buildOrderSku.ProductId = r_sku.ProductId;
+                                    buildOrderSku.ReceiveMode = block.ReceiveMode;
                                     buildOrderSku.Name = r_sku.Name;
                                     buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
                                     buildOrderSku.BarCode = r_sku.BarCode;
@@ -637,6 +638,7 @@ namespace LocalS.BLL.Biz
                                     var buildOrderSku = new BuildOrder.ProductSku();
                                     buildOrderSku.Id = sku.Id;
                                     buildOrderSku.ProductId = r_sku.ProductId;
+                                    buildOrderSku.ReceiveMode = block.ReceiveMode;
                                     buildOrderSku.Name = r_sku.Name;
                                     buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
                                     buildOrderSku.BarCode = r_sku.BarCode;
@@ -774,6 +776,7 @@ namespace LocalS.BLL.Biz
                                     var buildOrderSku = new BuildOrder.ProductSku();
                                     buildOrderSku.Id = sku.Id;
                                     buildOrderSku.ProductId = "";
+                                    buildOrderSku.ReceiveMode = E_ReceiveMode.MemberFee;
                                     buildOrderSku.Name = memberFeeSt.Name;
                                     buildOrderSku.MainImgUrl = memberFeeSt.MainImgUrl;
                                     buildOrderSku.BarCode = "";
@@ -936,127 +939,120 @@ namespace LocalS.BLL.Biz
                         order.PickupCode = IdWorker.BuildPickupCode();
                         order.PickupCodeExpireTime = DateTime.Now.AddDays(10);//todo 取货码10内有效
                         order.SubmittedTime = DateTime.Now;
-
                         order.CouponIdsByShop = rop.CouponIdsByShop.ToJsonString();
                         order.CouponAmountByShop = buildOrder.CouponAmountByShop;
                         order.CouponIdByRent = rop.CouponIdByRent;
                         order.CouponAmountByRent = buildOrder.CouponAmountByRent;
                         order.CouponIdByDeposit = rop.CouponIdByDeposit;
                         order.CouponAmountByDeposit = buildOrder.CouponAmountByDeposit;
-
                         order.ShopMethod = rop.ShopMethod;
 
-                        if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.Rent)
+                        switch (buildOrder.ReceiveMode)
                         {
-                            switch (buildOrder.SellChannelRefType)
-                            {
-                                case E_SellChannelRefType.Machine:
-                                    #region Machine
+                            case E_ReceiveMode.Delivery:
+                                #region Delivery
 
-                                    if (order.PickupCode == null)
+                                var rm_Delivery = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).FirstOrDefault();
+
+                                if (rm_Delivery == null && rm_Delivery.Delivery == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式配送地址为空", null);
+                                }
+
+                                order.ReceiveModeName = "配送到手";
+                                order.ReceiveMode = E_ReceiveMode.Delivery;
+                                order.Receiver = rm_Delivery.Delivery.Consignee;
+                                order.ReceiverPhoneNumber = rm_Delivery.Delivery.PhoneNumber;
+                                order.ReceptionAreaCode = rm_Delivery.Delivery.AreaCode;
+                                order.ReceptionAreaName = rm_Delivery.Delivery.AreaName;
+                                order.ReceptionAddress = rm_Delivery.Delivery.Address;
+
+                                #endregion
+                                break;
+                            case E_ReceiveMode.StoreSelfTake:
+                                #region StoreSelfTake
+
+                                var rm_StoreSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
+
+                                if (rm_StoreSelfTake == null || rm_StoreSelfTake.SelfTake == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空", null);
+                                }
+
+
+                                order.ReceiveModeName = "到店自提";
+                                order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                order.Receiver = rm_StoreSelfTake.SelfTake.Consignee;
+                                order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.PhoneNumber;
+                                order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.AreaCode;
+                                order.ReceptionAreaName = rm_StoreSelfTake.SelfTake.AreaName;
+                                order.ReceptionAddress = rm_StoreSelfTake.SelfTake.StoreAddress;
+                                order.ReceptionMarkName = rm_StoreSelfTake.SelfTake.StoreName;
+
+
+                                if (rm_StoreSelfTake.BookTime != null && !string.IsNullOrEmpty(rm_StoreSelfTake.BookTime.Value))
+                                {
+                                    //1为具体时间值 例如 2020-11-24 13:00
+                                    //2为时间段区间 例如 2020-11-24 13:00,2020-11-24 13:00
+                                    if (rm_StoreSelfTake.BookTime.Type == 1)
                                     {
-                                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
-                                    }
-
-                                    var shopModeByMachine = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).FirstOrDefault();
-
-                                    if (shopModeByMachine == null || shopModeByMachine.SelfTake == null)
-                                    {
-                                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空", null);
-                                    }
-
-                                    if (shopModeByMachine.ReceiveMode != E_ReceiveMode.MachineSelfTake)
-                                    {
-                                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式请指定收货方式", null);
-                                    }
-
-                                    order.ReceiveModeName = "机器自提";
-                                    order.ReceiveMode = shopModeByMachine.ReceiveMode;
-                                    order.Receiver = null;
-                                    order.ReceiverPhoneNumber = null;
-                                    order.ReceptionAddress = shopModeByMachine.SelfTake.StoreAddress;
-                                    order.ReceptionMarkName = shopModeByMachine.SelfTake.StoreName;
-                                    #endregion
-                                    break;
-                                case E_SellChannelRefType.Mall:
-                                    #region Mall
-
-
-                                    var shopModeByMall = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery || m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
-                                    if (shopModeByMall == null)
-                                    {
-                                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式数据为空", null);
-                                    }
-                                    else if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery && shopModeByMall.Delivery == null)
-                                    {
-                                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式配送地址为空", null);
-                                    }
-                                    else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake && shopModeByMall.SelfTake == null)
-                                    {
-                                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空", null);
-                                    }
-
-                                    if (shopModeByMall.ReceiveMode == E_ReceiveMode.Delivery)
-                                    {
-                                        order.ReceiveModeName = "配送到手";
-                                        order.ReceiveMode = E_ReceiveMode.Delivery;
-                                        order.Receiver = shopModeByMall.Delivery.Consignee;
-                                        order.ReceiverPhoneNumber = shopModeByMall.Delivery.PhoneNumber;
-                                        order.ReceptionAreaCode = shopModeByMall.Delivery.AreaCode;
-                                        order.ReceptionAreaName = shopModeByMall.Delivery.AreaName;
-                                        order.ReceptionAddress = shopModeByMall.Delivery.Address;
-                                    }
-                                    else if (shopModeByMall.ReceiveMode == E_ReceiveMode.StoreSelfTake)
-                                    {
-                                        order.ReceiveModeName = "到店自取";
-                                        order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
-                                        order.Receiver = shopModeByMall.SelfTake.Consignee;
-                                        order.ReceiverPhoneNumber = shopModeByMall.SelfTake.PhoneNumber;
-                                        order.ReceptionAreaCode = shopModeByMall.SelfTake.AreaCode;
-                                        order.ReceptionAreaName = shopModeByMall.SelfTake.AreaName;
-                                        order.ReceptionAddress = shopModeByMall.SelfTake.StoreAddress;
-                                        order.ReceptionMarkName = shopModeByMall.SelfTake.StoreName;
-
-
-                                        if (shopModeByMall.BookTime != null && !string.IsNullOrEmpty(shopModeByMall.BookTime.Value))
+                                        if (Lumos.CommonUtil.IsDateTime(rm_StoreSelfTake.BookTime.Value))
                                         {
-                                            //1为具体时间值 例如 2020-11-24 13:00
-                                            //2为时间段区间 例如 2020-11-24 13:00,2020-11-24 13:00
-                                            if (shopModeByMall.BookTime.Type == 1)
-                                            {
-                                                if (Lumos.CommonUtil.IsDateTime(shopModeByMall.BookTime.Value))
-                                                {
-                                                    order.ReceptionBookStartTime = DateTime.Parse(shopModeByMall.BookTime.Value);
-                                                }
-                                            }
-                                            else if (shopModeByMall.BookTime.Type == 2)
-                                            {
-                                                string[] arr_time = shopModeByMall.BookTime.Value.Split(',');
-                                                if (arr_time.Length == 2)
-                                                {
-                                                    if (Lumos.CommonUtil.IsDateTime(arr_time[0]))
-                                                    {
-                                                        order.ReceptionBookStartTime = DateTime.Parse(arr_time[0]);
-                                                    }
-
-                                                    if (Lumos.CommonUtil.IsDateTime(arr_time[1]))
-                                                    {
-                                                        order.ReceptionBookEndTime = DateTime.Parse(arr_time[1]);
-                                                    }
-                                                }
-
-                                            }
+                                            order.ReceptionBookStartTime = DateTime.Parse(rm_StoreSelfTake.BookTime.Value);
                                         }
                                     }
-                                    #endregion
-                                    break;
-                            }
-                        }
-                        else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
-                        {
-                            order.ReceiveMode = E_ReceiveMode.MemberFee;
-                            order.ReceiveModeName = "会员费";
-                            order.IsNoDisplayClient = true;
+                                    else if (rm_StoreSelfTake.BookTime.Type == 2)
+                                    {
+                                        string[] arr_time = rm_StoreSelfTake.BookTime.Value.Split(',');
+                                        if (arr_time.Length == 2)
+                                        {
+                                            if (Lumos.CommonUtil.IsDateTime(arr_time[0]))
+                                            {
+                                                order.ReceptionBookStartTime = DateTime.Parse(arr_time[0]);
+                                            }
+
+                                            if (Lumos.CommonUtil.IsDateTime(arr_time[1]))
+                                            {
+                                                order.ReceptionBookEndTime = DateTime.Parse(arr_time[1]);
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                #endregion
+                                break;
+                            case E_ReceiveMode.MachineSelfTake:
+                                #region MachineSelfTake
+
+                                if (order.PickupCode == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
+                                }
+
+                                var rm_MachineSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).FirstOrDefault();
+
+                                if (rm_MachineSelfTake == null || rm_MachineSelfTake.SelfTake == null)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空", null);
+                                }
+
+                                order.ReceiveModeName = "机器自提";
+                                order.ReceiveMode = rm_MachineSelfTake.ReceiveMode;
+                                order.Receiver = null;
+                                order.ReceiverPhoneNumber = null;
+                                order.ReceptionAddress = rm_MachineSelfTake.SelfTake.StoreAddress;
+                                order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.StoreName;
+                                #endregion
+                                break;
+                            case E_ReceiveMode.MemberFee:
+                                #region MemberFee
+                                order.ReceiveMode = E_ReceiveMode.MemberFee;
+                                order.ReceiveModeName = "会员费";
+                                order.IsNoDisplayClient = true;
+                                #endregion
+                                break;
+
                         }
 
                         order.SaleAmount = buildOrder.SaleAmount;
@@ -1165,23 +1161,24 @@ namespace LocalS.BLL.Biz
 
             List<BuildOrder.Child> buildOrderChilds = new List<BuildOrder.Child>();
 
-            var shopModes = reserveProductSkus.Select(m => m.ShopMode).Distinct().ToArray();
+            var d_s_orders = (from d in reserveProductSkus select new { d.ShopMode, d.ReceiveMode }).Distinct().ToArray();
 
-            foreach (var shopMode in shopModes)
+            foreach (var d_s_order in d_s_orders)
             {
-                var shopModeProductSkus = reserveProductSkus.Where(m => m.ShopMode == shopMode).ToList();
+                var shopModeProductSkus = reserveProductSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode).ToList();
 
                 foreach (var shopModeProductSku in shopModeProductSkus)
                 {
                     var productSku_Stocks = shopModeProductSku.Stocks;
 
-                    if (shopMode == E_SellChannelRefType.Mall)
+                    if (d_s_order.ShopMode == E_SellChannelRefType.Mall)
                     {
                         //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
                         var buildOrderChild = new BuildOrder.Child();
                         buildOrderChild.SellChannelRefType = productSku_Stocks[0].RefType;
                         buildOrderChild.SellChannelRefId = productSku_Stocks[0].RefId;
                         buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                        buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                         buildOrderChild.CabinetId = productSku_Stocks[0].CabinetId;
                         buildOrderChild.SlotId = productSku_Stocks[0].SlotId;
                         buildOrderChild.Quantity = shopModeProductSku.Quantity;
@@ -1198,14 +1195,14 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
                         buildOrderChilds.Add(buildOrderChild);
                     }
-                    else if (shopMode == E_SellChannelRefType.Machine)
+                    else if (d_s_order.ShopMode == E_SellChannelRefType.Machine)
                     {
                         foreach (var item in productSku_Stocks)
                         {
                             bool isFlag = false;
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
-                                int reservedQuantity = buildOrderChilds.Where(m => m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == shopMode).Sum(m => m.Quantity);//已订的数量
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == d_s_order.ShopMode).Sum(m => m.Quantity);//已订的数量
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
@@ -1213,6 +1210,7 @@ namespace LocalS.BLL.Biz
                                     buildOrderChild.SellChannelRefType = item.RefType;
                                     buildOrderChild.SellChannelRefId = item.RefId;
                                     buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                                    buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                                     buildOrderChild.CabinetId = item.CabinetId;
                                     buildOrderChild.SlotId = item.SlotId;
                                     buildOrderChild.Quantity = 1;
@@ -1264,7 +1262,8 @@ namespace LocalS.BLL.Biz
                                  select new
                                  {
                                      c.SellChannelRefType,
-                                     c.SellChannelRefId
+                                     c.SellChannelRefId,
+                                     c.ReceiveMode,
                                  }).Distinct().ToList();
 
 
@@ -1273,6 +1272,7 @@ namespace LocalS.BLL.Biz
                 var buildOrder = new BuildOrder();
                 buildOrder.SellChannelRefType = l_buildOrder.SellChannelRefType;
                 buildOrder.SellChannelRefId = l_buildOrder.SellChannelRefId;
+                buildOrder.ReceiveMode = l_buildOrder.ReceiveMode;
                 buildOrder.Quantity = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.Quantity);
                 buildOrder.SaleAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.SaleAmount);
                 buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.OriginalAmount);
