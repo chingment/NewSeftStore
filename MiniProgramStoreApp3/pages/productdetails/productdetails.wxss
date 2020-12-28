@@ -261,3 +261,12 @@ swiper {
 .it-charTag .txt{
   color: #cdcdcd;
 }
+
+.item-tag .tag{
+  padding: 8rpx;
+  border-radius: 5rpx;
+  color: #b45052;
+  background-color: #ffedeb;
+  display: inline-block;
+  margin-top: 10rpx;
+}

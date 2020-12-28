@@ -113,15 +113,15 @@
       <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" clearable />
       </el-form-item>
-       <el-form-item label="取货模式">
+      <el-form-item label="取货模式">
         <el-radio-group v-model="form.supReceiveMode">
-          <el-radio-button label="1">仅配送</el-radio-button>
-          <el-radio-button label="2">仅店铺自取</el-radio-button>
-          <el-radio-button label="3">可配送或店铺自取</el-radio-button>
+          <el-radio-button label="1">仅限配送</el-radio-button>
+          <el-radio-button label="2">仅限店铺自提</el-radio-button>
+          <el-radio-button label="3">可配送或店铺自提</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="属性">
-        <el-checkbox v-model="isOpenAddMultiSpecs"> 多规格</el-checkbox>
+        <el-checkbox v-model="isOpenAddMultiSpecs">多规格</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
       </el-form-item>
@@ -300,7 +300,7 @@ export default {
         supplierId: '',
         isTrgVideoService: false,
         isRevService: false,
-        supReceiveMode:'1',
+        supReceiveMode: '1',
         displayImgUrls: [],
         singleSkuCumCode: '',
         singleSkuBarCode: '',

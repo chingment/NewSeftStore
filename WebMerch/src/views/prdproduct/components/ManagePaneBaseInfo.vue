@@ -92,9 +92,9 @@
       </el-form-item>
       <el-form-item label="取货模式">
         <el-radio-group v-model="form.supReceiveMode">
-          <el-radio-button label="1">仅配送</el-radio-button>
-          <el-radio-button label="2">仅店铺自取</el-radio-button>
-          <el-radio-button label="3">可配送或店铺自取</el-radio-button>
+          <el-radio-button label="1">仅限配送</el-radio-button>
+          <el-radio-button label="2">仅限店铺自提</el-radio-button>
+          <el-radio-button label="3">可配送或店铺自提</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="属性">
@@ -228,7 +228,7 @@ export default {
         charTags: [],
         isTrgVideoService: false,
         isRevService: false,
-        supReceiveMode:'1',
+        supReceiveMode: '1',
         briefDes: '',
         displayImgUrls: [],
         isUnifyUpdateSalePrice: false,
@@ -283,7 +283,7 @@ export default {
           this.form.skus = d.skus
           this.form.isTrgVideoService = d.isTrgVideoService
           this.form.isRevService = d.isRevService
-          this.form.supReceiveMode = d.supReceiveMode+''
+          this.form.supReceiveMode = d.supReceiveMode + ''
           this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
           this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)

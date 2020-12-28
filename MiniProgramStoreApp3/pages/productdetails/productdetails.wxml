@@ -26,6 +26,10 @@
 						<view class="item-name">
 							<text class="name">{{productSku.name}}</text>
 						</view>
+						<view class="item-tag">
+							<view wx:if="{{productSku.supReceiveMode==2}}" class="tag">仅限店铺自提</view>
+							<view wx:if="{{productSku.supReceiveMode==4}}" class="tag">仅限机器自取</view>
+						</view>
 						<view class="item-briefIntro font-gray">
 							<text class="briefIntro">{{productSku.briefDes}}</text>
 						</view>
