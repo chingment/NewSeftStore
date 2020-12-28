@@ -70,6 +70,7 @@
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />
     <Compile Include="MachineBindLog.cs" />
+    <Compile Include="SelfPickAddress.cs" />
     <Compile Include="PayRefund.cs" />
     <Compile Include="PayTrans.cs" />
     <Compile Include="Order.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="AppSoftware.cs" />
     <Compile Include="StoreKind.cs" />
     <Compile Include="StoreKindSpu.cs" />
+    <Compile Include="StoreSelfPickAddress.cs" />
     <Compile Include="Supplier.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

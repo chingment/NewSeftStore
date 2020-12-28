@@ -54,10 +54,12 @@ namespace LocalS.Service.Api.StoreApp
 
     public class BookTimeModel
     {
+        public string Text { get; set; }
         public string Week { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
         public string Type { get; set; }
+        public string Value { get; set; }
     }
 
     public class OrderConfirmSubtotalItemModel

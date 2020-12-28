@@ -8,7 +8,12 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class SelfTakeModel
     {
-        public string StoreName { get; set; }
-        public string StoreAddress { get; set; }
+        public string Id { get; set; }
+        public string Consignee { get; set; }
+        public string PhoneNumber { get; set; }
+        public string AreaName { get; set; }
+        public string AreaCode { get; set; }
+        public string MarkName { get; set; }
+        public string Address { get; set; }
     }
 }

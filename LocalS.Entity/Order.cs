@@ -77,6 +77,7 @@ namespace LocalS.Entity
         public string ReceiveModeName { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPhoneNumber { get; set; }
+        public string ReceptionId { get; set; }
         public string ReceptionAddress { get; set; }
         public string ReceptionAreaCode { get; set; }
         public string ReceptionAreaName { get; set; }

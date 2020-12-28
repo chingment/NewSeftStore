@@ -75,6 +75,10 @@ namespace LocalS.DAL
 
         public IDbSet<RentOrderTransRecord> RentOrderTransRecord { get; set; }
 
+        public IDbSet<SelfPickAddress> SelfPickAddress { get; set; }
+
+        public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

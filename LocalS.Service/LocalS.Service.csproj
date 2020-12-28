@@ -343,8 +343,10 @@
     <Compile Include="Api\StoreApp\RModels\RupProductKindPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSaleOutletList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSearchTobeSearch.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupSelfPickAddressList.cs" />
     <Compile Include="Api\StoreApp\SaleOutletService.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />
+    <Compile Include="Api\StoreApp\SelfPickAddressService.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />
     <Compile Include="Api\StoreApp\CouponService.cs" />

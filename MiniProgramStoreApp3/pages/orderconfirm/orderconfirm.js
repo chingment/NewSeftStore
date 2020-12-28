@@ -19,6 +19,8 @@ Page({
     pageIsReady: false,
     tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
+    curSelfPickAddressBlockIndex: -1,
+    curBookTimeBlockIndex: -1,
     storeId: undefined,
     orderIds: [],
     blocks: [],
@@ -33,7 +35,12 @@ Page({
     booktimeDialog: {
       isShow: false
     },
-    booktimeSelectBlockIndex: -1,
+    selfPickAddressDialog: {
+      isShow: false,
+      dataS: {
+        curSelfPickAddressId: ''
+      }
+    },
     action: '',
     saleOutletId: '',
     shopMethod: 1
@@ -99,17 +106,6 @@ Page({
   },
   onShareAppMessage: function () {
 
-  },
-  booktimeSelect: function (e) {
-    console.log('booktimeSelect')
-    var _this = this
-    var index = e.currentTarget.dataset.replyIndex
-    _this.setData({
-      booktimeSelectBlockIndex: index,
-      booktimeDialog: {
-        isShow: true
-      }
-    })
   },
   deliveryAddressSelect: function (e) {
     var _this = this
@@ -194,7 +190,7 @@ Page({
       var bookTime = null
 
       if (_blocks[i].receiveMode == 1) {
-        if (util.isEmptyOrNull(_delivery.phoneNumber)) {
+        if (util.isEmptyOrNull(_delivery.id)) {
           toast.show({
             title: '请选择快寄地址'
           })
@@ -210,6 +206,13 @@ Page({
         }
       } else if (_blocks[i].receiveMode == 2) {
 
+        if (util.isEmptyOrNull(_selfTake.id)) {
+          toast.show({
+            title: '请选择自提地址'
+          })
+          return
+        }
+
         if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
           toast.show({
             title: '请选择预约时间'
@@ -223,21 +226,20 @@ Page({
         }
 
         selfTake = {
-          storeName: _selfTake.storeName,
-          storeAddress: _selfTake.storeAddress,
+          id: _selfTake.id,
+          markName: _selfTake.markName,
+          address: _selfTake.address,
           areaCode: _selfTake.areaCode,
           address: _selfTake.address
         }
       } else if (_blocks[i].receiveMode == 3) {
         selfTake = {
-          storeName: _selfTake.storeName,
-          storeAddress: _selfTake.storeAddress,
+          markName: _selfTake.markName,
+          address: _selfTake.address,
           areaCode: _selfTake.areaCode,
           address: _selfTake.address
         }
       }
-
-
 
       blocks.push({
         shopMode: _blocks[i].shopMode,
@@ -456,6 +458,17 @@ Page({
       }
     })
   },
+  clickToOpenBooktimeDialog: function (e) {
+    console.log('booktimeSelect')
+    var _this = this
+    var blockIndex = e.currentTarget.dataset.replyBlockindex
+    _this.setData({
+      curBookTimeBlockIndex: blockIndex,
+      booktimeDialog: {
+        isShow: true
+      }
+    })
+  },
   getSelectBookTime: function (e) {
     var _this = this;
     var d = e.detail.params
@@ -466,11 +479,43 @@ Page({
       type: d.type
     }
 
-    _this.data.blocks[_this.data.booktimeSelectBlockIndex].bookTime = booktime
+    console.log("booktime:"+JSON.stringify(booktime))
+    _this.data.blocks[_this.data.curBookTimeBlockIndex].bookTime = booktime
 
     _this.setData({
       blocks: _this.data.blocks
     })
+  },
+  clickToOpenSelfPickAddressDialog: function (e) {
+    var _this = this
+    var blockIndex = e.currentTarget.dataset.replyBlockindex
+
+    _this.setData({
+      curSelfPickAddressBlockIndex: blockIndex
+    })
+
+    var selfPickAddressDialog = _this.data.selfPickAddressDialog
+    selfPickAddressDialog.isShow = true
+    selfPickAddressDialog.dataS.curSelfPickAddressId = _this.data.blocks[blockIndex].selfTake.id
+    _this.setData({
+      selfPickAddressDialog: selfPickAddressDialog
+    })
+  },
+  selectSelfPickAddressItem: function (e) {
+    var _this = this
+    var selfPickAddress = e.detail.selfPickAddress
+    console.log("selfPickAddress:" + JSON.stringify(selfPickAddress))
+
+    var blockIndex = _this.data.curSelfPickAddressBlockIndex
+
+    _this.data.blocks[blockIndex].selfTake.id = selfPickAddress.id
+    _this.data.blocks[blockIndex].selfTake.markName = selfPickAddress.name
+    _this.data.blocks[blockIndex].selfTake.address = selfPickAddress.contactAddress
+
+    _this.setData({
+      blocks: _this.data.blocks
+    })
+
   }
 
 })

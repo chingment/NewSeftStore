@@ -54,7 +54,7 @@ var config = {
     memberGetPromSt: `${host}/Member/GetPromSt`,
     memberGetRightDescSt: `${host}/Member/GetRightDescSt`,
     saleOutletList: `${host}/SaleOutlet/List`,
-    
+    selfPickAddressList: `${host}/SelfPickAddress/List`,
   }
 
 };
