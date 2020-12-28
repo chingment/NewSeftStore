@@ -333,9 +333,19 @@ namespace LocalS.Service.Api.StoreApp
 
                 }
 
+                string time = "";
+                if (DateTime.Now.Minute > 0 && DateTime.Now.Minute < 30)
+                {
+                    time = DateTime.Now.ToString("HH:30");
+                }
+                else
+                {
+                    time = DateTime.Now.AddHours(1).ToString("HH:00");
+                }
+
                 bookTimeModel.Type = "1";
                 bookTimeModel.Date = DateTime.Now.ToString("yyy-MM-dd");
-                bookTimeModel.Time = DateTime.Now.ToString("HH:00");
+                bookTimeModel.Time = time;
                 bookTimeModel.Week = Lumos.CommonUtil.GetCnWeekDayName(DateTime.Now);
                 bookTimeModel.Text = string.Format("（{0}）{1} {2}", bookTimeModel.Week, bookTimeModel.Date, bookTimeModel.Time);
                 bookTimeModel.Value = string.Format("{0} {1}", bookTimeModel.Date, bookTimeModel.Time);
