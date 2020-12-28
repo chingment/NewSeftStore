@@ -959,8 +959,8 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式配送地址为空", null);
                                 }
 
-                                order.ReceiveModeName = "配送到手";
                                 order.ReceiveMode = E_ReceiveMode.Delivery;
+                                order.ReceiveModeName = "配送到手";
                                 order.Receiver = rm_Delivery.Delivery.Consignee;
                                 order.ReceiverPhoneNumber = rm_Delivery.Delivery.PhoneNumber;
                                 order.ReceptionAreaCode = rm_Delivery.Delivery.AreaCode;
@@ -979,9 +979,8 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空", null);
                                 }
 
-
-                                order.ReceiveModeName = "到店自提";
                                 order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                order.ReceiveModeName = "到店自提";
                                 order.Receiver = rm_StoreSelfTake.SelfTake.Consignee;
                                 order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.PhoneNumber;
                                 order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.AreaCode;
@@ -1037,8 +1036,8 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空", null);
                                 }
 
+                                order.ReceiveMode = E_ReceiveMode.MachineSelfTake;
                                 order.ReceiveModeName = "机器自提";
-                                order.ReceiveMode = rm_MachineSelfTake.ReceiveMode;
                                 order.Receiver = null;
                                 order.ReceiverPhoneNumber = null;
                                 order.ReceptionAddress = rm_MachineSelfTake.SelfTake.StoreAddress;
