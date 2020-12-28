@@ -330,7 +330,15 @@ namespace LocalS.Service.Api.StoreApp
                     selfTakeModel.PhoneNumber = selfPickAddress.ContactPhone;
                     selfTakeModel.AreaName = "";
                     selfTakeModel.Address = selfPickAddress.ContactAddress;
+
                 }
+
+                bookTimeModel.Type = "1";
+                bookTimeModel.Date = DateTime.Now.ToString("yyy-MM-dd");
+                bookTimeModel.Time = DateTime.Now.ToString("HH:00");
+                bookTimeModel.Week = Lumos.CommonUtil.GetCnWeekDayName(DateTime.Now);
+                bookTimeModel.Text = string.Format("（{0}）{1} {2}", bookTimeModel.Week, bookTimeModel.Date, bookTimeModel.Time);
+                bookTimeModel.Value = string.Format("{0} {1}", bookTimeModel.Date, bookTimeModel.Time);
 
 
                 amount_original = c_prodcutSkus.Sum(m => m.OriginalAmount);

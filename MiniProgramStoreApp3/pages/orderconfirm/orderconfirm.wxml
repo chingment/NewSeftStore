@@ -137,8 +137,8 @@
 								</view>
 							</view>
 							<view class="content-item selected ">
-								<view class="its-a" bindtap="clickToOpenSelfPickAddressDialog" data-reply-blockindex="{{index}}">
-									<view class="it">
+								<view class="its-a">
+									<view class="it" bindtap="clickToOpenSelfPickAddressDialog" data-reply-blockindex="{{index}}">
 										<view class="it-l">
 											<text class='txt-h1'>自提地址</text>
 										</view>
@@ -150,7 +150,7 @@
 										</view>
 									</view>
 
-									<view class="it" bindtap="booktimeSelect" data-reply-index="{{index}}">
+									<view class="it" bindtap="clickToOpenBooktimeDialog" data-reply-blockindex="{{index}}">
 										<view class="it-l">
 											<text class='txt-h1'>预约时间</text>
 											<text class="txt-h2 isDefault">预约</text>
