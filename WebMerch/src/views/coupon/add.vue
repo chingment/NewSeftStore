@@ -55,6 +55,7 @@
           <el-radio-button label="1">不限制</el-radio-button>
           <el-radio-button label="2">按日</el-radio-button>
           <el-radio-button label="3">按月</el-radio-button>
+          <el-radio-button label="4">按季</el-radio-button>
         </el-radio-group>
         <el-input
           v-show="form.perLimitTimeType!=1"

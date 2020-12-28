@@ -617,6 +617,38 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当月领取已经超过大限制，请下个月再试试");
                 }
             }
+            else if (d_coupon.PerLimitTimeType == E_Coupon_PerLimitTimeType.Quarter)
+            {
+                int nowYear = int.Parse(DateTime.Now.ToString("yyyy"));
+                int nowMonth = int.Parse(DateTime.Now.ToString("MM"));
+
+                int[] arr_nowMonths;
+
+                if (nowMonth > 0 && nowMonth <= 3)
+                {
+                    arr_nowMonths = new int[] { 1, 2, 3 };
+                }
+                else if (nowMonth > 3 && nowMonth <= 6)
+                {
+                    arr_nowMonths = new int[] { 4, 5, 6 };
+                }
+                else if (nowMonth > 7 && nowMonth <= 9)
+                {
+                    arr_nowMonths = new int[] { 7, 8, 9 };
+                }
+                else
+                {
+                    arr_nowMonths = new int[] { 10, 11, 12 };
+                }
+
+                d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime.Year == nowYear && arr_nowMonths.Contains(m.SourceTime.Month)
+                ).ToList();
+
+                if (d_coupon.PerLimitTimeNum <= d_clientCoupons.Count)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当季领取已经超过大限制，请下个月再试试");
+                }
+            }
 
 
             var d_clientCoupon = new ClientCoupon();

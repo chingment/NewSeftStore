@@ -72,6 +72,8 @@ namespace LocalS.Entity
         Day = 2,
         //月
         Month = 3,
+        //季
+        Quarter = 4,
     }
 
     [Table("Coupon")]
