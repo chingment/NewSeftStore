@@ -14,12 +14,6 @@
       <el-form-item label="优惠券名称" prop="name">
         <el-input v-model="form.name" clearable />
       </el-form-item>
-      <el-form-item label="使用方式" prop="useMode">
-        <el-radio-group v-model="form.useMode">
-          <el-radio-button label="1">用户支付时选择</el-radio-button>
-          <el-radio-button label="2">用户出示二维码</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label="发行总量" prop="issueQuantity" :show-message="rules.issueQuantity[0].isShow">
         <template v-if="form.category==2||form.category==3">
           <span>不限制</span>
@@ -37,6 +31,7 @@
           <el-radio-button label="2">购物折扣券</el-radio-button>
           <el-radio-button label="3">租金代金券</el-radio-button>
           <el-radio-button label="4">押金代金券</el-radio-button>
+          <el-radio-button label="5">入场券</el-radio-button>
         </el-radio-group>
       </el-form-item>
 
@@ -681,7 +676,7 @@ export default {
 
 <style  lang="scss"  scoped>
 #user_add {
-  max-width: 600px;
+  max-width: 800px;
   .line {
     text-align: center;
   }

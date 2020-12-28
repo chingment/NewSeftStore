@@ -35,7 +35,9 @@ namespace LocalS.Entity
         //租金代金券
         RentVoucher = 3,
         //押金代金券
-        DepositVoucher = 4
+        DepositVoucher = 4,
+        //入场券
+        EntranceTicket = 5
     }
     public enum E_Coupon_Category
     {

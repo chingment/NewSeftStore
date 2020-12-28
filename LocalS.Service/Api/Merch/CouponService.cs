@@ -81,6 +81,9 @@ namespace LocalS.Service.Api.Merch
                 case E_Coupon_FaceType.DepositVoucher:
                     name = "押金代金券";
                     break;
+                case E_Coupon_FaceType.EntranceTicket:
+                    name = "入场券";
+                    break;
                 default:
                     name = "未知";
                     break;
@@ -150,6 +153,10 @@ namespace LocalS.Service.Api.Merch
                     faceValue = string.Format("{0}元", item.FaceValue);
                 }
                 else if (item.FaceType == E_Coupon_FaceType.DepositVoucher)
+                {
+                    faceValue = string.Format("{0}元", item.FaceValue);
+                }
+                else if (item.FaceType == E_Coupon_FaceType.EntranceTicket)
                 {
                     faceValue = string.Format("{0}元", item.FaceValue);
                 }
@@ -244,10 +251,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择优惠券类型");
             }
 
-            if (rop.UseMode == E_Coupon_UseMode.Unknow)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择使用方式");
-            }
+            //if (rop.UseMode == E_Coupon_UseMode.Unknow)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择使用方式");
+            //}
 
             if (rop.FaceType == E_Coupon_FaceType.Unknow)
             {
@@ -454,10 +461,10 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择优惠券类型");
             }
 
-            if (rop.UseMode == E_Coupon_UseMode.Unknow)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择使用方式");
-            }
+            //if (rop.UseMode == E_Coupon_UseMode.Unknow)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择使用方式");
+            //}
 
             if (rop.FaceType == E_Coupon_FaceType.Unknow)
             {
