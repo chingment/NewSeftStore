@@ -21,7 +21,8 @@
     "pages/memberrightdesc/memberrightdesc",
     "pages/membercenter/membercenter",
     "pages/couponrevcenter/couponrevcenter",
-    "pages/bindphonenumber/bindphonenumber"
+    "pages/bindphonenumber/bindphonenumber",
+    "pages/myserviceprom/myserviceprom"
   ],
   "window": {
     "backgroundTextStyle": "light",

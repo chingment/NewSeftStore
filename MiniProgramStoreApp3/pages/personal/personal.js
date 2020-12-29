@@ -17,6 +17,7 @@ Component({
     isOnReady: false,
     isLogin: false,
     userInfo: {},
+    proService: null,
     badgeByWaitPayOrders: {}
   },
   methods: {
@@ -49,7 +50,8 @@ Component({
             _this.setData({
               isLogin: ownRequest.isLogin(),
               userInfo: d.userInfo,
-              badgeByWaitPayOrders:d.badgeByWaitPayOrders
+              badgeByWaitPayOrders: d.badgeByWaitPayOrders,
+              proService: d.proService
             })
           }
         })

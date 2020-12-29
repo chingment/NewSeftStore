@@ -12,5 +12,7 @@ namespace LocalS.Service.Api.StoreApp
         public UserInfoModel UserInfo { get; set; }
 
         public Badge BadgeByWaitPayOrders { get; set; }
+
+        public ProServiceModel ProService { get; set; }
     }
 }

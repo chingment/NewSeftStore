@@ -234,6 +234,34 @@ Page({
     })
 
   },
+  updateProductSku: function (e) {
+    var _this = this
+    var selSku = e.detail.productSku
+
+    console.log("updateParent:" + JSON.stringify(selSku))
+
+    var productSku = _this.data.productSku
+    productSku.id = selSku.id
+    productSku.name = selSku.name
+    productSku.isOffSell = selSku.isOffSell
+    productSku.salePrice = selSku.salePrice
+    productSku.isShowPrice = selSku.isShowPrice
+    productSku.salePriceByVip = selSku.salePriceByVip
+    productSku.sellQuantity = selSku.sellQuantity
+    productSku.specIdx = selSku.specIdx
+
+    _this.setData({
+      productSku: productSku
+    })
+  },
+  cartdialogClose: function () {
+    var _this = this
+    var cartDialog = _this.data.cartDialog
+    cartDialog.isShow = false
+    _this.setData({
+      cartDialog: cartDialog
+    })
+  },
   onShareAppMessage: function (options) {
     var _this = this;
     // 设置转发内容
@@ -265,32 +293,4 @@ Page({
     return shareObj;
 
   },
-  updateProductSku: function (e) {
-    var _this = this
-    var selSku = e.detail.productSku
-
-    console.log("updateParent:" + JSON.stringify(selSku))
-
-    var productSku = _this.data.productSku
-    productSku.id = selSku.id
-    productSku.name = selSku.name
-    productSku.isOffSell = selSku.isOffSell
-    productSku.salePrice = selSku.salePrice
-    productSku.isShowPrice = selSku.isShowPrice
-    productSku.salePriceByVip = selSku.salePriceByVip
-    productSku.sellQuantity = selSku.sellQuantity
-    productSku.specIdx = selSku.specIdx
-
-    _this.setData({
-      productSku: productSku
-    })
-  },
-  cartdialogClose: function () {
-    var _this = this
-    var cartDialog = _this.data.cartDialog
-    cartDialog.isShow = false
-    _this.setData({
-      cartDialog: cartDialog
-    })
-  }
 })

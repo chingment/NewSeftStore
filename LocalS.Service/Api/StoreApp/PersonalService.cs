@@ -26,6 +26,13 @@ namespace LocalS.Service.Api.StoreApp
                 ret.BadgeByWaitPayOrders = new UI.Badge { Type = "number", Value = d_ordersByWaitpay_Count.ToString() };
             }
 
+            if (clientUserId == "e3246aa715254ecf9a56916e889b928b")
+            {
+                ret.ProService = new ProServiceModel();
+                ret.ProService.IsHasProm = true;
+                ret.ProService.IsHasWrCoupon = true;
+            }
+
             result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;

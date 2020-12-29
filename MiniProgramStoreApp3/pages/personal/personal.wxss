@@ -161,3 +161,33 @@
   z-index: 999;
   top: -10rpx;
 }
+
+
+
+.personal-proservice {
+  display: flex;
+  flex-direction: row;
+  border-top: 3rpx solid #f8f8f8;
+  padding: 10px 5px 5px 5px;
+}
+
+.personal-proservice .item {
+  width: 25%;
+  height: 100rpx;
+  text-align: center;
+  position: relative;
+}
+
+.personal-proservice .item-img {
+  width: 60rpx;
+  height: 60rpx;
+  display: inline-block;
+}
+
+.personal-proservice .item-title {
+  height: 60rpx;
+  display: block;
+  text-align: center;
+  font-size: 24rpx;
+  color: #676767;
+}

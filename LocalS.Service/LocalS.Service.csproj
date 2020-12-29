@@ -300,6 +300,7 @@
     <Compile Include="Api\StoreApp\Models\PdRentModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\StoreApp\Models\ProServiceModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponRevCenterSt.cs" />
