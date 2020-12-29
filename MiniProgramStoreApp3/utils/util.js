@@ -40,14 +40,23 @@ function isEmptyOrNull(str) {
   if (str == null)
     return true
 
-  if (typeof (str) == "string") {
+  //console.log('str.constructor：' + str.constructor.toString())
+
+  if (str instanceof String) {
+    console.log('str.constructor：String')
     if (str.replace(/(^s*)|(s*$)/g, "").length == 0) {
       return true
     } else {
       return false
     }
-  }
-  else{
+  } else if (str instanceof Array) {
+    console.log('str.constructor：Array')
+    if (str.length == 0) {
+      return true
+    } else {
+      return false
+    }
+  } else {
     return false
   }
 }

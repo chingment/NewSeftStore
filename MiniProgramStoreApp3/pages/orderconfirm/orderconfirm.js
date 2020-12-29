@@ -17,7 +17,6 @@ Page({
     skeletonBgcolor: '#FFF',
     skeletonData,
     pageIsReady: false,
-    tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
     curSelfPickAddressBlockIndex: -1,
     curBookTimeBlockIndex: -1,
@@ -57,28 +56,26 @@ Page({
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
     var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
-    console.log('orderIds:' + _orderIds)
+    var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
+
 
     var orderIds = []
     if (_orderIds != null) {
       var arr_order = _orderIds.split(',')
-
       for (let i = 0; i < arr_order.length; i++) {
         orderIds.push(arr_order[i])
       }
-
-      console.log("orderIds:" + JSON.stringify(orderIds))
     }
 
-    var productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
     _this.setData({
       storeId: ownRequest.getCurrentStoreId(),
       orderIds: orderIds,
-      productSkus: productSkus,
+      productSkus: _productSkus,
       action: _action,
       saleOutletId: _saleOutletId,
       shopMethod: _shopMethod
     })
+
     _this.buildPayOptions()
     _this.getConfirmData()
   },
@@ -89,8 +86,6 @@ Page({
   onShow: function () {
     var _this = this
     app.globalData.skeletonPage = _this
-    //_this.getConfirmData()
-
   },
   onHide: function () {
 
@@ -164,7 +159,7 @@ Page({
       return
     }
 
-    var tabShopModeByMall = _this.data.tabShopModeByMall
+
 
     var blocks = []
     var _blocks = _this.data.blocks
@@ -252,9 +247,7 @@ Page({
 
     }
 
-    if (_this.data.orderIds == undefined || _this.data.orderIds == null || _this.data.orderIds.length == 0) {
-
-
+    if (util.isEmptyOrNull(_this.data.orderIds)) {
       apiOrder.reserve({
         storeId: _this.data.storeId,
         blocks: blocks,
@@ -408,20 +401,6 @@ Page({
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
-        var blocks = d.blocks
-        var tabShopModeByMall = 0
-        for (var i = 0; i < blocks.length; i++) {
-          if (blocks[i].shopMode == 1) {
-            if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
-              tabShopModeByMall = 0
-            } else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
-              tabShopModeByMall = 1
-            }
-          }
-        }
-
-        console.log("tabShopModeByMall:" + tabShopModeByMall)
-
 
         var couponIdsByShop = []
         if (d.couponByShop != null) {
@@ -441,7 +420,6 @@ Page({
         }
 
         _this.setData({
-          tabShopModeByMall: tabShopModeByMall,
           blocks: d.blocks,
           subtotalItems: d.subtotalItems,
           actualAmount: d.actualAmount,
@@ -479,7 +457,7 @@ Page({
       type: d.type
     }
 
-    console.log("booktime:"+JSON.stringify(booktime))
+    console.log("booktime:" + JSON.stringify(booktime))
     _this.data.blocks[_this.data.curBookTimeBlockIndex].bookTime = booktime
 
     _this.setData({
