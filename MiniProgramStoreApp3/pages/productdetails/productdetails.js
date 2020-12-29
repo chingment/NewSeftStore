@@ -20,6 +20,7 @@ Page({
     specsDialog: {
       isShow: false
     },
+    proSign: '',
     cartDialog: {
       isShow: false,
       dataS: {
@@ -263,11 +264,12 @@ Page({
     })
   },
   onShareAppMessage: function (options) {
-    var _this = this;
+    var _this = this
+    var _data = _data.data
     // 设置转发内容
     var shareObj = {
       title: _this.data.productSku.name,
-      path: '/pages/productdetails/productdetails?skuId=' + _this.data.productSku.id + '&shopMode=' + _this.data.shopMode + '&shopMethod=' + _this.data.shopMethod + '&storeId=' + _this.data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      path: '/pages/productdetails/productdetails?proSign=' + _data.proSign + 'skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
       imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') {}
@@ -285,9 +287,8 @@ Page({
     };
     // 来自页面内的按钮的转发
     if (options.from == 'button') {
-      var dataid = options.target.dataset; //上方data-id=shareBtn设置的值
-      // 此处可以修改 shareObj 中的内容
-      shareObj.path = '/pages/btnname/btnname?id=' + dataid.id;
+
+
     }
     // 返回shareObj
     return shareObj;
