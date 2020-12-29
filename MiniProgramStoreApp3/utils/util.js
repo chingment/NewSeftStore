@@ -40,16 +40,16 @@ function isEmptyOrNull(str) {
   if (str == null)
     return true
 
-  //console.log('str.constructor：' + str.constructor.toString())
+  console.log('str.constructor：' + str.constructor.toString())
 
-  if (str instanceof String) {
+  if (str.constructor === String) {
     console.log('str.constructor：String')
     if (str.replace(/(^s*)|(s*$)/g, "").length == 0) {
       return true
     } else {
       return false
     }
-  } else if (str instanceof Array) {
+  } else if (str.constructor === Array) {
     console.log('str.constructor：Array')
     if (str.length == 0) {
       return true
