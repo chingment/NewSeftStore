@@ -22,7 +22,8 @@
     "pages/membercenter/membercenter",
     "pages/couponrevcenter/couponrevcenter",
     "pages/bindphonenumber/bindphonenumber",
-    "pages/myserviceprom/myserviceprom"
+    "pages/myserviceprom/myserviceprom",
+    "pages/smcfselftakeorder/smcfselftakeorder"
   ],
   "window": {
     "backgroundTextStyle": "light",

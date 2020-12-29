@@ -34,7 +34,12 @@ namespace LocalS.Service.Api.StoreApp
                 if (order.ReceiveMode == E_ReceiveMode.MachineSelfTake)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
-                    block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", order.SellChannelRefId) };
+                    block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "扫码枪扫一扫" };
+                }
+                else if (order.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                {
+                    block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
+                    block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "出示给店员扫一扫" };
                 }
 
                 if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.MachineSelfTake || order.ReceiveMode == E_ReceiveMode.StoreSelfTake)

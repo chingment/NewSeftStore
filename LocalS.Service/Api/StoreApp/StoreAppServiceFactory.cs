@@ -128,5 +128,13 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
+        public static ServiceFunService ServiceFun
+        {
+            get
+            {
+                return new ServiceFunService();
+            }
+        }
+
     }
 }

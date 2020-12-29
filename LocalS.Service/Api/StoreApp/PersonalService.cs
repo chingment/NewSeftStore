@@ -31,6 +31,7 @@ namespace LocalS.Service.Api.StoreApp
                 ret.ProService = new ProServiceModel();
                 ret.ProService.IsHasProm = true;
                 ret.ProService.IsHasWrCoupon = true;
+                ret.ProService.IsHasCfSelfTakeOrder = true;
             }
 
             result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);

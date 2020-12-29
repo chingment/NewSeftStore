@@ -11,5 +11,7 @@ namespace LocalS.Service.Api.StoreApp
         public bool IsHasProm { get; set; }
 
         public bool IsHasWrCoupon { get; set; }
+
+        public bool IsHasCfSelfTakeOrder { get; set; }
     }
 }

@@ -55,6 +55,7 @@ var config = {
     memberGetRightDescSt: `${host}/Member/GetRightDescSt`,
     saleOutletList: `${host}/SaleOutlet/List`,
     selfPickAddressList: `${host}/SelfPickAddress/List`,
+    serviceFunScanCodeResult: `${host}/ServiceFun/ScanCodeResult`,
   }
 
 };

@@ -128,7 +128,9 @@
 
 				</view>
 			</view>
-			<view class="col-nav" wx:if="{{proService!=null}}" >
+
+			<view class="personal-proservice" wx:if="{{proService!=null}}">
+			<view class="col-nav" >
 				<view class="container">
 					<view class="col-nav-item" hover-class="none">
 						<view class="item-left">
@@ -140,18 +142,25 @@
 					</view>
 				</view>
 			</view>
-			<view class='personal-proservice' wx:if="{{proService!=null}}">
+			<view class='col-proservice'>
 				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/myserviceprom/myserviceprom" wx:if="{{proService.isHasProm}}"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/myservice_prom.png'></image>
 					<text class='item-title'>推广码</text>
 				</view>
-				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000" wx:if="{{proService.isHasWrCoupon}}"
+				<view bindtap="clickToCfSelfTakeOrder"  wx:if="{{proService.isHasCfSelfTakeOrder}}"
+					class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
+					<text class='item-title'>确认自提单</text>
+				</view>
+				<view bindtap="clickTosWrCoupon"  wx:if="{{proService.isHasWrCoupon}}"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
 					<text class='item-title'>核销优惠券</text>
 				</view>
+
 			</view>
+		</view>
 		</view>
 	</view>
 </scroll-view>

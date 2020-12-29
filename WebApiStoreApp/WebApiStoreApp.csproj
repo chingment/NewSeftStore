@@ -160,6 +160,7 @@
     <Compile Include="Controllers\DeliveryAddressController.cs" />
     <Compile Include="Controllers\ProductKindController.cs" />
     <Compile Include="Controllers\SaleOutletController.cs" />
+    <Compile Include="Controllers\ServiceFunController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SelfPickAddressController.cs" />
     <Compile Include="Controllers\StoreController.cs" />

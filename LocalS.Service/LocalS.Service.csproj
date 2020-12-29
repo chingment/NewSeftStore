@@ -326,6 +326,7 @@
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RopCouponReceive.cs" />
+    <Compile Include="Api\StoreApp\RModels\RopServiceFunScanCodeResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCouponRevCenterSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RupCartGetCartData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupDeliveryAddressMy.cs" />
@@ -348,6 +349,7 @@
     <Compile Include="Api\StoreApp\SaleOutletService.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />
     <Compile Include="Api\StoreApp\SelfPickAddressService.cs" />
+    <Compile Include="Api\StoreApp\ServiceFunService.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />
     <Compile Include="Api\StoreApp\CartService.cs" />
     <Compile Include="Api\StoreApp\CouponService.cs" />

@@ -1,6 +1,8 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiPersonal = require('../../api/personal.js')
+const apiServiceFun = require('../../api/servicefun.js')
 const storeageutil = require('../../utils/storeageutil.js')
+const toast = require('../../utils/toastutil')
 const app = getApp()
 Component({
   options: {
@@ -68,6 +70,48 @@ Component({
         isLogin: ownRequest.isLogin()
       })
       _this.getPageData()
+    },
+    clickTosWrCoupon: function (e) {
+      var _this = this
+      wx.scanCode({
+        success: (res) => {
+          var code = res.result;
+          _this.scanCodeResult("WrCoupon", code)
+        }
+      })
+    },
+    clickToCfSelfTakeOrder: function (e) {
+      var _this = this
+      wx.scanCode({
+        success: (res) => {
+          var code = res.result;
+          _this.scanCodeResult("CfSelfTakeOrder", code)
+        }
+      })
+    },
+    scanCodeResult: function (action, code) {
+
+      apiServiceFun.scanCodeResult({
+        action: action,
+        code: code
+      }).then(function (res) {
+        if (res.result == 1) {
+          var d = res.data
+
+          switch (d.action) {
+            case 'CfSelfTakeOrder':
+              wx.navigateTo({
+                url: '/pages/smcfselftakeorder/smcfselftakeorder?orderId=' + d.orderId
+              })
+              break
+          }
+        } else {
+          toast.show({
+            title: res.message
+          })
+        }
+      })
+
     }
   }
 })
