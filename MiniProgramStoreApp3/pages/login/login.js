@@ -10,7 +10,17 @@ Page({
     tag: "login",
     isAuthUserInfo: false,
     returnUrl: '',
-    code: ''
+    userInfoEp: {
+      code: '',
+      iv: '',
+      encryptedData: ''
+    },
+    phoneNumberEp: {
+      session_key: '',
+      iv: '',
+      encryptedData: ''
+    }
+
   },
   onLoad: function (options) {
     var _this = this
@@ -24,15 +34,15 @@ Page({
     })
 
     // 查看是否授权
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          _this.setData({
-            isAuthUserInfo: true
-          })
-        }
-      }
-    })
+    // wx.getSetting({
+    //   success(res) {
+    //     if (res.authSetting['scope.userInfo']) {
+    //       _this.setData({
+    //         isAuthUserInfo: true
+    //       })
+    //     }
+    //   }
+    // })
 
     wx.checkSession({
       success() {
@@ -55,26 +65,36 @@ Page({
   },
   onReady: function () {},
   onShow: function () {},
-  loginByMinProgram: function (openId, code, iv, encryptedData) {
+  loginByMinProgram: function (openId, userInfoEp, phoneNumberEp) {
     var _this = this
     apiOwn.loginByMinProgram({
       appId: _this.data.appId,
       merchId: storeage.getMerchId(),
       openId: openId,
-      code: code,
-      iv: iv,
-      encryptedData: encryptedData
+      userInfoEp: userInfoEp,
+      phoneNumberEp: phoneNumberEp
     }).then(function (res) {
       if (res.result == 1) {
+
         storeage.setOpenId(res.data.openId);
         storeage.setAccessToken(res.data.token);
         wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
           url: ownRequest.getReturnUrl()
         })
       } else {
-        toast.show({
-          title: res.message
-        })
+
+        if (res.code == 2405) {
+
+          _this.setData({
+            isAuthUserInfo: true
+          })
+
+        } else {
+
+          toast.show({
+            title: res.message
+          })
+        }
       }
     })
   },
@@ -87,7 +107,11 @@ Page({
           console.log('=>>login.code2:' + res.code)
 
           if (res.code) {
-            _this.loginByMinProgram(storeage.getOpenId(), res.code, e.detail.iv, e.detail.encryptedData)
+            _this.loginByMinProgram(storeage.getOpenId(), {
+              code: res.code,
+              iv: e.detail.iv,
+              encryptedData: e.detail.encryptedData
+            }, null)
           } else {
 
           }
@@ -107,24 +131,22 @@ Page({
     var _this = this
     console.log(e)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
-      apiOwn.wxPhoneNumber({
+      _this.loginByMinProgram(storeage.getOpenId(), null, {
         encryptedData: e.detail.encryptedData,
         iv: e.detail.iv,
         session_key: storeage.getSessionKey(),
-      }).then(function (res) {
-        console.log(res)
-        if (res.result == 1) {
-          var d = res.data
-        } else {
-          toast.show({
-            title: res.message
-          })
-        }
       })
+
     } else {
       toast.show({
         title: '您点击了拒绝授权登录！'
       })
     }
+  },
+  clickToRefuse: function () {
+
+    wx.navigateBack({
+      delta: 1,
+    })
   }
 })

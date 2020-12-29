@@ -279,11 +279,24 @@ namespace LocalS.Service.Api.Account
             wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
             wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
 
-            var wxUserInfoByMinProram = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.EncryptedData, rop.Iv, rop.Code);
+            UserInfoModelByMinProramJsCode wxUserInfo = null;
+            WxPhoneNumber wxPhoneNumber = null;
 
-            if (wxUserInfoByMinProram == null)
+            if (rop.UserInfoEp != null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败");
+                wxUserInfo = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.UserInfoEp.EncryptedData, rop.UserInfoEp.Iv, rop.UserInfoEp.Code);
+                if (wxUserInfo == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败");
+                }
+            }
+
+            if (rop.PhoneNumberEp != null)
+            {
+                LogUtil.Info("rop.PhoneNumberEp=>" + rop.PhoneNumberEp.ToJsonString());
+
+                wxPhoneNumber = SdkFactory.Wx.GetWxPhoneNumber(rop.PhoneNumberEp.encryptedData, rop.PhoneNumberEp.iv, rop.PhoneNumberEp.session_key);
+                LogUtil.Info("rop.wxPhoneNumber=>" + wxPhoneNumber.ToJsonString());
             }
 
             var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == rop.OpenId).FirstOrDefault();
@@ -296,12 +309,21 @@ namespace LocalS.Service.Api.Account
                 d_clientUser.PasswordHash = PassWordHelper.HashPassword("888888");
                 d_clientUser.SecurityStamp = Guid.NewGuid().ToString();
                 d_clientUser.RegisterTime = DateTime.Now;
-                d_clientUser.NickName = wxUserInfoByMinProram.nickName;
-                d_clientUser.Sex = wxUserInfoByMinProram.gender;
-                d_clientUser.Province = wxUserInfoByMinProram.province;
-                d_clientUser.City = wxUserInfoByMinProram.city;
-                d_clientUser.Country = wxUserInfoByMinProram.country;
-                d_clientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                if (wxUserInfo != null)
+                {
+                    d_clientUser.NickName = wxUserInfo.nickName;
+                    d_clientUser.Sex = wxUserInfo.gender;
+                    d_clientUser.Province = wxUserInfo.province;
+                    d_clientUser.City = wxUserInfo.city;
+                    d_clientUser.Country = wxUserInfo.country;
+                    d_clientUser.Avatar = wxUserInfo.avatarUrl;
+                }
+
+                if (wxPhoneNumber != null)
+                {
+                    d_clientUser.PhoneNumber = wxPhoneNumber.phoneNumber;
+                }
+
                 d_clientUser.MemberLevel = 0;
                 d_clientUser.CreateTime = DateTime.Now;
                 d_clientUser.Creator = d_clientUser.Id;
@@ -315,17 +337,28 @@ namespace LocalS.Service.Api.Account
             }
             else
             {
-                d_clientUser.NickName = wxUserInfoByMinProram.nickName;
-                d_clientUser.Sex = wxUserInfoByMinProram.gender;
-                d_clientUser.Province = wxUserInfoByMinProram.province;
-                d_clientUser.City = wxUserInfoByMinProram.city;
-                d_clientUser.Country = wxUserInfoByMinProram.country;
-                d_clientUser.Avatar = wxUserInfoByMinProram.avatarUrl;
+                if (wxUserInfo != null)
+                {
+                    d_clientUser.NickName = wxUserInfo.nickName;
+                    d_clientUser.Sex = wxUserInfo.gender;
+                    d_clientUser.Province = wxUserInfo.province;
+                    d_clientUser.City = wxUserInfo.city;
+                    d_clientUser.Country = wxUserInfo.country;
+                    d_clientUser.Avatar = wxUserInfo.avatarUrl;
+                }
+
+                if (wxPhoneNumber != null)
+                {
+                    d_clientUser.PhoneNumber = wxPhoneNumber.phoneNumber;
+                }
+
                 d_clientUser.MendTime = DateTime.Now;
                 d_clientUser.Mender = d_clientUser.Id;
                 CurrentDb.SaveChanges();
             }
 
+            if (string.IsNullOrEmpty(d_clientUser.PhoneNumber))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoPhoneNumber, "未授权手机号码", ret);
 
             var tokenInfo = new TokenInfo();
             ret.Token = IdWorker.Build(IdType.NewGuid);

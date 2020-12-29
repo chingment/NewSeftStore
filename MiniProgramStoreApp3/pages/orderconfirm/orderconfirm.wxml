@@ -148,6 +148,12 @@
 												<text class='txt-h2'>{{item.selfTake.address}}</text>
 											</view>
 										</view>
+										<view class='it-r'>
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
+											</view>
+										</view>
 									</view>
 
 									<view class="it" bindtap="clickToOpenBooktimeDialog" data-reply-blockindex="{{index}}">
