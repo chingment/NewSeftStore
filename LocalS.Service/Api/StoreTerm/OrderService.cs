@@ -46,6 +46,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.AppId = AppId.STORETERM;
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = machine.StoreId;
+            bizRop.ShopMethod = E_OrderShopMethod.Shop;
             bizRop.IsTestMode = machine.IsTestMode;
 
 
