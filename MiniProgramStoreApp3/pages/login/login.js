@@ -71,6 +71,7 @@ Page({
       appId: _this.data.appId,
       merchId: storeage.getMerchId(),
       openId: openId,
+      reffSign: storeage.getReffSign(),
       userInfoEp: userInfoEp,
       phoneNumberEp: phoneNumberEp
     }).then(function (res) {

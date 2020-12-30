@@ -43,6 +43,7 @@ Page({
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? undefined : options.shopMode
     var shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
+    var reffSign = options.reffSign == undefined ? '' : options.reffSign
 
     if (storeId == undefined) {
       storeId = ownRequest.getCurrentStoreId()
@@ -51,6 +52,10 @@ Page({
     if (shopMode == undefined) {
       shopMode = storeage.getCurrentShopMode()
     }
+
+    console.log("reffSign:" + reffSign)
+
+    storeage.setReffSign(reffSign)
 
     storeage.setCurrentShopMode(shopMode)
 
@@ -264,12 +269,13 @@ Page({
     })
   },
   onShareAppMessage: function (options) {
+
     var _this = this
-    var _data = _data.data
+    var _data = _this.data
     // 设置转发内容
     var shareObj = {
       title: _this.data.productSku.name,
-      path: '/pages/productdetails/productdetails?proSign=' + _data.proSign + 'skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
       imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') {}

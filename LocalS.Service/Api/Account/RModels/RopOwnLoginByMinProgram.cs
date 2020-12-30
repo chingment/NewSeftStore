@@ -13,6 +13,7 @@ namespace LocalS.Service.Api.Account
         public string OpenId { get; set; }
         public UserInfoEpModel UserInfoEp { get; set; }
         public PhoneNumberEpModel PhoneNumberEp { get; set; }
+        public string ReffSign { get; set; }
         public class UserInfoEpModel
         {
             public string Code { get; set; }

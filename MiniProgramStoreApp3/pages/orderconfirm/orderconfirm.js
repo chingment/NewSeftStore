@@ -252,6 +252,7 @@ Page({
         storeId: _this.data.storeId,
         blocks: blocks,
         source: 3,
+        reffSign: storeage.getReffSign(),
         saleOutletId: _this.data.saleOutletId,
         couponIdsByShop: _this.data.couponIdsByShop,
         couponIdByDeposit: _this.data.couponIdByDeposit,

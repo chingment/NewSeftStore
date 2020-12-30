@@ -69,5 +69,7 @@ namespace LocalS.Entity
         public decimal CouponAmountByShop { get; set; }
         public decimal CouponAmountByRent { get; set; }
         public decimal CouponAmountByDeposit { get; set; }
+        public string ReffSign { get; set; }
+        public string ReffUserId { get; set; }
     }
 }

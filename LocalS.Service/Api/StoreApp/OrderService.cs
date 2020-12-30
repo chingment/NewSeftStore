@@ -124,7 +124,7 @@ namespace LocalS.Service.Api.StoreApp
             bizRop.ShopMethod = rop.ShopMethod;
             bizRop.IsTestMode = store.IsTestMode;
             bizRop.Blocks = rop.Blocks;
-
+            bizRop.ReffSign = rop.ReffSign;
             var bizResult = LocalS.BLL.Biz.BizFactory.Order.Reserve(operater, bizRop);
 
             if (bizResult.Result == ResultType.Success)

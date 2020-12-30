@@ -137,5 +137,7 @@ namespace LocalS.Entity
         public string CouponIdByDeposit { get; set; }
         public decimal CouponAmountByDeposit { get; set; }
         public E_OrderShopMethod ShopMethod { get; set; }
+        public string ReffSign { get; set; }
+        public string ReffUserId { get; set; }
     }
 }

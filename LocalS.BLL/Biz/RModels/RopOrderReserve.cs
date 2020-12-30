@@ -15,6 +15,7 @@ namespace LocalS.BLL.Biz
             this.Blocks = new List<OrderReserveBlockModel>();
         }
 
+        public string ReffSign { get; set; }
         public string AppId { get; set; }
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }

@@ -917,6 +917,21 @@ namespace LocalS.BLL.Biz
 
                     LogUtil.Info("IsTestMode:" + rop.IsTestMode);
 
+                    #region 获取推荐用户ID
+                    string reffUserId = null;
+                    if (!string.IsNullOrEmpty(rop.ReffSign))
+                    {
+                        var reffUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == rop.ReffSign).FirstOrDefault();
+                        if (reffUser != null)
+                        {
+                            if (reffUser.Id != rop.ClientUserId)
+                            {
+                                reffUserId = reffUser.Id;
+                            }
+                        }
+                    }
+                    #endregion
+
                     List<Order> orders = new List<Order>();
 
                     string unId = IdWorker.Build(IdType.NewGuid);
@@ -946,6 +961,8 @@ namespace LocalS.BLL.Biz
                         order.CouponIdByDeposit = rop.CouponIdByDeposit;
                         order.CouponAmountByDeposit = buildOrder.CouponAmountByDeposit;
                         order.ShopMethod = rop.ShopMethod;
+                        order.ReffSign = rop.ReffSign;
+                        order.ReffUserId = reffUserId;
 
                         switch (buildOrder.ReceiveMode)
                         {
@@ -1080,12 +1097,12 @@ namespace LocalS.BLL.Biz
 
                             var orderSub = new OrderSub();
                             orderSub.Id = order.Id + buildOrder.Childs.IndexOf(buildOrderSub).ToString();
-                            orderSub.ClientUserId = rop.ClientUserId;
-                            orderSub.ClientUserName = clientUserName;
-                            orderSub.MerchId = store.MerchId;
-                            orderSub.MerchName = store.MerchName;
-                            orderSub.StoreId = rop.StoreId;
-                            orderSub.StoreName = store.Name;
+                            orderSub.ClientUserId = order.ClientUserId;
+                            orderSub.ClientUserName = order.ClientUserName;
+                            orderSub.MerchId = order.MerchId;
+                            orderSub.MerchName = order.MerchName;
+                            orderSub.StoreId = order.StoreId;
+                            orderSub.StoreName = order.StoreName;
                             orderSub.SellChannelRefType = order.SellChannelRefType;
                             orderSub.SellChannelRefId = order.SellChannelRefId;
                             orderSub.ReceiveModeName = order.ReceiveModeName;
@@ -1121,11 +1138,13 @@ namespace LocalS.BLL.Biz
                             orderSub.PayStatus = E_PayStatus.WaitPay;
                             orderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
                             orderSub.SvcConsulterId = productSku.SvcConsulterId;
-                            orderSub.SaleOutletId = rop.SaleOutletId;
-                            orderSub.IsTestMode = rop.IsTestMode;
-                            orderSub.Creator = operater;
-                            orderSub.CreateTime = DateTime.Now;
-                            orderSub.ShopMethod = rop.ShopMethod;
+                            orderSub.SaleOutletId = order.SaleOutletId;
+                            orderSub.IsTestMode = order.IsTestMode;
+                            orderSub.Creator = order.Creator;
+                            orderSub.CreateTime = order.CreateTime;
+                            orderSub.ShopMethod = order.ShopMethod;
+                            orderSub.ReffSign = order.ReffSign;
+                            orderSub.ReffUserId = order.ReffUserId;
                             CurrentDb.OrderSub.Add(orderSub);
 
 

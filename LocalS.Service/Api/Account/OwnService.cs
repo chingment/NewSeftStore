@@ -331,6 +331,7 @@ namespace LocalS.Service.Api.Account
                 d_clientUser.MerchId = rop.MerchId;
                 d_clientUser.WxMpOpenId = rop.OpenId;
                 d_clientUser.WxMpAppId = rop.AppId;
+                d_clientUser.ReffSign = rop.ReffSign;
                 CurrentDb.SysClientUser.Add(d_clientUser);
                 CurrentDb.SaveChanges();
 
@@ -350,6 +351,11 @@ namespace LocalS.Service.Api.Account
                 if (wxPhoneNumber != null)
                 {
                     d_clientUser.PhoneNumber = wxPhoneNumber.phoneNumber;
+                }
+
+                if (string.IsNullOrEmpty(d_clientUser.ReffSign))
+                {
+                    d_clientUser.ReffSign = rop.ReffSign;
                 }
 
                 d_clientUser.MendTime = DateTime.Now;
