@@ -56,6 +56,8 @@ namespace LocalS.Service.Api.StoreTerm
             block.SelfTake.Id = machine.StoreId;
             block.SelfTake.MarkName = machine.StoreName;
             block.SelfTake.Address = machine.StoreAddress;
+            block.SelfTake.AreaCode = "";
+            block.SelfTake.AreaName = "";
             foreach (var productSku in rop.ProductSkus)
             {
                 block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.MachineId }, SvcConsulterId = productSku.SvcConsulterId });

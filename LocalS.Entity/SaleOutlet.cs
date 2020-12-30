@@ -11,6 +11,8 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string Name { get; set; }
+        public string AreaName { get; set; }
+        public string AreaCode { get; set; }
         public string ContactName { get; set; }
         public string ContactAddress { get; set; }
         public string ContactPhone { get; set; }

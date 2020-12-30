@@ -317,7 +317,7 @@ namespace LocalS.Service.Api.StoreApp
                                        join m in CurrentDb.SelfPickAddress on u.SelfPickAddressId equals m.Id into temp
                                        from tt in temp.DefaultIfEmpty()
                                        where u.MerchId == store.MerchId && u.StoreId == store.StoreId
-                                       select new { tt.Id, tt.Name, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress }).FirstOrDefault();
+                                       select new { tt.Id, tt.Name, tt.AreaCode, tt.AreaName, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress }).FirstOrDefault();
 
                 if (selfPickAddress == null)
                 {
@@ -325,6 +325,7 @@ namespace LocalS.Service.Api.StoreApp
                     selfTakeModel.Consignee = "自提地址";
                     selfTakeModel.PhoneNumber = "选择";
                     selfTakeModel.AreaName = "";
+                    selfTakeModel.AreaCode = "";
                     selfTakeModel.Address = "";
                 }
                 else
@@ -333,7 +334,8 @@ namespace LocalS.Service.Api.StoreApp
                     selfTakeModel.MarkName = selfPickAddress.Name;
                     selfTakeModel.Consignee = selfPickAddress.ContactName;
                     selfTakeModel.PhoneNumber = selfPickAddress.ContactPhone;
-                    selfTakeModel.AreaName = "";
+                    selfTakeModel.AreaName = selfPickAddress.AreaName;
+                    selfTakeModel.AreaCode = selfPickAddress.AreaCode;
                     selfTakeModel.Address = selfPickAddress.ContactAddress;
 
                 }
@@ -468,7 +470,7 @@ namespace LocalS.Service.Api.StoreApp
                                            join m in CurrentDb.SelfPickAddress on u.SelfPickAddressId equals m.Id into temp
                                            from tt in temp.DefaultIfEmpty()
                                            where u.MerchId == store.MerchId && u.StoreId == store.StoreId
-                                           select new { tt.Id, tt.Name, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress }).FirstOrDefault();
+                                           select new { tt.Id, tt.Name, tt.AreaCode, tt.AreaName, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress }).FirstOrDefault();
 
                     if (selfPickAddress == null)
                     {
@@ -476,6 +478,7 @@ namespace LocalS.Service.Api.StoreApp
                         selfTakeModel.Consignee = "自提地址";
                         selfTakeModel.PhoneNumber = "选择";
                         selfTakeModel.AreaName = "";
+                        selfTakeModel.AreaCode = "";
                         selfTakeModel.Address = "";
                     }
                     else
@@ -484,7 +487,8 @@ namespace LocalS.Service.Api.StoreApp
                         selfTakeModel.MarkName = selfPickAddress.Name;
                         selfTakeModel.Consignee = selfPickAddress.ContactName;
                         selfTakeModel.PhoneNumber = selfPickAddress.ContactPhone;
-                        selfTakeModel.AreaName = "";
+                        selfTakeModel.AreaName = selfPickAddress.AreaName;
+                        selfTakeModel.AreaCode = selfPickAddress.AreaCode;
                         selfTakeModel.Address = selfPickAddress.ContactAddress;
                     }
 
@@ -497,6 +501,8 @@ namespace LocalS.Service.Api.StoreApp
                     selfTakeModel.PhoneNumber = selfTake.ReceiverPhoneNumber;
                     selfTakeModel.AreaName = selfTake.ReceptionAreaName;
                     selfTakeModel.Address = selfTake.ReceptionAddress;
+                    selfTakeModel.AreaName = selfTake.ReceptionAreaName;
+                    selfTakeModel.AreaCode = selfTake.ReceptionAreaCode;
 
                     if (selfTake.ReceptionBookStartTime != null)
                     {

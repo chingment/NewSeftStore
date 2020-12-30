@@ -1043,6 +1043,8 @@ namespace LocalS.BLL.Biz
                                 order.Receiver = null;
                                 order.ReceiverPhoneNumber = null;
                                 order.ReceptionId = rm_MachineSelfTake.SelfTake.Id;
+                                order.ReceptionAreaCode = rm_MachineSelfTake.SelfTake.AreaCode;
+                                order.ReceptionAreaName = rm_MachineSelfTake.SelfTake.AreaName;
                                 order.ReceptionAddress = rm_MachineSelfTake.SelfTake.Address;
                                 order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.MarkName;
                                 #endregion
