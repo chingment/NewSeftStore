@@ -15,6 +15,7 @@ using LocalS.BLL.Mq;
 using System.Transactions;
 using LocalS.Entity;
 using Lumos.Redis;
+using System.IO;
 
 namespace LocalS.Service.Api.Account
 {
@@ -299,6 +300,39 @@ namespace LocalS.Service.Api.Account
                 LogUtil.Info("rop.wxPhoneNumber=>" + wxPhoneNumber.ToJsonString());
             }
 
+            var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, "rs=" + rop.OpenId, "/pages/main/main");
+
+            if (result_WxACodeUnlimit != null)
+            {
+                if (result_WxACodeUnlimit.errcode == "0")
+                {
+                    byte[] fileData = Convert.FromBase64String(result_WxACodeUnlimit.buffer);
+
+                    string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                    string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = ".png";
+                    string savePath = "/upload/acode/";
+                    string serverSavePath = rootPath + savePath + fileName + extension;
+                    string domainPathUrl = domain + savePath + fileName + extension;
+
+                    DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
+                    if (!dir.Exists)
+                    {
+                        dir.Create();
+                    }
+
+                    LogUtil.Info("serverSavePath:" + serverSavePath);
+                    LogUtil.Info("domainPathUrl:" + domainPathUrl);
+
+                    FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
+                    fs.Write(fileData, 0, fileData.Length);
+                    fs.Flush();
+                    fs.Close();
+                }
+            }
+
+
             var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == rop.OpenId).FirstOrDefault();
 
             if (d_clientUser == null)
@@ -362,6 +396,8 @@ namespace LocalS.Service.Api.Account
                 d_clientUser.Mender = d_clientUser.Id;
                 CurrentDb.SaveChanges();
             }
+
+
 
             if (string.IsNullOrEmpty(d_clientUser.PhoneNumber))
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoPhoneNumber, "未授权手机号码", ret);

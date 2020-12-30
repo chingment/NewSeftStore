@@ -280,6 +280,11 @@ namespace LocalS.BLL
             return OAuthApi.GetUserInfoByApiToken(this.GetApiAccessToken(config), openId);
         }
 
+        public WxApiGetWxACodeUnlimitResult GetWxACodeUnlimit(WxAppInfoConfig config, string scene, string page)
+        {
+            return OAuthApi.GetWxACodeUnlimit(this.GetApiAccessToken(config), scene, page);
+        }
+
         public List<string> GetUserOpenIds(WxAppInfoConfig config)
         {
             return OAuthApi.GetUserOpenIds(this.GetApiAccessToken(config));
@@ -487,7 +492,6 @@ namespace LocalS.BLL
             return result;
         }
 
-
         public void GiftvoucherActivityNotifyPick(string body, string opendId, string orderSn, string pickAddress, string pickCode, string productskusName, DateTime lastPickTime, string url)
         {
 
@@ -531,9 +535,6 @@ namespace LocalS.BLL
         {
             return null;
         }
-
-
-
 
         //public string OrderPayReFund(string comCode, string orderId, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
         //{

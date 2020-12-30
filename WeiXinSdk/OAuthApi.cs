@@ -54,6 +54,15 @@ namespace MyWeiXinSdk
             return userInfo_Result;
         }
 
+        public static WxApiGetWxACodeUnlimitResult GetWxACodeUnlimit(string accessToken,string scene,string page)
+        {
+            WxApi api = new WxApi();
+            object post_data = new { scene = scene, page = page };
+            WxApiGetWxACodeUnlimit request = new WxApiGetWxACodeUnlimit(accessToken, WxPostDataType.Json, post_data);
+            var result = api.DoPost(request);
+            return result;
+        }
+
         public static WxApiJsApiTicketResult GetJsApiTicket(string accessToken)
         {
             var api = new WxApi();

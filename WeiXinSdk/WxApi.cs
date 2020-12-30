@@ -63,7 +63,7 @@ namespace MyWeiXinSdk
             {
                 postData = JsonConvert.SerializeObject(request.PostData);
             }
-
+            log.InfoFormat("MyWeiXinSdk-Url->{0}", realServerUrl);
             log.InfoFormat("MyWeiXinSdk-Post->{0}", postData);
             responseString = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData);
             log.InfoFormat("MyWeiXinSdk-Result->{0}", responseString);

@@ -86,6 +86,8 @@
     <Compile Include="Post\WxApiCardUserGetCartList.cs" />
     <Compile Include="Post\WxApiCustomMessagePostData.cs" />
     <Compile Include="Post\WxApiCustomMessageSend.cs" />
+    <Compile Include="Post\WxApiGetWxACodeUnlimit.cs" />
+    <Compile Include="Post\WxApiGetWxACodeUnlimitResult.cs" />
     <Compile Include="Post\WxApiQrCodeCreateRequest.cs" />
     <Compile Include="Post\WxApiQrCodeCreatePostData.cs" />
     <Compile Include="Post\WxApiQrCodeCreateResult.cs" />
