@@ -148,16 +148,12 @@
 					<image class='item-img' src='/content/default/images/myservice_prom.png'></image>
 					<text class='item-title'>推广码</text>
 				</view>
-				<view bindtap="clickToCfSelfTakeOrder"  wx:if="{{proService.isHasCfSelfTakeOrder}}"
+				<view bindtap="clickToScanCode"  wx:if="{{proService.isHasScanCode}}"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
-					<text class='item-title'>确认自提单</text>
+					<text class='item-title'>扫一扫</text>
 				</view>
-				<view bindtap="clickTosWrCoupon"  wx:if="{{proService.isHasWrCoupon}}"
-					class="item" hover-class="none">
-					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
-					<text class='item-title'>核销优惠券</text>
-				</view>
+
 
 			</view>
 		</view>

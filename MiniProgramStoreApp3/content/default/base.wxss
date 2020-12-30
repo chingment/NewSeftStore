@@ -940,24 +940,24 @@ page {
   padding: 0 0;
 }
 
-.it-ordbk .its-odcskus .it {
+.it-ordbk .its-odcskus > .it {
   display: flex;
   flex-direction: row;
   border-bottom: 3rpx solid #f8f8f8;
   padding: 8rpx 0;
 }
 
-.it-ordbk .its-odcskus .it:last-child {
+.it-ordbk .its-odcskus > .it:last-child {
   border-bottom: 0 solid #f8f8f8;
 }
 
-.it-ordbk .its-odcskus .it-l {
+.it-ordbk .its-odcskus > .it > .it-l {
   display: inline-block;
   overflow: hidden;
   text-align: right;
 }
 
-.it-ordbk .its-odcskus .it-l .imgUrl {
+.it-ordbk .its-odcskus > .it > .it-l .imgUrl {
   align-items: center;
   display: flex;
   width: 100rpx;
@@ -965,17 +965,17 @@ page {
   padding: 10rpx;
 }
 
-.it-ordbk .its-odcskus .it-l .imgUrl .img {
+.it-ordbk .its-odcskus > .it > .it-l .imgUrl .img {
   width: 100%;
   height: 100%;
 }
 
-.it-ordbk .its-odcskus .it-m {
+.it-ordbk .its-odcskus > .it > .it-m {
   flex: 1;
   display: flex;
 }
 
-.it-ordbk .its-odcskus .it-ml {
+.it-ordbk .its-odcskus > .it > .it-m > .it-ml {
   flex: 1;
   align-items: center;
   -webkit-line-clamp: 2;
@@ -991,7 +991,7 @@ page {
   padding: 10rpx 0rpx;
 }
 
-.it-ordbk .its-odcskus .it-mr {
+.it-ordbk .its-odcskus  > .it > .it-m > .it-mr {
   text-align: center;
   width: 80rpx;
   align-items: center;
@@ -999,7 +999,7 @@ page {
   justify-content: flex-end;
 }
 
-.it-ordbk .its-odcskus .it-r {
+.it-ordbk .its-odcskus  > .it > .it-r {
   text-align: center;
   align-items: center;
   display: flex;

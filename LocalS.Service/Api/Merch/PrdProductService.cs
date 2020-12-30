@@ -208,6 +208,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.BriefDes = rop.BriefDes.Trim2();
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.IsRevService = rop.IsRevService;
+                prdProduct.IsHardware = rop.IsHardware;
                 prdProduct.SupReceiveMode = rop.SupReceiveMode;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
                 prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
@@ -295,6 +296,7 @@ namespace LocalS.Service.Api.Merch
                 ret.Kinds = GetKindTree();
                 ret.IsTrgVideoService = prdProduct.IsTrgVideoService;
                 ret.IsRevService = prdProduct.IsRevService;
+                ret.IsHardware = prdProduct.IsHardware;
                 ret.SupReceiveMode = prdProduct.SupReceiveMode;
                 if (!string.IsNullOrEmpty(prdProduct.SupplierId))
                 {
@@ -366,6 +368,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.IsRevService = rop.IsRevService;
+                prdProduct.IsHardware = rop.IsHardware;
                 prdProduct.SupReceiveMode = rop.SupReceiveMode;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
                 prdProduct.SupplierId = rop.SupplierId;

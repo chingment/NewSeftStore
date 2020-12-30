@@ -163,6 +163,7 @@
     <Compile Include="Controllers\ServiceFunController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SelfPickAddressController.cs" />
+    <Compile Include="Controllers\SmCfSelfTakeOrderController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\OwnController.cs" />
     <Compile Include="Global.asax.cs">

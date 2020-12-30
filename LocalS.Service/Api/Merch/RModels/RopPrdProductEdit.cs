@@ -30,6 +30,7 @@ namespace LocalS.Service.Api.Merch
 
         public bool IsTrgVideoService { get; set; }
         public bool IsRevService { get; set; }
+        public bool IsHardware { get; set; }
         public E_SupReceiveMode SupReceiveMode { get; set; }
         public string SupplierId { get; set; }
         public List<string> CharTags { get; set; }

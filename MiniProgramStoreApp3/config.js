@@ -56,6 +56,8 @@ var config = {
     saleOutletList: `${host}/SaleOutlet/List`,
     selfPickAddressList: `${host}/SelfPickAddress/List`,
     serviceFunScanCodeResult: `${host}/ServiceFun/ScanCodeResult`,
+    smCfSelfTakeOrderCfTake: `${host}/SmCfSelfTakeOrder/CfTake`,
+    smCfSelfTakeOrderDetails: `${host}/SmCfSelfTakeOrder/Details`,
   }
 
 };

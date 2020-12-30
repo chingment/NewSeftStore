@@ -62,6 +62,7 @@ namespace LocalS.BLL
                     r_spu.CharTags = d_spu.CharTags.ToJsonObject<List<string>>();
                     r_spu.IsTrgVideoService = d_spu.IsTrgVideoService;
                     r_spu.IsRevService = d_spu.IsRevService;
+                    r_spu.IsHardware = d_spu.IsHardware;
                     r_spu.SupReceiveMode = d_spu.SupReceiveMode;
                     r_spu.KindId1 = d_spu.PrdKindId1;
                     r_spu.KindId2 = d_spu.PrdKindId2;
@@ -166,6 +167,7 @@ namespace LocalS.BLL
                     r_sku.SpecIdxSkus = r_spu.SpecIdxSkus;
                     r_sku.IsTrgVideoService = r_spu.IsTrgVideoService;
                     r_sku.IsRevService = r_spu.IsRevService;
+                    r_sku.IsHardware = r_spu.IsHardware;
                     r_sku.SupReceiveMode = r_spu.SupReceiveMode;
                     r_sku.KindId1 = r_spu.KindId1;
                     r_sku.KindId2 = r_spu.KindId2;

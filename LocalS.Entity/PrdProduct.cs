@@ -34,7 +34,8 @@ namespace LocalS.Entity
         public string BriefDes { get; set; }
         public string SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
-        public bool IsRevService { get; set; }
+        public bool IsRevService { get; set; } 
+        public bool IsHardware { get; set; }
         public E_SupReceiveMode SupReceiveMode { get; set; }
         public string CharTags { get; set; }
         public string Creator { get; set; }

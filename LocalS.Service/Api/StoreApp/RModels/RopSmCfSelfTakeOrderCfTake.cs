@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class ProServiceModel
+    public class RopSmCfSelfTakeOrderCfTake
     {
-        public bool IsHasProm { get; set; }
 
-        public bool isHasScanCode { get; set; }
     }
 }

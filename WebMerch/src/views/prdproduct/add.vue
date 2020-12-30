@@ -124,6 +124,7 @@
         <el-checkbox v-model="isOpenAddMultiSpecs">多规格</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
+        <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
       </el-form-item>
       <el-form-item v-show="isOpenAddMultiSpecs" style="max-width:1000px">
 
@@ -300,6 +301,7 @@ export default {
         supplierId: '',
         isTrgVideoService: false,
         isRevService: false,
+        isHardware: false,
         supReceiveMode: '1',
         displayImgUrls: [],
         singleSkuCumCode: '',
@@ -438,6 +440,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
+          _form.isHardware = this.form.isHardware
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = skus
           console.log(JSON.stringify(_form))

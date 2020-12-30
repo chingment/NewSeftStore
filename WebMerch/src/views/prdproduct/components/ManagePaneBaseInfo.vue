@@ -100,6 +100,7 @@
       <el-form-item label="属性">
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
+        <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
       </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
 
@@ -228,6 +229,7 @@ export default {
         charTags: [],
         isTrgVideoService: false,
         isRevService: false,
+        isHardware: false,
         supReceiveMode: '1',
         briefDes: '',
         displayImgUrls: [],
@@ -283,6 +285,7 @@ export default {
           this.form.skus = d.skus
           this.form.isTrgVideoService = d.isTrgVideoService
           this.form.isRevService = d.isRevService
+          this.form.isHardware = d.isHardware
           this.form.supReceiveMode = d.supReceiveMode + ''
           this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
@@ -335,6 +338,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
+          _form.isHardware = this.form.isHardware
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = this.form.skus
           _form.supplierId = this.form.supplierId

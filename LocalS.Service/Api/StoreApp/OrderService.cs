@@ -840,7 +840,7 @@ namespace LocalS.Service.Api.StoreApp
             fsBlockByField.Tag.Name = new FsText("订单信息", "");
 
             fsBlockByField.Data.Add(new FsField("订单编号", "", order.Id, ""));
-            fsBlockByField.Data.Add(new FsField("创建时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
+            fsBlockByField.Data.Add(new FsField("下单时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
             if (order.PayedTime != null)
             {
                 fsBlockByField.Data.Add(new FsField("付款时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));

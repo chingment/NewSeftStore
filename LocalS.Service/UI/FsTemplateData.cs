@@ -26,6 +26,8 @@ namespace LocalS.Service.UI
             public bool IsGift { get; set; }
             public string StatusName { get; set; }
             public FsText Desc { get; set; }
+            public bool IsNeedWrDeviceId { get; set; }
+            public string[] DeviceIds { get; set; }
         }
     }
 }

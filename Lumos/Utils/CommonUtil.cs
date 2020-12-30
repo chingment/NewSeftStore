@@ -277,12 +277,12 @@ namespace Lumos
 
             if (string.IsNullOrEmpty(phone))
             {
-                return null;
+                return "";
             }
 
             if (phone.Length < 11)
             {
-                return null;
+                return "";
             }
 
             try

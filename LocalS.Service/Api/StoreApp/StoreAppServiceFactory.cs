@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class StoreAppServiceFactory : BaseDbContext
+    public class StoreAppServiceFactory 
     {
         public static GlobalService Global
         {
@@ -133,6 +133,14 @@ namespace LocalS.Service.Api.StoreApp
             get
             {
                 return new ServiceFunService();
+            }
+        }
+
+        public static SmCfSelfTakeOrderService SmCfSelfTakeOrder
+        {
+            get
+            {
+                return new SmCfSelfTakeOrderService();
             }
         }
 

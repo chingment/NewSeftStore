@@ -71,46 +71,34 @@ Component({
       })
       _this.getPageData()
     },
-    clickTosWrCoupon: function (e) {
+    clickToScanCode: function (e) {
       var _this = this
       wx.scanCode({
         success: (res) => {
-          var code = res.result;
-          _this.scanCodeResult("WrCoupon", code)
-        }
-      })
-    },
-    clickToCfSelfTakeOrder: function (e) {
-      var _this = this
-      wx.scanCode({
-        success: (res) => {
-          var code = res.result;
-          _this.scanCodeResult("CfSelfTakeOrder", code)
-        }
-      })
-    },
-    scanCodeResult: function (action, code) {
+          var code = res.result
+          apiServiceFun.scanCodeResult({
+            code: code
+          }).then(function (res) {
+            if (res.result == 1) {
+              var d = res.data
 
-      apiServiceFun.scanCodeResult({
-        action: action,
-        code: code
-      }).then(function (res) {
-        if (res.result == 1) {
-          var d = res.data
-
-          switch (d.action) {
-            case 'CfSelfTakeOrder':
-              wx.navigateTo({
-                url: '/pages/smcfselftakeorder/smcfselftakeorder?orderId=' + d.orderId
+              switch (d.action) {
+                case 'CfSelfTakeOrder':
+                  wx.navigateTo({
+                    url: '/pages/smcfselftakeorder/smcfselftakeorder?id=' + d.orderId
+                  })
+                  break
+              }
+            } else {
+              toast.show({
+                title: res.message
               })
-              break
-          }
-        } else {
-          toast.show({
-            title: res.message
+            }
           })
+
         }
       })
+
 
     }
   }
