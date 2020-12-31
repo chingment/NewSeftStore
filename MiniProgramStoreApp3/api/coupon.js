@@ -11,12 +11,21 @@ function my(params, requestHandler) {
   })
 }
 
+function details(params) {
+
+  return lumos.getJson({
+    url: config.apiUrl.couponDetails,
+    urlParams: params,
+    isShowLoading: false
+  })
+}
+
 function revCenterSt(params) {
 
   return lumos.getJson({
     url: config.apiUrl.couponRevCenterSt,
     urlParams: params,
-    isShowLoading:false
+    isShowLoading: false
   })
 }
 
@@ -31,5 +40,6 @@ function receive(params) {
 module.exports = {
   my: my,
   revCenterSt: revCenterSt,
-  receive: receive
+  receive: receive,
+  details: details
 }

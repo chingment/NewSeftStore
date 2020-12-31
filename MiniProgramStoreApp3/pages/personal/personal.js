@@ -88,6 +88,11 @@ Component({
                     url: '/pages/smcfselftakeorder/smcfselftakeorder?id=' + d.orderId
                   })
                   break
+                  case 'WtCouponCode':
+                    wx.navigateTo({
+                      url: '/pages/smwtcoupon/smwtcoupon?id=' + d.couponId
+                    })
+                    break
               }
             } else {
               toast.show({

@@ -94,7 +94,23 @@ Page({
     var operate = _this.data.operate
 
     if (operate == 1) {
-      pageMain.mainTabBarSwitch(0)
+
+
+      if (coupon.faceType == 5) {
+
+        wx.navigateTo({
+          url: '/pages/mycoupondetails/mycoupondetails?id=' + coupon.id,
+          success: function (res) {
+            // success
+          },
+        })
+
+      } else {
+
+        pageMain.mainTabBarSwitch(0)
+      }
+
+
     } else if (operate == 2) {
       if (!coupon.canSelected) {
         toast.show({
@@ -134,7 +150,7 @@ Page({
       } else if (_this.data.op_faceTypes == '4') {
         var coupon = prevPage.data.couponByDeposit
         coupon.selectedCouponIds = couponIds
-        console.log('couponIds>>'+couponIds)
+        console.log('couponIds>>' + couponIds)
         prevPage.setData({
           couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : '',
           couponByDeposit: coupon

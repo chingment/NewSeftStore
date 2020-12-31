@@ -1,2 +1,63 @@
-<!--pages/mycoupondetails/mycoupondetails.wxml-->
-<text>pages/mycoupondetails/mycoupondetails.wxml</text>
+<view class="page-ct">
+
+  <view class="block-qrcode">
+    <canvas class="qrimg" canvas-id="qrcode-0"></canvas>
+    <text class="remark">请出示二维码</text>
+  </view>
+
+  <view class="line-space"></view>
+
+  <view class="its-a fieldBlock pd-com">
+    <view class="it">
+      <view class="it-m">
+        <view class="it-ml w100">
+          <text class="txt">券名</text>
+        </view>
+        <view class="it-mr flex1">
+          <text class="txt">{{name}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="it">
+      <view class="it-m">
+        <view class="it-ml w100">
+          <text class="txt">券种</text>
+        </view>
+        <view class="it-mr flex1">
+          <text class="txt">{{faceTip}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="it">
+      <view class="it-m">
+        <view class="it-ml w100">
+          <text class="txt">券值</text>
+        </view>
+        <view class="it-mr flex1">
+          <text class="txt">{{faceValue}}{{faceUnit}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="it">
+      <view class="it-m">
+        <view class="it-ml w100">
+          <text class="txt">有效期</text>
+        </view>
+        <view class="it-mr flex1">
+          <text class="txt">{{validDate}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="it">
+      <view class="it-m">
+        <view class="it-ml w100">
+          <text class="txt">描述</text>
+        </view>
+        <view class="it-mr flex1">
+          <text class="txt">{{description}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="line-space"></view>
+</view>

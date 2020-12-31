@@ -207,14 +207,19 @@ namespace LocalS.Service.Api.StoreApp
 
             return model;
         }
-        private CouponModel CovertCouponModel(string id, string sn, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount)
+        private CouponModel CovertCouponModel(string id, string sn, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, DateTime? validTimeStart, DateTime? validTimeEnd)
         {
             var model = new CouponModel();
 
             model.Id = id;
             model.Sn = sn;
             model.Name = name;
-
+            model.FaceType = faceType;
+            model.WtCode = MyDESCryptoUtil.BuildQrcode2CouponWtCode(id);
+            if (validTimeEnd != null)
+            {
+                model.ValidDate = "有效到" + validTimeEnd.Value.ToUnifiedFormatDate();
+            }
             switch (faceType)
             {
                 case E_Coupon_FaceType.ShopVoucher:
@@ -440,9 +445,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var couponModel = CovertCouponModel(item.Id, item.Sn, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
-
-                couponModel.ValidDate = "有效到" + item.ValidEndTime.ToUnifiedFormatDate();
+                var couponModel = CovertCouponModel(item.Id, item.Sn, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.ValidStartTime, item.ValidEndTime);
 
 
                 if (rop.CouponIds != null)
@@ -527,13 +530,15 @@ namespace LocalS.Service.Api.StoreApp
                 if (d_coupon != null)
                 {
 
+                    var couponModel = CovertCouponModel(d_clientCoupon.Id, d_clientCoupon.Sn, d_coupon.Name, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue, d_coupon.AtLeastAmount, d_clientCoupon.ValidStartTime, d_clientCoupon.ValidEndTime);
 
-                    //ret = new { Id = d_clientCoupon.Id, Name = d_coupon.V };
+
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", couponModel);
 
                 }
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "", ret);
 
             return result;
         }
@@ -561,7 +566,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in list)
                 {
-                    var couponModel = CovertCouponModel(item.Id, "", item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
+                    var couponModel = CovertCouponModel(item.Id, "", item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, null, null);
 
 
                     ret.Coupons.Add(couponModel);

@@ -14,5 +14,8 @@ namespace Lumos.DbRelay
         public string WxMpOpenId { get; set; }
         public string WxMpAppId { get; set; }
         public string ReffSign { get; set; }
+        public bool IsHasProm { get; set; }
+        public bool IsStaff { get; set; }
+
     }
 }

@@ -26,12 +26,17 @@ namespace LocalS.Service.Api.StoreApp
                 ret.BadgeByWaitPayOrders = new UI.Badge { Type = "number", Value = d_ordersByWaitpay_Count.ToString() };
             }
 
-            if (clientUserId == "e3246aa715254ecf9a56916e889b928b")
+            if (ret.UserInfo.IsHasProm || ret.UserInfo.IsStaff)
             {
                 ret.ProService = new ProServiceModel();
-                ret.ProService.IsHasProm = true;
-                ret.ProService.isHasScanCode = true;
+                ret.ProService.IsHasProm = ret.UserInfo.IsHasProm;
+
+                if (ret.UserInfo.IsStaff)
+                {
+                    ret.ProService.isHasScanCode = true;
+                }
             }
+
 
             result = new CustomJsonResult<RetPersonalPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -51,6 +56,8 @@ namespace LocalS.Service.Api.StoreApp
                 m_userInfo.Avatar = d_clientUser.Avatar;
                 m_userInfo.MemberLevel = d_clientUser.MemberLevel;
                 m_userInfo.MemberTag = "普通用户";
+                m_userInfo.IsHasProm = d_clientUser.IsHasProm;
+                m_userInfo.IsStaff = d_clientUser.IsStaff;
                 if (d_clientUser.MemberLevel > 0)
                 {
                     m_userInfo.MemberExpireTip = string.Format("{0}天后过期", Convert.ToInt16((d_clientUser.MemberExpireTime.Value - DateTime.Now).TotalDays));

@@ -68,15 +68,15 @@ namespace LocalS.BLL
             return value;
         }
 
-        public static string BuildQrcode2CouponCode(string pCode)
+        public static string BuildQrcode2CouponWtCode(string pCode)
         {
             string code = MyDESCryptoUtil.Encode(pCode);
-            string value = "couponcode@v2:" + code;
+            string value = "couponwtcode@v2:" + code;
             return value;
         }
-        public static string DecodeQrcode2CouponCode(string pCode)
+        public static string DecodeQrcode2CouponWtCode(string pCode)
         {
-            if (pCode.IndexOf("couponcode@v2:") < 0)
+            if (pCode.IndexOf("couponwtcode@v2:") < 0)
                 return null;
 
             string code = pCode.Split(':')[1];

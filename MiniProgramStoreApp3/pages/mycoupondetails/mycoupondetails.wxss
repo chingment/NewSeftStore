@@ -1,1 +1,13 @@
 /* pages/mycoupondetails/mycoupondetails.wxss */
+
+.qrimg{
+  width: 130px;
+  height: 130px;
+  margin: 12rpx auto 0 auto;
+}
+
+.remark{
+  text-align:center;
+  display: block;
+  padding: 10rpx 0;
+}

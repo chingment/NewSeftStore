@@ -15,5 +15,7 @@ namespace LocalS.Service.Api.StoreApp
         public int MemberLevel { get; set; }
         public string MemberTag { get; set; }
         public string MemberExpireTip { get; set; }
+        public bool IsStaff { get; set; }
+        public bool IsHasProm { get; set; }
     }
 }

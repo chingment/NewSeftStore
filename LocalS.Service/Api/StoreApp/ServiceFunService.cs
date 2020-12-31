@@ -49,6 +49,28 @@ namespace LocalS.Service.Api.StoreApp
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { orderId = order.Id, action = "CfSelfTakeOrder" });
 
             }
+            else if (rop.Code.IndexOf("couponwtcode@v1:") > -1 || rop.Code.IndexOf("couponwtcode@v2:") > -1)
+            {
+                string dec_code = "";
+                if (rop.Code.IndexOf("couponwtcode@v1:") > -1)
+                {
+                    dec_code = rop.Code.Split(':')[1];
+                }
+                else if (rop.Code.IndexOf("couponwtcode@v2:") > -1)
+                {
+                    dec_code = MyDESCryptoUtil.DecodeQrcode2CouponWtCode(rop.Code);
+                }
+
+                var clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == dec_code).FirstOrDefault();
+
+                if (clientCoupon == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到优惠券，请重新输入");
+                }
+
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { couponId = clientCoupon.Id, action = "WtCouponCode" });
+
+            }
 
             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据查找失败");
 
