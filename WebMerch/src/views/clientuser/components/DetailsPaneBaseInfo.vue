@@ -1,7 +1,7 @@
 <template>
   <div id="store_baseinfo" v-loading="loading" class="app-container">
 
-    <el-form v-show="!isEdit" class="noeditform" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="编码">
         {{ temp.id }}
       </el-form-item>
@@ -17,13 +17,24 @@
       <el-form-item label="昵称">
         {{ temp.nickName }}
       </el-form-item>
-
+      <el-form-item label="标识">
+        <span v-show="!isEdit&&form.isHasProm">推销者</span>
+        <span v-show="!isEdit&&form.isStaff">公司职员</span>
+        <el-checkbox v-show="isEdit" v-model="form.isHasProm ">推销者</el-checkbox>
+        <el-checkbox v-show="isEdit" v-model="form.isStaff">公司职员</el-checkbox>
+      </el-form-item>
+      <el-form-item>
+        <el-button v-show="!isEdit" type="primary" @click="openEdit">编辑</el-button>
+        <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
+        <el-button v-show="isEdit" type="primary" @click="onSubmit">保存</el-button>
+      </el-form-item>
     </el-form>
 
   </div>
 </template>
 <script>
-import { initDetailsBaseInfo } from '@/api/clientuser'
+import { MessageBox } from 'element-ui'
+import { initDetailsBaseInfo, edit } from '@/api/clientuser'
 import { getUrlParam } from '@/utils/commonUtil'
 
 export default {
@@ -38,6 +49,14 @@ export default {
         fullName: '',
         phoneNumber: '',
         nickName: ''
+      },
+      form: {
+        id: '',
+        isHasProm: false,
+        isStaff: false
+      },
+      rules: {
+
       }
     }
   },
@@ -65,9 +84,39 @@ export default {
           this.temp.fullName = d.fullName
           this.temp.phoneNumber = d.phoneNumber
           this.temp.nickName = d.nickName
+          this.form.id = d.id
+          this.form.isHasProm = d.isHasProm
+          this.form.isStaff = d.isStaff
         }
         this.loading = false
       })
+    },
+    onSubmit() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            edit(this.form).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.isEdit = false
+                this.init()
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
+    },
+    openEdit() {
+      this.isEdit = true
+    },
+    cancleEdit() {
+      this.isEdit = false
+      // this.$refs['form'].resetFields()
     }
   }
 }

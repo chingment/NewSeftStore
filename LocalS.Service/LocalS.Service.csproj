@@ -231,6 +231,7 @@
     <Compile Include="Api\Merch\RModels\RetAdminUserInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetAdminUserInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSpaceRelease.cs" />
+    <Compile Include="Api\Merch\RModels\RopClientUserEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineEditStock.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineRebootSys.cs" />

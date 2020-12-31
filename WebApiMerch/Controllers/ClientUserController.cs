@@ -45,5 +45,13 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.ClientUser.DetailsOrdersGetOrderList(this.CurrentUserId, this.CurrentMerchId,rup);
             return new OwnApiHttpResponse(result);
         }
+
+
+        [HttpPost]
+        public OwnApiHttpResponse Edit([FromBody]RopClientUserEdit rop)
+        {
+            IResult result = MerchServiceFactory.ClientUser.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

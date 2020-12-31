@@ -40,8 +40,17 @@ export function detailsOrdersGetOrderList(params) {
   })
 }
 
+export function edit(data) {
+  return request({
+    url: '/clientuser/edit',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
+  edit: edit,
   initDetails: initDetails,
   initDetailsBaseInfo: initDetailsBaseInfo,
   initDetailsOrders: initDetailsOrders,

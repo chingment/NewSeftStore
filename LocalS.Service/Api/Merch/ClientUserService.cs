@@ -1,10 +1,13 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Mq;
+using LocalS.Entity;
 using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
@@ -15,7 +18,7 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.SysClientUser
-                         where 
+                         where
                           (rup.UserName == null || u.UserName.Contains(rup.UserName)) &&
                          (rup.NickName == null || u.NickName.Contains(rup.NickName)) &&
                          (rup.PhoneNumber == null || u.PhoneNumber.Contains(rup.PhoneNumber)) &&
@@ -91,6 +94,8 @@ namespace LocalS.Service.Api.Merch
             ret.FullName = clientUser.FullName;
             ret.NickName = clientUser.NickName;
             ret.Avatar = clientUser.Avatar;
+            ret.IsHasProm = clientUser.IsHasProm;
+            ret.IsStaff = clientUser.IsStaff;
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
@@ -106,6 +111,35 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
             return MerchServiceFactory.Order.GetList(operater, merchId, new RupOrderGetList { ClientUserId = rup.ClientUserId, OrderId = rup.OrderId });
+        }
+
+        public CustomJsonResult Edit(string operater, string merchId, RopClientUserEdit rop)
+        {
+
+            CustomJsonResult result = new CustomJsonResult();
+
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var d_SysClientUser = CurrentDb.SysClientUser.Where(m => m.MerchId == merchId && m.Id == rop.Id).FirstOrDefault();
+
+
+                d_SysClientUser.IsStaff = rop.IsStaff;
+                d_SysClientUser.IsHasProm = rop.IsHasProm;
+   
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.ClientUserEdit, string.Format("保存客户账号（{0}）信息成功", d_SysClientUser.UserName));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            }
+
+
+            return result;
+
+
         }
     }
 }

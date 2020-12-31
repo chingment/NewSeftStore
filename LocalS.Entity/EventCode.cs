@@ -64,6 +64,8 @@ namespace LocalS.Entity
         public const string AdminUserAdd = "AdminUserAdd";
         [EventCodeRemark("A", "修改管理账号信息")]
         public const string AdminUserEdit = "AdminUserEdit";
+        [EventCodeRemark("A", "修改客户账号信息")]
+        public const string ClientUserEdit = "ClientUserEdit";
         [EventCodeRemark("A", "发布广告")]
         public const string AdSpaceRelease = "AdSpaceRelease";
         [EventCodeRemark("A", "删除广告")]
