@@ -12,7 +12,7 @@
 								<image class="img" src='/content/default/images/icon_member_{{userInfo.memberLevel>0?1:0}}.png'></image>
 								<text class='txt level-{{userInfo.memberLevel}}'>{{userInfo.memberTag}}</text>
 							</view>
-							<view wx:if="{{userInfo.phoneNumber!=null}}" class='item-phone'>
+							<view wx:if="{{userInfo.phoneNumber!=null&&userInfo.phoneNumber!=''}}" class='item-phone'>
 								<image class="img" src='/content/default/images/icon_phone.png'></image>
 								<text class="txt">{{userInfo.phoneNumber}}</text>
 							</view>
