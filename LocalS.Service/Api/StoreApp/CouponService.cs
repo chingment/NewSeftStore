@@ -89,7 +89,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-
         public bool GetCanSelected(E_OrderShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
         {
 
@@ -133,7 +132,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-
         public OrderConfirmCouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
         {
             var model = new OrderConfirmCouponModel();
@@ -209,12 +207,12 @@ namespace LocalS.Service.Api.StoreApp
 
             return model;
         }
-
-        private CouponModel CovertCouponModel(string id, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount)
+        private CouponModel CovertCouponModel(string id, string sn, string name, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount)
         {
             var model = new CouponModel();
 
             model.Id = id;
+            model.Sn = sn;
             model.Name = name;
 
             switch (faceType)
@@ -314,7 +312,6 @@ namespace LocalS.Service.Api.StoreApp
 
             return model;
         }
-
         public CustomJsonResult<RetCouponMy> My(string operater, string clientUserId, RopCouponMy rop)
         {
             var result = new CustomJsonResult<RetCouponMy>();
@@ -324,7 +321,7 @@ namespace LocalS.Service.Api.StoreApp
             var query = (from u in CurrentDb.ClientCoupon
                          join m in CurrentDb.Coupon on u.CouponId equals m.Id into temp
                          from tt in temp.DefaultIfEmpty()
-                         select new { u.Id, u.ClientUserId, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount });
+                         select new { u.Id, u.ClientUserId, u.Sn, u.MerchId, tt.Name, tt.UseAreaType, tt.UseAreaValue, u.Status, u.ValidEndTime, u.ValidStartTime, tt.FaceType, tt.FaceValue, tt.AtLeastAmount });
 
             if (!rop.IsGetHis)
             {
@@ -443,7 +440,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var couponModel = CovertCouponModel(item.Id, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
+                var couponModel = CovertCouponModel(item.Id, item.Sn, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
 
                 couponModel.ValidDate = "有效到" + item.ValidEndTime.ToUnifiedFormatDate();
 
@@ -518,6 +515,29 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+        public CustomJsonResult Details(string operater, string clientUserId, string couponId)
+        {
+            var result = new CustomJsonResult();
+
+            var ret = new { };
+            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == couponId).FirstOrDefault();
+            if (d_clientCoupon != null)
+            {
+                var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                if (d_coupon != null)
+                {
+
+
+                    //ret = new { Id = d_clientCoupon.Id, Name = d_coupon.V };
+
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
         public CustomJsonResult RevCenterSt(string operater, string clientUserId, RupCouponRevCenterSt rup)
         {
             var result = new CustomJsonResult();
@@ -541,7 +561,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var item in list)
                 {
-                    var couponModel = CovertCouponModel(item.Id, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
+                    var couponModel = CovertCouponModel(item.Id, "", item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount);
 
 
                     ret.Coupons.Add(couponModel);

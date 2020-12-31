@@ -135,7 +135,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else if (rup.PickupCode.IndexOf("pickupcode@v2:") > -1)
             {
-                pickupCode = BizFactory.Order.DecodeQrcode2PickupCode(rup.PickupCode);
+                pickupCode = MyDESCryptoUtil.DecodeQrcode2PickupCode(rup.PickupCode);
             }
             else
             {

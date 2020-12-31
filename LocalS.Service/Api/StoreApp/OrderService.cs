@@ -34,12 +34,12 @@ namespace LocalS.Service.Api.StoreApp
                 if (order.ReceiveMode == E_ReceiveMode.MachineSelfTake)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
-                    block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "扫码枪扫一扫" };
+                    block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "扫码枪扫一扫" };
                 }
                 else if (order.ReceiveMode == E_ReceiveMode.StoreSelfTake)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
-                    block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "出示给店员扫一扫" };
+                    block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "出示给店员扫一扫" };
                 }
 
                 if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.MachineSelfTake || order.ReceiveMode == E_ReceiveMode.StoreSelfTake)
@@ -737,7 +737,7 @@ namespace LocalS.Service.Api.StoreApp
                     if (item.ReceiveMode == E_ReceiveMode.MachineSelfTake)
                     {
                         block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
-                        block.Qrcode = new FsQrcode { Code = BizFactory.Order.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
+                        block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
                     }
 
                     if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.MachineSelfTake || item.ReceiveMode == E_ReceiveMode.StoreSelfTake)

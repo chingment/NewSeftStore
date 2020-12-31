@@ -2775,61 +2775,6 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        public string BuildQrcode2PickupCode(string pickupCode)
-        {
-            string encode_qrcode = PickupCodeEncode(pickupCode);
-            string buildqrcode = "pickupcode@v2:" + encode_qrcode;
-            return buildqrcode;
-        }
-        public string DecodeQrcode2PickupCode(string buildqrcode)
-        {
-            if (buildqrcode.IndexOf("pickupcode@v2:") < 0)
-                return null;
-
-            string pickupCode = PickupCodeDecode(buildqrcode.Split(':')[1]);
-            return pickupCode;
-        }
-        private const string PickupCode_KEY_64 = "VavicXbv";//注意了，是8个字符，64位
-        private const string PickupCode_IV_64 = "VavicXbv";
-        private string PickupCodeEncode(string data)
-        {
-            byte[] byKey = System.Text.ASCIIEncoding.ASCII.GetBytes(PickupCode_KEY_64);
-            byte[] byIV = System.Text.ASCIIEncoding.ASCII.GetBytes(PickupCode_IV_64);
-
-            DESCryptoServiceProvider cryptoProvider = new DESCryptoServiceProvider();
-            int i = cryptoProvider.KeySize;
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cst = new CryptoStream(ms, cryptoProvider.CreateEncryptor(byKey, byIV), CryptoStreamMode.Write);
-
-            StreamWriter sw = new StreamWriter(cst);
-            sw.Write(data);
-            sw.Flush();
-            cst.FlushFinalBlock();
-            sw.Flush();
-            return Convert.ToBase64String(ms.GetBuffer(), 0, (int)ms.Length);
-
-        }
-        private string PickupCodeDecode(string data)
-        {
-            byte[] byKey = System.Text.ASCIIEncoding.ASCII.GetBytes(PickupCode_KEY_64);
-            byte[] byIV = System.Text.ASCIIEncoding.ASCII.GetBytes(PickupCode_IV_64);
-
-            byte[] byEnc;
-            try
-            {
-                byEnc = Convert.FromBase64String(data);
-            }
-            catch
-            {
-                return null;
-            }
-
-            DESCryptoServiceProvider cryptoProvider = new DESCryptoServiceProvider();
-            MemoryStream ms = new MemoryStream(byEnc);
-            CryptoStream cst = new CryptoStream(ms, cryptoProvider.CreateDecryptor(byKey, byIV), CryptoStreamMode.Read);
-            StreamReader sr = new StreamReader(cst);
-            return sr.ReadToEnd();
-        }
 
     }
 }

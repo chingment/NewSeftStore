@@ -101,6 +101,7 @@
     <Compile Include="Biz\Models\UpdateMachineHomeBannerModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineProdcutSkuStockModel.cs" />
     <Compile Include="Biz\Models\UseAreaValueModel.cs" />
+    <Compile Include="Biz\MyDESCryptoUtil.cs" />
     <Compile Include="Biz\OperateLogService.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />

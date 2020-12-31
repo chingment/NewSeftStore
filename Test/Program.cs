@@ -171,7 +171,7 @@ namespace Test
 
             //string[] arr="A/S/B".Split('X')
 
-            BizFactory.Order.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
+            MyDESCryptoUtil.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
 
 
 

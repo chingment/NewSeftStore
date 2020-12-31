@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else if (rop.Code.IndexOf("pickupcode@v2:") > -1)
                 {
-                    dec_code = BizFactory.Order.DecodeQrcode2PickupCode(rop.Code);
+                    dec_code = MyDESCryptoUtil.DecodeQrcode2PickupCode(rop.Code);
                 }
 
                 LogUtil.Info("Code2=>>" + dec_code);

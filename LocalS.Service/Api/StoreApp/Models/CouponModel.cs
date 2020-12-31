@@ -9,6 +9,7 @@ namespace LocalS.Service.Api.StoreApp
     public class CouponModel
     {
         public string Id { get; set; }
+        public string Sn { get; set; }
         public string Name { get; set; }
         public string FaceValue { get; set; }
         public string FaceUnit { get; set; }
@@ -17,7 +18,6 @@ namespace LocalS.Service.Api.StoreApp
         public string Description { get; set; }
         public bool CanSelected { get; set; }
         public bool IsSelected { get; set; }
-
         public decimal CouponAmount { get; set; }
     }
 }
