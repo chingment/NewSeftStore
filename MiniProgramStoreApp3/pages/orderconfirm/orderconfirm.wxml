@@ -504,6 +504,25 @@
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
 
+				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+					<view class="it">
+						<view class="it-l" style="width:60rpx">
+							<view class="icon">
+
+							</view>
+						</view>
+						<view class="it-m">
+							<view class="it-ml w100">
+								<text class="txt">{{item.name}}</text>
+							</view>
+							<view class="it-mr flex1">
+								<text class="txt"> {{item.amount}}</text>
+							</view>
+						</view>
+					</view>
+				</block>
+
+
 				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1||shopMethod==3}}" data-reply-facetypes="1,2">
 					<view class="it-l" style="width:60rpx">
 						<view class="icon">
@@ -570,24 +589,6 @@
 						</view>
 					</view>
 				</view>
-
-				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-					<view class="it">
-						<view class="it-l" style="width:60rpx">
-							<view class="icon">
-
-							</view>
-						</view>
-						<view class="it-m">
-							<view class="it-ml w100">
-								<text class="txt">{{item.name}}</text>
-							</view>
-							<view class="it-mr flex1">
-								<text class="txt"> {{item.amount}}</text>
-							</view>
-						</view>
-					</view>
-				</block>
 
 			</view>
 			<view class="line-space-ncolor"></view>

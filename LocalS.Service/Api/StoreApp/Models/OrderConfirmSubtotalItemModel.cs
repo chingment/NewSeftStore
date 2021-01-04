@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.StoreApp
         public string TagName { get; set; }
 
         /// <summary>
-        /// Tab选项卡模式 Delivery 仅支持配送方式，SelfTake 仅支持自提方式 DeliveryAndSelfTake 支持配送和自提 
+        /// Tab选项卡模式 Delivery 仅支持配送方式，SelfTake 仅支持自提方式 DeliveryOrSelfTake 支持配送和自提 
         /// </summary>
         public E_TabMode TabMode { get; set; }
 
@@ -37,7 +37,6 @@ namespace LocalS.Service.Api.StoreApp
         /// </summary>
         public SelfTakeModel SelfTake { get; set; }
         public List<OrderConfirmProductSkuModel> Skus { get; set; }
-
         public BookTimeModel BookTime { get; set; }
     }
 

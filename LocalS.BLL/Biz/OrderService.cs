@@ -1216,6 +1216,7 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
                         buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
                         buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
+                        buildOrderChild.DiscountAmount = shopModeProductSku.OriginalAmount - shopModeProductSku.SaleAmount;
                         buildOrderChilds.Add(buildOrderChild);
                     }
                     else if (d_s_order.ShopMode == E_SellChannelRefType.Machine)
@@ -1244,6 +1245,7 @@ namespace LocalS.BLL.Biz
                                     buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
                                     buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
                                     buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
+                                    buildOrderChild.DiscountAmount = buildOrderChild.OriginalAmount - buildOrderChild.SaleAmount;
                                     buildOrderChilds.Add(buildOrderChild);
                                 }
                                 else
@@ -1264,7 +1266,7 @@ namespace LocalS.BLL.Biz
             }
 
             var sumSaleAmount = buildOrderChilds.Sum(m => m.SaleAmount);
-            var sumDiscountAmount = 0m;
+            var sumDiscountAmount = buildOrderChilds.Sum(m => m.DiscountAmount);
             for (int i = 0; i < buildOrderChilds.Count; i++)
             {
                 decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderChilds[i].SaleAmount / sumSaleAmount));

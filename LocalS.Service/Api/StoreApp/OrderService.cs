@@ -541,7 +541,6 @@ namespace LocalS.Service.Api.StoreApp
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
                 amount_sale = orders.Sum(m => m.SaleAmount);
-                amount_couponByShop = orders.Sum(m => m.DiscountAmount);
                 amount_charge = orders.Sum(m => m.ChargeAmount);
             }
 
@@ -650,6 +649,10 @@ namespace LocalS.Service.Api.StoreApp
             }
 
             ret.Blocks = orderBlock;
+
+
+            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { Name = "商品总额", Amount = amount_original.ToF2Price() });
+            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { Name = "商品优惠", Amount = "-" + (amount_original - amount_sale).ToF2Price() });
 
             ret.SubtotalItems = c_subtotalItems;
 

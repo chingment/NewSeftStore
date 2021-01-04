@@ -33,17 +33,6 @@ Page({
       returnUrl: returnUrl
     })
 
-    // 查看是否授权
-    // wx.getSetting({
-    //   success(res) {
-    //     if (res.authSetting['scope.userInfo']) {
-    //       _this.setData({
-    //         isAuthUserInfo: true
-    //       })
-    //     }
-    //   }
-    // })
-
     wx.checkSession({
       success() {
         console.log('session 未过期')
