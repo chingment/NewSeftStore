@@ -27,7 +27,16 @@
           </div>
         </el-card>
       </el-col>
+
+      <el-alert
+        v-if="listData.length==0"
+        title="您好，您的会员权益功能暂未开通，如需要，请联系客服人员"
+        type="success"
+        :closable="false"
+      />
+
     </el-row>
+
   </div>
 </template>
 
