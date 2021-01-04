@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class IndexService : BaseDbContext
+    public class IndexService : BaseService
     {
         public CustomJsonResult<RetIndexPageData> PageData(string operater, string clientUserId, RupIndexPageData rup)
         {

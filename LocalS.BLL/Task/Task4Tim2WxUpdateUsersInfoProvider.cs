@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.BLL.Task
 {
-    public class Task4Tim2WxUpdateUsersInfoProvider : BaseDbContext, IJob
+    public class Task4Tim2WxUpdateUsersInfoProvider : BaseService, IJob
     {
         public void Execute(IJobExecutionContext context)
         {

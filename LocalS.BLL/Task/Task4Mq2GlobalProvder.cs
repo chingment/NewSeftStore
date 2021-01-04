@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Task
 {
-    public class Task4Mq2GlobalProvder : BaseDbContext, ITask
+    public class Task4Mq2GlobalProvder : BaseService, ITask
     {
         private int _threadCount = 1;
 

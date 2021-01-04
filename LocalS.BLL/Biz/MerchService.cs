@@ -10,7 +10,7 @@ using XrtPaySdk;
 
 namespace LocalS.BLL.Biz
 {
-    public class MerchService : BaseDbContext
+    public class MerchService : BaseService
     {
         public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId)
         {

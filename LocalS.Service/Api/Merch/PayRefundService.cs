@@ -14,7 +14,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class PayRefundService : BaseDbContext
+    public class PayRefundService : BaseService
     {
         public StatusModel GetStatus(E_PayRefundStatus status)
         {

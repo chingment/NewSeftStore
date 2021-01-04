@@ -11,7 +11,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class DeliveryAddressService : BaseDbContext
+    public class DeliveryAddressService : BaseService
     {
 
         public CustomJsonResult My(string operater, string clientUserId, RupDeliveryAddressMy rup)

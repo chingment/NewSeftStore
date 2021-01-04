@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Task
 {
-    public class Task4Mqtt2MachineProvder : BaseDbContext, ITask
+    public class Task4Mqtt2MachineProvder : BaseService, ITask
     {
         private readonly string TAG = "Task4Mqtt2MachineProvder";
 

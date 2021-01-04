@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class ImService : BaseDbContext
+    public class ImService : BaseService
     {
         public CustomJsonResult Seats(RopImServiceSeats rop)
         {

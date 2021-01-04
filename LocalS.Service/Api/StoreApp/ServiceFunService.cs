@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class ServiceFunService : BaseDbContext
+    public class ServiceFunService : BaseService
     {
         public CustomJsonResult ScanCodeResult(string operater, string clientUserId, RopServiceFunScanCodeResult rop)
         {

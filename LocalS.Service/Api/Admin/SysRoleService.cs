@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class SysRoleService : BaseDbContext
+    public class SysRoleService : BaseService
     {
         public CustomJsonResult GetList(string operater, Enumeration.BelongSite belongSite, RupSysRoleGetList rup)
         {

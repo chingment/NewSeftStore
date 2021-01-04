@@ -13,7 +13,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Agent
 {
-    public class UserService : BaseDbContext
+    public class UserService : BaseService
     {
         public string GetStatusText(bool isDisable)
         {

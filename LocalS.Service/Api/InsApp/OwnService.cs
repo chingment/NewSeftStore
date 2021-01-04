@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.InsApp
 {
-    public class OwnService : BaseDbContext
+    public class OwnService : BaseService
     {
         public CustomJsonResult LoginByUrlParams(string mId, string tppId)
         {

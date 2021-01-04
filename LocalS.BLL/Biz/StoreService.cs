@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class StoreService : BaseDbContext
+    public class StoreService : BaseService
     {
 
 

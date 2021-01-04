@@ -10,7 +10,7 @@ using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class ZfbSdkProvider : BaseDbContext, IPaySdkProvider<ZfbAppInfoConfig>
+    public class ZfbSdkProvider : BaseService, IPaySdkProvider<ZfbAppInfoConfig>
     {
         public PayBuildQrCodeResult PayBuildQrCode(ZfbAppInfoConfig config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {

@@ -13,7 +13,7 @@ using System.Transactions;
 
 namespace LocalS.BLL.Biz
 {
-    public class MachineService : BaseDbContext
+    public class MachineService : BaseService
     {
         public MachineInfoModel GetOne(string id)
         {

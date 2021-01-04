@@ -25,7 +25,7 @@ namespace LocalS.BLL.Biz
         public string Name { get; set; }
         public string Type { get; set; }
     }
-    public class OrderService : BaseDbContext
+    public class OrderService : BaseService
     {
         public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
         {

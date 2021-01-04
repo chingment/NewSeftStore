@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class OperateService : BaseDbContext
+    public class OperateService : BaseService
     {
         public CustomJsonResult Result(string operater, string clientUserId, RupOperateResult rup)
         {

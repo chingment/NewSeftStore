@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class PersonalService : BaseDbContext
+    public class PersonalService : BaseService
     {
         public CustomJsonResult<RetPersonalPageData> PageData(string operater, string clientUserId, RupPersonalPageData rup)
         {

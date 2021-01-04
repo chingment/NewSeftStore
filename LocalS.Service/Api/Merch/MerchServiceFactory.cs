@@ -119,5 +119,13 @@ namespace LocalS.Service.Api.Merch
                 return new SupplierService();
             }
         }
+
+        public static MemberRightService MemberRight
+        {
+            get
+            {
+                return new MemberRightService();
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class GlobalService : BaseDbContext
+    public class GlobalService : BaseService
     {
         public CustomJsonResult DataSet(string operater, string clientUserId, RupGlobalDataSet rup)
         {

@@ -13,7 +13,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class MachineService : BaseDbContext
+    public class MachineService : BaseService
     {
 
         public StatusModel GetStatus(string curUseStoreId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)

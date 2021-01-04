@@ -14,7 +14,7 @@ using System.Transactions;
 namespace LocalS.Service.Api.StoreTerm
 {
 
-    public class OrderService : BaseDbContext
+    public class OrderService : BaseService
     {
         public CustomJsonResult Reserve(RopOrderReserve rop)
         {

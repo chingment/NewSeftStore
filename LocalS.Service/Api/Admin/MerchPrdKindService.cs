@@ -13,7 +13,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class MerchPrdKindService : BaseDbContext
+    public class MerchPrdKindService : BaseService
     {
         private List<TreeNode> GetTree(int id, List<PrdKind> prdKinds)
         {

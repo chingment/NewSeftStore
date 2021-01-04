@@ -183,6 +183,7 @@
     <Compile Include="Api\Merch\CouponService.cs" />
     <Compile Include="Api\Merch\LogService.cs" />
     <Compile Include="Api\Merch\MachineService.cs" />
+    <Compile Include="Api\Merch\MemberRightService.cs" />
     <Compile Include="Api\Merch\Models\CouponModel.cs" />
     <Compile Include="Api\Merch\Models\MachineModel.cs" />
     <Compile Include="Api\Merch\Models\OnSaleStoreModel.cs" />

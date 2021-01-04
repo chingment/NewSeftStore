@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Account
 {
-    public class HomeService : BaseDbContext
+    public class HomeService : BaseService
     {
         public CustomJsonResult GetIndexPageData(string operater, string userId)
         {

@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class AdminUserService : BaseDbContext
+    public class AdminUserService : BaseService
     {
         public string GetStatusText(bool isDisable)
         {

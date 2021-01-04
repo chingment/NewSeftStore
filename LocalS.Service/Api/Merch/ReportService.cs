@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class ReportService : BaseDbContext
+    public class ReportService : BaseService
     {
         public CustomJsonResult StoreStockRealDataInit(string operater, string merchId)
         {

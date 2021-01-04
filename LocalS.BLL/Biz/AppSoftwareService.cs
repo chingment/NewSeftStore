@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class AppSoftwareService : BaseDbContext
+    public class AppSoftwareService : BaseService
     {
         public string GetAppSecretByAppKey(string appId, string appKey)
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class MerchRepairFunService
+    public class MerchRepairFunService: BaseService
     {
         public CustomJsonResult ReLoadProductCache(string operater)
         {

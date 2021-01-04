@@ -14,7 +14,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class StockSettingService : BaseDbContext
+    public class StockSettingService : BaseService
     {
         public CustomJsonResult GetCabinetSlots(string operater, RupStockSettingGetCabinetSlots rup)
         {

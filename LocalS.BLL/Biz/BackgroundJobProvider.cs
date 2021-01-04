@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class BackgroundJobProvider : BaseDbContext
+    public class BackgroundJobProvider : BaseService
     {
         public CustomJsonResult GetDetails(string operater, string id)
         {

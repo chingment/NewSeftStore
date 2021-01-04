@@ -23,7 +23,7 @@ namespace LocalS.BLL.Task
         MachineRunInfo = 5
     }
 
-    public class Task4Tim2GlobalProvider : BaseDbContext, IJob
+    public class Task4Tim2GlobalProvider : BaseService, IJob
     {
         private static readonly string key = "task4Tim2Global";
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class SupplierService : BaseDbContext
+    public class SupplierService : BaseService
     {
         public CustomJsonResult Search(string operater, string merchId, string key)
         {

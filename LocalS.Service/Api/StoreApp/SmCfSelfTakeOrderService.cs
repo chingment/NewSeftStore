@@ -13,7 +13,7 @@ using LocalS.BLL.Biz;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class SmCfSelfTakeOrderService : BaseDbContext
+    public class SmCfSelfTakeOrderService : BaseService
     {
         private List<FsBlock> GetOrderBlocks(Order order)
         {

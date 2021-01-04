@@ -14,7 +14,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class OrderService : BaseDbContext
+    public class OrderService : BaseService
     {
         public CustomJsonResult GetDetails(string operater, string merchId, string orderId)
         {

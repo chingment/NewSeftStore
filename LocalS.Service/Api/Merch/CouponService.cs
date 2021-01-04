@@ -14,7 +14,7 @@ using System.Transactions;
 namespace LocalS.Service.Api.Merch
 {
 
-    public class CouponService : BaseDbContext
+    public class CouponService : BaseService
     {
         public string GetCategoryName(E_Coupon_Category category)
         {

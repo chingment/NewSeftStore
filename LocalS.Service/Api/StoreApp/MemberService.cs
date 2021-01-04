@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class MemberService : BaseDbContext
+    public class MemberService : BaseService
     {
 
         public CustomJsonResult GetPromSt(string operater, string clientUserId, RupMemberGetPromSt rup)

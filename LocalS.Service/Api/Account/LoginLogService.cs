@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Account
 {
-    public class LoginLogService : BaseDbContext
+    public class LoginLogService : BaseService
     {
         public string GetLoginWayText(Lumos.DbRelay.Enumeration.LoginWay loginWay)
         {

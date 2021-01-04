@@ -15,7 +15,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class PrdProductService : BaseDbContext
+    public class PrdProductService : BaseService
     {
         private List<TreeNode> GetKindTree(int id, List<PrdKind> prdKinds)
         {

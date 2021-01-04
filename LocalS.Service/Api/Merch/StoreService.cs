@@ -14,7 +14,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class StoreService : BaseDbContext
+    public class StoreService : BaseService
     {
 
         public StatusModel GetStatus(bool isOpen)

@@ -10,7 +10,7 @@ using LocalS.BLL.Biz;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class StoreService : BaseDbContext
+    public class StoreService : BaseService
     {
         public CustomJsonResult List(string operater, string clientUserId, RupStoreList rup)
         {

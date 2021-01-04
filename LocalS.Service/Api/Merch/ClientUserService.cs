@@ -11,7 +11,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class ClientUserService : BaseDbContext
+    public class ClientUserService : BaseService
     {
         public CustomJsonResult GetList(string operater, string merchId, RupClientGetList rup)
         {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class LogService : BaseDbContext
+    public class LogService : BaseService
     {
         public CustomJsonResult InitListByOperate(string operater, string merchId)
         {

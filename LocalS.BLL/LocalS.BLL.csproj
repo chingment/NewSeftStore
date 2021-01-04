@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AppId.cs" />
     <Compile Include="BaseDbContext.cs" />
+    <Compile Include="BaseService.cs" />
     <Compile Include="Biz\BackgroundJobProvider.cs" />
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\MachineService.cs" />

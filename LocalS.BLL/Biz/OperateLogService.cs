@@ -13,7 +13,7 @@ using System.Transactions;
 
 namespace LocalS.BLL.Biz
 {
-    public class OperateLogService : BaseDbContext
+    public class OperateLogService : BaseService
     {
         public void EventNotifyHandle(EventNotifyModel model)
         {

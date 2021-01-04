@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class SysMenuService : BaseDbContext
+    public class SysMenuService : BaseService
     {
         private List<TreeNode> GetMenuTree(string id, List<SysMenu> sysMenus)
         {

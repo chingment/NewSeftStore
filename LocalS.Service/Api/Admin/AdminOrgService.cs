@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class AdminOrgService : BaseDbContext
+    public class AdminOrgService : BaseService
     {
         private List<TreeNode> GetOrgTree(string id, List<SysOrg> sysOrgs)
         {

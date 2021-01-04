@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class ProductService : BaseDbContext
+    public class ProductService : BaseService
     {
         public CustomJsonResult InitSearchPageData(string operater, string clientUserId, RupProductInitSearchPageData rup)
         {

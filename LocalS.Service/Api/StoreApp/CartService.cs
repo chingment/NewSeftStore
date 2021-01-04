@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class CartService : BaseDbContext
+    public class CartService : BaseService
     {
 
         private CartDataModel GetCartData(string clientUserId, string storeId, E_SellChannelRefType ShopMode)

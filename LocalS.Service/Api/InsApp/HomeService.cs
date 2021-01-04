@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.InsApp
 {
-    public class HomeService : BaseDbContext
+    public class HomeService : BaseService
     {
         public CustomJsonResult GetIndexPageData(string mId, string uId)
         {

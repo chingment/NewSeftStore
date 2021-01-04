@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Admin
 {
-    public class MerchMachineService : BaseDbContext
+    public class MerchMachineService : BaseService
     {
         public CustomJsonResult InitGetList(string operater)
         {

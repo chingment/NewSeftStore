@@ -10,7 +10,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Account
 {
-    public class UserInfoService : BaseDbContext
+    public class UserInfoService : BaseService
     {
         public CustomJsonResult Save(string operater, string userId, RopUserInfoSave rop)
         {

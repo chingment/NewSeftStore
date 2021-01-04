@@ -12,7 +12,7 @@ using System.Transactions;
 
 namespace LocalS.BLL.Biz
 {
-    public class ProductSkuService : BaseDbContext
+    public class ProductSkuService : BaseService
     {
 
         private void SendUpdateProductSkuStock(string operater, string appId, string merchId, string storeId, string[] sellChannelRefIds, string productSkuId)

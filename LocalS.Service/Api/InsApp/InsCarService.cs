@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.InsApp
 {
-    public class InsCarService : BaseDbContext
+    public class InsCarService : BaseService
     {
         public CustomJsonResult GetIndexPageData()
         {

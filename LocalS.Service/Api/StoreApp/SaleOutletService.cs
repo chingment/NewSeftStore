@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class SaleOutletService : BaseDbContext
+    public class SaleOutletService : BaseService
     {
         public CustomJsonResult List(string operater, string clientUserId, RupSaleOutletList rup)
         {

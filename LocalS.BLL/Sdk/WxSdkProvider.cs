@@ -16,7 +16,7 @@ using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class WxSdkProvider : BaseDbContext, IPaySdkProvider<WxAppInfoConfig>
+    public class WxSdkProvider : BaseService, IPaySdkProvider<WxAppInfoConfig>
     {
         private string AES_decrypt(string encryptedData, string iv, string sessionKey)
         {

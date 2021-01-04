@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class ProductCacheService : BaseDbContext
+    public class ProductCacheService : BaseService
     {
         public void RemoveSpuInfo(string merchId, string productId)
         {

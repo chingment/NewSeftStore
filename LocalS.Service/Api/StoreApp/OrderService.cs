@@ -14,7 +14,7 @@ using LocalS.BLL.Biz;
 namespace LocalS.Service.Api.StoreApp
 {
 
-    public class OrderService : BaseDbContext
+    public class OrderService : BaseService
     {
         private List<FsBlock> GetOrderBlocks(Order order)
         {

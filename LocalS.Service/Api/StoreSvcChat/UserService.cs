@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreSvcChat
 {
-    public class UserService : BaseDbContext
+    public class UserService : BaseService
     {
         public CustomJsonResult GetInfoByUserName(string operater, string userId, RupUserGetInfo rup)
         {

@@ -15,7 +15,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class MachineService : BaseDbContext
+    public class MachineService : BaseService
     {
         public CustomJsonResult InitData(RopMachineInitData rop)
         {

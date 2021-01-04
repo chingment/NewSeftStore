@@ -13,7 +13,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class AdSpaceService : BaseDbContext
+    public class AdSpaceService : BaseService
     {
         public StatusModel GetReleaseStatus(E_AdContentStatus status)
         {

@@ -16,7 +16,7 @@ using System.Transactions;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class AdminUserService : BaseDbContext
+    public class AdminUserService : BaseService
     {
         public StatusModel GetStatus(bool isDisable)
         {
