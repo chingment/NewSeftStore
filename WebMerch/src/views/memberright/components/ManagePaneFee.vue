@@ -1,27 +1,22 @@
 <template>
   <div id="store_list" class="app-container">
-
     <el-row v-loading="loading" :gutter="20">
-
       <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-
               <div class="circle-item"> <span class="name">{{ item.name }}</span> </div>
-
             </div>
             <div class="right">
-              <el-button type="text" @click="handleManage(item)">管理</el-button>
+              <el-button type="text" @click="handleRemoveMachine(item)">设置</el-button>
             </div>
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" style="padding:0px;color:#67c23a;" @click="handleManageBaseInfo(item)">基本信息</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f;" @click="handleManageFee(item)">会费设置</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#139baf;" @click="handleManageRight(item)">权益设置</el-button></li>
+                <li>展示价：{{ item.feeOriginalValue }} </li>
+                <li>实际价：{{ item.feeSaleValue }}</li>
               </ul>
             </div>
           </div>
@@ -32,10 +27,17 @@
 </template>
 
 <script>
-import { getLevelSts } from '@/api/memberright'
-
+import { MessageBox } from 'element-ui'
+import { getFeeSts } from '@/api/memberright'
+import { getUrlParam } from '@/utils/commonUtil'
 export default {
-  name: 'StoreList',
+  name: 'ManagePaneMachine',
+  props: {
+    levelstid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: true,
@@ -44,57 +46,34 @@ export default {
         limit: 10,
         name: undefined
       },
-      listData: [],
-      mctMode: ''
+      listData: []
+    }
+  },
+  watch: {
+    levelstid: function(val, oldval) {
+      console.log('levelid 值改变')
+
+      this.init()
     }
   },
   created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
-    }
-    this.mctMode = this.$store.getters.userInfo.mctMode
-    this.getListData()
+    this.init()
   },
   methods: {
-    getListData() {
+    init() {
+      var id = this.levelstid
+      if (this.levelstid !== '') {
+        this._getListData({ id: id })
+      }
+    },
+    _getListData(listQuery) {
       this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getLevelSts(this.listQuery).then(res => {
+      getFeeSts(listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.listData = d.levelSts
+          this.listData = d.feeSts
         }
         this.loading = false
-      })
-    },
-    handleManageBaseInfo(row) {
-      this.$router.push({
-        name: 'MarketMemberSet',
-        path: '/memberright/manage',
-        params: {
-          id: row.id,
-          tab: 'tabBaseInfo'
-        }
-      })
-    },
-    handleManageFee(row) {
-      this.$router.push({
-        name: 'MarketMemberSet',
-        path: '/memberright/manage',
-        params: {
-          id: row.id,
-          tab: 'tabFee'
-        }
-      })
-    },
-    handleManageRight(row) {
-      this.$router.push({
-        name: 'MarketMemberSet',
-        path: '/memberright/manage',
-        params: {
-          id: row.id,
-          tab: 'tabRight'
-        }
       })
     }
   }
@@ -122,16 +101,11 @@ export default {
 text-overflow:ellipsis;
 white-space: nowrap;
     .name{
-padding: 0 5px;
-    display: inline-block;
-    flex: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis
+    padding: 0px 5px;
     }
     }
     .right{
-      max-width: 100px;
+      width: 100px;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -153,7 +127,7 @@ padding: 0 5px;
 
     .describe{
       flex: 1;
-      padding: 0px;
+      padding: 5px;
       font-size: 12px;
 
       ul{
@@ -162,13 +136,12 @@ padding: 0 5px;
         list-style: none;
          li{
            width: 100%;
-           text-align: right;
+             text-align: right;
         height: 26px;
         line-height: 26px;
       }
       }
     }
-
   }
 }
 </style>
