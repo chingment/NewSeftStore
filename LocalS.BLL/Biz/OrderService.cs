@@ -434,6 +434,24 @@ namespace LocalS.BLL.Biz
 
                 using (TransactionScope ts = new TransactionScope())
                 {
+                    string clientUserName = "匿名";
+
+                    var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
+
+                    MemberLevelSt clientMemberLevel = null;
+
+                    if (clientUser != null)
+                    {
+                        if (!string.IsNullOrEmpty(clientUser.NickName))
+                        {
+                            clientUserName = clientUser.NickName;
+                        }
+
+                        clientMemberLevel = CurrentDb.MemberLevelSt.Where(m => m.MerchId == store.MerchId && m.Level == clientUser.MemberLevel).FirstOrDefault();
+                    }
+
+
+
                     RetOrderReserve ret = new RetOrderReserve();
 
                     List<BuildOrder.ProductSku> buildOrderSkus = new List<BuildOrder.ProductSku>();
@@ -583,9 +601,34 @@ namespace LocalS.BLL.Biz
                                     buildOrderSku.Quantity = sku.Quantity;
                                     buildOrderSku.ShopMode = sku.ShopMode;
                                     buildOrderSku.Stocks = r_sku.Stocks;
-                                    //todo 会员价 变换
+
                                     decimal salePrice = r_sku.Stocks[0].SalePrice;
-                                    decimal originalPrice = r_sku.Stocks[0].SalePrice;
+
+                                    decimal originalPrice = salePrice;
+
+                                    if (clientMemberLevel != null)
+                                    {
+                                        decimal memberDiscountPrice = salePrice * clientMemberLevel.Discount * 0.1m;
+
+                                        var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == sku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
+                                        if (memberProductSkuSt == null)
+                                        {
+                                            salePrice = memberDiscountPrice;
+
+                                            LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
+                                        }
+                                        else
+                                        {
+                                            if (memberProductSkuSt.MemberPrice >= memberDiscountPrice)
+                                            {
+                                                salePrice = memberDiscountPrice;
+                                            }
+                                            else
+                                            {
+                                                salePrice = memberProductSkuSt.MemberPrice;
+                                            }
+                                        }
+                                    }
 
                                     buildOrderSku.SalePrice = salePrice;
                                     buildOrderSku.SaleAmount = salePrice * sku.Quantity;
@@ -885,7 +928,7 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
                     #region 更改购物车标识
-                    var clientUserName = "匿名";
+          
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
                     {
                         var cartsIds = buildOrderSkus.Select(m => m.CartId).Distinct().ToArray();
@@ -901,15 +944,6 @@ namespace LocalS.BLL.Biz
                                     cart.MendTime = DateTime.Now;
                                     CurrentDb.SaveChanges();
                                 }
-                            }
-                        }
-
-                        var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
-                        if (clientUser != null)
-                        {
-                            if (!string.IsNullOrEmpty(clientUser.NickName))
-                            {
-                                clientUserName = clientUser.NickName;
                             }
                         }
                     }
@@ -935,6 +969,13 @@ namespace LocalS.BLL.Biz
                     List<Order> orders = new List<Order>();
 
                     string unId = IdWorker.Build(IdType.NewGuid);
+
+
+                    //指定开发者ID 为测试模式
+                    if (rop.ClientUserId == "e3246aa715254ecf9a56916e889b928b")
+                    {
+                        rop.IsTestMode = true;
+                    }
 
                     foreach (var buildOrder in buildOrders)
                     {

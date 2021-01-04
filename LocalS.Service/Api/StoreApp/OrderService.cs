@@ -182,6 +182,11 @@ namespace LocalS.Service.Api.StoreApp
 
                 store = BizFactory.Store.GetOne(rop.StoreId);
 
+                MemberLevelSt clientMemberLevel = null;
+                if (clientUser != null)
+                {
+                    clientMemberLevel = CurrentDb.MemberLevelSt.Where(m => m.MerchId == store.MerchId && m.Level == clientUser.MemberLevel).FirstOrDefault();
+                }
 
                 foreach (var productSku in rop.ProductSkus)
                 {
@@ -218,13 +223,27 @@ namespace LocalS.Service.Api.StoreApp
                         LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
 
                         //切换会员价
-                        if (clientUser.MemberLevel > 0)
+                        if (clientMemberLevel != null)
                         {
+                            decimal memberDiscountPrice = salePrice * clientMemberLevel.Discount * 0.1m;
+
                             var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
-                            if (memberProductSkuSt != null)
+                            if (memberProductSkuSt == null)
                             {
-                                salePrice = memberProductSkuSt.MemberPrice;
+                                salePrice = memberDiscountPrice;
+
                                 LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
+                            }
+                            else
+                            {
+                                if (memberProductSkuSt.MemberPrice >= memberDiscountPrice)
+                                {
+                                    salePrice = memberDiscountPrice;
+                                }
+                                else
+                                {
+                                    salePrice = memberProductSkuSt.MemberPrice;
+                                }
                             }
                         }
 
