@@ -9,11 +9,11 @@ namespace LocalS.Entity
 
         Unknow = 0,
         Delivery = 1,
-        StoreSelfTake = 2,
-        DeliveryOrStoreSelfTake = 3,
-        MachineSelfTake = 4,
-        MemerbFee = 5,
-        StoreConsume = 6
+        SelfTakeByStore = 2,
+        DeliveryOrSelfTakeByStore = 3,
+        SelfTakeByMachine = 4,
+        FeeByMember = 5,
+        ConsumeByStore = 6
     }
 
     [Table("PrdProduct")]

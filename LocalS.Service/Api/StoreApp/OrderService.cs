@@ -277,7 +277,7 @@ namespace LocalS.Service.Api.StoreApp
                         if (memberFeeSt != null)
                         {
                             productSku.Name = memberFeeSt.Name;
-                            productSku.SupReceiveMode = E_SupReceiveMode.MemerbFee;
+                            productSku.SupReceiveMode = E_SupReceiveMode.FeeByMember;
                             productSku.MainImgUrl = memberFeeSt.MainImgUrl;
                             productSku.SalePrice = memberFeeSt.FeeSaleValue;
                             productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
@@ -446,12 +446,25 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (delivery == null)
                 {
-                    dliveryModel.Id = "";
-                    dliveryModel.Consignee = "配送地址";
-                    dliveryModel.PhoneNumber = "选择";
-                    dliveryModel.AreaName = "";
-                    dliveryModel.Address = "";
-                    dliveryModel.IsDefault = false;
+                    var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
+                    if (d_shippingAddress == null)
+                    {
+                        dliveryModel.Id = "";
+                        dliveryModel.Consignee = "配送地址";
+                        dliveryModel.PhoneNumber = "选择";
+                        dliveryModel.AreaName = "";
+                        dliveryModel.Address = "";
+                        dliveryModel.IsDefault = false;
+                    }
+                    else
+                    {
+                        dliveryModel.Id = d_shippingAddress.Id;
+                        dliveryModel.Consignee = d_shippingAddress.Consignee;
+                        dliveryModel.PhoneNumber = d_shippingAddress.PhoneNumber;
+                        dliveryModel.AreaName = d_shippingAddress.AreaName;
+                        dliveryModel.Address = d_shippingAddress.Address;
+                        dliveryModel.IsDefault = d_shippingAddress.IsDefault;
+                    }
                 }
                 else
                 {
@@ -544,96 +557,96 @@ namespace LocalS.Service.Api.StoreApp
                 if (skus_ShopOrRent.Count > 0)
                 {
                     var skus_Delivery = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.Delivery).ToList();
-                    if (skus_ShopOrRent.Count > 0)
+                    if (skus_Delivery.Count > 0)
                     {
-                        var orderBlock_Delivery = new OrderBlockModel();
-                        orderBlock_Delivery.TagName = "线上商城[配送]";
-                        orderBlock_Delivery.Skus = skus_Delivery;
-                        orderBlock_Delivery.TabMode = E_TabMode.Delivery;
-                        orderBlock_Delivery.ReceiveMode = E_ReceiveMode.Delivery;
-                        orderBlock_Delivery.Delivery = dliveryModel;
-                        orderBlock.Add(orderBlock_Delivery);
+                        var ob_Delivery = new OrderBlockModel();
+                        ob_Delivery.TagName = "线上商城[配送]";
+                        ob_Delivery.Skus = skus_Delivery;
+                        ob_Delivery.TabMode = E_TabMode.Delivery;
+                        ob_Delivery.ReceiveMode = E_ReceiveMode.Delivery;
+                        ob_Delivery.Delivery = dliveryModel;
+                        orderBlock.Add(ob_Delivery);
 
                     }
 
-                    var skus_StoreSelfTake = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.StoreSelfTake).ToList();
+                    var skus_SelfTakeByStore = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.SelfTakeByStore).ToList();
 
-                    if (skus_StoreSelfTake.Count > 0)
+                    if (skus_SelfTakeByStore.Count > 0)
                     {
 
-                        var orderBlock_StoreSelfTake = new OrderBlockModel();
-                        orderBlock_StoreSelfTake.TagName = "线上商城[自提]";
-                        orderBlock_StoreSelfTake.Skus = skus_StoreSelfTake;
-                        orderBlock_StoreSelfTake.TabMode = E_TabMode.SelfTakeByStore;
-                        orderBlock_StoreSelfTake.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
-                        orderBlock_StoreSelfTake.Delivery = dliveryModel;
-                        orderBlock_StoreSelfTake.BookTime = bookTimeModel;
-                        orderBlock_StoreSelfTake.SelfTake = selfTakeModel;
-                        orderBlock.Add(orderBlock_StoreSelfTake);
+                        var ob_SelfTakeByStore = new OrderBlockModel();
+                        ob_SelfTakeByStore.TagName = "线上商城[自提]";
+                        ob_SelfTakeByStore.Skus = skus_SelfTakeByStore;
+                        ob_SelfTakeByStore.TabMode = E_TabMode.SelfTakeByStore;
+                        ob_SelfTakeByStore.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
+                        ob_SelfTakeByStore.Delivery = dliveryModel;
+                        ob_SelfTakeByStore.BookTime = bookTimeModel;
+                        ob_SelfTakeByStore.SelfTake = selfTakeModel;
+                        orderBlock.Add(ob_SelfTakeByStore);
 
                     }
 
-                    var skus_DeliveryOrStoreSelfTake = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.DeliveryOrStoreSelfTake).ToList();
+                    var skus_DeliveryOrSelfTakeByStore = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.DeliveryOrSelfTakeByStore).ToList();
 
-                    if (skus_DeliveryOrStoreSelfTake.Count > 0)
+                    if (skus_DeliveryOrSelfTakeByStore.Count > 0)
                     {
-                        var orderBlock_DeliveryOrStoreSelfTake = new OrderBlockModel();
-                        orderBlock_DeliveryOrStoreSelfTake.TagName = "线上商城[配送或自提]";
-                        orderBlock_DeliveryOrStoreSelfTake.Skus = skus_DeliveryOrStoreSelfTake;
-                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.DeliveryOrSelfTakeByStore;
+                        var ob_DeliveryOrSelfTakeByStore = new OrderBlockModel();
+                        ob_DeliveryOrSelfTakeByStore.TagName = "线上商城[配送或自提]";
+                        ob_DeliveryOrSelfTakeByStore.Skus = skus_DeliveryOrSelfTakeByStore;
+                        ob_DeliveryOrSelfTakeByStore.TabMode = E_TabMode.DeliveryOrSelfTakeByStore;
 
                         if (rop.OrderIds == null || rop.OrderIds.Count == 0)
                         {
-                            orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
+                            ob_DeliveryOrSelfTakeByStore.ReceiveMode = E_ReceiveMode.Delivery;
                         }
                         else
                         {
-                            int count_Delivery = skus_DeliveryOrStoreSelfTake.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).Count();
-                            if (count_Delivery > 0)
+                            int skus_Delivery_Count = skus_DeliveryOrSelfTakeByStore.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).Count();
+                            if (skus_Delivery_Count > 0)
                             {
-                                orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
+                                ob_DeliveryOrSelfTakeByStore.ReceiveMode = E_ReceiveMode.Delivery;
                             }
                             else
                             {
-                                orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
+                                ob_DeliveryOrSelfTakeByStore.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
                             }
                         }
 
-                        orderBlock_DeliveryOrStoreSelfTake.Delivery = dliveryModel;
-                        orderBlock_DeliveryOrStoreSelfTake.BookTime = bookTimeModel;
-                        orderBlock_DeliveryOrStoreSelfTake.SelfTake = selfTakeModel;
-                        orderBlock.Add(orderBlock_DeliveryOrStoreSelfTake);
+                        ob_DeliveryOrSelfTakeByStore.Delivery = dliveryModel;
+                        ob_DeliveryOrSelfTakeByStore.BookTime = bookTimeModel;
+                        ob_DeliveryOrSelfTakeByStore.SelfTake = selfTakeModel;
+                        orderBlock.Add(ob_DeliveryOrSelfTakeByStore);
 
                     }
 
                 }
 
 
-                var skus_MemberFee = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.MemberFee).ToList();
+                var skus_FeeByMember = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.MemberFee).ToList();
 
-                if (skus_MemberFee.Count > 0)
+                if (skus_FeeByMember.Count > 0)
                 {
-                    var orderBlock_MemberFee = new OrderBlockModel();
-                    orderBlock_MemberFee.TagName = "会员费";
-                    orderBlock_MemberFee.Skus = skus_MemberFee;
-                    orderBlock_MemberFee.TabMode = E_TabMode.FeeByMember;
-                    orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.FeeByMember;
-                    orderBlock.Add(orderBlock_MemberFee);
+                    var ob_MemberFee = new OrderBlockModel();
+                    ob_MemberFee.TagName = "会员费";
+                    ob_MemberFee.Skus = skus_FeeByMember;
+                    ob_MemberFee.TabMode = E_TabMode.FeeByMember;
+                    ob_MemberFee.ReceiveMode = E_ReceiveMode.FeeByMember;
+                    orderBlock.Add(ob_MemberFee);
                 }
 
             }
 
-            var skus_MachineSelfTake = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
-            if (skus_MachineSelfTake.Count > 0)
+            var skus_SelfTakeByMachine = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
+            if (skus_SelfTakeByMachine.Count > 0)
             {
-                var orderBlock_MachineSelfTake = new OrderBlockModel();
-                orderBlock_MachineSelfTake.TagName = "线下机器";
-                orderBlock_MachineSelfTake.Skus = skus_MachineSelfTake;
-                orderBlock_MachineSelfTake.TabMode = E_TabMode.SelfTakeByMachine;
-                orderBlock_MachineSelfTake.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-                orderBlock_MachineSelfTake.SelfTake.MarkName = store.Name;
-                orderBlock_MachineSelfTake.SelfTake.Address = store.Address;
-                orderBlock.Add(orderBlock_MachineSelfTake);
+                var ob_SelfTakeByMachine = new OrderBlockModel();
+                ob_SelfTakeByMachine.TagName = "线下机器";
+                ob_SelfTakeByMachine.Skus = skus_SelfTakeByMachine;
+                ob_SelfTakeByMachine.TabMode = E_TabMode.SelfTakeByMachine;
+                ob_SelfTakeByMachine.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
+                ob_SelfTakeByMachine.SelfTake.MarkName = store.Name;
+                ob_SelfTakeByMachine.SelfTake.Address = store.Address;
+                orderBlock.Add(ob_SelfTakeByMachine);
             }
 
             ret.Blocks = orderBlock;
