@@ -31,18 +31,18 @@ namespace LocalS.Service.Api.StoreApp
 
             if (order.PayStatus == E_PayStatus.PaySuccess)
             {
-                if (order.ReceiveMode == E_ReceiveMode.MachineSelfTake)
+                if (order.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
                     block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "扫码枪扫一扫" };
                 }
-                else if (order.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                else if (order.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
                     block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "出示给店员扫一扫" };
                 }
 
-                if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.MachineSelfTake || order.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || order.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
                 {
                     block.ReceiptInfo = new FsReceiptInfo { LastTime = order.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = order.PickupFlowLastDesc };
 
@@ -442,7 +442,7 @@ namespace LocalS.Service.Api.StoreApp
 
 
                 var delivery = orders.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).FirstOrDefault();
-                var selfTake = orders.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake || m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
+                var selfTake = orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
 
                 if (delivery == null)
                 {
@@ -539,12 +539,12 @@ namespace LocalS.Service.Api.StoreApp
 
             if (skus_Mall.Count > 0)
             {
-                var skus_DeliveryOrStoreSelfTake = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.Shop || m.ShopMethod == E_OrderShopMethod.Rent).ToList();
+                var skus_ShopOrRent = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.Shop || m.ShopMethod == E_OrderShopMethod.Rent).ToList();
 
-                if (skus_DeliveryOrStoreSelfTake.Count > 0)
+                if (skus_ShopOrRent.Count > 0)
                 {
-                    var skus_Delivery = skus_DeliveryOrStoreSelfTake.Where(m => m.SupReceiveMode == E_SupReceiveMode.Delivery).ToList();
-                    if (skus_Delivery.Count > 0)
+                    var skus_Delivery = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.Delivery).ToList();
+                    if (skus_ShopOrRent.Count > 0)
                     {
                         var orderBlock_Delivery = new OrderBlockModel();
                         orderBlock_Delivery.TagName = "线上商城[配送]";
@@ -556,7 +556,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     }
 
-                    var skus_StoreSelfTake = skus_DeliveryOrStoreSelfTake.Where(m => m.SupReceiveMode == E_SupReceiveMode.StoreSelfTake).ToList();
+                    var skus_StoreSelfTake = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.StoreSelfTake).ToList();
 
                     if (skus_StoreSelfTake.Count > 0)
                     {
@@ -564,8 +564,8 @@ namespace LocalS.Service.Api.StoreApp
                         var orderBlock_StoreSelfTake = new OrderBlockModel();
                         orderBlock_StoreSelfTake.TagName = "线上商城[自提]";
                         orderBlock_StoreSelfTake.Skus = skus_StoreSelfTake;
-                        orderBlock_StoreSelfTake.TabMode = E_TabMode.StoreSelfTake;
-                        orderBlock_StoreSelfTake.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                        orderBlock_StoreSelfTake.TabMode = E_TabMode.SelfTakeByStore;
+                        orderBlock_StoreSelfTake.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
                         orderBlock_StoreSelfTake.Delivery = dliveryModel;
                         orderBlock_StoreSelfTake.BookTime = bookTimeModel;
                         orderBlock_StoreSelfTake.SelfTake = selfTakeModel;
@@ -573,14 +573,14 @@ namespace LocalS.Service.Api.StoreApp
 
                     }
 
-                    var skus_DeliveryAndStoreSelfTake = skus_DeliveryOrStoreSelfTake.Where(m => m.SupReceiveMode == E_SupReceiveMode.DeliveryAndStoreSelfTake).ToList();
+                    var skus_DeliveryOrStoreSelfTake = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.DeliveryOrStoreSelfTake).ToList();
 
-                    if (skus_DeliveryAndStoreSelfTake.Count > 0)
+                    if (skus_DeliveryOrStoreSelfTake.Count > 0)
                     {
                         var orderBlock_DeliveryOrStoreSelfTake = new OrderBlockModel();
                         orderBlock_DeliveryOrStoreSelfTake.TagName = "线上商城[配送或自提]";
-                        orderBlock_DeliveryOrStoreSelfTake.Skus = skus_DeliveryAndStoreSelfTake;
-                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.DeliveryAndStoreSelfTake;
+                        orderBlock_DeliveryOrStoreSelfTake.Skus = skus_DeliveryOrStoreSelfTake;
+                        orderBlock_DeliveryOrStoreSelfTake.TabMode = E_TabMode.DeliveryOrSelfTakeByStore;
 
                         if (rop.OrderIds == null || rop.OrderIds.Count == 0)
                         {
@@ -588,14 +588,14 @@ namespace LocalS.Service.Api.StoreApp
                         }
                         else
                         {
-                            int count_Delivery = skus_DeliveryAndStoreSelfTake.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).Count();
+                            int count_Delivery = skus_DeliveryOrStoreSelfTake.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).Count();
                             if (count_Delivery > 0)
                             {
                                 orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.Delivery;
                             }
                             else
                             {
-                                orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                orderBlock_DeliveryOrStoreSelfTake.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
                             }
                         }
 
@@ -616,8 +616,8 @@ namespace LocalS.Service.Api.StoreApp
                     var orderBlock_MemberFee = new OrderBlockModel();
                     orderBlock_MemberFee.TagName = "会员费";
                     orderBlock_MemberFee.Skus = skus_MemberFee;
-                    orderBlock_MemberFee.TabMode = E_TabMode.MemerbFee;
-                    orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.MemberFee;
+                    orderBlock_MemberFee.TabMode = E_TabMode.FeeByMember;
+                    orderBlock_MemberFee.ReceiveMode = E_ReceiveMode.FeeByMember;
                     orderBlock.Add(orderBlock_MemberFee);
                 }
 
@@ -629,8 +629,8 @@ namespace LocalS.Service.Api.StoreApp
                 var orderBlock_MachineSelfTake = new OrderBlockModel();
                 orderBlock_MachineSelfTake.TagName = "线下机器";
                 orderBlock_MachineSelfTake.Skus = skus_MachineSelfTake;
-                orderBlock_MachineSelfTake.TabMode = E_TabMode.MachineSelfTake;
-                orderBlock_MachineSelfTake.ReceiveMode = E_ReceiveMode.MachineSelfTake;
+                orderBlock_MachineSelfTake.TabMode = E_TabMode.SelfTakeByMachine;
+                orderBlock_MachineSelfTake.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
                 orderBlock_MachineSelfTake.SelfTake.MarkName = store.Name;
                 orderBlock_MachineSelfTake.SelfTake.Address = store.Address;
                 orderBlock.Add(orderBlock_MachineSelfTake);
@@ -734,13 +734,13 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (item.PayStatus == E_PayStatus.PaySuccess)
                 {
-                    if (item.ReceiveMode == E_ReceiveMode.MachineSelfTake)
+                    if (item.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
                     {
                         block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
                         block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
                     }
 
-                    if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.MachineSelfTake || item.ReceiveMode == E_ReceiveMode.StoreSelfTake)
+                    if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || item.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
                     {
                         block.ReceiptInfo = new FsReceiptInfo { LastTime = item.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = item.PickupFlowLastDesc };
 
@@ -919,7 +919,7 @@ namespace LocalS.Service.Api.StoreApp
                         ret.RecordTop.CircleText = "收";
                         ret.RecordTop.Description = order.ReceptionAddress;
                         break;
-                    case E_ReceiveMode.StoreSelfTake:
+                    case E_ReceiveMode.SelfTakeByStore:
                         ret.Top.CircleText = "自";
                         ret.Top.Field1 = order.ReceptionMarkName;
                         ret.Top.Field2 = order.ReceptionAddress;
@@ -927,7 +927,7 @@ namespace LocalS.Service.Api.StoreApp
                         ret.RecordTop.CircleText = "自";
                         ret.RecordTop.Description = order.ReceptionAddress;
                         break;
-                    case E_ReceiveMode.MachineSelfTake:
+                    case E_ReceiveMode.SelfTakeByMachine:
                         ret.Top.CircleText = "提";
                         ret.Top.Field1 = order.ReceptionMarkName;
                         ret.Top.Field2 = order.ReceptionAddress;

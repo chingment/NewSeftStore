@@ -23,9 +23,12 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Delivery = 1,
-        StoreSelfTake = 2,
-        MachineSelfTake = 3,
-        MemberFee = 4 //会员费
+        SelfTakeByStore = 2,
+        SelfTakeByMachine = 4,
+        FeeByMember = 5,
+        ConsumeByStore = 6,
+        FeeByDeposit = 7,
+        FeeByRent = 8
     }
 
 }

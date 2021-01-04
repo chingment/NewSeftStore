@@ -93,8 +93,9 @@
       <el-form-item label="取货模式">
         <el-radio-group v-model="form.supReceiveMode">
           <el-radio-button label="1">仅限配送</el-radio-button>
-          <el-radio-button label="2">仅限店铺自提</el-radio-button>
-          <el-radio-button label="3">可配送或店铺自提</el-radio-button>
+          <el-radio-button label="2">仅限门店自提</el-radio-button>
+          <el-radio-button label="3">可配送或门店自提</el-radio-button>
+          <!-- <el-radio-button label="6">仅限门店消费</el-radio-button> -->
         </el-radio-group>
       </el-form-item>
       <el-form-item label="属性">

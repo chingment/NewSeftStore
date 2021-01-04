@@ -776,7 +776,7 @@ namespace LocalS.BLL.Biz
                                     var buildOrderSku = new BuildOrder.ProductSku();
                                     buildOrderSku.Id = sku.Id;
                                     buildOrderSku.ProductId = "";
-                                    buildOrderSku.ReceiveMode = E_ReceiveMode.MemberFee;
+                                    buildOrderSku.ReceiveMode = E_ReceiveMode.FeeByMember;
                                     buildOrderSku.Name = memberFeeSt.Name;
                                     buildOrderSku.MainImgUrl = memberFeeSt.MainImgUrl;
                                     buildOrderSku.BarCode = "";
@@ -987,17 +987,17 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                                 break;
-                            case E_ReceiveMode.StoreSelfTake:
+                            case E_ReceiveMode.SelfTakeByStore:
                                 #region StoreSelfTake
 
-                                var rm_StoreSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
+                                var rm_StoreSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
 
                                 if (rm_StoreSelfTake == null || rm_StoreSelfTake.SelfTake == null)
                                 {
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空", null);
                                 }
 
-                                order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                order.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
                                 order.ReceiveModeName = "到店自提";
                                 order.Receiver = rm_StoreSelfTake.SelfTake.Consignee;
                                 order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.PhoneNumber;
@@ -1040,7 +1040,7 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                                 break;
-                            case E_ReceiveMode.MachineSelfTake:
+                            case E_ReceiveMode.SelfTakeByMachine:
                                 #region MachineSelfTake
 
                                 if (order.PickupCode == null)
@@ -1048,14 +1048,14 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
                                 }
 
-                                var rm_MachineSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).FirstOrDefault();
+                                var rm_MachineSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).FirstOrDefault();
 
                                 if (rm_MachineSelfTake == null || rm_MachineSelfTake.SelfTake == null)
                                 {
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空", null);
                                 }
 
-                                order.ReceiveMode = E_ReceiveMode.MachineSelfTake;
+                                order.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
                                 order.ReceiveModeName = "机器自提";
                                 order.Receiver = null;
                                 order.ReceiverPhoneNumber = null;
@@ -1066,9 +1066,9 @@ namespace LocalS.BLL.Biz
                                 order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.MarkName;
                                 #endregion
                                 break;
-                            case E_ReceiveMode.MemberFee:
+                            case E_ReceiveMode.FeeByMember:
                                 #region MemberFee
-                                order.ReceiveMode = E_ReceiveMode.MemberFee;
+                                order.ReceiveMode = E_ReceiveMode.FeeByMember;
                                 order.ReceiveModeName = "会员费";
                                 order.IsNoDisplayClient = true;
                                 #endregion
@@ -1473,17 +1473,17 @@ namespace LocalS.BLL.Biz
                                 d_order.PickupFlowLastDesc = "您已成功支付，等待发货";
                                 d_order.PickupFlowLastTime = DateTime.Now;
                                 break;
-                            case E_ReceiveMode.StoreSelfTake:
+                            case E_ReceiveMode.SelfTakeByStore:
                                 d_order.Status = E_OrderStatus.Payed;
                                 d_order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_order.ReceptionMarkName, d_order.PickupCode);
                                 d_order.PickupFlowLastTime = DateTime.Now;
                                 break;
-                            case E_ReceiveMode.MachineSelfTake:
+                            case E_ReceiveMode.SelfTakeByMachine:
                                 d_order.Status = E_OrderStatus.Payed;
                                 d_order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", d_order.ReceptionMarkName, d_order.SellChannelRefId, d_order.PickupCode);
                                 d_order.PickupFlowLastTime = DateTime.Now;
                                 break;
-                            case E_ReceiveMode.MemberFee:
+                            case E_ReceiveMode.FeeByMember:
                                 d_order.Status = E_OrderStatus.Completed;
                                 d_order.PickupFlowLastDesc = "您已成功支付";
                                 d_order.PickupFlowLastTime = DateTime.Now;
@@ -1972,10 +1972,10 @@ namespace LocalS.BLL.Biz
                                 d_order.ReceptionAddress = rm_Delivery.Delivery.Address;
                             }
 
-                            var rm_StoreSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.StoreSelfTake).FirstOrDefault();
+                            var rm_StoreSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
                             if (rm_StoreSelfTake != null)
                             {
-                                d_order.ReceiveMode = E_ReceiveMode.StoreSelfTake;
+                                d_order.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
                                 d_order.Receiver = rm_StoreSelfTake.SelfTake.Consignee;
                                 d_order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.PhoneNumber;
                                 d_order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.AreaCode;
@@ -2574,7 +2574,7 @@ namespace LocalS.BLL.Biz
                 {
                     if (string.IsNullOrEmpty(rop.MachineId))
                     {
-                        var machineIds = orders.Where(m => m.ReceiveMode == E_ReceiveMode.MachineSelfTake).Select(m => m.SellChannelRefId).ToArray();
+                        var machineIds = orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).Select(m => m.SellChannelRefId).ToArray();
 
                         foreach (var machineId in machineIds)
                         {

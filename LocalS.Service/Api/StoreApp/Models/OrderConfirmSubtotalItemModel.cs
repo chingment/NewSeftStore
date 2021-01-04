@@ -46,10 +46,10 @@ namespace LocalS.Service.Api.StoreApp
 
         Unknow = 0,
         Delivery = 1,
-        StoreSelfTake = 2,
-        DeliveryAndStoreSelfTake = 3,
-        MachineSelfTake = 4,
-        MemerbFee = 5
+        SelfTakeByStore = 2,
+        DeliveryOrSelfTakeByStore = 3,
+        SelfTakeByMachine = 4,
+        FeeByMember = 5
     }
 
     public class BookTimeModel

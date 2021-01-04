@@ -52,7 +52,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             OrderReserveBlockModel block = new OrderReserveBlockModel();
 
-            block.ReceiveMode = E_ReceiveMode.MachineSelfTake;
+            block.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
             block.SelfTake.Id = machine.StoreId;
             block.SelfTake.MarkName = machine.StoreName;
             block.SelfTake.Address = machine.StoreAddress;

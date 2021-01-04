@@ -10,9 +10,10 @@ namespace LocalS.Entity
         Unknow = 0,
         Delivery = 1,
         StoreSelfTake = 2,
-        DeliveryAndStoreSelfTake = 3,
+        DeliveryOrStoreSelfTake = 3,
         MachineSelfTake = 4,
-        MemerbFee = 5
+        MemerbFee = 5,
+        StoreConsume = 6
     }
 
     [Table("PrdProduct")]
@@ -34,7 +35,7 @@ namespace LocalS.Entity
         public string BriefDes { get; set; }
         public string SpecItems { get; set; }
         public bool IsTrgVideoService { get; set; }
-        public bool IsRevService { get; set; } 
+        public bool IsRevService { get; set; }
         public bool IsHardware { get; set; }
         public E_SupReceiveMode SupReceiveMode { get; set; }
         public string CharTags { get; set; }
