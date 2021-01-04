@@ -222,28 +222,14 @@ namespace LocalS.Service.Api.StoreApp
 
                         LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
 
-                        //切换会员价
+                        //切换特定商品会员价
                         if (clientMemberLevel != null)
                         {
-                            decimal memberDiscountPrice = salePrice * clientMemberLevel.Discount * 0.1m;
-
                             var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
-                            if (memberProductSkuSt == null)
+                            if (memberProductSkuSt != null)
                             {
-                                salePrice = memberDiscountPrice;
-
+                                salePrice = memberProductSkuSt.MemberPrice;
                                 LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
-                            }
-                            else
-                            {
-                                if (memberProductSkuSt.MemberPrice >= memberDiscountPrice)
-                                {
-                                    salePrice = memberDiscountPrice;
-                                }
-                                else
-                                {
-                                    salePrice = memberProductSkuSt.MemberPrice;
-                                }
                             }
                         }
 
@@ -559,7 +545,12 @@ namespace LocalS.Service.Api.StoreApp
                 ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = amount_couponByRent == 0 ? "无优惠" : string.Format("-{0}", amount_couponByRent.ToF2Price()), TipType = TipType.InUse };
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
+
+
                 amount_sale = orders.Sum(m => m.SaleAmount);
+
+
+
                 amount_charge = orders.Sum(m => m.ChargeAmount);
             }
 

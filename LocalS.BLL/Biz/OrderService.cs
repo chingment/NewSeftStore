@@ -606,27 +606,14 @@ namespace LocalS.BLL.Biz
 
                                     decimal originalPrice = salePrice;
 
+                                    //切换特定商品会员价
                                     if (clientMemberLevel != null)
                                     {
-                                        decimal memberDiscountPrice = salePrice * clientMemberLevel.Discount * 0.1m;
-
                                         var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == sku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
-                                        if (memberProductSkuSt == null)
+                                        if (memberProductSkuSt != null)
                                         {
-                                            salePrice = memberDiscountPrice;
-
+                                            salePrice = memberProductSkuSt.MemberPrice;
                                             LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
-                                        }
-                                        else
-                                        {
-                                            if (memberProductSkuSt.MemberPrice >= memberDiscountPrice)
-                                            {
-                                                salePrice = memberDiscountPrice;
-                                            }
-                                            else
-                                            {
-                                                salePrice = memberProductSkuSt.MemberPrice;
-                                            }
                                         }
                                     }
 
