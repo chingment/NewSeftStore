@@ -651,8 +651,8 @@ namespace LocalS.Service.Api.StoreApp
             ret.Blocks = orderBlock;
 
 
-            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { Name = "商品总额", Amount = amount_original.ToF2Price() });
-            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { Name = "商品优惠", Amount = "-" + (amount_original - amount_sale).ToF2Price() });
+            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "https://file.17fanju.com/Upload/Icon/icon_discountamont.png", Name = "商品总额", Amount = amount_original.ToF2Price() });
+            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "https://file.17fanju.com/Upload/Icon/icon_discountamont.png", Name = "商品优惠", Amount = "-" + (amount_original - amount_sale).ToF2Price() });
 
             ret.SubtotalItems = c_subtotalItems;
 

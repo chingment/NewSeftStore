@@ -508,7 +508,8 @@
 					<view class="it">
 						<view class="it-l" style="width:60rpx">
 							<view class="icon">
-
+								<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
+								src='{{item.imgUrl}}'></image>
 							</view>
 						</view>
 						<view class="it-m">
