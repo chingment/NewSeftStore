@@ -14,7 +14,7 @@ namespace LocalS.Entity
         public string Tag { get; set; }
         public string DetailsDes { get; set; }
         public string MainImgUrl { get; set; }
-        public decimal Discount { get; set; }
+        //public decimal Discount { get; set; }
         //Level 越大级别越大
         public int Level { get; set; }
         public string Creator { get; set; }
