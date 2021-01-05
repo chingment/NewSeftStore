@@ -93,6 +93,8 @@ namespace LocalS.Service.Api.StoreApp
                     sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
                     sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
                     sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
+                    sku.SaleAmount = orderSubChilds_Sku.Sum(m => m.SaleAmount).ToF2Price();
+                    sku.OriginalAmount = orderSubChilds_Sku.Sum(m => m.OriginalAmount).ToF2Price();
                     sku.StatusName = "";
                     field.Value = sku;
                     block.Data.Add(field);
@@ -910,28 +912,32 @@ namespace LocalS.Service.Api.StoreApp
 
             fsBlockByField.Data.Add(new FsField("订单编号", "", order.Id, ""));
 
-
-            fsBlockByField.Data.Add(new FsField("商品总额", "", order.OriginalAmount.ToF2Price(), ""));
-            fsBlockByField.Data.Add(new FsField("商品优惠", "", "-" + order.DiscountAmount.ToF2Price(), ""));
-
-            if (order.CouponAmountByShop > 0)
+            if (order.PayedTime != null)
             {
-                fsBlockByField.Data.Add(new FsField("优惠券", "", "-" + order.CouponAmountByShop.ToF2Price(), ""));
-            }
+                fsBlockByField.Data.Add(new FsField("商品总额", "", order.OriginalAmount.ToF2Price(), ""));
+                fsBlockByField.Data.Add(new FsField("商品优惠", "", "-" + order.DiscountAmount.ToF2Price(), ""));
 
-            if (order.CouponAmountByDeposit > 0)
-            {
-                fsBlockByField.Data.Add(new FsField("押金券", "", "-" + order.CouponAmountByDeposit.ToF2Price(), ""));
-            }
+                if (order.CouponAmountByShop > 0)
+                {
+                    fsBlockByField.Data.Add(new FsField("优惠券", "", "-" + order.CouponAmountByShop.ToF2Price(), ""));
+                }
 
-            if (order.CouponAmountByRent > 0)
-            {
-                fsBlockByField.Data.Add(new FsField("租金券", "", "-" + order.CouponAmountByRent.ToF2Price(), ""));
-            }
+                if (order.CouponAmountByDeposit > 0)
+                {
+                    fsBlockByField.Data.Add(new FsField("押金券", "", "-" + order.CouponAmountByDeposit.ToF2Price(), ""));
+                }
 
-            fsBlockByField.Data.Add(new FsField("实际支付", "", order.ChargeAmount.ToF2Price(), ""));
+                if (order.CouponAmountByRent > 0)
+                {
+                    fsBlockByField.Data.Add(new FsField("租金券", "", "-" + order.CouponAmountByRent.ToF2Price(), ""));
+                }
+
+                fsBlockByField.Data.Add(new FsField("实际支付", "", order.ChargeAmount.ToF2Price(), ""));
+
+            }
 
             fsBlockByField.Data.Add(new FsField("下单时间", "", order.SubmittedTime.ToUnifiedFormatDateTime(), ""));
+
             if (order.PayedTime != null)
             {
                 fsBlockByField.Data.Add(new FsField("付款时间", "", order.PayedTime.ToUnifiedFormatDateTime(), ""));
