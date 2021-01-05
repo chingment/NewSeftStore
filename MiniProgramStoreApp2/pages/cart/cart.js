@@ -225,7 +225,6 @@ Component({
 
 
           _this.setData({
-            scrollHeight: 500,
             cartData: p_cartData
           })
 
@@ -256,7 +255,10 @@ Component({
       query.select('.cart-bottom').boundingClientRect(function (rect) {
         if (rect != null) {
           if (rect.height != null) {
+            console.log("_this.data.height >"+_this.data.height )
+            console.log("rect.height >"+rect.height )
             var height = _this.data.height - rect.height
+            
             _this.setData({
               scrollHeight: height
             })

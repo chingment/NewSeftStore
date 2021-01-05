@@ -236,7 +236,7 @@ namespace LocalS.Service.Api.StoreApp
                     break;
                 case E_Coupon_FaceType.ShopDiscount:
                     model.FaceValue = faceValue.ToF2Price();
-                    model.FaceUnit = "元";
+                    model.FaceUnit = "折";
                     if (atLeastAmount > 0)
                     {
                         model.FaceTip = string.Format("满{0}元使用", atLeastAmount);
