@@ -1022,6 +1022,22 @@ page {
   font-size: 34rpx;
 }
 
+.it-ordbk .its-odcskus .quantity {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.it-ordbk .its-odcskus .originalPrice {
+  color: #999;
+  font-size: 32rpx;
+  text-decoration:line-through;
+}
+
+.it-ordbk .its-odcskus .salePrice {
+  color: #f18d00;
+  font-size: 34rpx;
+}
+
 
 .it-ordbk .block-qrcode .qrimg{
   width: 130px;
@@ -1094,3 +1110,5 @@ page {
     font-size: 24rpx;
     color:#fff ;
   }
+
+
