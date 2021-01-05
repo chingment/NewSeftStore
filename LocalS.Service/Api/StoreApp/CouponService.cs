@@ -536,10 +536,10 @@ namespace LocalS.Service.Api.StoreApp
                 ret.Coupons.Add(couponModel);
             }
 
+            ret.Coupons = ret.Coupons.OrderByDescending(m => m.CanSelected).ToList();
 
 
-
-            result = new CustomJsonResult<RetCouponMy>(ResultType.Success, ResultCode.Success, "", ret);
+           result = new CustomJsonResult<RetCouponMy>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
