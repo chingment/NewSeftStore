@@ -19,6 +19,7 @@ Page({
     isShowButtonBottom: false,
     timespan: (new Date()).getTime(),
     userInfo: {},
+    isOpenMemberRight: false
   },
 
   /**
@@ -30,15 +31,15 @@ Page({
     var reffSign = options.reffSign == undefined ? '' : options.reffSign
 
     storeage.setReffSign(reffSign)
-    
+
     if (app.globalData.checkConfig) {
-       console.log('a1')
-       
+      console.log('a1')
+
       _this.getPromSt()
     } else {
       console.log('a2')
       app.checkConfigReadyCallback = res => {
-         console.log('a3')
+        console.log('a3')
         _this.getPromSt()
       }
     }
@@ -54,7 +55,8 @@ Page({
         var d = res.data
         _this.setData({
           pageIsReady: true,
-          userInfo: d.userInfo
+          userInfo: d.userInfo,
+          isOpenMemberRight:d.isOpenMemberRight
         })
       }
     })

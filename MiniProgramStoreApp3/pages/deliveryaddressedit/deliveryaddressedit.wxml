@@ -24,11 +24,6 @@
 				</view>
 				<view class="it">
 					<view class="it-m">
-						<input class="input" name="deliveryAddress_address" placeholder="标注点，附近地标,楼盘" value="{{deliveryAddress.markName}}" />
-					</view>
-				</view>
-				<view class="it">
-					<view class="it-m">
 						<input class="input" name="deliveryAddress_address" placeholder="详细地址，如街道，门牌号等" value="{{deliveryAddress.address}}" />
 					</view>
 				</view>
@@ -43,6 +38,11 @@
 							</label>
 						</view>
 
+					</view>
+				</view>
+				<view class="it">
+					<view class="it-m">
+						<input class="input" name="deliveryAddress_address" placeholder="标注点，附近地标,楼盘" value="{{deliveryAddress.markName}}" />
 					</view>
 				</view>
 			</view>

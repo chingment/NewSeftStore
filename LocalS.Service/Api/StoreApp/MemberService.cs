@@ -22,6 +22,9 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.UserInfo = StoreAppServiceFactory.Personal.GetUserInfo(clientUserId, rup.OpenId);
 
+            var d_merch = CurrentDb.Merch.Where(m => m.Id == rup.MerchId).FirstOrDefault();
+
+            ret.IsOpenMemberRight =d_merch.IsOpenMemberRight;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

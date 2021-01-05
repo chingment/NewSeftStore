@@ -9,5 +9,7 @@ namespace LocalS.Service.Api.StoreApp
     public class RetMemberPromSt
     {
         public UserInfoModel UserInfo { get; set; }
+
+        public bool IsOpenMemberRight { get; set; }
     }
 }
