@@ -503,17 +503,17 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-
-
-                LogUtil.Info(" couponModel.CouponAmount:" + couponModel.CouponAmount);
-
                 //金额补差
 
                 if (rop.ProductSkus != null)
                 {
                     if (rop.ProductSkus.Count > 0)
                     {
-                        if (item.FaceType != E_Coupon_FaceType.DepositVoucher)
+                        if (item.FaceType == E_Coupon_FaceType.ShopDiscount)
+                        {
+
+                        }
+                        else
                         {
                             var sumCouponAmount1 = item.FaceValue;
                             var sumCouponAmount2 = rop.ProductSkus.Sum(m => m.CouponAmount);
@@ -528,6 +528,8 @@ namespace LocalS.Service.Api.StoreApp
 
 
                 couponModel.CouponAmount = rop.ProductSkus.Sum(m => m.CouponAmount);
+
+                LogUtil.Info(" couponModel.CouponAmount:" + couponModel.CouponAmount);
 
                 couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.Status, item.ValidStartTime, item.ValidEndTime, item.MerchId, rop.StoreId, clientUserId, rop.ProductSkus);
 

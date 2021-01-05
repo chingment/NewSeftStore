@@ -314,7 +314,6 @@ namespace LocalS.BLL.Biz
                         case E_Coupon_FaceType.ShopVoucher:
                         case E_Coupon_FaceType.DepositVoucher:
                         case E_Coupon_FaceType.RentVoucher:
-
                             couponAmount = (faceValue) * (saleAmount / sum_amount);
                             break;
                         case E_Coupon_FaceType.ShopDiscount:
