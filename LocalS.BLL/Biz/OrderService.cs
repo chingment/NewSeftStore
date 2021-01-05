@@ -1247,6 +1247,7 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
                         buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
                         buildOrderChild.DiscountAmount = shopModeProductSku.OriginalAmount - shopModeProductSku.SaleAmount;
+                        buildOrderChild.ChargeAmount = shopModeProductSku.SaleAmount - shopModeProductSku.CouponAmountByDeposit - shopModeProductSku.CouponAmountByShop - shopModeProductSku.CouponAmountByRent;
                         buildOrderChilds.Add(buildOrderChild);
                     }
                     else if (d_s_order.ShopMode == E_SellChannelRefType.Machine)
@@ -1276,6 +1277,7 @@ namespace LocalS.BLL.Biz
                                     buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
                                     buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
                                     buildOrderChild.DiscountAmount = buildOrderChild.OriginalAmount - buildOrderChild.SaleAmount;
+                                    buildOrderChild.ChargeAmount = shopModeProductSku.SaleAmount - shopModeProductSku.CouponAmountByDeposit - shopModeProductSku.CouponAmountByShop - shopModeProductSku.CouponAmountByRent;
                                     buildOrderChilds.Add(buildOrderChild);
                                 }
                                 else
@@ -1301,7 +1303,6 @@ namespace LocalS.BLL.Biz
             {
                 decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderChilds[i].SaleAmount / sumSaleAmount));
                 buildOrderChilds[i].DiscountAmount = Decimal.Round(scale * sumDiscountAmount, 2);
-                buildOrderChilds[i].ChargeAmount = buildOrderChilds[i].SaleAmount - buildOrderChilds[i].DiscountAmount - buildOrderChilds[i].CouponAmountByShop - buildOrderChilds[i].CouponAmountByRent - buildOrderChilds[i].CouponAmountByDeposit;
             }
 
             var sumDiscountAmount2 = buildOrderChilds.Sum(m => m.DiscountAmount);
@@ -1310,7 +1311,6 @@ namespace LocalS.BLL.Biz
                 var diff = sumDiscountAmount - sumDiscountAmount2;
 
                 buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount = buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount + diff;
-                buildOrderChilds[buildOrderChilds.Count - 1].SaleAmount = buildOrderChilds[buildOrderChilds.Count - 1].SaleAmount - buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount;
             }
 
             var l_buildOrders = (from c in buildOrderChilds
@@ -1328,15 +1328,15 @@ namespace LocalS.BLL.Biz
                 buildOrder.SellChannelRefType = l_buildOrder.SellChannelRefType;
                 buildOrder.SellChannelRefId = l_buildOrder.SellChannelRefId;
                 buildOrder.ReceiveMode = l_buildOrder.ReceiveMode;
-                buildOrder.Quantity = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.Quantity);
-                buildOrder.SaleAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.SaleAmount);
-                buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.OriginalAmount);
-                buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.DiscountAmount);
-                buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.ChargeAmount);
-                buildOrder.CouponAmountByDeposit = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.CouponAmountByDeposit);
-                buildOrder.CouponAmountByRent = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.CouponAmountByRent);
-                buildOrder.CouponAmountByShop = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).Sum(m => m.CouponAmountByShop);
-                buildOrder.Childs = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId).ToList();
+                buildOrder.Quantity = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.Quantity);
+                buildOrder.SaleAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.SaleAmount);
+                buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.OriginalAmount);
+                buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.DiscountAmount);
+                buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.ChargeAmount);
+                buildOrder.CouponAmountByDeposit = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByDeposit);
+                buildOrder.CouponAmountByRent = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByRent);
+                buildOrder.CouponAmountByShop = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByShop);
+                buildOrder.Childs = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).ToList();
                 buildOrders.Add(buildOrder);
             }
 

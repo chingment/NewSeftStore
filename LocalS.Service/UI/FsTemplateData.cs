@@ -23,6 +23,8 @@ namespace LocalS.Service.UI
             public string MainImgUrl { get; set; }
             public string Quantity { get; set; }
             public string ChargeAmount { get; set; }
+            public string OriginalAmount { get; set; }
+            public string SaleAmount { get; set; }
             public bool IsGift { get; set; }
             public string StatusName { get; set; }
             public FsText Desc { get; set; }

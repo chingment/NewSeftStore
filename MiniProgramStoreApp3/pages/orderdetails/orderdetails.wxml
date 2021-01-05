@@ -73,20 +73,21 @@
 										</view>
 									</view>
 									<view class="it-m">
-										<view class="it-ml">
-											<view>
-												<text class='name'>{{skusitem.value.name}}</text>
+										<view class="it-ml" style="display:block">
+											<view style="height:100rpx;">
+												<text class='name skeleton-rect'>{{skusitem.value.name}}</text>
 											</view>
-											<view>
-												<text class='statusname'>{{skusitem.value.statusName}}</text>
+											<view style="height:50rpx;">
+												<text class='quantity skeleton-rect'> x {{skusitem.value.quantity}}</text>
 											</view>
 										</view>
 										<view class="it-mr">
-											<text class='quantity'> x {{skusitem.value.quantity}}</text>
+											<text wx:if="{{skusitem.value.originalAmount!=skusitem.value.saleAmount}}"
+												class='originalPrice skeleton-rect'>{{skusitem.value.originalAmount}}</text>
 										</view>
 									</view>
 									<view class="it-r">
-										<text class='salePrice'> {{skusitem.value.chargeAmount}}</text>
+										<text class='salePrice'> {{skusitem.value.saleAmount}}</text>
 									</view>
 								</view>
 							</block>
