@@ -4,7 +4,8 @@
 			<view class="tabbar-items" style="width:100%">
 				<view class="container" style="display:flex;width:100%">
 					<block wx:for-items="{{tabs}}" wx:for-item="item" wx:key="index">
-						<view id="{{index}}" style="width:100%;flex:1;font-size:30rpx" class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
+						<view id="{{index}}" style="width:100%;flex:1;font-size:30rpx"
+							class="item {{item.selected==true?'item-seleced':''}}" data-reply-index="{{index}}" bindtap="tabBarClick">
 							<view class="title">{{item.name}}</view>
 							<view class='seleced-bottom'></view>
 
@@ -18,7 +19,10 @@
 	<swiper class="tabbar-contents" current="{{tabsSliderIndex}}" duration="300" style="height:{{scrollHeight}}px">
 		<block wx:for="{{tabs}}" wx:for-item="tab" wx:key="index">
 			<swiper-item class="item" catchtouchmove="stopTouchMove">
-				<own-scroll data-reply-index="{{index}}" pulldownDistance="100" emptyTipText="暂未找到相关订单" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
+				<own-scroll data-reply-index="{{index}}" pulldownDistance="100" emptyTipText="暂未找到相关订单"
+					refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试" refreshLoadingText="正在努力刷新中~"
+					loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore bind:_loadmore="loadmore"
+					bind:_refresh="refresh" allloaded="{{tab.list.allloaded}}" isEmpty="{{tab.list.isEmpty}}">
 					<view class='list'>
 						<block wx:for="{{tab.list.items}}" wx:for-index="i" wx:for-item="item2" wx:key="list">
 
@@ -61,7 +65,8 @@
 												<view class="tag-desc">
 													<view class="content">
 														<text class="t">{{block.tag.desc.title.content}}</text>
-														<text class="c" style="color:{{block.tag.desc.value.color}}" >{{block.tag.desc.value.content}}</text>
+														<text class="c"
+															style="color:{{block.tag.desc.value.color}}">{{block.tag.desc.value.content}}</text>
 													</view>
 
 												</view>
@@ -74,10 +79,12 @@
 											</view> -->
 
 											<view wx:if="{{block.receiptInfo!=null}}" class="block-receiptinfo">
-												<navigator class="ct" hover-class="none" url="/pages/receipttimeaxis/receipttimeaxis?uniqueId={{block.uniqueId}}&uniqueType={{block.uniqueType}}">
+												<navigator class="ct" hover-class="none"
+													url="/pages/receipttimeaxis/receipttimeaxis?uniqueId={{block.uniqueId}}&uniqueType={{block.uniqueType}}">
 													<view class="content">
 														<view class="des">
-															<image class="img" src="/content/default/images/icon_express.png"></image> <text class="txt">{{block.receiptInfo.description}}</text>
+															<image class="img" src="/content/default/images/icon_express.png"></image> <text
+																class="txt">{{block.receiptInfo.description}}</text>
 														</view>
 														<view class="time">
 															<text class="txt">{{block.receiptInfo.lastTime}}</text>
@@ -102,20 +109,21 @@
 																</view>
 															</view>
 															<view class="it-m">
-																<view class="it-ml">
-																	<view>
-																		<text class='name'>{{skusitem.value.name}}</text>
+																<view class="it-ml" style="display:block">
+																	<view style="height:100rpx;">
+																		<text class='name skeleton-rect'>{{skusitem.value.name}}</text>
 																	</view>
-																	<view>
-																		<text class='statusname'>{{skusitem.value.statusName}}</text>
+																	<view style="height:50rpx;">
+																		<text class='quantity skeleton-rect'> x {{skusitem.value.quantity}}</text>
 																	</view>
 																</view>
 																<view class="it-mr">
-																	<text class='quantity'> x {{skusitem.value.quantity}}</text>
+																	<text wx:if="{{skusitem.value.originalAmount!=skusitem.value.saleAmount}}"
+																		class='originalPrice skeleton-rect'>{{skusitem.value.originalAmount}}</text>
 																</view>
 															</view>
 															<view class="it-r">
-																<text class='salePrice'> {{skusitem.value.chargeAmount}}</text>
+																<text class='salePrice'> {{skusitem.value.saleAmount}}</text>
 															</view>
 														</view>
 													</block>
@@ -132,7 +140,10 @@
 
 									<block wx:for="{{item2.buttons}}" wx:for-index="index" wx:for-item="button" wx:key="list">
 										<view class="btnbox">
-											<view class="btn" bindtap="operate" data-reply-opval="{{button.opVal}}" data-reply-optype="{{button.opType}}" data-reply-id="{{item2.id}}" style="color:{{button.name.color}}; border:1px solid {{button.name.color}};">{{button.name.content}}</view>
+											<view class="btn" bindtap="operate" data-reply-opval="{{button.opVal}}"
+												data-reply-optype="{{button.opType}}" data-reply-id="{{item2.id}}"
+												style="color:{{button.name.color}}; border:1px solid {{button.name.color}};">
+												{{button.name.content}}</view>
 										</view>
 									</block>
 

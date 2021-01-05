@@ -827,6 +827,8 @@ namespace LocalS.Service.Api.StoreApp
                         sku.Name = orderSub.PrdProductSkuName;
                         sku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
                         sku.Quantity = orderSub.Quantity.ToString();
+                        sku.OriginalAmount = orderSub.OriginalAmount.ToF2Price();
+                        sku.SaleAmount = orderSub.SaleAmount.ToF2Price();
                         sku.ChargeAmount = orderSub.ChargeAmount.ToF2Price();
                         sku.StatusName = "";
                         field.Value = sku;
@@ -853,6 +855,8 @@ namespace LocalS.Service.Api.StoreApp
                         sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
                         sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
                         sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
+                        sku.OriginalAmount = orderSubChilds_Sku.Sum(m => m.OriginalAmount).ToF2Price();
+                        sku.SaleAmount = orderSubChilds_Sku.Sum(m => m.SaleAmount).ToF2Price();
                         sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
                         sku.StatusName = "";
                         field.Value = sku;
