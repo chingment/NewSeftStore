@@ -504,17 +504,25 @@ namespace LocalS.Service.Api.StoreApp
 
 
 
+
                 LogUtil.Info(" couponModel.CouponAmount:" + couponModel.CouponAmount);
 
                 //金额补差
-                if (item.FaceType != E_Coupon_FaceType.DepositVoucher)
+
+                if (rop.ProductSkus != null)
                 {
-                    var sumCouponAmount1 = item.FaceValue;
-                    var sumCouponAmount2 = rop.ProductSkus.Sum(m => m.CouponAmount);
-                    if (sumCouponAmount1 != sumCouponAmount2)
+                    if (rop.ProductSkus.Count > 0)
                     {
-                        var diff = sumCouponAmount1 - sumCouponAmount2;
-                        rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount = rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount + diff;
+                        if (item.FaceType != E_Coupon_FaceType.DepositVoucher)
+                        {
+                            var sumCouponAmount1 = item.FaceValue;
+                            var sumCouponAmount2 = rop.ProductSkus.Sum(m => m.CouponAmount);
+                            if (sumCouponAmount1 != sumCouponAmount2)
+                            {
+                                var diff = sumCouponAmount1 - sumCouponAmount2;
+                                rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount = rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount + diff;
+                            }
+                        }
                     }
                 }
 
