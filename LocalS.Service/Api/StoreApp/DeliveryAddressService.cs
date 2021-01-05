@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.StoreApp
                          where
                          o.ClientUserId == clientUserId &&
                          o.IsDelete == false
-                         select new { o.Id, o.Consignee, o.PhoneNumber, o.Address, o.AreaName, o.AreaCode, o.IsDefault, o.CreateTime }
+                         select new { o.Id, o.Consignee, o.PhoneNumber, o.MarkName, o.Address, o.AreaName, o.AreaCode, o.IsDefault, o.CreateTime }
               );
 
 
@@ -43,6 +43,7 @@ namespace LocalS.Service.Api.StoreApp
                     Address = m.Address,
                     AreaName = m.AreaName,
                     AreaCode = m.AreaCode,
+                    MarkName = m.MarkName,
                     IsDefault = m.IsDefault
                 });
             }
@@ -71,6 +72,7 @@ namespace LocalS.Service.Api.StoreApp
                 l_userDeliveryAddress.AreaCode = rop.AreaCode;
                 l_userDeliveryAddress.Address = rop.Address;
                 l_userDeliveryAddress.IsDefault = rop.IsDefault;
+                l_userDeliveryAddress.MarkName = rop.MarkName;
                 l_userDeliveryAddress.CreateTime = DateTime.Now;
                 l_userDeliveryAddress.Creator = operater;
                 CurrentDb.ClientDeliveryAddress.Add(l_userDeliveryAddress);
@@ -84,6 +86,7 @@ namespace LocalS.Service.Api.StoreApp
                 l_userDeliveryAddress.AreaName = rop.AreaName;
                 l_userDeliveryAddress.Address = rop.Address;
                 l_userDeliveryAddress.IsDefault = rop.IsDefault;
+                l_userDeliveryAddress.MarkName = rop.MarkName;
                 l_userDeliveryAddress.MendTime = DateTime.Now;
                 l_userDeliveryAddress.Creator = operater;
                 CurrentDb.SaveChanges();

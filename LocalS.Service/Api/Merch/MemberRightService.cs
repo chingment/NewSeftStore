@@ -14,6 +14,8 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+
             var d_MemberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId).OrderBy(m => m.Level).ToList();
 
             List<object> levelSts = new List<object>();
@@ -30,7 +32,7 @@ namespace LocalS.Service.Api.Merch
                 });
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { levelSts = levelSts });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { IsOpenMemberRight = d_Merch.IsOpenMemberRight, levelSts = levelSts });
             return result;
         }
 

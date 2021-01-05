@@ -10,9 +10,14 @@ namespace LocalS.Service.Api.StoreApp
     {
         public DeliveryModel()
         {
-
+            this.Contact = new ContactModel();
         }
-    
+
+        public ContactModel Contact { get; set; }
+    }
+
+    public class ContactModel
+    {
         public string Id { get; set; }
         public string Consignee { get; set; }
         public string PhoneNumber { get; set; }

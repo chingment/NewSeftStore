@@ -15,5 +15,6 @@ namespace LocalS.Service.Api.StoreApp
         public string AreaCode { get; set; }
         public string Address { get; set; }
         public bool IsDefault { get; set; }
+        public string MarkName { get; set; }
     }
 }

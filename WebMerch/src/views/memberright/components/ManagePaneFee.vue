@@ -8,14 +8,14 @@
               <div class="circle-item"> <span class="name">{{ item.name }}</span> </div>
             </div>
             <div class="right">
-              <el-button type="text" @click="handleRemoveMachine(item)">设置</el-button>
+              <el-button type="text" @click="handleSetting(item)">设置</el-button>
             </div>
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li>展示价：{{ item.feeOriginalValue }} </li>
+                <li>原价：{{ item.feeOriginalValue }} </li>
                 <li>实际价：{{ item.feeSaleValue }}</li>
               </ul>
             </div>
@@ -41,11 +41,6 @@ export default {
   data() {
     return {
       loading: true,
-      listQuery: {
-        page: 1,
-        limit: 10,
-        name: undefined
-      },
       listData: []
     }
   },

@@ -32,7 +32,10 @@ export default {
         id: '',
         name: '',
         tag: ''
-      }
+      },
+      form: {
+      },
+      rules: {}
     }
   },
   watch: {

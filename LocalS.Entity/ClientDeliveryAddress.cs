@@ -34,6 +34,6 @@ namespace LocalS.Entity
         public string Mender { get; set; }
 
         public DateTime? MendTime { get; set; }
-        
+        public string MarkName { get; set; }
     }
 }

@@ -144,8 +144,8 @@
 										</view>
 										<view class="it-m">
 											<view class="it-ml">
-												<text class='txt-h1 bold'>{{item.selfTake.markName}}</text>
-												<text class='txt-h2'>{{item.selfTake.address}}</text>
+												<text class='txt-h1 bold'>{{item.selfTake.mark.name}}</text>
+												<text class='txt-h2'>{{item.selfTake.mark.address}}</text>
 											</view>
 										</view>
 										<view class='it-r'>
@@ -164,8 +164,8 @@
 										<view class="it-m">
 											<view class="it-ml">
 												<text class='txt bold'>
-													<block wx:if="{{item.bookTime.value==null}}">选择</block>
-													<block wx:else>{{item.bookTime.text}}</block>
+													<block wx:if="{{item.selfTake.bookTime.value==null}}">选择</block>
+													<block wx:else>{{item.selfTake.bookTime.text}}</block>
 												</text>
 											</view>
 										</view>
@@ -175,7 +175,25 @@
 											</view>
 										</view>
 									</view>
-
+									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
+										data-reply-deliveryaddressid="{{item.selfTake.contact.id}}">
+										<view class="it-l">
+											<text class='txt-h1 skeleton-rect'>联系人</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.selfTake.contact.isDefault}}">默认</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml skeleton-rect">
+												<text class='txt-h1 bold'>{{item.selfTake.contact.consignee}}</text>
+												<text class='txt-h2 '>{{item.selfTake.contact.phoneNumber}}</text>
+											</view>
+										</view>
+										<view class='it-r' bindtap="goSelect">
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
+											</view>
+										</view>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -253,15 +271,15 @@
 
 								<view class="its-a">
 									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
-										data-reply-deliveryaddressid="{{item.delivery.id}}">
+										data-reply-deliveryaddressid="{{item.delivery.contact.id}}">
 										<view class="it-l">
-											<text class='txt-h1 skeleton-rect'>{{item.delivery.consignee}}</text>
-											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.isDefault}}">默认</text>
+											<text class='txt-h1 skeleton-rect'>{{item.delivery.contact.consignee}}</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.contact.isDefault}}">默认</text>
 										</view>
 										<view class="it-m">
 											<view class="it-ml skeleton-rect">
-												<text class='txt-h1 bold'>{{item.delivery.phoneNumber}}</text>
-												<text class='txt-h2 '>{{item.delivery.areaName}} {{item.delivery.address}}</text>
+												<text class='txt-h1 bold'>{{item.delivery.contact.phoneNumber}}</text>
+												<text class='txt-h2 '>{{item.delivery.contact.areaName}} {{item.delivery.contact.address}}</text>
 											</view>
 										</view>
 										<view class='it-r'>
@@ -281,8 +299,8 @@
 										</view>
 										<view class="it-m">
 											<view class="it-ml">
-												<text class='txt-h1 bold'>{{item.selfTake.markName}}</text>
-												<text class='txt-h2'>{{item.selfTake.address}}</text>
+												<text class='txt-h1 bold'>{{item.selfTake.mark.name}}</text>
+												<text class='txt-h2'>{{item.selfTake.mark.address}}</text>
 											</view>
 										</view>
 										<view class='it-r'>
@@ -301,14 +319,34 @@
 										<view class="it-m">
 											<view class="it-ml">
 												<text class='txt bold'>
-													<block wx:if="{{item.bookTime.value==null}}">选择</block>
-													<block wx:else>{{item.bookTime.text}}</block>
+													<block wx:if="{{item.selfTake.bookTime.value==null}}">选择</block>
+													<block wx:else>{{item.selfTake.bookTime.text}}</block>
 												</text>
 											</view>
 										</view>
 										<view class='it-r'>
 											<view class="icon">
 												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											</view>
+										</view>
+									</view>
+
+									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
+										data-reply-deliveryaddressid="{{item.selfTake.contact.id}}">
+										<view class="it-l">
+											<text class='txt-h1 skeleton-rect'>联系人</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.selfTake.contact.isDefault}}">默认</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml skeleton-rect">
+												<text class='txt-h1 bold'>{{item.selfTake.contact.consignee}}</text>
+												<text class='txt-h2 '>{{item.selfTake.contact.phoneNumber}}</text>
+											</view>
+										</view>
+										<view class='it-r' bindtap="goSelect">
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
 											</view>
 										</view>
 									</view>
@@ -393,8 +431,8 @@
 										</view>
 										<view class="it-m">
 											<view class="it-ml">
-												<text class='txt-h1 bold'>{{item.selfTake.storeName}}</text>
-												<text class='txt-h2'> {{item.selfTake.storeAddress}}</text>
+												<text class='txt-h1 bold'>{{item.selfTake.mark.name}}</text>
+												<text class='txt-h2'> {{item.selfTake.mark.address}}</text>
 											</view>
 										</view>
 									</view>

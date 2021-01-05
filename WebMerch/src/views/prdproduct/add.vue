@@ -110,9 +110,6 @@
         />
 
       </el-form-item>
-      <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
-        <el-input v-model="form.singleSkuSpecDes" clearable />
-      </el-form-item>
       <el-form-item label="取货模式">
         <el-radio-group v-model="form.supReceiveMode">
           <el-radio-button label="1">仅限配送</el-radio-button>
@@ -126,6 +123,9 @@
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
         <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
+      </el-form-item>
+      <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
+        <el-input v-model="form.singleSkuSpecDes" clearable />
       </el-form-item>
       <el-form-item v-show="isOpenAddMultiSpecs" style="max-width:1000px">
 

@@ -65,5 +65,7 @@ namespace LocalS.Entity
 
         //单店铺模式下，指定的店铺ID
         public string MctStoreId { get; set; }
+
+        public bool IsOpenMemberRight { get; set; }
     }
 }

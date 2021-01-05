@@ -180,68 +180,59 @@ Page({
       var _delivery = _blocks[i].delivery
       var _selfTake = _blocks[i].selfTake
 
-      var delivery = null
-      var selfTake = null
-      var bookTime = null
-
       if (_blocks[i].receiveMode == 1) {
-        if (util.isEmptyOrNull(_delivery.id)) {
+        if (util.isEmptyOrNull(_delivery.contact.id)) {
           toast.show({
             title: '请选择快寄地址'
           })
           return
         }
-        delivery = {
-          id: _delivery.id,
-          consignee: _delivery.consignee,
-          phoneNumber: _delivery.phoneNumber,
-          areaName: _delivery.areaName,
-          areaCode: _delivery.areaCode,
-          address: _delivery.address
-        }
       } else if (_blocks[i].receiveMode == 2) {
 
-        if (util.isEmptyOrNull(_selfTake.id)) {
+        if (util.isEmptyOrNull(_selfTake.mark.id)) {
           toast.show({
             title: '请选择自提地址'
           })
           return
         }
 
-        if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
+        if (util.isEmptyOrNull(_selfTake.bookTime.value)) {
           toast.show({
             title: '请选择预约时间'
           })
           return
         }
 
-        bookTime = {
-          type: _blocks[i].bookTime.type,
-          value: _blocks[i].bookTime.value
+        if (util.isEmptyOrNull(_selfTake.contact.id)) {
+          toast.show({
+            title: '请选择联系人'
+          })
+          return
         }
 
-        selfTake = {
-          id: _selfTake.id,
-          markName: _selfTake.markName,
-          address: _selfTake.address,
-          areaCode: _selfTake.areaCode,
-          address: _selfTake.address
+      } else if (_blocks[i].receiveMode == 4) {
+
+        if (util.isEmptyOrNull(_selfTake.mark.id)) {
+          toast.show({
+            title: '请选择自提地址'
+          })
+          return
         }
-      } else if (_blocks[i].receiveMode == 3) {
-        selfTake = {
-          markName: _selfTake.markName,
-          address: _selfTake.address,
-          areaCode: _selfTake.areaCode,
-          address: _selfTake.address
+
+        if (util.isEmptyOrNull(_selfTake.contact.id)) {
+          toast.show({
+            title: '请选择联系人'
+          })
+          return
         }
+
       }
 
       blocks.push({
         shopMode: _blocks[i].shopMode,
         receiveMode: _blocks[i].receiveMode,
-        delivery: delivery,
-        selfTake: selfTake,
-        bookTime: bookTime,
+        delivery: _blocks[i].delivery,
+        selfTake: _blocks[i].selfTake,
         skus: skus
       })
 
@@ -459,7 +450,7 @@ Page({
     }
 
     console.log("booktime:" + JSON.stringify(booktime))
-    _this.data.blocks[_this.data.curBookTimeBlockIndex].bookTime = booktime
+    _this.data.blocks[_this.data.curBookTimeBlockIndex].selfTake.bookTime = booktime
 
     _this.setData({
       blocks: _this.data.blocks
@@ -475,7 +466,7 @@ Page({
 
     var selfPickAddressDialog = _this.data.selfPickAddressDialog
     selfPickAddressDialog.isShow = true
-    selfPickAddressDialog.dataS.curSelfPickAddressId = _this.data.blocks[blockIndex].selfTake.id
+    selfPickAddressDialog.dataS.curSelfPickAddressId = _this.data.blocks[blockIndex].selfTake.mark.id
     _this.setData({
       selfPickAddressDialog: selfPickAddressDialog
     })
@@ -487,11 +478,11 @@ Page({
 
     var blockIndex = _this.data.curSelfPickAddressBlockIndex
 
-    _this.data.blocks[blockIndex].selfTake.id = selfPickAddress.id
-    _this.data.blocks[blockIndex].selfTake.markName = selfPickAddress.name
-    _this.data.blocks[blockIndex].selfTake.address = selfPickAddress.contactAddress
-    _this.data.blocks[blockIndex].selfTake.areaCode = selfPickAddress.areaCode
-    _this.data.blocks[blockIndex].selfTake.areaName = selfPickAddress.areaName
+    _this.data.blocks[blockIndex].selfTake.mark.id = selfPickAddress.id
+    _this.data.blocks[blockIndex].selfTake.mark.name = selfPickAddress.name
+    _this.data.blocks[blockIndex].selfTake.mark.address = selfPickAddress.contactAddress
+    _this.data.blocks[blockIndex].selfTake.mark.areaCode = selfPickAddress.areaCode
+    _this.data.blocks[blockIndex].selfTake.mark.areaName = selfPickAddress.areaName
 
     _this.setData({
       blocks: _this.data.blocks

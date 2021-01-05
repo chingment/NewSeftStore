@@ -158,7 +158,6 @@ namespace LocalS.Service.Api.StoreApp
             StoreInfoModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
             SelfTakeModel selfTakeModel = new SelfTakeModel();
-            BookTimeModel bookTimeModel = new BookTimeModel();
 
             var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
 
@@ -300,21 +299,36 @@ namespace LocalS.Service.Api.StoreApp
                 var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
                 if (d_shippingAddress == null)
                 {
-                    dliveryModel.Id = "";
-                    dliveryModel.Consignee = "配送地址";
-                    dliveryModel.PhoneNumber = "选择";
-                    dliveryModel.AreaName = "";
-                    dliveryModel.Address = "";
-                    dliveryModel.IsDefault = false;
+                    dliveryModel.Contact.Id = "";
+                    dliveryModel.Contact.Consignee = "配送地址";
+                    dliveryModel.Contact.PhoneNumber = "选择";
+                    dliveryModel.Contact.AreaName = "";
+                    dliveryModel.Contact.Address = "";
+                    dliveryModel.Contact.IsDefault = false;
+
+                    selfTakeModel.Contact.Id = "";
+                    selfTakeModel.Contact.Consignee = "";
+                    selfTakeModel.Contact.PhoneNumber = "";
+                    selfTakeModel.Contact.AreaName = "";
+                    selfTakeModel.Contact.AreaCode = "";
+                    selfTakeModel.Contact.Address = "";
                 }
                 else
                 {
-                    dliveryModel.Id = d_shippingAddress.Id;
-                    dliveryModel.Consignee = d_shippingAddress.Consignee;
-                    dliveryModel.PhoneNumber = d_shippingAddress.PhoneNumber;
-                    dliveryModel.AreaName = d_shippingAddress.AreaName;
-                    dliveryModel.Address = d_shippingAddress.Address;
-                    dliveryModel.IsDefault = d_shippingAddress.IsDefault;
+                    dliveryModel.Contact.Id = d_shippingAddress.Id;
+                    dliveryModel.Contact.Consignee = d_shippingAddress.Consignee;
+                    dliveryModel.Contact.PhoneNumber = d_shippingAddress.PhoneNumber;
+                    dliveryModel.Contact.AreaName = d_shippingAddress.AreaName;
+                    dliveryModel.Contact.Address = d_shippingAddress.Address;
+                    dliveryModel.Contact.IsDefault = d_shippingAddress.IsDefault;
+
+                    selfTakeModel.Contact.Id = d_shippingAddress.Id;
+                    selfTakeModel.Contact.Consignee = d_shippingAddress.Consignee;
+                    selfTakeModel.Contact.PhoneNumber = d_shippingAddress.PhoneNumber;
+                    selfTakeModel.Contact.AreaName = d_shippingAddress.AreaName;
+                    selfTakeModel.Contact.AreaCode = d_shippingAddress.AreaCode;
+                    selfTakeModel.Contact.Address = d_shippingAddress.Address;
+                    selfTakeModel.Contact.IsDefault = d_shippingAddress.IsDefault;
                 }
 
 
@@ -326,22 +340,23 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (selfPickAddress == null)
                 {
-                    selfTakeModel.Id = "";
-                    selfTakeModel.Consignee = "自提地址";
-                    selfTakeModel.PhoneNumber = "选择";
-                    selfTakeModel.AreaName = "";
-                    selfTakeModel.AreaCode = "";
-                    selfTakeModel.Address = "";
+                    selfTakeModel.Mark.Id = "";
+                    selfTakeModel.Mark.Name = "";
+                    selfTakeModel.Mark.Consignee = "";
+                    selfTakeModel.Mark.PhoneNumber = "";
+                    selfTakeModel.Mark.AreaCode = "";
+                    selfTakeModel.Mark.AreaName = "";
+                    selfTakeModel.Mark.Address = "";
                 }
                 else
                 {
-                    selfTakeModel.Id = selfPickAddress.Id;
-                    selfTakeModel.MarkName = selfPickAddress.Name;
-                    selfTakeModel.Consignee = selfPickAddress.ContactName;
-                    selfTakeModel.PhoneNumber = selfPickAddress.ContactPhone;
-                    selfTakeModel.AreaName = selfPickAddress.AreaName;
-                    selfTakeModel.AreaCode = selfPickAddress.AreaCode;
-                    selfTakeModel.Address = selfPickAddress.ContactAddress;
+                    selfTakeModel.Mark.Id = selfPickAddress.Id;
+                    selfTakeModel.Mark.Name = selfPickAddress.Name;
+                    selfTakeModel.Mark.Consignee = selfPickAddress.ContactName;
+                    selfTakeModel.Mark.PhoneNumber = selfPickAddress.ContactPhone;
+                    selfTakeModel.Mark.AreaName = selfPickAddress.AreaName;
+                    selfTakeModel.Mark.AreaCode = selfPickAddress.AreaCode;
+                    selfTakeModel.Mark.Address = selfPickAddress.ContactAddress;
 
                 }
 
@@ -355,12 +370,12 @@ namespace LocalS.Service.Api.StoreApp
                     time = DateTime.Now.AddHours(1).ToString("HH:00");
                 }
 
-                bookTimeModel.Type = "1";
-                bookTimeModel.Date = DateTime.Now.ToString("yyy-MM-dd");
-                bookTimeModel.Time = time;
-                bookTimeModel.Week = Lumos.CommonUtil.GetCnWeekDayName(DateTime.Now);
-                bookTimeModel.Text = string.Format("（{0}）{1} {2}", bookTimeModel.Week, bookTimeModel.Date, bookTimeModel.Time);
-                bookTimeModel.Value = string.Format("{0} {1}", bookTimeModel.Date, bookTimeModel.Time);
+                selfTakeModel.BookTime.Type = "1";
+                selfTakeModel.BookTime.Date = DateTime.Now.ToString("yyy-MM-dd");
+                selfTakeModel.BookTime.Time = time;
+                selfTakeModel.BookTime.Week = Lumos.CommonUtil.GetCnWeekDayName(DateTime.Now);
+                selfTakeModel.BookTime.Text = string.Format("（{0}）{1} {2}", selfTakeModel.BookTime.Week, selfTakeModel.BookTime.Date, selfTakeModel.BookTime.Time);
+                selfTakeModel.BookTime.Value = string.Format("{0} {1}", selfTakeModel.BookTime.Date, selfTakeModel.BookTime.Time);
 
 
                 amount_original = c_prodcutSkus.Sum(m => m.OriginalAmount);
@@ -445,41 +460,55 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
 
+                var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
 
                 var delivery = orders.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).FirstOrDefault();
                 var selfTake = orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
 
                 if (delivery == null)
                 {
-                    var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
                     if (d_shippingAddress == null)
                     {
-                        dliveryModel.Id = "";
-                        dliveryModel.Consignee = "配送地址";
-                        dliveryModel.PhoneNumber = "选择";
-                        dliveryModel.AreaName = "";
-                        dliveryModel.Address = "";
-                        dliveryModel.IsDefault = false;
+                        dliveryModel.Contact.Id = "";
+                        dliveryModel.Contact.Consignee = "配送地址";
+                        dliveryModel.Contact.PhoneNumber = "选择";
+                        dliveryModel.Contact.AreaName = "";
+                        dliveryModel.Contact.Address = "";
+                        dliveryModel.Contact.IsDefault = false;
                     }
                     else
                     {
-                        dliveryModel.Id = d_shippingAddress.Id;
-                        dliveryModel.Consignee = d_shippingAddress.Consignee;
-                        dliveryModel.PhoneNumber = d_shippingAddress.PhoneNumber;
-                        dliveryModel.AreaName = d_shippingAddress.AreaName;
-                        dliveryModel.Address = d_shippingAddress.Address;
-                        dliveryModel.IsDefault = d_shippingAddress.IsDefault;
+                        dliveryModel.Contact.Id = d_shippingAddress.Id;
+                        dliveryModel.Contact.Consignee = d_shippingAddress.Consignee;
+                        dliveryModel.Contact.PhoneNumber = d_shippingAddress.PhoneNumber;
+                        dliveryModel.Contact.AreaName = d_shippingAddress.AreaName;
+                        dliveryModel.Contact.Address = d_shippingAddress.Address;
+                        dliveryModel.Contact.IsDefault = d_shippingAddress.IsDefault;
+
+                        selfTakeModel.Contact.Id = d_shippingAddress.Id;
+                        selfTakeModel.Contact.Consignee = d_shippingAddress.Consignee;
+                        selfTakeModel.Contact.PhoneNumber = d_shippingAddress.PhoneNumber;
+                        selfTakeModel.Contact.AreaName = d_shippingAddress.AreaName;
+                        selfTakeModel.Contact.AreaCode = d_shippingAddress.AreaCode;
+                        selfTakeModel.Contact.Address = d_shippingAddress.Address;
                     }
                 }
                 else
                 {
-                    dliveryModel.Id = delivery.Id;
-                    dliveryModel.Consignee = delivery.Receiver;
-                    dliveryModel.PhoneNumber = delivery.ReceiverPhoneNumber;
-                    dliveryModel.AreaCode = delivery.ReceptionAreaCode;
-                    dliveryModel.AreaName = delivery.ReceptionAreaName;
-                    dliveryModel.Address = delivery.ReceptionAddress;
-                    dliveryModel.IsDefault = false;
+                    dliveryModel.Contact.Id = delivery.Id;
+                    dliveryModel.Contact.Consignee = delivery.Receiver;
+                    dliveryModel.Contact.PhoneNumber = delivery.ReceiverPhoneNumber;
+                    dliveryModel.Contact.AreaCode = delivery.ReceptionAreaCode;
+                    dliveryModel.Contact.AreaName = delivery.ReceptionAreaName;
+                    dliveryModel.Contact.Address = delivery.ReceptionAddress;
+                    dliveryModel.Contact.IsDefault = false;
+
+                    selfTakeModel.Contact.Id = delivery.Id;
+                    selfTakeModel.Contact.Consignee = delivery.Receiver;
+                    selfTakeModel.Contact.PhoneNumber = delivery.ReceiverPhoneNumber;
+                    selfTakeModel.Contact.AreaName = delivery.ReceptionAreaName;
+                    selfTakeModel.Contact.AreaCode = delivery.ReceptionAreaCode;
+                    selfTakeModel.Contact.Address = delivery.ReceptionAddress;
                 }
 
                 if (selfTake == null)
@@ -492,44 +521,52 @@ namespace LocalS.Service.Api.StoreApp
 
                     if (selfPickAddress == null)
                     {
-                        selfTakeModel.Id = "";
-                        selfTakeModel.Consignee = "自提地址";
-                        selfTakeModel.PhoneNumber = "选择";
-                        selfTakeModel.AreaName = "";
-                        selfTakeModel.AreaCode = "";
-                        selfTakeModel.Address = "";
+                        selfTakeModel.Mark.Id = "";
+                        selfTakeModel.Mark.Consignee = "自提地址";
+                        selfTakeModel.Mark.PhoneNumber = "选择";
+                        selfTakeModel.Mark.AreaName = "";
+                        selfTakeModel.Mark.AreaCode = "";
+                        selfTakeModel.Mark.Address = "";
                     }
                     else
                     {
-                        selfTakeModel.Id = selfPickAddress.Id;
-                        selfTakeModel.MarkName = selfPickAddress.Name;
-                        selfTakeModel.Consignee = selfPickAddress.ContactName;
-                        selfTakeModel.PhoneNumber = selfPickAddress.ContactPhone;
-                        selfTakeModel.AreaName = selfPickAddress.AreaName;
-                        selfTakeModel.AreaCode = selfPickAddress.AreaCode;
-                        selfTakeModel.Address = selfPickAddress.ContactAddress;
+                        selfTakeModel.Mark.Id = selfPickAddress.Id;
+                        selfTakeModel.Mark.Name = selfPickAddress.Name;
+                        selfTakeModel.Mark.Consignee = selfPickAddress.ContactName;
+                        selfTakeModel.Mark.PhoneNumber = selfPickAddress.ContactPhone;
+                        selfTakeModel.Mark.AreaName = selfPickAddress.AreaName;
+                        selfTakeModel.Mark.AreaCode = selfPickAddress.AreaCode;
+                        selfTakeModel.Mark.Address = selfPickAddress.ContactAddress;
                     }
 
                 }
                 else
                 {
-                    selfTakeModel.Id = selfTake.Id;
-                    selfTakeModel.MarkName = selfTake.ReceptionMarkName;
-                    selfTakeModel.Consignee = selfTake.Receiver;
-                    selfTakeModel.PhoneNumber = selfTake.ReceiverPhoneNumber;
-                    selfTakeModel.AreaName = selfTake.ReceptionAreaName;
-                    selfTakeModel.Address = selfTake.ReceptionAddress;
-                    selfTakeModel.AreaName = selfTake.ReceptionAreaName;
-                    selfTakeModel.AreaCode = selfTake.ReceptionAreaCode;
+                    selfTakeModel.Contact.Id = selfTake.ReceptionId;
+                    selfTakeModel.Contact.Consignee = selfTake.Receiver;
+                    selfTakeModel.Contact.PhoneNumber = selfTake.ReceiverPhoneNumber;
+                    selfTakeModel.Contact.AreaCode = selfTake.ReceptionAreaCode;
+                    selfTakeModel.Contact.AreaName = selfTake.ReceptionAreaName;
+                    selfTakeModel.Contact.Address = selfTake.ReceptionAddress;
+                    selfTakeModel.Contact.IsDefault = false;
+
+                    selfTakeModel.Mark.Id = selfTake.Id;
+                    selfTakeModel.Mark.Name = selfTake.ReceptionMarkName;
+                    selfTakeModel.Mark.Consignee = selfTake.Receiver;
+                    selfTakeModel.Mark.PhoneNumber = selfTake.ReceiverPhoneNumber;
+                    selfTakeModel.Mark.AreaName = selfTake.ReceptionAreaName;
+                    selfTakeModel.Mark.Address = selfTake.ReceptionAddress;
+                    selfTakeModel.Mark.AreaName = selfTake.ReceptionAreaName;
+                    selfTakeModel.Mark.AreaCode = selfTake.ReceptionAreaCode;
 
                     if (selfTake.ReceptionBookStartTime != null)
                     {
-                        bookTimeModel.Type = "1";
-                        bookTimeModel.Date = selfTake.ReceptionBookStartTime.Value.ToString("yyy-MM-dd");
-                        bookTimeModel.Time = selfTake.ReceptionBookStartTime.Value.ToString("HH:mm");
-                        bookTimeModel.Week = Lumos.CommonUtil.GetCnWeekDayName(selfTake.ReceptionBookStartTime.Value);
-                        bookTimeModel.Text = string.Format("（{0}）{1}", bookTimeModel.Week, selfTake.ReceptionBookStartTime.Value.ToString("yyy-MM-dd HH:mm"));
-                        bookTimeModel.Value = selfTake.ReceptionBookStartTime.Value.ToString("yyy-MM-dd HH:mm");
+                        selfTakeModel.BookTime.Type = "1";
+                        selfTakeModel.BookTime.Date = selfTake.ReceptionBookStartTime.Value.ToString("yyy-MM-dd");
+                        selfTakeModel.BookTime.Time = selfTake.ReceptionBookStartTime.Value.ToString("HH:mm");
+                        selfTakeModel.BookTime.Week = Lumos.CommonUtil.GetCnWeekDayName(selfTake.ReceptionBookStartTime.Value);
+                        selfTakeModel.BookTime.Text = string.Format("（{0}）{1}", selfTakeModel.BookTime.Week, selfTake.ReceptionBookStartTime.Value.ToString("yyy-MM-dd HH:mm"));
+                        selfTakeModel.BookTime.Value = selfTake.ReceptionBookStartTime.Value.ToString("yyy-MM-dd HH:mm");
                     }
                 }
 
@@ -588,8 +625,6 @@ namespace LocalS.Service.Api.StoreApp
                         ob_SelfTakeByStore.Skus = skus_SelfTakeByStore;
                         ob_SelfTakeByStore.TabMode = E_TabMode.SelfTakeByStore;
                         ob_SelfTakeByStore.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
-                        ob_SelfTakeByStore.Delivery = dliveryModel;
-                        ob_SelfTakeByStore.BookTime = bookTimeModel;
                         ob_SelfTakeByStore.SelfTake = selfTakeModel;
                         orderBlock.Add(ob_SelfTakeByStore);
 
@@ -622,7 +657,6 @@ namespace LocalS.Service.Api.StoreApp
                         }
 
                         ob_DeliveryOrSelfTakeByStore.Delivery = dliveryModel;
-                        ob_DeliveryOrSelfTakeByStore.BookTime = bookTimeModel;
                         ob_DeliveryOrSelfTakeByStore.SelfTake = selfTakeModel;
                         orderBlock.Add(ob_DeliveryOrSelfTakeByStore);
 
@@ -653,8 +687,9 @@ namespace LocalS.Service.Api.StoreApp
                 ob_SelfTakeByMachine.Skus = skus_SelfTakeByMachine;
                 ob_SelfTakeByMachine.TabMode = E_TabMode.SelfTakeByMachine;
                 ob_SelfTakeByMachine.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-                ob_SelfTakeByMachine.SelfTake.MarkName = store.Name;
-                ob_SelfTakeByMachine.SelfTake.Address = store.Address;
+                ob_SelfTakeByMachine.SelfTake.Mark.Id = store.StoreId;
+                ob_SelfTakeByMachine.SelfTake.Mark.Name = store.Name;
+                ob_SelfTakeByMachine.SelfTake.Mark.Address = store.Address;
                 orderBlock.Add(ob_SelfTakeByMachine);
             }
 

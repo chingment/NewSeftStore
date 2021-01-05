@@ -435,7 +435,7 @@ namespace LocalS.BLL.Biz
                 using (TransactionScope ts = new TransactionScope())
                 {
                     string clientUserName = "匿名";
-
+                    string clientPhoneNumber = null;
                     var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
 
                     MemberLevelSt clientMemberLevel = null;
@@ -446,7 +446,7 @@ namespace LocalS.BLL.Biz
                         {
                             clientUserName = clientUser.NickName;
                         }
-
+                        clientPhoneNumber = clientUser.PhoneNumber;
                         clientMemberLevel = CurrentDb.MemberLevelSt.Where(m => m.MerchId == store.MerchId && m.Level == clientUser.MemberLevel).FirstOrDefault();
                     }
 
@@ -915,7 +915,7 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
                     #region 更改购物车标识
-          
+
                     if (!string.IsNullOrEmpty(rop.ClientUserId))
                     {
                         var cartsIds = buildOrderSkus.Select(m => m.CartId).Distinct().ToArray();
@@ -1006,13 +1006,13 @@ namespace LocalS.BLL.Biz
 
                                 order.ReceiveMode = E_ReceiveMode.Delivery;
                                 order.ReceiveModeName = "配送到手";
-                                order.Receiver = rm_Delivery.Delivery.Consignee;
-                                order.ReceptionId = rm_Delivery.Delivery.Id;
-                                order.ReceiverPhoneNumber = rm_Delivery.Delivery.PhoneNumber;
-                                order.ReceptionAreaCode = rm_Delivery.Delivery.AreaCode;
-                                order.ReceptionAreaName = rm_Delivery.Delivery.AreaName;
-                                order.ReceptionAddress = rm_Delivery.Delivery.Address;
-
+                                order.Receiver = rm_Delivery.Delivery.Contact.Consignee;
+                                order.ReceptionId = rm_Delivery.Delivery.Contact.Id;
+                                order.ReceiverPhoneNumber = rm_Delivery.Delivery.Contact.PhoneNumber;
+                                order.ReceptionAreaCode = rm_Delivery.Delivery.Contact.AreaCode;
+                                order.ReceptionAreaName = rm_Delivery.Delivery.Contact.AreaName;
+                                order.ReceptionAddress = rm_Delivery.Delivery.Contact.Address;
+                                order.ReceptionMarkName = rm_Delivery.Delivery.Contact.MarkName;
                                 #endregion
                                 break;
                             case E_ReceiveMode.SelfTakeByStore:
@@ -1027,29 +1027,29 @@ namespace LocalS.BLL.Biz
 
                                 order.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
                                 order.ReceiveModeName = "到店自提";
-                                order.Receiver = rm_StoreSelfTake.SelfTake.Consignee;
-                                order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.PhoneNumber;
-                                order.ReceptionId = rm_StoreSelfTake.SelfTake.Id;
-                                order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.AreaCode;
-                                order.ReceptionAreaName = rm_StoreSelfTake.SelfTake.AreaName;
-                                order.ReceptionAddress = rm_StoreSelfTake.SelfTake.Address;
-                                order.ReceptionMarkName = rm_StoreSelfTake.SelfTake.MarkName;
+                                order.Receiver = rm_StoreSelfTake.SelfTake.Contact.Consignee;
+                                order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.Contact.PhoneNumber;
+                                order.ReceptionId = rm_StoreSelfTake.SelfTake.Mark.Id;
+                                order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.Mark.AreaCode;
+                                order.ReceptionAreaName = rm_StoreSelfTake.SelfTake.Mark.AreaName;
+                                order.ReceptionAddress = rm_StoreSelfTake.SelfTake.Mark.Address;
+                                order.ReceptionMarkName = rm_StoreSelfTake.SelfTake.Mark.Name;
 
 
-                                if (rm_StoreSelfTake.BookTime != null && !string.IsNullOrEmpty(rm_StoreSelfTake.BookTime.Value))
+                                if (rm_StoreSelfTake.SelfTake.BookTime != null && !string.IsNullOrEmpty(rm_StoreSelfTake.SelfTake.BookTime.Value))
                                 {
                                     //1为具体时间值 例如 2020-11-24 13:00
                                     //2为时间段区间 例如 2020-11-24 13:00,2020-11-24 13:00
-                                    if (rm_StoreSelfTake.BookTime.Type == 1)
+                                    if (rm_StoreSelfTake.SelfTake.BookTime.Type == 1)
                                     {
-                                        if (Lumos.CommonUtil.IsDateTime(rm_StoreSelfTake.BookTime.Value))
+                                        if (Lumos.CommonUtil.IsDateTime(rm_StoreSelfTake.SelfTake.BookTime.Value))
                                         {
-                                            order.ReceptionBookStartTime = DateTime.Parse(rm_StoreSelfTake.BookTime.Value);
+                                            order.ReceptionBookStartTime = DateTime.Parse(rm_StoreSelfTake.SelfTake.BookTime.Value);
                                         }
                                     }
-                                    else if (rm_StoreSelfTake.BookTime.Type == 2)
+                                    else if (rm_StoreSelfTake.SelfTake.BookTime.Type == 2)
                                     {
-                                        string[] arr_time = rm_StoreSelfTake.BookTime.Value.Split(',');
+                                        string[] arr_time = rm_StoreSelfTake.SelfTake.BookTime.Value.Split(',');
                                         if (arr_time.Length == 2)
                                         {
                                             if (Lumos.CommonUtil.IsDateTime(arr_time[0]))
@@ -1085,19 +1085,21 @@ namespace LocalS.BLL.Biz
 
                                 order.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
                                 order.ReceiveModeName = "机器自提";
-                                order.Receiver = null;
-                                order.ReceiverPhoneNumber = null;
-                                order.ReceptionId = rm_MachineSelfTake.SelfTake.Id;
-                                order.ReceptionAreaCode = rm_MachineSelfTake.SelfTake.AreaCode;
-                                order.ReceptionAreaName = rm_MachineSelfTake.SelfTake.AreaName;
-                                order.ReceptionAddress = rm_MachineSelfTake.SelfTake.Address;
-                                order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.MarkName;
+                                order.Receiver = rm_MachineSelfTake.SelfTake.Contact.Consignee;
+                                order.ReceiverPhoneNumber = rm_MachineSelfTake.SelfTake.Contact.PhoneNumber;
+                                order.ReceptionId = rm_MachineSelfTake.SelfTake.Mark.Id;
+                                order.ReceptionAreaCode = rm_MachineSelfTake.SelfTake.Mark.AreaCode;
+                                order.ReceptionAreaName = rm_MachineSelfTake.SelfTake.Mark.AreaName;
+                                order.ReceptionAddress = rm_MachineSelfTake.SelfTake.Mark.Address;
+                                order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.Mark.Name;
                                 #endregion
                                 break;
                             case E_ReceiveMode.FeeByMember:
                                 #region MemberFee
                                 order.ReceiveMode = E_ReceiveMode.FeeByMember;
                                 order.ReceiveModeName = "会员费";
+                                order.Receiver = clientUserName;
+                                order.ReceiverPhoneNumber = clientPhoneNumber;
                                 order.IsNoDisplayClient = true;
                                 #endregion
                                 break;
@@ -1994,40 +1996,40 @@ namespace LocalS.BLL.Biz
                             {
                                 d_order.ReceiveModeName = "配送到手";
                                 d_order.ReceiveMode = E_ReceiveMode.Delivery;
-                                d_order.Receiver = rm_Delivery.Delivery.Consignee;
-                                d_order.ReceiverPhoneNumber = rm_Delivery.Delivery.PhoneNumber;
-                                d_order.ReceptionId = rm_Delivery.Delivery.Id;
-                                d_order.ReceptionAreaCode = rm_Delivery.Delivery.AreaCode;
-                                d_order.ReceptionAreaName = rm_Delivery.Delivery.AreaName;
-                                d_order.ReceptionAddress = rm_Delivery.Delivery.Address;
+                                d_order.Receiver = rm_Delivery.Delivery.Contact.Consignee;
+                                d_order.ReceiverPhoneNumber = rm_Delivery.Delivery.Contact.PhoneNumber;
+                                d_order.ReceptionId = rm_Delivery.Delivery.Contact.Id;
+                                d_order.ReceptionAreaCode = rm_Delivery.Delivery.Contact.AreaCode;
+                                d_order.ReceptionAreaName = rm_Delivery.Delivery.Contact.AreaName;
+                                d_order.ReceptionAddress = rm_Delivery.Delivery.Contact.Address;
                             }
 
                             var rm_StoreSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
                             if (rm_StoreSelfTake != null)
                             {
                                 d_order.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
-                                d_order.Receiver = rm_StoreSelfTake.SelfTake.Consignee;
-                                d_order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.PhoneNumber;
-                                d_order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.AreaCode;
-                                d_order.ReceptionAreaName = rm_StoreSelfTake.SelfTake.AreaName;
-                                d_order.ReceptionAddress = rm_StoreSelfTake.SelfTake.Address;
-                                d_order.ReceptionMarkName = rm_StoreSelfTake.SelfTake.MarkName;
+                                d_order.Receiver = rm_StoreSelfTake.SelfTake.Contact.Consignee;
+                                d_order.ReceiverPhoneNumber = rm_StoreSelfTake.SelfTake.Contact.PhoneNumber;
+                                d_order.ReceptionAreaCode = rm_StoreSelfTake.SelfTake.Mark.AreaCode;
+                                d_order.ReceptionAreaName = rm_StoreSelfTake.SelfTake.Mark.AreaName;
+                                d_order.ReceptionAddress = rm_StoreSelfTake.SelfTake.Mark.Address;
+                                d_order.ReceptionMarkName = rm_StoreSelfTake.SelfTake.Mark.Name;
 
 
-                                if (rm_StoreSelfTake.BookTime != null && !string.IsNullOrEmpty(rm_StoreSelfTake.BookTime.Value))
+                                if (rm_StoreSelfTake.SelfTake.BookTime != null && !string.IsNullOrEmpty(rm_StoreSelfTake.SelfTake.BookTime.Value))
                                 {
                                     //1为具体时间值 例如 2020-11-24 13:00
                                     //2为时间段区间 例如 2020-11-24 13:00,2020-11-24 13:00
-                                    if (rm_StoreSelfTake.BookTime.Type == 1)
+                                    if (rm_StoreSelfTake.SelfTake.BookTime.Type == 1)
                                     {
-                                        if (Lumos.CommonUtil.IsDateTime(rm_StoreSelfTake.BookTime.Value))
+                                        if (Lumos.CommonUtil.IsDateTime(rm_StoreSelfTake.SelfTake.BookTime.Value))
                                         {
-                                            d_order.ReceptionBookStartTime = DateTime.Parse(rm_StoreSelfTake.BookTime.Value);
+                                            d_order.ReceptionBookStartTime = DateTime.Parse(rm_StoreSelfTake.SelfTake.BookTime.Value);
                                         }
                                     }
-                                    else if (rm_StoreSelfTake.BookTime.Type == 2)
+                                    else if (rm_StoreSelfTake.SelfTake.BookTime.Type == 2)
                                     {
-                                        string[] arr_time = rm_StoreSelfTake.BookTime.Value.Split(',');
+                                        string[] arr_time = rm_StoreSelfTake.SelfTake.BookTime.Value.Split(',');
                                         if (arr_time.Length == 2)
                                         {
                                             if (Lumos.CommonUtil.IsDateTime(arr_time[0]))
