@@ -2,6 +2,7 @@
   "navigationBarTitleText": "确认订单",
   "usingComponents": {
       "booktimedialog": "/components/booktimedialog/booktimedialog",
+      "selfpickaddressdialog": "/components/selfpickaddressdialog/selfpickaddressdialog",
       "skeleton": "../../components/skeleton/skeleton"
   }
 }

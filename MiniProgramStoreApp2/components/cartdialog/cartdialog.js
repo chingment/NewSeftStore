@@ -170,7 +170,8 @@ Component({
               cartId: blocks[i].productSkus[j].cartId,
               id: blocks[i].productSkus[j].id,
               quantity: blocks[i].productSkus[j].quantity,
-              shopMode: blocks[i].productSkus[j].shopMode
+              shopMode: blocks[i].productSkus[j].shopMode,
+              shopMethod: 1
             })
           }
         }
@@ -184,7 +185,7 @@ Component({
       }
 
       wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
+        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=1',
         success: function (res) {
           // success
         },

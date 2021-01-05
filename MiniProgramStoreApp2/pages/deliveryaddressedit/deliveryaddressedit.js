@@ -249,6 +249,17 @@ Page({
       }
     })
 
-  }
+  },
+  onChangeAddress: function () {
+    var _this = this
+    wx.chooseLocation({
+     success: function (res) {
+       console.log(JSON.stringify(res))
+     },
+     fail: function (err) {
+      console.log(err)
+     }
+    });
+   },
 
 });

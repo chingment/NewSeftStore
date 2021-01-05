@@ -2,6 +2,7 @@ const config = require('../../config')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCoupon = require('../../api/coupon.js')
 const toast = require('../../utils/toastutil')
+const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
 Page({
@@ -93,7 +94,23 @@ Page({
     var operate = _this.data.operate
 
     if (operate == 1) {
-      app.switchTab(0)
+
+
+      if (coupon.faceType == 5) {
+
+        wx.navigateTo({
+          url: '/pages/mycoupondetails/mycoupondetails?id=' + coupon.id,
+          success: function (res) {
+            // success
+          },
+        })
+
+      } else {
+
+        pageMain.mainTabBarSwitch(0)
+      }
+
+
     } else if (operate == 2) {
       if (!coupon.canSelected) {
         toast.show({
@@ -117,21 +134,31 @@ Page({
       var prevPage = pages[pages.length - 2];
 
       if (_this.data.op_faceTypes == '1,2') {
+        var coupon = prevPage.data.couponByShop
+        coupon.selectedCouponIds = couponIds.length > 0 ? couponIds[0] : ['']
         prevPage.setData({
-          couponIdsByShop: couponIds
+          couponIdsByShop: couponIds.length > 0 ? [couponIds[0]] : [''],
+          couponByShop: coupon
         })
       } else if (_this.data.op_faceTypes == '3') {
+        var coupon = prevPage.data.couponByRent
+        coupon.selectedCouponIds = couponIds
         prevPage.setData({
-          couponIdByRent: couponIds.length > 0 ? couponIds[0] : ''
+          couponIdByRent: couponIds.length > 0 ? couponIds[0] : '',
+          couponByRent: coupon
         })
       } else if (_this.data.op_faceTypes == '4') {
+        var coupon = prevPage.data.couponByDeposit
+        coupon.selectedCouponIds = couponIds
+        console.log('couponIds>>' + couponIds)
         prevPage.setData({
-          couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : ''
+          couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : '',
+          couponByDeposit: coupon
         })
       }
 
       prevPage.getConfirmData()
-      
+
       wx.navigateBack()
     }
   },

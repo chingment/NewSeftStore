@@ -502,16 +502,32 @@ namespace LocalS.Service.Api.StoreApp
                     productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, item.AtLeastAmount, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, rop.StoreId, productSku.ProductId, productSku.KindId3, productSku.SaleAmount), 2);
                 }
 
-                couponModel.CouponAmount = rop.ProductSkus.Sum(m => m.CouponAmount);
+
 
                 LogUtil.Info(" couponModel.CouponAmount:" + couponModel.CouponAmount);
 
+                //金额补差
+                if (item.FaceType != E_Coupon_FaceType.DepositVoucher)
+                {
+                    var sumCouponAmount1 = item.FaceValue;
+                    var sumCouponAmount2 = rop.ProductSkus.Sum(m => m.CouponAmount);
+                    if (sumCouponAmount1 != sumCouponAmount2)
+                    {
+                        var diff = sumCouponAmount1 - sumCouponAmount2;
+                        rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount = rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount + diff;
+                    }
+                }
 
+
+                couponModel.CouponAmount = rop.ProductSkus.Sum(m => m.CouponAmount);
 
                 couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.Status, item.ValidStartTime, item.ValidEndTime, item.MerchId, rop.StoreId, clientUserId, rop.ProductSkus);
 
                 ret.Coupons.Add(couponModel);
             }
+
+
+
 
             result = new CustomJsonResult<RetCouponMy>(ResultType.Success, ResultCode.Success, "", ret);
 

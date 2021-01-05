@@ -1,6 +1,8 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiPersonal = require('../../api/personal.js')
+const apiServiceFun = require('../../api/servicefun.js')
 const storeageutil = require('../../utils/storeageutil.js')
+const toast = require('../../utils/toastutil')
 const app = getApp()
 Component({
   options: {
@@ -17,6 +19,7 @@ Component({
     isOnReady: false,
     isLogin: false,
     userInfo: {},
+    proService: null,
     badgeByWaitPayOrders: {}
   },
   methods: {
@@ -49,7 +52,8 @@ Component({
             _this.setData({
               isLogin: ownRequest.isLogin(),
               userInfo: d.userInfo,
-              badgeByWaitPayOrders:d.badgeByWaitPayOrders
+              badgeByWaitPayOrders: d.badgeByWaitPayOrders,
+              proService: d.proService
             })
           }
         })
@@ -66,6 +70,41 @@ Component({
         isLogin: ownRequest.isLogin()
       })
       _this.getPageData()
+    },
+    clickToScanCode: function (e) {
+      var _this = this
+      wx.scanCode({
+        success: (res) => {
+          var code = res.result
+          apiServiceFun.scanCodeResult({
+            code: code
+          }).then(function (res) {
+            if (res.result == 1) {
+              var d = res.data
+
+              switch (d.action) {
+                case 'CfSelfTakeOrder':
+                  wx.navigateTo({
+                    url: '/pages/smcfselftakeorder/smcfselftakeorder?id=' + d.orderId
+                  })
+                  break
+                  case 'WtCouponCode':
+                    wx.navigateTo({
+                      url: '/pages/smwtcoupon/smwtcoupon?id=' + d.couponId
+                    })
+                    break
+              }
+            } else {
+              toast.show({
+                title: res.message
+              })
+            }
+          })
+
+        }
+      })
+
+
     }
   }
 })

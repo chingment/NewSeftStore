@@ -19,6 +19,7 @@ Page({
     isShowButtonBottom: false,
     timespan: (new Date()).getTime(),
     userInfo: {},
+    isOpenMemberRight: false
   },
 
   /**
@@ -27,15 +28,18 @@ Page({
   onLoad: function (options) {
     var _this = this
 
+    var reffSign = options.reffSign == undefined ? '' : options.reffSign
+
+    storeage.setReffSign(reffSign)
 
     if (app.globalData.checkConfig) {
-       console.log('a1')
-       
+      console.log('a1')
+
       _this.getPromSt()
     } else {
       console.log('a2')
       app.checkConfigReadyCallback = res => {
-         console.log('a3')
+        console.log('a3')
         _this.getPromSt()
       }
     }
@@ -51,7 +55,8 @@ Page({
         var d = res.data
         _this.setData({
           pageIsReady: true,
-          userInfo: d.userInfo
+          userInfo: d.userInfo,
+          isOpenMemberRight:d.isOpenMemberRight
         })
       }
     })
@@ -107,6 +112,34 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    var _this = this
+    var _data = _this.data
+    // 设置转发内容
+    var shareObj = {
+      title: _this.data.productSku.name,
+      path: '/pages/memberprom/memberprom?reffSign=' + storeage.getOpenId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
+      success: function (res) { // 转发成功之后的回调　　　　　
+        if (res.errMsg == 'shareAppMessage:ok') {}
+      },
+      fail: function () { // 转发失败之后的回调
+        if (res.errMsg == 'shareAppMessage:fail cancel') {
+          // 用户取消转发
+        } else if (res.errMsg == 'shareAppMessage:fail') {
+          // 转发失败，其中 detail message 为详细失败信息
+        }
+      },
+      complete: function () {
+        // 转发结束之后的回调（转发成不成功都会执行）
+      }
+    };
+    // 来自页面内的按钮的转发
+    if (options.from == 'button') {
+
+
+    }
+    // 返回shareObj
+    return shareObj;
 
   },
   //监听屏幕滚动 判断上下滚动  

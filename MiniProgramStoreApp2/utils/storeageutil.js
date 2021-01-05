@@ -9,6 +9,7 @@ const key_session_key = "session_key"
 const key_cur_store_id = "key_cur_store_id"
 const key_cur_shop_model = "key_cur_shop_model"
 const key_last_saleoutlet_id = "key_last_saleoutlet_id"
+const key_reffsign = "key_reffsign"
 
 function getCart() {
   return wx.getStorageSync(key_cart) || []
@@ -109,6 +110,14 @@ function setLastSaleOutletId(saleoutlet_id) {
   wx.setStorageSync(key_last_saleoutlet_id, saleoutlet_id)
 }
 
+function getReffSign() {
+  return wx.getStorageSync(key_reffsign) || ''
+}
+
+function setReffSign(reffsign) {
+  wx.setStorageSync(key_reffsign, reffsign)
+}
+
 
 module.exports = {
   getCart: getCart,
@@ -128,5 +137,7 @@ module.exports = {
   getCurrentShopMode: getCurrentShopMode,
   setCurrentShopMode: setCurrentShopMode,
   getLastSaleOutletId: getLastSaleOutletId,
-  setLastSaleOutletId: setLastSaleOutletId
+  setLastSaleOutletId: setLastSaleOutletId,
+  setReffSign: setReffSign,
+  getReffSign: getReffSign
 }

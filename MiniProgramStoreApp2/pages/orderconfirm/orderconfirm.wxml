@@ -5,6 +5,8 @@
 <template is="showToast" data="{{showToast: showToast}}" />
 <booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}">
 </booktimedialog>
+<selfpickaddressdialog id="selfpickaddressdialog" isShow="{{selfPickAddressDialog.isShow}}" bind:_selectSelfPickAddressItem="selectSelfPickAddressItem"
+   dataS="{{selfPickAddressDialog.dataS}}"></selfpickaddressdialog>
 
 <!-- <view class='tag-address'>
 	<image class="img" src="/content/default/images/tag_address.png"></image>
@@ -15,7 +17,232 @@
 		<block wx:for="{{blocks}}" wx:for-item="item" wx:key="index">
 			<view class="ct pd-com">
 
-				<block wx:if="{{item.tabMode==1||item.tabMode==2||item.tabMode==3}}">
+				<block wx:if="{{item.tabMode==1}}">
+					<view class="tab-double ">
+						<view class="tab-title">
+							<view class="title-left selected skeleton-bg">
+								<view class="txt skeleton-rect">
+									<text>配送地址</text>
+								</view>
+								<view class="left-triangle">
+								</view>
+							</view>
+							<view class="title-right skeleton-bg" >
+								<view class="right-triangle">
+
+								</view>
+								<view class="txt skeleton-rect">
+									
+								</view>
+							</view>
+						</view>
+
+						<view class="tab-content">
+							<view class="content-item selected">
+								<view class="its-a">
+									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
+										data-reply-deliveryaddressid="{{item.delivery.contact.id}}">
+										<view class="it-l">
+											<text class='txt-h1 skeleton-rect'>{{item.delivery.contact.consignee}}</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.contact.isDefault}}">默认</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml skeleton-rect">
+												<text class='txt-h1 bold'>{{item.delivery.contact.phoneNumber}}</text>
+												<text class='txt-h2 '>{{item.delivery.contact.areaName}} {{item.delivery.contact.address}}</text>
+											</view>
+										</view>
+										<view class='it-r' bindtap="goSelect">
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
+											</view>
+										</view>
+									</view>
+								</view>
+							</view>
+							<view class="content-item ">
+				
+							</view>
+						</view>
+						<view class="its-odcskus" style="padding: 18rpx;">
+							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+								<view class="it">
+									<view class="it-l">
+										<view class="imgUrl skeleton-rect">
+											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
+										</view>
+									</view>
+									<view class="it-m">
+										<view class="it-ml" style="display:block">
+											<view style="height:100rpx;">
+												<text class='name skeleton-rect'>{{skusitem.name}}</text>
+											</view>
+											<view style="height:50rpx;">
+												<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+											</view>
+										</view>
+										<view class="it-mr">
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}"
+												class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
+										</view>
+									</view>
+									<view class="it-r" wx:if="{{shopMethod==1||shopMethod==3}}">
+										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
+									</view>
+									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:230rpx">
+										<view class="dt">
+											<view class="dt1"> <text>租金</text> </view>
+											<view class="dt2">
+												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
+											</view>
+										</view>
+										<view class="dt">
+											<view class="dt1">
+												<text>押金</text></view>
+											<view class="dt2">
+												<text class='salePrice skeleton-rect'> {{skusitem.depositAmount}}</text>
+											</view>
+										</view>
+									</view>
+								</view>
+							</block>
+						</view>
+					</view>
+				</block>
+				<block wx:elif="{{item.tabMode==2}}">
+					<view class="tab-double ">
+						<view class="tab-title">
+							<view class="title-left skeleton-bg">
+								<view class="txt skeleton-rect">
+								
+								</view>
+								<view class="left-triangle">
+								</view>
+							</view>
+							<view class="title-right selected skeleton-bg" >
+								<view class="right-triangle">
+
+								</view>
+								<view class="txt skeleton-rect">
+									<text>到店自提</text>
+								</view>
+							</view>
+						</view>
+
+						<view class="tab-content">
+							<view class="content-item ">
+								<view class="its-a">
+								
+								</view>
+							</view>
+							<view class="content-item selected ">
+								<view class="its-a">
+									<view class="it" bindtap="clickToOpenSelfPickAddressDialog" data-reply-blockindex="{{index}}">
+										<view class="it-l">
+											<text class='txt-h1'>自提地址</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt-h1 bold'>{{item.selfTake.mark.name}}</text>
+												<text class='txt-h2'>{{item.selfTake.mark.address}}</text>
+											</view>
+										</view>
+										<view class='it-r'>
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
+											</view>
+										</view>
+									</view>
+
+									<view class="it" bindtap="clickToOpenBooktimeDialog" data-reply-blockindex="{{index}}">
+										<view class="it-l">
+											<text class='txt-h1'>预约时间</text>
+											<text class="txt-h2 isDefault">预约</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml">
+												<text class='txt bold'>
+													<block wx:if="{{item.selfTake.bookTime.value==null}}">选择</block>
+													<block wx:else>{{item.selfTake.bookTime.text}}</block>
+												</text>
+											</view>
+										</view>
+										<view class='it-r'>
+											<view class="icon">
+												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											</view>
+										</view>
+									</view>
+									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
+										data-reply-deliveryaddressid="{{item.selfTake.contact.id}}">
+										<view class="it-l">
+											<text class='txt-h1 skeleton-rect'>联系人</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.selfTake.contact.isDefault}}">默认</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml skeleton-rect">
+												<text class='txt-h1 bold'>{{item.selfTake.contact.consignee}}</text>
+												<text class='txt-h2 '>{{item.selfTake.contact.phoneNumber}}</text>
+											</view>
+										</view>
+										<view class='it-r' bindtap="goSelect">
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
+											</view>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+						<view class="its-odcskus" style="padding: 18rpx;">
+							<block wx:for="{{item.skus}}" wx:for-index="index" wx:for-item="skusitem" wx:key="list">
+								<view class="it">
+									<view class="it-l">
+										<view class="imgUrl skeleton-rect">
+											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
+										</view>
+									</view>
+									<view class="it-m">
+										<view class="it-ml" style="display:block">
+											<view style="height:100rpx;">
+												<text class='name skeleton-rect'>{{skusitem.name}}</text>
+											</view>
+											<view style="height:50rpx;">
+												<text class='quantity skeleton-rect'> x {{skusitem.quantity}}</text>
+											</view>
+										</view>
+										<view class="it-mr">
+											<text wx:if="{{skusitem.originalPrice!=skusitem.salePrice}}"
+												class='originalPrice skeleton-rect'>{{skusitem.originalPrice}}</text>
+										</view>
+									</view>
+									<view class="it-r" wx:if="{{shopMethod==1||shopMethod==3}}">
+										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
+									</view>
+									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:230rpx">
+										<view class="dt">
+											<view class="dt1"> <text>租金</text> </view>
+											<view class="dt2">
+												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
+											</view>
+										</view>
+										<view class="dt">
+											<view class="dt1">
+												<text>押金</text></view>
+											<view class="dt2">
+												<text class='salePrice skeleton-rect'> {{skusitem.depositAmount}}</text>
+											</view>
+										</view>
+									</view>
+								</view>
+							</block>
+						</view>
+					</view>
+				</block>
+				<block wx:elif="{{item.tabMode==3}}">
 					<view class="tab-double ">
 						<view class="tab-title">
 							<view class="title-left {{item.receiveMode==1?'selected':''}} skeleton-bg"
@@ -34,7 +261,7 @@
 
 								</view>
 								<view class="txt skeleton-rect">
-									<text wx:if="{{item.tabMode==2||item.tabMode==3}}">到店自取</text>
+									<text wx:if="{{item.tabMode==2||item.tabMode==3}}">到店自提</text>
 								</view>
 							</view>
 						</view>
@@ -44,18 +271,18 @@
 
 								<view class="its-a">
 									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
-										data-reply-deliveryaddressid="{{item.delivery.id}}">
+										data-reply-deliveryaddressid="{{item.delivery.contact.id}}">
 										<view class="it-l">
-											<text class='txt-h1 skeleton-rect'>{{item.delivery.consignee}}</text>
-											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.isDefault}}">默认</text>
+											<text class='txt-h1 skeleton-rect'>{{item.delivery.contact.consignee}}</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.contact.isDefault}}">默认</text>
 										</view>
 										<view class="it-m">
 											<view class="it-ml skeleton-rect">
-												<text class='txt-h1 bold'>{{item.delivery.phoneNumber}}</text>
-												<text class='txt-h2 '>{{item.delivery.areaName}} {{item.delivery.address}}</text>
+												<text class='txt-h1 bold'>{{item.delivery.contact.phoneNumber}}</text>
+												<text class='txt-h2 '>{{item.delivery.contact.areaName}} {{item.delivery.contact.address}}</text>
 											</view>
 										</view>
-										<view class='it-r' bindtap="goSelect">
+										<view class='it-r'>
 											<view class="icon ">
 												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
 												</image>
@@ -66,19 +293,25 @@
 							</view>
 							<view class="content-item {{item.receiveMode==2?'selected':''}}">
 								<view class="its-a">
-									<view class="it">
+									<view class="it" bindtap="clickToOpenSelfPickAddressDialog" data-reply-blockindex="{{index}}">
 										<view class="it-l">
-											<text class='txt-h1'>自取地址</text>
+											<text class='txt-h1'>自提地址</text>
 										</view>
 										<view class="it-m">
 											<view class="it-ml">
-												<text class='txt-h1 bold'>{{item.selfTake.storeName}}</text>
-												<text class='txt-h2'>{{item.selfTake.storeAddress}}</text>
+												<text class='txt-h1 bold'>{{item.selfTake.mark.name}}</text>
+												<text class='txt-h2'>{{item.selfTake.mark.address}}</text>
+											</view>
+										</view>
+										<view class='it-r'>
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
 											</view>
 										</view>
 									</view>
 
-									<view class="it" bindtap="booktimeSelect" data-reply-index="{{index}}">
+									<view class="it" bindtap="clickToOpenBooktimeDialog" data-reply-blockindex="{{index}}">
 										<view class="it-l">
 											<text class='txt-h1'>预约时间</text>
 											<text class="txt-h2 isDefault">预约</text>
@@ -86,14 +319,34 @@
 										<view class="it-m">
 											<view class="it-ml">
 												<text class='txt bold'>
-													<block wx:if="{{item.bookTime.value==null}}">选择</block>
-													<block wx:else>{{item.bookTime.text}}</block>
+													<block wx:if="{{item.selfTake.bookTime.value==null}}">选择</block>
+													<block wx:else>{{item.selfTake.bookTime.text}}</block>
 												</text>
 											</view>
 										</view>
 										<view class='it-r'>
 											<view class="icon">
 												<image class="img-nav-right" src='/content/default/images/col_nav_right.png'></image>
+											</view>
+										</view>
+									</view>
+
+									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
+										data-reply-deliveryaddressid="{{item.selfTake.contact.id}}">
+										<view class="it-l">
+											<text class='txt-h1 skeleton-rect'>联系人</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.selfTake.contact.isDefault}}">默认</text>
+										</view>
+										<view class="it-m">
+											<view class="it-ml skeleton-rect">
+												<text class='txt-h1 bold'>{{item.selfTake.contact.consignee}}</text>
+												<text class='txt-h2 '>{{item.selfTake.contact.phoneNumber}}</text>
+											</view>
+										</view>
+										<view class='it-r' bindtap="goSelect">
+											<view class="icon ">
+												<image class="img-nav-right skeleton-circle" src='/content/default/images/col_nav_right.png'>
+												</image>
 											</view>
 										</view>
 									</view>
@@ -126,11 +379,11 @@
 									<view class="it-r" wx:if="{{shopMethod==1||shopMethod==3}}">
 										<text class='salePrice skeleton-rect'> {{skusitem.salePrice}}</text>
 									</view>
-									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:200rpx">
+									<view class="it-r" wx:elif="{{shopMethod==2}}" style="width:230rpx">
 										<view class="dt">
 											<view class="dt1"> <text>租金</text> </view>
 											<view class="dt2">
-												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentUnitText}}</text>
+												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
 											</view>
 										</view>
 										<view class="dt">
@@ -178,8 +431,8 @@
 										</view>
 										<view class="it-m">
 											<view class="it-ml">
-												<text class='txt-h1 bold'>{{item.selfTake.storeName}}</text>
-												<text class='txt-h2'> {{item.selfTake.storeAddress}}</text>
+												<text class='txt-h1 bold'>{{item.selfTake.mark.name}}</text>
+												<text class='txt-h2'> {{item.selfTake.mark.address}}</text>
 											</view>
 										</view>
 									</view>
@@ -289,6 +542,26 @@
 		<view class="pd-com">
 			<view class="its-a fieldBlock pd-com">
 
+				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+					<view class="it">
+						<view class="it-l" style="width:60rpx">
+							<view class="icon">
+								<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
+								src='{{item.imgUrl}}'></image>
+							</view>
+						</view>
+						<view class="it-m">
+							<view class="it-ml w100">
+								<text class="txt">{{item.name}}</text>
+							</view>
+							<view class="it-mr flex1">
+								<text class="txt"> {{item.amount}}</text>
+							</view>
+						</view>
+					</view>
+				</block>
+
+
 				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==1||shopMethod==3}}" data-reply-facetypes="1,2">
 					<view class="it-l" style="width:60rpx">
 						<view class="icon">
@@ -355,24 +628,6 @@
 						</view>
 					</view>
 				</view>
-
-				<block wx:for="{{subtotalItems}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-					<view class="it">
-						<view class="it-l" style="width:60rpx">
-							<view class="icon">
-
-							</view>
-						</view>
-						<view class="it-m">
-							<view class="it-ml w100">
-								<text class="txt">{{item.name}}</text>
-							</view>
-							<view class="it-mr flex1">
-								<text class="txt"> {{item.amount}}</text>
-							</view>
-						</view>
-					</view>
-				</block>
 
 			</view>
 			<view class="line-space-ncolor"></view>

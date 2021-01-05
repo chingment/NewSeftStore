@@ -904,6 +904,19 @@ namespace LocalS.BLL.Biz
                                     {
                                         buildOrderSku.CouponAmountByShop = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue, rop.StoreId, buildOrderSku.ProductId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
                                     }
+
+                                    //金额补差
+                                    if (d_coupon.FaceType != E_Coupon_FaceType.DepositVoucher)
+                                    {
+                                        var sumCouponAmount1 = d_coupon.FaceValue;
+                                        var sumCouponAmount2 = buildOrderSkus.Sum(m => m.CouponAmountByShop);
+                                        if (sumCouponAmount1 != sumCouponAmount2)
+                                        {
+                                            var diff = sumCouponAmount1 - sumCouponAmount2;
+                                            buildOrderSkus[buildOrderSkus.Count - 1].CouponAmountByShop = buildOrderSkus[buildOrderSkus.Count - 1].CouponAmountByShop + diff;
+                                        }
+                                    }
+
                                 }
                             }
                         }

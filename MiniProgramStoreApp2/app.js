@@ -17,7 +17,7 @@ App({
 
     _this.globalData.appId = appId
 
-    console.log('>>'+appId)
+    console.log('>>' + appId)
 
     _this.getConfig()
 
@@ -37,8 +37,8 @@ App({
   },
   onShow: function () {
     //var _this = this
-   // console.log('app.onShow')
-   // _this.getConfig()
+    // console.log('app.onShow')
+    // _this.getConfig()
   },
   globalData: {
     appId: null,
@@ -52,6 +52,7 @@ App({
     var appId = accountInfo.miniProgram.appId
     wx.login({
       success: function (res) {
+        console.log('=>>login.code1:' + res.code)
         if (res.code) {
           apiOwn.wxConfig({
             appId: appId,

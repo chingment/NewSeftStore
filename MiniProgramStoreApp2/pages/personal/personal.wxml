@@ -12,7 +12,7 @@
 								<image class="img" src='/content/default/images/icon_member_{{userInfo.memberLevel>0?1:0}}.png'></image>
 								<text class='txt level-{{userInfo.memberLevel}}'>{{userInfo.memberTag}}</text>
 							</view>
-							<view wx:if="{{userInfo.phoneNumber!=null}}" class='item-phone'>
+							<view wx:if="{{userInfo.phoneNumber!=null&&userInfo.phoneNumber!=''}}" class='item-phone'>
 								<image class="img" src='/content/default/images/icon_phone.png'></image>
 								<text class="txt">{{userInfo.phoneNumber}}</text>
 							</view>
@@ -48,7 +48,7 @@
 				</view>
 			</view>
 			<view class='personal-orderstatus'>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000"
+				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=2000"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_waitpay.png'></image>
 					<text class='item-title'>待支付</text>
@@ -56,26 +56,26 @@
 
 					<text class="number" wx:if="{{badgeByWaitPayOrders!=null}}">{{badgeByWaitPayOrders.value}}</text>
 
-				</div>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000"
+				</view>
+				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=3000"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_pickup.png'></image>
 					<text class='item-title'>待取/待收</text>
-				</div>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000"
+				</view>
+				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=4000"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_complete.png'></image>
 					<text class='item-title'>已完成</text>
-				</div>
-				<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000"
+				</view>
+				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/orderlist/orderlist?status=5000"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/order_status_cancel.png'></image>
 					<text class='item-title'>已失效</text>
-				</div>
+				</view>
 			</view>
 			<view class="col-nav">
 				<view class="container">
-					<div bindtap="navigateToClick" data-ischecklogin="true"
+					<view bindtap="navigateToClick" data-ischecklogin="true"
 						data-url="/pages/mycoupon/mycoupon?operate=1&isGetHis=false" class="col-nav-item" hover-class="none">
 						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_coupon.png'></image>
@@ -86,9 +86,20 @@
 						<view class='item-right'>
 							<image src='/content/default/images/col_nav_right.png'></image>
 						</view>
-					</div>
-
-					<div bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item"
+					</view>
+					<view bindtap="navigateToClick" data-ischecklogin="true"
+						data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_address.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">我的联系方式</text>
+						</view>
+						<view class='item-right'>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</view>
+					<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item"
 						hover-class="none">
 						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_personalinfo.png'></image>
@@ -99,20 +110,8 @@
 						<view class='item-right'>
 							<image src='/content/default/images/col_nav_right.png'></image>
 						</view>
-					</div>
+					</view>
 
-					<div bindtap="navigateToClick" data-ischecklogin="true"
-						data-url="/pages/deliveryaddress/deliveryaddress?operate=1" class="col-nav-item" hover-class="none">
-						<view class="item-left">
-							<image src='/content/default/images/col_nav_icon_address.png'></image>
-						</view>
-						<view class="item-middle">
-							<text class="title">地址管理</text>
-						</view>
-						<view class='item-right'>
-							<image src='/content/default/images/col_nav_right.png'></image>
-						</view>
-					</div>
 
 					<button class="btn-noboder col-nav-item" hover-class="none" open-type="contact">
 						<view class="item-left">
@@ -129,6 +128,34 @@
 				</view>
 			</view>
 
+			<view class="personal-proservice" wx:if="{{proService!=null}}">
+			<view class="col-nav" >
+				<view class="container">
+					<view class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_myservice.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">我的服务</text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class='col-proservice'>
+				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/myserviceprom/myserviceprom" wx:if="{{proService.isHasProm}}"
+					class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/myservice_prom.png'></image>
+					<text class='item-title'>推广码</text>
+				</view>
+				<view bindtap="clickToScanCode"  wx:if="{{proService.isHasScanCode}}"
+					class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
+					<text class='item-title'>扫一扫</text>
+				</view>
+
+
+			</view>
+		</view>
 		</view>
 	</view>
 </scroll-view>

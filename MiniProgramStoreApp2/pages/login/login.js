@@ -6,35 +6,31 @@ const apiOwn = require('../../api/own.js')
 const app = getApp()
 Page({
   data: {
-    appId:'',
+    appId: '',
     tag: "login",
     isAuthUserInfo: false,
-    returnUrl: ''
+    returnUrl: '',
+    userInfoEp: {
+      code: '',
+      iv: '',
+      encryptedData: ''
+    },
+    phoneNumberEp: {
+      session_key: '',
+      iv: '',
+      encryptedData: ''
+    }
+
   },
   onLoad: function (options) {
-
     var _this = this
 
-    //var accountInfo = wx.getAccountInfoSync()
-
-    //var appId = accountInfo.miniProgram.appId
-
-    var returnUrl = typeof options.returnUrl == 'undefined'?'':options.returnUrl
-
+    var accountInfo = wx.getAccountInfoSync()
+    var appId = accountInfo.miniProgram.appId
+    var returnUrl = typeof options.returnUrl == 'undefined' ? '' : options.returnUrl
     _this.setData({
-      appId:app.globalData.appId,
+      appId: appId,
       returnUrl: returnUrl
-    })
-
-    // 查看是否授权
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          _this.setData({
-            isAuthUserInfo: true
-          })
-        }
-      }
     })
 
     wx.checkSession({
@@ -46,117 +42,101 @@ Page({
       }
     })
 
-    const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-    var appId = accountInfo.miniProgram.appId
     wx.login({
-      success: function (res) {
-        console.log("minProgram:login")
-        if (res.code) {
-          console.log(res)
-          apiOwn.wxConfig({
-            appId: appId,
-            code: res.code,
-          }).then(function (res2) {
-            console.log(res2)
-            if (res2.result == 1) {
-              var d = res2.data
+      success(res) {
+        console.log('=>>login.code3:' + res.code)
+      },
+      fail() {
 
-              storeage.setOpenId(d.openId)
-              storeage.setSessionKey(d.sessionKey)
-              storeage.setMerchId(d.merchId)
-
-            } else {
-              toast.show({
-                title: res2.message
-              })
-            }
-          })
-        }
       }
-    });
-
+    })
 
   },
   onReady: function () {},
   onShow: function () {},
-  login: function (openId, phoneNumber) {
-
-    const accountInfo = wx.getAccountInfoSync()
-    console.log(accountInfo.miniProgram.appId)
-
+  loginByMinProgram: function (openId, userInfoEp, phoneNumberEp) {
+    var _this = this
     apiOwn.loginByMinProgram({
-      appId: accountInfo.miniProgram.appId,
+      appId: _this.data.appId,
       merchId: storeage.getMerchId(),
       openId: openId,
-      phoneNumber: phoneNumber,
+      reffSign: storeage.getReffSign(),
+      userInfoEp: userInfoEp,
+      phoneNumberEp: phoneNumberEp
     }).then(function (res) {
       if (res.result == 1) {
+
         storeage.setOpenId(res.data.openId);
         storeage.setAccessToken(res.data.token);
         wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
           url: ownRequest.getReturnUrl()
         })
       } else {
-        toast.show({
-          title: res.message
-        })
+
+        if (res.code == 2405) {
+
+          _this.setData({
+            isAuthUserInfo: true
+          })
+
+        } else {
+
+          toast.show({
+            title: res.message
+          })
+        }
       }
     })
-
   },
   bindgetuserinfo: function (e) {
     var _this = this
-    if (_this.data.isAuthUserInfo) {
-      _this.login(storeage.getOpenId(), '', '', e.detail.iv, e.detail.encryptedData)
-    } else {
-      if (e.detail.userInfo) {
-        wx.login({
-          success(res) {
-            console.log(JSON.stringify(res))
-            if (res.code) {
-              _this.login('', '', res.code, e.detail.iv, e.detail.encryptedData)
-            } else {
 
-            }
-          },
-          fail() {
+    if (e.detail.userInfo) {
+      wx.login({
+        success(res) {
+          console.log('=>>login.code2:' + res.code)
+
+          if (res.code) {
+            _this.loginByMinProgram(storeage.getOpenId(), {
+              code: res.code,
+              iv: e.detail.iv,
+              encryptedData: e.detail.encryptedData
+            }, null)
+          } else {
 
           }
-        })
-      } else {
-        toast.show({
-          title: '只有允许授权才能进行微信登录，请再次点击登录按钮'
-        })
-      }
+        },
+        fail() {
+
+        }
+      })
+    } else {
+      toast.show({
+        title: '只有允许授权才能进行微信登录，请再次点击登录按钮'
+      })
     }
+
   },
   bindgetphonenumber: function (e) {
-    var _this = this;
-
-    console.log(e);
+    var _this = this
+    console.log(e)
     if (e.detail.errMsg == "getPhoneNumber:ok") {
-
-      apiOwn.wxPhoneNumber({
+      _this.loginByMinProgram(storeage.getOpenId(), null, {
         encryptedData: e.detail.encryptedData,
         iv: e.detail.iv,
         session_key: storeage.getSessionKey(),
-      }).then(function (res2) {
-        console.log(res2)
-
-        if (res2.result == 1) {
-          var d = res2.data
-          _this.login(storeage.getOpenId(), d.phoneNumber)
-        } else {
-          toast.show({
-            title: res2.message
-          })
-        }
       })
+
     } else {
       toast.show({
         title: '您点击了拒绝授权登录！'
       })
     }
+  },
+  clickToRefuse: function () {
+
+    wx.navigateBack({
+      delta: 1,
+    })
   }
 })

@@ -1,141 +1,147 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
   data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
 <view class="page-ct memberprom skeleton" wx:if="{{ pageIsReady }}">
-  <view class="bg-1 skeleton-rect">
-    <image class="bg-img"
-      src="http://file.17fanju.com/upload/membertheme/1/prom/bg_1_{{userInfo.memberLevel==0?'0':'1'}}.png?ts={{timespan}}">
-    </image>
-    <view class="section" wx:if="{{userInfo.memberLevel>0}}">
-      <view class="info">
-        <view class="avatarUrl">
-          <open-data type="userAvatarUrl"></open-data>
-        </view>
-        <view class="hello">
-          <view class="t1">尊敬的 <text class="memberTag">{{userInfo.memberTag}}</text>,您好!</view>
-          <view class="t2">[{{userInfo.memberExpireTip}}]</view>
+
+  <block wx:if="{{isOpenMemberRight}}">
+    <view class="bg-1 skeleton-rect">
+      <image class="bg-img"
+        src="http://file.17fanju.com/upload/membertheme/1/prom/bg_1_{{userInfo.memberLevel==0?'0':'1'}}.png?ts={{timespan}}">
+      </image>
+      <view class="section" wx:if="{{userInfo.memberLevel>0}}">
+        <view class="info">
+          <view class="avatarUrl">
+            <open-data type="userAvatarUrl"></open-data>
+          </view>
+          <view class="hello">
+            <view class="t1">尊敬的 <text class="memberTag">{{userInfo.memberTag}}</text>,您好!</view>
+            <view class="t2">[{{userInfo.memberExpireTip}}]</view>
+          </view>
         </view>
       </view>
     </view>
-  </view>
-  <view class="bg-2" style="height:{{userInfo.memberLevel==0?'847rpx':'650rpx'}};">
-    <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_2.png?ts={{timespan}}"></image>
+    <view class="bg-2" style="height:{{userInfo.memberLevel==0?'847rpx':'650rpx'}};">
+      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_2.png?ts={{timespan}}"></image>
 
-    <view class="section">
-      <view class="tui-table-view">
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="1" data-title="心晓智能健康监测">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_1.png?ts={{timespan}}"></image>
+      <view class="section">
+        <view class="tui-table-view">
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="1" data-title="心晓智能健康监测">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_1.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect"><text> 心晓智能
+                  健康监测</text></view>
+              <view class="tip skeleton-rect">AI科技为您护航</view>
             </view>
-            <view class="title skeleton-rect"><text> 心晓智能
-                健康监测</text></view>
-            <view class="tip skeleton-rect">AI科技为您护航</view>
           </view>
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="2" data-title="会员折扣">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_2.png?ts={{timespan}}"></image>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="2" data-title="会员折扣">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_2.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">会员折扣</view>
+              <view class="tip skeleton-rect">7.8折起</view>
             </view>
-            <view class="title skeleton-rect">会员折扣</view>
-            <view class="tip skeleton-rect">7.8折起</view>
           </view>
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="3" data-title="免费讲座">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_3.png?ts={{timespan}}"></image>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="3" data-title="免费讲座">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_3.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">免费讲座</view>
+              <view class="tip skeleton-rect">名医专场</view>
             </view>
-            <view class="title skeleton-rect">免费讲座</view>
-            <view class="tip skeleton-rect">名医专场</view>
           </view>
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="4" data-title="大额优惠券">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_4.png?ts={{timespan}}"></image>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="4" data-title="大额优惠券">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_4.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">大额优惠券</view>
+              <view class="tip skeleton-rect">同门槛，更省钱</view>
             </view>
-            <view class="title skeleton-rect">大额优惠券</view>
-            <view class="tip skeleton-rect">同门槛，更省钱</view>
           </view>
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="5" data-title="生日礼">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_5.png?ts={{timespan}}"></image>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="5" data-title="生日礼">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_5.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">生日礼</view>
+              <view class="tip skeleton-rect">专属礼遇</view>
             </view>
-            <view class="title skeleton-rect">生日礼</view>
-            <view class="tip skeleton-rect">专属礼遇</view>
           </view>
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="6" data-title="会员日">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_6.png?ts={{timespan}}"></image>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="6" data-title="会员日">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_6.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">会员日</view>
+              <view class="tip skeleton-rect">省钱有益</view>
             </view>
-            <view class="title skeleton-rect">会员日</view>
-            <view class="tip skeleton-rect">省钱有益</view>
           </view>
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="7" data-title="VIP客服">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_7.png?ts={{timespan}}"></image>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="7" data-title="VIP客服">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_7.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">VIP客服</view>
+              <view class="tip skeleton-rect">贴心服务</view>
             </view>
-            <view class="title skeleton-rect">VIP客服</view>
-            <view class="tip skeleton-rect">贴心服务</view>
-          </view>
 
-        </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="8" data-title="门店服务">
-          <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_8.png?ts={{timespan}}"></image>
+          </view>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="8" data-title="门店服务">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_8.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">门店服务</view>
+              <view class="tip skeleton-rect">专业安心</view>
             </view>
-            <view class="title skeleton-rect">门店服务</view>
-            <view class="tip skeleton-rect">专业安心</view>
+          </view>
+          <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="9" data-title="更多权益">
+            <view class="wrapper">
+              <view class="icon-box">
+                <image class="icon skeleton-circle"
+                  src="http://file.17fanju.com/upload/membertheme/1/prom/ng_9.png?ts={{timespan}}"></image>
+              </view>
+              <view class="title skeleton-rect">更多权益</view>
+              <view class="tip skeleton-rect">敬请期待</view>
+            </view>
           </view>
         </view>
-        <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="9" data-title="更多权益">
+        <view class="tui-btn-view" wx:if="{{userInfo.memberLevel==0}}">
           <view class="wrapper">
-            <view class="icon-box">
-              <image class="icon skeleton-circle"
-                src="http://file.17fanju.com/upload/membertheme/1/prom/ng_9.png?ts={{timespan}}"></image>
-            </view>
-            <view class="title skeleton-rect">更多权益</view>
-            <view class="tip skeleton-rect">敬请期待</view>
+            <image class="tui-btn-tip"
+              src="http://file.17fanju.com/upload/membertheme/1/prom/btn_tip1.png?ts={{timespan}}">
+            </image>
+            <button bindtap="clickToCenter" class='tui-btn-open btn-open skeleton-rect'>立即开通</button>
           </view>
         </view>
       </view>
-      <view class="tui-btn-view" wx:if="{{userInfo.memberLevel==0}}">
-        <view class="wrapper">
-          <image class="tui-btn-tip"
-            src="http://file.17fanju.com/upload/membertheme/1/prom/btn_tip1.png?ts={{timespan}}">
-          </image>
-          <button bindtap="clickToCenter" class='tui-btn-open btn-open skeleton-rect'>立即开通</button>
+    </view>
+    <view class="bg-3 skeleton-rect">
+      <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_3.png?ts={{timespan}}"></image>
+    </view>
+
+    <view class="bg-bottom" wx:if="{{isShowButtonBottom&&userInfo.memberLevel==0}}">
+      <view class="wrapper">
+        <button bindtap="clickToCenter" class='btn-open'>立即开通</button>
+        <view class="btn-tip">
+          <text class="tip1">*开通即代表同意</text>
+          <text class="tip2">《会员协议》</text>
         </view>
       </view>
     </view>
-  </view>
-  <view class="bg-3 skeleton-rect">
-    <image class="bg-img" src="http://file.17fanju.com/upload/membertheme/1/prom/bg_3.png?ts={{timespan}}"></image>
-  </view>
-
-  <view class="bg-bottom" wx:if="{{isShowButtonBottom&&userInfo.memberLevel==0}}">
-    <view class="wrapper">
-      <button bindtap="clickToCenter" class='btn-open'>立即开通</button>
-      <view class="btn-tip">
-        <text class="tip1">*开通即代表同意</text>
-        <text class="tip2">《会员协议》</text>
-      </view>
-    </view>
-  </view>
+  </block>
+  <block wx:else>
+    <view style="text-align: center;">暂时未开通，敬请期待</view>
+  </block>
 </view>

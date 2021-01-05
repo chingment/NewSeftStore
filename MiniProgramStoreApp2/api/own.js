@@ -16,7 +16,7 @@ function WxApiCode2Session(dataParams) {
   return lumos.postJson({
     url: config.apiUrl.ownWxApiCode2Session,
     dataParams: dataParams,
-    isShowLoading:false
+    isShowLoading: false
   })
 }
 
@@ -32,13 +32,22 @@ function wxConfig(dataParams) {
   return lumos.postJson({
     url: config.apiUrl.ownConfig,
     dataParams: dataParams,
-    isShowLoading:false
+    isShowLoading: false
+  })
+}
+
+function bindPhoneNumberByWx(dataParams) {
+
+  return lumos.postJson({
+    url: config.apiUrl.ownBindPhoneNumberByWx,
+    dataParams: dataParams
   })
 }
 
 module.exports = {
   loginByMinProgram: loginByMinProgram,
   WxApiCode2Session: WxApiCode2Session,
-  wxConfig:wxConfig,
-  wxPhoneNumber: wxPhoneNumber
+  wxConfig: wxConfig,
+  wxPhoneNumber: wxPhoneNumber,
+  bindPhoneNumberByWx: bindPhoneNumberByWx
 }

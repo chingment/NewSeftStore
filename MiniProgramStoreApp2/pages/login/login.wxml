@@ -6,7 +6,18 @@
     <image class="img" src='http://file.17fanju.com/upload/logo/logo_{{appId}}.png'></image>
   </view>
 
-  <!-- <button class="btn bg-main btn-login" open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo">微信一键登录</button> -->
-  <button class="btn bg-main btn-login" open-type="getPhoneNumber" bindgetphonenumber="bindgetphonenumber">微信授权登录</button>
-   
+  <view class="t">
+    <view class="t1">申请获得以下权限</view>
+    <view class="t2">
+      <text class="dot">●</text>
+      <text class="tip">获得你的公开信息（昵称、头像等）和手机号信息，仅用于您登陆和使用平台相关功能，我们将对您的个人信息进行严格保密</text>
+    </view>
+  </view>
+  <button class="btn bg-main btn-login" lang='zh_CN' open-type="getUserInfo" wx:if="{{!isAuthUserInfo}}"
+    bindgetuserinfo="bindgetuserinfo">微信一键登录</button>
+  <button class="btn bg-main btn-login" open-type="getPhoneNumber" wx:if="{{isAuthUserInfo}}" bindgetphonenumber="bindgetphonenumber">还差一点点，授权手机号</button> 
+
+  <view style="text-align:center" >
+    <text class="btn-refuse" bindtap="clickToRefuse">残忍拒绝</text>
+  </view>
 </view>

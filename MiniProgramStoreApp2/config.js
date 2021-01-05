@@ -18,11 +18,12 @@ var config = {
     ownWxApiCode2Session: `${host}/Own/WxApiCode2Session`,
     ownConfig: `${host}/Own/Config`,
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
+    ownBindPhoneNumberByWx: `${host}/Own/BindPhoneNumberByWx`,
     globalDataSet: `${host}/Global/DataSet`,
     globalMsgTips: `${host}/Global/MsgTips`,
     indexPageData: `${host}/Index/PageData`,
     indexSugProducts: `${host}/Index/SugProducts`,
-    productKindPageData:`${host}/ProductKind/PageData`,
+    productKindPageData: `${host}/ProductKind/PageData`,
     cartOperate: `${host}/Cart/Operate`,
     cartPageData: `${host}/Cart/PageData`,
     cartGetCartData: `${host}/Cart/GetCartData`,
@@ -33,6 +34,7 @@ var config = {
     deliveryAddressEdit: `${host}/DeliveryAddress/Edit`,
     deliveryAddressMy: `${host}/DeliveryAddress/My`,
     couponMy: `${host}/Coupon/My`,
+    couponDetails: `${host}/Coupon/Details`,
     couponRevCenterSt: `${host}/Coupon/RevCenterSt`,
     couponReceive: `${host}/Coupon/Receive`,
     storeList: `${host}/Store/List`,
@@ -53,6 +55,10 @@ var config = {
     memberGetPromSt: `${host}/Member/GetPromSt`,
     memberGetRightDescSt: `${host}/Member/GetRightDescSt`,
     saleOutletList: `${host}/SaleOutlet/List`,
+    selfPickAddressList: `${host}/SelfPickAddress/List`,
+    serviceFunScanCodeResult: `${host}/ServiceFun/ScanCodeResult`,
+    smCfSelfTakeOrderCfTake: `${host}/SmCfSelfTakeOrder/CfTake`,
+    smCfSelfTakeOrderDetails: `${host}/SmCfSelfTakeOrder/Details`,
   }
 
 };

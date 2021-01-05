@@ -17,14 +17,15 @@ Page({
     skeletonBgcolor: '#FFF',
     skeletonData,
     pageIsReady: false,
-    tabShopModeByMall: 0,
     tabShopModeByMachine: 1,
+    curSelfPickAddressBlockIndex: -1,
+    curBookTimeBlockIndex: -1,
     storeId: undefined,
     orderIds: [],
     blocks: [],
-    couponIdsByShop: [],
-    couponIdByRent: '',
-    couponIdByDeposit: '',
+    couponIdsByShop: null,
+    couponIdByRent: null,
+    couponIdByDeposit: null,
     payOption: {
       title: '支付方式',
       options: []
@@ -33,7 +34,12 @@ Page({
     booktimeDialog: {
       isShow: false
     },
-    booktimeSelectBlockIndex: -1,
+    selfPickAddressDialog: {
+      isShow: false,
+      dataS: {
+        curSelfPickAddressId: ''
+      }
+    },
     action: '',
     saleOutletId: '',
     shopMethod: 1
@@ -50,28 +56,26 @@ Page({
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
     var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
-    console.log('orderIds:' + _orderIds)
+    var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
+
 
     var orderIds = []
     if (_orderIds != null) {
       var arr_order = _orderIds.split(',')
-
       for (let i = 0; i < arr_order.length; i++) {
         orderIds.push(arr_order[i])
       }
-
-      console.log("orderIds:" + JSON.stringify(orderIds))
     }
 
-    var productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
     _this.setData({
       storeId: ownRequest.getCurrentStoreId(),
       orderIds: orderIds,
-      productSkus: productSkus,
+      productSkus: _productSkus,
       action: _action,
       saleOutletId: _saleOutletId,
       shopMethod: _shopMethod
     })
+
     _this.buildPayOptions()
     _this.getConfirmData()
   },
@@ -82,8 +86,6 @@ Page({
   onShow: function () {
     var _this = this
     app.globalData.skeletonPage = _this
-    //_this.getConfirmData()
-
   },
   onHide: function () {
 
@@ -99,17 +101,6 @@ Page({
   },
   onShareAppMessage: function () {
 
-  },
-  booktimeSelect: function (e) {
-    console.log('booktimeSelect')
-    var _this = this
-    var index = e.currentTarget.dataset.replyIndex
-    _this.setData({
-      booktimeSelectBlockIndex: index,
-      booktimeDialog: {
-        isShow: true
-      }
-    })
   },
   deliveryAddressSelect: function (e) {
     var _this = this
@@ -168,7 +159,7 @@ Page({
       return
     }
 
-    var tabShopModeByMall = _this.data.tabShopModeByMall
+
 
     var blocks = []
     var _blocks = _this.data.blocks
@@ -189,74 +180,70 @@ Page({
       var _delivery = _blocks[i].delivery
       var _selfTake = _blocks[i].selfTake
 
-      var delivery = null
-      var selfTake = null
-      var bookTime = null
-
       if (_blocks[i].receiveMode == 1) {
-        if (util.isEmptyOrNull(_delivery.phoneNumber)) {
+        if (util.isEmptyOrNull(_delivery.contact.id)) {
           toast.show({
             title: '请选择快寄地址'
           })
           return
         }
-        delivery = {
-          id: _delivery.id,
-          consignee: _delivery.consignee,
-          phoneNumber: _delivery.phoneNumber,
-          areaName: _delivery.areaName,
-          areaCode: _delivery.areaCode,
-          address: _delivery.address
-        }
       } else if (_blocks[i].receiveMode == 2) {
 
-        if (util.isEmptyOrNull(_blocks[i].bookTime.value)) {
+        if (util.isEmptyOrNull(_selfTake.mark.id)) {
+          toast.show({
+            title: '请选择自提地址'
+          })
+          return
+        }
+
+        if (util.isEmptyOrNull(_selfTake.bookTime.value)) {
           toast.show({
             title: '请选择预约时间'
           })
           return
         }
 
-        bookTime = {
-          type: _blocks[i].bookTime.type,
-          value: _blocks[i].bookTime.value
+        if (util.isEmptyOrNull(_selfTake.contact.id)) {
+          toast.show({
+            title: '请选择联系人'
+          })
+          return
         }
 
-        selfTake = {
-          storeName: _selfTake.storeName,
-          storeAddress: _selfTake.storeAddress,
-          areaCode: _selfTake.areaCode,
-          address: _selfTake.address
+      } else if (_blocks[i].receiveMode == 4) {
+
+        if (util.isEmptyOrNull(_selfTake.mark.id)) {
+          toast.show({
+            title: '请选择自提地址'
+          })
+          return
         }
-      } else if (_blocks[i].receiveMode == 3) {
-        selfTake = {
-          storeName: _selfTake.storeName,
-          storeAddress: _selfTake.storeAddress,
-          areaCode: _selfTake.areaCode,
-          address: _selfTake.address
-        }
+
+        // if (util.isEmptyOrNull(_selfTake.contact.id)) {
+        //   toast.show({
+        //     title: '请选择联系人'
+        //   })
+        //   return
+        // }
+
       }
-
-
 
       blocks.push({
         shopMode: _blocks[i].shopMode,
         receiveMode: _blocks[i].receiveMode,
-        delivery: delivery,
-        selfTake: selfTake,
-        bookTime: bookTime,
+        delivery: _blocks[i].delivery,
+        selfTake: _blocks[i].selfTake,
         skus: skus
       })
 
     }
 
-    if (_this.data.orderIds == undefined || _this.data.orderIds == null || _this.data.orderIds.length == 0) {
-
-
+    if (util.isEmptyOrNull(_this.data.orderIds)) {
       apiOrder.reserve({
         storeId: _this.data.storeId,
         blocks: blocks,
         source: 3,
+        reffSign: storeage.getReffSign(),
         saleOutletId: _this.data.saleOutletId,
         couponIdsByShop: _this.data.couponIdsByShop,
         couponIdByDeposit: _this.data.couponIdByDeposit,
@@ -323,7 +310,7 @@ Page({
 
         var d = res.data
 
-        if (d.code == '1040') {
+        if (res.code == '1040') {
           wx.redirectTo({
             url: '/pages/operate/operate?id=' + d.payTransId + '&type=1&caller=1&action=' + data.action
           })
@@ -406,22 +393,25 @@ Page({
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
-        var blocks = d.blocks
-        var tabShopModeByMall = 0
-        for (var i = 0; i < blocks.length; i++) {
-          if (blocks[i].shopMode == 1) {
-            if (blocks[i].tabMode == 1 || blocks[i].tabMode == 3) {
-              tabShopModeByMall = 0
-            } else if (blocks[i].tabMode == 2 || blocks[i].tabMode == 3) {
-              tabShopModeByMall = 1
-            }
-          }
+
+        var couponIdsByShop = []
+        if (d.couponByShop != null) {
+          couponIdsByShop = d.couponByShop.selectedCouponIds
         }
 
-        console.log("tabShopModeByMall:" + tabShopModeByMall)
+        var couponIdByRent = ''
+        if (d.couponByRent != null) {
+          if (d.couponByRent.selectedCouponIds != null && d.couponByRent.selectedCouponIds.length > 0)
+            couponIdByRent = d.couponByRent.selectedCouponIds[0]
+        }
+
+        var couponIdByDeposit = ''
+        if (d.couponByDeposit != null) {
+          if (d.couponByDeposit.selectedCouponIds != null && d.couponByDeposit.selectedCouponIds.length > 0)
+            couponIdByDeposit = d.couponByDeposit.selectedCouponIds[0]
+        }
 
         _this.setData({
-          tabShopModeByMall: tabShopModeByMall,
           blocks: d.blocks,
           subtotalItems: d.subtotalItems,
           actualAmount: d.actualAmount,
@@ -429,9 +419,23 @@ Page({
           couponByShop: d.couponByShop,
           couponByRent: d.couponByRent,
           couponByDeposit: d.couponByDeposit,
+          couponIdsByShop: couponIdsByShop,
+          couponIdByRent: couponIdByRent,
+          couponIdByDeposit: couponIdByDeposit,
           shopMethod: d.shopMethod,
           pageIsReady: true
         })
+      }
+    })
+  },
+  clickToOpenBooktimeDialog: function (e) {
+    console.log('booktimeSelect')
+    var _this = this
+    var blockIndex = e.currentTarget.dataset.replyBlockindex
+    _this.setData({
+      curBookTimeBlockIndex: blockIndex,
+      booktimeDialog: {
+        isShow: true
       }
     })
   },
@@ -445,11 +449,45 @@ Page({
       type: d.type
     }
 
-    _this.data.blocks[_this.data.booktimeSelectBlockIndex].bookTime = booktime
+    console.log("booktime:" + JSON.stringify(booktime))
+    _this.data.blocks[_this.data.curBookTimeBlockIndex].selfTake.bookTime = booktime
 
     _this.setData({
       blocks: _this.data.blocks
     })
+  },
+  clickToOpenSelfPickAddressDialog: function (e) {
+    var _this = this
+    var blockIndex = e.currentTarget.dataset.replyBlockindex
+
+    _this.setData({
+      curSelfPickAddressBlockIndex: blockIndex
+    })
+
+    var selfPickAddressDialog = _this.data.selfPickAddressDialog
+    selfPickAddressDialog.isShow = true
+    selfPickAddressDialog.dataS.curSelfPickAddressId = _this.data.blocks[blockIndex].selfTake.mark.id
+    _this.setData({
+      selfPickAddressDialog: selfPickAddressDialog
+    })
+  },
+  selectSelfPickAddressItem: function (e) {
+    var _this = this
+    var selfPickAddress = e.detail.selfPickAddress
+    console.log("selfPickAddress:" + JSON.stringify(selfPickAddress))
+
+    var blockIndex = _this.data.curSelfPickAddressBlockIndex
+
+    _this.data.blocks[blockIndex].selfTake.mark.id = selfPickAddress.id
+    _this.data.blocks[blockIndex].selfTake.mark.name = selfPickAddress.name
+    _this.data.blocks[blockIndex].selfTake.mark.address = selfPickAddress.contactAddress
+    _this.data.blocks[blockIndex].selfTake.mark.areaCode = selfPickAddress.areaCode
+    _this.data.blocks[blockIndex].selfTake.mark.areaName = selfPickAddress.areaName
+
+    _this.setData({
+      blocks: _this.data.blocks
+    })
+
   }
 
 })

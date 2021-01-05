@@ -9,7 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tag:'deliveryaddress',
+    tag: 'deliveryaddress',
     operate: 0,
     orderBlockIndex: 0,
     list: []
@@ -22,23 +22,27 @@ Page({
     var _this = this
     var operate = parseInt(options.operate)
     var orderBlockIndex = parseInt(options.orderBlockIndex)
-    var currentSelectId = typeof options.currentSelectId =="undefined"?"":options.currentSelectId
+    var currentSelectId = typeof options.currentSelectId == "undefined" ? "" : options.currentSelectId
 
-    
+
     var title = ""
     switch (operate) {
       case 1:
-        title = "地址管理";
+        title = "我的联系方式";
         break;
       case 2:
-        title = "选择地址";
+        title = "选择联系方式";
         break;
     }
     wx.setNavigationBarTitle({
       title: title,
     })
 
-    _this.setData({ operate: operate, orderBlockIndex: orderBlockIndex,currentSelectId:currentSelectId })
+    _this.setData({
+      operate: operate,
+      orderBlockIndex: orderBlockIndex,
+      currentSelectId: currentSelectId
+    })
 
   },
 
@@ -56,9 +60,9 @@ Page({
     var _this = this
     apiDeliveryaddress.my({}).then(function (res) {
       if (res.result == 1) {
-      _this.setData({
-        list: res.data
-      })
+        _this.setData({
+          list: res.data
+        })
       }
     })
   },
@@ -116,14 +120,33 @@ Page({
     if (_this.data.operate == 2) {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
-      if(prevPage.data.tag=='orderconfirm')
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.id = deliveryAddress.id
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.consignee = deliveryAddress.consignee
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.phoneNumber = deliveryAddress.phoneNumber
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.address = deliveryAddress.address
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.areaName = deliveryAddress.areaName
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.areaCode = deliveryAddress.areaCode
-      prevPage.data.blocks[_this.data.orderBlockIndex].delivery.isDefault = deliveryAddress.isDefault
+      if (prevPage.data.tag == 'orderconfirm')
+
+        if (typeof prevPage.data.blocks[_this.data.orderBlockIndex].delivery != 'undefined') {
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.id = deliveryAddress.id
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.consignee = deliveryAddress.consignee
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.phoneNumber = deliveryAddress.phoneNumber
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.address = deliveryAddress.address
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.areaName = deliveryAddress.areaName
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.areaCode = deliveryAddress.areaCode
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.markName = deliveryAddress.markName
+          prevPage.data.blocks[_this.data.orderBlockIndex].delivery.contact.isDefault = deliveryAddress.isDefault
+  
+        }
+
+      if (typeof prevPage.data.blocks[_this.data.orderBlockIndex].selfTake != 'undefined') {
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.id = deliveryAddress.id
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.consignee = deliveryAddress.consignee
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.phoneNumber = deliveryAddress.phoneNumber
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.address = deliveryAddress.address
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.areaName = deliveryAddress.areaName
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.areaCode = deliveryAddress.areaCode
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.markName = deliveryAddress.markName
+        prevPage.data.blocks[_this.data.orderBlockIndex].selfTake.contact.isDefault = deliveryAddress.isDefault
+      }
+
+
+
       prevPage.setData({
         blocks: prevPage.data.blocks
       })
