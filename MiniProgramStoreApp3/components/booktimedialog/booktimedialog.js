@@ -85,9 +85,11 @@ Component({
 
           var curDateAreaIndex = _this.data.curDateAreaIndex
           for (var i = 0; i < dateArea.length; i++) {
-            if (value.indexOf(dateArea[i].value) > -1) {
-              curDateAreaIndex = i
-              break
+            if (typeof value != 'undefined' && value != null) {
+              if (value.indexOf(dateArea[i].value) > -1) {
+                curDateAreaIndex = i
+                break
+              }
             }
           }
 
@@ -95,9 +97,11 @@ Component({
           var curDateTimeArea = dateArea[curDateAreaIndex].timeArea
 
           for (var i = 0; i < curDateTimeArea.length; i++) {
-            if (value.indexOf(curDateTimeArea[i].value) > -1) {
-              curTimeAreaIndex = i
-              break
+            if (typeof value != 'undefined' && value != null) {
+              if (value.indexOf(curDateTimeArea[i].value) > -1) {
+                curTimeAreaIndex = i
+                break
+              }
             }
           }
 
@@ -148,9 +152,11 @@ Component({
       var curTimeAreaIndex = _this.data.curTimeAreaIndex
 
       for (var i = 0; i < curTimeArea.length; i++) {
-        if (lastTimeArea.value.indexOf(curTimeArea[i].value) > -1) {
-          curTimeAreaIndex = i
-          break
+        if (typeof lastTimeArea.value != 'undefined') {
+          if (lastTimeArea.value.indexOf(curTimeArea[i].value) > -1) {
+            curTimeAreaIndex = i
+            break
+          }
         }
       }
 

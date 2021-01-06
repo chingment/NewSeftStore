@@ -368,16 +368,19 @@ namespace LocalS.Service.Api.StoreApp
                 memberLevel = clientUser.MemberLevel;
             }
 
-            BuildOrderService buildOrderService = new BuildOrderService(store.MerchId, store.StoreId, memberLevel);
-
-            foreach (var productSku in rop.ProductSkus)
+            if (store != null)
             {
-                string[] sellChannelRefIds = store.GetSellChannelRefIds(productSku.ShopMode);
+                BuildOrderService buildOrderService = new BuildOrderService(store.MerchId, store.StoreId, memberLevel);
 
-                buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
+                foreach (var productSku in rop.ProductSkus)
+                {
+                    string[] sellChannelRefIds = store.GetSellChannelRefIds(productSku.ShopMode);
+
+                    buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
+                }
+
+                rop.ProductSkus = buildOrderService.GetSkus();
             }
-
-            rop.ProductSkus = buildOrderService.GetSkus();
 
             foreach (var item in list)
             {

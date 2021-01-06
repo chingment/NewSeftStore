@@ -1060,8 +1060,10 @@ namespace LocalS.Service.Api.StoreApp
                 //dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "18:00", Tip = "", Status = 1, Value = "17:30", Type = 1 });
 
 
-
-                ret.DateArea.Add(dateArea);
+                if (dateArea.TimeArea.Count > 0)
+                {
+                    ret.DateArea.Add(dateArea);
+                }
 
             }
 
