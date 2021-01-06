@@ -1,4 +1,5 @@
-﻿using LocalS.Entity;
+﻿using LocalS.BLL.Biz;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace LocalS.Service.Api.StoreApp
     {
         public OrderBlockModel()
         {
-            this.Skus = new List<OrderConfirmProductSkuModel>();
+            this.Skus = new List<BuildSku>();
             this.Delivery = new DeliveryModel();
             this.SelfTake = new SelfTakeModel();
         }
@@ -35,7 +36,7 @@ namespace LocalS.Service.Api.StoreApp
         /// 当当ReceiveMode 为 SelfTake 选择该方式
         /// </summary>
         public SelfTakeModel SelfTake { get; set; }
-        public List<OrderConfirmProductSkuModel> Skus { get; set; }
+        public List<BuildSku> Skus { get; set; }
     }
 
     public enum E_TabMode

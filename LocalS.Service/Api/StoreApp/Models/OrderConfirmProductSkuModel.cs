@@ -30,9 +30,7 @@ namespace LocalS.Service.Api.StoreApp
         public string RentTermUnitText { get; set; }
         public decimal RentAmount { get; set; }
         public decimal DepositAmount{ get; set; }
-
         public E_SupReceiveMode SupReceiveMode { get; set; }
-
         public E_ReceiveMode ReceiveMode { get; set; }
     }
 }

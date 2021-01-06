@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class CouponService : BaseService
     {
-        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
+        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<BuildSku> productSkus)
         {
             if (useAreaType == E_Coupon_UseAreaType.All)
             {
@@ -89,7 +89,7 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-        public bool GetCanSelected(E_OrderShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<OrderConfirmProductSkuModel> productSkus)
+        public bool GetCanSelected(E_OrderShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<BuildSku> productSkus)
         {
 
             if (shopMethod == E_OrderShopMethod.Unknow)
@@ -132,7 +132,7 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-        public OrderConfirmCouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<OrderConfirmProductSkuModel> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
+        public OrderConfirmCouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
         {
             var model = new OrderConfirmCouponModel();
 
@@ -360,93 +360,28 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rop.StoreId);
 
+            int memberLevel = 0;
+
             var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            if (clientUser != null)
+            {
+                memberLevel = clientUser.MemberLevel;
+            }
+
+            BuildOrderService buildOrderService = new BuildOrderService(store.MerchId, store.StoreId, memberLevel);
 
             foreach (var productSku in rop.ProductSkus)
             {
-                if (productSku.ShopMethod == E_OrderShopMethod.Shop)
-                {
-                    #region Shop
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
-                    if (r_productSku != null)
-                    {
-                        productSku.Name = r_productSku.Name;
-                        productSku.MainImgUrl = r_productSku.MainImgUrl;
-                        productSku.ProductId = r_productSku.ProductId;
-                        productSku.KindId3 = r_productSku.KindId3;
-                        productSku.RentTermUnit = E_RentTermUnit.Month;
-                        productSku.RentTermUnitText = "月";
-                        productSku.RentTermValue = 1;
-                        productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
-                        productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
-                        productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                string[] sellChannelRefIds = store.GetSellChannelRefIds(productSku.ShopMode);
 
-                        LogUtil.Info("clientUser.MemberLeve:" + clientUser.MemberLevel);
-                        //切换会员价
-                        if (clientUser.MemberLevel > 0)
-                        {
-                            var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
-                            if (memberProductSkuSt != null)
-                            {
-                                productSku.SalePrice = memberProductSkuSt.MemberPrice;
-                                LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
-                            }
-                        }
-                    }
-
-                    productSku.OriginalPrice = r_productSku.Stocks[0].SalePrice;
-                    productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
-                    productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
-
-                    #endregion
-                }
-                else if (productSku.ShopMethod == E_OrderShopMethod.Rent)
-                {
-                    #region Rent
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(productSku.ShopMode), productSku.Id);
-                    if (r_productSku != null)
-                    {
-                        productSku.Name = r_productSku.Name;
-                        productSku.MainImgUrl = r_productSku.MainImgUrl;
-                        productSku.ProductId = r_productSku.ProductId;
-                        productSku.KindId3 = r_productSku.KindId3;
-                        productSku.RentTermUnit = E_RentTermUnit.Month;
-                        productSku.RentTermUnitText = "月";
-                        productSku.RentTermValue = 1;
-                        productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
-                        productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
-                        productSku.SalePrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
-                        productSku.OriginalPrice = r_productSku.Stocks[0].RentMhPrice + r_productSku.Stocks[0].DepositPrice;
-                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
-                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
-                    }
-
-                    #endregion
-                }
-                else if (productSku.ShopMethod == E_OrderShopMethod.MemberFee)
-                {
-                    #region 
-                    var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == store.MerchId && m.Id == productSku.Id).FirstOrDefault();
-                    if (memberFeeSt != null)
-                    {
-                        productSku.Name = memberFeeSt.Name;
-                        productSku.MainImgUrl = memberFeeSt.MainImgUrl;
-                        productSku.SalePrice = memberFeeSt.FeeSaleValue;
-                        productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
-                        productSku.SaleAmount = productSku.Quantity * productSku.SalePrice;
-                        productSku.OriginalAmount = productSku.Quantity * productSku.OriginalPrice;
-                        productSku.ProductId = "";
-                        productSku.KindId3 = 0;
-                    }
-
-                    #endregion
-                }
+                buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
             }
+
+            rop.ProductSkus = buildOrderService.GetSkus();
 
             foreach (var item in list)
             {
                 var couponModel = CovertCouponModel(item.Id, item.Sn, item.Name, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.ValidStartTime, item.ValidEndTime);
-
 
                 if (rop.CouponIds != null)
                 {
@@ -455,7 +390,6 @@ namespace LocalS.Service.Api.StoreApp
                         couponModel.IsSelected = true;
                     }
                 }
-
 
                 decimal cal_sum_amount = 0;
                 if (item.UseAreaType == E_Coupon_UseAreaType.All)
@@ -539,7 +473,7 @@ namespace LocalS.Service.Api.StoreApp
             ret.Coupons = ret.Coupons.OrderByDescending(m => m.CanSelected).ToList();
 
 
-           result = new CustomJsonResult<RetCouponMy>(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult<RetCouponMy>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }

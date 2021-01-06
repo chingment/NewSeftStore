@@ -33,15 +33,17 @@ page{
 }
 
 .its-odcskus .it-l {
-  display: inline-block;
+  display: flex;
   overflow: hidden;
   text-align: right;
+  width: 180rpx;
 }
 
 .its-odcskus .it-l .imgUrl {
   align-items: center;
   display: flex;
   margin-right:10rpx;
+  position: absolute;
 }
 
 .its-odcskus .it-l .imgUrl .img {

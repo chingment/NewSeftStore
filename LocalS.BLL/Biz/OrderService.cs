@@ -405,6 +405,7 @@ namespace LocalS.BLL.Biz
             return couponAmount;
         }
 
+
         private static readonly object lock_Reserve = new object();
         public CustomJsonResult<RetOrderReserve> Reserve(string operater, RopOrderReserve rop)
         {
@@ -437,7 +438,7 @@ namespace LocalS.BLL.Biz
                     string clientPhoneNumber = null;
                     var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
 
-                    MemberLevelSt clientMemberLevel = null;
+                    int clientMemberLevel = 0;
 
                     if (clientUser != null)
                     {
@@ -446,402 +447,298 @@ namespace LocalS.BLL.Biz
                             clientUserName = clientUser.NickName;
                         }
                         clientPhoneNumber = clientUser.PhoneNumber;
-                        clientMemberLevel = CurrentDb.MemberLevelSt.Where(m => m.MerchId == store.MerchId && m.Level == clientUser.MemberLevel).FirstOrDefault();
+                        clientMemberLevel = clientUser.MemberLevel;
                     }
-
-
 
                     RetOrderReserve ret = new RetOrderReserve();
 
-                    List<BuildOrder.ProductSku> buildOrderSkus = new List<BuildOrder.ProductSku>();
+                    List<BuildSku> buildOrderSkus = new List<BuildSku>();
 
-                    decimal couponAmountByDeposit = 0;
-                    E_Coupon_UseAreaType couponUseAreaTypeByDeposit = E_Coupon_UseAreaType.Unknow;
-                    List<UseAreaValueModel> couponUseAreaValueByDeposit = null;
-
-                    decimal couponAmountByRent = 0;
-                    E_Coupon_UseAreaType couponUseAreaTypeByRent = E_Coupon_UseAreaType.Unknow;
-                    List<UseAreaValueModel> couponUseAreaValueByRent = null;
-
-                    if (!string.IsNullOrEmpty(rop.CouponIdByDeposit))
-                    {
-                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByDeposit).FirstOrDefault();
-                        if (d_clientCoupon != null)
-                        {
-                            if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
-                            {
-                                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
-                            }
-
-
-                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                            d_clientCoupon.Mender = operater;
-                            d_clientCoupon.MendTime = DateTime.Now;
-
-
-                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                            if (d_coupon != null)
-                            {
-                                if (d_coupon.FaceType == E_Coupon_FaceType.DepositVoucher)
-                                {
-                                    couponAmountByDeposit = d_coupon.FaceValue;
-                                    couponUseAreaTypeByDeposit = d_coupon.UseAreaType;
-                                    couponUseAreaValueByDeposit = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
-                                }
-                            }
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(rop.CouponIdByRent))
-                    {
-                        var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
-                        if (d_clientCoupon != null)
-                        {
-                            if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
-                            {
-                                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
-                            }
-
-                            d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                            d_clientCoupon.Mender = operater;
-                            d_clientCoupon.MendTime = DateTime.Now;
-
-                            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                            if (d_coupon != null)
-                            {
-                                if (d_coupon.FaceType == E_Coupon_FaceType.RentVoucher)
-                                {
-                                    couponAmountByRent = d_coupon.FaceValue;
-                                    couponUseAreaTypeByRent = d_coupon.UseAreaType;
-                                    couponUseAreaValueByRent = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
-                                }
-                            }
-                        }
-                    }
-
-
-                    #region 检查可售商品信息是否符合实际环境
-                    List<string> warn_tips = new List<string>();
+                    BuildOrderService buildOrderService = new BuildOrderService(store.MerchId, store.StoreId, clientMemberLevel);
 
                     foreach (var block in rop.Blocks)
                     {
-                        var skus = block.Skus;
-
-                        foreach (var sku in skus)
+                        foreach (var productSku in block.Skus)
                         {
-                            if (rop.ShopMethod == E_OrderShopMethod.Shop)
+
+                            string[] sellChannelRefIds = new string[] { };
+
+                            if (productSku.ShopMode == E_SellChannelRefType.Mall)
                             {
-                                #region Shop
-
-                                string[] sellChannelRefIds = new string[] { };
-
-                                if (sku.ShopMode == E_SellChannelRefType.Mall)
+                                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                            }
+                            else if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                            {
+                                if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                                 {
-                                    sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
-                                }
-                                else if (sku.ShopMode == E_SellChannelRefType.Machine)
-                                {
-                                    if (sku.SellChannelRefIds == null || sku.SellChannelRefIds.Length == 0)
-                                    {
-                                        sellChannelRefIds = store.SellMachineIds;
-                                    }
-                                    else
-                                    {
-                                        sellChannelRefIds = sku.SellChannelRefIds;
-                                    }
-                                }
-
-                                var r_sku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, sku.Id);
-
-                                if (r_sku == null)
-                                {
-                                    warn_tips.Add(string.Format("{0}商品信息不存在", r_sku.Name));
+                                    sellChannelRefIds = store.SellMachineIds;
                                 }
                                 else
                                 {
-                                    if (r_sku.Stocks.Count == 0)
-                                    {
-                                        warn_tips.Add(string.Format("{0}商品库存信息不存在", r_sku.Name));
-                                    }
-                                    else
-                                    {
-                                        var sellQuantity = r_sku.Stocks.Sum(m => m.SellQuantity);
-
-                                        Console.WriteLine("sellQuantity：" + sellQuantity);
-
-                                        if (r_sku.Stocks[0].IsOffSell)
-                                        {
-                                            warn_tips.Add(string.Format("{0}已经下架", r_sku.Name));
-                                        }
-                                        else
-                                        {
-                                            if (sellQuantity < sku.Quantity)
-                                            {
-                                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", r_sku.Name, sellQuantity));
-                                            }
-                                        }
-                                    }
-
-                                    var buildOrderSku = new BuildOrder.ProductSku();
-                                    buildOrderSku.Id = sku.Id;
-                                    buildOrderSku.ProductId = r_sku.ProductId;
-                                    buildOrderSku.ReceiveMode = block.ReceiveMode;
-                                    buildOrderSku.Name = r_sku.Name;
-                                    buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
-                                    buildOrderSku.BarCode = r_sku.BarCode;
-                                    buildOrderSku.CumCode = r_sku.CumCode;
-                                    buildOrderSku.SpecDes = r_sku.SpecDes;
-                                    buildOrderSku.Producer = r_sku.Producer;
-                                    buildOrderSku.CartId = sku.CartId;
-                                    buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
-                                    buildOrderSku.KindId1 = r_sku.KindId1;
-                                    buildOrderSku.KindId2 = r_sku.KindId2;
-                                    buildOrderSku.KindId3 = r_sku.KindId3;
-                                    buildOrderSku.Quantity = sku.Quantity;
-                                    buildOrderSku.ShopMode = sku.ShopMode;
-                                    buildOrderSku.Stocks = r_sku.Stocks;
-
-                                    decimal salePrice = r_sku.Stocks[0].SalePrice;
-
-                                    decimal originalPrice = salePrice;
-
-                                    //切换特定商品会员价
-                                    if (clientMemberLevel != null)
-                                    {
-                                        var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == sku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
-                                        if (memberProductSkuSt != null)
-                                        {
-                                            salePrice = memberProductSkuSt.MemberPrice;
-                                            LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
-                                        }
-                                    }
-
-                                    buildOrderSku.SalePrice = salePrice;
-                                    buildOrderSku.SaleAmount = salePrice * sku.Quantity;
-                                    buildOrderSku.OriginalPrice = originalPrice;
-                                    buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
-                                    buildOrderSkus.Add(buildOrderSku);
+                                    sellChannelRefIds = productSku.SellChannelRefIds;
                                 }
-
-                                #endregion
                             }
-                            if (rop.ShopMethod == E_OrderShopMethod.Rent)
-                            {
-                                #region Rent
 
-                                var r_sku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, new string[] { SellChannelStock.MallSellChannelRefId }, sku.Id);
-
-                                if (r_sku == null)
-                                {
-                                    warn_tips.Add(string.Format("{0}商品信息不存在", r_sku.Name));
-                                }
-                                else
-                                {
-                                    if (r_sku.Stocks.Count == 0)
-                                    {
-                                        warn_tips.Add(string.Format("{0}商品库存信息不存在", r_sku.Name));
-                                    }
-                                    else
-                                    {
-                                        var sellQuantity = r_sku.Stocks.Sum(m => m.SellQuantity);
-
-                                        Console.WriteLine("sellQuantity：" + sellQuantity);
-
-                                        if (r_sku.Stocks[0].IsOffSell)
-                                        {
-                                            warn_tips.Add(string.Format("{0}已经下架", r_sku.Name));
-                                        }
-                                        else if (!r_sku.Stocks[0].IsUseRent)
-                                        {
-                                            warn_tips.Add(string.Format("{0}不支持租用", r_sku.Name));
-                                        }
-                                        else
-                                        {
-                                            if (sellQuantity < sku.Quantity)
-                                            {
-                                                warn_tips.Add(string.Format("{0}的可销售数量为{1}个", r_sku.Name, sellQuantity));
-                                            }
-                                        }
-                                    }
-
-                                    var buildOrderSku = new BuildOrder.ProductSku();
-                                    buildOrderSku.Id = sku.Id;
-                                    buildOrderSku.ProductId = r_sku.ProductId;
-                                    buildOrderSku.ReceiveMode = block.ReceiveMode;
-                                    buildOrderSku.Name = r_sku.Name;
-                                    buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
-                                    buildOrderSku.BarCode = r_sku.BarCode;
-                                    buildOrderSku.CumCode = r_sku.CumCode;
-                                    buildOrderSku.SpecDes = r_sku.SpecDes;
-                                    buildOrderSku.Producer = r_sku.Producer;
-                                    buildOrderSku.Quantity = sku.Quantity;
-                                    buildOrderSku.ShopMode = sku.ShopMode;
-                                    buildOrderSku.Stocks = r_sku.Stocks;
-                                    buildOrderSku.CartId = sku.CartId;
-                                    buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
-                                    buildOrderSku.KindId1 = r_sku.KindId1;
-                                    buildOrderSku.KindId2 = r_sku.KindId2;
-                                    buildOrderSku.KindId3 = r_sku.KindId3;
-
-                                    #region CouponAmountByDeposit
-                                    if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.All)
-                                    {
-                                        buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
-                                    }
-                                    else if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.Store)
-                                    {
-                                        if (couponUseAreaValueByDeposit != null)
-                                        {
-                                            if (couponUseAreaValueByDeposit.Where(m => m.Id == rop.StoreId).Count() > 0)
-                                            {
-                                                buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
-                                            }
-                                        }
-                                    }
-                                    else if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.ProductKind)
-                                    {
-                                        if (couponUseAreaValueByDeposit != null)
-                                        {
-                                            string kind3 = r_sku.KindId3.ToString();
-                                            if (couponUseAreaValueByDeposit.Where(m => m.Id == kind3).Count() > 0)
-                                            {
-                                                buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
-                                            }
-                                        }
-                                    }
-                                    else if (couponUseAreaTypeByDeposit == E_Coupon_UseAreaType.ProductSpu)
-                                    {
-                                        if (couponUseAreaValueByDeposit != null)
-                                        {
-                                            if (couponUseAreaValueByDeposit.Where(m => m.Id == r_sku.ProductId).Count() > 0)
-                                            {
-                                                buildOrderSku.CouponAmountByDeposit = couponAmountByDeposit;
-                                            }
-                                        }
-                                    }
-                                    #endregion
-
-                                    #region CouponAmountByRent
-                                    if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.All)
-                                    {
-                                        buildOrderSku.CouponAmountByRent = couponAmountByRent;
-                                    }
-                                    else if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.Store)
-                                    {
-                                        if (couponUseAreaValueByRent != null)
-                                        {
-                                            if (couponUseAreaValueByRent.Where(m => m.Id == rop.StoreId).Count() > 0)
-                                            {
-                                                buildOrderSku.CouponAmountByRent = couponAmountByRent;
-                                            }
-                                        }
-                                    }
-                                    else if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.ProductKind)
-                                    {
-                                        if (couponUseAreaValueByRent != null)
-                                        {
-                                            string kind3 = r_sku.KindId3.ToString();
-                                            if (couponUseAreaValueByRent.Where(m => m.Id == kind3).Count() > 0)
-                                            {
-                                                buildOrderSku.CouponAmountByRent = couponAmountByRent;
-                                            }
-                                        }
-                                    }
-                                    else if (couponUseAreaTypeByRent == E_Coupon_UseAreaType.ProductSpu)
-                                    {
-                                        if (couponUseAreaValueByRent != null)
-                                        {
-                                            if (couponUseAreaValueByRent.Where(m => m.Id == r_sku.ProductId).Count() > 0)
-                                            {
-                                                buildOrderSku.CouponAmountByRent = couponAmountByRent;
-                                            }
-                                        }
-                                    }
-                                    #endregion
-
-                                    decimal salePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
-                                    decimal originalPrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
-
-                                    buildOrderSku.SalePrice = salePrice;
-                                    buildOrderSku.SaleAmount = salePrice * sku.Quantity;
-                                    buildOrderSku.OriginalPrice = originalPrice;
-                                    buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
-                                    buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice;
-                                    buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice;
-                                    buildOrderSku.RentTermUnit = E_RentTermUnit.Month;
-                                    buildOrderSku.RentTermValue = 1;
-                                    buildOrderSkus.Add(buildOrderSku);
-                                }
-
-                                #endregion
-                            }
-                            else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
-                            {
-                                #region MemberFee
-
-                                var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.Id == sku.Id).FirstOrDefault();
-                                if (memberFeeSt == null)
-                                {
-                                    warn_tips.Add(string.Format("{0}商品信息不存在", "服务"));
-                                }
-                                else
-                                {
-                                    var stocks = new List<ProductSkuStockModel>();
-
-                                    var stock = new ProductSkuStockModel();
-
-                                    stock.RefType = E_SellChannelRefType.Mall;
-                                    stock.RefId = SellChannelStock.MemberFeeSellChannelRefId;
-                                    stock.CabinetId = "";
-                                    stock.SlotId = "";
-                                    stock.SumQuantity = 0;
-                                    stock.LockQuantity = 0;
-                                    stock.SellQuantity = 0;
-                                    stock.IsOffSell = false;
-                                    stock.SalePrice = memberFeeSt.FeeSaleValue;
-
-                                    stocks.Add(stock);
-
-                                    var buildOrderSku = new BuildOrder.ProductSku();
-                                    buildOrderSku.Id = sku.Id;
-                                    buildOrderSku.ProductId = "";
-                                    buildOrderSku.ReceiveMode = E_ReceiveMode.FeeByMember;
-                                    buildOrderSku.Name = memberFeeSt.Name;
-                                    buildOrderSku.MainImgUrl = memberFeeSt.MainImgUrl;
-                                    buildOrderSku.BarCode = "";
-                                    buildOrderSku.CumCode = "";
-                                    buildOrderSku.SpecDes = null;
-                                    buildOrderSku.Producer = "";
-                                    buildOrderSku.Stocks = stocks;
-                                    buildOrderSku.CartId = "";
-                                    buildOrderSku.SvcConsulterId = "";
-                                    buildOrderSku.KindId1 = 0;
-                                    buildOrderSku.KindId2 = 0;
-                                    buildOrderSku.KindId3 = 0;
-                                    buildOrderSku.Quantity = sku.Quantity;
-                                    buildOrderSku.ShopMode = sku.ShopMode;
-                                    buildOrderSku.SalePrice = memberFeeSt.FeeSaleValue;
-                                    buildOrderSku.SaleAmount = memberFeeSt.FeeSaleValue;
-                                    buildOrderSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
-                                    buildOrderSku.OriginalAmount = memberFeeSt.FeeOriginalValue;
-                                    buildOrderSkus.Add(buildOrderSku);
-
-                                }
-
-                                #endregion
-                            }
+                            buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, rop.ShopMethod, block.ReceiveMode, sellChannelRefIds);
                         }
                     }
 
-                    if (warn_tips.Count > 0)
+                    buildOrderService.BuildSkus();
+
+                    if (!buildOrderService.IsSuccess)
                     {
-                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join("\n", warn_tips.ToArray()), null);
+                        return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, buildOrderService.Message, null);
                     }
 
-                    #endregion
+                    buildOrderSkus = buildOrderService.GetSkus();
+
+                    //#region 检查可售商品信息是否符合实际环境
+                    //List<string> warn_tips = new List<string>();
+
+                    //foreach (var block in rop.Blocks)
+                    //{
+                    //    var skus = block.Skus;
+
+                    //    foreach (var sku in skus)
+                    //    {
+                    //        if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                    //        {
+                    //            #region Shop
+
+                    //            string[] sellChannelRefIds = new string[] { };
+
+                    //            if (sku.ShopMode == E_SellChannelRefType.Mall)
+                    //            {
+                    //                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                    //            }
+                    //            else if (sku.ShopMode == E_SellChannelRefType.Machine)
+                    //            {
+                    //                if (sku.SellChannelRefIds == null || sku.SellChannelRefIds.Length == 0)
+                    //                {
+                    //                    sellChannelRefIds = store.SellMachineIds;
+                    //                }
+                    //                else
+                    //                {
+                    //                    sellChannelRefIds = sku.SellChannelRefIds;
+                    //                }
+                    //            }
+
+                    //            var r_sku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, sellChannelRefIds, sku.Id);
+
+                    //            if (r_sku == null)
+                    //            {
+                    //                warn_tips.Add(string.Format("{0}商品信息不存在", r_sku.Name));
+                    //            }
+                    //            else
+                    //            {
+                    //                if (r_sku.Stocks.Count == 0)
+                    //                {
+                    //                    warn_tips.Add(string.Format("{0}商品库存信息不存在", r_sku.Name));
+                    //                }
+                    //                else
+                    //                {
+                    //                    var sellQuantity = r_sku.Stocks.Sum(m => m.SellQuantity);
+
+                    //                    Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                    //                    if (r_sku.Stocks[0].IsOffSell)
+                    //                    {
+                    //                        warn_tips.Add(string.Format("{0}已经下架", r_sku.Name));
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        if (sellQuantity < sku.Quantity)
+                    //                        {
+                    //                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", r_sku.Name, sellQuantity));
+                    //                        }
+                    //                    }
+                    //                }
+
+                    //                var buildOrderSku = new BuildOrder.ProductSku();
+                    //                buildOrderSku.Id = sku.Id;
+                    //                buildOrderSku.ProductId = r_sku.ProductId;
+                    //                buildOrderSku.ReceiveMode = block.ReceiveMode;
+                    //                buildOrderSku.Name = r_sku.Name;
+                    //                buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
+                    //                buildOrderSku.BarCode = r_sku.BarCode;
+                    //                buildOrderSku.CumCode = r_sku.CumCode;
+                    //                buildOrderSku.SpecDes = r_sku.SpecDes;
+                    //                buildOrderSku.Producer = r_sku.Producer;
+                    //                buildOrderSku.CartId = sku.CartId;
+                    //                buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
+                    //                buildOrderSku.KindId1 = r_sku.KindId1;
+                    //                buildOrderSku.KindId2 = r_sku.KindId2;
+                    //                buildOrderSku.KindId3 = r_sku.KindId3;
+                    //                buildOrderSku.Quantity = sku.Quantity;
+                    //                buildOrderSku.ShopMode = sku.ShopMode;
+                    //                buildOrderSku.Stocks = r_sku.Stocks;
+
+                    //                decimal salePrice = r_sku.Stocks[0].SalePrice;
+
+                    //                decimal originalPrice = salePrice;
+
+                    //                //切换特定商品会员价
+                    //                if (clientMemberLevel != null)
+                    //                {
+                    //                    var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == store.MerchId && m.StoreId == store.StoreId && m.PrdProductSkuId == sku.Id && m.MemberLevel == clientUser.MemberLevel && m.IsDisabled == false).FirstOrDefault();
+                    //                    if (memberProductSkuSt != null)
+                    //                    {
+                    //                        salePrice = memberProductSkuSt.MemberPrice;
+                    //                        LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
+                    //                    }
+                    //                }
+
+                    //                buildOrderSku.SalePrice = salePrice;
+                    //                buildOrderSku.SaleAmount = salePrice * sku.Quantity;
+                    //                buildOrderSku.OriginalPrice = originalPrice;
+                    //                buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
+                    //                buildOrderSkus.Add(buildOrderSku);
+                    //            }
+
+                    //            #endregion
+                    //        }
+                    //        if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                    //        {
+                    //            #region Rent
+
+                    //            var r_sku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, rop.StoreId, new string[] { SellChannelStock.MallSellChannelRefId }, sku.Id);
+
+                    //            if (r_sku == null)
+                    //            {
+                    //                warn_tips.Add(string.Format("{0}商品信息不存在", r_sku.Name));
+                    //            }
+                    //            else
+                    //            {
+                    //                if (r_sku.Stocks.Count == 0)
+                    //                {
+                    //                    warn_tips.Add(string.Format("{0}商品库存信息不存在", r_sku.Name));
+                    //                }
+                    //                else
+                    //                {
+                    //                    var sellQuantity = r_sku.Stocks.Sum(m => m.SellQuantity);
+
+                    //                    Console.WriteLine("sellQuantity：" + sellQuantity);
+
+                    //                    if (r_sku.Stocks[0].IsOffSell)
+                    //                    {
+                    //                        warn_tips.Add(string.Format("{0}已经下架", r_sku.Name));
+                    //                    }
+                    //                    else if (!r_sku.Stocks[0].IsUseRent)
+                    //                    {
+                    //                        warn_tips.Add(string.Format("{0}不支持租用", r_sku.Name));
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        if (sellQuantity < sku.Quantity)
+                    //                        {
+                    //                            warn_tips.Add(string.Format("{0}的可销售数量为{1}个", r_sku.Name, sellQuantity));
+                    //                        }
+                    //                    }
+                    //                }
+
+                    //                var buildOrderSku = new BuildOrder.ProductSku();
+                    //                buildOrderSku.Id = sku.Id;
+                    //                buildOrderSku.ProductId = r_sku.ProductId;
+                    //                buildOrderSku.ReceiveMode = block.ReceiveMode;
+                    //                buildOrderSku.Name = r_sku.Name;
+                    //                buildOrderSku.MainImgUrl = r_sku.MainImgUrl;
+                    //                buildOrderSku.BarCode = r_sku.BarCode;
+                    //                buildOrderSku.CumCode = r_sku.CumCode;
+                    //                buildOrderSku.SpecDes = r_sku.SpecDes;
+                    //                buildOrderSku.Producer = r_sku.Producer;
+                    //                buildOrderSku.Quantity = sku.Quantity;
+                    //                buildOrderSku.ShopMode = sku.ShopMode;
+                    //                buildOrderSku.Stocks = r_sku.Stocks;
+                    //                buildOrderSku.CartId = sku.CartId;
+                    //                buildOrderSku.SvcConsulterId = sku.SvcConsulterId;
+                    //                buildOrderSku.KindId1 = r_sku.KindId1;
+                    //                buildOrderSku.KindId2 = r_sku.KindId2;
+                    //                buildOrderSku.KindId3 = r_sku.KindId3;
+
+                    //                decimal salePrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
+                    //                decimal originalPrice = r_sku.Stocks[0].DepositPrice + r_sku.Stocks[0].RentMhPrice;
+
+                    //                buildOrderSku.SalePrice = salePrice;
+                    //                buildOrderSku.SaleAmount = salePrice * sku.Quantity;
+                    //                buildOrderSku.OriginalPrice = originalPrice;
+                    //                buildOrderSku.OriginalAmount = originalPrice * sku.Quantity;
+                    //                buildOrderSku.DepositAmount = r_sku.Stocks[0].DepositPrice;
+                    //                buildOrderSku.RentAmount = r_sku.Stocks[0].RentMhPrice;
+                    //                buildOrderSku.RentTermUnit = E_RentTermUnit.Month;
+                    //                buildOrderSku.RentTermValue = 1;
+                    //                buildOrderSkus.Add(buildOrderSku);
+                    //            }
+
+                    //            #endregion
+                    //        }
+                    //        else if (rop.ShopMethod == E_OrderShopMethod.MemberFee)
+                    //        {
+                    //            #region MemberFee
+
+                    //            var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.Id == sku.Id).FirstOrDefault();
+                    //            if (memberFeeSt == null)
+                    //            {
+                    //                warn_tips.Add(string.Format("{0}商品信息不存在", "服务"));
+                    //            }
+                    //            else
+                    //            {
+                    //                var stocks = new List<ProductSkuStockModel>();
+
+                    //                var stock = new ProductSkuStockModel();
+
+                    //                stock.RefType = E_SellChannelRefType.Mall;
+                    //                stock.RefId = SellChannelStock.MemberFeeSellChannelRefId;
+                    //                stock.CabinetId = "";
+                    //                stock.SlotId = "";
+                    //                stock.SumQuantity = 0;
+                    //                stock.LockQuantity = 0;
+                    //                stock.SellQuantity = 0;
+                    //                stock.IsOffSell = false;
+                    //                stock.SalePrice = memberFeeSt.FeeSaleValue;
+
+                    //                stocks.Add(stock);
+
+                    //                var buildOrderSku = new BuildOrder.ProductSku();
+                    //                buildOrderSku.Id = sku.Id;
+                    //                buildOrderSku.ProductId = "";
+                    //                buildOrderSku.ReceiveMode = E_ReceiveMode.FeeByMember;
+                    //                buildOrderSku.Name = memberFeeSt.Name;
+                    //                buildOrderSku.MainImgUrl = memberFeeSt.MainImgUrl;
+                    //                buildOrderSku.BarCode = "";
+                    //                buildOrderSku.CumCode = "";
+                    //                buildOrderSku.SpecDes = null;
+                    //                buildOrderSku.Producer = "";
+                    //                buildOrderSku.Stocks = stocks;
+                    //                buildOrderSku.CartId = "";
+                    //                buildOrderSku.SvcConsulterId = "";
+                    //                buildOrderSku.KindId1 = 0;
+                    //                buildOrderSku.KindId2 = 0;
+                    //                buildOrderSku.KindId3 = 0;
+                    //                buildOrderSku.Quantity = sku.Quantity;
+                    //                buildOrderSku.ShopMode = sku.ShopMode;
+                    //                buildOrderSku.SalePrice = memberFeeSt.FeeSaleValue;
+                    //                buildOrderSku.SaleAmount = memberFeeSt.FeeSaleValue;
+                    //                buildOrderSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
+                    //                buildOrderSku.OriginalAmount = memberFeeSt.FeeOriginalValue;
+                    //                buildOrderSkus.Add(buildOrderSku);
+
+                    //            }
+
+                    //            #endregion
+                    //        }
+                    //    }
+                    //}
+
+                    //if (warn_tips.Count > 0)
+                    //{
+                    //    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, string.Join("\n", warn_tips.ToArray()), null);
+                    //}
+
+                    //#endregion
 
                     if (rop.ShopMethod == E_OrderShopMethod.Shop)
                     {
+                        #region 计算优惠券金额
                         if (rop.CouponIdsByShop != null && rop.CouponIdsByShop.Count > 0)
                         {
                             string couponIdByShop = rop.CouponIdsByShop[0];
@@ -861,66 +758,73 @@ namespace LocalS.BLL.Biz
                                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_coupon != null)
                                 {
-                                    decimal cal_sum_amount = 0;
-                                    if (d_coupon.UseAreaType == E_Coupon_UseAreaType.All)
+                                    if (d_coupon.FaceType == E_Coupon_FaceType.ShopDiscount || d_coupon.FaceType == E_Coupon_FaceType.ShopVoucher)
                                     {
-                                        cal_sum_amount = buildOrderSkus.Sum(m => m.SaleAmount);
+                                        buildOrderService.CalCouponAmount(d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue);
                                     }
-                                    else if (d_coupon.UseAreaType == E_Coupon_UseAreaType.Store)
-                                    {
-                                        cal_sum_amount = buildOrderSkus.Sum(m => m.SaleAmount);
-                                    }
-                                    else if (d_coupon.UseAreaType == E_Coupon_UseAreaType.ProductKind)
-                                    {
-                                        var list = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
-                                        if (list != null)
-                                        {
-                                            int[] ids = list.Select(s => Int32.Parse(s.Id)).ToArray();
-
-                                            if (ids != null)
-                                            {
-                                                cal_sum_amount = buildOrderSkus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
-                                            }
-                                        }
-
-                                    }
-                                    else if (d_coupon.UseAreaType == E_Coupon_UseAreaType.ProductSpu)
-                                    {
-                                        var list = d_coupon.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
-                                        if (list != null)
-                                        {
-                                            string[] ids = list.Select(m => m.Id).ToArray();
-
-                                            if (ids != null)
-                                            {
-                                                cal_sum_amount = buildOrderSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
-                                            }
-                                        }
-
-                                    }
-
-                                    foreach (var buildOrderSku in buildOrderSkus)
-                                    {
-                                        buildOrderSku.CouponAmountByShop = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue, rop.StoreId, buildOrderSku.ProductId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
-                                    }
-
-                                    //金额补差
-                                    if (d_coupon.FaceType != E_Coupon_FaceType.DepositVoucher)
-                                    {
-                                        var sumCouponAmount1 = d_coupon.FaceValue;
-                                        var sumCouponAmount2 = buildOrderSkus.Sum(m => m.CouponAmountByShop);
-                                        if (sumCouponAmount1 != sumCouponAmount2)
-                                        {
-                                            var diff = sumCouponAmount1 - sumCouponAmount2;
-                                            buildOrderSkus[buildOrderSkus.Count - 1].CouponAmountByShop = buildOrderSkus[buildOrderSkus.Count - 1].CouponAmountByShop + diff;
-                                        }
-                                    }
-
                                 }
                             }
                         }
-                    }
 
+                        #endregion
+                    }
+                    else if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                    {
+                        #region 计算押金卷，租金券金额
+
+                        if (!string.IsNullOrEmpty(rop.CouponIdByDeposit))
+                        {
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByDeposit).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                                }
+
+                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+                                d_clientCoupon.Mender = operater;
+                                d_clientCoupon.MendTime = DateTime.Now;
+
+
+                                var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                                if (d_coupon != null)
+                                {
+                                    if (d_coupon.FaceType == E_Coupon_FaceType.DepositVoucher)
+                                    {
+                                        buildOrderService.CalCouponAmount(d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(rop.CouponIdByRent))
+                        {
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                                }
+
+                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+                                d_clientCoupon.Mender = operater;
+                                d_clientCoupon.MendTime = DateTime.Now;
+
+                                var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                                if (d_coupon != null)
+                                {
+                                    if (d_coupon.FaceType == E_Coupon_FaceType.RentVoucher)
+                                    {
+                                        buildOrderService.CalCouponAmount(d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+                    }
 
                     LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
                     var buildOrders = BuildOrders(rop.ShopMethod, buildOrderSkus);
@@ -1217,7 +1121,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        private List<BuildOrder> BuildOrders(E_OrderShopMethod shopMethod, List<BuildOrder.ProductSku> reserveProductSkus)
+        private List<BuildOrder> BuildOrders(E_OrderShopMethod shopMethod, List<BuildSku> reserveProductSkus)
         {
             List<BuildOrder> buildOrders = new List<BuildOrder>();
 

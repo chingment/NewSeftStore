@@ -721,7 +721,11 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
+
+
                 var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+
+                CacheServiceFactory.Product.RemoveSpuInfo(merchId, bizProductSku.ProductId);
 
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.PrdProductSkuId == productSkuId).ToList();
                 machineIds = sellChannelStocks.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine).Select(m => m.SellChannelRefId).Distinct().ToArray();

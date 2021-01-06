@@ -32,5 +32,6 @@ namespace LocalS.Service.Api.StoreApp
         public List<string> OrderIds { get; set; }
         public E_OrderShopMethod ShopMethod { get; set; }
 
+        public bool IsCanPay { get; set; }
     }
 }
