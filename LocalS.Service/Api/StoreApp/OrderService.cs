@@ -381,6 +381,14 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.RentAmount = orderSub.RentAmount;
                     c_prodcutSku.DepositAmount = orderSub.DepositAmount;
                     c_prodcutSku.KindId3 = orderSub.PrdKindId3;
+                    if (orderSub.ShopMethod == E_OrderShopMethod.MemberFee)
+                    {
+                        c_prodcutSku.IsOffSell = false;
+                    }
+                    else
+                    {
+                        c_prodcutSku.IsOffSell = r_productSku.IsOffSell;
+                    }
                     c_prodcutSkus.Add(c_prodcutSku);
                 }
 
