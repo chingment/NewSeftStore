@@ -300,7 +300,7 @@ namespace Lumos
         {
             DateTime dateTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
 
-            int days = Convert.ToInt32((startTime - dateTime).TotalDays);
+            int days = Convert.ToInt32(Math.Floor((startTime - dateTime).TotalDays));
 
             string week = "";
             if (days == 0)
