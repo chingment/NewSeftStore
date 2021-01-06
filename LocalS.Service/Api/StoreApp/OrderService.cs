@@ -1096,14 +1096,14 @@ namespace LocalS.Service.Api.StoreApp
                 DateTime statDate = DateTime.Parse(dateTime.ToString("yyy-MM-dd"));
                 for (int z = 8; z < 19; z++)
                 {
-                    if (DateTime.Now < DateTime.Parse(statDate.AddHours(z).ToString("HH:00")))
+                    if (DateTime.Now < DateTime.Parse(statDate.AddHours(z).ToString("yyyy-MM-dd HH:00")))
                     {
                         string time1 = statDate.AddHours(z).ToString("HH:00");
                         dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = time1, Tip = "", Status = 1, Value = time1, Type = 1 });
 
                     }
 
-                    if (DateTime.Now < DateTime.Parse(statDate.AddHours(z).ToString("HH:30")))
+                    if (DateTime.Now < DateTime.Parse(statDate.AddHours(z).ToString("yyyy-MM-dd HH:30")))
                     {
                         string time2 = statDate.AddHours(z).ToString("HH:30");
                         dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = time2, Tip = "", Status = 1, Value = time2, Type = 1 });

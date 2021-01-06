@@ -138,19 +138,26 @@ Component({
     _selectDate: function (e) {
       var _this = this
       var curDateAreaIndex = e.currentTarget.dataset.index
-      //console.log('curDateAreaIndex>>' + curDateAreaIndex)
-      var timeArea = _this.data.dateArea[curDateAreaIndex].timeArea
+
+      var lastDateArea = _this.data.dateArea[_this.data.curDateAreaIndex]
+      var lastTimeArea = lastDateArea.timeArea[_this.data.curTimeAreaIndex]
+
+
+      var curTimeArea = _this.data.dateArea[curDateAreaIndex].timeArea
 
       var curTimeAreaIndex = _this.data.curTimeAreaIndex
 
-      if (curTimeAreaIndex >= timeArea.length) {
-        curTimeAreaIndex = 0
+      for (var i = 0; i < curTimeArea.length; i++) {
+        if (lastTimeArea.value.indexOf(curTimeArea[i].value) > -1) {
+          curTimeAreaIndex = i
+          break
+        }
       }
 
       _this.setData({
         curDateAreaIndex: curDateAreaIndex,
         curTimeAreaIndex: curTimeAreaIndex,
-        timeArea: timeArea
+        timeArea: curTimeArea
       })
       _this._getSelectBookTime()
     },
