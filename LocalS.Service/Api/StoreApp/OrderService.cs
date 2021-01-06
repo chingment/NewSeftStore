@@ -1087,42 +1087,33 @@ namespace LocalS.Service.Api.StoreApp
                 DateTime dateTime = DateTime.Now.AddDays(i);
 
                 var dateArea = new BookTimeDateAreaModel();
-
-                if ((dateTime - startTime).TotalDays == 0)
-                {
-                    dateArea.Week = "今天";
-                }
-                else if ((dateTime - startTime).TotalDays == 1)
-                {
-                    dateArea.Week = "明天";
-                }
-                else if ((dateTime - startTime).TotalDays == 2)
-                {
-                    dateArea.Week = "后天";
-                }
-                else
-                {
-                    dateArea.Week = Lumos.CommonUtil.GetCnWeekDayName(dateTime);
-                }
-
+                dateArea.Week = Lumos.CommonUtil.GetCnWeekDayName(dateTime);
                 dateArea.Date = dateTime.ToUnifiedFormatDate();
                 dateArea.Value = dateTime.ToUnifiedFormatDate();
                 dateArea.Status = 1;
                 dateArea.Tip = "";
 
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "8:00", Tip = "", Status = 1, Value = "8:00", Type = 1 });
-
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "8:30", Tip = "", Status = 1, Value = "8:30", Type = 1 });
-
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "9:00", Tip = "", Status = 1, Value = "9:00", Type = 1 });
-
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "9:30", Tip = "", Status = 1, Value = "9:30", Type = 1 });
-
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "10:00", Tip = "", Status = 1, Value = "10:00", Type = 1 });
-
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "10:30", Tip = "", Status = 1, Value = "10:30", Type = 1 });
-
                 dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "11:30", Tip = "", Status = 1, Value = "11:30", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "12:00", Tip = "", Status = 1, Value = "12:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "12:30", Tip = "", Status = 1, Value = "12:30", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "13:00", Tip = "", Status = 1, Value = "13:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "13:30", Tip = "", Status = 1, Value = "13:30", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "14:00", Tip = "", Status = 1, Value = "14:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "14:30", Tip = "", Status = 1, Value = "14:30", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "15:00", Tip = "", Status = 1, Value = "15:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "15:30", Tip = "", Status = 1, Value = "15:30", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "16:00", Tip = "", Status = 1, Value = "16:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "16:30", Tip = "", Status = 1, Value = "16:30", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "17:00", Tip = "", Status = 1, Value = "17:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "17:30", Tip = "", Status = 1, Value = "12:00", Type = 1 });
+                dateArea.TimeArea.Add(new BookTimeTimeAreaModel { Time = "18:00", Tip = "", Status = 1, Value = "17:30", Type = 1 });
+
 
 
                 ret.DateArea.Add(dateArea);

@@ -30,7 +30,7 @@ namespace Test
 {
     class Program
     {
-        
+
 
         public static sbyte[] a(byte[] myByte)
         {
@@ -105,6 +105,9 @@ namespace Test
 
         static void Main(string[] args)
         {
+            string a66 = CommonUtil.GetCnWeekDayName(DateTime.Parse("2021-01-06 08:00:00.000"));
+
+
             //&..00111122==IIaabcccdddeeeefhiiikllmmnnnnooprsssttux
             // 9b6e056b87057a3c173312ba5b2a418e109bc39eecd400086cad89909ded2ad4
             //OWI2ZTA1NmI4NzA1N2EzYzE3MzMxMmJhNWIyYTQxOGUxMDliYzM5ZWVjZDQwMDA4NmNhZDg5OTA5ZGVkMmFkNA==

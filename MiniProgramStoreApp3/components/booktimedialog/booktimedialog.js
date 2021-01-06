@@ -18,6 +18,17 @@ Component({
           this._dialogClose()
         }
       }
+    },
+    dataS: {
+      type: Object,
+      value: {},
+      observer: function (newVal, oldVal) {
+        if (newVal == null)
+          return
+        this.setData({
+          myDataS: newVal
+        })
+      }
     }
   },
   data: {
@@ -28,7 +39,8 @@ Component({
     curDateAreaIndex: 0,
     curTimeAreaIndex: 0,
     dateArea: [],
-    timeArea: []
+    timeArea: [],
+    myDataS: {}
   },
   methods: {
     _dialogOpen: function (e) {
@@ -64,9 +76,36 @@ Component({
 
           var d = res.data
 
+
+          var value = _this.data.myDataS.bookTime.value
+          // console.log(JSON.stringify(_this.data.myDataS))
+
           var dateArea = d.dateArea
-          var timeArea = dateArea[_this.data.curDateAreaIndex].timeArea
+
+
+          var curDateAreaIndex = _this.data.curDateAreaIndex
+          for (var i = 0; i < dateArea.length; i++) {
+            if (value.indexOf(dateArea[i].value) > -1) {
+              curDateAreaIndex = i
+              break
+            }
+          }
+
+          var curTimeAreaIndex = _this.data.curTimeAreaIndex
+          var curDateTimeArea = dateArea[curDateAreaIndex].timeArea
+
+          for (var i = 0; i < curDateTimeArea.length; i++) {
+            if (value.indexOf(curDateTimeArea[i].value) > -1) {
+              curTimeAreaIndex = i
+              break
+            }
+          }
+
+
+          var timeArea = dateArea[curDateAreaIndex].timeArea
           _this.setData({
+            curDateAreaIndex: curDateAreaIndex,
+            curTimeAreaIndex: curTimeAreaIndex,
             dateArea: dateArea,
             timeArea: timeArea,
             width: 186 * parseInt(dateArea.length - _this.data.curDateAreaIndex <= 7 ? dateArea.length : 7)

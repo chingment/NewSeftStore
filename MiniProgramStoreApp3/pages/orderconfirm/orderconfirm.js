@@ -432,10 +432,19 @@ Page({
     console.log('booktimeSelect')
     var _this = this
     var blockIndex = e.currentTarget.dataset.replyBlockindex
+
+
+    var booktime = _this.data.blocks[blockIndex].selfTake.bookTime
+
+    console.log(JSON.stringify(booktime))
+
     _this.setData({
       curBookTimeBlockIndex: blockIndex,
       booktimeDialog: {
-        isShow: true
+        isShow: true,
+        dataS: {
+          bookTime: booktime
+        }
       }
     })
   },

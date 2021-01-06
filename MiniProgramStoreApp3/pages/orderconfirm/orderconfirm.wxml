@@ -3,9 +3,9 @@
 
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
-<booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}">
+<booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" dataS="{{booktimeDialog.dataS}}" isShow="{{booktimeDialog.isShow}}">
 </booktimedialog>
-<selfpickaddressdialog id="selfpickaddressdialog" isShow="{{selfPickAddressDialog.isShow}}" bind:_selectSelfPickAddressItem="selectSelfPickAddressItem"
+<selfpickaddressdialog id="selfpickaddressdialog" isShow="{{selfPickAddressDialog.isShow}}"  bind:_selectSelfPickAddressItem="selectSelfPickAddressItem"
    dataS="{{selfPickAddressDialog.dataS}}"></selfpickaddressdialog>
 
 <!-- <view class='tag-address'>

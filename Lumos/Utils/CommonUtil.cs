@@ -296,13 +296,33 @@ namespace Lumos
 
         }
 
-        public static string GetCnWeekDayName(DateTime dt)
+        public static string GetCnWeekDayName(DateTime startTime)
         {
+            DateTime dateTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
 
+            int days = Convert.ToInt32((startTime - dateTime).TotalDays);
 
-            string[] cnWeekDayNames = { "日", "一", "二", "三", "四", "五", "六" };
+            string week = "";
+            if (days == 0)
+            {
+                week = "今天";
+            }
+            else if (days == 1)
+            {
+                week = "明天";
+            }
+            else if (days == 2)
+            {
+                week = "后天";
+            }
+            else
+            {
+                string[] cnWeekDayNames = { "日", "一", "二", "三", "四", "五", "六" };
 
-            return "星期" + cnWeekDayNames[(int)dt.DayOfWeek];
+                week = "星期" + cnWeekDayNames[(int)startTime.DayOfWeek];
+            }
+
+            return week;
         }
     }
 }
