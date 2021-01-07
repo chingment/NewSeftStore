@@ -20,6 +20,7 @@ var config = {
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
     ownBindPhoneNumberByWx: `${host}/Own/BindPhoneNumberByWx`,
     globalDataSet: `${host}/Global/DataSet`,
+    globalByPoint: `${host}/Global/ByPoint`,
     globalMsgTips: `${host}/Global/MsgTips`,
     indexPageData: `${host}/Index/PageData`,
     indexSugProducts: `${host}/Index/SugProducts`,

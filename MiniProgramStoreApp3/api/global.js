@@ -3,6 +3,7 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
+
 function dataSet(urlParams) {
 
   return lumos.getJson({
@@ -13,7 +14,7 @@ function dataSet(urlParams) {
 
 function msgTips(urlParams) {
 
- lumos.getJson({
+  lumos.getJson({
     url: config.apiUrl.globalMsgTips,
     urlParams: urlParams,
     isShowLoading: false
@@ -35,7 +36,21 @@ function msgTips(urlParams) {
 
 }
 
+function byPoint(page, eventCode, eventParam) {
+
+  lumos.postJson({
+    url: config.apiUrl.globalByPoint,
+    isShowLoading: false,
+    dataParams: {
+      page: page,
+      eventCode: eventCode,
+      eventParam: eventParam
+    }
+  })
+}
+
 module.exports = {
   dataSet: dataSet,
-  msgTips: msgTips
+  msgTips: msgTips,
+  byPoint: byPoint
 }

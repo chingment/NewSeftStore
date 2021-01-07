@@ -90,8 +90,16 @@ Page({
       shopMode: shopMode
     }).then(function (res) {
       if (res.result == 1) {
+        var d = res.data
         _this.setData({
-          productSku: res.data
+          productSku: d
+        })
+
+        app.byPoint(_this.data.tag, 'browse_spu', {
+          productSkuId: d.id,
+          kindId1: d.kindId1,
+          kindId2: d.kindId2,
+          kindId3: d.kindId3
         })
       }
     })
@@ -300,4 +308,7 @@ Page({
     return shareObj;
 
   },
+  onHide: function () {
+    console.log("==onHide==");
+  }
 })

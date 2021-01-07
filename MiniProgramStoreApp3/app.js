@@ -5,10 +5,50 @@ const toast = require('/utils/toastutil')
 const storeage = require('/utils/storeageutil.js')
 const ownRequest = require('/own/ownRequest.js')
 const apiOwn = require('/api/own.js')
+const apiGlobal = require('/api/global.js')
+const myPage = require('/utils/myPage.js')
+
+let orgainPage = Page; // 保存原本的Page对象
+let basePage = function (data) {
+  // 生成初始data，如果页面已经有该值不在重新赋值
+  if (typeof data.data.dataVal === 'undefined') {
+    data.data.dataVal = '具体值';
+  }
+  // 重写onLoad默认执行一些初始事件
+  let orgainOnLoad = data.onLoad;
+  data.onLoad = function (o) {
+    console.log(">>>onLoad")
+    // 执行的初始事件 start
+
+    // 执行的初始事件 end
+    orgainOnLoad.call(this, o);
+  }
+
+  let orgainOnHide= data.onHide;
+  data.onHide = function () {
+    console.log(">>>onHide")
+    // 执行的初始事件 start
+
+    // 执行的初始事件 end
+    orgainOnHide.call(this);
+  }
+
+  // 默认初始方法，如果页面已经有该方法不在重写该方法
+  if (typeof data.orgainFun !== 'function') {
+    data.orgainFun = function () {
+      // 执行具体函数 start
+
+      // 执行具体函数 end
+    }
+  }
+  return orgainPage(data);
+};
 
 App({
   onLaunch: function () {
     var _this = this
+   
+
     console.log('app.onLaunch')
     _this.autoUpdate()
 
@@ -40,6 +80,7 @@ App({
     // console.log('app.onShow')
     // _this.getConfig()
   },
+  basePage: basePage,
   globalData: {
     appId: null,
     userInfo: null,
@@ -84,6 +125,9 @@ App({
         }
       }
     })
+  },
+  byPoint: function byPoint(page, eventCode, eventParam) {
+    apiGlobal.byPoint(page, eventCode, eventParam)
   },
   autoUpdate: function () {
     console.log(new Date())

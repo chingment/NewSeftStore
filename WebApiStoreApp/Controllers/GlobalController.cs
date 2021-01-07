@@ -26,5 +26,14 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public OwnApiHttpResponse ByPoint([FromBody]LocalS.BLL.Biz.RopByPoint rop)
+        {
+            IResult result = LocalS.BLL.Biz.BizFactory.ByPoint.Record(this.CurrentUserId, rop);
+
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

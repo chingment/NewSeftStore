@@ -140,6 +140,9 @@ namespace LocalS.Service.Api.StoreApp
             m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
             m_productSku.CharTags = r_productSku.CharTags;
             m_productSku.SupReceiveMode = r_productSku.SupReceiveMode;
+            m_productSku.KindId1 = r_productSku.KindId1;
+            m_productSku.KindId2 = r_productSku.KindId2;
+            m_productSku.KindId3 = r_productSku.KindId3;
             if (r_productSku.Stocks.Count > 0)
             {
                 m_productSku.IsShowPrice = false;

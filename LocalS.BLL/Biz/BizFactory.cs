@@ -70,5 +70,13 @@ namespace LocalS.BLL.Biz
                 return new OperateLogService();
             }
         }
+
+        public static ByPointService ByPoint
+        {
+            get
+            {
+                return new ByPointService();
+            }
+        }
     }
 }

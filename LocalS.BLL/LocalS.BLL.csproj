@@ -78,6 +78,7 @@
     <Compile Include="Biz\BackgroundJobProvider.cs" />
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\BuildOrderTool.cs" />
+    <Compile Include="Biz\ByPointService.cs" />
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\Models\AdContentModel.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
     <Compile Include="Biz\RModels\RopBackgroundJobAdd.cs" />
     <Compile Include="Biz\RModels\RopBackgroundJobEdit.cs" />
+    <Compile Include="Biz\RModels\RopByPoint.cs" />
     <Compile Include="Biz\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Biz\RModels\RopOrderHandleExByMachineSelfTake.cs" />
     <Compile Include="Biz\RModels\RopOrderReserve.cs" />
