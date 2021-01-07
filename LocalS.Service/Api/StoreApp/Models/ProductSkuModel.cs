@@ -11,6 +11,8 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class ProductSkuModel
     {
+        private bool _isOffSell = true;
+
         public string Id { get; set; }
         public string ProductId { get; set; }
         public string Name { get; set; }
@@ -23,10 +25,29 @@ namespace LocalS.Service.Api.StoreApp
         public decimal SalePrice { get; set; }
         public decimal ShowPrice { get; set; }
         public bool IsShowPrice { get; set; }
-        public bool IsOffSell { get; set; }
         public List<SpecIdxSku> SpecIdxSkus{ get; set; }
         public int CartQuantity { get; set; }
         public decimal RentMhPrice { get; set; }
         public decimal DepositPrice { get; set; }
+        public bool IsOffSell
+        {
+            get
+            {
+                return _isOffSell;
+            }
+            set
+            {
+                _isOffSell = value;
+            }
+        }
+        public List<ImgSet> DisplayImgUrls { get; set; }
+        public List<ImgSet> DetailsDes { get; set; }
+        public E_SupReceiveMode SupReceiveMode { get; set; }
+        public int SellQuantity { get; set; }
+        public bool IsUseRent { get; set; }
+        public decimal RentAmount { get; set; }
+        public E_RentTermUnit RentTermUnit { get; set; }
+        public string RentTermUnitText { get; set; }
+        public decimal DepositAmount { get; set; }
     }
 }

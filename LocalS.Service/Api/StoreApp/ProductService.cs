@@ -127,33 +127,33 @@ namespace LocalS.Service.Api.StoreApp
 
             var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, store.GetSellChannelRefIds(rup.ShopMode), rup.SkuId);
 
-            var m_ProductSkuDetails = new ProductSkuDetailsModel();
-            m_ProductSkuDetails.Id = r_productSku.Id;
-            m_ProductSkuDetails.ProductId = r_productSku.ProductId;
-            m_ProductSkuDetails.Name = r_productSku.Name;
-            m_ProductSkuDetails.MainImgUrl = r_productSku.MainImgUrl;
-            m_ProductSkuDetails.DisplayImgUrls = r_productSku.DisplayImgUrls;
-            m_ProductSkuDetails.DetailsDes = r_productSku.DetailsDes;
-            m_ProductSkuDetails.BriefDes = r_productSku.BriefDes;
-            m_ProductSkuDetails.SpecItems = r_productSku.SpecItems;
-            m_ProductSkuDetails.SpecIdx = r_productSku.SpecIdx;
-            m_ProductSkuDetails.SpecIdxSkus = r_productSku.SpecIdxSkus;
-            m_ProductSkuDetails.CharTags = r_productSku.CharTags;
-            m_ProductSkuDetails.SupReceiveMode = r_productSku.SupReceiveMode;
+            var m_productSku = new ProductSkuModel();
+            m_productSku.Id = r_productSku.Id;
+            m_productSku.ProductId = r_productSku.ProductId;
+            m_productSku.Name = r_productSku.Name;
+            m_productSku.MainImgUrl = r_productSku.MainImgUrl;
+            m_productSku.DisplayImgUrls = r_productSku.DisplayImgUrls;
+            m_productSku.DetailsDes = r_productSku.DetailsDes;
+            m_productSku.BriefDes = r_productSku.BriefDes;
+            m_productSku.SpecItems = r_productSku.SpecItems;
+            m_productSku.SpecIdx = r_productSku.SpecIdx;
+            m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
+            m_productSku.CharTags = r_productSku.CharTags;
+            m_productSku.SupReceiveMode = r_productSku.SupReceiveMode;
             if (r_productSku.Stocks.Count > 0)
             {
-                m_ProductSkuDetails.IsShowPrice = false;
-                m_ProductSkuDetails.SalePrice = r_productSku.Stocks[0].SalePrice;
-                m_ProductSkuDetails.IsOffSell = r_productSku.Stocks[0].IsOffSell;
-                m_ProductSkuDetails.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
-                m_ProductSkuDetails.IsUseRent = r_productSku.Stocks[0].IsUseRent;
-                m_ProductSkuDetails.RentAmount = r_productSku.Stocks[0].RentMhPrice;
-                m_ProductSkuDetails.RentTermUnit = E_RentTermUnit.Month;
-                m_ProductSkuDetails.RentTermUnitText = "月";
-                m_ProductSkuDetails.DepositAmount = r_productSku.Stocks[0].DepositPrice;
+                m_productSku.IsShowPrice = false;
+                m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                m_productSku.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                m_productSku.IsUseRent = r_productSku.Stocks[0].IsUseRent;
+                m_productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                m_productSku.RentTermUnit = E_RentTermUnit.Month;
+                m_productSku.RentTermUnitText = "月";
+                m_productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_ProductSkuDetails);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_productSku);
 
             return result;
         }

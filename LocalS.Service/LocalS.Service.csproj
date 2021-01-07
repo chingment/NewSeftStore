@@ -297,7 +297,6 @@
     <Compile Include="Api\StoreApp\Models\BookTimeModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdRentModel.cs" />
-    <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProServiceModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
