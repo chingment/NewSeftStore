@@ -132,9 +132,9 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-        public OrderConfirmCouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
+        public RetOrderConfirm.CouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
         {
-            var model = new OrderConfirmCouponModel();
+            var model = new RetOrderConfirm.CouponModel();
 
             RopCouponMy rup = new RopCouponMy();
             rup.StoreId = storeId;
@@ -370,7 +370,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (store != null)
             {
-                BuildOrderService buildOrderService = new BuildOrderService(store.MerchId, store.StoreId, memberLevel);
+                BuildOrderTool buildOrderService = new BuildOrderTool(store.MerchId, store.StoreId, memberLevel);
 
                 foreach (var productSku in rop.ProductSkus)
                 {
@@ -379,7 +379,8 @@ namespace LocalS.Service.Api.StoreApp
                     buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
                 }
 
-                rop.ProductSkus = buildOrderService.GetSkus();
+                
+                rop.ProductSkus = buildOrderService.BuildSkus();
             }
 
             foreach (var item in list)

@@ -13,7 +13,6 @@ namespace LocalS.Service.Api.StoreApp
         public string Sn { get; set; }
         public string WtCode { get; set; }
         public string Name { get; set; }
-
         public E_Coupon_FaceType FaceType { get; set; }
         public string FaceValue { get; set; }
         public string FaceUnit { get; set; }

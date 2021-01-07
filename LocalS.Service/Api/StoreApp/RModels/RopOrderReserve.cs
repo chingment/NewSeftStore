@@ -12,11 +12,11 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RopOrderReserve()
         {
-            this.Blocks = new List<OrderReserveBlockModel>();
+            this.Blocks = new List<LocalS.BLL.Biz.RopOrderReserve.BlockModel>();
         }
         public string StoreId { get; set; }
         public string SaleOutletId { get; set; }
-        public List<OrderReserveBlockModel> Blocks { get; set; }
+        public List<LocalS.BLL.Biz.RopOrderReserve.BlockModel> Blocks { get; set; }
         public E_OrderSource Source { get; set; }
         public E_OrderShopMethod ShopMethod { get; set; }
         public List<string> CouponIdsByShop { get; set; }

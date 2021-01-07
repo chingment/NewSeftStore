@@ -291,14 +291,10 @@
     <Compile Include="Api\StoreApp\Models\BannerModel.cs" />
     <Compile Include="Api\StoreApp\Models\BookTimeDateAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\BookTimeTimeAreaModel.cs" />
-    <Compile Include="Api\StoreApp\Models\CartBlockModel.cs" />
     <Compile Include="Api\StoreApp\Models\CartDataModel.cs" />
-    <Compile Include="Api\StoreApp\Models\CartProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\CouponCanUseModel.cs" />
     <Compile Include="Api\StoreApp\Models\DeliveryAddressModel.cs" />
-    <Compile Include="Api\StoreApp\Models\OrderConfirmCouponModel.cs" />
-    <Compile Include="Api\StoreApp\Models\OrderConfirmProductSkuModel.cs" />
-    <Compile Include="Api\StoreApp\Models\OrderConfirmSubtotalItemModel.cs" />
+    <Compile Include="Api\StoreApp\Models\BookTimeModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdAreaModel.cs" />
     <Compile Include="Api\StoreApp\Models\PdRentModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProductSkuDetailsModel.cs" />

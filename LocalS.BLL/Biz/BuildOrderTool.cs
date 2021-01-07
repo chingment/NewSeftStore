@@ -60,7 +60,50 @@ namespace LocalS.BLL.Biz
         }
     }
 
-    public class BuildOrderService : BaseService
+    public class BuildOrder
+    {
+        public BuildOrder()
+        {
+            this.Childs = new List<Child>();
+        }
+        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public string SellChannelRefId { get; set; }
+        public int Quantity { get; set; }
+        public decimal OriginalAmount { get; set; }
+        public decimal SaleAmount { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public decimal ChargeAmount { get; set; }
+        public decimal CouponAmountByShop { get; set; }
+        public decimal CouponAmountByRent { get; set; }
+        public decimal CouponAmountByDeposit { get; set; }
+        public E_ReceiveMode ReceiveMode { get; set; }
+        public List<Child> Childs { get; set; }
+        public class Child
+        {
+            public E_SellChannelRefType SellChannelRefType { get; set; }
+            public string SellChannelRefId { get; set; }
+            public string ProductSkuId { get; set; }
+            public decimal SalePrice { get; set; }
+            public decimal OriginalPrice { get; set; }
+            public int Quantity { get; set; }
+            public decimal OriginalAmount { get; set; }
+            public decimal SaleAmount { get; set; }
+            public decimal DiscountAmount { get; set; }
+            public decimal ChargeAmount { get; set; }
+            public string CabinetId { get; set; }
+            public string SlotId { get; set; }
+            public E_RentTermUnit RentTermUnit { get; set; }
+            public int RentTermValue { get; set; }
+            public decimal RentAmount { get; set; }
+            public decimal DepositAmount { get; set; }
+            public decimal CouponAmountByShop { get; set; }
+            public decimal CouponAmountByRent { get; set; }
+            public decimal CouponAmountByDeposit { get; set; }
+            public E_ReceiveMode ReceiveMode { get; set; }
+        }
+    }
+
+    public class BuildOrderTool : BaseService
     {
         private int _memberLevel = 0;
         private string _merchId = "";
@@ -91,7 +134,7 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public BuildOrderService(string merchId, string storeId, int memberLevel)
+        public BuildOrderTool(string merchId, string storeId, int memberLevel)
         {
             _merchId = merchId;
             _storeId = storeId;
@@ -106,7 +149,7 @@ namespace LocalS.BLL.Biz
             _buildSkus.Add(new BuildSku { Id = id, Quantity = quantity, CartId = cartId, ShopMode = shopMode, ShopMethod = shopMethod, ReceiveMode = receiveMode, SellChannelRefIds = sellChannelRefIds });
         }
 
-        public void BuildSkus()
+        public List<BuildSku> BuildSkus()
         {
             if (_buildSkus.Count == 0)
             {
@@ -304,10 +347,7 @@ namespace LocalS.BLL.Biz
                     #endregion
                 }
             }
-        }
 
-        public List<BuildSku> GetSkus()
-        {
             return _buildSkus;
         }
 
@@ -410,6 +450,145 @@ namespace LocalS.BLL.Biz
                     _buildSkus[_buildSkus.Count - 1].CouponAmountByRent = _buildSkus[_buildSkus.Count - 1].CouponAmountByRent + diff;
                 }
             }
+        }
+
+        public List<BuildOrder> BuildOrders()
+        {
+            List<BuildOrder> buildOrders = new List<BuildOrder>();
+
+            if (_buildSkus == null || _buildSkus.Count == 0)
+                return buildOrders;
+
+            List<BuildOrder.Child> buildOrderChilds = new List<BuildOrder.Child>();
+
+            var d_s_orders = (from d in _buildSkus select new { d.ShopMode, d.ReceiveMode }).Distinct().ToArray();
+
+            foreach (var d_s_order in d_s_orders)
+            {
+                var shopModeProductSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode).ToList();
+
+                foreach (var shopModeProductSku in _buildSkus)
+                {
+                    var productSku_Stocks = shopModeProductSku.Stocks;
+
+                    if (d_s_order.ShopMode == E_SellChannelRefType.Mall)
+                    {
+                        //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
+                        var buildOrderChild = new BuildOrder.Child();
+                        buildOrderChild.SellChannelRefType = productSku_Stocks[0].RefType;
+                        buildOrderChild.SellChannelRefId = productSku_Stocks[0].RefId;
+                        buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                        buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
+                        buildOrderChild.CabinetId = productSku_Stocks[0].CabinetId;
+                        buildOrderChild.SlotId = productSku_Stocks[0].SlotId;
+                        buildOrderChild.Quantity = shopModeProductSku.Quantity;
+                        buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
+                        buildOrderChild.SaleAmount = shopModeProductSku.SaleAmount;
+                        buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
+                        buildOrderChild.OriginalAmount = shopModeProductSku.OriginalAmount;
+                        buildOrderChild.RentTermUnit = shopModeProductSku.RentTermUnit;
+                        buildOrderChild.RentTermValue = shopModeProductSku.RentTermValue;
+                        buildOrderChild.RentAmount = shopModeProductSku.RentAmount;
+                        buildOrderChild.DepositAmount = shopModeProductSku.DepositAmount;
+                        buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
+                        buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
+                        buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
+                        buildOrderChild.DiscountAmount = shopModeProductSku.OriginalAmount - shopModeProductSku.SaleAmount;
+                        buildOrderChild.ChargeAmount = shopModeProductSku.SaleAmount - shopModeProductSku.CouponAmountByDeposit - shopModeProductSku.CouponAmountByShop - shopModeProductSku.CouponAmountByRent;
+                        buildOrderChilds.Add(buildOrderChild);
+                    }
+                    else if (d_s_order.ShopMode == E_SellChannelRefType.Machine)
+                    {
+                        foreach (var item in productSku_Stocks)
+                        {
+                            bool isFlag = false;
+                            for (var i = 0; i < item.SellQuantity; i++)
+                            {
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == d_s_order.ShopMode).Sum(m => m.Quantity);//已订的数量
+                                int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
+                                if (reservedQuantity != needReserveQuantity)
+                                {
+                                    var buildOrderChild = new BuildOrder.Child();
+                                    buildOrderChild.SellChannelRefType = item.RefType;
+                                    buildOrderChild.SellChannelRefId = item.RefId;
+                                    buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                                    buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
+                                    buildOrderChild.CabinetId = item.CabinetId;
+                                    buildOrderChild.SlotId = item.SlotId;
+                                    buildOrderChild.Quantity = 1;
+                                    buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
+                                    buildOrderChild.SaleAmount = buildOrderChild.Quantity * shopModeProductSku.SalePrice;
+                                    buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
+                                    buildOrderChild.OriginalAmount = buildOrderChild.Quantity * shopModeProductSku.OriginalPrice;
+                                    buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
+                                    buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
+                                    buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
+                                    buildOrderChild.DiscountAmount = buildOrderChild.OriginalAmount - buildOrderChild.SaleAmount;
+                                    buildOrderChild.ChargeAmount = shopModeProductSku.SaleAmount - shopModeProductSku.CouponAmountByDeposit - shopModeProductSku.CouponAmountByShop - shopModeProductSku.CouponAmountByRent;
+                                    buildOrderChilds.Add(buildOrderChild);
+                                }
+                                else
+                                {
+                                    isFlag = true;
+                                    break;
+                                }
+                            }
+
+                            if (isFlag)
+                                break;
+                        }
+
+                    }
+
+                }
+
+            }
+
+            var sumSaleAmount = buildOrderChilds.Sum(m => m.SaleAmount);
+            var sumDiscountAmount = buildOrderChilds.Sum(m => m.DiscountAmount);
+            for (int i = 0; i < buildOrderChilds.Count; i++)
+            {
+                decimal scale = (sumSaleAmount == 0 ? 0 : (buildOrderChilds[i].SaleAmount / sumSaleAmount));
+                buildOrderChilds[i].DiscountAmount = Decimal.Round(scale * sumDiscountAmount, 2);
+            }
+
+            var sumDiscountAmount2 = buildOrderChilds.Sum(m => m.DiscountAmount);
+            if (sumDiscountAmount != sumDiscountAmount2)
+            {
+                var diff = sumDiscountAmount - sumDiscountAmount2;
+
+                buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount = buildOrderChilds[buildOrderChilds.Count - 1].DiscountAmount + diff;
+            }
+
+            var l_buildOrders = (from c in buildOrderChilds
+                                 select new
+                                 {
+                                     c.SellChannelRefType,
+                                     c.SellChannelRefId,
+                                     c.ReceiveMode,
+                                 }).Distinct().ToList();
+
+
+            foreach (var l_buildOrder in l_buildOrders)
+            {
+                var buildOrder = new BuildOrder();
+                buildOrder.SellChannelRefType = l_buildOrder.SellChannelRefType;
+                buildOrder.SellChannelRefId = l_buildOrder.SellChannelRefId;
+                buildOrder.ReceiveMode = l_buildOrder.ReceiveMode;
+                buildOrder.Quantity = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.Quantity);
+                buildOrder.SaleAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.SaleAmount);
+                buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.OriginalAmount);
+                buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.DiscountAmount);
+                buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.ChargeAmount);
+                buildOrder.CouponAmountByDeposit = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByDeposit);
+                buildOrder.CouponAmountByRent = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByRent);
+                buildOrder.CouponAmountByShop = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByShop);
+                buildOrder.Childs = buildOrderChilds.Where(m => m.SellChannelRefId == l_buildOrder.SellChannelRefId && m.ReceiveMode == l_buildOrder.ReceiveMode).ToList();
+                buildOrders.Add(buildOrder);
+            }
+
+
+            return buildOrders;
         }
     }
 }

@@ -154,7 +154,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetOrderConfirm();
 
-            var c_subtotalItems = new List<OrderConfirmSubtotalItemModel>();
+            var c_subtotalItems = new List<RetOrderConfirm.SubtotalItemModel>();
 
             var c_prodcutSkus = new List<BuildSku>();
 
@@ -198,18 +198,18 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                BuildOrderService buildOrder = new BuildOrderService(store.MerchId, store.StoreId, clientMemberLevel);
+                BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel);
 
                 foreach (var productSku in rop.ProductSkus)
                 {
                     string[] sellChannelRefIds = store.GetSellChannelRefIds(productSku.ShopMode);
 
-                    buildOrder.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
+                    buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
                 }
 
-                buildOrder.BuildSkus();
+                c_prodcutSkus = buildOrderTool.BuildSkus();
 
-                if (buildOrder.IsSuccess)
+                if (buildOrderTool.IsSuccess)
                 {
                     ret.IsCanPay = true;
                 }
@@ -217,8 +217,6 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     ret.IsCanPay = false;
                 }
-
-                c_prodcutSkus = buildOrder.GetSkus();
 
                 var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
                 if (d_shippingAddress == null)
@@ -509,9 +507,9 @@ namespace LocalS.Service.Api.StoreApp
                 amount_couponByRent = orders.Sum(m => m.CouponAmountByRent);
                 amount_couponByDeposit = orders.Sum(m => m.CouponAmountByDeposit);
 
-                ret.CouponByShop = new OrderConfirmCouponModel { TipMsg = amount_couponByShop == 0 ? "无优惠" : string.Format("-{0}", amount_couponByShop.ToF2Price()), TipType = TipType.InUse };
-                ret.CouponByDeposit = new OrderConfirmCouponModel { TipMsg = amount_couponByDeposit == 0 ? "无优惠" : string.Format("-{0}", amount_couponByDeposit.ToF2Price()), TipType = TipType.InUse };
-                ret.CouponByRent = new OrderConfirmCouponModel { TipMsg = amount_couponByRent == 0 ? "无优惠" : string.Format("-{0}", amount_couponByRent.ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByShop = new RetOrderConfirm.CouponModel { TipMsg = amount_couponByShop == 0 ? "无优惠" : string.Format("-{0}", amount_couponByShop.ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByDeposit = new RetOrderConfirm.CouponModel { TipMsg = amount_couponByDeposit == 0 ? "无优惠" : string.Format("-{0}", amount_couponByDeposit.ToF2Price()), TipType = TipType.InUse };
+                ret.CouponByRent = new RetOrderConfirm.CouponModel { TipMsg = amount_couponByRent == 0 ? "无优惠" : string.Format("-{0}", amount_couponByRent.ToF2Price()), TipType = TipType.InUse };
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
 
@@ -524,7 +522,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            var orderBlock = new List<OrderBlockModel>();
+            var orderBlock = new List<RetOrderConfirm.BlockModel>();
 
             var skus_Mall = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
 
@@ -537,7 +535,7 @@ namespace LocalS.Service.Api.StoreApp
                     var skus_Delivery = skus_ShopOrRent.Where(m => m.SupReceiveMode == E_SupReceiveMode.Delivery).ToList();
                     if (skus_Delivery.Count > 0)
                     {
-                        var ob_Delivery = new OrderBlockModel();
+                        var ob_Delivery = new RetOrderConfirm.BlockModel();
                         ob_Delivery.TagName = "线上商城[配送]";
                         ob_Delivery.Skus = skus_Delivery;
                         ob_Delivery.TabMode = E_TabMode.Delivery;
@@ -552,7 +550,7 @@ namespace LocalS.Service.Api.StoreApp
                     if (skus_SelfTakeByStore.Count > 0)
                     {
 
-                        var ob_SelfTakeByStore = new OrderBlockModel();
+                        var ob_SelfTakeByStore = new RetOrderConfirm.BlockModel();
                         ob_SelfTakeByStore.TagName = "线上商城[自提]";
                         ob_SelfTakeByStore.Skus = skus_SelfTakeByStore;
                         ob_SelfTakeByStore.TabMode = E_TabMode.SelfTakeByStore;
@@ -566,7 +564,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     if (skus_DeliveryOrSelfTakeByStore.Count > 0)
                     {
-                        var ob_DeliveryOrSelfTakeByStore = new OrderBlockModel();
+                        var ob_DeliveryOrSelfTakeByStore = new RetOrderConfirm.BlockModel();
                         ob_DeliveryOrSelfTakeByStore.TagName = "线上商城[配送或自提]";
                         ob_DeliveryOrSelfTakeByStore.Skus = skus_DeliveryOrSelfTakeByStore;
                         ob_DeliveryOrSelfTakeByStore.TabMode = E_TabMode.DeliveryOrSelfTakeByStore;
@@ -601,7 +599,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (skus_FeeByMember.Count > 0)
                 {
-                    var ob_MemberFee = new OrderBlockModel();
+                    var ob_MemberFee = new RetOrderConfirm.BlockModel();
                     ob_MemberFee.TagName = "会员费";
                     ob_MemberFee.Skus = skus_FeeByMember;
                     ob_MemberFee.TabMode = E_TabMode.FeeByMember;
@@ -614,7 +612,7 @@ namespace LocalS.Service.Api.StoreApp
             var skus_SelfTakeByMachine = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
             if (skus_SelfTakeByMachine.Count > 0)
             {
-                var ob_SelfTakeByMachine = new OrderBlockModel();
+                var ob_SelfTakeByMachine = new RetOrderConfirm.BlockModel();
                 ob_SelfTakeByMachine.TagName = "线下机器";
                 ob_SelfTakeByMachine.Skus = skus_SelfTakeByMachine;
                 ob_SelfTakeByMachine.TabMode = E_TabMode.SelfTakeByMachine;
@@ -628,8 +626,8 @@ namespace LocalS.Service.Api.StoreApp
             ret.Blocks = orderBlock;
 
 
-            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "https://file.17fanju.com/Upload/Icon/icon_discountamont.png", Name = "商品总额", Amount = amount_original.ToF2Price() });
-            c_subtotalItems.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "https://file.17fanju.com/Upload/Icon/icon_discountamont.png", Name = "商品优惠", Amount = "-" + (amount_original - amount_sale).ToF2Price() });
+            c_subtotalItems.Add(new RetOrderConfirm.SubtotalItemModel { ImgUrl = "https://file.17fanju.com/Upload/Icon/icon_discountamont.png", Name = "商品总额", Amount = amount_original.ToF2Price() });
+            c_subtotalItems.Add(new RetOrderConfirm.SubtotalItemModel { ImgUrl = "https://file.17fanju.com/Upload/Icon/icon_discountamont.png", Name = "商品优惠", Amount = "-" + (amount_original - amount_sale).ToF2Price() });
 
             ret.SubtotalItems = c_subtotalItems;
 

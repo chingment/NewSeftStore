@@ -12,7 +12,7 @@ namespace LocalS.BLL.Biz
         public RopOrderBuildPayParams()
         {
             this.OrderIds = new List<string>();
-            this.Blocks = new List<OrderReserveBlockModel>();
+            this.Blocks = new List<RopOrderReserve.BlockModel>();
         }
         public string AppId { get; set; }
         public List<string> OrderIds { get; set; }
@@ -20,7 +20,7 @@ namespace LocalS.BLL.Biz
         public E_PayPartner PayPartner { get; set; }
         public string CreateIp { get; set; }
 
-        public List<OrderReserveBlockModel> Blocks { get; set; }
+        public List<RopOrderReserve.BlockModel> Blocks { get; set; }
 
         public class Order
         {

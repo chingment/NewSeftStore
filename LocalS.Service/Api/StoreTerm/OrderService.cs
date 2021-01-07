@@ -50,7 +50,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.IsTestMode = machine.IsTestMode;
 
 
-            OrderReserveBlockModel block = new OrderReserveBlockModel();
+            LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
             block.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
             block.SelfTake.Mark.Id = machine.StoreId;
@@ -60,7 +60,7 @@ namespace LocalS.Service.Api.StoreTerm
             block.SelfTake.Mark.AreaName = "";
             foreach (var productSku in rop.ProductSkus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.OrderReserveBlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);

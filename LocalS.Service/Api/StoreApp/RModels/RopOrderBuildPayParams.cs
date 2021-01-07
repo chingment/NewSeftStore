@@ -16,6 +16,6 @@ namespace LocalS.Service.Api.StoreApp
         public E_PayPartner PayPartner { get; set; }
         public string CreateIp { get; set; }
 
-        public List<OrderReserveBlockModel> Blocks { get; set; }
+        public List<LocalS.BLL.Biz.RopOrderReserve.BlockModel> Blocks { get; set; }
     }
 }

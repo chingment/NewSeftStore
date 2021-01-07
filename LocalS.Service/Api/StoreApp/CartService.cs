@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.StoreApp
             var d_clientCarts = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == storeId && m.Status == E_ClientCartStatus.WaitSettle).ToList();
 
             //构建购物车商品信息
-            var m_cartProductSkus = new List<CartProductSkuModel>();
+            var m_cartProductSkus = new List<CartDataModel.ProductSkuModel>();
 
             foreach (var d_clientCart in d_clientCarts)
             {
@@ -33,7 +33,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     if (r_productSku.Stocks.Count > 0)
                     {
-                        var m_cartProductSku = new CartProductSkuModel();
+                        var m_cartProductSku = new CartDataModel.ProductSkuModel();
                         m_cartProductSku.CartId = d_clientCart.Id;
                         m_cartProductSku.Id = d_clientCart.PrdProductSkuId;
                         m_cartProductSku.ProductId = d_clientCart.PrdProductId;
@@ -55,7 +55,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var m_shopMode in m_shopModes)
             {
-                var m_carBlock = new CartBlockModel();
+                var m_carBlock = new CartDataModel.BlockModel();
                 m_carBlock.ShopMode = m_shopMode;
                 m_carBlock.ProductSkus = m_cartProductSkus.Where(m => m.ShopMode == m_shopMode).ToList();
                 switch (m_shopMode)
