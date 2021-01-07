@@ -261,8 +261,35 @@ Page({
             orderIds.push(d.orders[i].id)
           }
 
+
+
+          if (_this.data.couponByShop != null) {
+            if (_this.data.couponByShop.selectedCouponIds == null || _this.data.couponByShop.selectedCouponIds.length == 0) {
+              _this.data.couponByShop.tipType = 3
+              _this.data.couponByShop.tipMsg = "-0.0"
+            }
+          }
+
+          if (_this.data.couponByDeposit != null) {
+            if (_this.data.couponByDeposit.selectedCouponIds.length == 0) {
+              _this.data.couponByDeposit.tipType = 3
+              _this.data.couponByDeposit.tipMsg = "-0.0"
+            }
+          }
+
+          if (_this.data.couponByRent != null) {
+
+            if (_this.data.couponByRent.selectedCouponIds.length == 0) {
+              _this.data.couponByRent.tipType = 3
+              _this.data.couponByRent.tipMsg = "-0.0"
+            }
+          }
+
           _this.setData({
-            orderIds: orderIds
+            orderIds: orderIds,
+            couponByShop: _this.data.couponByShop,
+            couponByDeposit: _this.data.couponByDeposit,
+            couponByRent: _this.data.couponByRent
           })
           _this.goPay(_this.data.curSelPayOption, null)
         } else {
