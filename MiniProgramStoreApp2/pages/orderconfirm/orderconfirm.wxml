@@ -3,10 +3,12 @@
 
 <import src="../../template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
-<booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" isShow="{{booktimeDialog.isShow}}">
+<booktimedialog id="booktimeDialog2" bindgetSelectBookTime="getSelectBookTime" dataS="{{booktimeDialog.dataS}}"
+	isShow="{{booktimeDialog.isShow}}">
 </booktimedialog>
-<selfpickaddressdialog id="selfpickaddressdialog" isShow="{{selfPickAddressDialog.isShow}}" bind:_selectSelfPickAddressItem="selectSelfPickAddressItem"
-   dataS="{{selfPickAddressDialog.dataS}}"></selfpickaddressdialog>
+<selfpickaddressdialog id="selfpickaddressdialog" isShow="{{selfPickAddressDialog.isShow}}"
+	bind:_selectSelfPickAddressItem="selectSelfPickAddressItem" dataS="{{selfPickAddressDialog.dataS}}">
+</selfpickaddressdialog>
 
 <!-- <view class='tag-address'>
 	<image class="img" src="/content/default/images/tag_address.png"></image>
@@ -27,12 +29,12 @@
 								<view class="left-triangle">
 								</view>
 							</view>
-							<view class="title-right skeleton-bg" >
+							<view class="title-right skeleton-bg">
 								<view class="right-triangle">
 
 								</view>
 								<view class="txt skeleton-rect">
-									
+
 								</view>
 							</view>
 						</view>
@@ -41,15 +43,15 @@
 							<view class="content-item selected">
 								<view class="its-a">
 									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
-										data-reply-deliveryaddressid="{{item.delivery.contact.id}}">
+										data-reply-deliveryaddressid="{{item.delivery.id}}">
 										<view class="it-l">
-											<text class='txt-h1 skeleton-rect'>{{item.delivery.contact.consignee}}</text>
-											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.contact.isDefault}}">默认</text>
+											<text class='txt-h1 skeleton-rect'>{{item.delivery.consignee}}</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.isDefault}}">默认</text>
 										</view>
 										<view class="it-m">
 											<view class="it-ml skeleton-rect">
-												<text class='txt-h1 bold'>{{item.delivery.contact.phoneNumber}}</text>
-												<text class='txt-h2 '>{{item.delivery.contact.areaName}} {{item.delivery.contact.address}}</text>
+												<text class='txt-h1 bold'>{{item.delivery.phoneNumber}}</text>
+												<text class='txt-h2 '>{{item.delivery.areaName}} {{item.delivery.address}}</text>
 											</view>
 										</view>
 										<view class='it-r' bindtap="goSelect">
@@ -62,7 +64,7 @@
 								</view>
 							</view>
 							<view class="content-item ">
-				
+
 							</view>
 						</view>
 						<view class="its-odcskus" style="padding: 18rpx;">
@@ -70,6 +72,9 @@
 								<view class="it">
 									<view class="it-l">
 										<view class="imgUrl skeleton-rect">
+											<view wx:if="{{skusitem.isOffSell}}" class="isOffSell-box">
+												<view class="isOffSell-tip">已下架</view>
+											</view>
 											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
 										</view>
 									</view>
@@ -94,7 +99,8 @@
 										<view class="dt">
 											<view class="dt1"> <text>租金</text> </view>
 											<view class="dt2">
-												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
+												<text
+													class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
 											</view>
 										</view>
 										<view class="dt">
@@ -115,12 +121,12 @@
 						<view class="tab-title">
 							<view class="title-left skeleton-bg">
 								<view class="txt skeleton-rect">
-								
+
 								</view>
 								<view class="left-triangle">
 								</view>
 							</view>
-							<view class="title-right selected skeleton-bg" >
+							<view class="title-right selected skeleton-bg">
 								<view class="right-triangle">
 
 								</view>
@@ -133,7 +139,7 @@
 						<view class="tab-content">
 							<view class="content-item ">
 								<view class="its-a">
-								
+
 								</view>
 							</view>
 							<view class="content-item selected ">
@@ -226,7 +232,8 @@
 										<view class="dt">
 											<view class="dt1"> <text>租金</text> </view>
 											<view class="dt2">
-												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
+												<text
+													class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
 											</view>
 										</view>
 										<view class="dt">
@@ -279,7 +286,8 @@
 										<view class="it-m">
 											<view class="it-ml skeleton-rect">
 												<text class='txt-h1 bold'>{{item.delivery.contact.phoneNumber}}</text>
-												<text class='txt-h2 '>{{item.delivery.contact.areaName}} {{item.delivery.contact.address}}</text>
+												<text class='txt-h2 '>{{item.delivery.contact.areaName}}
+													{{item.delivery.contact.address}}</text>
 											</view>
 										</view>
 										<view class='it-r'>
@@ -359,6 +367,9 @@
 								<view class="it">
 									<view class="it-l">
 										<view class="imgUrl skeleton-rect">
+											<view wx:if="{{skusitem.isOffSell}}" class="isOffSell-box">
+												<view class="isOffSell-tip">已下架</view>
+											</view>
 											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
 										</view>
 									</view>
@@ -383,7 +394,8 @@
 										<view class="dt">
 											<view class="dt1"> <text>租金</text> </view>
 											<view class="dt2">
-												<text class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
+												<text
+													class='salePrice skeleton-rect'>{{skusitem.rentAmount}}/{{skusitem.rentTermUnitText}}</text>
 											</view>
 										</view>
 										<view class="dt">
@@ -448,6 +460,9 @@
 								<view class="it">
 									<view class="it-l">
 										<view class="imgUrl">
+											<view wx:if="{{skusitem.isOffSell}}" class="isOffSell-box">
+												<view class="isOffSell-tip">已下架</view>
+											</view>
 											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
 										</view>
 									</view>
@@ -505,6 +520,9 @@
 								<view class="it">
 									<view class="it-l">
 										<view class="imgUrl">
+											<view wx:if="{{skusitem.isOffSell}}" class="isOffSell-box">
+												<view class="isOffSell-tip">已下架</view>
+											</view>
 											<image class="img" src="{{skusitem.mainImgUrl}}"></image>
 										</view>
 									</view>
@@ -546,8 +564,8 @@
 					<view class="it">
 						<view class="it-l" style="width:60rpx">
 							<view class="icon">
-								<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"
-								src='{{item.imgUrl}}'></image>
+								<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0" src='{{item.imgUrl}}'>
+								</image>
 							</view>
 						</view>
 						<view class="it-m">

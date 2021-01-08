@@ -15,7 +15,7 @@ Component({
     }
   },
   data: {
-    tag: "personal",
+    tag: "mian-personal",
     isOnReady: false,
     isLogin: false,
     userInfo: {},
@@ -71,6 +71,7 @@ Component({
       })
       _this.getPageData()
     },
+    onUnload: function () {},
     clickToScanCode: function (e) {
       var _this = this
       wx.scanCode({

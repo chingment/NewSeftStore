@@ -2,7 +2,7 @@ const util = require('../../utils/util')
 const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
-
+const apiGlobal = require('../../api/global.js')
 Component({
   options: {
     addGlobalClass: true,
@@ -14,7 +14,7 @@ Component({
     }
   },
   data: {
-    tag: 'cart',
+    tag: 'main-cart',
     isOnReady: false,
     isLogin: false,
     storeId: undefined,
@@ -66,6 +66,11 @@ Component({
             title: res.message
           })
 
+        })
+
+        apiGlobal.byPoint(_this.data.tag, "op_cart", {
+          operate: operate,
+          productSkus: operateProductSkus
         })
       }
 
@@ -225,6 +230,7 @@ Component({
 
 
           _this.setData({
+            scrollHeight: 500,
             cartData: p_cartData
           })
 
@@ -255,10 +261,7 @@ Component({
       query.select('.cart-bottom').boundingClientRect(function (rect) {
         if (rect != null) {
           if (rect.height != null) {
-            console.log("_this.data.height >"+_this.data.height )
-            console.log("rect.height >"+rect.height )
             var height = _this.data.height - rect.height
-            
             _this.setData({
               scrollHeight: height
             })

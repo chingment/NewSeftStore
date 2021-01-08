@@ -5,10 +5,43 @@ const toast = require('/utils/toastutil')
 const storeage = require('/utils/storeageutil.js')
 const ownRequest = require('/own/ownRequest.js')
 const apiOwn = require('/api/own.js')
+const apiGlobal = require('/api/global.js')
+const myPage = require('/utils/myPage.js')
+
+let orgainPage = Page; // 保存原本的Page对象
+let basePage = function (obj) {
+   // 重写onShow方法，用一个变量保存旧的onShow函数
+   let oldOnLoad= obj.onLoad
+
+   console.log('oldOnLoad:'+obj.onLoad)
+
+   obj.onLoad = function (e) {
+     console.log("==>parent.onLoad==");
+     // 此处不能写成oldOnShow()，否则没有this，this.setData等方法为undefined。这里的this在Page构造函数实例化的时候才会指定
+     // 在Page构造函数实例化的时候，小程序会将当前的Page对象的原型链（__proto__）增加很多方法，例如setData。当前的obj没有setData
+     // 上面一段是我猜的
+     oldOnLoad.call(this,e)
+   }
+   // 重写onHide方法，用一个变量保存旧的onHide函数
+   let oldUnload  = obj.onUnload 
+
+   console.log('oldUnload:'+obj.oldUnload)
+
+   obj.onUnload = function () {
+     console.log("==>parent.onUnload==");
+     // 此处不能写成oldOnHide()，否则没有this，this.setData等方法为undefined。这里的this在Page对象实例化的时候才会指定
+     oldUnload.call(this)
+   }
+
+   return orgainPage(obj)
+};
 
 App({
   onLaunch: function () {
     var _this = this
+   
+    myPage.init(_this)
+
     console.log('app.onLaunch')
     _this.autoUpdate()
 
@@ -40,6 +73,7 @@ App({
     // console.log('app.onShow')
     // _this.getConfig()
   },
+  basePage: basePage,
   globalData: {
     appId: null,
     userInfo: null,
@@ -84,6 +118,9 @@ App({
         }
       }
     })
+  },
+  byPoint: function byPoint(page, eventCode, eventParam) {
+    apiGlobal.byPoint(page, eventCode, eventParam)
   },
   autoUpdate: function () {
     console.log(new Date())

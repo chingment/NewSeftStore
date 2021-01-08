@@ -10,6 +10,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tag: "memberrightdesc",
     pageIsReady: false,
     right: 1,
     isMember: false,

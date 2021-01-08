@@ -1,5 +1,6 @@
 Page({
   data: {
+    tag: "myserviceprom",
     canvas: '',
     canvas_width: 700,
     canvas_height: 800,

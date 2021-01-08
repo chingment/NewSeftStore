@@ -4,6 +4,7 @@ const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
+const apiGlobal = require('../../api/global.js')
 const app = getApp()
 
 Page({
@@ -95,6 +96,8 @@ Page({
 
 
   },
+  onShow: function () {},
+  onUnload: function () {},
   //加载更多
   loadmore: function (e) {
     var _this = this
@@ -159,6 +162,12 @@ Page({
 
     })
 
+
+    apiGlobal.byPoint(_this.data.tag, "op_cart", {
+      operate: 2,
+      productSkus: productSkus
+    })
+
   },
   selectSpecs: function (e) {
     var _this = this
@@ -200,6 +209,11 @@ Page({
     var pageIndex = _this.data.dataList.pageIndex
     var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
 
+
+    app.byPoint(_this.data.tag, 'browse_store_kind', {
+      kindId: kindId,
+    })
+
     return apiProduct.search({
       storeId: _this.data.storeId,
       pageIndex: pageIndex,
@@ -228,16 +242,6 @@ Page({
         if ((d.pageIndex + 1) >= d.pageCount) {
           allloaded = true
         }
-
-        new Promise(function (resolve, reject) {
-
-          setTimeout(function () {
-
-            console.log("我是异步")
-
-          }, 3000);
-
-        })
 
         list.loading = false
         list.allloaded = allloaded

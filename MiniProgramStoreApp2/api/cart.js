@@ -7,6 +7,7 @@ const apiGlobal = require('../api/global.js')
 function operate(params) {
 
   var promise = new Promise((resolve, reject) => {
+    
     lumos.postJson({
       url: config.apiUrl.cartOperate,
       dataParams: params,
@@ -20,6 +21,7 @@ function operate(params) {
       }
       resolve(res);
     })
+
   })
 
   return promise;
@@ -44,7 +46,6 @@ function pageData() {
     })
 
   })
-
 
   return promise
 }

@@ -21,7 +21,7 @@ function setCart(cartData) {
   //设置页面的标志点
   var pages = getCurrentPages();
   for (var i = 0; i < pages.length; i++) {
-    if (pages[i].data.tag == "main") {
+    if (pages[i].data.tag.indexOf("main-")>-1) {
 
       pages[i].selectComponent('#cp_cart').setData({
         cartData: cartData

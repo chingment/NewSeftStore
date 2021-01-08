@@ -37,6 +37,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("==>child.onLoad==");
     var _this = this
 
     var skuId = options.skuId == undefined ? "0" : options.skuId
@@ -90,8 +91,16 @@ Page({
       shopMode: shopMode
     }).then(function (res) {
       if (res.result == 1) {
+        var d = res.data
         _this.setData({
-          productSku: res.data
+          productSku: d
+        })
+
+        app.byPoint(_this.data.tag, 'browse_spu', {
+          productSkuId: d.id,
+          kindId1: d.kindId1,
+          kindId2: d.kindId2,
+          kindId3: d.kindId3
         })
       }
     })
@@ -300,4 +309,13 @@ Page({
     return shareObj;
 
   },
+  onHide: function () {
+    console.log("==>onHide==");
+  },
+  onUnload: function () {
+
+  },
+  onShow: function () {
+
+  }
 })

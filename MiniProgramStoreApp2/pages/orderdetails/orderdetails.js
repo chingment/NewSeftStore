@@ -45,5 +45,7 @@ Page({
         }
       }
     })
-  }
+  },
+  onShow: function () {},
+  onUnload: function () {},
 })

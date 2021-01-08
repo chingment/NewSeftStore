@@ -137,7 +137,7 @@ Page({
         var coupon = prevPage.data.couponByShop
         coupon.selectedCouponIds = couponIds.length > 0 ? couponIds[0] : ['']
         prevPage.setData({
-          couponIdsByShop: couponIds.length > 0 ? [couponIds[0]] : [''],
+          couponIdsByShop: couponIds.length > 0 ? couponIds[0] : [''],
           couponByShop: coupon
         })
       } else if (_this.data.op_faceTypes == '3') {

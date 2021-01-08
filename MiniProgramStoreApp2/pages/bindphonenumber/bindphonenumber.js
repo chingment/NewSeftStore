@@ -27,7 +27,12 @@ Page({
     }
   },
   onReady: function () {},
-  onShow: function () {},
+  onUnload: function () {
+
+  },
+  onShow: function () {
+
+  },
   bindPhoneNumberByWx: function (openId, phoneNumber) {
     var _this = this
 

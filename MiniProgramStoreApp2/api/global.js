@@ -3,6 +3,7 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
+
 function dataSet(urlParams) {
 
   return lumos.getJson({
@@ -13,7 +14,7 @@ function dataSet(urlParams) {
 
 function msgTips(urlParams) {
 
- lumos.getJson({
+  lumos.getJson({
     url: config.apiUrl.globalMsgTips,
     urlParams: urlParams,
     isShowLoading: false
@@ -22,7 +23,7 @@ function msgTips(urlParams) {
       var d = res.data
       var pages = getCurrentPages();
       for (var i = 0; i < pages.length; i++) {
-        if (pages[i].data.tag == "main") {
+        if (pages[i].data.tag.indexOf("main-") > -1) {
           pages[i].data.tabBar[2].badge = d.badgeByCart
           pages[i].data.tabBar[3].badge = d.badgeByPersonal
           pages[i].setData({
@@ -35,7 +36,26 @@ function msgTips(urlParams) {
 
 }
 
+function byPoint(page, action, param) {
+
+  const accountInfo = wx.getAccountInfoSync()
+  var appId = accountInfo.miniProgram.appId
+
+  lumos.postJson({
+    url: config.apiUrl.globalByPoint,
+    isShowLoading: false,
+    dataParams: {
+      appId:appId,
+      page: page,
+      action: action,
+      param: param,
+      usrSign:storeage.getOpenId()
+    }
+  })
+}
+
 module.exports = {
   dataSet: dataSet,
-  msgTips: msgTips
+  msgTips: msgTips,
+  byPoint: byPoint
 }

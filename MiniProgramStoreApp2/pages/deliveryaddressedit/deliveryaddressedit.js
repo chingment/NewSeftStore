@@ -8,8 +8,10 @@ const app = getApp()
 
 Page({
   data: {
-    tag:'deliveryaddressedit',
-    address: { area: "" },
+    tag: 'deliveryaddressedit',
+    address: {
+      area: ""
+    },
     showArea: false,
     currentTab: 1,
     country: [],
@@ -210,6 +212,12 @@ Page({
     }
 
   },
+  onUnload: function () {
+
+  },
+  onShow: function () {
+
+  },
   formSubmit: function (e) {
     var id = e.detail.value.deliveryAddress_id
     var consignee = e.detail.value.deliveryAddress_consignee
@@ -219,19 +227,27 @@ Page({
     var isDefault = e.detail.value.deliveryAddress_isDefault
 
     if (consignee.length == 0) {
-      toast.show({ title: '请输入姓名' })
+      toast.show({
+        title: '请输入姓名'
+      })
       return
     }
     if (phoneNumber.length == 0) {
-      toast.show({ title: '请输入手机号码' })
+      toast.show({
+        title: '请输入手机号码'
+      })
       return
     }
     if (areaName.length == 0) {
-      toast.show({ title: '请选择身份，城市，区县' })
+      toast.show({
+        title: '请选择身份，城市，区县'
+      })
       return
     }
     if (address.length == 0) {
-      toast.show({ title: '请输入详细地址' })
+      toast.show({
+        title: '请输入详细地址'
+      })
       return
     }
 
@@ -245,7 +261,7 @@ Page({
       isDefault: isDefault
     }).then(function (res) {
       if (res.result == 1) {
-      wx.navigateBack()
+        wx.navigateBack()
       }
     })
 
@@ -253,13 +269,13 @@ Page({
   onChangeAddress: function () {
     var _this = this
     wx.chooseLocation({
-     success: function (res) {
-       console.log(JSON.stringify(res))
-     },
-     fail: function (err) {
-      console.log(err)
-     }
+      success: function (res) {
+        console.log(JSON.stringify(res))
+      },
+      fail: function (err) {
+        console.log(err)
+      }
     });
-   },
+  },
 
 });

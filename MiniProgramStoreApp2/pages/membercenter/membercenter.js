@@ -14,6 +14,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tag: "membercenter",
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
     skeletonIsDev: false,

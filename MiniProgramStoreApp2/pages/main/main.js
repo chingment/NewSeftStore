@@ -10,7 +10,7 @@ var app = getApp()
 Page({
   data: {
     scrollHeight: 500,
-    tag: "main",
+    tag: "main-",
     tabBarContentHeight: 0,
     name: "index",
     tabBarIndex: 0,
@@ -23,6 +23,7 @@ Page({
       text: "首页",
       navTitle: "首页",
       selected: true,
+      tag: "main-index",
       badge: {
         value: "",
         type: null
@@ -36,6 +37,7 @@ Page({
       text: "分类",
       navTitle: "分类",
       selected: false,
+      tag: "main-productkind",
       badge: {
         value: "",
         type: null
@@ -49,6 +51,7 @@ Page({
       text: "购物车",
       navTitle: "购物车",
       selected: false,
+      tag: "main-cart",
       badge: {
         value: "",
         type: null
@@ -62,6 +65,7 @@ Page({
       text: "个人",
       navTitle: "个人",
       selected: false,
+      tag: "main-personal",
       badge: {
         value: "",
         type: null
@@ -146,9 +150,11 @@ Page({
     //   }
     // }
   },
-  onShow: function () {
+  onShow: function (options) {
     console.log("mian.onShow")
     var _this = this
+
+    console.log(options)
 
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
@@ -168,16 +174,9 @@ Page({
       }
     }
 
+  },
+  onUnload: function () {
 
-    // if (!ownRequest.isSelectedStore(true)) {
-    //   return
-    // }
-    // apiCart.pageData()
-    // if (_this.data.isOnLoad) {
-    //     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    //     let cp = _this.selectComponent('#' + _this.data.tabBar[tabBarIndex].id);
-    //     cp.onShow()
-    //  // }
   },
   _onShow() {
     var _this = this
@@ -190,18 +189,16 @@ Page({
     })
 
     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    mainTabBarSwitch(tabBarIndex)
-
-
+    mainTabBarSwitch(tabBarIndex, false)
   },
   mainTabBarItemClick(e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
-    mainTabBarSwitch(index)
+    mainTabBarSwitch(index, true)
   },
 })
 
-function mainTabBarSwitch(index) {
+function mainTabBarSwitch(index, isOnShow) {
   console.log('mainTabBarSwitch')
 
   var _this = this
@@ -209,12 +206,19 @@ function mainTabBarSwitch(index) {
   var pages = getCurrentPages();
   var isHasMain = false;
   for (var i = 0; i < pages.length; i++) {
-    if (pages[i].data.tag == "main") {
+    if (pages[i].data.tag.indexOf("main-") > -1) {
+
+      var old_index = wx.getStorageSync('main_tabbar_index')
+      if (old_index != index) {
+        pages[i].onUnload()
+      }
+
       isHasMain = true
       var tabBar = pages[i].data.tabBar;
 
       for (var j = 0; j < tabBar.length; j++) {
         if (j == index) {
+
           tabBar[j].selected = true
           var s = tabBar[j];
           setTimeout(function () {
@@ -225,6 +229,7 @@ function mainTabBarSwitch(index) {
 
           wx.setStorageSync('main_tabbar_index', index)
           pages[i].setData({
+            tag: tabBar[j].tag,
             tabBarIndex: index
           })
         } else {
@@ -240,12 +245,16 @@ function mainTabBarSwitch(index) {
         })
       }
 
+      console.log(' cp.data.tag:' + pages[i].data.tag)
       pages[i].setData({
         tabBar: tabBar
       })
 
-      cp = pages[i].selectComponent('#' + tabBar[index].id);
       cp.onShow()
+
+      if (isOnShow) {
+        pages[i].onShow()
+      }
       break
     }
   }
