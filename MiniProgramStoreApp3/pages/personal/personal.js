@@ -15,7 +15,7 @@ Component({
     }
   },
   data: {
-    tag: "personal",
+    tag: "mian-personal",
     isOnReady: false,
     isLogin: false,
     userInfo: {},

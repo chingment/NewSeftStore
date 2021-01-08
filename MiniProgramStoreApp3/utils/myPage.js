@@ -28,7 +28,7 @@ function init(_data) {
     obj.onShow = function () {
       console.log("==>parent.onShow==");
      
-      apiGlobal.byPoint(obj.data.tag, 'browse_page', {})
+      apiGlobal.byPoint(this.data.tag, 'browse_page', {})
     
       oldOnShow.call(this)
     }
@@ -42,7 +42,7 @@ function init(_data) {
     obj.onUnload = function () {
       console.log("==>parent.onUnload==");
 
-      apiGlobal.byPoint(obj.data.tag, 'browse_page', {})
+      apiGlobal.byPoint(this.data.tag, 'browse_page', {})
       
       // 此处不能写成oldOnHide()，否则没有this，this.setData等方法为undefined。这里的this在Page对象实例化的时候才会指定
       oldOnUnload.call(this)

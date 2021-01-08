@@ -23,7 +23,7 @@ function msgTips(urlParams) {
       var d = res.data
       var pages = getCurrentPages();
       for (var i = 0; i < pages.length; i++) {
-        if (pages[i].data.tag == "main") {
+        if (pages[i].data.tag.indexOf("main-") > -1) {
           pages[i].data.tabBar[2].badge = d.badgeByCart
           pages[i].data.tabBar[3].badge = d.badgeByPersonal
           pages[i].setData({

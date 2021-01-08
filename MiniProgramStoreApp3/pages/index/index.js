@@ -19,7 +19,7 @@ Component({
     }
   },
   data: {
-    tag: "index",
+    tag: "main-index",
     storeId: undefined,
     isOnReady: false,
     pageIsReady: false,
