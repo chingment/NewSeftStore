@@ -733,9 +733,16 @@ export default {
     charTagsHandleInputConfirm() {
       const inputValue = this.charTagsInputValue
 
-      if (inputValue && this.form.charTags.length <= 2) {
+      if (inputValue !== '' && this.form.charTags.length <= 2) {
+        for (var i = 0; i < this.form.charTags.length; i++) {
+          if (this.form.charTags[i] === inputValue) {
+            this.$message('已存在' + inputValue)
+            return
+          }
+        }
+
         this.form.charTags.push(inputValue)
-      } else {
+      } else if (inputValue !== '' && this.form.charTags.length >= 3) {
         this.$message('最多输入3个特色标签')
       }
       this.charTagsInputVisible = false

@@ -46,7 +46,7 @@
           <i class="el-icon-plus" />
         </el-upload>
         <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDisplayImgUrls">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt="">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt>
         </el-dialog>
         <el-alert
           title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
@@ -62,12 +62,7 @@
           style="width:300px"
           clearable
         />
-        <el-alert
-          show-icon
-          title="如果商品分类不满足业务需要，请联系系统管理员进行添加或修改"
-          type="remark"
-          :closable="false"
-        />
+        <el-alert show-icon title="如果商品分类不满足业务需要，请联系系统管理员进行添加或修改" type="remark" :closable="false" />
       </el-form-item>
       <el-form-item label="特色标签" prop="charTags">
         <el-tag
@@ -76,9 +71,7 @@
           closable
           :disable-transitions="false"
           @close="charTagsHandleClose(tag)"
-        >
-          {{ tag }}
-        </el-tag>
+        >{{ tag }}</el-tag>
         <el-input
           v-if="charTagsInputVisible"
           ref="saveTagInput"
@@ -104,7 +97,6 @@
         <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
       </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
-
         <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新所有店铺销售信息（价格，下架）</el-checkbox>
 
         <el-alert
@@ -117,36 +109,17 @@
         <table class="list-tb" cellpadding="0" cellspacing="0">
           <thead>
             <tr>
-              <th>
-                规格
-              </th>
-              <th style="width:180px">
-                编码
-              </th>
-              <th style="width:180px">
-                条形码
-              </th>
-              <th style="width:100px">
-                价格
-              </th>
-              <th style="width:100px">
-                下架
-              </th>
+              <th>规格</th>
+              <th style="width:180px">编码</th>
+              <th style="width:180px">条形码</th>
+              <th style="width:100px">价格</th>
+              <th style="width:100px">下架</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(item,x) in form.skus"
-              :key="x"
-            >
+            <tr v-for="(item,x) in form.skus" :key="x">
               <td>
-                <span
-                  v-for="(specDes,y) in item.specDes"
-                  :key="y"
-                >
-                  {{ specDes.value }}
-
-                </span>
+                <span v-for="(specDes,y) in item.specDes" :key="y">{{ specDes.value }}</span>
               </td>
               <td>
                 <el-input v-model="item.cumCode" clearable style="width:90%" />
@@ -162,16 +135,17 @@
               </td>
             </tr>
           </tbody>
-
         </table>
-
       </el-form-item>
 
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" maxlength="200" clearable />
       </el-form-item>
       <el-form-item label="详情图片" prop="detailsDes">
-        <el-input :value="form.detailsDes==null?'':form.detailsDes.toString()" style="display:none" />
+        <el-input
+          :value="form.detailsDes==null?'':form.detailsDes.toString()"
+          style="display:none"
+        />
         <el-upload
           ref="uploadImgByDetailsDes"
           v-model="form.detailsDes"
@@ -189,14 +163,9 @@
           <i class="el-icon-plus" />
         </el-upload>
         <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDetailsDes">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt="">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt>
         </el-dialog>
-        <el-alert
-          title="提示：图片不超过4M；可拖动改变图片顺序"
-          type="remark-gray"
-          :closable="false"
-        />
-
+        <el-alert title="提示：图片不超过4M；可拖动改变图片顺序" type="remark-gray" :closable="false" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -514,11 +483,14 @@ export default {
     charTagsHandleInputConfirm() {
       const inputValue = this.charTagsInputValue
 
-      if (inputValue && this.form.charTags.length <= 2) {
+      // if (inputValue === '') {
+
+      if (inputValue !== '' && this.form.charTags.length <= 2) {
         this.form.charTags.push(inputValue)
-      } else {
+      } else if (inputValue !== '' && this.form.charTags.length >= 3) {
         this.$message('最多输入3个特色标签')
       }
+
       this.charTagsInputVisible = false
       this.charTagsInputValue = ''
     },
@@ -542,23 +514,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#productsku_edit {
+  .el-form .el-form-item {
+    max-width: 600px;
+  }
 
-#productsku_edit{
-.el-form .el-form-item{
-  max-width: 600px;
-}
+  .el-upload-list >>> .sortable-ghost {
+    opacity: 0.8;
+    color: #fff !important;
+    background: #42b983 !important;
+  }
 
-.el-upload-list >>> .sortable-ghost {
-  opacity: .8;
-  color: #fff!important;
-  background: #42b983!important;
-}
+  .el-upload-list >>> .el-tag {
+    cursor: pointer;
+  }
 
-.el-upload-list >>> .el-tag {
-  cursor: pointer;
-}
-
-   .el-tag {
+  .el-tag {
     margin-right: 10px;
   }
   .button-new-tag {
@@ -572,8 +543,6 @@ export default {
     margin-right: 10px;
     vertical-align: bottom;
   }
-
 }
-
 </style>
 

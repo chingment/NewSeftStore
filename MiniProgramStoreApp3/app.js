@@ -9,45 +9,38 @@ const apiGlobal = require('/api/global.js')
 const myPage = require('/utils/myPage.js')
 
 let orgainPage = Page; // 保存原本的Page对象
-let basePage = function (data) {
-  // 生成初始data，如果页面已经有该值不在重新赋值
-  if (typeof data.data.dataVal === 'undefined') {
-    data.data.dataVal = '具体值';
-  }
-  // 重写onLoad默认执行一些初始事件
-  let orgainOnLoad = data.onLoad;
-  data.onLoad = function (o) {
-    console.log(">>>onLoad")
-    // 执行的初始事件 start
+let basePage = function (obj) {
+   // 重写onShow方法，用一个变量保存旧的onShow函数
+   let oldOnLoad= obj.onLoad
 
-    // 执行的初始事件 end
-    orgainOnLoad.call(this, o);
-  }
+   console.log('oldOnLoad:'+obj.onLoad)
 
-  let orgainOnHide= data.onHide;
-  data.onHide = function () {
-    console.log(">>>onHide")
-    // 执行的初始事件 start
+   obj.onLoad = function (e) {
+     console.log("==>parent.onLoad==");
+     // 此处不能写成oldOnShow()，否则没有this，this.setData等方法为undefined。这里的this在Page构造函数实例化的时候才会指定
+     // 在Page构造函数实例化的时候，小程序会将当前的Page对象的原型链（__proto__）增加很多方法，例如setData。当前的obj没有setData
+     // 上面一段是我猜的
+     oldOnLoad.call(this,e)
+   }
+   // 重写onHide方法，用一个变量保存旧的onHide函数
+   let oldUnload  = obj.onUnload 
 
-    // 执行的初始事件 end
-    orgainOnHide.call(this);
-  }
+   console.log('oldUnload:'+obj.oldUnload)
 
-  // 默认初始方法，如果页面已经有该方法不在重写该方法
-  if (typeof data.orgainFun !== 'function') {
-    data.orgainFun = function () {
-      // 执行具体函数 start
+   obj.onUnload = function () {
+     console.log("==>parent.onUnload==");
+     // 此处不能写成oldOnHide()，否则没有this，this.setData等方法为undefined。这里的this在Page对象实例化的时候才会指定
+     oldUnload.call(this)
+   }
 
-      // 执行具体函数 end
-    }
-  }
-  return orgainPage(data);
+   return orgainPage(obj)
 };
 
 App({
   onLaunch: function () {
     var _this = this
    
+    myPage.init(_this)
 
     console.log('app.onLaunch')
     _this.autoUpdate()

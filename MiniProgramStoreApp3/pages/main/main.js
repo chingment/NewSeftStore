@@ -198,6 +198,7 @@ Page({
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
     mainTabBarSwitch(index)
+   
   },
 })
 

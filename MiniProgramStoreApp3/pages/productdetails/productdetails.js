@@ -37,6 +37,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("==>child.onLoad==");
     var _this = this
 
     var skuId = options.skuId == undefined ? "0" : options.skuId
@@ -309,6 +310,12 @@ Page({
 
   },
   onHide: function () {
-    console.log("==onHide==");
+    console.log("==>onHide==");
+  },
+  onUnload: function (e) {
+    console.log("==>child.onUnload==");
+  },
+  onShow:function(){
+
   }
 })

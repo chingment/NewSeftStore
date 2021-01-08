@@ -36,15 +36,15 @@ function msgTips(urlParams) {
 
 }
 
-function byPoint(page, eventCode, eventParam) {
+function byPoint(page, action, param) {
 
   lumos.postJson({
     url: config.apiUrl.globalByPoint,
     isShowLoading: false,
     dataParams: {
       page: page,
-      eventCode: eventCode,
-      eventParam: eventParam
+      action: action,
+      param: param
     }
   })
 }
