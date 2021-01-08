@@ -48,7 +48,8 @@ function byPoint(page, action, param) {
       appId:appId,
       page: page,
       action: action,
-      param: param
+      param: param,
+      usrSign:storeage.getOpenId()
     }
   })
 }

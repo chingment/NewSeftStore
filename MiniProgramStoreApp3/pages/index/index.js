@@ -4,7 +4,7 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
-
+const apiGlobal = require('../../api/global.js')
 const skeletonData = require('./skeletonData');
 
 const app = getApp()
@@ -63,6 +63,10 @@ Component({
         }
       })
 
+      apiGlobal.byPoint(_this.data.tag, "op_cart", {
+        operate: 2,
+        productSkus: productSkus
+      })
     },
     selectSpecs: function (e) {
       var _this = this

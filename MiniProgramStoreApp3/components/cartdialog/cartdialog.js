@@ -1,6 +1,7 @@
 const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
+const apiGlobal = require('../../api/global.js')
 const storeage = require('../../utils/storeageutil.js')
 
 Component({
@@ -138,6 +139,11 @@ Component({
               title: res.message
             })
           }
+        })
+
+        apiGlobal.byPoint(_this.data.tag, "op_cart", {
+          operate: operate,
+          productSkus: operateProductSkus
         })
       }
 

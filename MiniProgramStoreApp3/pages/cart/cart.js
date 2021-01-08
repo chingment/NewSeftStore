@@ -2,7 +2,7 @@ const util = require('../../utils/util')
 const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
-
+const apiGlobal = require('../../api/global.js')
 Component({
   options: {
     addGlobalClass: true,
@@ -66,6 +66,11 @@ Component({
             title: res.message
           })
 
+        })
+
+        apiGlobal.byPoint(_this.data.tag, "op_cart", {
+          operate: operate,
+          productSkus: operateProductSkus
         })
       }
 

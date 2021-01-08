@@ -4,6 +4,7 @@ const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
+const apiGlobal = require('../../api/global.js')
 const app = getApp()
 
 Page({
@@ -159,6 +160,12 @@ Page({
         })
       }
 
+    })
+
+
+    apiGlobal.byPoint(_this.data.tag, "op_cart", {
+      operate: 2,
+      productSkus: productSkus
     })
 
   },
