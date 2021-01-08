@@ -210,6 +210,9 @@ namespace LocalS.BLL
 
 
             var search_Keys = RedisManager.Db.HashScan(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("*{0}*", key.ToLower()));
+
+            search_Keys = search_Keys.Distinct();
+
             foreach (var item in search_Keys)
             {
                 r_skuIds.Add(item.Value);
