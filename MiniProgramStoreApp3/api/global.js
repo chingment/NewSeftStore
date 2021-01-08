@@ -38,10 +38,14 @@ function msgTips(urlParams) {
 
 function byPoint(page, action, param) {
 
+  const accountInfo = wx.getAccountInfoSync()
+  var appId = accountInfo.miniProgram.appId
+
   lumos.postJson({
     url: config.apiUrl.globalByPoint,
     isShowLoading: false,
     dataParams: {
+      appId:appId,
       page: page,
       action: action,
       param: param

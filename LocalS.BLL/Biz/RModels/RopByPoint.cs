@@ -8,6 +8,7 @@ namespace LocalS.BLL.Biz
 {
     public class RopByPoint
     {
+        public string AppId { get; set; }
         public string Page { get; set; }
         public string Action { get; set; }
         public object Param { get; set; }

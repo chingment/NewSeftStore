@@ -1,5 +1,5 @@
 const apiGlobal = require('../api/global.js')
-
+const util = require('../utils/util.js')
 let data
 // 这里data从app.js中传入，为了获取data的一些参数
 function init(_data) {
@@ -21,29 +21,40 @@ function init(_data) {
     // }
 
 
-    let oldOnShow= obj.onShow
+    let oldOnShow = obj.onShow
 
-    console.log('oldOnShow:'+obj.onShow)
+    console.log('oldOnShow:' + obj.onShow)
 
     obj.onShow = function () {
       console.log("==>parent.onShow==");
-     
-      apiGlobal.byPoint(this.data.tag, 'browse_page', {})
-    
+
+      this.setData({
+        start_time: new Date()
+      })
+      apiGlobal.byPoint(this.data.tag, 'browse_page', {
+        starTime: util.formatTime(new Date())
+      })
+
       oldOnShow.call(this)
     }
 
 
     // 重写onHide方法，用一个变量保存旧的onHide函数
-    let oldOnUnload   = obj.onUnload 
+    let oldOnUnload = obj.onUnload
 
-    console.log('oldOnUnload:'+obj.oldOnUnload)
+    console.log('oldOnUnload:' + obj.oldOnUnload)
 
     obj.onUnload = function () {
       console.log("==>parent.onUnload==");
 
-      apiGlobal.byPoint(this.data.tag, 'browse_page', {})
-      
+      const page_stay_time = (new Date() - this.data.start_time) / 1000;
+
+      apiGlobal.byPoint(this.data.tag, 'browse_page', {
+        starTime: util.formatTime(new Date(this.data.start_time)),
+        endtTime: util.formatTime(new Date()),
+        staySecond: page_stay_time
+      })
+
       // 此处不能写成oldOnHide()，否则没有this，this.setData等方法为undefined。这里的this在Page对象实例化的时候才会指定
       oldOnUnload.call(this)
     }

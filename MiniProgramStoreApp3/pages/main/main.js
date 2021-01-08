@@ -156,8 +156,6 @@ Page({
 
     console.log(options)
 
-
-
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
       _this.setData({
@@ -176,18 +174,6 @@ Page({
       }
     }
 
-
-
-
-    // if (!ownRequest.isSelectedStore(true)) {
-    //   return
-    // }
-    // apiCart.pageData()
-    // if (_this.data.isOnLoad) {
-    //     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    //     let cp = _this.selectComponent('#' + _this.data.tabBar[tabBarIndex].id);
-    //     cp.onShow()
-    //  // }
   },
   onUnload: function () {
 
@@ -203,16 +189,16 @@ Page({
     })
 
     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    mainTabBarSwitch(tabBarIndex)
+    mainTabBarSwitch(tabBarIndex, false)
   },
   mainTabBarItemClick(e) {
     var _this = this
     var index = e.currentTarget.dataset.replyIndex
-    mainTabBarSwitch(index)
+    mainTabBarSwitch(index, true)
   },
 })
 
-function mainTabBarSwitch(index) {
+function mainTabBarSwitch(index, isOnShow) {
   console.log('mainTabBarSwitch')
 
   var _this = this
@@ -221,11 +207,18 @@ function mainTabBarSwitch(index) {
   var isHasMain = false;
   for (var i = 0; i < pages.length; i++) {
     if (pages[i].data.tag.indexOf("main-") > -1) {
+
+      var old_index = wx.getStorageSync('main_tabbar_index')
+      if (old_index != index) {
+        pages[i].onUnload()
+      }
+
       isHasMain = true
       var tabBar = pages[i].data.tabBar;
 
       for (var j = 0; j < tabBar.length; j++) {
         if (j == index) {
+
           tabBar[j].selected = true
           var s = tabBar[j];
           setTimeout(function () {
@@ -258,7 +251,10 @@ function mainTabBarSwitch(index) {
       })
 
       cp.onShow()
-      
+
+      if (isOnShow) {
+        pages[i].onShow()
+      }
       break
     }
   }

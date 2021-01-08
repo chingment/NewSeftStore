@@ -80,6 +80,8 @@ namespace LocalS.DAL
         public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
 
 
+        public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }
+  
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

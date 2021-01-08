@@ -48,6 +48,7 @@
     <Compile Include="AdSpace.cs" />
     <Compile Include="AdContentBelong.cs" />
     <Compile Include="AppTraceLog.cs" />
+    <Compile Include="BI_AppTraceLog.cs" />
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />
