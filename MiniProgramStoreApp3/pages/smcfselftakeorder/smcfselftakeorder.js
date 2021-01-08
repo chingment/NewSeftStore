@@ -31,6 +31,8 @@ Page({
       }
     })
   },
+  onShow: function () {},
+  onUnload: function () {},
   clickToScanCode: function (e) {
     var _this = this
     var _data = _this.data

@@ -312,10 +312,10 @@ Page({
   onHide: function () {
     console.log("==>onHide==");
   },
-  onUnload: function (e) {
-    console.log("==>child.onUnload==");
+  onUnload: function () {
+
   },
-  onShow:function(){
+  onShow: function () {
 
   }
 })

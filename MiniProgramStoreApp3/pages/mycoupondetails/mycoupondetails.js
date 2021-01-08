@@ -27,7 +27,7 @@ Page({
       id: id
     }).then(function (res) {
       if (res.result == 1) {
-        var d=res.data
+        var d = res.data
 
         _this.setData(d)
 
@@ -45,5 +45,7 @@ Page({
 
       }
     })
-  }
+  },
+  onShow: function () {},
+  onUnload: function () {},
 })

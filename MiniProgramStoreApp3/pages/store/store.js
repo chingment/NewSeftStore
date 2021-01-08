@@ -69,6 +69,8 @@ Page({
     }
 
   },
+  onShow: function () {},
+  onUnload: function () {},
   selectStore: function (e) {
     var store = e.currentTarget.dataset.replyStore
     ownRequest.setCurrentStoreId(store.id);

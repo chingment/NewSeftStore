@@ -303,5 +303,7 @@ Page({
   },
   stopTouchMove: function () {
     return false;
-  }
+  },
+  onShow: function () {},
+  onUnload: function () {},
 })

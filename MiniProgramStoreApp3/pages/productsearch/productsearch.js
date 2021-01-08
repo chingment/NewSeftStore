@@ -95,6 +95,8 @@ Page({
 
 
   },
+  onShow: function () {},
+  onUnload: function () {},
   //加载更多
   loadmore: function (e) {
     var _this = this

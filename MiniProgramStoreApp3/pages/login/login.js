@@ -54,6 +54,7 @@ Page({
   },
   onReady: function () {},
   onShow: function () {},
+  onUnload: function () {},
   loginByMinProgram: function (openId, userInfoEp, phoneNumberEp) {
     var _this = this
     apiOwn.loginByMinProgram({

@@ -126,15 +126,10 @@ Page({
       clearInterval(_this.countDown);
     }
   },
-
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
+  onShow: function () {},
+  onUnload: function () {},
   onReady: function () {
-
   },
-
   operate: function (e) {
   
     var opType = e.currentTarget.dataset.replyOptype

@@ -41,6 +41,9 @@ function init(_data) {
 
     obj.onUnload = function () {
       console.log("==>parent.onUnload==");
+
+      apiGlobal.byPoint(obj.data.tag, 'browse_page', {})
+      
       // 此处不能写成oldOnHide()，否则没有this，this.setData等方法为undefined。这里的this在Page对象实例化的时候才会指定
       oldOnUnload.call(this)
     }
