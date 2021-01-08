@@ -102,7 +102,17 @@ Page({
     isOnLoad: false
   },
   onLoad: function (options) {
+    var _this = this
+    var old_index = wx.getStorageSync('main_tabbar_index')|| 0
+    var tag = _this.data.tabBar[old_index].tag
+
+    console.log('tag:' + tag)
+    _this.setData({
+      tag: tag
+    })
+
     // var _this = this;
+
     // wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
     //   var wHeight = wx.getSystemInfoSync().windowHeight;
     //   _this.setData({
