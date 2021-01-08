@@ -12,6 +12,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tag: "couponrevcenter",
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
     skeletonIsDev: false,

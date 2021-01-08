@@ -202,6 +202,11 @@ Page({
     var pageIndex = _this.data.dataList.pageIndex
     var kindId = _this.data.condition_Kinds[_this.data.condition_Kinds_index].id
 
+
+    app.byPoint(_this.data.tag, 'browse_store_kind', {
+      kindId: kindId,
+    })
+
     return apiProduct.search({
       storeId: _this.data.storeId,
       pageIndex: pageIndex,
@@ -230,16 +235,6 @@ Page({
         if ((d.pageIndex + 1) >= d.pageCount) {
           allloaded = true
         }
-
-        new Promise(function (resolve, reject) {
-
-          setTimeout(function () {
-
-            console.log("我是异步")
-
-          }, 3000);
-
-        })
 
         list.loading = false
         list.allloaded = allloaded

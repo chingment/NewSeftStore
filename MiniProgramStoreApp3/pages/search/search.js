@@ -8,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tag: "search",
     navH:40,
     statusBarHeight:0,
     searchInputFocus: false,

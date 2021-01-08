@@ -32,7 +32,7 @@ function init(_data) {
         start_time: new Date()
       })
       apiGlobal.byPoint(this.data.tag, 'browse_page', {
-        starTime: util.formatTime(new Date())
+        startTime: util.formatTime(new Date())
       })
 
       oldOnShow.call(this)
@@ -50,8 +50,8 @@ function init(_data) {
       const page_stay_time = (new Date() - this.data.start_time) / 1000;
 
       apiGlobal.byPoint(this.data.tag, 'browse_page', {
-        starTime: util.formatTime(new Date(this.data.start_time)),
-        endtTime: util.formatTime(new Date()),
+        startTime: util.formatTime(new Date(this.data.start_time)),
+        endTime: util.formatTime(new Date()),
         staySecond: page_stay_time
       })
 

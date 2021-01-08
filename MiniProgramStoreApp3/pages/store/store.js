@@ -3,7 +3,9 @@ const apiStore = require('../../api/store.js')
 const app = getApp()
 
 Page({
-  data: {},
+  data: {
+    tag:'store'
+  },
   onLoad: function (options) {
     var _this = this
 
