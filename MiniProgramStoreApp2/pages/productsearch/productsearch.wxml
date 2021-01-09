@@ -8,11 +8,11 @@
 
 	<view class="search-condition" style="height:62rpx">
 		<block wx:if="{{condition_Kinds.length>0}}">
-			<scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{100*condition_Kinds_index}}">
-				<view style="width:{{condition_Kinds.length*100}}px;height:62rpx;" class="tabbar-items">
+			<scroll-view class="tabbar-scroll" scroll-x="true" scroll-left="{{160*condition_Kinds_index}}rpx">
+				<view style="width:{{condition_Kinds.length*160}}rpx;height:62rpx;" class="tabbar-items">
 					<view class="container">
 						<block wx:for="{{condition_Kinds}}" wx:for-item="item" wx:for-index="index" wx:key="index">
-							<view id="{{index}}" style="width:80px" class="item {{condition_Kinds_index==index?'item-seleced':''}}"
+							<view id="{{index}}" style="width:140rpx" class="item {{condition_Kinds_index==index?'item-seleced':''}}"
 								data-reply-index="{{index}}" bindtap="tabBarClickByKind">
 								<view class="title skeleton-rect">{{item.name}}</view>
 								<view class='seleced-bottom'></view>
