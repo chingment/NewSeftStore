@@ -135,7 +135,6 @@ Page({
     var opType = e.currentTarget.dataset.replyOptype
     var opVal = e.currentTarget.dataset.replyOpval
 
-    console.log("opType:" + opType + ",opVal:" + opVal)
     switch (opType) {
       case "FUN":
         switch (opVal) {

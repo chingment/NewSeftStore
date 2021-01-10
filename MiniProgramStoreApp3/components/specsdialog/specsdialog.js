@@ -21,7 +21,6 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
-        //console.log("newVal:" + newVal + ",oldVal:" + oldVal)
         if (newVal) {
           this._dialogOpen()
         }
@@ -35,8 +34,6 @@ Component({
       value: null,
       observer: function (newVal, oldVal) {
         var _this = this
-        //console.log("newVal:" + JSON.stringify(newVal))
-        //console.log("oldVal:" + JSON.stringify(oldVal))
         var productSku = newVal
         var specIdxSkus = productSku.specIdxSkus
         var specShopItemInfo = {}
@@ -44,8 +41,6 @@ Component({
         for (var i in specIdxSkus) {
           specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i];
         }
-
-        //console.log("specShopItemInfo=>"+JSON.stringify(specShopItemInfo))
 
         for (var i = 0; i < specItems.length; i++) {
           for (var o = 0; o < specItems[i].value.length; o++) {

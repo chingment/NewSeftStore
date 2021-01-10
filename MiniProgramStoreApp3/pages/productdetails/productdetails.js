@@ -152,7 +152,7 @@ Page({
         var cartDialog = _this.data.cartDialog
         cartDialog.dataS = res.data
         cartDialog.isShow = false
-        console.log('cartDialog.ishow:' + cartDialog.isShow)
+    
         _this.setData({
           cartDialog: cartDialog
         })

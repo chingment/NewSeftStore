@@ -23,10 +23,10 @@ function init(_data) {
 
     let oldOnShow = obj.onShow
 
-    console.log('oldOnShow:' + obj.onShow)
+    //console.log('oldOnShow:' + obj.onShow)
 
     obj.onShow = function () {
-      console.log("==>parent.onShow==");
+      // console.log("==>parent.onShow==");
 
       this.setData({
         start_time: new Date()
@@ -42,10 +42,10 @@ function init(_data) {
     // 重写onHide方法，用一个变量保存旧的onHide函数
     let oldOnUnload = obj.onUnload
 
-    console.log('oldOnUnload:' + obj.oldOnUnload)
+   // console.log('oldOnUnload:' + obj.oldOnUnload)
 
     obj.onUnload = function () {
-      console.log("==>parent.onUnload==");
+    //  console.log("==>parent.onUnload==");
 
       const page_stay_time = (new Date() - this.data.start_time) / 1000;
 

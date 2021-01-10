@@ -1,6 +1,5 @@
 <view class="page st-cart" style="height:{{height}}px;">
   <view class="page-ct ct" style="height:100%;position:relative">
-
     <block wx:if="{{isLogin}}">
       <block wx:if="{{cartData.blocks.length>0}}">
         <scroll-view scroll-y="true" style="height:{{scrollHeight}}px;">
@@ -76,7 +75,6 @@
           </view>
         </view>
       </block>
-
       <block wx:else>
 
         <view style='height:60%;display:flex;justify-content:center;align-items:center'>
@@ -86,11 +84,9 @@
         <button style="width:80%;color: #fff;" class="btn bg-main btn-login" bindtap="clickToGoShop">去购物</button>
 
       </block>
-
     </block>
     <block wx:else>
       <button style="width:80%;color: #fff;" class="btn bg-main btn-login" bindtap="clickToGoLogin">登录</button>
     </block>
-
   </view>
 </view>

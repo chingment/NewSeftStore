@@ -129,7 +129,6 @@ Page({
         couponIds.push(coupon.id)
       }
 
-      console.log(">>>" + JSON.stringify(couponIds))
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
 
@@ -150,7 +149,6 @@ Page({
       } else if (_this.data.op_faceTypes == '4') {
         var coupon = prevPage.data.couponByDeposit
         coupon.selectedCouponIds = couponIds
-        console.log('couponIds>>' + couponIds)
         prevPage.setData({
           couponIdByDeposit: couponIds.length > 0 ? couponIds[0] : '',
           couponByDeposit: coupon

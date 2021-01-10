@@ -69,7 +69,7 @@ Page({
             condition_Kinds_index = i
           }
         }
-        console.log(">>>condition_Kinds:" + JSON.stringify(d.condition_Kinds))
+        // console.log(">>>condition_Kinds:" + JSON.stringify(d.condition_Kinds))
         _this.setData({
           condition_Kinds: d.condition_Kinds,
           condition_Kinds_index: condition_Kinds_index,

@@ -121,7 +121,7 @@ Page({
     }
 
     var faceTypes = e.currentTarget.dataset.replyFacetypes
-    console.log('faceTypes:' + faceTypes)
+    //console.log('faceTypes:' + faceTypes)
     var couponIds
     if (faceTypes == '1,2') {
       couponIds = _this.data.couponIdsByShop
@@ -322,7 +322,7 @@ Page({
   goPayCofirm: function (payOption, blocks) {
     var _this = this
     var data = _this.data
-    console.log('_this.data.action:' + data.action)
+   // console.log('_this.data.action:' + data.action)
     apiOrder.buildPayParams({
       orderIds: data.orderIds,
       payCaller: payOption.payCaller,
@@ -391,9 +391,9 @@ Page({
     var blockindex = e.currentTarget.dataset.replyBlockindex
     var tabmode = e.currentTarget.dataset.replyTabmode
 
-    console.log("blockindex:" + blockindex)
-    console.log("tabmode:" + tabmode)
-    console.log("receivemode:" + receivemode)
+    //console.log("blockindex:" + blockindex)
+    //console.log("tabmode:" + tabmode)
+    //console.log("receivemode:" + receivemode)
 
     _this.data.blocks[blockindex].receiveMode = receivemode
 
@@ -456,14 +456,10 @@ Page({
     })
   },
   clickToOpenBooktimeDialog: function (e) {
-    console.log('booktimeSelect')
+
     var _this = this
     var blockIndex = e.currentTarget.dataset.replyBlockindex
-
-
     var booktime = _this.data.blocks[blockIndex].selfTake.bookTime
-
-    console.log(JSON.stringify(booktime))
 
     _this.setData({
       curBookTimeBlockIndex: blockIndex,
@@ -485,7 +481,7 @@ Page({
       type: d.type
     }
 
-    console.log("booktime:" + JSON.stringify(booktime))
+
     _this.data.blocks[_this.data.curBookTimeBlockIndex].selfTake.bookTime = booktime
 
     _this.setData({
@@ -510,7 +506,6 @@ Page({
   selectSelfPickAddressItem: function (e) {
     var _this = this
     var selfPickAddress = e.detail.selfPickAddress
-    console.log("selfPickAddress:" + JSON.stringify(selfPickAddress))
 
     var blockIndex = _this.data.curSelfPickAddressBlockIndex
 

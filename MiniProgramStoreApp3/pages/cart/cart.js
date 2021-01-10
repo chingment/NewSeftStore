@@ -163,7 +163,6 @@ Component({
       }
 
       //更新数据
-      // console.log(JSON.stringify(_this.data.cart))
       _this.setData({
         cartData: cartData
       })

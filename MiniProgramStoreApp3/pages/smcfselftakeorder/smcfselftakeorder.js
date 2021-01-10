@@ -40,9 +40,9 @@ Page({
     var dataindex = e.currentTarget.dataset.replyDataindex
     var deviceidindex = e.currentTarget.dataset.replyDeviceidindex
 
-    console.log("blockindex:" + blockindex)
-    console.log("dataindex:" + dataindex)
-    console.log("deviceidindex:" + deviceidindex)
+    //console.log("blockindex:" + blockindex)
+    //console.log("dataindex:" + dataindex)
+    //console.log("deviceidindex:" + deviceidindex)
 
 
 

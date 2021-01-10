@@ -106,7 +106,6 @@ Page({
     var old_index = wx.getStorageSync('main_tabbar_index') || 0
     var tag = _this.data.tabBar[old_index].tag
 
-    console.log('tag:' + tag)
     _this.setData({
       tag: tag
     })
@@ -164,8 +163,6 @@ Page({
     console.log("mian.onShow")
     var _this = this
 
-    console.log(options)
-
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
       _this.setData({
@@ -211,13 +208,12 @@ Page({
     else if(e.type=='callSomeFun'){
       index=e.detail.dataset.replyIndex
     }
-    console.log('index:'+JSON.stringify(index))
     mainTabBarSwitch(index, true)
   }
 })
 
 function mainTabBarSwitch(index, isOnShow) {
-  console.log('mainTabBarSwitch')
+
   var pages = getCurrentPages();
   var isHasMain = false;
   for (var i = 0; i < pages.length; i++) {

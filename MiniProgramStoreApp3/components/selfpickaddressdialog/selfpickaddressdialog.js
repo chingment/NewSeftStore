@@ -12,7 +12,6 @@ Component({
       type: Boolean,
       value: false,
       observer: function (newVal, oldVal) {
-        console.log('isShow:' + newVal)
         if (newVal) {
           this._dialogOpen()
         } else {
@@ -26,7 +25,6 @@ Component({
       observer: function (newVal, oldVal) {
         if (newVal == null)
           return
-        console.log('dataS:' + JSON.stringify(newVal))
         this.setData({
           myDataS: newVal
         })
@@ -103,8 +101,7 @@ Component({
     _selectItem: function (e) {
       var _this = this
       var item = e.currentTarget.dataset.replyItem
-      console.log(JSON.stringify(item))
-
+      
       _this.triggerEvent('_selectSelfPickAddressItem', {
         selfPickAddress: item
       })

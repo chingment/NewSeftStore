@@ -57,7 +57,7 @@ Page({
         })
       },
       fail(err) {
-        console.log(err);
+      
       }
     })
 
@@ -152,15 +152,11 @@ Page({
 
     var curFeeSt
     if (_data.curlevelSt == 1) {
-      console.log("1")
+  
       curFeeSt = _data.levelSt1.feeSts[_data.levelSt1.curFeeStIdx]
     } else if (_this.data.curlevelSt == 2) {
-      console.log("2")
       curFeeSt = _data.levelSt2.feeSts[_data.levelSt2.curFeeStIdx]
     }
-
-    console.log("_this.data.curlevelSt:" + _data.curlevelSt)
-    console.log("curFeeSt:" + JSON.stringify(curFeeSt))
 
     var skuId = curFeeSt.id //对应页面data-reply-index
     var productSkus = []
@@ -186,7 +182,7 @@ Page({
   clickToTabLevel(e) {
     var _this = this
     var level = e.currentTarget.dataset.replyLevel
-    console.log("level:" + level)
+
     _this.setData({
       curlevelSt: level
     })
@@ -203,10 +199,9 @@ Page({
         levelSt1: levelSt1
       })
     }
-    console.log("level:" + level + ",feeStIdx:" + feeStIdx)
   },
   clickToOpenSaleOutletDialog: function (e) {
-    console.log("goCart")
+    ("goCart")
     var _this = this
     var saleOutletDialog = _this.data.saleOutletDialog
     saleOutletDialog.isShow = true
@@ -218,7 +213,7 @@ Page({
   selectSaleoutletItem: function (e) {
     var _this = this
     var saleOutlet = e.detail.saleOutlet
-    console.log("saleOutlet:" + JSON.stringify(saleOutlet))
+
     var curSaleOutlet = _this.data.curSaleOutlet
     curSaleOutlet.id = saleOutlet.id
     curSaleOutlet.contentBm = saleOutlet.name
