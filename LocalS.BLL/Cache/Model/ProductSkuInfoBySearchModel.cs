@@ -15,7 +15,6 @@ namespace LocalS.BLL
         public string BarCode { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
-
         public string SpecDes { get; set; }
     }
 }

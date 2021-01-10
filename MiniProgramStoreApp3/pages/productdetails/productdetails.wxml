@@ -113,20 +113,26 @@
 		<view bindtap="goHome" class="item-home">
 			<image src="/content/default/images/home.png" />
 		</view>
-		<view bindtap="goCart" class="item-cart" wx:if="{{shopMethod==1}}">
+		<view bindtap="goCart" class="item-cart" wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}">
 			<view class='number {{cartDialog.dataS.count==0?"hidden":""}}'>{{cartDialog.dataS.count}}</view>
 			<image src="/content/default/images/cart.png" />
 		</view>
 		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
-			wx:if="{{shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
+			wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
 			<text>加入购物车</text>
 		</view>
 		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}'
-			wx:if="{{shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
+			wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
 			<text>立即购买</text>
 		</view>
+
+		<view bindtap="immeMavkBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}'
+			wx:if="{{productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
+			<text>立即购买</text>
+		</view>
+
 		<view bindtap="immeRent" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
-			wx:if="{{shopMethod==2}}" data-reply-skuid="{{productSku.id}}">
+			wx:if="{{productSku.isMavkBuy&&shopMethod==2}}" data-reply-skuid="{{productSku.id}}">
 			<text>立即租用</text>
 		</view>
 	</view>

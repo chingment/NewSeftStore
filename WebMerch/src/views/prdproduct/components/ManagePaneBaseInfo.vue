@@ -92,6 +92,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="属性">
+        <el-checkbox v-model="form.isMavkBuy">单独购买</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
         <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
@@ -197,6 +198,7 @@ export default {
         subjectIds: [],
         detailsDes: [],
         charTags: [],
+        isMavkBuy:false,
         isTrgVideoService: false,
         isRevService: false,
         isHardware: false,
@@ -253,6 +255,7 @@ export default {
           this.form.briefDes = d.briefDes
           this.form.displayImgUrls = d.displayImgUrls
           this.form.skus = d.skus
+          this.form.isMavkBuy=d.isMavkBuy
           this.form.isTrgVideoService = d.isTrgVideoService
           this.form.isRevService = d.isRevService
           this.form.isHardware = d.isHardware
@@ -309,6 +312,7 @@ export default {
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
           _form.isHardware = this.form.isHardware
+          _form.isMavkBuy = this.form.isMavkBuy
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = this.form.skus
           _form.supplierId = this.form.supplierId

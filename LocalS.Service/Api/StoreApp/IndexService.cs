@@ -146,6 +146,7 @@ namespace LocalS.Service.Api.StoreApp
                     m_productSku.SpecItems = r_productSku.SpecItems;
                     m_productSku.SpecIdx = r_productSku.SpecIdx;
                     m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
+                    m_productSku.IsMavkBuy = true;
                     m_productSku.IsShowPrice = false;
                     m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
                     m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
@@ -167,7 +168,7 @@ namespace LocalS.Service.Api.StoreApp
                 tab.Id = d_storeKind.Id;
                 tab.Name = d_storeKind.Name;
                 tab.MainImgUrl = ImgSet.GetMain_O(d_storeKind.DisplayImgUrls);
-                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, d_storeKind.Id);
+                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, E_OrderShopMethod.Shop, d_storeKind.Id);
                 if (tab.List.Items.Count > 0)
                 {
                     m_pdArea.Tabs.Add(tab);

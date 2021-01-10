@@ -279,7 +279,6 @@
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpus.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreManageMachineGetMachineList.cs" />
-    <Compile Include="Api\Merch\RModels\RupStoreManageProductGetProductList.cs" />
     <Compile Include="Api\Merch\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\AdminUserService.cs" />

@@ -44,5 +44,6 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public string Mender { get; set; }
         public string SupplierId { get; set; }
+        public bool IsMavkBuy{ get; set; }
     }
 }

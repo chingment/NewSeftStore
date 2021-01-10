@@ -49,7 +49,7 @@ namespace LocalS.Service.Api.StoreApp
         public E_RentTermUnit RentTermUnit { get; set; }
         public string RentTermUnitText { get; set; }
         public decimal DepositAmount { get; set; }
-
+        public bool IsMavkBuy { get; set; }
         public int KindId1 { get; set; }
         public int KindId2 { get; set; }
         public int KindId3 { get; set; }

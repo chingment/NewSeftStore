@@ -14,5 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         public string StoreId { get; set; }
 
         public E_SellChannelRefType ShopMode { get; set; }
+
+        public E_OrderShopMethod ShopMethod { get; set; }
     }
 }

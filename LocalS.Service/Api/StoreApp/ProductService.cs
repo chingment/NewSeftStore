@@ -43,14 +43,14 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, rup.ShopMode, rup.KindId);
+            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, rup.ShopMode, rup.ShopMethod, rup.KindId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntiy);
 
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, E_SellChannelRefType shopMode, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, E_SellChannelRefType shopMode, E_OrderShopMethod shopMethod, string kindId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 
@@ -104,6 +104,15 @@ namespace LocalS.Service.Api.StoreApp
                 m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
 
 
+                if (shopMethod == E_OrderShopMethod.Rent)
+                {
+                    m_productSku.IsMavkBuy = true;
+                }
+                else
+                {
+                    m_productSku.IsMavkBuy = r_productSku.IsMavkBuy;
+                }
+
 
                 if (shopMode == E_SellChannelRefType.Machine)
                 {
@@ -151,6 +160,16 @@ namespace LocalS.Service.Api.StoreApp
             m_productSku.SpecIdx = r_productSku.SpecIdx;
             m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
             m_productSku.CharTags = r_productSku.CharTags;
+
+
+            if (rup.ShopMethod == E_OrderShopMethod.Rent)
+            {
+                m_productSku.IsMavkBuy = true;
+            }
+            else
+            {
+                m_productSku.IsMavkBuy = r_productSku.IsMavkBuy;
+            }
 
             if (rup.ShopMode == E_SellChannelRefType.Machine)
             {

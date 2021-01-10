@@ -88,7 +88,8 @@ Page({
     apiProduct.details({
       storeId: storeId,
       skuId: skuId,
-      shopMode: shopMode
+      shopMode: shopMode,
+      shopMethode: shopMethod
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -207,6 +208,37 @@ Page({
     })
   },
   immeRent: function (e) {
+    var _this = this
+
+    if (_this.data.productSku.isOffSell) {
+      toast.show({
+        title: '商品已下架'
+      })
+      return
+    }
+
+    if (!ownRequest.isLogin()) {
+      ownRequest.goLogin()
+      return
+    }
+
+    var skuId = _this.data.productSku.id //对应页面data-reply-index
+    var productSkus = []
+    productSkus.push({
+      cartId: 0,
+      id: skuId,
+      quantity: 1,
+      shopMode: _this.data.shopMode,
+      shopMethod: _this.data.shopMethod
+    })
+    wx.navigateTo({
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      success: function (res) {
+        // success
+      },
+    })
+  },
+  immeMavkBuy:function(e){
     var _this = this
 
     if (_this.data.productSku.isOffSell) {

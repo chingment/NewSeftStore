@@ -120,6 +120,7 @@
       </el-form-item>
       <el-form-item label="属性">
         <el-checkbox v-model="isOpenAddMultiSpecs">多规格</el-checkbox>
+        <el-checkbox v-model="form.isMavkBuy">单独购买</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
         <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
@@ -442,6 +443,7 @@ export default {
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
           _form.isHardware = this.form.isHardware
+          _form.isMavkBuy = this.form.isMavkBuy
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = skus
           console.log(JSON.stringify(_form))

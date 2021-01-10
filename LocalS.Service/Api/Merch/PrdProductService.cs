@@ -209,6 +209,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.IsRevService = rop.IsRevService;
                 prdProduct.IsHardware = rop.IsHardware;
+                prdProduct.IsMavkBuy = rop.IsMavkBuy;
                 prdProduct.SupReceiveMode = rop.SupReceiveMode;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
                 prdProduct.SpecItems = rop.SpecItems.Where(m => m.Value.Count > 0).ToJsonString();
@@ -298,6 +299,7 @@ namespace LocalS.Service.Api.Merch
                 ret.IsRevService = prdProduct.IsRevService;
                 ret.IsHardware = prdProduct.IsHardware;
                 ret.SupReceiveMode = prdProduct.SupReceiveMode;
+                ret.IsMavkBuy = prdProduct.IsMavkBuy;
                 if (!string.IsNullOrEmpty(prdProduct.SupplierId))
                 {
                     var supplier = CurrentDb.Supplier.Where(m => m.Id == prdProduct.SupplierId).FirstOrDefault();
@@ -369,6 +371,7 @@ namespace LocalS.Service.Api.Merch
                 prdProduct.IsTrgVideoService = rop.IsTrgVideoService;
                 prdProduct.IsRevService = rop.IsRevService;
                 prdProduct.IsHardware = rop.IsHardware;
+                prdProduct.IsMavkBuy = rop.IsMavkBuy;
                 prdProduct.SupReceiveMode = rop.SupReceiveMode;
                 prdProduct.CharTags = rop.CharTags.ToJsonString();
                 prdProduct.SupplierId = rop.SupplierId;
