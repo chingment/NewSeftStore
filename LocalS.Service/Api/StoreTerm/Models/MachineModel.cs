@@ -22,7 +22,6 @@ namespace LocalS.Service.Api.StoreTerm
 
         public string MachineId { get; set; }
         public string Name { get; set; }
-
         public string DeviceId { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }

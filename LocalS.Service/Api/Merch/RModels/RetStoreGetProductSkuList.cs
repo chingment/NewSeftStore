@@ -10,8 +10,7 @@ namespace LocalS.Service.Api.Merch
     {
         public RetStoreGetProductSkuList()
         {
-            this.StoreSellChannels = new List<StoreSellChannelModel>();
+         
         }
-        public List<StoreSellChannelModel> StoreSellChannels { get; set; }
     }
 }

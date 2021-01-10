@@ -11,9 +11,8 @@ namespace LocalS.Service.Api.Merch
     {
         public RetStoreInitManageProduct()
         {
-            this.SellChannels = new List<StoreSellChannelModel>();
+         
         }
 
-        public List<StoreSellChannelModel> SellChannels { get; set; }
     }
 }

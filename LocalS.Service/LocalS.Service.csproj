@@ -188,13 +188,11 @@
     <Compile Include="Api\Merch\Models\MachineModel.cs" />
     <Compile Include="Api\Merch\Models\OnSaleStoreModel.cs" />
     <Compile Include="Api\Merch\Models\ProductSkuInStoreModel.cs" />
-    <Compile Include="Api\Merch\Models\ProductSkuModel.cs" />
     <Compile Include="Api\Merch\Models\SlotRowModel.cs" />
     <Compile Include="Api\Merch\Models\Rpt7DayGmvRlModel.cs" />
     <Compile Include="Api\Merch\Models\RptProductSkuSaleRlModel.cs" />
     <Compile Include="Api\Merch\Models\RptStoreGmvRlModel.cs" />
     <Compile Include="Api\Merch\Models\StoreModel.cs" />
-    <Compile Include="Api\Merch\Models\StoreSellChannelModel.cs" />
     <Compile Include="Api\Merch\OrderService.cs" />
     <Compile Include="Api\Merch\PayRefundService.cs" />
     <Compile Include="Api\Merch\PayTransService.cs" />
