@@ -511,7 +511,7 @@ Page({
 
     _this.data.blocks[blockIndex].selfTake.mark.id = selfPickAddress.id
     _this.data.blocks[blockIndex].selfTake.mark.name = selfPickAddress.name
-    _this.data.blocks[blockIndex].selfTake.mark.address = selfPickAddress.contactAddress
+    _this.data.blocks[blockIndex].selfTake.mark.address = selfPickAddress.address
     _this.data.blocks[blockIndex].selfTake.mark.areaCode = selfPickAddress.areaCode
     _this.data.blocks[blockIndex].selfTake.mark.areaName = selfPickAddress.areaName
 

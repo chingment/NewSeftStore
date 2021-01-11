@@ -89,7 +89,7 @@ Page({
       storeId: storeId,
       skuId: skuId,
       shopMode: shopMode,
-      shopMethode: shopMethod
+      shopMethod: shopMethod
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
