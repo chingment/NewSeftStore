@@ -106,6 +106,7 @@ export default {
   },
   watch: {
     storeid: function(val, oldval) {
+      console.log('storeid3 值改变:' + val)
       this.init()
     }
   },
@@ -115,6 +116,7 @@ export default {
   methods: {
     init() {
       if (!isEmpty(this.storeid)) {
+        console.log('storeid3 1值改变:' + this.storeid)
         this.loading = true
         this.storeId = this.storeid
         this.listQuery.storeId = this.storeid

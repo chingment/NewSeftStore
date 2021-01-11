@@ -518,55 +518,55 @@ export default {
   },
   watch: {
     storeid: function(val, oldval) {
-      console.log('val:' + val + ',oldval：' + oldval)
-
-      this.listQuery.storeId = this.storeid
-      this.init()
-    },
-    $route() {
-      var receiveMode = getUrlParam('receiveMode')
-      this.listQuery.receiveMode = receiveMode
+      // console.log('val:' + val + ',oldval：' + oldval)
+      console.log('storeid4 值改变:' + val)
+      // this.listQuery.storeId = val
       this.init()
     }
   },
   created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
-    }
+    // if (this.$store.getters.listPageQuery.has(this.$route.path)) {
+    //   this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+    // }
 
-    var urlPrm_isHasEx = this.$cookies.get('isHasEx')
-    if (urlPrm_isHasEx === '1') {
-      this.$cookies.remove('isHasEx')
-      this.listQuery.isHasEx = true
-    } else {
-      this.listQuery.isHasEx = false
-    }
+    // var urlPrm_isHasEx = this.$cookies.get('isHasEx')
+    // if (urlPrm_isHasEx === '1') {
+    //   this.$cookies.remove('isHasEx')
+    //   this.listQuery.isHasEx = true
+    // } else {
+    //   this.listQuery.isHasEx = false
+    // }
 
-    var receiveMode = getUrlParam('receiveMode')
-    if (receiveMode != null) {
-      this.listQuery.receiveMode = receiveMode
-    } else {
-      this.listQuery.receiveMode = this.receivemode
-    }
+    // var receiveMode = getUrlParam('receiveMode')
+    // if (receiveMode != null) {
+    //   this.listQuery.receiveMode = receiveMode
+    // } else {
+    //   this.listQuery.receiveMode = this.receivemode
+    // }
 
-    this.listQuery.storeId = this.storeid
-    this.listQuery.sellChannelRefId = this.sellchannelrefid
+    // this.listQuery.storeId = this.storeid
+    // this.listQuery.sellChannelRefId = this.sellchannelrefid
 
-    if (this.clientuserid === '') {
-      this.isShowClientUserNameInput = true
-    } else {
-      this.isShowClientUserNameInput = false
-    }
-    this.listQuery.clientUserId = this.clientuserid
+    // if (this.clientuserid === '') {
+    //   this.isShowClientUserNameInput = true
+    // } else {
+    //   this.isShowClientUserNameInput = false
+    // }
+    // this.listQuery.clientUserId = this.clientuserid
     this.init()
   },
   methods: {
     init() {
+      console.log('storeid4 1值改变:' + this.storeid)
+      this.listQuery.storeId = this.storeid
       this.getListData()
     },
     getListData() {
+      console.log('getListData3 dasdsadaddad')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+
+      console.log('getListData4 dasdsadaddad')
       getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data

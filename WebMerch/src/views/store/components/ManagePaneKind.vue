@@ -446,6 +446,7 @@ export default {
   },
   watch: {
     storeid: function(val, oldval) {
+      console.log('storeid2 值改变:' + val)
       this.init()
     }
   },
@@ -455,6 +456,7 @@ export default {
   methods: {
     init() {
       if (!isEmpty(this.storeid)) {
+        console.log('storeid2 1值改变:' + this.storeid)
         this.storeId = this.storeid
         this.kindForm.storeId = this.storeid
         this.kindSpuForm.storeId = this.storeid
