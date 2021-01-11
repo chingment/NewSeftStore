@@ -15,8 +15,9 @@ namespace LocalS.Entity
     public enum E_SellChannelRefType
     {
         Unknow = 0,
-        Mall = 1,//商城
-        Machine = 3,//机器
+        Mall = 1,//商城库存
+        StoreFront = 2,//门店库存
+        Machine = 3,//机器库存
     }
 
     public enum E_ReceiveMode
