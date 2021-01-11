@@ -61,9 +61,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse ManageMachineGetMachineList([FromUri]RupStoreManageMachineGetMachineList rup)
+        public OwnApiHttpResponse GetMachineList([FromUri]RupStoreGetMachineList rup)
         {
-            IResult result = MerchServiceFactory.Store.ManageMachineGetMachineList(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Store.GetMachineList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -80,7 +80,6 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Store.RemoveMachine(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
-
 
         [HttpGet]
         public OwnApiHttpResponse GetKinds(string id)
@@ -131,5 +130,32 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse InitManageFront([FromUri]string id)
+        {
+            IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetFrontList([FromUri]RupStoreGetFrontList rup)
+        {
+            IResult result = MerchServiceFactory.Store.GetFrontList(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetFront([FromUri]RupStoreGetFront rup)
+        {
+            IResult result = MerchServiceFactory.Store.GetFront(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaveFront([FromBody]RopStoreSaveFront rop)
+        {
+            IResult result = MerchServiceFactory.Store.SaveFront(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

@@ -48,22 +48,6 @@ export function edit(data) {
   })
 }
 
-export function initManageProduct(params) {
-  return request({
-    url: '/store/initManageProduct',
-    method: 'get',
-    params
-  })
-}
-
-export function manageProductGetProductList(params) {
-  return request({
-    url: '/store/manageProductGetProductList',
-    method: 'get',
-    params
-  })
-}
-
 export function initManageMachine(params) {
   return request({
     url: '/store/initManageMachine',
@@ -72,9 +56,9 @@ export function initManageMachine(params) {
   })
 }
 
-export function manageMachineGetMachineList(params) {
+export function getMachineList(params) {
   return request({
-    url: '/store/manageMachineGetMachineList',
+    url: '/store/getMachineList',
     method: 'get',
     params
   })
@@ -152,6 +136,38 @@ export function getKindSpuInfo(params) {
   })
 }
 
+export function initManageFront(params) {
+  return request({
+    url: '/store/initManageFront',
+    method: 'get',
+    params
+  })
+}
+
+export function getFrontList(params) {
+  return request({
+    url: '/store/getFrontList',
+    method: 'get',
+    params
+  })
+}
+
+export function getFront(params) {
+  return request({
+    url: '/store/getFront',
+    method: 'get',
+    params
+  })
+}
+
+export function saveFront(data) {
+  return request({
+    url: '/store/saveFront',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
@@ -159,10 +175,8 @@ export default {
   initManageBaseInfo: initManageBaseInfo,
   edit: edit,
   initManage: initManage,
-  initManageProduct: initManageProduct,
-  manageProductGetProductList: manageProductGetProductList,
   initManageMachine: initManageMachine,
-  manageMachineGetMachineList: manageMachineGetMachineList,
+  getMachineList: getMachineList,
   removeMachine: removeMachine,
   addMachine: addMachine,
   getKinds: getKinds,
@@ -171,5 +185,9 @@ export default {
   saveKindSpu: saveKindSpu,
   getKindSpus: getKindSpus,
   removeKindSpu: removeKindSpu,
-  getKindSpuInfo: getKindSpuInfo
+  getKindSpuInfo: getKindSpuInfo,
+  initManageFront: initManageFront,
+  getFrontList: getFrontList,
+  getFront: getFront,
+  saveFront: saveFront
 }

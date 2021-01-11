@@ -205,7 +205,7 @@ namespace LocalS.Service.Api.Merch
                         ret.CurStore.SctMode = store.SctMode;
                     }
 
-                    ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name,SctMode= store.SctMode });
+                    ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name, SctMode = store.SctMode });
                 }
             }
 
@@ -264,7 +264,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult ManageMachineGetMachineList(string operater, string merchId, RupStoreManageMachineGetMachineList rup)
+        public CustomJsonResult GetMachineList(string operater, string merchId, RupStoreGetMachineList rup)
         {
             return MerchServiceFactory.Machine.GetList(operater, merchId, new RupMachineGetList { Limit = rup.Limit, Page = rup.Page, StoreId = rup.StoreId });
         }
@@ -730,6 +730,125 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
+
+        public CustomJsonResult GetFrontList(string operater, string merchId, RupStoreGetFrontList rup)
+        {
+
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.StoreFront
+                         where (rup.Name == null || u.Name.Contains(rup.Name))
+                         &&
+                         u.MerchId == merchId
+                         &&
+                         u.StoreId == rup.StoreId &&
+                         u.IsDelete == false
+                         select new { u.Id, u.Name, u.StoreId, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    StoreId = item.StoreId,
+                    Name = item.Name,
+                    MainImgUrl = item.MainImgUrl,
+                    Address = item.Address,
+                    Status = GetStatus(item.IsOpen),
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult SaveFront(string operater, string merchId, RopStoreSaveFront rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.Id))
+            {
+                var d_StoreFront = new StoreFront();
+                d_StoreFront.Id = IdWorker.Build(IdType.NewGuid);
+                d_StoreFront.MerchId = merchId;
+                d_StoreFront.StoreId = rop.StoreId;
+                d_StoreFront.Name = rop.Name;
+                d_StoreFront.Address = rop.Address;
+                d_StoreFront.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                d_StoreFront.MainImgUrl = ImgSet.GetMain_O(d_StoreFront.DisplayImgUrls);
+                d_StoreFront.BriefDes = rop.BriefDes;
+                d_StoreFront.IsDelete = false;
+                d_StoreFront.CreateTime = DateTime.Now;
+                d_StoreFront.Creator = operater;
+                CurrentDb.StoreFront.Add(d_StoreFront);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+
+                var d_StoreFront = CurrentDb.StoreFront.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id == rop.Id).FirstOrDefault();
+                if (d_StoreFront != null)
+                {
+                    d_StoreFront.Name = rop.Name;
+                    d_StoreFront.Address = rop.Address;
+                    d_StoreFront.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                    d_StoreFront.MainImgUrl = ImgSet.GetMain_O(d_StoreFront.DisplayImgUrls);
+                    d_StoreFront.BriefDes = rop.BriefDes;
+                    CurrentDb.SaveChanges();
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+
+            return result;
+        }
+
+        public CustomJsonResult GetFront(string operater, string merchId, RupStoreGetFront rup)
+        {
+            var result = new CustomJsonResult();
+
+            var d_StoreFront = CurrentDb.StoreFront.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.Id == rup.Id).FirstOrDefault();
+
+            if (d_StoreFront != null)
+            {
+                var ret = new
+                {
+                    Id = d_StoreFront.Id,
+                    Name = d_StoreFront.Name,
+                    StoreId = d_StoreFront.StoreId,
+                    BriefDes = d_StoreFront.BriefDes,
+                    Address = d_StoreFront.Address,
+                    MainImgUrl = d_StoreFront.MainImgUrl,
+                    DisplayImgUrls = d_StoreFront.DisplayImgUrls.ToJsonObject<List<ImgSet>>(),
+                    IsOpen = d_StoreFront.IsOpen,
+                    Status = GetStatus(d_StoreFront.IsOpen)
+                };
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            }
+
+            return result;
+        }
+
     }
 }
 

@@ -143,7 +143,7 @@ export default {
   },
   watch: {
     storeid: function(val, oldval) {
-      console.log('storeid1 值改变:' + val)
+      console.log('storeid 值改变:' + val)
 
       this.init()
     }
@@ -158,7 +158,6 @@ export default {
   methods: {
     init() {
       if (!isEmpty(this.storeid)) {
-        console.log('storeid1 1值改变:' + this.storeid)
         this.loading = true
         initManageBaseInfo({ id: this.storeid }).then(res => {
           if (res.result === 1) {

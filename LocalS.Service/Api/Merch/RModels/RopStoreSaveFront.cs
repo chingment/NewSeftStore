@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopStoreEdit
+    public class RopStoreSaveFront
     {
-        public RopStoreEdit()
+        public RopStoreSaveFront()
         {
             this.AddressPoint = new MapPoint();
         }
         public string Id { get; set; }
+        public string StoreId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string BriefDes { get; set; }
