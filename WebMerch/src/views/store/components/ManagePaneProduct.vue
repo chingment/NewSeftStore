@@ -190,9 +190,9 @@
                 <th style="width:100px">编码</th>
                 <th style="width:100px">库存</th>
                 <th style="width:100px">价格</th>
-                <th style="width:50px">租用</th>
-                <th style="width:100px">押金</th>
-                <th style="width:100px">月租</th>
+                <th v-if="kindSpuForm.isSupRentService" style="width:50px">租用</th>
+                <th v-if="kindSpuForm.isSupRentService" style="width:100px">押金</th>
+                <th v-if="kindSpuForm.isSupRentService" style="width:100px">月租</th>
                 <th style="width:50px">下架</th>
               </tr>
             </thead>
@@ -206,13 +206,13 @@
                 <td>
                   <el-input v-model="item.salePrice" clearable style="width:90%" />
                 </td>
-                <td>
+                <td v-if="kindSpuForm.isSupRentService">
                   <el-checkbox v-model="item.isUseRent" />
                 </td>
-                <td>
+                <td v-if="kindSpuForm.isSupRentService">
                   <el-input v-model="item.depositPrice" clearable style="width:90%" />
                 </td>
-                <td>
+                <td v-if="kindSpuForm.isSupRentService">
                   <el-input v-model="item.rentMhPrice" clearable style="width:90%" />
                 </td>
                 <td>
@@ -391,6 +391,7 @@ export default {
         kindId: '',
         kindName: '',
         productId: '',
+        isSupRentService: false,
         stocks: []
       },
       kindSpuRules: {
@@ -625,6 +626,7 @@ export default {
             this.kindSpuForm.storeId = item.storeId
             this.kindSpuForm.stocks = d.stocks
             this.kindSpuForm.kindName = d.kindName
+            this.kindSpuForm.isSupRentService = d.isSupRentService
             this.productSearchName = d.name
             this.productSearchMainImgUrl = d.mainImgUrl
           }
@@ -633,6 +635,7 @@ export default {
         this.kindSpuRemoveBtnShow = false
         this.kindSpuForm.productId = ''
         this.kindSpuForm.stocks = []
+        this.kindSpuForm.isSupRentService = false
         this.productSearchName = ''
         this.productSearchMainImgUrl = this.emptyImgUrl
       }
@@ -648,7 +651,8 @@ export default {
               value: d[j].name,
               mainImgUrl: d[j].mainImgUrl,
               name: d[j].name,
-              productId: d[j].productId
+              productId: d[j].productId,
+              isSupRentService: d[j].isSupRentService
             })
           }
 
@@ -661,7 +665,7 @@ export default {
       this.productSearchMainImgUrl = item.mainImgUrl
       this.kindSpuForm.storeId = this.storeId
       this.kindSpuForm.productId = item.productId
-
+      this.kindSpuForm.isSupRentService = item.isSupRentService
       getSpecs({ id: item.productId }).then(res => {
         if (res.result === 1) {
           var d = res.data

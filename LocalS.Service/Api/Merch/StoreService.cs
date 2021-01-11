@@ -618,7 +618,7 @@ namespace LocalS.Service.Api.Merch
                 }
             }
 
-            var ret = new { Id = d_Product.Id, KindName = d_StoreKind.Name, Name = d_Product.Name, MainImgUrl = d_Product.MainImgUrl, Stocks = stocks };
+            var ret = new { Id = d_Product.Id, KindName = d_StoreKind.Name, Name = d_Product.Name, MainImgUrl = d_Product.MainImgUrl, Stocks = stocks, IsSupRentService = d_Product.IsSupRentService };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
