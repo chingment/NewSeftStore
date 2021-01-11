@@ -18,10 +18,10 @@
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
-              <ul>
+              <!-- <ul>
                 <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
                 <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li>
-              </ul>
+              </ul> -->
             </div>
           </div>
         </el-card>
