@@ -95,7 +95,7 @@
         <el-checkbox v-model="form.isMavkBuy">单独购买</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
-        <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
+        <el-checkbox v-model="form.isSupRentService">支持租赁方式</el-checkbox>
       </el-form-item>
       <el-form-item label="SKU列表" style="max-width:1000px">
         <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新所有店铺销售信息（价格，下架）</el-checkbox>
@@ -198,10 +198,10 @@ export default {
         subjectIds: [],
         detailsDes: [],
         charTags: [],
-        isMavkBuy:false,
+        isMavkBuy: false,
         isTrgVideoService: false,
         isRevService: false,
-        isHardware: false,
+        isSupRentService: false,
         supReceiveMode: '1',
         briefDes: '',
         displayImgUrls: [],
@@ -255,10 +255,10 @@ export default {
           this.form.briefDes = d.briefDes
           this.form.displayImgUrls = d.displayImgUrls
           this.form.skus = d.skus
-          this.form.isMavkBuy=d.isMavkBuy
+          this.form.isMavkBuy = d.isMavkBuy
           this.form.isTrgVideoService = d.isTrgVideoService
           this.form.isRevService = d.isRevService
-          this.form.isHardware = d.isHardware
+          this.form.isSupRentService = d.isSupRentService
           this.form.supReceiveMode = d.supReceiveMode + ''
           this.form.charTags = d.charTags === null ? [] : d.charTags
           this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
@@ -311,7 +311,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
-          _form.isHardware = this.form.isHardware
+          _form.isSupRentService = this.form.isSupRentService
           _form.isMavkBuy = this.form.isMavkBuy
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = this.form.skus

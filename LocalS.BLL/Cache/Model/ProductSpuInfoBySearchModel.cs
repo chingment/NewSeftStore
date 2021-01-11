@@ -13,5 +13,6 @@ namespace LocalS.BLL
         public string BarCode { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
+        public bool IsSupRentService { get; set; }
     }
 }

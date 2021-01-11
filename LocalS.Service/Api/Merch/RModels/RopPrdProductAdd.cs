@@ -27,7 +27,7 @@ namespace LocalS.Service.Api.Merch
         public List<int> KindIds { get; set; }
         public bool IsTrgVideoService { get; set; }
         public bool IsRevService { get; set; }
-        public bool IsHardware { get; set; }
+        public bool IsSupRentService { get; set; }
         public bool IsMavkBuy { get; set; }
         public E_SupReceiveMode SupReceiveMode { get; set; }
         public List<string> CharTags { get; set; }

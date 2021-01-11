@@ -123,7 +123,7 @@
         <el-checkbox v-model="form.isMavkBuy">单独购买</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
-        <el-checkbox v-model="form.isHardware">硬件设备</el-checkbox>
+        <el-checkbox v-model="form.isSupRentService">支持租赁方式</el-checkbox>
       </el-form-item>
       <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
         <el-input v-model="form.singleSkuSpecDes" clearable />
@@ -303,7 +303,7 @@ export default {
         supplierId: '',
         isTrgVideoService: false,
         isRevService: false,
-        isHardware: false,
+        isSupRentService: false,
         supReceiveMode: '1',
         displayImgUrls: [],
         singleSkuCumCode: '',
@@ -442,7 +442,7 @@ export default {
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
-          _form.isHardware = this.form.isHardware
+          _form.isSupRentService = this.form.isSupRentService
           _form.isMavkBuy = this.form.isMavkBuy
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = skus

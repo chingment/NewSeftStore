@@ -2,7 +2,6 @@
   <div id="store_manage" class="app-container">
     <div class="cur-store">
       <span class="title">当前店铺:</span><span class="name">{{ curStore.name }}</span>
-
       <el-dropdown trigger="click" @command="handleChangeStore">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />

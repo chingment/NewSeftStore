@@ -63,7 +63,7 @@ namespace LocalS.BLL
                     r_spu.IsTrgVideoService = d_spu.IsTrgVideoService;
                     r_spu.IsRevService = d_spu.IsRevService;
                     r_spu.IsMavkBuy = d_spu.IsMavkBuy;
-                    r_spu.IsHardware = d_spu.IsHardware;
+                    r_spu.IsSupRentService = d_spu.IsSupRentService;
                     r_spu.SupReceiveMode = d_spu.SupReceiveMode;
                     r_spu.KindId1 = d_spu.PrdKindId1;
                     r_spu.KindId2 = d_spu.PrdKindId2;
@@ -168,7 +168,7 @@ namespace LocalS.BLL
                     r_sku.SpecIdxSkus = r_spu.SpecIdxSkus;
                     r_sku.IsTrgVideoService = r_spu.IsTrgVideoService;
                     r_sku.IsRevService = r_spu.IsRevService;
-                    r_sku.IsHardware = r_spu.IsHardware;
+                    r_sku.IsSupRentService = r_spu.IsSupRentService;
                     r_sku.IsMavkBuy = r_spu.IsMavkBuy;
                     r_sku.SupReceiveMode = r_spu.SupReceiveMode;
                     r_sku.KindId1 = r_spu.KindId1;
@@ -289,6 +289,8 @@ namespace LocalS.BLL
                         m_search.Name = l_spu.Name;
                         m_search.SpuCode = l_spu.SpuCode;
                         m_search.MainImgUrl = ImgSet.Convert_S(l_spu.MainImgUrl);
+                        m_search.IsSupRentService = l_spu.IsSupRentService;
+                        
                         m_searchs.Add(m_search);
                     }
                     catch (Exception ex)
