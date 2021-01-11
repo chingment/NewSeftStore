@@ -149,6 +149,7 @@
       >
         <el-form-item label="所属分类">
           <el-select
+            v-if="!dialogKindSpuIsEdit"
             v-model="kindSpuForm.kindId"
             :disabled="dialogKindSpuIsEdit?true:false"
             placeholder="请选择"
@@ -161,6 +162,9 @@
               :value="item.id"
             />
           </el-select>
+
+          <span v-if="dialogKindSpuIsEdit">{{ kindSpuForm.kindName }}</span>
+
         </el-form-item>
         <el-form-item v-show="!dialogKindSpuIsEdit" label="商品搜索" prop="productId">
           <el-autocomplete
@@ -178,17 +182,7 @@
         <el-form-item label="商品图片">
           <el-image style="width: 100px; height: 100px" :src="productSearchMainImgUrl" fit="fit" />
         </el-form-item>
-        <el-form-item label="线上商城">
-          <el-checkbox v-model="kindSpuForm.isSellMall">开启</el-checkbox>
-          <el-alert
-            show-icon
-            title="开启后，则需要设置线上商城库存，该库存只能用于店里自取、配送到手，若机器自提，请在机器设置"
-            type="remark"
-            :closable="false"
-          />
-        </el-form-item>
-
-        <el-form-item v-show="kindSpuForm.isSellMall" label="SKU列表" style="max-width:1000px">
+        <el-form-item label="商城库存" style="max-width:1000px">
           <table class="list-tb" cellpadding="0" cellspacing="0">
             <thead>
               <tr>
@@ -227,6 +221,12 @@
               </tr>
             </tbody>
           </table>
+          <el-alert
+            show-icon
+            title="商城库存只用于线上配送到手,非门店配送到手"
+            type="remark"
+            :closable="false"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -389,9 +389,9 @@ export default {
       kindSpuForm: {
         storeId: '',
         kindId: '',
+        kindName: '',
         productId: '',
-        stocks: [],
-        isSellMall: false
+        stocks: []
       },
       kindSpuRules: {
         storeId: [
@@ -623,14 +623,13 @@ export default {
             var d = res.data
             this.kindSpuForm.productId = item.productId
             this.kindSpuForm.storeId = item.storeId
-            this.kindSpuForm.isSellMall = d.isSellMall
             this.kindSpuForm.stocks = d.stocks
+            this.kindSpuForm.kindName = d.kindName
             this.productSearchName = d.name
             this.productSearchMainImgUrl = d.mainImgUrl
           }
         })
       } else {
-        this.kindSpuForm.isSellMall = false
         this.kindSpuRemoveBtnShow = false
         this.kindSpuForm.productId = ''
         this.kindSpuForm.stocks = []

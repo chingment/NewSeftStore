@@ -13,8 +13,6 @@ namespace LocalS.Service.Api.Merch
         public string ProductId { get; set; }
         public List<StockInfo> Stocks { get; set; }
 
-        public bool IsSellMall { get; set; }
-
         public class StockInfo
         {
             public string SkuId { get; set; }

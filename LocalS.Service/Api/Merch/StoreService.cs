@@ -525,14 +525,12 @@ namespace LocalS.Service.Api.Merch
                     storeKindSpu.StoreKindId = rop.KindId;
                     storeKindSpu.PrdProductId = rop.ProductId;
                     storeKindSpu.IsDelete = false;
-                    storeKindSpu.IsSellMall = rop.IsSellMall;
                     storeKindSpu.CreateTime = DateTime.Now;
                     storeKindSpu.Creator = operater;
                     CurrentDb.StoreKindSpu.Add(storeKindSpu);
                 }
                 else
                 {
-                    storeKindSpu.IsSellMall = rop.IsSellMall;
                     storeKindSpu.IsDelete = false;
                     storeKindSpu.MendTime = DateTime.Now;
                     storeKindSpu.Mender = operater;
@@ -544,63 +542,48 @@ namespace LocalS.Service.Api.Merch
                     foreach (var stock in rop.Stocks)
                     {
                         var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
-                        if (rop.IsSellMall)
+
+                        if (sellChannelStock == null)
                         {
-                            if (sellChannelStock == null)
-                            {
-                                sellChannelStock = new SellChannelStock();
-                                sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
-                                sellChannelStock.MerchId = merchId;
-                                sellChannelStock.StoreId = rop.StoreId;
-                                sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
-                                sellChannelStock.SellChannelRefId = SellChannelStock.MallSellChannelRefId;
-                                sellChannelStock.CabinetId = "0";
-                                sellChannelStock.SlotId = "0";
-                                sellChannelStock.PrdProductId = rop.ProductId;
-                                sellChannelStock.PrdProductSkuId = stock.SkuId;
-                                sellChannelStock.SalePrice = stock.SalePrice;
-                                sellChannelStock.IsOffSell = stock.IsOffSell;
-                                sellChannelStock.SellQuantity = stock.SumQuantity;
-                                sellChannelStock.WaitPayLockQuantity = 0;
-                                sellChannelStock.WaitPickupLockQuantity = 0;
-                                sellChannelStock.SumQuantity = stock.SumQuantity;
-                                sellChannelStock.MaxQuantity = stock.SumQuantity;
-                                sellChannelStock.IsUseRent = stock.IsUseRent;
-                                sellChannelStock.RentMhPrice = stock.RentMhPrice;
-                                sellChannelStock.DepositPrice = stock.DepositPrice;
-                                sellChannelStock.CreateTime = DateTime.Now;
-                                sellChannelStock.Creator = operater;
-                                CurrentDb.SellChannelStock.Add(sellChannelStock);
-                            }
-                            else
-                            {
-                                sellChannelStock.SalePrice = stock.SalePrice;
-                                sellChannelStock.IsOffSell = stock.IsOffSell;
-                                sellChannelStock.SumQuantity = stock.SumQuantity;
-                                sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
-                                sellChannelStock.MaxQuantity = stock.SumQuantity;
-                                sellChannelStock.IsUseRent = stock.IsUseRent;
-                                sellChannelStock.RentMhPrice = stock.RentMhPrice;
-                                sellChannelStock.DepositPrice = stock.DepositPrice;
-                                sellChannelStock.MendTime = DateTime.Now;
-                                sellChannelStock.Mender = operater;
-                            }
+                            sellChannelStock = new SellChannelStock();
+                            sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
+                            sellChannelStock.MerchId = merchId;
+                            sellChannelStock.StoreId = rop.StoreId;
+                            sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
+                            sellChannelStock.SellChannelRefId = SellChannelStock.MallSellChannelRefId;
+                            sellChannelStock.CabinetId = "0";
+                            sellChannelStock.SlotId = "0";
+                            sellChannelStock.PrdProductId = rop.ProductId;
+                            sellChannelStock.PrdProductSkuId = stock.SkuId;
+                            sellChannelStock.SalePrice = stock.SalePrice;
+                            sellChannelStock.IsOffSell = stock.IsOffSell;
+                            sellChannelStock.SellQuantity = stock.SumQuantity;
+                            sellChannelStock.WaitPayLockQuantity = 0;
+                            sellChannelStock.WaitPickupLockQuantity = 0;
+                            sellChannelStock.SumQuantity = stock.SumQuantity;
+                            sellChannelStock.MaxQuantity = stock.SumQuantity;
+                            sellChannelStock.IsUseRent = stock.IsUseRent;
+                            sellChannelStock.RentMhPrice = stock.RentMhPrice;
+                            sellChannelStock.DepositPrice = stock.DepositPrice;
+                            sellChannelStock.CreateTime = DateTime.Now;
+                            sellChannelStock.Creator = operater;
+                            CurrentDb.SellChannelStock.Add(sellChannelStock);
                         }
                         else
                         {
-                            if (sellChannelStock != null)
-                            {
-                                if ((sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity) > 0)
-                                {
-                                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存失败，该商品有客户进行中");
-                                }
-
-                                CurrentDb.SellChannelStock.Remove(sellChannelStock);
-                            }
+                            sellChannelStock.SalePrice = stock.SalePrice;
+                            sellChannelStock.IsOffSell = stock.IsOffSell;
+                            sellChannelStock.SumQuantity = stock.SumQuantity;
+                            sellChannelStock.SellQuantity = stock.SumQuantity - sellChannelStock.WaitPayLockQuantity - sellChannelStock.WaitPickupLockQuantity;
+                            sellChannelStock.MaxQuantity = stock.SumQuantity;
+                            sellChannelStock.IsUseRent = stock.IsUseRent;
+                            sellChannelStock.RentMhPrice = stock.RentMhPrice;
+                            sellChannelStock.DepositPrice = stock.DepositPrice;
+                            sellChannelStock.MendTime = DateTime.Now;
+                            sellChannelStock.Mender = operater;
                         }
                     }
                 }
-
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -615,27 +598,27 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var product = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.ProductId).FirstOrDefault();
-
-            var productSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.PrdProductId == product.Id).ToList();
-            var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.PrdProductId == product.Id).FirstOrDefault();
+            var d_Product = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.ProductId).FirstOrDefault();
+            var d_ProductSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.PrdProductId == rup.ProductId).ToList();
+            var d_StoreKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.Id == rup.KindId).FirstOrDefault();
+            var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.PrdProductId == rup.ProductId).FirstOrDefault();
 
             List<object> stocks = new List<object>();
 
-            foreach (var productSku in productSkus)
+            foreach (var d_ProductSku in d_ProductSkus)
             {
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == productSku.Id).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == d_ProductSku.Id).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
-                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = 10000, SpecIdx = productSku.SpecIdx, SalePrice = productSku.SalePrice, IsOffSell = false, IsUseRent = false, RentMhPrice = 0, DepositPrice = 0 });
+                    stocks.Add(new { SkuId = d_ProductSku.Id, CumCode = d_ProductSku.CumCode, SumQuantity = 10000, SpecIdx = d_ProductSku.SpecIdx, SalePrice = d_ProductSku.SalePrice, IsOffSell = false, IsUseRent = false, RentMhPrice = 0, DepositPrice = 0 });
                 }
                 else
                 {
-                    stocks.Add(new { SkuId = productSku.Id, CumCode = productSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = productSku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell, IsUseRent = sellChannelStock.IsUseRent, RentMhPrice = sellChannelStock.RentMhPrice, DepositPrice = sellChannelStock.DepositPrice });
+                    stocks.Add(new { SkuId = d_ProductSku.Id, CumCode = d_ProductSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = d_ProductSku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell, IsUseRent = sellChannelStock.IsUseRent, RentMhPrice = sellChannelStock.RentMhPrice, DepositPrice = sellChannelStock.DepositPrice });
                 }
             }
 
-            var ret = new { Id = product.Id, IsSellMall = storeKindSpu.IsSellMall, Name = product.Name, MainImgUrl = product.MainImgUrl, Stocks = stocks };
+            var ret = new { Id = d_Product.Id, KindName = d_StoreKind.Name, Name = d_Product.Name, MainImgUrl = d_Product.MainImgUrl, Stocks = stocks };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
@@ -662,25 +645,24 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择商品");
                 }
 
-
-                var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
-                if (storeKindSpu != null)
+                var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
+                if (d_StoreKindSpu != null)
                 {
-                    storeKindSpu.IsDelete = true;
-                    storeKindSpu.MendTime = DateTime.Now;
-                    storeKindSpu.Mender = operater;
+                    d_StoreKindSpu.IsDelete = true;
+                    d_StoreKindSpu.MendTime = DateTime.Now;
+                    d_StoreKindSpu.Mender = operater;
                 }
 
-                var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductId == rop.ProductId).ToList();
+                var d_SellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductId == rop.ProductId).ToList();
 
-                foreach (var sellChannelStock in sellChannelStocks)
+                foreach (var d_SellChannelStock in d_SellChannelStocks)
                 {
-                    if ((sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity) > 0)
+                    if ((d_SellChannelStock.WaitPayLockQuantity + d_SellChannelStock.WaitPickupLockQuantity) > 0)
                     {
-                        return new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除失败，该商品有客户进行中");
+                        return new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除失败，该商品有订单进行中");
                     }
 
-                    CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                    CurrentDb.SellChannelStock.Remove(d_SellChannelStock);
                 }
 
                 CurrentDb.SaveChanges();
