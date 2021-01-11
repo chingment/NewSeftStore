@@ -343,7 +343,7 @@
     <Compile Include="Api\StoreApp\RModels\RupSelfPickAddressList.cs" />
     <Compile Include="Api\StoreApp\SaleOutletService.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />
-    <Compile Include="Api\StoreApp\SelfPickAddressService.cs" />
+    <Compile Include="Api\StoreApp\StoreFrontService.cs" />
     <Compile Include="Api\StoreApp\ServiceFunService.cs" />
     <Compile Include="Api\StoreApp\SmCfSelfTakeOrderService.cs" />
     <Compile Include="Api\StoreApp\StoreAppServiceFactory.cs" />

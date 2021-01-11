@@ -120,11 +120,11 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
-        public static SelfPickAddressService SelfPickAddress
+        public static StoreFrontService StoreFront
         {
             get
             {
-                return new SelfPickAddressService();
+                return new StoreFrontService();
             }
         }
 

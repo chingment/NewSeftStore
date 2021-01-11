@@ -75,9 +75,9 @@ namespace LocalS.DAL
 
         public IDbSet<RentOrderTransRecord> RentOrderTransRecord { get; set; }
 
-        public IDbSet<SelfPickAddress> SelfPickAddress { get; set; }
+        public IDbSet<StoreFront> StoreFront { get; set; }
 
-        public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
+        //public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
 
 
         public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }

@@ -254,11 +254,9 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                var selfPickAddress = (from u in CurrentDb.StoreSelfPickAddress
-                                       join m in CurrentDb.SelfPickAddress on u.SelfPickAddressId equals m.Id into temp
-                                       from tt in temp.DefaultIfEmpty()
+                var selfPickAddress = (from u in CurrentDb.StoreFront
                                        where u.MerchId == store.MerchId && u.StoreId == store.StoreId
-                                       select new { tt.Id, tt.Name, tt.AreaCode, tt.AreaName, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress }).FirstOrDefault();
+                                       select new { u.Id, u.Name, u.Address, u.AreaCode, u.AreaName, u.MerchId, u.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress }).FirstOrDefault();
 
                 if (selfPickAddress == null)
                 {
@@ -443,11 +441,9 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (selfTake == null)
                 {
-                    var selfPickAddress = (from u in CurrentDb.StoreSelfPickAddress
-                                           join m in CurrentDb.SelfPickAddress on u.SelfPickAddressId equals m.Id into temp
-                                           from tt in temp.DefaultIfEmpty()
+                    var selfPickAddress = (from u in CurrentDb.StoreFront
                                            where u.MerchId == store.MerchId && u.StoreId == store.StoreId
-                                           select new { tt.Id, tt.Name, tt.AreaCode, tt.AreaName, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress }).FirstOrDefault();
+                                           select new { u.Id, u.Name, u.Address, u.AreaCode, u.AreaName, u.MerchId, u.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress }).FirstOrDefault();
 
                     if (selfPickAddress == null)
                     {

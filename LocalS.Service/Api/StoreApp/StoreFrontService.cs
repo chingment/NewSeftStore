@@ -9,18 +9,16 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class SelfPickAddressService : BaseService
+    public class StoreFrontService : BaseService
     {
 
         public CustomJsonResult List(string operater, string clientUserId, RupSelfPickAddressList rup)
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.StoreSelfPickAddress
-                         join m in CurrentDb.SelfPickAddress on u.SelfPickAddressId equals m.Id into temp
-                         from tt in temp.DefaultIfEmpty()
+            var query = (from u in CurrentDb.StoreFront
                          where u.MerchId == rup.MerchId && u.StoreId == rup.StoreId
-                         select new { tt.Id, tt.Name, u.MerchId, u.StoreId, tt.ContactName, tt.ContactPhone, tt.ContactAddress });
+                         select new { u.Id, u.Name, u.Address, u.AreaCode, u.AreaName, u.MerchId, u.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress });
 
 
             var list = query.ToList();
@@ -34,6 +32,9 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     Id = item.Id,
                     Name = item.Name,
+                    Address = item.Address,
+                    AreaCode = item.AreaCode,
+                    AreaName = item.AreaName,
                     ContactName = item.ContactName,
                     ContactAddress = item.ContactAddress,
                     ContactPhone = item.ContactPhone
