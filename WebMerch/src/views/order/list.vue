@@ -517,6 +517,12 @@ export default {
     }
   },
   watch: {
+    storeid: function(val, oldval) {
+      console.log('val:' + val + ',oldval：' + oldval)
+
+      this.listQuery.storeId = this.storeid
+      this.init()
+    },
     $route() {
       var receiveMode = getUrlParam('receiveMode')
       this.listQuery.receiveMode = receiveMode

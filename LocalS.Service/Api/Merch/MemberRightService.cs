@@ -58,7 +58,10 @@ namespace LocalS.Service.Api.Merch
 
             if (curLevelSt == null)
             {
-                curLevelSt = levelSts[0];
+                if (levelSts.Count > 0)
+                {
+                    curLevelSt = levelSts[0];
+                }
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { levelSts, curLevelSt });

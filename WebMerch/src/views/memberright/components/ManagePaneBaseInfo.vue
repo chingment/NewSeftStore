@@ -1,18 +1,23 @@
 <template>
   <div id="store_baseinfo" class="app-container">
-    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px" :hide-required-asterisk="!isEdit">
+    <el-form
+      ref="form"
+      v-loading="loading"
+      :model="form"
+      :rules="rules"
+      label-width="80px"
+      :hide-required-asterisk="!isEdit"
+    >
       <el-form-item label="名称" prop="name" :show-message="isEdit">
         <span v-show="!isEdit">{{ temp.name }}</span>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 <script>
-
 import { MessageBox } from 'element-ui'
 import { edit, initManageBaseInfo } from '@/api/memberright'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 import { all } from 'q'
 
@@ -33,15 +38,12 @@ export default {
         name: '',
         tag: ''
       },
-      form: {
-      },
+      form: {},
       rules: {}
     }
   },
   watch: {
     levelstid: function(val, oldval) {
-      console.log('levelid 值改变')
-
       this.init()
     }
   },
@@ -50,7 +52,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.levelstid !== '') {
+      if (!isEmpty(this.levelstid)) {
         this.loading = true
         var id = this.levelstid
         initManageBaseInfo({ id: id }).then(res => {
@@ -63,61 +65,62 @@ export default {
         })
       }
     }
+
   }
 }
 </script>
 <style lang="scss" scoped>
-
-#dsss .el-form-item__label:before{
-  content: '';
-  margin-left:1000px;
+#dsss .el-form-item__label:before {
+  content: "";
+  margin-left: 1000px;
 }
 
-#store_baseinfo{
-.el-form .el-form-item{
-  max-width: 600px;
-}
+#store_baseinfo {
+  .el-form .el-form-item {
+    max-width: 600px;
+  }
 
-.el-upload-list >>> .sortable-ghost {
-  opacity: .8;
-  color: #fff !important;
-  background: #42b983 !important;
-}
+  .el-upload-list >>> .sortable-ghost {
+    opacity: 0.8;
+    color: #fff !important;
+    background: #42b983 !important;
+  }
 
-.el-upload-list >>> .el-tag {
-  cursor: pointer;
-}
+  .el-upload-list >>> .el-tag {
+    cursor: pointer;
+  }
 
-.bm-view {
-  width: 100%;
-  height: 200px;
-  margin-top: 20px;
-}
+  .bm-view {
+    width: 100%;
+    height: 200px;
+    margin-top: 20px;
+  }
 
-.autoAddressClass{
-  li {
-    display: flex;
-    i.el-icon-search {margin-top:11px;}
-    .mgr10 {margin-right: 10px;}
-    .title {
-      text-overflow: ellipsis;
-      overflow: hidden;
+  .autoAddressClass {
+    li {
+      display: flex;
+      i.el-icon-search {
+        margin-top: 11px;
+      }
+      .mgr10 {
+        margin-right: 10px;
+      }
+      .title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .address-ct {
+        flex: 1;
+      }
+
+      .address {
+        line-height: 1;
+        font-size: 12px;
+        color: #b4b4b4;
+        margin-bottom: 5px;
+      }
     }
-
-.address-ct{
-  flex: 1;
-}
-
-    .address {
-      line-height: 1;
-      font-size: 12px;
-      color: #b4b4b4;
-      margin-bottom: 5px;
-    }
-
   }
 }
-
-}
-
 </style>

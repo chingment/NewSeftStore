@@ -84,12 +84,18 @@
 
 import { MessageBox } from 'element-ui'
 import { edit, initManageBaseInfo } from '@/api/store'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 import { all } from 'q'
 
 export default {
   name: 'ManagePaneBaseInfo',
+  props: {
+    storeid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       isEdit: false,
@@ -136,7 +142,9 @@ export default {
     }
   },
   watch: {
-    '$route'(to, from) {
+    storeid: function(val, oldval) {
+      console.log('storeid 值改变:' + val)
+
       this.init()
     }
   },
@@ -149,37 +157,38 @@ export default {
   },
   methods: {
     init() {
-      this.loading = true
-      var id = getUrlParam('id')
-      initManageBaseInfo({ id: id }).then(res => {
-        if (res.result === 1) {
-          var d = res.data
-          this.form.id = d.id
-          this.form.name = d.name
-          this.form.address = d.address
-          this.form.addressPoint = d.addressPoint
-          this.form.briefDes = d.briefDes
-          this.form.displayImgUrls = d.displayImgUrls
-          this.form.isOpen = d.isOpen
-          this.form.status = d.status
+      if (!isEmpty(this.storeid)) {
+        this.loading = true
+        initManageBaseInfo({ id: this.storeid }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.form.id = d.id
+            this.form.name = d.name
+            this.form.address = d.address
+            this.form.addressPoint = d.addressPoint
+            this.form.briefDes = d.briefDes
+            this.form.displayImgUrls = d.displayImgUrls
+            this.form.isOpen = d.isOpen
+            this.form.status = d.status
 
-          this.temp.name = this.form.name
-          this.temp.address = this.form.address
-          this.temp.briefDes = this.form.briefDes
-          this.temp.status = this.form.status
+            this.temp.name = this.form.name
+            this.temp.address = this.form.address
+            this.temp.briefDes = this.form.briefDes
+            this.temp.status = this.form.status
 
-          this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
+            this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
 
-          var pt = new BMap.Point(d.addressPoint.lng, d.addressPoint.lat)
-          this.mapObject.centerAndZoom(pt, 15)
-          var marker = new BMap.Marker(pt) // 创建标注
-          this.mapObject.clearOverlays()
-          this.mapObject.addOverlay(marker)
-          this.mapObject.panTo(pt)
-          this.uploadCardCheckShow()
-        }
-        this.loading = false
-      })
+            var pt = new BMap.Point(d.addressPoint.lng, d.addressPoint.lat)
+            this.mapObject.centerAndZoom(pt, 15)
+            var marker = new BMap.Marker(pt) // 创建标注
+            this.mapObject.clearOverlays()
+            this.mapObject.addOverlay(marker)
+            this.mapObject.panTo(pt)
+            this.uploadCardCheckShow()
+          }
+          this.loading = false
+        })
+      }
     },
     bdMap() {
       var _this = this

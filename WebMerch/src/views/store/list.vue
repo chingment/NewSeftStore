@@ -38,8 +38,7 @@
               <ul>
                 <li v-if="item.sctMode.indexOf('K')>-1"><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageProduct(item)">商品分类</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f;display:none" @click="handleManageExpressStock(item)">快递库存</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageKind(item)">商品分类</el-button></li>
               </ul>
             </div>
           </div>
@@ -110,27 +109,42 @@ export default {
     },
     handleManage(row) {
       this.$router.push({
-        path: '/store/manage?id=' + row.id + '&tab=tabBaseInfo'
+        name: 'MerchStoreEdit',
+        path: '/store/manage',
+        params: {
+          id: row.id,
+          tab: 'tabBaseInfo'
+        }
       })
     },
     handleManageMachine(row) {
       this.$router.push({
-        path: '/store/manage?id=' + row.id + '&tab=tabMachine'
+        name: 'MerchStoreEdit',
+        path: '/store/manage',
+        params: {
+          id: row.id,
+          tab: 'tabMachine'
+        }
       })
     },
     handleManageOrder(row) {
       this.$router.push({
-        path: '/store/manage?id=' + row.id + '&tab=tabOrder'
+        name: 'MerchStoreEdit',
+        path: '/store/manage',
+        params: {
+          id: row.id,
+          tab: 'tabOrder'
+        }
       })
     },
-    handleManageExpressStock(row) {
+    handleManageKind(row) {
       this.$router.push({
-        path: '/store/manage?id=' + row.id + '&tab=tabExpressStock'
-      })
-    },
-    handleManageProduct(row) {
-      this.$router.push({
-        path: '/store/manage?id=' + row.id + '&tab=tabProduct'
+        name: 'MerchStoreEdit',
+        path: '/store/manage',
+        params: {
+          id: row.id,
+          tab: 'tabKind'
+        }
       })
     }
   }

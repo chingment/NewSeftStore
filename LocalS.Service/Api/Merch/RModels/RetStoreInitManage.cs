@@ -10,7 +10,6 @@ namespace LocalS.Service.Api.Merch
     {
         public RetStoreInitManage()
         {
-            this.CurStore = new StoreModel();
             this.Stores = new List<StoreModel>();
         }
 

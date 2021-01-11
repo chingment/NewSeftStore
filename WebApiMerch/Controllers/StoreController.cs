@@ -40,7 +40,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitManage([FromUri]string id)
+        public OwnApiHttpResponse InitManage([FromUri]string id = "")
         {
             IResult result = MerchServiceFactory.Store.InitManage(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);

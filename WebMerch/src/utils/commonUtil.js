@@ -7,6 +7,11 @@ export function isEmpty(str) {
   if (typeof str === 'undefined') { return true }
   if (str === null) { return true }
   if (str.length === 0) { return true }
+
+  str = str.replace(/(^\s*)|(\s*$)/g, '')
+
+  if (str.length === 0) { return true }
+
   return false
 }
 

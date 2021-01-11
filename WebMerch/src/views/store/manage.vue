@@ -1,21 +1,21 @@
 <template>
   <div id="store_manage" class="app-container">
     <div class="cur-store">
-      <span class="title">当前店铺:</span><span class="name">{{ curStore.name }}</span>
-      <el-dropdown trigger="click" @command="handleChangeStore">
+      <span class="title">当前店铺:</span><span class="name">{{ activeDropdown.name }}</span>
+      <el-dropdown trigger="click" @command="handleChangeDropdown">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="store in stores" :key="store.id" :command="store.id"> {{ store.name }}</el-dropdown-item>
+          <el-dropdown-item v-for="option in dropdownOptions" :key="option.id" :command="option.id"> {{ option.name }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="id" /></el-tab-pane>
-      <el-tab-pane label="商品分类" name="tabProduct"><manage-pane-product :storeid="id" /></el-tab-pane>
-      <el-tab-pane v-if="curStore.sctMode.indexOf('K')>-1" label="机器信息" name="tabMachine"><manage-pane-machine :storeid="id" /></el-tab-pane>
-      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order ref="order" :storeid="id" /></el-tab-pane>
+    <el-tabs v-model="activeTab" type="card">
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :storeid="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane v-if="activeDropdown.sctMode.indexOf('K')>-1" label="机器信息" name="tabMachine"><manage-pane-machine :storeid="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order ref="order" :storeid="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -24,19 +24,19 @@ import { initManage } from '@/api/store'
 import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneMachine from './components/ManagePaneMachine'
-import managePaneProduct from './components/ManagePaneProduct'
+import managePaneKind from './components/ManagePaneKind'
 import managePaneOrder from '@/views/order/list'
 export default {
-  components: { managePaneBaseInfo, managePaneProduct, managePaneMachine, managePaneOrder },
+  components: { managePaneBaseInfo, managePaneKind, managePaneMachine, managePaneOrder },
   data() {
     return {
-      activeName: 'tabBaseInfo',
-      curStore: {
+      activeTab: 'tabBaseInfo',
+      activeDropdown: {
         id: '',
         name: '',
         sctMode: ''
       },
-      stores: []
+      dropdownOptions: []
     }
   },
   watch: {
@@ -47,29 +47,28 @@ export default {
     }
   },
   created() {
-    this.id = getUrlParam('id')
+    this.activeDropdown.id = this.$route.params.id
+    this.activeTab =
+      typeof this.$route.params.tab === 'undefined'
+        ? 'tabBaseInfo'
+        : this.$route.params.tab
     this.init()
   },
   methods: {
     init() {
-      this.activeName = getUrlParam('tab')
       this.loading = true
-      initManage({ id: this.id }).then(res => {
+      initManage({ id: this.activeDropdown.id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.curStore = d.curStore
-          this.stores = d.stores
+          this.activeDropdown = d.curStore
+          this.dropdownOptions = d.stores
         }
         this.loading = false
       })
     },
-    handleChangeStore(command) {
-      this.$router.push({
-        path: '/store/manage?id=' + command + '&tab=' + this.activeName
-      })
-    },
-    handleClick(tab, event) {
-      console.log(tab, event)
+    handleChangeDropdown(id) {
+      this.activeDropdown.id = id
+      this.init()
     }
   }
 }

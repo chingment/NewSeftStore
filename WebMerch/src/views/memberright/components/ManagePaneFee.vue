@@ -29,7 +29,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { getFeeSts } from '@/api/memberright'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneMachine',
   props: {
@@ -46,8 +46,6 @@ export default {
   },
   watch: {
     levelstid: function(val, oldval) {
-      console.log('levelid 值改变')
-
       this.init()
     }
   },
@@ -56,8 +54,8 @@ export default {
   },
   methods: {
     init() {
-      var id = this.levelstid
-      if (this.levelstid !== '') {
+      if (!isEmpty(this.levelstid)) {
+        var id = this.levelstid
         this._getListData({ id: id })
       }
     },

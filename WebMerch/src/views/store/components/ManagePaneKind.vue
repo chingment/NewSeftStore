@@ -329,11 +329,17 @@ import {
   getKindSpuInfo
 } from '@/api/store'
 import { searchSpu, getSpecs } from '@/api/prdproduct'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
   name: 'ManagePaneProduct',
   components: { Pagination },
+  props: {
+    storeid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: false,
@@ -439,7 +445,7 @@ export default {
     }
   },
   watch: {
-    $route(to, from) {
+    storeid: function(val, oldval) {
       this.init()
     }
   },
@@ -448,14 +454,15 @@ export default {
   },
   methods: {
     init() {
-      var id = getUrlParam('id')
-      this.storeId = id
-      this.kindForm.storeId = id
-      this.kindSpuForm.storeId = id
-      this.listDataByKinds = []
-      this.listDataByKindSpus = []
-      this.currentKindIndex = 0
-      this._getKinds()
+      if (!isEmpty(this.storeid)) {
+        this.storeId = this.storeid
+        this.kindForm.storeId = this.storeid
+        this.kindSpuForm.storeId = this.storeid
+        this.listDataByKinds = []
+        this.listDataByKindSpus = []
+        this.currentKindIndex = 0
+        this._getKinds()
+      }
     },
     _getKinds() {
       this.isLoaingByKinds = true

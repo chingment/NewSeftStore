@@ -199,12 +199,21 @@ namespace LocalS.Service.Api.Merch
                 {
                     if (store.StoreId == storeId)
                     {
+                        ret.CurStore = new StoreModel();
                         ret.CurStore.Id = store.StoreId;
                         ret.CurStore.Name = store.Name;
                         ret.CurStore.SctMode = store.SctMode;
                     }
 
-                    ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name });
+                    ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name,SctMode= store.SctMode });
+                }
+            }
+
+            if (ret.CurStore == null)
+            {
+                if (ret.Stores.Count > 0)
+                {
+                    ret.CurStore = ret.Stores[0];
                 }
             }
 

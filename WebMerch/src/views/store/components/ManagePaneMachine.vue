@@ -70,9 +70,15 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { initManageMachine, manageMachineGetMachineList, removeMachine, addMachine } from '@/api/store'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneMachine',
+  props: {
+    storeid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: true,
@@ -99,7 +105,7 @@ export default {
     }
   },
   watch: {
-    '$route'(to, from) {
+    storeid: function(val, oldval) {
       this.init()
     }
   },
@@ -108,28 +114,27 @@ export default {
   },
   methods: {
     init() {
-      var id = getUrlParam('id')
-      this.loading = true
-      this.storeId = id
-      this.listQuery.storeId = id
-
-      initManageMachine({ id: id }).then(res => {
-        if (res.result === 1) {
-          var d = res.data
-          this.storeName = d.storeName
-          this.formSelectMachines = d.formSelectMachines
-        }
-        this.loading = false
-      })
-
-      this.getListData(this.listQuery)
+      if (!isEmpty(this.storeid)) {
+        this.loading = true
+        this.storeId = this.storeid
+        this.listQuery.storeId = this.storeid
+        initManageMachine({ id: this.storeid }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.storeName = d.storeName
+            this.formSelectMachines = d.formSelectMachines
+          }
+          this.loading = false
+        })
+        this.getListData(this.listQuery)
+      }
     },
     getListData(listQuery) {
       this.loading = true
       // this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
       manageMachineGetMachineList(listQuery).then(res => {
         if (res.result === 1) {
-          var d = res.data                                   
+          var d = res.data
           this.listData = d.items
         }
         this.loading = false
