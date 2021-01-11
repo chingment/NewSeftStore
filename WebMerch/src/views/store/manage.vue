@@ -30,6 +30,7 @@ export default {
   components: { managePaneBaseInfo, managePaneKind, managePaneMachine, managePaneOrder },
   data() {
     return {
+      loading: false,
       activeTab: 'tabBaseInfo',
       activeDropdown: {
         id: '',

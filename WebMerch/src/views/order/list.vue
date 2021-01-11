@@ -553,7 +553,7 @@ export default {
     //   this.isShowClientUserNameInput = false
     // }
     // this.listQuery.clientUserId = this.clientuserid
-    this.init()
+    // this.init()
   },
   methods: {
     init() {
@@ -562,11 +562,9 @@ export default {
       this.getListData()
     },
     getListData() {
-      console.log('getListData3 dasdsadaddad')
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
 
-      console.log('getListData4 dasdsadaddad')
       getList(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
