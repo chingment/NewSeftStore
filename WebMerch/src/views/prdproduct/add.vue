@@ -118,7 +118,7 @@
           <!-- <el-radio-button label="6">仅限门店消费</el-radio-button> -->
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="属性">
+      <el-form-item label="属性" style="max-width:1000px">
         <el-checkbox v-model="isOpenAddMultiSpecs">多规格</el-checkbox>
         <el-checkbox v-model="form.isMavkBuy">单独购买</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
