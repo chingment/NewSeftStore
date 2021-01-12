@@ -29,7 +29,6 @@ namespace LocalS.BLL.Biz
             model.Name = machine.Name;
             model.MainImgUrl = machine.MainImgUrl;
             model.LogoImgUrl = machine.LogoImgUrl;
-            model.JPushRegId = machine.JPushRegId;
             model.RunStatus = machine.RunStatus;
             model.LastRequestTime = machine.LastRequestTime;
             model.AppVersion = machine.AppVersionName;
@@ -95,7 +94,6 @@ namespace LocalS.BLL.Biz
                 {
                     model.StoreId = merchStore.StoreId;
                     model.StoreName = merchStore.Name;
-                    model.StoreAddress = merchStore.Address;
                 }
             }
 

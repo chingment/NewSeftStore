@@ -1,21 +1,21 @@
 <template>
   <div id="machine_manage" class="app-container">
     <div class="cur-machine">
-      <span class="title">当前机器:</span><span class="name">{{ curMachine.name }}</span>
+      <span class="title">当前机器:</span><span class="name">{{ activeDropdown.name }}</span>
 
-      <el-dropdown trigger="click" @command="handleChangeMachine">
+      <el-dropdown trigger="click" @command="handleChangeDropdown">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="machine in machines" :key="machine.id" :command="machine.id"> {{ machine.name }}</el-dropdown-item>
+          <el-dropdown-item v-for="option in dropdownOptions" :key="option.id" :command="option.id"> {{ option.name }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :machineid="id" /></el-tab-pane>
-      <el-tab-pane label="库存信息" name="tabStock"><manage-pane-stock :machineid="id" /></el-tab-pane>
-      <el-tab-pane label="控制中心" name="tabControlCenter"><manage-pane-control-center :machineid="id" /></el-tab-pane>
+    <el-tabs v-model="activeTab" type="card">
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :machineid="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="库存信息" name="tabStock"><manage-pane-stock :machineid="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="控制中心" name="tabControlCenter"><manage-pane-control-center :machineid="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -29,43 +29,39 @@ export default {
   components: { managePaneBaseInfo, managePaneStock, managePaneControlCenter },
   data() {
     return {
-      activeName: 'tabBaseInfo',
-      curMachine: {
+      loading: false,
+      activeTab: 'tabBaseInfo',
+      activeDropdown: {
         id: '',
-        name: ''
+        name: '',
+        sctMode: ''
       },
-      machines: []
-    }
-  },
-  watch: {
-    '$route'(to, from) {
-      this.id = to.query.id
-      this.$refs.order.listQuery.sellChannelRefId = this.id
-      this.$refs.order.listQuery.receiveMode = '3'
-      this.init()
+      dropdownOptions: []
     }
   },
   created() {
-    this.id = getUrlParam('id')
+    this.activeDropdown.id = this.$route.params.id
+    this.activeTab =
+      typeof this.$route.params.tab === 'undefined'
+        ? 'tabBaseInfo'
+        : this.$route.params.tab
     this.init()
   },
   methods: {
     init() {
-      this.activeName = getUrlParam('tab')
       this.loading = true
-      initManage({ id: this.id }).then(res => {
+      initManage({ id: this.activeDropdown.id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.curMachine = d.curMachine
-          this.machines = d.machines
+          this.activeDropdown = d.curMachine
+          this.dropdownOptions = d.machines
         }
         this.loading = false
       })
     },
-    handleChangeMachine(command) {
-      this.$router.push({
-        path: '/machine/manage?id=' + command + '&tab=' + this.activeName
-      })
+    handleChangeDropdown(id) {
+      this.activeDropdown.id = id
+      this.init()
     }
   }
 }

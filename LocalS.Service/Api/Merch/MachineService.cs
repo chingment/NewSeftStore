@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.Merch
     public class MachineService : BaseService
     {
 
-        public StatusModel GetStatus(string curUseStoreFrontId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
+        public StatusModel GetStatus(string curUseShopId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
         {
             var status = new StatusModel();
 
@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.Merch
                 return new StatusModel(1, "停止使用");
             }
 
-            if (string.IsNullOrEmpty(curUseStoreFrontId))
+            if (string.IsNullOrEmpty(curUseShopId))
             {
                 return new StatusModel(1, "未绑定门店");
             }
@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Id == null || u.MachineId.Contains(rup.Id))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.MachineId, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseStoreFrontId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, u.MachineId, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
 
 
             if (!string.IsNullOrEmpty(rup.StoreId))
@@ -95,9 +95,9 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.CurUseStoreId == rup.StoreId);
             }
 
-            if (!string.IsNullOrEmpty(rup.StoreFrontId))
+            if (!string.IsNullOrEmpty(rup.ShopId))
             {
-                query = query.Where(m => m.CurUseStoreId == rup.StoreFrontId);
+                query = query.Where(m => m.CurUseShopId == rup.ShopId);
             }
 
             int total = query.Count();
@@ -115,12 +115,12 @@ namespace LocalS.Service.Api.Merch
             {
                 string remark = "未绑定门店";
 
-                if (!string.IsNullOrEmpty(item.CurUseStoreFrontId))
+                if (!string.IsNullOrEmpty(item.CurUseShopId))
                 {
                     var store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
-                    var storeFront = CurrentDb.StoreFront.Where(m => m.Id == item.CurUseStoreFrontId).FirstOrDefault();
+                    var shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
 
-                    remark = string.Format("[{0}]{1}", store.Name, storeFront.Name);
+                    remark = string.Format("[{0}]{1}", store.Name, shop.Name);
                 }
 
                 olist.Add(new
@@ -130,11 +130,11 @@ namespace LocalS.Service.Api.Merch
                     MainImgUrl = item.MainImgUrl,
                     AppVersion = item.AppVersionCode,
                     CtrlSdkVersion = item.CtrlSdkVersionCode,
-                    Status = GetStatus(item.CurUseStoreFrontId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
+                    Status = GetStatus(item.CurUseShopId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
                     LastRequestTime = item.LastRequestTime,
                     CreateTime = item.CreateTime,
                     StoreId = item.CurUseStoreId,
-                    StoreFrontId = item.CurUseStoreFrontId,
+                    ShopId = item.CurUseShopId,
                     Remark = remark
                 });
 
@@ -160,24 +160,38 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var merchMachine in merchMachines)
             {
-
-                string name = string.Format("{0} [{1}]", merchMachine.MachineId, "未绑定店铺");
-
+                string name = "";
                 if (merchMachine.IsStopUse)
                 {
                     name = string.Format("{0} [{1}]", merchMachine.MachineId, "已停止使用");
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(merchMachine.CurUseStoreId))
+                    if (string.IsNullOrEmpty(merchMachine.CurUseStoreId))
                     {
-                        var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
-
-                        name = string.Format("{0} [{1}]", merchMachine.MachineId, store.Name);
+                        name = string.Format("{0} [未绑定店铺]", merchMachine.MachineId);
                     }
+                    else if (string.IsNullOrEmpty(merchMachine.CurUseShopId))
+                    {
+                        name = string.Format("{0} [未绑定门店]", merchMachine.MachineId);
+                    }
+                    else
+                    {
+                        var store = CurrentDb.Store.Where(m => m.Id == merchMachine.CurUseStoreId).FirstOrDefault();
+
+                        var shop = CurrentDb.Shop.Where(m => m.Id == merchMachine.CurUseShopId).FirstOrDefault();
+
+                        if (store != null && shop != null)
+                        {
+                            name = string.Format("{0} [{1}/{2}]", merchMachine.MachineId, store.Name, shop.Name);
+                        }
+                        else
+                        {
+                            name = "未知";
+                        }
+                    }
+
                 }
-
-
 
                 if (merchMachine.MachineId == machineId)
                 {

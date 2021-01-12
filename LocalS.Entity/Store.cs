@@ -19,7 +19,6 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string Name { get; set; }
-
         public string DisplayImgUrls { get; set; }
         public string MainImgUrl { get; set; }
         public string ContactName { get; set; }
@@ -32,7 +31,6 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-
         public bool IsTestMode { get; set; }
 
         //线上商城 F

@@ -75,8 +75,8 @@ namespace LocalS.DAL
 
         public IDbSet<RentOrderTransRecord> RentOrderTransRecord { get; set; }
 
-        public IDbSet<StoreFront> StoreFront { get; set; }
-
+        public IDbSet<StoreShop> StoreShop { get; set; }
+        public IDbSet<Shop> Shop { get; set; }
         //public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
 
 

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace LocalS.Entity
 {
-    [Table("StoreFront")]
-    public class StoreFront
+    [Table("Shop")]
+    public class Shop
     {
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        public string StoreId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public string DisplayImgUrls { get; set; }

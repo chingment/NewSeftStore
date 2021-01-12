@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupStoreGetFrontList:RupBaseGetList
+    public class RupStoreGetMachines : RupBaseGetList
     {
-        public string Name { get; set; }
         public string StoreId { get; set; }
+
+        public string ShopId { get; set; }
     }
 }

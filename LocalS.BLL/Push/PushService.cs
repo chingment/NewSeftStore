@@ -98,7 +98,7 @@ namespace LocalS.BLL.Push
         {
             var result = new CustomJsonResult();
             var machine = BizFactory.Machine.GetOne(machineId);
-            result = pushService.QueryStatus(machine.JPushRegId, messageId);
+            result = pushService.QueryStatus("", messageId);
             return result;
         }
 

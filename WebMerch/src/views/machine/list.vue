@@ -40,8 +40,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" style="padding:0px;" @click="handleManageStock(item)">库存管理</el-button></li>
-                <!-- <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li> -->
+                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageStock(item)">库存查看</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageControlCenter(item)">控制中心</el-button></li>
               </ul>
             </div>
@@ -129,22 +128,32 @@ export default {
     },
     handleManage(row) {
       this.$router.push({
-        path: '/machine/manage?id=' + row.id + '&tab=tabBaseInfo'
+        name: 'MerchMachineManage',
+        path: '/machine/manage',
+        params: {
+          id: row.id,
+          tab: 'tabBaseInfo'
+        }
       })
     },
     handleManageStock(row) {
       this.$router.push({
-        path: '/machine/manage?id=' + row.id + '&tab=tabStock'
-      })
-    },
-    handleManageOrder(row) {
-      this.$router.push({
-        path: '/machine/manage?id=' + row.id + '&tab=tabOrder'
+        name: 'MerchMachineManage',
+        path: '/machine/manage',
+        params: {
+          id: row.id,
+          tab: 'tabStock'
+        }
       })
     },
     handleManageControlCenter(row) {
       this.$router.push({
-        path: '/machine/manage?id=' + row.id + '&tab=tabControlCenter'
+        name: 'MerchMachineManage',
+        path: '/machine/manage',
+        params: {
+          id: row.id,
+          tab: 'tabControlCenter'
+        }
       })
     }
   }

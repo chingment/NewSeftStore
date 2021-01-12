@@ -19,27 +19,6 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitAdd()
-        {
-            IResult result = MerchServiceFactory.Store.InitAdd(this.CurrentUserId, this.CurrentMerchId);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse Add([FromBody]RopStoreAdd rop)
-        {
-            IResult result = MerchServiceFactory.Store.Add(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse Edit([FromBody]RopStoreEdit rop)
-        {
-            IResult result = MerchServiceFactory.Store.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
         public OwnApiHttpResponse InitManage([FromUri]string id = "")
         {
             IResult result = MerchServiceFactory.Store.InitManage(this.CurrentUserId, this.CurrentMerchId, id);
@@ -53,33 +32,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        //[HttpGet]
-        //public OwnApiHttpResponse InitManageMachine([FromUri]string id)
-        //{
-        //    IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);
-        //    return new OwnApiHttpResponse(result);
-        //}
-
         [HttpGet]
-        public OwnApiHttpResponse GetMachineList([FromUri]RupStoreGetMachineList rup)
+        public OwnApiHttpResponse GetMachines([FromUri]RupStoreGetMachines rup)
         {
-            IResult result = MerchServiceFactory.Store.GetMachineList(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Store.GetMachines(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
-
-        //[HttpPost]
-        //public OwnApiHttpResponse AddMachine([FromBody]RopStoreAddMachine rop)
-        //{
-        //    IResult result = MerchServiceFactory.Store.AddMachine(this.CurrentUserId, this.CurrentMerchId, rop);
-        //    return new OwnApiHttpResponse(result);
-        //}
-
-        //[HttpPost]
-        //public OwnApiHttpResponse RemoveMachine([FromBody]RopStoreRemoveMachine rop)
-        //{
-        //    IResult result = MerchServiceFactory.Store.RemoveMachine(this.CurrentUserId, this.CurrentMerchId, rop);
-        //    return new OwnApiHttpResponse(result);
-        //}
 
         [HttpGet]
         public OwnApiHttpResponse GetKinds(string id)
@@ -131,30 +89,16 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitManageFront([FromUri]string id)
+        public OwnApiHttpResponse InitManageShop([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Store.InitManageFront(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Store.InitManageShop(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetFrontList([FromUri]RupStoreGetFrontList rup)
+        public OwnApiHttpResponse GetShops([FromUri]RupStoreGetShops rup)
         {
-            IResult result = MerchServiceFactory.Store.GetFrontList(this.CurrentUserId, this.CurrentMerchId, rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
-        public OwnApiHttpResponse GetFront([FromUri]RupStoreGetFront rup)
-        {
-            IResult result = MerchServiceFactory.Store.GetFront(this.CurrentUserId, this.CurrentMerchId, rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse SaveFront([FromBody]RopStoreSaveFront rop)
-        {
-            IResult result = MerchServiceFactory.Store.SaveFront(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Store.GetShops(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

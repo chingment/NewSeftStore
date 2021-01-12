@@ -158,7 +158,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/api/machine'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
 import vueSeamlessScroll from 'vue-seamless-scroll'
 export default {
@@ -166,9 +166,14 @@ export default {
   components: {
     vueSeamlessScroll
   },
+  props: {
+    machineid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      listData3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 3, 4],
       loading: false,
       listTotal: 0,
       listQuery: {
@@ -204,16 +209,9 @@ export default {
       isDesktop: this.$store.getters.isDesktop
     }
   },
-  computed: {
-    classOption3() {
-      return {
-        direction: 2,
-        navigation: true
-      }
-    }
-  },
   watch: {
-    '$route'(to, from) {
+    machineid: function(val, oldval) {
+      console.log('storeid 值改变:' + val)
       this.init()
     }
   },
@@ -222,19 +220,19 @@ export default {
   },
   methods: {
     init() {
-      var id = getUrlParam('id')
       this.loading = true
-      this.listQuery.machineId = id
-      initManageStock({ id: id }).then(res => {
-        if (res.result === 1) {
-          var d = res.data
+      if (!isEmpty(this.machineid)) {
+        this.listQuery.machineId = this.machineid
+        initManageStock({ id: this.machineid }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.options_cabinets = d.optionsCabinets
+          }
+          this.loading = false
+        })
 
-          this.options_cabinets = d.optionsCabinets
-        }
-        this.loading = false
-      })
-
-      this.getListData(this.listQuery)
+        this.getListData(this.listQuery)
+      }
     },
     getListData(listQuery) {
       this.loading = true

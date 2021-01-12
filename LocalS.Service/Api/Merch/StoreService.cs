@@ -84,84 +84,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult InitAdd(string operater, string merchId)
-        {
-            var result = new CustomJsonResult();
-            var ret = new RetStoreInitAdd();
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-
-            return result;
-        }
-
-        public CustomJsonResult Add(string operater, string merchId, RopStoreAdd rop)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var isExistStore = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Name == rop.Name).FirstOrDefault();
-                if (isExistStore != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
-                }
-
-                var store = new Store();
-                store.Id = IdWorker.Build(IdType.NewGuid);
-                store.MerchId = merchId;
-                store.Name = rop.Name;
-                store.ContactAddress = rop.ContactAddress;
-                //store.BriefDes = rop.BriefDes;
-                //store.IsOpen = false;
-                //store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                //store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
-                store.CreateTime = DateTime.Now;
-                store.Creator = operater;
-                CurrentDb.Store.Add(store);
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
-            }
-
-            return result;
-        }
-
-        public CustomJsonResult Edit(string operater, string merchId, RopStoreEdit rop)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-            using (TransactionScope ts = new TransactionScope())
-            {
-
-                var isExistStore = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.Id && m.Name == rop.Name).FirstOrDefault();
-                if (isExistStore != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
-                }
-
-                var store = CurrentDb.Store.Where(m => m.Id == rop.Id).FirstOrDefault();
-
-                store.Name = rop.Name;
-                store.ContactAddress = rop.ContactAddress;
-                //store.BriefDes = rop.BriefDes;
-                //store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                //store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
-                //store.IsOpen = rop.IsOpen;
-                store.MendTime = DateTime.Now;
-                store.Mender = operater;
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreEdit, string.Format("保存店铺（{0}）信息成功", rop.Name));
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
-            return result;
-        }
-
         public CustomJsonResult InitManage(string operater, string merchId, string storeId)
         {
             var ret = new RetStoreInitManage();
@@ -216,7 +138,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult InitManageFront(string operater, string merchId, string storeId)
+        public CustomJsonResult InitManageShop(string operater, string merchId, string storeId)
         {
             var result = new CustomJsonResult();
 
@@ -224,52 +146,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
-        //public CustomJsonResult InitManageMachine(string operater, string merchId, string storeId)
-        //{
-        //    var ret = new RetStoreInitManageMachine();
-
-        //    var store = BizFactory.Store.GetOne(storeId);
-
-        //    ret.StoreName = store.Name;
-
-        //    var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).OrderBy(m => m.CurUseStoreId).ToList();
-
-        //    foreach (var merchMachine in merchMachines)
-        //    {
-        //        bool disabled = false;
-        //        string value = merchMachine.MachineId;
-        //        string label = "";
-
-        //        if (merchMachine.IsStopUse)
-        //        {
-        //            label = string.Format("{0}(停止使用)", merchMachine.MachineId);
-        //            disabled = true;
-        //        }
-        //        else
-        //        {
-
-        //            if (string.IsNullOrEmpty(merchMachine.CurUseStoreId))
-        //            {
-        //                label = string.Format("{0}(未使用)", merchMachine.MachineId);
-        //                disabled = false;
-        //            }
-        //            else
-        //            {
-        //                var l_store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
-
-        //                label = string.Format("{0}(店铺:[{1}]已使用)", merchMachine.MachineId, l_store.Name);
-        //                disabled = true;
-        //            }
-        //        }
-
-        //        ret.FormSelectMachines.Add(new { value = value, label = label, disabled = disabled });
-        //    }
-
-        //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-        //}
-
-        public CustomJsonResult GetMachineList(string operater, string merchId, RupStoreGetMachineList rup)
+        public CustomJsonResult GetMachines(string operater, string merchId, RupStoreGetMachines rup)
         {
             var result = new CustomJsonResult();
 
@@ -281,7 +158,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          u.CurUseStoreId == rup.StoreId
                          &&
-                         u.CurUseStoreFrontId == rup.StoreFrontId
+                         u.CurUseShopId == rup.ShopId
                          select new { u.Id, u.MachineId, tt.ExIsHas, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
 
             var list = query.OrderBy(m => m.IsStopUse).ToList();
@@ -308,126 +185,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
-        //public CustomJsonResult AddMachine(string operater, string merchId, RopStoreAddMachine rop)
-        //{
-        //    CustomJsonResult result = new CustomJsonResult();
-        //    using (TransactionScope ts = new TransactionScope())
-        //    {
-        //        var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-        //        if (machine == null)
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该机器");
-        //        }
-
-        //        if (machine.CurUseMerchId != merchId)
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器不是对应商户");
-        //        }
-
-        //        var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.MachineId).FirstOrDefault();
-        //        if (merchMachine == null)
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到商户的机器");
-        //        }
-
-        //        if (!string.IsNullOrEmpty(merchMachine.CurUseStoreId))
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被使用");
-        //        }
-
-        //        var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-
-
-        //        machine.CurUseStoreId = rop.StoreId;
-        //        machine.Mender = operater;
-        //        machine.MendTime = DateTime.Now;
-
-        //        merchMachine.CurUseStoreId = rop.StoreId;
-        //        merchMachine.Mender = operater;
-        //        merchMachine.MendTime = DateTime.Now;
-
-
-        //        var machineBindLog = new MachineBindLog();
-        //        machineBindLog.Id = IdWorker.Build(IdType.NewGuid);
-        //        machineBindLog.MachineId = rop.MachineId;
-        //        machineBindLog.MerchId = merchId;
-        //        machineBindLog.StoreId = rop.StoreId;
-        //        machineBindLog.BindType = E_MachineBindType.BindOnStore;
-        //        machineBindLog.CreateTime = DateTime.Now;
-        //        machineBindLog.Creator = operater;
-        //        machineBindLog.RemarkByDev = "绑定店铺";
-        //        CurrentDb.MachineBindLog.Add(machineBindLog);
-
-        //        CurrentDb.SaveChanges();
-        //        ts.Complete();
-
-        //        MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAddMachine, string.Format("机器（{0}）绑定店铺（{1}）成功", merchMachine.MachineId, store.Name));
-
-        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
-        //    }
-        //    return result;
-        //}
-
-        //public CustomJsonResult RemoveMachine(string operater, string merchId, RopStoreRemoveMachine rop)
-        //{
-        //    CustomJsonResult result = new CustomJsonResult();
-        //    using (TransactionScope ts = new TransactionScope())
-        //    {
-        //        var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-        //        if (machine == null)
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该机器");
-        //        }
-
-        //        if (machine.CurUseMerchId != merchId)
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器不是对应商户");
-        //        }
-
-        //        var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.MachineId).FirstOrDefault();
-
-        //        if (merchMachine == null)
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到商户的机器");
-        //        }
-
-        //        if (string.IsNullOrEmpty(merchMachine.CurUseStoreId))
-        //        {
-        //            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被移除");
-        //        }
-
-        //        var store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-
-        //        var machineBindLog = new MachineBindLog();
-        //        machineBindLog.Id = IdWorker.Build(IdType.NewGuid);
-        //        machineBindLog.MachineId = rop.MachineId;
-        //        machineBindLog.MerchId = machine.CurUseMerchId;
-        //        machineBindLog.StoreId = machine.CurUseStoreId;
-        //        machineBindLog.BindType = E_MachineBindType.BindOffStore;
-        //        machineBindLog.CreateTime = DateTime.Now;
-        //        machineBindLog.Creator = operater;
-        //        machineBindLog.RemarkByDev = "解绑店铺";
-        //        CurrentDb.MachineBindLog.Add(machineBindLog);
-
-
-        //        machine.CurUseStoreId = null;
-        //        machine.Mender = operater;
-        //        machine.MendTime = DateTime.Now;
-
-        //        merchMachine.CurUseStoreId = null;
-        //        merchMachine.Mender = operater;
-        //        merchMachine.MendTime = DateTime.Now;
-
-        //        MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreRemoveMachine, string.Format("机器（{0}）解绑店铺（{1}）成功", merchMachine.MachineId, store.Name));
-
-        //        CurrentDb.SaveChanges();
-        //        ts.Complete();
-
-        //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
-        //    }
-        //    return result;
-        //}
 
         public CustomJsonResult GetKinds(string operater, string merchId, string storeId)
         {
@@ -771,19 +528,17 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult GetFrontList(string operater, string merchId, RupStoreGetFrontList rup)
+        public CustomJsonResult GetShops(string operater, string merchId, RupStoreGetShops rup)
         {
-
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.StoreFront
-                         where (rup.Name == null || u.Name.Contains(rup.Name))
-                         &&
+            var query = (from s in CurrentDb.StoreShop
+                         join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
+                         from u in temp.DefaultIfEmpty()
+                         where
                          u.MerchId == merchId
-                         &&
-                         u.StoreId == rup.StoreId &&
-                         u.IsDelete == false
-                         select new { u.Id, u.Name, u.StoreId, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.CreateTime });
+                         && s.StoreId == rup.StoreId
+                         select new { u.Id, u.Name, u.Address, u.MainImgUrl, u.IsOpen, u.AreaCode, u.AreaName, u.MerchId, s.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress, u.CreateTime });
 
 
             int total = query.Count();
@@ -799,7 +554,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var machineCount = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == rup.StoreId && m.CurUseStoreFrontId == item.Id).Count();
+                var machineCount = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == rup.StoreId && m.CurUseShopId == item.Id).Count();
 
                 olist.Add(new
                 {
@@ -817,76 +572,6 @@ namespace LocalS.Service.Api.Merch
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
-
-            return result;
-        }
-
-        public CustomJsonResult SaveFront(string operater, string merchId, RopStoreSaveFront rop)
-        {
-            var result = new CustomJsonResult();
-
-            if (string.IsNullOrEmpty(rop.Id))
-            {
-                var d_StoreFront = new StoreFront();
-                d_StoreFront.Id = IdWorker.Build(IdType.NewGuid);
-                d_StoreFront.MerchId = merchId;
-                d_StoreFront.StoreId = rop.StoreId;
-                d_StoreFront.Name = rop.Name;
-                d_StoreFront.Address = rop.Address;
-                d_StoreFront.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                d_StoreFront.MainImgUrl = ImgSet.GetMain_O(d_StoreFront.DisplayImgUrls);
-                d_StoreFront.BriefDes = rop.BriefDes;
-                d_StoreFront.IsDelete = false;
-                d_StoreFront.CreateTime = DateTime.Now;
-                d_StoreFront.Creator = operater;
-                CurrentDb.StoreFront.Add(d_StoreFront);
-                CurrentDb.SaveChanges();
-            }
-            else
-            {
-
-                var d_StoreFront = CurrentDb.StoreFront.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.Id == rop.Id).FirstOrDefault();
-                if (d_StoreFront != null)
-                {
-                    d_StoreFront.Name = rop.Name;
-                    d_StoreFront.Address = rop.Address;
-                    d_StoreFront.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                    d_StoreFront.MainImgUrl = ImgSet.GetMain_O(d_StoreFront.DisplayImgUrls);
-                    d_StoreFront.BriefDes = rop.BriefDes;
-                    CurrentDb.SaveChanges();
-                }
-            }
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
-
-            return result;
-        }
-
-        public CustomJsonResult GetFront(string operater, string merchId, RupStoreGetFront rup)
-        {
-            var result = new CustomJsonResult();
-
-            var d_StoreFront = CurrentDb.StoreFront.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.Id == rup.Id).FirstOrDefault();
-
-            if (d_StoreFront != null)
-            {
-                var ret = new
-                {
-                    Id = d_StoreFront.Id,
-                    Name = d_StoreFront.Name,
-                    StoreId = d_StoreFront.StoreId,
-                    BriefDes = d_StoreFront.BriefDes,
-                    Address = d_StoreFront.Address,
-                    MainImgUrl = d_StoreFront.MainImgUrl,
-                    DisplayImgUrls = d_StoreFront.DisplayImgUrls.ToJsonObject<List<ImgSet>>(),
-                    IsOpen = d_StoreFront.IsOpen,
-                    Status = GetStatus(d_StoreFront.IsOpen)
-                };
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-
-            }
 
             return result;
         }

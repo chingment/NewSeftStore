@@ -26,20 +26,14 @@ namespace LocalS.BLL.Biz
         public MapPoint AddressPoint { get; set; }
         public bool IsDelete { get; set; }
         public string MerchId { get; set; }
-
         public string MerchName { get; set; }
         public string[] AllMachineIds { get; set; }
         public string[] SellMachineIds { get; set; }
         public string BriefDes { get; set; }
-
         public bool IsOpen { get; set; }
-
         public List<ImgSet> DisplayImgUrls { get; set; }
-
         public bool IsTestMode { get; set; }
-
         public string SctMode { get; set; }
-
         public string[] GetSellChannelRefIds(E_SellChannelRefType shopMode)
         {
             string[] sellChannelRefIds = null;

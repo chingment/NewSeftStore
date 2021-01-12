@@ -16,7 +16,7 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Mall = 1,//商城库存
-        StoreFront = 2,//门店库存
+        Shop = 2,//门店库存
         Machine = 3,//机器库存
     }
 

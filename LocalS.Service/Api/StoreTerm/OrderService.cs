@@ -20,47 +20,55 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+            var d_machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
 
-            if (machine == null)
+            if (d_machine == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
+            if (string.IsNullOrEmpty(d_machine.CurUseMerchId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(machine.StoreId))
+            if (string.IsNullOrEmpty(d_machine.CurUseStoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
             }
 
-            if (machine.RunStatus != E_MachineRunStatus.Running)
+            if (string.IsNullOrEmpty(d_machine.CurUseShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
+            }
+
+            if (d_machine.RunStatus != E_MachineRunStatus.Running)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器在维护状态");
             }
 
+            var shop = CurrentDb.Shop.Where(m => m.Id == d_machine.CurUseShopId).FirstOrDefault();
+
+
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.AppId = AppId.STORETERM;
             bizRop.Source = E_OrderSource.Machine;
-            bizRop.StoreId = machine.StoreId;
+            bizRop.StoreId = d_machine.CurUseStoreId;
             bizRop.ShopMethod = E_OrderShopMethod.Shop;
-            bizRop.IsTestMode = machine.IsTestMode;
-
+            bizRop.IsTestMode = d_machine.IsTestMode;
 
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
             block.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-            block.SelfTake.Mark.Id = machine.StoreId;
-            block.SelfTake.Mark.Name = machine.StoreName;
-            block.SelfTake.Mark.Address = machine.StoreAddress;
-            block.SelfTake.Mark.AreaCode = "";
-            block.SelfTake.Mark.AreaName = "";
+            block.SelfTake.Mark.Id = d_machine.CurUseShopId;
+            block.SelfTake.Mark.Name = shop.Name;
+            block.SelfTake.Mark.Address = shop.Address;
+            block.SelfTake.Mark.AreaCode = shop.AreaCode;
+            block.SelfTake.Mark.AreaName = shop.AreaName;
+
             foreach (var productSku in rop.ProductSkus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { machine.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { rop.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);

@@ -20,7 +20,7 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string MachineId { get; set; }
         public string CurUseStoreId { get; set; }
-        public string CurUseStoreFrontId { get; set; }
+        public string CurUseShopId { get; set; }
         [MaxLength(128)]
         public string Name { get; set; }
         public string LogoImgUrl { get; set; }

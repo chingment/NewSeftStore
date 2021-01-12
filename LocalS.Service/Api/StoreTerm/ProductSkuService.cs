@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ProductSkuService : BaseService
     {
-        public PageEntity<ProductSkuModel> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string storeFrontId, string machineId)
+        public PageEntity<ProductSkuModel> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string machineId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 

@@ -30,59 +30,16 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
-            <el-button type="text" @click="dialogOpenByFront(false,null)">新建</el-button>
+            <el-button type="text">配置</el-button>
           </div>
           <div class="it-component">
 
-            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card" @click="dialogOpenByFront(false,null)"><i class="el-icon-plus" /></div>
+            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
 
           </div>
         </el-card>
       </el-col>
     </el-row>
-
-    <el-dialog :title="dialogByFrontIsEdit?'编辑':'新建'" :visible.sync="dialogByFrontIsVisible" width="800px">
-      <el-form ref="formByFront" v-loading="loadingByFromFront" :model="formByFront" :rules="rulesByFront" label-width="80px">
-        <el-form-item label="门店名称" prop="name">
-          <el-input v-model="formByFront.name" clearable />
-        </el-form-item>
-        <el-form-item label="联系地址" prop="address">
-          <el-input v-model="formByFront.address" clearable />
-        </el-form-item>
-        <el-form-item label="图片" prop="displayImgUrls">
-          <el-input :value="formByFront.displayImgUrls.toString()" style="display:none" />
-          <el-upload
-            ref="uploadImg"
-            v-model="formByFront.displayImgUrls"
-            :action="uploadImgServiceUrl"
-            list-type="picture-card"
-            :before-upload="uploadBeforeHandle"
-            :on-success="uploadSuccessHandle"
-            :on-remove="uploadRemoveHandle"
-            :on-error="uploadErrorHandle"
-            :on-preview="uploadPreviewHandle"
-            :file-list="uploadImglist"
-          >
-            <i class="el-icon-plus" />
-          </el-upload>
-          <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-            <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
-          </el-dialog>
-          <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
-        </el-form-item>
-        <el-form-item label="简短描述" style="max-width:1000px">
-          <el-input v-model="formByFront.briefDes" type="text" maxlength="200" clearable show-word-limit />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogByFrontIsVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="_saveFront">
-          保存
-        </el-button>
-      </div>
-    </el-dialog>
 
     <el-dialog v-loading="loadingByDialogByMachine" :title="'机器管理'" :visible.sync="dialogByMachineIsVisible">
       <div style="width:800px;height:600px">
@@ -110,7 +67,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initManageFront, getFrontList, saveFront, getFront, getMachineList } from '@/api/store'
+import { initManageShop, getShops, getMachines } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 export default {
@@ -170,7 +127,7 @@ export default {
     }
   },
   mounted() {
-    this.setUploadImgSort()
+
   },
   created() {
     this.init()
@@ -182,7 +139,7 @@ export default {
         this.loading = true
         this.storeId = this.storeid
         this.listQuery.storeId = this.storeid
-        initManageFront({ id: this.storeid }).then(res => {
+        initManageShop({ id: this.storeid }).then(res => {
           if (res.result === 1) {
             var d = res.data
           }
@@ -194,7 +151,7 @@ export default {
     getListData(listQuery) {
       this.loading = true
       // this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
-      getFrontList(listQuery).then(res => {
+      getShops(listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -207,7 +164,7 @@ export default {
       if (isEdit) {
         this.dialogByFrontIsEdit = true
 
-        getFront({
+        getShop({
           storeId: item.storeId,
           id: item.id
         }).then(res => {
@@ -236,126 +193,10 @@ export default {
         this.uploadImglist = []
       }
     },
-    _saveFront() {
-      this.$refs['formByFront'].validate(valid => {
-        if (valid) {
-          MessageBox.confirm('确定要保存', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          })
-            .then(() => {
-              saveFront(this.formByFront).then(res => {
-                this.$message(res.message)
-                if (res.result === 1) {
-                  this.init()
-
-                  this.dialogByFrontIsVisible = false
-                }
-              })
-            })
-            .catch(() => {})
-        }
-      })
-    },
-    getUploadImglist(displayImgUrls) {
-      var _uploadImglist = []
-      if (displayImgUrls !== null) {
-        for (var i = 0; i < displayImgUrls.length; i++) {
-          _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
-        }
-      }
-
-      return _uploadImglist
-    },
-    getdisplayImgUrls(fileList) {
-      var _displayImgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
-        }
-      }
-      return _displayImgUrls
-    },
-    uploadBeforeHandle(file) {
-      if (this.formByFront.displayImgUrls.length >= this.uploadImgMaxSize) {
-        this.$message.error('上传图片不能超过4张!')
-        return false
-      }
-
-      const imgType = file.type
-      const isLt4M = file.size / 1024 / 1024 < 4
-      //  var a = isLt4M === true ? 'true' : 'false'
-      if (imgType !== 'image/jpeg' && imgType !== 'image/png' && imgType !== 'image/jpg') {
-        this.$message('图片格式仅支持(jpg,png)')
-        return false
-      }
-
-      if (!isLt4M) {
-        this.$message('图片大小不能超过4M')
-        return false
-      }
-
-      return true
-    },
-    uploadCardCheckShow() {
-      var uploadcard = this.$refs.uploadImg.$el.querySelectorAll('.el-upload--picture-card')
-      if (this.formByFront.displayImgUrls.length === this.uploadImgMaxSize) {
-        uploadcard[0].style.display = 'none'
-      } else {
-        uploadcard[0].style.display = 'inline-block'
-      }
-    },
-    uploadRemoveHandle(file, fileList) {
-      this.uploadImglist = fileList
-      this.formByFront.displayImgUrls = this.getdisplayImgUrls(fileList)
-      this.uploadCardCheckShow()
-    },
-    uploadSuccessHandle(response, file, fileList) {
-      this.uploadImglist = fileList
-      this.formByFront.displayImgUrls = this.getdisplayImgUrls(fileList)
-      this.uploadCardCheckShow()
-    },
-    uploadErrorHandle(errs, file, fileList) {
-      this.uploadImglist = fileList
-      this.formByFront.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    uploadPreviewHandle(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
-    },
-    setUploadImgSort() {
-      var _this = this
-      const $ul = _this.$refs.uploadImg.$el.querySelectorAll('.el-upload-list')[0]
-      new Sortable($ul, {
-        onUpdate: function(event) {
-        // 修改items数据顺序
-          var newIndex = event.newIndex
-          var oldIndex = event.oldIndex
-          var $li = $ul.children[newIndex]
-          var $oldLi = $ul.children[oldIndex]
-          // 先删除移动的节点
-          $ul.removeChild($li)
-          // 再插入移动的节点到原有节点，还原了移动的操作
-          if (newIndex > oldIndex) {
-            $ul.insertBefore($li, $oldLi)
-          } else {
-            $ul.insertBefore($li, $oldLi.nextSibling)
-          }
-          // 更新items数组
-          var item = _this.uploadImglist.splice(oldIndex, 1)
-          _this.uploadImglist.splice(newIndex, 0, item[0])
-
-          _this.formByFront.displayImgUrls = _this.getdisplayImgUrls(_this.uploadImglist)
-        // 下一个tick就会走patch更新
-        },
-        animation: 150
-      })
-    },
     dialogOpenByMachine(item) {
       this.dialogByMachineIsVisible = true
       this.loadingByDialogByMachine = true
-      getMachineList({ storeId: item.storeId, storeFrontId: item.id }).then(res => {
+      getMachines({ storeId: item.storeId, storeFrontId: item.id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listDataByMachine = d

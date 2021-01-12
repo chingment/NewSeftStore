@@ -22,14 +22,14 @@ namespace LocalS.BLL.Biz
         public string LogoImgUrl { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
-        public string StoreFrontId { get; set; }
+        public string ShopId { get; set; }
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
         public string CsrHelpTip { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }
-        public string StoreAddress { get; set; }
-        public string JPushRegId { get; set; }
+        public string ShopName { get; set; }
+        public string ShopAddress { get; set; }
         public string MainImgUrl { get; set; }
         public DateTime? LastRequestTime { get; set; }
         public E_MachineRunStatus RunStatus { get; set; }

@@ -78,7 +78,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.LogoImgUrl = l_machine.LogoImgUrl;
             ret.Machine.MerchName = l_machine.MerchName;
             ret.Machine.StoreName = l_machine.StoreName;
-
+            ret.Machine.ShopName = l_machine.ShopName;
             ret.Machine.CsrQrCode = l_machine.CsrQrCode;
             ret.Machine.CsrPhoneNumber = l_machine.CsrPhoneNumber;
             ret.Machine.CsrHelpTip = l_machine.CsrHelpTip;
@@ -105,15 +105,15 @@ namespace LocalS.Service.Api.StoreTerm
 
             ret.Banners = BizFactory.Machine.GetHomeBanners(l_machine.MachineId);
             ret.Ads = BizFactory.Machine.GetAds(l_machine.MachineId);
-            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(l_machine.MerchId, l_machine.StoreId, l_machine.StoreFrontId, l_machine.MachineId);
-            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.StoreFrontId, l_machine.MachineId);
+            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
+            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string storeFrontId, string machineId)
+        public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string shopId, string machineId)
         {
-            var l_products = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, storeFrontId, machineId);
+            var l_products = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, shopId, machineId);
 
             var dics = new Dictionary<string, ProductSkuModel>();
 
@@ -140,14 +140,13 @@ namespace LocalS.Service.Api.StoreTerm
             return dics;
         }
 
-        public List<ProductKindModel> GetProductKinds(string merchId, string storeId, string storeFrontId, string machineId)
+        public List<ProductKindModel> GetProductKinds(string merchId, string storeId, string shopId, string machineId)
         {
             var l_kinds = new List<ProductKindModel>();
 
             var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId).ToList();
-
+            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId&&m.SellChannelRefType== E_SellChannelRefType.Machine).ToList();
 
             var l_kind_all = new ProductKindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);

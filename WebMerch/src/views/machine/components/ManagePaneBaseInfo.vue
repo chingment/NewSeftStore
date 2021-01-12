@@ -48,11 +48,17 @@
 
 import { MessageBox } from 'element-ui'
 import { edit, initManageBaseInfo } from '@/api/machine'
-import { getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 
 export default {
   name: 'ManagePaneBaseInfo',
+  props: {
+    machineid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       isEdit: false,
@@ -80,12 +86,10 @@ export default {
     }
   },
   watch: {
-    '$route'(to, from) {
+    machineid: function(val, oldval) {
+      console.log('storeid 值改变:' + val)
       this.init()
     }
-  },
-  mounted() {
-
   },
   created() {
     this.init()
@@ -93,26 +97,27 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var id = getUrlParam('id')
-      initManageBaseInfo({ id: id }).then(res => {
-        if (res.result === 1) {
-          var d = res.data
-          this.form.id = d.id
-          this.form.name = d.name
-          this.form.logoImgUrl = d.logoImgUrl
+      if (!isEmpty(this.machineid)) {
+        initManageBaseInfo({ id: this.machineid }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.form.id = d.id
+            this.form.name = d.name
+            this.form.logoImgUrl = d.logoImgUrl
 
-          this.temp.id = d.id
-          this.temp.name = d.name
-          this.temp.logoImgUrl = d.logoImgUrl
-          this.temp.status = d.status
-          this.temp.ctrlSdkVersion = d.ctrlSdkVersion
-          this.temp.appVersion = d.appVersion
-          this.temp.storeName = d.storeName
-          this.temp.lastRequestTime = d.lastRequestTime
-          this.temp.isStopUse = d.isStopUse
-        }
-        this.loading = false
-      })
+            this.temp.id = d.id
+            this.temp.name = d.name
+            this.temp.logoImgUrl = d.logoImgUrl
+            this.temp.status = d.status
+            this.temp.ctrlSdkVersion = d.ctrlSdkVersion
+            this.temp.appVersion = d.appVersion
+            this.temp.storeName = d.storeName
+            this.temp.lastRequestTime = d.lastRequestTime
+            this.temp.isStopUse = d.isStopUse
+          }
+          this.loading = false
+        })
+      }
     },
     onSubmit() {
       this.$refs['form'].validate((valid) => {

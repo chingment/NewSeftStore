@@ -31,7 +31,7 @@ namespace LocalS.Entity
         public string JPushRegId { get; set; }
         public string CurUseMerchId { get; set; }
         public string CurUseStoreId { get; set; }
-        public string CurUseStoreFrontId { get; set; }
+        public string CurUseShopId { get; set; }
         public string LogoImgUrl { get; set; }
         public string AppVersionCode { get; set; }
         public string AppVersionName { get; set; }

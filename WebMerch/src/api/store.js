@@ -8,22 +8,6 @@ export function getList(params) {
   })
 }
 
-export function initAdd(params) {
-  return request({
-    url: '/store/initAdd',
-    method: 'get',
-    params
-  })
-}
-
-export function add(data) {
-  return request({
-    url: '/store/add',
-    method: 'post',
-    data
-  })
-}
-
 export function initManage(params) {
   return request({
     url: '/store/initManage',
@@ -40,17 +24,9 @@ export function initManageBaseInfo(params) {
   })
 }
 
-export function edit(data) {
+export function getMachines(params) {
   return request({
-    url: '/store/edit',
-    method: 'post',
-    data
-  })
-}
-
-export function getMachineList(params) {
-  return request({
-    url: '/store/getMachineList',
+    url: '/store/getMachines',
     method: 'get',
     params
   })
@@ -112,46 +88,26 @@ export function getKindSpu(params) {
   })
 }
 
-export function initManageFront(params) {
+export function initManageShop(params) {
   return request({
-    url: '/store/initManageFront',
+    url: '/store/initManageShop',
     method: 'get',
     params
   })
 }
 
-export function getFrontList(params) {
+export function getShops(params) {
   return request({
-    url: '/store/getFrontList',
+    url: '/store/getShops',
     method: 'get',
     params
-  })
-}
-
-export function getFront(params) {
-  return request({
-    url: '/store/getFront',
-    method: 'get',
-    params
-  })
-}
-
-export function saveFront(data) {
-  return request({
-    url: '/store/saveFront',
-    method: 'post',
-    data
   })
 }
 
 export default {
   getList: getList,
-  initAdd: initAdd,
-  add: add,
-  initManageBaseInfo: initManageBaseInfo,
-  edit: edit,
   initManage: initManage,
-  getMachineList: getMachineList,
+  initManageBaseInfo: initManageBaseInfo,
   getKinds: getKinds,
   saveKind: saveKind,
   removeKind: removeKind,
@@ -159,8 +115,6 @@ export default {
   getKindSpus: getKindSpus,
   removeKindSpu: removeKindSpu,
   getKindSpu: getKindSpu,
-  initManageFront: initManageFront,
-  getFrontList: getFrontList,
-  getFront: getFront,
-  saveFront: saveFront
+  getShops: getShops,
+  getMachines: getMachines
 }

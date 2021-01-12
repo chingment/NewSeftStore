@@ -61,7 +61,6 @@ namespace LocalS.Service.Api.Admin
                     MerchName = string.IsNullOrEmpty(machine.MerchId) == true ? "未绑定商户" : machine.MerchName,
                     CtrlSdkVersion = machine.CtrlSdkVersion,
                     AppVersion = machine.AppVersion,
-                    JPushRegId = machine.JPushRegId,
                     LogoImgUrl = machine.LogoImgUrl,
                     CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
                 });

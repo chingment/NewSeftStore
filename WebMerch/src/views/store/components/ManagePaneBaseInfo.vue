@@ -1,19 +1,12 @@
 <template>
   <div id="store_baseinfo" v-loading="loading" class="app-container">
 
-    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px" :hide-required-asterisk="!isEdit">
-
-      <el-form-item label="名称" prop="name" :show-message="isEdit">
-        <span>{{ temp.name }}</span>
+    <el-form ref="form" v-loading="loading" label-width="80px">
+      <el-form-item label="名称" prop="name">
+        <span>{{ store.name }}</span>
       </el-form-item>
-
-      <el-form-item label="联系地址" prop="contactAddress" :show-message="isEdit">
-        <span v-show="!isEdit">{{ temp.contactAddress }}</span>  <el-input v-show="isEdit" v-model="form.contactAddress" clearable />
-      </el-form-item>
-      <el-form-item>
-        <el-button v-show="!isEdit" type="primary" @click="openEdit">编辑</el-button>
-        <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
-        <el-button v-show="isEdit" type="primary" @click="onSubmit">保存</el-button>
+      <el-form-item label="联系地址" prop="contactAddress">
+        <span>{{ store.contactAddress }}</span>
       </el-form-item>
     </el-form>
 
@@ -39,25 +32,16 @@ export default {
     return {
       isEdit: false,
       loading: false,
-      temp: {
+      store: {
         id: '',
         name: '',
         contactAddress: ''
-      },
-      form: {
-        id: '',
-        name: '',
-        contactAddress: ''
-      },
-      rules: {
-        contactAddress: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }]
       }
     }
   },
   watch: {
     storeid: function(val, oldval) {
       console.log('storeid 值改变:' + val)
-
       this.init()
     }
   },
@@ -71,42 +55,13 @@ export default {
         initManageBaseInfo({ id: this.storeid }).then(res => {
           if (res.result === 1) {
             var d = res.data
-            this.form.id = d.id
-            this.form.name = d.name
-            this.form.contactAddress = d.contactAddress
-
-            this.temp.name = this.form.name
-            this.temp.contactAddress = this.form.contactAddress
+            this.store.id = d.id
+            this.store.name = d.name
+            this.store.contactAddress = d.contactAddress
           }
           this.loading = false
         })
       }
-    },
-    onSubmit() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          MessageBox.confirm('确定要保存', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            edit(this.form).then(res => {
-              this.$message(res.message)
-              if (res.result === 1) {
-                this.isEdit = false
-                this.init()
-              }
-            })
-          }).catch(() => {
-          })
-        }
-      })
-    },
-    openEdit() {
-      this.isEdit = true
-    },
-    cancleEdit() {
-      this.isEdit = false
     }
   }
 }
