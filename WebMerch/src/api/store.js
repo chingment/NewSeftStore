@@ -48,35 +48,11 @@ export function edit(data) {
   })
 }
 
-export function initManageMachine(params) {
-  return request({
-    url: '/store/initManageMachine',
-    method: 'get',
-    params
-  })
-}
-
 export function getMachineList(params) {
   return request({
     url: '/store/getMachineList',
     method: 'get',
     params
-  })
-}
-
-export function addMachine(data) {
-  return request({
-    url: '/store/addMachine',
-    method: 'post',
-    data
-  })
-}
-
-export function removeMachine(data) {
-  return request({
-    url: '/store/removeMachine',
-    method: 'post',
-    data
   })
 }
 
@@ -128,9 +104,9 @@ export function removeKindSpu(data) {
   })
 }
 
-export function getKindSpuInfo(params) {
+export function getKindSpu(params) {
   return request({
-    url: '/store/getKindSpuInfo',
+    url: '/store/getKindSpu',
     method: 'get',
     params
   })
@@ -175,17 +151,14 @@ export default {
   initManageBaseInfo: initManageBaseInfo,
   edit: edit,
   initManage: initManage,
-  initManageMachine: initManageMachine,
   getMachineList: getMachineList,
-  removeMachine: removeMachine,
-  addMachine: addMachine,
   getKinds: getKinds,
   saveKind: saveKind,
   removeKind: removeKind,
   saveKindSpu: saveKindSpu,
   getKindSpus: getKindSpus,
   removeKindSpu: removeKindSpu,
-  getKindSpuInfo: getKindSpuInfo,
+  getKindSpu: getKindSpu,
   initManageFront: initManageFront,
   getFrontList: getFrontList,
   getFront: getFront,

@@ -18,10 +18,10 @@
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
-              <!-- <ul>
-                <li><el-button type="text" @click="handleViewStock(item)">库存管理</el-button></li>
-                <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li>
-              </ul> -->
+              <ul>
+                <li><el-button type="text" @click="dialogOpenByMachine(item)">({{ item.machineCount }}台)机器</el-button></li>
+                <!-- <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li> -->
+              </ul>
             </div>
           </div>
         </el-card>
@@ -84,12 +84,33 @@
       </div>
     </el-dialog>
 
+    <el-dialog v-loading="loadingByDialogByMachine" :title="'机器管理'" :visible.sync="dialogByMachineIsVisible">
+      <div style="width:800px;height:600px">
+        <el-col v-for="item in listDataByMachine" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
+          <el-card class="box-card">
+            <div slot="header" class="it-header clearfix">
+              <div class="left">
+                <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>          <span style="font-size:12px;"> ({{ item.status.text }})</span></div>
+              </div>
+              <div class="right">
+                <el-button type="text" @click="handleRemoveMachine(item)">查看</el-button>
+              </div>
+            </div>
+            <div class="it-component">
+              <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
+              <div class="describe" />
+            </div>
+          </el-card>
+        </el-col>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initManageFront, getFrontList, saveFront, getFront } from '@/api/store'
+import { initManageFront, getFrontList, saveFront, getFront, getMachineList } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 export default {
@@ -104,18 +125,21 @@ export default {
     return {
       loading: false,
       loadingByFromFront: false,
+      loadingByDialogByMachine: false,
       listQuery: {
         page: 1,
         limit: 10,
         name: undefined
       },
       listData: [],
+      listDataByMachine: [],
       storeId: '',
       storeName: '',
       formSelectMachines: [
       ],
       dialogByFrontIsEdit: false,
       dialogByFrontIsVisible: false,
+      dialogByMachineIsVisible: false,
       formByFront: {
         name: '',
         address: '',
@@ -161,8 +185,6 @@ export default {
         initManageFront({ id: this.storeid }).then(res => {
           if (res.result === 1) {
             var d = res.data
-            this.storeName = d.storeName
-            this.formSelectMachines = d.formSelectMachines
           }
           this.loading = false
         })
@@ -328,6 +350,17 @@ export default {
         // 下一个tick就会走patch更新
         },
         animation: 150
+      })
+    },
+    dialogOpenByMachine(item) {
+      this.dialogByMachineIsVisible = true
+      this.loadingByDialogByMachine = true
+      getMachineList({ storeId: item.storeId, storeFrontId: item.id }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.listDataByMachine = d
+        }
+        this.loadingByDialogByMachine = false
       })
     }
   }

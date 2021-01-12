@@ -326,7 +326,7 @@ import {
   getKindSpus,
   removeKind,
   removeKindSpu,
-  getKindSpuInfo
+  getKindSpu
 } from '@/api/store'
 import { searchSpu, getSpecs } from '@/api/prdproduct'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
@@ -624,7 +624,7 @@ export default {
       this.kindSpuForm.kindId = kind.id
       if (isEdit) {
         this.kindSpuRemoveBtnShow = true
-        getKindSpuInfo({
+        getKindSpu({
           storeId: item.storeId,
           productId: item.productId,
           kindId: item.kindId

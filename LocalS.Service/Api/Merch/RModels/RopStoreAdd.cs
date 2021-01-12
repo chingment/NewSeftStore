@@ -10,7 +10,7 @@ namespace LocalS.Service.Api.Merch
     public class RopStoreAdd
     {
         public string Name { get; set; }
-        public string Address { get; set; }
+        public string ContactAddress { get; set; }
         public string BriefDes { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
     }

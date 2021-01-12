@@ -9,5 +9,7 @@ namespace LocalS.Service.Api.Merch
     public class RupStoreGetMachineList : RupBaseGetList
     {
         public string StoreId { get; set; }
+
+        public string StoreFrontId { get; set; }
     }
 }

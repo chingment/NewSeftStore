@@ -22,12 +22,12 @@ namespace LocalS.BLL.Biz
         public string LogoImgUrl { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
+        public string StoreFrontId { get; set; }
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }
         public string CsrHelpTip { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }
-
         public string StoreAddress { get; set; }
         public string JPushRegId { get; set; }
         public string MainImgUrl { get; set; }
@@ -48,7 +48,6 @@ namespace LocalS.BLL.Biz
         public string OstVern { get; set; }
         public ScannerModel Scanner { get; set; }
         public FingerVeinnerModel FingerVeinner { get; set; }
-
         public bool ImIsUse { get; set; }
         public string ImPartner { get; set; }
         public string ImUserName { get; set; }

@@ -109,6 +109,7 @@ namespace LocalS.BLL.Biz
         private string _merchId = "";
         private string _storeId = "";
 
+
         private List<string> _errorPoints;
         private List<BuildSku> _buildSkus;
 
@@ -134,10 +135,11 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public BuildOrderTool(string merchId, string storeId, int memberLevel)
+        public BuildOrderTool(string merchId, string storeId,int memberLevel)
         {
             _merchId = merchId;
             _storeId = storeId;
+
             _memberLevel = memberLevel;
 
             _buildSkus = new List<BuildSku>();

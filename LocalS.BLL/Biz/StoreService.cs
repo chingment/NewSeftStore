@@ -28,11 +28,7 @@ namespace LocalS.BLL.Biz
             model.Name = store.Name;
             model.MerchId = store.MerchId;
             model.MerchName = merch.Name;
-            model.Address = store.Address;
             model.BriefDes = store.BriefDes;
-            model.DisplayImgUrls = store.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-            model.AddressPoint.Lng = store.Lng;
-            model.AddressPoint.Lat = store.Lat;
             model.IsOpen = store.IsOpen;
             model.IsDelete = store.IsDelete;
             model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();
@@ -56,11 +52,9 @@ namespace LocalS.BLL.Biz
                 model.StoreId = store.Id;
                 model.Name = store.Name;
                 model.MerchId = store.MerchId;
-                model.Address = store.Address;
+                model.Address = store.ContactAddress;
                 model.BriefDes = store.BriefDes;
                 model.DisplayImgUrls = store.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                model.AddressPoint.Lat = store.Lat;
-                model.AddressPoint.Lng = store.Lng;
                 model.IsOpen = store.IsOpen;
                 model.IsDelete = store.IsDelete;
                 model.AllMachineIds = merchMachines.Select(m => m.MachineId).ToArray();

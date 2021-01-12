@@ -12,14 +12,13 @@ namespace LocalS.Service.Api.Merch
     {
         public RopStoreEdit()
         {
-            this.AddressPoint = new MapPoint();
+         
         }
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
+        public string ContactAddress { get; set; }
         public string BriefDes { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public bool IsOpen { get; set; }
-        public MapPoint AddressPoint { get; set; }
     }
 }

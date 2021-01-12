@@ -18,14 +18,13 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        [MaxLength(128)]
         public string Name { get; set; }
-        public string MainImgUrl { get; set; }
+
         public string DisplayImgUrls { get; set; }
-        [MaxLength(128)]
-        public string Address { get; set; }
-        public double Lat { get; set; }
-        public double Lng { get; set; }
+        public string MainImgUrl { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
+        public string ContactAddress { get; set; }
         public bool IsOpen { get; set; }
         public bool IsDelete { get; set; }
         public string BriefDes { get; set; }

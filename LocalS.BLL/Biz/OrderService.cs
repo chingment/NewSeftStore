@@ -463,11 +463,15 @@ namespace LocalS.BLL.Biz
 
                             string[] sellChannelRefIds = new string[] { };
 
-                            if (productSku.ShopMode == E_SellChannelRefType.Mall)
+                            if (block.ReceiveMode == E_ReceiveMode.Delivery)
                             {
                                 sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
                             }
-                            else if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                            else if (block.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
+                            {
+                                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
+                            }
+                            else if (block.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
                             {
                                 if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                                 {

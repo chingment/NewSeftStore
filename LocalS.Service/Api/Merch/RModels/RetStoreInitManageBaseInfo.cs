@@ -12,18 +12,14 @@ namespace LocalS.Service.Api.Merch
     {
         public RetStoreInitManageBaseInfo()
         {
-            this.AddressPoint = new MapPoint();
+
         }
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public string BriefDes { get; set; }
-        public List<ImgSet> DisplayImgUrls { get; set; }
-
+        public string ContactName { get; set; }
+        public string ContactAddress { get; set; }
+        public string ContactPhone { get; set; }
         public object Status { get; set; }
 
-        public bool IsOpen { get; set; }
-
-        public MapPoint AddressPoint { get; set; }
     }
 }

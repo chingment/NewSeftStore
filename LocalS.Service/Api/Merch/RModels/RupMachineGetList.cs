@@ -11,5 +11,7 @@ namespace LocalS.Service.Api.Merch
         public string Id { get; set; }
 
         public string StoreId { get; set; }
+
+        public string StoreFrontId { get; set; }
     }
 }

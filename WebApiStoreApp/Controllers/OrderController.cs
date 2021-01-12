@@ -181,7 +181,6 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage RefundResultNotifyByWx()

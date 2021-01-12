@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.StoreApp
             var storeModel = new StoreModel();
             storeModel.Id = store.Id;
             storeModel.Name = store.Name;
-            storeModel.Address = store.Address;
+ 
 
 
             ret.Store = storeModel;

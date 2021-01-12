@@ -15,8 +15,8 @@
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="activeDropdown.id" /></el-tab-pane>
       <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :storeid="activeDropdown.id" /></el-tab-pane>
       <el-tab-pane label="门店信息" name="tabFront"><manage-pane-front :storeid="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane v-if="activeDropdown.sctMode.indexOf('K')>-1" label="机器信息" name="tabMachine"><manage-pane-machine :storeid="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order ref="order" :storeid="activeDropdown.id" /></el-tab-pane>
+      <!-- <el-tab-pane v-if="activeDropdown.sctMode.indexOf('K')>-1" label="机器信息" name="tabMachine"><manage-pane-machine :storeid="activeDropdown.id" /></el-tab-pane> -->
+      <!-- <el-tab-pane label="订单信息" name="tabOrder"><manage-pane-order ref="order" :storeid="activeDropdown.id" /></el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

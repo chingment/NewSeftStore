@@ -31,6 +31,7 @@ namespace LocalS.Entity
         public string JPushRegId { get; set; }
         public string CurUseMerchId { get; set; }
         public string CurUseStoreId { get; set; }
+        public string CurUseStoreFrontId { get; set; }
         public string LogoImgUrl { get; set; }
         public string AppVersionCode { get; set; }
         public string AppVersionName { get; set; }
@@ -50,12 +51,10 @@ namespace LocalS.Entity
         public bool SannerIsUse { get; set; }
         public string SannerComId { get; set; }
         public bool FingerVeinnerIsUse { get; set; }
-
         public string ExReason { get; set; }
         public bool ExIsHas { get; set; }
-        public string MstVern { get; set; } //门所在主控商
+        public string MstVern { get; set; } //门锁在主控商
         public string OstVern { get; set; } //系统在主控商
-
         public bool ImIsUse { get; set; }
         public string ImPartner { get; set; }
         public string ImUserName { get; set; }

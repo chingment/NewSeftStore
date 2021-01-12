@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.Merch
     public class MachineService : BaseService
     {
 
-        public StatusModel GetStatus(string curUseStoreId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
+        public StatusModel GetStatus(string curUseStoreFrontId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
         {
             var status = new StatusModel();
 
@@ -25,9 +25,9 @@ namespace LocalS.Service.Api.Merch
                 return new StatusModel(1, "停止使用");
             }
 
-            if (string.IsNullOrEmpty(curUseStoreId))
+            if (string.IsNullOrEmpty(curUseStoreFrontId))
             {
-                return new StatusModel(1, "未绑定店铺");
+                return new StatusModel(1, "未绑定门店");
             }
 
             if (isEx)
@@ -72,7 +72,7 @@ namespace LocalS.Service.Api.Merch
 
             var machineCount = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId).Count();
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { machineCount= machineCount });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { machineCount = machineCount });
             return result;
         }
 
@@ -87,12 +87,17 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Id == null || u.MachineId.Contains(rup.Id))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.MachineId, tt.ExIsHas, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, u.MachineId, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseStoreFrontId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
 
 
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
                 query = query.Where(m => m.CurUseStoreId == rup.StoreId);
+            }
+
+            if (!string.IsNullOrEmpty(rup.StoreFrontId))
+            {
+                query = query.Where(m => m.CurUseStoreId == rup.StoreFrontId);
             }
 
             int total = query.Count();
@@ -108,23 +113,31 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var machine = BizFactory.Machine.GetOne(item.MachineId);
-                if (machine != null)
+                string remark = "未绑定门店";
+
+                if (!string.IsNullOrEmpty(item.CurUseStoreFrontId))
                 {
-                    olist.Add(new
-                    {
-                        Id = item.MachineId,
-                        Name = item.MachineId,
-                        MainImgUrl = machine.MainImgUrl,
-                        AppVersion = machine.AppVersion,
-                        CtrlSdkVersion = machine.CtrlSdkVersion,
-                        Status = GetStatus(item.CurUseStoreId, item.IsStopUse, item.ExIsHas, machine.RunStatus, machine.LastRequestTime),
-                        LastRequestTime = machine.LastRequestTime,
-                        CreateTime = item.CreateTime,
-                        StoreId = machine.StoreId,
-                        StoreName = string.IsNullOrEmpty(machine.StoreId) ? "未绑定店铺" : machine.StoreName
-                    });
+                    var store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
+                    var storeFront = CurrentDb.StoreFront.Where(m => m.Id == item.CurUseStoreFrontId).FirstOrDefault();
+
+                    remark = string.Format("[{0}]{1}", store.Name, storeFront.Name);
                 }
+
+                olist.Add(new
+                {
+                    Id = item.MachineId,
+                    Name = item.MachineId,
+                    MainImgUrl = item.MainImgUrl,
+                    AppVersion = item.AppVersionCode,
+                    CtrlSdkVersion = item.CtrlSdkVersionCode,
+                    Status = GetStatus(item.CurUseStoreFrontId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
+                    LastRequestTime = item.LastRequestTime,
+                    CreateTime = item.CreateTime,
+                    StoreId = item.CurUseStoreId,
+                    StoreFrontId = item.CurUseStoreFrontId,
+                    Remark = remark
+                });
+
             }
 
 

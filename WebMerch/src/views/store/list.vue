@@ -36,16 +36,17 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li v-if="item.sctMode.indexOf('K')>-1"><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageKind(item)">商品分类</el-button></li>
+                <!-- <li v-if="item.sctMode.indexOf('K')>-1"><el-button type="text" style="padding:0px" @click="handleManageMachine(item)">机器管理</el-button></li> -->
+                <!-- <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li> -->
+                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageKind(item)">商品分类</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageFront(item)">门店信息</el-button></li>
               </ul>
             </div>
           </div>
         </el-card>
       </el-col>
 
-      <el-col v-if="mctMode.indexOf('M')>-1" :span="6" :xs="24" style="margin-bottom:20px">
+      <!-- <el-col v-if="mctMode.indexOf('M')>-1" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
@@ -57,7 +58,7 @@
 
           </div>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -144,6 +145,16 @@ export default {
         params: {
           id: row.id,
           tab: 'tabKind'
+        }
+      })
+    },
+    handleManageFront(row) {
+      this.$router.push({
+        name: 'MerchStoreEdit',
+        path: '/store/manage',
+        params: {
+          id: row.id,
+          tab: 'tabFront'
         }
       })
     }

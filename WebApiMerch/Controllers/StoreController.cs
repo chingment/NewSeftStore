@@ -53,12 +53,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse InitManageMachine([FromUri]string id)
-        {
-            IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);
-            return new OwnApiHttpResponse(result);
-        }
+        //[HttpGet]
+        //public OwnApiHttpResponse InitManageMachine([FromUri]string id)
+        //{
+        //    IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);
+        //    return new OwnApiHttpResponse(result);
+        //}
 
         [HttpGet]
         public OwnApiHttpResponse GetMachineList([FromUri]RupStoreGetMachineList rup)
@@ -67,19 +67,19 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse AddMachine([FromBody]RopStoreAddMachine rop)
-        {
-            IResult result = MerchServiceFactory.Store.AddMachine(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
+        //[HttpPost]
+        //public OwnApiHttpResponse AddMachine([FromBody]RopStoreAddMachine rop)
+        //{
+        //    IResult result = MerchServiceFactory.Store.AddMachine(this.CurrentUserId, this.CurrentMerchId, rop);
+        //    return new OwnApiHttpResponse(result);
+        //}
 
-        [HttpPost]
-        public OwnApiHttpResponse RemoveMachine([FromBody]RopStoreRemoveMachine rop)
-        {
-            IResult result = MerchServiceFactory.Store.RemoveMachine(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
+        //[HttpPost]
+        //public OwnApiHttpResponse RemoveMachine([FromBody]RopStoreRemoveMachine rop)
+        //{
+        //    IResult result = MerchServiceFactory.Store.RemoveMachine(this.CurrentUserId, this.CurrentMerchId, rop);
+        //    return new OwnApiHttpResponse(result);
+        //}
 
         [HttpGet]
         public OwnApiHttpResponse GetKinds(string id)
@@ -110,9 +110,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetKindSpuInfo([FromUri]RupStoreGetKindSpu rup)
+        public OwnApiHttpResponse GetKindSpu([FromUri]RupStoreGetKindSpu rup)
         {
-            IResult result = MerchServiceFactory.Store.GetKindSpuInfo(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.Store.GetKindSpu(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -133,7 +133,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse InitManageFront([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.Store.InitManageMachine(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Store.InitManageFront(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 

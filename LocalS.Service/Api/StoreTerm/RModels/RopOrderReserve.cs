@@ -17,7 +17,6 @@ namespace LocalS.Service.Api.StoreTerm
         }
 
         public string MachineId { get; set; }
-
         public List<ProductSku> ProductSkus { get; set; }
         public class ProductSku
         {

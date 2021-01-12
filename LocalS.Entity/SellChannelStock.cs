@@ -15,12 +15,12 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
-        public string PrdProductId { get; set; }
-        public string PrdProductSkuId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
         public string SellChannelRefId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
+        public string PrdProductId { get; set; }
+        public string PrdProductSkuId { get; set; }
         public int SumQuantity { get; set; }
         public int WaitPayLockQuantity { get; set; }
         public int WaitPickupLockQuantity { get; set; }
