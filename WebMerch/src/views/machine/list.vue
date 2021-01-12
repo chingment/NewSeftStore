@@ -34,7 +34,7 @@
               <el-button type="text" @click="handleManage(item)">管理</el-button>
             </div>
           </div>
-          <div class="storeName" style="font-size:12px;">{{ item.storeName }} </div>
+          <div class="storeName" style="font-size:12px;">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
           <div class="it-component">
 
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>

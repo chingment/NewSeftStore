@@ -21,8 +21,8 @@
         </el-upload>
 
       </el-form-item>
-      <el-form-item label="所属店铺">
-        {{ temp.storeName }}
+      <el-form-item label="所属门店">
+        {{ temp.shopName }}
       </el-form-item>
       <el-form-item label="控制程序号">
         {{ temp.ctrlSdkVersion }}
@@ -111,7 +111,7 @@ export default {
             this.temp.status = d.status
             this.temp.ctrlSdkVersion = d.ctrlSdkVersion
             this.temp.appVersion = d.appVersion
-            this.temp.storeName = d.storeName
+            this.temp.shopName = d.shopName
             this.temp.lastRequestTime = d.lastRequestTime
             this.temp.isStopUse = d.isStopUse
           }
@@ -162,7 +162,6 @@ export default {
     uploadSuccessHandle(response, file, fileList) {
       this.form.logoImgUrl = response.data.url
     }
-
   }
 }
 </script>

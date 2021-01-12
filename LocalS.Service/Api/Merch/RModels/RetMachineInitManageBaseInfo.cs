@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.Service.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace LocalS.Service.Api.Merch
         public StatusModel Status { get; set; }
         public string AppVersion { get; set; }
         public string CtrlSdkVersion { get; set; }
-        public string StoreId { get; set; }
-        public string StoreName { get; set; }
-
+        public string ShopId { get; set; }
+        public string ShopName { get; set; }
         public bool IsStopUse { get; set; }
+        public List<OptionNode> OptionsShop { get; set; }
     }
 }

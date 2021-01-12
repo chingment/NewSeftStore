@@ -87,7 +87,6 @@
     <Compile Include="RentOrder.cs" />
     <Compile Include="RentOrderTransRecord.cs" />
     <Compile Include="SaleOutlet.cs" />
-    <Compile Include="SellChannel.cs" />
     <Compile Include="SellChannelStockDateHis.cs" />
     <Compile Include="Retailer.cs" />
     <Compile Include="Shop.cs" />

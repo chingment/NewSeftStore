@@ -113,14 +113,14 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                string remark = "未绑定门店";
+                string shopName = "未绑定门店";
 
                 if (!string.IsNullOrEmpty(item.CurUseShopId))
                 {
                     var store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
                     var shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
 
-                    remark = string.Format("[{0}]{1}", store.Name, shop.Name);
+                    shopName = string.Format("{0}/{1}", store.Name, shop.Name);
                 }
 
                 olist.Add(new
@@ -128,14 +128,9 @@ namespace LocalS.Service.Api.Merch
                     Id = item.MachineId,
                     Name = item.MachineId,
                     MainImgUrl = item.MainImgUrl,
-                    AppVersion = item.AppVersionCode,
-                    CtrlSdkVersion = item.CtrlSdkVersionCode,
                     Status = GetStatus(item.CurUseShopId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
-                    LastRequestTime = item.LastRequestTime,
-                    CreateTime = item.CreateTime,
-                    StoreId = item.CurUseStoreId,
-                    ShopId = item.CurUseShopId,
-                    Remark = remark
+                    LastRequestTime = item.LastRequestTime.ToUnifiedFormatDateTime(),
+                    ShopName = shopName
                 });
 
             }
@@ -195,11 +190,23 @@ namespace LocalS.Service.Api.Merch
 
                 if (merchMachine.MachineId == machineId)
                 {
+                    ret.CurMachine = new MachineModel();
                     ret.CurMachine.Id = merchMachine.MachineId;
                     ret.CurMachine.Name = name;
                 }
 
+
+
                 ret.Machines.Add(new MachineModel { Id = merchMachine.MachineId, Name = name });
+            }
+
+
+            if (ret.CurMachine == null)
+            {
+                if (ret.Machines.Count > 0)
+                {
+                    ret.CurMachine = ret.Machines[0];
+                }
             }
 
 
@@ -212,27 +219,37 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetMachineInitManageBaseInfo();
 
-            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
-            var machine = BizFactory.Machine.GetOne(machineId);
+            var d_machine = (from s in CurrentDb.MerchMachine
+                             join m in CurrentDb.Machine on s.MachineId equals m.Id into temp
+                             from u in temp.DefaultIfEmpty()
+                             where
+                             s.MerchId == merchId
+                             &&
+                             s.MachineId == machineId
+                             select new { s.MachineId, u.AppVersionCode, u.CtrlSdkVersionCode, u.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
 
-            ret.Id = merchMachine.MachineId;
-            ret.Name = merchMachine.Name;
-            ret.LogoImgUrl = merchMachine.LogoImgUrl;
-            ret.Status = GetStatus(merchMachine.CurUseStoreId, merchMachine.IsStopUse, machine.ExIsHas, machine.RunStatus, machine.LastRequestTime);
-            ret.LastRequestTime = machine.LastRequestTime.ToUnifiedFormatDateTime();
-            ret.AppVersion = machine.AppVersion;
-            ret.CtrlSdkVersion = machine.CtrlSdkVersion;
-            ret.IsStopUse = merchMachine.IsStopUse;
+            ret.Id = d_machine.MachineId;
+            ret.Name = d_machine.Name;
+            ret.LogoImgUrl = d_machine.LogoImgUrl;
+            ret.Status = GetStatus(d_machine.CurUseShopId, d_machine.IsStopUse, d_machine.ExIsHas, d_machine.RunStatus, d_machine.LastRequestTime);
+            ret.LastRequestTime = d_machine.LastRequestTime.ToUnifiedFormatDateTime();
+            ret.AppVersion = d_machine.AppVersionCode;
+            ret.CtrlSdkVersion = d_machine.CtrlSdkVersionCode;
+            ret.IsStopUse = d_machine.IsStopUse;
 
 
-            if (string.IsNullOrEmpty(machine.StoreId))
+            if (string.IsNullOrEmpty(d_machine.CurUseStoreId) || string.IsNullOrEmpty(d_machine.CurUseShopId))
             {
-                ret.StoreName = "未绑定店铺";
+                ret.ShopName = "未绑定店铺门店";
             }
             else
             {
-                ret.StoreName = machine.StoreName;
+                var store = CurrentDb.Store.Where(m => m.Id == d_machine.CurUseStoreId).FirstOrDefault();
+                var shop = CurrentDb.Shop.Where(m => m.Id == d_machine.CurUseShopId).FirstOrDefault();
+
+                ret.ShopName = string.Format("{0}/{1}", store.Name, shop.Name);
             }
+
 
 
 

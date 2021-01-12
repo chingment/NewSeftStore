@@ -10,7 +10,6 @@ namespace LocalS.Service.Api.Merch
     {
         public RetMachineInitManage()
         {
-            this.CurMachine = new MachineModel();
             this.Machines = new List<MachineModel>();
         }
 
