@@ -11,9 +11,7 @@
             <div class="left">
               <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>          <span style="font-size:12px;"> ({{ item.status.text }})</span></div>
             </div>
-            <div class="right">
-              <el-button type="text" @click="dialogOpenByFront(true,item)">编辑</el-button>
-            </div>
+            <div class="right" />
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
@@ -30,7 +28,7 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
-            <el-button type="text">配置</el-button>
+
           </div>
           <div class="it-component">
 
