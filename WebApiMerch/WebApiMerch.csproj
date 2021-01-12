@@ -155,6 +155,7 @@
     <Compile Include="Controllers\PayTransController.cs" />
     <Compile Include="Controllers\PrdProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\TestController.cs" />

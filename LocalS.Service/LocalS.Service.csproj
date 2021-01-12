@@ -244,6 +244,8 @@
     <Compile Include="Api\Merch\RModels\RopPrdProductEditSalePriceOnStore.cs" />
     <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopShopAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RopShopEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddMachine.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreEdit.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RupShopGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetShop.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpu.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpus.cs" />
@@ -283,6 +286,7 @@
     <Compile Include="Api\Merch\RModels\RupStoreGetShops.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetMachines.cs" />
     <Compile Include="Api\Merch\RModels\RupAdminUserGetList.cs" />
+    <Compile Include="Api\Merch\ShopService.cs" />
     <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\AdminUserService.cs" />
     <Compile Include="Api\Merch\SupplierService.cs" />

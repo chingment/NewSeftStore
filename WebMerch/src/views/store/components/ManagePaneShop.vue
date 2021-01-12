@@ -30,7 +30,7 @@
             <div class="left" />
 
           </div>
-          <div class="it-component">
+          <div class="it-component" @click="dialogOpenByShop">
 
             <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
 
@@ -60,6 +60,12 @@
       </div>
     </el-dialog>
 
+   <el-dialog  :title="'选择门店'" :visible.sync="dialogByShopIsVisible">
+
+   <manage-pane-shop opcode="select" :storeid='storeid'  />
+
+   </el-dialog>
+
   </div>
 </template>
 
@@ -68,7 +74,9 @@ import { MessageBox } from 'element-ui'
 import { initManageShop, getShops, getMachines } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
+import managePaneShop from '@/views/shop/list'
 export default {
+  components: { managePaneShop },
   name: 'ManagePaneMachine',
   props: {
     storeid: {
@@ -79,7 +87,6 @@ export default {
   data() {
     return {
       loading: false,
-      loadingByFromFront: false,
       loadingByDialogByMachine: false,
       listQuery: {
         page: 1,
@@ -89,33 +96,8 @@ export default {
       listData: [],
       listDataByMachine: [],
       storeId: '',
-      storeName: '',
-      formSelectMachines: [
-      ],
-      dialogByFrontIsEdit: false,
-      dialogByFrontIsVisible: false,
+      dialogByShopIsVisible: false,
       dialogByMachineIsVisible: false,
-      formByFront: {
-        name: '',
-        address: '',
-        briefDes: '',
-        displayImgUrls: [],
-        addressPoint: { // 详细地址经纬度
-          lng: 0,
-          lat: 0
-        }
-      },
-      rulesByFront: {
-        name: [{ required: true, min: 1, max: 30, message: '必填,且不能超过30个字符', trigger: 'change' }],
-        address: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
-        briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
-      },
-      uploadImglist: [],
-      uploadImgMaxSize: 4,
-      uploadImgPreImgDialogUrl: '',
-      uploadImgPreImgDialogVisible: false,
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
   watch: {
@@ -157,39 +139,8 @@ export default {
         this.loading = false
       })
     },
-    dialogOpenByFront(isEdit, item) {
-      this.dialogByFrontIsVisible = true
-      if (isEdit) {
-        this.dialogByFrontIsEdit = true
-
-        getShop({
-          storeId: item.storeId,
-          id: item.id
-        }).then(res => {
-          if (res.result === 1) {
-            var d = res.data
-            this.formByFront.id = d.id
-            this.formByFront.storeId = d.storeId
-            this.formByFront.name = d.name
-            this.formByFront.address = d.address
-            this.formByFront.briefDes = d.briefDes
-            this.formByFront.displayImgUrls = d.displayImgUrls
-            this.formByFront.isOpen = d.isOpen
-            this.formByFront.status = d.status
-            this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
-          }
-        })
-      } else {
-        this.dialogByFrontIsEdit = false
-
-        this.formByFront.id = ''
-        this.formByFront.storeId = this.storeId
-        this.formByFront.name = ''
-        this.formByFront.address = ''
-        this.formByFront.briefDes = ''
-        this.formByFront.displayImgUrls = []
-        this.uploadImglist = []
-      }
+    dialogOpenByShop() {
+      this.dialogByShopIsVisible = true
     },
     dialogOpenByMachine(item) {
       this.dialogByMachineIsVisible = true

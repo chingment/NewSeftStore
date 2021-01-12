@@ -127,5 +127,15 @@ namespace LocalS.Service.Api.Merch
                 return new MemberRightService();
             }
         }
+
+        public static ShopService Shop
+        {
+            get
+            {
+                return new ShopService();
+            }
+        }
+
+        
     }
 }
