@@ -37,30 +37,30 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
 
             foreach (var item in list)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
 
-                var productSkuModel = new ProductSkuModel();
-                productSkuModel.ProductSkuId = bizProductSku.Id;
-                productSkuModel.ProductId = bizProductSku.ProductId;
-                productSkuModel.Name = bizProductSku.Name;
-                productSkuModel.MainImgUrl = ImgSet.Convert_B(bizProductSku.MainImgUrl);
-                productSkuModel.DisplayImgUrls = bizProductSku.DisplayImgUrls;
-                productSkuModel.DetailsDes = bizProductSku.DetailsDes;
-                productSkuModel.BriefDes = bizProductSku.BriefDes;
-                productSkuModel.SpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes);
-                productSkuModel.IsTrgVideoService = bizProductSku.IsTrgVideoService;
-                productSkuModel.CharTags = bizProductSku.CharTags;
+                var m_productSku = new ProductSkuModel();
+                m_productSku.ProductSkuId = r_productSku.Id;
+                m_productSku.ProductId = r_productSku.ProductId;
+                m_productSku.Name = r_productSku.Name;
+                m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
+                m_productSku.DisplayImgUrls = r_productSku.DisplayImgUrls;
+                m_productSku.DetailsDes = r_productSku.DetailsDes;
+                m_productSku.BriefDes = r_productSku.BriefDes;
+                m_productSku.SpecDes = SpecDes.GetDescribe(r_productSku.SpecDes);
+                m_productSku.IsTrgVideoService = r_productSku.IsTrgVideoService;
+                m_productSku.CharTags = r_productSku.CharTags;
 
-                if (bizProductSku.Stocks.Count > 0)
+                if (r_productSku.Stocks.Count > 0)
                 {
-                    productSkuModel.IsShowPrice = false;
-                    productSkuModel.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                    productSkuModel.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                    productSkuModel.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
+                    m_productSku.IsShowPrice = false;
+                    m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
+                    m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                    m_productSku.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
                 }
 
 
-                pageEntiy.Items.Add(productSkuModel);
+                pageEntiy.Items.Add(m_productSku);
 
             }
 

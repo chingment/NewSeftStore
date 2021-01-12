@@ -26,6 +26,7 @@ namespace LocalS.Service.Api.StoreTerm
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string ShopName { get; set; }
+        public string ShopAddress { get; set; }
         public string LogoImgUrl { get; set; }
         public string CsrQrCode { get; set; }
         public string CsrPhoneNumber { get; set; }

@@ -79,6 +79,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.MerchName = l_machine.MerchName;
             ret.Machine.StoreName = l_machine.StoreName;
             ret.Machine.ShopName = l_machine.ShopName;
+            ret.Machine.ShopAddress = l_machine.ShopAddress;
             ret.Machine.CsrQrCode = l_machine.CsrQrCode;
             ret.Machine.CsrPhoneNumber = l_machine.CsrPhoneNumber;
             ret.Machine.CsrHelpTip = l_machine.CsrHelpTip;
@@ -146,7 +147,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId&&m.SellChannelRefType== E_SellChannelRefType.Machine).ToList();
+            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
 
             var l_kind_all = new ProductKindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);
