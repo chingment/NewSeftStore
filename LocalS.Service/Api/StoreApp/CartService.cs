@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
     public class CartService : BaseService
     {
 
-        private CartDataModel GetCartData(string clientUserId, string storeId, E_SellChannelRefType ShopMode)
+        private CartDataModel GetCartData(string clientUserId, string storeId, string shopId, E_SellChannelRefType ShopMode)
         {
             var m_cartData = new CartDataModel();
 
@@ -28,8 +28,21 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_clientCart in d_clientCarts)
             {
-                var r_productSku =new  ProductSkuInfoModel();
-                //var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.MerchId, d_clientCart.StoreId, BizFactory.Store.GetSellChannelRefIds(storeId,d_clientCart.ShopMode), d_clientCart.PrdProductSkuId);
+                var r_productSku = new ProductSkuInfoModel();
+                if (d_clientCart.ShopMode == E_SellChannelRefType.Mall)
+                {
+                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, d_clientCart.MerchId, storeId, shopId, null, d_clientCart.PrdProductSkuId);
+                }
+                else if (d_clientCart.ShopMode == E_SellChannelRefType.Shop)
+                {
+                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, d_clientCart.MerchId, storeId, shopId, null, d_clientCart.PrdProductSkuId);
+                }
+                else if (d_clientCart.ShopMode == E_SellChannelRefType.Machine)
+                {
+                    string[] machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == d_clientCart.MerchId && m.CurUseStoreId == d_clientCart.StoreId && m.CurUseShopId == shopId).Select(m => m.Id).Distinct().ToArray();
+                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Machine, d_clientCart.MerchId, storeId, shopId, machineIds, d_clientCart.PrdProductSkuId);
+                }
+
                 if (r_productSku != null)
                 {
                     if (r_productSku.Stocks.Count > 0)
@@ -89,7 +102,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var ret = GetCartData(clientUserId, rup.StoreId, rup.ShopMode);
+            var ret = GetCartData(clientUserId, rup.StoreId, "0", rup.ShopMode);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -102,7 +115,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetCartPageData();
 
-            ret.CartData = GetCartData(clientUserId, rup.StoreId, rup.ShopMode);
+            ret.CartData = GetCartData(clientUserId, rup.StoreId, "0", rup.ShopMode);
 
             result = new CustomJsonResult<RetCartPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -151,16 +164,29 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var bizProductSku = new ProductSkuInfoModel();
+                                var r_productSku = new ProductSkuInfoModel();
+                  
+                                if (item.ShopMode == E_SellChannelRefType.Mall)
+                                {
+                                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, store.MerchId, store.StoreId, "0", null, item.Id);
+                                }
+                                else if (item.ShopMode == E_SellChannelRefType.Shop)
+                                {
+                                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, store.MerchId, store.StoreId, "0", null, item.Id);
+                                }
+                                else if (item.ShopMode == E_SellChannelRefType.Machine)
+                                {
+                                    string[] machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == store.MerchId && m.CurUseStoreId == store.StoreId && m.CurUseShopId == rop.ShopId).Select(m => m.Id).Distinct().ToArray();
+                                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Machine, store.MerchId, store.StoreId, "0", machineIds, item.Id);
+                                }
 
-                               // var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,item.ShopMode), item.Id);
 
-                                if (bizProductSku == null || bizProductSku.Stocks == null || bizProductSku.Stocks.Count == 0)
+                                if (r_productSku == null || r_productSku.Stocks == null || r_productSku.Stocks.Count == 0)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品已经售完");
                                 }
 
-                                if (bizProductSku.Stocks[0].IsOffSell)
+                                if (r_productSku.Stocks[0].IsOffSell)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品已下架");
                                 }
@@ -172,7 +198,7 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.ClientUserId = clientUserId;
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
-                                    clientCart.PrdProductId = bizProductSku.ProductId;
+                                    clientCart.PrdProductId = r_productSku.ProductId;
                                     clientCart.PrdProductSkuId = item.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;
@@ -208,7 +234,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (result.Result == ResultType.Success)
             {
-                result.Data = GetCartData(clientUserId, rop.StoreId, rop.ShopMode);
+                result.Data = GetCartData(clientUserId, rop.StoreId, "0", rop.ShopMode);
             }
 
             return result;

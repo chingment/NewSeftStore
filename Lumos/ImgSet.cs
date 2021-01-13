@@ -20,6 +20,11 @@ namespace Lumos
 
         public static string Convert_S(string imgUrl)
         {
+
+            if (string.IsNullOrEmpty(imgUrl))
+                return null;
+
+
             if (imgUrl.IndexOf("_O") > -1)
             {
                 imgUrl = imgUrl.Replace("_O", "_S");
@@ -35,6 +40,10 @@ namespace Lumos
 
         public static string Convert_B(string imgUrl)
         {
+
+            if (string.IsNullOrEmpty(imgUrl))
+                return null;
+
             if (imgUrl.IndexOf("_O") > -1)
             {
                 imgUrl = imgUrl.Replace("_O", "_B");
@@ -58,6 +67,11 @@ namespace Lumos
 
         private static string GetMain(string jsonStr, string format = null)
         {
+
+            if (string.IsNullOrEmpty(jsonStr))
+                return null;
+
+
             string imgUrl = "";
             try
             {

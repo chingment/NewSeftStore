@@ -32,7 +32,7 @@ namespace LocalS.Service.Api.StoreApp
                 prdKindModel.Name = prdKind.Name;
                 prdKindModel.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
                 prdKindModel.Selected = false;
-                prdKindModel.List = StoreAppServiceFactory.Product.GetProducts(0, 10, rup.StoreId, rup.ShopMode, Entity.E_OrderShopMethod.Shop, prdKind.Id);
+                prdKindModel.List = StoreAppServiceFactory.Product.GetProducts(0, 10, rup.StoreId, "0", rup.ShopMode, Entity.E_OrderShopMethod.Shop, prdKind.Id);
 
                 if (prdKindModel.List.Items.Count > 0)
                 {

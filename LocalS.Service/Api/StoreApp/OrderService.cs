@@ -202,9 +202,15 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    string[] sellChannelRefIds = BizFactory.Store.GetSellChannelRefIds(store.StoreId, productSku.ShopMode);
+                    string[] machineIds = new string[] { };
+                    E_ReceiveMode receiveMode = E_ReceiveMode.Delivery;
+                    if (productSku.ShopMode == E_SellChannelRefType.Machine)
+                    {
+                        machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == store.MerchId && m.CurUseStoreId == store.StoreId && m.CurUseShopId == productSku.ShopId).Select(m => m.Id).Distinct().ToArray();
+                        receiveMode = E_ReceiveMode.SelfTakeByMachine;
+                    }
 
-                    //buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
+                    buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, receiveMode, productSku.ShopId, machineIds);
                 }
 
                 c_prodcutSkus = buildOrderTool.BuildSkus();

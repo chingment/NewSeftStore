@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetIndexSugProducts();
 
-            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.IsUseRent == true).Take(2).ToList();
+            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.ShopId == "0" && m.MachineId == "0" && m.SellChannelRefType == E_SellChannelRefType.Mall && m.IsUseRent == true).Take(2).ToList();
 
             var m_pdRent = new PdRentModel();
 
@@ -148,7 +148,7 @@ namespace LocalS.Service.Api.StoreApp
                 tab.Id = d_storeKind.Id;
                 tab.Name = d_storeKind.Name;
                 tab.MainImgUrl = ImgSet.GetMain_O(d_storeKind.DisplayImgUrls);
-                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, E_OrderShopMethod.Shop, d_storeKind.Id);
+                tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, "0", rup.ShopMode, E_OrderShopMethod.Shop, d_storeKind.Id);
                 if (tab.List.Items.Count > 0)
                 {
                     m_pdArea.Tabs.Add(tab);

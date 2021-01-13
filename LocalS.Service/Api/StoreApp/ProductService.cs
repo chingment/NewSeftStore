@@ -43,14 +43,14 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, rup.ShopMode, rup.ShopMethod, rup.KindId);
+            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, "0", rup.ShopMode, rup.ShopMethod, rup.KindId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntiy);
 
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, E_SellChannelRefType shopMode, E_OrderShopMethod shopMethod, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_SellChannelRefType shopMode, E_OrderShopMethod shopMethod, string kindId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 
@@ -62,6 +62,7 @@ namespace LocalS.Service.Api.StoreApp
             var query = CurrentDb.SellChannelStock.Where(m =>
                 m.MerchId == store.MerchId
                          && m.StoreId == storeId
+                         && m.ShopId == shopId
                          && m.SellChannelRefType == shopMode
 
                 ).AsEnumerable()
@@ -87,8 +88,22 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
+                LogUtil.Info("shopMode:" + shopMode);
+
                 var r_productSku = new ProductSkuInfoModel();
-               // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, storeId, BizFactory.Store.GetSellChannelRefIds(storeId,shopMode), item.PrdProductSkuId);
+                if (shopMode == E_SellChannelRefType.Mall)
+                {
+                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, store.MerchId, storeId, shopId, null, item.PrdProductSkuId);
+                }
+                else if (shopMode == E_SellChannelRefType.Shop)
+                {
+                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, store.MerchId, storeId, shopId, null, item.PrdProductSkuId);
+                }
+                else if (shopMode == E_SellChannelRefType.Machine)
+                {
+                    string[] machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == store.MerchId && m.CurUseStoreId == store.StoreId && m.CurUseShopId == shopId).Select(m => m.Id).Distinct().ToArray();
+                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Machine, store.MerchId, storeId, shopId, machineIds, item.PrdProductSkuId);
+                }
 
                 var m_productSku = new ProductSkuModel();
 
@@ -148,7 +163,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var r_productSku = new ProductSkuInfoModel();
 
-           // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
+            // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
 
             var m_productSku = new ProductSkuModel();
             m_productSku.Id = r_productSku.Id;
@@ -213,7 +228,7 @@ namespace LocalS.Service.Api.StoreApp
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
             var r_productSku = new ProductSkuInfoModel();
-           // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
+            // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
 
             bool isOffSell = true;
             bool isShowPrice = false;
