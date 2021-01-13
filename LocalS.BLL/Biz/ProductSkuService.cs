@@ -31,7 +31,7 @@ namespace LocalS.BLL.Biz
                 updateProdcutSkuStock.SellQuantity = r_ProductSku.Stocks.Sum(m => m.SellQuantity);
                 updateProdcutSkuStock.SumQuantity = r_ProductSku.Stocks.Sum(m => m.SumQuantity);
                 updateProdcutSkuStock.IsTrgVideoService = r_ProductSku.IsTrgVideoService;
-                // BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, sellChannelRefId, updateProdcutSkuStock);
+                // BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, null, updateProdcutSkuStock);
             }
 
 

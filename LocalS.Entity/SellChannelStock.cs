@@ -34,10 +34,6 @@ namespace LocalS.Entity
     [Table("SellChannelStock")]
     public class SellChannelStock
     {
-
-        //public const string MallSellChannelRefId = "000000000000";
-        //public const string MemberFeeSellChannelRefId = "000000000001";
-
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }

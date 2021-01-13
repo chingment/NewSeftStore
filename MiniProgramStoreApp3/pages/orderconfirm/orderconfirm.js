@@ -271,7 +271,7 @@ Page({
           }
 
           if (_this.data.couponByDeposit != null) {
-            if (_this.data.couponByDeposit.selectedCouponIds.length == 0) {
+            if (_this.data.couponByDeposit.selectedCouponIds==null||_this.data.couponByDeposit.selectedCouponIds.length == 0) {
               _this.data.couponByDeposit.tipType = 3
               _this.data.couponByDeposit.tipMsg = "-0.0"
             }
@@ -279,7 +279,7 @@ Page({
 
           if (_this.data.couponByRent != null) {
 
-            if (_this.data.couponByRent.selectedCouponIds.length == 0) {
+            if (_this.data.couponByRent.selectedCouponIds==null||_this.data.couponByRent.selectedCouponIds.length == 0) {
               _this.data.couponByRent.tipType = 3
               _this.data.couponByRent.tipMsg = "-0.0"
             }

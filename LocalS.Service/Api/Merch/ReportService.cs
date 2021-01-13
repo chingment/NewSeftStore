@@ -183,7 +183,7 @@ namespace LocalS.Service.Api.Merch
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId) &&
                          m.StockDate == rop.StockDate
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.SellChannelRefId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             if (rop.SellChannelRefType != Entity.E_SellChannelRefType.Unknow)
             {
@@ -207,7 +207,7 @@ namespace LocalS.Service.Api.Merch
                 else if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                 {
                     sellChannelRefName = "线下机器";
-                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.SellChannelRefId, sellChannelStock.SlotId);
+                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.MachineId, sellChannelStock.SlotId);
                 }
 
                 olist.Add(new

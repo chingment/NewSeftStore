@@ -1274,7 +1274,10 @@ namespace LocalS.BLL.Biz
                         d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         d_orderPickupLog.OrderId = d_order.Id;
                         d_orderPickupLog.SellChannelRefType = d_order.SellChannelRefType;
-                        //d_orderPickupLog.SellChannelRefId = d_order.SellChannelRefId;
+                        d_orderPickupLog.MerchId = d_order.MerchId;
+                        d_orderPickupLog.StoreId = d_order.StoreId;
+                        d_orderPickupLog.ShopId = d_order.ShopId;
+                        d_orderPickupLog.MachineId = d_order.MachineId;
                         d_orderPickupLog.UniqueId = d_order.Id;
                         d_orderPickupLog.UniqueType = E_UniqueType.Order;
                         d_orderPickupLog.ActionRemark = d_order.PickupFlowLastDesc;
@@ -2057,7 +2060,10 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = orderSub.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            //orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                            orderPickupLog.MerchId = orderSub.MerchId;
+                            orderPickupLog.StoreId = orderSub.StoreId;
+                            orderPickupLog.ShopId = orderSub.ShopId;
+                            orderPickupLog.MachineId = orderSub.MachineId;
                             orderPickupLog.UniqueId = orderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
                             orderPickupLog.PrdProductSkuId = orderSub.PrdProductSkuId;
@@ -2086,7 +2092,9 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = orderSub.OrderId;
                             orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                            //orderPickupLog.SellChannelRefId = orderSub.SellChannelRefId;
+                            orderPickupLog.MerchId = orderSub.MerchId;
+                            orderPickupLog.StoreId = orderSub.StoreId;
+                            orderPickupLog.MachineId = orderSub.MachineId;
                             orderPickupLog.UniqueId = orderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
                             orderPickupLog.PrdProductSkuId = orderSub.PrdProductSkuId;

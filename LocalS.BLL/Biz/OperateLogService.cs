@@ -370,8 +370,11 @@ namespace LocalS.BLL.Biz
                     var orderPickupLog = new OrderPickupLog();
                     orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                     orderPickupLog.OrderId = model.OrderId;
+                    orderPickupLog.MerchId = order.MerchId;
                     orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
-                    orderPickupLog.SellChannelRefId = machineId;
+                    orderPickupLog.StoreId = order.StoreId;
+                    orderPickupLog.ShopId = order.ShopId;
+                    orderPickupLog.MachineId = order.MachineId;
                     orderPickupLog.UniqueId = model.UniqueId;
                     orderPickupLog.UniqueType = E_UniqueType.OrderSub;
                     orderPickupLog.PrdProductSkuId = model.ProductSkuId;
@@ -629,16 +632,9 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.MerchName = merchName;
                 sellChannelStockLog.StoreId = storeId;
                 sellChannelStockLog.StoreName = storeName;
-                sellChannelStockLog.SellChannelRefId = model.SellChannelRefId;
+                sellChannelStockLog.ShopId = model.ShopId;
+                sellChannelStockLog.MachineId = model.MachineId;
                 sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
-                if (model.SellChannelRefType == E_SellChannelRefType.Machine)
-                {
-                    sellChannelStockLog.SellChannelRefName = "线下机器";
-                }
-                else if (model.SellChannelRefType == E_SellChannelRefType.Mall)
-                {
-                    sellChannelStockLog.SellChannelRefName = "线上商城";
-                }
                 sellChannelStockLog.CabinetId = model.CabinetId;
                 sellChannelStockLog.SlotId = model.SlotId;
                 sellChannelStockLog.PrdProductId = bizProductSku.ProductId;

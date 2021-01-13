@@ -31,21 +31,5 @@ namespace LocalS.BLL.Biz
             model.SctMode = store.SctMode;
             return model;
         }
-
-        public string[] GetSellChannelRefIds(string storeId, E_SellChannelRefType shopMode)
-        {
-            string[] sellChannelRefIds = null;
-            //if (shopMode == E_SellChannelRefType.Machine)
-            //{
-            //    sellChannelRefIds = this.SellMachineIds;
-            //}
-            //else if (shopMode == E_SellChannelRefType.Mall)
-            //{
-            //    sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
-            //}
-
-
-            return sellChannelRefIds;
-        }
     }
 }

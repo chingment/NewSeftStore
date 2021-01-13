@@ -214,8 +214,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var r_productSku = new ProductSkuInfoModel();
-            // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
+            var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, rup.ShopId, null, rup.SkuId);
 
             bool isOffSell = true;
             bool isShowPrice = false;

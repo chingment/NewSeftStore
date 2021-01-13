@@ -123,24 +123,19 @@ namespace Test
             //a1.Id = "1";
             //a1.Quantity = 3;
             //a1.ShopMode = E_SellChannelRefType.Mall;
-            //a1.Stocks.Add(new ProductSkuStockModel() { RefId = SellChannelStock.MallSellChannelRefId, RefType = E_SellChannelRefType.Mall, CabinetId = "0", SlotId = "0", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 10, SumQuantity = 10 });
-            //p1.Add(a1);
-
+      
 
             //BuildOrderSub.ProductSku a2 = new BuildOrderSub.ProductSku();
             //a2.Id = "2";
             //a2.Quantity = 5;
             //a2.ShopMode = E_SellChannelRefType.Mall;
-            //a2.Stocks.Add(new ProductSkuStockModel() { RefId = SellChannelStock.MallSellChannelRefId, RefType = E_SellChannelRefType.Mall, CabinetId = "0", SlotId = "0", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 7, SumQuantity = 7 });
-            //p1.Add(a2);
+       
 
             //BuildOrderSub.ProductSku a3 = new BuildOrderSub.ProductSku();
             //a3.Id = "3";
             //a3.Quantity = 10;
             //a3.ShopMode = E_SellChannelRefType.Machine;
-            //a3.Stocks.Add(new ProductSkuStockModel() { RefId = "3012002", RefType = E_SellChannelRefType.Machine, CabinetId = "0", SlotId = "1", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 7, SumQuantity = 7 });
-            //a3.Stocks.Add(new ProductSkuStockModel() { RefId = "3011001", RefType = E_SellChannelRefType.Machine, CabinetId = "0", SlotId = "2", IsOffSell = false, LockQuantity = 0, SalePrice = 10, SalePriceByVip = 9.9m, SellQuantity = 4, SumQuantity = 4 });
-            //p1.Add(a3);
+
 
             //var buildOrderSubs = BizFactory.Order.BuildOrderSubs(p1);
 

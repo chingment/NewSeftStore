@@ -14,7 +14,8 @@ namespace LocalS.Entity
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
-        public string SellChannelRefId { get; set; }
+        public string ShopId { get; set; }
+        public string MachineId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public int SumQuantity { get; set; }

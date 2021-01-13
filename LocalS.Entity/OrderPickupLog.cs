@@ -11,9 +11,12 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string OrderId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
-        public string SellChannelRefId { get; set; }
         public E_UniqueType UniqueType { get; set; }
         public string UniqueId { get; set; }
+        public string MerchId { get; set; }
+        public string StoreId { get; set; }
+        public string ShopId { get; set; }
+        public string MachineId { get; set; }
         public string CabinetId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string SlotId { get; set; }
