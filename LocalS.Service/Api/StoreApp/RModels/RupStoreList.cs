@@ -10,6 +10,8 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string MerchId { get; set; }
 
+        public string StoreId { get; set; }
+
         public double Lat { get; set; }
 
         public double Lng { get; set; }

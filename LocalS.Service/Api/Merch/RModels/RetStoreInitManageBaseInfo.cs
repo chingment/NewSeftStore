@@ -19,7 +19,9 @@ namespace LocalS.Service.Api.Merch
         public string ContactName { get; set; }
         public string ContactAddress { get; set; }
         public string ContactPhone { get; set; }
-        public object Status { get; set; }
+        public string MainImgUrl { get; set; }
+        public string BriefDes { get; set; }
+        public string SctMode { get; set; }
 
     }
 }

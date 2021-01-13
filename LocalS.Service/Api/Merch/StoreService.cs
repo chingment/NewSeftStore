@@ -16,25 +16,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class StoreService : BaseService
     {
-
-        public StatusModel GetStatus(bool isOpen)
-        {
-            var status = new StatusModel();
-
-            if (isOpen)
-            {
-                status.Value = 2;
-                status.Text = "营业中";
-            }
-            else
-            {
-                status.Value = 1;
-                status.Text = "已关闭";
-            }
-
-            return status;
-        }
-
         public CustomJsonResult GetList(string operater, string merchId, RupStoreGetList rup)
         {
             var result = new CustomJsonResult();
@@ -45,7 +26,7 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId
                          &&
                          u.IsDelete == false
-                         select new { u.Id, u.Name, u.SctMode, u.MainImgUrl, u.IsOpen, u.BriefDes, u.ContactAddress, u.CreateTime });
+                         select new { u.Id, u.Name, u.SctMode, u.MainImgUrl, u.BriefDes, u.ContactPhone, u.ContactName, u.ContactAddress, u.CreateTime });
 
 
             int total = query.Count();
@@ -67,10 +48,11 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Name = item.Name,
                     MainImgUrl = item.MainImgUrl,
+                    BriefDes = item.BriefDes,
+                    ContactName = item.ContactName,
+                    ContactPhone = item.ContactPhone,
                     ContactAddress = item.ContactAddress,
-                    Status = GetStatus(item.IsOpen),
-                    SctMode = item.SctMode,
-                    CreateTime = item.CreateTime,
+                    SctMode = item.SctMode
                 });
             }
 
@@ -122,17 +104,21 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetStoreInitManageBaseInfo();
-
             var d_store = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id == storeId).FirstOrDefault();
 
-            ret.Id = d_store.Id;
-            ret.Name = d_store.Name;
-            ret.ContactName = d_store.ContactName;
-            ret.ContactAddress = d_store.ContactAddress;
-            ret.ContactPhone = d_store.ContactPhone;
-            ret.Status = GetStatus(d_store.IsOpen);
+            var ret = new
+            {
 
+                Id = d_store.Id,
+                Name = d_store.Name,
+                ContactName = d_store.ContactName,
+                ContactAddress = d_store.ContactAddress,
+                ContactPhone = d_store.ContactPhone,
+                BriefDes = d_store.BriefDes,
+                MainImgUrl = d_store.MainImgUrl,
+                IsTestMode = d_store.IsTestMode,
+                SctMode = d_store.SctMode
+            };
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
@@ -563,7 +549,7 @@ namespace LocalS.Service.Api.Merch
                     Name = item.Name,
                     MainImgUrl = item.MainImgUrl,
                     Address = item.Address,
-                    Status = GetStatus(item.IsOpen),
+                    Status = MerchServiceFactory.Shop.GetStatus(item.IsOpen),
                     MachineCount = machineCount,
                     CreateTime = item.CreateTime,
                 });

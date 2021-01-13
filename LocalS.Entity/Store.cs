@@ -19,12 +19,10 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string Name { get; set; }
-        public string DisplayImgUrls { get; set; }
         public string MainImgUrl { get; set; }
         public string ContactName { get; set; }
         public string ContactPhone { get; set; }
         public string ContactAddress { get; set; }
-        public bool IsOpen { get; set; }
         public bool IsDelete { get; set; }
         public string BriefDes { get; set; }
         public string Creator { get; set; }
@@ -32,7 +30,6 @@ namespace LocalS.Entity
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
         public bool IsTestMode { get; set; }
-
         //线上商城 F
         //线下机器 K
         //线上商城+线下机器 FK

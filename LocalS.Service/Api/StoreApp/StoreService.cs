@@ -16,11 +16,17 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var stores = BizFactory.Store.GetAll(rup.MerchId).Where(m => m.IsDelete == false);
+            var d_Shops = (from s in CurrentDb.StoreShop
+                           join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
+                           from u in temp.DefaultIfEmpty()
+                           where
+                           u.MerchId == rup.MerchId
+                           && s.StoreId == rup.StoreId
+                           select new { u.Id, u.Name, u.Address, u.Lat, u.Lng, u.MainImgUrl, u.IsOpen, u.AreaCode, u.AreaName, u.MerchId, s.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress, u.CreateTime }).ToList();
 
             var storeModels = new List<StoreModel>();
 
-            foreach (var m in stores)
+            foreach (var d_Shop in d_Shops)
             {
                 double distance = 0;
                 string distanceMsg = "";
@@ -31,12 +37,12 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else
                 {
-                    distance = DistanceUtil.GetDistance(m.AddressPoint.Lat, m.AddressPoint.Lng, rup.Lat, rup.Lng);
+                    distance = DistanceUtil.GetDistance(d_Shop.Lat, d_Shop.Lng, rup.Lat, rup.Lng);
 
                     distanceMsg = string.Format("{0}km", distance.ToString("f2"));
                 }
 
-                storeModels.Add(new StoreModel { Id = m.StoreId, Name = m.Name, Address = m.Address, Distance = distance, DistanceMsg = distanceMsg });
+                storeModels.Add(new StoreModel { Id = d_Shop.Id, Name = d_Shop.Name, Address = d_Shop.Address, Distance = distance, DistanceMsg = distanceMsg });
             }
 
             storeModels = storeModels.OrderBy(m => m.Distance).ToList();

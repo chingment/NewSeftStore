@@ -427,11 +427,6 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);
                 }
 
-                if (!store.IsOpen)
-                {
-                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "店铺已暂停营业", null);
-                }
-
                 using (TransactionScope ts = new TransactionScope())
                 {
                     string clientUserName = "匿名";

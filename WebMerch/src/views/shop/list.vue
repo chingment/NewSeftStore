@@ -46,7 +46,8 @@
             <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">
               选择
             </el-button>
-            <span v-else>{{ row.opTips }}</span>
+            <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
+
           </template>
           <el-button type="primary" size="mini" @click="dialogByEditOpen(true,row)">
             编辑

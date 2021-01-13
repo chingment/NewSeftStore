@@ -16,6 +16,24 @@ namespace LocalS.Service.Api.Merch
 {
     public class ShopService : BaseService
     {
+        public StatusModel GetStatus(bool isOpen)
+        {
+            var status = new StatusModel();
+
+            if (isOpen)
+            {
+                status.Value = 2;
+                status.Text = "营业中";
+            }
+            else
+            {
+                status.Value = 1;
+                status.Text = "已关闭";
+            }
+
+            return status;
+        }
+
         public CustomJsonResult GetList(string operater, string merchId, RupShopGetList rup)
         {
             var result = new CustomJsonResult();
