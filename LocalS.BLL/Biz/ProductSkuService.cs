@@ -15,7 +15,7 @@ namespace LocalS.BLL.Biz
     public class ProductSkuService : BaseService
     {
 
-        private void SendStock(string operater, string appId,string merchId,string productSkuId)
+        private void SendStock(string operater, string appId, string merchId, string productSkuId)
         {
 
             //var r_ProductSku = CacheServiceFactory.Product.GetSkuStock(refType, merchId, storeId, shopId, machineIds, productSkuId);
@@ -723,18 +723,14 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
-            string[] machineIds = null;
-
             using (TransactionScope ts = new TransactionScope())
             {
-
-
                 var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
 
                 CacheServiceFactory.Product.RemoveSpuInfo(merchId, bizProductSku.ProductId);
 
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.PrdProductSkuId == productSkuId).ToList();
-                machineIds = sellChannelStocks.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine).Select(m => m.MachineId).Distinct().ToArray();
+
                 foreach (var sellChannelStock in sellChannelStocks)
                 {
 
@@ -748,17 +744,15 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                foreach (string machineId in machineIds)
-                {
-                    MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, machineId, EventCode.MachineAdjustStockSalePrice, string.Format("商品：{0}，调整价格为：{1}", bizProductSku.Name, salePrice));
-                }
+                MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, "", EventCode.MachineAdjustStockSalePrice, string.Format("商品：{0}，调整价格为：{1}", bizProductSku.Name, salePrice));
+
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
             if (result.Result == ResultType.Success)
             {
-                SendStock(operater, appId, merchId,productSkuId);
+                SendStock(operater, appId, merchId, productSkuId);
             }
 
             return result;
