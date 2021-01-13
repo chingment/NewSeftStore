@@ -34,7 +34,12 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(machine.StoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
+            }
+
+            if (string.IsNullOrEmpty(machine.ShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
             }
 
             var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rup.MachineId && m.CabinetId == rup.CabinetId && m.IsUse == true).FirstOrDefault();
@@ -50,23 +55,23 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             ret.RowColLayout = cabinet.RowColLayout;
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.CabinetId == rup.CabinetId && m.SellChannelRefId == rup.MachineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.ShopId == machine.ShopId && m.CabinetId == rup.CabinetId && m.MachineId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.PrdProductSkuId);
+                var r_bizProductSku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.PrdProductSkuId);
 
-                if (bizProductSku != null)
+                if (r_bizProductSku != null)
                 {
                     var slot = new SlotModel();
                     slot.SlotId = item.SlotId;
                     slot.StockId = item.Id;
                     slot.CabinetId = item.CabinetId;
-                    slot.ProductSkuId = bizProductSku.Id;
-                    slot.CumCode = bizProductSku.CumCode;
-                    slot.Name = bizProductSku.Name;
-                    slot.MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl);
-                    slot.SpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes);
+                    slot.ProductSkuId = r_bizProductSku.Id;
+                    slot.CumCode = r_bizProductSku.CumCode;
+                    slot.Name = r_bizProductSku.Name;
+                    slot.MainImgUrl = ImgSet.Convert_S(r_bizProductSku.MainImgUrl);
+                    slot.SpecDes = SpecDes.GetDescribe(r_bizProductSku.SpecDes);
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
@@ -90,19 +95,38 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
+            if (machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+            }
+
+            if (string.IsNullOrEmpty(machine.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+            }
+
+            if (string.IsNullOrEmpty(machine.StoreId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
+            }
+
+            if (string.IsNullOrEmpty(machine.ShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
+            }
+
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
                 return result;
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
+                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
-
+                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
                 }
 
                 return result;
@@ -189,7 +213,7 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId && m.SellChannelRefId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId & m.ShopId == machine.CurUseShopId && m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
 
                     for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                     {
@@ -217,7 +241,7 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, AppId.STORETERM, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+                        BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, AppId.STORETERM, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
                     }
                 }
 

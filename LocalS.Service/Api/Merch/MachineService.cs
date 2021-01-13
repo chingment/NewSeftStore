@@ -306,7 +306,7 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.CabinetId == cabinetId && m.StoreId == machine.StoreId && m.SellChannelRefId == machineId).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.CabinetId == cabinetId && m.StoreId == machine.StoreId && m.ShopId == machine.ShopId && m.MachineId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
@@ -430,7 +430,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.MERCH, merchId, machine.StoreId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.MERCH, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
 
             return result;
         }

@@ -35,15 +35,16 @@ namespace LocalS.Entity
     public class SellChannelStock
     {
 
-        public const string MallSellChannelRefId = "000000000000";
-        public const string MemberFeeSellChannelRefId = "000000000001";
+        //public const string MallSellChannelRefId = "000000000000";
+        //public const string MemberFeeSellChannelRefId = "000000000001";
 
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
-        public string SellChannelRefId { get; set; }
+        public string ShopId { get; set; }
+        public string MachineId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string PrdProductId { get; set; }

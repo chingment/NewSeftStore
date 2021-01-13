@@ -114,7 +114,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderId == null || o.Id.Contains(rup.OrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.IsTestMode, o.SellChannelRefId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Id, o.StoreId, o.IsTestMode, o.MachineId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rup.SellChannelRefId))
             {
-                query = query.Where(m => m.SellChannelRefId == rup.SellChannelRefId);
+                query = query.Where(m => m.MachineId == rup.SellChannelRefId);
             }
 
             int total = query.Count();

@@ -104,19 +104,34 @@ namespace LocalS.BLL
             return r_spu;
         }
 
-        public ProductSkuInfoModel GetSkuStock(string merchId, string storeId, string[] sellChannelRefIds, string productSkuId)
+
+        public ProductSkuInfoModel GetSkuStock(E_SellChannelRefType refType, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
         {
             var productSkuInfo = GetSkuInfo(merchId, productSkuId);
 
             var productSkuStocks = new List<ProductSkuStockModel>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && sellChannelRefIds.Contains(m.SellChannelRefId) && m.PrdProductSkuId == productSkuId).ToList();
+            var sellChannelStocks = new List<SellChannelStock>();
+
+            if (refType == E_SellChannelRefType.Mall)
+            {
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == productSkuId).ToList();
+            }
+            else if (refType == E_SellChannelRefType.Shop)
+            {
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.SellChannelRefType == E_SellChannelRefType.Shop && m.PrdProductSkuId == productSkuId).ToList();
+            }
+            else if (refType == E_SellChannelRefType.Machine)
+            {
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.SellChannelRefType == E_SellChannelRefType.Machine && machineIds.Contains(m.MachineId) && m.PrdProductSkuId == productSkuId).ToList();
+            }
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var productSkuStock = new ProductSkuStockModel();
                 productSkuStock.RefType = sellChannelStock.SellChannelRefType;
-                productSkuStock.RefId = sellChannelStock.SellChannelRefId;
+                productSkuStock.ShopId = sellChannelStock.ShopId;
+                productSkuStock.MachineId = sellChannelStock.MachineId;
                 productSkuStock.CabinetId = sellChannelStock.CabinetId;
                 productSkuStock.SlotId = sellChannelStock.SlotId;
                 productSkuStock.SumQuantity = sellChannelStock.SumQuantity;
@@ -135,6 +150,38 @@ namespace LocalS.BLL
 
             return productSkuInfo;
         }
+
+        //public ProductSkuInfoModel GetSkuStock(string merchId, string storeId, string[] sellChannelRefIds, string productSkuId)
+        //{
+        //    var productSkuInfo = GetSkuInfo(merchId, productSkuId);
+
+        //    var productSkuStocks = new List<ProductSkuStockModel>();
+
+        //    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && sellChannelRefIds.Contains(m.SellChannelRefId) && m.PrdProductSkuId == productSkuId).ToList();
+
+        //    foreach (var sellChannelStock in sellChannelStocks)
+        //    {
+        //        var productSkuStock = new ProductSkuStockModel();
+        //        productSkuStock.RefType = sellChannelStock.SellChannelRefType;
+        //        productSkuStock.RefId = sellChannelStock.SellChannelRefId;
+        //        productSkuStock.CabinetId = sellChannelStock.CabinetId;
+        //        productSkuStock.SlotId = sellChannelStock.SlotId;
+        //        productSkuStock.SumQuantity = sellChannelStock.SumQuantity;
+        //        productSkuStock.LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
+        //        productSkuStock.SellQuantity = sellChannelStock.SellQuantity;
+        //        productSkuStock.IsOffSell = sellChannelStock.IsOffSell;
+        //        productSkuStock.SalePrice = sellChannelStock.SalePrice;
+        //        productSkuStock.IsUseRent = sellChannelStock.IsUseRent;
+        //        productSkuStock.RentMhPrice = sellChannelStock.RentMhPrice;
+        //        productSkuStock.DepositPrice = sellChannelStock.DepositPrice;
+        //        productSkuStocks.Add(productSkuStock);
+        //    }
+
+
+        //    productSkuInfo.Stocks = productSkuStocks;
+
+        //    return productSkuInfo;
+        //}
 
         public ProductSkuInfoModel GetSkuInfo(string merchId, string productSkuId)
         {
@@ -290,7 +337,7 @@ namespace LocalS.BLL
                         m_search.SpuCode = l_spu.SpuCode;
                         m_search.MainImgUrl = ImgSet.Convert_S(l_spu.MainImgUrl);
                         m_search.IsSupRentService = l_spu.IsSupRentService;
-                        
+
                         m_searchs.Add(m_search);
                     }
                     catch (Exception ex)

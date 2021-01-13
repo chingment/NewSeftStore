@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.StoreApp
             var storeModel = new StoreModel();
             storeModel.Id = store.Id;
             storeModel.Name = store.Name;
- 
+
 
 
             ret.Store = storeModel;
@@ -93,26 +93,6 @@ namespace LocalS.Service.Api.StoreApp
 
             ret.Banner = bannerModel;
 
-
-            //var pdAreaModel = new PdAreaModel();
-
-            //var prdKinds = CurrentDb.StoreKind.Where(m => m.MerchId == store.MerchId && m.StoreId == store.Id && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
-
-            //foreach (var prdKind in prdKinds)
-            //{
-            //    var tab = new PdAreaModel.Tab();
-            //    tab.Id = prdKind.Id;
-            //    tab.Name = prdKind.Name;
-            //    tab.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
-            //    tab.List = StoreAppServiceFactory.Product.GetProducts(0, 6, rup.StoreId, rup.ShopMode, prdKind.Id);
-            //    if (tab.List.Items.Count > 0)
-            //    {
-            //        pdAreaModel.Tabs.Add(tab);
-            //    }
-            //}
-
-            //ret.PdArea = pdAreaModel;
-
             result = new CustomJsonResult<RetIndexPageData>(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
@@ -132,7 +112,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_sellChannelStock in d_sellChannelStocks)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.MerchId, rup.StoreId, new string[] { SellChannelStock.MallSellChannelRefId }, d_sellChannelStock.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.PrdProductSkuId);
                 if (r_productSku != null && r_productSku.Stocks != null && r_productSku.Stocks.Count > 0)
                 {
                     var m_productSku = new ProductSkuModel();

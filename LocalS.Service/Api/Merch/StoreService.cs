@@ -342,7 +342,8 @@ namespace LocalS.Service.Api.Merch
                             sellChannelStock.MerchId = merchId;
                             sellChannelStock.StoreId = rop.StoreId;
                             sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
-                            sellChannelStock.SellChannelRefId = SellChannelStock.MallSellChannelRefId;
+                            sellChannelStock.ShopId = "0";
+                            sellChannelStock.MachineId = "0";
                             sellChannelStock.CabinetId = "0";
                             sellChannelStock.SlotId = "0";
                             sellChannelStock.PrdProductId = rop.ProductId;

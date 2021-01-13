@@ -15,8 +15,10 @@ namespace LocalS.Entity
         public string MerchName { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
+        public string ShopId { get; set; }
+        public string ShopName { get; set; }
         public E_SellChannelRefType SellChannelRefType { get; set; }
-        public string SellChannelRefId { get; set; }
+        public string MachineId { get; set; }
         public string ReceiveModeName { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public string OrderId { get; set; }

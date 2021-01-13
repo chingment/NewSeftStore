@@ -28,7 +28,8 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_clientCart in d_clientCarts)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.MerchId, d_clientCart.StoreId, BizFactory.Store.GetSellChannelRefIds(storeId,d_clientCart.ShopMode), d_clientCart.PrdProductSkuId);
+                var r_productSku =new  ProductSkuInfoModel();
+                //var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.MerchId, d_clientCart.StoreId, BizFactory.Store.GetSellChannelRefIds(storeId,d_clientCart.ShopMode), d_clientCart.PrdProductSkuId);
                 if (r_productSku != null)
                 {
                     if (r_productSku.Stocks.Count > 0)
@@ -150,7 +151,9 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,item.ShopMode), item.Id);
+                                var bizProductSku = new ProductSkuInfoModel();
+
+                               // var bizProductSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,item.ShopMode), item.Id);
 
                                 if (bizProductSku == null || bizProductSku.Stocks == null || bizProductSku.Stocks.Count == 0)
                                 {

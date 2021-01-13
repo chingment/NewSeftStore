@@ -70,8 +70,9 @@ namespace LocalS.BLL.Biz
                 public string Id { get; set; }
                 public int Quantity { get; set; }
                 public E_SellChannelRefType ShopMode { get; set; }
-                public string[] SellChannelRefIds { get; set; }
                 public string SvcConsulterId { get; set; }
+                public string ShopId { get; set; }
+                public string[] MachineIds { get; set; }
             }
             public class BookTimeModel
             {

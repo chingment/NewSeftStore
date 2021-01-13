@@ -70,30 +70,38 @@ namespace LocalS.BLL.Biz
 
 
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == machine.CurUseMerchId).FirstOrDefault();
 
-            if (merch != null)
+            if (d_Merch != null)
             {
-                model.MerchId = merch.Id;
-                model.MerchName = merch.Name;
-                model.CsrQrCode = merch.CsrQrCode;
-                model.CsrPhoneNumber = merch.CsrPhoneNumber;
-                model.CsrHelpTip = merch.CsrHelpTip;
+                model.MerchId = d_Merch.Id;
+                model.MerchName = d_Merch.Name;
+                model.CsrQrCode = d_Merch.CsrQrCode;
+                model.CsrPhoneNumber = d_Merch.CsrPhoneNumber;
+                model.CsrHelpTip = d_Merch.CsrHelpTip;
 
-                model.PayOptions = merch.TermAppPayOptions.ToJsonObject<List<PayOption>>();
+                model.PayOptions = d_Merch.TermAppPayOptions.ToJsonObject<List<PayOption>>();
 
-                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
-                if (merchMachine != null)
+                var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == machine.CurUseMerchId && m.MachineId == id).FirstOrDefault();
+                if (d_MerchMachine != null)
                 {
-                    model.Name = merchMachine.Name;
-                    model.LogoImgUrl = merchMachine.LogoImgUrl;
+                    model.Name = d_MerchMachine.Name;
+                    model.LogoImgUrl = d_MerchMachine.LogoImgUrl;
                 }
 
-                var merchStore = BizFactory.Store.GetOne(machine.CurUseStoreId);
-                if (merchStore != null)
+                var d_Store = CurrentDb.Store.Where(m => m.Id == machine.CurUseStoreId).FirstOrDefault();
+                if (d_Store != null)
                 {
-                    model.StoreId = merchStore.StoreId;
-                    model.StoreName = merchStore.Name;
+                    model.StoreId = d_Store.Id;
+                    model.StoreName = d_Store.Name;
+                }
+
+                var d_Shop = CurrentDb.Shop.Where(m => m.Id == machine.CurUseShopId).FirstOrDefault();
+                if (d_Shop != null)
+                {
+                    model.ShopId = d_Shop.Id;
+                    model.ShopName = d_Shop.Name;
+                    model.ShopAddress = d_Shop.Address;
                 }
             }
 

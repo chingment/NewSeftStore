@@ -202,9 +202,9 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    string[] sellChannelRefIds = BizFactory.Store.GetSellChannelRefIds(store.StoreId,productSku.ShopMode);
+                    string[] sellChannelRefIds = BizFactory.Store.GetSellChannelRefIds(store.StoreId, productSku.ShopMode);
 
-                    buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
+                    //buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
                 }
 
                 c_prodcutSkus = buildOrderTool.BuildSkus();
@@ -359,7 +359,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var orderSub in orderSubs)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, new string[] { orderSub.SellChannelRefId }, orderSub.PrdProductSkuId);
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(orderSub.SellChannelRefType, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.PrdProductSkuId);
 
                     var c_prodcutSku = new BuildSku();
                     c_prodcutSku.Id = orderSub.PrdProductSkuId;
@@ -446,11 +446,11 @@ namespace LocalS.Service.Api.StoreApp
                 {
 
                     var selfPickAddress = (from s in CurrentDb.StoreShop
-                                 join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
-                                 from u in temp.DefaultIfEmpty()
-                                 where
-                           u.MerchId == store.MerchId
-                               && s.StoreId == store.StoreId
+                                           join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
+                                           from u in temp.DefaultIfEmpty()
+                                           where
+                                     u.MerchId == store.MerchId
+                                         && s.StoreId == store.StoreId
                                            select new { u.Id, u.Name, u.Address, u.MainImgUrl, u.IsOpen, u.AreaCode, u.AreaName, u.MerchId, s.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress, u.CreateTime }).FirstOrDefault();
 
 
@@ -677,7 +677,6 @@ namespace LocalS.Service.Api.StoreApp
                              CanceledTime = o.CanceledTime,
                              ReceiveMode = o.ReceiveMode,
                              ReceiveModeName = o.ReceiveModeName,
-                             SellChannelRefId = o.SellChannelRefId,
                              PickupFlowLastTime = o.PickupFlowLastTime,
                              PickupFlowLastDesc = o.PickupFlowLastDesc,
                              PickupCode = o.PickupCode,
@@ -733,7 +732,7 @@ namespace LocalS.Service.Api.StoreApp
                     if (item.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
                     {
                         block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
-                        block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.SellChannelRefId) };
+                        //block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.ma) };
                     }
 
                     if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || item.ReceiveMode == E_ReceiveMode.SelfTakeByStore)

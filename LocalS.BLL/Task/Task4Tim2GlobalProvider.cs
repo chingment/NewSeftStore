@@ -230,7 +230,7 @@ namespace LocalS.BLL.Task
             {
                 var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == model.MachineId).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.MachineId == model.MachineId).ToList();
 
                 if (order != null)
                 {

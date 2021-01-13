@@ -18,11 +18,17 @@ namespace LocalS.Service.Api.StoreTerm
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
 
+
+            LogUtil.Info("merchId:" + merchId);
+            LogUtil.Info("storeId:" + storeId);
+            LogUtil.Info("shopId:" + shopId);
+            LogUtil.Info("MachineId:" + machineId);
             var query = (from m in CurrentDb.SellChannelStock
                          where (
 m.MerchId == merchId &&
 m.StoreId == storeId &&
-m.SellChannelRefId == machineId &&
+m.ShopId == shopId &&
+m.MachineId == machineId &&
 m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                          orderby m.CreateTime
                          select new { m.PrdProductSkuId }).Distinct();
@@ -37,7 +43,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
 
             foreach (var item in list)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(merchId, storeId, new string[] { machineId }, item.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(Entity.E_SellChannelRefType.Machine, merchId, storeId, shopId, new string[] { machineId }, item.PrdProductSkuId);
 
                 var m_productSku = new ProductSkuModel();
                 m_productSku.ProductSkuId = r_productSku.Id;

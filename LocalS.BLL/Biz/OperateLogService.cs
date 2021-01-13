@@ -352,7 +352,7 @@ namespace LocalS.BLL.Biz
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
                 if (order != null)
                 {
-                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefId == machine.Id).ToList();
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.MachineId == machine.Id).ToList();
 
                     //是否触发过取货
                     if (order.PickupTrgTime == null)
@@ -364,7 +364,7 @@ namespace LocalS.BLL.Biz
 
                         int timoutM = order.Quantity * 5;
 
-                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.SellChannelRefId });
+                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.MachineId });
                     }
 
                     var orderPickupLog = new OrderPickupLog();
@@ -454,7 +454,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
-                                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.MerchId, orderSub.StoreId, orderSub.SellChannelRefId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.SellChannelRefType, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
                                     }
 
                                     if (orderSub.PickupEndTime == null)

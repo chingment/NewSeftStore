@@ -72,7 +72,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var productSku in rop.ProductSkus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, SellChannelRefIds = new string[] { rop.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_SellChannelRefType.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);
@@ -156,7 +156,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             LogUtil.Info("PickupCode2=>>" + pickupCode);
 
-            var order = CurrentDb.Order.Where(m => m.SellChannelRefId == rup.MachineId && m.PickupCode == pickupCode).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.MachineId == rup.MachineId && m.PickupCode == pickupCode).FirstOrDefault();
 
             if (order == null)
             {

@@ -68,7 +68,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId)
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.SellChannelRefId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.ShopId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             if (rop.SellChannelRefType != Entity.E_SellChannelRefType.Unknow)
             {
@@ -91,7 +91,7 @@ namespace LocalS.Service.Api.Merch
                 else if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
                 {
                     sellChannelRefName = "线下机器";
-                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.SellChannelRefId, sellChannelStock.SlotId);
+                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.MachineId, sellChannelStock.SlotId);
                 }
 
                 olist.Add(new
@@ -310,7 +310,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
                         u.IsTestMode == false
-                         select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.SellChannelRefId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -455,7 +455,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_PayStatus.PaySuccess &&
                          u.IsTestMode == false
-                         select new { u.Id, u.StoreName, u.StoreId, u.ReceiveMode, u.ReceiveModeName, u.SellChannelRefId, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
+                         select new { u.Id, u.StoreName, u.StoreId, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 

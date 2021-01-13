@@ -68,7 +68,12 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(d_machine.CurUseStoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
+            }
+
+            if (string.IsNullOrEmpty(d_machine.CurUseShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
             }
 
             var l_machine = BizFactory.Machine.GetOne(d_machine.Id);
@@ -147,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SellChannelRefId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
+            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
 
             var l_kind_all = new ProductKindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);
@@ -352,7 +357,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { ReasonId = "2", Title = "机器出现故障" });
             ret.ExReasons.Add(new RetMachineGetRunExHandleItems.ExReason { ReasonId = "3", Title = "未知原因" });
 
-            var d_orders = CurrentDb.Order.Where(m => m.SellChannelRefId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
+            var d_orders = CurrentDb.Order.Where(m => m.MachineId == rup.MachineId && m.ExIsHappen == true && m.ExIsHandle == false).ToList();
 
             foreach (var d_order in d_orders)
             {

@@ -374,9 +374,9 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    string[] sellChannelRefIds = BizFactory.Store.GetSellChannelRefIds(rop.StoreId, productSku.ShopMode);
+                    //string[] sellChannelRefIds = BizFactory.Store.GetSellChannelRefIds(rop.StoreId, productSku.ShopMode);
 
-                    buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
+                    //buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, sellChannelRefIds);
                 }
 
 

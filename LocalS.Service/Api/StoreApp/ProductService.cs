@@ -87,8 +87,8 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, storeId, BizFactory.Store.GetSellChannelRefIds(storeId,shopMode), item.PrdProductSkuId);
-
+                var r_productSku = new ProductSkuInfoModel();
+               // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, storeId, BizFactory.Store.GetSellChannelRefIds(storeId,shopMode), item.PrdProductSkuId);
 
                 var m_productSku = new ProductSkuModel();
 
@@ -146,7 +146,9 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
+            var r_productSku = new ProductSkuInfoModel();
+
+           // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
 
             var m_productSku = new ProductSkuModel();
             m_productSku.Id = r_productSku.Id;
@@ -210,7 +212,8 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
+            var r_productSku = new ProductSkuInfoModel();
+           // var r_productSku = CacheServiceFactory.Product.GetSkuStock(store.MerchId, store.StoreId, BizFactory.Store.GetSellChannelRefIds(store.StoreId,rup.ShopMode), rup.SkuId);
 
             bool isOffSell = true;
             bool isShowPrice = false;
