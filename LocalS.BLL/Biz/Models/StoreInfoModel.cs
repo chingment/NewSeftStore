@@ -10,14 +10,14 @@ namespace LocalS.BLL.Biz
 {
     public class MapPoint
     {
-        public double Lng { get; set; }
-        public double Lat { get; set; }
+        public float Lng { get; set; }
+        public float Lat { get; set; }
 
         public MapPoint()
         {
 
         }
-        public MapPoint(double lng, double lat)
+        public MapPoint(float lng, float lat)
         {
             this.Lng = lng;
             this.Lat = lat;
