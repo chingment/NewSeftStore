@@ -15,14 +15,13 @@ namespace LocalS.BLL.Biz
     public class ProductSkuService : BaseService
     {
 
-        private void SendUpdateProductSkuStock(string operater, string appId, E_SellChannelRefType refType, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
+        private void SendStock2Machine(string operater, string appId, E_SellChannelRefType refType, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
         {
 
             var r_ProductSku = CacheServiceFactory.Product.GetSkuStock(refType, merchId, storeId, shopId, machineIds, productSkuId);
 
             if (r_ProductSku != null)
             {
-
                 var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
                 updateProdcutSkuStock.ProductSkuId = r_ProductSku.Id;
                 updateProdcutSkuStock.IsOffSell = r_ProductSku.Stocks[0].IsOffSell;
@@ -31,7 +30,8 @@ namespace LocalS.BLL.Biz
                 updateProdcutSkuStock.SellQuantity = r_ProductSku.Stocks.Sum(m => m.SellQuantity);
                 updateProdcutSkuStock.SumQuantity = r_ProductSku.Stocks.Sum(m => m.SumQuantity);
                 updateProdcutSkuStock.IsTrgVideoService = r_ProductSku.IsTrgVideoService;
-                // BizFactory.Machine.SendUpdateProductSkuStock(operater, appId, merchId, null, updateProdcutSkuStock);
+
+                BizFactory.Machine.SendStock(operater, appId, merchId, "");
             }
 
 
@@ -604,14 +604,9 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                //try
-                //{
-                //    SendUpdateProductSkuStock(operater, appId, merchId, storeId, new string[] { sellChannelRefId }, productSkuId);
-                //}
-                //catch (Exception ex)
-                //{
 
-                //}
+                SendStock2Machine(operater, appId, refType, merchId, storeId, shopId, new string[] { machineId }, productSkuId);
+
             }
 
             return result;
@@ -717,7 +712,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                //SendUpdateProductSkuStock(operater, appId, merchId, storeId, new string[] { machineId }, productSkuId);
+                SendStock2Machine(operater, appId, E_SellChannelRefType.Machine, merchId, storeId, shopId, new string[] { machineId }, productSkuId);
             }
 
             return result;
@@ -763,7 +758,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                //SendUpdateProductSkuStock(operater, appId, merchId, storeId, machineIds, productSkuId);
+                SendStock2Machine(operater, appId, E_SellChannelRefType.Machine, merchId, storeId, "", machineIds, productSkuId);
             }
 
             return result;

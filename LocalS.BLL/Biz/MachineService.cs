@@ -177,9 +177,18 @@ namespace LocalS.BLL.Biz
             return merchMachine.IsStopUse;
         }
 
-        public void SendUpdateProductSkuStock(string operater, string appId, string merchId, string machineId, UpdateMachineProdcutSkuStockModel updateProdcutSkuStock)
+
+        public void SendStock(string operater, string appId, string merchId, string[] machineIds)
         {
-            PushService.SendUpdateProductSkuStock(operater, appId, merchId, machineId, updateProdcutSkuStock);
+           foreach(var machineId in machineIds)
+            {
+                SendStock(operater, appId, merchId,machineId);
+            }
+        }
+
+        public void SendStock(string operater, string appId, string merchId, string machineId)
+        {
+            PushService.SendStock(operater, appId, merchId, machineId, null);
         }
 
         public void SendUpdateHomeBanners(string operater, string appId, string merchId, string machineId)

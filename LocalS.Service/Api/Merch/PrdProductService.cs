@@ -434,32 +434,9 @@ namespace LocalS.Service.Api.Merch
             if (result.Result == ResultType.Success)
             {
 
-                foreach (var productSkuId in productSkuIds)
-                {
-                    CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
-                }
-
-                //var sellChannelStocks = (from m in CurrentDb.SellChannelStock where m.MerchId == merchId && m.PrdProductId == rop.Id select new { m.StoreId, m.SellChannelRefId, m.PrdProductSkuId }).Distinct();
-
-                //foreach (var sellChannelStock in sellChannelStocks)
-                //{
-                //    var bizProductSku = CacheServiceFactory.Product.GetSkuStock(merchId, sellChannelStock.StoreId, new string[] { sellChannelStock.SellChannelRefId }, sellChannelStock.PrdProductSkuId);
-                //    if (bizProductSku.Stocks != null)
-                //    {
-                //        if (bizProductSku.Stocks.Count > 0)
-                //        {
-                //            var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
-                //            updateProdcutSkuStock.ProductSkuId = bizProductSku.Id;
-                //            updateProdcutSkuStock.IsOffSell = bizProductSku.Stocks[0].IsOffSell;
-                //            updateProdcutSkuStock.SalePrice = bizProductSku.Stocks[0].SalePrice;
-                //            updateProdcutSkuStock.LockQuantity = bizProductSku.Stocks.Sum(m => m.LockQuantity);
-                //            updateProdcutSkuStock.SellQuantity = bizProductSku.Stocks.Sum(m => m.SellQuantity);
-                //            updateProdcutSkuStock.SumQuantity = bizProductSku.Stocks.Sum(m => m.SumQuantity);
-                //            updateProdcutSkuStock.IsTrgVideoService = bizProductSku.IsTrgVideoService;
-                //            BizFactory.Machine.SendUpdateProductSkuStock(operater, AppId.MERCH, merchId, sellChannelStock.SellChannelRefId, updateProdcutSkuStock);
-                //        }
-                //    }
-                //}
+                var machineIds = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.PrdProductId == rop.Id && m.SellChannelRefType == E_SellChannelRefType.Machine).Select(m => m.MachineId).Distinct().ToArray();
+                CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuIds.ToArray());
+                BizFactory.Machine.SendStock(operater, AppId.MERCH, merchId, machineIds);
             }
 
 

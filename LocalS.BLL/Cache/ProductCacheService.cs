@@ -158,6 +158,21 @@ namespace LocalS.BLL
             return productSkuInfo;
         }
 
+
+        public List<ProductSkuInfoModel> GetSkuInfo(string merchId, string[] productSkuIds)
+        {
+            var oList = new List<ProductSkuInfoModel>();
+
+            foreach(var productSkuId in productSkuIds)
+            {
+                var productSku = GetSkuInfo(merchId, productSkuId);
+                if (productSku != null)
+                    oList.Add(productSku);
+            }
+
+            return oList;
+        }
+
         public ProductSkuInfoModel GetSkuInfo(string merchId, string productSkuId)
         {
             var r_sku = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), productSkuId.ToLower());
