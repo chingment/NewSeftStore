@@ -8,6 +8,11 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupShopGetDetails
     {
-        public string Id { get; set;}
+        public string Id { get; set; }
+
+        public RupShopGetDetails()
+        {
+
+        }
     }
 }

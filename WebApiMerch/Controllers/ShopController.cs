@@ -19,7 +19,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetDetails([FromBody]RupShopGetDetails rup)
+        public OwnApiHttpResponse GetDetails([FromUri]RupShopGetDetails rup)
         {
             IResult result = MerchServiceFactory.Shop.GetDetails(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);

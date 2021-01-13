@@ -18,8 +18,8 @@ namespace LocalS.Entity
         public string ContactName { get; set; }
         public string ContactAddress { get; set; }
         public string ContactPhone { get; set; }
-        public float Lat { get; set; }
-        public float Lng { get; set; }
+        public double Lat { get; set; }
+        public double Lng { get; set; }
         public bool IsOpen { get; set; }
         public bool IsDelete { get; set; }
         public string BriefDes { get; set; }

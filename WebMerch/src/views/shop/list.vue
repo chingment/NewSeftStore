@@ -256,7 +256,7 @@ export default {
         getDetails({ id: item.id }).then(res => {
           if (res.result === 1) {
             var d = res.data
-            this.form = d.d
+            this.form = d
           }
         })
       } else {
