@@ -10,7 +10,7 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="dialogByEditOpen">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="dialogByEditOpen(false,null)">
             添加
           </el-button>
         </el-col>
@@ -48,7 +48,7 @@
             </el-button>
             <span v-else>{{ row.opTips }}</span>
           </template>
-          <el-button type="primary" size="mini" @click="dialogByEditOpen(row)">
+          <el-button type="primary" size="mini" @click="dialogByEditOpen(true,row)">
             编辑
           </el-button>
         </template>
@@ -130,7 +130,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getList, add } from '@/api/shop'
+import { getList, add, getDetails } from '@/api/shop'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -251,8 +251,15 @@ export default {
         this.selectMethod(item)
       }
     },
-    dialogByEditOpen(isEdit) {
-      if (!isEdit) {
+    dialogByEditOpen(isEdit, item) {
+      if (isEdit) {
+        getDetails({ id: item.id }).then(res => {
+          if (res.result === 1) {
+            var d = res.data
+            this.form = d.d
+          }
+        })
+      } else {
         this.form.id = ''
       }
       this.dialogByEditIsVisible = true

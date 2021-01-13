@@ -12,6 +12,16 @@ namespace LocalS.BLL.Biz
     {
         public double Lng { get; set; }
         public double Lat { get; set; }
+
+        public MapPoint()
+        {
+
+        }
+        public MapPoint(double lng, double lat)
+        {
+            this.Lng = lng;
+            this.Lat = lat;
+        }
     }
 
     public class StoreInfoModel

@@ -44,10 +44,21 @@ namespace LocalS.BLL.Biz
             public List<ProductSkuModel> Skus { get; set; }
             public class DeliveryModel
             {
+                public DeliveryModel()
+                {
+                    this.Contact = new ContactModel();
+                }
+
                 public ContactModel Contact { get; set; }
             }
             public class SelfTakeModel
             {
+                public SelfTakeModel()
+                {
+                    this.Mark = new MarkModel();
+                    this.Contact = new ContactModel();
+                    this.BookTime = new BookTimeModel();
+                }
                 public MarkModel Mark { get; set; }
                 public ContactModel Contact { get; set; }
                 public BookTimeModel BookTime { get; set; }

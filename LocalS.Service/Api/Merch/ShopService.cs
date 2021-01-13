@@ -92,6 +92,34 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult GetDetails(string operater, string merchId, RupShopGetDetails rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            var d_Shop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Id == rup.Id).FirstOrDefault();
+            if (d_Shop == null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到数据");
+            var ret = new
+            {
+                Id = d_Shop.Id,
+                Name = d_Shop.Name,
+                Address = d_Shop.Address,
+                AreaCode = d_Shop.AreaCode,
+                AreaName = d_Shop.AreaName,
+                BriefDes = d_Shop.BriefDes,
+                MapPoint = new MapPoint(d_Shop.Lng, d_Shop.Lat),
+                MainImgUrl = d_Shop.MainImgUrl,
+                DisplayImgUrls = d_Shop.DisplayImgUrls.ToJsonObject<List<ImgSet>>(),
+                ContactName = d_Shop.ContactName,
+                ContactAddress = d_Shop.ContactAddress,
+                ContactPhone = d_Shop.ContactPhone,
+            };
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
         public CustomJsonResult Add(string operater, string merchId, RopShopAdd rop)
         {
             CustomJsonResult result = new CustomJsonResult();

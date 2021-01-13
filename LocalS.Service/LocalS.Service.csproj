@@ -246,6 +246,7 @@
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopShopAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopShopEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddMachine.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />
