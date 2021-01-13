@@ -16,17 +16,9 @@ export function getDetails(params) {
   })
 }
 
-export function add(data) {
+export function save(data) {
   return request({
-    url: '/shop/add',
-    method: 'post',
-    data
-  })
-}
-
-export function edit(data) {
-  return request({
-    url: '/shop/add',
+    url: '/shop/save',
     method: 'post',
     data
   })
@@ -35,6 +27,5 @@ export function edit(data) {
 export default {
   getList: getList,
   getDetails: getDetails,
-  add: add,
-  edit: edit
+  save: save
 }

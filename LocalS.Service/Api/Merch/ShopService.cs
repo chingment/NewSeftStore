@@ -120,37 +120,74 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Add(string operater, string merchId, RopShopAdd rop)
+        public CustomJsonResult Save(string operater, string merchId, RopShopSave rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
 
-            var d_Shop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Name == rop.Name).FirstOrDefault();
-            if (d_Shop != null)
+            if (string.IsNullOrEmpty(rop.Id))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                var d_Shop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Name == rop.Name).FirstOrDefault();
+                if (d_Shop != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                }
+
+                d_Shop = new Shop();
+                d_Shop.Id = IdWorker.Build(IdType.NewGuid);
+                d_Shop.MerchId = merchId;
+                d_Shop.Name = rop.Name;
+                d_Shop.Address = rop.Address;
+                d_Shop.AreaCode = rop.AreaCode;
+                d_Shop.AreaName = rop.AreaName;
+                d_Shop.Lat = rop.AddressPoint.Lat;
+                d_Shop.Lng = rop.AddressPoint.Lng;
+                d_Shop.ContactName = rop.ContactName;
+                d_Shop.ContactPhone = rop.ContactPhone;
+                d_Shop.ContactAddress = rop.ContactAddress;
+                d_Shop.BriefDes = rop.BriefDes;
+                d_Shop.IsOpen = false;
+                d_Shop.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                d_Shop.MainImgUrl = ImgSet.GetMain_O(d_Shop.DisplayImgUrls);
+                d_Shop.CreateTime = DateTime.Now;
+                d_Shop.Creator = operater;
+                CurrentDb.Shop.Add(d_Shop);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+                var isExistShop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Id != rop.Id && m.Name == rop.Name).FirstOrDefault();
+                if (isExistShop != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
+                }
+
+                var d_Shop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Id == rop.Id).FirstOrDefault();
+                if (d_Shop == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应记录");
+                }
+
+                d_Shop.Name = rop.Name;
+                d_Shop.Address = rop.Address;
+                d_Shop.AreaCode = rop.AreaCode;
+                d_Shop.AreaName = rop.AreaName;
+                d_Shop.Lat = rop.AddressPoint.Lat;
+                d_Shop.Lng = rop.AddressPoint.Lng;
+                d_Shop.ContactName = rop.ContactName;
+                d_Shop.ContactPhone = rop.ContactPhone;
+                d_Shop.ContactAddress = rop.ContactAddress;
+                d_Shop.BriefDes = rop.BriefDes;
+                d_Shop.IsOpen = false;
+                d_Shop.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                d_Shop.MainImgUrl = ImgSet.GetMain_O(d_Shop.DisplayImgUrls);
+                d_Shop.Mender = operater;
+                d_Shop.MendTime = DateTime.Now;
+
+                CurrentDb.SaveChanges();
             }
 
-            d_Shop = new Shop();
-            d_Shop.Id = IdWorker.Build(IdType.NewGuid);
-            d_Shop.MerchId = merchId;
-            d_Shop.Name = rop.Name;
-            d_Shop.Address = rop.Address;
-            d_Shop.AreaCode = rop.AreaCode;
-            d_Shop.AreaName = rop.AreaName;
-            d_Shop.Lat = rop.AddressPoint.Lat;
-            d_Shop.Lng = rop.AddressPoint.Lng;
-            d_Shop.ContactName = rop.ContactName;
-            d_Shop.ContactPhone = rop.ContactPhone;
-            d_Shop.ContactAddress = rop.ContactAddress;
-            d_Shop.BriefDes = rop.BriefDes;
-            d_Shop.IsOpen = false;
-            d_Shop.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-            d_Shop.MainImgUrl = ImgSet.GetMain_O(d_Shop.DisplayImgUrls);
-            d_Shop.CreateTime = DateTime.Now;
-            d_Shop.Creator = operater;
-            CurrentDb.Shop.Add(d_Shop);
-            CurrentDb.SaveChanges();
+
 
 
             MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
@@ -160,36 +197,5 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopShopEdit rop)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-            using (TransactionScope ts = new TransactionScope())
-            {
-
-                var isExistStore = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id != rop.Id && m.Name == rop.Name).FirstOrDefault();
-                if (isExistStore != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
-                }
-
-                var store = CurrentDb.Store.Where(m => m.Id == rop.Id).FirstOrDefault();
-
-                store.Name = rop.Name;
-                store.ContactAddress = rop.ContactAddress;
-                //store.BriefDes = rop.BriefDes;
-                //store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                //store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
-                //store.IsOpen = rop.IsOpen;
-                store.MendTime = DateTime.Now;
-                store.Mender = operater;
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreEdit, string.Format("保存店铺（{0}）信息成功", rop.Name));
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-            }
-            return result;
-        }
     }
 }

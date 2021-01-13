@@ -26,16 +26,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Add([FromBody]RopShopAdd rop)
+        public OwnApiHttpResponse Save([FromBody]RopShopSave rop)
         {
-            IResult result = MerchServiceFactory.Shop.Add(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse Edit([FromBody]RopShopEdit rop)
-        {
-            IResult result = MerchServiceFactory.Shop.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Shop.Save(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

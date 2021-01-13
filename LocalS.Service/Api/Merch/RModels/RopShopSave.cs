@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopShopAdd
+    public class RopShopSave
     {
-        public RopShopAdd()
+        public RopShopSave()
         {
             this.AddressPoint = new MapPoint();
         }
-
+        public string Id { get; set; }
         public string Name { get; set; }
         public string AreaCode { get; set; }
         public MapPoint AddressPoint { get; set; }

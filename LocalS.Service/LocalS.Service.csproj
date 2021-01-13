@@ -212,7 +212,6 @@
     <Compile Include="Api\Merch\RModels\RetAdSpaceInitRelease.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitDetailsOrders.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitManageBaseInfo.cs" />
-    <Compile Include="Api\Merch\RModels\RetClientUserInitManageProduct.cs" />
     <Compile Include="Api\Merch\RModels\RetMachineInitManage.cs" />
     <Compile Include="Api\Merch\RModels\RetMachineInitManageBaseInfo.cs" />
     <Compile Include="Api\Merch\RModels\RetMachineInitManageStock.cs" />
@@ -244,10 +243,8 @@
     <Compile Include="Api\Merch\RModels\RopPrdProductEditSalePriceOnStore.cs" />
     <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
-    <Compile Include="Api\Merch\RModels\RopShopAdd.cs" />
-    <Compile Include="Api\Merch\RModels\RopShopEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />
-    <Compile Include="Api\Merch\RModels\RopStoreAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddMachine.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreEdit.cs" />

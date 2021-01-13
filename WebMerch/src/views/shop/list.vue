@@ -59,7 +59,7 @@
 
     <el-dialog v-if="dialogByEditIsVisible" :title="'编辑'" :visible.sync="dialogByEditIsVisible" width="600px" append-to-body>
       <div style="height:500px">
-        <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
+        <el-form ref="form" v-loading="loadingByDetails" :model="form" :rules="rules" label-width="80px">
           <el-form-item label="店铺名称" prop="name">
             <el-input v-model="form.name" clearable />
           </el-form-item>
@@ -68,15 +68,15 @@
             <el-button type="text" @click="getGpsList">选择</el-button>
           </el-form-item>
           <el-form-item label="联系人" prop="contactName">
-            <el-input v-model="form.contactName" clearable />
+            <el-input v-model="form.contactName" clearable style="width:200px" />
+          </el-form-item>
+          <el-form-item label="联系电话" prop="contactPhone">
+            <el-input v-model="form.contactPhone" clearable style="width:200px" />
           </el-form-item>
           <el-form-item label="联系地址" prop="contactAddress">
             <el-input v-model="form.contactAddress" clearable />
           </el-form-item>
-          <el-form-item label="联系电话" prop="contactPhone">
-            <el-input v-model="form.contactPhone" clearable />
-          </el-form-item>
-          <el-form-item label="图片" prop="displayImgUrls">
+          <el-form-item label="店铺图片" prop="displayImgUrls">
             <el-input :value="form.displayImgUrls.toString()" style="display:none" />
             <el-upload
               ref="uploadImg"
@@ -106,7 +106,7 @@
         <el-button @click="dialogByEditIsVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleEdit">
+        <el-button type="primary" @click="handleSave">
           保存
         </el-button>
       </div>
@@ -130,7 +130,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getList, add, getDetails } from '@/api/shop'
+import { getList, save, getDetails } from '@/api/shop'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -153,6 +153,7 @@ export default {
   data() {
     return {
       loading: false,
+      loadingByDetails: false,
       listKey: 0,
       listData: null,
       listTotal: 0,
@@ -253,18 +254,23 @@ export default {
     },
     dialogByEditOpen(isEdit, item) {
       if (isEdit) {
+        this.loadingByDetails = true
         getDetails({ id: item.id }).then(res => {
           if (res.result === 1) {
             var d = res.data
             this.form = d
+            this.form.displayImgUrls = this.form.displayImgUrls == null ? [] : this.form.displayImgUrls
+            this.uploadImglist = this.getUploadImglist(d.displayImgUrls)
           }
+          this.loadingByDetails = false
         })
       } else {
+        this.form.displayImgUrls = []
         this.form.id = ''
       }
       this.dialogByEditIsVisible = true
     },
-    handleEdit() {
+    handleSave() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
@@ -272,7 +278,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            add(this.form).then(res => {
+            save(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 this.dialogByEditIsVisible = false
@@ -282,6 +288,16 @@ export default {
           })
         }
       })
+    },
+    getUploadImglist(displayImgUrls) {
+      var _uploadImglist = []
+      if (displayImgUrls !== null) {
+        for (var i = 0; i < displayImgUrls.length; i++) {
+          _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
+        }
+      }
+
+      return _uploadImglist
     },
     getdisplayImgUrls(fileList) {
       var _displayImgUrls = []
