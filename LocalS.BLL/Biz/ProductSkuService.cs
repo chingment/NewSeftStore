@@ -15,24 +15,24 @@ namespace LocalS.BLL.Biz
     public class ProductSkuService : BaseService
     {
 
-        private void SendStock2Machine(string operater, string appId, E_SellChannelRefType refType, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
+        private void SendStock(string operater, string appId,string merchId,string productSkuId)
         {
 
-            var r_ProductSku = CacheServiceFactory.Product.GetSkuStock(refType, merchId, storeId, shopId, machineIds, productSkuId);
+            //var r_ProductSku = CacheServiceFactory.Product.GetSkuStock(refType, merchId, storeId, shopId, machineIds, productSkuId);
 
-            if (r_ProductSku != null)
-            {
-                var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
-                updateProdcutSkuStock.ProductSkuId = r_ProductSku.Id;
-                updateProdcutSkuStock.IsOffSell = r_ProductSku.Stocks[0].IsOffSell;
-                updateProdcutSkuStock.SalePrice = r_ProductSku.Stocks[0].SalePrice;
-                updateProdcutSkuStock.LockQuantity = r_ProductSku.Stocks.Sum(m => m.LockQuantity);
-                updateProdcutSkuStock.SellQuantity = r_ProductSku.Stocks.Sum(m => m.SellQuantity);
-                updateProdcutSkuStock.SumQuantity = r_ProductSku.Stocks.Sum(m => m.SumQuantity);
-                updateProdcutSkuStock.IsTrgVideoService = r_ProductSku.IsTrgVideoService;
+            //if (r_ProductSku != null)
+            //{
+            //    var updateProdcutSkuStock = new UpdateMachineProdcutSkuStockModel();
+            //    updateProdcutSkuStock.ProductSkuId = r_ProductSku.Id;
+            //    updateProdcutSkuStock.IsOffSell = r_ProductSku.Stocks[0].IsOffSell;
+            //    updateProdcutSkuStock.SalePrice = r_ProductSku.Stocks[0].SalePrice;
+            //    updateProdcutSkuStock.LockQuantity = r_ProductSku.Stocks.Sum(m => m.LockQuantity);
+            //    updateProdcutSkuStock.SellQuantity = r_ProductSku.Stocks.Sum(m => m.SellQuantity);
+            //    updateProdcutSkuStock.SumQuantity = r_ProductSku.Stocks.Sum(m => m.SumQuantity);
+            //    updateProdcutSkuStock.IsTrgVideoService = r_ProductSku.IsTrgVideoService;
 
-                BizFactory.Machine.SendStock(operater, appId, merchId, "");
-            }
+            //    BizFactory.Machine.SendStock(operater, appId, merchId, "");
+            //}
 
 
         }
@@ -605,7 +605,7 @@ namespace LocalS.BLL.Biz
             if (result.Result == ResultType.Success)
             {
 
-                SendStock2Machine(operater, appId, refType, merchId, storeId, shopId, new string[] { machineId }, productSkuId);
+                SendStock(operater, appId, merchId, productSkuId);
 
             }
 
@@ -712,7 +712,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                SendStock2Machine(operater, appId, E_SellChannelRefType.Machine, merchId, storeId, shopId, new string[] { machineId }, productSkuId);
+                SendStock(operater, appId, merchId, productSkuId);
             }
 
             return result;
@@ -758,7 +758,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                SendStock2Machine(operater, appId, E_SellChannelRefType.Machine, merchId, storeId, "", machineIds, productSkuId);
+                SendStock(operater, appId, merchId,productSkuId);
             }
 
             return result;
