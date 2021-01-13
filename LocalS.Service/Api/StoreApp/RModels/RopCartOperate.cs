@@ -13,7 +13,6 @@ namespace LocalS.Service.Api.StoreApp
         public E_CartOperateType Operate { get; set; }
         public List<ProductSkuModel> ProductSkus { get; set; }
         public E_SellChannelRefType ShopMode { get; set; }
-
         public string ShopId { get; set; }
         public class ProductSkuModel
         {

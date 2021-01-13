@@ -123,6 +123,11 @@ namespace LocalS.BLL
             }
             else if (refType == E_SellChannelRefType.Machine)
             {
+                if (machineIds == null || machineIds.Length == 0)
+                {
+                    machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == storeId && m.CurUseShopId == shopId).Select(m => m.Id).Distinct().ToArray();
+                }
+
                 sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.SellChannelRefType == E_SellChannelRefType.Machine && machineIds.Contains(m.MachineId) && m.PrdProductSkuId == productSkuId).ToList();
             }
 

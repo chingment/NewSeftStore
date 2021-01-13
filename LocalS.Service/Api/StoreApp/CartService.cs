@@ -28,20 +28,9 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_clientCart in d_clientCarts)
             {
-                var r_productSku = new ProductSkuInfoModel();
-                if (d_clientCart.ShopMode == E_SellChannelRefType.Mall)
-                {
-                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, d_clientCart.MerchId, storeId, shopId, null, d_clientCart.PrdProductSkuId);
-                }
-                else if (d_clientCart.ShopMode == E_SellChannelRefType.Shop)
-                {
-                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, d_clientCart.MerchId, storeId, shopId, null, d_clientCart.PrdProductSkuId);
-                }
-                else if (d_clientCart.ShopMode == E_SellChannelRefType.Machine)
-                {
-                    string[] machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == d_clientCart.MerchId && m.CurUseStoreId == d_clientCart.StoreId && m.CurUseShopId == shopId).Select(m => m.Id).Distinct().ToArray();
-                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Machine, d_clientCart.MerchId, storeId, shopId, machineIds, d_clientCart.PrdProductSkuId);
-                }
+
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.ShopMode, d_clientCart.MerchId, storeId, shopId, null, d_clientCart.PrdProductSkuId);
+
 
                 if (r_productSku != null)
                 {
@@ -164,21 +153,8 @@ namespace LocalS.Service.Api.StoreApp
                                 break;
                             case E_CartOperateType.Increase:
 
-                                var r_productSku = new ProductSkuInfoModel();
-                  
-                                if (item.ShopMode == E_SellChannelRefType.Mall)
-                                {
-                                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, store.MerchId, store.StoreId, "0", null, item.Id);
-                                }
-                                else if (item.ShopMode == E_SellChannelRefType.Shop)
-                                {
-                                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, store.MerchId, store.StoreId, "0", null, item.Id);
-                                }
-                                else if (item.ShopMode == E_SellChannelRefType.Machine)
-                                {
-                                    string[] machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == store.MerchId && m.CurUseStoreId == store.StoreId && m.CurUseShopId == rop.ShopId).Select(m => m.Id).Distinct().ToArray();
-                                    r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Machine, store.MerchId, store.StoreId, "0", machineIds, item.Id);
-                                }
+
+                                var r_productSku = CacheServiceFactory.Product.GetSkuStock(item.ShopMode, store.MerchId, store.StoreId, "0", null, item.Id);
 
 
                                 if (r_productSku == null || r_productSku.Stocks == null || r_productSku.Stocks.Count == 0)

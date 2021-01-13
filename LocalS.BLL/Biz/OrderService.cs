@@ -456,20 +456,7 @@ namespace LocalS.BLL.Biz
                     {
                         foreach (var productSku in block.Skus)
                         {
-                            string[] machineIds = new string[] { };
-                            if (block.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
-                            {
-                                if (productSku.MachineIds == null || productSku.MachineIds.Length == 0)
-                                {
-                                    machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == store.MerchId && m.CurUseStoreId == store.StoreId && m.CurUseShopId == productSku.ShopId).Select(m => m.Id).Distinct().ToArray();
-                                }
-                                else
-                                {
-                                    machineIds = productSku.MachineIds;
-                                }
-                            }
-
-                            buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, rop.ShopMethod, block.ReceiveMode, productSku.ShopId, machineIds);
+                            buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, rop.ShopMethod, block.ReceiveMode, productSku.ShopId, productSku.MachineIds);
                         }
                     }
 

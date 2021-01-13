@@ -374,15 +374,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    string[] machineIds = new string[] { };
-                    E_ReceiveMode receiveMode = E_ReceiveMode.Delivery;
-                    if (productSku.ShopMode == E_SellChannelRefType.Machine)
-                    {
-                        machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == store.MerchId && m.CurUseStoreId == store.StoreId && m.CurUseShopId == productSku.ShopId).Select(m => m.Id).Distinct().ToArray();
-                        receiveMode = E_ReceiveMode.SelfTakeByMachine;
-                    }
-
-                    buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, receiveMode, productSku.ShopId, machineIds);
+                    buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, productSku.ShopId, null);
                 }
 
 

@@ -168,20 +168,7 @@ namespace LocalS.BLL.Biz
                 {
                     #region Shop
 
-                    ProductSkuInfoModel r_productSku = null;
-
-                    if (productSku.ReceiveMode == E_ReceiveMode.Delivery)
-                    {
-                        r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, _merchId, _storeId, "0", null, productSku.Id);
-                    }
-                    else if (productSku.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
-                    {
-                        r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, _merchId, _storeId, "0", null, productSku.Id);
-                    }
-                    else if (productSku.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
-                    {
-                        r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Machine, _merchId, _storeId, productSku.ShopId, productSku.MachineIds, productSku.Id);
-                    }
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(productSku.ShopMode, _merchId, _storeId, productSku.ShopId, productSku.MachineIds, productSku.Id);
 
                     if (r_productSku == null)
                     {
