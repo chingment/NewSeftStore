@@ -101,5 +101,20 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Store.GetShops(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+
+        [HttpPost]
+        public OwnApiHttpResponse RemoveShop([FromBody]RopStoreRemoveShop rop)
+        {
+            IResult result = MerchServiceFactory.Store.RemoveShop(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse AddShop([FromBody]RopStoreAddShop rop)
+        {
+            IResult result = MerchServiceFactory.Store.AddShop(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

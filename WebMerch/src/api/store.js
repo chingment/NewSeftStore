@@ -104,6 +104,22 @@ export function getShops(params) {
   })
 }
 
+export function addShop(data) {
+  return request({
+    url: '/store/addShop',
+    method: 'post',
+    data
+  })
+}
+
+export function removeShop(data) {
+  return request({
+    url: '/store/removeShop',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   initManage: initManage,
@@ -116,5 +132,7 @@ export default {
   removeKindSpu: removeKindSpu,
   getKindSpu: getKindSpu,
   getShops: getShops,
+  addShop: addShop,
+  removeShop: removeShop,
   getMachines: getMachines
 }

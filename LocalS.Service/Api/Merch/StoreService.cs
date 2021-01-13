@@ -576,6 +576,46 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult RemoveShop(string operater, string merchId, RopStoreRemoveShop rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_StoreShop = CurrentDb.StoreShop.Where(m => m.ShopId == rop.ShopId && m.StoreId == rop.StoreId).FirstOrDefault();
+
+            if (d_StoreShop != null)
+            {
+                CurrentDb.StoreShop.Remove(d_StoreShop);
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+
+            return result;
+        }
+
+        public CustomJsonResult AddShop(string operater, string merchId, RopStoreAddShop rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_StoreShop = CurrentDb.StoreShop.Where(m => m.ShopId == rop.ShopId && m.StoreId == rop.StoreId).FirstOrDefault();
+
+            if (d_StoreShop == null)
+            {
+                d_StoreShop = new StoreShop();
+
+                d_StoreShop.Id = IdWorker.Build(IdType.NewGuid);
+                d_StoreShop.MerchId = merchId;
+                d_StoreShop.StoreId = rop.StoreId;
+                d_StoreShop.ShopId = rop.ShopId;
+                d_StoreShop.Creator = operater;
+                d_StoreShop.CreateTime = DateTime.Now;
+                CurrentDb.StoreShop.Add(d_StoreShop);
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
+            return result;
+        }
     }
 }
 

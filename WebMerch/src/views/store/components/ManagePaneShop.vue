@@ -11,7 +11,11 @@
             <div class="left">
               <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>          <span style="font-size:12px;"> ({{ item.status.text }})</span></div>
             </div>
-            <div class="right" />
+            <div class="right">
+
+              <el-button type="text" @click="handleRemoveShop(item)">移除</el-button>
+
+            </div>
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
@@ -31,9 +35,7 @@
 
           </div>
           <div class="it-component" @click="dialogOpenByShop">
-
             <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
-
           </div>
         </el-card>
       </el-col>
@@ -60,24 +62,24 @@
       </div>
     </el-dialog>
 
-   <el-dialog  :title="'选择门店'" :visible.sync="dialogByShopIsVisible">
-
-   <manage-pane-shop opcode="select" :storeid='storeid'  />
-
-   </el-dialog>
+    <el-dialog v-if="dialogByShopIsVisible" :title="'选择门店'" :visible.sync="dialogByShopIsVisible">
+      <div style="height:600px">
+        <manage-pane-shop opcode="select" :storeid="storeid" :select-method="handleAddShop" />
+      </div>
+    </el-dialog>
 
   </div>
 </template>
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initManageShop, getShops, getMachines } from '@/api/store'
+import { initManageShop, getShops, getMachines, addShop, removeShop } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 import managePaneShop from '@/views/shop/list'
 export default {
-  components: { managePaneShop },
   name: 'ManagePaneMachine',
+  components: { managePaneShop },
   props: {
     storeid: {
       type: String,
@@ -97,7 +99,7 @@ export default {
       listDataByMachine: [],
       storeId: '',
       dialogByShopIsVisible: false,
-      dialogByMachineIsVisible: false,
+      dialogByMachineIsVisible: false
     }
   },
   watch: {
@@ -151,6 +153,36 @@ export default {
           this.listDataByMachine = d
         }
         this.loadingByDialogByMachine = false
+      })
+    },
+    handleAddShop(item) {
+      MessageBox.confirm('确定要选择该门店？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        addShop({ shopId: item.id, storeId: this.storeid }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.dialogByShopIsVisible = false
+            this.getListData(this.listQuery)
+          }
+        })
+      })
+    },
+    handleRemoveShop(item) {
+      MessageBox.confirm('确定要移除该门店？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeShop({ shopId: item.id, storeId: this.storeid }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.dialogByShopIsVisible = false
+            this.getListData(this.listQuery)
+          }
+        })
       })
     }
   }

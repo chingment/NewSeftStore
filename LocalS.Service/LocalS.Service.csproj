@@ -248,11 +248,13 @@
     <Compile Include="Api\Merch\RModels\RopShopEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddMachine.cs" />
+    <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreRemoveKind.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreRemoveMachine.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopAdminUserEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopStoreRemoveShop.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreSaveFront.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreSaveKind.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreSaveKindSpu.cs" />

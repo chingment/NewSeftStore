@@ -96,34 +96,38 @@ namespace LocalS.Service.Api.Merch
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            using (TransactionScope ts = new TransactionScope())
+
+            var d_Shop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Name == rop.Name).FirstOrDefault();
+            if (d_Shop != null)
             {
-                var isExistStore = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Name == rop.Name).FirstOrDefault();
-                if (isExistStore != null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
-                }
-
-                var store = new Store();
-                store.Id = IdWorker.Build(IdType.NewGuid);
-                store.MerchId = merchId;
-                store.Name = rop.Name;
-                store.ContactAddress = rop.ContactAddress;
-                //store.BriefDes = rop.BriefDes;
-                //store.IsOpen = false;
-                //store.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
-                //store.MainImgUrl = ImgSet.GetMain_O(store.DisplayImgUrls);
-                store.CreateTime = DateTime.Now;
-                store.Creator = operater;
-                CurrentDb.Store.Add(store);
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
             }
+
+            d_Shop = new Shop();
+            d_Shop.Id = IdWorker.Build(IdType.NewGuid);
+            d_Shop.MerchId = merchId;
+            d_Shop.Name = rop.Name;
+            d_Shop.Address = rop.Address;
+            d_Shop.AreaCode = rop.AreaCode;
+            d_Shop.AreaName = rop.AreaName;
+            d_Shop.Lat = rop.AddressPoint.Lat;
+            d_Shop.Lng = rop.AddressPoint.Lng;
+            d_Shop.ContactName = rop.ContactName;
+            d_Shop.ContactPhone = rop.ContactPhone;
+            d_Shop.ContactAddress = rop.ContactAddress;
+            d_Shop.BriefDes = rop.BriefDes;
+            d_Shop.IsOpen = false;
+            d_Shop.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+            d_Shop.MainImgUrl = ImgSet.GetMain_O(d_Shop.DisplayImgUrls);
+            d_Shop.CreateTime = DateTime.Now;
+            d_Shop.Creator = operater;
+            CurrentDb.Shop.Add(d_Shop);
+            CurrentDb.SaveChanges();
+
+
+            MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }
