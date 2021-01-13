@@ -70,22 +70,22 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetStoreInitManage();
 
-            var stores = BizFactory.Store.GetAll(merchId);
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
-                if (!store.IsDelete)
+                if (!d_Store.IsDelete)
                 {
-                    if (store.StoreId == storeId)
+                    if (d_Store.Id == storeId)
                     {
                         ret.CurStore = new StoreModel();
-                        ret.CurStore.Id = store.StoreId;
-                        ret.CurStore.Name = store.Name;
-                        ret.CurStore.SctMode = store.SctMode;
+                        ret.CurStore.Id = d_Store.Id;
+                        ret.CurStore.Name = d_Store.Name;
+                        ret.CurStore.SctMode = d_Store.SctMode;
                     }
 
-                    ret.Stores.Add(new StoreModel { Id = store.StoreId, Name = store.Name, SctMode = store.SctMode });
+                    ret.Stores.Add(new StoreModel { Id = d_Store.Id, Name = d_Store.Name, SctMode = d_Store.SctMode });
                 }
             }
 

@@ -151,11 +151,11 @@ namespace LocalS.Service.Api.Merch
 
                 if (adSpace.BelongType == E_AdSpaceBelongType.App)
                 {
-                    var stores = BizFactory.Store.GetAll(merchId);
+                    var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
                     foreach (var store in stores)
                     {
-                        ret.Belongs.Add(new { Id = store.StoreId, Name = string.Format("[店铺]{0}", store.Name) });
+                        ret.Belongs.Add(new { Id = store.Id, Name = string.Format("[店铺]{0}", store.Name) });
                     }
                 }
                 else if (adSpace.BelongType == E_AdSpaceBelongType.Machine)

@@ -36,26 +36,11 @@ namespace LocalS.BLL.Biz
         public bool IsDelete { get; set; }
         public string MerchId { get; set; }
         public string MerchName { get; set; }
-        public string[] AllMachineIds { get; set; }
-        public string[] SellMachineIds { get; set; }
+        //public string[] AllMachineIds { get; set; }
+        //public string[] SellMachineIds { get; set; }
         public string BriefDes { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public bool IsTestMode { get; set; }
         public string SctMode { get; set; }
-        public string[] GetSellChannelRefIds(E_SellChannelRefType shopMode)
-        {
-            string[] sellChannelRefIds = null;
-            if (shopMode == E_SellChannelRefType.Machine)
-            {
-                sellChannelRefIds = this.SellMachineIds;
-            }
-            else if (shopMode == E_SellChannelRefType.Mall)
-            {
-                sellChannelRefIds = new string[] { SellChannelStock.MallSellChannelRefId };
-            }
-
-
-            return sellChannelRefIds;
-        }
     }
 }

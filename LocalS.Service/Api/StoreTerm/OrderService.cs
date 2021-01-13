@@ -49,6 +49,10 @@ namespace LocalS.Service.Api.StoreTerm
 
             var shop = CurrentDb.Shop.Where(m => m.Id == d_machine.CurUseShopId).FirstOrDefault();
 
+            if (shop == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "门店信息异常");
+            }
 
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.AppId = AppId.STORETERM;

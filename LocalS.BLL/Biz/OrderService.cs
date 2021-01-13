@@ -431,9 +431,9 @@ namespace LocalS.BLL.Biz
                 {
                     string clientUserName = "匿名";
                     string clientPhoneNumber = null;
-                    var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
-
                     int clientMemberLevel = 0;
+
+                    var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == rop.ClientUserId).FirstOrDefault();
 
                     if (clientUser != null)
                     {
@@ -441,6 +441,7 @@ namespace LocalS.BLL.Biz
                         {
                             clientUserName = clientUser.NickName;
                         }
+
                         clientPhoneNumber = clientUser.PhoneNumber;
                         clientMemberLevel = clientUser.MemberLevel;
                     }
@@ -470,7 +471,7 @@ namespace LocalS.BLL.Biz
                             {
                                 if (productSku.SellChannelRefIds == null || productSku.SellChannelRefIds.Length == 0)
                                 {
-                                    sellChannelRefIds = store.SellMachineIds;
+                                   // sellChannelRefIds = CurrentDb.Machine.Where(m=>m.CurUseStoreId==rop)
                                 }
                                 else
                                 {
