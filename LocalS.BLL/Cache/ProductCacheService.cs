@@ -104,7 +104,6 @@ namespace LocalS.BLL
             return r_spu;
         }
 
-
         public ProductSkuInfoModel GetSkuStock(E_SellChannelRefType refType, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
         {
             var productSkuInfo = GetSkuInfo(merchId, productSkuId);
@@ -157,7 +156,6 @@ namespace LocalS.BLL
 
             return productSkuInfo;
         }
-
 
         public List<ProductSkuInfoModel> GetSkuInfo(string merchId, string[] productSkuIds)
         {
