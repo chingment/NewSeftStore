@@ -61,10 +61,10 @@
     <el-dialog v-if="dialogByEditIsVisible" :title="'编辑'" :visible.sync="dialogByEditIsVisible" width="600px" append-to-body>
       <div style="height:500px">
         <el-form ref="form" v-loading="loadingByDetails" :model="form" :rules="rules" label-width="80px">
-          <el-form-item label="店铺名称" prop="name">
+          <el-form-item label="门店名称" prop="name">
             <el-input v-model="form.name" clearable />
           </el-form-item>
-          <el-form-item label="店铺地址" prop="address">
+          <el-form-item label="门店地址" prop="address">
             <span>{{ form.address }}</span>
             <el-button type="text" @click="getGpsList">选择</el-button>
           </el-form-item>
@@ -77,7 +77,7 @@
           <el-form-item label="联系地址" prop="contactAddress">
             <el-input v-model="form.contactAddress" clearable />
           </el-form-item>
-          <el-form-item label="店铺图片" prop="displayImgUrls">
+          <el-form-item label="门店图片" prop="displayImgUrls">
             <el-input :value="form.displayImgUrls.toString()" style="display:none" />
             <el-upload
               ref="uploadImg"

@@ -5,8 +5,17 @@
       <el-form-item label="名称" prop="name">
         <span>{{ store.name }}</span>
       </el-form-item>
+      <el-form-item label="联系人" prop="contactAddress">
+        <span>{{ store.contactName }}</span>
+      </el-form-item>
+      <el-form-item label="联系电话" prop="contactAddress">
+        <span>{{ store.contactPhone }}</span>
+      </el-form-item>
       <el-form-item label="联系地址" prop="contactAddress">
         <span>{{ store.contactAddress }}</span>
+      </el-form-item>
+      <el-form-item label="简介" prop="contactAddress">
+        <span>{{ store.briefDes }}</span>
       </el-form-item>
     </el-form>
 
@@ -14,12 +23,8 @@
 </template>
 <script>
 
-import { MessageBox } from 'element-ui'
-import { edit, initManageBaseInfo } from '@/api/store'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
-import Sortable from 'sortablejs'
-import { all } from 'q'
-
+import { initManageBaseInfo } from '@/api/store'
+import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneBaseInfo',
   props: {
@@ -35,6 +40,8 @@ export default {
       store: {
         id: '',
         name: '',
+        contactName: '',
+        contactPhone: '',
         contactAddress: ''
       }
     }
@@ -67,57 +74,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-#dsss .el-form-item__label:before{
-  content: '';
-  margin-left:1000px;
-}
-
-#store_baseinfo{
-.el-form .el-form-item{
-  max-width: 600px;
-}
-
-.el-upload-list >>> .sortable-ghost {
-  opacity: .8;
-  color: #fff !important;
-  background: #42b983 !important;
-}
-
-.el-upload-list >>> .el-tag {
-  cursor: pointer;
-}
-
-.bm-view {
-  width: 100%;
-  height: 200px;
-  margin-top: 20px;
-}
-
-.autoAddressClass{
-  li {
-    display: flex;
-    i.el-icon-search {margin-top:11px;}
-    .mgr10 {margin-right: 10px;}
-    .title {
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-.address-ct{
-  flex: 1;
-}
-
-    .address {
-      line-height: 1;
-      font-size: 12px;
-      color: #b4b4b4;
-      margin-bottom: 5px;
-    }
-
-  }
-}
-
-}
 
 </style>

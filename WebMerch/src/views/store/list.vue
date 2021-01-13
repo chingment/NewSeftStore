@@ -1,12 +1,7 @@
 <template>
   <div id="store_list" class="app-container">
 
-    <div class="circle-status-bar">
-      <div class="circle-item"> <span class="icon-status icon-status-1" /> <span class="name">关闭</span></div>
-      <div class="circle-item"> <span class="icon-status icon-status-2" /> <span class="name">正常</span></div>
-    </div>
     <div class="filter-container">
-
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="店铺名称" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
@@ -25,7 +20,7 @@
           <div slot="header" class="it-header clearfix">
             <div class="left">
 
-              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span> </div>
+              <div class="circle-item"> <span class="name">{{ item.name }}</span> </div>
 
             </div>
             <div class="right">
