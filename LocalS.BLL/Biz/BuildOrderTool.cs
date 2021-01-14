@@ -473,7 +473,7 @@ namespace LocalS.BLL.Biz
             List<BuildOrder.Child> buildOrderChilds = new List<BuildOrder.Child>();
 
             var d_s_orders = (from d in _buildSkus select new { d.ShopMode, d.ReceiveMode, d.ShopId }).Distinct().ToArray();
-
+            LogUtil.Info("myabc.d_s_orders:" + d_s_orders.ToJsonString());
             foreach (var d_s_order in d_s_orders)
             {
                 var shopModeProductSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode && m.ShopId == d_s_order.ShopId).ToList();
@@ -514,9 +514,13 @@ namespace LocalS.BLL.Biz
                         foreach (var item in productSku_Stocks)
                         {
                             bool isFlag = false;
+
+
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
-                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == shopModeProductSku.ShopId && m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == d_s_order.ShopMode).Sum(m => m.Quantity);//已订的数量
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == item.ShopId && m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == item.RefType).Sum(m => m.Quantity);//已订的数量
+                                LogUtil.Info("myabc.reservedQuantity:"+reservedQuantity);
+                                LogUtil.Info("myabc.needReserveQuantity:" + shopModeProductSku.Quantity);
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
@@ -556,6 +560,9 @@ namespace LocalS.BLL.Biz
                 }
 
             }
+
+
+            LogUtil.Info("buildOrderChilds:" + buildOrderChilds.ToJsonString());
 
             var sumSaleAmount = buildOrderChilds.Sum(m => m.SaleAmount);
             var sumDiscountAmount = buildOrderChilds.Sum(m => m.DiscountAmount);
