@@ -72,7 +72,7 @@
 				</view>
 			</view>
 
-			<view class="pdMachineShop">
+			<view class="pdMachineShop" wx:if="{{isSupMachineShop}}">
 
 				<view class="ct">
 					<view class="lt">

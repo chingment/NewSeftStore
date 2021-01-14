@@ -11,6 +11,7 @@
 				<view class="store" bindtap="goChoiceShop">
 					<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
 					<text class="title skeleton-rect">{{curShop.name}}</text>
+					<image class="more-img" src="/content/default/images/arro_down.png"></image>
 				</view>
 
 				<view class="searchbox-ct" bindtap="searchClick">
