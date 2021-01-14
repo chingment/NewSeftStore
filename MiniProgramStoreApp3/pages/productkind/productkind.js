@@ -166,7 +166,7 @@ Component({
 
 
       _this.setData({
-        storeId: storeageutil.getStoreId()
+        storeId: storeage.getStoreId()
       })
       _this.getPageData()
 

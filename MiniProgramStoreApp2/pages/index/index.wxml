@@ -72,7 +72,7 @@
 				</view>
 			</view>
 
-			<view class="pdMachineShop"> 
+			<!-- <view class="pdMachineShop"> 
 			
 				<view class="it" bindtap="clickToFc" data-ischecklogin="false"
 							data-url="/pages/shopmarket/shopmarket">
@@ -81,7 +81,7 @@
 						
 				</view>
 			
-			</view>
+			</view> -->
 
 			<view class="pdRent" wx:if="{{pdRent.list.length>0}}">
 				<view class="ct">

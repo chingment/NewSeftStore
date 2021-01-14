@@ -1,5 +1,6 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiStore = require('../../api/store.js')
+const storeage = require('../../utils/storeageutil.js')
 const app = getApp()
 
 Page({
@@ -14,7 +15,8 @@ Page({
     if (isClearCache != undefined) {
       wx.clearStorage()
     }
-    var storeId = ownRequest.getCurrentStoreId()
+    
+    var storeId = storeage.getStoreId()
 
     function getStoreList(lat, lng) {
       apiStore.list({
@@ -75,7 +77,7 @@ Page({
   onUnload: function () {},
   selectStore: function (e) {
     var store = e.currentTarget.dataset.replyStore
-    ownRequest.setCurrentStoreId(store.id);
+   // ownRequest.setCurrentStoreId(store.id);
     wx.reLaunch({
       url: ownRequest.getReturnUrl()
     })

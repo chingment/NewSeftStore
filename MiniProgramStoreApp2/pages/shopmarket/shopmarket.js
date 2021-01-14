@@ -64,7 +64,7 @@ Page({
     }).exec()
 
     _this.setData({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: storeage.getStoreId(),
       shopId: 'f748e0fb203a4f82bd271f4349f663c1'
     })
 
@@ -314,7 +314,7 @@ Page({
 
       apiCart.getCartData({
         shopMode: _this.data.shopMode,
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: storeage.getStoreId(),
         shopId: _this.data.shopId
       }).then(function (res) {
         if (res.result == 1) {

@@ -1,23 +1,8 @@
 const storeage = require('../utils/storeageutil.js')
 var loginPage = '../login/login'
 
-function getAccessonToken() {
-  var token = storeage.getAccessToken()
-  return token
-}
-
-function getCurrentStoreId() {
-  var id = storeage.getCurrentStoreId();
-  return id
-}
-
-
-function setCurrentStoreId(id) {
-  storeage.setCurrentStoreId(id)
-}
 
 function isLogin() {
-
   var acctoken = storeage.getAccessToken()
   if (acctoken == "") {
     // showLoginModal()
@@ -56,26 +41,23 @@ function getReturnUrl() {
 }
 
 
-function isSelectedStore(isGoSelect) {
-  var storeId = getCurrentStoreId()
-  if (storeId == undefined || storeId == null || storeId == "") {
-    isGoSelect = isGoSelect == undefined ? false : isGoSelect
-    if (isGoSelect) {
-      wx.navigateTo({ //保留当前页面，跳转到应用内的某个页面（最多打开5个页面，之后按钮就没有响应的）
-        url: "/pages/store/store"
-      })
-    }
-    return false
-  } else {
-    return true
-  }
-}
+// function isSelectedStore(isGoSelect) {
+//   var storeId = 
+//   if (storeId == undefined || storeId == null || storeId == "") {
+//     isGoSelect = isGoSelect == undefined ? false : isGoSelect
+//     if (isGoSelect) {
+//       wx.navigateTo({ //保留当前页面，跳转到应用内的某个页面（最多打开5个页面，之后按钮就没有响应的）
+//         url: "/pages/store/store"
+//       })
+//     }
+//     return false
+//   } else {
+//     return true
+//   }
+// }
 
 module.exports = {
   goLogin: goLogin,
-  getCurrentStoreId: getCurrentStoreId,
-  setCurrentStoreId: setCurrentStoreId,
-  isSelectedStore: isSelectedStore,
   isLogin: isLogin,
   getReturnUrl: getReturnUrl
 }

@@ -3,7 +3,7 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
-const config = require('../../config');
+const config = require('../../config')
 const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
@@ -15,7 +15,8 @@ Page({
   data: {
     tag: "productdetails",
     storeId: null,
-    shopMode: null,
+    shopMode: 1,
+    shopId: '0',
     shopMethod: 1,
     specsDialog: {
       isShow: false
@@ -42,25 +43,21 @@ Page({
 
     var skuId = options.skuId == undefined ? "0" : options.skuId
     var storeId = options.storeId == undefined ? undefined : options.storeId
-    var shopMode = options.shopMode == undefined ? undefined : options.shopMode
+    var shopMode = options.shopMode == undefined ? 1 : options.shopMode
     var shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
     var reffSign = options.reffSign == undefined ? '' : options.reffSign
 
     if (storeId == undefined) {
-      storeId = ownRequest.getCurrentStoreId()
+      storeId = storeage.getStoreId()
     }
 
-    if (shopMode == undefined) {
-      shopMode = storeage.getCurrentShopMode()
-    }
 
     console.log("reffSign:" + reffSign)
 
     storeage.setReffSign(reffSign)
 
-    storeage.setCurrentShopMode(shopMode)
 
-    ownRequest.setCurrentStoreId(storeId)
+    storeage.setStoreId(storeId)
 
     _this.setData({
       storeId: storeId,
@@ -89,7 +86,8 @@ Page({
       storeId: storeId,
       skuId: skuId,
       shopMode: shopMode,
-      shopMethod: shopMethod
+      shopMethod: shopMethod,
+      shopId: _this.data.shopId
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -136,13 +134,15 @@ Page({
       id: skuId,
       quantity: 1,
       selected: true,
-      shopMode: _this.data.shopMode
+      shopMode: _this.data.shopMode,
+      shopId: _this.data.shopId
     });
 
     apiCart.operate({
       storeId: _this.data.storeId,
       operate: 2,
-      productSkus: productSkus
+      productSkus: productSkus,
+      shopId: _this.data.shopId
     }).then(function (res) {
       if (res.result == 1) {
         toast.show({
@@ -152,7 +152,7 @@ Page({
         var cartDialog = _this.data.cartDialog
         cartDialog.dataS = res.data
         cartDialog.isShow = false
-    
+
         _this.setData({
           cartDialog: cartDialog
         })
@@ -198,7 +198,8 @@ Page({
       id: skuId,
       quantity: 1,
       shopMode: _this.data.shopMode,
-      shopMethod: 1
+      shopMethod: 1,
+      shopId: _this.data.shopId
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
@@ -229,7 +230,8 @@ Page({
       id: skuId,
       quantity: 1,
       shopMode: _this.data.shopMode,
-      shopMethod: _this.data.shopMethod
+      shopMethod: _this.data.shopMethod,
+      shopId: _this.data.shopId
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
@@ -238,7 +240,7 @@ Page({
       },
     })
   },
-  immeMavkBuy:function(e){
+  immeMavkBuy: function (e) {
     var _this = this
 
     if (_this.data.productSku.isOffSell) {
@@ -260,7 +262,8 @@ Page({
       id: skuId,
       quantity: 1,
       shopMode: _this.data.shopMode,
-      shopMethod: _this.data.shopMethod
+      shopMethod: _this.data.shopMethod,
+      shopId: _this.data.shopId
     })
     wx.navigateTo({
       url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,

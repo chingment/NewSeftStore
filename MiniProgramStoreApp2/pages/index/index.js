@@ -44,7 +44,8 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: _this.data.shopMode
+        shopMode: _this.data.shopMode,
+        shopId: '0',
       });
 
       apiCart.operate({
@@ -148,7 +149,7 @@ Component({
       app.globalData.skeletonPage = _this;
 
       _this.setData({
-        storeId: ownRequest.getCurrentStoreId()
+        storeId: storeage.getStoreId()
       })
       _this.getPageData()
 
@@ -181,7 +182,8 @@ Component({
         id: skuId,
         quantity: 1,
         shopMode: _this.data.shopMode,
-        shopMethod: 2
+        shopMethod: 2,
+        shopId: '0'
       })
       wx.navigateTo({
         url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',

@@ -1,7 +1,7 @@
 const ownRequest = require('../../own/ownRequest.js')
 const apiPersonal = require('../../api/personal.js')
 const apiServiceFun = require('../../api/servicefun.js')
-const storeageutil = require('../../utils/storeageutil.js')
+const storeage = require('../../utils/storeageutil.js')
 const toast = require('../../utils/toastutil')
 const app = getApp()
 Component({
@@ -43,9 +43,9 @@ Component({
     },
     getPageData: function (e) {
       var _this = this
-      if (storeageutil.getStoreId() != undefined) {
+      if (storeage.getStoreId() != undefined) {
         apiPersonal.pageData({
-          openId: storeageutil.getOpenId()
+          openId: storeage.getOpenId()
         }).then(function (res) {
           if (res.result == 1) {
             var d = res.data

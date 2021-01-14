@@ -47,11 +47,6 @@ Page({
   onLoad: function (options) {
     var _this = this
 
-    var _this = this
-    if (!ownRequest.isSelectedStore(true)) {
-      return
-    }
-
     var _orderIds = options.orderIds == undefined ? null : options.orderIds
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
@@ -68,7 +63,7 @@ Page({
     }
 
     _this.setData({
-      storeId: ownRequest.getCurrentStoreId(),
+      storeId: storeage.getStoreId(),
       orderIds: orderIds,
       productSkus: _productSkus,
       action: _action,

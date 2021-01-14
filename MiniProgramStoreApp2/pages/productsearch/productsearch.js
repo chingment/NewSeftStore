@@ -22,7 +22,7 @@ Page({
       items: []
     },
     storeId: '',
-    shopMode: 0,
+    shopMode: 1,
     scrollHeight: 0,
     specsDialog: {
       isShow: false
@@ -42,8 +42,7 @@ Page({
     var _this = this
 
     _this.setData({
-      shopMode: storeage.getCurrentShopMode(),
-      storeId: ownRequest.getCurrentStoreId()
+      storeId: storeage.getStoreId()
     })
 
     var kindId = options.kindId == undefined ? "" : options.kindId
@@ -264,8 +263,8 @@ Page({
     if (ownRequest.isLogin()) {
 
       apiCart.getCartData({
-        shopMode: storeage.getCurrentShopMode(),
-        storeId: ownRequest.getCurrentStoreId()
+        shopMode: _this.data.shopMode,
+        storeId: storeage.getStoreId()
       }).then(function (res) {
         if (res.result == 1) {
           var cartDialog = _this.data.cartDialog

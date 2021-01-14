@@ -33,7 +33,7 @@ Page({
       }
     })
 
-    _this.setData({storeId:ownRequest.getCurrentStoreId()})
+    _this.setData({storeId:storeage.getStoreId()})
   },
 
   /**
