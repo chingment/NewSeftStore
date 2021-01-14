@@ -41,23 +41,24 @@ function getReturnUrl() {
 }
 
 
-// function isSelectedStore(isGoSelect) {
-//   var storeId = 
-//   if (storeId == undefined || storeId == null || storeId == "") {
-//     isGoSelect = isGoSelect == undefined ? false : isGoSelect
-//     if (isGoSelect) {
-//       wx.navigateTo({ //保留当前页面，跳转到应用内的某个页面（最多打开5个页面，之后按钮就没有响应的）
-//         url: "/pages/store/store"
-//       })
-//     }
-//     return false
-//   } else {
-//     return true
-//   }
-// }
+function isSelectedShop(isGoSelect) {
+  var shopId =storeage.getShopId() 
+  if (shopId == undefined || shopId == null || shopId == "") {
+    isGoSelect = isGoSelect == undefined ? false : isGoSelect
+    if (isGoSelect) {
+      wx.navigateTo({ //保留当前页面，跳转到应用内的某个页面（最多打开5个页面，之后按钮就没有响应的）
+        url: "/pages/shopchoice/shopchoice"
+      })
+    }
+    return false
+  } else {
+    return true
+  }
+}
 
 module.exports = {
   goLogin: goLogin,
   isLogin: isLogin,
-  getReturnUrl: getReturnUrl
+  getReturnUrl: getReturnUrl,
+  isSelectedShop:isSelectedShop
 }

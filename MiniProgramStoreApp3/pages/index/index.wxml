@@ -72,16 +72,29 @@
 				</view>
 			</view>
 
-			<!-- <view class="pdMachineShop"> 
-			
-				<view class="it" bindtap="clickToFc" data-ischecklogin="false"
-							data-url="/pages/shopmarket/shopmarket">
-						
-								<text class='txt'>门店自提</text>
-						
+			<view class="pdMachineShop" wx:if="{{isSupMachineShop}}">
+
+				<view class="ct">
+					<view class="lt">
+						<image class="img" src="/content/default/images/machine.png"></image>
+					</view>
+					<view class="rt">
+
+						<view class="t1">线上下单线下自取</view>
+						<view class="t2"><text class="t22">7X24小时</text> <text class="t22">智能遍历</text> <text class="t22">商品丰富</text> </view>
+						<view class="t3">
+
+							<view class="it" bindtap="clickToFc" data-ischecklogin="false" data-url="/pages/shopmarket/shopmarket">
+
+								<text class="btn-rent">进入购物</text>
+
+							</view>
+
+						</view>
+					</view>
 				</view>
-			
-			</view> -->
+			</view>
+
 
 			<view class="pdRent" wx:if="{{pdRent.list.length>0}}">
 				<view class="ct">

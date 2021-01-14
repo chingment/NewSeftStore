@@ -9,11 +9,13 @@ Page({
    */
   data: {
     tag: "search",
-    navH:40,
-    statusBarHeight:0,
+    navH: 40,
+    statusBarHeight: 0,
     searchInputFocus: false,
-    searchResult:{
-      productSkus:[]
+    shopId: '0',
+    shopMethod: 1,
+    searchResult: {
+      productSkus: []
     }
   },
 
@@ -21,19 +23,34 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-   var _this=this
+    var _this = this
+
+    var skuId = options.skuId == undefined ? "0" : options.skuId
+    var shopMode = options.shopMode == undefined ? 1 : options.shopMode
+    var shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
+    var shopId = options.shopMethod == undefined ? '0' : options.shopId
+
     wx.getSystemInfo({
       success: res => {
         //导航高度
-        var statusBarHeight=res.statusBarHeight
+        var statusBarHeight = res.statusBarHeight
         var navHeight = statusBarHeight + 46
-        _this.setData({statusBarHeight:statusBarHeight,navH:navHeight})
-      }, fail(err) {
+        _this.setData({
+          statusBarHeight: statusBarHeight,
+          navH: navHeight
+        })
+      },
+      fail(err) {
         console.log(err);
       }
     })
 
-    _this.setData({storeId:storeage.getStoreId()})
+    _this.setData({
+      shopMode: shopMode,
+      shopMethod: shopMethod,
+      shopId: shopId,
+      storeId: storeage.getStoreId()
+    })
   },
 
   /**
@@ -84,23 +101,23 @@ Page({
   onShareAppMessage: function () {
 
   },
-  navGoBackClick :function(){
+  navGoBackClick: function () {
     wx.navigateBack({
       complete: (res) => {},
     })
   },
   bindKeyInput: function (e) {
-    var _this=this
+    var _this = this
     var val = e.detail.value
     console.log(val)
 
     apiSearch.tobeSearch({
-      storeId:_this.data.storeId,
+      storeId: _this.data.storeId,
       key: val
-    }).then(function(res) {
+    }).then(function (res) {
       if (res.result == 1) {
         _this.setData({
-          searchResult:res.data
+          searchResult: res.data
         })
       }
     })

@@ -45,6 +45,7 @@ Page({
     var storeId = options.storeId == undefined ? undefined : options.storeId
     var shopMode = options.shopMode == undefined ? 1 : options.shopMode
     var shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
+    var shopId = options.shopId == undefined ? '0' : options.shopId
     var reffSign = options.reffSign == undefined ? '' : options.reffSign
 
     if (storeId == undefined) {
@@ -60,6 +61,7 @@ Page({
     storeage.setStoreId(storeId)
 
     _this.setData({
+      shopId: shopId,
       storeId: storeId,
       shopMode: shopMode,
       shopMethod: shopMethod
