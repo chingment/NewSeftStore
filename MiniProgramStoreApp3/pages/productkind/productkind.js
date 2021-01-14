@@ -20,7 +20,7 @@ Component({
     tag: 'main-productkind',
     isOnReady: false,
     shopMode: 1,
-    shopId: 0,
+    shopId: '0',
     specsDialog: {
       isShow: false
     }
@@ -166,7 +166,7 @@ Component({
 
 
       _this.setData({
-        storeId: ownRequest.getCurrentStoreId()
+        storeId: storeageutil.getStoreId()
       })
       _this.getPageData()
 

@@ -16,7 +16,7 @@ function operate(params) {
       if (res.result == 1) {
         storeage.setCart(res.data)
         apiGlobal.msgTips({
-          storeId: ownRequest.getCurrentStoreId()
+          storeId: storeage.getStoreId()
         })
       }
       resolve(res);
@@ -34,7 +34,7 @@ function pageData() {
       url: config.apiUrl.cartPageData,
       isShowLoading: false,
       urlParams: {
-        storeId: ownRequest.getCurrentStoreId()
+        storeId: storeage.getStoreId()
       }
     }).then(function (res) {
 

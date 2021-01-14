@@ -187,12 +187,9 @@ Page({
   },
   _onShow() {
     var _this = this
-    if (!ownRequest.isSelectedStore(true)) {
-      return
-    }
 
     apiGlobal.msgTips({
-      storeId: ownRequest.getCurrentStoreId()
+      storeId: storeage.getStoreId()
     })
 
     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0

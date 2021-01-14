@@ -104,7 +104,7 @@ Page({
     _this.setData({
       tabsSliderIndex: _tabsSliderIndex,
       tabs: _this.data.tabs,
-      storeId: ownRequest.getCurrentStoreId()
+      storeId: storeage.getStoreId()
     })
 
     wx.createSelectorQuery().selectAll('.tabbar-items').boundingClientRect(function (rect) {

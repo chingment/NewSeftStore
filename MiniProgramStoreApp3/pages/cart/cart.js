@@ -1,5 +1,6 @@
 const util = require('../../utils/util')
 const toast = require('../../utils/toastutil')
+const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiGlobal = require('../../api/global.js')
@@ -54,7 +55,8 @@ Component({
         id: productSku.id,
         quantity: 1,
         selected: productSku.selected,
-        shopMode: productSku.shopMode
+        shopMode: productSku.shopMode,
+        shopId: productSku.shopId
       });
 
       function _operate() {
@@ -215,7 +217,7 @@ Component({
       var _this = this
 
       _this.setData({
-        storeId: ownRequest.getCurrentStoreId(),
+        storeId: storeage.getStoreId(),
         isLogin: ownRequest.isLogin()
       })
 
@@ -252,7 +254,7 @@ Component({
               quantity: blocks[i].productSkus[j].quantity,
               shopMode: blocks[i].productSkus[j].shopMode,
               shopMethod: 1,
-              shopId:blocks[i].productSkus[j].shopId
+              shopId: blocks[i].productSkus[j].shopId
             })
           }
         }
@@ -273,8 +275,12 @@ Component({
       })
     },
     clickToGoShop: function (e) {
-      e.currentTarget.dataset.replyIndex=1
-      this.triggerEvent('callSomeFun', {"dataset":{"replyIndex":1}})
+      e.currentTarget.dataset.replyIndex = 1
+      this.triggerEvent('callSomeFun', {
+        "dataset": {
+          "replyIndex": 1
+        }
+      })
     },
     clickToGoLogin: function (e) {
       ownRequest.goLogin()

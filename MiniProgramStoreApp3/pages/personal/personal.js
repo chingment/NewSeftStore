@@ -43,7 +43,7 @@ Component({
     },
     getPageData: function (e) {
       var _this = this
-      if (ownRequest.getCurrentStoreId() != undefined) {
+      if (storeageutil.getStoreId() != undefined) {
         apiPersonal.pageData({
           openId: storeageutil.getOpenId()
         }).then(function (res) {

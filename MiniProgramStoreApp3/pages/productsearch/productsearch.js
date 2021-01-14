@@ -42,7 +42,7 @@ Page({
     var _this = this
 
     _this.setData({
-      storeId: ownRequest.getCurrentStoreId()
+      storeId: storeage.getStoreId()
     })
 
     var kindId = options.kindId == undefined ? "" : options.kindId
@@ -264,7 +264,7 @@ Page({
 
       apiCart.getCartData({
         shopMode: _this.data.shopMode,
-        storeId: ownRequest.getCurrentStoreId()
+        storeId: storeage.getStoreId()
       }).then(function (res) {
         if (res.result == 1) {
           var cartDialog = _this.data.cartDialog

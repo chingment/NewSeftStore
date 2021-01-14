@@ -124,7 +124,7 @@ Component({
       function _operate() {
 
         apiCart.operate({
-          storeId: ownRequest.getCurrentStoreId(),
+          storeId: storeage.getStoreId(),
           operate: operate,
           productSkus: operateProductSkus
         }).then(function (res) {

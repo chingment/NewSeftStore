@@ -3,7 +3,8 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
-const config = require('../../config');
+const config = require('../../config')
+const storeageutil = require('../../utils/storeageutil.js')
 const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
@@ -48,7 +49,7 @@ Page({
     var reffSign = options.reffSign == undefined ? '' : options.reffSign
 
     if (storeId == undefined) {
-      storeId = ownRequest.getCurrentStoreId()
+      storeId = storeageutil.getStoreId()
     }
 
 
@@ -57,7 +58,7 @@ Page({
     storeage.setReffSign(reffSign)
 
 
-    ownRequest.setCurrentStoreId(storeId)
+    storeageutil.setStoreId(storeId)
 
     _this.setData({
       storeId: storeId,

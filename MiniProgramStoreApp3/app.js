@@ -98,7 +98,7 @@ App({
               storeage.setMerchId(d.merchId)
               storeage.setStoreId(d.storeId) //指定设置单店铺模式，为NULL 多店铺模式
               if (d.storeId != null) {
-                storeage.setCurrentStoreId(d.storeId) //设置当前店铺
+                storeage.setStoreId(d.storeId) //设置当前店铺
               }
 
               _this.globalData.checkConfig = true
