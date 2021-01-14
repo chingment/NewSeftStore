@@ -308,3 +308,52 @@
   width: 50rpx;
   height: 50rpx;
 }
+
+.pdMachineShop .ct{
+  display: flex;
+
+  margin-top: 14rpx;
+    margin-bottom: 14rpx;
+    padding: 20rpx 0;
+    display: flex;
+    border-radius: 12rpx;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.pdMachineShop .lt {
+  width: 250rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.pdMachineShop .lt .img{
+  width: 220rpx;
+  height: 220rpx;
+}
+
+.pdMachineShop .rt {
+  flex:1
+}
+
+.pdMachineShop .t1 {
+  font-weight: 800;
+  font-size: 32rpx;
+  margin-top: 30rpx;
+}
+
+.pdMachineShop .t22 {
+  height: 60rpx;
+    line-height: 60rpx;
+    background-color: #ffb101;
+    color: #fff;
+    border-radius: 5rpx;
+    padding: 8rpx 10rpx;
+    margin-right: 10rpx;
+    font-size: 21rpx
+}
+
+.pdMachineShop .t3 {
+  height: 60rpx;
+  line-height: 60rpx;
+}

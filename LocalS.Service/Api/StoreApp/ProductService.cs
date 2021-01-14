@@ -150,7 +150,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, "0", null, rup.SkuId);
+            var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, rup.ShopId, null, rup.SkuId);
 
             var m_productSku = new ProductSkuModel();
             m_productSku.Id = r_productSku.Id;

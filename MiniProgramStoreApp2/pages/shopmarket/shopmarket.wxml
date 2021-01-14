@@ -35,7 +35,7 @@
 							<block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
 								<view class='it'>
 									<view class="it-left">
-										<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}&shopMethod=1" hover-class="none">
+										<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}&shopMethod=1&shopId={{shopId}}&&shopMode={{shopMode}}" hover-class="none">
 											<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 												<view class="isOffSell-tip">已下架</view>
 											</view>
