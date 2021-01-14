@@ -303,6 +303,7 @@
     <Compile Include="Api\StoreApp\Models\ProductSkuModel.cs" />
     <Compile Include="Api\StoreApp\Models\ProServiceModel.cs" />
     <Compile Include="Api\StoreApp\Models\SelfTakeModel.cs" />
+    <Compile Include="Api\StoreApp\Models\ShopModel.cs" />
     <Compile Include="Api\StoreApp\Models\ShopModeModel.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponRevCenterSt.cs" />
     <Compile Include="Api\StoreApp\RModels\RetGlobalMsgTips.cs" />
@@ -326,6 +327,7 @@
     <Compile Include="Api\StoreApp\RModels\RetCartPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RetCouponMy.cs" />
     <Compile Include="Api\StoreApp\RModels\RetIndexPageData.cs" />
+    <Compile Include="Api\StoreApp\RModels\RetShopMarketPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RopCouponReceive.cs" />
     <Compile Include="Api\StoreApp\RModels\RopServiceFunScanCodeResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RopSmCfSelfTakeOrderCfTake.cs" />
@@ -348,8 +350,10 @@
     <Compile Include="Api\StoreApp\RModels\RupSaleOutletList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSelfPickAddressList.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupShopMartketPageData.cs" />
     <Compile Include="Api\StoreApp\SaleOutletService.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />
+    <Compile Include="Api\StoreApp\ShopMartketService.cs" />
     <Compile Include="Api\StoreApp\StoreFrontService.cs" />
     <Compile Include="Api\StoreApp\ServiceFunService.cs" />
     <Compile Include="Api\StoreApp\SmCfSelfTakeOrderService.cs" />
@@ -379,8 +383,8 @@
     <Compile Include="Api\StoreApp\RModels\RupOrderList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductDetails.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductSearch.cs" />
-    <Compile Include="Api\StoreApp\RModels\RupStoreList.cs" />
-    <Compile Include="Api\StoreApp\StoreService.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupShopList.cs" />
+    <Compile Include="Api\StoreApp\ShopService.cs" />
     <Compile Include="Api\StoreApp\DeliveryAddressService.cs" />
     <Compile Include="Api\StoreSvcChat\OwnService.cs" />
     <Compile Include="Api\StoreSvcChat\RModels\RetOwnGetContactInfos.cs" />

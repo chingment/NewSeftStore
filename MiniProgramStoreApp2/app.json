@@ -2,7 +2,6 @@
   "pages": [
     "pages/main/main",
     "pages/login/login",
-    "pages/store/store",
     "pages/productsearch/productsearch",
     "pages/productdetails/productdetails",
     "pages/deliveryaddress/deliveryaddress",
@@ -26,7 +25,8 @@
     "pages/smcfselftakeorder/smcfselftakeorder",
     "pages/smwtcoupon/smwtcoupon",
     "pages/mycoupondetails/mycoupondetails",
-    "pages/shopmarket/shopmarket"
+    "pages/shopmarket/shopmarket",
+    "pages/shopchoice/shopchoice"
   ],
   "window": {
     "backgroundTextStyle": "light",

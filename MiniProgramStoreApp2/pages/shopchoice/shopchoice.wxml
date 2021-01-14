@@ -2,7 +2,7 @@
 <!-- url="/pages/main/main?storeId={{item.id}}" -->
   <view class="its-a">
     <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-      <view  class="it {{item.id==currentStoreId?'it-selected':''}}" bindtap="selectStore" data-reply-store="{{item}}" >
+      <view  class="it {{item.id==currentChoiceId?'it-selected':''}}" bindtap="choice" data-reply-item="{{item}}" >
         <view class="it-l hide">
           <view class="icon">
             <image class="img" src='/content/default/images/list_icon_withdraw.png'></image>

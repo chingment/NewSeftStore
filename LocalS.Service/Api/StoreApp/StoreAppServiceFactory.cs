@@ -80,11 +80,11 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
-        public static StoreService Store
+        public static ShopService Shop
         {
             get
             {
-                return new StoreService();
+                return new ShopService();
             }
         }
 
@@ -144,5 +144,12 @@ namespace LocalS.Service.Api.StoreApp
             }
         }
 
+        public static ShopMarketService ShopMarket
+        {
+            get
+            {
+                return new ShopMarketService();
+            }
+        }
     }
 }

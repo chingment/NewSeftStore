@@ -3,17 +3,14 @@ const storeage = require('../utils/storeageutil.js')
 const ownRequest = require('../own/ownRequest.js')
 const lumos = require('../utils/lumos.minprogram.js')
 
-function list(urlParams) {
+function pageData(urlParams) {
 
   return lumos.getJson({
-    url: config.apiUrl.storeList,
-    urlParams: {
-      lat: urlParams.lat,
-      lng: urlParams.lng
-    }
+    url: config.apiUrl.shopMarketPageData,
+    urlParams:urlParams
   })
 }
 
 module.exports = {
-  list: list
+  pageData: pageData
 }

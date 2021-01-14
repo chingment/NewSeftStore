@@ -38,7 +38,7 @@ var config = {
     couponDetails: `${host}/Coupon/Details`,
     couponRevCenterSt: `${host}/Coupon/RevCenterSt`,
     couponReceive: `${host}/Coupon/Receive`,
-    storeList: `${host}/Store/List`,
+    shopList: `${host}/Shop/List`,
     operateResult: `${host}/Operate/Result`,
     orderConfirm: `${host}/Order/Confirm`,
     orderReserve: `${host}/Order/Reserve`,
@@ -60,6 +60,7 @@ var config = {
     serviceFunScanCodeResult: `${host}/ServiceFun/ScanCodeResult`,
     smCfSelfTakeOrderCfTake: `${host}/SmCfSelfTakeOrder/CfTake`,
     smCfSelfTakeOrderDetails: `${host}/SmCfSelfTakeOrder/Details`,
+    shopMarketPageData: `${host}/ShopMarket/PageData`,
 
   }
 

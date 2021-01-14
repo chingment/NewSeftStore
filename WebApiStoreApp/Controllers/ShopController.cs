@@ -4,13 +4,13 @@ using System.Web.Http;
 
 namespace WebApiStoreApp.Controllers
 {
-    public class StoreController : OwnApiBaseController
+    public class ShopController : OwnApiBaseController
     {
         [AllowAnonymous]
         [HttpGet]
-        public OwnApiHttpResponse List([FromUri]RupStoreList rup)
+        public OwnApiHttpResponse List([FromUri]RupShopList rup)
         {
-            var result = StoreAppServiceFactory.Store.List(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Shop.List(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

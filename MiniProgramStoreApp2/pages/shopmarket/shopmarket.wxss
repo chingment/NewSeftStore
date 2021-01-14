@@ -147,3 +147,43 @@ height:42rpx;
   padding: 60rpx;
   font-size: 24rpx;
 }
+
+
+
+.store {
+  align-items: center;
+  display: flex;
+  padding: 8rpx 0;
+  height: 45prx;
+  float:left;
+  width:50%
+}
+
+
+.store .icon-img{
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 12rpx;
+}
+
+.store .title {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.store .more-img {
+  width: 22rpx;
+  height: 23rpx;
+}
+
+.shopmode{
+  float:right;
+  display: flex;
+  align-items: center;
+  justify-content: content;
+  justify-items: center;
+  height: 100%;
+}

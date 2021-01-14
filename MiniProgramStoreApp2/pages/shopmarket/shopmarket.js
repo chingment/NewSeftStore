@@ -1,7 +1,7 @@
 const ownRequest = require('../../own/ownRequest.js')
 const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
-const apiKind = require('../../api/kind.js')
+const apiShopMarket = require('../../api/shopmarket.js')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
 const app = getApp()
@@ -38,6 +38,7 @@ Page({
   onLoad: function (options) {
 
 
+
   },
 
   /**
@@ -63,9 +64,11 @@ Page({
 
     }).exec()
 
+    ownRequest.isSelectedShop(true)
+
     _this.setData({
       storeId: storeage.getStoreId(),
-      shopId: 'f748e0fb203a4f82bd271f4349f663c1'
+      shopId: storeage.getShopId()
     })
 
     _this.getPageData()
@@ -205,7 +208,7 @@ Page({
   getPageData: function () {
     var _this = this
 
-    apiKind.pageData({
+    apiShopMarket.pageData({
       storeId: _this.data.storeId,
       shopId: _this.data.shopId,
       shopMode: _this.data.shopMode
@@ -221,7 +224,8 @@ Page({
 
         _this.setData({
           searchtips: searchtips,
-          tabs: d.tabs
+          tabs: d.tabs,
+          curShop: d.curShop
         })
 
       }
@@ -335,5 +339,10 @@ Page({
     _this.setData({
       cartDialog: cartDialog
     })
-  }
+  },
+  goChoiceShop: function (e) {
+    wx.navigateTo({
+      url: '/pages/shopchoice/shopchoice',
+    })
+  },
 })

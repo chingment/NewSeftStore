@@ -84,8 +84,9 @@ Component({
       })
     },
     searchClick: function (e) {
+      var _this = this
       wx.navigateTo({
-        url: '/pages/search/search'
+        url: '/pages/search/search?shopId=' + _this.data.shopId + '&shopMode=' + _this.data.shopMode + '&shopMethod=1'
       })
     },
     productLoadMore: function (e) {

@@ -3,6 +3,7 @@ const app = getApp()
 const key_cart = "key_cart"
 const key_accesstoken = "key_accesstoken"
 const key_store_id = "key_store_id"
+const key_shop_id = "key_shop_id"
 const key_open_id = "key_open_id"
 const key_merch_id = "key_merch_id"
 const key_session_key = "session_key"
@@ -105,6 +106,13 @@ function setReffSign(reffsign) {
   wx.setStorageSync(key_reffsign, reffsign)
 }
 
+function getShopId() {
+  return wx.getStorageSync(key_shop_id) || undefined
+}
+
+function setShopId(shop_id) {
+  wx.setStorageSync(key_shop_id, shop_id)
+}
 
 module.exports = {
   getCart: getCart,
@@ -122,5 +130,7 @@ module.exports = {
   getLastSaleOutletId: getLastSaleOutletId,
   setLastSaleOutletId: setLastSaleOutletId,
   setReffSign: setReffSign,
-  getReffSign: getReffSign
+  getReffSign: getReffSign,
+  getShopId: getShopId,
+  setShopId: setShopId
 }

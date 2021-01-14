@@ -1,11 +1,11 @@
 const ownRequest = require('../../own/ownRequest.js')
-const apiStore = require('../../api/store.js')
+const apiShop = require('../../api/shop.js')
 const storeage = require('../../utils/storeageutil.js')
 const app = getApp()
 
 Page({
   data: {
-    tag:'store'
+    tag: 'store'
   },
   onLoad: function (options) {
     var _this = this
@@ -15,18 +15,19 @@ Page({
     if (isClearCache != undefined) {
       wx.clearStorage()
     }
-    
-    var storeId = storeage.getStoreId()
 
-    function getStoreList(lat, lng) {
-      apiStore.list({
+    var shopId = storeage.getShopId()
+
+    function getShopList(lat, lng) {
+      apiShop.list({
+        storeId: storeage.getStoreId(),
         lat: lat,
         lng: lng
       }).then(function (res) {
         if (res.result == 1) {
           _this.setData({
             list: res.data,
-            currentStoreId: storeId == undefined ? '' : storeId
+            currentChoiceId: shopId == undefined ? '' : shopId
           })
         }
       })
@@ -41,7 +42,6 @@ Page({
       }
     }
 
-
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
@@ -52,32 +52,19 @@ Page({
           lng: longitude
         })
         if (loaction.lat != latitude || loaction.lng != longitude) {
-          getStoreList(latitude, longitude)
+          getShopList(latitude, longitude)
         }
       }
     })
 
-
-
-    app.globalData.checkConfig = false
-    
-    if (app.globalData.checkConfig) {
-      console.log("call>>1")
-      getStoreList(loaction.lat, loaction.lng)
-    } else {
-      console.log("call>>2")
-      app.checkConfigReadyCallback = res => {
-        console.log("call>>3," + JSON.stringify(res))
-        getStoreList(loaction.lat, loaction.lng)
-      }
-    }
+    getShopList(loaction.lat, loaction.lng)
 
   },
   onShow: function () {},
   onUnload: function () {},
-  selectStore: function (e) {
-    var store = e.currentTarget.dataset.replyStore
-   // ownRequest.setCurrentStoreId(store.id);
+  choice: function (e) {
+    var choice = e.currentTarget.dataset.replyItem
+    storeage.setShopId(choice.id);
     wx.reLaunch({
       url: ownRequest.getReturnUrl()
     })
