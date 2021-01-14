@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId));
+            MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId));
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -126,7 +126,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
+                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, E_SellChannelRefType.Machine, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
                 }
 
                 return result;
@@ -156,11 +156,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId));
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId));
             }
             else
             {
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId));
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId));
             }
 
             return result;

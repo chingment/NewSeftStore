@@ -12,6 +12,7 @@ namespace LocalS.BLL.Mq
         public string Operater { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
+        public string ShopId { get; set; }
         public string MachineId { get; set; }
         public string EventCode { get; set; }
         public string EventRemark { get; set; }

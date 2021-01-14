@@ -430,7 +430,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.MERCH, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.MERCH, E_SellChannelRefType.Machine, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
 
             return result;
         }
@@ -459,7 +459,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", "", EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

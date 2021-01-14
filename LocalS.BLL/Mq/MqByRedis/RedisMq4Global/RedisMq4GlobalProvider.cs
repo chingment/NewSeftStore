@@ -29,17 +29,18 @@ namespace LocalS.BLL.Mq.MqByRedis
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.PayRefundResultNotify;
             obj.Ticket = ticket;
-            obj.Content = new PayRefundResultNotifyModel { PayPartner = payParner, From = from, PayTransId= payTransId, PayRefundId= payRefundId, Content = content };
+            obj.Content = new PayRefundResultNotifyModel { PayPartner = payParner, From = from, PayTransId = payTransId, PayRefundId = payRefundId, Content = content };
             this.Push(obj);
         }
 
-        public CustomJsonResult PushEventNotify(string operater, string appId, string merchId, string storeId, string machineId, string eventCode, string eventRemark, object eventContent = null)
+        public CustomJsonResult PushEventNotify(string operater, string appId, string merchId, string storeId, string shopId, string machineId, string eventCode, string eventRemark, object eventContent = null)
         {
             var content = new EventNotifyModel();
             content.AppId = appId;
             content.Operater = operater;
             content.MerchId = merchId;
             content.StoreId = storeId;
+            content.ShopId = shopId;
             content.MachineId = machineId;
             content.EventCode = eventCode;
             content.EventRemark = eventRemark;

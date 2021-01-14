@@ -27,11 +27,11 @@ namespace LocalS.BLL.Push
 
                 if (result.Result == ResultType.Success)
                 {
-                    MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machineId, cmd, "命令发送成功");
+                    MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machine.ShopId, machineId, cmd, "命令发送成功");
                 }
                 else
                 {
-                    MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machineId, cmd, "命令发送失败");
+                    MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, machine.StoreId, machine.ShopId, machineId, cmd, "命令发送失败");
                 }
             }
 

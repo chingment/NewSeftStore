@@ -843,7 +843,7 @@ namespace LocalS.BLL.Biz
                     foreach (var order in orders)
                     {
                         Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId });
-                        MqFactory.Global.PushEventNotify(operater, rop.AppId, order.MerchId, order.StoreId, "", EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", order.Id));
+                        MqFactory.Global.PushEventNotify(operater, rop.AppId, order.MerchId, order.StoreId, order.ShopId, order.MachineId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", order.Id));
                         ret.Orders.Add(new RetOrderReserve.Order { Id = order.Id, ChargeAmount = order.ChargeAmount.ToF2Price() });
                     }
 
@@ -1302,7 +1302,7 @@ namespace LocalS.BLL.Biz
                     foreach (var d_order in d_orders)
                     {
                         Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
-                        MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, "", EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", d_order.Id));
+                        MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, d_order.ShopId, d_order.MachineId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", d_order.Id));
 
                     }
                 }
@@ -1459,7 +1459,7 @@ namespace LocalS.BLL.Biz
                         Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
                     }
 
-                    MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, "", EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_order.Id));
+                    MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, d_order.ShopId, d_order.MachineId, EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_order.Id));
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
