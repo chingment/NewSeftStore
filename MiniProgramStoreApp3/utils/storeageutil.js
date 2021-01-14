@@ -40,6 +40,13 @@ function setCart(cartData) {
         cartDialog: cartDialog
       })
     }
+    else if (pages[i].data.tag == "shopmarket") {
+      var cartDialog = pages[i].data.cartDialog
+      cartDialog.dataS = cartData
+      pages[i].setData({
+        cartDialog: cartDialog
+      })
+    }
   }
 
 }
@@ -94,14 +101,6 @@ function setCurrentStoreId(store_id) {
   wx.setStorageSync(key_cur_store_id, store_id)
 }
 
-function getCurrentShopMode() {
-  return wx.getStorageSync(key_cur_shop_model) || undefined
-}
-
-function setCurrentShopMode(shopMode) {
-  wx.setStorageSync(key_cur_shop_model, shopMode)
-}
-
 function getLastSaleOutletId() {
   return wx.getStorageSync(key_last_saleoutlet_id) || ''
 }
@@ -134,8 +133,6 @@ module.exports = {
   setSessionKey: setSessionKey,
   getCurrentStoreId: getCurrentStoreId,
   setCurrentStoreId: setCurrentStoreId,
-  getCurrentShopMode: getCurrentShopMode,
-  setCurrentShopMode: setCurrentShopMode,
   getLastSaleOutletId: getLastSaleOutletId,
   setLastSaleOutletId: setLastSaleOutletId,
   setReffSign: setReffSign,

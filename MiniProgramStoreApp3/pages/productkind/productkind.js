@@ -19,7 +19,8 @@ Component({
   data: {
     tag: 'main-productkind',
     isOnReady: false,
-    shopMode: 0,
+    shopMode: 1,
+    shopId: 0,
     specsDialog: {
       isShow: false
     }
@@ -49,13 +50,15 @@ Component({
         id: skuId,
         quantity: 1,
         selected: true,
-        shopMode: _this.data.shopMode
+        shopMode: _this.data.shopMode,
+        shopId:_this.data.shopId
       });
 
       apiCart.operate({
         storeId: _this.data.storeId,
         operate: 2,
-        productSkus: productSkus
+        productSkus: productSkus,
+        shopId:_this.data.shopId
       }).then(function (res) {
         if (res.result == 1) {
           toast.show({
@@ -91,7 +94,7 @@ Component({
 
       var index = e.currentTarget.dataset.replyIndex
 
-     // console.log("index:" + index)
+      // console.log("index:" + index)
       _this.data.tabs[index].list.pageIndex += 1
       _this.setData({
         tabs: _this.data.tabs
@@ -107,7 +110,7 @@ Component({
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
 
-    //  console.log("productLoadMore.index:" + index)
+      //  console.log("productLoadMore.index:" + index)
 
       _this.data.tabs[index].list.pageIndex = 0
       _this.data.tabs[index].list.loading = false
@@ -122,7 +125,8 @@ Component({
 
       apiKind.pageData({
         storeId: _this.data.storeId,
-        shopMode: _this.data.shopMode
+        shopMode: _this.data.shopMode,
+        shopId:_this.data.shopId
       }).then(function (res) {
 
         if (res.result === 1) {
@@ -161,10 +165,7 @@ Component({
       }).exec()
 
 
-      var shopMode = storeage.getCurrentShopMode()
-
       _this.setData({
-        shopMode: shopMode,
         storeId: ownRequest.getCurrentStoreId()
       })
       _this.getPageData()
@@ -205,6 +206,7 @@ Component({
         pageSize: pageSize,
         kindId: kindId,
         shopMode: _this.data.shopMode,
+        shopId:_this.data.shopId,
         name: ""
       }, false).then(function (res) {
         if (res.result == 1) {

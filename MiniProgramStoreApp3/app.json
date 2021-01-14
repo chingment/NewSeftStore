@@ -25,7 +25,8 @@
     "pages/myserviceprom/myserviceprom",
     "pages/smcfselftakeorder/smcfselftakeorder",
     "pages/smwtcoupon/smwtcoupon",
-    "pages/mycoupondetails/mycoupondetails"
+    "pages/mycoupondetails/mycoupondetails",
+    "pages/shopmarket/shopmarket"
   ],
   "window": {
     "backgroundTextStyle": "light",

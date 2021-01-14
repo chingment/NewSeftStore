@@ -22,7 +22,7 @@ Page({
       items: []
     },
     storeId: '',
-    shopMode: 0,
+    shopMode: 1,
     scrollHeight: 0,
     specsDialog: {
       isShow: false
@@ -42,7 +42,6 @@ Page({
     var _this = this
 
     _this.setData({
-      shopMode: storeage.getCurrentShopMode(),
       storeId: ownRequest.getCurrentStoreId()
     })
 
@@ -264,7 +263,7 @@ Page({
     if (ownRequest.isLogin()) {
 
       apiCart.getCartData({
-        shopMode: storeage.getCurrentShopMode(),
+        shopMode: _this.data.shopMode,
         storeId: ownRequest.getCurrentStoreId()
       }).then(function (res) {
         if (res.result == 1) {

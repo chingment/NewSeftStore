@@ -60,6 +60,7 @@ var config = {
     serviceFunScanCodeResult: `${host}/ServiceFun/ScanCodeResult`,
     smCfSelfTakeOrderCfTake: `${host}/SmCfSelfTakeOrder/CfTake`,
     smCfSelfTakeOrderDetails: `${host}/SmCfSelfTakeOrder/Details`,
+
   }
 
 };

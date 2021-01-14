@@ -86,6 +86,9 @@
       </block>
     </block>
     <block wx:else>
+      <view style='height:60%;display:flex;justify-content:center;align-items:center'>
+          <image src='/content/default/images/cart_empty.png'></image>
+        </view>
       <button style="width:80%;color: #fff;" class="btn bg-main btn-login" bindtap="clickToGoLogin">登录</button>
     </block>
   </view>

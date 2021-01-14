@@ -22,7 +22,7 @@
 							<view class="it-m">
 								<view class="it-ml">
 									<text class="txt-h1">{{item.name}}</text>
-									<text class="txt-h2">{{item.contactAddress}}</text>
+									<text class="txt-h2">{{item.address}}</text>
 								</view>
 								<view class="it-mr">
 									<text class="txt">{{item.distanceMsg}}</text>

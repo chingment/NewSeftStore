@@ -1,0 +1,149 @@
+/**分类栏**/
+
+.st-kind {
+  display: flex;
+  height: 100%;
+}
+
+.kind-left-navbar {
+  width: 200rpx;
+  height: 100%;
+  font-size: 28rpx;
+  background: #f8f8f8;
+}
+
+.kind-left-navbar .it {
+  height: 80rpx;
+  line-height:  80rpx;
+  text-align: center;
+}
+
+.kind-left-navbar-normal {
+ 
+}
+
+.kind-left-navbar-selected {
+
+  font-size: 30rpx;
+  background: #fff;
+}
+
+.kind-right-content {
+  flex: 1;
+  height: 100%;
+}
+
+.nomore-tip{
+  text-align: center;
+  color: #dbdbdb;
+  font-size: 24rpx;
+  padding: 60rpx;
+}
+
+
+
+/* 滚动 */
+
+.searchbox {
+  position: relative;
+  overflow: hidden;
+  height: 58rpx;
+  background-color: white;
+  padding: 18rpx 30rpx;
+  border-bottom: 3rpx solid #F0F0F5;
+  border-top: 3rpx solid #F0F0F5;
+}
+
+.searchbox-ct{
+  display: flex;
+  background: #F0F0F5;
+  border-radius: 38rpx;
+  height: 58rpx;
+  padding: 0 30rpx;
+}
+.searchbox-icon {
+  align-items: center;
+  display: flex;
+}
+
+.searchbox-icon .img{
+width:42rpx;
+height:42rpx;
+}
+
+.searchbox-tips{
+  flex: 1;
+  padding-left: 15rpx;
+}
+
+.searchbox-tips .swiperitem {
+  height: 100%;
+}
+
+.searchbox-tips .swiperview .wx-swiper-dots {
+  display: none;
+}
+
+.searchbox-tips .swiper-txt {
+  font-size: 24rpx;
+  color: #b0b0b0;
+  line-height: 60rpx;
+}
+
+
+.carttips {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 130rpx;
+  float: right;
+  background-color: #fff;
+  position: fixed;
+  bottom: 80rpx;
+  right: 50rpx;
+  border: 0 solid #fff;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  -webkit-box-shadow: 0 0 42rpx rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 42rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 42rpx rgba(0, 0, 0, 0.1);
+}
+
+.carttips .img {
+  width:55rpx;
+  height: 55rpx;
+}
+
+.carttips .title {
+  color: #8a8a8a;
+}
+
+.carttips .number {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  font-size: 21rpx;
+  border: 0 solid #fff;
+  background-color: #f00;
+  color: #fff;
+  position: absolute;
+  right: 32rpx;
+  border-radius: 30rpx;
+  z-index: 999;
+  top: 24rpx;
+}
+
+.nodata-tip{
+  text-align: center;
+  color: #dbdbdb;
+  padding: 60rpx;
+  font-size: 24rpx;
+}
+
+.nomore-tip{
+  text-align: center;
+  color: #dbdbdb;
+  padding: 60rpx;
+  font-size: 24rpx;
+}

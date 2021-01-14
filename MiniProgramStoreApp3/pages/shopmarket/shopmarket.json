@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "门店自提",
+  "usingComponents": {
+    "cartdialog": "/components/cartdialog/cartdialog",
+    "skeleton": "/components/skeleton/skeleton",
+    "own-scroll": "/components/ownscroll/ownscroll",
+    "specsdialog": "../../components/specsdialog/specsdialog"
+  }
+}

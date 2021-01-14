@@ -251,7 +251,8 @@ Component({
               id: blocks[i].productSkus[j].id,
               quantity: blocks[i].productSkus[j].quantity,
               shopMode: blocks[i].productSkus[j].shopMode,
-              shopMethod: 1
+              shopMethod: 1,
+              shopId:blocks[i].productSkus[j].shopId
             })
           }
         }

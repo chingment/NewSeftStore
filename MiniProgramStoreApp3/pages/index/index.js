@@ -28,7 +28,7 @@ Component({
     skeletonIsDev: false,
     skeletonBgcolor: '#FFF',
     skeletonData,
-    shopMode: 0,
+    shopMode: 1,
     specsDialog: {
       isShow: false
     }
@@ -90,19 +90,8 @@ Component({
         if (res.result === 1) {
           var d = res.data
 
-          var shopMode
-          d.shopModes.forEach(function (item, index) {
-            if (item.selected) {
-              shopMode = item.id
-            }
-          })
-
-          storeage.setCurrentShopMode(shopMode)
-
           _this.setData({
-            shopMode: shopMode,
-            shopModes: d.shopModes,
-            singleStore: typeof storeage.getStoreId() == "undefined" ? false : true,
+            isSupMachineShop: d.isSupMachineShop,
             currentStore: d.store,
             banner: d.banner,
             pageIsReady: true
@@ -110,12 +99,6 @@ Component({
 
           _this.getSugProducts()
 
-        } else if (res.result == 2) {
-          if (res.code == '2404') { //当前店铺无效，重新选择
-            wx.navigateTo({
-              url: "/pages/store/store"
-            })
-          }
         }
       })
     },
@@ -198,7 +181,8 @@ Component({
         id: skuId,
         quantity: 1,
         shopMode: _this.data.shopMode,
-        shopMethod: 2
+        shopMethod: 2,
+        shopId:'0'
       })
       wx.navigateTo({
         url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
