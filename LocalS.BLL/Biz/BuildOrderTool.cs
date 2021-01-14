@@ -49,6 +49,7 @@ namespace LocalS.BLL.Biz
 
         public string ShopId { get; set; }
         public string[] MachineIds { get; set; }
+
         public bool IsOffSell
         {
             get
@@ -469,11 +470,11 @@ namespace LocalS.BLL.Biz
 
             List<BuildOrder.Child> buildOrderChilds = new List<BuildOrder.Child>();
 
-            var d_s_orders = (from d in _buildSkus select new { d.ShopMode, d.ReceiveMode }).Distinct().ToArray();
+            var d_s_orders = (from d in _buildSkus select new { d.ShopMode, d.ReceiveMode, d.ShopId }).Distinct().ToArray();
 
             foreach (var d_s_order in d_s_orders)
             {
-                var shopModeProductSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode).ToList();
+                var shopModeProductSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode && m.ShopId == d_s_order.ShopId).ToList();
 
                 foreach (var shopModeProductSku in _buildSkus)
                 {
@@ -513,7 +514,7 @@ namespace LocalS.BLL.Biz
                             bool isFlag = false;
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
-                                int reservedQuantity = buildOrderChilds.Where(m => m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == d_s_order.ShopMode).Sum(m => m.Quantity);//已订的数量
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == shopModeProductSku.ShopId && m.ProductSkuId == shopModeProductSku.Id && m.SellChannelRefType == d_s_order.ShopMode).Sum(m => m.Quantity);//已订的数量
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
