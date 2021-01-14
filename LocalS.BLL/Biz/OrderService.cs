@@ -623,6 +623,12 @@ namespace LocalS.BLL.Biz
                         order.StoreId = rop.StoreId;
                         order.StoreName = store.Name;
                         order.ShopId = buildOrder.ShopId;
+
+                        var shop = CurrentDb.Shop.Where(m => m.Id == buildOrder.ShopId).FirstOrDefault();
+                        if (shop != null)
+                        {
+                            order.ShopName = shop.Name;
+                        }
                         order.SellChannelRefType = buildOrder.SellChannelRefType;
                         order.ShopId = buildOrder.ShopId;
                         order.MachineId = buildOrder.MachineId;
@@ -785,6 +791,7 @@ namespace LocalS.BLL.Biz
                             orderSub.StoreName = order.StoreName;
                             orderSub.SellChannelRefType = order.SellChannelRefType;
                             orderSub.ShopId = order.ShopId;
+                            orderSub.ShopName = order.ShopName;
                             orderSub.MachineId = order.MachineId;
                             orderSub.ReceiveModeName = order.ReceiveModeName;
                             orderSub.ReceiveMode = order.ReceiveMode;
