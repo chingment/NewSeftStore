@@ -1,5 +1,6 @@
 ﻿using LocalS.Entity;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -316,10 +317,10 @@ namespace LocalS.BLL.Biz
                         var stocks = new List<ProductSkuStockModel>();
                         var stock = new ProductSkuStockModel();
                         stock.RefType = E_SellChannelRefType.Mall;
-                        stock.ShopId = "";
-                        stock.MachineId = "";
-                        stock.CabinetId = "";
-                        stock.SlotId = "";
+                        stock.ShopId = "0";
+                        stock.MachineId = "0";
+                        stock.CabinetId = "0";
+                        stock.SlotId = "0";
                         stock.SumQuantity = 0;
                         stock.LockQuantity = 0;
                         stock.SellQuantity = 0;
@@ -328,7 +329,6 @@ namespace LocalS.BLL.Biz
                         stocks.Add(stock);
 
                         productSku.Name = memberFeeSt.Name;
-                        productSku.ProductId = "";
                         productSku.SupReceiveMode = E_SupReceiveMode.FeeByMember;
                         productSku.ReceiveMode = E_ReceiveMode.FeeByMember;
                         productSku.MainImgUrl = memberFeeSt.MainImgUrl;
@@ -336,11 +336,11 @@ namespace LocalS.BLL.Biz
                         productSku.SaleAmount = productSku.Quantity * memberFeeSt.FeeSaleValue;
                         productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
                         productSku.OriginalAmount = productSku.Quantity * memberFeeSt.FeeOriginalValue;
-                        productSku.ProductId = "";
-                        productSku.BarCode = "";
-                        productSku.CumCode = "";
-                        productSku.SpecDes = null;
-                        productSku.Producer = "";
+                        productSku.ProductId = IdWorker.Build(IdType.EmptyGuid);
+                        productSku.BarCode = "MEMBER_FEE";
+                        productSku.CumCode = "MEMBER_FEE";
+                        productSku.SpecDes = "[{\"name\":\"单规格\",\"value\":\"会员费\"}]";
+                        productSku.Producer = "商家";
                         productSku.CartId = "";
                         productSku.SvcConsulterId = "";
                         productSku.KindId1 = 0;

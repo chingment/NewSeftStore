@@ -172,7 +172,8 @@ Page({
           id: _skus[j].id,
           quantity: _skus[j].quantity,
           shopMode: _skus[j].shopMode,
-          shopMethod: _skus[j].shopMethod
+          shopMethod: _skus[j].shopMethod,
+          shopId: ''
         })
       }
 
@@ -210,6 +211,10 @@ Page({
           return
         }
 
+        for (var j = 0; j < _skus.length; j++) {
+          skus[j].shopId = _selfTake.mark.id
+        }
+
       } else if (_blocks[i].receiveMode == 4) {
 
         if (util.isEmptyOrNull(_selfTake.mark.id)) {
@@ -226,6 +231,9 @@ Page({
           return
         }
 
+        for (var j = 0; j < _skus.length; j++) {
+          skus[j].shopId = _selfTake.mark.id
+        }
       }
 
       blocks.push({
@@ -271,7 +279,7 @@ Page({
           }
 
           if (_this.data.couponByDeposit != null) {
-            if (_this.data.couponByDeposit.selectedCouponIds==null||_this.data.couponByDeposit.selectedCouponIds.length == 0) {
+            if (_this.data.couponByDeposit.selectedCouponIds == null || _this.data.couponByDeposit.selectedCouponIds.length == 0) {
               _this.data.couponByDeposit.tipType = 3
               _this.data.couponByDeposit.tipMsg = "-0.0"
             }
@@ -279,7 +287,7 @@ Page({
 
           if (_this.data.couponByRent != null) {
 
-            if (_this.data.couponByRent.selectedCouponIds==null||_this.data.couponByRent.selectedCouponIds.length == 0) {
+            if (_this.data.couponByRent.selectedCouponIds == null || _this.data.couponByRent.selectedCouponIds.length == 0) {
               _this.data.couponByRent.tipType = 3
               _this.data.couponByRent.tipMsg = "-0.0"
             }
@@ -322,7 +330,7 @@ Page({
   goPayCofirm: function (payOption, blocks) {
     var _this = this
     var data = _this.data
-   // console.log('_this.data.action:' + data.action)
+    // console.log('_this.data.action:' + data.action)
     apiOrder.buildPayParams({
       orderIds: data.orderIds,
       payCaller: payOption.payCaller,

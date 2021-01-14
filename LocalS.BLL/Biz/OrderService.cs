@@ -828,8 +828,8 @@ namespace LocalS.BLL.Biz
                             orderSub.ReffUserId = order.ReffUserId;
                             CurrentDb.OrderSub.Add(orderSub);
 
-                            //判断ShopMethod 是 Shop 才进行库存操作
-                            if (orderSub.ShopMethod == E_OrderShopMethod.Shop)
+                            //购物或租赁进行库存操作
+                            if (orderSub.ShopMethod == E_OrderShopMethod.Shop || orderSub.ShopMethod == E_OrderShopMethod.Rent)
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.SellChannelRefType, order.MerchId, order.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
                             }
@@ -1053,9 +1053,6 @@ namespace LocalS.BLL.Biz
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
                                 d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
-
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, E_SellChannelRefType.Mall, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
-
                                 #endregion 
                             }
                             else if (d_orderSub.ShopMethod == E_OrderShopMethod.Rent)
@@ -1064,7 +1061,6 @@ namespace LocalS.BLL.Biz
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                                 d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
                                 d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
-
 
                                 var d_rentOrder = new RentOrder();
                                 d_rentOrder.Id = IdWorker.Build(IdType.NewGuid);
@@ -1202,6 +1198,12 @@ namespace LocalS.BLL.Biz
                                 }
 
                                 #endregion
+                            }
+
+                            //购物和租赁进行库存操作
+                            if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop || d_orderSub.ShopMethod == E_OrderShopMethod.Rent)
+                            {
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.SellChannelRefType, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                             }
                         }
 
@@ -1400,9 +1402,10 @@ namespace LocalS.BLL.Biz
 
                         d_orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
 
-                        if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
+                        //购物货租赁进行库存操作
+                        if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop || d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, E_SellChannelRefType.Mall, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
+                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, d_order.SellChannelRefType, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                         }
 
                     }
