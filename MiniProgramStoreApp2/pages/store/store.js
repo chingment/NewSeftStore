@@ -56,20 +56,19 @@ Page({
     })
 
 
-    getStoreList(loaction.lat, loaction.lng)
 
-    // app.globalData.checkConfig = false
+    app.globalData.checkConfig = false
     
-    // if (app.globalData.checkConfig) {
-    //   console.log("call>>1")
-    //   getStoreList(loaction.lat, loaction.lng)
-    // } else {
-    //   console.log("call>>2")
-    //   app.checkConfigReadyCallback = res => {
-    //     console.log("call>>3," + JSON.stringify(res))
-    //     getStoreList(loaction.lat, loaction.lng)
-    //   }
-    // }
+    if (app.globalData.checkConfig) {
+      console.log("call>>1")
+      getStoreList(loaction.lat, loaction.lng)
+    } else {
+      console.log("call>>2")
+      app.checkConfigReadyCallback = res => {
+        console.log("call>>3," + JSON.stringify(res))
+        getStoreList(loaction.lat, loaction.lng)
+      }
+    }
 
   },
   onShow: function () {},

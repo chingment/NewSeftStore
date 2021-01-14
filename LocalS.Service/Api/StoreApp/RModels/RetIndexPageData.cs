@@ -10,18 +10,14 @@ namespace LocalS.Service.Api.StoreApp
     {
         public RetIndexPageData()
         {
-            this.ShopModes = new List<ShopModeModel>();
             this.Store = new StoreModel();
             this.Banner = new BannerModel();
             this.PdArea = new PdAreaModel();
         }
 
-        public List<ShopModeModel> ShopModes { get; set; }
-
         public StoreModel Store { get; set; }
-
         public BannerModel Banner { get; set; }
-
         public PdAreaModel PdArea { get; set; }
+        public bool IsSupMachineShop { get; set; }
     }
 }

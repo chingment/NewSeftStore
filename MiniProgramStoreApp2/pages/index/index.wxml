@@ -10,19 +10,6 @@
 				<view class="store" bindtap="goSelectStore">
 					<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
 					<text class="title skeleton-rect">{{currentStore.name}}</text>
-					<image wx:if="{{!singleStore}}" class="more-img" src="/content/default/images/arro_down.png"></image>
-				</view>
-
-				<view class="shopmode">
-					<view class="radio-grp">
-						<block wx:for="{{shopModes}}" wx:for-item="item" wx:key="index">
-							<view class="radio-item" bindtap="switchShopMode" data-reply-shopmodeid="{{item.id}}">
-								<image class="img skeleton-circle"
-									src='/content/default/images/{{item.selected==false?"radio_off":"radio_on"}}.png'></image>
-								<text class='txt {{item.selected==false?"txt-off":"txt-on"}} skeleton-rect'>{{item.name}}</text>
-							</view>
-						</block>
-					</view>
 				</view>
 			</view>
 			<view class="banner skeleton-rect">
@@ -83,6 +70,17 @@
 						</view>
 					</view>
 				</view>
+			</view>
+
+			<view class="pdMachineShop"> 
+			
+				<view class="it" bindtap="clickToFc" data-ischecklogin="false"
+							data-url="/pages/shopmarket/shopmarket">
+						
+								<text class='txt'>门店自提</text>
+						
+				</view>
+			
 			</view>
 
 			<view class="pdRent" wx:if="{{pdRent.list.length>0}}">
@@ -185,7 +183,6 @@
 																data-reply-skuid="{{item.id}}" data-reply-sku="{{item}}"
 																src='/content/default/images/increase.png'></image>
 														</view>
-
 
 
 													</block>

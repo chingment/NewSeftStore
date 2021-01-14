@@ -102,7 +102,16 @@ Page({
     isOnLoad: false
   },
   onLoad: function (options) {
+    var _this = this
+    var old_index = wx.getStorageSync('main_tabbar_index') || 0
+    var tag = _this.data.tabBar[old_index].tag
+
+    _this.setData({
+      tag: tag
+    })
+
     // var _this = this;
+
     // wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
     //   var wHeight = wx.getSystemInfoSync().windowHeight;
     //   _this.setData({
@@ -154,8 +163,6 @@ Page({
     console.log("mian.onShow")
     var _this = this
 
-    console.log(options)
-
     wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
       var wHeight = wx.getSystemInfoSync().windowHeight;
       _this.setData({
@@ -193,32 +200,32 @@ Page({
   },
   mainTabBarItemClick(e) {
     var _this = this
-    var index = e.currentTarget.dataset.replyIndex
+
+    var index=-1
+    if(e.type=='tap'){
+      index=e.currentTarget.dataset.replyIndex
+    }
+    else if(e.type=='callSomeFun'){
+      index=e.detail.dataset.replyIndex
+    }
     mainTabBarSwitch(index, true)
-  },
+  }
 })
 
 function mainTabBarSwitch(index, isOnShow) {
-  console.log('mainTabBarSwitch')
-
-  var _this = this
 
   var pages = getCurrentPages();
   var isHasMain = false;
   for (var i = 0; i < pages.length; i++) {
     if (pages[i].data.tag.indexOf("main-") > -1) {
-
       var old_index = wx.getStorageSync('main_tabbar_index')
       if (old_index != index) {
         pages[i].onUnload()
       }
-
       isHasMain = true
       var tabBar = pages[i].data.tabBar;
-
       for (var j = 0; j < tabBar.length; j++) {
         if (j == index) {
-
           tabBar[j].selected = true
           var s = tabBar[j];
           setTimeout(function () {
@@ -226,7 +233,6 @@ function mainTabBarSwitch(index, isOnShow) {
               title: s.navTitle
             })
           }, 1)
-
           wx.setStorageSync('main_tabbar_index', index)
           pages[i].setData({
             tag: tabBar[j].tag,
@@ -236,7 +242,6 @@ function mainTabBarSwitch(index, isOnShow) {
           tabBar[j].selected = false
         }
       }
-
       let cp = pages[i].selectComponent('#' + tabBar[index].id);
       if (!cp.data.isOnReady) {
         cp.onReady()
@@ -244,14 +249,10 @@ function mainTabBarSwitch(index, isOnShow) {
           isOnReady: true
         })
       }
-
-      console.log(' cp.data.tag:' + pages[i].data.tag)
       pages[i].setData({
         tabBar: tabBar
       })
-
       cp.onShow()
-
       if (isOnShow) {
         pages[i].onShow()
       }

@@ -40,6 +40,13 @@ function setCart(cartData) {
         cartDialog: cartDialog
       })
     }
+    else if (pages[i].data.tag == "shopmarket") {
+      var cartDialog = pages[i].data.cartDialog
+      cartDialog.dataS = cartData
+      pages[i].setData({
+        cartDialog: cartDialog
+      })
+    }
   }
 
 }

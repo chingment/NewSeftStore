@@ -78,7 +78,7 @@ Component({
 
 
           var value = _this.data.myDataS.bookTime.value
-          // console.log(JSON.stringify(_this.data.myDataS))
+
 
           var dateArea = d.dateArea
 

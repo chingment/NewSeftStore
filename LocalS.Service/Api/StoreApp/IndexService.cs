@@ -32,46 +32,13 @@ namespace LocalS.Service.Api.StoreApp
 
             if (store.SctMode.Contains("K"))
             {
-                ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Machine, Name = "线下机器", Selected = false });
+                ret.IsSupMachineShop = true;
+              
             }
-
-            if (store.SctMode.Contains("F"))
-            {
-                ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Mall, Name = "线上商城", Selected = false });
-            }
-
-            //若没有，默认添加一个线上商城
-            if (ret.ShopModes.Count == 0)
-            {
-                ret.ShopModes.Add(new ShopModeModel { Id = E_SellChannelRefType.Mall, Name = "线上商城", Selected = false });
-            }
-
-            if (rup.ShopMode == E_SellChannelRefType.Unknow)
-            {
-                ret.ShopModes[0].Selected = true;
-            }
-            else
-            {
-                var shopMode = ret.ShopModes.Where(m => m.Id == rup.ShopMode).FirstOrDefault();
-                if (shopMode == null)
-                {
-                    ret.ShopModes[0].Selected = true;
-                }
-                else
-                {
-                    ret.ShopModes.Where(m => m.Id == rup.ShopMode).First().Selected = true;
-                }
-            }
-
-
-            rup.ShopMode = ret.ShopModes.Where(m => m.Selected == true).First().Id;
-
 
             var storeModel = new StoreModel();
             storeModel.Id = store.Id;
             storeModel.Name = store.Name;
-
-
 
             ret.Store = storeModel;
 

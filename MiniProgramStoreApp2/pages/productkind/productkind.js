@@ -91,7 +91,7 @@ Component({
 
       var index = e.currentTarget.dataset.replyIndex
 
-      console.log("index:" + index)
+     // console.log("index:" + index)
       _this.data.tabs[index].list.pageIndex += 1
       _this.setData({
         tabs: _this.data.tabs
@@ -107,7 +107,7 @@ Component({
       var _this = this
       var index = e.currentTarget.dataset.replyIndex
 
-      console.log("productLoadMore.index:" + index)
+    //  console.log("productLoadMore.index:" + index)
 
       _this.data.tabs[index].list.pageIndex = 0
       _this.data.tabs[index].list.loading = false
@@ -122,7 +122,8 @@ Component({
 
       apiKind.pageData({
         storeId: _this.data.storeId,
-        shopMode: _this.data.shopMode
+        shopMode: _this.data.shopMode,
+        shopId:'0'
       }).then(function (res) {
 
         if (res.result === 1) {
@@ -153,10 +154,7 @@ Component({
       query.select('.searchbox').boundingClientRect(function (rect) {
 
         var height = _this.data.height - rect.height
-        // console.log("height:" + _this.data.height)
-        // console.log("rect.height:" + rect.height)
-        // console.log("height:" + height)
-        // _this.data["scrollHeight"] = height
+
         _this.setData({
           scrollHeight: height
         })

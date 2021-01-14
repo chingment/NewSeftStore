@@ -279,7 +279,7 @@ namespace LocalS.Service.Api.StoreApp
                     selfTakeModel.Mark.PhoneNumber = selfPickAddress.ContactPhone;
                     selfTakeModel.Mark.AreaName = selfPickAddress.AreaName;
                     selfTakeModel.Mark.AreaCode = selfPickAddress.AreaCode;
-                    selfTakeModel.Mark.Address = selfPickAddress.ContactAddress;
+                    selfTakeModel.Mark.Address = selfPickAddress.Address;
 
                 }
 
@@ -471,7 +471,7 @@ namespace LocalS.Service.Api.StoreApp
                         selfTakeModel.Mark.PhoneNumber = selfPickAddress.ContactPhone;
                         selfTakeModel.Mark.AreaName = selfPickAddress.AreaName;
                         selfTakeModel.Mark.AreaCode = selfPickAddress.AreaCode;
-                        selfTakeModel.Mark.Address = selfPickAddress.ContactAddress;
+                        selfTakeModel.Mark.Address = selfPickAddress.Address;
                     }
 
                 }
@@ -614,18 +614,26 @@ namespace LocalS.Service.Api.StoreApp
 
             }
 
-            var skus_SelfTakeByMachine = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Machine).ToList();
-            if (skus_SelfTakeByMachine.Count > 0)
+            var skus_SelfTakeByMachines = (from u in c_prodcutSkus where u.ShopMode == E_SellChannelRefType.Machine select new { u.ShopMode, u.ShopId }).Distinct().ToList();
+
+            if (skus_SelfTakeByMachines.Count > 0)
             {
-                var ob_SelfTakeByMachine = new RetOrderConfirm.BlockModel();
-                ob_SelfTakeByMachine.TagName = "线下机器";
-                ob_SelfTakeByMachine.Skus = skus_SelfTakeByMachine;
-                ob_SelfTakeByMachine.TabMode = E_TabMode.SelfTakeByMachine;
-                ob_SelfTakeByMachine.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-                ob_SelfTakeByMachine.SelfTake.Mark.Id = store.StoreId;
-                ob_SelfTakeByMachine.SelfTake.Mark.Name = store.Name;
-                ob_SelfTakeByMachine.SelfTake.Mark.Address = store.Address;
-                orderBlock.Add(ob_SelfTakeByMachine);
+                foreach (var skus_SelfTakeByMachine in skus_SelfTakeByMachines)
+                {
+                    var shop = CurrentDb.Shop.Where(m => m.Id == skus_SelfTakeByMachine.ShopId).FirstOrDefault();
+
+                    var l_skus = c_prodcutSkus.Where(m => m.ShopId == skus_SelfTakeByMachine.ShopId && m.ShopMode == E_SellChannelRefType.Machine).ToList();
+
+                    var ob_SelfTakeByMachine = new RetOrderConfirm.BlockModel();
+                    ob_SelfTakeByMachine.TagName = "线下机器";
+                    ob_SelfTakeByMachine.Skus = l_skus;
+                    ob_SelfTakeByMachine.TabMode = E_TabMode.SelfTakeByMachine;
+                    ob_SelfTakeByMachine.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
+                    ob_SelfTakeByMachine.SelfTake.Mark.Id = shop.Id;
+                    ob_SelfTakeByMachine.SelfTake.Mark.Name = shop.Name;
+                    ob_SelfTakeByMachine.SelfTake.Mark.Address = shop.Address;
+                    orderBlock.Add(ob_SelfTakeByMachine);
+                }
             }
 
             ret.Blocks = orderBlock;

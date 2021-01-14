@@ -59,7 +59,6 @@ function getReturnUrl() {
 function isSelectedStore(isGoSelect) {
   var storeId = getCurrentStoreId()
   if (storeId == undefined || storeId == null || storeId == "") {
-    //    console.log("ownRequest.isSelectedStore->>>当前店铺id为空，未选择店铺")
     isGoSelect = isGoSelect == undefined ? false : isGoSelect
     if (isGoSelect) {
       wx.navigateTo({ //保留当前页面，跳转到应用内的某个页面（最多打开5个页面，之后按钮就没有响应的）

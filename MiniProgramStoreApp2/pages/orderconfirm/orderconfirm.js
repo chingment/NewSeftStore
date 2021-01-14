@@ -121,7 +121,7 @@ Page({
     }
 
     var faceTypes = e.currentTarget.dataset.replyFacetypes
-    console.log('faceTypes:' + faceTypes)
+    //console.log('faceTypes:' + faceTypes)
     var couponIds
     if (faceTypes == '1,2') {
       couponIds = _this.data.couponIdsByShop
@@ -172,7 +172,8 @@ Page({
           id: _skus[j].id,
           quantity: _skus[j].quantity,
           shopMode: _skus[j].shopMode,
-          shopMethod: _skus[j].shopMethod
+          shopMethod: _skus[j].shopMethod,
+          shopId: ''
         })
       }
 
@@ -210,6 +211,10 @@ Page({
           return
         }
 
+        for (var j = 0; j < _skus.length; j++) {
+          skus[j].shopId = _selfTake.mark.id
+        }
+
       } else if (_blocks[i].receiveMode == 4) {
 
         if (util.isEmptyOrNull(_selfTake.mark.id)) {
@@ -226,6 +231,9 @@ Page({
           return
         }
 
+        for (var j = 0; j < _skus.length; j++) {
+          skus[j].shopId = _selfTake.mark.id
+        }
       }
 
       blocks.push({
@@ -271,7 +279,7 @@ Page({
           }
 
           if (_this.data.couponByDeposit != null) {
-            if (_this.data.couponByDeposit.selectedCouponIds.length == 0) {
+            if (_this.data.couponByDeposit.selectedCouponIds == null || _this.data.couponByDeposit.selectedCouponIds.length == 0) {
               _this.data.couponByDeposit.tipType = 3
               _this.data.couponByDeposit.tipMsg = "-0.0"
             }
@@ -279,7 +287,7 @@ Page({
 
           if (_this.data.couponByRent != null) {
 
-            if (_this.data.couponByRent.selectedCouponIds.length == 0) {
+            if (_this.data.couponByRent.selectedCouponIds == null || _this.data.couponByRent.selectedCouponIds.length == 0) {
               _this.data.couponByRent.tipType = 3
               _this.data.couponByRent.tipMsg = "-0.0"
             }
@@ -322,7 +330,7 @@ Page({
   goPayCofirm: function (payOption, blocks) {
     var _this = this
     var data = _this.data
-    console.log('_this.data.action:' + data.action)
+    // console.log('_this.data.action:' + data.action)
     apiOrder.buildPayParams({
       orderIds: data.orderIds,
       payCaller: payOption.payCaller,
@@ -391,9 +399,9 @@ Page({
     var blockindex = e.currentTarget.dataset.replyBlockindex
     var tabmode = e.currentTarget.dataset.replyTabmode
 
-    console.log("blockindex:" + blockindex)
-    console.log("tabmode:" + tabmode)
-    console.log("receivemode:" + receivemode)
+    //console.log("blockindex:" + blockindex)
+    //console.log("tabmode:" + tabmode)
+    //console.log("receivemode:" + receivemode)
 
     _this.data.blocks[blockindex].receiveMode = receivemode
 
@@ -456,14 +464,10 @@ Page({
     })
   },
   clickToOpenBooktimeDialog: function (e) {
-    console.log('booktimeSelect')
+
     var _this = this
     var blockIndex = e.currentTarget.dataset.replyBlockindex
-
-
     var booktime = _this.data.blocks[blockIndex].selfTake.bookTime
-
-    console.log(JSON.stringify(booktime))
 
     _this.setData({
       curBookTimeBlockIndex: blockIndex,
@@ -485,7 +489,7 @@ Page({
       type: d.type
     }
 
-    console.log("booktime:" + JSON.stringify(booktime))
+
     _this.data.blocks[_this.data.curBookTimeBlockIndex].selfTake.bookTime = booktime
 
     _this.setData({
@@ -510,13 +514,12 @@ Page({
   selectSelfPickAddressItem: function (e) {
     var _this = this
     var selfPickAddress = e.detail.selfPickAddress
-    console.log("selfPickAddress:" + JSON.stringify(selfPickAddress))
 
     var blockIndex = _this.data.curSelfPickAddressBlockIndex
 
     _this.data.blocks[blockIndex].selfTake.mark.id = selfPickAddress.id
     _this.data.blocks[blockIndex].selfTake.mark.name = selfPickAddress.name
-    _this.data.blocks[blockIndex].selfTake.mark.address = selfPickAddress.contactAddress
+    _this.data.blocks[blockIndex].selfTake.mark.address = selfPickAddress.address
     _this.data.blocks[blockIndex].selfTake.mark.areaCode = selfPickAddress.areaCode
     _this.data.blocks[blockIndex].selfTake.mark.areaName = selfPickAddress.areaName
 

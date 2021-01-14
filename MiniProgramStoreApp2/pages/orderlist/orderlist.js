@@ -144,7 +144,7 @@ Page({
     var opVal = e.currentTarget.dataset.replyOpval
     var id = e.currentTarget.dataset.replyId
 
-    console.log("opType:" + opType + ",opVal:" + opVal + ",id:" + id)
+    // console.log("opType:" + opType + ",opVal:" + opVal + ",id:" + id)
 
     switch (opType) {
       case "FUN":
@@ -180,7 +180,7 @@ Page({
     var _this = this
 
     var index = _this.data.tabsSliderIndex
-    console.log("index:" + index)
+    // console.log("index:" + index)
     _this.data.tabs[index].list.pageIndex += 1
     _this.setData({
       tabs: _this.data.tabs
@@ -194,13 +194,13 @@ Page({
   //刷新处理
   refresh: function (e) {
 
-    console.log("index:" + JSON.stringify(e))
+   // console.log("index:" + JSON.stringify(e))
 
     var _this = this
 
     var index = _this.data.tabsSliderIndex
 
-    console.log("index:" + index)
+    // console.log("index:" + index)
 
     _this.data.tabs[index].list.pageIndex = 0
     _this.data.tabs[index].list.loading = true
@@ -281,7 +281,7 @@ Page({
         //     var blocks = items[i].blocks
         //     for (var j = 0; j < blocks.length; j++) {
         //       var id='qrcode-' + i+"-"+j
-        //       console.log("id:"+id)
+        //       ("id:"+id)
         //       if (blocks[j].qrcode != null) {
         //         new QRCode(id, {
         //           // usingIn: this,

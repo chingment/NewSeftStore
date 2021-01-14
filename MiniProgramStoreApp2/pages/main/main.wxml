@@ -12,6 +12,7 @@
           class='it {{tabBar[1].selected==false?"hidden":""}}' data-reply-index="{{1}}"
           data-reply-name="{{tabBar[1].name}}"></page-productkind>
         <page-cart id="{{tabBar[2].id}}" initdata="{{cart}}" height="{{tabBarContentHeight}}" style="overflow:hidden"
+        bind:callSomeFun="mainTabBarItemClick"
           class='it {{tabBar[2].selected==false?"hidden":""}}' data-reply-index="{{2}}"
           data-reply-name="{{tabBar[2].name}}"></page-cart>
         <page-personal id="{{tabBar[3].id}}" initdata="{{personal}}" height="{{tabBarContentHeight}}"

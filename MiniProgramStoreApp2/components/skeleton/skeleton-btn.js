@@ -65,7 +65,7 @@ Component({
       });
     },
     ouput(data) {
-      console.log(JSON.stringify(data, null, 2));
+
     },
     objToStyle(obj) {
       const { physicalRadio } = this.data;
@@ -80,7 +80,6 @@ Component({
         getElements(`.${this.data.selector}`),
       ]).then(([scrollOffset, [container]]) => {
         const { width, height, top, left } = container;
-        console.log(container);
         return this.calcStyleLists(container)
           .then(lists => ({
             container: this.objToStyle({

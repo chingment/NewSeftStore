@@ -20,6 +20,7 @@ namespace LocalS.Service.Api.StoreApp
             public int Quantity { get; set; }
             public bool Selected { get; set; }
             public E_SellChannelRefType ShopMode { get; set; }
+            public string ShopId { get; set; }
         }
     }
 }

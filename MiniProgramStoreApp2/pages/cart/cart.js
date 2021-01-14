@@ -3,6 +3,8 @@ const toast = require('../../utils/toastutil')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiGlobal = require('../../api/global.js')
+
+
 Component({
   options: {
     addGlobalClass: true,
@@ -89,41 +91,6 @@ Component({
         _operate()
       }
     }, 1000),
-    immeBuy: function (e) {
-      var _this = this
-
-      var blocks = _this.data.cartData.blocks
-
-      var productSkus = []
-
-      for (var i = 0; i < blocks.length; i++) {
-        for (var j = 0; j < blocks[i].productSkus.length; j++) {
-          if (blocks[i].productSkus[j].selected) {
-            productSkus.push({
-              cartId: blocks[i].productSkus[j].cartId,
-              id: blocks[i].productSkus[j].id,
-              quantity: blocks[i].productSkus[j].quantity,
-              shopMode: blocks[i].productSkus[j].shopMode,
-              shopMethod: 1
-            })
-          }
-        }
-      }
-
-      if (productSkus.length == 0) {
-        toast.show({
-          title: '至少选择一件商品'
-        })
-        return
-      }
-
-      wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
-        success: function (res) {
-          // success
-        },
-      })
-    },
     itemTouchstart: function (e) {
 
       //开始触摸时 重置所有删除
@@ -196,7 +163,6 @@ Component({
       }
 
       //更新数据
-      // console.log(JSON.stringify(_this.data.cart))
       _this.setData({
         cartData: cartData
       })
@@ -237,9 +203,6 @@ Component({
         }
       })
     },
-    goLogin: function (e) {
-      ownRequest.goLogin()
-    },
     onReady: function () {
       var _this = this
       // console.log("cart.onReady")
@@ -272,6 +235,49 @@ Component({
 
       _this.getPageData()
 
+    },
+    clickToBuy: function (e) {
+      var _this = this
+
+      var blocks = _this.data.cartData.blocks
+
+      var productSkus = []
+
+      for (var i = 0; i < blocks.length; i++) {
+        for (var j = 0; j < blocks[i].productSkus.length; j++) {
+          if (blocks[i].productSkus[j].selected) {
+            productSkus.push({
+              cartId: blocks[i].productSkus[j].cartId,
+              id: blocks[i].productSkus[j].id,
+              quantity: blocks[i].productSkus[j].quantity,
+              shopMode: blocks[i].productSkus[j].shopMode,
+              shopMethod: 1,
+              shopId:blocks[i].productSkus[j].shopId
+            })
+          }
+        }
+      }
+
+      if (productSkus.length == 0) {
+        toast.show({
+          title: '至少选择一件商品'
+        })
+        return
+      }
+
+      wx.navigateTo({
+        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
+        success: function (res) {
+          // success
+        },
+      })
+    },
+    clickToGoShop: function (e) {
+      e.currentTarget.dataset.replyIndex=1
+      this.triggerEvent('callSomeFun', {"dataset":{"replyIndex":1}})
+    },
+    clickToGoLogin: function (e) {
+      ownRequest.goLogin()
     }
   }
 })

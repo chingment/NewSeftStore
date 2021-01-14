@@ -55,6 +55,8 @@ namespace LocalS.Service.Api.StoreApp
             public decimal SumPrice { get; set; }
             public E_SellChannelRefType ShopMode { get; set; }
 
+            public string ShopId { get; set; }
+
         }
     }
 }

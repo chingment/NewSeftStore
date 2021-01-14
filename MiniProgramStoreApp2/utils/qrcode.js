@@ -415,7 +415,7 @@ var QRCode;
         callback(res.tempFilePath)
       },
       fail: res => {
-        console.log(res)
+     
       }
     })
   }

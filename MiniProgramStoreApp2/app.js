@@ -13,10 +13,10 @@ let basePage = function (obj) {
    // 重写onShow方法，用一个变量保存旧的onShow函数
    let oldOnLoad= obj.onLoad
 
-   console.log('oldOnLoad:'+obj.onLoad)
+   //console.log('oldOnLoad:'+obj.onLoad)
 
    obj.onLoad = function (e) {
-     console.log("==>parent.onLoad==");
+     //console.log("==>parent.onLoad==");
      // 此处不能写成oldOnShow()，否则没有this，this.setData等方法为undefined。这里的this在Page构造函数实例化的时候才会指定
      // 在Page构造函数实例化的时候，小程序会将当前的Page对象的原型链（__proto__）增加很多方法，例如setData。当前的obj没有setData
      // 上面一段是我猜的
@@ -25,10 +25,10 @@ let basePage = function (obj) {
    // 重写onHide方法，用一个变量保存旧的onHide函数
    let oldUnload  = obj.onUnload 
 
-   console.log('oldUnload:'+obj.oldUnload)
+   //console.log('oldUnload:'+obj.oldUnload)
 
    obj.onUnload = function () {
-     console.log("==>parent.onUnload==");
+     //console.log("==>parent.onUnload==");
      // 此处不能写成oldOnHide()，否则没有this，this.setData等方法为undefined。这里的this在Page对象实例化的时候才会指定
      oldUnload.call(this)
    }
@@ -42,7 +42,6 @@ App({
    
     myPage.init(_this)
 
-    console.log('app.onLaunch')
     _this.autoUpdate()
 
     const accountInfo = wx.getAccountInfoSync()
@@ -50,7 +49,6 @@ App({
 
     _this.globalData.appId = appId
 
-    console.log('>>' + appId)
 
     _this.getConfig()
 
@@ -70,7 +68,6 @@ App({
   },
   onShow: function () {
     //var _this = this
-    // console.log('app.onShow')
     // _this.getConfig()
   },
   basePage: basePage,
@@ -134,7 +131,7 @@ App({
         if (res.hasUpdate) {
           //2. 小程序有新版本，则静默下载新版本，做好更新准备
           updateManager.onUpdateReady(function () {
-            console.log(new Date())
+          
             wx.showModal({
               title: '更新提示',
               content: '新版本已经准备好，是否重启应用？',
