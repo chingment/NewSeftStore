@@ -30,7 +30,9 @@ namespace LocalS.Service.Api.StoreApp
                 return new CustomJsonResult(ResultType.Failure, "2304", "请先选择店铺");
             }
 
-            var curShop = d_Shop.Where(m => m.Id == rup.ShopId).FirstOrDefault();
+            string shopId = rup.ShopId == null ? "" : rup.ShopId.ToLower();
+
+            var curShop = d_Shop.Where(m => m.Id == shopId).FirstOrDefault();
             if (curShop == null)
             {
                 curShop = d_Shop[0];
@@ -39,7 +41,6 @@ namespace LocalS.Service.Api.StoreApp
             ret.CurShop.Id = curShop.Id;
             ret.CurShop.Name = curShop.Name;
             ret.CurShop.Address = curShop.Address;
-
 
 
             var prdKindModels = new List<PrdKindModel>();
@@ -55,7 +56,7 @@ namespace LocalS.Service.Api.StoreApp
                 prdKindModel.Name = prdKind.Name;
                 prdKindModel.MainImgUrl = ImgSet.GetMain_O(prdKind.DisplayImgUrls);
                 prdKindModel.Selected = false;
-                prdKindModel.List = StoreAppServiceFactory.Product.GetProducts(0, 10, rup.StoreId, rup.ShopId, Entity.E_SellChannelRefType.Machine, Entity.E_OrderShopMethod.Shop, prdKind.Id);
+                prdKindModel.List = StoreAppServiceFactory.Product.GetProducts(0, 10, rup.StoreId, curShop.Id, Entity.E_SellChannelRefType.Machine, Entity.E_OrderShopMethod.Shop, prdKind.Id);
 
                 if (prdKindModel.List.Items.Count > 0)
                 {

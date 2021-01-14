@@ -50,6 +50,8 @@ namespace LocalS.BLL.Biz
         public string ShopId { get; set; }
         public string[] MachineIds { get; set; }
 
+        public string MachineId { get; set; }
+
         public bool IsOffSell
         {
             get
