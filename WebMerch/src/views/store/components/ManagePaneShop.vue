@@ -41,24 +41,9 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-loading="loadingByDialogByMachine" :title="'机器管理'" :visible.sync="dialogByMachineIsVisible">
+    <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" :visible.sync="dialogByMachineIsVisible">
       <div style="width:800px;height:600px">
-        <el-col v-for="item in listDataByMachine" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
-          <el-card class="box-card">
-            <div slot="header" class="it-header clearfix">
-              <div class="left">
-                <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }}</span>          <span style="font-size:12px;"> ({{ item.status.text }})</span></div>
-              </div>
-              <div class="right">
-                <el-button type="text" @click="handleRemoveMachine(item)">查看</el-button>
-              </div>
-            </div>
-            <div class="it-component">
-              <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-              <div class="describe" />
-            </div>
-          </el-card>
-        </el-col>
+        <manage-pane-machine opcode="view" :storeid="storeid" :shopid="shopId" />
       </div>
     </el-dialog>
 
@@ -77,9 +62,10 @@ import { initManageShop, getShops, getMachines, addShop, removeShop } from '@/ap
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 import managePaneShop from '@/views/shop/list'
+import managePaneMachine from '@/views/machine/list'
 export default {
   name: 'ManagePaneMachine',
-  components: { managePaneShop },
+  components: { managePaneShop, managePaneMachine },
   props: {
     storeid: {
       type: String,
@@ -89,7 +75,6 @@ export default {
   data() {
     return {
       loading: false,
-      loadingByDialogByMachine: false,
       listQuery: {
         page: 1,
         limit: 10,
@@ -98,6 +83,7 @@ export default {
       listData: [],
       listDataByMachine: [],
       storeId: '',
+      shopId: '',
       dialogByShopIsVisible: false,
       dialogByMachineIsVisible: false
     }
@@ -145,15 +131,8 @@ export default {
       this.dialogByShopIsVisible = true
     },
     dialogOpenByMachine(item) {
+      this.shopId = item.id
       this.dialogByMachineIsVisible = true
-      this.loadingByDialogByMachine = true
-      getMachines({ storeId: item.storeId, storeFrontId: item.id }).then(res => {
-        if (res.result === 1) {
-          var d = res.data
-          this.listDataByMachine = d
-        }
-        this.loadingByDialogByMachine = false
-      })
     },
     handleAddShop(item) {
       MessageBox.confirm('确定要选择该门店？', '提示', {

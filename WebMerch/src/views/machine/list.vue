@@ -22,7 +22,7 @@
     </div>
     <el-row v-loading="loading" :gutter="20">
 
-      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
+      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :span="span" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
@@ -75,30 +75,48 @@ import { getList, initGetList } from '@/api/machine'
 
 export default {
   name: 'MachineList',
+  props: {
+    opcode: {
+      type: String,
+      default: 'list'
+    },
+    storeid: {
+      type: String,
+      default: ''
+    },
+    shopid: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: true,
       listQuery: {
         page: 1,
         limit: 10,
+        shopId: '',
+        storeId: '',
         id: undefined
       },
       machineCount: 0,
-      listData: []
-
+      listData: [],
+      span: 6
     }
   },
   created() {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-
+    this.span = this.shopid === '' ? 6 : 12
     this.init()
   },
   methods: {
     init() {
       this.loading = true
-
+      this.listQuery.storeId = this.storeid
+      this.listQuery.shopId = this.shopid
+      console.log('this.listQuery:' + JSON.stringify(this.listQuery))
       initGetList().then(res => {
         if (res.result === 1) {
           var d = res.data
