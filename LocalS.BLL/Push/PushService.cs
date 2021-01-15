@@ -45,14 +45,14 @@ namespace LocalS.BLL.Push
             return result;
         }
 
-        public static CustomJsonResult SendUpdateMachineHomeBanners(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendHomeBanners(string operater, string appId, string merchId, string machineId, object content)
         {
             var result = new CustomJsonResult();
             result = Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateHomeBanners, content);
             return result;
         }
 
-        public static CustomJsonResult SendUpdateMachineHomeLogo(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendHomeLogo(string operater, string appId, string merchId, string machineId, object content)
         {
             var result = new CustomJsonResult();
             result = Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateHomeLogo, content);

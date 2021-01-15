@@ -222,7 +222,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "","", EventCode.AdSpaceRelease, string.Format("发布广告（{0}）成功", rop.Title));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", "", EventCode.AdSpaceRelease, string.Format("发布广告（{0}）成功", rop.Title));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
@@ -231,10 +231,8 @@ namespace LocalS.Service.Api.Merch
             {
                 if (rop.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
                 {
-                    foreach (var belongId in rop.BelongIds)
-                    {
-                        BizFactory.Machine.SendUpdateHomeBanners(operater, AppId.MERCH, merchId, belongId);
-                    }
+                    string[] machineIds = rop.BelongIds.ToArray();
+                    BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds);
                 }
             }
 
@@ -255,18 +253,11 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
 
 
-                var adContentBelongs = CurrentDb.AdContentBelong.Where(m => m.AdContentId == adContent.Id && m.MerchId == merchId).ToList();
+                var machineIds = CurrentDb.AdContentBelong.Where(m => m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.AdContentId == adContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Machine).Select(m => m.BelongId).Distinct().ToArray();
 
-                foreach (var adContentBelong in adContentBelongs)
-                {
-                    if (adContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
-                    {
-                        BizFactory.Machine.SendUpdateHomeBanners(operater, AppId.MERCH, merchId, adContentBelong.BelongId);
-                    }
-                }
+                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds);
 
-
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "","", EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", adContent.Title));
+                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "", "", EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", adContent.Title));
 
             }
 

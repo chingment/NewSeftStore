@@ -137,16 +137,6 @@ namespace LocalS.BLL.Biz
             return merch.Name;
         }
 
-        public string GetMachineName(string merchId, string machineId)
-        {
-            string machineName = "";
-            var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
-            if (merchMachine != null)
-            {
-                machineName = merchMachine.Name;
-            }
-            return machineName;
-        }
 
         public string GetClientName(string merchId, string clientUserId)
         {

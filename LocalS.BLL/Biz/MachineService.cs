@@ -177,7 +177,6 @@ namespace LocalS.BLL.Biz
             return merchMachine.IsStopUse;
         }
 
-
         public void SendStock(string operater, string appId, string merchId, string[] productSkuIds)
         {
            //foreach(var machineId in machineIds)
@@ -186,21 +185,16 @@ namespace LocalS.BLL.Biz
            // }
         }
 
-        public void SendStock(string operater, string appId, string merchId, string machineId)
+        public void SendHomeBanners(string operater, string appId, string merchId, string[] machineId)
         {
-            PushService.SendStock(operater, appId, merchId, machineId, null);
+            //var banners = BizFactory.Machine.GetHomeBanners(machineId);
+            //PushService.SendHomeBanners(operater, appId, merchId, machineId, banners);
         }
 
-        public void SendUpdateHomeBanners(string operater, string appId, string merchId, string machineId)
-        {
-            var banners = BizFactory.Machine.GetHomeBanners(machineId);
-            PushService.SendUpdateMachineHomeBanners(operater, appId, merchId, machineId, banners);
-        }
-
-        public void SendUpdateHomeLogo(string operater, string appId, string merchId, string machineId, string logoImgUrl)
+        public void SendHomeLogo(string operater, string appId, string merchId, string machineId, string logoImgUrl)
         {
             var content = new { url = logoImgUrl };
-            PushService.SendUpdateMachineHomeLogo(operater, appId, merchId, machineId, content);
+            PushService.SendHomeLogo(operater, appId, merchId, machineId, content);
         }
 
         public CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string machineId)
