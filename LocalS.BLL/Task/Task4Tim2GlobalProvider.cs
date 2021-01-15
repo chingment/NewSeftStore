@@ -48,6 +48,9 @@ namespace LocalS.BLL.Task
 
         public void Exit(Task4TimType type, string id)
         {
+            if (string.IsNullOrEmpty(id))
+                return;
+
             RedisManager.Db.HashDelete(key, id);
         }
 

@@ -1444,12 +1444,8 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
-
-                    if (!string.IsNullOrEmpty(d_order.PayTransId))
-                    {
-                        Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
-                    }
-
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
+  
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
             }
