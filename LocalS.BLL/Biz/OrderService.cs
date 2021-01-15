@@ -467,7 +467,7 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, buildOrderTool.Message, null);
                     }
 
-                    if (rop.ShopMethod == E_OrderShopMethod.Shop)
+                    if (rop.ShopMethod == E_ShopMethod.Buy)
                     {
                         #region 计算优惠券金额
                         if (rop.CouponIdsByShop != null && rop.CouponIdsByShop.Count > 0)
@@ -499,7 +499,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                     }
-                    else if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                    else if (rop.ShopMethod == E_ShopMethod.Rent)
                     {
                         #region 计算押金卷，租金券金额
 
@@ -836,7 +836,7 @@ namespace LocalS.BLL.Biz
                             CurrentDb.OrderSub.Add(orderSub);
 
                             //购物或租赁进行库存操作
-                            if (orderSub.ShopMethod == E_OrderShopMethod.Shop || orderSub.ShopMethod == E_OrderShopMethod.Rent)
+                            if (orderSub.ShopMethod == E_ShopMethod.Buy || orderSub.ShopMethod == E_ShopMethod.Rent)
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.ShopMode, order.MerchId, order.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
                             }
@@ -1054,7 +1054,7 @@ namespace LocalS.BLL.Biz
                             d_orderSub.Mender = operater;
                             d_orderSub.MendTime = DateTime.Now;
 
-                            if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
+                            if (d_orderSub.ShopMethod == E_ShopMethod.Buy)
                             {
                                 #region Shop
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
@@ -1062,7 +1062,7 @@ namespace LocalS.BLL.Biz
                                 d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
                                 #endregion 
                             }
-                            else if (d_orderSub.ShopMethod == E_OrderShopMethod.Rent)
+                            else if (d_orderSub.ShopMethod == E_ShopMethod.Rent)
                             {
                                 #region 
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
@@ -1112,7 +1112,7 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                             }
-                            else if (d_orderSub.ShopMethod == E_OrderShopMethod.MemberFee)
+                            else if (d_orderSub.ShopMethod == E_ShopMethod.MemberFee)
                             {
                                 #region MemberFee
                                 d_orderSub.PickupStatus = E_OrderPickupStatus.Taked;
@@ -1208,7 +1208,7 @@ namespace LocalS.BLL.Biz
                             }
 
                             //购物和租赁进行库存操作
-                            if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop || d_orderSub.ShopMethod == E_OrderShopMethod.Rent)
+                            if (d_orderSub.ShopMethod == E_ShopMethod.Buy || d_orderSub.ShopMethod == E_ShopMethod.Rent)
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.ShopMode, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                             }
@@ -1410,7 +1410,7 @@ namespace LocalS.BLL.Biz
                         d_orderSub.PickupStatus = E_OrderPickupStatus.Canceled;
 
                         //购物货租赁进行库存操作
-                        if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop || d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
+                        if (d_orderSub.ShopMethod == E_ShopMethod.Buy || d_orderSub.ShopMethod == E_ShopMethod.Rent)
                         {
                             BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, d_order.ShopMode, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                         }

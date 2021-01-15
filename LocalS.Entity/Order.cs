@@ -51,10 +51,10 @@ namespace LocalS.Entity
         UnTaked = 2
     }
 
-    public enum E_OrderShopMethod
+    public enum E_ShopMethod
     {
         Unknow = 0,
-        Shop = 1,
+        Buy = 1,
         Rent = 2,
         MemberFee = 3,
         RevService = 4
@@ -138,7 +138,7 @@ namespace LocalS.Entity
         public decimal CouponAmountByRent { get; set; }
         public string CouponIdByDeposit { get; set; }
         public decimal CouponAmountByDeposit { get; set; }
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
         public string ReffSign { get; set; }
         public string ReffUserId { get; set; }
     }

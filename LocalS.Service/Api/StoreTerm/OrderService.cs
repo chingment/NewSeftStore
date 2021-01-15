@@ -58,7 +58,7 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.AppId = AppId.STORETERM;
             bizRop.Source = E_OrderSource.Machine;
             bizRop.StoreId = d_machine.CurUseStoreId;
-            bizRop.ShopMethod = E_OrderShopMethod.Shop;
+            bizRop.ShopMethod = E_ShopMethod.Buy;
             bizRop.IsTestMode = d_machine.IsTestMode;
 
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();

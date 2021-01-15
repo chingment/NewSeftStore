@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.StoreApp
         public string StoreId { get; set; }
         public string ShopId { get; set; }
         public E_ShopMode ShopMode { get; set; }
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
         public string Key { get; set; }
     }
 }

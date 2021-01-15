@@ -89,10 +89,10 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-        public bool GetCanSelected(E_OrderShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<BuildSku> productSkus)
+        public bool GetCanSelected(E_ShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<BuildSku> productSkus)
         {
 
-            if (shopMethod == E_OrderShopMethod.Unknow)
+            if (shopMethod == E_ShopMethod.Unknow)
                 return false;
             if (useAreaType == E_Coupon_UseAreaType.Unknow)
                 return false;
@@ -115,14 +115,14 @@ namespace LocalS.Service.Api.StoreApp
             if (string.IsNullOrEmpty(merchId) || string.IsNullOrEmpty(storeId) || string.IsNullOrEmpty(clientUserId))
                 return false;
 
-            if (shopMethod == E_OrderShopMethod.Shop)
+            if (shopMethod == E_ShopMethod.Buy)
             {
                 if (faceType == E_Coupon_FaceType.ShopVoucher || faceType == E_Coupon_FaceType.ShopDiscount)
                 {
                     return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
                 }
             }
-            else if (shopMethod == E_OrderShopMethod.Rent)
+            else if (shopMethod == E_ShopMethod.Rent)
             {
                 if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
                 {
@@ -132,7 +132,7 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-        public RetOrderConfirm.CouponModel GetCanUseCount(E_OrderShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
+        public RetOrderConfirm.CouponModel GetCanUseCount(E_ShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
         {
             var model = new RetOrderConfirm.CouponModel();
 

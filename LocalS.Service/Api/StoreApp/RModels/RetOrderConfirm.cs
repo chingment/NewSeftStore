@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.StoreApp
         //原金额
         public string OriginalAmount { get; set; }
         public List<string> OrderIds { get; set; }
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
 
         public bool IsCanPay { get; set; }
 

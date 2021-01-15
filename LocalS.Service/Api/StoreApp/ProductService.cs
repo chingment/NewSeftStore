@@ -50,7 +50,7 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_ShopMode shopMode, E_OrderShopMethod shopMethod, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_ShopMode shopMode, E_ShopMethod shopMethod, string kindId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 
@@ -108,7 +108,7 @@ namespace LocalS.Service.Api.StoreApp
                 m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
 
 
-                if (shopMethod == E_OrderShopMethod.Rent)
+                if (shopMethod == E_ShopMethod.Rent)
                 {
                     m_productSku.IsMavkBuy = true;
                 }
@@ -166,7 +166,7 @@ namespace LocalS.Service.Api.StoreApp
             m_productSku.CharTags = r_productSku.CharTags;
 
 
-            if (rup.ShopMethod == E_OrderShopMethod.Rent)
+            if (rup.ShopMethod == E_ShopMethod.Rent)
             {
                 m_productSku.IsMavkBuy = true;
             }

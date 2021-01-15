@@ -31,7 +31,7 @@ namespace LocalS.BLL.Biz
         public string CartId { get; set; }
         public int Quantity { get; set; }
         public E_ShopMode ShopMode { get; set; }
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
         public int KindId1 { get; set; }
         public int KindId2 { get; set; }
         public int KindId3 { get; set; }
@@ -154,7 +154,7 @@ namespace LocalS.BLL.Biz
             _errorPoints = new List<string>();
         }
 
-        public void AddSku(string id, int quantity, string cartId, E_ShopMode shopMode, E_OrderShopMethod shopMethod, E_ReceiveMode receiveMode, string shopId, string[] machineIds)
+        public void AddSku(string id, int quantity, string cartId, E_ShopMode shopMode, E_ShopMethod shopMethod, E_ReceiveMode receiveMode, string shopId, string[] machineIds)
         {
             _buildSkus.Add(new BuildSku { Id = id, Quantity = quantity, CartId = cartId, ShopMode = shopMode, ShopMethod = shopMethod, ReceiveMode = receiveMode, ShopId = shopId, MachineIds = machineIds });
         }
@@ -168,7 +168,7 @@ namespace LocalS.BLL.Biz
 
             foreach (var productSku in _buildSkus)
             {
-                if (productSku.ShopMethod == E_OrderShopMethod.Shop)
+                if (productSku.ShopMethod == E_ShopMethod.Buy)
                 {
                     #region Shop
 
@@ -242,7 +242,7 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
                 }
-                else if (productSku.ShopMethod == E_OrderShopMethod.Rent)
+                else if (productSku.ShopMethod == E_ShopMethod.Rent)
                 {
                     #region Rent
                     var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, _merchId, _storeId, "", null, productSku.Id);
@@ -306,7 +306,7 @@ namespace LocalS.BLL.Biz
 
                     #endregion
                 }
-                else if (productSku.ShopMethod == E_OrderShopMethod.MemberFee)
+                else if (productSku.ShopMethod == E_ShopMethod.MemberFee)
                 {
                     #region MemberFee
 

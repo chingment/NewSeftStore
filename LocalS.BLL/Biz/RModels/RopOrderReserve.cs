@@ -24,7 +24,7 @@ namespace LocalS.BLL.Biz
         public List<string> CouponIdsByShop { get; set; }
         public string CouponIdByRent { get; set; }
         public string CouponIdByDeposit { get; set; }
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
         public E_OrderSource Source { get; set; }
         public List<BlockModel> Blocks { get; set; }
         public bool IsTestMode { get; set; }

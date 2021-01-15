@@ -186,7 +186,7 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品指定的购物模式有误");
                 }
 
-                if (rop.ShopMethod == E_OrderShopMethod.Unknow)
+                if (rop.ShopMethod == E_ShopMethod.Unknow)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择购物类型");
                 }
@@ -305,13 +305,13 @@ namespace LocalS.Service.Api.StoreApp
 
                 amount_sale = c_prodcutSkus.Sum(m => m.SaleAmount);
 
-                if (rop.ShopMethod == E_OrderShopMethod.Shop || rop.ShopMethod == E_OrderShopMethod.MemberFee)
+                if (rop.ShopMethod == E_ShopMethod.Buy || rop.ShopMethod == E_ShopMethod.MemberFee)
                 {
                     ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
 
                     amount_couponByShop = ret.CouponByShop.CouponAmount;
                 }
-                else if (rop.ShopMethod == E_OrderShopMethod.Rent)
+                else if (rop.ShopMethod == E_ShopMethod.Rent)
                 {
                     #region Rent
 
@@ -382,7 +382,7 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.KindId3 = orderSub.PrdKindId3;
                     c_prodcutSku.ShopId = orderSub.ShopId;
                     c_prodcutSku.MachineIds = new string[] { orderSub.MachineId };
-                    if (orderSub.ShopMethod == E_OrderShopMethod.MemberFee)
+                    if (orderSub.ShopMethod == E_ShopMethod.MemberFee)
                     {
                         c_prodcutSku.IsOffSell = false;
                     }
@@ -535,7 +535,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (skus_Mall.Count > 0)
             {
-                var skus_ShopOrRent = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.Shop || m.ShopMethod == E_OrderShopMethod.Rent).ToList();
+                var skus_ShopOrRent = skus_Mall.Where(m => m.ShopMethod == E_ShopMethod.Buy || m.ShopMethod == E_ShopMethod.Rent).ToList();
 
                 if (skus_ShopOrRent.Count > 0)
                 {
@@ -602,7 +602,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                var skus_FeeByMember = skus_Mall.Where(m => m.ShopMethod == E_OrderShopMethod.MemberFee).ToList();
+                var skus_FeeByMember = skus_Mall.Where(m => m.ShopMethod == E_ShopMethod.MemberFee).ToList();
 
                 if (skus_FeeByMember.Count > 0)
                 {

@@ -17,6 +17,6 @@ namespace LocalS.Service.Api.StoreApp
         public E_ShopMode ShopMode { get; set; }
         public string Name { get; set; }
 
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
     }
 }

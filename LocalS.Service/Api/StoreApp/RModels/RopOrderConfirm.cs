@@ -17,14 +17,14 @@ namespace LocalS.Service.Api.StoreApp
         public List<string> CouponIdsByShop { get; set; }
         public string CouponIdByRent { get; set; }
         public string CouponIdByDeposit { get; set; }
-        public E_OrderShopMethod ShopMethod { get; set; }
+        public E_ShopMethod ShopMethod { get; set; }
         public class ProductSkuModel
         {
             public string Id { get; set; }
             public string CartId { get; set; }
             public int Quantity { get; set; }
             public E_ShopMode ShopMode { get; set; }
-            public E_OrderShopMethod ShopMethod { get; set; }
+            public E_ShopMethod ShopMethod { get; set; }
             public string ShopId { get; set; }
         }
     }
