@@ -459,7 +459,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

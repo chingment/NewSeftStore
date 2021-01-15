@@ -71,6 +71,14 @@ namespace LocalS.BLL.Biz
             }
         }
 
+        public static EventService Event
+        {
+            get
+            {
+                return new EventService();
+            }
+        }
+
         public static ByPointService ByPoint
         {
             get

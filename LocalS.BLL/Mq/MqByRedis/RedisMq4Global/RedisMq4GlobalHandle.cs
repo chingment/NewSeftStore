@@ -46,7 +46,12 @@ namespace LocalS.BLL.Mq.MqByRedis
                             case MqMessageType.EventNotify:
                                 LogUtil.Info("EventNotify");
                                 var eventNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<EventNotifyModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
-                                BLL.Biz.BizFactory.OperateLog.EventNotifyHandle(eventNotifyModel);
+                                BLL.Biz.BizFactory.Event.Handle(eventNotifyModel);
+                                break;
+                            case MqMessageType.OperateLog:
+                                LogUtil.Info("OperateLog");
+                                var pperateLogEventNotifyModel = Newtonsoft.Json.JsonConvert.DeserializeObject<OperateLogModel>(Newtonsoft.Json.JsonConvert.SerializeObject(this.Content));
+                                BLL.Biz.BizFactory.OperateLog.Handle(pperateLogEventNotifyModel);
                                 break;
                         }
 

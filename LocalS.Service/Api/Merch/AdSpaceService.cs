@@ -222,7 +222,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, EventCode.AdSpaceRelease, string.Format("发布广告（{0}）成功", rop.Title));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdSpaceRelease, string.Format("发布广告（{0}）成功", rop.Title));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
@@ -257,7 +257,7 @@ namespace LocalS.Service.Api.Merch
 
                 BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds);
 
-                MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", adContent.Title));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", adContent.Title));
 
             }
 

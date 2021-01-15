@@ -277,7 +277,7 @@ namespace LocalS.Service.Api.StoreTerm
             if (bizResult.Result == ResultType.Success)
             {
                 var d_machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, d_machine.CurUseMerchId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, d_machine.CurUseMerchId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark);
             }
 
             return bizResult;

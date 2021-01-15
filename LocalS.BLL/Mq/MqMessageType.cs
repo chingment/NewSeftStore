@@ -11,6 +11,7 @@ namespace LocalS.BLL.Mq
         Unknow = 0,
         PayTransResultNotify = 2,
         EventNotify = 3,
-        PayRefundResultNotify = 4
+        PayRefundResultNotify = 4,
+        OperateLog = 5
     }
 }

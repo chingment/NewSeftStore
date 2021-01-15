@@ -79,6 +79,7 @@
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\BuildOrderTool.cs" />
     <Compile Include="Biz\ByPointService.cs" />
+    <Compile Include="Biz\EventService.cs" />
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
     <Compile Include="Biz\Models\AdContentModel.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Mq\MqFactory.cs" />
     <Compile Include="Mq\MqMessageConentModel\EventNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\LoginLogModel.cs" />
+    <Compile Include="Mq\MqMessageConentModel\OperateLogModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayRefundResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayTransResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\SellChannelStockChangeModel.cs" />
