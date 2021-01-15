@@ -843,13 +843,7 @@ namespace LocalS.BLL.Biz
 
                     }
 
-
-                  
-
-                    MqFactory.Global.PushOperateLog(operater, rop.AppId, orders[0].MerchId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())));
-
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
-
                 }
             }
 

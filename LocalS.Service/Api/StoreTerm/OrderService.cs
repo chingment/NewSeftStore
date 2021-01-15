@@ -82,6 +82,9 @@ namespace LocalS.Service.Api.StoreTerm
             if (bizResult.Result == ResultType.Success)
             {
                 var order = bizResult.Data.Orders[0];
+
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), bizRop.AppId, rop.MachineId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", bizResult.Data.Orders.Select(m => m.Id).ToArray())));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", new { OrderId = order.Id, ChargeAmount = order.ChargeAmount });
             }
             else

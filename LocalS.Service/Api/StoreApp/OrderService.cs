@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using MyWeiXinSdk;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 
 namespace LocalS.Service.Api.StoreApp
 {
@@ -140,6 +141,9 @@ namespace LocalS.Service.Api.StoreApp
 
             if (bizResult.Result == ResultType.Success)
             {
+               
+                MqFactory.Global.PushOperateLog(operater, bizRop.AppId, rop.StoreId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", bizResult.Data.Orders.Select(m => m.Id).ToArray())));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", bizResult.Data);
             }
             else
