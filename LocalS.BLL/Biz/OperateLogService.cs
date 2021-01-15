@@ -40,6 +40,16 @@ namespace LocalS.BLL.Biz
                 merchName = BizFactory.Merch.GetMerchName(merchId);
                 trgerName = merchName;
             }
+            else if (model.AppId == AppId.WXMINPRAGROM)
+            {
+                var store = BizFactory.Store.GetOne(model.TrgerId);
+                trgerName = store.Name;
+                if (store != null)
+                {
+                    merchId = store.MerchId;
+                    merchName = store.MerchName;
+                }
+            }
             else if (model.AppId == AppId.STORETERM)
             {
                 var machine = BizFactory.Machine.GetOne(model.TrgerId);
@@ -47,7 +57,6 @@ namespace LocalS.BLL.Biz
                 {
                     merchName = machine.MerchName;
                     merchId = machine.MerchId;
-
                     trgerName = machine.MachineId;
                 }
             }
