@@ -9,7 +9,7 @@ namespace LocalS.BLL
 {
     public class ProductSkuStockModel
     {
-        public E_SellChannelRefType RefType { get; set; }
+        public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
         public string MachineId { get; set; }
         public string CabinetId { get; set; }

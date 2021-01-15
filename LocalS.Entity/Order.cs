@@ -71,7 +71,7 @@ namespace LocalS.Entity
         public string MerchName { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
-        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
         public string ShopName { get; set; }
         public string MachineId { get; set; }

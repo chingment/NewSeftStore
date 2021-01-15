@@ -23,7 +23,7 @@ namespace LocalS.BLL.Biz
                 if (operateEvent == EventCode.MachineCabinetSlotRemove)
                 {
                     #region MachineSlotRemove
-                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
+                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                     if (sellChannelStock != null)
                     {
                         var bizProdutSku = CacheServiceFactory.Product.GetSkuInfo(merchId, sellChannelStock.PrdProductSkuId);
@@ -66,14 +66,14 @@ namespace LocalS.BLL.Biz
                 else if (operateEvent == EventCode.MachineCabinetSlotSave)
                 {
                     #region MachineSlotSave
-                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
+                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                     var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
                     var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
                     if (sellChannelStock == null)
                     {
                         sellChannelStock = new SellChannelStock();
                         sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
-                        sellChannelStock.SellChannelRefType = E_SellChannelRefType.Machine;
+                        sellChannelStock.ShopMode = E_ShopMode.Machine;
                         sellChannelStock.MerchId = merchId;
                         sellChannelStock.StoreId = storeId;
                         sellChannelStock.ShopId = shopId;
@@ -159,7 +159,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, string appId, E_SellChannelRefType refType, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
+        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, string appId, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
 
@@ -172,7 +172,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderReserveSuccess:
                         #region OrderReserve
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -194,7 +194,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderCancle:
                         #region OrderCancle
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -221,7 +221,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderPaySuccess:
                         #region OrderPaySuccess
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -230,11 +230,11 @@ namespace LocalS.BLL.Biz
 
                         sellChannelStock.WaitPayLockQuantity -= quantity;
 
-                        if (sellChannelStock.SellChannelRefType == E_SellChannelRefType.Machine)
+                        if (sellChannelStock.ShopMode == E_ShopMode.Machine)
                         {
                             sellChannelStock.WaitPickupLockQuantity += quantity;
                         }
-                        else if (sellChannelStock.SellChannelRefType == E_SellChannelRefType.Mall)
+                        else if (sellChannelStock.ShopMode == E_ShopMode.Mall)
                         {
                             sellChannelStock.SumQuantity -= quantity;
                         }
@@ -252,7 +252,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderPickupOneSysMadeSignTake:
                         #region OrderPaySuccess
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -275,7 +275,7 @@ namespace LocalS.BLL.Biz
                         #region OrderPickupOneManMadeSignTakeByNotComplete
 
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -298,7 +298,7 @@ namespace LocalS.BLL.Biz
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -320,7 +320,7 @@ namespace LocalS.BLL.Biz
                     case EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
-                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
@@ -371,14 +371,14 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult AdjustStockQuantity(string operater, string appId, E_SellChannelRefType refType, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null, int? warnQuantity = null, int? holdQuantity = null)
+        public CustomJsonResult AdjustStockQuantity(string operater, string appId, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null, int? warnQuantity = null, int? holdQuantity = null)
         {
             var result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
                 var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == refType && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.PrdProductSkuId == productSkuId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.PrdProductSkuId == productSkuId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
 

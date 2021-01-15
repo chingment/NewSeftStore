@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.SellChannelRefType == E_SellChannelRefType.Machine).ToList();
+            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.ShopMode == E_ShopMode.Machine).ToList();
 
             var l_kind_all = new ProductKindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);

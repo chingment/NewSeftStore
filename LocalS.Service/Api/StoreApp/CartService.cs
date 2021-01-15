@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
     public class CartService : BaseService
     {
 
-        private CartDataModel GetCartData(string clientUserId, string storeId, string shopId, E_SellChannelRefType ShopMode)
+        private CartDataModel GetCartData(string clientUserId, string storeId, string shopId, E_ShopMode shopMode)
         {
             var m_cartData = new CartDataModel();
 
@@ -72,10 +72,10 @@ namespace LocalS.Service.Api.StoreApp
                 m_carBlock.ProductSkus = m_cartProductSkus.Where(m => m.ShopMode == m_shop.ShopMode && m.ShopId == m_shop.ShopId).ToList();
                 switch (m_shop.ShopMode)
                 {
-                    case E_SellChannelRefType.Mall:
+                    case E_ShopMode.Mall:
                         m_carBlock.TagName = "线上商城";
                         break;
-                    case E_SellChannelRefType.Machine:
+                    case E_ShopMode.Machine:
                         var shop = CurrentDb.Shop.Where(m => m.Id == m_shop.ShopId).FirstOrDefault();
                         m_carBlock.TagName = string.Format("门店[{0}]/线下机器", shop.Name);
                         break;
@@ -141,7 +141,7 @@ namespace LocalS.Service.Api.StoreApp
                     foreach (var item in rop.ProductSkus)
                     {
 
-                        if (item.ShopMode == E_SellChannelRefType.Unknow)
+                        if (item.ShopMode == E_ShopMode.Unknow)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoSelectShopMode, "未选择购物方式");
                         }

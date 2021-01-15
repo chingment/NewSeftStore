@@ -16,7 +16,7 @@ namespace LocalS.BLL.Mq
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string PrdProductSkuId { get; set; }
-        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public E_ShopMode ShopMode { get; set; }
         public string EventCode { get; set; }
         public int ChangeQuantity { get; set; }
         public int SumQuantity { get; set; }

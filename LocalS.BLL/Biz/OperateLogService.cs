@@ -352,7 +352,7 @@ namespace LocalS.BLL.Biz
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
                 if (order != null)
                 {
-                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.SellChannelRefType == E_SellChannelRefType.Machine && m.MachineId == machine.Id).ToList();
+                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.ShopMode == E_ShopMode.Machine && m.MachineId == machine.Id).ToList();
 
                     //是否触发过取货
                     if (order.PickupTrgTime == null)
@@ -371,7 +371,7 @@ namespace LocalS.BLL.Biz
                     orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                     orderPickupLog.OrderId = model.OrderId;
                     orderPickupLog.MerchId = order.MerchId;
-                    orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                    orderPickupLog.ShopMode = E_ShopMode.Machine;
                     orderPickupLog.StoreId = order.StoreId;
                     orderPickupLog.ShopId = order.ShopId;
                     orderPickupLog.MachineId = order.MachineId;
@@ -457,7 +457,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                     {
-                                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.SellChannelRefType, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                        BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, appId, orderSub.ShopMode, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
                                     }
 
                                     if (orderSub.PickupEndTime == null)
@@ -634,7 +634,7 @@ namespace LocalS.BLL.Biz
                 sellChannelStockLog.StoreName = storeName;
                 sellChannelStockLog.ShopId = model.ShopId;
                 sellChannelStockLog.MachineId = model.MachineId;
-                sellChannelStockLog.SellChannelRefType = model.SellChannelRefType;
+                sellChannelStockLog.ShopMode = model.ShopMode;
                 sellChannelStockLog.CabinetId = model.CabinetId;
                 sellChannelStockLog.SlotId = model.SlotId;
                 sellChannelStockLog.PrdProductId = bizProductSku.ProductId;

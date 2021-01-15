@@ -11,7 +11,7 @@ namespace LocalS.Entity
         OrderSub = 2
     }
 
-    public enum E_SellChannelRefType
+    public enum E_ShopMode
     {
         Unknow = 0,
         Mall = 1,//商城库存
@@ -38,7 +38,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
-        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
         public string MachineId { get; set; }
         public string CabinetId { get; set; }

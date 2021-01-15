@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.Merch
         public List<RefModel> Refs { get; set; }
         public class RefModel
         {
-            public E_SellChannelRefType RefType { get; set; }
+            public E_ShopMode ShopMode { get; set; }
             public string RefId { get; set; }
 
             public string RefName { get; set; }

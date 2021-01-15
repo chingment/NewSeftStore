@@ -36,7 +36,7 @@ namespace LocalS.Entity
         public string PrdProductId { get; set; }
         public string PrdProductSkuId { get; set; }
         public string PrdProductSkuName { get; set; }
-        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public E_ShopMode ShopMode { get; set; }
         public string EventCode { get; set; }
         public string EventName { get; set; }
         public int ChangeQuantity { get; set; }

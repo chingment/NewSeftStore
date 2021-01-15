@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetIndexSugProducts();
 
-            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.ShopId == "0" && m.MachineId == "0" && m.SellChannelRefType == E_SellChannelRefType.Mall && m.IsUseRent == true).Take(2).ToList();
+            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.ShopId == "0" && m.MachineId == "0" && m.ShopMode == E_ShopMode.Mall && m.IsUseRent == true).Take(2).ToList();
 
             var m_pdRent = new PdRentModel();
 
@@ -79,7 +79,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_sellChannelStock in d_sellChannelStocks)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_SellChannelRefType.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.PrdProductSkuId);
                 if (r_productSku != null && r_productSku.Stocks != null && r_productSku.Stocks.Count > 0)
                 {
                     var m_productSku = new ProductSkuModel();

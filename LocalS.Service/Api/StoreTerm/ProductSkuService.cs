@@ -29,7 +29,7 @@ m.MerchId == merchId &&
 m.StoreId == storeId &&
 m.ShopId == shopId &&
 m.MachineId == machineId &&
-m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
+m.ShopMode == Entity.E_ShopMode.Machine)
                          orderby m.CreateTime
                          select new { m.PrdProductSkuId }).Distinct();
 
@@ -43,7 +43,7 @@ m.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
 
             foreach (var item in list)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(Entity.E_SellChannelRefType.Machine, merchId, storeId, shopId, new string[] { machineId }, item.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Machine, merchId, storeId, shopId, new string[] { machineId }, item.PrdProductSkuId);
 
                 var m_productSku = new ProductSkuModel();
                 m_productSku.ProductSkuId = r_productSku.Id;

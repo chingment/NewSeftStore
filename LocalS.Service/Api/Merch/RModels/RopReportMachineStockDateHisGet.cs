@@ -13,6 +13,6 @@ namespace LocalS.Service.Api.Merch
 
         public String StockDate { get; set; }
 
-        public E_SellChannelRefType SellChannelRefType { get; set; }
+        public E_ShopMode ShopMode { get; set; }
     }
 }

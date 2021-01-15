@@ -333,7 +333,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     foreach (var stock in rop.Stocks)
                     {
-                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.SellChannelRefType == E_SellChannelRefType.Mall).FirstOrDefault();
+                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.ShopMode == E_ShopMode.Mall).FirstOrDefault();
 
                         if (sellChannelStock == null)
                         {
@@ -341,7 +341,7 @@ namespace LocalS.Service.Api.Merch
                             sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
                             sellChannelStock.MerchId = merchId;
                             sellChannelStock.StoreId = rop.StoreId;
-                            sellChannelStock.SellChannelRefType = E_SellChannelRefType.Mall;
+                            sellChannelStock.ShopMode = E_ShopMode.Mall;
                             sellChannelStock.ShopId = "0";
                             sellChannelStock.MachineId = "0";
                             sellChannelStock.CabinetId = "0";
@@ -400,7 +400,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var d_ProductSku in d_ProductSkus)
             {
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductSkuId == d_ProductSku.Id).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.ShopMode == E_ShopMode.Mall && m.PrdProductSkuId == d_ProductSku.Id).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
                     stocks.Add(new { SkuId = d_ProductSku.Id, CumCode = d_ProductSku.CumCode, SumQuantity = 10000, SpecIdx = d_ProductSku.SpecIdx, SalePrice = d_ProductSku.SalePrice, IsOffSell = false, IsUseRent = false, RentMhPrice = 0, DepositPrice = 0 });
@@ -446,7 +446,7 @@ namespace LocalS.Service.Api.Merch
                     d_StoreKindSpu.Mender = operater;
                 }
 
-                var d_SellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.SellChannelRefType == E_SellChannelRefType.Mall && m.PrdProductId == rop.ProductId).ToList();
+                var d_SellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopMode == E_ShopMode.Mall && m.PrdProductId == rop.ProductId).ToList();
 
                 foreach (var d_SellChannelStock in d_SellChannelStocks)
                 {

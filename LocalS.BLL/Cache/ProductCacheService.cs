@@ -104,7 +104,7 @@ namespace LocalS.BLL
             return r_spu;
         }
 
-        public ProductSkuInfoModel GetSkuStock(E_SellChannelRefType refType, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
+        public ProductSkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
         {
             var productSkuInfo = GetSkuInfo(merchId, productSkuId);
 
@@ -112,15 +112,15 @@ namespace LocalS.BLL
 
             var sellChannelStocks = new List<SellChannelStock>();
 
-            if (refType == E_SellChannelRefType.Mall)
+            if (shopMode == E_ShopMode.Mall)
             {
-                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Mall && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == "0" && m.MachineId == "0" && m.PrdProductSkuId == productSkuId).ToList();
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Mall && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == "0" && m.MachineId == "0" && m.PrdProductSkuId == productSkuId).ToList();
             }
-            else if (refType == E_SellChannelRefType.Shop)
+            else if (shopMode == E_ShopMode.Shop)
             {
-                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Shop && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == "0" && m.PrdProductSkuId == productSkuId).ToList();
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Shop && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == "0" && m.PrdProductSkuId == productSkuId).ToList();
             }
-            else if (refType == E_SellChannelRefType.Machine)
+            else if (shopMode == E_ShopMode.Machine)
             {
                 if (machineIds == null || machineIds.Length == 0)
                 {
@@ -128,14 +128,14 @@ namespace LocalS.BLL
                 }
                 if (machineIds != null && machineIds.Length > 0)
                 {
-                    sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && machineIds.Contains(m.MachineId) && m.PrdProductSkuId == productSkuId).ToList();
+                    sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && machineIds.Contains(m.MachineId) && m.PrdProductSkuId == productSkuId).ToList();
                 }
             }
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var productSkuStock = new ProductSkuStockModel();
-                productSkuStock.RefType = sellChannelStock.SellChannelRefType;
+                productSkuStock.ShopMode = sellChannelStock.ShopMode;
                 productSkuStock.ShopId = sellChannelStock.ShopId;
                 productSkuStock.MachineId = sellChannelStock.MachineId;
                 productSkuStock.CabinetId = sellChannelStock.CabinetId;

@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.StoreApp
 
             public List<ProductSkuModel> ProductSkus { get; set; }
 
-            public E_SellChannelRefType ShopMode { get; set; }
+            public E_ShopMode ShopMode { get; set; }
 
         }
 
@@ -53,7 +53,7 @@ namespace LocalS.Service.Api.StoreApp
             public int Quantity { get; set; }
             public bool Selected { get; set; }
             public decimal SumPrice { get; set; }
-            public E_SellChannelRefType ShopMode { get; set; }
+            public E_ShopMode ShopMode { get; set; }
 
             public string ShopId { get; set; }
 

@@ -181,7 +181,7 @@ namespace LocalS.Service.Api.StoreApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择商品");
                 }
 
-                if (rop.ProductSkus.Where(m => m.ShopMode == E_SellChannelRefType.Unknow).Count() != 0)
+                if (rop.ProductSkus.Where(m => m.ShopMode == E_ShopMode.Unknow).Count() != 0)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品指定的购物模式有误");
                 }
@@ -359,7 +359,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var orderSub in orderSubs)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(orderSub.SellChannelRefType, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.PrdProductSkuId);
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.PrdProductSkuId);
 
                     var c_prodcutSku = new BuildSku();
                     c_prodcutSku.Id = orderSub.PrdProductSkuId;
@@ -371,7 +371,7 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.SaleAmount = orderSub.SaleAmount;
                     c_prodcutSku.OriginalAmount = orderSub.OriginalAmount;
                     c_prodcutSku.ShopMethod = orderSub.ShopMethod;
-                    c_prodcutSku.ShopMode = orderSub.SellChannelRefType;
+                    c_prodcutSku.ShopMode = orderSub.ShopMode;
                     c_prodcutSku.SupReceiveMode = r_productSku.SupReceiveMode;
                     c_prodcutSku.ReceiveMode = orderSub.ReceiveMode;
                     c_prodcutSku.RentTermUnitText = "月";
@@ -531,7 +531,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var orderBlock = new List<RetOrderConfirm.BlockModel>();
 
-            var skus_Mall = c_prodcutSkus.Where(m => m.ShopMode == E_SellChannelRefType.Mall).ToList();
+            var skus_Mall = c_prodcutSkus.Where(m => m.ShopMode == E_ShopMode.Mall).ToList();
 
             if (skus_Mall.Count > 0)
             {
@@ -616,7 +616,7 @@ namespace LocalS.Service.Api.StoreApp
 
             }
 
-            var skus_SelfTakeByMachines = (from u in c_prodcutSkus where u.ShopMode == E_SellChannelRefType.Machine select new { u.ShopMode, u.ShopId }).Distinct().ToList();
+            var skus_SelfTakeByMachines = (from u in c_prodcutSkus where u.ShopMode == E_ShopMode.Machine select new { u.ShopMode, u.ShopId }).Distinct().ToList();
 
             if (skus_SelfTakeByMachines.Count > 0)
             {
@@ -624,7 +624,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var shop = CurrentDb.Shop.Where(m => m.Id == skus_SelfTakeByMachine.ShopId).FirstOrDefault();
 
-                    var l_skus = c_prodcutSkus.Where(m => m.ShopId == skus_SelfTakeByMachine.ShopId && m.ShopMode == E_SellChannelRefType.Machine).ToList();
+                    var l_skus = c_prodcutSkus.Where(m => m.ShopId == skus_SelfTakeByMachine.ShopId && m.ShopMode == E_ShopMode.Machine).ToList();
 
                     var ob_SelfTakeByMachine = new RetOrderConfirm.BlockModel();
                     ob_SelfTakeByMachine.TagName = "线下机器";

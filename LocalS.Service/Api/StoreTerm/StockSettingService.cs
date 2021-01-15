@@ -55,7 +55,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
             ret.RowColLayout = cabinet.RowColLayout;
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.ShopId == machine.ShopId && m.CabinetId == rup.CabinetId && m.MachineId == rup.MachineId).ToList();
+            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.ShopId == machine.ShopId && m.CabinetId == rup.CabinetId && m.MachineId == rup.MachineId).ToList();
 
             foreach (var item in machineStocks)
             {
@@ -126,7 +126,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, E_SellChannelRefType.Machine, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
+                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, AppId.STORETERM, E_ShopMode.Machine, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
                 }
 
                 return result;
@@ -213,7 +213,7 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.SellChannelRefType == E_SellChannelRefType.Machine && m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId & m.ShopId == machine.CurUseShopId && m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId & m.ShopId == machine.CurUseShopId && m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
 
                     for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                     {

@@ -68,11 +68,11 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId)
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.ShopId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
-            if (rop.SellChannelRefType != Entity.E_SellChannelRefType.Unknow)
+            if (rop.ShopMode != Entity.E_ShopMode.Unknow)
             {
-                query = query.Where(m => m.SellChannelRefType == rop.SellChannelRefType);
+                query = query.Where(m => m.ShopMode == rop.ShopMode);
             }
 
             var sellChannelStocks = query.OrderBy(m => m.SlotId).ToList();
@@ -84,11 +84,11 @@ namespace LocalS.Service.Api.Merch
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
 
-                if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Mall)
+                if (sellChannelStock.ShopMode == Entity.E_ShopMode.Mall)
                 {
                     sellChannelRefName = "线上商城";
                 }
-                else if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
+                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Machine)
                 {
                     sellChannelRefName = "线下机器";
                     sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.MachineId, sellChannelStock.SlotId);
@@ -183,11 +183,11 @@ namespace LocalS.Service.Api.Merch
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId) &&
                          m.StockDate == rop.StockDate
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.SellChannelRefType, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
-            if (rop.SellChannelRefType != Entity.E_SellChannelRefType.Unknow)
+            if (rop.ShopMode != Entity.E_ShopMode.Unknow)
             {
-                query = query.Where(m => m.SellChannelRefType == rop.SellChannelRefType);
+                query = query.Where(m => m.ShopMode == rop.ShopMode);
             }
 
             var sellChannelStocks = query.OrderBy(m => m.SlotId).ToList();
@@ -200,11 +200,11 @@ namespace LocalS.Service.Api.Merch
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
 
-                if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Mall)
+                if (sellChannelStock.ShopMode == Entity.E_ShopMode.Mall)
                 {
                     sellChannelRefName = "线上商城";
                 }
-                else if (sellChannelStock.SellChannelRefType == Entity.E_SellChannelRefType.Machine)
+                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Machine)
                 {
                     sellChannelRefName = "线下机器";
                     sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.MachineId, sellChannelStock.SlotId);

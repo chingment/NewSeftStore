@@ -50,7 +50,7 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_SellChannelRefType shopMode, E_OrderShopMethod shopMethod, string kindId)
+        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_ShopMode shopMode, E_OrderShopMethod shopMethod, string kindId)
         {
             var pageEntiy = new PageEntity<ProductSkuModel>();
 
@@ -63,7 +63,7 @@ namespace LocalS.Service.Api.StoreApp
                 m.MerchId == store.MerchId
                          && m.StoreId == storeId
                          && m.ShopId == shopId
-                         && m.SellChannelRefType == shopMode
+                         && m.ShopMode == shopMode
 
                 ).AsEnumerable()
                      .OrderBy(x => x.Id)
@@ -118,7 +118,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                if (shopMode == E_SellChannelRefType.Machine)
+                if (shopMode == E_ShopMode.Machine)
                 {
                     m_productSku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
                 }
@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.StoreApp
                 m_productSku.IsMavkBuy = r_productSku.IsMavkBuy;
             }
 
-            if (rup.ShopMode == E_SellChannelRefType.Machine)
+            if (rup.ShopMode == E_ShopMode.Machine)
             {
                 m_productSku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
             }

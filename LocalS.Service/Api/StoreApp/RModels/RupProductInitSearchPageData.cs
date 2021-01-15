@@ -9,7 +9,7 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RupProductInitSearchPageData
     {
-        public E_SellChannelRefType ShopMode { get; set; }
+        public E_ShopMode ShopMode { get; set; }
 
         public string StoreId { get; set; }
     }

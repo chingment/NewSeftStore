@@ -10,6 +10,6 @@ namespace LocalS.Service.Api.StoreApp
     public class RupCartPageData
     {
         public string StoreId { get; set; }
-        public E_SellChannelRefType ShopMode { get; set; }
+        public E_ShopMode ShopMode { get; set; }
     }
 }

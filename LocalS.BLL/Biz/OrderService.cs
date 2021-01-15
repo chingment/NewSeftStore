@@ -629,7 +629,7 @@ namespace LocalS.BLL.Biz
                         {
                             order.ShopName = shop.Name;
                         }
-                        order.SellChannelRefType = buildOrder.SellChannelRefType;
+                        order.ShopMode = buildOrder.ShopMode;
                         order.ShopId = buildOrder.ShopId;
                         order.MachineId = buildOrder.MachineId;
                         order.SaleOutletId = rop.SaleOutletId;
@@ -789,7 +789,7 @@ namespace LocalS.BLL.Biz
                             orderSub.MerchName = order.MerchName;
                             orderSub.StoreId = order.StoreId;
                             orderSub.StoreName = order.StoreName;
-                            orderSub.SellChannelRefType = order.SellChannelRefType;
+                            orderSub.ShopMode = order.ShopMode;
                             orderSub.ShopId = order.ShopId;
                             orderSub.ShopName = order.ShopName;
                             orderSub.MachineId = order.MachineId;
@@ -838,7 +838,7 @@ namespace LocalS.BLL.Biz
                             //购物或租赁进行库存操作
                             if (orderSub.ShopMethod == E_OrderShopMethod.Shop || orderSub.ShopMethod == E_OrderShopMethod.Rent)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.SellChannelRefType, order.MerchId, order.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, rop.AppId, order.ShopMode, order.MerchId, order.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, orderSub.Quantity);
                             }
                         }
                     }
@@ -1210,7 +1210,7 @@ namespace LocalS.BLL.Biz
                             //购物和租赁进行库存操作
                             if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop || d_orderSub.ShopMethod == E_OrderShopMethod.Rent)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.SellChannelRefType, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.AppId, d_order.ShopMode, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                             }
                         }
 
@@ -1282,7 +1282,7 @@ namespace LocalS.BLL.Biz
                         var d_orderPickupLog = new OrderPickupLog();
                         d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                         d_orderPickupLog.OrderId = d_order.Id;
-                        d_orderPickupLog.SellChannelRefType = d_order.SellChannelRefType;
+                        d_orderPickupLog.ShopMode = d_order.ShopMode;
                         d_orderPickupLog.MerchId = d_order.MerchId;
                         d_orderPickupLog.StoreId = d_order.StoreId;
                         d_orderPickupLog.ShopId = d_order.ShopId;
@@ -1412,7 +1412,7 @@ namespace LocalS.BLL.Biz
                         //购物货租赁进行库存操作
                         if (d_orderSub.ShopMethod == E_OrderShopMethod.Shop || d_orderSub.ShopMethod == E_OrderShopMethod.Shop)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, d_order.SellChannelRefType, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
+                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_order.AppId, d_order.ShopMode, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                         }
 
                     }
@@ -2057,7 +2057,7 @@ namespace LocalS.BLL.Biz
 
                             if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.MERCH, E_SellChannelRefType.Machine, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, AppId.MERCH, E_ShopMode.Machine, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
                             }
 
                             orderSub.ExPickupIsHandle = true;
@@ -2069,7 +2069,7 @@ namespace LocalS.BLL.Biz
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = orderSub.OrderId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.ShopMode = E_ShopMode.Machine;
                             orderPickupLog.MerchId = orderSub.MerchId;
                             orderPickupLog.StoreId = orderSub.StoreId;
                             orderPickupLog.ShopId = orderSub.ShopId;
@@ -2090,7 +2090,7 @@ namespace LocalS.BLL.Biz
                         {
                             if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, E_SellChannelRefType.Machine, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, AppId.STORETERM, E_ShopMode.Machine, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
                             }
 
                             orderSub.ExPickupIsHandle = true;
@@ -2101,7 +2101,7 @@ namespace LocalS.BLL.Biz
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = orderSub.OrderId;
-                            orderPickupLog.SellChannelRefType = E_SellChannelRefType.Machine;
+                            orderPickupLog.ShopMode = E_ShopMode.Machine;
                             orderPickupLog.MerchId = orderSub.MerchId;
                             orderPickupLog.StoreId = orderSub.StoreId;
                             orderPickupLog.MachineId = orderSub.MachineId;
