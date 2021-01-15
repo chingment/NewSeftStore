@@ -5,7 +5,7 @@ const app = getApp()
 
 Page({
   data: {
-    tag: 'store'
+    tag: 'shopchoice'
   },
   onLoad: function (options) {
     var _this = this
