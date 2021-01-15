@@ -5,7 +5,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const apiIndex = require('../../api/index.js')
 const apiCart = require('../../api/cart.js')
 const apiGlobal = require('../../api/global.js')
-const skeletonData = require('./skeletonData');
+const skeletonData = require('./skeletonData')
 
 const app = getApp()
 Component({
@@ -146,7 +146,7 @@ Component({
     onShow() {
       console.log("index.onShow")
       var _this = this
-      app.globalData.skeletonPage = _this;
+      app.globalData.skeletonPage = _this
 
       _this.setData({
         storeId: storeage.getStoreId()

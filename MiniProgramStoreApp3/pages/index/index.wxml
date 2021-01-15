@@ -7,7 +7,7 @@
 	<view class="page st-index pd-com skeleton" wx:if="{{ pageIsReady }}">
 		<view class="page-ct">
 			<view style="height:61rpx;width:100%">
-				<view class="store" bindtap="goSelectStore">
+				<view class="store">
 					<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
 					<text class="title skeleton-rect">{{currentStore.name}}</text>
 				</view>
@@ -81,7 +81,7 @@
 					<view class="rt">
 
 						<view class="t1">线上下单线下自取</view>
-						<view class="t2"><text class="t22">7X24小时</text> <text class="t22">智能遍历</text> <text class="t22">商品丰富</text> </view>
+						<view class="t2"><text class="t22">7X24小时</text> <text class="t22">智能便利</text> <text class="t22">商品丰富</text> </view>
 						<view class="t3">
 
 							<view class="it" bindtap="clickToFc" data-ischecklogin="false" data-url="/pages/shopmarket/shopmarket">

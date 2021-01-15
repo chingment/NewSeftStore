@@ -11,7 +11,7 @@ module.exports = {
         "width:160rpx;height:44rpx;left:70rpx;top:8rpx",
         "width:112rpx;height:40rpx;left:454rpx;top:10rpx",
         "width:112rpx;height:40rpx;left:620rpx;top:10rpx",
-        "width:714rpx;height:300rpx;left:18rpx;top:70rpx",a
+        "width:714rpx;height:300rpx;left:18rpx;top:70rpx",
         "width:158.5rpx;height:32rpx;left:28rpx;top:542rpx",
         "width:158.5rpx;height:32rpx;left:206.5rpx;top:542rpx",
         "width:158.5rpx;height:32rpx;left:385rpx;top:542rpx",

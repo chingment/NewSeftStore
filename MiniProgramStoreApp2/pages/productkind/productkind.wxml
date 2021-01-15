@@ -1,8 +1,11 @@
 <specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}"></specsdialog>
-<view class="page">
-	<view class="page-ct">
+<skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
+	data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
+
+<view class="page skeleton" wx:if="{{ pageIsReady }}">
+	<view class="page-ct " >
 		<view id="searchbox" class="searchbox cl1" bindtap="searchClick">
-			<view class="searchbox-ct">
+			<view class="searchbox-ct skeleton-rect">
 				<view class="searchbox-icon">
 					<image class="img" src="/content/default/images/icon_search_box.png"></image>
 				</view>
@@ -21,7 +24,8 @@
 			<view class='st-kind'>
 				<scroll-view class='kind-left-navbar' scroll-y="true">
 					<block wx:for="{{tabs}}" wx:for-index="tabsIndex" wx:for-item="tab" wx:key="tabsIndex">
-						<view class="it {{ tab.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{tabsIndex}}" bindtap="itemClick">{{tab.name}}
+						<view class="it {{ tab.selected==true ? 'font-main kind-left-navbar-selected' : 'kind-left-navbar-normal' }}" data-reply-index="{{tabsIndex}}" bindtap="itemClick">
+					 <text class="skeleton-rect">{{tab.name}}</text>
 						</view>
 					</block>
 				</scroll-view>
@@ -34,7 +38,7 @@
 							<block wx:for="{{tab.list.items}}" wx:for-index="listIndex" wx:for-item="item" wx:key="listIndex">
 								<view class='it'>
 									<view class="it-left">
-										<navigator class='imgurl' url="/pages/productdetails/productdetails?skuId={{item.id}}&shopMethod=1" hover-class="none">
+										<navigator class='imgurl skeleton-rect' url="/pages/productdetails/productdetails?skuId={{item.id}}&shopMethod=1" hover-class="none">
 											<view wx:if="{{item.isOffSell}}" class="isOffSell-box">
 												<view class="isOffSell-tip">已下架</view>
 											</view>
@@ -42,17 +46,17 @@
 										</navigator>
 									</view>
 									<view class="it-right">
-										<text class="name font-gray">{{item.name}}</text>
-										<text class="briefInfo font-gray">{{item.briefDes}}</text>
+										<text class="name font-gray skeleton-rect">{{item.name}}</text>
+										<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
 										<view class="area2">
 											<view class="price">
-												<text class="saleprice font-black">{{item.salePrice}}</text>
+												<text class="saleprice font-black skeleton-rect">{{item.salePrice}}</text>
 												<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
 											</view>
 											<view class="operate">
 
 												<block wx:if="{{item.specIdxSkus.length<=1}}">
-													<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase" src='/content/default/images/increase.png'></image>
+													<image wx:if="{{!item.isOffSell}}" bindtap="addToCart" data-reply-skuid="{{item.id}}" class="increase skeleton-circle" src='/content/default/images/increase.png'></image>
 												</block>
 												<block wx:else>
 

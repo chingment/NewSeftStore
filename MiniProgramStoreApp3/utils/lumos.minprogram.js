@@ -231,7 +231,7 @@ const myWxRequest = (opts) => {
     if (!isNullOrEmpty(_urlParams)) {
       _url += "&"
       for (var p in _urlParams) {
-        _url += p + '=' + encodeURIComponent(_urlParams[p]).toUpperCase() + '&';
+        _url += p + '=' + encodeURIComponent(_urlParams[p]).toLowerCase() + '&';
       }
 
       _url = _url.substring(0, _url.length - 1)

@@ -219,12 +219,12 @@ Page({
           return
         }
 
-        if (util.isEmptyOrNull(_selfTake.contact.id)) {
-          toast.show({
-            title: '请选择联系人'
-          })
-          return
-        }
+        // if (util.isEmptyOrNull(_selfTake.contact.id)) {
+        //   toast.show({
+        //     title: '请选择联系人'
+        //   })
+        //   return
+        // }
 
         for (var j = 0; j < _skus.length; j++) {
           skus[j].shopId = _selfTake.mark.id

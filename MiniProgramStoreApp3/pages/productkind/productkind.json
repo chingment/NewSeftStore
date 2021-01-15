@@ -2,6 +2,7 @@
   "component": true,
   "usingComponents": {
     "own-scroll": "/components/ownscroll/ownscroll",
+    "skeleton": "../../components/skeleton/skeleton",
     "specsdialog": "../../components/specsdialog/specsdialog"
   }
 }

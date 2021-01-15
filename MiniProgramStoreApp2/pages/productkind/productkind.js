@@ -4,6 +4,7 @@ const storeage = require('../../utils/storeageutil.js')
 const apiKind = require('../../api/kind.js')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
+const skeletonData = require('./skeletonData')
 const app = getApp()
 
 Component({
@@ -18,6 +19,12 @@ Component({
   },
   data: {
     tag: 'main-productkind',
+    pageIsReady: false,
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: false,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
     isOnReady: false,
     shopMode: 1,
     shopId: '0',
@@ -51,14 +58,14 @@ Component({
         quantity: 1,
         selected: true,
         shopMode: _this.data.shopMode,
-        shopId:_this.data.shopId
+        shopId: _this.data.shopId
       });
 
       apiCart.operate({
         storeId: _this.data.storeId,
         operate: 2,
         productSkus: productSkus,
-        shopId:_this.data.shopId
+        shopId: _this.data.shopId
       }).then(function (res) {
         if (res.result == 1) {
           toast.show({
@@ -127,7 +134,7 @@ Component({
       apiKind.pageData({
         storeId: _this.data.storeId,
         shopMode: _this.data.shopMode,
-        shopId:_this.data.shopId
+        shopId: _this.data.shopId
       }).then(function (res) {
 
         if (res.result === 1) {
@@ -139,11 +146,25 @@ Component({
 
 
           _this.setData({
+            pageIsReady:true,
             searchtips: searchtips,
             tabs: d.tabs
           })
 
         }
+
+        const query = wx.createSelectorQuery().in(_this)
+        query.select('.searchbox').boundingClientRect(function (rect) {
+          if (rect == null)
+            return
+          var height = _this.data.height - rect.height
+
+          _this.setData({
+            scrollHeight: height
+          })
+
+        }).exec()
+
       })
     },
     onReady: function () {
@@ -152,18 +173,9 @@ Component({
     },
     onShow() {
       console.log("productKind.onShow")
-      var _this = this;
+      var _this = this
 
-      const query = wx.createSelectorQuery().in(_this)
-      query.select('.searchbox').boundingClientRect(function (rect) {
-
-        var height = _this.data.height - rect.height
-
-        _this.setData({
-          scrollHeight: height
-        })
-
-      }).exec()
+      app.globalData.skeletonPage = _this
 
 
       _this.setData({
@@ -207,7 +219,7 @@ Component({
         pageSize: pageSize,
         kindId: kindId,
         shopMode: _this.data.shopMode,
-        shopId:_this.data.shopId,
+        shopId: _this.data.shopId,
         name: ""
       }, false).then(function (res) {
         if (res.result == 1) {

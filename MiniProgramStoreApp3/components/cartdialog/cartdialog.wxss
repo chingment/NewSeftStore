@@ -92,6 +92,7 @@
   align-items: center;
   justify-content: left;
   padding: 5rpx 0;
+  width: 100%;
 }
 
 .its-blocks>.it>.it-tag .icon {

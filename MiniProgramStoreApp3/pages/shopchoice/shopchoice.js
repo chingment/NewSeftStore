@@ -65,8 +65,18 @@ Page({
   choice: function (e) {
     var choice = e.currentTarget.dataset.replyItem
     storeage.setShopId(choice.id);
-    wx.reLaunch({
-      url: ownRequest.getReturnUrl()
+
+    var pages = getCurrentPages();
+    var beforePage = pages[pages.length - 2]; // 前一个页面
+
+    beforePage.getPageData()
+    
+    wx.navigateBack({
+      //返回
+      delta: 1
     })
+
+
+
   }
 })

@@ -16,7 +16,7 @@ Page({
     tag: 'shopmarket',
     skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
     skeletonSelectedLoadingType: 'shine',
-    skeletonIsDev: true,
+    skeletonIsDev: false,
     skeletonBgcolor: '#FFF',
     skeletonData,
     pageIsReady: false,
@@ -47,6 +47,9 @@ Page({
     app.globalData.skeletonPage = _this
 
 
+    _this.getPageData()
+    _this.getCartData()
+
   },
 
   /**
@@ -61,30 +64,32 @@ Page({
    */
   onShow: function () {
 
-    var _this = this
-
-    const query = wx.createSelectorQuery().in(_this)
-    var wHeight = wx.getSystemInfoSync().windowHeight;
-    query.select('.searchbox').boundingClientRect(function (rect) {
-      if (rect == null)
-        return
-      var heihgt = typeof rect.height == undefined ? 0 : rect.height
-      var height = wHeight - rect.height
-      _this.setData({
-        scrollHeight: height
-      })
-
-    }).exec()
-
     ownRequest.isSelectedShop(true)
 
-    _this.setData({
-      storeId: storeage.getStoreId(),
-      shopId: storeage.getShopId()
-    })
+    // var _this = this
 
-    _this.getPageData()
-    _this.getCartData()
+    // const query = wx.createSelectorQuery().in(_this)
+    // var wHeight = wx.getSystemInfoSync().windowHeight;
+    // query.select('.searchbox').boundingClientRect(function (rect) {
+    //   if (rect == null)
+    //     return
+    //   var heihgt = typeof rect.height == undefined ? 0 : rect.height
+    //   var height = wHeight - rect.height
+    //   _this.setData({
+    //     scrollHeight: height
+    //   })
+
+    // }).exec()
+
+    // ownRequest.isSelectedShop(true)
+
+    // _this.setData({
+    //   storeId: storeage.getStoreId(),
+    //   shopId: storeage.getShopId()
+    // })
+
+    // _this.getPageData()
+    // _this.getCartData()
   },
 
   /**
@@ -219,7 +224,11 @@ Page({
   },
   getPageData: function () {
     var _this = this
-
+    _this.setData({
+      pageIsReady:false,
+      storeId: storeage.getStoreId(),
+      shopId: storeage.getShopId()
+    })
     apiShopMarket.pageData({
       storeId: _this.data.storeId,
       shopId: _this.data.shopId,
@@ -242,6 +251,19 @@ Page({
         })
 
       }
+
+      const query = wx.createSelectorQuery().in(_this)
+      var wHeight = wx.getSystemInfoSync().windowHeight;
+      query.select('.searchbox').boundingClientRect(function (rect) {
+        if (rect == null)
+          return
+        var heihgt = typeof rect.height == undefined ? 0 : rect.height
+        var height = wHeight - rect.height
+        _this.setData({
+          scrollHeight: height
+        })
+
+      }).exec()
 
 
     })

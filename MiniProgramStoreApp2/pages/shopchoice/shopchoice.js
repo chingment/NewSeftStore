@@ -66,10 +66,17 @@ Page({
     var choice = e.currentTarget.dataset.replyItem
     storeage.setShopId(choice.id);
 
+    var pages = getCurrentPages();
+    var beforePage = pages[pages.length - 2]; // 前一个页面
+
+    beforePage.getPageData()
+    
     wx.navigateBack({
       //返回
       delta: 1
     })
-    
+
+
+
   }
 })
