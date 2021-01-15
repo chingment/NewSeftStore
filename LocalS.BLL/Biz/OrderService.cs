@@ -49,18 +49,6 @@ namespace LocalS.BLL.Biz
                 statusModel.Value = 0;
                 statusModel.Text = "否";
             }
-            //switch (status)
-            //{
-            //    case E_AdContentStatus.Normal:
-            //        statusModel.Value = 1;
-            //        statusModel.Text = "正常";
-            //        break;
-            //    case E_AdContentStatus.Deleted:
-            //        statusModel.Value = 2;
-            //        statusModel.Text = "已删除";
-            //        break;
-            //}
-
 
             return statusModel;
         }

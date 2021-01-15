@@ -59,19 +59,19 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var r_bizProductSku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.PrdProductSkuId);
+                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.PrdProductSkuId);
 
-                if (r_bizProductSku != null)
+                if (r_ProductSku != null)
                 {
                     var slot = new SlotModel();
                     slot.SlotId = item.SlotId;
                     slot.StockId = item.Id;
                     slot.CabinetId = item.CabinetId;
-                    slot.ProductSkuId = r_bizProductSku.Id;
-                    slot.CumCode = r_bizProductSku.CumCode;
-                    slot.Name = r_bizProductSku.Name;
-                    slot.MainImgUrl = ImgSet.Convert_S(r_bizProductSku.MainImgUrl);
-                    slot.SpecDes = SpecDes.GetDescribe(r_bizProductSku.SpecDes);
+                    slot.ProductSkuId = r_ProductSku.Id;
+                    slot.CumCode = r_ProductSku.CumCode;
+                    slot.Name = r_ProductSku.Name;
+                    slot.MainImgUrl = ImgSet.Convert_S(r_ProductSku.MainImgUrl);
+                    slot.SpecDes = SpecDes.GetDescribe(r_ProductSku.SpecDes);
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
