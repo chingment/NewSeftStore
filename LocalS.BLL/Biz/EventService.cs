@@ -351,6 +351,9 @@ namespace LocalS.BLL.Biz
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, remark.ToString());
             }
         }
 
@@ -370,6 +373,8 @@ namespace LocalS.BLL.Biz
             string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
 
             machine.LastRequestTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+
 
             StringBuilder remark = new StringBuilder("");
             string productSkuName = "[测试]";
@@ -396,7 +401,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-
+            MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, remark.ToString());
 
         }
 

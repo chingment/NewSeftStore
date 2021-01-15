@@ -142,7 +142,7 @@ namespace LocalS.Service.Api.StoreApp
             if (bizResult.Result == ResultType.Success)
             {
 
-                MqFactory.Global.PushOperateLog(operater, bizRop.AppId, rop.StoreId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", bizResult.Data.Orders.Select(m => m.Id).ToArray())));
+                MqFactory.Global.PushOperateLog(operater, AppId.WXMINPRAGROM, rop.StoreId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", bizResult.Data.Orders.Select(m => m.Id).ToArray())));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", bizResult.Data);
             }
@@ -917,7 +917,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, clientUserId, EventCode.OrderCancle, string.Format("用户取消订单（{0}）成功", rop.Id));
+                MqFactory.Global.PushOperateLog(operater, AppId.WXMINPRAGROM, rop.StoreId, EventCode.OrderCancle, string.Format("用户取消订单（{0}）成功", rop.Id));
             }
 
             return result;

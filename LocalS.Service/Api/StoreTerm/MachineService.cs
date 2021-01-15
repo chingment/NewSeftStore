@@ -209,7 +209,7 @@ namespace LocalS.Service.Api.StoreTerm
 
         public CustomJsonResult EventNotify(string operater, RopMachineEventNotify rop)
         {
-            BizFactory.Machine.EventNotify(operater, rop.AppId, rop.MachineId, rop.EventCode, rop.EventRemark, rop.Content);
+            BizFactory.Machine.EventNotify(operater, AppId.STORETERM, rop.MachineId, rop.EventCode, rop.EventRemark, rop.Content);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }

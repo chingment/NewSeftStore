@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string Id { get; set; }
 
-        public string AppId { get; set; }
+        public string StoreId { get; set; }
 
     }
 }

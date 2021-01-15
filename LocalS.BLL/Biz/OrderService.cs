@@ -1295,7 +1295,17 @@ namespace LocalS.BLL.Biz
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_payTrans.Id);
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_orders.Select(m => m.Id).ToArray());
 
-                    MqFactory.Global.PushOperateLog(operater, d_orders[0].AppId, d_orders[0].MerchId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_orders.Select(m => m.Id).ToArray())));
+                    string trgerId = "";
+                    if (d_orders[0].AppId == AppId.STORETERM)
+                    {
+                        trgerId = d_orders[0].MachineId;
+                    }
+                    else if (d_orders[0].AppId == AppId.WXMINPRAGROM)
+                    {
+                        trgerId = d_orders[0].StoreId;
+                    }
+
+                    MqFactory.Global.PushOperateLog(operater, d_orders[0].AppId, trgerId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_orders.Select(m => m.Id).ToArray())));
                 }
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：交易号({0})通知成功", payTransId));
@@ -1445,7 +1455,7 @@ namespace LocalS.BLL.Biz
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
-  
+
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
             }
