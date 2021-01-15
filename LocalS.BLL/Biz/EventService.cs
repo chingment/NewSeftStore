@@ -22,24 +22,24 @@ namespace LocalS.BLL.Biz
             {
                 case EventCode.Login:
                     var loginLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
-                    HandleByLogin(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark, loginLogModel);
+                    HandleByLogin(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, loginLogModel);
                     break;
                 case EventCode.Logout:
                     var logoutLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
-                    HandleByLogout(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark, logoutLogModel);
+                    HandleByLogout(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, logoutLogModel);
                     break;
                 case EventCode.MachineStatus:
                     LogUtil.Info(">>>>>MachineStatus");
                     var machineStatusModel = model.EventContent.ToJsonObject<MachineEventByMachineStatusModel>();
-                    HandleByMachineStatus(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark, machineStatusModel);
+                    HandleByMachineStatus(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, machineStatusModel);
                     break;
                 case EventCode.Pickup:
                     var pickupModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
-                    HandleByPickup(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark, pickupModel);
+                    HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupModel);
                     break;
                 case EventCode.PickupTest:
                     var pickupTestModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
-                    HandleByPickupTest(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark, pickupTestModel);
+                    HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupTestModel);
                     break;
                 case EventCode.MachineCabinetSlotSave:
                 case EventCode.MachineCabinetSlotRemove:
@@ -52,7 +52,7 @@ namespace LocalS.BLL.Biz
                 case EventCode.StockOrderPaySuccess:
                 case EventCode.StockOrderReserveSuccess:
                     var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
-                    HandleByStockChangeLog(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
+                    HandleByStockChangeLog(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
                     break;
             }
         }

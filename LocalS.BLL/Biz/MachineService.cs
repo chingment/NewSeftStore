@@ -258,8 +258,7 @@ namespace LocalS.BLL.Biz
 
         public CustomJsonResult EventNotify(string operater, string appId, string machineId, string eventCode, string eventRemark, object content)
         {
-            var machine = BizFactory.Machine.GetOne(machineId);
-            MqFactory.Global.PushEventNotify(operater, appId, machine.MerchId, eventCode, eventRemark, content);
+            MqFactory.Global.PushEventNotify(operater, appId, machineId, eventCode, eventRemark, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }

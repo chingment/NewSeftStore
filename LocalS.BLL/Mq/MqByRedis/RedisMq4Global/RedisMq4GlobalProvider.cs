@@ -43,15 +43,12 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public CustomJsonResult PushEventNotify(string operater, string appId, string merchId, string eventCode, string eventRemark, object eventContent = null)
+        public CustomJsonResult PushEventNotify(string operater, string appId, string trgerId, string eventCode, string eventRemark, object eventContent = null)
         {
             var content = new EventNotifyModel();
             content.AppId = appId;
             content.Operater = operater;
-            content.MerchId = merchId;
-            //content.StoreId = storeId;
-            //content.ShopId = shopId;
-            //content.MachineId = machineId;
+            content.TrgerId = trgerId;
             content.EventCode = eventCode;
             content.EventRemark = eventRemark;
             content.EventContent = eventContent;
@@ -65,18 +62,17 @@ namespace LocalS.BLL.Mq.MqByRedis
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
-
-        public CustomJsonResult PushOperateLog(string operater, string appId, string merchId, string eventCode, string eventRemark)
+        public CustomJsonResult PushOperateLog(string operater, string appId, string trgerId, string eventCode, string eventRemark)
         {
             var content = new OperateLogModel();
             content.AppId = appId;
             content.Operater = operater;
-            content.MerchId = merchId;
+            content.TrgerId = trgerId;
             content.EventCode = eventCode;
             content.EventRemark = eventRemark;
 
             var obj = new RedisMq4GlobalHandle();
-            obj.Type = MqMessageType.EventNotify;
+            obj.Type = MqMessageType.OperateLog;
             obj.Ticket = IdWorker.Build(IdType.NewGuid);
             obj.Content = content;
             this.Push(obj);

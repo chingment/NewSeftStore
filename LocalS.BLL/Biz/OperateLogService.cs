@@ -17,14 +17,14 @@ namespace LocalS.BLL.Biz
     {
         public void Handle(OperateLogModel model)
         {
-            Handle(model.Operater, model.AppId, model.MerchId, model.EventCode, model.EventRemark);
+            Handle(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark);
 
         }
 
-        private void Handle(string operater, string appId, string merchId, string eventCode, string eventRemark)
+        private void Handle(string operater, string appId, string trgerId, string eventCode, string eventRemark)
         {
-            string merchName = BizFactory.Merch.GetMerchName(merchId);
-            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+            // string merchName = BizFactory.Merch.GetMerchName(merchId);
+            // string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var sysUserOperateLog = new SysUserOperateLog();
             sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -41,10 +41,10 @@ namespace LocalS.BLL.Biz
             var merchOperateLog = new MerchOperateLog();
             merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
             merchOperateLog.AppId = appId;
-            merchOperateLog.MerchId = merchId;
-            merchOperateLog.MerchName = merchName;
+            merchOperateLog.TrgerId = trgerId;
+            merchOperateLog.TrgerName = "";
             merchOperateLog.OperateUserId = operater;
-            merchOperateLog.OperateUserName = operaterUserName;
+            merchOperateLog.OperateUserName = "";
             merchOperateLog.EventCode = eventCode;
             merchOperateLog.EventName = EventCode.GetEventName(eventCode);
             merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
