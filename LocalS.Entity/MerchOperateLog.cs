@@ -13,6 +13,8 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string AppId { get; set; }
+        public string MerchId { get; set; }
+        public string MerchName { get; set; }
         public string TrgerId { get; set; }
         public string TrgerName { get; set; }
         public string OperateUserId { get; set; }

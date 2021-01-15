@@ -17,43 +17,58 @@ namespace LocalS.BLL.Biz
     {
         public void Handle(OperateLogModel model)
         {
-            Handle(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark);
-
-        }
-
-        private void Handle(string operater, string appId, string trgerId, string eventCode, string eventRemark)
-        {
-            // string merchName = BizFactory.Merch.GetMerchName(merchId);
-            // string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
 
             var sysUserOperateLog = new SysUserOperateLog();
             sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
-            sysUserOperateLog.UserId = operater;
-            sysUserOperateLog.EventCode = eventCode;
-            sysUserOperateLog.EventName = EventCode.GetEventName(eventCode);
-            sysUserOperateLog.AppId = appId;
-            sysUserOperateLog.Remark = eventRemark;
+            sysUserOperateLog.UserId = model.Operater;
+            sysUserOperateLog.EventCode = model.EventCode;
+            sysUserOperateLog.EventName = EventCode.GetEventName(model.EventCode);
+            sysUserOperateLog.AppId = model.AppId;
+            sysUserOperateLog.Remark = model.EventRemark;
             sysUserOperateLog.CreateTime = DateTime.Now;
-            sysUserOperateLog.Creator = operater;
+            sysUserOperateLog.Creator = model.Operater;
             CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
             CurrentDb.SaveChanges();
 
+            string trgerName = "";
+            string merchId = "";
+            string merchName = "";
+
+            if (model.AppId == AppId.MERCH)
+            {
+                merchId = model.TrgerId;
+                merchName = BizFactory.Merch.GetMerchName(merchId);
+                trgerName = merchName;
+            }
+            else if (model.AppId == AppId.STORETERM)
+            {
+                var machine = BizFactory.Machine.GetOne(model.TrgerId);
+                if (machine != null)
+                {
+                    merchName = machine.MerchName;
+                    merchId = machine.MerchId;
+
+                    trgerName = machine.MachineId;
+                }
+            }
+
             var merchOperateLog = new MerchOperateLog();
             merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
-            merchOperateLog.AppId = appId;
-            merchOperateLog.TrgerId = trgerId;
-            merchOperateLog.TrgerName = "";
-            merchOperateLog.OperateUserId = operater;
+            merchOperateLog.AppId = model.AppId;
+            merchOperateLog.TrgerId = model.TrgerId;
+            merchOperateLog.TrgerName = trgerName;
+            merchOperateLog.MerchId = merchId;
+            merchOperateLog.MerchName = merchName;
+            merchOperateLog.OperateUserId = model.Operater;
             merchOperateLog.OperateUserName = "";
-            merchOperateLog.EventCode = eventCode;
-            merchOperateLog.EventName = EventCode.GetEventName(eventCode);
-            merchOperateLog.EventLevel = EventCode.GetEventLevel(eventCode);
-            merchOperateLog.Remark = eventRemark;
-            merchOperateLog.Creator = operater;
+            merchOperateLog.EventCode = model.EventCode;
+            merchOperateLog.EventName = EventCode.GetEventName(model.EventCode);
+            merchOperateLog.EventLevel = EventCode.GetEventLevel(model.EventCode);
+            merchOperateLog.Remark = model.EventCode;
+            merchOperateLog.Creator = model.Operater;
             merchOperateLog.CreateTime = DateTime.Now;
             CurrentDb.MerchOperateLog.Add(merchOperateLog);
             CurrentDb.SaveChanges();
-
         }
     }
 }

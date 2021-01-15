@@ -57,7 +57,7 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        private void HandleByLogin(string operater, string appId, string merchId, string eventCode, string eventRemark, LoginLogModel model)
+        private void HandleByLogin(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
         {
             var userLoginHis = new SysUserLoginHis();
             userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
@@ -79,7 +79,7 @@ namespace LocalS.BLL.Biz
 
         }
 
-        private void HandleByLogout(string operater, string appId, string merchId, string eventCode, string eventRemark, LoginLogModel model)
+        private void HandleByLogout(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
         {
             var userLoginHis = new SysUserLoginHis();
             userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
@@ -99,19 +99,20 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
         }
 
-        private void HandleByMachineStatus(string operater, string appId, string merchId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
+        private void HandleByMachineStatus(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
         {
             LogUtil.Info(">>>>>EventHandleByMachineStatus");
 
-            string machineId = model.MachineId;
-            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+            string machineId = trgerId;
+            var machine = CurrentDb.Machine.Where(m => m.Id == trgerId).FirstOrDefault();
 
             if (machine == null)
                 return;
 
-            string merchName = BizFactory.Merch.GetMerchName(merchId);
-            string storeName = BizFactory.Merch.GetStoreName(merchId, machine.CurUseStoreId);
-            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+            string merchName = BizFactory.Merch.GetMerchName(machine.CurUseMerchId);
+            string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
+
+            string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
 
             machine.LastRequestTime = DateTime.Now;
 
@@ -158,7 +159,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
         }
 
-        private void HandleByPickup(string operater, string appId, string merchId, string eventCode, string eventRemark, MachineEventByPickupModel model)
+        private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupModel model)
         {
             if (model == null)
                 return;
@@ -166,7 +167,7 @@ namespace LocalS.BLL.Biz
             using (TransactionScope ts = new TransactionScope())
             {
 
-                string machineId = model.MachineId;
+                string machineId = trgerId;
                 var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
 
                 if (machine == null)
@@ -175,9 +176,9 @@ namespace LocalS.BLL.Biz
                 machine.LastRequestTime = DateTime.Now;
 
 
-                string merchName = BizFactory.Merch.GetMerchName(merchId);
-                string storeName = BizFactory.Merch.GetStoreName(merchId, machine.CurUseStoreId);
-                string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+                string merchName = BizFactory.Merch.GetMerchName(machine.CurUseMerchId);
+                string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
+                string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
 
                 StringBuilder remark = new StringBuilder("");
 
@@ -353,20 +354,20 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        private void HandleByPickupTest(string operater, string appId, string merchId, string eventCode, string eventRemark, MachineEventByPickupModel model)
+        private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupModel model)
         {
             if (model == null)
                 return;
 
-            string machineId = model.MachineId;
+            string machineId = trgerId;
             var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
 
             if (machine == null)
                 return;
 
-            string merchName = BizFactory.Merch.GetMerchName(merchId);
-            string storeName = BizFactory.Merch.GetStoreName(merchId, machine.CurUseStoreId);
-            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+            string merchName = BizFactory.Merch.GetMerchName(machine.CurUseMerchId);
+            string storeName = BizFactory.Merch.GetStoreName(machine.CurUseStoreId, machine.CurUseStoreId);
+            string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
 
             machine.LastRequestTime = DateTime.Now;
 
@@ -395,19 +396,21 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
+
+
         }
 
-        private void HandleByStockChangeLog(string operater, string appId, string merchId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
+        private void HandleByStockChangeLog(string operater, string appId, string trgerId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
         {
-            string merchName = BizFactory.Merch.GetMerchName(merchId);
-            string storeName = BizFactory.Merch.GetStoreName(merchId, model.StoreId);
-            string operaterUserName = BizFactory.Merch.GetClientName(merchId, operater);
+            string merchName = BizFactory.Merch.GetMerchName(model.MerchId);
+            string storeName = BizFactory.Merch.GetStoreName(model.MerchId, model.StoreId);
+            string operaterUserName = BizFactory.Merch.GetClientName(model.MerchId, operater);
 
-            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, model.PrdProductSkuId);
+            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(model.MerchId, model.PrdProductSkuId);
 
             var sellChannelStockLog = new SellChannelStockLog();
             sellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
-            sellChannelStockLog.MerchId = merchId;
+            sellChannelStockLog.MerchId = model.MerchId;
             sellChannelStockLog.MerchName = merchName;
             sellChannelStockLog.StoreId = model.StoreId;
             sellChannelStockLog.StoreName = storeName;
@@ -428,6 +431,7 @@ namespace LocalS.BLL.Biz
             sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
             sellChannelStockLog.Creator = operater;
             sellChannelStockLog.CreateTime = DateTime.Now;
+
             if (string.IsNullOrEmpty(model.MachineId))
             {
                 sellChannelStockLog.Remark = eventRemark;
@@ -436,6 +440,7 @@ namespace LocalS.BLL.Biz
             {
                 sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, model.MachineId, eventRemark);
             }
+
             CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
             CurrentDb.SaveChanges();
 
