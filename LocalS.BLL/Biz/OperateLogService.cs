@@ -43,9 +43,9 @@ namespace LocalS.BLL.Biz
             else if (model.AppId == AppId.WXMINPRAGROM)
             {
                 var store = BizFactory.Store.GetOne(model.TrgerId);
-                trgerName = store.Name;
                 if (store != null)
                 {
+                    trgerName = store.Name;
                     merchId = store.MerchId;
                     merchName = store.MerchName;
                 }
@@ -73,7 +73,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.EventCode = model.EventCode;
             merchOperateLog.EventName = EventCode.GetEventName(model.EventCode);
             merchOperateLog.EventLevel = EventCode.GetEventLevel(model.EventCode);
-            merchOperateLog.Remark = model.EventCode;
+            merchOperateLog.Remark = model.EventRemark;
             merchOperateLog.Creator = model.Operater;
             merchOperateLog.CreateTime = DateTime.Now;
             CurrentDb.MerchOperateLog.Add(merchOperateLog);

@@ -76,7 +76,10 @@ namespace LocalS.BLL.Biz
             CurrentDb.SysUserLoginHis.Add(userLoginHis);
             CurrentDb.SaveChanges();
 
-
+            if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
+            {
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev);
+            }
         }
 
         private void HandleByLogout(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
@@ -97,6 +100,13 @@ namespace LocalS.BLL.Biz
             userLoginHis.Creator = operater;
             CurrentDb.SysUserLoginHis.Add(userLoginHis);
             CurrentDb.SaveChanges();
+
+
+            if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
+            {
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev);
+            }
+
         }
 
         private void HandleByMachineStatus(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
@@ -157,6 +167,11 @@ namespace LocalS.BLL.Biz
             }
 
             CurrentDb.SaveChanges();
+
+            if (isLog)
+            {
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, eventRemark.ToString());
+            }
         }
 
         private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupModel model)
