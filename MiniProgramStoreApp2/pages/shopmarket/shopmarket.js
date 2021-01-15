@@ -2,6 +2,7 @@ const ownRequest = require('../../own/ownRequest.js')
 const toast = require('../../utils/toastutil')
 const storeage = require('../../utils/storeageutil.js')
 const apiShopMarket = require('../../api/shopmarket.js')
+const skeletonData = require('./skeletonData')
 const apiProduct = require('../../api/product.js')
 const apiCart = require('../../api/cart.js')
 const app = getApp()
@@ -13,6 +14,12 @@ Page({
    */
   data: {
     tag: 'shopmarket',
+    skeletonLoadingTypes: ['spin', 'chiaroscuro', 'shine', 'null'],
+    skeletonSelectedLoadingType: 'shine',
+    skeletonIsDev: true,
+    skeletonBgcolor: '#FFF',
+    skeletonData,
+    pageIsReady: false,
     isOnReady: false,
     shopMode: 3,
     storeId: '',
@@ -36,7 +43,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    var _this = this
+    app.globalData.skeletonPage = _this
 
 
   },
@@ -53,11 +61,14 @@ Page({
    */
   onShow: function () {
 
-    var _this = this;
+    var _this = this
 
     const query = wx.createSelectorQuery().in(_this)
     var wHeight = wx.getSystemInfoSync().windowHeight;
     query.select('.searchbox').boundingClientRect(function (rect) {
+      if (rect == null)
+        return
+      var heihgt = typeof rect.height == undefined ? 0 : rect.height
       var height = wHeight - rect.height
       _this.setData({
         scrollHeight: height
@@ -226,10 +237,13 @@ Page({
         _this.setData({
           searchtips: searchtips,
           tabs: d.tabs,
-          curShop: d.curShop
+          curShop: d.curShop,
+          pageIsReady: true
         })
 
       }
+
+
     })
   },
   productSearch: function () {

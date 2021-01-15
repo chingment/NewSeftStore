@@ -56,6 +56,7 @@ Component({
     },
     handleUpdateData(e) {
       this.setData({ devData: e.detail });
+      console.log(JSON.stringify(e.detail))
       console.table(e.detail);
     },
   },

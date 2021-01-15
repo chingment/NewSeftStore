@@ -7,7 +7,7 @@
 	<view class="page st-index pd-com skeleton" wx:if="{{ pageIsReady }}">
 		<view class="page-ct">
 			<view style="height:61rpx;width:100%">
-				<view class="store" bindtap="goSelectStore">
+				<view class="store">
 					<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
 					<text class="title skeleton-rect">{{currentStore.name}}</text>
 				</view>
