@@ -83,8 +83,6 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 var order = bizResult.Data.Orders[0];
 
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, rop.MachineId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", bizResult.Data.Orders.Select(m => m.Id).ToArray())));
-
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", new { OrderId = order.Id, ChargeAmount = order.ChargeAmount });
             }
             else
@@ -125,15 +123,8 @@ namespace LocalS.Service.Api.StoreTerm
 
         public CustomJsonResult Cancle(RopOrderCancle rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
 
-
-            result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.Type, rop.Reason);
-
-            if (result.Result == ResultType.Success)
-            {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, rop.MachineId, EventCode.OrderCancle, string.Format("用户取消订单（{0}）成功", rop.OrderId));
-            }
+            var result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, rop.Type, rop.Reason);
 
             return result;
         }

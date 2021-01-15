@@ -843,6 +843,19 @@ namespace LocalS.BLL.Biz
 
                     }
 
+                    string trgerId = "";
+                    if (orders[0].AppId == AppId.STORETERM)
+                    {
+                        trgerId = orders[0].MachineId;
+                    }
+                    else if (orders[0].AppId == AppId.WXMINPRAGROM)
+                    {
+                        trgerId = orders[0].StoreId;
+                    }
+
+                    MqFactory.Global.PushOperateLog(operater, orders[0].AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())));
+
+
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
                 }
             }
@@ -1456,9 +1469,22 @@ namespace LocalS.BLL.Biz
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
 
+                    string trgerId = "";
+                    if (d_order.AppId == AppId.STORETERM)
+                    {
+                        trgerId = d_order.MachineId;
+                    }
+                    else if (d_order.AppId == AppId.WXMINPRAGROM)
+                    {
+                        trgerId = d_order.StoreId;
+                    }
+
+                    MqFactory.Global.PushOperateLog(operater, d_order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单（{0}）取消成功", d_order.Id));
+
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
             }
+
 
             return result;
         }

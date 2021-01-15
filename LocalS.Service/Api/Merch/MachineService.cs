@@ -432,6 +432,11 @@ namespace LocalS.Service.Api.Merch
 
             result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
 
+            if (result.Result == ResultType.Success)
+            {
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "ManageStockEditStock", string.Format("机器（{0}）,货道（{1}）调整", rop.MachineId, rop.SlotId));
+            }
+
             return result;
         }
 
@@ -473,13 +478,9 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
-
         public CustomJsonResult SysReboot(string operater, string merchId, RopMachineRebootSys rop)
         {
             CustomJsonResult result = new CustomJsonResult();
-
-
 
             result = BizFactory.Machine.SendSysReboot(operater, AppId.MERCH, merchId, rop.Id);
 
@@ -512,7 +513,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult QueryMsgPushResult(string operater, string merchId, RopMachineQueryMsgPushResult rop)
         {

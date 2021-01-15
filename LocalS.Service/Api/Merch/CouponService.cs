@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -365,6 +366,9 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId,"Coupon_Add", string.Format("新建优惠券（{0}）成功", rop.Name));
+
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             }
@@ -585,6 +589,8 @@ namespace LocalS.Service.Api.Merch
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
+
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "Coupon_Add", string.Format("保存优惠券（{0}）成功", rop.Name));
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

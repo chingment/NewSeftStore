@@ -317,6 +317,8 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "PayRefund_Apply", string.Format("订单号:{0}，申请退款金额：{1},提交成功，退款单号：{2}", payRefund.OrderId, payRefund.ApplyAmount.ToF2Price(), payRefund.Id));
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", new { PayRefundId = payRefund.Id });
 
             }

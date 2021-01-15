@@ -362,6 +362,12 @@ namespace LocalS.Service.Api.Merch
             bizRop.Remark = rop.Remark;
             bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
             var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
+
+            if (result.Result == ResultType.Success)
+            {
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "HandleExByMachineSelfTake", string.Format("订单号（{0}），异常处理成功", rop.Id));
+            }
+
             return result;
         }
     }
