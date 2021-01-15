@@ -482,7 +482,7 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult EditSalePriceOnStore(string operater, string merchId, RopPrdProductEditSalePriceOnStore rop)
         {
-            return BizFactory.ProductSku.AdjustStockSalePrice(operater, AppId.MERCH, merchId, rop.StoreId, rop.ProductSkuId, rop.ProductSkuSalePrice, rop.ProductSkuIsOffSell);
+            return BizFactory.ProductSku.AdjustStockSalePrice(operater, merchId, rop.StoreId, rop.ProductSkuId, rop.ProductSkuSalePrice, rop.ProductSkuIsOffSell);
         }
 
         public CustomJsonResult SearchSpu(string operater, string merchId, string key)

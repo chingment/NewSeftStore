@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
-            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.ShopMode == E_ShopMode.Machine).ToList();
+            var d_stocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId).ToList();
 
             var l_kind_all = new ProductKindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);
@@ -205,139 +205,6 @@ namespace LocalS.Service.Api.StoreTerm
             var model = new { versionCode = d_appSoftware.VersionCode, versionName = d_appSoftware.VersionName, downloadUrl = d_appSoftware.DownloadUrl };
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
-        }
-
-        public Task<bool> UpLoadTraceLog(RopAppTraceLog rop)
-        {
-            var task = Task.Run(() =>
-            {
-                if (rop.events != null)
-                {
-                    foreach (var pa in rop.appActions)
-                    {
-                        var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
-                        appTraceLog.AppTraceType = E_AppTraceType.Action;
-                        appTraceLog.AppId = rop.device.appinfo.appId;
-                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
-                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
-                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
-                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
-                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
-                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
-                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
-                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
-                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
-                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
-                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
-
-                        appTraceLog.AppActionTime = pa.action_time;
-                        appTraceLog.AppActionType = pa.action_type;
-                        appTraceLog.AppActionDesc = pa.action_desc;
-                        appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                        CurrentDb.AppTraceLog.Add(appTraceLog);
-                        CurrentDb.SaveChanges();
-                    }
-
-                    foreach (var pa in rop.pages)
-                    {
-                        var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
-                        appTraceLog.AppTraceType = E_AppTraceType.Page;
-                        appTraceLog.AppId = rop.device.appinfo.appId;
-                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
-                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
-                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
-                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
-                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
-                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
-                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
-                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
-                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
-                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
-                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
-
-                        appTraceLog.PageId = pa.page_id;
-                        appTraceLog.PageRefererPageId = pa.referer_page_id;
-                        appTraceLog.PageStartTime = pa.page_start_time;
-                        appTraceLog.PageEndTime = pa.page_end_time;
-
-                        appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                        CurrentDb.AppTraceLog.Add(appTraceLog);
-                        CurrentDb.SaveChanges();
-                    }
-
-                    foreach (var ev in rop.events)
-                    {
-                        var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
-                        appTraceLog.AppTraceType = E_AppTraceType.Event;
-                        appTraceLog.AppId = rop.device.appinfo.appId;
-                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
-                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
-                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
-                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
-                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
-                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
-                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
-                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
-                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
-                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
-                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
-                        appTraceLog.EventName = ev.event_name;
-                        appTraceLog.EventPageId = ev.page_id;
-                        appTraceLog.EventRefererPageId = ev.referer_page_id;
-                        appTraceLog.EventActionTime = ev.action_time;
-
-                        appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                        CurrentDb.AppTraceLog.Add(appTraceLog);
-                        CurrentDb.SaveChanges();
-                    }
-
-                    foreach (var ev in rop.exceptionInfos)
-                    {
-                        var appTraceLog = new AppTraceLog();
-                        appTraceLog.Id = IdWorker.Build(IdType.NewGuid);
-                        appTraceLog.AppTraceType = E_AppTraceType.Exception;
-                        appTraceLog.AppId = rop.device.appinfo.appId;
-                        appTraceLog.AppVersion = rop.device.appinfo.appVersion;
-                        appTraceLog.AppChannel = rop.device.appinfo.appChannel;
-                        appTraceLog.DeviceDensity = rop.device.deviceinfo.deviceDensity;
-                        appTraceLog.DeviceId = rop.device.deviceinfo.deviceId;
-                        appTraceLog.DeviceLocale = rop.device.deviceinfo.deviceLocale;
-                        appTraceLog.DeviceMacAddr = rop.device.deviceinfo.deviceMacAddr;
-                        appTraceLog.DeviceModel = rop.device.deviceinfo.deviceModel;
-                        appTraceLog.DeviceOsVersion = rop.device.deviceinfo.deviceOsVersion;
-                        appTraceLog.DevicePlatform = rop.device.deviceinfo.devicePlatform;
-                        appTraceLog.DeviceScreen = rop.device.deviceinfo.deviceScreen;
-                        appTraceLog.IpAddr = rop.device.networkinfo.ipAddr;
-                        appTraceLog.Wifi = rop.device.networkinfo.wifi;
-                        appTraceLog.ExceptionString = ev.exceptionString;
-                        appTraceLog.ExceptionSystemModel = ev.systemModel;
-                        appTraceLog.ExceptionSystemVersion = ev.systemVersion;
-                        appTraceLog.ExceptionPhoneModel = ev.phoneModel;
-
-                        appTraceLog.CreateTime = DateTime.Now;
-                        appTraceLog.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                        CurrentDb.AppTraceLog.Add(appTraceLog);
-                        CurrentDb.SaveChanges();
-                    }
-                }
-
-                return true;
-            });
-
-            return task;
         }
 
         public CustomJsonResult EventNotify(string operater, RopMachineEventNotify rop)

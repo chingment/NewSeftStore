@@ -414,7 +414,6 @@
     <Compile Include="Api\StoreTerm\RModels\RetOrderReserve.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetOrderPickupStatusQuery.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetProductSkuSearch.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopAppTraceLog.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopImServiceSeats.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineHandleRunExItems.cs" />

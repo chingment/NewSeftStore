@@ -18,29 +18,14 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public OwnApiHttpResponse UpLoadTraceLog([FromBody]RopAppTraceLog rop)
-        //{
-        //    var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+        [AllowAnonymous]
+        [HttpPost]
+        public OwnApiHttpResponse ByPoint([FromBody]LocalS.BLL.Biz.RopByPoint rop)
+        {
+            IResult result = LocalS.BLL.Biz.BizFactory.ByPoint.Record(this.CurrentUserId, rop);
 
-        //    if (request.Headers["data_head"] != null)
-        //    {
-        //        string data_head = System.Web.HttpUtility.UrlDecode(request.Headers["data_head"].ToString());
-        //        LogUtil.Info("data_head:" + data_head);
-
-        //        rop.device = Newtonsoft.Json.JsonConvert.DeserializeObject<RopAppTraceLog.Device>(data_head);
-        //    }
-        //    else
-        //    {
-        //        LogUtil.Info("data_head: NULL");
-        //    }
-
-        //    StoreTermServiceFactory.Machine.UpLoadTraceLog(rop);
-
-        //    IResult result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
-        //    return new OwnApiHttpResponse(result);
-        //}
+            return new OwnApiHttpResponse(result);
+        }
 
         [HttpGet]
         [AllowAnonymous]

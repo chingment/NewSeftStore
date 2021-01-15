@@ -14,7 +14,7 @@ namespace LocalS.BLL.Biz
 {
     public class ProductSkuService : BaseService
     {
-        public CustomJsonResult OperateSlot(string operater, string operateEvent, string appId, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId)
+        public CustomJsonResult OperateSlot(string operater, string operateEvent,string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId)
         {
             var result = new CustomJsonResult();
 
@@ -30,7 +30,6 @@ namespace LocalS.BLL.Biz
                         int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                         if (lockQuantity > 0)
                         {
-                            MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, shopId, machineId, EventCode.MachineCabinetSlotSave, string.Format("机柜：{0}，货道：{1}，删除失败，存在有预定数量不能删除", cabinetId, slotId));
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
                         }
 
@@ -159,7 +158,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, string appId, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
+        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent,E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
 
@@ -371,7 +370,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult AdjustStockQuantity(string operater, string appId, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null, int? warnQuantity = null, int? holdQuantity = null)
+        public CustomJsonResult AdjustStockQuantity(string operater, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int version, int sumQuantity, int? maxQuantity = null, int? warnQuantity = null, int? holdQuantity = null)
         {
             var result = new CustomJsonResult();
 
@@ -457,7 +456,7 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public CustomJsonResult AdjustStockSalePrice(string operater, string appId, string merchId, string storeId, string productSkuId, decimal salePrice, bool isOffSell)
+        public CustomJsonResult AdjustStockSalePrice(string operater, string merchId, string storeId, string productSkuId, decimal salePrice, bool isOffSell)
         {
             var result = new CustomJsonResult();
 
