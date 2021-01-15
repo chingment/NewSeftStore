@@ -165,7 +165,8 @@ namespace LocalS.Service.Api.Account
                 tokenInfo.BelongId = merchUser.MerchId;
                 tokenInfo.BelongType = Enumeration.BelongType.Merch;
                 tokenInfo.MctMode = merch.MctMode;
-                MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, "", "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
+
+                MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, merchUser.MerchId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
@@ -207,7 +208,7 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                 }
 
-                MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, machine.CurUseStoreId, machine.CurUseShopId, machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
+                MqFactory.Global.PushEventNotify(sysUser.Id, rop.AppId, machine.CurUseMerchId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
@@ -410,7 +411,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
-            MqFactory.Global.PushEventNotify(d_clientUser.Id, rop.AppId, d_clientUser.MerchId, "", "", "", EventCode.Login, "登录成功");
+            MqFactory.Global.PushEventNotify(d_clientUser.Id, rop.AppId, d_clientUser.MerchId, EventCode.Login, "登录成功");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -573,7 +574,7 @@ namespace LocalS.Service.Api.Account
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
-                MqFactory.Global.PushEventNotify(userId, rop.AppId, "", "", "", machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
+                MqFactory.Global.PushEventNotify(userId, rop.AppId, "", EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", new { UserName = sysUser.UserName, FullName = sysUser.FullName });
@@ -598,7 +599,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.Quit(rop.Token);
 
-            MqFactory.Global.PushEventNotify(operater, rop.AppId, rop.BelongId, "", "", "",EventCode.Logout, "退出成功", new LoginLogModel { LoginAccount = userName, LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
+            MqFactory.Global.PushEventNotify(operater, rop.AppId, rop.BelongId,EventCode.Logout, "退出成功", new LoginLogModel { LoginAccount = userName, LoginResult = Enumeration.LoginResult.LogoutSuccess, LoginWay = rop.LoginWay });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "退出成功");
 

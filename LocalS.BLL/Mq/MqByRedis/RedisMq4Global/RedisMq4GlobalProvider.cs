@@ -10,6 +10,16 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Mq.MqByRedis
 {
+    public enum SourceType
+    {
+        Unknow = 0,
+        Merch = 1000,
+        WaitPay = 2000,
+        Payed = 3000,
+        Completed = 4000,
+        Canceled = 5000
+    }
+
     public class RedisMq4GlobalProvider : RedisMqObject<RedisMq4GlobalHandle>
     {
         protected override string MessageQueueKeyName { get { return "RedisMq4Global"; } }
@@ -33,15 +43,15 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public CustomJsonResult PushEventNotify(string operater, string appId, string merchId, string storeId, string shopId, string machineId, string eventCode, string eventRemark, object eventContent = null)
+        public CustomJsonResult PushEventNotify(string operater, string appId, string merchId,  string eventCode, string eventRemark, object eventContent = null)
         {
             var content = new EventNotifyModel();
             content.AppId = appId;
             content.Operater = operater;
             content.MerchId = merchId;
-            content.StoreId = storeId;
-            content.ShopId = shopId;
-            content.MachineId = machineId;
+            //content.StoreId = storeId;
+            //content.ShopId = shopId;
+            //content.MachineId = machineId;
             content.EventCode = eventCode;
             content.EventRemark = eventRemark;
             content.EventContent = eventContent;

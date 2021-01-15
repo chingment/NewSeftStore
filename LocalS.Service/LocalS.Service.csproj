@@ -417,12 +417,10 @@
     <Compile Include="Api\StoreTerm\RModels\RopImServiceSeats.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineEventNotify.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopMachineHandleRunExItems.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopMachineUploadImg.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineCheckUpdate.cs" />
     <Compile Include="Api\StoreTerm\RModels\RupMachineGetRunExHandleItems.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopMachineUpdateInfo.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderBuildPayParams.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderCancle.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderReserve.cs" />

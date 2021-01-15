@@ -27,6 +27,7 @@ namespace LocalS.BLL.Task
     {
         private static readonly string key = "task4Tim2Global";
 
+
         public void Enter(Task4TimType type, string id, DateTime expireTime, object data)
         {
             var d = new TaskData();
@@ -35,6 +36,14 @@ namespace LocalS.BLL.Task
             d.ExpireTime = expireTime;
             d.Data = data;
             RedisManager.Db.HashSetAsync(key, d.Id, d.ToJsonString(), StackExchange.Redis.When.Always);
+        }
+
+        public void Exit(Task4TimType type, string[] ids)
+        {
+            foreach (var id in ids)
+            {
+                RedisManager.Db.HashDelete(key, id);
+            }
         }
 
         public void Exit(Task4TimType type, string id)

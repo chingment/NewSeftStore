@@ -208,7 +208,7 @@ namespace LocalS.Service.Api.Merch
 
 
 
-            MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, "", "","", EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
+            MqFactory.Global.PushEventNotify(operater, AppId.MERCH, merchId, EventCode.StoreAdd, string.Format("新建店铺（{0}）成功", rop.Name));
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

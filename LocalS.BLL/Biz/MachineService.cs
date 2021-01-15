@@ -179,10 +179,10 @@ namespace LocalS.BLL.Biz
 
         public void SendStock(string operater, string appId, string merchId, string[] productSkuIds)
         {
-           //foreach(var machineId in machineIds)
-           // {
-           //     SendStock(operater, appId, merchId,machineId);
-           // }
+            //foreach(var machineId in machineIds)
+            // {
+            //     SendStock(operater, appId, merchId,machineId);
+            // }
         }
 
         public void SendHomeBanners(string operater, string appId, string merchId, string[] machineId)
@@ -259,7 +259,7 @@ namespace LocalS.BLL.Biz
         public CustomJsonResult EventNotify(string operater, string appId, string machineId, string eventCode, string eventRemark, object content)
         {
             var machine = BizFactory.Machine.GetOne(machineId);
-            MqFactory.Global.PushEventNotify(operater, appId, machine.MerchId, machine.StoreId, machine.ShopId, machineId, eventCode, eventRemark, content);
+            MqFactory.Global.PushEventNotify(operater, appId, machine.MerchId, eventCode, eventRemark, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }

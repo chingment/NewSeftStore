@@ -837,10 +837,16 @@ namespace LocalS.BLL.Biz
 
                     foreach (var order in orders)
                     {
-                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId });
-                        MqFactory.Global.PushEventNotify(operater, rop.AppId, order.MerchId, order.StoreId, order.ShopId, order.MachineId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", order.Id));
                         ret.Orders.Add(new RetOrderReserve.Order { Id = order.Id, ChargeAmount = order.ChargeAmount.ToF2Price() });
+
+                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, order.Id, order.PayExpireTime.Value, new Order2CheckPayModel { Id = order.Id, MerchId = order.MerchId });
+
                     }
+
+
+                  
+
+                    MqFactory.Global.PushEventNotify(operater, rop.AppId, orders[0].MerchId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())));
 
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
 
@@ -1293,13 +1299,9 @@ namespace LocalS.BLL.Biz
                     LogUtil.Info("进入PaySuccess修改订单,结束");
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_payTrans.Id);
+                    Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_orders.Select(m => m.Id).ToArray());
 
-                    foreach (var d_order in d_orders)
-                    {
-                        Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_order.Id);
-                        MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, d_order.ShopId, d_order.MachineId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", d_order.Id));
-
-                    }
+                    MqFactory.Global.PushEventNotify(operater, d_orders[0].AppId, d_orders[0].MerchId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_orders.Select(m => m.Id).ToArray())));
                 }
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：交易号({0})通知成功", payTransId));
@@ -1453,8 +1455,6 @@ namespace LocalS.BLL.Biz
                     {
                         Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_order.PayTransId);
                     }
-
-                    MqFactory.Global.PushEventNotify(operater, d_order.AppId, d_order.MerchId, d_order.StoreId, d_order.ShopId, d_order.MachineId, EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_order.Id));
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }
