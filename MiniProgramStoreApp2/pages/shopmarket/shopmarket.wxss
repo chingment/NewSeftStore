@@ -41,56 +41,6 @@
 }
 
 
-
-/* 滚动 */
-
-.searchbox {
-  position: relative;
-  overflow: hidden;
-  height: 58rpx;
-  background-color: white;
-  padding: 18rpx 30rpx;
-  border-bottom: 3rpx solid #F0F0F5;
-  border-top: 3rpx solid #F0F0F5;
-}
-
-.searchbox-ct{
-  display: flex;
-  background: #F0F0F5;
-  border-radius: 38rpx;
-  height: 58rpx;
-  padding: 0 30rpx;
-}
-.searchbox-icon {
-  align-items: center;
-  display: flex;
-}
-
-.searchbox-icon .img{
-width:42rpx;
-height:42rpx;
-}
-
-.searchbox-tips{
-  flex: 1;
-  padding-left: 15rpx;
-}
-
-.searchbox-tips .swiperitem {
-  height: 100%;
-}
-
-.searchbox-tips .swiperview .wx-swiper-dots {
-  display: none;
-}
-
-.searchbox-tips .swiper-txt {
-  font-size: 24rpx;
-  color: #b0b0b0;
-  line-height: 60rpx;
-}
-
-
 .carttips {
   width: 130rpx;
   height: 130rpx;
@@ -150,7 +100,18 @@ height:42rpx;
 
 
 
-.store {
+.searchbox {
+  position: relative;
+  overflow: hidden;
+  height: 58rpx;
+  background-color: white;
+  padding: 18rpx 30rpx;
+  border-bottom: 3rpx solid #F0F0F5;
+  border-top: 3rpx solid #F0F0F5;
+}
+
+
+.it-tag {
   align-items: center;
   display: flex;
   padding: 8rpx 0;
@@ -160,30 +121,59 @@ height:42rpx;
 }
 
 
-.store .icon-img{
+.it-tag .icon-img{
   width: 40rpx;
   height: 40rpx;
   margin-right: 12rpx;
 }
 
-.store .title {
+.it-tag .title {
   font-size: 32rpx;
   margin-right: 12rpx;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  max-width: 250rpx;
 }
 
-.store .more-img {
+.it-tag .more-img {
   width: 22rpx;
   height: 23rpx;
 }
 
-.shopmode{
-  float:right;
+
+.it-search{
   display: flex;
+  background: #F0F0F5;
+  border-radius: 38rpx;
+  height: 58rpx;
+  padding: 0 30rpx;
+}
+.it-search .search-icon {
   align-items: center;
-  justify-content: content;
-  justify-items: center;
+  display: flex;
+}
+
+.it-search .search-icon .img{
+width:42rpx;
+height:42rpx;
+}
+
+.it-search .search-tips{
+  flex: 1;
+  padding-left: 15rpx;
+}
+
+.it-search .search-tips .swiperitem {
   height: 100%;
+}
+
+.it-search .search-tips .swiperview .wx-swiper-dots {
+  display: none;
+}
+
+.it-search .search-tips .swiper-txt {
+  font-size: 24rpx;
+  color: #b0b0b0;
+  line-height: 60rpx;
 }

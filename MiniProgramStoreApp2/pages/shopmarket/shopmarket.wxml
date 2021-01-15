@@ -6,31 +6,31 @@
 	<view class="page-ct">
 
 
-			<view id="searchbox" class="searchbox cl1" >
+		<view id="searchbox" class="searchbox cl1">
 
-				<view class="store" bindtap="goChoiceShop">
-					<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
-					<text class="title skeleton-rect">{{curShop.name}}</text>
-					<image class="more-img" src="/content/default/images/arro_down.png"></image>
-				</view>
-
-				<view class="searchbox-ct" bindtap="searchClick">
-					<view class="searchbox-icon">
-						<image class="img" src="/content/default/images/icon_search_box.png"></image>
-					</view>
-					<view class="searchbox-tips">
-						<swiper class="swiperitem" autoplay="true" vertical="true">
-							<block wx:for="{{searchtips}}" wx:key="index">
-								<swiper-item>
-									<text class="swiper-txt">{{item}}</text>
-								</swiper-item>
-							</block>
-						</swiper>
-					</view>
-				</view>
-
+			<view class="it-tag" bindtap="goChoiceShop">
+				<image class="icon-img skeleton-circle" src="/content/default/images/store_address.png"></image>
+				<text class="title skeleton-rect">{{curShop.name}}</text>
+				<image class="more-img" src="/content/default/images/arro_down.png"></image>
 			</view>
-	
+
+			<view class="it-search" bindtap="searchClick">
+				<view class="search-icon">
+					<image class="img" src="/content/default/images/icon_search_box.png"></image>
+				</view>
+				<view class="search-tips">
+					<swiper class="swiperitem" autoplay="true" vertical="true">
+						<block wx:for="{{searchtips}}" wx:key="index">
+							<swiper-item>
+								<text class="swiper-txt">{{item}}</text>
+							</swiper-item>
+						</block>
+					</swiper>
+				</view>
+			</view>
+
+		</view>
+
 
 
 

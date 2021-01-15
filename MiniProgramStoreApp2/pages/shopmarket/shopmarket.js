@@ -56,8 +56,9 @@ Page({
     var _this = this;
 
     const query = wx.createSelectorQuery().in(_this)
+    var wHeight = wx.getSystemInfoSync().windowHeight;
     query.select('.searchbox').boundingClientRect(function (rect) {
-      var height = _this.data.height - rect.height
+      var height = wHeight - rect.height
       _this.setData({
         scrollHeight: height
       })
@@ -264,6 +265,7 @@ Page({
       pageSize: pageSize,
       kindId: kindId,
       shopMode: _this.data.shopMode,
+      shopId: _this.data.shopId,
       name: ""
     }, false).then(function (res) {
       if (res.result == 1) {

@@ -65,8 +65,11 @@ Page({
   choice: function (e) {
     var choice = e.currentTarget.dataset.replyItem
     storeage.setShopId(choice.id);
-    wx.reLaunch({
-      url: ownRequest.getReturnUrl()
+
+    wx.navigateBack({
+      //返回
+      delta: 1
     })
+    
   }
 })

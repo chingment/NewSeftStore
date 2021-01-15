@@ -43,7 +43,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, "0", rup.ShopMode, rup.ShopMethod, rup.KindId);
+            var pageEntiy = GetProducts(rup.PageIndex, rup.PageSize, rup.StoreId, rup.ShopId, rup.ShopMode, rup.ShopMethod, rup.KindId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntiy);
 
