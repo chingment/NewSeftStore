@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId), rup);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看店铺({0})门店({1})机器({2})机柜({3})的库存", machine.StoreName, machine.ShopName, machine.MachineId, rup.CabinetId), rup);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -118,6 +118,12 @@ namespace LocalS.Service.Api.StoreTerm
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
                 var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
+
+                if (result.Result == ResultType.Success)
+                {
+                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})货道({4})商品移除成功", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId), rop);
+                }
+
                 return result;
             }
             else
@@ -127,6 +133,11 @@ namespace LocalS.Service.Api.StoreTerm
                 if (result.Result == ResultType.Success)
                 {
                     result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
+
+                    if (result.Result == ResultType.Success)
+                    {
+                        MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})货道({4})商品库存保存成功", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId), rop);
+                    }
                 }
 
                 return result;
@@ -156,11 +167,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})，扫描结果上传成功", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId), rop);
             }
             else
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})，扫描结果上传失败", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId), rop);
             }
 
             return result;
