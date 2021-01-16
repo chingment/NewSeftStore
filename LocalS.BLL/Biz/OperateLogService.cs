@@ -23,6 +23,7 @@ namespace LocalS.BLL.Biz
             sysUserOperateLog.UserId = model.Operater;
             sysUserOperateLog.EventCode = model.EventCode;
             sysUserOperateLog.EventName = EventCode.GetEventName(model.EventCode);
+            sysUserOperateLog.EventData = model.EventData.ToJsonString();
             sysUserOperateLog.AppId = model.AppId;
             sysUserOperateLog.Remark = model.EventRemark;
             sysUserOperateLog.CreateTime = DateTime.Now;
@@ -74,6 +75,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.EventName = EventCode.GetEventName(model.EventCode);
             merchOperateLog.EventLevel = EventCode.GetEventLevel(model.EventCode);
             merchOperateLog.Remark = model.EventRemark;
+            merchOperateLog.EventData = model.EventData.ToJsonString();
             merchOperateLog.Creator = model.Operater;
             merchOperateLog.CreateTime = DateTime.Now;
             CurrentDb.MerchOperateLog.Add(merchOperateLog);

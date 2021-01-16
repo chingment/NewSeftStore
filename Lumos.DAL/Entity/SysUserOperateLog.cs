@@ -14,6 +14,7 @@ namespace Lumos.DbRelay
         public string AppId { get; set; }
         public string EventCode { get; set; }
         public string EventName { get; set; }
+        public string EventData { get; set; }
         [MaxLength(1024)]
         public string Remark { get; set; }
         public string Creator { get; set; }
