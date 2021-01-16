@@ -14,7 +14,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupSelfPickAddressList rup)
         {
-            var result = StoreAppServiceFactory.StoreFront.List(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.SelfPickAddress.List(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class StoreFrontService : BaseService
+    public class SelfPickAddressService : BaseService
     {
 
         public CustomJsonResult List(string operater, string clientUserId, RupSelfPickAddressList rup)
