@@ -2199,7 +2199,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "异常处理成功");
             }
 
             return result;
