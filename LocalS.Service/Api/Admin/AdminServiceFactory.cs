@@ -79,5 +79,13 @@ namespace LocalS.Service.Api.Admin
                 return new MerchPrdKindService();
             }
         }
+
+        public static BackgroundJobService BackgroundJob
+        {
+            get
+            {
+                return new BackgroundJobService();
+            }
+        }
     }
 }

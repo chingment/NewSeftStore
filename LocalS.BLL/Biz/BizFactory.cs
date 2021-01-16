@@ -40,14 +40,6 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public static BackgroundJobProvider BackgroundJob
-        {
-            get
-            {
-                return new BackgroundJobProvider();
-            }
-        }
-
         public static ProductSkuService ProductSku
         {
             get
@@ -84,6 +76,14 @@ namespace LocalS.BLL.Biz
             get
             {
                 return new ByPointService();
+            }
+        }
+
+        public static BackgroundJobService BackgroundJob
+        {
+            get
+            {
+                return new BackgroundJobService();
             }
         }
     }

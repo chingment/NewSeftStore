@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.BLL.Biz
+namespace LocalS.Service.Api.Admin
 {
     public class RetBackgroundJobGetDetails
     {
