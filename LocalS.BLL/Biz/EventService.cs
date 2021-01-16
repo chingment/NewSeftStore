@@ -78,7 +78,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev);
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev,null);
             }
         }
 
@@ -104,7 +104,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev);
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev,null);
             }
 
         }
@@ -170,7 +170,7 @@ namespace LocalS.BLL.Biz
 
             if (isLog)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, eventRemark.ToString());
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, eventRemark.ToString(),null);
             }
         }
 
@@ -363,7 +363,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, remark.ToString());
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, remark.ToString(), model);
             }
         }
 
@@ -407,7 +407,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-            MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, remark.ToString());
+            MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, remark.ToString(), model);
 
         }
 

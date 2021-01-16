@@ -13,5 +13,6 @@ namespace LocalS.BLL.Mq
         public string TrgerId { get; set; }
         public string EventCode { get; set; }
         public string EventRemark { get; set; }
+        public object EventData { get; set; }
     }
 }

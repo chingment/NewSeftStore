@@ -270,7 +270,7 @@ namespace LocalS.Service.Api.Merch
             if (result.Result == ResultType.Success)
             {
                 CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuIds.ToArray());
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name),rop);
             }
 
             return result;
@@ -430,7 +430,7 @@ namespace LocalS.Service.Api.Merch
                 CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuIds.ToArray());
                 BizFactory.Machine.SendStock(operater, AppId.MERCH, merchId, productSkuIds.ToArray());
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductEdit, string.Format("保存商品（{0}）信息成功", rop.Name));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductEdit, string.Format("保存商品（{0}）信息成功", rop.Name),rop);
 
             }
 

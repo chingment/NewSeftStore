@@ -196,6 +196,8 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
+                var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+
                 string oldName = null;
                 if (string.IsNullOrEmpty(rop.KindId))
                 {
@@ -263,6 +265,10 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreSaveKind, string.Format("保存店铺（{0}）分类（{1}）", d_Store.Name, rop.Name), rop);
+
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
@@ -273,13 +279,26 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
             var storeKindSpu = CurrentDb.StoreKind.Where(m => m.Id == rop.KindId && m.StoreId == rop.StoreId).FirstOrDefault();
-            if (storeKindSpu != null)
+            if (storeKindSpu == null)
             {
-                storeKindSpu.IsDelete = true;
-                storeKindSpu.MendTime = DateTime.Now;
-                storeKindSpu.Mender = operater;
-                CurrentDb.SaveChanges();
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "查找数据失败");
             }
+
+            if (storeKindSpu.IsDelete)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被删除");
+            }
+
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+            var d_StoreKind = CurrentDb.StoreKind.Where(m => m.Id == rop.KindId).FirstOrDefault();
+            storeKindSpu.IsDelete = true;
+            storeKindSpu.MendTime = DateTime.Now;
+            storeKindSpu.Mender = operater;
+            CurrentDb.SaveChanges();
+
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreRemoveKind, string.Format("删除店铺（{0}）分类（{1}）", d_Store.Name, d_StoreKind.Name), rop);
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
 
@@ -381,6 +400,8 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+
+ 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
@@ -567,6 +588,8 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
             var d_StoreShop = CurrentDb.StoreShop.Where(m => m.ShopId == rop.ShopId && m.StoreId == rop.StoreId).FirstOrDefault();
 
             if (d_StoreShop != null)
@@ -574,6 +597,9 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.StoreShop.Remove(d_StoreShop);
                 CurrentDb.SaveChanges();
             }
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreRemoveShop, string.Format("店铺（{0}）移除门店（{1}）", d_Store.Name, d_Shop.Name), rop);
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
 
@@ -584,7 +610,11 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
+
             var d_StoreShop = CurrentDb.StoreShop.Where(m => m.ShopId == rop.ShopId && m.StoreId == rop.StoreId).FirstOrDefault();
+
 
             if (d_StoreShop == null)
             {
@@ -599,6 +629,10 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.StoreShop.Add(d_StoreShop);
                 CurrentDb.SaveChanges();
             }
+
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreAddShop, string.Format("店铺（{0}）添加门店（{1}）", d_Store.Name, d_Shop.Name), rop);
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
             return result;

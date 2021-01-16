@@ -276,7 +276,7 @@ namespace LocalS.Service.Api.StoreTerm
             var bizResult = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
             if (bizResult.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark,rop);
             }
 
             return bizResult;

@@ -853,7 +853,7 @@ namespace LocalS.BLL.Biz
                         trgerId = orders[0].StoreId;
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, orders[0].AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())));
+                    MqFactory.Global.PushOperateLog(operater, orders[0].AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())), rop);
 
 
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
@@ -1318,7 +1318,15 @@ namespace LocalS.BLL.Biz
                         trgerId = d_orders[0].StoreId;
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, d_orders[0].AppId, trgerId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_orders.Select(m => m.Id).ToArray())));
+                    MqFactory.Global.PushOperateLog(operater, d_orders[0].AppId, trgerId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_orders.Select(m => m.Id).ToArray())), new
+                    {
+                        payTransId = payTransId,
+                        payPartner = payPartner,
+                        payPartnerPayTransId = payPartnerPayTransId,
+                        payWay = payWay,
+                        completedTime = completedTime,
+                        pms = pms
+                    });
                 }
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：交易号({0})通知成功", payTransId));
@@ -1479,7 +1487,13 @@ namespace LocalS.BLL.Biz
                         trgerId = d_order.StoreId;
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, d_order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单（{0}）取消成功", d_order.Id));
+                    MqFactory.Global.PushOperateLog(operater, d_order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单（{0}）取消成功", d_order.Id), new
+                    {
+                        orderId = orderId,
+                        cancleType = cancleType,
+                        cancelReason = cancelReason
+
+                    });
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
                 }

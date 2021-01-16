@@ -72,6 +72,9 @@ namespace LocalS.Entity
         public const string AdSpaceDeleteAdContent = "AdSpaceDeleteAdContent";
         [EventCodeRemark("A", "保存机器信息")]
         public const string MachineEdit = "MachineEdit";
+        [EventCodeRemark("A", "保存机器货道库存")]
+        public const string MachineAdjustStockQuantity = "MachineAdjustStockQuantity";
+        
         [EventCodeRemark("A", "新增商品分类信息")]
         public const string PrdKindAdd = "PrdKindAdd";
         [EventCodeRemark("A", "修改商品分类信息")]
@@ -86,6 +89,16 @@ namespace LocalS.Entity
         public const string StoreAdd = "StoreAdd";
         [EventCodeRemark("A", "修改店铺信息")]
         public const string StoreEdit = "StoreEdit";
+        [EventCodeRemark("A", "店铺添加门店")]
+        public const string StoreAddShop = "StoreAddShop";
+        [EventCodeRemark("A", "店铺移除门店")]
+        public const string StoreRemoveShop = "StoreRemoveShop";
+        [EventCodeRemark("A", "保存店铺分类")]
+        public const string StoreSaveKind = "StoreSaveKind";
+        [EventCodeRemark("A", "移除店铺分类")]
+        public const string StoreRemoveKind = "StoreRemoveKind";
+        [EventCodeRemark("A", "保存门店信息")]
+        public const string ShopSave = "ShopSave";
         [EventCodeRemark("A", "店铺绑定机器")]
         public const string StoreAddMachine = "StoreAddMachine";
         [EventCodeRemark("A", "店铺移除机器")]
@@ -106,6 +119,10 @@ namespace LocalS.Entity
         public const string MCmdDsx01OpenPickupDoor = "MCmdDsx01OpenPickupDoor";
         [EventCodeRemark("C", "支付成功命令")]
         public const string MCmdPaySuccess = "MCmdPaySuccess";
+        [EventCodeRemark("A", "新建优惠券")]
+        public const string CouponAdd = "CouponAdd";
+        [EventCodeRemark("A", "修改优惠券信息")]
+        public const string CouponEdit = "CouponEdit";
 
         public static string GetEventName(string eventCode)
         {

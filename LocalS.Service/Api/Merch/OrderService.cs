@@ -365,7 +365,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "HandleExByMachineSelfTake", string.Format("订单号（{0}），异常处理成功", rop.Id));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "HandleExByMachineSelfTake", string.Format("订单号（{0}），异常处理成功", rop.Id),rop);
             }
 
             return result;

@@ -366,7 +366,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId,"Coupon_Add", string.Format("新建优惠券（{0}）成功", rop.Name));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId,EventCode.CouponAdd, string.Format("新建优惠券（{0}）成功", rop.Name),rop);
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
@@ -590,7 +590,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "Coupon_Add", string.Format("保存优惠券（{0}）成功", rop.Name));
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.CouponEdit, string.Format("保存优惠券（{0}）成功", rop.Name),rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

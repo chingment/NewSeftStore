@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId));
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看机柜({0})的库存", rup.CabinetId), rup);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -156,11 +156,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId));
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果成功", rop.CabinetId), rop);
             }
             else
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId));
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("机柜：{0}，保存扫描结果失败", rop.CabinetId), rop);
             }
 
             return result;

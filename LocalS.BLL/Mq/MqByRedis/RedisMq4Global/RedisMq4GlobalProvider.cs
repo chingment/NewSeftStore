@@ -62,7 +62,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
-        public CustomJsonResult PushOperateLog(string operater, string appId, string trgerId, string eventCode, string eventRemark)
+        public CustomJsonResult PushOperateLog(string operater, string appId, string trgerId, string eventCode, string eventRemark, object eventData)
         {
             var content = new OperateLogModel();
             content.AppId = appId;
@@ -70,6 +70,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             content.TrgerId = trgerId;
             content.EventCode = eventCode;
             content.EventRemark = eventRemark;
+            content.EventData = eventData;
 
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.OperateLog;
