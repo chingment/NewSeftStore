@@ -208,7 +208,7 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                 }
 
-                MqFactory.Global.PushEventNotify(sysUser.Id, AppId.STORETERM, machine.CurUseStoreId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
+                MqFactory.Global.PushEventNotify(sysUser.Id, AppId.STORETERM, machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
@@ -411,7 +411,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
-            MqFactory.Global.PushEventNotify(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.Login, "登录成功");
+            MqFactory.Global.PushEventNotify(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -590,13 +590,9 @@ namespace LocalS.Service.Api.Account
 
             string userName = null;
 
+            var tokenInfo = SSOUtil.GetTokenInfo(rop.Token);
 
-            var sysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
-            if (sysUser != null)
-            {
-                userName = sysUser.UserName;
-
-            }
+            //tokenInfo.UserName;
 
             SSOUtil.Quit(rop.Token);
 

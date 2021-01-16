@@ -190,11 +190,6 @@ namespace LocalS.BLL.Biz
 
                 machine.LastRequestTime = DateTime.Now;
 
-
-                string merchName = BizFactory.Merch.GetMerchName(machine.CurUseMerchId);
-                string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-                string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
-
                 StringBuilder remark = new StringBuilder("");
 
                 string productSkuName = "";
@@ -382,10 +377,6 @@ namespace LocalS.BLL.Biz
 
             if (machine == null)
                 return;
-
-            string merchName = BizFactory.Merch.GetMerchName(machine.CurUseMerchId);
-            string storeName = BizFactory.Merch.GetStoreName(machine.CurUseStoreId, machine.CurUseStoreId);
-            string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
 
             machine.LastRequestTime = DateTime.Now;
             CurrentDb.SaveChanges();

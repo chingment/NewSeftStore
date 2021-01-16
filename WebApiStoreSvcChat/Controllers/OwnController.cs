@@ -1,4 +1,5 @@
-﻿using LocalS.Service.Api.StoreSvcChat;
+﻿using LocalS.BLL;
+using LocalS.Service.Api.StoreSvcChat;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ namespace WebApiStoreSvcChat.Controllers
             }
 
             rop.Token = this.Token;
-
+            rop.Ip = CommonUtil.GetIP();
+            rop.AppId = AppId.SVCCHAT;
 
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);

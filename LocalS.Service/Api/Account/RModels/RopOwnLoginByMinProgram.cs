@@ -11,6 +11,7 @@ namespace LocalS.Service.Api.Account
         public string MerchId { get; set; }
         public string AppId { get; set; }
         public string OpenId { get; set; }
+        public string Ip { get; set; }
         public UserInfoEpModel UserInfoEp { get; set; }
         public PhoneNumberEpModel PhoneNumberEp { get; set; }
         public string ReffSign { get; set; }

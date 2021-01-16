@@ -21,5 +21,7 @@ namespace LocalS.Service.Api.Account
 
         public string BelongId { get; set; }
 
+        public string Ip { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.BLL;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,8 @@ namespace WebApiStoreTerm.Controllers
             {
                 rop = new LocalS.Service.Api.Account.RopOwnLogout();
             }
-
+            rop.Ip = CommonUtil.GetIP();
+            rop.AppId = AppId.STORETERM;
             rop.Token = this.Token;
 
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);

@@ -42,7 +42,8 @@ namespace Lumos.DbRelay
         {
             Unknow = 0,
             Account = 1,
-            FingerVein = 2
+            FingerVein = 2,
+            MpAuth=3
         }
 
         public enum LoginResult
