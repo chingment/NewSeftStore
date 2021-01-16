@@ -69,7 +69,7 @@ namespace LocalS.BLL.Biz
             merchOperateLog.MerchId = merchId;
             merchOperateLog.MerchName = merchName;
             merchOperateLog.OperateUserId = model.Operater;
-            merchOperateLog.OperateUserName = "";
+            merchOperateLog.OperateUserName = BizFactory.Merch.GetOperaterUserName(merchId, model.Operater);
             merchOperateLog.EventCode = model.EventCode;
             merchOperateLog.EventName = EventCode.GetEventName(model.EventCode);
             merchOperateLog.EventLevel = EventCode.GetEventLevel(model.EventCode);

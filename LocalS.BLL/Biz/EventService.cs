@@ -78,7 +78,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev,null);
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev, null);
             }
         }
 
@@ -104,7 +104,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev,null);
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev, null);
             }
 
         }
@@ -119,10 +119,9 @@ namespace LocalS.BLL.Biz
             if (machine == null)
                 return;
 
-            string merchName = BizFactory.Merch.GetMerchName(machine.CurUseMerchId);
             string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-
-            string operaterUserName = BizFactory.Merch.GetClientName(machine.CurUseMerchId, operater);
+            string shopName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseShopId);
+            string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
             machine.LastRequestTime = DateTime.Now;
 
@@ -130,7 +129,7 @@ namespace LocalS.BLL.Biz
             switch (model.Status)
             {
                 case "running":
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，运行正常", storeName, machineId);
+                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，运行正常", storeName, shopName, machineId);
 
                     if (machine.RunStatus != E_MachineRunStatus.Running)
                     {
@@ -140,7 +139,7 @@ namespace LocalS.BLL.Biz
                     machine.RunStatus = E_MachineRunStatus.Running;
                     break;
                 case "setting":
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，维护中", storeName, machineId);
+                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，维护中", storeName, shopName, machineId);
 
                     if (machine.RunStatus != E_MachineRunStatus.Setting)
                     {
@@ -151,7 +150,7 @@ namespace LocalS.BLL.Biz
                     break;
                 case "excepition":
 
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，异常", storeName, machineId);
+                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，异常", storeName, shopName, machineId);
 
                     if (machine.RunStatus != E_MachineRunStatus.Excepition)
                     {
@@ -162,7 +161,7 @@ namespace LocalS.BLL.Biz
 
                     break;
                 default:
-                    eventRemark = string.Format("店铺：{0}，机器：{1}，未知状态", storeName, machineId);
+                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，未知状态", storeName, shopName, machineId);
                     break;
             }
 
@@ -170,7 +169,7 @@ namespace LocalS.BLL.Biz
 
             if (isLog)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, eventRemark.ToString(),null);
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, eventRemark.ToString(), model);
             }
         }
 
@@ -187,6 +186,10 @@ namespace LocalS.BLL.Biz
 
                 if (machine == null)
                     return;
+
+                string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
+                string shopName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseShopId);
+                string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
                 machine.LastRequestTime = DateTime.Now;
 
@@ -363,7 +366,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, remark.ToString(), model);
+                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
             }
         }
 
@@ -381,13 +384,18 @@ namespace LocalS.BLL.Biz
             machine.LastRequestTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
+            string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
+            string shopName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseShopId);
+            string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
             StringBuilder remark = new StringBuilder("");
             string productSkuName = "[测试]";
-            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.ProductSkuId);
-            if (bizProductSku != null)
+
+            var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.ProductSkuId);
+
+            if (r_ProductSku != null)
             {
-                productSkuName += bizProductSku.Name;
+                productSkuName += r_ProductSku.Name;
             }
 
             if (model.PickupStatus == E_OrderPickupStatus.SendPickupCmd)
@@ -407,7 +415,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-            MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, remark.ToString(), model);
+            MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
 
         }
 

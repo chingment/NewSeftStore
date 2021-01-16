@@ -138,29 +138,54 @@ namespace LocalS.BLL.Biz
         }
 
 
-        public string GetClientName(string merchId, string clientUserId)
+        public string GetClientName(string merchId, string userId)
         {
-            string clientUserName = "匿名";
-            var clientUser = CurrentDb.SysUser.Where(m => m.Id == clientUserId).FirstOrDefault();
-            if (clientUser != null)
+            string userName = "匿名";
+            var d_SysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+            if (d_SysUser != null)
             {
-                if (!string.IsNullOrEmpty(clientUser.FullName))
+                if (!string.IsNullOrEmpty(d_SysUser.FullName))
                 {
-                    return clientUser.FullName;
+                    return d_SysUser.FullName;
                 }
 
-                if (!string.IsNullOrEmpty(clientUser.NickName))
+                if (!string.IsNullOrEmpty(d_SysUser.NickName))
                 {
-                    return clientUser.NickName;
+                    return d_SysUser.NickName;
                 }
 
-                if (!string.IsNullOrEmpty(clientUser.UserName))
+                if (!string.IsNullOrEmpty(d_SysUser.UserName))
                 {
-                    return clientUser.UserName;
+                    return d_SysUser.UserName;
                 }
             }
 
-            return clientUserName;
+            return userName;
+        }
+
+        public string GetOperaterUserName(string merchId, string userId)
+        {
+            string userName = "匿名";
+            var d_SysUser = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+            if (d_SysUser != null)
+            {
+                if (!string.IsNullOrEmpty(d_SysUser.FullName))
+                {
+                    return d_SysUser.FullName;
+                }
+
+                if (!string.IsNullOrEmpty(d_SysUser.NickName))
+                {
+                    return d_SysUser.NickName;
+                }
+
+                if (!string.IsNullOrEmpty(d_SysUser.UserName))
+                {
+                    return d_SysUser.UserName;
+                }
+            }
+
+            return userName;
         }
 
         public string GetStoreName(string merchId, string storeId)
@@ -172,6 +197,17 @@ namespace LocalS.BLL.Biz
                 return null;
 
             return store.Name;
+        }
+
+        public string GetShopName(string merchId, string shopId)
+        {
+
+            var shop = CurrentDb.Shop.Where(m => m.Id == shopId && m.MerchId == merchId).FirstOrDefault();
+
+            if (shop == null)
+                return null;
+
+            return shop.Name;
         }
     }
 }
