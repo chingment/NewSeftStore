@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看（店铺[{0}]门店[{1}]机器[{2}]机柜[{3}]）的库存", machine.StoreName, machine.ShopName, machine.MachineId, rup.CabinetId), rup);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("店铺[{0}]门店[{1}]机器[{2}]机柜[{3}]，查看库存", machine.StoreName, machine.ShopName, machine.MachineId, rup.CabinetId), rup);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -142,11 +142,8 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult SaveCabinetRowColLayout(string operater, RopStockSettingSaveCabinetRowColLayout rop)
         {
             var result = new CustomJsonResult();
+
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
-            if (string.IsNullOrEmpty(rop.RowColLayout))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，扫描结果为空");
-            }
 
             switch (rop.CabinetId)
             {
@@ -170,6 +167,11 @@ namespace LocalS.Service.Api.StoreTerm
 
             using (TransactionScope ts = new TransactionScope())
             {
+                if (string.IsNullOrEmpty(rop.RowColLayout))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，扫描结果为空");
+                }
+
                 CabinetRowColLayoutByDSModel newRowColLayout = rop.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
                 if (newRowColLayout == null)
                 {
@@ -180,7 +182,7 @@ namespace LocalS.Service.Api.StoreTerm
                 var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).FirstOrDefault();
                 if (cabinet == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，机器未配置机柜，请联系管理员");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，机器未配置机柜");
                 }
 
                 CabinetRowColLayoutByDSModel oldRowColLayout = null;
