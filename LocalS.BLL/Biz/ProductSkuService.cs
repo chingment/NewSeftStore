@@ -14,7 +14,7 @@ namespace LocalS.BLL.Biz
 {
     public class ProductSkuService : BaseService
     {
-        public CustomJsonResult OperateSlot(string operater, string operateEvent,string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId)
+        public CustomJsonResult OperateSlot(string operater, string operateEvent, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId)
         {
             var result = new CustomJsonResult();
 
@@ -30,7 +30,7 @@ namespace LocalS.BLL.Biz
                         int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                         if (lockQuantity > 0)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道删除失败，存在有预定数量不能删除");
                         }
 
                         CurrentDb.SellChannelStock.Remove(sellChannelStock);
@@ -59,7 +59,7 @@ namespace LocalS.BLL.Biz
                         IsCanAlterMaxQuantity = true
                     };
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "货道删除成功", slot);
                     #endregion MachineSlotRemove
                 }
                 else if (operateEvent == EventCode.MachineCabinetSlotSave)
@@ -104,7 +104,7 @@ namespace LocalS.BLL.Biz
                             int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
                             if (lockQuantity > 0)
                             {
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "删除失败，存在有预定数量不能删除");
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "库存保存失败，存在有预定数量不能更换商品");
                             }
 
                             sellChannelStock.PrdProductId = bizProductSku.ProductId;
@@ -145,12 +145,12 @@ namespace LocalS.BLL.Biz
                         Version = sellChannelStock.Version,
                         IsCanAlterMaxQuantity = true
                     };
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "库存保存成功", slot);
                     #endregion
                 }
                 else
                 {
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未知操作类型");
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "库存保存失败，未知操作类型");
                 }
 
             }
@@ -158,7 +158,7 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent,E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
+        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
 
@@ -442,15 +442,13 @@ namespace LocalS.BLL.Biz
                     IsCanAlterMaxQuantity = true
                 };
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", slot);
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功", slot);
             }
 
             //if (result.Result == ResultType.Success)
             //{
             //    SendStock(operater, appId, merchId, productSkuId);
             //}
-
-            //MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, shopId, machineId, EventCode.MachineCabinetSlotAdjustStockQuantity, string.Format("机柜：{0}，货道：{1}，商品：{2}，保存失败，找不到该数据", cabinetId, slotId, bizProductSku.Name));
 
             return result;
 
@@ -482,7 +480,6 @@ namespace LocalS.BLL.Biz
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
-            //MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, "", "", EventCode.MachineAdjustStockSalePrice, string.Format("商品：{0}，调整价格为：{1}", bizProductSku.Name, salePrice));
             //if (result.Result == ResultType.Success)
             //{
             //    SendStock(operater, appId, merchId, productSkuId);

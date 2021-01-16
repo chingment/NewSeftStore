@@ -1990,7 +1990,7 @@ namespace LocalS.BLL.Biz
 
                 if (string.IsNullOrEmpty(rop.Remark))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "处理的备注信息不能为空");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，备注信息不能为空");
                 }
 
                 List<Order> orders = new List<Order>();
@@ -2002,17 +2002,17 @@ namespace LocalS.BLL.Biz
                     var order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
                     if (order == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息不存在");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单信息不存在");
                     }
 
                     if (!order.ExIsHappen)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不是异常状态，不能处理");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单不是异常状态");
                     }
 
                     if (order.ExIsHandle)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该异常订单已经处理完毕");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该异常订单已经处理完毕");
                     }
 
 
@@ -2026,14 +2026,14 @@ namespace LocalS.BLL.Biz
 
                         if (item.RefundAmount > (order.ChargeAmount - (refundedAmount + refundingAmount)))
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款的金额不能大于可退金额");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
                         }
 
                         var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
 
                         if (item.RefundAmount > payTran.ChargeAmount)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款的金额不能大于可退金额");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
                         }
 
                         string payRefundId = IdWorker.Build(IdType.PayRefundId);
@@ -2072,12 +2072,12 @@ namespace LocalS.BLL.Biz
                         var detailItem = item.Uniques.Where(m => m.UniqueId == orderSub.Id).FirstOrDefault();
                         if (detailItem == null)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单里对应商品异常记录未找到");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单里对应商品异常记录未找到");
                         }
 
                         if (detailItem.SignStatus != 1 && detailItem.SignStatus != 2)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单不能处理该异常状态:" + detailItem.SignStatus);
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单不能处理该异常状态:" + detailItem.SignStatus);
                         }
 
                         if (detailItem.SignStatus == 1)
@@ -2198,10 +2198,6 @@ namespace LocalS.BLL.Biz
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
-
-
-                //MqFactory.Global.PushEventNotify(operater, AppId.MERCH, orderSub.MerchId, "", "", EventCode.OrderHandleExOrder, string.Format("处理异常子订单号：{0}，备注：{1}", orderSub.Id, orderSub.ExHandleRemark));
-
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
             }

@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看店铺({0})门店({1})机器({2})机柜({3})的库存", machine.StoreName, machine.ShopName, machine.MachineId, rup.CabinetId), rup);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("查看（店铺[{0}]门店[{1}]机器[{2}]机柜[{3}]）的库存", machine.StoreName, machine.ShopName, machine.MachineId, rup.CabinetId), rup);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -93,6 +93,8 @@ namespace LocalS.Service.Api.StoreTerm
 
         public CustomJsonResult SaveCabinetSlot(string operater, RopStockSettingSaveCabinetSlot rop)
         {
+            var result = new CustomJsonResult();
+
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
             if (machine == null)
@@ -117,31 +119,22 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
-
-                if (result.Result == ResultType.Success)
-                {
-                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})货道({4})商品移除成功", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId), rop);
-                }
-
-                return result;
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
             }
             else
             {
-                var result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
 
                 if (result.Result == ResultType.Success)
                 {
                     result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
-
-                    if (result.Result == ResultType.Success)
-                    {
-                        MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})货道({4})商品库存保存成功", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId), rop);
-                    }
                 }
 
-                return result;
             }
+
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺[{0}]门店[{1}]机器[{2}]机柜[{3}]货道[{4}]，{5}", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId, result.Message), rop);
+
+            return result;
 
 
         }
@@ -152,7 +145,7 @@ namespace LocalS.Service.Api.StoreTerm
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
             if (string.IsNullOrEmpty(rop.RowColLayout))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道结果为空，上传失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，扫描结果为空");
             }
 
             switch (rop.CabinetId)
@@ -161,18 +154,12 @@ namespace LocalS.Service.Api.StoreTerm
                     result = SaveCabinetRowColLayoutByDS(operater, rop);
                     break;
                 default:
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释柜子布局失败");
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，未知道机柜类型");
                     break;
             }
 
-            if (result.Result == ResultType.Success)
-            {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})，扫描结果上传成功", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId), rop);
-            }
-            else
-            {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺({0})门店({1})机器({2})机柜({3})，扫描结果上传失败", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId), rop);
-            }
+
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺[{0}]门店[{1}]机器[{2}]机柜[{3}]，{4}", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, result.Message), rop);
 
             return result;
         }
@@ -186,14 +173,14 @@ namespace LocalS.Service.Api.StoreTerm
                 CabinetRowColLayoutByDSModel newRowColLayout = rop.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
                 if (newRowColLayout == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，解释新布局格式错误");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，解释新布局格式错误");
                 }
 
                 var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
                 var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).FirstOrDefault();
                 if (cabinet == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，机器未配置机柜，请联系管理员");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，机器未配置机柜，请联系管理员");
                 }
 
                 CabinetRowColLayoutByDSModel oldRowColLayout = null;
@@ -202,7 +189,7 @@ namespace LocalS.Service.Api.StoreTerm
                     oldRowColLayout = cabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
                     if (oldRowColLayout == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，解释旧布局格式错误");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，解释旧布局格式错误");
                     }
 
                     newRowColLayout.PendantRows = oldRowColLayout.PendantRows;
@@ -243,7 +230,7 @@ namespace LocalS.Service.Api.StoreTerm
                                 {
                                     if (!slotIds.Contains(slotId))
                                     {
-                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描货道存在有上传失败");
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，货道存在锁定数量");
                                     }
                                 }
                             }

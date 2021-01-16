@@ -268,16 +268,18 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
+            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+
             var bizRop = new RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = true;
             bizRop.Remark = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
             bizRop.Items = rop.ExItems;
             bizRop.MachineId = rop.MachineId;
+
             var bizResult = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
-            if (bizResult.Result == ResultType.Success)
-            {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, "处理运行异常信息，原因：" + bizRop.Remark,rop);
-            }
+
+
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, string.Format("店铺[{0}]门店[{1}]机器[{2}]，{3}", machine.StoreName, machine.ShopName, machine.MachineId, result.Message), rop);
 
             return bizResult;
         }
