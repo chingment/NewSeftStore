@@ -41,14 +41,14 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" :visible.sync="dialogByMachineIsVisible">
-      <div style="width:800px;height:600px">
+    <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByMachineIsVisible">
+      <div style="width:100%;height:600px">
         <manage-pane-machine opcode="view" :storeid="storeid" :shopid="shopId" />
       </div>
     </el-dialog>
 
-    <el-dialog v-if="dialogByShopIsVisible" :title="'选择门店'" :visible.sync="dialogByShopIsVisible">
-      <div style="height:600px">
+    <el-dialog v-if="dialogByShopIsVisible" :title="'选择门店'" width="800px" :visible.sync="dialogByShopIsVisible">
+      <div style="width:100%;height:600px">
         <manage-pane-shop opcode="select" :storeid="storeid" :select-method="handleAddShop" />
       </div>
     </el-dialog>
