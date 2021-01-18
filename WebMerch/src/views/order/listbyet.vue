@@ -71,10 +71,10 @@
                 <td style="30%">
                   x {{ pickupSku.quantity }}
                 </td>
-                <td v-show="scope.row.receiveMode===3" style="15%">
+                <td v-show="scope.row.receiveMode===4" style="15%">
                   {{ pickupSku.status.text }}
                 </td>
-                <td v-show="scope.row.receiveMode===3" style="width:15%;text-align:center;">
+                <td v-show="scope.row.receiveMode===4" style="width:15%;text-align:center;">
                   <el-popover
                     v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
@@ -485,7 +485,7 @@ export default {
         label: '已取消'
       }],
       options_ReceiveModes: [{
-        value: '3',
+        value: '4',
         label: '机器自提'
       }, {
         value: '2',

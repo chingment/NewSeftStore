@@ -71,10 +71,10 @@
                 <td style="30%">
                   x {{ pickupSku.quantity }}
                 </td>
-                <td v-show="scope.row.receiveMode===3" style="15%">
+                <td v-show="scope.row.receiveMode===4" style="15%">
                   {{ pickupSku.status.text }}
                 </td>
-                <td v-show="scope.row.receiveMode===3" style="width:15%;text-align:center;">
+                <td v-show="scope.row.receiveMode===4" style="width:15%;text-align:center;">
                   <el-popover
                     v-if="pickupSku.pickupLogs.length>0"
                     placement="right"
@@ -279,10 +279,10 @@
               <td style="width:40%">
                 x {{ pickupSku.quantity }}
               </td>
-              <td v-show="receiveMode.mode===3" style="width:200px;text-align:center;">
+              <td v-show="receiveMode.mode===4" style="width:200px;text-align:center;">
                 {{ pickupSku.status.text }}
               </td>
-              <td v-show="receiveMode.mode===3" style="width:100px;text-align:center;">
+              <td v-show="receiveMode.mode===4" style="width:100px;text-align:center;">
                 <el-popover
                   v-if="pickupSku.pickupLogs.length>0"
                   placement="right"
@@ -485,7 +485,7 @@ export default {
         label: '已取消'
       }],
       options_ReceiveModes: [{
-        value: '3',
+        value: '4',
         label: '机器自提'
       }, {
         value: '2',
@@ -605,7 +605,7 @@ export default {
       var uniques = []
 
       for (var i = 0; i < details.receiveModes.length; i++) {
-        if (details.receiveModes[i].mode === 3) {
+        if (details.receiveModes[i].mode === 4) {
           var l_items = details.receiveModes[i].items
           for (var j = 0; j < l_items.length; j++) {
             if (l_items[j].status.value === 6000) {
@@ -613,7 +613,7 @@ export default {
                 this.$message('处理前，请选择【' + l_items[j].name + '】的取货状态 已取或未取')
                 return
               } else {
-                uniques.push({ id: l_items[j].uniqueId, signStatus: l_items[j].signStatus })
+                uniques.push({ uniqueId: l_items[j].uniqueId, signStatus: l_items[j].signStatus })
               }
             }
           }
