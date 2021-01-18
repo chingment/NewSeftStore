@@ -13,5 +13,7 @@ namespace LocalS.Service.Api.Account
         public string AppId { get; set; }
         public Enumeration.LoginWay LoginWay { get; set; }
         public Dictionary<string, string> LoginPms { get; set; }
+
+        public string Ip { get; set; }
     }
 }

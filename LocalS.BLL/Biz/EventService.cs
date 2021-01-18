@@ -120,7 +120,7 @@ namespace LocalS.BLL.Biz
                 return;
 
             string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-            string shopName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseShopId);
+            string shopName = BizFactory.Merch.GetShopName(machine.CurUseMerchId, machine.CurUseShopId);
             string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
             machine.LastRequestTime = DateTime.Now;
@@ -188,7 +188,7 @@ namespace LocalS.BLL.Biz
                     return;
 
                 string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-                string shopName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseShopId);
+                string shopName = BizFactory.Merch.GetShopName(machine.CurUseMerchId, machine.CurUseShopId);
                 string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
                 machine.LastRequestTime = DateTime.Now;
@@ -385,7 +385,7 @@ namespace LocalS.BLL.Biz
             CurrentDb.SaveChanges();
 
             string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-            string shopName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseShopId);
+            string shopName = BizFactory.Merch.GetShopName(machine.CurUseMerchId, machine.CurUseShopId);
             string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
             StringBuilder remark = new StringBuilder("");

@@ -36,6 +36,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse LoginByFingerVein([FromBody]LocalS.Service.Api.Account.RopOwnLoginByFingerVein rop)
         {
+            rop.Ip = CommonUtil.GetIP();
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByFingerVein(rop);
             return new OwnApiHttpResponse(result);
         }
@@ -44,6 +45,9 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse LoginByAccount([FromBody]LocalS.Service.Api.Account.RopOwnLoginByAccount rop)
         {
+
+            rop.Ip = CommonUtil.GetIP();
+
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
             return new OwnApiHttpResponse(result);
         }
