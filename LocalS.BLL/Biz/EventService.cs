@@ -78,7 +78,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Logout, model.Remark, model);
+                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Login, model.Remark, model);
             }
         }
 

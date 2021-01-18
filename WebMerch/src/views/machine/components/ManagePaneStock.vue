@@ -292,7 +292,7 @@ export default {
       this.form.cabinetId = this.listQuery.cabinetId
       this.form.slotId = productSku.slotId
       this.form.version = productSku.version
-      this.form.machineId = getUrlParam('id')
+      this.form.machineId = this.listQuery.machineId
     },
     handleEdit() {
       this.$refs['form'].validate((valid) => {
