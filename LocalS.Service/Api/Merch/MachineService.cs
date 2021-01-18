@@ -434,7 +434,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineAdjustStockQuantity, string.Format("机器（{0}）,货道（{1}）调整", rop.MachineId, rop.SlotId),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineAdjustStockQuantity, string.Format("店铺：{0}，门店：{1}，机器：{2}，机柜：{3}，货道：{4}，调整库存", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId), rop);
             }
 
             return result;
@@ -464,7 +464,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

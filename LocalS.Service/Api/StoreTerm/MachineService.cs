@@ -279,7 +279,7 @@ namespace LocalS.Service.Api.StoreTerm
             result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, string.Format("店铺[{0}]门店[{1}]机器[{2}]，{3}", machine.StoreName, machine.ShopName, machine.MachineId, result.Message), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", machine.StoreName, machine.ShopName, machine.MachineId, result.Message), rop);
 
             return result;
         }

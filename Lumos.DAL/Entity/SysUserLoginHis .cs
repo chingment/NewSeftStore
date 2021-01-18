@@ -29,7 +29,7 @@ namespace Lumos.DbRelay
         [MaxLength(512)]
         public string Description { get; set; }
         [MaxLength(512)]
-        public string RemarkByDev { get; set; }
+        public string Remark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

@@ -70,7 +70,7 @@ namespace LocalS.BLL.Biz
             userLoginHis.LoginTime = DateTime.Now;
             userLoginHis.Result = model.LoginResult;
             userLoginHis.Description = eventRemark;
-            userLoginHis.RemarkByDev = model.RemarkByDev;
+            userLoginHis.Remark = model.Remark;
             userLoginHis.CreateTime = DateTime.Now;
             userLoginHis.Creator = operater;
             CurrentDb.SysUserLoginHis.Add(userLoginHis);
@@ -78,7 +78,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev, null);
+                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Logout, model.Remark, model);
             }
         }
 
@@ -95,7 +95,7 @@ namespace LocalS.BLL.Biz
             userLoginHis.LoginTime = DateTime.Now;
             userLoginHis.Result = model.LoginResult;
             userLoginHis.Description = eventRemark;
-            userLoginHis.RemarkByDev = model.RemarkByDev;
+            userLoginHis.Remark = model.Remark;
             userLoginHis.CreateTime = DateTime.Now;
             userLoginHis.Creator = operater;
             CurrentDb.SysUserLoginHis.Add(userLoginHis);
@@ -104,7 +104,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), appId, trgerId, EventCode.Logout, model.RemarkByDev, null);
+                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Logout, model.Remark, model);
             }
 
         }
@@ -129,7 +129,7 @@ namespace LocalS.BLL.Biz
             switch (model.Status)
             {
                 case "running":
-                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，运行正常", storeName, shopName, machineId);
+                    eventRemark = "运行正常";
 
                     if (machine.RunStatus != E_MachineRunStatus.Running)
                     {
@@ -139,7 +139,7 @@ namespace LocalS.BLL.Biz
                     machine.RunStatus = E_MachineRunStatus.Running;
                     break;
                 case "setting":
-                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，维护中", storeName, shopName, machineId);
+                    eventRemark = "维护中";
 
                     if (machine.RunStatus != E_MachineRunStatus.Setting)
                     {
@@ -150,7 +150,7 @@ namespace LocalS.BLL.Biz
                     break;
                 case "excepition":
 
-                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，异常", storeName, shopName, machineId);
+                    eventRemark = "异常";
 
                     if (machine.RunStatus != E_MachineRunStatus.Excepition)
                     {
@@ -161,7 +161,7 @@ namespace LocalS.BLL.Biz
 
                     break;
                 default:
-                    eventRemark = string.Format("店铺：{0}，门店：{1}，机器：{2}，未知状态", storeName, shopName, machineId);
+                    eventRemark = "未知状态";
                     break;
             }
 
@@ -169,7 +169,7 @@ namespace LocalS.BLL.Biz
 
             if (isLog)
             {
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, eventRemark.ToString(), model);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.MachineStatus, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machineId, eventRemark), model);
             }
         }
 
@@ -366,7 +366,7 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.Pickup, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
             }
         }
 
@@ -415,7 +415,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-            MqFactory.Global.PushOperateLog(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.PickupTest, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
 
         }
 
