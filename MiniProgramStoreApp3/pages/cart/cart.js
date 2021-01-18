@@ -198,7 +198,6 @@ Component({
 
 
           _this.setData({
-            scrollHeight: 500,
             cartData: p_cartData
           })
 
