@@ -15,9 +15,9 @@
         </el-col>
 
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.sellChannelRefType" clearable placeholder="销售模式" style="width: 100%">
+          <el-select v-model="listQuery.shopMode" clearable placeholder="销售模式" style="width: 100%">
             <el-option
-              v-for="item in optionsSellChannelRefTypes"
+              v-for="item in optionsShopModes"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -129,7 +129,7 @@ export default {
         sellChannelRefType: undefined
       },
       optionsStores: [],
-      optionsSellChannelRefTypes: [{
+      optionsShopModes: [{
         value: '1',
         label: '线上商城'
       }, {

@@ -158,12 +158,6 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-
-
-
-
-
-
         public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
             var result = new CustomJsonResult();
