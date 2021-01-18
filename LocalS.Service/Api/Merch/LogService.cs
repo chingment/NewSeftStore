@@ -28,7 +28,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.MerchOperateLog
                          where
-                         u.TrgerId == merchId
+                         u.MerchId == merchId
                          &&
                          u.EventLevel == "A"
                          select new { u.Id, u.OperateUserName, u.EventName, u.Remark, u.CreateTime, u.AppId });
@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SellChannelStockLog
                          where
                          u.MerchId == merchId && u.PrdProductSkuId == rup.ProductSkuId &&
-                         u.StoreId == rup.StoreId 
+                         u.StoreId == rup.StoreId
                          select new { u.Id, u.PrdProductSkuName, u.StoreName, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
 

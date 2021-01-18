@@ -8,7 +8,6 @@ namespace LocalS.BLL.Biz
 {
     public class MachineEventByMachineStatusModel : MachineEventBaseModel
     {
-        public string MachineId { get; set; }
         public string Activity { get; set; }
         public long UpKb { get; set; }
         public long DownKb { get; set; }

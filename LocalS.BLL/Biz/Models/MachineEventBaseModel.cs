@@ -9,5 +9,6 @@ namespace LocalS.BLL.Biz
     public class MachineEventBaseModel
     {
         public string DeviceId { get; set; }
+        public string MachineId { get; set; }
     }
 }

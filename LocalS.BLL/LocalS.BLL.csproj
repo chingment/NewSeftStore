@@ -92,6 +92,7 @@
     <Compile Include="Biz\Models\MachineEventBaseModel.cs" />
     <Compile Include="Biz\Models\MachineEventByMachineStatusModel.cs" />
     <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />
+    <Compile Include="Biz\Models\MachineEventByPickupTestModel.cs" />
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
     <Compile Include="Biz\Models\MiniProgramStModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />

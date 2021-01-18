@@ -1487,7 +1487,7 @@ namespace LocalS.BLL.Biz
                         trgerId = d_order.StoreId;
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, d_order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单（{0}）取消成功", d_order.Id), new
+                    MqFactory.Global.PushOperateLog(operater, d_order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_order.Id), new
                     {
                         orderId = orderId,
                         cancleType = cancleType,

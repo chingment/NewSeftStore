@@ -38,7 +38,7 @@ namespace LocalS.BLL.Biz
                     HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupModel);
                     break;
                 case EventCode.PickupTest:
-                    var pickupTestModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
+                    var pickupTestModel = model.EventContent.ToJsonObject<MachineEventByPickupTestModel>();
                     HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupTestModel);
                     break;
                 case EventCode.MachineCabinetSlotSave:
@@ -370,7 +370,7 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupModel model)
+        private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupTestModel model)
         {
             if (model == null)
                 return;
