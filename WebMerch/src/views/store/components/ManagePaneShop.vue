@@ -41,7 +41,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByMachineIsVisible">
+    <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByMachineIsVisible" @close="getListData(listQuery)">
       <div style="width:100%;height:600px">
         <manage-pane-machine opcode="bindshop" :storeid="storeid" :shopid="shopId" />
       </div>

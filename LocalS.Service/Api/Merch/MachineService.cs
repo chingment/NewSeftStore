@@ -102,11 +102,11 @@ namespace LocalS.Service.Api.Merch
                     query = query.Where(m => m.CurUseShopId == rup.ShopId);
                 }
             }
-            else if (rup.OpCode == "bindshop")
+            else if (rup.OpCode == "listbyshop")
             {
                 query = query.Where(m => m.CurUseStoreId == rup.StoreId && m.CurUseShopId == rup.ShopId);
             }
-            else if (rup.OpCode == "unbindshop")
+            else if (rup.OpCode == "listbyunbindshop")
             {
 
             }
@@ -138,7 +138,7 @@ namespace LocalS.Service.Api.Merch
 
                 bool isCanSelect = false;
 
-                if (rup.OpCode == "unbindshop")
+                if (rup.OpCode == "listbyunbindshop")
                 {
                     if (string.IsNullOrEmpty(item.CurUseShopId))
                     {
@@ -474,33 +474,22 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult Edit(string operater, string merchId, RopMachineEdit rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
-            using (TransactionScope ts = new TransactionScope())
+            var result = new CustomJsonResult();
+
+            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.Id).FirstOrDefault();
+            if (d_MerchMachine.IsStopUse)
             {
-
-                //var isExist = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId != rop.Id && m.Name == rop.Name).FirstOrDefault();
-                //if (isExist != null)
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "名称已存在,请使用其它");
-                //}
-
-                var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.Id).FirstOrDefault();
-                if (merchMachine.IsStopUse)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
-                }
-                //merchMachine.Name = rop.Name;
-                merchMachine.LogoImgUrl = rop.LogoImgUrl;
-                merchMachine.MendTime = DateTime.Now;
-                merchMachine.Mender = operater;
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("保存机器（{0}）信息成功", merchMachine.MachineId), rop);
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
             }
+
+            d_MerchMachine.LogoImgUrl = rop.LogoImgUrl;
+            d_MerchMachine.MendTime = DateTime.Now;
+            d_MerchMachine.Mender = operater;
+            CurrentDb.SaveChanges();
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("机器：{0}，信息修改，保存成功", d_MerchMachine.MachineId), rop);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             if (result.Result == ResultType.Success)
             {
