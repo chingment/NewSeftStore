@@ -401,7 +401,7 @@ namespace LocalS.Service.Api.Merch
                 ts.Complete();
 
 
- 
+
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
 
@@ -587,6 +587,14 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult RemoveShop(string operater, string merchId, RopStoreRemoveShop rop)
         {
             var result = new CustomJsonResult();
+
+
+            var d_StoreShopMachine_Count = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).Count();
+
+            if (d_StoreShopMachine_Count > 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请先解绑关联的机器");
+            }
 
             var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
             var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();

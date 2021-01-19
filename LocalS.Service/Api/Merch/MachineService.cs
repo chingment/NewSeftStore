@@ -568,7 +568,7 @@ namespace LocalS.Service.Api.Merch
             d_Machine.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
-            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
+            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId).FirstOrDefault();
 
             if (d_MerchMachine != null)
             {
@@ -576,11 +576,12 @@ namespace LocalS.Service.Api.Merch
                 d_MerchMachine.CurUseStoreId = null;
                 d_MerchMachine.Mender = operater;
                 d_MerchMachine.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
             }
 
             MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineUnBindShop, string.Format("移除机器：{0}", rop.MachineId), rop);
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
 
             return result;
         }
@@ -636,7 +637,7 @@ namespace LocalS.Service.Api.Merch
 
             MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineBindShop, string.Format("移除机器：{0}", rop.MachineId), rop);
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
 
             return result;
         }

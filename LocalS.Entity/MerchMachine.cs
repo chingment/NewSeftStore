@@ -15,9 +15,12 @@ namespace LocalS.Entity
     [Table("MerchMachine")]
     public class MerchMachine
     {
-        [Key]
         public string Id { get; set; }
+        [Key]
+        [Column(Order = 1)]
         public string MerchId { get; set; }
+        [Key]
+        [Column(Order = 2)]
         public string MachineId { get; set; }
         public string CurUseStoreId { get; set; }
         public string CurUseShopId { get; set; }
