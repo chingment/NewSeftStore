@@ -790,7 +790,7 @@ namespace LocalS.BLL.Biz
                             orderSub.PrdProductId = productSku.ProductId;
                             orderSub.PrdProductSkuName = productSku.Name;
                             orderSub.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
-                            orderSub.PrdProductSkuSpecDes = productSku.SpecDes.ToJsonString();
+                            orderSub.PrdProductSkuSpecDes = productSku.SpecDes;
                             orderSub.PrdProductSkuProducer = productSku.Producer;
                             orderSub.PrdProductSkuBarCode = productSku.BarCode;
                             orderSub.PrdProductSkuCumCode = productSku.CumCode;

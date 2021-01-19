@@ -342,7 +342,10 @@ namespace LocalS.BLL.Biz
                         productSku.ProductId = IdWorker.Build(IdType.EmptyGuid);
                         productSku.BarCode = "MEMBER_FEE";
                         productSku.CumCode = "MEMBER_FEE";
-                        productSku.SpecDes = "[{\"name\":\"单规格\",\"value\":\"会员费\"}]";
+
+                        List<SpecDes> specDes = new List<BLL.SpecDes>();
+                        specDes.Add(new SpecDes { Name = "单规格", Value = "会员费" });
+                        productSku.SpecDes = specDes.ToJsonString();
                         productSku.Producer = "商家";
                         productSku.CartId = "";
                         productSku.SvcConsulterId = "";
@@ -519,7 +522,7 @@ namespace LocalS.BLL.Biz
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
                                 int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == item.ShopId && m.ProductSkuId == shopModeProductSku.Id && m.ShopMode == item.ShopMode).Sum(m => m.Quantity);//已订的数量
-                                LogUtil.Info("myabc.reservedQuantity:"+reservedQuantity);
+                                LogUtil.Info("myabc.reservedQuantity:" + reservedQuantity);
                                 LogUtil.Info("myabc.needReserveQuantity:" + shopModeProductSku.Quantity);
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
