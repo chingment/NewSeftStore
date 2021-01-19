@@ -192,7 +192,7 @@ export default {
       this.loading = true
       this.listQuery.storeId = this.storeid
       this.listQuery.shopId = this.shopid
-
+      this.listQuery.opCode = this.opcode
       initGetList().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -253,7 +253,7 @@ export default {
     getListDataBySelect() {
       this.listQueryBySelect.storeId = this.storeid
       this.listQueryBySelect.shopId = this.shopid
-      this.listQueryBySelect.opCode = 'bindshop'
+      this.listQueryBySelect.opCode = 'unbindshop'
       this.loadingBySelect = true
       getList(this.listQueryBySelect).then(res => {
         if (res.result === 1) {

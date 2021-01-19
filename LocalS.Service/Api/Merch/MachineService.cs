@@ -104,7 +104,11 @@ namespace LocalS.Service.Api.Merch
             }
             else if (rup.OpCode == "bindshop")
             {
-                //query = query.Where(m => m.CurUseShopId == null);
+                query = query.Where(m => m.CurUseStoreId == rup.StoreId && m.CurUseShopId == rup.ShopId);
+            }
+            else if (rup.OpCode == "unbindshop")
+            {
+
             }
 
             int total = query.Count();
@@ -134,7 +138,7 @@ namespace LocalS.Service.Api.Merch
 
                 bool isCanSelect = false;
 
-                if (rup.OpCode == "bindshop")
+                if (rup.OpCode == "unbindshop")
                 {
                     if (string.IsNullOrEmpty(item.CurUseShopId))
                     {

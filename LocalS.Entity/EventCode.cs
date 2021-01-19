@@ -78,7 +78,6 @@ namespace LocalS.Entity
         public const string MachineBindShop = "MachineBindShop";
         [EventCodeRemark("A", "保存机器货道库存")]
         public const string MachineAdjustStockQuantity = "MachineAdjustStockQuantity";
-        
         [EventCodeRemark("A", "新增商品分类信息")]
         public const string PrdKindAdd = "PrdKindAdd";
         [EventCodeRemark("A", "修改商品分类信息")]
