@@ -43,7 +43,7 @@
 
     <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByMachineIsVisible">
       <div style="width:100%;height:600px">
-        <manage-pane-machine opcode="view" :storeid="storeid" :shopid="shopId" />
+        <manage-pane-machine opcode="bindshop" :storeid="storeid" :shopid="shopId" />
       </div>
     </el-dialog>
 
@@ -58,7 +58,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initManageShop, getShops, getMachines, addShop, removeShop } from '@/api/store'
+import { initManageShop, getShops, addShop, removeShop } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 import managePaneShop from '@/views/shop/list'

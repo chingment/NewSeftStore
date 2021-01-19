@@ -237,6 +237,7 @@
     <Compile Include="Api\Merch\RModels\RopMachineRebootSys.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineSetSysStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopMachineShutdownSys.cs" />
+    <Compile Include="Api\Merch\RModels\RopMachineUnBindShop.cs" />
     <Compile Include="Api\Merch\RModels\RopOrderHandleExByMachineSelfTake.cs" />
     <Compile Include="Api\Merch\RModels\RopPayRefundApply.cs" />
     <Compile Include="Api\Merch\RModels\RopPayRefundHandle.cs" />

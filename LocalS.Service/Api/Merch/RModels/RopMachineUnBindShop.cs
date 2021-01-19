@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupMachineGetList:RupBaseGetList
+    public class RopMachineUnBindShop
     {
-        public string Id { get; set; }
-
         public string StoreId { get; set; }
-
         public string ShopId { get; set; }
-
-        public string OpCode { get; set; }
+        public string MachineId { get; set; }
     }
 }

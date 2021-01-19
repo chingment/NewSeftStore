@@ -10,7 +10,7 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="dialogByEditOpen(false,null)">
+          <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="dialogByEditOpen(false,null)">
             添加
           </el-button>
         </el-col>

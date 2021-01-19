@@ -107,5 +107,19 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse UnBindShop([FromBody]RopMachineUnBindShop rop)
+        {
+            IResult result = MerchServiceFactory.Machine.UnBindShop(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse BindShop([FromBody]RopMachineUnBindShop rop)
+        {
+            IResult result = MerchServiceFactory.Machine.BindShop(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

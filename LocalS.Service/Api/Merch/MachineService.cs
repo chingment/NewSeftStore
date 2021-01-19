@@ -4,6 +4,7 @@ using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,15 +90,21 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId
                          select new { u.Id, u.MachineId, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
 
-
-            if (!string.IsNullOrEmpty(rup.StoreId))
+            if (rup.OpCode == "list")
             {
-                query = query.Where(m => m.CurUseStoreId == rup.StoreId);
+                if (!string.IsNullOrEmpty(rup.StoreId))
+                {
+                    query = query.Where(m => m.CurUseStoreId == rup.StoreId);
+                }
+
+                if (!string.IsNullOrEmpty(rup.ShopId))
+                {
+                    query = query.Where(m => m.CurUseShopId == rup.ShopId);
+                }
             }
-
-            if (!string.IsNullOrEmpty(rup.ShopId))
+            else if (rup.OpCode == "bindshop")
             {
-                query = query.Where(m => m.CurUseShopId == rup.ShopId);
+                //query = query.Where(m => m.CurUseShopId == null);
             }
 
             int total = query.Count();
@@ -123,14 +130,35 @@ namespace LocalS.Service.Api.Merch
                     shopName = string.Format("{0}/{1}", store.Name, shop.Name);
                 }
 
+                string opTips = "";
+
+                bool isCanSelect = false;
+
+                if (rup.OpCode == "bindshop")
+                {
+                    if (string.IsNullOrEmpty(item.CurUseShopId))
+                    {
+                        isCanSelect = true;
+                    }
+                    else
+                    {
+                        opTips = "已选择";
+                    }
+
+                }
+
                 olist.Add(new
                 {
                     Id = item.MachineId,
                     Name = item.MachineId,
+                    StoreId = item.CurUseStoreId,
+                    ShopId = item.CurUseShopId,
                     MainImgUrl = item.MainImgUrl,
                     Status = GetStatus(item.CurUseShopId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
                     LastRequestTime = item.LastRequestTime.ToUnifiedFormatDateTime(),
-                    ShopName = shopName
+                    ShopName = shopName,
+                    IsCanSelect = isCanSelect,
+                    OpTips = opTips
                 });
 
             }
@@ -519,6 +547,95 @@ namespace LocalS.Service.Api.Merch
             CustomJsonResult result = new CustomJsonResult();
 
             result = BizFactory.Machine.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.MachineId, rop.msg_id);
+
+            return result;
+        }
+
+        public CustomJsonResult UnBindShop(string operater, string merchId, RopMachineUnBindShop rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            var d_Machine = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.Id == rop.MachineId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
+
+            if (d_Machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已解绑门店");
+            }
+
+            d_Machine.CurUseStoreId = null;
+            d_Machine.CurUseShopId = null;
+            d_Machine.Mender = operater;
+            d_Machine.MendTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+
+            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
+
+            if (d_MerchMachine != null)
+            {
+                d_MerchMachine.IsStopUse = true;
+                d_MerchMachine.Mender = operater;
+                d_MerchMachine.MendTime = DateTime.Now;
+            }
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineUnBindShop, string.Format("移除机器：{0}", rop.MachineId), rop);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+
+            return result;
+        }
+
+
+        public CustomJsonResult BindShop(string operater, string merchId, RopMachineUnBindShop rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            var d_Machine = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.Id == rop.MachineId).FirstOrDefault();
+
+            if (d_Machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到设备");
+            }
+
+            if (!string.IsNullOrEmpty(d_Machine.CurUseStoreId) || !string.IsNullOrEmpty(d_Machine.CurUseShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被绑定，请先解除绑定");
+            }
+
+            d_Machine.CurUseStoreId = rop.StoreId;
+            d_Machine.CurUseShopId = rop.ShopId;
+            d_Machine.Mender = operater;
+            d_Machine.MendTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+
+            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
+
+            if (d_MerchMachine == null)
+            {
+                d_MerchMachine = new MerchMachine();
+                d_MerchMachine.Id = IdWorker.Build(IdType.NewGuid);
+                d_MerchMachine.MerchId = merchId;
+                d_MerchMachine.MachineId = rop.MachineId;
+                d_MerchMachine.CurUseStoreId = rop.StoreId;
+                d_MerchMachine.CurUseShopId = rop.ShopId;
+                d_MerchMachine.Name = d_Machine.Name;
+                d_MerchMachine.LogoImgUrl = d_Machine.LogoImgUrl;
+                d_MerchMachine.IsStopUse = false;
+                d_MerchMachine.Creator = operater;
+                d_MerchMachine.CreateTime = DateTime.Now;
+                CurrentDb.MerchMachine.Add(d_MerchMachine);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+                d_MerchMachine.IsStopUse = false;
+                d_MerchMachine.Mender = operater;
+                d_MerchMachine.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineBindShop, string.Format("移除机器：{0}", rop.MachineId), rop);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
 
             return result;
         }

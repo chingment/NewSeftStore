@@ -10,12 +10,15 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :span="span" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :span="span" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
+          </el-button>
+          <el-button v-if="opcode==='bindshop'" class="filter-item" type="primary" icon="el-icon-plus" @click="dialogByOpenSelect(false,null)">
+            添加
           </el-button>
         </el-col>
       </el-row>
@@ -31,7 +34,8 @@
 
             </div>
             <div class="right">
-              <el-button type="text" @click="handleManage(item)">管理</el-button>
+              <el-button v-if="opcode==='list'" type="text" @click="handleManage(item)">管理</el-button>
+              <el-button v-if="opcode==='bindshop'" type="text" @click="handleUnBindShop(item)">解绑</el-button>
             </div>
           </div>
           <div class="storeName" style="font-size:12px;">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
@@ -67,11 +71,68 @@
     <div v-show="listData.length<=0&&machineCount>0" class="list-empty">
       <span>暂无数据</span>
     </div>
+
+    <el-dialog v-if="dialogByOpenSelectIsVisible" :title="'选择机器'" width="600px" :visible.sync="dialogByOpenSelectIsVisible" append-to-body>
+      <div style="width:100%;height:400px">
+
+        <div class="filter-container">
+          <el-row :gutter="16">
+            <el-col :span="8" :xs="24" style="margin-bottom:20px">
+              <el-input v-model="listQueryBySelect.id" clearable style="width: 100%" placeholder="编号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+            </el-col>
+            <el-col :span="8" :xs="24" style="margin-bottom:20px">
+              <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilterBySelect">
+                查询
+              </el-button>
+            </el-col>
+          </el-row>
+
+        </div>
+        <el-table
+          :key="listKey"
+          v-loading="loadingBySelect"
+          :data="listDataBySelect"
+          fit
+          highlight-current-row
+          style="width: 100%;"
+        >
+          <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+            <template slot-scope="scope">
+              <span>{{ scope.$index+1 }} </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="编号" align="left" min-width="30%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="门店" align="left" min-width="30%">
+            <template slot-scope="scope">
+              <span>{{ scope.row.shopName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
+            <template slot-scope="{row}">
+              <template v-if="opcode==='bindshop'">
+                <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">
+                  选择
+                </el-button>
+                <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
+              </template>
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getList, initGetList } from '@/api/machine'
+
+import { MessageBox } from 'element-ui'
+import { getList, initGetList, bindShop, unBindShop } from '@/api/machine'
 
 export default {
   name: 'MachineList',
@@ -92,16 +153,31 @@ export default {
   data() {
     return {
       loading: true,
+      listKey: 'listQuery',
+      listKeyBySelect: 'listQueryBySelectss',
       listQuery: {
+        opCode: 'list',
         page: 1,
         limit: 10,
         shopId: '',
         storeId: '',
-        id: undefined
+        id: ''
       },
+      loadingBySelect: false,
+      listQueryBySelect: {
+        opCode: 'bindshop',
+        page: 1,
+        limit: 10,
+        shopId: '',
+        storeId: '',
+        id: ''
+      },
+      dialogByOpenSelectIsVisible: false,
       machineCount: 0,
       listData: [],
-      span: 6
+      listDataBySelect: [],
+      span: 6,
+      isDesktop: this.$store.getters.isDesktop
     }
   },
   created() {
@@ -116,7 +192,6 @@ export default {
       this.loading = true
       this.listQuery.storeId = this.storeid
       this.listQuery.shopId = this.shopid
-      console.log('this.listQuery:' + JSON.stringify(this.listQuery))
       initGetList().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -173,6 +248,58 @@ export default {
           tab: 'tabControlCenter'
         }
       })
+    },
+    getListDataBySelect() {
+      this.listQueryBySelect.storeId = this.storeid
+      this.listQueryBySelect.shopId = this.shopid
+      this.listQueryBySelect.opCode = this.opcode
+      this.loadingBySelect = true
+      getList(this.listQueryBySelect).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.listDataBySelect = d.items
+        }
+        this.loadingBySelect = false
+      })
+    },
+    handleFilterBySelect() {
+      this.listQueryBySelect.page = 1
+      this.getListDataBySelect()
+    },
+    dialogByOpenSelect() {
+      this.dialogByOpenSelectIsVisible = true
+      this.getListDataBySelect()
+    },
+    handleUnBindShop: function(item) {
+      MessageBox.confirm('确定要解绑设备', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        unBindShop({ machineId: item.id, storeId: item.storeId, shopId: item.shopId }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.getListData()
+          }
+        })
+      })
+    },
+    handleSelect: function(item) {
+      if (this.opcode === 'bindshop') {
+        MessageBox.confirm('确定绑定设备', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          bindShop({ machineId: item.id, storeId: this.storeid, shopId: this.shopid }).then(res => {
+            this.$message(res.message)
+            if (res.result === 1) {
+              this.getListData()
+              this.dialogByOpenSelectIsVisible = false
+            }
+          })
+        })
+      }
     }
   }
 }

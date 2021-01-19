@@ -72,6 +72,10 @@ namespace LocalS.Entity
         public const string AdSpaceDeleteAdContent = "AdSpaceDeleteAdContent";
         [EventCodeRemark("A", "保存机器信息")]
         public const string MachineEdit = "MachineEdit";
+        [EventCodeRemark("A", "解绑门店机器")]
+        public const string MachineUnBindShop = "MachineUnBindShop";
+        [EventCodeRemark("A", "绑定门店机器")]
+        public const string MachineBindShop = "MachineBindShop";
         [EventCodeRemark("A", "保存机器货道库存")]
         public const string MachineAdjustStockQuantity = "MachineAdjustStockQuantity";
         

@@ -103,6 +103,22 @@ export function dsx01OpenPickupDoor(data) {
   })
 }
 
+export function bindShop(data) {
+  return request({
+    url: '/machine/bindShop',
+    method: 'post',
+    data
+  })
+}
+
+export function unBindShop(data) {
+  return request({
+    url: '/machine/unBindShop',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initGetList: initGetList,
   getList: getList,
@@ -116,5 +132,7 @@ export default {
   sysShutdown: sysShutdown,
   sysSetStatus: sysSetStatus,
   queryMsgPushResult: queryMsgPushResult,
-  dsx01OpenPickupDoor: dsx01OpenPickupDoor
+  dsx01OpenPickupDoor: dsx01OpenPickupDoor,
+  bindShop: bindShop,
+  unBindShop: unBindShop
 }
