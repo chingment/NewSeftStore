@@ -101,17 +101,17 @@
               <span>{{ scope.$index+1 }} </span>
             </template>
           </el-table-column>
-          <el-table-column label="编号" align="left" min-width="30%">
+          <el-table-column label="编号" align="left" min-width="45%">
             <template slot-scope="scope">
               <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="门店" align="left" min-width="30%">
+          <el-table-column label="门店" align="left" min-width="55%">
             <template slot-scope="scope">
               <span>{{ scope.row.shopName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="right" width="100" class-name="small-padding fixed-width">
             <template slot-scope="{row}">
               <template v-if="opcode==='bindshop'">
                 <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">

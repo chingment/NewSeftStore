@@ -142,7 +142,7 @@ namespace LocalS.Service.Api.Merch
                     }
                     else
                     {
-                        opTips = "已选择";
+                        opTips = "已绑定";
                     }
 
                 }
@@ -572,7 +572,8 @@ namespace LocalS.Service.Api.Merch
 
             if (d_MerchMachine != null)
             {
-                d_MerchMachine.IsStopUse = true;
+                d_MerchMachine.CurUseShopId = null;
+                d_MerchMachine.CurUseStoreId = null;
                 d_MerchMachine.Mender = operater;
                 d_MerchMachine.MendTime = DateTime.Now;
             }
@@ -607,7 +608,7 @@ namespace LocalS.Service.Api.Merch
             d_Machine.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
-            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
+            var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId).FirstOrDefault();
 
             if (d_MerchMachine == null)
             {
@@ -619,7 +620,6 @@ namespace LocalS.Service.Api.Merch
                 d_MerchMachine.CurUseShopId = rop.ShopId;
                 d_MerchMachine.Name = d_Machine.Name;
                 d_MerchMachine.LogoImgUrl = d_Machine.LogoImgUrl;
-                d_MerchMachine.IsStopUse = false;
                 d_MerchMachine.Creator = operater;
                 d_MerchMachine.CreateTime = DateTime.Now;
                 CurrentDb.MerchMachine.Add(d_MerchMachine);
@@ -627,7 +627,8 @@ namespace LocalS.Service.Api.Merch
             }
             else
             {
-                d_MerchMachine.IsStopUse = false;
+                d_MerchMachine.CurUseStoreId = rop.StoreId;
+                d_MerchMachine.CurUseShopId = rop.ShopId;
                 d_MerchMachine.Mender = operater;
                 d_MerchMachine.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
