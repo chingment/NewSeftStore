@@ -234,6 +234,12 @@
                 </el-tooltip>
               </td>
             </tr>
+
+            <tr v-if="multiSpecsSkuResult.length==0">
+              <td colspan="3" style="text-align: center;padding: 30px;color: #8c939d;">
+                <span>请添加新规格</span>
+              </td>
+            </tr>
           </tbody>
 
         </table>

@@ -341,9 +341,7 @@ namespace LocalS.BLL.Biz
                 }
             }
 
-
-            //MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, shopId, machineId, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, r_ProductSku.Name, quantity), eventContent);
-            //eventContent = new SellChannelStockChangeModel
+            //var eventContent = new SellChannelStockChangeModel
             //{
             //    MerchId = sellChannelStock.MerchId,
             //    StoreId = sellChannelStock.StoreId,
@@ -361,6 +359,7 @@ namespace LocalS.BLL.Biz
             //    ChangeQuantity = quantity
             //};
 
+            //MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, shopId, machineId, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, r_ProductSku.Name, quantity), eventContent);
 
             //if (result.Result == ResultType.Success)
             //{
