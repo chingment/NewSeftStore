@@ -561,6 +561,8 @@ namespace LocalS.Service.Api.Merch
             d_Machine.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
             var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId).FirstOrDefault();
 
             if (d_MerchMachine != null)
@@ -572,7 +574,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineUnBindShop, string.Format("移除机器：{0}", rop.MachineId), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineUnBindShop, string.Format("将机器（{0}）从店铺（{1}）门店（{2}）移除成功", rop.MachineId, d_Store.Name, d_Shop.Name), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
 
@@ -602,6 +604,8 @@ namespace LocalS.Service.Api.Merch
             d_Machine.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
             var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MachineId == rop.MachineId && m.MerchId == merchId).FirstOrDefault();
 
             if (d_MerchMachine == null)
@@ -628,7 +632,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineBindShop, string.Format("移除机器：{0}", rop.MachineId), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineBindShop, string.Format("选择机器（{0}）到店铺（{1}）门店（{2}）添加成功", rop.MachineId, d_Store.Name, d_Shop.Name), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
 

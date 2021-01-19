@@ -128,7 +128,11 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+
+            var d_store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { SctMode = d_store.SctMode });
             return result;
         }
 
@@ -538,6 +542,8 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+
             var query = (from s in CurrentDb.StoreShop
                          join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
                          from u in temp.DefaultIfEmpty()
@@ -570,6 +576,7 @@ namespace LocalS.Service.Api.Merch
                     MainImgUrl = item.MainImgUrl,
                     Address = item.Address,
                     Status = MerchServiceFactory.Shop.GetStatus(item.IsOpen),
+                    StcMode = d_Store.SctMode,
                     MachineCount = machineCount,
                     CreateTime = item.CreateTime,
                 });
@@ -604,7 +611,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreRemoveShop, string.Format("店铺（{0}）移除门店（{1}）", d_Store.Name, d_Shop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreRemoveShop, string.Format("将门店（{1}）从店铺（{0}）移除成功", d_Store.Name, d_Shop.Name), rop);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
@@ -637,7 +644,7 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreAddShop, string.Format("选择门店（{0}）到店铺（{1}），添加成功", d_Store.Name, d_Shop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreAddShop, string.Format("选择门店（{0}）到店铺（{1}）添加成功", d_Store.Name, d_Shop.Name), rop);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");

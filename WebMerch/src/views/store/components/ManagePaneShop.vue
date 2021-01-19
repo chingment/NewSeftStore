@@ -21,7 +21,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li><el-button type="text" @click="dialogOpenByMachine(item)">({{ item.machineCount }}台)机器</el-button></li>
+                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="dialogOpenByMachine(item)">({{ item.machineCount }}台)机器</el-button></li>
                 <!-- <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li> -->
               </ul>
             </div>
