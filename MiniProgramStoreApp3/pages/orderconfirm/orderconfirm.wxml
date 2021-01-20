@@ -45,13 +45,13 @@
 									<view class="it" bindtap="deliveryAddressSelect" data-reply-index="{{index}}"
 										data-reply-deliveryaddressid="{{item.delivery.id}}">
 										<view class="it-l">
-											<text class='txt-h1 skeleton-rect'>{{item.delivery.consignee}}</text>
-											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.isDefault}}">默认</text>
+											<text class='txt-h1 skeleton-rect'>{{item.delivery.contact.consignee}}</text>
+											<text class="txt-h2 isDefault skeleton-rect" wx:if="{{item.delivery.contact.isDefault}}">默认</text>
 										</view>
 										<view class="it-m">
 											<view class="it-ml skeleton-rect">
-												<text class='txt-h1 bold'>{{item.delivery.phoneNumber}}</text>
-												<text class='txt-h2 '>{{item.delivery.areaName}} {{item.delivery.address}}</text>
+												<text class='txt-h1 bold'>{{item.delivery.contact.phoneNumber}}</text>
+												<text class='txt-h2 '>{{item.delivery.contact.areaName}} {{item.delivery.contact.address}}</text>
 											</view>
 										</view>
 										<view class='it-r' bindtap="goSelect">
