@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="log4net.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AlipaySdk\MyAlipaySdk.csproj">

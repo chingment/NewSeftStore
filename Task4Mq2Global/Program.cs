@@ -22,6 +22,8 @@ namespace Task4Mq2Global
         {
             log.InfoFormat("程序开始");
 
+            MqFactory.Global.PushOperateLog("", "", "", "PayRefund_Apply", "", new { a = "dads" });
+
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "log4net.config"));
             HostFactory.Run(x =>
             {

@@ -11,27 +11,14 @@ namespace Lumos
 
         public static void SetTrackId()
         {
-            string trackid = Guid.NewGuid().ToString();
-            if (LogicalThreadContext.Properties["trackid"] == null)
-            {
-                if (HttpContext.Current != null)
-                {
-                    if (HttpContext.Current.Session != null)
-                    {
-                        trackid = HttpContext.Current.Session.SessionID;
-                    }
-                }
-            }
-
-            LogicalThreadContext.Properties["trackid"] = trackid;
+            SetTrackId(null);
         }
-
 
         public static void SetTrackId(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
-                token = Guid.NewGuid().ToString();
+                token = Guid.NewGuid().ToString().Replace("-", "").ToLower();
             }
 
             LogicalThreadContext.Properties["trackid"] = token;
@@ -58,23 +45,6 @@ namespace Lumos
         public static void Info(string tag, string msg)
         {
             string r_msg = "\r\n";
-            //var trace = new System.Diagnostics.StackTrace();
-            //for (int i = 0; i < trace.FrameCount; i++)
-            //{
-            //    System.Reflection.MethodBase mb2 = trace.GetFrame(i).GetMethod();
-            //    if (mb2 != null)
-            //    {
-            //        if (mb2.DeclaringType != null)
-            //        {
-            //            if (mb2.DeclaringType.Assembly.FullName.ToLower().IndexOf("lumos") > -1 || mb2.DeclaringType.Assembly.FullName.ToLower().IndexOf("websso") > -1)
-            //            {
-            //                r_msg += string.Format("[CALL STACK][{0}]: {1}.{2}\r\n", i, mb2.DeclaringType.FullName, mb2.Name);
-            //            }
-            //        }
-            //    }
-            //}
-
-
             GetLog().Info(r_msg + tag + msg);
         }
 
