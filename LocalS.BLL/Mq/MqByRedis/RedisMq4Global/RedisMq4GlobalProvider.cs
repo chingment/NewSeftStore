@@ -30,7 +30,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.PayTransResultNotify;
             obj.Ticket = ticket;
-            obj.Content = new PayTransResultNotifyModel { PayPartner = payParner, From = from, Content = content };
+            obj.Content = (new PayTransResultNotifyModel { PayPartner = payParner, From = from, Content = content }).ToJsonString();
             this.Push(obj);
         }
 
@@ -39,7 +39,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.PayRefundResultNotify;
             obj.Ticket = ticket;
-            obj.Content = new PayRefundResultNotifyModel { PayPartner = payParner, From = from, PayTransId = payTransId, PayRefundId = payRefundId, Content = content };
+            obj.Content = (new PayRefundResultNotifyModel { PayPartner = payParner, From = from, PayTransId = payTransId, PayRefundId = payRefundId, Content = content }).ToJsonString();
             this.Push(obj);
         }
 
@@ -56,7 +56,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.EventNotify;
             obj.Ticket = IdWorker.Build(IdType.NewGuid);
-            obj.Content = content;
+            obj.Content = content.ToJsonString();
             this.Push(obj);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
@@ -75,7 +75,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.OperateLog;
             obj.Ticket = IdWorker.Build(IdType.NewGuid);
-            obj.Content = content;
+            obj.Content = content.ToJsonString();
             this.Push(obj);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");

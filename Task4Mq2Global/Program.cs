@@ -1,4 +1,5 @@
-﻿using LocalS.BLL.Task;
+﻿using LocalS.BLL.Mq;
+using LocalS.BLL.Task;
 using log4net;
 using Lumos;
 using System;
