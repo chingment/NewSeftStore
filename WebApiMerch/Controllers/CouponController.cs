@@ -12,6 +12,7 @@ namespace WebApiMerch.Controllers
 {
     public class CouponController : OwnApiBaseController
     {
+
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupCouponGetList rup)
         {

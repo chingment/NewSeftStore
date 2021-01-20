@@ -67,5 +67,7 @@ namespace LocalS.Entity
         public string MctStoreId { get; set; }
 
         public bool IsOpenMemberRight { get; set; }
+
+        public bool IsOpenCouponRight { get; set; }
     }
 }
