@@ -23,11 +23,10 @@
       </el-aside>
 
       <el-container>
-        <el-header style="text-align: left; font-size: 12px;background-color: #fff">
+        <el-header style="height:auto; text-align: left; font-size: 12px;background-color: #fff;padding: 4px 0 0 20px;">
           <el-button
             type="text"
             icon="el-icon-edit"
-            size="small"
             style="font-size: 18px;color:#000;margin-right:10px"
             :disabled="kindEditBtnDisabled"
             @click="dialogKindOpen(true)"
