@@ -4,9 +4,11 @@
       <div class="title"><span>系统相关</span>
       </div>
       <div class="content">
-        <el-button type="primary" @click="onOpenDialogSysSetStatus">设置状态</el-button>
-        <el-button type="primary" @click="onSysReboot">重启系统</el-button>
-        <el-button type="primary" @click="onSysShutDown">关闭系统</el-button>
+
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;" @click="onOpenDialogSysSetStatus">设置状态</el-button>
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onSysReboot">重启系统</el-button>
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onSysShutDown">关闭系统</el-button>
+
       </div>
     </div>
 

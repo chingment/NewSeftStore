@@ -25,7 +25,7 @@
     </div>
     <el-row v-loading="loading" :gutter="20">
 
-      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :span="span" :xs="24" style="margin-bottom:20px">
+      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :span="span" :xs="24" class="my-col">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">

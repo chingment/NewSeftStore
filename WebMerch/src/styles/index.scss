@@ -344,3 +344,35 @@ overflow: hidden;
   color: #88B7E0;
 
 }
+
+
+.my-col{
+  margin-bottom:20px;min-width:260px
+}
+
+.cur-tab{
+  display: flex;
+  margin-bottom: 18px;
+}
+
+
+.cur-tab .it-name{
+  overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+
+.cur-tab .it-name .title{
+  color: #5e6d82;
+}
+
+.cur-tab .it-name .name{
+  padding: 0 10px;
+  color:#2ac06d;
+}
+
+.cur-tab .it-switch{
+  width: 100px;
+}

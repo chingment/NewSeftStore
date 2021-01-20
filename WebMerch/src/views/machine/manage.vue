@@ -1,9 +1,10 @@
 <template>
   <div id="machine_manage" class="app-container">
-    <div class="cur-machine">
-      <span class="title">当前机器:</span><span class="name">{{ activeDropdown.name }}</span>
-
-      <el-dropdown trigger="click" @command="handleChangeDropdown">
+    <div class="cur-machine cur-tab">
+      <div class="it-name">
+        <span class="title">当前机器:</span><span class="name">{{ activeDropdown.name }}</span>
+      </div>
+      <el-dropdown class="it-switch" trigger="click" @command="handleChangeDropdown">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
@@ -68,18 +69,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-#machine_manage{
-  padding-top: 0px;
-  .cur-machine{
-  font-size: 14px;
-  line-height: 60px;
-   .title{
-    color: #5e6d82;
-   }
-   .name{
-    padding: 0 10px;
-    color:#2ac06d;
-   }
-  }
-}
 </style>

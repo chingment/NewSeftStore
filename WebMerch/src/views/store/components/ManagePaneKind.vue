@@ -28,7 +28,7 @@
             type="text"
             icon="el-icon-edit"
             size="small"
-            style="font-size: 18px;color:#000;"
+            style="font-size: 18px;color:#000;margin-right:10px"
             :disabled="kindEditBtnDisabled"
             @click="dialogKindOpen(true)"
           >{{ currentKindName }}</el-button>
@@ -40,6 +40,7 @@
 
           <el-button
             type="primary"
+            style="margin-left:0px;"
             icon="el-icon-edit"
             size="small"
             :disabled="kindEditBtnDisabled"
@@ -52,7 +53,7 @@
               v-for="item in listDataByKindSpus"
               :key="item.id"
               :span="5"
-              style="margin-bottom:20px;"
+              class="my-col"
             >
               <el-card class="box-card box-card-product">
                 <div slot="header" class="it-header clearfix">
@@ -249,7 +250,6 @@
 .el-header {
   background-color: #b3c0d1;
   color: #333;
-  line-height: 60px;
 }
 
 .el-aside {
