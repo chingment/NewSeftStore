@@ -115,7 +115,7 @@
           >
             <i class="el-icon-plus" />
           </el-upload>
-          <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByKindDisplayImgUrls">
+          <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByKindDisplayImgUrls" append-to-body>
             <img width="100%" :src="uploadImgPreImgDialogUrlByKindDisplayImgUrls" alt>
           </el-dialog>
           <el-alert

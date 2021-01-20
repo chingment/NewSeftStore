@@ -130,7 +130,6 @@ namespace LocalS.BLL.Biz
             return bannerModels;
         }
 
-
         public Dictionary<string, AdModel> GetAds(string id)
         {
             var ads = new Dictionary<string, AdModel>();
@@ -167,8 +166,6 @@ namespace LocalS.BLL.Biz
 
         public bool IsStopUse(string merchId, string machineId)
         {
-            bool isFlag = true;
-
             var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
 
             if (merchMachine == null)
