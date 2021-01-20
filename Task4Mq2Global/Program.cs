@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL.Mq;
 using LocalS.BLL.Task;
+using LocalS.Entity;
 using log4net;
 using Lumos;
 using System;
@@ -21,8 +22,6 @@ namespace Task4Mq2Global
         static void Main(string[] args)
         {
             log.InfoFormat("程序开始");
-
-            MqFactory.Global.PushOperateLog("", "", "", "PayRefund_Apply", "", new { a = "dads" });
 
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "log4net.config"));
             HostFactory.Run(x =>

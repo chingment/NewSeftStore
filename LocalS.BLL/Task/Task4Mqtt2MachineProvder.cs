@@ -104,7 +104,7 @@ namespace LocalS.BLL.Task
                     {
                         case "machine_status":
 
-                            BizFactory.Machine.EventNotify("",  AppId.STORETERM, machineId, EventCode.MachineStatus,"心跳包", content);
+                            BizFactory.Machine.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, "心跳包", content);
                             break;
                     }
                 }

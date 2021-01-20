@@ -13,7 +13,7 @@ namespace LocalS.Entity
         [EventCodeRemark("A", "系统退出")]
         public const string Logout = "Logout";
         [EventCodeRemark("D", "心跳包")]
-        public const string MachineStatus = "machine_status";
+        public const string MachineStatus = "MachineStatus";
         [EventCodeRemark("A", "机器扫描货道")]
         public const string ScanSlots = "ScanSlots";
         [EventCodeRemark("A", "机器商品取货")]
