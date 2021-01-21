@@ -1,6 +1,5 @@
 <template>
   <div id="machine_list" class="app-container">
-
     <div class="circle-status-bar">
       <div class="circle-item"> <span class="icon-status icon-status-1" /> <span class="name">关闭</span></div>
       <div class="circle-item"> <span class="icon-status icon-status-2" /> <span class="name">正常</span></div>
@@ -67,11 +66,9 @@
       </el-col>
 
     </el-row>
-
     <div v-show="listData.length<=0&&machineCount>0" class="list-empty">
       <span>暂无数据</span>
     </div>
-
     <el-dialog v-if="dialogByOpenSelectIsVisible" :title="'选择机器'" width="600px" :visible.sync="dialogByOpenSelectIsVisible" append-to-body>
       <div style="width:100%;height:400px">
 
@@ -125,7 +122,6 @@
 
       </div>
     </el-dialog>
-
   </div>
 </template>
 

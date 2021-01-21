@@ -12,6 +12,8 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse LoginByMinProgram(RopOwnLoginByMinProgram rop)
         {
+            rop.Ip = CommonUtil.GetIP();
+
             IResult result = AccountServiceFactory.Own.LoginByMinProgram(rop);
             return new OwnApiHttpResponse(result);
         }

@@ -69,7 +69,8 @@ namespace WebApiAccount.Controllers
             }
 
             rop.Token = this.Token;
-            rop.AppId = AppId.ACCOUNT;
+            rop.AppId = rop.AppId;
+            rop.Ip = CommonUtil.GetIP();
             rop.BelongId = this.BelongId;
 
             IResult result = AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
