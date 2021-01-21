@@ -16,11 +16,12 @@ export function getInfo(token, website, path) {
   })
 }
 
-export function logout(token) {
+export function logout(token, appId) {
   return request({
     url: '/own/logout',
     method: 'post',
-    params: { token }
+    params: { token: token, appId: appId },
+    data: { token: token, appId: appId }
   })
 }
 

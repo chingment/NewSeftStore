@@ -53,9 +53,9 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit, state }, pms) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout(state.token, pms.appId).then(() => {
         commit('SET_TOKEN', '')
         removeToken()
         resetRouter()

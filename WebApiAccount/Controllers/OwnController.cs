@@ -72,7 +72,7 @@ namespace WebApiAccount.Controllers
             rop.AppId = rop.AppId;
             rop.Ip = CommonUtil.GetIP();
             rop.BelongId = this.BelongId;
-
+            rop.LoginWay = Lumos.DbRelay.Enumeration.LoginWay.Website;
             IResult result = AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }

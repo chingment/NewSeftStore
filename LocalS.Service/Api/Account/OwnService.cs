@@ -591,8 +591,10 @@ namespace LocalS.Service.Api.Account
             string userName = null;
 
             var tokenInfo = SSOUtil.GetTokenInfo(rop.Token);
-
-            //tokenInfo.UserName;
+            if (tokenInfo != null)
+            {
+                userName = tokenInfo.UserName;
+            }
 
             SSOUtil.Quit(rop.Token);
 

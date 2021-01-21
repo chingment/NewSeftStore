@@ -14,15 +14,17 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   document.title = getPageTitle(to.meta.title)
   var logout = getUrlParam('logout')
+  var appId = getUrlParam('appId')
   var redirect = getUrlParam('redirect')
   var token = getToken()
+  console.log('appId：' + appId)
   console.log('logout：' + logout)
   console.log('redirect：' + redirect)
   console.log('token befefore: ' + token)
   if (logout !== null) {
     token = undefined
     if (logout === '1') {
-      await store.dispatch('own/logout')
+      await store.dispatch('own/logout', { appId: appId })
     }
   }
   console.log('token after: ' + token)
