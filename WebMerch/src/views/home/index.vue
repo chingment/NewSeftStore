@@ -1,5 +1,5 @@
 <template>
-  <div id="home_container">
+  <div id="home_container" class="app-container">
 
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
@@ -352,9 +352,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#home_container{
-  padding: 20px;
-}
 
 .today-sum{
   display: flex;

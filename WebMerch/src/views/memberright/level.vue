@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 #list_levelsts {
-  padding: 20px;
+
   .it-header {
     display: flex;
     justify-content: flex-start;

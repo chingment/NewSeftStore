@@ -311,7 +311,6 @@ export default {
 <style lang="scss" scoped>
 
 #machine_list{
-  padding: 20px;
 
   .it-header{
     display: flex;

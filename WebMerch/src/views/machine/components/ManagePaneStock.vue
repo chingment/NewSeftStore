@@ -324,7 +324,7 @@ export default {
 <style lang="scss" scoped>
 
 #machine_stock{
-  padding: 20px;
+
 .rows{
 .row{
 

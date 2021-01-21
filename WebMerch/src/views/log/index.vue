@@ -25,7 +25,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-#log_manage{
-  padding: 20px;
-}
 </style>

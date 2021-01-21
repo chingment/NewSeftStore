@@ -172,8 +172,6 @@ export default {
 
 #store_list{
 
-  padding: 20px;
-
 .bm-view {
   width: 100%;
   height: 200px;

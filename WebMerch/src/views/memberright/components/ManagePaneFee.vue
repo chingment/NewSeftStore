@@ -76,7 +76,6 @@ export default {
 <style lang="scss" scoped>
 
 #store_list{
-  padding: 20px;
 
   .it-header{
     display: flex;

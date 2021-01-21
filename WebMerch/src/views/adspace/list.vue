@@ -94,7 +94,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-#machine_list{
-  padding: 20px;
-}
 </style>

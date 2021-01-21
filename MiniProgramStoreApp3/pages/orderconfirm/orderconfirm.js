@@ -61,7 +61,7 @@ Page({
         orderIds.push(arr_order[i])
       }
     }
-
+    
     _this.setData({
       storeId: storeage.getStoreId(),
       orderIds: orderIds,
