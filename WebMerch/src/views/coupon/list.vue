@@ -1,5 +1,5 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="user_list">
     <div class="filter-container">
 
       <el-row :gutter="12">
@@ -137,17 +137,17 @@ export default {
     },
     handleDetails(row) {
       this.$router.push({
-        path: '/coupon/details?id=' + row.id
+        path: '/operationcenter/coupon/details?id=' + row.id
       })
     },
     handleEdit(row) {
       this.$router.push({
-        path: '/coupon/edit?id=' + row.id
+        path: '/operationcenter/coupon/edit?id=' + row.id
       })
     },
     handleCreate(row) {
       this.$router.push({
-        path: '/coupon/add'
+        path: '/operationcenter/coupon/add'
       })
     }
   }

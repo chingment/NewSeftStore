@@ -1,5 +1,5 @@
 <template>
-  <div id="user_add" class="app-container">
+  <div id="user_add">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="优惠券类型" prop="category">
         <el-select v-model="form.category" style="width: 100%" @change="handleCategoryChange">

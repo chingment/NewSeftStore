@@ -1,5 +1,5 @@
 <template>
-  <div id="manage_level" class="app-container">
+  <div id="manage_level">
     <div class="cur-dropdown">
       <span class="title">当前会员:</span>
       <span class="name">{{ activeDropdown.name }}</span>

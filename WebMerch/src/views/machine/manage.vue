@@ -1,5 +1,5 @@
 <template>
-  <div id="machine_manage" class="app-container">
+  <div id="machine_manage">
     <div class="cur-machine cur-tab">
       <div class="it-name">
         <span class="title">当前机器:</span><span class="name">{{ activeDropdown.name }}</span>

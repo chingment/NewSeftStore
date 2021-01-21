@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_list" class="app-container">
+  <div id="productsku_list">
     <div class="filter-container">
 
       <el-row :gutter="12">
@@ -10,29 +10,9 @@
           <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
         </el-col>
         <el-col :span="3" :xs="12" style="margin-bottom:20px">
-          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式" style="width: 100%">
-            <el-option
-              v-for="item in options_ReceiveModes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :span="3" :xs="12" style="margin-bottom:20px">
           <el-select v-model="listQuery.orderStatus" clearable placeholder="全部状态" style="width: 100%">
             <el-option
               v-for="item in options_status"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :span="3" :xs="12" style="margin-bottom:20px">
-          <el-select v-model="listQuery.pickupTrgStatus" clearable placeholder="触发状态" style="width: 100%">
-            <el-option
-              v-for="item in options_pickupTrgStatus"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -428,7 +408,7 @@ export default {
     receivemode: {
       type: String,
       require: false,
-      default: ''
+      default: '1'
     },
     clientuserid: {
       type: String,
@@ -443,7 +423,7 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        receiveMode: undefined,
+        receiveMode: 1,
         page: 1,
         limit: 10,
         clientName: undefined,

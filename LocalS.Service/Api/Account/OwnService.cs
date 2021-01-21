@@ -49,25 +49,75 @@ namespace LocalS.Service.Api.Account
 
             }
 
-            foreach (var sysMenu in sysMenus)
-            {
-                MenuNode menuNode = new MenuNode();
-                menuNode.Id = sysMenu.Id;
-                menuNode.PId = sysMenu.PId;
-                menuNode.Path = sysMenu.Path;
-                menuNode.Name = sysMenu.Name;
-                menuNode.Icon = sysMenu.Icon;
-                menuNode.Title = sysMenu.Title;
-                menuNode.Component = sysMenu.Component;
-                menuNode.IsSidebar = sysMenu.IsSidebar;
-                menuNode.IsNavbar = sysMenu.IsNavbar;
-                menuNode.IsRouter = sysMenu.IsRouter;
-                menuNodes.Add(menuNode);
-            }
+            //foreach (var sysMenu in sysMenus)
+            //{
+            //    MenuNode menuNode = new MenuNode();
+            //    menuNode.Id = sysMenu.Id;
+            //    menuNode.PId = sysMenu.PId;
+            //    menuNode.Path = sysMenu.Path;
+            //    menuNode.Name = sysMenu.Name;
+            //    menuNode.Icon = sysMenu.Icon;
+            //    menuNode.Title = sysMenu.Title;
+            //    menuNode.Component = sysMenu.Component;
+            //    menuNode.IsSidebar = sysMenu.IsSidebar;
+            //    menuNode.IsNavbar = sysMenu.IsNavbar;
+            //    menuNode.IsRouter = sysMenu.IsRouter;
+            //    menuNodes.Add(menuNode);
+            //}
 
+
+            menuNodes= GetMenuTree("10000000000000000000000000000025", sysMenus);
             return menuNodes;
 
         }
+
+        private List<MenuNode> GetMenuTree(string id, List<SysMenu> sysMenus)
+        {
+            List<MenuNode> treeNodes = new List<MenuNode>();
+
+            var p_sysMenus = sysMenus.Where(t => t.PId == id).ToList();
+
+            foreach (var p_sysMenu in p_sysMenus)
+            {
+                MenuNode menuNode = new MenuNode();
+                menuNode.Id = p_sysMenu.Id;
+                menuNode.PId = p_sysMenu.PId;
+                menuNode.Path = p_sysMenu.Path;
+                menuNode.Name = p_sysMenu.Name;
+                menuNode.Icon = p_sysMenu.Icon;
+                menuNode.Title = p_sysMenu.Title;
+                menuNode.Component = p_sysMenu.Component;
+                menuNode.IsSidebar = p_sysMenu.IsSidebar;
+                menuNode.IsNavbar = p_sysMenu.IsNavbar;
+                menuNode.IsRouter = p_sysMenu.IsRouter;
+                menuNode.Redirect = p_sysMenu.Redirect;
+
+
+                var children = GetMenuTree(p_sysMenu.Id, sysMenus);
+                if (children != null)
+                {
+                    if (children.Count > 0)
+                    {
+                        menuNode.Children = new List<MenuNode>();
+                        menuNode.Children= children;
+                    }
+                }
+
+                treeNodes.Add(menuNode);
+            }
+
+            return treeNodes;
+        }
+
+        //private List<TreeNode> GetMenuTree(Enumeration.BelongSite belongSite)
+        //{
+        //    var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite).OrderBy(m => m.Priority).ToList();
+
+        //    var topMenu = sysMenus.Where(m => m.Depth == 0).FirstOrDefault();
+
+        //    return GetMenuTree(topMenu.Id, sysMenus);
+        //}
+
         private List<RoleModel> GetRoles(Enumeration.BelongSite belongSite, string userId)
         {
             List<RoleModel> models = new List<RoleModel>();

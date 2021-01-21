@@ -23,5 +23,7 @@ namespace LocalS.Service.UI
         public string Component { get; set; }
 
         public bool IsRouter { get; set; }
+        public string Redirect { get; set; }
+        public List<MenuNode> Children { get; set; }
     }
 }

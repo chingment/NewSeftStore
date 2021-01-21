@@ -1,5 +1,5 @@
 <template>
-  <div id="list_levelsts" v-loading="loading" class="app-container">
+  <div id="list_levelsts" v-loading="loading">
 
     <el-alert
       v-if="!isOpenMemberRight"

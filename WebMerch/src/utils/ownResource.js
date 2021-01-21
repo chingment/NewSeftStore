@@ -2,7 +2,8 @@ import store from '@/store'
 import { constantRoutes } from '@/router'
 import router from '@/router'
 import Layout from '@/layout'
-
+import Main from '@/views/order/index.vue'
+import Tour from '@/views/order/listbymt.vue'
 export function getSideBars() {
   // meta: { title: '用户设置', icon: 'table' },
   function toTree(data) {
@@ -54,7 +55,7 @@ export function getSideBars() {
         meta: { title: item.title, icon: item.icon }
       }
       if (item.children) {
-        if (menu.children === undefined) {
+        if (menu.children === undefined||menu.children==null) {
           menu.children = []
         }
         _generateRoutes(menu.children, item.children)
@@ -105,8 +106,10 @@ export function getNavbars() {
 }
 
 export function generateRoutes(data) {
-  function _generateRoutes(router, menus) {
-    var _layoutRouter = {
+  console.log('data:'+JSON.stringify(data))
+ 
+ 
+  var _layoutRouter = {
       path: '/',
       component: Layout,
       redirect: '/home',
@@ -114,34 +117,110 @@ export function generateRoutes(data) {
       ]
     }
 
-    menus.filter(item => {
-      if (item.isRouter) {
-        if (item.component !== null) {
-          var path = item.path
+  var routers = []
+  function _generateRoutes(routers, menus) {
+    menus.forEach((item) => {
+
+      var path = item.path
           if (item.path.indexOf('?') > -1) {
             path = item.path.split('?')[0]
-          }
+      }
 
-          const component = resolve => require([`@/views${item.component}`], resolve)
-          var _router = {
+      const component = resolve => require([`@/views${item.component}`], resolve)
+      const menu = {
             path: path,
             component: component,
             children: undefined,
+            redirect:undefined,
             hidden: item.hidden,
             name: item.name,
             meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
-          }
-          _layoutRouter.children.push(_router)
-        }
       }
-    })
+      if (item.children) {
+        if (menu.children === undefined) {
+          menu.children = []
+        }
+        const redirect=item.redirect==null?undefined:item.redirect
 
-    router.push(_layoutRouter)
+         menu.redirect=redirect
+        _generateRoutes(menu.children, item.children)
+      }
+      routers.push(menu)
+    })
   }
 
-  _generateRoutes(constantRoutes, data)
+  _generateRoutes(routers, data)
 
-  constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
-  router.addRoutes(constantRoutes)
+
+  //_layoutRouter.children.push(routers)
+
+  //routers.push(_layoutRouter)
+  // var s=[]
+  // function _generateRoutes(router, menus) {
+  //   var _layoutRouter = {
+  //     path: '/',
+  //     component: Layout,
+  //     redirect: '/home',
+  //     children: [
+  //     ]
+  //   }
+
+  //   menus.filter(item => {
+  //     if (item.isRouter) {
+  //       if (item.component !== null) {
+  //         var path = item.path
+  //         if (item.path.indexOf('?') > -1) {
+  //           path = item.path.split('?')[0]
+  //         }
+
+  //         const component = resolve => require([`@/views${item.component}`], resolve)
+
+  //         var _router = {
+  //           path: path,
+  //           component: component,
+  //           children: undefined,
+  //           hidden: item.hidden,
+  //           name: item.name,
+  //           meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
+  //         }
+  //         _layoutRouter.children.push(_router)
+  //       }
+  //     }
+  //   })
+
+  //   s.push(_layoutRouter)
+  //   router.push(_layoutRouter)
+  // }
+
+  // _generateRoutes(constantRoutes, data)
+
+  // console.log(JSON.stringify(s))
+
+  //constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
+
+  //_layoutRouter.children.push(routers)
+//{"path":"/home","name":"MerchHome","meta":{"title":"主页","icon":"dashboard","id":"25f3d80ce69a48b683f6aa2d6c899fca","pId":"10000000000000000000000000000025"}}
+
+
+// [{
+//   path:'/order',
+//   component:Main,
+//   children:[{
+//    path:'list',
+//    component:Tour,
+//   }]
+// }]
+
+  var _routers=[{
+    path: '/',
+    component: Layout,
+    redirect: '/home',
+    children: routers
+},
+{ path: '*', redirect: '/404', hidden: true }]
+
+console.log('routers:'+JSON.stringify(_routers))
+
+  router.addRoutes(_routers)
 }
 

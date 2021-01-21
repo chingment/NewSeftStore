@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_edit" class="app-container">
+  <div id="productsku_edit">
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :productid="id" /></el-tab-pane>
       <el-tab-pane label="在售店铺" name="tabStoreSale"><manage-pane-store-sale :productid="id" /></el-tab-pane>

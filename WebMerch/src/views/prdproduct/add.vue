@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_add" class="app-container">
+  <div id="productsku_add">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />

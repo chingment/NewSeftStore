@@ -1,5 +1,5 @@
 <template>
-  <div id="store_manage" class="app-container">
+  <div id="store_manage">
     <div class="cur-store cur-tab">
       <div class="it-name">
         <span class="title">当前店铺:</span><span class="name">{{ activeDropdown.name }}</span>

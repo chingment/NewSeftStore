@@ -1,6 +1,5 @@
 <template>
-  <div id="store_list" class="app-container">
-
+  <div id="store_list">
     <div class="filter-container">
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">

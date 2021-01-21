@@ -1,36 +1,12 @@
 <template>
-  <div id="productsku_list" class="app-container my-container1">
+  <div id="productsku_list">
     <div class="filter-container">
-      <el-container>
-        <el-aside width="200px">
-          <el-menu :default-active="navActive" @select="selectNav">
-            <el-menu-item-group>
-              <template slot="title">订单中心</template>
-              <el-menu-item index="1">机器自提</el-menu-item>
-              <el-menu-item index="2">店铺自提</el-menu-item>
-              <el-menu-item index="3">配送到手</el-menu-item>
-            </el-menu-item-group>
-          </el-menu>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <router-view name="second" />
             <el-row :gutter="12">
               <el-col :span="6" :xs="24" style="margin-bottom:20px">
                 <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
               </el-col>
               <el-col v-if="isShowClientUserNameInput" :span="3" :xs="12" style="margin-bottom:20px">
                 <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
-              </el-col>
-              <el-col :span="3" :xs="12" style="margin-bottom:20px">
-                <el-select v-model="listQuery.receiveMode" clearable placeholder="全部取货方式" style="width: 100%">
-                  <el-option
-                    v-for="item in options_ReceiveModes"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
               </el-col>
               <el-col :span="3" :xs="12" style="margin-bottom:20px">
                 <el-select v-model="listQuery.orderStatus" clearable placeholder="全部状态" style="width: 100%">
@@ -416,9 +392,7 @@
                 </el-button>
               </div>
             </el-dialog>
-          </el-main>
-        </el-container>
-      </el-container>
+
 
     </div>
   </div>
@@ -446,7 +420,7 @@ export default {
     receivemode: {
       type: String,
       require: false,
-      default: ''
+      default: '4'
     },
     clientuserid: {
       type: String,
@@ -462,7 +436,7 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        receiveMode: undefined,
+        receiveMode: 4,
         page: 1,
         limit: 10,
         clientName: undefined,
