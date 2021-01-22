@@ -31,7 +31,6 @@ export default {
   },
   created() {
     this.navActive = this.$route.path
-    console.log('this.$route.params.path:' + this.$route.path)
   },
   methods: {
 

@@ -138,11 +138,11 @@ export default {
   name: 'ShopList',
   components: { Pagination },
   props: {
-    opcode: {
+    opCode: {
       type: String,
       default: 'list'
     },
-    storeid: {
+    storeId: {
       type: String,
       default: ''
     },
@@ -218,8 +218,8 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.listQuery.opCode = this.opcode
-    this.listQuery.storeId = this.storeid
+    this.listQuery.opCode = this.opCode
+    this.listQuery.storeId = this.storeId
     this.getListData()
   },
   methods: {

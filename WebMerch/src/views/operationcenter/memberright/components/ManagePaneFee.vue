@@ -33,7 +33,7 @@ import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneMachine',
   props: {
-    levelstid: {
+    levelstId: {
       type: String,
       default: ''
     }
@@ -45,7 +45,7 @@ export default {
     }
   },
   watch: {
-    levelstid: function(val, oldval) {
+    levelstId: function(val, oldval) {
       this.init()
     }
   },
@@ -54,8 +54,8 @@ export default {
   },
   methods: {
     init() {
-      if (!isEmpty(this.levelstid)) {
-        var id = this.levelstid
+      if (!isEmpty(this.levelstId)) {
+        var id = this.levelstId
         this._getListData({ id: id })
       }
     },

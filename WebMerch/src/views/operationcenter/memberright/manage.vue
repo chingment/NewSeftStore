@@ -19,13 +19,13 @@
     </div>
     <el-tabs v-model="activeTab" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo">
-        <manage-pane-base-info :levelstid="activeDropdown.id" />
+        <manage-pane-base-info :levelst-id="activeDropdown.id" />
       </el-tab-pane>
       <el-tab-pane label="会费设置" name="tabFee">
-        <manage-pane-fee :levelstid="activeDropdown.id" />
+        <manage-pane-fee :levelst-id="activeDropdown.id" />
       </el-tab-pane>
       <el-tab-pane label="权益设置" name="tabRight">
-        <manage-pane-right :levelstid="activeDropdown.id" />
+        <manage-pane-right :levelst-id="activeDropdown.id" />
       </el-tab-pane>
     </el-tabs>
   </div>

@@ -24,7 +24,7 @@ import { all } from 'q'
 export default {
   name: 'ManagePaneBaseInfo',
   props: {
-    levelstid: {
+    levelstId: {
       type: String,
       default: ''
     }
@@ -43,7 +43,7 @@ export default {
     }
   },
   watch: {
-    levelstid: function(val, oldval) {
+    levelstId: function(val, oldval) {
       this.init()
     }
   },
@@ -52,9 +52,9 @@ export default {
   },
   methods: {
     init() {
-      if (!isEmpty(this.levelstid)) {
+      if (!isEmpty(this.levelstId)) {
         this.loading = true
-        var id = this.levelstid
+        var id = this.levelstId
         initManageBaseInfo({ id: id }).then(res => {
           if (res.result === 1) {
             var d = res.data

@@ -28,7 +28,7 @@ import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneBaseInfo',
   props: {
-    storeid: {
+    storeId: {
       type: String,
       default: ''
     }
@@ -47,8 +47,7 @@ export default {
     }
   },
   watch: {
-    storeid: function(val, oldval) {
-      console.log('storeid 值改变:' + val)
+    storeId: function(val, oldval) {
       this.init()
     }
   },
@@ -57,9 +56,9 @@ export default {
   },
   methods: {
     init() {
-      if (!isEmpty(this.storeid)) {
+      if (!isEmpty(this.storeId)) {
         this.loading = true
-        initManageBaseInfo({ id: this.storeid }).then(res => {
+        initManageBaseInfo({ id: this.storeId }).then(res => {
           if (res.result === 1) {
             var d = res.data
             this.store.id = d.id

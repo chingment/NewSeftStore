@@ -54,7 +54,7 @@ import { all } from 'q'
 export default {
   name: 'ManagePaneBaseInfo',
   props: {
-    machineid: {
+    machineId: {
       type: String,
       default: ''
     }
@@ -86,8 +86,7 @@ export default {
     }
   },
   watch: {
-    machineid: function(val, oldval) {
-      console.log('storeid 值改变:' + val)
+    machineId: function(val, oldval) {
       this.init()
     }
   },
@@ -97,8 +96,8 @@ export default {
   methods: {
     init() {
       this.loading = true
-      if (!isEmpty(this.machineid)) {
-        initManageBaseInfo({ id: this.machineid }).then(res => {
+      if (!isEmpty(this.machineId)) {
+        initManageBaseInfo({ id: this.machineId }).then(res => {
           if (res.result === 1) {
             var d = res.data
             this.form.id = d.id

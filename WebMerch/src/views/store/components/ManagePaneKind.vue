@@ -334,7 +334,7 @@ export default {
   name: 'ManagePaneProduct',
   components: { Pagination },
   props: {
-    storeid: {
+    storeId: {
       type: String,
       default: ''
     }
@@ -342,7 +342,6 @@ export default {
   data() {
     return {
       loading: false,
-      storeId: '',
       isLoaingByKinds: false,
       isLoaingByKindSpus: false,
       listDataByKinds: [],
@@ -444,8 +443,7 @@ export default {
     }
   },
   watch: {
-    storeid: function(val, oldval) {
-      console.log('storeid2 值改变:' + val)
+    storeId: function(val, oldval) {
       this.init()
     }
   },
@@ -454,11 +452,9 @@ export default {
   },
   methods: {
     init() {
-      if (!isEmpty(this.storeid)) {
-        console.log('storeid2 1值改变:' + this.storeid)
-        this.storeId = this.storeid
-        this.kindForm.storeId = this.storeid
-        this.kindSpuForm.storeId = this.storeid
+      if (!isEmpty(this.storeId)) {
+        this.kindForm.storeId = this.storeId
+        this.kindSpuForm.storeId = this.storeId
         this.listDataByKinds = []
         this.listDataByKindSpus = []
         this.currentKindIndex = 0

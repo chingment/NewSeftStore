@@ -167,7 +167,7 @@ export default {
     vueSeamlessScroll
   },
   props: {
-    machineid: {
+    machineId: {
       type: String,
       default: ''
     }
@@ -210,8 +210,7 @@ export default {
     }
   },
   watch: {
-    machineid: function(val, oldval) {
-      console.log('storeid 值改变:' + val)
+    machineId: function(val, oldval) {
       this.init()
     }
   },
@@ -221,9 +220,9 @@ export default {
   methods: {
     init() {
       this.loading = true
-      if (!isEmpty(this.machineid)) {
-        this.listQuery.machineId = this.machineid
-        initManageStock({ id: this.machineid }).then(res => {
+      if (!isEmpty(this.machineId)) {
+        this.listQuery.machineId = this.machineId
+        initManageStock({ id: this.machineId }).then(res => {
           if (res.result === 1) {
             var d = res.data
             this.options_cabinets = d.optionsCabinets

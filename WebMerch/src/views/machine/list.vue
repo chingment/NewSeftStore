@@ -16,7 +16,7 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-          <el-button v-if="opcode==='bindshop'" class="filter-item" type="primary" icon="el-icon-plus" @click="dialogByOpenSelect(false,null)">
+          <el-button v-if="opCode==='bindshop'" class="filter-item" type="primary" icon="el-icon-plus" @click="dialogByOpenSelect(false,null)">
             添加
           </el-button>
         </el-col>
@@ -33,8 +33,8 @@
 
             </div>
             <div class="right">
-              <el-button v-if="opcode==='list'" type="text" @click="handleManage(item)">管理</el-button>
-              <el-button v-if="opcode==='bindshop'" type="text" @click="handleUnBindShop(item)">解绑</el-button>
+              <el-button v-if="opCode==='list'" type="text" @click="handleManage(item)">管理</el-button>
+              <el-button v-if="opCode==='bindshop'" type="text" @click="handleUnBindShop(item)">解绑</el-button>
             </div>
           </div>
           <div class="storeName" style="font-size:12px;">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
@@ -110,7 +110,7 @@
           </el-table-column>
           <el-table-column label="操作" align="right" width="100" class-name="small-padding fixed-width">
             <template slot-scope="{row}">
-              <template v-if="opcode==='bindshop'">
+              <template v-if="opCode==='bindshop'">
                 <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">
                   选择
                 </el-button>
@@ -133,15 +133,15 @@ import { getList, initGetList, bindShop, unBindShop } from '@/api/machine'
 export default {
   name: 'MachineList',
   props: {
-    opcode: {
+    opCode: {
       type: String,
       default: 'list'
     },
-    storeid: {
+    storeId: {
       type: String,
       default: ''
     },
-    shopid: {
+    shopId: {
       type: String,
       default: ''
     }
@@ -180,16 +180,16 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.span = this.shopid === '' ? 6 : 12
+    this.span = this.shopId === '' ? 6 : 12
     this.init()
   },
   methods: {
     init() {
       this.loading = true
-      this.listQuery.storeId = this.storeid
-      this.listQuery.shopId = this.shopid
+      this.listQuery.storeId = this.storeId
+      this.listQuery.shopId = this.shopId
 
-      if (this.opcode === 'bindshop') {
+      if (this.opCode === 'bindshop') {
         this.listQuery.opCode = 'listbyshop'
       } else {
         this.listQuery.opCode = 'list'
@@ -253,8 +253,8 @@ export default {
       })
     },
     getListDataBySelect() {
-      this.listQueryBySelect.storeId = this.storeid
-      this.listQueryBySelect.shopId = this.shopid
+      this.listQueryBySelect.storeId = this.storeId
+      this.listQueryBySelect.shopId = this.shopId
       this.listQueryBySelect.opCode = 'listbyunbindshop'
       this.loadingBySelect = true
       getList(this.listQueryBySelect).then(res => {
@@ -288,13 +288,13 @@ export default {
       })
     },
     handleSelect: function(item) {
-      if (this.opcode === 'bindshop') {
+      if (this.opCode === 'bindshop') {
         MessageBox.confirm('确定绑定设备', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          bindShop({ machineId: item.id, storeId: this.storeid, shopId: this.shopid }).then(res => {
+          bindShop({ machineId: item.id, storeId: this.storeId, shopId: this.shopId }).then(res => {
             this.$message(res.message)
             if (res.result === 1) {
               this.getListData()

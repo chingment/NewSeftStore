@@ -406,22 +406,22 @@ export default {
   name: 'OrderListByMt',
   components: { Pagination },
   props: {
-    storeid: {
+    storeId: {
       type: String,
       require: false,
       default: ''
     },
-    sellchannelrefid: {
+    sellChannelRefId: {
       type: String,
       require: false,
       default: ''
     },
-    receivemode: {
+    receiveMode: {
       type: String,
       require: false,
       default: '4'
     },
-    clientuserid: {
+    clientUserId: {
       type: String,
       require: false,
       default: ''
@@ -532,18 +532,18 @@ export default {
     if (receiveMode != null) {
       this.listQuery.receiveMode = receiveMode
     } else {
-      this.listQuery.receiveMode = this.receivemode
+      this.listQuery.receiveMode = this.receiveMode
     }
 
-    this.listQuery.storeId = this.storeid
-    this.listQuery.sellChannelRefId = this.sellchannelrefid
+    this.listQuery.storeId = this.storeId
+    this.listQuery.sellChannelRefId = this.sellChannelRefId
 
-    if (this.clientuserid === '') {
+    if (this.clientUserId === '') {
       this.isShowClientUserNameInput = true
     } else {
       this.isShowClientUserNameInput = false
     }
-    this.listQuery.clientUserId = this.clientuserid
+    this.listQuery.clientUserId = this.clientUserId
     this.init()
   },
   methods: {

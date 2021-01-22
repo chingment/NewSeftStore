@@ -224,8 +224,8 @@ export default {
         x: touch.pageX - this.startPos.x,
         y: touch.pageY - this.startPos.y
       }
-      event.preventDefault() //阻止触摸事件的默认行为，即阻止滚屏
-        const dir = Math.abs(this.endPos.x) < Math.abs(this.endPos.y) ? 1 : 0 // dir，1表示纵向滑动，0为横向滑动
+      event.preventDefault() // 阻止触摸事件的默认行为，即阻止滚屏
+      const dir = Math.abs(this.endPos.x) < Math.abs(this.endPos.y) ? 1 : 0 // dir，1表示纵向滑动，0为横向滑动
       if (dir === 1 && direction < 2) { // 表示纵向滑动 && 运动方向为上下
         this.yPos = this.startPosY + this.endPos.y
       } else if (dir === 0 && direction > 1) { // 为横向滑动 && 运动方向为左右
@@ -356,7 +356,7 @@ export default {
             this.realBoxHeight = this.$refs.realBox.offsetHeight
             this._move()
           }, 0)
-          } else {
+        } else {
           this._cancle()
           this.yPos = this.xPos = 0
         }
@@ -365,7 +365,7 @@ export default {
     _dataWarm(data) {
       if (data.length > 100) {
         console.warn(`数据达到了${data.length}条有点多哦~,可能会造成部分老旧浏览器卡顿。`)
-        }
+      }
     }
   }
 }

@@ -367,9 +367,7 @@
               <el-form-item label="备注:" prop="remark">
                 <el-input v-model="formByHandle.remark" />
               </el-form-item>
-
             </el-form>
-
             <p v-else>{{ details.exHandleRemark }}</p>
           </div>
         </div>
@@ -396,22 +394,22 @@ export default {
   name: 'OrderList',
   components: { Pagination },
   props: {
-    storeid: {
+    storeId: {
       type: String,
       require: false,
       default: ''
     },
-    sellchannelrefid: {
+    sellChannelRefId: {
       type: String,
       require: false,
       default: ''
     },
-    receivemode: {
+    receiveMode: {
       type: String,
       require: false,
       default: ''
     },
-    clientuserid: {
+    clientUserId: {
       type: String,
       require: false,
       default: ''
@@ -522,18 +520,18 @@ export default {
     if (receiveMode != null) {
       this.listQuery.receiveMode = receiveMode
     } else {
-      this.listQuery.receiveMode = this.receivemode
+      this.listQuery.receiveMode = this.receiveMode
     }
 
-    this.listQuery.storeId = this.storeid
-    this.listQuery.sellChannelRefId = this.sellchannelrefid
+    this.listQuery.storeId = this.storeId
+    this.listQuery.sellChannelRefId = this.sellChannelRefId
 
-    if (this.clientuserid === '') {
+    if (this.clientUserId === '') {
       this.isShowClientUserNameInput = true
     } else {
       this.isShowClientUserNameInput = false
     }
-    this.listQuery.clientUserId = this.clientuserid
+    this.listQuery.clientUserId = this.clientUserId
     this.init()
   },
   methods: {

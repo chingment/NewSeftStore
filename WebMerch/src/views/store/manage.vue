@@ -14,9 +14,9 @@
       </el-dropdown>
     </div>
     <el-tabs v-model="activeTab" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :storeid="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :storeid="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="门店信息" name="tabFront"><manage-pane-shop :storeid="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="门店信息" name="tabFront"><manage-pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>

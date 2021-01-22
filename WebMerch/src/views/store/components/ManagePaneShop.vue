@@ -43,13 +43,13 @@
 
     <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByMachineIsVisible" @close="getListData(listQuery)">
       <div style="width:100%;height:600px">
-        <manage-pane-machine opcode="bindshop" :storeid="storeid" :shopid="shopId" />
+        <manage-pane-machine op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
       </div>
     </el-dialog>
 
     <el-dialog v-if="dialogByShopIsVisible" :title="'选择门店'" width="800px" :visible.sync="dialogByShopIsVisible">
       <div style="width:100%;height:600px">
-        <manage-pane-shop opcode="select" :storeid="storeid" :select-method="handleAddShop" />
+        <manage-pane-shop op-code="select" :store-id="storeId" :select-method="handleAddShop" />
       </div>
     </el-dialog>
 
@@ -67,7 +67,7 @@ export default {
   name: 'ManagePaneMachine',
   components: { managePaneShop, managePaneMachine },
   props: {
-    storeid: {
+    storeId: {
       type: String,
       default: ''
     }
@@ -82,15 +82,13 @@ export default {
       },
       listData: [],
       listDataByMachine: [],
-      storeId: '',
       shopId: '',
       dialogByShopIsVisible: false,
       dialogByMachineIsVisible: false
     }
   },
   watch: {
-    storeid: function(val, oldval) {
-      console.log('storeid3 值改变:' + val)
+    storeId: function(val, oldval) {
       this.init()
     }
   },
@@ -102,12 +100,10 @@ export default {
   },
   methods: {
     init() {
-      if (!isEmpty(this.storeid)) {
-        console.log('storeid3 1值改变:' + this.storeid)
+      if (!isEmpty(this.storeId)) {
         this.loading = true
-        this.storeId = this.storeid
-        this.listQuery.storeId = this.storeid
-        initManageShop({ id: this.storeid }).then(res => {
+        this.listQuery.storeId = this.storeId
+        initManageShop({ id: this.storeId }).then(res => {
           if (res.result === 1) {
             var d = res.data
           }
@@ -140,7 +136,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        addShop({ shopId: item.id, storeId: this.storeid }).then(res => {
+        addShop({ shopId: item.id, storeId: this.storeId }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this.dialogByShopIsVisible = false
@@ -155,7 +151,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeShop({ shopId: item.id, storeId: this.storeid }).then(res => {
+        removeShop({ shopId: item.id, storeId: this.storeId }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this.dialogByShopIsVisible = false

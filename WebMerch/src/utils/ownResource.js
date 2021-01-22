@@ -3,7 +3,7 @@ import store from '@/store'
 import router from '@/router'
 import Layout from '@/layout'
 
-function _generateRoutes(routers, menus, isCheckSidebar) {
+function _generateRoutes(routers, menus) {
   menus.forEach((item) => {
     var path = item.path
     if (item.path.indexOf('?') > -1) {
@@ -27,7 +27,7 @@ function _generateRoutes(routers, menus, isCheckSidebar) {
       const redirect = item.redirect == null ? undefined : item.redirect
 
       menu.redirect = redirect
-      _generateRoutes(menu.children, item.children, isCheckSidebar)
+      _generateRoutes(menu.children, item.children)
     }
 
     routers.push(menu)
@@ -45,7 +45,7 @@ function _generateRoutes(routers, menus, isCheckSidebar) {
 export function getSideBars() {
   var menus = store.getters.userInfo.menus
   var routers = []
-  _generateRoutes(routers, menus, true)
+  _generateRoutes(routers, menus)
   return routers
 }
 
@@ -60,11 +60,9 @@ export function getNavbars() {
 }
 
 export function generateRoutes(data) {
-  console.log('data:' + JSON.stringify(data))
-
   var routers = []
 
-  _generateRoutes(routers, data, false)
+  _generateRoutes(routers, data)
 
   var _routers = [{
     path: '/',
@@ -73,8 +71,6 @@ export function generateRoutes(data) {
     children: routers
   },
   { path: '*', redirect: '/404', hidden: true }]
-
-  console.log('routers:' + JSON.stringify(_routers))
 
   router.addRoutes(_routers)
 }

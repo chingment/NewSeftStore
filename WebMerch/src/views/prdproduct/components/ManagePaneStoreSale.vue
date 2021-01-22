@@ -81,7 +81,7 @@ import { getOnSaleStores, editSalePriceOnStore } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
 export default {
   props: {
-    productid: {
+    productId: {
       type: String,
       require: false,
       default: ''
@@ -113,7 +113,7 @@ export default {
     }
   },
   created() {
-    this.listQuery.id = this.productid
+    this.listQuery.id = this.productId
     this.init()
   },
   methods: {
