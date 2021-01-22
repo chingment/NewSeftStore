@@ -273,7 +273,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import { MessageBox } from 'element-ui'
 
 export default {
-  name: 'PaytransList',
+  name: 'PayTransRefundHandle',
   components: { Pagination },
   data() {
     return {

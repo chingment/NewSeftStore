@@ -11,6 +11,7 @@ import { getUrlParam } from '@/utils/commonUtil'
 import detailsPaneBaseInfo from './components/DetailsPaneBaseInfo'
 import detailsPaneOrder from '@/views/order/list'
 export default {
+  name: 'ClientUserDetails',
   components: { detailsPaneBaseInfo, detailsPaneOrder },
   data() {
     return {

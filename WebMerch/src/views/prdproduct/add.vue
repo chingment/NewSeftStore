@@ -295,6 +295,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Sortable from 'sortablejs'
 
 export default {
+  name: 'PrdProductAdd',
   data() {
     return {
       loading: false,

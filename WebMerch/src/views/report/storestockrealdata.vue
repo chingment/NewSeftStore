@@ -113,7 +113,7 @@
 import { storeStockRealDataInit, storeStockRealDataGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'MachineStock',
+  name: 'ReportStoreStockRealData',
   data() {
     return {
       loading: false,

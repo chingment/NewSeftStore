@@ -11,6 +11,7 @@
 import paneOperateLog from './components/PaneOperateLog'
 import paneStockLog from './components/PaneStockLog'
 export default {
+  name: 'SettingLogList',
   components: { paneOperateLog, paneStockLog },
   data() {
     return {

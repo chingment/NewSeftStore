@@ -74,6 +74,7 @@ import { edit, initEdit } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
+  name: 'SettingAdminUserEdit',
   data() {
     return {
       loading: false,

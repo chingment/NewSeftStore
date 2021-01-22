@@ -240,6 +240,7 @@ import { searchOrder, getOrderDetails, apply } from '@/api/payrefund'
 import { MessageBox } from 'element-ui'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
+  name: 'PayTransRefundApply',
   data() {
     return {
       loading: false,

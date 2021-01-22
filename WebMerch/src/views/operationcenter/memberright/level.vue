@@ -63,7 +63,7 @@
 import { getLevelSts } from '@/api/memberright'
 
 export default {
-  name: 'MemberRightLevelSt',
+  name: 'OperationCenterMemberRightLevel',
   data() {
     return {
       loading: true,

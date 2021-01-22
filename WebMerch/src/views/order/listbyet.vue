@@ -392,7 +392,7 @@ import { getList, getDetailsByMachineSelfTake, handleExByMachineSelfTake } from 
 import Pagination from '@/components/Pagination'
 import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
-  name: 'OrderList',
+  name: 'OrderListByEt',
   components: { Pagination },
   props: {
     storeid: {

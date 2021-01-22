@@ -60,6 +60,7 @@ import { add, initAdd } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
 import { goBack } from '@/utils/commonUtil'
 export default {
+  name: 'SettingAdminUserAdd',
   data() {
     return {
       loading: false,

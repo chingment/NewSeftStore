@@ -124,7 +124,7 @@
 import { storeStockDateHisInit, storeStockDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'MachineStock',
+  name: 'ReportStoreStockDateHis',
   data() {
     return {
       loading: false,

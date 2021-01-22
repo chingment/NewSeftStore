@@ -113,7 +113,7 @@ import { getList } from '@/api/paytrans'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'PaytransList',
+  name: 'PayTransPayQuery',
   components: { Pagination },
   data() {
     return {

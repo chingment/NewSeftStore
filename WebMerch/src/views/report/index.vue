@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'ReportCenter',
+  name: 'ReportIndex',
   data() {
     return {
       navActive: '/order/list',

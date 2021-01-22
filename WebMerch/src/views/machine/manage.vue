@@ -27,6 +27,7 @@ import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStock from './components/ManagePaneStock'
 import managePaneControlCenter from './components/ManagePaneControlCenter'
 export default {
+  name: 'MachineManage',
   components: { managePaneBaseInfo, managePaneStock, managePaneControlCenter },
   data() {
     return {

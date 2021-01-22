@@ -92,7 +92,7 @@ import { getList, searchSku } from '@/api/prdproduct'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'ProductSkuList',
+  name: 'PrdProductList',
   components: { Pagination },
   data() {
     return {

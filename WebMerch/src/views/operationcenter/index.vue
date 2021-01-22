@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'OperationCenter',
+  name: 'OperationCenterIndex',
   data() {
     return {
       navActive: '/order/list',

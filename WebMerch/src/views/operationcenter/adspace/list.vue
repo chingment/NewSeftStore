@@ -42,7 +42,7 @@
 import { getList } from '@/api/adspace'
 
 export default {
-  name: 'AdminUserList',
+  name: 'OperationCenterAdspaceList',
   data() {
     return {
       loading: false,

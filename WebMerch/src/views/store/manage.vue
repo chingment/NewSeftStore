@@ -27,6 +27,7 @@ import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneShop from './components/ManagePaneShop'
 import managePaneKind from './components/ManagePaneKind'
 export default {
+  name: 'StoreManage',
   components: { managePaneBaseInfo, managePaneKind, managePaneShop },
   data() {
     return {

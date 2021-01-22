@@ -103,7 +103,7 @@
 import { orderSalesDateHisInit, orderSalesDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'Order',
+  name: 'ReportOrderSalesDateHis',
   props: {
   },
   data() {

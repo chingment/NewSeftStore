@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'ProductIndex',
+  name: 'PrdProductIndex',
   data() {
     return {
       isDesktop: this.$store.getters.isDesktop

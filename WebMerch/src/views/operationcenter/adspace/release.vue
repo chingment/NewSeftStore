@@ -49,6 +49,7 @@ import fromReg from '@/utils/formReg'
 import { goBack, getUrlParam } from '@/utils/commonUtil'
 
 export default {
+  name: 'OperationCenterAdspaceRelease',
   data() {
     return {
       loading: false,

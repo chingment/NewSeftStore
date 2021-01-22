@@ -104,7 +104,7 @@ import { getList } from '@/api/payrefund'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'PaytransList',
+  name: 'PayTransRefundQuery',
   components: { Pagination },
   data() {
     return {

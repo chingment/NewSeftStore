@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: 'ReportCenter',
+  name: 'PayTransIndex',
   data() {
     return {
       navActive: '/order/list',

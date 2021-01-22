@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'OrderCenter',
+  name: 'OrderIndex',
   data() {
     return {
       navActive: '/order/list',

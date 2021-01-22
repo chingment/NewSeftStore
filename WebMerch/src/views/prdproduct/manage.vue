@@ -12,6 +12,7 @@ import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStoreSale from './components/ManagePaneStoreSale'
 
 export default {
+  name: 'PrdProductManage',
   components: { managePaneBaseInfo, managePaneStoreSale },
   data() {
     return {

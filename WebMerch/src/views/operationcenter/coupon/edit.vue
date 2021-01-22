@@ -278,6 +278,7 @@ import { searchSpu } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
+  name: 'OperationCenterCouponEdit',
   data() {
     return {
       loading: false,

@@ -50,7 +50,7 @@ import { MessageBox } from 'element-ui'
 import { getReleaseList, deleteAdContent } from '@/api/adspace'
 import { getUrlParam } from '@/utils/commonUtil'
 export default {
-  name: 'AdminUserList',
+  name: 'OperationCenterAdspaceReleaseList',
   data() {
     return {
       loading: false,

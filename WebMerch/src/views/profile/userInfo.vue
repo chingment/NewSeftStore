@@ -44,6 +44,7 @@ import { changePassword } from '@/api/userInfo'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
+  name: 'ProfileUserInfo',
   data() {
     return {
       loading: false,

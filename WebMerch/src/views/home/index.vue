@@ -226,6 +226,7 @@ import CountTo from 'vue-count-to'
 import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
 
 export default {
+  name: 'Home',
   components: {
     CountTo
   },

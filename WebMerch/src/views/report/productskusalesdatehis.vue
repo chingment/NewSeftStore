@@ -140,7 +140,7 @@
 import { productSkuSalesDateHisInit, productSkuSalesDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'ProductSkuDaySales',
+  name: 'ReportProductSkuSalesDateHis',
   props: {
   },
   data() {

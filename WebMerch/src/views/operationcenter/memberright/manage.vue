@@ -38,6 +38,7 @@ import managePaneFee from './components/ManagePaneFee'
 import managePaneRight from './components/ManagePaneRight'
 
 export default {
+  name: 'OperationCenterMemberRightManage',
   components: { managePaneBaseInfo, managePaneFee, managePaneRight },
   data() {
     return {

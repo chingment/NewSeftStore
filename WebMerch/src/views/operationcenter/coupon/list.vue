@@ -96,7 +96,7 @@ import { getList } from '@/api/coupon'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'AdminUserList',
+  name: 'OperationCenterCouponList',
   components: { Pagination },
   data() {
     return {

@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'SettingCenter',
+  name: 'SettingIndex',
   data() {
     return {
       navActive: '/order/list',

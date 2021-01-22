@@ -76,7 +76,7 @@ import { getList } from '@/api/adminuser'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'AdminUserList',
+  name: 'SettingAdminUserList',
   components: { Pagination },
   data() {
     return {
