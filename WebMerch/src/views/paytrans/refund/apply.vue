@@ -1,5 +1,5 @@
 <template>
-  <div id="refund_apply" class="app-container">
+  <div id="refund_apply">
 
     <div v-show="isSearch">
       <el-form ref="form" label-width="120px">

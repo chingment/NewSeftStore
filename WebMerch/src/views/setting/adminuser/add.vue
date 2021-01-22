@@ -1,22 +1,11 @@
 <template>
-  <div id="user_edit" class="app-container">
+  <div id="adminuser_add">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
-        {{ form.userName }}
+        <el-input v-model="form.userName" clearable />
       </el-form-item>
-      <el-form-item v-show="!isOpenEditPassword" label="密码">
-        <span>********</span>
-        <span @click="openEditPassword()">修改</span>
-      </el-form-item>
-      <el-form-item v-show="isOpenEditPassword" label="密码" prop="password">
-        <div style="display:flex">
-          <div style="flex:1">
-            <el-input v-model="form.password" type="password" clearable />
-          </div>
-          <div style="width:50px;text-align: center;">
-            <span @click="openEditPassword()">取消</span>
-          </div>
-        </div>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="form.password" type="password" clearable />
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
         <el-input :value="form.avatar" style="display:none" />
@@ -53,9 +42,6 @@
       <el-form-item label="音视频">
         <el-switch v-model="form.imIsUse" />
       </el-form-item>
-      <el-form-item label="禁用">
-        <el-switch v-model="form.isDisable" />
-      </el-form-item>
       <el-form-item v-show="checkbox_group_role_options.length>0" label="角色">
         <el-checkbox-group v-model="form.roleIds">
           <el-checkbox v-for="option in checkbox_group_role_options" :key="option.id" style="display:block" :label="option.id">{{ option.label }}</el-checkbox>
@@ -70,16 +56,14 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { edit, initEdit } from '@/api/adminuser'
+import { add, initAdd } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
-import { getUrlParam, goBack } from '@/utils/commonUtil'
+import { goBack } from '@/utils/commonUtil'
 export default {
   data() {
     return {
       loading: false,
-      isOpenEditPassword: false,
       form: {
-        id: '',
         userName: '',
         password: '',
         fullName: '',
@@ -92,7 +76,8 @@ export default {
         imIsUse: false
       },
       rules: {
-        password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
+        userName: [{ required: true, message: '必填,且由3到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.userName }],
+        password: [{ required: true, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
         avatar: [{ required: true, message: '必须上传' }],
         nickName: [{ required: true, message: '必填', trigger: 'change' }],
         orgIds: [{ required: true, message: '必选' }],
@@ -114,31 +99,23 @@ export default {
   methods: {
     init() {
       this.loading = true
-      var id = getUrlParam('id')
-      initEdit({ id: id }).then(res => {
+      initAdd().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.form.id = d.id
-          this.form.userName = d.userName
-          this.form.fullName = d.fullName
-          this.form.nickName = d.nickName
-          this.form.phoneNumber = d.phoneNumber
-          this.form.email = d.email
-          this.form.orgIds = d.orgIds
-          this.form.roleIds = d.roleIds
-          this.form.imIsUse = d.imIsUse
-          this.form.avatar = d.avatar
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
-
-          if (d.avatar != null && d.avatar.length > 0) {
-            this.uploadImglistByAvatar.push({ name: 'xx', url: d.avatar })
-            var var1 = document.querySelector('.el-upload')
-            var1.style.display = 'none'
-          }
         }
         this.loading = false
       })
+    },
+    resetForm() {
+      this.form = {
+        userName: '',
+        password: '',
+        fullName: '',
+        phoneNumber: '',
+        email: ''
+      }
     },
     onSubmit() {
       this.$refs['form'].validate((valid) => {
@@ -148,7 +125,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            edit(this.form).then(res => {
+            add(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 goBack(this)
@@ -158,19 +135,6 @@ export default {
           })
         }
       })
-    },
-    openEditPassword() {
-      if (this.isOpenEditPassword) {
-        this.isOpenEditPassword = false
-        this.form.password = ''
-        this.rules.password[0].required = false
-      } else {
-        this.isOpenEditPassword = true
-        this.rules.password[0].required = true
-      }
-    },
-    cascader_org_change() {
-      console.log('dasd')
     },
     handleRemoveByAvatar(file, fileList) {
       this.uploadImglistByAvatar = fileList
@@ -195,17 +159,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style  lang="scss"  scoped>
 
-#user_edit
-{
+#adminuser_add{
    max-width: 600px;
-
 .line {
   text-align: center;
 }
-.el-tree-node__expand-icon.is-leaf{
-  display: none;
+
+.is-leaf{
+  display: none !important;
+  width: 0px !important;
 }
 }
 </style>

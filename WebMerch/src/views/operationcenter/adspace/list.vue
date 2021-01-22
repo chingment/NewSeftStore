@@ -1,5 +1,5 @@
 <template>
-  <div id="adspace_list" class="app-container">
+  <div id="adspace_list">
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -81,12 +81,12 @@ export default {
     },
     handleRelease(row) {
       this.$router.push({
-        path: '/adspace/release?id=' + row.id
+        path: '/operationcenter/adspace/release?id=' + row.id
       })
     },
     handleReleaseList(row) {
       this.$router.push({
-        path: '/adspace/releaselist?id=' + row.id
+        path: '/operationcenter/adspace/releaselist?id=' + row.id
       })
     }
   }

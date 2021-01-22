@@ -1,5 +1,5 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="user_list">
 
     <div v-show="!isHandle">
       <div class="filter-container">

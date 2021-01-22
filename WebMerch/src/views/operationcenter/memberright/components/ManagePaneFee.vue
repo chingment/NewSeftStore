@@ -1,5 +1,5 @@
 <template>
-  <div id="store_list" class="app-container">
+  <div id="memberright_fee">
     <el-row v-loading="loading" :gutter="20">
       <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" style="margin-bottom:20px">
         <el-card class="box-card">
@@ -75,7 +75,7 @@ export default {
 
 <style lang="scss" scoped>
 
-#store_list{
+#memberright_fee{
 
   .it-header{
     display: flex;

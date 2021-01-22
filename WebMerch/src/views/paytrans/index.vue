@@ -4,12 +4,14 @@
       <el-aside width="200px">
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
-            <template slot="title">报表服务</template>
-            <el-menu-item index="/report/storestockrealdata">店铺实时库存报表</el-menu-item>
-            <el-menu-item index="/report/storestockdatehis">店铺历史库存报表</el-menu-item>
-            <el-menu-item index="/report/storesalesdatehis">店铺销售概况表</el-menu-item>
-            <el-menu-item index="/report/productskusalesdatehis">商品销售报表</el-menu-item>
-            <el-menu-item index="/report/ordersalesdatehis">订单销售报表</el-menu-item>
+            <template slot="title">支付中心</template>
+            <el-menu-item index="/paytrans/pay/query">支付查询</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <template slot="title">退款中心</template>
+            <el-menu-item index="/paytrans/refund/query">退款查询</el-menu-item>
+            <el-menu-item index="/paytrans/refund/apply">申请退款</el-menu-item>
+            <el-menu-item index="/paytrans/refund/handle">退款处理</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>

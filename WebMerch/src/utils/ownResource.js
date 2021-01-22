@@ -55,7 +55,7 @@ export function getSideBars() {
         meta: { title: item.title, icon: item.icon }
       }
       if (item.children) {
-        if (menu.children === undefined||menu.children==null) {
+        if (menu.children === undefined || menu.children == null) {
           menu.children = []
         }
         _generateRoutes(menu.children, item.children)
@@ -66,31 +66,6 @@ export function getSideBars() {
   _generateRoutes(routers, data)
 
   return routers
-}
-
-export function getBreadcrumb(route) {
-  var matc = []
-  var parentList = store.getters.userInfo.menus
-
-  function findParent(idx) {
-    parentList.forEach(g => {
-      if (g.id === idx) {
-        matc.push({
-          path: g.path,
-          meta: { title: g.title, icon: g.icon }
-        })
-        findParent(g.pId)
-      }
-    })
-  }
-
-  findParent(route.meta.id)
-
-  matc = matc.reverse()
-
-  // console.log(JSON.stringify(matc))
-
-  return matc
 }
 
 export function getNavbars() {
@@ -106,43 +81,33 @@ export function getNavbars() {
 }
 
 export function generateRoutes(data) {
-  console.log('data:'+JSON.stringify(data))
- 
- 
-  var _layoutRouter = {
-      path: '/',
-      component: Layout,
-      redirect: '/home',
-      children: [
-      ]
-    }
+  console.log('data:' + JSON.stringify(data))
 
   var routers = []
   function _generateRoutes(routers, menus) {
     menus.forEach((item) => {
-
       var path = item.path
-          if (item.path.indexOf('?') > -1) {
-            path = item.path.split('?')[0]
+      if (item.path.indexOf('?') > -1) {
+        path = item.path.split('?')[0]
       }
 
       const component = resolve => require([`@/views${item.component}`], resolve)
       const menu = {
-            path: path,
-            component: component,
-            children: undefined,
-            redirect:undefined,
-            hidden: item.hidden,
-            name: item.name,
-            meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
+        path: path,
+        component: component,
+        children: undefined,
+        redirect: undefined,
+        hidden: item.hidden,
+        name: item.name,
+        meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
       }
       if (item.children) {
         if (menu.children === undefined) {
           menu.children = []
         }
-        const redirect=item.redirect==null?undefined:item.redirect
+        const redirect = item.redirect == null ? undefined : item.redirect
 
-         menu.redirect=redirect
+        menu.redirect = redirect
         _generateRoutes(menu.children, item.children)
       }
       routers.push(menu)
@@ -151,10 +116,9 @@ export function generateRoutes(data) {
 
   _generateRoutes(routers, data)
 
+  // _layoutRouter.children.push(routers)
 
-  //_layoutRouter.children.push(routers)
-
-  //routers.push(_layoutRouter)
+  // routers.push(_layoutRouter)
   // var s=[]
   // function _generateRoutes(router, menus) {
   //   var _layoutRouter = {
@@ -196,30 +160,29 @@ export function generateRoutes(data) {
 
   // console.log(JSON.stringify(s))
 
-  //constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
+  // constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
 
-  //_layoutRouter.children.push(routers)
-//{"path":"/home","name":"MerchHome","meta":{"title":"主页","icon":"dashboard","id":"25f3d80ce69a48b683f6aa2d6c899fca","pId":"10000000000000000000000000000025"}}
+  // _layoutRouter.children.push(routers)
+  // {"path":"/home","name":"MerchHome","meta":{"title":"主页","icon":"dashboard","id":"25f3d80ce69a48b683f6aa2d6c899fca","pId":"10000000000000000000000000000025"}}
 
+  // [{
+  //   path:'/order',
+  //   component:Main,
+  //   children:[{
+  //    path:'list',
+  //    component:Tour,
+  //   }]
+  // }]
 
-// [{
-//   path:'/order',
-//   component:Main,
-//   children:[{
-//    path:'list',
-//    component:Tour,
-//   }]
-// }]
-
-  var _routers=[{
+  var _routers = [{
     path: '/',
     component: Layout,
     redirect: '/home',
     children: routers
-},
-{ path: '*', redirect: '/404', hidden: true }]
+  },
+  { path: '*', redirect: '/404', hidden: true }]
 
-console.log('routers:'+JSON.stringify(_routers))
+  console.log('routers:' + JSON.stringify(_routers))
 
   router.addRoutes(_routers)
 }

@@ -1,7 +1,6 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="adminuser_list">
     <div class="filter-container">
-
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.userName" style="width: 100%" placeholder="用户名" clearable class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
@@ -15,7 +14,6 @@
           </el-button>
         </el-col>
       </el-row>
-
     </div>
     <el-table
       :key="listKey"
@@ -119,12 +117,12 @@ export default {
     },
     handleCreate() {
       this.$router.push({
-        path: '/adminuser/add'
+        path: '/setting/adminuser/add'
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/adminuser/edit?id=' + row.id
+        path: '/setting/adminuser/edit?id=' + row.id
       })
     }
   }

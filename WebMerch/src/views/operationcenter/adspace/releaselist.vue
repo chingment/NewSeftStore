@@ -1,5 +1,5 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="adspace_release_list">
     <el-table
       :key="listKey"
       v-loading="loading"

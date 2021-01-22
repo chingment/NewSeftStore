@@ -1,5 +1,5 @@
 <template>
-  <div id="adspace_release" class="app-container">
+  <div id="adspace_release">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="所属版位">
         {{ temp.adSpaceName }}

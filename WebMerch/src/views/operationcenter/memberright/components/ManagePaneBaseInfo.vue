@@ -1,5 +1,5 @@
 <template>
-  <div id="store_baseinfo" class="app-container">
+  <div id="memberright_baseinfo">
     <el-form
       ref="form"
       v-loading="loading"
@@ -75,7 +75,7 @@ export default {
   margin-left: 1000px;
 }
 
-#store_baseinfo {
+#memberright_baseinfo {
   .el-form .el-form-item {
     max-width: 600px;
   }

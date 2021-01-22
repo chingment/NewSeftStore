@@ -13,7 +13,7 @@
 import pathToRegexp from 'path-to-regexp'
 import { Tree } from 'element-ui'
 import { close } from 'fs'
-import { getBreadcrumb } from '@/utils/ownResource'
+
 export default {
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     _getBreadcrumb() {
-      var matched = getBreadcrumb(this.$route)
+      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       const first = matched[0]
 
       if (!this.isDashboard(first)) {

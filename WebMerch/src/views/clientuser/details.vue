@@ -1,5 +1,5 @@
 <template>
-  <div id="clientuser_details" class="app-container">
+  <div id="clientuser_details">
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <details-pane-base-info :clientuserid="id" /></el-tab-pane>
       <el-tab-pane label="订单信息" name="tabOrder"><details-pane-order :clientuserid="id" /></el-tab-pane>

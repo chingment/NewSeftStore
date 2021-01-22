@@ -1,5 +1,5 @@
 <template>
-  <div id="user_add">
+  <div id="coupon_add">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="优惠券类型" prop="category">
         <el-select v-model="form.category" style="width: 100%" @change="handleCategoryChange">
@@ -675,7 +675,7 @@ export default {
 </script>
 
 <style  lang="scss"  scoped>
-#user_add {
+#coupon_add {
   max-width: 800px;
   .line {
     text-align: center;

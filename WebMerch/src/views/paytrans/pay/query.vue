@@ -1,5 +1,5 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="pay_list">
     <div class="filter-container">
 
       <el-row :gutter="16">
@@ -157,7 +157,7 @@ export default {
       var arr = command.split('-')
       if (arr[0] === 'payRefund') {
         this.$router.push({
-          path: '/payrefund/apply?payTransId=' + arr[1]
+          path: '/paytrans/refund/apply?payTransId=' + arr[1]
         })
       }
     }
