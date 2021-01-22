@@ -10,6 +10,6 @@ namespace MyWeiXinSdk
     {
         public string contentType { get; set; }
 
-        public string buffer { get; set; }
+        public byte[] buffer { get; set; }
     }
 }

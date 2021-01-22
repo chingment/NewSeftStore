@@ -16,6 +16,7 @@ using System.Transactions;
 using LocalS.Entity;
 using Lumos.Redis;
 using System.IO;
+using System.Net;
 
 namespace LocalS.Service.Api.Account
 {
@@ -66,7 +67,7 @@ namespace LocalS.Service.Api.Account
             //}
 
 
-            menuNodes= GetMenuTree("10000000000000000000000000000025", sysMenus);
+            menuNodes = GetMenuTree("10000000000000000000000000000025", sysMenus);
             return menuNodes;
 
         }
@@ -99,7 +100,7 @@ namespace LocalS.Service.Api.Account
                     if (children.Count > 0)
                     {
                         menuNode.Children = new List<MenuNode>();
-                        menuNode.Children= children;
+                        menuNode.Children = children;
                     }
                 }
 
@@ -351,36 +352,60 @@ namespace LocalS.Service.Api.Account
                 LogUtil.Info("rop.wxPhoneNumber=>" + wxPhoneNumber.ToJsonString());
             }
 
-            var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, "rs=" + rop.OpenId, "/pages/main/main");
 
-            if (result_WxACodeUnlimit != null)
+            try
             {
-                if (result_WxACodeUnlimit.errcode == "0")
+                var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, "rs=" + rop.OpenId, "pages/main/main");
+
+                LogUtil.Info("result_WxACodeUnlimit.errcode:" + result_WxACodeUnlimit.errcode);
+                LogUtil.Info("result_WxACodeUnlimit.buffer:" + result_WxACodeUnlimit.buffer);
+
+                if (result_WxACodeUnlimit != null)
                 {
-                    byte[] fileData = Convert.FromBase64String(result_WxACodeUnlimit.buffer);
-
-                    string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
-                    string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
-                    string fileName = Guid.NewGuid().ToString();
-                    string extension = ".png";
-                    string savePath = "/upload/acode/";
-                    string serverSavePath = rootPath + savePath + fileName + extension;
-                    string domainPathUrl = domain + savePath + fileName + extension;
-
-                    DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
-                    if (!dir.Exists)
+                    if (result_WxACodeUnlimit.errcode == "0")
                     {
-                        dir.Create();
+                        byte[] fileData = result_WxACodeUnlimit.buffer;
+
+                        string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                        string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
+                        string fileName = Guid.NewGuid().ToString();
+                        string extension = ".png";
+                        string savePath = "/upload/acode/";
+                        string serverSavePath = rootPath + savePath + fileName + extension;
+                        string domainPathUrl = domain + savePath + fileName + extension;
+
+                        DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
+                        if (!dir.Exists)
+                        {
+                            dir.Create();
+                        }
+
+                        LogUtil.Info("serverSavePath:" + serverSavePath);
+                        LogUtil.Info("domainPathUrl:" + domainPathUrl);
+
+                        FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
+                        fs.Write(fileData, 0, fileData.Length);
+                        fs.Flush();
+                        fs.Close();
+
+                        if (!string.IsNullOrEmpty(wxUserInfo.avatarUrl))
+                        {
+                            var wreq = WebRequest.Create(wxUserInfo.avatarUrl);
+                            HttpWebResponse wresp = (HttpWebResponse)wreq.GetResponse();
+                            Stream s = wresp.GetResponseStream();
+                            var img = System.Drawing.Image.FromStream(s);
+
+                            string avatarSavePath = string.Format(rootPath + "/Upload/avatar/{0}.png", Guid.NewGuid().ToString());
+
+                            img.Save(avatarSavePath, System.Drawing.Imaging.ImageFormat.Png);   //保存
+                        }
                     }
-
-                    LogUtil.Info("serverSavePath:" + serverSavePath);
-                    LogUtil.Info("domainPathUrl:" + domainPathUrl);
-
-                    FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
-                    fs.Write(fileData, 0, fileData.Length);
-                    fs.Flush();
-                    fs.Close();
                 }
+            }
+            catch (Exception ex)
+            {
+
+
             }
 
 
@@ -462,6 +487,8 @@ namespace LocalS.Service.Api.Account
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
             MqFactory.Global.PushEventNotify(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
+
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 

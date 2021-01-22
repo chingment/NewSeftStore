@@ -4,11 +4,11 @@ Page({
     canvas: '',
     canvas_width: 700,
     canvas_height: 800,
-    main: "https://file.17fanju.com/upload/Avatar_default.png",
-    logo: "https://file.17fanju.com/upload/Avatar_default.png",
-    explain: "种一棵树最好的时间是十年前，其次是现在",
-    code: "https://file.17fanju.com/upload/Avatar_default.png",
-    avatar: "https://file.17fanju.com/upload/Avatar_default.png"
+    main: "https://file.17fanju.com/upload/sharecode/1/product.png",
+    logo: "https://file.17fanju.com/upload/sharecode/1/logo.png",
+    explain: "",
+    code: "https://file.17fanju.com/upload/acode/714732c6-9a76-4e8d-a86f-8e87f71e85f0.png",
+    avatar: "https://file.17fanju.com/upload/Avatar/e032f079-5b22-4615-80b6-9841e5397fcb.png"
   },
 
   onLoad: function (options) {
@@ -111,14 +111,14 @@ Page({
         // logo图片
         ctx.drawImage(mark, 30, 30, mark_width, mark_height)
         // 竖线
-        ctx.moveTo(mark_width + 40, 30)
-        ctx.lineTo(mark_width + 40, mark_height + 30)
-        ctx.stroke()
+        //ctx.moveTo(mark_width + 40, 30)
+        //ctx.lineTo(mark_width + 40, mark_height + 30)
+        //ctx.stroke()
         // 标题文字
-        ctx.setFontSize(28)
-        ctx.setFillStyle('#000')
-        ctx.fillText('标题文字', mark_width + 50, mark_height + 15)
-        // 用户头像
+        //ctx.setFontSize(28)
+        //ctx.setFillStyle('#000')
+        //ctx.fillText('标题文字', mark_width + 50, mark_height + 15)
+        //用户头像
         ctx.save()
         ctx.beginPath()
         ctx.arc(this.data.canvas_width - 90, 60, 50, 0, Math.PI * 2, false);
@@ -127,15 +127,15 @@ Page({
         ctx.drawImage(portrait, this.data.canvas_width - 145, 5, 110, 110) //145为arc的90加110除以2
         ctx.restore()
         // 主体图片
-        ctx.drawImage(primary, this.data.canvas_width / 2 - primary_width / 2.4, 140, primary_width / 1.2, primary_height / 1.2)
+        ctx.drawImage(primary, this.data.canvas_width / 2 - primary_width / 4, 140, primary_width / 2, primary_height / 2)
         // 详情
-        ctx.setFontSize(24)
-        ctx.setTextAlign('center')
-        ctx.setFillStyle('#666')
-        ctx.fillText(explain, this.data.canvas_width / 2, 500)
-        ctx.fillText('你的好友分享给你的小程序', this.data.canvas_width / 2, 550)
+        //ctx.setFontSize(24)
+       // ctx.setTextAlign('center')
+       // ctx.setFillStyle('#666')
+        //ctx.fillText(explain, this.data.canvas_width / 2, 500)
+       // ctx.fillText('你的好友分享给你的小程序', this.data.canvas_width / 2, 550)
         // 小程序二维码
-        ctx.drawImage(yard, this.data.canvas_width / 2 - yard_width / 2.4, 600, yard_width / 1.2, yard_height / 1.2)
+        ctx.drawImage(yard, this.data.canvas_width / 2 - yard_width / 3.2, 500, yard_width / 1.6, yard_height / 1.6)
         ctx.draw(true, setTimeout(() => {
           wx.canvasToTempFilePath({
             canvasId: 'mycanvas',
@@ -174,4 +174,6 @@ Page({
       }
     })
   },
+  onShow: function () {},
+  onUnload: function () {},
 })

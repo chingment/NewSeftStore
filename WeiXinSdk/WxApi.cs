@@ -73,6 +73,31 @@ namespace MyWeiXinSdk
             return rsp;
         }
 
+        public T GetWxACodeUnlimit<T>(IWxApiPostRequest<T> request, out byte[] buffer) where T : WxApiBaseResult
+        {
+
+            string realServerUrl = request.ApiUrl;
+
+            WebUtils webUtils = new WebUtils();
+
+            string postData = null;
+            if (request.PostDataTpye == WxPostDataType.Text)
+            {
+                postData = request.PostData.ToString();
+            }
+            else if (request.PostDataTpye == WxPostDataType.Json)
+            {
+                postData = JsonConvert.SerializeObject(request.PostData);
+            }
+            log.InfoFormat("MyWeiXinSdk-Url->{0}", realServerUrl);
+            log.InfoFormat("MyWeiXinSdk-Post->{0}", postData);
+            responseString = webUtils.DoPostBuffer(realServerUrl, request.GetUrlParameters(), postData, out buffer);
+            log.InfoFormat("MyWeiXinSdk-Result->{0}", responseString);
+            T rsp = JsonConvert.DeserializeObject<T>(responseString);
+
+
+            return rsp;
+        }
 
     }
 }

@@ -176,6 +176,8 @@ namespace MyWeiXinSdk
             }
 
             HttpWebRequest req = GetWebRequest(url, "POST", headerParams);
+
+
             req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
 
 
@@ -188,6 +190,60 @@ namespace MyWeiXinSdk
             Encoding encoding = GetResponseEncoding(rsp);
             return GetResponseAsString(rsp, encoding);
         }
+
+
+        public string DoPostBuffer(string url, IDictionary<string, string> urlParams, string postdata, out byte[] stream)
+        {
+
+            if (urlParams != null && urlParams.Count > 0)
+            {
+                url = BuildRequestUrl(url, urlParams);
+            }
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            //request.ContentType = "application/json;charset=UTF-8";
+            byte[] postData = Encoding.UTF8.GetBytes(postdata);
+            System.IO.Stream reqStream = request.GetRequestStream();
+            reqStream.Write(postData, 0, postData.Length);
+            reqStream.Close();
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            LogUtil.Info("response.ContentType:" + response.ContentType);
+
+            // byte[] reportBytes;
+
+            if (response.ContentType == "image/jpeg")
+            {
+                using (Stream dataStream = response.GetResponseStream())
+                {
+                    int readCount = 0;
+
+                    //位运算，128k字节
+                    int bufferSize = 1 << 17;
+
+                    var buffer = new byte[bufferSize];
+                    using (var memory = new MemoryStream())
+                    {
+                        while ((readCount = dataStream.Read(buffer, 0, bufferSize)) > 0)
+                        {
+                            memory.Write(buffer, 0, readCount);
+                        }
+
+                        stream = memory.ToArray();
+                    }
+                }
+
+                return "{\"errcode\":\"0\"}";
+            }
+            else
+            {
+                stream = null;
+                return GetResponseAsString(response, Encoding.UTF8);
+            }
+        }
+
 
         public string DoPost(string url, string postdata)
         {
