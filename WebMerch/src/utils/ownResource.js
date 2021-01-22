@@ -16,6 +16,7 @@ function _generateRoutes(routers, menus, isCheckSidebar) {
       children: undefined,
       redirect: undefined,
       hidden: !item.isSidebar,
+      isSidebar: item.isSidebar,
       name: item.name,
       meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
     }
@@ -29,13 +30,15 @@ function _generateRoutes(routers, menus, isCheckSidebar) {
       _generateRoutes(menu.children, item.children, isCheckSidebar)
     }
 
-    if (isCheckSidebar) {
-      if (item.isSidebar) {
-        routers.push(menu)
-      }
-    } else {
-      routers.push(menu)
-    }
+    routers.push(menu)
+
+    // if (isCheckSidebar) {
+    //   if (item.isSidebar) {
+    //     routers.push(menu)
+    //   }
+    // } else {
+    //   routers.push(menu)
+    // }
   })
 }
 
