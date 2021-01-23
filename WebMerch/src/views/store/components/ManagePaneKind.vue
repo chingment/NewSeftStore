@@ -1,5 +1,5 @@
 <template>
-  <div class="prodcut-list">
+  <div id="store_kind">
     <el-container style="min-height:300px">
       <el-aside width="200px;">
         <div style="padding:4px;0px;text-align: center;">
@@ -238,11 +238,11 @@
   </div>
 </template>
 <style lang="scss" scoped>
-.prodcut-list .el-menu {
+#store_kind .el-menu {
   border-right: solid 0px #e6e6e6;
 }
 
-.prodcut-list .el-col-5 {
+#store_kind .el-col-5 {
   width: 20%;
 }
 

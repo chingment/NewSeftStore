@@ -1,5 +1,5 @@
 <template>
-  <div id="store_baseinfo" v-loading="loading" class="app-container">
+  <div id="store_baseinfo" v-loading="loading">
 
     <el-form ref="form" v-loading="loading" label-width="80px">
       <el-form-item label="名称" prop="name">

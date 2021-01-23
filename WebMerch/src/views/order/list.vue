@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_list">
+  <div id="order_list">
     <div class="filter-container">
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
@@ -249,13 +249,13 @@
             <div> <i class="el-icon-place" /><span> {{ receiveMode.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
             <table class="table-skus" style="width:100%;table-layout:fixed;">
               <tr v-for="(pickupSku,sub_index) in receiveMode.items" :key="sub_index">
-                <td style="width:10%">
+                <td style="width:60px">
                   <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
                 </td>
-                <td style="width:50%">
+                <td style="width:100%">
                   {{ pickupSku.name }}
                 </td>
-                <td style="width:40%">
+                <td style="width:50px">
                   x {{ pickupSku.quantity }}
                 </td>
                 <td v-show="receiveMode.mode===4" style="width:200px;text-align:center;">

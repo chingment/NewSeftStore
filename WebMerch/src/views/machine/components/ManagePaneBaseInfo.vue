@@ -1,5 +1,5 @@
 <template>
-  <div id="machine_baseinfo" v-loading="loading" class="app-container">
+  <div id="machine_baseinfo" v-loading="loading">
 
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px" :hide-required-asterisk="!isEdit">
       <el-form-item label="机器编号">

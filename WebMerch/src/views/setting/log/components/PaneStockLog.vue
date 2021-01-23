@@ -1,5 +1,5 @@
 <template>
-  <div id="user_list" class="app-container">
+  <div id="log_stock">
     <div class="filter-container">
 
       <el-row :gutter="12">

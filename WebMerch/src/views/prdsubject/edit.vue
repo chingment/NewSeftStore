@@ -1,5 +1,5 @@
 <template>
-  <div id="useradd_container" class="app-container">
+  <div id="useradd_container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="75px">
       <el-form-item label="上构名称">
         {{ form.pName }}

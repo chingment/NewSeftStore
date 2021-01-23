@@ -1,14 +1,13 @@
 <template>
   <div id="machine_stock">
 
-    <div class="circle-status-bar">
 
       <div class="circle-status-bar">
         <div class="circle-item"> <span class="icon-status sellQuantity sellQuantity-bg" /> <span class="name">可售</span></div>
         <div class="circle-item"> <span class="icon-status lockQuantity lockQuantity-bg" /> <span class="name">锁定</span></div>
         <div class="circle-item"> <span class="icon-status sumQuantity sumQuantity-bg" /> <span class="name">总量</span></div>
       </div>
-    </div>
+    
 
     <div class="filter-container">
 

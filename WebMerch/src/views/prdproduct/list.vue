@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_list">
+  <div id="product_list">
     <div class="filter-container">
 
       <el-row :gutter="12">

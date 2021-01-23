@@ -1,5 +1,5 @@
 <template>
-  <div id="list_levelsts" v-loading="loading">
+  <div id="memberright_level" v-loading="loading">
 
     <el-alert
       v-if="!isOpenMemberRight"
@@ -128,7 +128,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#list_levelsts {
+#memberright_level {
 
   .it-header {
     display: flex;

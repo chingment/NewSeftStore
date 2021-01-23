@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_add">
+  <div id="product_add">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
@@ -778,7 +778,7 @@ export default {
 
 <style lang="scss" scoped>
 
-#productsku_add {
+#product_add {
 
 .el-form .el-form-item{
   max-width: 600px;

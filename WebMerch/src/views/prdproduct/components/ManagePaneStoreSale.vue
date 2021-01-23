@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_list" class="app-container">
+  <div id="product_storesale">
     <el-table
       :key="listKey"
       v-loading="loading"

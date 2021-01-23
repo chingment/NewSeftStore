@@ -1,5 +1,5 @@
 <template>
-  <div id="user_edit" class="app-container">
+  <div id="profile_userinfo">
     <el-form ref="form" v-loading="loading" :model="form" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <span>{{ userInfo.userName }}</span>
@@ -128,7 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 
-#user_edit
+#profile_userinfo
 {
    max-width: 600px;
 

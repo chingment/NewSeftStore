@@ -1,5 +1,5 @@
 <template>
-  <div id="productsku_edit" class="app-container">
+  <div id="product_baseinfo">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
@@ -518,7 +518,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#productsku_edit {
+#product_baseinfo {
   .el-form .el-form-item {
     max-width: 600px;
   }

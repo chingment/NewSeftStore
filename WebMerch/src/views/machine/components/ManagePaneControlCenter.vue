@@ -1,5 +1,5 @@
 <template>
-  <div id="machine_controlcenter" class="app-container">
+  <div id="machine_controlcenter">
     <div class="pane-ctl">
       <div class="title"><span>系统相关</span>
       </div>

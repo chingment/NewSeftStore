@@ -1,5 +1,5 @@
 <template>
-  <div id="manage_level">
+  <div id="memberright_manage">
     <div class="cur-dropdown">
       <span class="title">当前会员:</span>
       <span class="name">{{ activeDropdown.name }}</span>
@@ -78,7 +78,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#manage_level {
+#memberright_manage {
   padding-top: 0px;
   .cur-dropdown {
     font-size: 14px;
