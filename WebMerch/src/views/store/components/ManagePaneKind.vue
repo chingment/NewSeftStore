@@ -1,7 +1,7 @@
 <template>
   <div id="store_kind">
     <el-container style="min-height:300px">
-      <el-aside width="200px;">
+      <el-aside width="200px;" style="background:#fff">
         <div style="padding:4px;0px;text-align: center;">
           <el-button
             type="text"
@@ -15,6 +15,7 @@
           v-loading="isLoaingByKinds"
           :default-active="currentKindIndex+''"
           @select="kindSelect"
+          style="background:#fff"
         >
           <el-menu-item v-for="(item,index) in listDataByKinds" :key="item.id" :index="index+''">
             <span slot="title">{{ item.name }}</span>
@@ -46,7 +47,7 @@
             @click="dialogKindSpuOpen(false,null)"
           >添加商品</el-button>
         </el-header>
-        <el-main>
+        <el-main style="box-shadow: 0 0px 0px 0 rgb(0 0 0 / 10%);">
           <el-row v-loading="isLoaingByKindSpus" :gutter="20">
             <el-col
               v-for="item in listDataByKindSpus"

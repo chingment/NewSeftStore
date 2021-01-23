@@ -1,5 +1,6 @@
 <template>
   <div id="store_manage">
+       <page-header/>
     <div class="cur-store cur-tab">
       <div class="it-name">
         <span class="title">当前店铺:</span><span class="name">{{ activeDropdown.name }}</span>
@@ -16,7 +17,7 @@
     <el-tabs v-model="activeTab" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="activeDropdown.id" /></el-tab-pane>
       <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :store-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="门店信息" name="tabFront"><manage-pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="关联门店" name="tabFront"><manage-pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -26,9 +27,10 @@ import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneShop from './components/ManagePaneShop'
 import managePaneKind from './components/ManagePaneKind'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'StoreManage',
-  components: { managePaneBaseInfo, managePaneKind, managePaneShop },
+  components: { managePaneBaseInfo, managePaneKind, managePaneShop,PageHeader },
   data() {
     return {
       loading: false,

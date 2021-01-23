@@ -61,7 +61,7 @@ import { MessageBox } from 'element-ui'
 import { initManageShop, getShops, addShop, removeShop } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
-import managePaneShop from '@/views/shop/list'
+import managePaneShop from '@/views/shop/select'
 import managePaneMachine from '@/views/machine/list'
 export default {
   name: 'ManagePaneMachine',
