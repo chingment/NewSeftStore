@@ -116,7 +116,7 @@ div:focus {
 .vue-treeselect__placeholder,.vue-treeselect__multi-value{
   line-height: 38px !important;
 }
-.vue-treeselect__multi-value-label,{
+.vue-treeselect__multi-value-label{
   line-height: 24px !important;
 }
 
@@ -390,6 +390,7 @@ overflow: hidden;
 
 #app  .app-main{
   background:#fff !important;
+  min-height: calc(100vh - 66px);
  // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -409,7 +410,7 @@ overflow: hidden;
 
   .el-main{
     background: #ffffff;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 66px);
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   }
 }
