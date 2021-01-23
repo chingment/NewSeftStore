@@ -65,13 +65,27 @@ namespace LocalS.Service.Api.Merch
 
 
             string[] productIds = null;
+
             if (!string.IsNullOrEmpty(rup.Key))
             {
-                var search = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
-                if (search != null)
+                List<string> l_productIds = new List<string>();
+                var search1 = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
+                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key);
+                if (search1 != null)
                 {
-                    productIds = search.Select(m => m.ProductId).Distinct().ToArray();
+                    var productIds1 = search1.Select(m => m.ProductId).Distinct().ToArray();
+
+                    l_productIds.AddRange(productIds1);
                 }
+
+                if (search2 != null)
+                {
+                    var productIds2 = search2.Select(m => m.ProductId).Distinct().ToArray();
+
+                    l_productIds.AddRange(productIds2);
+                }
+
+                productIds = l_productIds.Distinct().ToArray();
             }
 
             var query = (from u in CurrentDb.PrdProduct
@@ -270,7 +284,7 @@ namespace LocalS.Service.Api.Merch
             if (result.Result == ResultType.Success)
             {
                 CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuIds.ToArray());
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.Name), rop);
             }
 
             return result;
@@ -429,7 +443,7 @@ namespace LocalS.Service.Api.Merch
                 CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
                 CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuIds.ToArray());
                 BizFactory.Machine.SendStock(operater, AppId.MERCH, merchId, productSkuIds.ToArray());
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductEdit, string.Format("保存商品（{0}）信息成功", rop.Name),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.PrdProductEdit, string.Format("保存商品（{0}）信息成功", rop.Name), rop);
 
             }
 
