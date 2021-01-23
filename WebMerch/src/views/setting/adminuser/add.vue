@@ -1,5 +1,6 @@
 <template>
   <div id="adminuser_add">
+    <page-header/>
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName" clearable />
@@ -59,8 +60,12 @@ import { MessageBox } from 'element-ui'
 import { add, initAdd } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
 import { goBack } from '@/utils/commonUtil'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'SettingAdminUserAdd',
+  components: {
+    PageHeader
+  },
   data() {
     return {
       loading: false,

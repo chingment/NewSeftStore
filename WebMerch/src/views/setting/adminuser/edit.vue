@@ -1,5 +1,6 @@
 <template>
   <div id="adminuser_edit">
+        <page-header/>
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         {{ form.userName }}
@@ -73,8 +74,12 @@ import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'SettingAdminUserEdit',
+  components: {
+    PageHeader
+  },
   data() {
     return {
       loading: false,
