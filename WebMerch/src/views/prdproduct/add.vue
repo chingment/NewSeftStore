@@ -1,5 +1,6 @@
 <template>
   <div id="product_add">
+        <page-header/>
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
@@ -293,9 +294,10 @@ import { goBack, strLen, isMoney } from '@/utils/commonUtil'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import Sortable from 'sortablejs'
-
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'PrdProductAdd',
+  components: { PageHeader },
   data() {
     return {
       loading: false,

@@ -1,5 +1,6 @@
 <template>
   <div id="coupon_add">
+    <page-header/>
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="优惠券类型" prop="category">
         <el-select v-model="form.category" style="width: 100%" @change="handleCategoryChange">
@@ -303,8 +304,12 @@ import { add, initAdd } from '@/api/coupon'
 import { searchSpu } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
 import { goBack } from '@/utils/commonUtil'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterCouponAdd',
+  components: {
+    PageHeader
+  },
   data() {
     return {
       loading: false,

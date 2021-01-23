@@ -1,5 +1,6 @@
 <template>
   <div id="adspace_release_list">
+    <page-header/>
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -49,8 +50,12 @@
 import { MessageBox } from 'element-ui'
 import { getReleaseList, deleteAdContent } from '@/api/adspace'
 import { getUrlParam } from '@/utils/commonUtil'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterAdspaceReleaseList',
+  components: {
+    PageHeader
+  },
   data() {
     return {
       loading: false,

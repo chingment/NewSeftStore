@@ -1,5 +1,6 @@
 <template>
   <div id="adspace_release">
+    <page-header/>
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="所属版位">
         {{ temp.adSpaceName }}
@@ -47,9 +48,12 @@ import { MessageBox } from 'element-ui'
 import { release, initRelease } from '@/api/adspace'
 import fromReg from '@/utils/formReg'
 import { goBack, getUrlParam } from '@/utils/commonUtil'
-
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterAdspaceRelease',
+  components: {
+    PageHeader
+  },
   data() {
     return {
       loading: false,
