@@ -7,7 +7,7 @@
           </el-form-item>
           <el-form-item label="门店地址" prop="address">
             <span>{{ form.address }}</span>
-            <el-button type="text" @click="getGpsList">选择</el-button>
+            <el-button type="text" @click="isShowBySelectAddressPoint=true">选择</el-button>
           </el-form-item>
           <el-form-item label="联系人" prop="contactName">
             <el-input v-model="form.contactName" clearable style="width:200px" />
@@ -46,8 +46,8 @@
             <el-button type="primary" @click="handleSave">保存</el-button>
       </el-form-item>
         </el-form>
-          <el-dialog title="地图定位" :visible.sync="isShowBySelectAddressPoint" v-if="isShowBySelectAddressPoint"  width="800px" append-to-body>
-     <select-address-point />
+        <el-dialog title="选择位置" :visible.sync="isShowBySelectAddressPoint" v-if="isShowBySelectAddressPoint"  width="800px" append-to-body>
+           <select-address-point />
        </el-dialog>
 
   </div>
@@ -190,121 +190,6 @@ export default {
     uploadPreviewHandle(file) {
       this.uploadImgPreImgDialogUrl = file.url
       this.uploadImgPreImgDialogVisible = true
-    },
-    getGpsList() {
-      this.isShowBySelectAddressPoint=true
-      // var that = this
-      // this.mapequipmentDialog = true
-      // this.$nextTick(function() {
-      //   // 创建变量，用于存储地址
-      //   var address
-      //   var dizhi
-      //   var marker
-      //   if (marker === undefined) {
-      //     //  初始化百度地图
-      //     var map = new BMap.Map('container')
-      //     // 创建地图实例
-      //     var point = new BMap.Point(116.404, 39.915)
-      //     // 创建点坐标
-      //     map.centerAndZoom(point, 15)
-      //     // var marker = new BMap.Marker(point);
-      //     // map.addOverlay(marker);
-      //     map.enableScrollWheelZoom(true)
-
-      //     map.addEventListener('click', function(e) {
-      //       // console.log(e);
-
-      //       // 移除标注
-      //       map.removeOverlay(marker)
-
-      //       // 创建变量，用于存储经纬度
-      //       var point = e.point
-      //       // console.log(point)
-
-      //       // 设置lng的值
-      //       window.localStorage.setItem('lng', point.lng)
-
-      //       // 设置lat的值
-      //       window.localStorage.setItem('lat', point.lat)
-
-      //       // 创建标注实例
-      //       marker = new BMap.Marker(point)
-
-      //       // 添加标注
-      //       map.addOverlay(marker)
-
-      //       // 创建地理编码实例
-      //       var geoc = new BMap.Geocoder()
-
-      //       geoc.getLocation(point, function(rs) {
-      //         // console.log(rs)
-
-      //         dizhi = rs.address
-
-      //         address = rs.addressComponents
-      //         // console.log(address)
-
-      //         // 设置currentProvince的值
-      //         window.localStorage.setItem('currentProvince', address.province)
-
-      //         // 设置currentCity的值
-      //         window.localStorage.setItem('currentCity', address.city)
-      //         // 设置地址的值
-      //         window.localStorage.setItem('dizhi', dizhi)
-      //         that.dizhiMap = window.localStorage.getItem('dizhi')
-      //       })
-      //     })
-      //   }
-      // })
-    },
-    getClick() {
-      this.mapequipmentDialog = false
-      // console.log(that.addobjequipment.dizhiInput)
-      this.addobjequipment.address = window.localStorage.getItem('dizhi')
-      this.addobjequipment.latitude = window.localStorage.getItem('lat')
-      this.addobjequipment.longitude = window.localStorage.getItem('lng')
-      this.editobjequipment.address = window.localStorage.getItem('dizhi')
-      this.editobjequipment.latitude = window.localStorage.getItem('lat')
-      this.editobjequipment.longitude = window.localStorage.getItem('lng')
-    },
-    async addClick() {
-      // this.addobjequipment = {}
-      if (this.addobjequipment.deviceNumber === '') {
-        this.$message.error('请输入设备号')
-        return
-      }
-      if (this.addobjequipment.devicename === '') {
-        this.$message.error('请输入设备名')
-        return
-      }
-      if (this.addobjequipment.address === '') {
-        this.$message.error('请选择地址')
-        return
-      }
-      this.addequipmentDialog = false
-      var res = await this.$http.post(url, {
-        deviceNumber: this.addobjequipment.deviceNumber,
-        devicename: this.addobjequipment.devicename,
-        address: this.addobjequipment.address,
-        latitude: this.addobjequipment.latitude,
-        longitude: this.addobjequipment.longitude
-      })
-      console.log(res)
-      var data = res.data
-      if (res.status === 200) {
-        if (data.success === true) {
-          this.$message({
-            message: data.results,
-            type: 'success'
-          })
-          this.getStreetList()
-          this.cancelAddobj()
-        } else {
-          this.$message.error(data.msg)
-        }
-      } else {
-        this.$message.error(data.results)
-      }
     }
   }
 }
