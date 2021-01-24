@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.Merch
     {
         public RopStoreSaveFront()
         {
-            this.AddressPoint = new MapPoint();
+           // this.AddressPoint = new MapPoint();
         }
         public string Id { get; set; }
         public string StoreId { get; set; }
@@ -21,6 +21,6 @@ namespace LocalS.Service.Api.Merch
         public string BriefDes { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public bool IsOpen { get; set; }
-        public MapPoint AddressPoint { get; set; }
+       // public MapPoint AddressPoint { get; set; }
     }
 }

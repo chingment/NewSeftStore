@@ -8,19 +8,34 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class MapPoint
+    public class AddressDetailsModel
     {
-        public double Lng { get; set; }
-        public double Lat { get; set; }
-
-        public MapPoint()
+        public AddressDetailsModel()
         {
-
+            this.AddressComponents = new AddressComponentsModel();
+            this.Point = new PointModel();
         }
-        public MapPoint(double lng, double lat)
+        public string Address { get; set; }
+        public AddressComponentsModel AddressComponents { get; set; }
+        public PointModel Point { get; set; }
+
+        public class PointModel
         {
-            this.Lng = lng;
-            this.Lat = lat;
+            public double Lng { get; set; }
+            public double Lat { get; set; }
+
+            public string Ye { get; set; }
+        }
+
+        public class AddressComponentsModel
+        {
+            public string StreetNumber { get; set; }
+            public string Street { get; set; }
+            public string District { get; set; }
+            public string City { get; set; }
+            public string Province { get; set; }
+
+            public string Town { get; set; }
         }
     }
 
@@ -28,7 +43,7 @@ namespace LocalS.BLL.Biz
     {
         public StoreInfoModel()
         {
-          
+
         }
         public string StoreId { get; set; }
         public string Name { get; set; }

@@ -6,8 +6,8 @@
             <el-input v-model="form.name" clearable style="max-width:500px" />
           </el-form-item>
           <el-form-item label="门店地址" prop="address">
-            <span>{{ form.address }}</span>
-            <el-button type="text" @click="isShowBySelectAddressPoint=true">选择</el-button>
+          <el-input v-model="form.address" clearable style="width:450px" />
+            <el-button type="text" @click="dialogIsShowBySelectAddressPoint=true">选择</el-button>
           </el-form-item>
           <el-form-item label="联系人" prop="contactName">
             <el-input v-model="form.contactName" clearable style="width:200px" />
@@ -46,8 +46,8 @@
             <el-button type="primary" @click="handleSave">保存</el-button>
       </el-form-item>
         </el-form>
-        <el-dialog title="选择位置" :visible.sync="isShowBySelectAddressPoint" v-if="isShowBySelectAddressPoint"  width="800px" append-to-body>
-           <select-address-point />
+        <el-dialog title="选择位置" :visible.sync="dialogIsShowBySelectAddressPoint" v-if="dialogIsShowBySelectAddressPoint"  width="800px" append-to-body>
+           <select-address-point :select-method="handleSelectAddressPoint" :cur-adddress="form.addressDetails"/>
        </el-dialog>
 
   </div>
@@ -70,20 +70,17 @@ export default {
         name: '',
         areaCode: '',
         areaName: '',
-        address: 'xx',
+        address: '',
         contactName: '',
         contactPhone: '',
         contactAddress: '',
         briefDes: '',
         displayImgUrls: [],
-        addressPoint: { // 详细地址经纬度
-          lng: 0,
-          lat: 0
-        }
+        addressDetails:null
       },
       rules: {
         name: [{ required: true, min: 1, max: 30, message: '必填,且不能超过30个字符', trigger: 'change' }],
-        address: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
+        address: [{ required: true, min: 1, max: 512, message: '请选择' }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
@@ -92,7 +89,7 @@ export default {
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-      isShowBySelectAddressPoint:false,
+      dialogIsShowBySelectAddressPoint:false,
       isDesktop: this.$store.getters.isDesktop,
     }
   },
@@ -190,7 +187,12 @@ export default {
     uploadPreviewHandle(file) {
       this.uploadImgPreImgDialogUrl = file.url
       this.uploadImgPreImgDialogVisible = true
-    }
+    },
+    handleSelectAddressPoint(rs) {
+       this.form.addressDetails=rs
+       this.form.address=rs.address
+       this.dialogIsShowBySelectAddressPoint=false
+    },
   }
 }
 </script>

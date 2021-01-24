@@ -118,6 +118,11 @@ namespace LocalS.Service.Api.Merch
             var d_Shop = CurrentDb.Shop.Where(m => m.MerchId == merchId && m.Id == rup.Id).FirstOrDefault();
             if (d_Shop == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到数据");
+
+            var addressDetailsModel = new AddressDetailsModel();
+            addressDetailsModel.Address = d_Shop.Address;
+            addressDetailsModel.Point.Lat = d_Shop.Lat;
+            addressDetailsModel.Point.Lng = d_Shop.Lng;
             var ret = new
             {
                 Id = d_Shop.Id,
@@ -126,7 +131,7 @@ namespace LocalS.Service.Api.Merch
                 AreaCode = d_Shop.AreaCode,
                 AreaName = d_Shop.AreaName,
                 BriefDes = d_Shop.BriefDes,
-                MapPoint = new MapPoint(d_Shop.Lng, d_Shop.Lat),
+                AddressDetails = addressDetailsModel,
                 MainImgUrl = d_Shop.MainImgUrl,
                 DisplayImgUrls = d_Shop.DisplayImgUrls.ToJsonObject<List<ImgSet>>(),
                 ContactName = d_Shop.ContactName,
@@ -158,8 +163,8 @@ namespace LocalS.Service.Api.Merch
                 d_Shop.Address = rop.Address;
                 d_Shop.AreaCode = rop.AreaCode;
                 d_Shop.AreaName = rop.AreaName;
-                d_Shop.Lat = rop.AddressPoint.Lat;
-                d_Shop.Lng = rop.AddressPoint.Lng;
+                d_Shop.Lat = rop.AddressDetails.Point.Lat;
+                d_Shop.Lng = rop.AddressDetails.Point.Lng;
                 d_Shop.ContactName = rop.ContactName;
                 d_Shop.ContactPhone = rop.ContactPhone;
                 d_Shop.ContactAddress = rop.ContactAddress;
@@ -190,8 +195,8 @@ namespace LocalS.Service.Api.Merch
                 d_Shop.Address = rop.Address;
                 d_Shop.AreaCode = rop.AreaCode;
                 d_Shop.AreaName = rop.AreaName;
-                d_Shop.Lat = rop.AddressPoint.Lat;
-                d_Shop.Lng = rop.AddressPoint.Lng;
+                d_Shop.Lat = rop.AddressDetails.Point.Lat;
+                d_Shop.Lng = rop.AddressDetails.Point.Lng;
                 d_Shop.ContactName = rop.ContactName;
                 d_Shop.ContactPhone = rop.ContactPhone;
                 d_Shop.ContactAddress = rop.ContactAddress;
@@ -206,7 +211,7 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ShopSave, string.Format("保存门店信息（{0}）成功", rop.Name),rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ShopSave, string.Format("保存门店信息（{0}）成功", rop.Name), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

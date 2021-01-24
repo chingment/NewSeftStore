@@ -12,12 +12,12 @@ namespace LocalS.Service.Api.Merch
     {
         public RopShopSave()
         {
-            this.AddressPoint = new MapPoint();
+            this.AddressDetails = new AddressDetailsModel();
         }
         public string Id { get; set; }
         public string Name { get; set; }
         public string AreaCode { get; set; }
-        public MapPoint AddressPoint { get; set; }
+        public AddressDetailsModel AddressDetails { get; set; }
         public string AreaName { get; set; }
         public string Address { get; set; }
         public string ContactName { get; set; }

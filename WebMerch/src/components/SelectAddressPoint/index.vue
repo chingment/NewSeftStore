@@ -1,14 +1,11 @@
 <template>
-    <!-- 点击新增设备定位按钮弹框 -->
-      <div style="width:100%;height:500px">  
-      <div class="selectAddress">
+  
+      <div class="selectAddress" style="width:100%;height:500px">
         
-
      <div class="filter-container">
       <el-row :gutter="12">
-        <el-col :span="10" :xs="24" style="margin-bottom:20px">
-        
-
+        <el-col :span="10" :xs="24">
+      
         <el-autocomplete
           v-model="mapSearchText"
           style="width:100%;"
@@ -27,26 +24,38 @@
         </el-autocomplete>
 
         </el-col>
-        <el-col :span="2" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        <el-col :span="2" :xs="24">
+          <el-button class="filter-item" type="primary" @click="handleSure">
             确定
           </el-button>
         </el-col>
       </el-row>
-    </div>
-
-
-
-
-        <p class="deviceAddressText">{{ dizhiMap }}</p>
-      </div>
+     </div>
+    <div style=" height: 50px;
+    line-height: 50px;
+    font-size: 16px;"> <span>当前地址：</span> <span class="deviceAddressText">{{ curAddressDetails }}</span></div>
       <div id="container" style="height:400px;width:100%" />
       </div>
+
 </template>
 
 <script>
 
 export default {
+  props: {
+    opCode: {
+      type: String,
+      default: 'list'
+    },
+    curAdddress: {
+      type: Object,
+      default: null
+    },
+    selectMethod: {
+      type: Function,
+      default: null
+    }
+  },
   data() {
     return {
       addequipmentDialog: false,
@@ -60,11 +69,12 @@ export default {
         longitude: ''
       },
       // 地图弹框的数据源
-      dizhiMap: '',
+      curAddressDetails: '',
       mapSearchText:'',
       mapObject: '', // 地图实例
       mapMarker: '', // Marker实例
-      mapGeoc: null
+      mapGeoc: null,
+      curSelectAddress:null
     }
   },
   created() {
@@ -81,13 +91,21 @@ export default {
           var map = new BMap.Map('container', { enableMapClick: false })
           // 创建地图实例
           var point = new BMap.Point(116.404, 39.915)
+          if(that.curAdddress!=null){
+             console.log("that.curAdddress:"+JSON.stringify(that.curAdddress))
+             point = new BMap.Point(that.curAdddress.point.lng,that.curAdddress.point.lat)
+             that.curAddressDetails=that.curAdddress.address
+          }
           // 创建点坐标
           map.centerAndZoom(point, 15)
           map.addControl(new BMap.NavigationControl())
           map.enableScrollWheelZoom(true)// 允许鼠标滚动缩放
+
+          if(that.curAdddress!=null){
           var marker = new BMap.Marker(point);
           map.addOverlay(marker);
           map.enableScrollWheelZoom(true)
+          }
 
           map.addEventListener('click', function(e) {
             // console.log(e);
@@ -99,12 +117,6 @@ export default {
             var point = e.point
             // console.log(point)
 
-            // 设置lng的值
-            window.localStorage.setItem('lng', point.lng)
-
-            // 设置lat的值
-            window.localStorage.setItem('lat', point.lat)
-
             // 创建标注实例
             marker = new BMap.Marker(point)
 
@@ -115,28 +127,13 @@ export default {
             var geoc = new BMap.Geocoder()
 
             geoc.getLocation(point, function(rs) {
-              // console.log(rs)
-
-              dizhi = rs.address
-
-              address = rs.addressComponents
-              // console.log(address)
-
-              // 设置currentProvince的值
-              window.localStorage.setItem('currentProvince', address.province)
-
-              // 设置currentCity的值
-              window.localStorage.setItem('currentCity', address.city)
-              // 设置地址的值
-              window.localStorage.setItem('dizhi', dizhi)
-              that.dizhiMap = window.localStorage.getItem('dizhi')
+              console.log(rs)
+              that.curSelectAddress=rs
+              that.curAddressDetails = rs.address
             })
           })
-
-
           this.mapObject = map
           this.mapMarker = marker
-
         }
       })
 
@@ -160,22 +157,21 @@ export default {
       local.search(str) // 调用search方法，根据检索词str发起检索
     },
     mapHandleSelect(item) {
-      this.mapSearchText = item.address + item.title // 记录详细地址，含建筑物名
+      this.mapSearchText = item.address // 记录详细地址，含建筑物名
       this.mapObject.clearOverlays() // 清除地图上所有覆盖物
-      this.mapMarker = new BMap.Marker(item.point) // 根据所选坐标重新创建Marker
-      this.mapObject.addOverlay(this.mapMarker) // 将覆盖物重新添加到地图中
+      //this.mapMarker = new BMap.Marker(item.point) // 根据所选坐标重新创建Marker
+      //this.mapObject.addOverlay(this.mapMarker) // 将覆盖物重新添加到地图中
       this.mapObject.panTo(item.point) // 将地图的中心点更改为选定坐标点
     },
-    getClick() {
-    //   this.mapequipmentDialog = false
-    //   // console.log(that.addobjequipment.dizhiInput)
-    //   this.addobjequipment.address = window.localStorage.getItem('dizhi')
-    //   this.addobjequipment.latitude = window.localStorage.getItem('lat')
-    //   this.addobjequipment.longitude = window.localStorage.getItem('lng')
-    //   this.editobjequipment.address = window.localStorage.getItem('dizhi')
-    //   this.editobjequipment.latitude = window.localStorage.getItem('lat')
-    //   this.editobjequipment.longitude = window.localStorage.getItem('lng')
-    },
+    handleSure() {
+      if(this.curSelectAddress==null)
+     { this.$message('请点击地图选择地址')
+      return 
+     }
+      if (this.selectMethod) {
+        this.selectMethod(this.curSelectAddress)
+      }
+    }
   }
 }
 </script>
