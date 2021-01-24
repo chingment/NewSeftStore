@@ -46,21 +46,9 @@
             <el-button type="primary" @click="handleSave">保存</el-button>
       </el-form-item>
         </el-form>
-      
-  
-    <!-- 点击新增设备定位按钮弹框 -->
-    <el-dialog title="地图定位" :visible.sync="mapequipmentDialog" width="800px">
-      <div style="width:100%;height:500px">  
-      <div class="selectAddress">
-        <p class="deviceAddressText">{{ dizhiMap }}</p>
-      </div>
-      <div id="container" style="height:400px;width:100%" />
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="mapequipmentDialog = false">取 消</el-button>
-        <el-button type="primary" @click="getClick">确 定</el-button>
-      </span>
-    </el-dialog>
+          <el-dialog title="地图定位" :visible.sync="isShowBySelectAddressPoint" v-if="isShowBySelectAddressPoint"  width="800px" append-to-body>
+     <select-address-point />
+       </el-dialog>
 
   </div>
 </template>
@@ -70,9 +58,10 @@
 import { MessageBox } from 'element-ui'
 import { save } from '@/api/shop'
 import PageHeader from '@/components/PageHeader/index.vue'
+import SelectAddressPoint from '@/components/SelectAddressPoint/index.vue'
 export default {
   name: 'ShopAdd',
-  components: { PageHeader },
+  components: { PageHeader,SelectAddressPoint },
   data() {
     return {
       loading: false,
@@ -103,21 +92,7 @@ export default {
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-      // 默认新增设备弹框控制器
-      addequipmentDialog: false,
-      // 新增设备的数据源
-      addobjequipment: {
-        deviceNumber: '',
-        // 地图弹框的数据源
-        devicename: '',
-        address: '',
-        latitude: '',
-        longitude: ''
-      },
-      // 地图弹框
-      mapequipmentDialog: false,
-      // 地图弹框的数据源
-      dizhiMap: '',
+      isShowBySelectAddressPoint:false,
       isDesktop: this.$store.getters.isDesktop,
     }
   },
@@ -217,69 +192,70 @@ export default {
       this.uploadImgPreImgDialogVisible = true
     },
     getGpsList() {
-      var that = this
-      this.mapequipmentDialog = true
-      this.$nextTick(function() {
-        // 创建变量，用于存储地址
-        var address
-        var dizhi
-        var marker
-        if (marker === undefined) {
-          //  初始化百度地图
-          var map = new BMap.Map('container')
-          // 创建地图实例
-          var point = new BMap.Point(116.404, 39.915)
-          // 创建点坐标
-          map.centerAndZoom(point, 15)
-          // var marker = new BMap.Marker(point);
-          // map.addOverlay(marker);
-          map.enableScrollWheelZoom(true)
+      this.isShowBySelectAddressPoint=true
+      // var that = this
+      // this.mapequipmentDialog = true
+      // this.$nextTick(function() {
+      //   // 创建变量，用于存储地址
+      //   var address
+      //   var dizhi
+      //   var marker
+      //   if (marker === undefined) {
+      //     //  初始化百度地图
+      //     var map = new BMap.Map('container')
+      //     // 创建地图实例
+      //     var point = new BMap.Point(116.404, 39.915)
+      //     // 创建点坐标
+      //     map.centerAndZoom(point, 15)
+      //     // var marker = new BMap.Marker(point);
+      //     // map.addOverlay(marker);
+      //     map.enableScrollWheelZoom(true)
 
-          map.addEventListener('click', function(e) {
-            // console.log(e);
+      //     map.addEventListener('click', function(e) {
+      //       // console.log(e);
 
-            // 移除标注
-            map.removeOverlay(marker)
+      //       // 移除标注
+      //       map.removeOverlay(marker)
 
-            // 创建变量，用于存储经纬度
-            var point = e.point
-            // console.log(point)
+      //       // 创建变量，用于存储经纬度
+      //       var point = e.point
+      //       // console.log(point)
 
-            // 设置lng的值
-            window.localStorage.setItem('lng', point.lng)
+      //       // 设置lng的值
+      //       window.localStorage.setItem('lng', point.lng)
 
-            // 设置lat的值
-            window.localStorage.setItem('lat', point.lat)
+      //       // 设置lat的值
+      //       window.localStorage.setItem('lat', point.lat)
 
-            // 创建标注实例
-            marker = new BMap.Marker(point)
+      //       // 创建标注实例
+      //       marker = new BMap.Marker(point)
 
-            // 添加标注
-            map.addOverlay(marker)
+      //       // 添加标注
+      //       map.addOverlay(marker)
 
-            // 创建地理编码实例
-            var geoc = new BMap.Geocoder()
+      //       // 创建地理编码实例
+      //       var geoc = new BMap.Geocoder()
 
-            geoc.getLocation(point, function(rs) {
-              // console.log(rs)
+      //       geoc.getLocation(point, function(rs) {
+      //         // console.log(rs)
 
-              dizhi = rs.address
+      //         dizhi = rs.address
 
-              address = rs.addressComponents
-              // console.log(address)
+      //         address = rs.addressComponents
+      //         // console.log(address)
 
-              // 设置currentProvince的值
-              window.localStorage.setItem('currentProvince', address.province)
+      //         // 设置currentProvince的值
+      //         window.localStorage.setItem('currentProvince', address.province)
 
-              // 设置currentCity的值
-              window.localStorage.setItem('currentCity', address.city)
-              // 设置地址的值
-              window.localStorage.setItem('dizhi', dizhi)
-              that.dizhiMap = window.localStorage.getItem('dizhi')
-            })
-          })
-        }
-      })
+      //         // 设置currentCity的值
+      //         window.localStorage.setItem('currentCity', address.city)
+      //         // 设置地址的值
+      //         window.localStorage.setItem('dizhi', dizhi)
+      //         that.dizhiMap = window.localStorage.getItem('dizhi')
+      //       })
+      //     })
+      //   }
+      // })
     },
     getClick() {
       this.mapequipmentDialog = false
