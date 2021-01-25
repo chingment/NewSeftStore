@@ -119,11 +119,6 @@
               <span>{{ scope.row.belongName }}</span>
             </template>
           </el-table-column>
-          <el-table-column v-if="isDesktop" label="版位" prop="title" align="left" min-width="30%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.adSpaceName }}</span>
-            </template>
-          </el-table-column>
           <el-table-column label="状态" prop="status" align="left" min-width="15%">
             <template slot-scope="scope">
               <span :class="'enable-status enable-status-'+scope.row.status.value">{{ scope.row.status.text }}</span>
@@ -140,13 +135,35 @@
             </template>
           </el-table-column>
         </el-table>
-
+        <pagination v-show="listTotalByBelongs>0" :total="listTotalByBelongs" :page.sync="listQueryByBelongs.page" :limit.sync="listQueryByBelongs.limit" @pagination="getListDataByBelong" />
       </div>
     </el-dialog>
 
     <el-dialog v-if="dialogByCopyIsVisible" :title="'同步至...'" width="800px" :visible.sync="dialogByCopyIsVisible">
       <div style="width:100%;height:600px">
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>内容信息</h5>
+          </div>
+          <div class="pull-right" />
+        </div>
+        <el-form class="form-container">
+          <el-form-item label-width="80px" label="所在版位">
+            <span>{{ adContent.adSpaceName }}</span>
+          </el-form-item>
+          <el-form-item label-width="80px" label="标题">
+            <span>{{ adContent.title }}</span>
+          </el-form-item>
+          <el-form-item label-width="80px" label="文件">
+            <img :src="adContent.url" style="width:80px;height:80px;">
+          </el-form-item>
+        </el-form>
+        <div class="row-title clearfix">
+          <div class="pull-left"> <h5>选择对象</h5>
+          </div>
+          <div class="pull-right" />
+        </div>
         <el-form ref="form" v-loading="loading" :model="formByCopy" label-width="80px">
+
           <el-form-item label="对象">
             <el-checkbox v-model="belongsCheckAll" :indeterminate="belongsIsIndeterminate" @change="handleBelongsCheckAllChange">全选</el-checkbox>
             <div style="margin: 15px 0;" />
@@ -310,6 +327,12 @@ export default {
     },
     handleOpenDialogByCopy(item) {
       this.formByCopy.adContentId = item.id
+      this.belongsCheckAll = false
+      this.belongsIsIndeterminate = false
+      this.formByCopy.belongIds = []
+      this.adContent.url = item.url
+      this.adContent.title = item.title
+      this.adContent.adSpaceName = item.adSpaceName
       this.dialogByCopyIsVisible = true
     },
     handleBelongsCheckAllChange(val) {
