@@ -116,7 +116,7 @@ namespace LocalS.BLL.Biz
             if (d_Machine == null)
                 return m_Banners;
 
-            var d_AdContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == d_Machine.CurUseMerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+            var d_AdContentIds = CurrentDb.AdContentBelong.Where(m => m.Status == E_AdContentBelongStatus.Normal && m.MerchId == d_Machine.CurUseMerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
 
             if (d_AdContentIds != null && d_AdContentIds.Length > 0)
             {
@@ -134,8 +134,13 @@ namespace LocalS.BLL.Biz
         {
             var ads = new Dictionary<string, AdModel>();
 
-            var machine = BizFactory.Machine.GetOne(id);
+            var machine = CurrentDb.Machine.Where(m => m.Id == id).FirstOrDefault();
 
+            if (machine == null)
+                return ads;
+
+            if (string.IsNullOrEmpty(machine.CurUseMerchId))
+                return ads;
 
             var adSpaces = CurrentDb.AdSpace.Where(m => m.Id == E_AdSpaceId.MachineHomeBanner).ToList();
 
@@ -144,7 +149,7 @@ namespace LocalS.BLL.Biz
                 var ad = new AdModel();
                 ad.AdId = adSpace.Id;
                 ad.Name = adSpace.Name;
-                var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == machine.MerchId && m.AdSpaceId == adSpace.Id && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+                var adContentIds = CurrentDb.AdContentBelong.Where(m => m.Status == E_AdContentBelongStatus.Normal && m.MerchId == machine.CurUseMerchId && m.AdSpaceId == adSpace.Id && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
 
                 if (adContentIds != null && adContentIds.Length > 0)
                 {
@@ -182,14 +187,16 @@ namespace LocalS.BLL.Biz
             // }
         }
 
-        public void SendHomeBanners(string operater, string appId, string merchId, string[] machineIds)
+        public void SendAds(string operater, string appId, string merchId, string[] machineIds)
         {
             var task = System.Threading.Tasks.Task.Run(() =>
             {
                 foreach (var machineId in machineIds)
                 {
-                    var banners = BizFactory.Machine.GetHomeBanners(machineId);
-                    PushService.SendHomeBanners(operater, appId, merchId, machineId, banners);
+                    LogUtil.Info("更新机器：" + machineId);
+                    var ads = BizFactory.Machine.GetAds(machineId);
+                    LogUtil.Info("更新机器数据：" + ads.ToJsonString());
+                    PushService.SendAds(operater, appId, merchId, machineId, ads);
                 }
             });
         }

@@ -14,12 +14,11 @@ namespace LocalS.Service.Api.StoreTerm
         public RetMachineInitData()
         {
             this.Machine = new MachineModel();
-            this.Banners = new List<BannerModel>();
+            this.Ads = new Dictionary<string, AdModel>();
             this.ProductSkus = new Dictionary<string, ProductSkuModel>();
             this.ProductKinds = new List<ProductKindModel>();
         }
         public MachineModel Machine { get; set; }
-        public List<BannerModel> Banners { get; set; }
         public Dictionary<string, ProductSkuModel> ProductSkus { get; set; }
         public List<ProductKindModel> ProductKinds { get; set; }
         public Dictionary<string, AdModel> Ads { get; set; }

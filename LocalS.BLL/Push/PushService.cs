@@ -20,9 +20,9 @@ namespace LocalS.BLL.Push
         private PushService()
         {
             push = new EmqxPushService();
-            pushService.push.ConnectedEvent += ConnectedEvent;
-            pushService.push.DisconnectedEvent += DisconnectedEvent;
-            pushService.push.MessageReceivedEvent += MessageReceivedEvent;
+            push.ConnectedEvent += ConnectedEvent;
+            push.DisconnectedEvent += DisconnectedEvent;
+            push.MessageReceivedEvent += MessageReceivedEvent;
         }
 
         public static PushService GetInstance()
@@ -37,6 +37,7 @@ namespace LocalS.BLL.Push
 
         public CustomJsonResult Send(string operater, string appId, string merchId, string machineId, string cmd, object content)
         {
+            LogUtil.Info("Send1");
             var result = new CustomJsonResult();
             result = GetInstance().push.Send(machineId, cmd, content);
 
@@ -74,10 +75,10 @@ namespace LocalS.BLL.Push
             return result;
         }
 
-        public static CustomJsonResult SendHomeBanners(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendAds(string operater, string appId, string merchId, string machineId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateHomeBanners, content);
+            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateAds, content);
             return result;
         }
 

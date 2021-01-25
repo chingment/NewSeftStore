@@ -108,8 +108,8 @@ namespace LocalS.Entity
         public const string StoreRemoveMachine = "StoreRemoveMachine";
         [EventCodeRemark("B", "更新机器库存信息命令")]
         public const string MCmdUpdateProductSkuStock = "MCmdUpdateProductSkuStock";
-        [EventCodeRemark("C", "更新机器首页广告命令")]
-        public const string MCmdUpdateHomeBanners = "MCmdUpdateHomeBanners";
+        [EventCodeRemark("C", "更新机器广告")]
+        public const string MCmdUpdateAds = "MCmdUpdateAds";
         [EventCodeRemark("C", "更新机器LOGO命令")]
         public const string MCmdUpdateHomeLogo = "MCmdUpdateHomeLogo";
         [EventCodeRemark("A", "重启系统命令")]

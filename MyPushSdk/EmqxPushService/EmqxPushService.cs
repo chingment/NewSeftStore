@@ -67,6 +67,8 @@ namespace MyPushSdk
 
         public CustomJsonResult Send(string registrationid, string type, object content)
         {
+            LogUtil.Info("Send2");
+
             if (mqttClient == null)
             {
                 Connect();
@@ -75,6 +77,11 @@ namespace MyPushSdk
             if (!mqttClient.IsConnected)
             {
                 Connect();
+            }
+
+            if (!mqttClient.IsConnected)
+            {
+                LogUtil.Info(TAG, "连接失败");
             }
 
             var result = new CustomJsonResult();

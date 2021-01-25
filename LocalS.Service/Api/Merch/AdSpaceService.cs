@@ -208,7 +208,7 @@ namespace LocalS.Service.Api.Merch
                 if (rop.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
                 {
                     string[] machineIds = rop.BelongIds.ToArray();
-                    BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds);
+                    BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds);
                 }
             }
 
@@ -295,7 +295,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
             }
 
             return result;
@@ -395,7 +395,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
             }
 
             return result;
@@ -456,7 +456,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
             }
 
             return result;
