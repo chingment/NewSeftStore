@@ -16,6 +16,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupPayRefundGetList rup)
         {
+
             IResult result = MerchServiceFactory.PayRefund.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }

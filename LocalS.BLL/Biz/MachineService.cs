@@ -110,24 +110,24 @@ namespace LocalS.BLL.Biz
 
         public List<BannerModel> GetHomeBanners(string id)
         {
-            var bannerModels = new List<BannerModel>();
+            var m_Banners = new List<BannerModel>();
 
-            var machine = BizFactory.Machine.GetOne(id);
+            var d_Machine = CurrentDb.Machine.Where(m => m.Id == id).FirstOrDefault();
+            if (d_Machine == null)
+                return m_Banners;
 
-            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == machine.MerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+            var d_AdContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == d_Machine.CurUseMerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
 
-            if (adContentIds != null && adContentIds.Length > 0)
+            if (d_AdContentIds != null && d_AdContentIds.Length > 0)
             {
-                var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
-
-
-                foreach (var item in adContents)
+                var d_AdContents = CurrentDb.AdContent.Where(m => d_AdContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
+                foreach (var d_AdContent in d_AdContents)
                 {
-                    bannerModels.Add(new BannerModel { Url = item.Url });
+                    m_Banners.Add(new BannerModel { Url = d_AdContent.Url });
                 }
             }
 
-            return bannerModels;
+            return m_Banners;
         }
 
         public Dictionary<string, AdModel> GetAds(string id)
@@ -182,10 +182,16 @@ namespace LocalS.BLL.Biz
             // }
         }
 
-        public void SendHomeBanners(string operater, string appId, string merchId, string[] machineId)
+        public void SendHomeBanners(string operater, string appId, string merchId, string[] machineIds)
         {
-            //var banners = BizFactory.Machine.GetHomeBanners(machineId);
-            //PushService.SendHomeBanners(operater, appId, merchId, machineId, banners);
+            var task = System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (var machineId in machineIds)
+                {
+                    var banners = BizFactory.Machine.GetHomeBanners(machineId);
+                    PushService.SendHomeBanners(operater, appId, merchId, machineId, banners);
+                }
+            });
         }
 
         public void SendHomeLogo(string operater, string appId, string merchId, string machineId, string logoImgUrl)
