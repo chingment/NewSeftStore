@@ -188,6 +188,7 @@ namespace LocalS.Service.Api.Merch
                     adSpaceContentBelong.AdContentId = adSpaceContent.Id;
                     adSpaceContentBelong.BelongType = adSpace.BelongType;
                     adSpaceContentBelong.BelongId = belongId;
+                    adSpaceContentBelong.Status = E_AdContentBelongStatus.Normal;
                     adSpaceContentBelong.Creator = operater;
                     adSpaceContentBelong.CreateTime = DateTime.Now;
 
