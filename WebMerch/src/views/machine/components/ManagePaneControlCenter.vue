@@ -56,9 +56,14 @@ import { sysReboot, sysShutdown, sysSetStatus, queryMsgPushResult, dsx01OpenPick
 
 export default {
   name: 'ManagePaneBaseInfo',
+  props: {
+    machineId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      machineId: '',
       dialogSysSetStatusIsVisible: false,
       isDesktop: this.$store.getters.isDesktop,
       formBySysSetStatus: {
@@ -72,20 +77,16 @@ export default {
     }
   },
   watch: {
-    '$route'(to, from) {
+    machineId: function(val, oldval) {
       this.init()
     }
-  },
-  mounted() {
-
   },
   created() {
     this.init()
   },
   methods: {
     init() {
-      var id = getUrlParam('id')
-      this.machineId = id
+
     },
     onSysReboot() {
       MessageBox.confirm('确定要重启系统？请确保机器在空闲状态中，否则会影响机器正常运行！', '提示', {

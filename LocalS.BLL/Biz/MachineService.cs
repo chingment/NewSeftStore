@@ -174,7 +174,12 @@ namespace LocalS.BLL.Biz
             var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == machineId).FirstOrDefault();
 
             if (merchMachine == null)
+            {
+                LogUtil.Warn("找不到记录");
                 return true;
+            }
+
+            LogUtil.Warn("IsStopUse:" + ".merchId:" + merchId + ".machineId:" + machineId + "," + merchMachine.IsStopUse);
 
             return merchMachine.IsStopUse;
         }

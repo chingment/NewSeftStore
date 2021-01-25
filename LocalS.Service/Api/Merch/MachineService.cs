@@ -521,6 +521,26 @@ namespace LocalS.Service.Api.Merch
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            var machine = CurrentDb.Machine.Where(m => m.Id == rop.Id && m.CurUseMerchId == merchId).FirstOrDefault();
+
+            if (machine == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该找不到记录");
+            }
+
+            if (rop.Status == 1)
+            {
+                machine.ExIsHas = false;
+                machine.ExReason = "";
+            }
+            else if (rop.Status == 2)
+            {
+                machine.ExIsHas = true;
+                machine.ExReason = "后台人员设置维护中";
+            }
+
+            CurrentDb.SaveChanges();
+
             result = BizFactory.Machine.SendSysSetStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
 
             return result;
