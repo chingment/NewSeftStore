@@ -35,7 +35,6 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
-
         public StatusModel GetBelongStatus(E_AdContentBelongStatus status)
         {
             var statusModel = new StatusModel();
@@ -97,57 +96,6 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
-                    CreateTime = item.CreateTime,
-                });
-            }
-
-
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
-
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
-
-
-            return result;
-        }
-
-        public CustomJsonResult GetReleaseList(string operater, string merchId, RupAdSpaceGetReleaseList rup)
-        {
-            var result = new CustomJsonResult();
-
-            string d_AdSpace_Name = "";
-            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == rup.AdSpaceId).FirstOrDefault();
-            if (d_AdSpace != null)
-            {
-                d_AdSpace_Name = d_AdSpace.Name;
-            }
-
-            var query = (from u in CurrentDb.AdContent
-                         where u.AdSpaceId == rup.AdSpaceId && u.MerchId == merchId
-                         select new { u.Id, u.Title, u.Url, u.Status, u.CreateTime });
-
-
-            int total = query.Count();
-
-            int pageIndex = rup.Page - 1;
-            int pageSize = rup.Limit;
-
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
-
-            var list = query.ToList();
-
-            List<object> olist = new List<object>();
-
-            foreach (var item in list)
-            {
-
-                olist.Add(new
-                {
-                    Id = item.Id,
-                    Title = item.Title,
-                    AdSpaceName = d_AdSpace_Name,
-                    Url = item.Url,
-                    Status = GetReleaseStatus(item.Status),
                     CreateTime = item.CreateTime,
                 });
             }
@@ -266,30 +214,88 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult GetAdContents(string operater, string merchId, RupAdSpaceGetReleaseList rup)
+        {
+            var result = new CustomJsonResult();
+
+            string d_AdSpace_Name = "";
+            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == rup.AdSpaceId).FirstOrDefault();
+            if (d_AdSpace != null)
+            {
+                d_AdSpace_Name = d_AdSpace.Name;
+            }
+
+            var query = (from u in CurrentDb.AdContent
+                         where u.AdSpaceId == rup.AdSpaceId && u.MerchId == merchId
+                         select new { u.Id, u.Title, u.Url, u.Status, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    AdSpaceName = d_AdSpace_Name,
+                    Url = item.Url,
+                    Status = GetReleaseStatus(item.Status),
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+        }
+
         public CustomJsonResult DeleteAdContent(string operater, string merchId, string adContentId)
         {
             var result = new CustomJsonResult();
 
-            var adContent = CurrentDb.AdContent.Where(m => m.Id == adContentId && m.MerchId == merchId).FirstOrDefault();
-            if (adContent != null)
+            List<string> machineIds = new List<string>();
+
+            var d_AdContent = CurrentDb.AdContent.Where(m => m.Id == adContentId && m.MerchId == merchId).FirstOrDefault();
+            if (d_AdContent != null)
             {
-                adContent.Status = E_AdContentStatus.Deleted;
-                adContent.Mender = operater;
-                adContent.MendTime = DateTime.Now;
+                d_AdContent.Status = E_AdContentStatus.Deleted;
+                d_AdContent.Mender = operater;
+                d_AdContent.MendTime = DateTime.Now;
+
+                if (d_AdContent.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+                {
+                    machineIds = CurrentDb.AdContentBelong.Where(m => m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.AdContentId == d_AdContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Machine).Select(m => m.BelongId).Distinct().ToList();
+                }
+
                 CurrentDb.SaveChanges();
 
-
-                var machineIds = CurrentDb.AdContentBelong.Where(m => m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.AdContentId == adContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Machine).Select(m => m.BelongId).Distinct().ToArray();
-
-                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds);
-
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", adContent.Title), new { adContentId = adContentId });
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdSpaceDeleteAdContent, string.Format("删除广告（{0}）成功", d_AdContent.Title), new { adContentId = adContentId });
 
             }
 
-
-
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
+
+
+            if (result.Result == ResultType.Success)
+            {
+                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds.ToArray());
+            }
 
             return result;
         }
@@ -364,6 +370,8 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            List<string> machineIds = new List<string>();
+
             var d_AdContentBelong = CurrentDb.AdContentBelong.Where(m => m.Id == rop.Id).FirstOrDefault();
 
             if (d_AdContentBelong == null)
@@ -371,12 +379,84 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设置失败");
             }
 
+            if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+            {
+                machineIds.Add(d_AdContentBelong.BelongId);
+            }
+
             d_AdContentBelong.Status = rop.Status;
             d_AdContentBelong.Mender = operater;
             d_AdContentBelong.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "设置成功");
+
+            if (result.Result == ResultType.Success)
+            {
+                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds.ToArray());
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult CopyAdContent2Belongs(string operater, string merchId, RopAdContentCopy2Belongs rop)
+        {
+            var result = new CustomJsonResult();
+
+            List<string> machineIds = new List<string>();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var d_AdContent = CurrentDb.AdContent.Where(m => m.Id == rop.AdContentId).FirstOrDefault();
+
+                if (d_AdContent == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到信息");
+                }
+
+                var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == d_AdContent.AdSpaceId).FirstOrDefault();
+
+                if (d_AdSpace == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到信息");
+                }
+
+                foreach (var belongId in rop.BelongIds)
+                {
+                    var d_AdContentBelong = CurrentDb.AdContentBelong.Where(m => m.AdContentId == d_AdContent.Id && m.BelongId == belongId).FirstOrDefault();
+                    if (d_AdContentBelong == null)
+                    {
+                        var adSpaceContentBelong = new AdContentBelong();
+                        adSpaceContentBelong.Id = IdWorker.Build(IdType.NewGuid);
+                        adSpaceContentBelong.MerchId = d_AdContent.MerchId;
+                        adSpaceContentBelong.AdSpaceId = d_AdContent.AdSpaceId;
+                        adSpaceContentBelong.AdContentId = d_AdContent.Id;
+                        adSpaceContentBelong.BelongType = d_AdSpace.BelongType;
+                        adSpaceContentBelong.BelongId = belongId;
+                        adSpaceContentBelong.Status = E_AdContentBelongStatus.Normal;
+                        adSpaceContentBelong.Creator = operater;
+                        adSpaceContentBelong.CreateTime = DateTime.Now;
+                        CurrentDb.AdContentBelong.Add(adSpaceContentBelong);
+
+                        if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+                        {
+                            machineIds.Add(belongId);
+                        }
+                    }
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "同步成功");
+
+            }
+
+            if (result.Result == ResultType.Success)
+            {
+                BizFactory.Machine.SendHomeBanners(operater, AppId.MERCH, merchId, machineIds.ToArray());
+            }
 
             return result;
         }

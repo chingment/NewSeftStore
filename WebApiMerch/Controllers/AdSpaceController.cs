@@ -20,13 +20,6 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetReleaseList([FromUri]RupAdSpaceGetReleaseList rup)
-        {
-            IResult result = MerchServiceFactory.AdSpace.GetReleaseList(this.CurrentUserId, this.CurrentMerchId, rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
         public OwnApiHttpResponse InitRelease([FromUri]E_AdSpaceId id)
         {
             IResult result = MerchServiceFactory.AdSpace.InitRelease(this.CurrentUserId, this.CurrentMerchId, id);
@@ -41,6 +34,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetAdContents([FromUri]RupAdSpaceGetReleaseList rup)
+        {
+            IResult result = MerchServiceFactory.AdSpace.GetAdContents(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse GetAdContentBelongs([FromUri]RupAdSpaceGetAdContentBelongs rup)
         {
             IResult result = MerchServiceFactory.AdSpace.GetAdContentBelongs(this.CurrentUserId, this.CurrentMerchId, rup);
@@ -51,6 +51,13 @@ namespace WebApiMerch.Controllers
         public OwnApiHttpResponse SetAdContentBelongStatus([FromBody]RopAdSpaceSetAdContentBelongStatus rop)
         {
             IResult result = MerchServiceFactory.AdSpace.SetAdContentBelongStatus(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse CopyAdContent2Belongs([FromBody]RopAdContentCopy2Belongs rop)
+        {
+            IResult result = MerchServiceFactory.AdSpace.CopyAdContent2Belongs(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

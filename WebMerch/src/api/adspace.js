@@ -8,14 +8,6 @@ export function getList(params) {
   })
 }
 
-export function getReleaseList(params) {
-  return request({
-    url: '/adspace/getReleaselist',
-    method: 'get',
-    params
-  })
-}
-
 export function initRelease(params) {
   return request({
     url: '/adspace/initRelease',
@@ -29,6 +21,14 @@ export function release(data) {
     url: '/adspace/release',
     method: 'post',
     data
+  })
+}
+
+export function getAdContents(params) {
+  return request({
+    url: '/adspace/getAdContents',
+    method: 'get',
+    params
   })
 }
 
@@ -56,12 +56,21 @@ export function setAdContentBelongStatus(data) {
   })
 }
 
+export function copyAdContent2Belongs(data) {
+  return request({
+    url: '/adspace/copyAdContent2Belongs',
+    method: 'post',
+    data
+  })
+}
+
 getAdContentBelongs
 export default {
   getList: getList,
   release: release,
-  getReleaseList: getReleaseList,
+  getAdContents: getAdContents,
   deleteAdContent: deleteAdContent,
   getAdContentBelongs: getAdContentBelongs,
-  setAdContentBelongStatus: setAdContentBelongStatus
+  setAdContentBelongStatus: setAdContentBelongStatus,
+  copyAdContent2Belongs: copyAdContent2Belongs
 }
