@@ -1,5 +1,6 @@
 <template>
   <div id="machine_manage">
+    <page-header />
     <div class="cur-machine cur-tab">
       <div class="it-name">
         <span class="title">当前机器:</span><span class="name">{{ activeDropdown.name }}</span>
@@ -26,9 +27,10 @@ import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStock from './components/ManagePaneStock'
 import managePaneControlCenter from './components/ManagePaneControlCenter'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'MachineManage',
-  components: { managePaneBaseInfo, managePaneStock, managePaneControlCenter },
+  components: { managePaneBaseInfo, managePaneStock, managePaneControlCenter, PageHeader },
   data() {
     return {
       loading: false,

@@ -22,6 +22,8 @@ namespace LocalS.Entity
         public string Title { get; set; }
         public string Url { get; set; }
         public int Priority { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public E_AdContentStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

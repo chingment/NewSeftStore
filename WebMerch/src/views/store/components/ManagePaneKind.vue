@@ -47,7 +47,7 @@
             @click="dialogKindSpuOpen(false,null)"
           >添加商品</el-button>
         </el-header>
-        <el-main style="box-shadow: 0 0px 0px 0 rgb(0 0 0 / 10%);">
+        <el-main class="fn-main">
           <el-row v-loading="isLoaingByKindSpus" :gutter="20">
             <el-col
               v-for="item in listDataByKindSpus"
@@ -314,6 +314,10 @@
       }
     }
   }
+}
+
+.fn-main{
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
 }
 </style>
 

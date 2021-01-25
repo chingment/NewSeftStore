@@ -1297,6 +1297,37 @@ namespace LocalS.BLL.Biz
                         d_orderPickupLog.Creator = operater;
                         CurrentDb.OrderPickupLog.Add(d_orderPickupLog);
                         CurrentDb.SaveChanges();
+
+
+                        var d_PayTransSub = new PayTransSub();
+                        d_PayTransSub.Id = IdWorker.Build(IdType.NewGuid);
+                        d_PayTransSub.PayTransId = d_payTrans.Id;
+                        d_PayTransSub.MerchId = d_payTrans.MerchId;
+                        d_PayTransSub.MerchName = d_order.MerchName;
+                        d_PayTransSub.StoreId = d_order.StoreId;
+                        d_PayTransSub.StoreName = d_order.StoreName;
+                        d_PayTransSub.ShopId = d_order.ShopId;
+                        d_PayTransSub.ShopName = d_order.ShopName;
+                        d_PayTransSub.OrderId = d_order.Id;
+                        d_PayTransSub.OriginalAmount = d_order.OriginalAmount;
+                        d_PayTransSub.DiscountAmount = d_order.DiscountAmount;
+                        d_PayTransSub.ChargeAmount = d_order.ChargeAmount;
+                        d_PayTransSub.Quantity = d_order.Quantity;
+                        d_PayTransSub.IsTestMode = d_order.IsTestMode;
+                        d_PayTransSub.AppId = d_order.AppId;
+                        d_PayTransSub.ClientUserId = d_order.ClientUserId;
+                        d_PayTransSub.ClientUserName = d_order.ClientUserName;
+                        d_PayTransSub.SubmittedTime = d_order.SubmittedTime;
+                        d_PayTransSub.Source = d_order.Source;
+                        d_PayTransSub.CreateTime = DateTime.Now;
+                        d_PayTransSub.Creator = operater;
+                        d_PayTransSub.PayCaller = d_payTrans.PayCaller;
+                        d_PayTransSub.PayPartner = d_payTrans.PayPartner;
+                        d_PayTransSub.PayWay = d_payTrans.PayWay;
+                        d_PayTransSub.PayStatus = d_payTrans.PayStatus;
+                        CurrentDb.PayTransSub.Add(d_PayTransSub);
+                        CurrentDb.SaveChanges();
+
                     }
 
 
@@ -1522,6 +1553,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var orderId in rop.OrderIds)
                 {
+
                     var d_order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
                     if (d_order == null)
@@ -1611,7 +1643,6 @@ namespace LocalS.BLL.Biz
                         }
                     }
 
-
                     CurrentDb.SaveChanges();
 
                     orders.Add(d_order);
@@ -1626,6 +1657,8 @@ namespace LocalS.BLL.Biz
                 payTrans.MerchName = orders[0].MerchName;
                 payTrans.StoreId = orders[0].StoreId;
                 payTrans.StoreName = orders[0].StoreName;
+                payTrans.ShopIds = string.Join(",", orders.Select(m => m.ShopId));
+                payTrans.ShopNames = string.Join(",", orders.Select(m => m.ShopName));
                 payTrans.OrderIds = string.Join(",", orders.Select(m => m.Id));
                 payTrans.OriginalAmount = orders.Sum(m => m.OriginalAmount);
                 payTrans.DiscountAmount = orders.Sum(m => m.DiscountAmount);

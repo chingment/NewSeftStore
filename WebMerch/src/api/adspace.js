@@ -40,9 +40,28 @@ export function deleteAdContent(params) {
   })
 }
 
+export function getAdContentBelongs(params) {
+  return request({
+    url: '/adspace/getAdContentBelongs',
+    method: 'get',
+    params
+  })
+}
+
+export function setAdContentBelongStatus(data) {
+  return request({
+    url: '/adspace/setAdContentBelongStatus',
+    method: 'post',
+    data
+  })
+}
+
+getAdContentBelongs
 export default {
   getList: getList,
   release: release,
   getReleaseList: getReleaseList,
-  deleteAdContent: deleteAdContent
+  deleteAdContent: deleteAdContent,
+  getAdContentBelongs: getAdContentBelongs,
+  setAdContentBelongStatus: setAdContentBelongStatus
 }

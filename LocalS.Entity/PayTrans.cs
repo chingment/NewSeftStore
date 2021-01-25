@@ -63,6 +63,8 @@ namespace LocalS.Entity
         public string MerchName { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
+        public string ShopIds { get; set; }
+        public string ShopNames { get; set; }
         public string OrderIds { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }

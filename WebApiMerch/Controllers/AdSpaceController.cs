@@ -41,6 +41,20 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetAdContentBelongs([FromUri]RupAdSpaceGetAdContentBelongs rup)
+        {
+            IResult result = MerchServiceFactory.AdSpace.GetAdContentBelongs(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SetAdContentBelongStatus([FromBody]RopAdSpaceSetAdContentBelongStatus rop)
+        {
+            IResult result = MerchServiceFactory.AdSpace.SetAdContentBelongStatus(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse DeleteAdContent([FromUri]string id)
         {
             IResult result = MerchServiceFactory.AdSpace.DeleteAdContent(this.CurrentUserId, this.CurrentMerchId, id);

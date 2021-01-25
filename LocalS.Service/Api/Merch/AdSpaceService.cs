@@ -36,6 +36,26 @@ namespace LocalS.Service.Api.Merch
         }
 
 
+        public StatusModel GetBelongStatus(E_AdContentBelongStatus status)
+        {
+            var statusModel = new StatusModel();
+
+            switch (status)
+            {
+                case E_AdContentBelongStatus.Normal:
+                    statusModel.Value = 1;
+                    statusModel.Text = "正常";
+                    break;
+                case E_AdContentBelongStatus.Invalid:
+                    statusModel.Value = 2;
+                    statusModel.Text = "失效";
+                    break;
+            }
+
+
+            return statusModel;
+        }
+
         public CustomJsonResult GetList(string operater, string merchId, RupAdSpaceGetList rup)
         {
             var result = new CustomJsonResult();
@@ -95,6 +115,13 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            string d_AdSpace_Name = "";
+            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == rup.AdSpaceId).FirstOrDefault();
+            if (d_AdSpace != null)
+            {
+                d_AdSpace_Name = d_AdSpace.Name;
+            }
+
             var query = (from u in CurrentDb.AdContent
                          where u.AdSpaceId == rup.AdSpaceId && u.MerchId == merchId
                          select new { u.Id, u.Title, u.Url, u.Status, u.CreateTime });
@@ -103,7 +130,7 @@ namespace LocalS.Service.Api.Merch
             int total = query.Count();
 
             int pageIndex = rup.Page - 1;
-            int pageSize = int.MaxValue;
+            int pageSize = rup.Limit;
 
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
@@ -118,6 +145,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.Id,
                     Title = item.Title,
+                    AdSpaceName = d_AdSpace_Name,
                     Url = item.Url,
                     Status = GetReleaseStatus(item.Status),
                     CreateTime = item.CreateTime,
@@ -133,7 +161,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult InitRelease(string operater, string merchId, E_AdSpaceId adSpaceId)
         {
@@ -239,7 +266,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
         public CustomJsonResult DeleteAdContent(string operater, string merchId, string adContentId)
         {
             var result = new CustomJsonResult();
@@ -264,6 +290,93 @@ namespace LocalS.Service.Api.Merch
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
+
+            return result;
+        }
+
+        public CustomJsonResult GetAdContentBelongs(string operater, string merchId, RupAdSpaceGetAdContentBelongs rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.AdContentBelong
+                         where u.AdContentId == rup.AdContentId && u.MerchId == merchId
+                         select new { u.Id, u.BelongType, u.AdSpaceId, u.Status, u.BelongId, u.CreateTime });
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                string belongName = "";
+                string adSpaceName = "";
+                if (item.BelongType == E_AdSpaceBelongType.Machine)
+                {
+                    belongName = string.Format("终端: {0}", item.BelongId);
+                }
+                else if (item.BelongType == E_AdSpaceBelongType.App)
+                {
+                    var d_Store = CurrentDb.Store.Where(m => m.Id == item.BelongId).FirstOrDefault();
+                    if (d_Store != null)
+                    {
+                        belongName = string.Format("店铺: {0}", d_Store.Name);
+                    }
+                }
+
+                var adSpace = CurrentDb.AdSpace.Where(m => m.Id == item.AdSpaceId).FirstOrDefault();
+                if (adSpace != null)
+                {
+                    adSpaceName = adSpace.Name;
+                }
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    BelongId = item.BelongId,
+                    AdSpaceName = adSpaceName,
+                    AdSpaceId = item.AdSpaceId,
+                    BelongType = item.BelongType,
+                    BelongName = belongName,
+                    Status = GetBelongStatus(item.Status),
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+
+        }
+
+        public CustomJsonResult SetAdContentBelongStatus(string operater, string merchId, RopAdSpaceSetAdContentBelongStatus rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_AdContentBelong = CurrentDb.AdContentBelong.Where(m => m.Id == rop.Id).FirstOrDefault();
+
+            if (d_AdContentBelong == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设置失败");
+            }
+
+            d_AdContentBelong.Status = rop.Status;
+            d_AdContentBelong.Mender = operater;
+            d_AdContentBelong.MendTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "设置成功");
 
             return result;
         }

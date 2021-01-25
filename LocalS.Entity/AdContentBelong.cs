@@ -5,6 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_AdContentBelongStatus
+    {
+        Unknow = 0,
+        Normal = 1,
+        Invalid = 2
+    }
+
     [Table("AdContentBelong")]
     public class AdContentBelong
     {
@@ -15,6 +22,7 @@ namespace LocalS.Entity
         public E_AdSpaceId AdSpaceId { get; set; }
         public E_AdSpaceBelongType BelongType { get; set; }
         public string BelongId { get; set; }
+        public E_AdContentBelongStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

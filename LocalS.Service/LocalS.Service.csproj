@@ -203,6 +203,8 @@
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\ReportService.cs" />
+    <Compile Include="Api\Merch\RModels\RopAdSpaceSetAdContentBelongStatus.cs" />
+    <Compile Include="Api\Merch\RModels\RupAdSpaceGetAdContentBelongs.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
