@@ -14,8 +14,8 @@
         <el-menu
           v-loading="isLoaingByKinds"
           :default-active="currentKindIndex+''"
-          @select="kindSelect"
           style="background:#fff"
+          @select="kindSelect"
         >
           <el-menu-item v-for="(item,index) in listDataByKinds" :key="item.id" :index="index+''">
             <span slot="title">{{ item.name }}</span>

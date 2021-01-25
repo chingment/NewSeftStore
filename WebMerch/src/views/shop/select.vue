@@ -39,10 +39,10 @@
       </el-table-column>
       <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-            <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">
-              选择
-            </el-button>
-            <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
+          <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">
+            选择
+          </el-button>
+          <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -1,6 +1,6 @@
 <template>
   <div id="store_manage">
-       <page-header/>
+    <page-header />
     <div class="cur-store cur-tab">
       <div class="it-name">
         <span class="title">当前店铺:</span><span class="name">{{ activeDropdown.name }}</span>
@@ -30,7 +30,7 @@ import managePaneKind from './components/ManagePaneKind'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'StoreManage',
-  components: { managePaneBaseInfo, managePaneKind, managePaneShop,PageHeader },
+  components: { managePaneBaseInfo, managePaneKind, managePaneShop, PageHeader },
   data() {
     return {
       loading: false,

@@ -1,54 +1,54 @@
 <template>
   <div id="shop_add">
-      <page-header/>
-        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-          <el-form-item label="门店名称" prop="name">
-            <el-input v-model="form.name" clearable style="max-width:500px" />
-          </el-form-item>
-          <el-form-item label="门店地址" prop="address">
-          <el-input v-model="form.address" clearable style="width:450px" />
-            <el-button type="text" @click="dialogIsShowBySelectAddressPoint=true">选择</el-button>
-          </el-form-item>
-          <el-form-item label="联系人" prop="contactName">
-            <el-input v-model="form.contactName" clearable style="width:200px" />
-          </el-form-item>
-          <el-form-item label="联系电话" prop="contactPhone">
-            <el-input v-model="form.contactPhone" clearable style="width:200px" />
-          </el-form-item>
-          <el-form-item label="联系地址" prop="contactAddress">
-            <el-input v-model="form.contactAddress" clearable style="max-width:500px" />
-          </el-form-item>
-          <el-form-item label="门店图片" prop="displayImgUrls">
-            <el-input :value="form.displayImgUrls.toString()" style="display:none" />
-            <el-upload
-              ref="uploadImg"
-              v-model="form.displayImgUrls"
-              :action="uploadImgServiceUrl"
-              list-type="picture-card"
-              :before-upload="uploadBeforeHandle"
-              :on-success="uploadSuccessHandle"
-              :on-remove="uploadRemoveHandle"
-              :on-error="uploadErrorHandle"
-              :on-preview="uploadPreviewHandle"
-              :file-list="uploadImglist"
-            >
-              <i class="el-icon-plus" />
-            </el-upload>
-            <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-              <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
-            </el-dialog>
-            <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
-          </el-form-item>
-          <el-form-item label="简短描述" style="max-width:1000px">
-            <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
-          </el-form-item>
-             <el-form-item>
-            <el-button type="primary" @click="handleSave">保存</el-button>
+    <page-header />
+    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form-item label="门店名称" prop="name">
+        <el-input v-model="form.name" clearable style="max-width:500px" />
       </el-form-item>
-        </el-form>
-        <el-dialog title="选择位置" :visible.sync="dialogIsShowBySelectAddressPoint" v-if="dialogIsShowBySelectAddressPoint"  width="800px" append-to-body>
-           <select-address-point :select-method="handleSelectAddressPoint" :cur-adddress="form.addressDetails"/>
-       </el-dialog>
+      <el-form-item label="门店地址" prop="address">
+        <el-input v-model="form.address" clearable style="width:450px" />
+        <el-button type="text" @click="dialogIsShowBySelectAddressPoint=true">选择</el-button>
+      </el-form-item>
+      <el-form-item label="联系人" prop="contactName">
+        <el-input v-model="form.contactName" clearable style="width:200px" />
+      </el-form-item>
+      <el-form-item label="联系电话" prop="contactPhone">
+        <el-input v-model="form.contactPhone" clearable style="width:200px" />
+      </el-form-item>
+      <el-form-item label="联系地址" prop="contactAddress">
+        <el-input v-model="form.contactAddress" clearable style="max-width:500px" />
+      </el-form-item>
+      <el-form-item label="门店图片" prop="displayImgUrls">
+        <el-input :value="form.displayImgUrls.toString()" style="display:none" />
+        <el-upload
+          ref="uploadImg"
+          v-model="form.displayImgUrls"
+          :action="uploadImgServiceUrl"
+          list-type="picture-card"
+          :before-upload="uploadBeforeHandle"
+          :on-success="uploadSuccessHandle"
+          :on-remove="uploadRemoveHandle"
+          :on-error="uploadErrorHandle"
+          :on-preview="uploadPreviewHandle"
+          :file-list="uploadImglist"
+        >
+          <i class="el-icon-plus" />
+        </el-upload>
+        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
+          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        </el-dialog>
+        <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
+      </el-form-item>
+      <el-form-item label="简短描述" style="max-width:1000px">
+        <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleSave">保存</el-button>
+      </el-form-item>
+    </el-form>
+    <el-dialog v-if="dialogIsShowBySelectAddressPoint" title="选择位置" :visible.sync="dialogIsShowBySelectAddressPoint" width="800px" append-to-body>
+      <select-address-point :select-method="handleSelectAddressPoint" :cur-adddress="form.addressDetails" />
+    </el-dialog>
 
   </div>
 </template>
@@ -61,7 +61,7 @@ import PageHeader from '@/components/PageHeader/index.vue'
 import SelectAddressPoint from '@/components/SelectAddressPoint/index.vue'
 export default {
   name: 'ShopAdd',
-  components: { PageHeader,SelectAddressPoint },
+  components: { PageHeader, SelectAddressPoint },
   data() {
     return {
       loading: false,
@@ -76,7 +76,7 @@ export default {
         contactAddress: '',
         briefDes: '',
         displayImgUrls: [],
-        addressDetails:null
+        addressDetails: null
       },
       rules: {
         name: [{ required: true, min: 1, max: 30, message: '必填,且不能超过30个字符', trigger: 'change' }],
@@ -89,15 +89,15 @@ export default {
       uploadImgPreImgDialogUrl: '',
       uploadImgPreImgDialogVisible: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-      dialogIsShowBySelectAddressPoint:false,
-      isDesktop: this.$store.getters.isDesktop,
+      dialogIsShowBySelectAddressPoint: false,
+      isDesktop: this.$store.getters.isDesktop
     }
   },
   mounted() {
 
   },
   created() {
-  
+
   },
   methods: {
     handleSave() {
@@ -111,11 +111,9 @@ export default {
             save(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
-
- this.$router.push({
-        path: '/shop/list'
-      })
-
+                this.$router.push({
+                  path: '/shop/list'
+                })
               }
             })
           })
@@ -189,10 +187,10 @@ export default {
       this.uploadImgPreImgDialogVisible = true
     },
     handleSelectAddressPoint(rs) {
-       this.form.addressDetails=rs
-       this.form.address=rs.address
-       this.dialogIsShowBySelectAddressPoint=false
-    },
+      this.form.addressDetails = rs
+      this.form.address = rs.address
+      this.dialogIsShowBySelectAddressPoint = false
+    }
   }
 }
 </script>

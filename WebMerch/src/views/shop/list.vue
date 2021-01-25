@@ -28,9 +28,7 @@
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
-            <div class="describe">
-            
-            </div>
+            <div class="describe" />
           </div>
         </el-card>
       </el-col>
@@ -42,7 +40,7 @@
             <el-button type="text" @click="handleAdd">新建</el-button>
           </div>
           <div class="it-component">
-            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" @click="handleAdd" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
+            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card" @click="handleAdd"><i data-v-62e19c49="" class="el-icon-plus" /></div>
           </div>
         </el-card>
       </el-col>
@@ -97,7 +95,7 @@ export default {
     },
     handleEdit(row) {
       this.$router.push({
-        path: '/shop/edit?id='+row.id
+        path: '/shop/edit?id=' + row.id
       })
     }
   }

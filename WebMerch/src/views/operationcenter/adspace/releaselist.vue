@@ -1,6 +1,6 @@
 <template>
   <div id="adspace_release_list">
-    <page-header/>
+    <page-header />
     <el-table
       :key="listKey"
       v-loading="loading"

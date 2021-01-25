@@ -1,7 +1,7 @@
 <template>
   <div class="app-container my-container1">
     <el-container>
-      <el-aside width="200px">
+      <el-aside class="my-aside">
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
             <template slot="title">机器</template>
