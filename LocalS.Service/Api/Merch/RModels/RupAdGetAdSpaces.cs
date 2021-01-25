@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupAdSpaceGetList : RupBaseGetList
+    public class RupAdGetAdSpaces : RupBaseGetList
     {
  
     }

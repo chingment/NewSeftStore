@@ -29,6 +29,17 @@
         </el-dialog>
         <div class="remark-tip"><span class="sign">*注</span>：{{ temp.adSpaceDescription }}</div>
       </el-form-item>
+      <el-form-item label="有效期" prop="validDate">
+        <el-date-picker
+          v-model="form.validDate"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
+          style="width: 380px"
+        />
+      </el-form-item>
       <el-form-item label="对象" prop="belongIds">
         <el-checkbox v-model="belongsCheckAll" :indeterminate="belongsIsIndeterminate" @change="handleBelongsCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;" />
@@ -45,7 +56,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { release, initRelease } from '@/api/adspace'
+import { release, initRelease } from '@/api/ad'
 import fromReg from '@/utils/formReg'
 import { goBack, getUrlParam } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
@@ -66,12 +77,14 @@ export default {
         adSpaceId: 0,
         title: '',
         belongIds: [],
+        validDate: [],
         displayImgUrls: []
       },
       rules: {
         title: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         displayImgUrls: [{ type: 'array', required: true, message: '至多上传一张', max: 1 }],
-        belongIds: [{ type: 'array', required: true, message: '至少选择一个对象', min: 1 }]
+        belongIds: [{ type: 'array', required: true, message: '至少选择一个对象', min: 1 }],
+        validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
       },
       belongsCheckAll: false,
       belongsIsIndeterminate: true,
@@ -111,7 +124,11 @@ export default {
             release(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
-                goBack(this)
+                
+                 this.$router.push({
+        path: '/operationcenter/ad/contents?id=' + this.form.adSpaceId
+      })
+
               }
             })
           })

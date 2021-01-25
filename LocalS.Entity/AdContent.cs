@@ -9,7 +9,7 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         Normal = 1,
-        Deleted = 2
+        Invalid = 2
     }
 
     [Table("AdContent")]
@@ -18,12 +18,11 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public E_AdSpaceId AdSpaceId { get; set; }
+        public E_AdSpaceBelongType BelongType { get; set; }
         public string MerchId { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }
         public int Priority { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
         public E_AdContentStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

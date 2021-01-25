@@ -22,6 +22,8 @@ namespace LocalS.Entity
         public E_AdSpaceId AdSpaceId { get; set; }
         public E_AdSpaceBelongType BelongType { get; set; }
         public string BelongId { get; set; }
+        public DateTime? ValidStartTime { get; set; }
+        public DateTime? ValidEndTime { get; set; }
         public E_AdContentBelongStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

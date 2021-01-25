@@ -10,5 +10,6 @@ namespace LocalS.Service.Api.Merch
     {
         public string AdContentId { get; set; }
         public List<string> BelongIds { get; set; }
+        public string[] ValidDate { get; set; }
     }
 }

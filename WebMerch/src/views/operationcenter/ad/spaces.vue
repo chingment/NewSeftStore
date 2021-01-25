@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/adspace'
+import { getSpaces } from '@/api/ad'
 
 export default {
   name: 'OperationCenterAdspaceList',
@@ -66,7 +66,7 @@ export default {
     getListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getList(this.listQuery).then(res => {
+      getSpaces(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -81,12 +81,12 @@ export default {
     },
     handleRelease(row) {
       this.$router.push({
-        path: '/operationcenter/adspace/release?id=' + row.id
+        path: '/operationcenter/ad/release?id=' + row.id
       })
     },
     handleReleaseList(row) {
       this.$router.push({
-        path: '/operationcenter/adspace/releaselist?id=' + row.id
+        path: '/operationcenter/ad/contents?id=' + row.id
       })
     }
   }

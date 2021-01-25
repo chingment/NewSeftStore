@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupAdSpaceGetAdContentBelongs : RupBaseGetList
+    public class RopAdAddContentBelong
     {
         public string AdContentId { get; set; }
+        public List<string> BelongIds { get; set; }
+        public string[] ValidDate { get; set; }
     }
 }

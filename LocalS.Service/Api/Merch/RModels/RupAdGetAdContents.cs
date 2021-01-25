@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopAdSpaceSetAdContentBelongStatus
+    public class RupAdGetAdContents : RupBaseGetList
     {
-        public string Id { get; set; }
-        public E_AdContentBelongStatus Status { get; set; }
+        public E_AdSpaceId AdSpaceId { get;set;}
     }
 }

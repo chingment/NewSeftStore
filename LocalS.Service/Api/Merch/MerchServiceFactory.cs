@@ -80,11 +80,11 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static AdSpaceService AdSpace
+        public static AdService Ad
         {
             get
             {
-                return new AdSpaceService();
+                return new AdService();
             }
         }
 

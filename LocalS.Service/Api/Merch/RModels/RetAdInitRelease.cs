@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetAdSpaceInitRelease
+    public class RetAdInitRelease
     {
-        public RetAdSpaceInitRelease()
+        public RetAdInitRelease()
         {
             this.Belongs = new List<object>();
         }
