@@ -359,6 +359,7 @@
     <Compile Include="Api\StoreApp\RModels\RupSaleOutletList.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSearchTobeSearch.cs" />
     <Compile Include="Api\StoreApp\RModels\RupSelfPickAddressList.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupServiceFunGetMyReffSkus.cs" />
     <Compile Include="Api\StoreApp\RModels\RupShopMartketPageData.cs" />
     <Compile Include="Api\StoreApp\SaleOutletService.cs" />
     <Compile Include="Api\StoreApp\SearchService.cs" />

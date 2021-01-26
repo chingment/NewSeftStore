@@ -1213,6 +1213,30 @@ namespace LocalS.BLL.Biz
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.ShopMode, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
                             }
+
+                            if (!string.IsNullOrEmpty(d_order.ReffUserId))
+                            {
+                                var d_ClientReffSku = new ClientReffSku();
+                                d_ClientReffSku.Id = IdWorker.Build(IdType.NewGuid);
+                                d_ClientReffSku.MerchId = d_orderSub.MerchId;
+                                d_ClientReffSku.ClientUserId = d_orderSub.ClientUserId;
+                                d_ClientReffSku.OrderId = d_orderSub.OrderId;
+                                d_ClientReffSku.OrderSubId = d_orderSub.Id;
+                                d_ClientReffSku.SkuId = d_orderSub.PrdProductSkuId;
+                                d_ClientReffSku.SkuName = d_orderSub.PrdProductSkuName;
+                                d_ClientReffSku.SkuMainImgUrl = d_orderSub.PrdProductSkuMainImgUrl;
+                                d_ClientReffSku.SkuBarCode = d_orderSub.PrdProductSkuBarCode;
+                                d_ClientReffSku.SkuCumCode = d_orderSub.PrdProductSkuCumCode;
+                                d_ClientReffSku.SkuSpecDes = d_orderSub.PrdProductSkuSpecDes;
+                                d_ClientReffSku.SkuProducer = d_orderSub.PrdProductSkuProducer;
+                                d_ClientReffSku.Quantity = d_orderSub.Quantity;
+                                d_ClientReffSku.Creator = d_orderSub.Creator;
+                                d_ClientReffSku.CreateTime = d_orderSub.CreateTime;
+                                d_ClientReffSku.ReffClientUserId = d_order.ReffUserId;
+                                d_ClientReffSku.Status = E_ClientReffSkuStatus.Valid;
+                                CurrentDb.ClientReffSku.Add(d_ClientReffSku);
+                                CurrentDb.SaveChanges();
+                            }
                         }
 
                         if (!string.IsNullOrEmpty(d_order.CouponIdsByShop))

@@ -18,5 +18,14 @@ namespace WebApiStoreApp.Controllers
 
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetMyReffSkus([FromUri]RupServiceFunGetMyReffSkus rup)
+        {
+            IResult result = StoreAppServiceFactory.ServiceFun.GetMyReffSkus(this.CurrentUserId, this.CurrentUserId, rup);
+
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

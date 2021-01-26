@@ -147,6 +147,11 @@
 					<image class='item-img' src='/content/default/images/myservice_prom.png'></image>
 					<text class='item-title'>推广码</text>
 				</view>
+				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/myreffskus/myreffskus" wx:if="{{proService.isHasProm}}"
+					class="item" hover-class="none">
+					<image class='item-img' src='/content/default/images/myservice_userreff.png'></image>
+					<text class='item-title'>我的推荐</text>
+				</view>
 				<view bindtap="clickToScanCode"  wx:if="{{proService.isHasScanCode}}"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>

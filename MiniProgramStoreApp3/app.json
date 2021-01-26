@@ -25,6 +25,7 @@
     "pages/smcfselftakeorder/smcfselftakeorder",
     "pages/smwtcoupon/smwtcoupon",
     "pages/mycoupondetails/mycoupondetails",
+    "pages/myreffskus/myreffskus",
     "pages/shopmarket/shopmarket",
     "pages/shopchoice/shopchoice"
   ],

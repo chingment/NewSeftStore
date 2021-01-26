@@ -75,5 +75,65 @@ namespace LocalS.Service.Api.StoreApp
             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数据查找失败");
 
         }
+
+        public CustomJsonResult GetMyReffSkus(string operater, string clientUserId, RupServiceFunGetMyReffSkus rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            var pageEntiy = new PageEntity<object>();
+
+            var query = (from o in CurrentDb.ClientReffSku
+                         where (o.ClientUserId == clientUserId && o.Status == E_ClientReffSkuStatus.Valid)
+                         select new
+                         {
+                             o.Id,
+                             o.ClientUserId,
+                             o.SkuMainImgUrl,
+                             o.SkuName,
+                             o.Quantity,
+                             o.CreateTime,
+                             o.ReffClientUserId
+                         }
+             );
+
+
+            int pageSize = 10;
+
+            pageEntiy.PageIndex = rup.PageIndex;
+            pageEntiy.PageSize = pageSize;
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> models = new List<object>();
+
+            foreach (var item in list)
+            {
+                var d_ReffClientUser = CurrentDb.SysClientUser.Where(m => m.Id == item.ClientUserId).FirstOrDefault();
+                if (d_ReffClientUser != null)
+                {
+                    var model = new
+                    {
+                        MainImgUrl = item.SkuMainImgUrl,
+                        Name = item.SkuName,
+                        Quantity = item.Quantity,
+                        ReffClientUserAvatar = d_ReffClientUser.Avatar,
+                        ReffClientUserNickName = d_ReffClientUser.NickName,
+                        StatusName = "有效"
+                    };
+
+                    pageEntiy.Items.Add(model);
+                }
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pageEntiy);
+
+            return result;
+
+        }
     }
 }

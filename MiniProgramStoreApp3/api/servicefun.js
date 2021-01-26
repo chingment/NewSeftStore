@@ -11,6 +11,15 @@ function scanCodeResult(params) {
   })
 }
 
+function getMyReffSkus(urlParams) {
+
+  return  lumos.getJson({
+      url: config.apiUrl.serviceFunGetMyReffSkus,
+      urlParams: urlParams
+    })
+  }
+
 module.exports = {
-  scanCodeResult: scanCodeResult
+  scanCodeResult: scanCodeResult,
+  getMyReffSkus:getMyReffSkus
 }

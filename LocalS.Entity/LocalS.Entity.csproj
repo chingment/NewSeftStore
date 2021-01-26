@@ -52,6 +52,7 @@
     <Compile Include="ClientCart.cs" />
     <Compile Include="ClientCoupon.cs" />
     <Compile Include="ClientDeliveryAddress.cs" />
+    <Compile Include="ClientReffSku.cs" />
     <Compile Include="Coupon.cs" />
     <Compile Include="CouponRevCenterSt.cs" />
     <Compile Include="CouponUseAreaObj.cs" />
