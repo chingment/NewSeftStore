@@ -84,7 +84,7 @@ export default {
         title: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         displayImgUrls: [{ type: 'array', required: true, message: '至多上传一张', max: 1 }],
         belongIds: [{ type: 'array', required: true, message: '至少选择一个对象', min: 1 }],
-        validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
+        validDate: [{ type: 'array', required: true, message: '请选择有效期' }]
       },
       belongsCheckAll: false,
       belongsIsIndeterminate: true,
@@ -102,7 +102,7 @@ export default {
       this.loading = true
       var id = getUrlParam('id')
 
-      initRelease({ id: id }).then(res => {
+      initRelease({ adSpaceId: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.form.adSpaceId = d.adSpaceId
@@ -124,11 +124,9 @@ export default {
             release(this.form).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
-                
-                 this.$router.push({
-        path: '/operationcenter/ad/contents?id=' + this.form.adSpaceId
-      })
-
+                this.$router.push({
+                  path: '/operationcenter/ad/contents?id=' + this.form.adSpaceId
+                })
               }
             })
           })

@@ -8,17 +8,17 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column v-if="isDesktop" label="序号" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="版位名称" prop="userName" align="left" min-width="30%">
+      <el-table-column label="版位名称" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="描述" prop="fullName" align="left" min-width="70%">
+      <el-table-column v-if="isDesktop" label="描述" align="left" min-width="70%">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
@@ -28,13 +28,12 @@
           <el-button type="primary" size="mini" @click="handleRelease(row)">
             发布
           </el-button>
-          <el-button type="primary" size="mini" @click="handleReleaseList(row)">
+          <el-button type="primary" size="mini" @click="handleSawContents(row)">
             发布记录
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-
   </div>
 </template>
 
@@ -42,7 +41,7 @@
 import { getSpaces } from '@/api/ad'
 
 export default {
-  name: 'OperationCenterAdspaceList',
+  name: 'OperationCenterAdSpaces',
   data() {
     return {
       loading: false,
@@ -84,7 +83,7 @@ export default {
         path: '/operationcenter/ad/release?id=' + row.id
       })
     },
-    handleReleaseList(row) {
+    handleSawContents(row) {
       this.$router.push({
         path: '/operationcenter/ad/contents?id=' + row.id
       })

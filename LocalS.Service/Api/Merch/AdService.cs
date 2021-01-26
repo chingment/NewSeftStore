@@ -167,6 +167,87 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+
+        public CustomJsonResult InitContents(string operater, string merchId, E_AdSpaceId adSpaceId)
+        {
+            var result = new CustomJsonResult();
+
+            var adSpace = CurrentDb.AdSpace.Where(m => m.Id == adSpaceId).FirstOrDefault();
+
+            if (adSpace != null)
+            {
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { AdSpaceId = adSpace.Id, AdSpaceName = adSpace.Name, AdSpaceDescription = adSpace.Description });
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult GetSelBelongs(string operater, string merchId, string adContentId)
+        {
+            var result = new CustomJsonResult();
+
+
+            var d_AdContent = CurrentDb.AdContent.Where(m => m.Id == adContentId).FirstOrDefault();
+
+            var d_AdContentBelongIds = CurrentDb.AdContentBelong.Where(m => m.AdContentId == adContentId).Select(m => m.BelongId).ToList();
+
+            List<object> objs = new List<object>();
+
+            if (d_AdContent.BelongType == E_AdSpaceBelongType.App)
+            {
+                var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                foreach (var store in stores)
+                {
+                    if (!d_AdContentBelongIds.Contains(store.Id))
+                    {
+                        objs.Add(new { Id = store.Id, Name = string.Format("[店铺]{0}", store.Name) });
+                    }
+                }
+            }
+            else if (d_AdContent.BelongType == E_AdSpaceBelongType.Machine)
+            {
+                var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
+
+                foreach (var merchMachine in merchMachines)
+                {
+                    string storeName = "未绑定店铺";
+                    var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
+                    if (store != null)
+                    {
+                        storeName = store.Name;
+                    }
+
+                    if (!d_AdContentBelongIds.Contains(merchMachine.MachineId))
+                    {
+                        objs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", merchMachine.MachineId, storeName) });
+
+                    }
+                }
+            }
+
+
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", objs);
+
+
+            return result;
+        }
+
+        public CustomJsonResult InitBelongs(string operater, string merchId, string adContentId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_AdContent = CurrentDb.AdContent.Where(m => m.Id == adContentId).FirstOrDefault();
+            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == d_AdContent.AdSpaceId).FirstOrDefault();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { Url = d_AdContent.Url, Title = d_AdContent.Title, AdSpaceId = d_AdSpace.Id, AdSpaceName = d_AdSpace.Name, Status = GetContentStatus(d_AdContent.Status), AdSpaceDescription = d_AdSpace.Description });
+
+
+            return result;
+        }
+
         public CustomJsonResult Release(string operater, string merchId, RopAdRelease rop)
         {
             var result = new CustomJsonResult();

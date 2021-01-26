@@ -20,9 +20,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitRelease([FromUri]E_AdSpaceId id)
+        public OwnApiHttpResponse InitRelease([FromUri]E_AdSpaceId adSpaceId)
         {
-            IResult result = MerchServiceFactory.Ad.InitRelease(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.Ad.InitRelease(this.CurrentUserId, this.CurrentMerchId, adSpaceId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -37,6 +37,28 @@ namespace WebApiMerch.Controllers
         public OwnApiHttpResponse GetContents([FromUri]RupAdGetAdContents rup)
         {
             IResult result = MerchServiceFactory.Ad.GetContents(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+
+        [HttpGet]
+        public OwnApiHttpResponse InitContents([FromUri]E_AdSpaceId adSpaceId)
+        {
+            IResult result = MerchServiceFactory.Ad.InitContents(this.CurrentUserId, this.CurrentMerchId, adSpaceId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse InitBelongs([FromUri]string adContentId)
+        {
+            IResult result = MerchServiceFactory.Ad.InitBelongs(this.CurrentUserId, this.CurrentMerchId, adContentId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetSelBelongs([FromUri]string adContentId)
+        {
+            IResult result = MerchServiceFactory.Ad.GetSelBelongs(this.CurrentUserId, this.CurrentMerchId, adContentId);
             return new OwnApiHttpResponse(result);
         }
 
