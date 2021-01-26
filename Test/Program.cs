@@ -112,7 +112,7 @@ namespace Test
             // 9b6e056b87057a3c173312ba5b2a418e109bc39eecd400086cad89909ded2ad4
             //OWI2ZTA1NmI4NzA1N2EzYzE3MzMxMmJhNWIyYTQxOGUxMDliYzM5ZWVjZDQwMDA4NmNhZDg5OTA5ZGVkMmFkNA==
             log.InfoFormat("程序开始");
-            Signature.Compute("com.uplink.selfstore", "1", "2", 2, "machineId=1&cabinetId=dsx01n01");
+            string assss = Signature.Compute("com.uplink.selfstore", "fanju", "7460e6512f1940f68c00fe1fdb2b7eb1", 1611646484, "{\"deviceId\":\"C0:84:7D:2C:06:10\",\"eventRemark\":\"商品取货\",\"appId\":\"com.uplink.selfstore\",\"content\":{\"orderId\":\"610409520210126153257757\",\"uniqueId\":\"6104095202101261532577571\",\"productSkuId\":\"36d68083bbdf4120961fe9cf2f3ff764\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r2c0\",\"pickupStatus\":4000,\"actionId\":1,\"actionName\":\"回到原点\",\"actionStatusCode\":2,\"actionStatusName\":\"动作执行完成\",\"pickupUseTime\":39553,\"imgId2\":\"0d5a0638-57b5-48be-8be6-65adfe0f9a1e\",\"remark\":\"取货完成\"},\"machineId\":\"202101040205\",\"lat\":0,\"lng\":0,\"eventCode\":\"Pickup\"}");
             //string a11 = "dasdsad";
             //string a22 = null;
             //string a33 = a11 + a22;
@@ -123,13 +123,13 @@ namespace Test
             //a1.Id = "1";
             //a1.Quantity = 3;
             //a1.ShopMode = E_SellChannelRefType.Mall;
-      
+
 
             //BuildOrderSub.ProductSku a2 = new BuildOrderSub.ProductSku();
             //a2.Id = "2";
             //a2.Quantity = 5;
             //a2.ShopMode = E_SellChannelRefType.Mall;
-       
+
 
             //BuildOrderSub.ProductSku a3 = new BuildOrderSub.ProductSku();
             //a3.Id = "3";

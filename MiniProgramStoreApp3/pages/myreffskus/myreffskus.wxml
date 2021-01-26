@@ -27,17 +27,14 @@
 							</view>
 						</view>
 						<view class="it-r" style="width:100rpx">
-
 							<view class="avatar">
 								<image class="img" src='{{item.reffClientUserAvatar}}'></image>
 							</view>
-
-							<view class="nickName">
+							<view class="nickname">
 								<text>{{item.reffClientUserNickName}}</text>
 							</view>
 						</view>
 					</view>
-
 				</block>
 			</view>
 		</own-scroll>

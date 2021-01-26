@@ -97,9 +97,24 @@
   font-size: 34rpx;
 }
 
+.its-reffskus .avatar{
+  height:100rpx;
+  display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+
 .its-reffskus .avatar .img {
   width: 80rpx;
   height: 80rpx;
   border-radius: 50%;
   overflow: hidden;
+}
+
+.its-reffskus .nickname{
+  height:50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center
 }

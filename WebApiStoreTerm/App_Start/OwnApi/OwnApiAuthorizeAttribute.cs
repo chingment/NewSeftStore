@@ -109,7 +109,9 @@ namespace WebApiStoreTerm
                 {
                     if (contentType.Contains("application/json"))
                     {
-                        Stream stream = HttpContext.Current.Request.InputStream;
+                        //Stream stream = HttpContext.Current.Request.InputStream;
+
+                        Stream stream = request.InputStream;
                         stream.Seek(0, SeekOrigin.Begin);
                         app_data = new StreamReader(stream).ReadToEnd();
 
