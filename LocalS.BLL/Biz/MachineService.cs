@@ -108,28 +108,6 @@ namespace LocalS.BLL.Biz
             return model;
         }
 
-        public List<BannerModel> GetHomeBanners(string id)
-        {
-            var m_Banners = new List<BannerModel>();
-
-            var d_Machine = CurrentDb.Machine.Where(m => m.Id == id).FirstOrDefault();
-            if (d_Machine == null)
-                return m_Banners;
-
-            var d_AdContentIds = CurrentDb.AdContentBelong.Where(m => m.Status == E_AdContentBelongStatus.Normal && m.MerchId == d_Machine.CurUseMerchId && m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.BelongType == E_AdSpaceBelongType.Machine && m.BelongId == id).Select(m => m.AdContentId).ToArray();
-
-            if (d_AdContentIds != null && d_AdContentIds.Length > 0)
-            {
-                var d_AdContents = CurrentDb.AdContent.Where(m => d_AdContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
-                foreach (var d_AdContent in d_AdContents)
-                {
-                    m_Banners.Add(new BannerModel { Url = d_AdContent.Url });
-                }
-            }
-
-            return m_Banners;
-        }
-
         public Dictionary<string, AdModel> GetAds(string id)
         {
             var ads = new Dictionary<string, AdModel>();
@@ -157,7 +135,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var item in adContents)
                     {
-                        ad.Contents.Add(new AdContentModel { DataType = "image", DataUrl = item.Url });
+                        ad.Contents.Add(new AdModel.ContentModel { DataType = "image", DataUrl = item.Url });
                     }
                 }
 

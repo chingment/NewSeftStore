@@ -280,6 +280,7 @@ Component({
 
     },
     myClose: function (e) {
+      console.log(e)
       var self = e.target.dataset.ref
       if (self == 'self') {
         this._dialogClose()

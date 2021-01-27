@@ -10,9 +10,9 @@ namespace LocalS.Service.Api.Merch
     {
         public RetRpt7DayGmvRl()
         {
-            this.Days = new List<Rpt7DayGmvRlModel>();
+            this.Days = new List<object>();
         }
 
-        public List<Rpt7DayGmvRlModel> Days { get; set; }
+        public List<object> Days { get; set; }
     }
 }

@@ -1,18 +1,10 @@
-<view>
-    <canvas class="canvas" style="width: {{canvas_width}}px;height:{{canvas_height}}px;" canvas-id="mycanvas"></canvas>
-    <view class="pop">
-        <view class="popbg" bindtap="getclose"></view>
-        <view class="popup">
-            <view class="poster">
-                <image src="{{canvas}}"></image>
-            </view>
-            <view class="save">
-                <view class="down">
-                    <image mode="widthFix" src="https://sucai.suoluomei.cn/sucai_zs/images/20200110105821-1.png">
-                    </image>
-                </view>
-                <view bindtap="getsave">保存图片</view>
-            </view>
-        </view>
-    </view>
+<!--index.wxml-->
+<view class="container">
+  <image src="{{shareImage}}" class="share-image"></image>
+  <canvasdrawer painting="{{painting}}" class="canvasdrawer" bind:getImage="eventGetImage" />
+
+  <view>
+    <button bind:tap="eventDraw">重新生成</button>
+    <button bind:tap="eventSave">保存图片</button>
+  </view>
 </view>

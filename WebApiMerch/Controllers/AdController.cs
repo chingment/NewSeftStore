@@ -13,7 +13,7 @@ namespace WebApiMerch.Controllers
     public class AdController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse GetSpaces([FromUri]RupAdGetAdSpaces rup)
+        public OwnApiHttpResponse GetSpaces([FromUri]RupAdGetSpaces rup)
         {
             IResult result = MerchServiceFactory.Ad.GetSpaces(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
@@ -34,7 +34,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetContents([FromUri]RupAdGetAdContents rup)
+        public OwnApiHttpResponse GetContents([FromUri]RupAdGetContents rup)
         {
             IResult result = MerchServiceFactory.Ad.GetContents(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
@@ -63,14 +63,14 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SetContentStatus([FromBody]RopAdSpaceSetAdContentStatus rop)
+        public OwnApiHttpResponse SetContentStatus([FromBody]RopAdSetContentStatus rop)
         {
             IResult result = MerchServiceFactory.Ad.SetContentStatus(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetContentBelongs([FromUri]RupAdGetAdContentBelongs rup)
+        public OwnApiHttpResponse GetContentBelongs([FromUri]RupAdGetContentBelongs rup)
         {
             IResult result = MerchServiceFactory.Ad.GetContentBelongs(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
@@ -91,7 +91,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse EditContentBelong([FromBody]RopAdContentCopy2Belongs rop)
+        public OwnApiHttpResponse EditContentBelong([FromBody]RopAdEditContentBelong rop)
         {
             IResult result = MerchServiceFactory.Ad.EditContentBelong(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);

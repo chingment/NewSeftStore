@@ -65,7 +65,7 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
-        public CustomJsonResult GetSpaces(string operater, string merchId, RupAdGetAdSpaces rup)
+        public CustomJsonResult GetSpaces(string operater, string merchId, RupAdGetSpaces rup)
         {
             var result = new CustomJsonResult();
 
@@ -226,6 +226,29 @@ namespace LocalS.Service.Api.Merch
             }
 
 
+            var prds = CurrentDb.PrdProduct.ToList();
+
+            foreach (var prd in prds)
+            {
+                if (!string.IsNullOrEmpty(prd.MainImgUrl))
+                {
+                    prd.MainImgUrl = prd.MainImgUrl.Replace("http", "https");
+                }
+
+                if (!string.IsNullOrEmpty(prd.DisplayImgUrls))
+                {
+                    prd.DisplayImgUrls = prd.DisplayImgUrls.Replace("http", "https");
+                }
+
+                if (!string.IsNullOrEmpty(prd.DetailsDes))
+                {
+                    prd.DetailsDes = prd.DetailsDes.Replace("http", "https");
+                }
+
+                CurrentDb.SaveChanges();
+            }
+
+
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", objs);
@@ -316,7 +339,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetContents(string operater, string merchId, RupAdGetAdContents rup)
+        public CustomJsonResult GetContents(string operater, string merchId, RupAdGetContents rup)
         {
             var result = new CustomJsonResult();
 
@@ -367,7 +390,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult SetContentStatus(string operater, string merchId, RopAdSpaceSetAdContentStatus rop)
+        public CustomJsonResult SetContentStatus(string operater, string merchId, RopAdSetContentStatus rop)
         {
             var result = new CustomJsonResult();
 
@@ -408,7 +431,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetContentBelongs(string operater, string merchId, RupAdGetAdContentBelongs rup)
+        public CustomJsonResult GetContentBelongs(string operater, string merchId, RupAdGetContentBelongs rup)
         {
             var result = new CustomJsonResult();
 
@@ -573,7 +596,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult EditContentBelong(string operater, string merchId, RopAdContentCopy2Belongs rop)
+        public CustomJsonResult EditContentBelong(string operater, string merchId, RopAdEditContentBelong rop)
         {
             var result = new CustomJsonResult();
 

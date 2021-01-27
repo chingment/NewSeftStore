@@ -11,7 +11,7 @@ namespace LocalS.BLL.Biz
     {
         public AdModel()
         {
-            this.Contents = new List<AdContentModel>();
+            this.Contents = new List<ContentModel>();
 
         }
 
@@ -19,6 +19,12 @@ namespace LocalS.BLL.Biz
 
         public string Name { get; set; }
 
-        public List<AdContentModel> Contents { get; set; }
+        public List<ContentModel> Contents { get; set; }
+
+        public class ContentModel
+        {
+            public string DataType { get; set; }
+            public string DataUrl { get; set; }
+        }
     }
 }

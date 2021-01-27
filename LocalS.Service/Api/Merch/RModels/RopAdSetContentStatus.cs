@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopAdSpaceSetAdContentStatus
+    public class RopAdSetContentStatus
     {
         public string Id { get; set; }
 

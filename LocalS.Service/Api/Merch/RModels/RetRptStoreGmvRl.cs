@@ -10,9 +10,9 @@ namespace LocalS.Service.Api.Merch
     {
         public RetRptStoreGmvRl()
         {
-            this.Stores = new List<RptStoreGmvRlModel>();
+            this.Stores = new List<object>();
         }
 
-        public List<RptStoreGmvRlModel> Stores { get; set; }
+        public List<object> Stores { get; set; }
     }
 }

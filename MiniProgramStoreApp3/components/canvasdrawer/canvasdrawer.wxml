@@ -1,0 +1,27 @@
+<view class="cumUpDialog" wx:if="{{myShow}}" data-ref="self" bindtap="_myClose">
+  <view class='wrapper'>
+    <view class="contentinfo">
+        <!-- <image src="{{shareImage}}" class="share-image"></image> -->
+
+        <view>
+        <canvas canvas-id="canvasdrawer" class="share-image" 
+          style="width:{{width}}px;height:{{height}}px;"></canvas>
+          <view style="margin-top:20rpx">
+            <button class="btn bg-main" style="width:320rpx;">分享到朋友圈</button>
+          </view>
+        </view>
+    </view>
+  </view>
+</view>
+
+
+
+<!-- <view class="cumUpDialog" wx:if="{{myShow}}" data-ref="self" bindtap="_myClose">
+  <view class='wrapper'>
+    <view class="contentinfo">
+      <canvas canvas-id="canvasdrawer" class="share-image" style="width:{{width}}px;height:{{height}}px;" 
+      ></canvas> 
+     <image src="{{shareImage}}" class="share-image"></image> 
+    </view>
+  </view>
+</view> -->

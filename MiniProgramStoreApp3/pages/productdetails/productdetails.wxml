@@ -6,6 +6,12 @@
 </specsdialog>
 <cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}" bindcartdialogClose="cartdialogClose">
 </cartdialog>
+<sharedialog id="share" isShow="{{shareDialog.isShow}}" dataS="{{shareDialog.dataS}}"  bindbuildPoster="buildPoster" >
+</sharedialog>
+
+
+<canvasdrawer  painting="{{canvasPoster.painting}}" class="canvasdrawer" bind:buildEvent="buildPosterEvent"/>
+
 
 <view class="page-ct details">
 	<view class="details-main">
@@ -110,12 +116,15 @@
 
 	</view>
 	<view class="details-nav">
-		<view bindtap="goHome" class="item-home">
-			<image src="/content/default/images/home.png" />
+		<view bindtap="goShare" class="item-home">
+			<image class="img" src="/content/default/images/share.png" />
+		</view>
+		<view bindtap="goHome" class="item-share">
+			<image class="img" src="/content/default/images/home.png" />
 		</view>
 		<view bindtap="goCart" class="item-cart" wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}">
 			<view class='number {{cartDialog.dataS.count==0?"hidden":""}}'>{{cartDialog.dataS.count}}</view>
-			<image src="/content/default/images/cart.png" />
+			<image  class="img" src="/content/default/images/cart.png" />
 		</view>
 		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
 			wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">

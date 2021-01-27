@@ -10,9 +10,9 @@ namespace LocalS.Service.Api.Merch
     {
         public RetRptProductSkuSaleRl()
         {
-            this.ProductSkus = new List<RptProductSkuSaleRlModel>();
+            this.ProductSkus = new List<object>();
         }
 
-        public List<RptProductSkuSaleRlModel> ProductSkus { get; set; }
+        public List<object> ProductSkus { get; set; }
     }
 }

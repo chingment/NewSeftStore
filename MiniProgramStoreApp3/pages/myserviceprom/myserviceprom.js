@@ -1,178 +1,157 @@
+//index.js
+
 Page({
   data: {
-    tag: "myserviceprom",
-    canvas: '',
-    canvas_width: 700,
-    canvas_height: 800,
-    main: "https://file.17fanju.com/upload/sharecode/1/product.png",
-    logo: "https://file.17fanju.com/upload/sharecode/1/logo.png",
-    explain: "",
-    code: "https://file.17fanju.com/upload/acode/714732c6-9a76-4e8d-a86f-8e87f71e85f0.png",
-    avatar: "https://file.17fanju.com/upload/Avatar/e032f079-5b22-4615-80b6-9841e5397fcb.png"
+    tag:'myserviceprom',
+    painting: {},
+    shareImage: ''
   },
-
-  onLoad: function (options) {
-    var logo = this.data.logo
-    var main = this.data.main
-    var explain = this.data.explain
-    var code = this.data.code
-    var avatar = this.data.avatar
-    this.getcanvas(logo, main, explain, code, avatar)
+  onLoad () {
+    this.eventDraw()
   },
-  // 获取海报 画布设置宽700 高800 
-  // 以此传入图标，主体图片，标题文字，小程序二维码
-  getcanvas(logo, main, explain, code, avatar) {
+  eventDraw () {
     wx.showLoading({
-      title: '加载中',
+      title: '绘制分享图片中',
+      mask: true
     })
-    // 主图所需
-    let primary = ""
-    let primary_width = ""
-    let primary_height = ""
-    // logo所需
-    let mark = ""
-    let mark_width = ""
-    let mark_height = ""
-    // 小程序码所需
-    let yard = ""
-    let yard_width = ""
-    let yard_height = ""
-    // 用户头像
-    let portrait = ""
-    let portrait_width = ""
-    let portrait_height = ""
-
-    return new Promise(resolve => {
-        wx.getImageInfo({
-          src: main,
-          success: (res) => {
-            primary = res.path
-            primary_width = res.width
-            primary_height = res.height
-            resolve(res)
+    this.setData({
+      painting: {
+        width: 375,
+        height: 555,
+        clear: true,
+        views: [
+          {
+            type: 'image',
+            url: 'https://file.17fanju.com/upload/sharecode/1/bg_white.png',
+            top: 0,
+            left: 0,
+            width: 375,
+            height: 555
+          },
+          {
+            type: 'image',
+            url: 'https://file.17fanju.com/upload/Avatar/e032f079-5b22-4615-80b6-9841e5397fcb.png',
+            top: 27.5,
+            left: 29,
+            width: 55,
+            height: 55,
+            borderRadius:100
+          },
+          {
+            type: 'text',
+            content: '您的好友【kuckboy】',
+            fontSize: 16,
+            color: '#402D16',
+            textAlign: 'left',
+            top: 33,
+            left: 96,
+            bolder: true,
+          },
+          {
+            type: 'text',
+            content: '发现一件好货，邀请你一起购买！',
+            fontSize: 15,
+            color: '#563D20',
+            textAlign: 'left',
+            top: 59.5,
+            left: 96
+          },
+          {
+            type: 'image',
+            url: 'https://file.17fanju.com/upload/sharecode/1/product.png',
+            top: 110,
+            left: 375/2-186/2,
+            width: 186,
+            height: 186
+          },
+          {
+            type: 'image',
+            url: 'https://file.17fanju.com/upload/acode/714732c6-9a76-4e8d-a86f-8e87f71e85f0.png',
+            top: 443,
+            left: 85,
+            width: 68,
+            height: 68
+          },
+          {
+            type: 'text',
+            content: '正品MAC魅可口红礼盒生日唇膏小辣椒Chili西柚情人',
+            fontSize: 16,
+            lineHeight: 21,
+            color: '#383549',
+            textAlign: 'left',
+            top: 336,
+            left: 44,
+            width: 287,
+            MaxLineNumber: 2,
+            breakWord: true,
+            bolder: true
+          },
+          {
+            type: 'text',
+            content: '￥0.00',
+            fontSize: 19,
+            color: '#E62004',
+            textAlign: 'left',
+            top: 387,
+            left: 44.5,
+            bolder: true
+          },
+          {
+            type: 'text',
+            content: '原价:￥138.00',
+            fontSize: 13,
+            color: '#7E7E8B',
+            textAlign: 'left',
+            top: 391,
+            left: 110,
+            textDecoration: 'line-through'
+          },
+          {
+            type: 'text',
+            content: '长按识别图中二维码立即试一试~',
+            fontSize: 14,
+            color: '#383549',
+            textAlign: 'left',
+            top: 460,
+            left: 165.5,
+            lineHeight: 20,
+            MaxLineNumber: 2,
+            breakWord: true,
+            width: 125
           }
-        })
-      })
-
-      .then(res => {
-        if (res.errMsg == "getImageInfo:ok") {
-          return new Promise(resolve => {
-            wx.getImageInfo({
-              src: logo,
-              success: (res) => {
-                mark = res.path
-                mark_width = res.width
-                mark_height = res.height
-                resolve(res)
-              }
-            })
-          })
-        }
-      })
-
-      .then(res => {
-        if (res.errMsg == "getImageInfo:ok") {
-          return new Promise(resolve => {
-            wx.getImageInfo({
-              src: code,
-              success: (res) => {
-                yard = res.path
-                yard_width = res.width
-                yard_height = res.height
-                resolve(res)
-              }
-            })
-          })
-        }
-      })
-
-      .then(res => {
-        if (res.errMsg == "getImageInfo:ok") {
-          return new Promise(resolve => {
-            wx.getImageInfo({
-              src: avatar,
-              success: (res) => {
-                portrait = res.path
-                portrait_width = res.width
-                portrait_height = res.height
-                resolve(res)
-              }
-            })
-          })
-        }
-      })
-
-      .then(res => {
-        let ctx = wx.createCanvasContext('mycanvas')
-        // 填充背景颜色
-        ctx.rect(0, 0, this.data.canvas_width, this.data.canvas_height)
-        ctx.setFillStyle('#fff')
-        ctx.fill()
-        // logo图片
-        ctx.drawImage(mark, 30, 30, mark_width, mark_height)
-        // 竖线
-        //ctx.moveTo(mark_width + 40, 30)
-        //ctx.lineTo(mark_width + 40, mark_height + 30)
-        //ctx.stroke()
-        // 标题文字
-        //ctx.setFontSize(28)
-        //ctx.setFillStyle('#000')
-        //ctx.fillText('标题文字', mark_width + 50, mark_height + 15)
-        //用户头像
-        ctx.save()
-        ctx.beginPath()
-        ctx.arc(this.data.canvas_width - 90, 60, 50, 0, Math.PI * 2, false);
-        ctx.stroke()
-        ctx.clip();
-        ctx.drawImage(portrait, this.data.canvas_width - 145, 5, 110, 110) //145为arc的90加110除以2
-        ctx.restore()
-        // 主体图片
-        ctx.drawImage(primary, this.data.canvas_width / 2 - primary_width / 4, 140, primary_width / 2, primary_height / 2)
-        // 详情
-        //ctx.setFontSize(24)
-       // ctx.setTextAlign('center')
-       // ctx.setFillStyle('#666')
-        //ctx.fillText(explain, this.data.canvas_width / 2, 500)
-       // ctx.fillText('你的好友分享给你的小程序', this.data.canvas_width / 2, 550)
-        // 小程序二维码
-        ctx.drawImage(yard, this.data.canvas_width / 2 - yard_width / 3.2, 500, yard_width / 1.6, yard_height / 1.6)
-        ctx.draw(true, setTimeout(() => {
-          wx.canvasToTempFilePath({
-            canvasId: 'mycanvas',
-            success: (res) => {
-              wx.hideLoading()
-              console.log(res.tempFilePath)
-              this.setData({
-                canvas: res.tempFilePath
-              })
-            },
-          }, this)
-        }, 500))
-      })
-  },
-  // 保存为图片
-  getsave() {
-    wx.getSetting({ //询问用户是否保存相册到本地
-      success: (set) => {
-        wx.saveImageToPhotosAlbum({
-          filePath: this.data.canvas,
-          success: (res) => {
-            if (res.errMsg == "saveImageToPhotosAlbum:ok") {
-              wx.showToast({
-                title: '保存成功',
-              });
-              this.setData({
-                show: 0
-              })
-            }
-          }
-        })
-        //拒绝保存到本地的处理机制
-        if (set.authSetting['scope.writePhotosAlbum'] == false) {
-          wx.openSetting()
-        }
+        ]
       }
     })
+  },
+  eventSave () {
+    wx.saveImageToPhotosAlbum({
+      filePath: this.data.shareImage,
+      success (res) {
+        wx.showToast({
+          title: '保存图片成功',
+          icon: 'success',
+          duration: 2000
+        })
+      }
+  })
+  },
+  eventGetImage (event) {
+    console.log("event:"+ JSON.stringify(event))
+    //
+    const { tempFilePath, errMsg } = event.detail
+    if (errMsg === 'canvasdrawer:ok') {
+      wx.hideLoading()
+      this.setData({
+        shareImage: tempFilePath
+      })
+    }
+    else if(errMsg==='canvasdrawer:download fail'){
+      wx.showToast({
+        title: '生成失败',
+        icon: '',
+        duration: 2000
+      })
+    }
   },
   onShow: function () {},
   onUnload: function () {},

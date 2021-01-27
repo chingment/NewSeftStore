@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-   public class Rpt7DayGmvRlModel
+    public class RupAdGetContentBelongs : RupBaseGetList
     {
-        public string Datef { get; set; }
-        public string SumCount{ get; set; }
-        public string SumTradeAmount { get; set; }
+        public string AdContentId { get; set; }
     }
 }

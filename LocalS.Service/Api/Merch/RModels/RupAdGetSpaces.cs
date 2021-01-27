@@ -1,5 +1,4 @@
-﻿using LocalS.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupAdGetAdContents : RupBaseGetList
+    public class RupAdGetSpaces : RupBaseGetList
     {
-        public E_AdSpaceId AdSpaceId { get;set;}
+ 
     }
 }

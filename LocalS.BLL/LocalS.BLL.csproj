@@ -82,9 +82,7 @@
     <Compile Include="Biz\EventService.cs" />
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />
-    <Compile Include="Biz\Models\AdContentModel.cs" />
     <Compile Include="Biz\Models\AdModel.cs" />
-    <Compile Include="Biz\Models\BannerModel.cs" />
     <Compile Include="Biz\Models\CabinetInfoModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByDSModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByZSModel.cs" />
@@ -94,14 +92,11 @@
     <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />
     <Compile Include="Biz\Models\MachineEventByPickupTestModel.cs" />
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
-    <Compile Include="Biz\Models\MiniProgramStModel.cs" />
     <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\OrderDetailsByPickupModel.cs" />
-    <Compile Include="Biz\Models\PayOptionModel.cs" />
     <Compile Include="Biz\Models\ScannerModel.cs" />
     <Compile Include="Biz\Models\StatusModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
-    <Compile Include="Biz\Models\UpdateMachineHomeBannerModel.cs" />
     <Compile Include="Biz\Models\UpdateMachineProdcutSkuStockModel.cs" />
     <Compile Include="Biz\Models\UseAreaValueModel.cs" />
     <Compile Include="Biz\MyDESCryptoUtil.cs" />

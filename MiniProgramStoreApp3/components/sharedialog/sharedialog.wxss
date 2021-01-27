@@ -1,0 +1,74 @@
+/* components/sharedialog.wxss */.cumUpDialog {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, .4);
+  z-index: 9999;
+}
+
+.cumUpDialog>.wrapper {
+  width: 100%;
+  height: 250rpx;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: #fff;
+  border-top-left-radius: 15rpx;
+  border-top-right-radius: 15rpx;
+}
+
+.cumUpDialog .contentinfo {
+  height: 160rpx;
+}
+
+.cumUpDialog .contentinfo .wrapper {
+  padding: 0 25rpx;
+}
+
+.cumUpDialog .bottominfo {
+  width: 100%;
+  background: #fff;
+}
+
+.cumUpDialog .bottominfo>.wrapper {
+  border-top: 3rpx solid #f8f8f8;
+  height: 100rpx;
+  padding: 15rpx 25rpx;
+  display: flex;
+  justify-content: center;
+
+}
+
+/*购物车*/
+
+.share-tpye{
+   display: flex;
+   margin-top: 20rpx;
+}
+
+.share-tpye .it{
+  flex: 1;
+  text-align: center;
+  background: transparent;
+}
+
+.share-tpye .it::after{
+  border: none;
+}
+
+.share-tpye .it .img{
+  width: 80rpx;
+  height: 80rpx;
+  display: block;
+  margin:auto;
+}
+
+.share-tpye .it .txt{
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 26rpx;
+}

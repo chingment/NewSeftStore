@@ -101,11 +101,13 @@ namespace LocalS.Service.Api.Merch
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {
-                var rpt7DayGmvRlModel = new Rpt7DayGmvRlModel();
+                var rpt7DayGmvRlModel = new
+                {
 
-                rpt7DayGmvRlModel.Datef = dtData.Rows[r]["datef"].ToString();
-                rpt7DayGmvRlModel.SumCount = dtData.Rows[r]["sumCount"].ToString();
-                rpt7DayGmvRlModel.SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString();
+                    Datef = dtData.Rows[r]["datef"].ToString(),
+                    SumCount = dtData.Rows[r]["sumCount"].ToString(),
+                    SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
+                };
 
                 retRpt7DayGmvRl.Days.Add(rpt7DayGmvRlModel);
             }
@@ -132,11 +134,13 @@ namespace LocalS.Service.Api.Merch
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {
-                var rptStoreGmvRlModel = new RptStoreGmvRlModel();
+                var rptStoreGmvRlModel = new
+                {
 
-                rptStoreGmvRlModel.Name = dtData.Rows[r]["name"].ToString();
-                rptStoreGmvRlModel.SumQuantity = dtData.Rows[r]["sumQuantity"].ToString();
-                rptStoreGmvRlModel.SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString();
+                    Name = dtData.Rows[r]["name"].ToString(),
+                    SumQuantity = dtData.Rows[r]["sumQuantity"].ToString(),
+                    SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
+                };
 
                 retRptStoreGmvRl.Stores.Add(rptStoreGmvRlModel);
             }
@@ -160,11 +164,12 @@ namespace LocalS.Service.Api.Merch
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {
-                var rptStoreGmvRlModel = new RptStoreGmvRlModel();
-
-                rptStoreGmvRlModel.Name = dtData.Rows[r]["name"].ToString();
-                rptStoreGmvRlModel.SumQuantity = dtData.Rows[r]["sumQuantity"].ToString();
-                rptStoreGmvRlModel.SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString();
+                var rptStoreGmvRlModel = new
+                {
+                    Name = dtData.Rows[r]["name"].ToString(),
+                    SumQuantity = dtData.Rows[r]["sumQuantity"].ToString(),
+                    SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
+                };
 
                 retRptStoreGmvRl.Stores.Add(rptStoreGmvRlModel);
             }
@@ -187,11 +192,13 @@ namespace LocalS.Service.Api.Merch
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {
-                var rptProductSkuSaleRlModel = new RptProductSkuSaleRlModel();
+                var rptProductSkuSaleRlModel = new
+                {
 
-                rptProductSkuSaleRlModel.Name = dtData.Rows[r]["prdProductSkuName"].ToString();
-                rptProductSkuSaleRlModel.SumQuantity = dtData.Rows[r]["sumQuantity"].ToString();
-                rptProductSkuSaleRlModel.SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString();
+                    Name = dtData.Rows[r]["prdProductSkuName"].ToString(),
+                    SumQuantity = dtData.Rows[r]["sumQuantity"].ToString(),
+                    SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
+                };
 
                 retRptProductSkuSaleRl.ProductSkus.Add(rptProductSkuSaleRlModel);
             }

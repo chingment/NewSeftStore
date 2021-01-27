@@ -85,12 +85,24 @@ swiper {
 
 .details-nav .item-home {
   text-align: center;
-  width: 150rpx;
+  width: 100rpx;
   line-height: 100rpx;
   height: 88rpx;
 }
 
-.details-nav .item-home image {
+.details-nav .item-home .img {
+  width: 38rpx;
+  height: 38rpx;
+}
+
+.details-nav .item-share {
+  text-align: center;
+  width: 100rpx;
+  line-height: 100rpx;
+  height: 88rpx;
+}
+
+.details-nav .item-share .img {
   width: 38rpx;
   height: 38rpx;
 }
@@ -104,7 +116,7 @@ swiper {
   position: relative;
 }
 
-.details-nav .item-cart image {
+.details-nav .item-cart .img {
   width: 38rpx;
   height: 38rpx;
 }
