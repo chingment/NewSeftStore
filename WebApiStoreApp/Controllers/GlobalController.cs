@@ -35,5 +35,14 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public OwnApiHttpResponse GetWxSceneData([FromUri]string scene)
+        {
+            IResult result = StoreAppServiceFactory.Global.GetWxSceneData(this.CurrentUserId, scene);
+
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

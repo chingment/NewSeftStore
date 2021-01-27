@@ -54,7 +54,7 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse GetWxACodeUnlimit(RopOwnGetWxACodeUnlimit rop)
         {
-            IResult result = AccountServiceFactory.Own.GetWxACodeUnlimit(this.CurrentUserId, rop);
+            IResult result = AccountServiceFactory.Own.GetWxACodeUnlimit(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

@@ -376,16 +376,19 @@ Page({
   },
   buildPoster: function () {
     var _this = this
+    var _data = _this.data
     console.log('buildPoster')
 
     var accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
-
+    var wxacode_data = '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId()
     apiOwn.getWxACodeUnlimit({
       appId: appId,
       merchId: storeage.getMerchId(),
       openId: storeage.getOpenId(),
-      data: "rc=1"
+      data: wxacode_data,
+      type: 'url',
+      isGetAvatar: true,
     }).then(function (res) {
       if (res.result == 1) {
         var d = res.data
@@ -411,7 +414,7 @@ Page({
                 },
                 {
                   type: 'image',
-                  url: 'https://file.17fanju.com/upload/Avatar/e032f079-5b22-4615-80b6-9841e5397fcb.png',
+                  url: d.avatar,
                   top: 27.5,
                   left: 29,
                   width: 55,
@@ -420,7 +423,7 @@ Page({
                 },
                 {
                   type: 'text',
-                  content: '您的好友【kuckboy】',
+                  content: '您的好友【'+d.nickName+'】',
                   fontSize: 16,
                   color: '#402D16',
                   textAlign: 'left',
@@ -447,7 +450,7 @@ Page({
                 },
                 {
                   type: 'image',
-                  url: d.url,
+                  url: d.wxaCodeUrl,
                   top: 443,
                   left: 85,
                   width: 68,

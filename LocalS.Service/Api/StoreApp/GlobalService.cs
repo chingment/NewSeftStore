@@ -50,5 +50,20 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+        public CustomJsonResult GetWxSceneData(string operater, string scene)
+        {
+
+            var result = new CustomJsonResult();
+
+            var d_WxACode = CurrentDb.WxACode.Where(m => m.Id == scene).FirstOrDefault();
+
+            if (d_WxACode == null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无数据");
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { Type = d_WxACode.Type, Data = d_WxACode.Data });
+
+            return result;
+        }
     }
 }

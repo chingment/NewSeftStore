@@ -324,5 +324,19 @@ namespace Lumos
 
             return week;
         }
+
+
+        public static string ConvetMD5IN32B(string str)
+        {
+            System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] bytStr = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
+            string encryptStr = "";
+            for (int i = 0; i < bytStr.Length; i++)
+            {
+                encryptStr = encryptStr + bytStr[i].ToString("x").PadLeft(2, '0');
+            }
+
+            return encryptStr;
+        }
     }
 }

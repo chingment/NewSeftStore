@@ -84,7 +84,9 @@ namespace LocalS.DAL
 
 
         public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }
-  
+
+        public IDbSet<WxACode> WxACode { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

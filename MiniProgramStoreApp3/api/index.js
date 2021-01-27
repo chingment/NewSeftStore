@@ -11,6 +11,7 @@ function pageData(params) {
   })
 }
 
+
 function sugProducts(params) {
   return lumos.getJson({
     url: config.apiUrl.indexSugProducts,

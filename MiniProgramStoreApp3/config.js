@@ -23,6 +23,7 @@ var config = {
     globalDataSet: `${host}/Global/DataSet`,
     globalByPoint: `${host}/Global/ByPoint`,
     globalMsgTips: `${host}/Global/MsgTips`,
+    globalGetWxSceneData: `${host}/Global/GetWxSceneData`,
     indexPageData: `${host}/Index/PageData`,
     indexSugProducts: `${host}/Index/SugProducts`,
     productKindPageData: `${host}/ProductKind/PageData`,

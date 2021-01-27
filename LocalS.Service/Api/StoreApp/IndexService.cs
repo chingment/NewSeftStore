@@ -33,7 +33,7 @@ namespace LocalS.Service.Api.StoreApp
             if (store.SctMode.Contains("K"))
             {
                 ret.IsSupMachineShop = true;
-              
+
             }
 
             var storeModel = new StoreModel();
@@ -64,6 +64,7 @@ namespace LocalS.Service.Api.StoreApp
 
             return result;
         }
+
 
         public CustomJsonResult SugProducts(string operater, string clientUserId, RupIndexSugProducts rup)
         {

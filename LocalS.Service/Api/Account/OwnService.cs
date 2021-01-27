@@ -947,72 +947,113 @@ namespace LocalS.Service.Api.Account
         }
 
 
-        public CustomJsonResult GetWxACodeUnlimit(string operater, RopOwnGetWxACodeUnlimit rop)
+        public CustomJsonResult GetWxACodeUnlimit(string operater, string userId, RopOwnGetWxACodeUnlimit rop)
         {
             var result = new CustomJsonResult();
 
             try
             {
-                var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+                string id = Lumos.CommonUtil.ConvetMD5IN32B(rop.Data);
 
-                if (merch == null)
+                var d_WxACode = CurrentDb.WxACode.Where(m => m.Id == id).FirstOrDefault();
+
+                string domainPathUrl = "";
+                if (d_WxACode == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败");
+
+                    var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+
+                    if (merch == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败");
+                    }
+
+                    var wxAppInfoConfig = new WxAppInfoConfig();
+
+                    wxAppInfoConfig.AppId = merch.WxMpAppId;
+                    wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+                    wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+                    wxAppInfoConfig.PayKey = merch.WxPayKey;
+                    wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+                    wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+
+                    var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, id, "pages/main/main");
+
+                    if (result_WxACodeUnlimit == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败.");
+                    }
+
+                    if (result_WxACodeUnlimit.errcode != "0")
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败..");
+                    }
+
+                    byte[] fileData = result_WxACodeUnlimit.buffer;
+
+                    string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                    string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
+                    string fileName = id;
+                    string extension = ".png";
+                    string savePath = "/upload/acode/";
+                    string serverSavePath = rootPath + savePath + fileName + extension;
+                    domainPathUrl = domain + savePath + fileName + extension;
+
+                    DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
+                    if (!dir.Exists)
+                    {
+                        dir.Create();
+                    }
+
+                    LogUtil.Info("serverSavePath:" + serverSavePath);
+                    LogUtil.Info("domainPathUrl:" + domainPathUrl);
+
+                    FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
+                    fs.Write(fileData, 0, fileData.Length);
+                    fs.Flush();
+                    fs.Close();
+
+                    d_WxACode = new WxACode();
+                    d_WxACode.Id = id;
+                    d_WxACode.MerchId = rop.MerchId;
+                    d_WxACode.AppId = rop.AppId;
+                    d_WxACode.OpenId = rop.OpenId;
+                    d_WxACode.Type = rop.Type;
+                    d_WxACode.Data = rop.Data;
+                    d_WxACode.UserId = operater;
+                    d_WxACode.ImgUrl = domainPathUrl;
+                    d_WxACode.Creator = operater;
+                    d_WxACode.CreateTime = DateTime.Now;
+                    CurrentDb.WxACode.Add(d_WxACode);
+                    CurrentDb.SaveChanges();
+                }
+                else
+                {
+                    domainPathUrl = d_WxACode.ImgUrl;
                 }
 
-                var wxAppInfoConfig = new WxAppInfoConfig();
+                if (string.IsNullOrEmpty(domainPathUrl))
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成失败...");
 
-                wxAppInfoConfig.AppId = merch.WxMpAppId;
-                wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
-                wxAppInfoConfig.PayMchId = merch.WxPayMchId;
-                wxAppInfoConfig.PayKey = merch.WxPayKey;
-                wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-                wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
-
-                var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, rop.Data, "pages/main/main");
-
-                if (result_WxACodeUnlimit == null)
+                string avatar = "";
+                string nickName = "";
+                if (rop.IsGetAvatar)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败");
-                }
-
-                if (result_WxACodeUnlimit.errcode != "0")
-                {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败");
+                    var d_SysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+                    if (d_SysClientUser != null)
+                    {
+                        avatar = d_SysClientUser.Avatar;
+                        nickName = d_SysClientUser.NickName;
+                    }
                 }
 
 
 
-                byte[] fileData = result_WxACodeUnlimit.buffer;
-
-                string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
-                string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
-                string fileName = Guid.NewGuid().ToString();
-                string extension = ".png";
-                string savePath = "/upload/acode/";
-                string serverSavePath = rootPath + savePath + fileName + extension;
-                string domainPathUrl = domain + savePath + fileName + extension;
-
-                DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
-                if (!dir.Exists)
-                {
-                    dir.Create();
-                }
-
-                LogUtil.Info("serverSavePath:" + serverSavePath);
-                LogUtil.Info("domainPathUrl:" + domainPathUrl);
-
-                FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
-                fs.Write(fileData, 0, fileData.Length);
-                fs.Flush();
-                fs.Close();
-
-
-                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", new { Url = domainPathUrl });
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "生成成功", new { WxACodeUrl = domainPathUrl, Avatar = avatar, NickName = nickName });
             }
             catch (Exception ex)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成失败.....");
             }
         }
     }

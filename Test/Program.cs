@@ -105,6 +105,9 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            string id = Lumos.CommonUtil.ConvetMD5IN32B("/pages/productdetails/productdetails?reffSign=o176Z5HZazGSxw_yY5A0k4ccVxpA&skuId=722b4d565604489fa1f40c548e0bc114&shopMode=1&shopMethod=1&storeId=4117916edd39468fb153666a55b47165&merchId=35129159f53249efabd4f0bc9a65810c");
+
             string a66 = CommonUtil.GetCnWeekDayName(DateTime.Parse("2021-01-06 08:00:00.000"));
 
 

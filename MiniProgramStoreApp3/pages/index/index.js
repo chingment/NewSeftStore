@@ -120,26 +120,6 @@ Component({
         }
       })
     },
-    goSelectStore: function (e) {
-
-      var _this = this
-
-      if (_this.data.singleStore)
-        return
-
-      wx.navigateTo({
-        url: '/pages/store/store',
-      })
-    },
-    switchShopMode: function (e) {
-      var _this = this
-      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面\
-      _this.setData({
-        shopMode: shopMode
-      })
-      _this.getPageData()
-
-    },
     onReady: function () {
       console.log("index.onReady")
     },

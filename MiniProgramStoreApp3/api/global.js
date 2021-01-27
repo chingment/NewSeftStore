@@ -54,8 +54,18 @@ function byPoint(page, action, param) {
   })
 }
 
+
+function getWxSceneData(params) {
+  return lumos.getJson({
+    url: config.apiUrl.globalGetWxSceneData,
+    urlParams: params,
+    isShowLoading: false
+  })
+}
+
 module.exports = {
   dataSet: dataSet,
   msgTips: msgTips,
-  byPoint: byPoint
+  byPoint: byPoint,
+  getWxSceneData:getWxSceneData
 }
