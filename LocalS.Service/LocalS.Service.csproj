@@ -76,6 +76,7 @@
     <Compile Include="Api\Account\RModels\RetOwnLoginByAccount.cs" />
     <Compile Include="Api\Account\RModels\RetOwnLoginByMinProgram.cs" />
     <Compile Include="Api\Account\RModels\RopGetConfig.cs" />
+    <Compile Include="Api\Account\RModels\RopOwnGetWxACodeUnlimit.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByAccountInWebSite.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByFingerVein.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByMinProgram.cs" />

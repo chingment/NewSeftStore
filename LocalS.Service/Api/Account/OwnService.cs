@@ -355,52 +355,32 @@ namespace LocalS.Service.Api.Account
 
             try
             {
-                var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, "rs=" + rop.OpenId, "pages/main/main");
 
-                LogUtil.Info("result_WxACodeUnlimit.errcode:" + result_WxACodeUnlimit.errcode);
-                LogUtil.Info("result_WxACodeUnlimit.buffer:" + result_WxACodeUnlimit.buffer);
+                string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
 
-                if (result_WxACodeUnlimit != null)
+                string savePath = "/Upload/avatar/";
+                string fileName = string.Format("{0}.png", Guid.NewGuid().ToString());
+
+                string avatarUrl = "";
+                if (!string.IsNullOrEmpty(wxUserInfo.avatarUrl))
                 {
-                    if (result_WxACodeUnlimit.errcode == "0")
-                    {
-                        byte[] fileData = result_WxACodeUnlimit.buffer;
+                    var wreq = WebRequest.Create(wxUserInfo.avatarUrl);
+                    HttpWebResponse wresp = (HttpWebResponse)wreq.GetResponse();
+                    Stream s = wresp.GetResponseStream();
+                    var img = System.Drawing.Image.FromStream(s);
 
-                        string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
-                        string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
-                        string fileName = Guid.NewGuid().ToString();
-                        string extension = ".png";
-                        string savePath = "/upload/acode/";
-                        string serverSavePath = rootPath + savePath + fileName + extension;
-                        string domainPathUrl = domain + savePath + fileName + extension;
+                    string avatarSavePath = string.Format("{0}{1}{2}", rootPath, savePath, fileName);
+                    img.Save(avatarSavePath, System.Drawing.Imaging.ImageFormat.Png);   //保存
 
-                        DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
-                        if (!dir.Exists)
-                        {
-                            dir.Create();
-                        }
-
-                        LogUtil.Info("serverSavePath:" + serverSavePath);
-                        LogUtil.Info("domainPathUrl:" + domainPathUrl);
-
-                        FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
-                        fs.Write(fileData, 0, fileData.Length);
-                        fs.Flush();
-                        fs.Close();
-
-                        if (!string.IsNullOrEmpty(wxUserInfo.avatarUrl))
-                        {
-                            var wreq = WebRequest.Create(wxUserInfo.avatarUrl);
-                            HttpWebResponse wresp = (HttpWebResponse)wreq.GetResponse();
-                            Stream s = wresp.GetResponseStream();
-                            var img = System.Drawing.Image.FromStream(s);
-
-                            string avatarSavePath = string.Format(rootPath + "/Upload/avatar/{0}.png", Guid.NewGuid().ToString());
-
-                            img.Save(avatarSavePath, System.Drawing.Imaging.ImageFormat.Png);   //保存
-                        }
-                    }
+                    avatarUrl = string.Format("{0}{1}{2}", domain, savePath, fileName);
                 }
+
+                if (!string.IsNullOrEmpty(avatarUrl))
+                {
+                    wxUserInfo.avatarUrl = avatarUrl;
+                }
+
             }
             catch (Exception ex)
             {
@@ -966,5 +946,74 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
+
+        public CustomJsonResult GetWxACodeUnlimit(string operater, RopOwnGetWxACodeUnlimit rop)
+        {
+            var result = new CustomJsonResult();
+
+            try
+            {
+                var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+
+                if (merch == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败");
+                }
+
+                var wxAppInfoConfig = new WxAppInfoConfig();
+
+                wxAppInfoConfig.AppId = merch.WxMpAppId;
+                wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
+                wxAppInfoConfig.PayMchId = merch.WxPayMchId;
+                wxAppInfoConfig.PayKey = merch.WxPayKey;
+                wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+                wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+
+                var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, rop.Data, "pages/main/main");
+
+                if (result_WxACodeUnlimit == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败");
+                }
+
+                if (result_WxACodeUnlimit.errcode != "0")
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败");
+                }
+
+
+
+                byte[] fileData = result_WxACodeUnlimit.buffer;
+
+                string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
+                string fileName = Guid.NewGuid().ToString();
+                string extension = ".png";
+                string savePath = "/upload/acode/";
+                string serverSavePath = rootPath + savePath + fileName + extension;
+                string domainPathUrl = domain + savePath + fileName + extension;
+
+                DirectoryInfo dir = new DirectoryInfo(rootPath + savePath);
+                if (!dir.Exists)
+                {
+                    dir.Create();
+                }
+
+                LogUtil.Info("serverSavePath:" + serverSavePath);
+                LogUtil.Info("domainPathUrl:" + domainPathUrl);
+
+                FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
+                fs.Write(fileData, 0, fileData.Length);
+                fs.Flush();
+                fs.Close();
+
+
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", new { Url = domainPathUrl });
+            }
+            catch (Exception ex)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "获取失败");
+            }
+        }
     }
 }

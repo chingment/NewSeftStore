@@ -19,6 +19,7 @@ var config = {
     ownConfig: `${host}/Own/Config`,
     ownWxPhoneNumber: `${host}/Own/WxPhoneNumber`,
     ownBindPhoneNumberByWx: `${host}/Own/BindPhoneNumberByWx`,
+    ownGetWxACodeUnlimit: `${host}/Own/GetWxACodeUnlimit`,
     globalDataSet: `${host}/Global/DataSet`,
     globalByPoint: `${host}/Global/ByPoint`,
     globalMsgTips: `${host}/Global/MsgTips`,

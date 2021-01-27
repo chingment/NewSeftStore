@@ -60,7 +60,7 @@ Component({
   },
   methods: {
     _myClose: function (e) {
-      console.log( JSON.stringify( e))
+      console.log(JSON.stringify(e))
       var _this = this
       console.log(e)
       var self = e.target.dataset.ref
@@ -69,6 +69,27 @@ Component({
           myShow: false
         })
       }
+    },
+    _myClick2Share: function () {
+      var _this=this
+      wx.saveImageToPhotosAlbum({
+        filePath: this.data.shareImage,
+        success(res) {
+          wx.showToast({
+            title: '保存图片成功',
+            icon: 'success',
+            duration: 2000
+          })
+
+          _this.setData({myShow:false})
+          _this.triggerEvent('buildEvent', {
+            tempFilePath: res.tempFilePath,
+            errMsg: 'share:ok'
+          })
+
+        }
+      })
+
     },
     readyPigment() {
       const {

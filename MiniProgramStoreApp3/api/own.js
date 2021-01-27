@@ -11,6 +11,14 @@ function loginByMinProgram(dataParams) {
   })
 }
 
+function getWxACodeUnlimit(dataParams) {
+
+  return lumos.postJson({
+    url: config.apiUrl.ownGetWxACodeUnlimit,
+    dataParams: dataParams
+  })
+}
+
 function WxApiCode2Session(dataParams) {
 
   return lumos.postJson({
@@ -49,5 +57,6 @@ module.exports = {
   WxApiCode2Session: WxApiCode2Session,
   wxConfig: wxConfig,
   wxPhoneNumber: wxPhoneNumber,
-  bindPhoneNumberByWx: bindPhoneNumberByWx
+  bindPhoneNumberByWx: bindPhoneNumberByWx,
+  getWxACodeUnlimit:getWxACodeUnlimit
 }

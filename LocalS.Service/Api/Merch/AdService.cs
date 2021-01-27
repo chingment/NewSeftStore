@@ -120,8 +120,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
-
         public CustomJsonResult InitRelease(string operater, string merchId, E_AdSpaceId adSpaceId)
         {
             var result = new CustomJsonResult();
@@ -166,7 +164,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult InitContents(string operater, string merchId, E_AdSpaceId adSpaceId)
         {
@@ -224,31 +221,6 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
             }
-
-
-            var prds = CurrentDb.PrdProduct.ToList();
-
-            foreach (var prd in prds)
-            {
-                if (!string.IsNullOrEmpty(prd.MainImgUrl))
-                {
-                    prd.MainImgUrl = prd.MainImgUrl.Replace("http", "https");
-                }
-
-                if (!string.IsNullOrEmpty(prd.DisplayImgUrls))
-                {
-                    prd.DisplayImgUrls = prd.DisplayImgUrls.Replace("http", "https");
-                }
-
-                if (!string.IsNullOrEmpty(prd.DetailsDes))
-                {
-                    prd.DetailsDes = prd.DetailsDes.Replace("http", "https");
-                }
-
-                CurrentDb.SaveChanges();
-            }
-
-
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", objs);

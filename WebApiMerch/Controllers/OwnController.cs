@@ -24,5 +24,6 @@ namespace WebApiMerch.Controllers
             IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.CheckPermission(this.CurrentUserId, this.CurrentUserId,this.Token, rup);
             return new OwnApiHttpResponse(result);
         }
+
     }
 }

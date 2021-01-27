@@ -49,5 +49,15 @@ namespace WebApiStoreApp.Controllers
             IResult result = AccountServiceFactory.Own.GetWxPhoneNumber(rop);
             return new OwnApiHttpResponse(result);
         }
+
+
+        [HttpPost]
+        public OwnApiHttpResponse GetWxACodeUnlimit(RopOwnGetWxACodeUnlimit rop)
+        {
+            IResult result = AccountServiceFactory.Own.GetWxACodeUnlimit(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
     }
 }
