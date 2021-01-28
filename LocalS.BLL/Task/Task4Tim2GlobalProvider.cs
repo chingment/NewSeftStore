@@ -175,7 +175,7 @@ namespace LocalS.BLL.Task
                                 break;
                             case Task4TimType.Order2CheckPickupTimeout:
                                 #region 检查订单是否取货超时
-                                var orderSub2CheckPickupTimeoutModel = m.Data.ToJsonObject<OrderSub2CheckPickupTimeoutModel>();
+                                var orderSub2CheckPickupTimeoutModel = m.Data.ToJsonObject<Order2CheckPickupTimeoutModel>();
                                 if (m.ExpireTime.AddMinutes(1) <= DateTime.Now)
                                 {
                                     Order2CheckPickupTimeout(orderSub2CheckPickupTimeoutModel);
@@ -239,7 +239,7 @@ namespace LocalS.BLL.Task
             public object Data { get; set; }
         }
 
-        private void Order2CheckPickupTimeout(OrderSub2CheckPickupTimeoutModel model)
+        private void Order2CheckPickupTimeout(Order2CheckPickupTimeoutModel model)
         {
             using (TransactionScope ts = new TransactionScope())
             {

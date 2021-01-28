@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Task
 {
-    public class OrderSub2CheckPickupTimeoutModel
+    public class Order2CheckPickupTimeoutModel
     {
         public string OrderId { get; set; }
         public string OrderSubId { get; set; }

@@ -148,7 +148,7 @@
     <Compile Include="Task\ITask.cs" />
     <Compile Include="Task\Launcher.cs" />
     <Compile Include="Task\Model\Order2CheckPayModel.cs" />
-    <Compile Include="Task\Model\OrderSub2CheckPickupTimeoutModel.cs" />
+    <Compile Include="Task\Model\Order2CheckPickupTimeoutModel.cs" />
     <Compile Include="Task\Model\PayRefund2CheckStatusModel.cs" />
     <Compile Include="Task\Model\PayTrans2CheckStatusModel.cs" />
     <Compile Include="Task\Quartz\QuartzManager.cs" />
