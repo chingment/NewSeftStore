@@ -87,7 +87,7 @@
     <Compile Include="Api\Account\RModels\RopUserInfoSave.cs" />
     <Compile Include="Api\Account\RModels\RopWxApiCode2Session.cs" />
     <Compile Include="Api\Account\RModels\RopWxGetPhoneNumber.cs" />
-    <Compile Include="Api\Account\RModels\RupOwnChangePassword.cs" />
+    <Compile Include="Api\Account\RModels\RopOwnChangePassword.cs" />
     <Compile Include="Api\Account\RModels\RupOwnCheckPermission.cs" />
     <Compile Include="Api\Account\RModels\RopOwnLoginByAccount.cs" />
     <Compile Include="Api\Account\RModels\RupBaseGetList.cs" />
