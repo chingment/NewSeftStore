@@ -66,8 +66,9 @@ App({
     // })
 
   },
-  onShow: function () {
-    //var _this = this
+  onShow: function (res) {
+    var _this = this
+    console.log('app.onShow.scene '+res.scene)
     // _this.getConfig()
   },
   basePage: basePage,

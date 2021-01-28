@@ -320,7 +320,7 @@ namespace LocalS.Service.Api.Account
 
             if (merch == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败[01]");
             }
 
             var wxAppInfoConfig = new WxAppInfoConfig();
@@ -340,54 +340,16 @@ namespace LocalS.Service.Api.Account
                 wxUserInfo = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.UserInfoEp.EncryptedData, rop.UserInfoEp.Iv, rop.UserInfoEp.Code);
                 if (wxUserInfo == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败[02]");
                 }
             }
 
             if (rop.PhoneNumberEp != null)
             {
                 LogUtil.Info("rop.PhoneNumberEp=>" + rop.PhoneNumberEp.ToJsonString());
-
                 wxPhoneNumber = SdkFactory.Wx.GetWxPhoneNumber(rop.PhoneNumberEp.encryptedData, rop.PhoneNumberEp.iv, rop.PhoneNumberEp.session_key);
                 LogUtil.Info("rop.wxPhoneNumber=>" + wxPhoneNumber.ToJsonString());
             }
-
-
-            try
-            {
-
-                string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
-                string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
-
-                string savePath = "/Upload/avatar/";
-                string fileName = string.Format("{0}.png", Guid.NewGuid().ToString());
-
-                string avatarUrl = "";
-                if (!string.IsNullOrEmpty(wxUserInfo.avatarUrl))
-                {
-                    var wreq = WebRequest.Create(wxUserInfo.avatarUrl);
-                    HttpWebResponse wresp = (HttpWebResponse)wreq.GetResponse();
-                    Stream s = wresp.GetResponseStream();
-                    var img = System.Drawing.Image.FromStream(s);
-
-                    string avatarSavePath = string.Format("{0}{1}{2}", rootPath, savePath, fileName);
-                    img.Save(avatarSavePath, System.Drawing.Imaging.ImageFormat.Png);   //保存
-
-                    avatarUrl = string.Format("{0}{1}{2}", domain, savePath, fileName);
-                }
-
-                if (!string.IsNullOrEmpty(avatarUrl))
-                {
-                    wxUserInfo.avatarUrl = avatarUrl;
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-
-            }
-
 
             var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == rop.OpenId).FirstOrDefault();
 
@@ -395,19 +357,25 @@ namespace LocalS.Service.Api.Account
             {
                 d_clientUser = new SysClientUser();
                 d_clientUser.Id = IdWorker.Build(IdType.NewGuid);
+
+
+                var avatarUrl = CreateWxAvatar(d_clientUser.Id, wxUserInfo.avatarUrl);
+
+                if (string.IsNullOrEmpty(avatarUrl))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败[03]");
+                }
+
                 d_clientUser.UserName = string.Format("wx{0}", Guid.NewGuid().ToString().Replace("-", ""));
                 d_clientUser.PasswordHash = PassWordHelper.HashPassword("888888");
                 d_clientUser.SecurityStamp = Guid.NewGuid().ToString();
                 d_clientUser.RegisterTime = DateTime.Now;
-                if (wxUserInfo != null)
-                {
-                    d_clientUser.NickName = wxUserInfo.nickName;
-                    d_clientUser.Sex = wxUserInfo.gender;
-                    d_clientUser.Province = wxUserInfo.province;
-                    d_clientUser.City = wxUserInfo.city;
-                    d_clientUser.Country = wxUserInfo.country;
-                    d_clientUser.Avatar = wxUserInfo.avatarUrl;
-                }
+                d_clientUser.NickName = wxUserInfo.nickName;
+                d_clientUser.Sex = wxUserInfo.gender;
+                d_clientUser.Province = wxUserInfo.province;
+                d_clientUser.City = wxUserInfo.city;
+                d_clientUser.Country = wxUserInfo.country;
+                d_clientUser.Avatar = avatarUrl;
 
                 if (wxPhoneNumber != null)
                 {
@@ -428,15 +396,19 @@ namespace LocalS.Service.Api.Account
             }
             else
             {
-                if (wxUserInfo != null)
+                var avatarUrl = CreateWxAvatar(d_clientUser.Id, wxUserInfo.avatarUrl);
+
+                if (string.IsNullOrEmpty(avatarUrl))
                 {
-                    d_clientUser.NickName = wxUserInfo.nickName;
-                    d_clientUser.Sex = wxUserInfo.gender;
-                    d_clientUser.Province = wxUserInfo.province;
-                    d_clientUser.City = wxUserInfo.city;
-                    d_clientUser.Country = wxUserInfo.country;
-                    d_clientUser.Avatar = wxUserInfo.avatarUrl;
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败[04]");
                 }
+
+                d_clientUser.NickName = wxUserInfo.nickName;
+                d_clientUser.Sex = wxUserInfo.gender;
+                d_clientUser.Province = wxUserInfo.province;
+                d_clientUser.City = wxUserInfo.city;
+                d_clientUser.Country = wxUserInfo.country;
+                d_clientUser.Avatar = avatarUrl;
 
                 if (wxPhoneNumber != null)
                 {
@@ -454,9 +426,8 @@ namespace LocalS.Service.Api.Account
             }
 
 
-
             if (string.IsNullOrEmpty(d_clientUser.PhoneNumber))
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoPhoneNumber, "未授权手机号码", ret);
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoPhoneNumber, "未授权手机号码[05]", ret);
 
             var tokenInfo = new TokenInfo();
             ret.Token = IdWorker.Build(IdType.NewGuid);
@@ -467,8 +438,6 @@ namespace LocalS.Service.Api.Account
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
             MqFactory.Global.PushEventNotify(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
-
-
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -965,7 +934,7 @@ namespace LocalS.Service.Api.Account
 
                     if (merch == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[01]");
                     }
 
                     var wxAppInfoConfig = new WxAppInfoConfig();
@@ -981,12 +950,12 @@ namespace LocalS.Service.Api.Account
 
                     if (result_WxACodeUnlimit == null)
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败.");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[02]");
                     }
 
                     if (result_WxACodeUnlimit.errcode != "0")
                     {
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败..");
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[03]");
                     }
 
                     byte[] fileData = result_WxACodeUnlimit.buffer;
@@ -1033,7 +1002,7 @@ namespace LocalS.Service.Api.Account
                 }
 
                 if (string.IsNullOrEmpty(domainPathUrl))
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成失败...");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[04]");
 
                 string avatar = "";
                 string nickName = "";
@@ -1047,14 +1016,54 @@ namespace LocalS.Service.Api.Account
                     }
                 }
 
-
-
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "生成成功", new { WxACodeUrl = domainPathUrl, Avatar = avatar, NickName = nickName });
             }
             catch (Exception ex)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成失败.....");
+                LogUtil.Error("生成小程序码失败[05]", ex);
+
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[05]");
             }
+        }
+
+
+        public string CreateWxAvatar(string userId, string avatarUrl)
+        {
+            string l_AvatarUrl = null;
+
+            if (string.IsNullOrEmpty(avatarUrl))
+                return l_AvatarUrl;
+
+            try
+            {
+                string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
+                string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
+
+                string savePath = "/Upload/avatar/";
+                string fileName = string.Format("{0}.png", userId);
+
+                var wreq = WebRequest.Create(avatarUrl);
+                HttpWebResponse wresp = (HttpWebResponse)wreq.GetResponse();
+                Stream s = wresp.GetResponseStream();
+                var img = System.Drawing.Image.FromStream(s);
+
+                string avatarSavePath = string.Format("{0}{1}{2}", rootPath, savePath, fileName);
+
+                if (File.Exists(avatarSavePath))
+                    File.Delete(avatarSavePath);
+
+                img.Save(avatarSavePath, System.Drawing.Imaging.ImageFormat.Png);   //保存
+
+                l_AvatarUrl = string.Format("{0}{1}{2}", domain, savePath, fileName);
+
+
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("创建微信用户头像失败", ex);
+            }
+
+            return l_AvatarUrl;
         }
     }
 }

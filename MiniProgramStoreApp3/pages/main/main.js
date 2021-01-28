@@ -112,7 +112,7 @@ Page({
       tag: tag
     })
 
-    _this.setData({scene:options.scene})
+    _this.setData({scene: decodeURIComponent(options.scene)})
 
     console.log('options.scene:'+ JSON.stringify(options))
 
@@ -153,6 +153,7 @@ Page({
     })
 
     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    
     mainTabBarSwitch(tabBarIndex, false)
 
     _this.setData({isFirst:false})

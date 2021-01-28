@@ -393,10 +393,6 @@ Page({
       if (res.result == 1) {
         var d = res.data
 
-        wx.showLoading({
-          title: '正在生成海报',
-          mask: true
-        })
         _this.setData({
           canvasPoster: {
             isShow: true,
@@ -423,7 +419,7 @@ Page({
                 },
                 {
                   type: 'text',
-                  content: '您的好友【'+d.nickName+'】',
+                  content: '您的好友【' + d.nickName + '】',
                   fontSize: 16,
                   color: '#402D16',
                   textAlign: 'left',
@@ -508,8 +504,6 @@ Page({
           }
         })
 
-
-
       } else {
         toast.show({
           title: res.message
@@ -524,22 +518,29 @@ Page({
       tempFilePath,
       errMsg
     } = event.detail
-    if (errMsg === 'canvasdrawer:ok') {
+
+    if (errMsg === 'canvasdrawer:build start') {
+      wx.showLoading({
+        title: '正在生成海报',
+        mask: true
+      })
+    } else if (errMsg === 'canvasdrawer:ok') {
       wx.hideLoading()
       var shareDialog = _this.data.shareDialog
       shareDialog.isShow = false
       this.setData({
         shareDialog: shareDialog
       })
-    } else if (errMsg === 'share:ok') {
+    } else if (errMsg === 'canvasdrawer:share ok') {
       wx.hideLoading()
 
+      toast.show({
+        title: '保存图片成功'
+      })
 
     } else if (errMsg === 'canvasdrawer:download fail') {
-      wx.showToast({
-        title: '生成失败',
-        icon: '',
-        duration: 2000
+      toast.show({
+        title: '生成失败'
       })
     }
   },

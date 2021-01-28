@@ -71,27 +71,27 @@ Component({
       }
     },
     _myClick2Share: function () {
-      var _this=this
+      var _this = this
       wx.saveImageToPhotosAlbum({
         filePath: this.data.shareImage,
         success(res) {
-          wx.showToast({
-            title: '保存图片成功',
-            icon: 'success',
-            duration: 2000
+          _this.setData({
+            myShow: false
           })
-
-          _this.setData({myShow:false})
           _this.triggerEvent('buildEvent', {
             tempFilePath: res.tempFilePath,
-            errMsg: 'share:ok'
+            errMsg: 'canvasdrawer:share ok'
           })
-
         }
       })
 
     },
     readyPigment() {
+
+      this.triggerEvent('buildEvent', {
+        errMsg: 'canvasdrawer:build start'
+      })
+
       const {
         width,
         height,

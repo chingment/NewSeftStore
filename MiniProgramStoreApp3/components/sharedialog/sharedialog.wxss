@@ -1,4 +1,5 @@
-/* components/sharedialog.wxss */.cumUpDialog {
+/* components/sharedialog.wxss */
+.cumUpDialog {
   position: fixed;
   width: 100%;
   left: 0;
@@ -11,7 +12,7 @@
 
 .cumUpDialog>.wrapper {
   width: 100%;
-  height: 250rpx;
+  height: 285rpx;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -23,6 +24,8 @@
 
 .cumUpDialog .contentinfo {
   height: 160rpx;
+  padding-top:20rpx;
+  padding-bottom: 20rpx;
 }
 
 .cumUpDialog .contentinfo .wrapper {
@@ -36,10 +39,10 @@
 
 .cumUpDialog .bottominfo>.wrapper {
   border-top: 3rpx solid #f8f8f8;
-  height: 100rpx;
-  padding: 15rpx 25rpx;
+  height: 82rpx;
   display: flex;
   justify-content: center;
+  align-items: center;
 
 }
 
