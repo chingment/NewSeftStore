@@ -11,6 +11,5 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string StoreId { get; set; }
 
-        public E_ShopMode ShopMode { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.StoreApp
                            && s.StoreId == rup.StoreId
                            select new { u.Id, u.Name, u.Address, u.Lat, u.Lng, u.MainImgUrl, u.IsOpen, u.AreaCode, u.AreaName, u.MerchId, s.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress, u.CreateTime }).ToList();
 
-            var storeModels = new List<StoreModel>();
+            var m_Shops = new List<ShopModel>();
 
             foreach (var d_Shop in d_Shops)
             {
@@ -44,13 +44,13 @@ namespace LocalS.Service.Api.StoreApp
                     distanceMsg = string.Format("{0}km", distance.ToString("f2"));
                 }
 
-                storeModels.Add(new StoreModel { Id = d_Shop.Id, Name = d_Shop.Name, Address = d_Shop.Address, Distance = distance, DistanceMsg = distanceMsg });
+                m_Shops.Add(new ShopModel { Id = d_Shop.Id, Name = d_Shop.Name, Address = d_Shop.Address, Distance = distance, DistanceMsg = distanceMsg });
             }
 
-            storeModels = storeModels.OrderBy(m => m.Distance).ToList();
+            m_Shops = m_Shops.OrderBy(m => m.Distance).ToList();
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", storeModels);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_Shops);
 
             return result;
         }

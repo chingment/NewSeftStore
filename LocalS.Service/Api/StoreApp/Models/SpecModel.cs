@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreApp
         public SpecModel()
         {
 
-            this.Value = new List<SpecValueModel>();
+            this.Value = new List<ValueModel>();
         }
            
           
@@ -19,6 +19,13 @@ namespace LocalS.Service.Api.StoreApp
 
         public string Name { get; set; }
 
-        public List<SpecValueModel> Value { get; set; }
+        public List<ValueModel> Value { get; set; }
+
+        public class ValueModel
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+        }
     }
 }

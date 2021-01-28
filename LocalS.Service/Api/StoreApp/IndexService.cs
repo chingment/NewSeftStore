@@ -36,11 +36,9 @@ namespace LocalS.Service.Api.StoreApp
 
             }
 
-            var storeModel = new StoreModel();
-            storeModel.Id = store.Id;
-            storeModel.Name = store.Name;
 
-            ret.Store = storeModel;
+            ret.Store.Id = store.Id;
+            ret.Store.Name = store.Name;
 
             var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == store.MerchId && m.AdSpaceId == E_AdSpaceId.AppHomeTopBanner && m.BelongType == E_AdSpaceBelongType.App && m.BelongId == store.Id).Select(m => m.AdContentId).ToArray();
 
