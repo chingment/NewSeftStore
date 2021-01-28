@@ -1,6 +1,11 @@
 <template>
   <div id="adspace_release_list">
     <page-header />
+    <div>
+      <el-button type="primary" size="mini" @click="handleRelease">
+        发布
+      </el-button>
+    </div>
     <div class="row-title clearfix">
       <div class="pull-left"> <h5>版位信息</h5>
       </div>
@@ -134,6 +139,11 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getListData()
+    },
+    handleRelease() {
+      this.$router.push({
+        path: '/operationcenter/ad/release?id=' + this.listQuery.adSpaceId
+      })
     },
     handleSetContentStatus(item) {
       var status = 0

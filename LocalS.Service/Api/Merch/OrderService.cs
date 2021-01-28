@@ -323,6 +323,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
                     string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+                    string imgUrl3 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId3);
                     List<string> imgUrls = new List<string>();
                     if (!string.IsNullOrEmpty(imgUrl))
                     {
@@ -331,6 +332,10 @@ namespace LocalS.Service.Api.Merch
                     if (!string.IsNullOrEmpty(imgUrl2))
                     {
                         imgUrls.Add(imgUrl2);
+                    }
+                    if (!string.IsNullOrEmpty(imgUrl3))
+                    {
+                        imgUrls.Add(imgUrl3);
                     }
                     pickupLogs.Add(new RetOrderDetailsByMachineSelfTake.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                 }

@@ -33,5 +33,6 @@ namespace LocalS.Entity
         public int PickupUseTime { get; set; }
         public string ImgId { get; set; }
         public string ImgId2 { get; set; }
+        public string ImgId3 { get; set; }
     }
 }

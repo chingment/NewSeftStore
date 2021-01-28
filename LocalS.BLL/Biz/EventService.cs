@@ -269,6 +269,7 @@ namespace LocalS.BLL.Biz
                         orderPickupLog.ActionStatusName = model.ActionStatusName;
                         orderPickupLog.ImgId = model.ImgId;
                         orderPickupLog.ImgId2 = model.ImgId2;
+                        orderPickupLog.ImgId3 = model.ImgId3;
                         orderPickupLog.PickupUseTime = model.PickupUseTime;
                         orderPickupLog.ActionRemark = remark.ToString();
                         orderPickupLog.Remark = model.Remark;

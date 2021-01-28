@@ -23,6 +23,8 @@ namespace LocalS.BLL.Biz
         public E_OrderPickupStatus PickupStatus { get; set; }
         public string ImgId { get; set; }
         public string ImgId2 { get; set; }
+
+        public string ImgId3 { get; set; }
         public string Remark { get; set; }
     }
 }

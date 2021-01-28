@@ -2,7 +2,7 @@
   <div id="adspace_release_list">
     <page-header />
     <div class="row-title clearfix">
-      <div class="pull-left"> <h5>版位信息</h5>
+      <div class="pull-left"> <h5>内容信息</h5>
       </div>
       <div class="pull-right" />
     </div>
