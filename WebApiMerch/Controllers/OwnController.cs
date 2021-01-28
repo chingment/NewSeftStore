@@ -25,5 +25,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse ChangePassword([FromBody]LocalS.Service.Api.Account.RopOwnChangePassword rop)
+        {
+            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.UserInfo.ChangePassword(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

@@ -915,6 +915,38 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
+        public CustomJsonResult ChangePassword(string operater, string userId, RopOwnChangePassword rop)
+        {
+
+            CustomJsonResult result = new CustomJsonResult();
+
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var user = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+
+                if (string.IsNullOrEmpty(rop.Password))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "密码不能为空");
+                }
+
+
+                user.PasswordHash = PassWordHelper.HashPassword(rop.Password);
+                user.MendTime = DateTime.Now;
+                user.Mender = operater;
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            }
+
+
+            return result;
+        }
+
 
         public CustomJsonResult GetWxACodeUnlimit(string operater, string userId, RopOwnGetWxACodeUnlimit rop)
         {

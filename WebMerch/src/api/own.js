@@ -16,7 +16,16 @@ export function checkPermission(website, tpye, content) {
   })
 }
 
+export function changePassword(data) {
+  return request({
+    url: '/own/changePassword',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getInfo: getInfo,
-  checkPermission: checkPermission
+  checkPermission: checkPermission,
+  changePassword: changePassword
 }

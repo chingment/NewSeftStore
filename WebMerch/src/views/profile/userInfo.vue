@@ -40,7 +40,7 @@
 <script>
 import store from '@/store'
 import { MessageBox } from 'element-ui'
-import { changePassword } from '@/api/userInfo'
+import { changePassword } from '@/api/own'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
