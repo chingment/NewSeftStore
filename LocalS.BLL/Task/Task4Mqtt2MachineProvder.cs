@@ -103,8 +103,13 @@ namespace LocalS.BLL.Task
                     switch (type)
                     {
                         case "machine_status":
-
                             BizFactory.Machine.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, "心跳包", content);
+                            break;
+                        case "pickup":
+                            BizFactory.Machine.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, "取货动作", content);
+                            break;
+                        case "pickup_test":
+                            BizFactory.Machine.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.PickupTest, "[测试]取货动作", content);
                             break;
                     }
                 }

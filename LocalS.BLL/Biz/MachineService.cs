@@ -162,7 +162,7 @@ namespace LocalS.BLL.Biz
             return merchMachine.IsStopUse;
         }
 
-        public void SendStock(string operater, string appId, string merchId, string[] productSkuIds)
+        public void SendStock(string operater, string appId, string merchId, string machineId, string[] productSkuIds)
         {
             //foreach(var machineId in machineIds)
             // {

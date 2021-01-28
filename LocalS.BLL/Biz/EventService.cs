@@ -180,6 +180,15 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
+                if (string.IsNullOrEmpty(model.SignId))
+                {
+                    model.SignId = IdWorker.Build(IdType.NewGuid);
+                }
+
+                var orderPickupLog = CurrentDb.OrderPickupLog.Where(m => m.Id == model.SignId).FirstOrDefault();
+
+                if (orderPickupLog != null)
+                    return;
 
                 string machineId = trgerId;
                 var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
@@ -240,8 +249,8 @@ namespace LocalS.BLL.Biz
                             Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.MachineId });
                         }
 
-                        var orderPickupLog = new OrderPickupLog();
-                        orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                        orderPickupLog = new OrderPickupLog();
+                        orderPickupLog.Id = model.SignId;
                         orderPickupLog.OrderId = model.OrderId;
                         orderPickupLog.MerchId = order.MerchId;
                         orderPickupLog.ShopMode = E_ShopMode.Machine;

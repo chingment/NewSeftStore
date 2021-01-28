@@ -9,6 +9,7 @@ namespace LocalS.BLL.Biz
 {
     public class MachineEventByPickupTestModel : MachineEventBaseModel
     {
+        public string SignId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string ProductSkuId { get; set; }
