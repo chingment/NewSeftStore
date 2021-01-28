@@ -246,7 +246,7 @@ namespace LocalS.BLL.Biz
 
                             int timoutM = order.Quantity * 5;
 
-                            Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new OrderSub2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.MachineId });
+                            Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, order.Id, DateTime.Now.AddMinutes(timoutM), new Order2CheckPickupTimeoutModel { OrderId = order.Id, MachineId = order.MachineId });
                         }
 
                         orderPickupLog = new OrderPickupLog();
