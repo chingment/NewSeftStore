@@ -162,12 +162,21 @@ namespace LocalS.BLL.Biz
             return merchMachine.IsStopUse;
         }
 
-        public void SendStock(string operater, string appId, string merchId, string machineId, string[] productSkuIds)
+        public void SendStock(string operater, string appId, string merchId, string machineId, List<MachineProdcutSkuStockModel> contents)
         {
-            //foreach(var machineId in machineIds)
-            // {
-            //     SendStock(operater, appId, merchId,machineId);
-            // }
+            PushService.SendStock(operater, appId, merchId, machineId, contents);
+        }
+
+        public void SendStock(string operater, string appId, string merchId, string machineId, MachineProdcutSkuStockModel content)
+        {
+            List<MachineProdcutSkuStockModel> contents = new List<MachineProdcutSkuStockModel>();
+            contents.Add(content);
+            SendStock(operater, appId, merchId, machineId, contents);
+        }
+
+        public void SendStock(string operater, string appId, string merchId, string machineId)
+        {
+            //PushService.SendStock(operater, appId, merchId, machineId);
         }
 
         public void SendAds(string operater, string appId, string merchId, string[] machineIds)

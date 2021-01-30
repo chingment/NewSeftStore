@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class UpdateMachineProdcutSkuStockModel
+    public class MachineProdcutSkuStockModel
     {
         public string ProductSkuId { get; set; }
         public decimal SalePrice { get; set; }

@@ -405,6 +405,8 @@ namespace LocalS.BLL.Biz
             }
 
 
+            List<BuildOrder> buildOrders = new List<BuildOrder>();
+
             lock (lock_Reserve)
             {
 
@@ -546,7 +548,7 @@ namespace LocalS.BLL.Biz
                     }
 
                     LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
-                    var buildOrders = buildOrderTool.BuildOrders();
+                    buildOrders = buildOrderTool.BuildOrders();
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
                     #region 更改购物车标识
@@ -854,10 +856,25 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())), rop);
+                   MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", orders.Select(m => m.Id).ToArray())), rop);
 
                     result = new CustomJsonResult<RetOrderReserve>(ResultType.Success, ResultCode.Success, "预定成功", ret);
                 }
+            }
+
+            //todo 
+            if (result.Result == ResultType.Success)
+            {
+
+                foreach (var buildOrder in buildOrders)
+                {
+                    foreach (var buildOrderSub in buildOrder.Childs)
+                    {
+
+                        
+                    }
+                }
+
             }
 
             return result;
