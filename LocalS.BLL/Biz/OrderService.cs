@@ -407,8 +407,8 @@ namespace LocalS.BLL.Biz
             string trgerId = "";
 
 
-            List<Order> d_Orders = new List<Order>();
-            List<OrderSub> d_OrderSubs = new List<OrderSub>();
+            List<Order> s_Orders = new List<Order>();
+            List<OrderSub> s_OrderSubs = new List<OrderSub>();
             lock (lock_Reserve)
             {
 
@@ -765,7 +765,7 @@ namespace LocalS.BLL.Biz
                         d_Order.CreateTime = DateTime.Now;
                         CurrentDb.Order.Add(d_Order);
 
-                        d_Orders.Add(d_Order);
+                        s_Orders.Add(d_Order);
 
                         foreach (var buildOrderSub in buildOrder.Childs)
                         {
@@ -825,12 +825,14 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.ReffUserId = d_Order.ReffUserId;
                             CurrentDb.OrderSub.Add(d_OrderSub);
 
-                            d_OrderSubs.Add(d_OrderSub);
 
                             //购物或租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
                                 BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+
+                                s_OrderSubs.Add(d_OrderSub);
+
                             }
                         }
                     }
@@ -840,11 +842,11 @@ namespace LocalS.BLL.Biz
                     ts.Complete();
 
 
-                    foreach (var d_Order in d_Orders)
+                    foreach (var s_Order in s_Orders)
                     {
-                        ret.Orders.Add(new RetOrderReserve.Order { Id = d_Order.Id, ChargeAmount = d_Order.ChargeAmount.ToF2Price() });
+                        ret.Orders.Add(new RetOrderReserve.Order { Id = s_Order.Id, ChargeAmount = s_Order.ChargeAmount.ToF2Price() });
 
-                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, d_Order.Id, d_Order.PayExpireTime.Value, new Order2CheckPayModel { Id = d_Order.Id, MerchId = d_Order.MerchId });
+                        Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, s_Order.Id, s_Order.PayExpireTime.Value, new Order2CheckPayModel { Id = s_Order.Id, MerchId = s_Order.MerchId });
 
                     }
 
@@ -859,16 +861,16 @@ namespace LocalS.BLL.Biz
 
                 if (rop.AppId == AppId.STORETERM)
                 {
-                    trgerId = d_Orders[0].MachineId;
+                    trgerId = s_Orders[0].MachineId;
                 }
                 else if (rop.AppId == AppId.WXMINPRAGROM)
                 {
-                    trgerId = d_Orders[0].StoreId;
+                    trgerId = s_Orders[0].StoreId;
                 }
 
-                MqFactory.Global.PushEventNotify(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", d_Orders.Select(m => m.Id).ToArray())), new { Orders = d_Orders, OrderSub = d_OrderSubs });
+                MqFactory.Global.PushEventNotify(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { Orders = s_Orders, OrderSubs = s_OrderSubs });
 
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", d_Orders.Select(m => m.Id).ToArray())), rop);
+                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.StockOrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), rop);
             }
 
             return result;
@@ -975,8 +977,8 @@ namespace LocalS.BLL.Biz
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            List<Order> d_Orders = new List<Order>();
-            List<OrderSub> d_OrderSubs = new List<OrderSub>();
+            List<Order> s_Orders = new List<Order>();
+            List<OrderSub> s_OrderSubs = new List<OrderSub>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -1020,7 +1022,7 @@ namespace LocalS.BLL.Biz
                     var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_payTrans.ClientUserId).FirstOrDefault();
 
                     var orderIds = d_payTrans.OrderIds.Split(',');
-                    d_Orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
+                    var d_Orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
                     foreach (var d_Order in d_Orders)
                     {
                         d_Order.ClientUserId = d_payTrans.ClientUserId;
@@ -1042,12 +1044,12 @@ namespace LocalS.BLL.Biz
                                 break;
                             case E_ReceiveMode.SelfTakeByStore:
                                 d_Order.Status = E_OrderStatus.Payed;
-                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_order.ReceptionMarkName, d_order.PickupCode);
+                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_Order.ReceptionMarkName, d_Order.PickupCode);
                                 d_Order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.SelfTakeByMachine:
                                 d_Order.Status = E_OrderStatus.Payed;
-                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", d_order.ReceptionMarkName, d_order.MachineId, d_order.PickupCode);
+                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", d_Order.ReceptionMarkName, d_Order.MachineId, d_Order.PickupCode);
                                 d_Order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.FeeByMember:
@@ -1058,91 +1060,91 @@ namespace LocalS.BLL.Biz
                                 break;
                         }
 
-                        d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+                        var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
 
                         foreach (var d_OrderSub in d_OrderSubs)
                         {
-                            d_OrderSub.PayWay = d_order.PayWay;
-                            d_OrderSub.PayStatus = d_order.PayStatus;
-                            d_OrderSub.PayedTime = d_order.PayedTime;
-                            d_OrderSub.ClientUserId = d_order.ClientUserId;
+                            d_OrderSub.PayWay = d_Order.PayWay;
+                            d_OrderSub.PayStatus = d_Order.PayStatus;
+                            d_OrderSub.PayedTime = d_Order.PayedTime;
+                            d_OrderSub.ClientUserId = d_Order.ClientUserId;
                             d_OrderSub.Mender = operater;
                             d_OrderSub.MendTime = DateTime.Now;
 
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy)
                             {
                                 #region Shop
-                                d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                                d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
-                                d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
+                                d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
+                                d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
                                 #endregion 
                             }
                             else if (d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
                                 #region 
-                                d_orderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                                d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
-                                d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
+                                d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
+                                d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
 
                                 var d_rentOrder = new RentOrder();
                                 d_rentOrder.Id = IdWorker.Build(IdType.NewGuid);
-                                d_rentOrder.MerchId = d_orderSub.MerchId;
-                                d_rentOrder.OrdeId = d_orderSub.OrderId;
-                                d_rentOrder.ClientUserId = d_orderSub.ClientUserId;
-                                d_rentOrder.SpuId = d_orderSub.PrdProductId;
-                                d_rentOrder.SkuId = d_orderSub.PrdProductSkuId;
-                                d_rentOrder.SkuName = d_orderSub.PrdProductSkuName;
-                                d_rentOrder.SkuCumCode = d_orderSub.PrdProductSkuCumCode;
-                                d_rentOrder.SkuBarCode = d_orderSub.PrdProductSkuBarCode;
-                                d_rentOrder.SkuSpecDes = d_orderSub.PrdProductSkuSpecDes;
-                                d_rentOrder.SkuProducer = d_orderSub.PrdProductSkuProducer;
-                                d_rentOrder.SkuMainImgUrl = d_orderSub.PrdProductSkuMainImgUrl;
-                                d_rentOrder.DepositAmount = d_orderSub.ChargeAmount;
+                                d_rentOrder.MerchId = d_OrderSub.MerchId;
+                                d_rentOrder.OrdeId = d_OrderSub.OrderId;
+                                d_rentOrder.ClientUserId = d_OrderSub.ClientUserId;
+                                d_rentOrder.SpuId = d_OrderSub.PrdProductId;
+                                d_rentOrder.SkuId = d_OrderSub.PrdProductSkuId;
+                                d_rentOrder.SkuName = d_OrderSub.PrdProductSkuName;
+                                d_rentOrder.SkuCumCode = d_OrderSub.PrdProductSkuCumCode;
+                                d_rentOrder.SkuBarCode = d_OrderSub.PrdProductSkuBarCode;
+                                d_rentOrder.SkuSpecDes = d_OrderSub.PrdProductSkuSpecDes;
+                                d_rentOrder.SkuProducer = d_OrderSub.PrdProductSkuProducer;
+                                d_rentOrder.SkuMainImgUrl = d_OrderSub.PrdProductSkuMainImgUrl;
+                                d_rentOrder.DepositAmount = d_OrderSub.ChargeAmount;
                                 d_rentOrder.IsPayDeposit = true;
                                 d_rentOrder.PayDepositTime = DateTime.Now;
-                                d_rentOrder.RentTermUnit = d_orderSub.RentTermUnit;
-                                d_rentOrder.RentTermValue = d_orderSub.RentTermValue;
+                                d_rentOrder.RentTermUnit = d_OrderSub.RentTermUnit;
+                                d_rentOrder.RentTermValue = d_OrderSub.RentTermValue;
                                 d_rentOrder.RentTermUnitText = "月";
-                                d_rentOrder.RentAmount = d_orderSub.RentAmount;
-                                d_rentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_orderSub.RentTermValue);
+                                d_rentOrder.RentAmount = d_OrderSub.RentAmount;
+                                d_rentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
                                 d_rentOrder.Creator = operater;
                                 d_rentOrder.CreateTime = DateTime.Now;
                                 CurrentDb.RentOrder.Add(d_rentOrder);
 
                                 var d_rentOrderTransRecord = new RentOrderTransRecord();
                                 d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
-                                d_rentOrderTransRecord.MerchId = d_orderSub.MerchId;
-                                d_rentOrderTransRecord.OrdeId = d_orderSub.OrderId;
+                                d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
+                                d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
                                 d_rentOrderTransRecord.RentOrderId = d_rentOrder.Id;
-                                d_rentOrderTransRecord.ClientUserId = d_orderSub.ClientUserId;
+                                d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
                                 d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
-                                d_rentOrderTransRecord.Amount = d_orderSub.ChargeAmount;
+                                d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
                                 d_rentOrderTransRecord.TransTime = DateTime.Now;
                                 d_rentOrderTransRecord.AmountType = E_RentAmountType.DepositAndRent;
-                                d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_orderSub.RentTermValue);
+                                d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
                                 d_rentOrderTransRecord.Creator = operater;
                                 d_rentOrderTransRecord.CreateTime = DateTime.Now;
-                                d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_orderSub.ChargeAmount);
+                                d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_OrderSub.ChargeAmount);
                                 CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
 
                                 #endregion
                             }
-                            else if (d_orderSub.ShopMethod == E_ShopMethod.MemberFee)
+                            else if (d_OrderSub.ShopMethod == E_ShopMethod.MemberFee)
                             {
                                 #region MemberFee
-                                d_orderSub.PickupStatus = E_OrderPickupStatus.Taked;
-                                d_orderSub.PickupFlowLastDesc = d_order.PickupFlowLastDesc;
-                                d_orderSub.PickupFlowLastTime = d_order.PickupFlowLastTime;
+                                d_OrderSub.PickupStatus = E_OrderPickupStatus.Taked;
+                                d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
+                                d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
 
 
-                                var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_orderSub.MerchId && m.Id == d_orderSub.PrdProductSkuId).FirstOrDefault();
+                                var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.Id == d_OrderSub.PrdProductSkuId).FirstOrDefault();
                                 if (d_memberFeeSt != null)
                                 {
                                     string[] couponIds = d_memberFeeSt.CouponIds.ToJsonObject<string[]>();
 
                                     if (couponIds != null && couponIds.Length > 0)
                                     {
-                                        var d_coupons = CurrentDb.Coupon.Where(m => couponIds.Contains(m.Id) && m.MerchId == d_orderSub.MerchId).ToList();
+                                        var d_coupons = CurrentDb.Coupon.Where(m => couponIds.Contains(m.Id) && m.MerchId == d_OrderSub.MerchId).ToList();
 
                                         foreach (var d_coupon in d_coupons)
                                         {
@@ -1151,8 +1153,8 @@ namespace LocalS.BLL.Biz
                                                 var d_clientCoupon = new ClientCoupon();
                                                 d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
                                                 d_clientCoupon.Sn = "";
-                                                d_clientCoupon.MerchId = d_orderSub.MerchId;
-                                                d_clientCoupon.ClientUserId = d_orderSub.ClientUserId;
+                                                d_clientCoupon.MerchId = d_OrderSub.MerchId;
+                                                d_clientCoupon.ClientUserId = d_OrderSub.ClientUserId;
                                                 d_clientCoupon.CouponId = d_coupon.Id;
                                                 if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
                                                 {
@@ -1225,10 +1227,12 @@ namespace LocalS.BLL.Biz
                             //购物和租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_order.ShopMode, d_order.MerchId, d_order.StoreId, d_orderSub.ShopId, d_orderSub.MachineId, d_orderSub.CabinetId, d_orderSub.SlotId, d_orderSub.PrdProductSkuId, d_orderSub.Quantity);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+
+                                s_OrderSubs.Add(d_OrderSub);
                             }
 
-                            if (!string.IsNullOrEmpty(d_order.ReffUserId))
+                            if (!string.IsNullOrEmpty(d_Order.ReffUserId))
                             {
                                 var d_ClientReffSku = new ClientReffSku();
                                 d_ClientReffSku.Id = IdWorker.Build(IdType.NewGuid);
@@ -1251,6 +1255,8 @@ namespace LocalS.BLL.Biz
                                 CurrentDb.ClientReffSku.Add(d_ClientReffSku);
                                 CurrentDb.SaveChanges();
                             }
+
+                            s_Orders.Add(d_Order);
                         }
 
                         if (!string.IsNullOrEmpty(d_Order.CouponIdsByShop))
@@ -1396,6 +1402,12 @@ namespace LocalS.BLL.Biz
                         completedTime = completedTime,
                         pms = pms
                     });
+
+                    MqFactory.Global.PushEventNotify(operater, d_Orders[0].AppId, trgerId, EventCode.StockOrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_Orders.Select(m => m.Id).ToArray())), new
+                    {
+                        Orders = s_Orders,
+                        OrderSubs = s_OrderSubs
+                    });
                 }
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, string.Format("支付完成通知：交易号({0})通知成功", payTransId));
@@ -1430,8 +1442,8 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var d_Orders = new List<Order>();
-                var d_OrderSubs = new List<OrderSub>();
+                var s_Orders = new List<Order>();
+                var s_OrderSubs = new List<OrderSub>();
 
                 var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
@@ -1477,7 +1489,7 @@ namespace LocalS.BLL.Biz
                         d_Order.PayStatus = E_PayStatus.PayTimeout;
                     }
 
-                    d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+                    var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
 
                     foreach (var d_OrderSub in d_OrderSubs)
                     {
@@ -1500,6 +1512,8 @@ namespace LocalS.BLL.Biz
                         if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                         {
                             BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+
+                            s_OrderSubs.Add(d_OrderSub);
                         }
 
                     }
@@ -1543,7 +1557,7 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    d_Orders.Add(d_Order);
+                    s_Orders.Add(d_Order);
 
                     CurrentDb.SaveChanges();
 
@@ -1570,7 +1584,7 @@ namespace LocalS.BLL.Biz
 
                     });
 
-                    MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new { Orders = d_Orders, OrderSub = d_OrderSubs });
+                    MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new { Orders = s_Orders, OrderSub = s_OrderSubs });
 
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
