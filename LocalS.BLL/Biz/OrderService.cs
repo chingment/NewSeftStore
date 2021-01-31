@@ -868,6 +868,7 @@ namespace LocalS.BLL.Biz
                     trgerId = s_Orders[0].StoreId;
                 }
 
+
                 MqFactory.Global.PushEventNotify(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { OrderSubs = s_OrderSubs });
                 MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.StockOrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), rop);
             }
