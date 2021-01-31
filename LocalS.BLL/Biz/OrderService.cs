@@ -868,8 +868,7 @@ namespace LocalS.BLL.Biz
                     trgerId = s_Orders[0].StoreId;
                 }
 
-                MqFactory.Global.PushEventNotify(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { Orders = s_Orders, OrderSubs = s_OrderSubs });
-
+                MqFactory.Global.PushEventNotify(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { OrderSubs = s_OrderSubs });
                 MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.StockOrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), rop);
             }
 
@@ -1405,7 +1404,6 @@ namespace LocalS.BLL.Biz
 
                     MqFactory.Global.PushEventNotify(operater, d_Orders[0].AppId, trgerId, EventCode.StockOrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_Orders.Select(m => m.Id).ToArray())), new
                     {
-                        Orders = s_Orders,
                         OrderSubs = s_OrderSubs
                     });
                 }
@@ -1584,7 +1582,7 @@ namespace LocalS.BLL.Biz
 
                     });
 
-                    MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new { Orders = s_Orders, OrderSub = s_OrderSubs });
+                    MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new { OrderSub = s_OrderSubs });
 
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
@@ -2079,6 +2077,11 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
+
+            List<Order> s_Orders = new List<Order>();
+            List<OrderSub> s_OrderSubs_1 = new List<OrderSub>();
+            List<OrderSub> s_OrderSubs_2 = new List<OrderSub>();
+
             using (TransactionScope ts = new TransactionScope())
             {
 
@@ -2087,24 +2090,22 @@ namespace LocalS.BLL.Biz
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，备注信息不能为空");
                 }
 
-                List<Order> orders = new List<Order>();
-
                 foreach (var item in rop.Items)
                 {
                     LogUtil.Info("Item:" + item.ItemId);
 
-                    var order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
-                    if (order == null)
+                    var d_Order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
+                    if (d_Order == null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单信息不存在");
                     }
 
-                    if (!order.ExIsHappen)
+                    if (!d_Order.ExIsHappen)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单不是异常状态");
                     }
 
-                    if (order.ExIsHandle)
+                    if (d_Order.ExIsHandle)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该异常订单已经处理完毕");
                     }
@@ -2118,12 +2119,12 @@ namespace LocalS.BLL.Biz
                         decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
                         decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
 
-                        if (item.RefundAmount > (order.ChargeAmount - (refundedAmount + refundingAmount)))
+                        if (item.RefundAmount > (d_Order.ChargeAmount - (refundedAmount + refundingAmount)))
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
                         }
 
-                        var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
+                        var payTran = CurrentDb.PayTrans.Where(m => m.Id == d_Order.PayTransId).FirstOrDefault();
 
                         if (item.RefundAmount > payTran.ChargeAmount)
                         {
@@ -2134,15 +2135,15 @@ namespace LocalS.BLL.Biz
 
                         var payRefund = new PayRefund();
                         payRefund.Id = payRefundId;
-                        payRefund.MerchId = order.MerchId;
-                        payRefund.MerchName = order.MerchName;
-                        payRefund.StoreId = order.StoreId;
-                        payRefund.StoreName = order.StoreName;
-                        payRefund.ClientUserId = order.ClientUserId;
-                        payRefund.ClientUserName = order.ClientUserName;
-                        payRefund.OrderId = order.Id;
-                        payRefund.PayPartnerPayTransId = order.PayPartnerPayTransId;
-                        payRefund.PayTransId = order.PayTransId;
+                        payRefund.MerchId = d_Order.MerchId;
+                        payRefund.MerchName = d_Order.MerchName;
+                        payRefund.StoreId = d_Order.StoreId;
+                        payRefund.StoreName = d_Order.StoreName;
+                        payRefund.ClientUserId = d_Order.ClientUserId;
+                        payRefund.ClientUserName = d_Order.ClientUserName;
+                        payRefund.OrderId = d_Order.Id;
+                        payRefund.PayPartnerPayTransId = d_Order.PayPartnerPayTransId;
+                        payRefund.PayTransId = d_Order.PayTransId;
                         payRefund.ApplyTime = DateTime.Now;
                         payRefund.ApplyMethod = item.RefundMethod;
                         payRefund.ApplyRemark = rop.Remark;
@@ -2156,14 +2157,14 @@ namespace LocalS.BLL.Biz
 
                     LogUtil.Info("orderSubs");
 
-                    var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.ItemId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
+                    var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.ItemId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
 
-                    foreach (var orderSub in orderSubs)
+                    foreach (var d_OrderSub in d_OrderSubs)
                     {
                         LogUtil.Info("orderSubs");
 
-                        var detailItem = item.Uniques.Where(m => m.UniqueId == orderSub.Id).FirstOrDefault();
+                        var detailItem = item.Uniques.Where(m => m.UniqueId == d_OrderSub.Id).FirstOrDefault();
                         if (detailItem == null)
                         {
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，该订单里对应商品异常记录未找到");
@@ -2177,30 +2178,32 @@ namespace LocalS.BLL.Biz
                         if (detailItem.SignStatus == 1)
                         {
 
-                            if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+
+                                s_OrderSubs_1.Add(d_OrderSub);
                             }
 
-                            orderSub.ExPickupIsHandle = true;
-                            orderSub.ExPickupHandleTime = DateTime.Now;
-                            orderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
-                            orderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
+                            d_OrderSub.ExPickupIsHandle = true;
+                            d_OrderSub.ExPickupHandleTime = DateTime.Now;
+                            d_OrderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
+                            d_OrderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
 
 
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                            orderPickupLog.OrderId = orderSub.OrderId;
+                            orderPickupLog.OrderId = d_OrderSub.OrderId;
                             orderPickupLog.ShopMode = E_ShopMode.Machine;
-                            orderPickupLog.MerchId = orderSub.MerchId;
-                            orderPickupLog.StoreId = orderSub.StoreId;
-                            orderPickupLog.ShopId = orderSub.ShopId;
-                            orderPickupLog.MachineId = orderSub.MachineId;
-                            orderPickupLog.UniqueId = orderSub.Id;
+                            orderPickupLog.MerchId = d_OrderSub.MerchId;
+                            orderPickupLog.StoreId = d_OrderSub.StoreId;
+                            orderPickupLog.ShopId = d_OrderSub.ShopId;
+                            orderPickupLog.MachineId = d_OrderSub.MachineId;
+                            orderPickupLog.UniqueId = d_OrderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
-                            orderPickupLog.PrdProductSkuId = orderSub.PrdProductSkuId;
-                            orderPickupLog.CabinetId = orderSub.CabinetId;
-                            orderPickupLog.SlotId = orderSub.SlotId;
+                            orderPickupLog.PrdProductSkuId = d_OrderSub.PrdProductSkuId;
+                            orderPickupLog.CabinetId = d_OrderSub.CabinetId;
+                            orderPickupLog.SlotId = d_OrderSub.SlotId;
                             orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
                             orderPickupLog.ActionRemark = "人为标识已取货";
                             orderPickupLog.Remark = "";
@@ -2210,28 +2213,30 @@ namespace LocalS.BLL.Biz
                         }
                         else if (detailItem.SignStatus == 2)
                         {
-                            if (orderSub.PickupStatus != E_OrderPickupStatus.Taked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, orderSub.MerchId, orderSub.StoreId, orderSub.ShopId, orderSub.MachineId, orderSub.CabinetId, orderSub.SlotId, orderSub.PrdProductSkuId, 1);
+                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+
+                                s_OrderSubs_2.Add(d_OrderSub);
                             }
 
-                            orderSub.ExPickupIsHandle = true;
-                            orderSub.ExPickupHandleTime = DateTime.Now;
-                            orderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
-                            orderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
+                            d_OrderSub.ExPickupIsHandle = true;
+                            d_OrderSub.ExPickupHandleTime = DateTime.Now;
+                            d_OrderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
+                            d_OrderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
 
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                            orderPickupLog.OrderId = orderSub.OrderId;
+                            orderPickupLog.OrderId = d_OrderSub.OrderId;
                             orderPickupLog.ShopMode = E_ShopMode.Machine;
-                            orderPickupLog.MerchId = orderSub.MerchId;
-                            orderPickupLog.StoreId = orderSub.StoreId;
-                            orderPickupLog.MachineId = orderSub.MachineId;
-                            orderPickupLog.UniqueId = orderSub.Id;
+                            orderPickupLog.MerchId = d_OrderSub.MerchId;
+                            orderPickupLog.StoreId = d_OrderSub.StoreId;
+                            orderPickupLog.MachineId = d_OrderSub.MachineId;
+                            orderPickupLog.UniqueId = d_OrderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
-                            orderPickupLog.PrdProductSkuId = orderSub.PrdProductSkuId;
-                            orderPickupLog.CabinetId = orderSub.CabinetId;
-                            orderPickupLog.SlotId = orderSub.SlotId;
+                            orderPickupLog.PrdProductSkuId = d_OrderSub.PrdProductSkuId;
+                            orderPickupLog.CabinetId = d_OrderSub.CabinetId;
+                            orderPickupLog.SlotId = d_OrderSub.SlotId;
                             orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;
                             orderPickupLog.ActionRemark = "人为标识未取货";
                             orderPickupLog.Remark = "";
@@ -2241,13 +2246,13 @@ namespace LocalS.BLL.Biz
                         }
                     }
 
-                    order.ExIsHandle = true;
-                    order.ExHandleTime = DateTime.Now;
-                    order.ExHandleRemark = rop.Remark;
-                    order.Status = E_OrderStatus.Completed;
-                    order.CompletedTime = DateTime.Now;
+                    d_Order.ExIsHandle = true;
+                    d_Order.ExHandleTime = DateTime.Now;
+                    d_Order.ExHandleRemark = rop.Remark;
+                    d_Order.Status = E_OrderStatus.Completed;
+                    d_Order.CompletedTime = DateTime.Now;
 
-                    orders.Add(order);
+                    s_Orders.Add(d_Order);
 
 
                     LogUtil.Info("orders");
@@ -2259,7 +2264,7 @@ namespace LocalS.BLL.Biz
                 {
                     if (string.IsNullOrEmpty(rop.MachineId))
                     {
-                        var machineIds = orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).Select(m => m.MachineId).ToArray();
+                        var machineIds = s_Orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).Select(m => m.MachineId).ToArray();
 
                         foreach (var machineId in machineIds)
                         {
@@ -2294,6 +2299,14 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "异常处理成功");
+            }
+
+            if(result.Result== ResultType.Success)
+            {
+
+                //MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, "", new { OrderSub = s_OrderSubs_1 });
+                //MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, "", new { OrderSub = s_OrderSubs_2 });
+
             }
 
             return result;

@@ -105,7 +105,7 @@ namespace LocalS.BLL.Task
                         case "machine_status":
                             BizFactory.Machine.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.MachineStatus, "心跳包", content);
                             break;
-                        case "pickup":
+                        case "pickup_action":
                             BizFactory.Machine.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, machineId, EventCode.Pickup, "取货动作", content);
                             break;
                         case "pickup_test":
