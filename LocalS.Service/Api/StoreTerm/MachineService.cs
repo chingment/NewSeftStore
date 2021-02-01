@@ -108,6 +108,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.Mqtt.Host = "tcp://112.74.179.185:1883";
             ret.Machine.Mqtt.UserName = "admin";
             ret.Machine.Mqtt.Password = "public";
+            ret.Machine.PicInSampleSize = 8;
 
             ret.Ads = BizFactory.Machine.GetAds(l_machine.MachineId);
             ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);

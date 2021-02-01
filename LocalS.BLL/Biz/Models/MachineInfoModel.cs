@@ -52,5 +52,6 @@ namespace LocalS.BLL.Biz
         public string ImPartner { get; set; }
         public string ImUserName { get; set; }
         public string ImPassword { get; set; }
+        public int PicInSampleSize { get; set; }
     }
 }

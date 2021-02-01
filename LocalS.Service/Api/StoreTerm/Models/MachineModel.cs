@@ -46,6 +46,8 @@ namespace LocalS.Service.Api.StoreTerm
         public string OstVern { get; set; }
         public MqttModel Mqtt { get; set; }
         public ImModel Im { get; set; }
+
+        public int PicInSampleSize { get; set; }
     }
 
 }
