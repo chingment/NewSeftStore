@@ -1589,7 +1589,6 @@ namespace LocalS.BLL.Biz
                             cancelReason = cancelReason
                         },
                         StockChangeRecords = s_StockChangeRecords
-
                     });
 
 
