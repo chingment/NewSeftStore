@@ -51,8 +51,8 @@ namespace LocalS.BLL.Biz
                 case EventCode.StockOrderCancle:
                 case EventCode.StockOrderPaySuccess:
                 case EventCode.StockOrderReserveSuccess:
-                    var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
-                    HandleByStockChangeLog(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
+                    //var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
+                    //HandleByStockChangeLog(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
                     break;
             }
         }
@@ -449,50 +449,50 @@ namespace LocalS.BLL.Biz
 
         }
 
-        private void HandleByStockChangeLog(string operater, string appId, string trgerId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
-        {
-            string merchName = BizFactory.Merch.GetMerchName(model.MerchId);
-            string storeName = BizFactory.Merch.GetStoreName(model.MerchId, model.StoreId);
-            string operaterUserName = BizFactory.Merch.GetClientName(model.MerchId, operater);
+        //private void HandleByStockChangeLog(string operater, string appId, string trgerId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
+        //{
+        //    string merchName = BizFactory.Merch.GetMerchName(model.MerchId);
+        //    string storeName = BizFactory.Merch.GetStoreName(model.MerchId, model.StoreId);
+        //    string operaterUserName = BizFactory.Merch.GetClientName(model.MerchId, operater);
 
-            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(model.MerchId, model.PrdProductSkuId);
+        //    var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(model.MerchId, model.PrdProductSkuId);
 
-            var sellChannelStockLog = new SellChannelStockLog();
-            sellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
-            sellChannelStockLog.MerchId = model.MerchId;
-            sellChannelStockLog.MerchName = merchName;
-            sellChannelStockLog.StoreId = model.StoreId;
-            sellChannelStockLog.StoreName = storeName;
-            sellChannelStockLog.ShopId = model.ShopId;
-            sellChannelStockLog.MachineId = model.MachineId;
-            sellChannelStockLog.ShopMode = model.ShopMode;
-            sellChannelStockLog.CabinetId = model.CabinetId;
-            sellChannelStockLog.SlotId = model.SlotId;
-            sellChannelStockLog.PrdProductId = bizProductSku.ProductId;
-            sellChannelStockLog.PrdProductSkuId = model.PrdProductSkuId;
-            sellChannelStockLog.PrdProductSkuName = bizProductSku.Name;
-            sellChannelStockLog.SellQuantity = model.SellQuantity;
-            sellChannelStockLog.WaitPayLockQuantity = model.WaitPayLockQuantity;
-            sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;
-            sellChannelStockLog.SumQuantity = model.SumQuantity;
-            sellChannelStockLog.EventCode = model.EventCode;
-            sellChannelStockLog.EventName = EventCode.GetEventName(model.EventCode);
-            sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
-            sellChannelStockLog.Creator = operater;
-            sellChannelStockLog.CreateTime = DateTime.Now;
+        //    var sellChannelStockLog = new SellChannelStockLog();
+        //    sellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
+        //    sellChannelStockLog.MerchId = model.MerchId;
+        //    sellChannelStockLog.MerchName = merchName;
+        //    sellChannelStockLog.StoreId = model.StoreId;
+        //    sellChannelStockLog.StoreName = storeName;
+        //    sellChannelStockLog.ShopId = model.ShopId;
+        //    sellChannelStockLog.MachineId = model.MachineId;
+        //    sellChannelStockLog.ShopMode = model.ShopMode;
+        //    sellChannelStockLog.CabinetId = model.CabinetId;
+        //    sellChannelStockLog.SlotId = model.SlotId;
+        //    sellChannelStockLog.PrdProductId = bizProductSku.ProductId;
+        //    sellChannelStockLog.PrdProductSkuId = model.PrdProductSkuId;
+        //    sellChannelStockLog.PrdProductSkuName = bizProductSku.Name;
+        //    sellChannelStockLog.SellQuantity = model.SellQuantity;
+        //    sellChannelStockLog.WaitPayLockQuantity = model.WaitPayLockQuantity;
+        //    sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;
+        //    sellChannelStockLog.SumQuantity = model.SumQuantity;
+        //    sellChannelStockLog.EventCode = model.EventCode;
+        //    sellChannelStockLog.EventName = EventCode.GetEventName(model.EventCode);
+        //    sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
+        //    sellChannelStockLog.Creator = operater;
+        //    sellChannelStockLog.CreateTime = DateTime.Now;
 
-            if (string.IsNullOrEmpty(model.MachineId))
-            {
-                sellChannelStockLog.Remark = eventRemark;
-            }
-            else
-            {
-                sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, model.MachineId, eventRemark);
-            }
+        //    if (string.IsNullOrEmpty(model.MachineId))
+        //    {
+        //        sellChannelStockLog.Remark = eventRemark;
+        //    }
+        //    else
+        //    {
+        //        sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, model.MachineId, eventRemark);
+        //    }
 
-            CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-            CurrentDb.SaveChanges();
+        //    CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
+        //    CurrentDb.SaveChanges();
 
-        }
+        //}
     }
 }

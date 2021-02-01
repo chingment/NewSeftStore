@@ -162,6 +162,9 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
+
+            var ret = new RetOperateStock();
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
@@ -186,7 +189,28 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        var record_1 = new RetOperateStock.ChangeRecordModel
+                        {
+                            ShopMode = sellChannelStock.ShopMode,
+                            MerchId = sellChannelStock.MerchId,
+                            StoreId = sellChannelStock.StoreId,
+                            ShopId = sellChannelStock.ShopId,
+                            MachineId = sellChannelStock.MachineId,
+                            CabinetId = sellChannelStock.CabinetId,
+                            SlotId = sellChannelStock.SlotId,
+                            SkuId = sellChannelStock.PrdProductSkuId,
+                            SellQuantity = sellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                            SumQuantity = sellChannelStock.SumQuantity,
+                            EventCode = EventCode.StockOrderReserveSuccess,
+                            ChangeQuantity = quantity
+                        };
+
+
+                        ret.ChangeRecords.Add(record_1);
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
@@ -214,7 +238,24 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        var record2 = new RetOperateStock.ChangeRecordModel
+                        {
+                            MerchId = sellChannelStock.MerchId,
+                            StoreId = sellChannelStock.StoreId,
+                            ShopId = sellChannelStock.ShopId,
+                            MachineId = sellChannelStock.MachineId,
+                            CabinetId = sellChannelStock.CabinetId,
+                            SlotId = sellChannelStock.SlotId,
+                            SkuId = sellChannelStock.PrdProductSkuId,
+                            SellQuantity = sellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                            SumQuantity = sellChannelStock.SumQuantity,
+                            EventCode = EventCode.StockOrderCancle,
+                            ChangeQuantity = quantity
+                        };
+
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
                         #endregion
                         break;
                     case EventCode.StockOrderPaySuccess:
@@ -244,7 +285,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
@@ -266,7 +307,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
@@ -289,7 +330,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
@@ -312,7 +353,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
@@ -334,7 +375,7 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功");
+                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;

@@ -103,6 +103,7 @@
     <Compile Include="Biz\OperateLogService.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />
+    <Compile Include="Biz\RModels\RetOperateStock.cs" />
     <Compile Include="Biz\RModels\RetOrderBuildPayOptions.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
     <Compile Include="Biz\RModels\RetPayResultQuery.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Mq\MqMessageConentModel\OperateLogModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayRefundResultNotifyModel.cs" />
     <Compile Include="Mq\MqMessageConentModel\PayTransResultNotifyModel.cs" />
-    <Compile Include="Mq\MqMessageConentModel\SellChannelStockChangeModel.cs" />
     <Compile Include="Mq\MqMessageType.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />
