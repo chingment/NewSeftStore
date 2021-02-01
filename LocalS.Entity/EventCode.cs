@@ -36,22 +36,14 @@ namespace LocalS.Entity
         public const string MachineCabinetSaveRowColLayout = "MachineCabinetSaveRowColLayout";
         [EventCodeRemark("A", "机器货道商品调整价格")]
         public const string MachineAdjustStockSalePrice = "MachineAdjustStockSalePrice";
-        [EventCodeRemark("A", "机器处理运行异常信息")]
-        public const string MachineHandleRunEx = "MachineHandleRunEx";
         [EventCodeRemark("B", "库存改变-订单商品取货未完成人工标记未取状态")]
-        public const string StockOrderPickupOneManMadeSignNotTakeByNotComplete = "StockOrderPickupOneManMadeSignNotTakeByNotComplete";
+        public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         [EventCodeRemark("B", "库存改变-订单商品取货已完成人工标记未取状态")]
-        public const string StockOrderPickupOneManMadeSignNotTakeByComplete = "StockOrderPickupOneManMadeSignNotTakeByComplete";
+        public const string OrderPickupOneManMadeSignNotTakeByComplete = "OrderPickupOneManMadeSignNotTakeByComplete";
         [EventCodeRemark("B", "库存改变-订单商品取货系统标记已取")]
-        public const string StockOrderPickupOneSysMadeSignTake = "StockOrderPickupOneSysMadeSignTake";
+        public const string OrderPickupOneSysMadeSignTake = "OrderPickupOneSysMadeSignTake";
         [EventCodeRemark("B", "库存改变-订单商品取货未取货完成系统标记已取")]
-        public const string StockOrderPickupOneManMadeSignTakeByNotComplete = "StockOrderPickupOneManMadeSignTakeByNotComplete";
-        [EventCodeRemark("B", "库存改变-订单取消")]
-        public const string StockOrderCancle = "StockOrderCancle";
-        [EventCodeRemark("B", "库存改变-订单支付成功")]
-        public const string StockOrderPaySuccess = "StockOrderPaySuccess";
-        [EventCodeRemark("B", "库存改变-订单预定成功")]
-        public const string StockOrderReserveSuccess = "StockOrderReserveSuccess";
+        public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
         [EventCodeRemark("A", "订单取消")]
         public const string OrderCancle = "OrderCancle";
         [EventCodeRemark("A", "订单支付成功")]

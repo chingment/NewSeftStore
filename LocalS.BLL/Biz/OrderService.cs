@@ -408,7 +408,7 @@ namespace LocalS.BLL.Biz
 
 
             List<Order> s_Orders = new List<Order>();
-            List<OrderSub> s_OrderSubs = new List<OrderSub>();
+            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
             lock (lock_Reserve)
             {
 
@@ -829,9 +829,14 @@ namespace LocalS.BLL.Biz
                             //购物或租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
 
-                                s_OrderSubs.Add(d_OrderSub);
+                                if (ret_OperateStock.Result != ResultType.Success)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "扣减库存失败", null);
+                                }
+
+                                s_StockChangeRecords.AddRange(ret_OperateStock.Data.ChangeRecords);
 
                             }
                         }
@@ -854,11 +859,9 @@ namespace LocalS.BLL.Biz
                 }
             }
 
-            //todo 
+
             if (result.Result == ResultType.Success)
             {
-
-
                 if (rop.AppId == AppId.STORETERM)
                 {
                     trgerId = s_Orders[0].MachineId;
@@ -868,9 +871,7 @@ namespace LocalS.BLL.Biz
                     trgerId = s_Orders[0].StoreId;
                 }
 
-
-                MqFactory.Global.PushEventNotify(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { OrderSubs = s_OrderSubs });
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.StockOrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), rop);
+                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
             }
 
             return result;
@@ -978,8 +979,7 @@ namespace LocalS.BLL.Biz
             CustomJsonResult result = new CustomJsonResult();
 
             List<Order> s_Orders = new List<Order>();
-            List<OrderSub> s_OrderSubs = new List<OrderSub>();
-
+            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
             using (TransactionScope ts = new TransactionScope())
             {
                 LogUtil.Info("payTransId:" + payTransId);
@@ -1227,9 +1227,13 @@ namespace LocalS.BLL.Biz
                             //购物和租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                                if (result_OperateStock.Result != ResultType.Success)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
+                                }
 
-                                s_OrderSubs.Add(d_OrderSub);
+                                s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
                             }
 
                             if (!string.IsNullOrEmpty(d_Order.ReffUserId))
@@ -1395,17 +1399,16 @@ namespace LocalS.BLL.Biz
 
                     MqFactory.Global.PushOperateLog(operater, d_Orders[0].AppId, trgerId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_Orders.Select(m => m.Id).ToArray())), new
                     {
-                        payTransId = payTransId,
-                        payPartner = payPartner,
-                        payPartnerPayTransId = payPartnerPayTransId,
-                        payWay = payWay,
-                        completedTime = completedTime,
-                        pms = pms
-                    });
-
-                    MqFactory.Global.PushEventNotify(operater, d_Orders[0].AppId, trgerId, EventCode.StockOrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_Orders.Select(m => m.Id).ToArray())), new
-                    {
-                        OrderSubs = s_OrderSubs
+                        Rop = new
+                        {
+                            payTransId = payTransId,
+                            payPartner = payPartner,
+                            payPartnerPayTransId = payPartnerPayTransId,
+                            payWay = payWay,
+                            completedTime = completedTime,
+                            pms = pms
+                        },
+                        StockChangeRecords = s_StockChangeRecords
                     });
                 }
 
@@ -1441,8 +1444,8 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var s_Orders = new List<Order>();
-                var s_OrderSubs = new List<OrderSub>();
+
+                List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
 
                 var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
@@ -1510,9 +1513,12 @@ namespace LocalS.BLL.Biz
                         //购物货租赁进行库存操作
                         if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                         {
-                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
-
-                            s_OrderSubs.Add(d_OrderSub);
+                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                            if (result_OperateStock.Result != ResultType.Success)
+                            {
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
+                            }
+                            s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
                         }
 
                     }
@@ -1556,7 +1562,6 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    s_Orders.Add(d_Order);
 
                     CurrentDb.SaveChanges();
 
@@ -1577,13 +1582,15 @@ namespace LocalS.BLL.Biz
 
                     MqFactory.Global.PushOperateLog(operater, d_Order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new
                     {
-                        orderId = orderId,
-                        cancleType = cancleType,
-                        cancelReason = cancelReason
+                        Rop = new
+                        {
+                            orderId = orderId,
+                            cancleType = cancleType,
+                            cancelReason = cancelReason
+                        },
+                        StockChangeRecords = s_StockChangeRecords
 
                     });
-
-                    MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new { OrderSub = s_OrderSubs });
 
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
@@ -2080,8 +2087,8 @@ namespace LocalS.BLL.Biz
 
 
             List<Order> s_Orders = new List<Order>();
-            List<OrderSub> s_OrderSubs_1 = new List<OrderSub>();
-            List<OrderSub> s_OrderSubs_2 = new List<OrderSub>();
+
+            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -2181,9 +2188,13 @@ namespace LocalS.BLL.Biz
 
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                if (result_OperateStock.Result != ResultType.Success)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，扣减库存失败");
+                                }
 
-                                s_OrderSubs_1.Add(d_OrderSub);
+                                s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
                             }
 
                             d_OrderSub.ExPickupIsHandle = true;
@@ -2216,9 +2227,14 @@ namespace LocalS.BLL.Biz
                         {
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
 
-                                s_OrderSubs_2.Add(d_OrderSub);
+                                if (result_OperateStock.Result != ResultType.Success)
+                                {
+                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，扣减库存失败");
+                                }
+
+                                s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
                             }
 
                             d_OrderSub.ExPickupIsHandle = true;
@@ -2302,11 +2318,20 @@ namespace LocalS.BLL.Biz
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "异常处理成功");
             }
 
-            if(result.Result== ResultType.Success)
+            if (result.Result == ResultType.Success)
             {
+                string trgerId = "";
+                string appId = s_Orders[0].AppId;
+                if (s_Orders[0].AppId == AppId.STORETERM)
+                {
+                    trgerId = s_Orders[0].MachineId;
+                }
+                else if (s_Orders[0].AppId == AppId.WXMINPRAGROM)
+                {
+                    trgerId = s_Orders[0].StoreId;
+                }
 
-                //MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete, "", new { OrderSub = s_OrderSubs_1 });
-                //MqFactory.Global.PushEventNotify(operater, d_Order.AppId, trgerId, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, "", new { OrderSub = s_OrderSubs_2 });
+                MqFactory.Global.PushEventNotify(operater, appId, trgerId, EventCode.OrderHandleExOrder, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
 
             }
 

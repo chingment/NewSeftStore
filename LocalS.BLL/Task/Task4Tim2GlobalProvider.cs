@@ -39,6 +39,7 @@ namespace LocalS.BLL.Task
             RedisManager.Db.HashSetAsync(key, d.Id, d.ToJsonString(), StackExchange.Redis.When.Always);
         }
 
+
         public void Exit(Task4TimType type, string[] ids)
         {
             foreach (var id in ids)

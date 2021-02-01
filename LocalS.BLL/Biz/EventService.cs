@@ -44,13 +44,6 @@ namespace LocalS.BLL.Biz
                 case EventCode.MachineCabinetSlotSave:
                 case EventCode.MachineCabinetSlotRemove:
                 case EventCode.MachineCabinetSlotAdjustStockQuantity:
-                case EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete:
-                case EventCode.StockOrderPickupOneManMadeSignNotTakeByComplete:
-                case EventCode.StockOrderPickupOneSysMadeSignTake:
-                case EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete:
-                case EventCode.StockOrderCancle:
-                case EventCode.StockOrderPaySuccess:
-                case EventCode.StockOrderReserveSuccess:
                     //var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
                     //HandleByStockChangeLog(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
                     break;
@@ -344,7 +337,7 @@ namespace LocalS.BLL.Biz
                                     {
                                         if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                         {
-                                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.StockOrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
 
                                             s_OrderSubs.Add(d_OrderSub);
                                         }
@@ -393,7 +386,7 @@ namespace LocalS.BLL.Biz
 
                 MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.Pickup, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
 
-                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machineId, EventCode.StockOrderPickupOneSysMadeSignTake, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), new {
+                MqFactory.Global.PushEventNotify(operater, AppId.STORETERM, machineId, EventCode.OrderPickupOneSysMadeSignTake, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), new {
                     Orders= s_Orders,
                     OrderSubs= s_OrderSubs
                 });

@@ -158,27 +158,26 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public CustomJsonResult OperateStockQuantity(string operater, string operateEvent, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
+        public CustomJsonResult<RetOperateStock> OperateStockQuantity(string operater, string operateEvent, E_ShopMode shopMode, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int quantity)
         {
-            var result = new CustomJsonResult();
-
+            var result = new CustomJsonResult<RetOperateStock>();
 
             var ret = new RetOperateStock();
 
+            SellChannelStock sellChannelStock = null;
             using (TransactionScope ts = new TransactionScope())
             {
                 var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
-                SellChannelStock sellChannelStock = null;
                 switch (operateEvent)
                 {
-                    case EventCode.StockOrderReserveSuccess:
+                    case EventCode.OrderReserveSuccess:
                         #region OrderReserve
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.WaitPayLockQuantity += quantity;
@@ -189,39 +188,18 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        var record_1 = new RetOperateStock.ChangeRecordModel
-                        {
-                            ShopMode = sellChannelStock.ShopMode,
-                            MerchId = sellChannelStock.MerchId,
-                            StoreId = sellChannelStock.StoreId,
-                            ShopId = sellChannelStock.ShopId,
-                            MachineId = sellChannelStock.MachineId,
-                            CabinetId = sellChannelStock.CabinetId,
-                            SlotId = sellChannelStock.SlotId,
-                            SkuId = sellChannelStock.PrdProductSkuId,
-                            SellQuantity = sellChannelStock.SellQuantity,
-                            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-                            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-                            SumQuantity = sellChannelStock.SumQuantity,
-                            EventCode = EventCode.StockOrderReserveSuccess,
-                            ChangeQuantity = quantity
-                        };
-
-
-                        ret.ChangeRecords.Add(record_1);
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
-                    case EventCode.StockOrderCancle:
+                    case EventCode.OrderCancle:
                         #region OrderCancle
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.WaitPayLockQuantity -= quantity;
@@ -238,34 +216,17 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        var record2 = new RetOperateStock.ChangeRecordModel
-                        {
-                            MerchId = sellChannelStock.MerchId,
-                            StoreId = sellChannelStock.StoreId,
-                            ShopId = sellChannelStock.ShopId,
-                            MachineId = sellChannelStock.MachineId,
-                            CabinetId = sellChannelStock.CabinetId,
-                            SlotId = sellChannelStock.SlotId,
-                            SkuId = sellChannelStock.PrdProductSkuId,
-                            SellQuantity = sellChannelStock.SellQuantity,
-                            WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-                            WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-                            SumQuantity = sellChannelStock.SumQuantity,
-                            EventCode = EventCode.StockOrderCancle,
-                            ChangeQuantity = quantity
-                        };
-
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
                         #endregion
                         break;
-                    case EventCode.StockOrderPaySuccess:
+                    case EventCode.OrderPaySuccess:
                         #region OrderPaySuccess
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.WaitPayLockQuantity -= quantity;
@@ -285,18 +246,19 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
-                    case EventCode.StockOrderPickupOneSysMadeSignTake:
-                        #region OrderPaySuccess
+                    case EventCode.OrderPickupOneSysMadeSignTake:
+                        #region OrderPickupOneSysMadeSignTake
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.WaitPickupLockQuantity -= quantity;
@@ -307,11 +269,12 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
-                    case EventCode.StockOrderPickupOneManMadeSignTakeByNotComplete:
+                    case EventCode.OrderPickupOneManMadeSignTakeByNotComplete:
                         #region OrderPickupOneManMadeSignTakeByNotComplete
 
 
@@ -319,7 +282,7 @@ namespace LocalS.BLL.Biz
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.WaitPickupLockQuantity -= quantity;
@@ -330,11 +293,11 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
-                    case EventCode.StockOrderPickupOneManMadeSignNotTakeByComplete:
+                    case EventCode.OrderPickupOneManMadeSignNotTakeByComplete:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
 
@@ -342,7 +305,7 @@ namespace LocalS.BLL.Biz
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.WaitPickupLockQuantity -= quantity;
@@ -353,18 +316,18 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
-                    case EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete:
+                    case EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId && m.PrdProductSkuId == productSkuId).FirstOrDefault();
                         if (sellChannelStock == null)
                         {
                             ts.Complete();
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId));
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", productSkuId), null);
                         }
 
                         sellChannelStock.SellQuantity += 1;
@@ -375,37 +338,37 @@ namespace LocalS.BLL.Biz
                         CurrentDb.SaveChanges();
                         ts.Complete();
 
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
 
                         #endregion
                         break;
                 }
             }
 
-            //var eventContent = new SellChannelStockChangeModel
-            //{
-            //    MerchId = sellChannelStock.MerchId,
-            //    StoreId = sellChannelStock.StoreId,
-            //    ShopId = sellChannelStock.ShopId,
-            //    MachineId = sellChannelStock.MachineId,
-            //    SellChannelRefType = sellChannelStock.SellChannelRefType,
-            //    CabinetId = sellChannelStock.CabinetId,
-            //    SlotId = sellChannelStock.SlotId,
-            //    PrdProductSkuId = sellChannelStock.PrdProductSkuId,
-            //    SellQuantity = sellChannelStock.SellQuantity,
-            //    WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-            //    WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-            //    SumQuantity = sellChannelStock.SumQuantity,
-            //    EventCode = EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete,
-            //    ChangeQuantity = quantity
-            //};
-
-            //MqFactory.Global.PushEventNotify(operater, appId, merchId, storeId, shopId, machineId, EventCode.StockOrderPickupOneManMadeSignNotTakeByNotComplete, string.Format("机柜：{0}，货道：{1}，商品：{2}，人为标记未取货成功，恢复可售库存：{3}，减去待取货库存：{3}，实际库存不变", cabinetId, slotId, r_ProductSku.Name, quantity), eventContent);
-
-            //if (result.Result == ResultType.Success)
-            //{
-            //    SendStock(operater, appId, merchId, productSkuId);
-            //}
+            if (result.Result == ResultType.Success)
+            {
+                var record = new RetOperateStock.ChangeRecordModel
+                {
+                    MerchId = sellChannelStock.MerchId,
+                    StoreId = sellChannelStock.StoreId,
+                    ShopId = sellChannelStock.ShopId,
+                    MachineId = sellChannelStock.MachineId,
+                    CabinetId = sellChannelStock.CabinetId,
+                    SlotId = sellChannelStock.SlotId,
+                    SkuId = sellChannelStock.PrdProductSkuId,
+                    SellQuantity = sellChannelStock.SellQuantity,
+                    WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
+                    WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
+                    SumQuantity = sellChannelStock.SumQuantity,
+                    EventCode = operateEvent,
+                    ChangeQuantity = quantity
+                };
+                result.Data = new RetOperateStock();
+                result.Data.ChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+                result.Data.ChangeRecords.Add(record);
+            }
 
             return result;
         }

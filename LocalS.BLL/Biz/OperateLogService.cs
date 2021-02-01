@@ -80,6 +80,8 @@ namespace LocalS.BLL.Biz
             merchOperateLog.CreateTime = DateTime.Now;
             CurrentDb.MerchOperateLog.Add(merchOperateLog);
             CurrentDb.SaveChanges();
+
+            
         }
     }
 }

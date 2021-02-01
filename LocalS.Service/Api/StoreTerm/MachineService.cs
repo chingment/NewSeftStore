@@ -267,8 +267,6 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
-
             var bizRop = new RopOrderHandleExByMachineSelfTake();
             bizRop.IsRunning = true;
             bizRop.Remark = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
@@ -276,9 +274,6 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.MachineId = rop.MachineId;
 
             result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
-
-
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineHandleRunEx, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", machine.StoreName, machine.ShopName, machine.MachineId, result.Message), rop);
 
             return result;
         }
