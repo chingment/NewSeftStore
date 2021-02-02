@@ -59,7 +59,7 @@ namespace LocalS.Service.Api.Merch
             var retRptTodaySummary = new RetRptTodaySummary();
 
             StringBuilder sql = new StringBuilder();
-            sql.Append(" select COUNT(*) from dbo.[Order] where ReceiveMode=3 and ExIsHappen=1 and ExIsHandle=0 and merchId='" + merchId + "' ");
+            sql.Append(" select COUNT(*) from dbo.[Order] where ReceiveMode=4 and ExIsHappen=1 and ExIsHandle=0 and merchId='" + merchId + "' ");
 
 
             int sumExHdByMachineSelfTake = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql.ToString()).ToString());

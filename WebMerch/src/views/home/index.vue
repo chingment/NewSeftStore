@@ -319,7 +319,7 @@ export default {
     sumExHdByMachineSelfTakeClick() {
       this.$cookies.set('isHasEx', '1')
       this.$router.push({
-        path: '/order/list?receiveMode=3'
+        path: '/order/listbymt'
       })
     },
     todayGmvClick() {
