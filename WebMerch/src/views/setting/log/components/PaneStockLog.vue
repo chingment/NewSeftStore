@@ -34,7 +34,7 @@
       </el-table-column>
       <el-table-column label="销售渠道" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span>{{ scope.row.sellChannelRefName }}</span>
+          <span>{{ scope.row.sellChannelName }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="时间" prop="createTime" align="left" min-width="15%">
@@ -180,7 +180,8 @@ export default {
 
       this.dialogRelStockListQuery.productSkuId = row.productSkuId
       this.dialogRelStockListQuery.storeId = row.storeId
-      this.dialogRelStockListQuery.sellChannelRefId = row.sellChannelRefId
+      this.dialogRelStockListQuery.shopId = row.shopId
+      this.dialogRelStockListQuery.machineId = row.machineId
       this.dialogRelStockListQuery.cabinetId = row.cabinetId
       this.dialogRelStockListQuery.slotId = row.slotId
 
