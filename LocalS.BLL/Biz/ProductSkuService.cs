@@ -356,6 +356,7 @@ namespace LocalS.BLL.Biz
                     ShopId = sellChannelStock.ShopId,
                     MachineId = sellChannelStock.MachineId,
                     CabinetId = sellChannelStock.CabinetId,
+                    ShopMode = sellChannelStock.ShopMode,
                     SlotId = sellChannelStock.SlotId,
                     SkuId = sellChannelStock.PrdProductSkuId,
                     SellQuantity = sellChannelStock.SellQuantity,
