@@ -19,12 +19,6 @@ using System.IO;
 
 namespace LocalS.BLL.Biz
 {
-    public class UseAreaModel
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Type { get; set; }
-    }
     public class OrderService : BaseService
     {
         public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
@@ -405,7 +399,6 @@ namespace LocalS.BLL.Biz
             }
 
             string trgerId = "";
-
 
             List<Order> s_Orders = new List<Order>();
             List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
@@ -984,29 +977,29 @@ namespace LocalS.BLL.Biz
             {
                 LogUtil.Info("payTransId:" + payTransId);
 
-                var d_payTrans = CurrentDb.PayTrans.Where(m => m.Id == payTransId).FirstOrDefault();
+                var d_PayTrans = CurrentDb.PayTrans.Where(m => m.Id == payTransId).FirstOrDefault();
 
-                if (d_payTrans == null)
+                if (d_PayTrans == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("找不到该订单号({0})", payTransId));
                 }
 
-                if (d_payTrans.PayStatus == E_PayStatus.PaySuccess)
+                if (d_PayTrans.PayStatus == E_PayStatus.PaySuccess)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("订单号({0})已经支付通知成功", payTransId));
                 }
 
-                if (d_payTrans.PayStatus == E_PayStatus.WaitPay || d_payTrans.PayStatus == E_PayStatus.Paying)
+                if (d_PayTrans.PayStatus == E_PayStatus.WaitPay || d_PayTrans.PayStatus == E_PayStatus.Paying)
                 {
                     LogUtil.Info("进入PaySuccess修改订单,开始");
 
-                    operater = d_payTrans.Creator;
+                    operater = d_PayTrans.Creator;
 
-                    d_payTrans.PayPartner = payPartner;
-                    d_payTrans.PayPartnerPayTransId = payPartnerPayTransId;
-                    d_payTrans.PayWay = payWay;
-                    d_payTrans.PayStatus = E_PayStatus.PaySuccess;
-                    d_payTrans.PayedTime = DateTime.Now;
+                    d_PayTrans.PayPartner = payPartner;
+                    d_PayTrans.PayPartnerPayTransId = payPartnerPayTransId;
+                    d_PayTrans.PayWay = payWay;
+                    d_PayTrans.PayStatus = E_PayStatus.PaySuccess;
+                    d_PayTrans.PayedTime = DateTime.Now;
 
                     if (pms != null)
                     {
@@ -1014,22 +1007,22 @@ namespace LocalS.BLL.Biz
                         {
                             if (!string.IsNullOrEmpty(pms["clientUserName"]))
                             {
-                                d_payTrans.ClientUserName = pms["clientUserName"];
+                                d_PayTrans.ClientUserName = pms["clientUserName"];
                             }
                         }
                     }
 
-                    var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_payTrans.ClientUserId).FirstOrDefault();
+                    var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_PayTrans.ClientUserId).FirstOrDefault();
 
-                    var orderIds = d_payTrans.OrderIds.Split(',');
+                    var orderIds = d_PayTrans.OrderIds.Split(',');
                     var d_Orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
                     foreach (var d_Order in d_Orders)
                     {
-                        d_Order.ClientUserId = d_payTrans.ClientUserId;
-                        d_Order.ClientUserName = d_payTrans.ClientUserName;
-                        d_Order.PayedTime = d_payTrans.PayedTime;
-                        d_Order.PayStatus = d_payTrans.PayStatus;
-                        d_Order.PayWay = d_payTrans.PayWay;
+                        d_Order.ClientUserId = d_PayTrans.ClientUserId;
+                        d_Order.ClientUserName = d_PayTrans.ClientUserName;
+                        d_Order.PayedTime = d_PayTrans.PayedTime;
+                        d_Order.PayStatus = d_PayTrans.PayStatus;
+                        d_Order.PayWay = d_PayTrans.PayWay;
                         d_Order.PayPartner = payPartner;
                         d_Order.PayPartnerPayTransId = payPartnerPayTransId;
                         d_Order.MendTime = DateTime.Now;
@@ -1349,8 +1342,8 @@ namespace LocalS.BLL.Biz
 
                         var d_PayTransSub = new PayTransSub();
                         d_PayTransSub.Id = IdWorker.Build(IdType.NewGuid);
-                        d_PayTransSub.PayTransId = d_payTrans.Id;
-                        d_PayTransSub.MerchId = d_payTrans.MerchId;
+                        d_PayTransSub.PayTransId = d_PayTrans.Id;
+                        d_PayTransSub.MerchId = d_PayTrans.MerchId;
                         d_PayTransSub.MerchName = d_Order.MerchName;
                         d_PayTransSub.StoreId = d_Order.StoreId;
                         d_PayTransSub.StoreName = d_Order.StoreName;
@@ -1369,10 +1362,10 @@ namespace LocalS.BLL.Biz
                         d_PayTransSub.Source = d_Order.Source;
                         d_PayTransSub.CreateTime = DateTime.Now;
                         d_PayTransSub.Creator = operater;
-                        d_PayTransSub.PayCaller = d_payTrans.PayCaller;
-                        d_PayTransSub.PayPartner = d_payTrans.PayPartner;
-                        d_PayTransSub.PayWay = d_payTrans.PayWay;
-                        d_PayTransSub.PayStatus = d_payTrans.PayStatus;
+                        d_PayTransSub.PayCaller = d_PayTrans.PayCaller;
+                        d_PayTransSub.PayPartner = d_PayTrans.PayPartner;
+                        d_PayTransSub.PayWay = d_PayTrans.PayWay;
+                        d_PayTransSub.PayStatus = d_PayTrans.PayStatus;
                         CurrentDb.PayTransSub.Add(d_PayTransSub);
                         CurrentDb.SaveChanges();
 
@@ -1384,7 +1377,7 @@ namespace LocalS.BLL.Biz
 
                     LogUtil.Info("进入PaySuccess修改订单,结束");
 
-                    Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_payTrans.Id);
+                    Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_PayTrans.Id);
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_Orders.Select(m => m.Id).ToArray());
 
                     string trgerId = "";

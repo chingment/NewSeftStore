@@ -98,6 +98,7 @@
     <Compile Include="Biz\Models\StatusModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\Models\MachineProdcutSkuStockModel.cs" />
+    <Compile Include="Biz\Models\UseAreaModel.cs" />
     <Compile Include="Biz\Models\UseAreaValueModel.cs" />
     <Compile Include="Biz\MyDESCryptoUtil.cs" />
     <Compile Include="Biz\OperateLogService.cs" />
