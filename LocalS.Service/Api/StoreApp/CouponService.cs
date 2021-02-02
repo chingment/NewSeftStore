@@ -28,7 +28,7 @@ namespace LocalS.Service.Api.StoreApp
             }
             else if (useAreaType == E_Coupon_UseAreaType.Store)
             {
-                var arr_useAreaValue = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                var arr_useAreaValue = useAreaValue.ToJsonObject<List<UseAreaModel>>();
 
                 if (arr_useAreaValue != null)
                 {
@@ -283,7 +283,7 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                var arr = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                var arr = useAreaValue.ToJsonObject<List<UseAreaModel>>();
 
                 switch (useAreaType)
                 {
@@ -404,7 +404,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else if (item.UseAreaType == E_Coupon_UseAreaType.ProductKind)
                 {
-                    var olist = item.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                    var olist = item.UseAreaValue.ToJsonObject<List<UseAreaModel>>();
                     if (olist != null)
                     {
                         int[] ids = olist.Select(s => Int32.Parse(s.Id)).ToArray();
@@ -418,7 +418,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else if (item.UseAreaType == E_Coupon_UseAreaType.ProductSpu)
                 {
-                    var olist = item.UseAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                    var olist = item.UseAreaValue.ToJsonObject<List<UseAreaModel>>();
                     if (list != null)
                     {
                         string[] ids = olist.Select(m => m.Id).ToArray();

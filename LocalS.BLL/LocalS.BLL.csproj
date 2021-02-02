@@ -92,14 +92,12 @@
     <Compile Include="Biz\Models\MachineEventByPickupModel.cs" />
     <Compile Include="Biz\Models\MachineEventByPickupTestModel.cs" />
     <Compile Include="Biz\Models\MachineInfoModel.cs" />
-    <Compile Include="Biz\Models\OrderAttachModel.cs" />
     <Compile Include="Biz\Models\OrderDetailsByPickupModel.cs" />
     <Compile Include="Biz\Models\ScannerModel.cs" />
     <Compile Include="Biz\Models\StatusModel.cs" />
     <Compile Include="Biz\Models\StoreInfoModel.cs" />
     <Compile Include="Biz\Models\MachineProdcutSkuStockModel.cs" />
     <Compile Include="Biz\Models\UseAreaModel.cs" />
-    <Compile Include="Biz\Models\UseAreaValueModel.cs" />
     <Compile Include="Biz\MyDESCryptoUtil.cs" />
     <Compile Include="Biz\OperateLogService.cs" />
     <Compile Include="Biz\OrderService.cs" />

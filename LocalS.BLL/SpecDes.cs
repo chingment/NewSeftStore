@@ -82,16 +82,4 @@ namespace LocalS.BLL
     {
         public string Name { get; set; }
     }
-
-    public class SpecSku
-    {
-        public string SkuId { get; set; }
-        public string SpecIdx { get; set; }
-        public bool IsShowPrice { get; set; }
-        public decimal ShowPrice { get; set; }
-        public decimal SalePrice { get; set; }
-        public decimal SalePriceByVip { get; set; }
-        public bool IsOffSell { get; set; }
-    }
-
 }

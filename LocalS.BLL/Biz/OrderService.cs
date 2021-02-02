@@ -1744,7 +1744,7 @@ namespace LocalS.BLL.Biz
 
                 if (payTrans.ChargeAmount > 0)
                 {
-                    var orderAttach = new BLL.Biz.OrderAttachModel();
+                   // var orderAttach = new BLL.Biz.OrderAttachModel();
 
                     var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == payTrans.ClientUserId).FirstOrDefault();
 
@@ -1789,9 +1789,9 @@ namespace LocalS.BLL.Biz
                                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息认证失败");
                                     }
 
-                                    orderAttach.MerchId = payTrans.MerchId;
-                                    orderAttach.StoreId = payTrans.StoreId;
-                                    orderAttach.PayCaller = rop.PayCaller;
+                                    //orderAttach.MerchId = payTrans.MerchId;
+                                    //orderAttach.StoreId = payTrans.StoreId;
+                                    //orderAttach.PayCaller = rop.PayCaller;
 
                                     var wxByMp_PayBuildWxJsPayInfo = SdkFactory.Wx.PayBuildWxJsPayInfo(wxByMp_AppInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 
@@ -1907,9 +1907,9 @@ namespace LocalS.BLL.Biz
                                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                     }
 
-                                    orderAttach.MerchId = payTrans.MerchId;
-                                    orderAttach.StoreId = payTrans.StoreId;
-                                    orderAttach.PayCaller = rop.PayCaller;
+                                   // orderAttach.MerchId = payTrans.MerchId;
+                                    //orderAttach.StoreId = payTrans.StoreId;
+                                   // orderAttach.PayCaller = rop.PayCaller;
 
                                     var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpAppId, d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 

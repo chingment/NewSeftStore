@@ -33,8 +33,6 @@ namespace LocalS.BLL.Biz
             public int WaitPayLockQuantity { get; set; }
             public int WaitPickupLockQuantity { get; set; }
             public int SellQuantity { get; set; }
-
         }
-
     }
 }

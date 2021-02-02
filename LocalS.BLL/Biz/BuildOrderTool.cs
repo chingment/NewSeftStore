@@ -374,7 +374,7 @@ namespace LocalS.BLL.Biz
             }
             else if (useAreaType == E_Coupon_UseAreaType.Store)
             {
-                var list = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                var list = useAreaValue.ToJsonObject<List<UseAreaModel>>();
                 if (list != null)
                 {
                     string[] ids = list.Select(m => m.Id).ToArray();
@@ -389,7 +389,7 @@ namespace LocalS.BLL.Biz
             }
             else if (useAreaType == E_Coupon_UseAreaType.ProductKind)
             {
-                var list = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                var list = useAreaValue.ToJsonObject<List<UseAreaModel>>();
                 if (list != null)
                 {
                     int[] ids = list.Select(s => Int32.Parse(s.Id)).ToArray();
@@ -402,7 +402,7 @@ namespace LocalS.BLL.Biz
             }
             else if (useAreaType == E_Coupon_UseAreaType.ProductSpu)
             {
-                var list = useAreaValue.ToJsonObject<List<UseAreaValueModel>>();
+                var list = useAreaValue.ToJsonObject<List<UseAreaModel>>();
                 if (list != null)
                 {
                     string[] ids = list.Select(m => m.Id).ToArray();
