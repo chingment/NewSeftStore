@@ -2313,17 +2313,16 @@ namespace LocalS.BLL.Biz
             if (result.Result == ResultType.Success)
             {
                 string trgerId = "";
-                string appId = s_Orders[0].AppId;
-                if (s_Orders[0].AppId == AppId.STORETERM)
+                if (rop.AppId == AppId.STORETERM)
                 {
-                    trgerId = s_Orders[0].MachineId;
+                    trgerId = rop.MachineId;
                 }
-                else if (s_Orders[0].AppId == AppId.WXMINPRAGROM)
+                else if (rop.AppId == AppId.MERCH)
                 {
-                    trgerId = s_Orders[0].StoreId;
+                    trgerId = rop.MerchId;
                 }
 
-                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.OrderHandleExOrder, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderHandleExOrder, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
 
             }
 

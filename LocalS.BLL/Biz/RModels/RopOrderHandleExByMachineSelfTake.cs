@@ -39,7 +39,8 @@ namespace LocalS.BLL.Biz
         public List<ExItem> Items { get; set; }
         public string Remark { get; set; }
         public bool IsRunning { get; set; }
-
         public string MachineId { get; set; }
+
+        public string MerchId { get; set; }
     }
 }

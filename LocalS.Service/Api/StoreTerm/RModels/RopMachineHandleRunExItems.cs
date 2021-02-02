@@ -15,8 +15,11 @@ namespace LocalS.Service.Api.StoreTerm
             this.ExReasons = new List<ExReason>();
         }
 
+        public string MerchId { get; set; }
         public string MachineId { get; set; }
         public List<ExItem> ExItems { get; set; }
         public List<ExReason> ExReasons { get; set; }
+
+        public string AppId { get; set; }
     }
 }

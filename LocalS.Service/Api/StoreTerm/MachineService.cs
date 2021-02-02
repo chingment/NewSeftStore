@@ -273,7 +273,8 @@ namespace LocalS.Service.Api.StoreTerm
             bizRop.Remark = string.Join(",", rop.ExReasons.Select(m => m.Title).ToArray());
             bizRop.Items = rop.ExItems;
             bizRop.MachineId = rop.MachineId;
-
+            bizRop.MerchId = rop.MerchId;
+            bizRop.AppId = rop.AppId;
             result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
 
             return result;

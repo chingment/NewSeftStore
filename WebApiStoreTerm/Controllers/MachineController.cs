@@ -1,4 +1,5 @@
-﻿using LocalS.Service.Api.StoreTerm;
+﻿using LocalS.BLL;
+using LocalS.Service.Api.StoreTerm;
 using Lumos;
 using System;
 using System.IO;
@@ -52,7 +53,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse HandleRunExItems([FromBody]RopMachineHandleRunExItems rop)
         {
-
+            rop.AppId = AppId.STORETERM;
             IResult result = StoreTermServiceFactory.Machine.HandleRunExItems(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }

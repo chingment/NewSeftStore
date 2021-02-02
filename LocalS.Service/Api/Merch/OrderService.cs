@@ -364,6 +364,8 @@ namespace LocalS.Service.Api.Merch
         {
             var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
             bizRop.AppId = rop.AppId;
+            bizRop.MerchId = merchId;
+            bizRop.MachineId = rop.MachineId;
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
             bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
