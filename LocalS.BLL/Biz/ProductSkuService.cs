@@ -448,13 +448,7 @@ namespace LocalS.BLL.Biz
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功", slot);
             }
 
-            //if (result.Result == ResultType.Success)
-            //{
-            //    SendStock(operater, appId, merchId, productSkuId);
-            //}
-
             return result;
-
         }
 
         public CustomJsonResult AdjustStockSalePrice(string operater, string merchId, string storeId, string productSkuId, decimal salePrice, bool isOffSell)
@@ -482,12 +476,6 @@ namespace LocalS.BLL.Biz
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
-
-            //if (result.Result == ResultType.Success)
-            //{
-            //    SendStock(operater, appId, merchId, productSkuId);
-            //}
-
             return result;
         }
     }

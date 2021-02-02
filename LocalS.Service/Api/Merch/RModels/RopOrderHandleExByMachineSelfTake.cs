@@ -16,6 +16,7 @@ namespace LocalS.Service.Api.Merch
         }
 
         public string Id { get; set; }
+        public string AppId { get; set; }
         public List<ExUnique> Uniques { get; set; }
         public string Remark { get; set; }
         public bool IsRunning { get; set; }

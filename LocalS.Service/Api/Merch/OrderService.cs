@@ -363,16 +363,11 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult HandleExByMachineSelfTake(string operater, string merchId, RopOrderHandleExByMachineSelfTake rop)
         {
             var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
+            bizRop.AppId = rop.AppId;
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
             bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
             var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
-
-            if (result.Result == ResultType.Success)
-            {
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, "HandleExByMachineSelfTake", string.Format("订单号（{0}），异常处理成功", rop.Id),rop);
-            }
-
             return result;
         }
     }

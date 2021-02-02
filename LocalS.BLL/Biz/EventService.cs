@@ -41,12 +41,6 @@ namespace LocalS.BLL.Biz
                     var pickupTestModel = model.EventContent.ToJsonObject<MachineEventByPickupTestModel>();
                     HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupTestModel);
                     break;
-                case EventCode.MachineCabinetSlotSave:
-                case EventCode.MachineCabinetSlotRemove:
-                case EventCode.MachineCabinetSlotAdjustStockQuantity:
-                    //var sellChannelStockChangeModel = model.EventContent.ToJsonObject<SellChannelStockChangeModel>();
-                    //HandleByStockChangeLog(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, sellChannelStockChangeModel);
-                    break;
             }
         }
 
@@ -74,7 +68,6 @@ namespace LocalS.BLL.Biz
                 MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Login, eventRemark, model);
             }
         }
-
         private void HandleByLogout(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
         {
             var userLoginHis = new SysUserLoginHis();
@@ -101,7 +94,6 @@ namespace LocalS.BLL.Biz
             }
 
         }
-
         private void HandleByMachineStatus(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
         {
             LogUtil.Info(">>>>>EventHandleByMachineStatus");
@@ -165,7 +157,6 @@ namespace LocalS.BLL.Biz
                 MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.MachineStatus, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machineId, eventRemark), model);
             }
         }
-
         private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupModel model)
         {
             if (model == null)
@@ -392,7 +383,6 @@ namespace LocalS.BLL.Biz
                 });
             }
         }
-
         private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupTestModel model)
         {
             if (model == null)
@@ -441,51 +431,5 @@ namespace LocalS.BLL.Biz
             MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.PickupTest, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
 
         }
-
-        //private void HandleByStockChangeLog(string operater, string appId, string trgerId, string eventCode, string eventRemark, SellChannelStockChangeModel model)
-        //{
-        //    string merchName = BizFactory.Merch.GetMerchName(model.MerchId);
-        //    string storeName = BizFactory.Merch.GetStoreName(model.MerchId, model.StoreId);
-        //    string operaterUserName = BizFactory.Merch.GetClientName(model.MerchId, operater);
-
-        //    var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(model.MerchId, model.PrdProductSkuId);
-
-        //    var sellChannelStockLog = new SellChannelStockLog();
-        //    sellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
-        //    sellChannelStockLog.MerchId = model.MerchId;
-        //    sellChannelStockLog.MerchName = merchName;
-        //    sellChannelStockLog.StoreId = model.StoreId;
-        //    sellChannelStockLog.StoreName = storeName;
-        //    sellChannelStockLog.ShopId = model.ShopId;
-        //    sellChannelStockLog.MachineId = model.MachineId;
-        //    sellChannelStockLog.ShopMode = model.ShopMode;
-        //    sellChannelStockLog.CabinetId = model.CabinetId;
-        //    sellChannelStockLog.SlotId = model.SlotId;
-        //    sellChannelStockLog.PrdProductId = bizProductSku.ProductId;
-        //    sellChannelStockLog.PrdProductSkuId = model.PrdProductSkuId;
-        //    sellChannelStockLog.PrdProductSkuName = bizProductSku.Name;
-        //    sellChannelStockLog.SellQuantity = model.SellQuantity;
-        //    sellChannelStockLog.WaitPayLockQuantity = model.WaitPayLockQuantity;
-        //    sellChannelStockLog.WaitPickupLockQuantity = model.WaitPickupLockQuantity;
-        //    sellChannelStockLog.SumQuantity = model.SumQuantity;
-        //    sellChannelStockLog.EventCode = model.EventCode;
-        //    sellChannelStockLog.EventName = EventCode.GetEventName(model.EventCode);
-        //    sellChannelStockLog.ChangeQuantity = model.ChangeQuantity;
-        //    sellChannelStockLog.Creator = operater;
-        //    sellChannelStockLog.CreateTime = DateTime.Now;
-
-        //    if (string.IsNullOrEmpty(model.MachineId))
-        //    {
-        //        sellChannelStockLog.Remark = eventRemark;
-        //    }
-        //    else
-        //    {
-        //        sellChannelStockLog.Remark = string.Format("店铺：{0}，机器：{1}，{2}", storeName, model.MachineId, eventRemark);
-        //    }
-
-        //    CurrentDb.SellChannelStockLog.Add(sellChannelStockLog);
-        //    CurrentDb.SaveChanges();
-
-        //}
     }
 }

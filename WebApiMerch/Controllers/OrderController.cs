@@ -1,4 +1,5 @@
-﻿using LocalS.Service.Api.Merch;
+﻿using LocalS.BLL;
+using LocalS.Service.Api.Merch;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace WebApiMerch.Controllers
         [HttpPost]
         public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderHandleExByMachineSelfTake rop)
         {
+            rop.AppId = AppId.MERCH;
             IResult result = MerchServiceFactory.Order.HandleExByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }

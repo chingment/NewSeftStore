@@ -12,6 +12,7 @@ using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
 using MyPushSdk;
+using Newtonsoft.Json.Linq;
 using NPinyin;
 using System;
 using System.Collections.Generic;
@@ -105,6 +106,13 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            var js = JToken.Parse("{\"rop\":{\"payTransId\":\"620443720210202091327829\",\"payPartner\":1,\"payPartnerPayTransId\":\"4200000909202102029437511778\",\"payWay\":1,\"completedTime\":\"2021-02-02T09:13:42.4383424+08:00\",\"pms\":{\"clientUserName\":null}},\"stockChangeRecords\":[{\"merchId\":\"d17df2252133478c99104180e8062230\",\"storeId\":\"21ae9399b1804dbc9ddd3c29e8b5c670\",\"shopId\":\"f748e0fb203a4f82bd271f4349f663c1\",\"machineId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r0c7\",\"skuId\":\"24fbddc8b80348759c3b12012e068216\",\"shopMode\":0,\"eventCode\":\"OrderPaySuccess\",\"changeQuantity\":1,\"sumQuantity\":3,\"waitPayLockQuantity\":0,\"waitPickupLockQuantity\":1,\"sellQuantity\":2},{\"merchId\":\"d17df2252133478c99104180e8062230\",\"storeId\":\"21ae9399b1804dbc9ddd3c29e8b5c670\",\"shopId\":\"f748e0fb203a4f82bd271f4349f663c1\",\"machineId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r0c9\",\"skuId\":\"5f34dd53523b4824bb9f6303d529d4d8\",\"shopMode\":0,\"eventCode\":\"OrderPaySuccess\",\"changeQuantity\":1,\"sumQuantity\":3,\"waitPayLockQuantity\":0,\"waitPickupLockQuantity\":1,\"sellQuantity\":2}]}");
+
+            if (js["stockChangeRe44cords"] != null)
+            {
+                var s = js["stockChangeRecords"].ToObject<List<RetOperateStock.ChangeRecordModel>>();
+            }
 
             string id = Lumos.CommonUtil.ConvetMD5IN32B("/pages/productdetails/productdetails?reffSign=o176Z5HZazGSxw_yY5A0k4ccVxpA&skuId=722b4d565604489fa1f40c548e0bc114&shopMode=1&shopMethod=1&storeId=4117916edd39468fb153666a55b47165&merchId=35129159f53249efabd4f0bc9a65810c");
 

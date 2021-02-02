@@ -4,6 +4,7 @@ using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +82,51 @@ namespace LocalS.BLL.Biz
             CurrentDb.MerchOperateLog.Add(merchOperateLog);
             CurrentDb.SaveChanges();
 
-            
+            if (!string.IsNullOrEmpty(merchOperateLog.EventData))
+            {
+                if (merchOperateLog.EventData.Contains("stockChangeRecords"))
+                {
+                    var jToken = JToken.Parse(merchOperateLog.EventData);
+                    if (jToken["stockChangeRecords"] != null)
+                    {
+                        var m_ChangeRecords = jToken["stockChangeRecords"].ToObject<List<RetOperateStock.ChangeRecordModel>>();
+
+                        foreach (var m_ChangeRecord in m_ChangeRecords)
+                        {
+                            var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(m_ChangeRecord.MerchId, m_ChangeRecord.SkuId);
+                            string storeName = BizFactory.Merch.GetStoreName(m_ChangeRecord.MerchId, m_ChangeRecord.StoreId);
+                            var d_SellChannelStockLog = new SellChannelStockLog();
+                            d_SellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
+                            d_SellChannelStockLog.MerchId = m_ChangeRecord.MerchId;
+                            d_SellChannelStockLog.MerchName = merchName;
+                            d_SellChannelStockLog.StoreId = m_ChangeRecord.StoreId;
+                            d_SellChannelStockLog.StoreName = storeName;
+                            d_SellChannelStockLog.ShopId = m_ChangeRecord.ShopId;
+                            d_SellChannelStockLog.MachineId = m_ChangeRecord.MachineId;
+                            d_SellChannelStockLog.ShopMode = m_ChangeRecord.ShopMode;
+                            d_SellChannelStockLog.CabinetId = m_ChangeRecord.CabinetId;
+                            d_SellChannelStockLog.SlotId = m_ChangeRecord.SlotId;
+                            d_SellChannelStockLog.PrdProductSkuId = m_ChangeRecord.SkuId;
+                            if (r_ProductSku != null)
+                            {
+                                d_SellChannelStockLog.PrdProductId = r_ProductSku.ProductId;
+                                d_SellChannelStockLog.PrdProductSkuName = r_ProductSku.Name;
+                            }
+                            d_SellChannelStockLog.SellQuantity = m_ChangeRecord.SellQuantity;
+                            d_SellChannelStockLog.WaitPayLockQuantity = m_ChangeRecord.WaitPayLockQuantity;
+                            d_SellChannelStockLog.WaitPickupLockQuantity = m_ChangeRecord.WaitPickupLockQuantity;
+                            d_SellChannelStockLog.SumQuantity = m_ChangeRecord.SumQuantity;
+                            d_SellChannelStockLog.EventCode = m_ChangeRecord.EventCode;
+                            d_SellChannelStockLog.EventName = EventCode.GetEventName(m_ChangeRecord.EventCode);
+                            d_SellChannelStockLog.ChangeQuantity = m_ChangeRecord.ChangeQuantity;
+                            d_SellChannelStockLog.Creator = model.Operater;
+                            d_SellChannelStockLog.CreateTime = DateTime.Now;
+                            CurrentDb.SellChannelStockLog.Add(d_SellChannelStockLog);
+                            CurrentDb.SaveChanges();
+                        }
+                    }
+                }
+            }
         }
     }
 }

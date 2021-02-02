@@ -395,7 +395,7 @@ namespace LocalS.BLL.Biz
 
             if (rop.Blocks == null || rop.Blocks.Count == 0)
             {
-                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定商品为空", null);
+                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[01]，商品数据为空", null);
             }
 
             string trgerId = "";
@@ -409,7 +409,7 @@ namespace LocalS.BLL.Biz
 
                 if (store == null)
                 {
-                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定店铺无效", null);
+                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[02]，无效店铺", null);
                 }
 
                 using (TransactionScope ts = new TransactionScope())
@@ -463,7 +463,7 @@ namespace LocalS.BLL.Biz
                             {
                                 if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[03]，优惠券无效", null);
                                 }
 
                                 d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
@@ -495,7 +495,7 @@ namespace LocalS.BLL.Biz
                             {
                                 if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[04]，押金券无效", null);
                                 }
 
                                 d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
@@ -521,7 +521,7 @@ namespace LocalS.BLL.Biz
                             {
                                 if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "优惠券无效", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[05]，租金券无效", null);
                                 }
 
                                 d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
@@ -639,7 +639,7 @@ namespace LocalS.BLL.Biz
 
                                 if (rm_Delivery == null && rm_Delivery.Delivery == null)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式配送地址为空", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[06]，配送地址为空", null);
                                 }
 
                                 d_Order.ReceiveMode = E_ReceiveMode.Delivery;
@@ -660,7 +660,7 @@ namespace LocalS.BLL.Biz
 
                                 if (rm_StoreSelfTake == null || rm_StoreSelfTake.SelfTake == null)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线上商城售卖模式自取地址为空", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[07]，自提地址为空", null);
                                 }
 
                                 d_Order.ReceiveMode = E_ReceiveMode.SelfTakeByStore;
@@ -711,14 +711,14 @@ namespace LocalS.BLL.Biz
 
                                 if (d_Order.PickupCode == null)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定下单生成取货码失败", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[08]，取货码生成失败", null);
                                 }
 
                                 var rm_MachineSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).FirstOrDefault();
 
                                 if (rm_MachineSelfTake == null || rm_MachineSelfTake.SelfTake == null)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "线下机器售卖模式自提地址为空", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[09]，自提地址为空", null);
                                 }
 
                                 d_Order.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
@@ -826,7 +826,7 @@ namespace LocalS.BLL.Biz
 
                                 if (ret_OperateStock.Result != ResultType.Success)
                                 {
-                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "扣减库存失败", null);
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[10]，库存扣减失败", null);
                                 }
 
                                 s_StockChangeRecords.AddRange(ret_OperateStock.Data.ChangeRecords);
@@ -2323,7 +2323,7 @@ namespace LocalS.BLL.Biz
                     trgerId = s_Orders[0].StoreId;
                 }
 
-                MqFactory.Global.PushEventNotify(operater, appId, trgerId, EventCode.OrderHandleExOrder, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.OrderHandleExOrder, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
 
             }
 

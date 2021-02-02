@@ -35,6 +35,7 @@ namespace LocalS.BLL.Biz
             this.Items = new List<ExItem>();
         }
 
+        public string AppId { get; set; }
         public List<ExItem> Items { get; set; }
         public string Remark { get; set; }
         public bool IsRunning { get; set; }
