@@ -104,7 +104,7 @@ namespace LocalS.BLL.Biz
                         d_SellChannelStock.IsOffSell = false;
                         d_SellChannelStock.SalePrice = r_ProductSku.SalePrice;
                         d_SellChannelStock.Version = 0;
-                        d_SellChannelStock.MaxQuantity = 10;
+                        d_SellChannelStock.MaxQuantity = maxQuantity.Value;
                         d_SellChannelStock.CreateTime = DateTime.Now;
                         d_SellChannelStock.Creator = operater;
                         CurrentDb.SellChannelStock.Add(d_SellChannelStock);
@@ -171,7 +171,7 @@ namespace LocalS.BLL.Biz
                         d_SellChannelStock.SumQuantity = sumQuantity.Value;
                         d_SellChannelStock.SellQuantity = sumQuantity.Value - d_SellChannelStock.WaitPayLockQuantity - d_SellChannelStock.WaitPickupLockQuantity;
                         d_SellChannelStock.Version += 1;
-                        d_SellChannelStock.MaxQuantity = 10;
+                        d_SellChannelStock.MaxQuantity = maxQuantity.Value;
                         d_SellChannelStock.MendTime = DateTime.Now;
                         d_SellChannelStock.Mender = operater;
                         CurrentDb.SaveChanges();
