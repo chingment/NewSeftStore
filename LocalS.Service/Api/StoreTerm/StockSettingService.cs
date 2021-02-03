@@ -241,7 +241,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                         if (resultOperateSlot.Result != ResultType.Success)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道数据异常失败");
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道库存扣减失败");
                         }
 
                         m_StockChangeRecords.AddRange(resultOperateSlot.Data.ChangeRecords);
