@@ -377,6 +377,8 @@ namespace LocalS.BLL.Biz
                 ts.Complete();
 
                 MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.Pickup, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, d_Machine.Id, remark.ToString()), new { Rop = model, StockChangeRecords = s_StockChangeRecords });
+
+                
             }
         }
         private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupTestModel model)

@@ -16,7 +16,7 @@ namespace LocalS.Entity
         public const string MachineStatus = "MachineStatus";
         [EventCodeRemark("A", "机器扫描货道")]
         public const string MachineScanSlot = "MachineScanSlot";
-        [EventCodeRemark("A", "机器商品取货")]
+        [EventCodeRemark("D", "机器商品取货")]
         public const string Pickup = "Pickup";
         [EventCodeRemark("D", "机器商品测试取货")]
         public const string PickupTest = "PickupTest";
