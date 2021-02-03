@@ -2322,7 +2322,7 @@ namespace LocalS.BLL.Biz
                     trgerId = rop.MerchId;
                 }
 
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderHandleExOrder, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderHandleException, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
 
             }
 

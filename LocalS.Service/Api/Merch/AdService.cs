@@ -297,7 +297,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdSpaceRelease, string.Format("发布广告（{0}）成功", rop.Title), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdRelease, string.Format("发布广告（{0}）成功", rop.Title), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
@@ -388,7 +388,7 @@ namespace LocalS.Service.Api.Merch
             CurrentDb.SaveChanges();
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdSpaceDeleteAdContent, string.Format("设置广告状态（{0}）成功", d_AdContent.Title), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdDeleteContent, string.Format("设置广告状态（{0}）成功", d_AdContent.Title), rop);
 
 
 

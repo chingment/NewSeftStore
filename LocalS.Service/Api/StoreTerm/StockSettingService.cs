@@ -152,9 +152,6 @@ namespace LocalS.Service.Api.StoreTerm
                     break;
             }
 
-
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSaveRowColLayout, string.Format("店铺：{0}，门店：{1}，机器：{2}，机柜：{3}，{4}", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, result.Message), rop);
-
             return result;
         }
 
