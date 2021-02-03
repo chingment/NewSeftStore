@@ -1,4 +1,5 @@
-﻿using LocalS.Service.Api.StoreTerm;
+﻿using LocalS.BLL.Biz;
+using LocalS.Service.Api.StoreTerm;
 using Lumos;
 using System.IO;
 using System.Web;
@@ -18,10 +19,10 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SaveCabinetSlot([FromBody]RopStockSettingSaveCabinetSlot rop)
+        public OwnApiHttpResponse<RetOperateSlot> SaveCabinetSlot([FromBody]RopStockSettingSaveCabinetSlot rop)
         {
-            IResult result = StoreTermServiceFactory.StockSetting.SaveCabinetSlot(this.CurrentUserId, rop);
-            return new OwnApiHttpResponse(result);
+            IResult<RetOperateSlot> result = StoreTermServiceFactory.StockSetting.SaveCabinetSlot(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse<RetOperateSlot>(result);
         }
 
         [HttpPost]

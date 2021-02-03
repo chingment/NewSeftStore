@@ -111,7 +111,7 @@ namespace Test
 
             if (js["stockChangeRe44cords"] != null)
             {
-                var s = js["stockChangeRecords"].ToObject<List<RetOperateStock.ChangeRecordModel>>();
+                var s = js["stockChangeRecords"].ToObject<List<StockChangeRecordModel>>();
             }
 
             string id = Lumos.CommonUtil.ConvetMD5IN32B("/pages/productdetails/productdetails?reffSign=o176Z5HZazGSxw_yY5A0k4ccVxpA&skuId=722b4d565604489fa1f40c548e0bc114&shopMode=1&shopMethod=1&storeId=4117916edd39468fb153666a55b47165&merchId=35129159f53249efabd4f0bc9a65810c");

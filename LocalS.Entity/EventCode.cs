@@ -20,16 +20,10 @@ namespace LocalS.Entity
         public const string Pickup = "Pickup";
         [EventCodeRemark("D", "机器商品测试取货")]
         public const string PickupTest = "PickupTest";
-        [EventCodeRemark("A", "库存改变-机器货道商品初始化")]
-        public const string MachineCabinetSlotInit = "MachineCabinetSlotInit";
-        [EventCodeRemark("A", "库存改变-机器货道商品替换")]
-        public const string MachineCabinetSlotReplace = "MachineCabinetSlotReplace";
         [EventCodeRemark("A", "库存改变-机器货道商品保存")]
         public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
         [EventCodeRemark("A", "库存改变-机器货道商品移除")]
         public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
-        [EventCodeRemark("A", "库存改变-机器货道商品调整库存数量")]
-        public const string MachineCabinetSlotAdjustStockQuantity = "MachineCabinetSlotAdjustStockQuantity";
         [EventCodeRemark("A", "机器商品库存查看")]
         public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
         [EventCodeRemark("A", "机器货道保存扫成结果")]
@@ -68,6 +62,8 @@ namespace LocalS.Entity
         public const string MachineUnBindShop = "MachineUnBindShop";
         [EventCodeRemark("A", "绑定门店机器")]
         public const string MachineBindShop = "MachineBindShop";
+        [EventCodeRemark("A", "机器扫描货道")]
+        public const string MachineScanSlot = "MachineScanSlot";
         [EventCodeRemark("A", "保存机器货道库存")]
         public const string MachineAdjustStockQuantity = "MachineAdjustStockQuantity";
         [EventCodeRemark("A", "新增商品分类信息")]

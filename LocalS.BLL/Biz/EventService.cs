@@ -162,7 +162,7 @@ namespace LocalS.BLL.Biz
             if (model == null)
                 return;
 
-            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+            List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
             using (TransactionScope ts = new TransactionScope())
             {
                 if (string.IsNullOrEmpty(model.SignId))

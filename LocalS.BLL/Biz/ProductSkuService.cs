@@ -14,143 +14,214 @@ namespace LocalS.BLL.Biz
 {
     public class ProductSkuService : BaseService
     {
-        public CustomJsonResult OperateSlot(string operater, string operateEvent, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId)
+        public CustomJsonResult<RetOperateSlot> OperateSlot(string operater, string operateEvent, string merchId, string storeId, string shopId, string machineId, string cabinetId, string slotId, string productSkuId, int version = 0, int? sumQuantity = null, int? maxQuantity = null, int? warnQuantity = null, int? holdQuantity = null)
         {
-            var result = new CustomJsonResult();
-
+            var result = new CustomJsonResult<RetOperateSlot>();
+            var ret = new RetOperateSlot();
             using (TransactionScope ts = new TransactionScope())
             {
                 if (operateEvent == EventCode.MachineCabinetSlotRemove)
                 {
-                    #region MachineSlotRemove
-                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
-                    if (sellChannelStock != null)
+                    #region MachineCabinetSlotRemove
+                    SellChannelStock d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
+                    if (d_SellChannelStock != null)
                     {
-                        var bizProdutSku = CacheServiceFactory.Product.GetSkuInfo(merchId, sellChannelStock.PrdProductSkuId);
-                        int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
-                        if (lockQuantity > 0)
+                        var r_ProdutSku = CacheServiceFactory.Product.GetSkuInfo(merchId, d_SellChannelStock.PrdProductSkuId);
+                        int l_LockQuantity = d_SellChannelStock.WaitPayLockQuantity + d_SellChannelStock.WaitPickupLockQuantity;
+                        if (l_LockQuantity > 0)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道删除失败，存在有预定数量不能删除");
+                            return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, string.Format("货道删除失败,商品[{0}]存在有预定数量不能删除", r_ProdutSku.Name), ret);
                         }
 
-                        CurrentDb.SellChannelStock.Remove(sellChannelStock);
+                        CurrentDb.SellChannelStock.Remove(d_SellChannelStock);
                         CurrentDb.SaveChanges();
                         ts.Complete();
                     }
 
+                    ret.StockId = "";
+                    ret.CabinetId = cabinetId;
+                    ret.SlotId = slotId;
+                    ret.ProductSkuId = "";
+                    ret.Name = "暂无商品";
+                    ret.CumCode = "";
+                    ret.SpecDes = "";
+                    ret.MainImgUrl = "";
+                    ret.SumQuantity = 0;
+                    ret.LockQuantity = 0;
+                    ret.SellQuantity = 0;
+                    ret.MaxQuantity = 0;
+                    ret.WarnQuantity = 0;
+                    ret.HoldQuantity = 0;
+                    ret.Version = 0;
+                    ret.IsCanAlterMaxQuantity = true;
 
-                    var slot = new
+                    var record = new StockChangeRecordModel
                     {
-                        StockId = "",
-                        CabinetId = cabinetId,
-                        SlotId = slotId,
-                        ProductSkuId = "",
-                        Name = "暂无商品",
-                        CumCode = "",
-                        SpecDes = "",
-                        MainImgUrl = "",
-                        SumQuantity = 0,
-                        LockQuantity = 0,
-                        SellQuantity = 0,
-                        MaxQuantity = 0,
-                        WarnQuantity = 0,
-                        HoldQuantity = 0,
-                        Version = 0,
-                        IsCanAlterMaxQuantity = true
+                        MerchId = d_SellChannelStock.MerchId,
+                        StoreId = d_SellChannelStock.StoreId,
+                        ShopId = d_SellChannelStock.ShopId,
+                        MachineId = d_SellChannelStock.MachineId,
+                        CabinetId = d_SellChannelStock.CabinetId,
+                        ShopMode = d_SellChannelStock.ShopMode,
+                        SlotId = d_SellChannelStock.SlotId,
+                        SkuId = d_SellChannelStock.PrdProductSkuId,
+                        SellQuantity = d_SellChannelStock.SellQuantity,
+                        WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
+                        WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
+                        SumQuantity = d_SellChannelStock.SumQuantity,
+                        EventCode = operateEvent,
+                        ChangeQuantity = d_SellChannelStock.SumQuantity
                     };
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "货道删除成功", slot);
-                    #endregion MachineSlotRemove
+                    ret.ChangeRecords.Add(record);
+                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "货道删除成功", ret);
+                    #endregion MachineCabinetSlotRemove
                 }
                 else if (operateEvent == EventCode.MachineCabinetSlotSave)
                 {
-                    #region MachineSlotSave
-                    SellChannelStock sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
-                    var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
-                    var productSku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
-                    if (sellChannelStock == null)
+                    #region MachineCabinetSlotSave
+                    SellChannelStock d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
+                    var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+                    if (d_SellChannelStock == null)
                     {
-                        sellChannelStock = new SellChannelStock();
-                        sellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
-                        sellChannelStock.ShopMode = E_ShopMode.Machine;
-                        sellChannelStock.MerchId = merchId;
-                        sellChannelStock.StoreId = storeId;
-                        sellChannelStock.ShopId = shopId;
-                        sellChannelStock.MachineId = machineId;
-                        sellChannelStock.CabinetId = cabinetId;
-                        sellChannelStock.SlotId = slotId;
-                        sellChannelStock.PrdProductId = bizProductSku.ProductId;
-                        sellChannelStock.PrdProductSkuId = productSkuId;
-                        sellChannelStock.WaitPayLockQuantity = 0;
-                        sellChannelStock.WaitPickupLockQuantity = 0;
-                        sellChannelStock.SumQuantity = 0;
-                        sellChannelStock.SellQuantity = 0;
-                        sellChannelStock.WarnQuantity = 0;
-                        sellChannelStock.HoldQuantity = 0;
-                        sellChannelStock.IsOffSell = false;
-                        sellChannelStock.SalePrice = productSku.SalePrice;
-                        sellChannelStock.Version = 0;
-                        sellChannelStock.MaxQuantity = 10;
-                        sellChannelStock.CreateTime = DateTime.Now;
-                        sellChannelStock.Creator = operater;
-                        CurrentDb.SellChannelStock.Add(sellChannelStock);
+                        d_SellChannelStock = new SellChannelStock();
+                        d_SellChannelStock.Id = IdWorker.Build(IdType.NewGuid);
+                        d_SellChannelStock.ShopMode = E_ShopMode.Machine;
+                        d_SellChannelStock.MerchId = merchId;
+                        d_SellChannelStock.StoreId = storeId;
+                        d_SellChannelStock.ShopId = shopId;
+                        d_SellChannelStock.MachineId = machineId;
+                        d_SellChannelStock.CabinetId = cabinetId;
+                        d_SellChannelStock.SlotId = slotId;
+                        d_SellChannelStock.PrdProductId = r_ProductSku.ProductId;
+                        d_SellChannelStock.PrdProductSkuId = productSkuId;
+                        d_SellChannelStock.WaitPayLockQuantity = 0;
+                        d_SellChannelStock.WaitPickupLockQuantity = 0;
+                        d_SellChannelStock.SumQuantity = sumQuantity.Value;
+                        d_SellChannelStock.SellQuantity = sumQuantity.Value;
+                        d_SellChannelStock.WarnQuantity = 0;
+                        d_SellChannelStock.HoldQuantity = 0;
+                        d_SellChannelStock.IsOffSell = false;
+                        d_SellChannelStock.SalePrice = r_ProductSku.SalePrice;
+                        d_SellChannelStock.Version = 0;
+                        d_SellChannelStock.MaxQuantity = 10;
+                        d_SellChannelStock.CreateTime = DateTime.Now;
+                        d_SellChannelStock.Creator = operater;
+                        CurrentDb.SellChannelStock.Add(d_SellChannelStock);
                         CurrentDb.SaveChanges();
                         ts.Complete();
+
+                        var record = new StockChangeRecordModel
+                        {
+                            MerchId = d_SellChannelStock.MerchId,
+                            StoreId = d_SellChannelStock.StoreId,
+                            ShopId = d_SellChannelStock.ShopId,
+                            MachineId = d_SellChannelStock.MachineId,
+                            CabinetId = d_SellChannelStock.CabinetId,
+                            ShopMode = d_SellChannelStock.ShopMode,
+                            SlotId = d_SellChannelStock.SlotId,
+                            SkuId = d_SellChannelStock.PrdProductSkuId,
+                            SellQuantity = d_SellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
+                            SumQuantity = d_SellChannelStock.SumQuantity,
+                            EventCode = operateEvent,
+                            ChangeQuantity = sumQuantity.Value
+                        };
+
+                        ret.ChangeRecords.Add(record);
                     }
                     else
                     {
-                        if (sellChannelStock.PrdProductSkuId != productSkuId)
+                        if (d_SellChannelStock.PrdProductSkuId != productSkuId)
                         {
-                            int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
-                            if (lockQuantity > 0)
+                            var o_ProdutSku = CacheServiceFactory.Product.GetSkuInfo(merchId, d_SellChannelStock.PrdProductSkuId);
+                            int l_LockQuantity = d_SellChannelStock.WaitPayLockQuantity + d_SellChannelStock.WaitPickupLockQuantity;
+                            if (l_LockQuantity > 0)
                             {
-                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "库存保存失败，存在有预定数量不能更换商品");
+                                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, string.Format("库存保存失败，商品[{0}]存在有预定数量不能更换商品", o_ProdutSku.Name), null);
                             }
 
-                            sellChannelStock.PrdProductId = bizProductSku.ProductId;
-                            sellChannelStock.PrdProductSkuId = productSkuId;
-                            sellChannelStock.IsOffSell = false;
-                            sellChannelStock.SalePrice = productSku.SalePrice;
-                            sellChannelStock.SumQuantity = 0;
-                            sellChannelStock.WaitPayLockQuantity = 0;
-                            sellChannelStock.WaitPickupLockQuantity = 0;
-                            sellChannelStock.SellQuantity = 0;
-                            sellChannelStock.Version = -1;
-                            sellChannelStock.MaxQuantity = 10;
-                            sellChannelStock.MendTime = DateTime.Now;
-                            sellChannelStock.Mender = operater;
-                            CurrentDb.SaveChanges();
-                            ts.Complete();
+                            var record_1 = new StockChangeRecordModel
+                            {
+                                MerchId = d_SellChannelStock.MerchId,
+                                StoreId = d_SellChannelStock.StoreId,
+                                ShopId = d_SellChannelStock.ShopId,
+                                MachineId = d_SellChannelStock.MachineId,
+                                CabinetId = d_SellChannelStock.CabinetId,
+                                ShopMode = d_SellChannelStock.ShopMode,
+                                SlotId = d_SellChannelStock.SlotId,
+                                SkuId = d_SellChannelStock.PrdProductSkuId,
+                                SellQuantity = d_SellChannelStock.SellQuantity,
+                                WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
+                                WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
+                                SumQuantity = d_SellChannelStock.SumQuantity,
+                                EventCode = EventCode.MachineCabinetSlotRemove,
+                                ChangeQuantity = sumQuantity.Value
+                            };
+
+                            ret.ChangeRecords.Add(record_1);
+
+                            d_SellChannelStock.PrdProductId = r_ProductSku.ProductId;
+                            d_SellChannelStock.PrdProductSkuId = productSkuId;
+                            d_SellChannelStock.SalePrice = r_ProductSku.SalePrice;
                         }
+
+                        d_SellChannelStock.IsOffSell = false;
+                        d_SellChannelStock.SumQuantity = sumQuantity.Value;
+                        d_SellChannelStock.SellQuantity = sumQuantity.Value - d_SellChannelStock.WaitPayLockQuantity - d_SellChannelStock.WaitPickupLockQuantity;
+                        d_SellChannelStock.Version += 1;
+                        d_SellChannelStock.MaxQuantity = 10;
+                        d_SellChannelStock.MendTime = DateTime.Now;
+                        d_SellChannelStock.Mender = operater;
+                        CurrentDb.SaveChanges();
+                        ts.Complete();
+
+                        var record_2 = new StockChangeRecordModel
+                        {
+                            MerchId = d_SellChannelStock.MerchId,
+                            StoreId = d_SellChannelStock.StoreId,
+                            ShopId = d_SellChannelStock.ShopId,
+                            MachineId = d_SellChannelStock.MachineId,
+                            CabinetId = d_SellChannelStock.CabinetId,
+                            ShopMode = d_SellChannelStock.ShopMode,
+                            SlotId = d_SellChannelStock.SlotId,
+                            SkuId = d_SellChannelStock.PrdProductSkuId,
+                            SellQuantity = d_SellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
+                            SumQuantity = d_SellChannelStock.SumQuantity,
+                            EventCode = EventCode.MachineCabinetSlotSave,
+                            ChangeQuantity = sumQuantity.Value
+                        };
+
+                        ret.ChangeRecords.Add(record_2);
+
                     }
 
+                    ret.StockId = d_SellChannelStock.Id;
+                    ret.CabinetId = cabinetId;
+                    ret.SlotId = slotId;
+                    ret.ProductSkuId = r_ProductSku.Id;
+                    ret.Name = r_ProductSku.Name;
+                    ret.CumCode = r_ProductSku.CumCode;
+                    ret.MainImgUrl = ImgSet.Convert_S(r_ProductSku.MainImgUrl);
+                    ret.SpecDes = SpecDes.GetDescribe(r_ProductSku.SpecDes);
+                    ret.SumQuantity = d_SellChannelStock.SumQuantity;
+                    ret.LockQuantity = d_SellChannelStock.WaitPayLockQuantity + d_SellChannelStock.WaitPickupLockQuantity;
+                    ret.SellQuantity = d_SellChannelStock.SellQuantity;
+                    ret.MaxQuantity = d_SellChannelStock.MaxQuantity;
+                    ret.WarnQuantity = d_SellChannelStock.WarnQuantity;
+                    ret.HoldQuantity = d_SellChannelStock.HoldQuantity;
+                    ret.Version = d_SellChannelStock.Version;
+                    ret.IsCanAlterMaxQuantity = true;
 
-
-                    var slot = new
-                    {
-                        StockId = sellChannelStock.Id,
-                        CabinetId = cabinetId,
-                        SlotId = slotId,
-                        ProductSkuId = bizProductSku.Id,
-                        Name = bizProductSku.Name,
-                        CumCode = bizProductSku.CumCode,
-                        MainImgUrl = ImgSet.Convert_S(bizProductSku.MainImgUrl),
-                        SpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
-                        SumQuantity = sellChannelStock.SumQuantity,
-                        LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
-                        SellQuantity = sellChannelStock.SellQuantity,
-                        MaxQuantity = sellChannelStock.MaxQuantity,
-                        WarnQuantity = sellChannelStock.WarnQuantity,
-                        HoldQuantity = sellChannelStock.HoldQuantity,
-                        Version = sellChannelStock.Version,
-                        IsCanAlterMaxQuantity = true
-                    };
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "库存保存成功", slot);
+                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "库存保存成功", ret);
                     #endregion
                 }
                 else
                 {
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "库存保存失败，未知操作类型");
+                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "库存保存失败，未知操作类型", ret);
                 }
 
             }
@@ -349,7 +420,7 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                var record = new RetOperateStock.ChangeRecordModel
+                var record = new StockChangeRecordModel
                 {
                     MerchId = sellChannelStock.MerchId,
                     StoreId = sellChannelStock.StoreId,
@@ -367,7 +438,7 @@ namespace LocalS.BLL.Biz
                     ChangeQuantity = quantity
                 };
                 result.Data = new RetOperateStock();
-                result.Data.ChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+                result.Data.ChangeRecords = new List<StockChangeRecordModel>();
                 result.Data.ChangeRecords.Add(record);
             }
 

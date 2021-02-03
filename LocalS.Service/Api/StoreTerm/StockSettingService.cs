@@ -91,30 +91,30 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult SaveCabinetSlot(string operater, RopStockSettingSaveCabinetSlot rop)
+        public CustomJsonResult<RetOperateSlot> SaveCabinetSlot(string operater, RopStockSettingSaveCabinetSlot rop)
         {
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<RetOperateSlot>();
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
             if (machine == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未登记", null);
             }
 
             if (string.IsNullOrEmpty(machine.MerchId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定商户", null);
             }
 
             if (string.IsNullOrEmpty(machine.StoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺", null);
             }
 
             if (string.IsNullOrEmpty(machine.ShopId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定门店", null);
             }
 
             if (string.IsNullOrEmpty(rop.ProductSkuId))
@@ -123,16 +123,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
             else
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
-
-                if (result.Result == ResultType.Success)
-                {
-                    result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity);
-                }
-
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，机器：{2}，机柜：{3}，货道：{4}，{5}", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId, result.Message), rop);
+            if (result.Result == ResultType.Success)
+            {
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，机器：{2}，机柜：{3}，货道：{4}，{5}", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
+            }
 
             return result;
 
@@ -164,6 +161,8 @@ namespace LocalS.Service.Api.StoreTerm
         private CustomJsonResult SaveCabinetRowColLayoutByDS(string operater, RopStockSettingSaveCabinetRowColLayout rop)
         {
             var result = new CustomJsonResult();
+
+            List<StockChangeRecordModel> m_StockChangeRecords = new List<StockChangeRecordModel>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -241,7 +240,14 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+
+                        if (resultOperateSlot.Result != ResultType.Success)
+                        {
+                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道数据异常失败");
+                        }
+
+                        m_StockChangeRecords.AddRange(resultOperateSlot.Data.ChangeRecords);
                     }
                 }
 
@@ -253,6 +259,11 @@ namespace LocalS.Service.Api.StoreTerm
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功", new { RowColLayout = cabinet.RowColLayout });
+
+                if (result.Result == ResultType.Success)
+                {
+                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineScanSlot, "机器扫描货道成功", new { Rop = rop, StockChangeRecords = m_StockChangeRecords });
+                }
             }
 
             return result;

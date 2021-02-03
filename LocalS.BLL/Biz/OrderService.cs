@@ -401,7 +401,7 @@ namespace LocalS.BLL.Biz
             string trgerId = "";
 
             List<Order> s_Orders = new List<Order>();
-            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+            List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
             lock (lock_Reserve)
             {
 
@@ -972,7 +972,7 @@ namespace LocalS.BLL.Biz
             CustomJsonResult result = new CustomJsonResult();
 
             List<Order> s_Orders = new List<Order>();
-            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+            List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
             using (TransactionScope ts = new TransactionScope())
             {
                 LogUtil.Info("payTransId:" + payTransId);
@@ -1438,7 +1438,7 @@ namespace LocalS.BLL.Biz
             using (TransactionScope ts = new TransactionScope())
             {
 
-                List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+                List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
 
                 var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
@@ -2080,7 +2080,7 @@ namespace LocalS.BLL.Biz
 
             List<Order> s_Orders = new List<Order>();
 
-            List<RetOperateStock.ChangeRecordModel> s_StockChangeRecords = new List<RetOperateStock.ChangeRecordModel>();
+            List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
 
             using (TransactionScope ts = new TransactionScope())
             {

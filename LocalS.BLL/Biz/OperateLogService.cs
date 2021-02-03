@@ -89,7 +89,7 @@ namespace LocalS.BLL.Biz
                     var jToken = JToken.Parse(merchOperateLog.EventData);
                     if (jToken["stockChangeRecords"] != null)
                     {
-                        var m_ChangeRecords = jToken["stockChangeRecords"].ToObject<List<RetOperateStock.ChangeRecordModel>>();
+                        var m_ChangeRecords = jToken["stockChangeRecords"].ToObject<List<StockChangeRecordModel>>();
 
                         foreach (var m_ChangeRecord in m_ChangeRecords)
                         {

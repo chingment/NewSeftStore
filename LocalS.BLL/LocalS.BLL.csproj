@@ -86,6 +86,7 @@
     <Compile Include="Biz\Models\CabinetInfoModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByDSModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByZSModel.cs" />
+    <Compile Include="Biz\Models\StockChangeRecordModel.cs" />
     <Compile Include="Biz\Models\FingerVeinnerModel.cs" />
     <Compile Include="Biz\Models\MachineEventBaseModel.cs" />
     <Compile Include="Biz\Models\MachineEventByMachineStatusModel.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Biz\OperateLogService.cs" />
     <Compile Include="Biz\OrderService.cs" />
     <Compile Include="Biz\ProductSkuService.cs" />
+    <Compile Include="Biz\RModels\RetOperateSlot.cs" />
     <Compile Include="Biz\RModels\RetOperateStock.cs" />
     <Compile Include="Biz\RModels\RetOrderBuildPayOptions.cs" />
     <Compile Include="Biz\RModels\RetOrderReserve.cs" />
