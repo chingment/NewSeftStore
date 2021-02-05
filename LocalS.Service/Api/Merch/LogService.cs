@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId
                          &&
                          u.EventLevel == "A"
-                         select new { u.Id, u.OperateUserName, u.EventName, u.Remark, u.CreateTime, u.AppId });
+                         select new { u.Id, u.OperateUserName, u.TrgerId, u.TrgerName, u.EventName, u.Remark, u.CreateTime, u.AppId });
 
             if (!string.IsNullOrEmpty(rup.EventName))
             {
@@ -60,6 +60,15 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                string appName = AppId.GetName(item.AppId);
+                if (item.AppId == AppId.STORETERM)
+                {
+                    appName = string.Format("终端设备[{0}]", item.TrgerName);
+                }
+                else if (item.AppId == AppId.WXMINPRAGROM)
+                {
+                    appName = string.Format("小程序[{0}]", item.TrgerName);
+                }
 
                 olist.Add(new
                 {
@@ -68,7 +77,7 @@ namespace LocalS.Service.Api.Merch
                     OperateUserName = item.OperateUserName,
                     EventName = item.EventName,
                     Remark = item.Remark,
-                    AppName = AppId.GetName(item.AppId),
+                    AppName = appName,
                     CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
                 });
             }

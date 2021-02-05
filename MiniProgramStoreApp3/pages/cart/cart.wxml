@@ -59,7 +59,7 @@
                   </block>
                 </view>
               </view>
-              <view class="line-space"></view>
+              <view wx:if="{{pindex%2}}" class="line-space"></view>
             </block>
           </view>
         </scroll-view>
