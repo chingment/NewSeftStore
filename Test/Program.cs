@@ -106,24 +106,31 @@ namespace Test
 
         static void Main(string[] args)
         {
+            for (int i = 0, m = 1; i < 30; i++)
 
-            var js = JToken.Parse("{\"rop\":{\"payTransId\":\"620443720210202091327829\",\"payPartner\":1,\"payPartnerPayTransId\":\"4200000909202102029437511778\",\"payWay\":1,\"completedTime\":\"2021-02-02T09:13:42.4383424+08:00\",\"pms\":{\"clientUserName\":null}},\"stockChangeRecords\":[{\"merchId\":\"d17df2252133478c99104180e8062230\",\"storeId\":\"21ae9399b1804dbc9ddd3c29e8b5c670\",\"shopId\":\"f748e0fb203a4f82bd271f4349f663c1\",\"machineId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r0c7\",\"skuId\":\"24fbddc8b80348759c3b12012e068216\",\"shopMode\":0,\"eventCode\":\"OrderPaySuccess\",\"changeQuantity\":1,\"sumQuantity\":3,\"waitPayLockQuantity\":0,\"waitPickupLockQuantity\":1,\"sellQuantity\":2},{\"merchId\":\"d17df2252133478c99104180e8062230\",\"storeId\":\"21ae9399b1804dbc9ddd3c29e8b5c670\",\"shopId\":\"f748e0fb203a4f82bd271f4349f663c1\",\"machineId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r0c9\",\"skuId\":\"5f34dd53523b4824bb9f6303d529d4d8\",\"shopMode\":0,\"eventCode\":\"OrderPaySuccess\",\"changeQuantity\":1,\"sumQuantity\":3,\"waitPayLockQuantity\":0,\"waitPickupLockQuantity\":1,\"sellQuantity\":2}]}");
+                for (int l = 0; l < new[] { 5, 6, 7, 6, 8, 10, 3, 10, 4, 13, 1, 13, 1, 87, 1, 27, 4, 23, 7, 20, 11, 16, 16, 11, 20, 7, 24, 3, 27, 1 }[i]; l++, m++)
 
-            if (js["stockChangeRe44cords"] != null)
-            {
-                var s = js["stockChangeRecords"].ToObject<List<StockChangeRecordModel>>();
-            }
+                    System.Console.Write((i % 2 > 0 ? "chingment"[m % 9] : ' ') + (m % 29 > 0 ? "" : "\n"));
 
-            string id = Lumos.CommonUtil.ConvetMD5IN32B("/pages/productdetails/productdetails?reffSign=o176Z5HZazGSxw_yY5A0k4ccVxpA&skuId=722b4d565604489fa1f40c548e0bc114&shopMode=1&shopMethod=1&storeId=4117916edd39468fb153666a55b47165&merchId=35129159f53249efabd4f0bc9a65810c");
+            Console.ReadLine();
 
-            string a66 = CommonUtil.GetCnWeekDayName(DateTime.Parse("2021-01-06 08:00:00.000"));
+            //var js = JToken.Parse("{\"rop\":{\"payTransId\":\"620443720210202091327829\",\"payPartner\":1,\"payPartnerPayTransId\":\"4200000909202102029437511778\",\"payWay\":1,\"completedTime\":\"2021-02-02T09:13:42.4383424+08:00\",\"pms\":{\"clientUserName\":null}},\"stockChangeRecords\":[{\"merchId\":\"d17df2252133478c99104180e8062230\",\"storeId\":\"21ae9399b1804dbc9ddd3c29e8b5c670\",\"shopId\":\"f748e0fb203a4f82bd271f4349f663c1\",\"machineId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r0c7\",\"skuId\":\"24fbddc8b80348759c3b12012e068216\",\"shopMode\":0,\"eventCode\":\"OrderPaySuccess\",\"changeQuantity\":1,\"sumQuantity\":3,\"waitPayLockQuantity\":0,\"waitPickupLockQuantity\":1,\"sellQuantity\":2},{\"merchId\":\"d17df2252133478c99104180e8062230\",\"storeId\":\"21ae9399b1804dbc9ddd3c29e8b5c670\",\"shopId\":\"f748e0fb203a4f82bd271f4349f663c1\",\"machineId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r0c9\",\"skuId\":\"5f34dd53523b4824bb9f6303d529d4d8\",\"shopMode\":0,\"eventCode\":\"OrderPaySuccess\",\"changeQuantity\":1,\"sumQuantity\":3,\"waitPayLockQuantity\":0,\"waitPickupLockQuantity\":1,\"sellQuantity\":2}]}");
+
+            //if (js["stockChangeRe44cords"] != null)
+            //{
+            //    var s = js["stockChangeRecords"].ToObject<List<StockChangeRecordModel>>();
+            //}
+
+            // string id = Lumos.CommonUtil.ConvetMD5IN32B("/pages/productdetails/productdetails?reffSign=o176Z5HZazGSxw_yY5A0k4ccVxpA&skuId=722b4d565604489fa1f40c548e0bc114&shopMode=1&shopMethod=1&storeId=4117916edd39468fb153666a55b47165&merchId=35129159f53249efabd4f0bc9a65810c");
+
+            //string a66 = CommonUtil.GetCnWeekDayName(DateTime.Parse("2021-01-06 08:00:00.000"));
 
 
             //&..00111122==IIaabcccdddeeeefhiiikllmmnnnnooprsssttux
             // 9b6e056b87057a3c173312ba5b2a418e109bc39eecd400086cad89909ded2ad4
             //OWI2ZTA1NmI4NzA1N2EzYzE3MzMxMmJhNWIyYTQxOGUxMDliYzM5ZWVjZDQwMDA4NmNhZDg5OTA5ZGVkMmFkNA==
-            log.InfoFormat("程序开始");
-            string assss = Signature.Compute("com.uplink.selfstore", "fanju", "7460e6512f1940f68c00fe1fdb2b7eb1", 1611646484, "{\"deviceId\":\"C0:84:7D:2C:06:10\",\"eventRemark\":\"商品取货\",\"appId\":\"com.uplink.selfstore\",\"content\":{\"orderId\":\"610409520210126153257757\",\"uniqueId\":\"6104095202101261532577571\",\"productSkuId\":\"36d68083bbdf4120961fe9cf2f3ff764\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r2c0\",\"pickupStatus\":4000,\"actionId\":1,\"actionName\":\"回到原点\",\"actionStatusCode\":2,\"actionStatusName\":\"动作执行完成\",\"pickupUseTime\":39553,\"imgId2\":\"0d5a0638-57b5-48be-8be6-65adfe0f9a1e\",\"remark\":\"取货完成\"},\"machineId\":\"202101040205\",\"lat\":0,\"lng\":0,\"eventCode\":\"Pickup\"}");
+            //log.InfoFormat("程序开始");
+            // string assss = Signature.Compute("com.uplink.selfstore", "fanju", "7460e6512f1940f68c00fe1fdb2b7eb1", 1611646484, "{\"deviceId\":\"C0:84:7D:2C:06:10\",\"eventRemark\":\"商品取货\",\"appId\":\"com.uplink.selfstore\",\"content\":{\"orderId\":\"610409520210126153257757\",\"uniqueId\":\"6104095202101261532577571\",\"productSkuId\":\"36d68083bbdf4120961fe9cf2f3ff764\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r2c0\",\"pickupStatus\":4000,\"actionId\":1,\"actionName\":\"回到原点\",\"actionStatusCode\":2,\"actionStatusName\":\"动作执行完成\",\"pickupUseTime\":39553,\"imgId2\":\"0d5a0638-57b5-48be-8be6-65adfe0f9a1e\",\"remark\":\"取货完成\"},\"machineId\":\"202101040205\",\"lat\":0,\"lng\":0,\"eventCode\":\"Pickup\"}");
             //string a11 = "dasdsad";
             //string a22 = null;
             //string a33 = a11 + a22;
@@ -150,8 +157,8 @@ namespace Test
 
             //var buildOrderSubs = BizFactory.Order.BuildOrderSubs(p1);
 
-            string ab = "[{\"cartId\":\"0ee2e0c85a314d6c9d5df6a2f0ce4aea\",\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"quantity\":2,\"receptionMode\":3},{\"cartId\":\"1fe7be781a5248ea9aa2b77bfcbf47dd\",\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"quantity\":3,\"receptionMode\":1}]";
-            string cs = "[{\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"receptionMode\":3,\"barCode\":\"\",\"cumCode\":\"343\",\"pinYinIndex\":\"KKKLGZ250ML\",\"productId\":\"f1b911de7b28445184b1ad89a0eade1b\",\"name\":\"可口可乐 灌装 250ML\",\"mainImgUrl\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"displayImgUrls\":[{\"url\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"isMain\":false,\"name\":\"3dbf6644-c267-46f8-bba2-7d9d1735366d_o.jpg\",\"priority\":0}],\"specDes\":[{\"name\":\"形状\",\"value\":\"灌装\"},{\"name\":\"容量\",\"value\":\"250ML\"}],\"briefDes\":\"#美味可口\",\"specItems\":[{\"name\":\"形状\",\"value\":[{\"name\":\"圆形\"},{\"name\":\"灌装\"}]},{\"name\":\"容量\",\"value\":[{\"name\":\"100ML\"},{\"name\":\"250ML\"}]}],\"specIdx\":\"灌装,250ML\",\"isTrgVideoService\":true,\"charTags\":[\"精致美品\",\"优选\"],\"specIdxSkus\":[{\"skuId\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"specIdx\":\"灌装,250ML\"},{\"skuId\":\"27a780d03d364197a657cf4e05ac000d\",\"specIdx\":\"灌装,100ML\"},{\"skuId\":\"88eae5cf68f84471a35b71c453d8f806\",\"specIdx\":\"圆形,100ML\"},{\"skuId\":\"af08c84c45e04fc4b9e467b52a1671f5\",\"specIdx\":\"圆形,250ML\"}],\"stocks\":[{\"refType\":3,\"refId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r4c4\",\"sumQuantity\":4,\"lockQuantity\":2,\"sellQuantity\":2,\"isOffSell\":false,\"salePrice\":2.00,\"salePriceByVip\":1.00}]},{\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"receptionMode\":1,\"barCode\":\"\",\"cumCode\":\"343\",\"pinYinIndex\":\"KKKLGZ250ML\",\"productId\":\"f1b911de7b28445184b1ad89a0eade1b\",\"name\":\"可口可乐 灌装 250ML\",\"mainImgUrl\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"displayImgUrls\":[{\"url\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"isMain\":false,\"name\":\"3dbf6644-c267-46f8-bba2-7d9d1735366d_o.jpg\",\"priority\":0}],\"specDes\":[{\"name\":\"形状\",\"value\":\"灌装\"},{\"name\":\"容量\",\"value\":\"250ML\"}],\"briefDes\":\"#美味可口\",\"specItems\":[{\"name\":\"形状\",\"value\":[{\"name\":\"圆形\"},{\"name\":\"灌装\"}]},{\"name\":\"容量\",\"value\":[{\"name\":\"100ML\"},{\"name\":\"250ML\"}]}],\"specIdx\":\"灌装,250ML\",\"isTrgVideoService\":true,\"charTags\":[\"精致美品\",\"优选\"],\"specIdxSkus\":[{\"skuId\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"specIdx\":\"灌装,250ML\"},{\"skuId\":\"27a780d03d364197a657cf4e05ac000d\",\"specIdx\":\"灌装,100ML\"},{\"skuId\":\"88eae5cf68f84471a35b71c453d8f806\",\"specIdx\":\"圆形,100ML\"},{\"skuId\":\"af08c84c45e04fc4b9e467b52a1671f5\",\"specIdx\":\"圆形,250ML\"}],\"stocks\":[{\"refType\":1,\"refId\":\"000000000000\",\"cabinetId\":\"0\",\"slotId\":\"0\",\"sumQuantity\":100,\"lockQuantity\":0,\"sellQuantity\":100,\"isOffSell\":false,\"salePrice\":3.50,\"salePriceByVip\":3.50}]}]";
+            //string ab = "[{\"cartId\":\"0ee2e0c85a314d6c9d5df6a2f0ce4aea\",\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"quantity\":2,\"receptionMode\":3},{\"cartId\":\"1fe7be781a5248ea9aa2b77bfcbf47dd\",\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"quantity\":3,\"receptionMode\":1}]";
+            // string cs = "[{\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"receptionMode\":3,\"barCode\":\"\",\"cumCode\":\"343\",\"pinYinIndex\":\"KKKLGZ250ML\",\"productId\":\"f1b911de7b28445184b1ad89a0eade1b\",\"name\":\"可口可乐 灌装 250ML\",\"mainImgUrl\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"displayImgUrls\":[{\"url\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"isMain\":false,\"name\":\"3dbf6644-c267-46f8-bba2-7d9d1735366d_o.jpg\",\"priority\":0}],\"specDes\":[{\"name\":\"形状\",\"value\":\"灌装\"},{\"name\":\"容量\",\"value\":\"250ML\"}],\"briefDes\":\"#美味可口\",\"specItems\":[{\"name\":\"形状\",\"value\":[{\"name\":\"圆形\"},{\"name\":\"灌装\"}]},{\"name\":\"容量\",\"value\":[{\"name\":\"100ML\"},{\"name\":\"250ML\"}]}],\"specIdx\":\"灌装,250ML\",\"isTrgVideoService\":true,\"charTags\":[\"精致美品\",\"优选\"],\"specIdxSkus\":[{\"skuId\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"specIdx\":\"灌装,250ML\"},{\"skuId\":\"27a780d03d364197a657cf4e05ac000d\",\"specIdx\":\"灌装,100ML\"},{\"skuId\":\"88eae5cf68f84471a35b71c453d8f806\",\"specIdx\":\"圆形,100ML\"},{\"skuId\":\"af08c84c45e04fc4b9e467b52a1671f5\",\"specIdx\":\"圆形,250ML\"}],\"stocks\":[{\"refType\":3,\"refId\":\"202004220011\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"r4c4\",\"sumQuantity\":4,\"lockQuantity\":2,\"sellQuantity\":2,\"isOffSell\":false,\"salePrice\":2.00,\"salePriceByVip\":1.00}]},{\"id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"receptionMode\":1,\"barCode\":\"\",\"cumCode\":\"343\",\"pinYinIndex\":\"KKKLGZ250ML\",\"productId\":\"f1b911de7b28445184b1ad89a0eade1b\",\"name\":\"可口可乐 灌装 250ML\",\"mainImgUrl\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"displayImgUrls\":[{\"url\":\"http://file.17fanju.com/Upload/product/3d78ab2404c743cfa30ea634d217dd0f_O.jpg\",\"isMain\":false,\"name\":\"3dbf6644-c267-46f8-bba2-7d9d1735366d_o.jpg\",\"priority\":0}],\"specDes\":[{\"name\":\"形状\",\"value\":\"灌装\"},{\"name\":\"容量\",\"value\":\"250ML\"}],\"briefDes\":\"#美味可口\",\"specItems\":[{\"name\":\"形状\",\"value\":[{\"name\":\"圆形\"},{\"name\":\"灌装\"}]},{\"name\":\"容量\",\"value\":[{\"name\":\"100ML\"},{\"name\":\"250ML\"}]}],\"specIdx\":\"灌装,250ML\",\"isTrgVideoService\":true,\"charTags\":[\"精致美品\",\"优选\"],\"specIdxSkus\":[{\"skuId\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"specIdx\":\"灌装,250ML\"},{\"skuId\":\"27a780d03d364197a657cf4e05ac000d\",\"specIdx\":\"灌装,100ML\"},{\"skuId\":\"88eae5cf68f84471a35b71c453d8f806\",\"specIdx\":\"圆形,100ML\"},{\"skuId\":\"af08c84c45e04fc4b9e467b52a1671f5\",\"specIdx\":\"圆形,250ML\"}],\"stocks\":[{\"refType\":1,\"refId\":\"000000000000\",\"cabinetId\":\"0\",\"slotId\":\"0\",\"sumQuantity\":100,\"lockQuantity\":0,\"sellQuantity\":100,\"isOffSell\":false,\"salePrice\":3.50,\"salePriceByVip\":3.50}]}]";
 
             //var ProductSkus = ab.ToJsonObject<List<LocalS.BLL.Biz.RopOrderReserve.ProductSku>>();
             //var bizProductSkus = cs.ToJsonObject<List<ProductSkuInfoModel>>();
@@ -180,65 +187,49 @@ namespace Test
 
             //string[] arr="A/S/B".Split('X')
 
-            MyDESCryptoUtil.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
+            //MyDESCryptoUtil.DecodeQrcode2PickupCode("pickupcode@v2:G1et+r347rTCrWvmkFaBHQ==");
 
 
 
-            StringBuilder sql = new StringBuilder(" select StoreName,SumCount ");
+            //StringBuilder sql = new StringBuilder(" select StoreName,SumCount ");
 
-            sql.Append(" SumComplete,(SumCount-SumComplete) as SumNoComplete, ");
-            sql.Append(" SumEx,SumExHandle,(SumEx-SumExHandle) as SumExNoHandle,  ");
-            sql.Append(" SumQuantity,SumChargeAmount,SumRefundAmount,(SumChargeAmount-SumRefundAmount) as SumAmount,PayWayByWx,PayWayByZfb ");
-            sql.Append("  from (  ");
-            sql.Append(" select StoreId,StoreName,COUNT(Id) as SumCount, ");
-            sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,");
-            sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle, ");
-            sql.Append(" SUM(Quantity) as SumQuantity, ");
-            sql.Append(" SUM(ChargeAmount)as SumChargeAmount, ");
-            sql.Append(" SUM(RefundAmount) as SumRefundAmount , ");
-            sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx, ");
-            sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb, ");
-            sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete  ");
-            sql.Append("  from [Order]  a where PayStatus=3 and MerchId='d17df2252133478c99104180e8062230'   ");
-            sql.Append("  group by StoreId,StoreName ) tb  order by SumChargeAmount desc  ");
+            //sql.Append(" SumComplete,(SumCount-SumComplete) as SumNoComplete, ");
+            //sql.Append(" SumEx,SumExHandle,(SumEx-SumExHandle) as SumExNoHandle,  ");
+            //sql.Append(" SumQuantity,SumChargeAmount,SumRefundAmount,(SumChargeAmount-SumRefundAmount) as SumAmount,PayWayByWx,PayWayByZfb ");
+            //sql.Append("  from (  ");
+            //sql.Append(" select StoreId,StoreName,COUNT(Id) as SumCount, ");
+            //sql.Append(" SUM( CASE ExIsHappen WHEN 1 THEN 1 ELSE 0 END) as SumEx,");
+            //sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle, ");
+            //sql.Append(" SUM(Quantity) as SumQuantity, ");
+            //sql.Append(" SUM(ChargeAmount)as SumChargeAmount, ");
+            //sql.Append(" SUM(RefundAmount) as SumRefundAmount , ");
+            //sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx, ");
+            //sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb, ");
+            //sql.Append(" SUM( CASE [Status] WHEN '4000' THEN 1 ELSE 0 END) as SumComplete  ");
+            //sql.Append("  from [Order]  a where PayStatus=3 and MerchId='d17df2252133478c99104180e8062230'   ");
+            //sql.Append("  group by StoreId,StoreName ) tb  order by SumChargeAmount desc  ");
 
 
 
-            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
+            // var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
 
             //TestA a = new TestA();
             // a.MaA = "dasd";
 
-            Task4Tim2GlobalProvider a = new Task4Tim2GlobalProvider();
-            a.BuildSellChannelStockDateReport();
+            // Task4Tim2GlobalProvider a = new Task4Tim2GlobalProvider();
+            //  a.BuildSellChannelStockDateReport();
 
             //  string b = a.Ma.GetCnName();
             // string c = a.MaA.GetCnName();
-            string c = EventCode.GetEventLevel(EventCode.Login);
-            string c1 = EventCode.GetEventName(EventCode.Login);
-            SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
+            // string c = EventCode.GetEventLevel(EventCode.Login);
+            /// string c1 = EventCode.GetEventName(EventCode.Login);
+            // SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
             ///string a = RedisSnUtil.BuildMachineId();
 
             ///IPushService pushService = new JgPushService();
 
             //pushService.Send("1104a8979234f30c8c2", "dasdsada", "das");
             //BizFactory.Machine.SendRebootSys(IdWorker.Build(IdType.EmptyGuid), AppId.MERCH, "d17df2252133478c99104180e8062230", "202004220011");
-
-            if ("昨天" == "明天")
-            {
-                Console.WriteLine("今天就是周五");
-            }
-
-            Console.WriteLine("今天是周几");
-
-
-
-
-
-
-
-
-
 
             //BizFactory.Order.BuildQrcode2PickupCode("31231232");
 
@@ -261,8 +252,6 @@ namespace Test
             //SdkFactory.XrtPay.PayQuery(payInfo, "610010720200115143310368");
             //string PinYinName = CommonUtil.GetPingYin("格力高百醇（草莓味）");
             //string PinYinIndex = CommonUtil.GetPingYinIndex("格力高百醇（草莓味）");
-
-
 
             //List<string[]> s = new List<string[]>();
             //s.Add

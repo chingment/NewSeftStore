@@ -72,6 +72,52 @@ namespace LocalS.Service.Api.Account
 
         }
 
+
+        private List<MenuNode> GetMenus2(Enumeration.BelongSite belongSite, string userId, string mctMode = "")
+        {
+            List<MenuNode> menuNodes = new List<MenuNode>();
+
+            var sysMenus = CurrentDb.SysMenu.Where(m => m.BelongSite == belongSite && m.Depth != 0).OrderBy(m => m.Priority).ToList();
+
+            if (belongSite == Enumeration.BelongSite.Admin || belongSite == Enumeration.BelongSite.Merch)
+            {
+                sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
+
+                if (belongSite == Enumeration.BelongSite.Merch)
+                {
+                    if (!string.IsNullOrEmpty(mctMode))
+                    {
+                        mctMode = (mctMode.Replace("M", "")).Replace("S", "");
+
+                        if (mctMode == "F")
+                        {
+                            sysMenus = sysMenus.Where(m => m.BelongMctMode != "K").ToList();
+                        }
+                    }
+                }
+
+            }
+
+            foreach (var sysMenu in sysMenus)
+            {
+                MenuNode menuNode = new MenuNode();
+                menuNode.Id = sysMenu.Id;
+                menuNode.PId = sysMenu.PId;
+                menuNode.Path = sysMenu.Path;
+                menuNode.Name = sysMenu.Name;
+                menuNode.Icon = sysMenu.Icon;
+                menuNode.Title = sysMenu.Title;
+                menuNode.Component = sysMenu.Component;
+                menuNode.IsSidebar = sysMenu.IsSidebar;
+                menuNode.IsNavbar = sysMenu.IsNavbar;
+                menuNode.IsRouter = sysMenu.IsRouter;
+                menuNodes.Add(menuNode);
+            }
+
+            return menuNodes;
+
+        }
+
         private List<MenuNode> GetMenuTree(string id, List<SysMenu> sysMenus)
         {
             List<MenuNode> treeNodes = new List<MenuNode>();
@@ -650,7 +696,7 @@ namespace LocalS.Service.Api.Account
                 switch (rup.WebSite)
                 {
                     case "admin":
-                        ret.Menus = GetMenus(Enumeration.BelongSite.Admin, userId);
+                        ret.Menus = GetMenus2(Enumeration.BelongSite.Admin, userId);
                         ret.Roles = GetRoles(Enumeration.BelongSite.Admin, userId);
                         break;
                     case "agent":
