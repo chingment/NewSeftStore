@@ -245,5 +245,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
     }
 }

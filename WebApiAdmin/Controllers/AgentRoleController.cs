@@ -18,6 +18,7 @@ namespace WebApiAdmin.Controllers
             IResult result = AdminServiceFactory.SysRole.GetList(this.CurrentUserId, Enumeration.BelongSite.Agent, rup);
             return new OwnApiHttpResponse(result);
         }
+
         [HttpGet]
         public OwnApiHttpResponse InitAdd()
         {
