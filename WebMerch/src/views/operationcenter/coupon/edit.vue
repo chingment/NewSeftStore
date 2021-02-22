@@ -84,7 +84,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"
-          style="width: 100%"
+          style="width: 400px"
         />
       </el-form-item>
       <el-form-item label="可使用时间" prop="useTimeValue">
@@ -99,9 +99,7 @@
             <el-input v-model="form.useTimeValue" placeholder="" clearable style="max-width:250px">
               <template slot="append">日后无效</template>
             </el-input>
-
           </div>
-
           <div v-else-if="form.useTimeType===2">
             <el-date-picker
               v-model="form.useTimeValue"
@@ -110,10 +108,9 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               value-format="yyyy-MM-dd"
-              style="width: 100%"
+              style="width: 400px"
             />
           </div>
-
         </div>
       </el-form-item>
       <el-form-item label="可使用范围" prop="useAreaValue" :show-message="rules.useAreaValue[0].isShow" :error="rules.useAreaValue[0].message">
@@ -138,9 +135,7 @@
               </el-select>
               <el-button size="medium" style="width: 20%" @click="handleUseAreaAddStore">添加</el-button>
             </div>
-
             <div>
-
               <el-table
                 key="list_usearea_stores"
                 :data="temp.list_usearea_stores"
@@ -161,9 +156,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-
             </div>
-
           </div>
           <div v-if="form.useAreaType==3">
             <div>
@@ -178,7 +171,6 @@
               />
               <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProductKind">添加</el-button>
             </div>
-
             <div>
               <el-table
                 key="list_usearea_productkinds"
@@ -203,7 +195,6 @@
             </div>
           </div>
           <div v-if="form.useAreaType==4">
-
             <div>
               <el-autocomplete
                 v-model="temp.productSearchKey"
@@ -223,7 +214,6 @@
               </el-autocomplete>
               <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProduct">添加</el-button>
             </div>
-
             <div>
               <el-table
                 key="list_usearea_products"
@@ -251,7 +241,6 @@
                 </el-table-column>
               </el-table>
             </div>
-
           </div>
         </div>
       </el-form-item>
@@ -264,14 +253,12 @@
           show-word-limit
           clearable
         /></el-form-item>
-
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
-
 <script>
 import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/coupon'

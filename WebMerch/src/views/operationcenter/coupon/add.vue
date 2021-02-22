@@ -83,7 +83,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"
-          style="width: 100%"
+          style="width: 400px"
         />
       </el-form-item>
       <el-form-item label="可使用时间" prop="useTimeValue">
@@ -107,7 +107,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               value-format="yyyy-MM-dd"
-              style="width: 100%"
+              style="width: 400px"
             />
           </div>
         </div>

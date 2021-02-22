@@ -158,12 +158,10 @@ namespace WebUploadServer.Controllers
                     string serverSmallSavePath = path + "/" + smallSavePath;
 
                     fileName = fileName.ToLower().Replace("\\", "/");
+                    fileName = fileName.ToLower().Replace("//", "/");
 
                     ImageUpload s = new ImageUpload();
                     string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
-
-
-
 
                     DirectoryInfo Drr = new DirectoryInfo(path + "/" + savefolder);
                     if (!Drr.Exists)
@@ -209,7 +207,6 @@ namespace WebUploadServer.Controllers
                 r.Result = ResultType.Exception;
                 r.Message = "上传失败";
                 LogUtil.Error("WebApi上传图片异常", ex);
-
             }
 
             string json = r.ToString();
