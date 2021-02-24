@@ -21,10 +21,10 @@
       <el-tab-pane label="会费设置" name="tabFee">
         <manage-pane-fee :levelst-id="activeDropdown.id" />
       </el-tab-pane>
-      <el-tab-pane label="优惠券" name="tabCoupon">
+      <el-tab-pane label="赠券设置" name="tabCoupon">
         <manage-pane-coupon :levelst-id="activeDropdown.id" />
       </el-tab-pane>
-      <el-tab-pane label="权益设置" name="tabRight">
+      <el-tab-pane label="优惠商品" name="tabRight">
         <manage-pane-right :levelst-id="activeDropdown.id" />
       </el-tab-pane>
     </el-tabs>
