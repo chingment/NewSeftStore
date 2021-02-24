@@ -153,7 +153,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && m.LevelStId == rup.LevelStId
-                         select new { CouponStId = m.Id, CouponId = u.Id, u.Name, u.UseMode, u.Category, u.ShopMode, u.UseAreaType, u.UseAreaValue, u.AtLeastAmount, u.FaceType, u.FaceValue, u.StartTime, u.EndTime, u.PerLimitNum, u.IsDelete, u.CreateTime });
+                         select new { CouponStId = m.Id, CouponId = u.Id, u.Name, u.UseMode, u.Category, u.ShopMode, u.UseAreaType, u.UseAreaValue, u.AtLeastAmount, u.FaceType, u.FaceValue, u.StartTime, u.EndTime, u.IsDelete, u.CreateTime });
 
             int total = query.Count();
 

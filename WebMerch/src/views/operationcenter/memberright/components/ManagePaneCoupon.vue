@@ -31,49 +31,19 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="优惠券名称" prop="name" align="left" min-width="15%">
+      <el-table-column label="优惠券名称" prop="name" align="left" min-width="40%">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="优惠券类型" prop="category" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.category }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="使用方式" prop="useMode" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.useMode }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="可使用范围" prop="useAreaType" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.useAreaType }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="使用门槛" prop="atLeastAmount" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.atLeastAmount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="券种" prop="faceType" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="券种" prop="faceType" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.faceType }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="券值" prop="faceValue" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="券值" prop="faceValue" align="left" min-width="30%">
         <template slot-scope="scope">
           <span>{{ scope.row.faceValue }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="有效期" prop="validDate" align="left" min-width="15%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.validDate }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="状态" prop="validDate" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">

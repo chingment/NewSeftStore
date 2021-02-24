@@ -16,7 +16,6 @@ namespace LocalS.Service.Api.Merch
         public int IssueQuantity { get; set; }
         public E_Coupon_FaceType FaceType { get; set; }
         public decimal FaceValue { get; set; }
-        public int PerLimitNum { get; set; }
         public decimal AtLeastAmount { get; set; }
         public string[] ValidDate { get; set; }
         public E_Coupon_UseAreaType UseAreaType { get; set; }
@@ -26,8 +25,9 @@ namespace LocalS.Service.Api.Merch
         public object UseTimeValue { get; set; }
         public string Description { get; set; }
         public bool IsSuperposition { get; set; }
-        public E_Coupon_PerLimitTimeType PerLimitTimeType { get; set; }
-        public int PerLimitTimeNum { get; set; }
-        public List<string> LimitMemberLevels { get; set; }
+        //public int PerLimitNum { get; set; }
+        //public E_Coupon_PerLimitTimeType PerLimitTimeType { get; set; }
+        //public int PerLimitTimeNum { get; set; }
+        //public List<string> LimitMemberLevels { get; set; }
     }
 }

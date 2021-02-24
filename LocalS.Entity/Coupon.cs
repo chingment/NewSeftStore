@@ -92,10 +92,10 @@ namespace LocalS.Entity
         public int ReceivedQuantity { get; set; }
         public E_Coupon_FaceType FaceType { get; set; }
         public decimal FaceValue { get; set; }
-        public int PerLimitNum { get; set; }
-        public E_Coupon_PerLimitTimeType PerLimitTimeType { get; set; }
-        public int PerLimitTimeNum { get; set; }
-        public string LimitMemberLevels { get; set; }
+        //public int PerLimitNum { get; set; }
+        //public E_Coupon_PerLimitTimeType PerLimitTimeType { get; set; }
+        //public int PerLimitTimeNum { get; set; }
+        //public string LimitMemberLevels { get; set; }
         public decimal AtLeastAmount { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

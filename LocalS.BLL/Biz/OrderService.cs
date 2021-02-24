@@ -1133,56 +1133,54 @@ namespace LocalS.BLL.Biz
                                 var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.Id == d_OrderSub.PrdProductSkuId).FirstOrDefault();
                                 if (d_memberFeeSt != null)
                                 {
-                                    string[] couponIds = d_memberFeeSt.CouponIds.ToJsonObject<string[]>();
+                                    var d_memberCouponSts = CurrentDb.MemberCouponSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.LevelStId == d_memberFeeSt.LevelStId).ToList();
 
-                                    if (couponIds != null && couponIds.Length > 0)
+                                    foreach (var d_memberCouponSt in d_memberCouponSts)
                                     {
-                                        var d_coupons = CurrentDb.Coupon.Where(m => couponIds.Contains(m.Id) && m.MerchId == d_OrderSub.MerchId).ToList();
+                                        var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_memberCouponSt.CouponId).FirstOrDefault();
 
-                                        foreach (var d_coupon in d_coupons)
+                                        for (int i = 0; i < d_memberCouponSt.Quantity; i++)
                                         {
-                                            for (int i = 0; i < d_coupon.PerLimitNum; i++)
+                                            var d_clientCoupon = new ClientCoupon();
+                                            d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
+                                            d_clientCoupon.Sn = "";
+                                            d_clientCoupon.MerchId = d_OrderSub.MerchId;
+                                            d_clientCoupon.ClientUserId = d_OrderSub.ClientUserId;
+                                            d_clientCoupon.CouponId = d_coupon.Id;
+                                            if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
                                             {
-                                                var d_clientCoupon = new ClientCoupon();
-                                                d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
-                                                d_clientCoupon.Sn = "";
-                                                d_clientCoupon.MerchId = d_OrderSub.MerchId;
-                                                d_clientCoupon.ClientUserId = d_OrderSub.ClientUserId;
-                                                d_clientCoupon.CouponId = d_coupon.Id;
-                                                if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
-                                                {
-                                                    d_clientCoupon.ValidStartTime = DateTime.Now;
-                                                    d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
-                                                }
-                                                else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
-                                                {
-                                                    string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
-                                                    if (arr_UseTimeValue.Length == 2)
-                                                    {
-                                                        d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
-                                                        d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
-                                                    }
-                                                }
-
-                                                d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                                                d_clientCoupon.SourceType = E_ClientCouponSourceType.SysGive;
-                                                d_clientCoupon.SourceObjType = "System";
-                                                d_clientCoupon.SourceObjId = IdWorker.Build(IdType.EmptyGuid);
-                                                d_clientCoupon.SourcePoint = "PaySuccess";
-                                                d_clientCoupon.SourceTime = DateTime.Now;
-                                                d_clientCoupon.SourceDes = "开通会员赠送";
-                                                d_clientCoupon.Creator = operater;
-                                                d_clientCoupon.CreateTime = DateTime.Now;
-                                                CurrentDb.ClientCoupon.Add(d_clientCoupon);
-
-                                                d_coupon.ReceivedQuantity += 1;
-                                                d_coupon.Mender = operater;
-                                                d_coupon.MendTime = DateTime.Now;
-
-                                                CurrentDb.SaveChanges();
-
+                                                d_clientCoupon.ValidStartTime = DateTime.Now;
+                                                d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
                                             }
+                                            else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+                                            {
+                                                string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
+                                                if (arr_UseTimeValue.Length == 2)
+                                                {
+                                                    d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
+                                                    d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
+                                                }
+                                            }
+
+                                            d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
+                                            d_clientCoupon.SourceType = E_ClientCouponSourceType.SysGive;
+                                            d_clientCoupon.SourceObjType = "System";
+                                            d_clientCoupon.SourceObjId = IdWorker.Build(IdType.EmptyGuid);
+                                            d_clientCoupon.SourcePoint = "PaySuccess";
+                                            d_clientCoupon.SourceTime = DateTime.Now;
+                                            d_clientCoupon.SourceDes = "开通会员赠送";
+                                            d_clientCoupon.Creator = operater;
+                                            d_clientCoupon.CreateTime = DateTime.Now;
+                                            CurrentDb.ClientCoupon.Add(d_clientCoupon);
+
+                                            d_coupon.ReceivedQuantity += 1;
+                                            d_coupon.Mender = operater;
+                                            d_coupon.MendTime = DateTime.Now;
+
+                                            CurrentDb.SaveChanges();
+
                                         }
+
                                     }
 
                                     if (d_clientUser != null)
@@ -1747,7 +1745,7 @@ namespace LocalS.BLL.Biz
 
                 if (payTrans.ChargeAmount > 0)
                 {
-                   // var orderAttach = new BLL.Biz.OrderAttachModel();
+                    // var orderAttach = new BLL.Biz.OrderAttachModel();
 
                     var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == payTrans.ClientUserId).FirstOrDefault();
 
@@ -1910,9 +1908,9 @@ namespace LocalS.BLL.Biz
                                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                     }
 
-                                   // orderAttach.MerchId = payTrans.MerchId;
+                                    // orderAttach.MerchId = payTrans.MerchId;
                                     //orderAttach.StoreId = payTrans.StoreId;
-                                   // orderAttach.PayCaller = rop.PayCaller;
+                                    // orderAttach.PayCaller = rop.PayCaller;
 
                                     var wxByMp_PayBuildWxJsPayInfo = SdkFactory.XrtPay.PayBuildWxJsPayInfo(xrtPayInfoConfig, payTrans.MerchId, "", "", d_clientUser.WxMpAppId, d_clientUser.WxMpOpenId, payTrans.Id, payTrans.ChargeAmount, "", rop.CreateIp, "自助商品", payTrans.PayExpireTime.Value);
 

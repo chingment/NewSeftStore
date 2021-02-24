@@ -197,7 +197,7 @@ namespace LocalS.Service.Api.Merch
                           (rup.Name == null || u.Name.Contains(rup.Name)) &&
                          u.IsDelete == false &&
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.UseMode, u.Category, u.ShopMode, u.UseAreaType, u.UseAreaValue, u.AtLeastAmount, u.FaceType, u.FaceValue, u.StartTime, u.EndTime, u.PerLimitNum, u.IsDelete, u.CreateTime });
+                         select new { u.Id, u.Name, u.UseMode, u.Category, u.ShopMode, u.UseAreaType, u.UseAreaValue, u.AtLeastAmount, u.FaceType, u.FaceValue, u.StartTime, u.EndTime, u.IsDelete, u.CreateTime });
 
             int total = query.Count();
 
@@ -321,11 +321,6 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "券值必须大于零");
             }
 
-            if (rop.PerLimitNum < 1)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "每人限领必须大于零");
-            }
-
             using (TransactionScope ts = new TransactionScope())
             {
                 var d_coupon = new Coupon();
@@ -338,7 +333,6 @@ namespace LocalS.Service.Api.Merch
                 d_coupon.IssueQuantity = rop.IssueQuantity;
                 d_coupon.FaceType = rop.FaceType;
                 d_coupon.FaceValue = rop.FaceValue;
-                d_coupon.PerLimitNum = rop.PerLimitNum;
                 d_coupon.AtLeastAmount = rop.AtLeastAmount;
                 d_coupon.StartTime = DateTime.Parse(rop.ValidDate[0]);
                 d_coupon.EndTime = DateTime.Parse(rop.ValidDate[1]);
@@ -353,17 +347,6 @@ namespace LocalS.Service.Api.Merch
                     d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
                 }
 
-                d_coupon.PerLimitTimeType = rop.PerLimitTimeType;
-
-                if (rop.PerLimitTimeType == E_Coupon_PerLimitTimeType.UnLimit)
-                {
-                    d_coupon.PerLimitTimeNum = 0;
-                }
-                else
-                {
-                    d_coupon.PerLimitTimeNum = rop.PerLimitTimeNum;
-                }
-                d_coupon.LimitMemberLevels = rop.LimitMemberLevels.ToJsonString();
                 d_coupon.IsSuperposition = false;
                 d_coupon.IsDelete = false;
                 d_coupon.Description = rop.Description;
@@ -426,7 +409,6 @@ namespace LocalS.Service.Api.Merch
                 ret.Coupon.IssueQuantity = d_coupon.IssueQuantity;
                 ret.Coupon.FaceType = d_coupon.FaceType;
                 ret.Coupon.FaceValue = d_coupon.FaceValue;
-                ret.Coupon.PerLimitNum = d_coupon.PerLimitNum;
                 ret.Coupon.AtLeastAmount = d_coupon.AtLeastAmount;
                 ret.Coupon.ValidDate = new string[2] { d_coupon.StartTime.ToUnifiedFormatDate(), d_coupon.EndTime.ToUnifiedFormatDate() };
                 ret.Coupon.UseAreaType = d_coupon.UseAreaType;
@@ -446,9 +428,6 @@ namespace LocalS.Service.Api.Merch
                     ret.Coupon.UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
                 }
 
-                ret.Coupon.PerLimitTimeType = d_coupon.PerLimitTimeType;
-                ret.Coupon.PerLimitTimeNum = d_coupon.PerLimitTimeNum;
-                ret.Coupon.LimitMemberLevels = d_coupon.LimitMemberLevels.ToJsonObject<List<string>>();
                 ret.Coupon.Description = d_coupon.Description;
                 ret.Coupon.IsSuperposition = d_coupon.IsSuperposition;
             }
@@ -534,11 +513,6 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "券值必须大于零");
             }
 
-            if (rop.PerLimitNum < 1)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "每人限领必须大于零");
-            }
-
             using (TransactionScope ts = new TransactionScope())
             {
                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == rop.Id && m.MerchId == merchId).FirstOrDefault();
@@ -554,7 +528,6 @@ namespace LocalS.Service.Api.Merch
                 d_coupon.IssueQuantity = rop.IssueQuantity;
                 d_coupon.FaceType = rop.FaceType;
                 d_coupon.FaceValue = rop.FaceValue;
-                d_coupon.PerLimitNum = rop.PerLimitNum;
                 d_coupon.AtLeastAmount = rop.AtLeastAmount;
                 d_coupon.StartTime = DateTime.Parse(rop.ValidDate[0]);
                 d_coupon.EndTime = DateTime.Parse(rop.ValidDate[1]);
@@ -568,19 +541,6 @@ namespace LocalS.Service.Api.Merch
                 {
                     d_coupon.UseTimeValue = rop.UseTimeValue.ToJsonString();
                 }
-
-                d_coupon.PerLimitTimeType = rop.PerLimitTimeType;
-
-                if (rop.PerLimitTimeType == E_Coupon_PerLimitTimeType.UnLimit)
-                {
-                    d_coupon.PerLimitTimeNum = 0;
-                }
-                else
-                {
-                    d_coupon.PerLimitTimeNum = rop.PerLimitTimeNum;
-                }
-
-                d_coupon.LimitMemberLevels = rop.LimitMemberLevels.ToJsonString();
 
                 d_coupon.IsSuperposition = false;
                 d_coupon.IsDelete = false;

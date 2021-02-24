@@ -26,7 +26,6 @@
           </el-input>
         </template>
       </el-form-item>
-
       <el-form-item label="券种" prop="faceType">
         <el-radio-group v-model="form.faceType">
           <el-radio-button label="1">购物代金券</el-radio-button>
@@ -36,39 +35,10 @@
           <el-radio-button label="5">入场券</el-radio-button>
         </el-radio-group>
       </el-form-item>
-
       <el-form-item label="券值" prop="faceValue">
         <el-input v-model="form.faceValue" placeholder="" clearable style="max-width:250px">
           <template slot="append">{{ form.faceType==2?"折":"元" }}</template>
         </el-input>
-      </el-form-item>
-      <el-form-item label="每人限领" prop="perLimitNum">
-        <el-input v-model="form.perLimitNum" placeholder="" clearable style="max-width:250px">
-          <template slot="append">张</template>
-        </el-input>
-      </el-form-item>
-      <el-form-item label="限领方式" prop="perLimitTimeType">
-        <el-radio-group v-model="form.perLimitTimeType">
-          <el-radio-button label="1">不限制</el-radio-button>
-          <el-radio-button label="2">按日</el-radio-button>
-          <el-radio-button label="3">按月</el-radio-button>
-          <el-radio-button label="4">按季</el-radio-button>
-        </el-radio-group>
-        <el-input
-          v-show="form.perLimitTimeType!=1"
-          v-model="form.perLimitTimeNum"
-          placeholder
-          clearable
-          style="width:160px"
-        >
-          <template slot="prepend">限领</template>
-          <template slot="append">张</template>
-        </el-input>
-      </el-form-item>
-      <el-form-item label="限领用户">
-        <el-checkbox-group v-model="form.limitMemberLevels">
-          <el-checkbox v-for="option in temp.options_memberlevels" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
-        </el-checkbox-group>
       </el-form-item>
       <el-form-item label="使用门槛" prop="atLeastAmount">
         <el-input v-model="form.atLeastAmount" placeholder="" clearable style="max-width:250px">
@@ -281,10 +251,6 @@ export default {
         issueQuantity: 1,
         faceType: 1,
         faceValue: '',
-        perLimitNum: 1,
-        perLimitTimeType: 1,
-        perLimitTimeNum: 0,
-        limitMemberLevels: ['0'],
         validDate: [],
         useAreaType: 1,
         useAreaValue: [],
@@ -293,7 +259,6 @@ export default {
         description: ''
       },
       temp: {
-        options_memberlevels: [],
         options_stores: [],
         options_productkinds: [],
         cur_sel_usearea_store: { id: '', name: '' },
@@ -322,7 +287,6 @@ export default {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         issueQuantity: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1, isShow: true }],
         faceValue: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money }],
-        perLimitNum: [{ required: true, message: '只能输入正整数', pattern: fromReg.intege1 }],
         atLeastAmount: [{ required: true, message: '格式,eg:88.88', pattern: fromReg.money1 }],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }],
         useTimeValue: [{ required: true, message: '请输入正整数', isShow: true, pattern: fromReg.intege1 }],
@@ -341,13 +305,9 @@ export default {
         if (res.result === 1) {
           var d = res.data
 
-          d.coupon.limitMemberLevels = d.coupon.limitMemberLevels == null ? [] : d.coupon.limitMemberLevels
-
           this.form = d.coupon
 
           this.form.issueQuantity = d.coupon.issueQuantity + ''
-          this.form.perLimitNum = d.coupon.perLimitNum + ''
-          this.form.perLimitTimeType = d.coupon.perLimitTimeType + ''
 
           if (d.coupon.useAreaType === 2) {
             this.temp.list_usearea_stores = d.coupon.useAreaValue
@@ -362,7 +322,6 @@ export default {
 
           this.temp.options_stores = d.optionsStores
           this.temp.options_productkinds = d.optionsProductKinds
-          this.temp.options_memberlevels = d.optionsMemberLevels
         }
         this.loading = false
       })
