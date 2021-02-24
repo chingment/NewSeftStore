@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
 using LocalS.Entity;
 using LocalS.Service.UI;
@@ -110,6 +111,71 @@ namespace LocalS.Service.Api.Merch
             return name;
         }
 
+        public string GetFaceValue(E_Coupon_FaceType faceType, decimal faceValue)
+        {
+            string str_faceValue = "";
+
+            if (faceType == E_Coupon_FaceType.ShopVoucher)
+            {
+                str_faceValue = string.Format("{0}元", faceValue);
+            }
+            else if (faceType == E_Coupon_FaceType.ShopDiscount)
+            {
+                str_faceValue = string.Format("{0}折", faceValue);
+            }
+            else if (faceType == E_Coupon_FaceType.RentVoucher)
+            {
+                str_faceValue = string.Format("{0}元", faceValue);
+            }
+            else if (faceType == E_Coupon_FaceType.DepositVoucher)
+            {
+                str_faceValue = string.Format("{0}元", faceValue);
+            }
+            else if (faceType == E_Coupon_FaceType.EntranceTicket)
+            {
+                str_faceValue = string.Format("{0}元", faceValue);
+            }
+
+            return str_faceValue;
+        }
+
+        public StatusModel GetStatus(DateTime startTime, DateTime endTime)
+        {
+            var status = new StatusModel();
+
+            if (DateTime.Now < startTime)
+            {
+                status = new StatusModel(1, "未生效");
+            }
+            else if (DateTime.Now >= startTime && DateTime.Now <= endTime)
+            {
+                status = new StatusModel(2, "已生效");
+            }
+            else
+            {
+                status = new StatusModel(3, "已过期");
+            }
+
+            return status;
+        }
+
+        public string GetValidDate(DateTime startTime, DateTime endTime)
+        {
+            string validDate = string.Format("{0}至{1}", startTime.ToUnifiedFormatDate(), endTime.ToUnifiedFormatDate());
+            return validDate;
+        }
+
+        public string GetAtLeastAmount(decimal atLeastAmount)
+        {
+            string str_AatLeastAmount = "无限制";
+            if (atLeastAmount > 0)
+            {
+                str_AatLeastAmount = string.Format("满{0}元可用", atLeastAmount);
+            }
+
+            return str_AatLeastAmount;
+        }
+
         public CustomJsonResult InitGetList(string operater, string merchId)
         {
             var result = new CustomJsonResult();
@@ -121,7 +187,6 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
-
 
         public CustomJsonResult GetList(string operater, string merchId, RupCouponGetList rup)
         {
@@ -146,64 +211,18 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                string atLeastAmount = "无限制";
-                if (item.AtLeastAmount > 0)
-                {
-                    atLeastAmount = string.Format("满{0}元可用", item.AtLeastAmount);
-                }
-
-                string faceValue = "";
-
-                if (item.FaceType == E_Coupon_FaceType.ShopVoucher)
-                {
-                    faceValue = string.Format("{0}元", item.FaceValue);
-                }
-                else if (item.FaceType == E_Coupon_FaceType.ShopDiscount)
-                {
-                    faceValue = string.Format("{0}折", item.FaceValue);
-                }
-                else if (item.FaceType == E_Coupon_FaceType.RentVoucher)
-                {
-                    faceValue = string.Format("{0}元", item.FaceValue);
-                }
-                else if (item.FaceType == E_Coupon_FaceType.DepositVoucher)
-                {
-                    faceValue = string.Format("{0}元", item.FaceValue);
-                }
-                else if (item.FaceType == E_Coupon_FaceType.EntranceTicket)
-                {
-                    faceValue = string.Format("{0}元", item.FaceValue);
-                }
-
-                string validDate = string.Format("{0}至{1}", item.StartTime.ToUnifiedFormatDate(), item.EndTime.ToUnifiedFormatDate());
-
-                string status = "";
-
-                if (DateTime.Now < item.StartTime)
-                {
-                    status = "未生效";
-                }
-                else if (DateTime.Now >= item.StartTime && DateTime.Now <= item.EndTime)
-                {
-                    status = "已生效";
-                }
-                else
-                {
-                    status = "已过期";
-                }
-
                 olist.Add(new
                 {
                     Id = item.Id,
                     Name = item.Name,
                     Category = GetCategoryName(item.Category),
                     UseAreaType = GetUseAreaTypeName(item.UseAreaType),
-                    AtLeastAmount = atLeastAmount,
+                    AtLeastAmount = GetAtLeastAmount(item.AtLeastAmount),
                     FaceType = GetFaceTypeName(item.FaceType),
                     UseMode = GetUseModeName(item.UseMode),
-                    FaceValue = faceValue,
-                    ValidDate = validDate,
-                    Status = status
+                    FaceValue = GetFaceValue(item.FaceType, item.FaceValue),
+                    ValidDate = GetValidDate(item.StartTime, item.EndTime),
+                    Status = GetStatus(item.StartTime, item.EndTime)
                 });
             }
 

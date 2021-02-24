@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var d_merch = CurrentDb.Merch.Where(m => m.Id == rup.MerchId).FirstOrDefault();
 
-            ret.IsOpenMemberRight =d_merch.IsOpenMemberRight;
+            ret.IsOpenMemberRight = d_merch.IsOpenMemberRight;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -52,7 +52,7 @@ namespace LocalS.Service.Api.StoreApp
 
 
             var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == rup.MerchId).ToList();
-            var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == rup.MerchId).ToList();
+            var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == rup.MerchId && m.IsStop == false).ToList();
 
             var d_memberLevelSt_1 = d_memberLevelSts.Where(m => m.Level == 1).FirstOrDefault();
 

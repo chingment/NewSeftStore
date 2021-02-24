@@ -68,6 +68,7 @@
     <Compile Include="MemberDaySt.cs" />
     <Compile Include="MemberFeeSt.cs" />
     <Compile Include="MemberLevelSt.cs" />
+    <Compile Include="MemberCouponSt.cs" />
     <Compile Include="MemberProductSkuSt.cs" />
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchMachine.cs" />

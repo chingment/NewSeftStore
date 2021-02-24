@@ -1,19 +1,16 @@
 <template>
   <div id="memberright_manage">
-    <div class="cur-dropdown">
-      <span class="title">当前会员:</span>
-      <span class="name">{{ activeDropdown.name }}</span>
-      <el-dropdown trigger="click" @command="handleChangeDropdown">
+    <page-header />
+    <div class="cur-machine cur-tab">
+      <div class="it-name">
+        <span class="title">当前会员:</span><span class="name">{{ activeDropdown.name }}</span>
+      </div>
+      <el-dropdown class="it-switch" trigger="click" @command="handleChangeDropdown">
         <span class="el-dropdown-link">
-          切换
-          <i class="el-icon-arrow-down el-icon--right" />
+          切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="option in dropdownOptions"
-            :key="option.id"
-            :command="option.id"
-          >{{ option.name }}</el-dropdown-item>
+          <el-dropdown-item v-for="option in dropdownOptions" :key="option.id" :command="option.id"> {{ option.name }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -23,6 +20,9 @@
       </el-tab-pane>
       <el-tab-pane label="会费设置" name="tabFee">
         <manage-pane-fee :levelst-id="activeDropdown.id" />
+      </el-tab-pane>
+      <el-tab-pane label="优惠券" name="tabCoupon">
+        <manage-pane-coupon :levelst-id="activeDropdown.id" />
       </el-tab-pane>
       <el-tab-pane label="权益设置" name="tabRight">
         <manage-pane-right :levelst-id="activeDropdown.id" />
@@ -36,10 +36,11 @@ import { initManage } from '@/api/memberright'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneFee from './components/ManagePaneFee'
 import managePaneRight from './components/ManagePaneRight'
-
+import managePaneCoupon from './components/ManagePaneCoupon'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterMemberRightManage',
-  components: { managePaneBaseInfo, managePaneFee, managePaneRight },
+  components: { managePaneBaseInfo, managePaneFee, managePaneRight, managePaneCoupon, PageHeader },
   data() {
     return {
       activeTab: 'tabBaseInfo',
@@ -78,18 +79,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#memberright_manage {
-  padding-top: 0px;
-  .cur-dropdown {
-    font-size: 14px;
-    line-height: 60px;
-    .title {
-      color: #5e6d82;
-    }
-    .name {
-      padding: 0 10px;
-      color: #2ac06d;
-    }
-  }
-}
+
 </style>

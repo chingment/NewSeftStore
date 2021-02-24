@@ -20,7 +20,7 @@
               </div>
             </div>
             <div class="right">
-              <el-button type="text" @click="handleManageBaseInfo(item)">管理</el-button>
+              <el-button type="text" @click="handleManageBaseInfo(item)">设置</el-button>
             </div>
           </div>
           <div class="it-component">
@@ -96,7 +96,7 @@ export default {
     handleManageBaseInfo(row) {
       this.$router.push({
         name: 'MarketMemberSet',
-        path: '/memberright/manage',
+        path: '/operationcenter/memberright/manage',
         params: {
           id: row.id,
           tab: 'tabBaseInfo'
@@ -106,7 +106,7 @@ export default {
     handleManageFee(row) {
       this.$router.push({
         name: 'MarketMemberSet',
-        path: '/memberright/manage',
+        path: '/operationcenter/memberright/manage',
         params: {
           id: row.id,
           tab: 'tabFee'
@@ -116,7 +116,7 @@ export default {
     handleManageRight(row) {
       this.$router.push({
         name: 'MarketMemberSet',
-        path: '/memberright/manage',
+        path: '/operationcenter/memberright/manage',
         params: {
           id: row.id,
           tab: 'tabRight'

@@ -8,10 +8,11 @@ namespace LocalS.Entity
     public enum E_MemberFeeSt_FeeType
     {
         Unknow = 0,
-        LongTerm = 1,
-        Year = 2,
-        Quarter = 3,
-        Month = 5,
+        LongTerm = 1,//终身
+        TwelveMonth = 2,//12个月 即年
+        SixMonth = 3,//6个月   即半年
+        ThreeMonth = 4,//3个月   即季度
+        OneMonth = 5 //1个月  
     }
 
     [Table("MemberFeeSt")]
@@ -35,5 +36,6 @@ namespace LocalS.Entity
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
         public string CouponIds { get; set; }
+        public bool IsStop { get; set; }
     }
 }

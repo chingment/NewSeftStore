@@ -8,7 +8,7 @@
               <div class="circle-item"> <span class="name">{{ item.name }}</span> </div>
             </div>
             <div class="right">
-              <el-button type="text" @click="handleSetting(item)">设置</el-button>
+              <el-button type="text" @click="dialogBySettingOpen(item)">设置</el-button>
             </div>
           </div>
           <div class="it-component">
@@ -17,18 +17,51 @@
               <ul>
                 <li>原价：{{ item.feeOriginalValue }} </li>
                 <li>实际价：{{ item.feeSaleValue }}</li>
+                <li>状态：{{ item.status.text }}</li>
               </ul>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
+
+    <el-dialog title="设置" :visible.sync="dialogBySettingIsVisible" :width="isDesktop==true?'500px':'90%'">
+
+      <el-form ref="formBySetting" :model="formBySetting" :rules="rulesBySetting" label-width="80px">
+        <el-form-item label="名称">
+          <span>{{ formBySetting.name }}</span>
+        </el-form-item>
+        <el-form-item label="原价" prop="originalValue">
+          <el-input v-model="formBySetting.originalValue" clearable style="width:160px">
+            <template slot="prepend">￥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="实际价" prop="saleValue">
+          <el-input v-model="formBySetting.saleValue" clearable style="width:160px">
+            <template slot="prepend">￥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="停用">
+          <el-switch v-model="formBySetting.isStop" />
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogBySettingIsVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="handleSetting">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getFeeSts } from '@/api/memberright'
+import { getFeeSts, setFeeSt } from '@/api/memberright'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneMachine',
@@ -41,7 +74,19 @@ export default {
   data() {
     return {
       loading: true,
-      listData: []
+      listQuery: {
+        id: ''
+      },
+      listData: [],
+      dialogBySettingIsVisible: false,
+      formBySetting: {
+        feeStId: '',
+        name: '',
+        originalValue: 0,
+        saleValue: 0,
+        isStop: false
+      },
+      isDesktop: this.$store.getters.isDesktop
     }
   },
   watch: {
@@ -61,12 +106,41 @@ export default {
     },
     _getListData(listQuery) {
       this.loading = true
+      this.listQuery = listQuery
       getFeeSts(listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.feeSts
         }
         this.loading = false
+      })
+    },
+    dialogBySettingOpen(item) {
+      this.dialogBySettingIsVisible = true
+      this.formBySetting.feeStId = item.id
+      this.formBySetting.name = item.name
+      this.formBySetting.originalValue = item.feeOriginalValue
+      this.formBySetting.saleValue = item.feeSaleValue
+      this.formBySetting.isStop = item.isStop
+    },
+    handleSetting() {
+      this.$refs['formBySetting'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            setFeeSt(this.formBySetting).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.dialogBySettingIsVisible = false
+                this._getListData(this.listQuery)
+              }
+            })
+          }).catch(() => {
+          })
+        }
       })
     }
   }

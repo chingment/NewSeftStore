@@ -32,9 +32,36 @@ export function getFeeSts(params) {
   })
 }
 
+export function setFeeSt(data) {
+  return request({
+    url: '/memberright/setFeeSt',
+    method: 'post',
+    data
+  })
+}
+
+export function getCouponsByLevelSt(params) {
+  return request({
+    url: '/memberright/getCouponsByLevelSt',
+    method: 'get',
+    params
+  })
+}
+
+export function removeCoupon(data) {
+  return request({
+    url: '/memberright/removeCoupon',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getLevelSts: getLevelSts,
   initManage: initManage,
   initManageBaseInfo: initManageBaseInfo,
-  getFeeSts: getFeeSts
+  getFeeSts: getFeeSts,
+  setFeeSt: setFeeSt,
+  getCouponsByLevelSt: getCouponsByLevelSt,
+  removeCoupon: removeCoupon
 }

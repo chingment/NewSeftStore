@@ -206,6 +206,9 @@
     <Compile Include="Api\Merch\RModels\RopAdEditContentBelong.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentBelongStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentStatus.cs" />
+    <Compile Include="Api\Merch\RModels\RopMemberRightGetLevelCoupons.cs" />
+    <Compile Include="Api\Merch\RModels\RopMemberRightRemoveCoupon.cs" />
+    <Compile Include="Api\Merch\RModels\RopMemberRightSetFeeSt.cs" />
     <Compile Include="Api\Merch\RModels\RupAdGetContentBelongs.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitEdit.cs" />

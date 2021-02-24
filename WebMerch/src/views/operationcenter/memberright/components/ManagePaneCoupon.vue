@@ -1,22 +1,5 @@
 <template>
   <div id="coupon_list">
-    <div class="filter-container">
-
-      <el-row :gutter="12">
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="优惠券名称" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
-        </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-            新建
-          </el-button>
-        </el-col>
-      </el-row>
-
-    </div>
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -77,11 +60,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <!-- <el-button type="primary" size="mini" @click="handleDetails(row)">
-            查看
-          </el-button> -->
-          <el-button type="primary" size="mini" @click="handleEdit(row)">
-            修改
+          <el-button type="primary" size="mini" @click="handleRemove(row)">
+            移除
           </el-button>
         </template>
       </el-table-column>
@@ -92,12 +72,21 @@
 </template>
 
 <script>
-import { getList } from '@/api/coupon'
+
+import { MessageBox } from 'element-ui'
+import { getCouponsByLevelSt, removeCoupon } from '@/api/memberright'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 
 export default {
-  name: 'OperationCenterCouponList',
+  name: 'ManagePaneCoupon',
   components: { Pagination },
+  props: {
+    levelstId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: false,
@@ -112,17 +101,24 @@ export default {
       isDesktop: this.$store.getters.isDesktop
     }
   },
-  created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+  watch: {
+    levelstId: function(val, oldval) {
+      this.init()
     }
-    this.getListData()
+  },
+  created() {
+    this.init()
   },
   methods: {
-    getListData() {
+    init() {
+      if (!isEmpty(this.levelstId)) {
+        this.listQuery.levelStId = this.levelstId
+        this._getListData()
+      }
+    },
+    _getListData() {
       this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getList(this.listQuery).then(res => {
+      getCouponsByLevelSt(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -131,23 +127,18 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getListData()
-    },
-    handleDetails(row) {
-      this.$router.push({
-        path: '/operationcenter/coupon/details?id=' + row.id
-      })
-    },
-    handleEdit(row) {
-      this.$router.push({
-        path: '/operationcenter/coupon/edit?id=' + row.id
-      })
-    },
-    handleCreate(row) {
-      this.$router.push({
-        path: '/operationcenter/coupon/add'
+    handleRemove(item) {
+      MessageBox.confirm('确定要移除该优惠券？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeCoupon({ couponStId: item.couponStId }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this._getListData()
+          }
+        })
       })
     }
   }

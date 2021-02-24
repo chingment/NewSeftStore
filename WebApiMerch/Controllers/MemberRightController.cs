@@ -38,5 +38,27 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.MemberRight.GetFeeSts(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse SetFeeSt([FromBody]RopMemberRightSetFeeSt rop)
+        {
+            IResult result = MerchServiceFactory.MemberRight.SetFeeSt(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetCouponsByLevelSt([FromUri]RupMemberRightGetLevelCoupons rup)
+        {
+            IResult result = MerchServiceFactory.MemberRight.GetCouponsByLevelSt(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse RemoveCoupon([FromBody]RopMemberRightRemoveCoupon rup)
+        {
+            IResult result = MerchServiceFactory.MemberRight.RemoveCoupon(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

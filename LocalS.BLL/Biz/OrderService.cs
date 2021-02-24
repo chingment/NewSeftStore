@@ -1194,13 +1194,16 @@ namespace LocalS.BLL.Biz
 
                                             switch (d_memberFeeSt.FeeType)
                                             {
-                                                case E_MemberFeeSt_FeeType.Year:
-                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddYears(1);
+                                                case E_MemberFeeSt_FeeType.TwelveMonth:
+                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(12);
                                                     break;
-                                                case E_MemberFeeSt_FeeType.Quarter:
+                                                case E_MemberFeeSt_FeeType.SixMonth:
+                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(6);
+                                                    break;
+                                                case E_MemberFeeSt_FeeType.ThreeMonth:
                                                     d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(3);
                                                     break;
-                                                case E_MemberFeeSt_FeeType.Month:
+                                                case E_MemberFeeSt_FeeType.OneMonth:
                                                     d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(1);
                                                     break;
                                                 case E_MemberFeeSt_FeeType.LongTerm:
