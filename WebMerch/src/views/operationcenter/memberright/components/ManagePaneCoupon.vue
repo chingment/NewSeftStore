@@ -1,22 +1,15 @@
 <template>
   <div id="coupon_list">
-
     <div class="filter-container">
-
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="优惠券名称" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-            添加
-          </el-button>
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
         </el-col>
       </el-row>
-
     </div>
     <el-table
       :key="listKey"
@@ -36,14 +29,19 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="券种" prop="faceType" align="left" min-width="30%">
+      <el-table-column label="券种" prop="faceType" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.faceType }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="券值" prop="faceValue" align="left" min-width="30%">
+      <el-table-column label="券值" prop="faceValue" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.faceValue }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="数量" prop="faceValue" align="left" min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.quantity }}</span> 张
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
@@ -54,7 +52,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
   </div>
 </template>

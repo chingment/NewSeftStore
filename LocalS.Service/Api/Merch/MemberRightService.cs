@@ -153,7 +153,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && m.LevelStId == rup.LevelStId
-                         select new { CouponStId = m.Id, CouponId = u.Id, u.Name, u.UseMode, u.Category, u.ShopMode, u.UseAreaType, u.UseAreaValue, u.AtLeastAmount, u.FaceType, u.FaceValue, u.StartTime, u.EndTime, u.IsDelete, u.CreateTime });
+                         select new { CouponStId = m.Id, CouponId = u.Id, m.Quantity, u.Name, u.UseMode, u.Category, u.ShopMode, u.UseAreaType, u.UseAreaValue, u.AtLeastAmount, u.FaceType, u.FaceValue, u.StartTime, u.EndTime, u.IsDelete, u.CreateTime });
 
             int total = query.Count();
 
@@ -173,6 +173,7 @@ namespace LocalS.Service.Api.Merch
                     CouponStId = item.CouponStId,
                     CouponId = item.CouponId,
                     Name = item.Name,
+                    Quantity = item.Quantity,
                     Category = MerchServiceFactory.Coupon.GetCategoryName(item.Category),
                     UseAreaType = MerchServiceFactory.Coupon.GetUseAreaTypeName(item.UseAreaType),
                     AtLeastAmount = MerchServiceFactory.Coupon.GetAtLeastAmount(item.AtLeastAmount),

@@ -24,9 +24,7 @@
         </el-card>
       </el-col>
     </el-row>
-
     <el-dialog title="设置" :visible.sync="dialogBySettingIsVisible" :width="isDesktop==true?'500px':'90%'">
-
       <el-form ref="formBySetting" :model="formBySetting" :rules="rulesBySetting" label-width="80px">
         <el-form-item label="名称">
           <span>{{ formBySetting.name }}</span>
@@ -45,7 +43,6 @@
           <el-switch v-model="formBySetting.isStop" />
         </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogBySettingIsVisible = false">
           取消
@@ -55,7 +52,6 @@
         </el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -176,7 +172,6 @@ white-space: nowrap;
       justify-content: flex-end;
       align-items: center;
     }
-
   }
   .it-component{
     min-height: 100px;
@@ -190,19 +185,17 @@ white-space: nowrap;
         height: 100%;
       }
     }
-
     .describe{
       flex: 1;
       padding: 5px;
       font-size: 12px;
-
       ul{
         padding: 0px;
         margin: 0px;
         list-style: none;
-         li{
-           width: 100%;
-             text-align: right;
+        li{
+        width: 100%;
+        text-align: right;
         height: 26px;
         line-height: 26px;
       }
