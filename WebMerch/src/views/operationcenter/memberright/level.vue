@@ -47,8 +47,15 @@
                   <el-button
                     type="text"
                     style="padding:0px;color:#139baf;"
-                    @click="handleManageRight(item)"
-                  >权益设置</el-button>
+                    @click="handleManageCoupon(item)"
+                  >赠券设置</el-button>
+                </li>
+                <li>
+                  <el-button
+                    type="text"
+                    style="padding:0px;color:#409EFF;"
+                    @click="handleManageSku(item)"
+                  >优惠商品</el-button>
                 </li>
               </ul>
             </div>
@@ -113,13 +120,23 @@ export default {
         }
       })
     },
-    handleManageRight(row) {
+    handleManageCoupon(row) {
       this.$router.push({
         name: 'MarketMemberSet',
         path: '/operationcenter/memberright/manage',
         params: {
           id: row.id,
-          tab: 'tabRight'
+          tab: 'tabCoupon'
+        }
+      })
+    },
+    handleManageSku(row) {
+      this.$router.push({
+        name: 'MarketMemberSet',
+        path: '/operationcenter/memberright/manage',
+        params: {
+          id: row.id,
+          tab: 'tabSku'
         }
       })
     }

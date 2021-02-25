@@ -521,10 +521,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 amount_original = orders.Sum(m => m.OriginalAmount);
 
-
                 amount_sale = orders.Sum(m => m.SaleAmount);
-
-
 
                 amount_charge = orders.Sum(m => m.ChargeAmount);
             }

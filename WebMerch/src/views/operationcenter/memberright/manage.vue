@@ -24,8 +24,8 @@
       <el-tab-pane label="赠券设置" name="tabCoupon">
         <manage-pane-coupon :levelst-id="activeDropdown.id" />
       </el-tab-pane>
-      <el-tab-pane label="优惠商品" name="tabRight">
-        <manage-pane-right :levelst-id="activeDropdown.id" />
+      <el-tab-pane label="优惠商品" name="tabSku">
+        <manage-pane-sku :levelst-id="activeDropdown.id" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -35,12 +35,12 @@
 import { initManage } from '@/api/memberright'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneFee from './components/ManagePaneFee'
-import managePaneRight from './components/ManagePaneRight'
+import managePaneSku from './components/ManagePaneSku'
 import managePaneCoupon from './components/ManagePaneCoupon'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterMemberRightManage',
-  components: { managePaneBaseInfo, managePaneFee, managePaneRight, managePaneCoupon, PageHeader },
+  components: { managePaneBaseInfo, managePaneFee, managePaneSku, managePaneCoupon, PageHeader },
   data() {
     return {
       activeTab: 'tabBaseInfo',

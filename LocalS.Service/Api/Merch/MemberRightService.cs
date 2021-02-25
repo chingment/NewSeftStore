@@ -69,16 +69,46 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { levelSts, curLevelSt });
         }
 
-        public CustomJsonResult InitManageBaseInfo(string operater, string merchId, string levelId)
+        public CustomJsonResult GetLevelSt(string operater, string merchId, string levelId)
         {
             var result = new CustomJsonResult();
 
             var d_MemberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId && m.Id == levelId).FirstOrDefault();
 
-            var ret = new { Id = d_MemberLevelSt.Id, Name = d_MemberLevelSt.Name };
+            var ret = new { Id = d_MemberLevelSt.Id, Name = d_MemberLevelSt.Name, Discount = d_MemberLevelSt.Discount };
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+        public CustomJsonResult SetLevelSt(string operater, string merchId, RopMemberRightSetLevelSt rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (rop.Discount == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "折扣不能等于0");
+            }
+            else if (rop.Discount < 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "折扣不能小于0");
+            }
+            else if (rop.Discount > 1)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "折扣不能大于1");
+            }
+
+            var d_MemberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId && m.Id == rop.LevelStId).FirstOrDefault();
+
+            if (d_MemberLevelSt != null)
+            {
+                d_MemberLevelSt.Discount = rop.Discount;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }
@@ -144,7 +174,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetCouponsByLevelSt(string operater, string merchId, RupMemberRightGetLevelCoupons rup)
+        public CustomJsonResult GetCoupons(string operater, string merchId, RupMemberRightGetCoupons rup)
         {
             var result = new CustomJsonResult();
 
@@ -237,5 +267,63 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
+
+        public CustomJsonResult GetSkus(string operater, string merchId, RupMemberRightGetSkus rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from m in CurrentDb.MemberSkuSt
+                         where
+                         m.MerchId == merchId
+                         && m.LevelStId == rup.LevelStId
+                         select new { m.Id, m.SkuId, m.MemberPrice, m.CreateTime, m.StoreId, m.StatTime, m.EndTime, m.IsDisabled });
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                var r_sku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.SkuId);
+
+                var status = new StatusModel();
+                if (item.IsDisabled)
+                    status = new StatusModel(1, "无效");
+                else
+                    status = new StatusModel(2, "有效");
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    SkuId = item.SkuId,
+                    Name = r_sku.Name,
+                    MainImgUrl = r_sku.MainImgUrl,
+                    MemberPrice = item.MemberPrice,
+                    IsDisabled = item.IsDisabled,
+                    StatTime = item.StatTime,
+                    EndTime = item.EndTime,
+                    Status = status
+                });
+
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+
+        }
+
     }
 }

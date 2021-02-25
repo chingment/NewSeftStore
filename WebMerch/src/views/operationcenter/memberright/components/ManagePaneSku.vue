@@ -96,7 +96,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getCoupons, removeCoupon, addCoupon, searchCoupon } from '@/api/memberright'
+import { getCouponsByLevelSt, removeCoupon, addCoupon, searchCoupon } from '@/api/memberright'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 
@@ -152,7 +152,7 @@ export default {
     },
     _getListData() {
       this.loading = true
-      getCoupons(this.listQuery).then(res => {
+      getCouponsByLevelSt(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

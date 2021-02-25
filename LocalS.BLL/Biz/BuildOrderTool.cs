@@ -224,11 +224,11 @@ namespace LocalS.BLL.Biz
                             //切换特定商品会员价
                             if (_memberLevel > 0)
                             {
-                                var memberProductSkuSt = CurrentDb.MemberProductSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.PrdProductSkuId == productSku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
-                                if (memberProductSkuSt != null)
+                                var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == productSku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
+                                if (d_MemberSkuSt != null)
                                 {
-                                    salePrice = memberProductSkuSt.MemberPrice;
-                                    LogUtil.Info("clientUser.MemberPrice:" + memberProductSkuSt.MemberPrice);
+                                    salePrice = d_MemberSkuSt.MemberPrice;
+                                    LogUtil.Info("clientUser.MemberPrice:" + d_MemberSkuSt.MemberPrice);
                                 }
                             }
 

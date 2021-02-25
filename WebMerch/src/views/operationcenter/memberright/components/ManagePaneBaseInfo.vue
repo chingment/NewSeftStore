@@ -9,14 +9,23 @@
       :hide-required-asterisk="!isEdit"
     >
       <el-form-item label="名称" prop="name" :show-message="isEdit">
-        <span v-show="!isEdit">{{ temp.name }}</span>
+        <span>{{ temp.name }}</span>
+      </el-form-item>
+      <el-form-item label="折扣" prop="discount" :show-message="isEdit">
+        <span v-show="!isEdit">{{ temp.discount }}</span>
+        <el-input v-show="isEdit" v-model="form.discount" placeholder="请输入内容" style="width:100px" />
+      </el-form-item>
+      <el-form-item>
+        <el-button v-show="!isEdit" type="primary" @click="openEdit">编辑</el-button>
+        <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
+        <el-button v-show="isEdit" type="primary" @click="handleSetLevelSt">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
 import { MessageBox } from 'element-ui'
-import { edit, initManageBaseInfo } from '@/api/memberright'
+import { edit, getLevelSt, setLevelSt } from '@/api/memberright'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import Sortable from 'sortablejs'
 import { all } from 'q'
@@ -36,9 +45,13 @@ export default {
       temp: {
         id: '',
         name: '',
-        tag: ''
+        tag: '',
+        discount: ''
       },
-      form: {},
+      form: {
+        id: '',
+        discount: ''
+      },
       rules: {}
     }
   },
@@ -55,17 +68,45 @@ export default {
       if (!isEmpty(this.levelstId)) {
         this.loading = true
         var id = this.levelstId
-        initManageBaseInfo({ id: id }).then(res => {
+        getLevelSt({ id: id }).then(res => {
           if (res.result === 1) {
             var d = res.data
             this.temp.name = d.name
             this.temp.tag = d.tag
+            this.temp.discount = d.discount
+            this.form.levelStId = this.levelstId
+            this.form.discount = d.discount
           }
           this.loading = false
         })
       }
+    },
+    openEdit() {
+      this.isEdit = true
+    },
+    cancleEdit() {
+      this.isEdit = false
+    },
+    handleSetLevelSt() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            setLevelSt(this.form).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.isEdit = false
+                this.init()
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
     }
-
   }
 }
 </script>

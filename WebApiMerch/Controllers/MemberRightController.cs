@@ -26,9 +26,16 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse InitManageBaseInfo([FromUri]string id)
+        public OwnApiHttpResponse GetLevelSt([FromUri]string id)
         {
-            IResult result = MerchServiceFactory.MemberRight.InitManageBaseInfo(this.CurrentUserId, this.CurrentMerchId, id);
+            IResult result = MerchServiceFactory.MemberRight.GetLevelSt(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SetLevelSt([FromBody]RopMemberRightSetLevelSt rop)
+        {
+            IResult result = MerchServiceFactory.MemberRight.SetLevelSt(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -47,9 +54,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetCouponsByLevelSt([FromUri]RupMemberRightGetLevelCoupons rup)
+        public OwnApiHttpResponse GetCoupons([FromUri]RupMemberRightGetCoupons rup)
         {
-            IResult result = MerchServiceFactory.MemberRight.GetCouponsByLevelSt(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.MemberRight.GetCoupons(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -75,6 +82,11 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
+        [HttpGet]
+        public OwnApiHttpResponse GetSkus([FromUri]RupMemberRightGetSkus rup)
+        {
+            IResult result = MerchServiceFactory.MemberRight.GetSkus(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

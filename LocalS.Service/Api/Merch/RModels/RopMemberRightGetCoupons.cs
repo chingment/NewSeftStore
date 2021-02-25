@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupMemberRightGetLevelCoupons:RupBaseGetList
+    public class RupMemberRightGetCoupons:RupBaseGetList
     {
         public string LevelStId { get; set; }
     }

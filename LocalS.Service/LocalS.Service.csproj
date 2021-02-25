@@ -207,9 +207,10 @@
     <Compile Include="Api\Merch\RModels\RopAdSetContentBelongStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightAddCoupon.cs" />
-    <Compile Include="Api\Merch\RModels\RopMemberRightGetLevelCoupons.cs" />
+    <Compile Include="Api\Merch\RModels\RopMemberRightGetCoupons.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightRemoveCoupon.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightSetFeeSt.cs" />
+    <Compile Include="Api\Merch\RModels\RopMemberRightSetLevelSt.cs" />
     <Compile Include="Api\Merch\RModels\RupAdGetContentBelongs.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitEdit.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
+    <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreEdit.cs" />

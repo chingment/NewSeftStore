@@ -16,17 +16,9 @@ export function initManage(params) {
   })
 }
 
-export function initManageBaseInfo(params) {
+export function getLevelSt(params) {
   return request({
-    url: '/memberright/initManageBaseInfo',
-    method: 'get',
-    params
-  })
-}
-
-export function getFeeSts(params) {
-  return request({
-    url: '/memberright/getFeeSts',
+    url: '/memberright/getLevelSt',
     method: 'get',
     params
   })
@@ -40,9 +32,25 @@ export function setFeeSt(data) {
   })
 }
 
-export function getCouponsByLevelSt(params) {
+export function getFeeSts(params) {
   return request({
-    url: '/memberright/getCouponsByLevelSt',
+    url: '/memberright/getFeeSts',
+    method: 'get',
+    params
+  })
+}
+
+export function setLevelSt(data) {
+  return request({
+    url: '/memberright/setLevelSt',
+    method: 'post',
+    data
+  })
+}
+
+export function getCoupons(params) {
+  return request({
+    url: '/memberright/getCoupons',
     method: 'get',
     params
   })
@@ -75,10 +83,11 @@ export function searchCoupon(params) {
 export default {
   getLevelSts: getLevelSts,
   initManage: initManage,
-  initManageBaseInfo: initManageBaseInfo,
+  getLevelSt: getLevelSt,
+  setLevelSt: setLevelSt,
   getFeeSts: getFeeSts,
   setFeeSt: setFeeSt,
-  getCouponsByLevelSt: getCouponsByLevelSt,
+  getCoupons: getCoupons,
   removeCoupon: removeCoupon,
   addCoupon: addCoupon,
   searchCoupon: searchCoupon
