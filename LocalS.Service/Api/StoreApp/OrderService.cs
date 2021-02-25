@@ -308,9 +308,24 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (rop.ShopMethod == E_ShopMethod.Buy || rop.ShopMethod == E_ShopMethod.MemberFee)
                 {
-                    ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
-
-                    amount_couponByShop = ret.CouponByShop.CouponAmount;
+                    if (buildOrderTool.MemberDiscountAmount == 0)
+                    {
+                        ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
+                        amount_couponByShop = ret.CouponByShop.CouponAmount;
+                    }
+                    else
+                    {
+                        if (rop.CouponIdsByShop == null)
+                        {
+                            ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, new List<string> { "" });
+                            amount_couponByShop = ret.CouponByShop.CouponAmount;
+                        }
+                        else
+                        {
+                            ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
+                            amount_couponByShop = ret.CouponByShop.CouponAmount;
+                        }
+                    }
                 }
                 else if (rop.ShopMethod == E_ShopMethod.Rent)
                 {

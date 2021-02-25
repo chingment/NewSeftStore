@@ -116,7 +116,19 @@ namespace LocalS.BLL.Biz
 
         private List<string> _errorPoints;
         private List<BuildSku> _buildSkus;
-        private List<string> _couponIds;
+        private List<string> _couponIdsByShop;
+
+        private decimal _memberDiscountAmount = 0;
+
+
+        public decimal MemberDiscountAmount
+        {
+            get
+            {
+                return _memberDiscountAmount;
+            }
+        }
+
         public bool IsSuccess
         {
             get
@@ -139,15 +151,24 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public BuildOrderTool(string merchId, string storeId, int memberLevel, List<string> couponIds)
+        public BuildOrderTool(string merchId, string storeId, int memberLevel, List<string> couponIdsByShop)
         {
             _merchId = merchId;
             _storeId = storeId;
 
             _memberLevel = memberLevel;
-            _couponIds = couponIds;
             _buildSkus = new List<BuildSku>();
             _errorPoints = new List<string>();
+            _couponIdsByShop = new List<string>();
+
+            if (couponIdsByShop != null)
+            {
+                foreach (var couponIdByShop in couponIdsByShop)
+                {
+                    if (!string.IsNullOrEmpty(couponIdByShop))
+                        _couponIdsByShop.Add(couponIdByShop);
+                }
+            }
         }
 
         public void AddSku(string id, int quantity, string cartId, E_ShopMode shopMode, E_ShopMethod shopMethod, E_ReceiveMode receiveMode, string shopId, string[] machineIds)
@@ -160,6 +181,16 @@ namespace LocalS.BLL.Biz
             if (_buildSkus.Count == 0)
             {
                 _errorPoints.Add("商品数据为空");
+            }
+
+            decimal memberDiscount = 0;
+            if (_memberLevel > 0)
+            {
+                var d_MemberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == _merchId && m.Level == _memberLevel).FirstOrDefault();
+                if (d_MemberLevelSt != null)
+                {
+                    memberDiscount = d_MemberLevelSt.Discount;
+                }
             }
 
             foreach (var productSku in _buildSkus)
@@ -220,18 +251,31 @@ namespace LocalS.BLL.Biz
                             //切换特定商品会员价
                             if (_memberLevel > 0)
                             {
-                                var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == productSku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
-                                if (d_MemberSkuSt != null)
+                                if (memberDiscount > 0)
                                 {
-                                    salePrice = d_MemberSkuSt.MemberPrice;
-                                    LogUtil.Info("clientUser.MemberPrice:" + d_MemberSkuSt.MemberPrice);
+                                    if (_couponIdsByShop == null || _couponIdsByShop.Count == 0)
+                                    {
+                                        salePrice = salePrice * memberDiscount;
+                                    }
                                 }
+
+                                //var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == productSku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
+                                //if (d_MemberSkuSt != null)
+                                //{
+                                //    salePrice = d_MemberSkuSt.MemberPrice;
+                                //    LogUtil.Info("clientUser.MemberPrice:" + d_MemberSkuSt.MemberPrice);
+                                //}
                             }
 
                             productSku.SalePrice = salePrice;
                             productSku.SaleAmount = salePrice * productSku.Quantity;
                             productSku.OriginalPrice = originalPrice;
                             productSku.OriginalAmount = originalPrice * productSku.Quantity;
+
+                            if (memberDiscount > 0)
+                            {
+                                _memberDiscountAmount += (productSku.OriginalAmount - productSku.SaleAmount);
+                            }
 
                         }
 
