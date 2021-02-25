@@ -54,11 +54,27 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse RemoveCoupon([FromBody]RopMemberRightRemoveCoupon rup)
+        public OwnApiHttpResponse RemoveCoupon([FromBody]RopMemberRightRemoveCoupon rop)
         {
-            IResult result = MerchServiceFactory.MemberRight.RemoveCoupon(this.CurrentUserId, this.CurrentMerchId, rup);
+            IResult result = MerchServiceFactory.MemberRight.RemoveCoupon(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse AddCoupon([FromBody]RopMemberRightAddCoupon rop)
+        {
+            IResult result = MerchServiceFactory.MemberRight.AddCoupon(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse SearchCoupon(string key)
+        {
+
+            IResult result = MerchServiceFactory.Coupon.Search(this.CurrentUserId, this.CurrentMerchId, key);
+            return new OwnApiHttpResponse(result);
+        }
+
 
     }
 }

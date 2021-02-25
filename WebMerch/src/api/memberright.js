@@ -56,6 +56,22 @@ export function removeCoupon(data) {
   })
 }
 
+export function addCoupon(data) {
+  return request({
+    url: '/memberright/addCoupon',
+    method: 'post',
+    data
+  })
+}
+
+export function searchCoupon(params) {
+  return request({
+    url: '/memberright/searchCoupon',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getLevelSts: getLevelSts,
   initManage: initManage,
@@ -63,5 +79,7 @@ export default {
   getFeeSts: getFeeSts,
   setFeeSt: setFeeSt,
   getCouponsByLevelSt: getCouponsByLevelSt,
-  removeCoupon: removeCoupon
+  removeCoupon: removeCoupon,
+  addCoupon: addCoupon,
+  searchCoupon: searchCoupon
 }

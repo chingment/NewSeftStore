@@ -7,7 +7,7 @@
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleOpenDialogByAddCoupon">添加</el-button>
         </el-col>
       </el-row>
     </div>
@@ -52,14 +52,51 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="_getListData" />
+
+    <el-dialog
+      title="添加"
+      :visible.sync="dialogByAddCouponIsVisible"
+      :width="isDesktop==true?'800px':'90%'"
+    >
+      <el-form
+        ref="formByAddCoupon"
+        v-loading="dialogByAddCouponIsLoading"
+        :model="formByAddCoupon"
+        :rules="rulesAddCoupon"
+        label-width="120px"
+      >
+        <el-form-item label="优惠券搜索" prop="productId">
+          <el-autocomplete
+            v-model="searchNameByCoupon"
+            style="width:300px"
+            :fetch-suggestions="searchAsyncByCoupon"
+            placeholder="名称"
+            @select="selectByCoupon"
+          />
+        </el-form-item>
+
+        <el-form-item label="优惠券名称">
+          <span>{{ formByAddCoupon.name }}</span>
+        </el-form-item>
+        <el-form-item label="数量">
+          <el-input-number v-model="formByAddCoupon.quantity" :min="0" :max="20" style="width:160px" />
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handelAddCoupon">保存</el-button>
+        <el-button @click="dialogByAddCouponIsVisible=false">关闭</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getCouponsByLevelSt, removeCoupon } from '@/api/memberright'
+import { getCouponsByLevelSt, removeCoupon, addCoupon, searchCoupon } from '@/api/memberright'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 
@@ -83,6 +120,18 @@ export default {
         limit: 10,
         name: undefined
       },
+      formByAddCoupon: {
+        name: '',
+        levelStId: '',
+        couponId: '',
+        quantity: 0
+      },
+      rulesAddCoupon: {
+        name: [{ required: true, min: 1, max: 200, message: '请选择优惠券', trigger: 'change' }]
+      },
+      searchNameByCoupon: '',
+      dialogByAddCouponIsVisible: false,
+      dialogByAddCouponIsLoading: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -112,6 +161,10 @@ export default {
         this.loading = false
       })
     },
+    handleFilter() {
+      this.listQuery.page = 1
+      this._getListData()
+    },
     handleRemove(item) {
       MessageBox.confirm('确定要移除该优惠券？', '提示', {
         confirmButtonText: '确定',
@@ -125,6 +178,56 @@ export default {
           }
         })
       })
+    },
+    handelAddCoupon() {
+      this.$refs['formByAddCoupon'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            addCoupon(this.formByAddCoupon).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.dialogByAddCouponIsVisible = false
+                this._getListData()
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
+    },
+    handleOpenDialogByAddCoupon(item) {
+      this.dialogByAddCouponIsVisible = true
+      this.searchNameByCoupon = ''
+      this.formByAddCoupon.name = ''
+      this.formByAddCoupon.quantity = 0
+    },
+    searchAsyncByCoupon(queryString, cb) {
+      console.log('queryString:' + queryString)
+      searchCoupon({ key: queryString }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          var restaurants = []
+          for (var j = 0; j < d.length; j++) {
+            restaurants.push({
+              value: d[j].name,
+              id: d[j].id,
+              name: d[j].name
+            })
+          }
+
+          cb(restaurants)
+        }
+      })
+    },
+    selectByCoupon(item) {
+      console.log(JSON.stringify(item))
+      this.formByAddCoupon.levelStId = this.levelstId
+      this.formByAddCoupon.couponId = item.id
+      this.formByAddCoupon.name = item.name
     }
   }
 }

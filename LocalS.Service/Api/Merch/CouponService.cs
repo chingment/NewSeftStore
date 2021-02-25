@@ -269,7 +269,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
         public CustomJsonResult Add(string operater, string merchId, RupCouponAdd rop)
         {
             var result = new CustomJsonResult();
@@ -592,5 +591,30 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult Search(string operater, string merchId, string key)
+        {
+            var d_Coupons = CurrentDb.Coupon.Where(m => m.Name.Contains(key)).Take(10).ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in d_Coupons)
+            {
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Category = GetCategoryName(item.Category),
+                    UseAreaType = GetUseAreaTypeName(item.UseAreaType),
+                    AtLeastAmount = GetAtLeastAmount(item.AtLeastAmount),
+                    FaceType = GetFaceTypeName(item.FaceType),
+                    UseMode = GetUseModeName(item.UseMode),
+                    FaceValue = GetFaceValue(item.FaceType, item.FaceValue),
+                    ValidDate = GetValidDate(item.StartTime, item.EndTime),
+                    Status = GetStatus(item.StartTime, item.EndTime)
+                });
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+        }
     }
 }

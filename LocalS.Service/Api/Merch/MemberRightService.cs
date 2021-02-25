@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -207,6 +208,31 @@ namespace LocalS.Service.Api.Merch
             CurrentDb.SaveChanges();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+
+            return result;
+
+        }
+
+        public CustomJsonResult AddCoupon(string operater, string merchId, RopMemberRightAddCoupon rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_MemberCouponSt = CurrentDb.MemberCouponSt.Where(m => m.MerchId == merchId && m.CouponId == rop.CouponId && m.LevelStId == rop.LevelStId).FirstOrDefault();
+            if (d_MemberCouponSt != null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经存在");
+
+            d_MemberCouponSt = new Entity.MemberCouponSt();
+            d_MemberCouponSt.Id = IdWorker.Build(IdType.NewGuid);
+            d_MemberCouponSt.MerchId = merchId;
+            d_MemberCouponSt.LevelStId = rop.LevelStId;
+            d_MemberCouponSt.CouponId = rop.CouponId;
+            d_MemberCouponSt.Quantity = rop.Quantity;
+            d_MemberCouponSt.Creator = operater;
+            d_MemberCouponSt.CreateTime = DateTime.Now;
+            CurrentDb.MemberCouponSt.Add(d_MemberCouponSt);
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
 
             return result;
 
