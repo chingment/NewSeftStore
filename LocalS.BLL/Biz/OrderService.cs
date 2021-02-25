@@ -435,7 +435,7 @@ namespace LocalS.BLL.Biz
 
                     List<BuildSku> buildOrderSkus = new List<BuildSku>();
 
-                    BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel);
+                    BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel, rop.CouponIdsByShop);
 
                     foreach (var block in rop.Blocks)
                     {

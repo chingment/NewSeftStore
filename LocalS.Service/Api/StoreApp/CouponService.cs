@@ -370,7 +370,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (store != null)
             {
-                BuildOrderTool buildOrderService = new BuildOrderTool(store.MerchId, store.StoreId, memberLevel);
+                BuildOrderTool buildOrderService = new BuildOrderTool(store.MerchId, store.StoreId, memberLevel, selectCouponIds);
 
                 foreach (var productSku in rop.ProductSkus)
                 {

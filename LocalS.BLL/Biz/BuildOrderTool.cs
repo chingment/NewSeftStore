@@ -46,12 +46,8 @@ namespace LocalS.BLL.Biz
         public decimal CouponAmountByShop { get; set; }
         public decimal CouponAmountByDeposit { get; set; }
         public decimal CouponAmountByRent { get; set; }
-
         public string ShopId { get; set; }
         public string[] MachineIds { get; set; }
-
-        public string MachineId { get; set; }
-
         public bool IsOffSell
         {
             get
@@ -120,7 +116,7 @@ namespace LocalS.BLL.Biz
 
         private List<string> _errorPoints;
         private List<BuildSku> _buildSkus;
-
+        private List<string> _couponIds;
         public bool IsSuccess
         {
             get
@@ -143,13 +139,13 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public BuildOrderTool(string merchId, string storeId, int memberLevel)
+        public BuildOrderTool(string merchId, string storeId, int memberLevel, List<string> couponIds)
         {
             _merchId = merchId;
             _storeId = storeId;
 
             _memberLevel = memberLevel;
-
+            _couponIds = couponIds;
             _buildSkus = new List<BuildSku>();
             _errorPoints = new List<string>();
         }

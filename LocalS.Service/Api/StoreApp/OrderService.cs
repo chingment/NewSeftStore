@@ -201,7 +201,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel);
+                BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel,rop.CouponIdsByShop);
 
                 foreach (var productSku in rop.ProductSkus)
                 {
