@@ -505,23 +505,23 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public CustomJsonResult RevCenterSt(string operater, string clientUserId, RupCouponRevCenterSt rup)
+        public CustomJsonResult RevPosSt(string operater, string clientUserId, RupCouponRevPosSt rup)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetCouponRevCenterSt();
 
-            var d_couponRevCenterSt = CurrentDb.CouponRevCenterSt.Where(m => m.MerchId == rup.MerchId).FirstOrDefault();
+            var d_CouponRevPosSt = CurrentDb.CouponRevPosSt.Where(m => m.MerchId == rup.MerchId && m.Code == rup.PosCode).FirstOrDefault();
 
-            if (d_couponRevCenterSt != null)
+            if (d_CouponRevPosSt != null)
             {
-                ret.TopImgUrl = d_couponRevCenterSt.TopImgUrl;
+                ret.TopImgUrl = d_CouponRevPosSt.TopImgUrl;
 
-                List<string> l_couponIds = d_couponRevCenterSt.CouponIds.ToJsonObject<List<string>>();
 
+                var l_CouponIds = CurrentDb.CouponRevCouponSt.Where(m => m.RevPosId == d_CouponRevPosSt.Id).Select(m => m.CouponId).ToList();
 
                 var query = (from u in CurrentDb.Coupon
-                             where l_couponIds.Contains(u.Id)
+                             where l_CouponIds.Contains(u.Id)
                              select new { u.Id, u.MerchId, u.Name, u.UseAreaType, u.UseAreaValue, u.FaceType, u.FaceValue, u.AtLeastAmount });
 
                 var list = query.OrderBy(m => m.Name).ToList();
@@ -547,149 +547,151 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            //var d_coupon = CurrentDb.Coupon.Where(m => m.Id == rop.CouponId).FirstOrDefault();
+            var d_coupon = CurrentDb.Coupon.Where(m => m.Id == rop.CouponId).FirstOrDefault();
 
-            //if (d_coupon == null)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效优惠券");
-            //}
+            if (d_coupon == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "无效优惠券");
+            }
 
-            //if (d_coupon.IsDelete)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该优惠券已被删除");
-            //}
+            if (d_coupon.IsDelete)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该优惠券已被删除");
+            }
 
-            //if (d_coupon.StartTime > DateTime.Now || d_coupon.EndTime < DateTime.Now)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该优惠券有效期已过");
-            //}
+            if (d_coupon.StartTime > DateTime.Now || d_coupon.EndTime < DateTime.Now)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该优惠券有效期已过");
+            }
 
-            //if (d_coupon.IssueQuantity != -1)
-            //{
-            //    if (d_coupon.ReceivedQuantity >= d_coupon.IssueQuantity)
-            //    {
-            //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该优惠券已被领取完");
-            //    }
-            //}
+            if (d_coupon.IssueQuantity != -1)
+            {
+                if (d_coupon.ReceivedQuantity >= d_coupon.IssueQuantity)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该优惠券已被领取完");
+                }
+            }
 
-            //var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
+            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
 
-            //var limitMemberLevels = d_coupon.LimitMemberLevels.ToJsonObject<List<string>>();
+            var d_CouponRevCouponSt = CurrentDb.CouponRevCouponSt.Where(m => m.Id == rop.RevCenterId).FirstOrDefault();
 
-            //if (limitMemberLevels != null)
-            //{
-            //    if (!limitMemberLevels.Contains(d_clientUser.MemberLevel.ToString()))
-            //    {
-            //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "无资格领取该优惠券");
-            //    }
-            //}
+            var limitMemberLevels = d_CouponRevCouponSt.LimitMemberLevels.ToJsonObject<List<string>>();
 
-            //var d_clientCoupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.CouponId == d_coupon.Id).ToList();
+            if (limitMemberLevels != null)
+            {
+                if (!limitMemberLevels.Contains(d_clientUser.MemberLevel.ToString()))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "无资格领取该优惠券");
+                }
+            }
 
-            //if (d_coupon.PerLimitNum == d_clientCoupons.Count)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "您领取的数量已经超过限制");
-            //}
+            var d_clientCoupons = CurrentDb.ClientCoupon.Where(m => m.ClientUserId == clientUserId && m.CouponId == d_coupon.Id).ToList();
 
-            //if (d_coupon.PerLimitTimeType == E_Coupon_PerLimitTimeType.Day)
-            //{
-            //    DateTime start = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00"));
-            //    DateTime end = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 23:59:59"));
+            if (d_CouponRevCouponSt.PerLimitNum == d_clientCoupons.Count)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "您领取的数量已经超过限制");
+            }
 
-            //    d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime >= start && m.SourceTime <= end).ToList();
+            if (d_CouponRevCouponSt.PerLimitTimeType == E_Coupon_PerLimitTimeType.Day)
+            {
+                DateTime start = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00"));
+                DateTime end = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 23:59:59"));
 
-            //    if (d_coupon.PerLimitTimeNum == d_clientCoupons.Count)
-            //    {
-            //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当天领取已经超过大限制，请明天再试试");
-            //    }
+                d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime >= start && m.SourceTime <= end).ToList();
 
-            //}
-            //else if (d_coupon.PerLimitTimeType == E_Coupon_PerLimitTimeType.Month)
-            //{
-            //    int nowYear = int.Parse(DateTime.Now.ToString("yyyy"));
-            //    int nowMonth = int.Parse(DateTime.Now.ToString("MM"));
+                if (d_CouponRevCouponSt.PerLimitTimeNum == d_clientCoupons.Count)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当天领取已经超过大限制，请明天再试试");
+                }
 
-            //    d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime.Year == nowYear && m.SourceTime.Month == nowMonth
-            //    ).ToList();
+            }
+            else if (d_CouponRevCouponSt.PerLimitTimeType == E_Coupon_PerLimitTimeType.Month)
+            {
+                int nowYear = int.Parse(DateTime.Now.ToString("yyyy"));
+                int nowMonth = int.Parse(DateTime.Now.ToString("MM"));
 
-            //    if (d_coupon.PerLimitTimeNum <= d_clientCoupons.Count)
-            //    {
-            //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当月领取已经超过大限制，请下个月再试试");
-            //    }
-            //}
-            //else if (d_coupon.PerLimitTimeType == E_Coupon_PerLimitTimeType.Quarter)
-            //{
-            //    int nowYear = int.Parse(DateTime.Now.ToString("yyyy"));
-            //    int nowMonth = int.Parse(DateTime.Now.ToString("MM"));
+                d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime.Year == nowYear && m.SourceTime.Month == nowMonth
+                ).ToList();
 
-            //    int[] arr_nowMonths;
+                if (d_CouponRevCouponSt.PerLimitTimeNum <= d_clientCoupons.Count)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当月领取已经超过大限制，请下个月再试试");
+                }
+            }
+            else if (d_CouponRevCouponSt.PerLimitTimeType == E_Coupon_PerLimitTimeType.Quarter)
+            {
+                int nowYear = int.Parse(DateTime.Now.ToString("yyyy"));
+                int nowMonth = int.Parse(DateTime.Now.ToString("MM"));
 
-            //    if (nowMonth > 0 && nowMonth <= 3)
-            //    {
-            //        arr_nowMonths = new int[] { 1, 2, 3 };
-            //    }
-            //    else if (nowMonth > 3 && nowMonth <= 6)
-            //    {
-            //        arr_nowMonths = new int[] { 4, 5, 6 };
-            //    }
-            //    else if (nowMonth > 7 && nowMonth <= 9)
-            //    {
-            //        arr_nowMonths = new int[] { 7, 8, 9 };
-            //    }
-            //    else
-            //    {
-            //        arr_nowMonths = new int[] { 10, 11, 12 };
-            //    }
+                int[] arr_nowMonths;
 
-            //    d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime.Year == nowYear && arr_nowMonths.Contains(m.SourceTime.Month)
-            //    ).ToList();
+                if (nowMonth > 0 && nowMonth <= 3)
+                {
+                    arr_nowMonths = new int[] { 1, 2, 3 };
+                }
+                else if (nowMonth > 3 && nowMonth <= 6)
+                {
+                    arr_nowMonths = new int[] { 4, 5, 6 };
+                }
+                else if (nowMonth > 7 && nowMonth <= 9)
+                {
+                    arr_nowMonths = new int[] { 7, 8, 9 };
+                }
+                else
+                {
+                    arr_nowMonths = new int[] { 10, 11, 12 };
+                }
 
-            //    if (d_coupon.PerLimitTimeNum <= d_clientCoupons.Count)
-            //    {
-            //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当季领取已经超过大限制，请下个月再试试");
-            //    }
-            //}
+                d_clientCoupons = d_clientCoupons.Where(m => m.SourceTime.Year == nowYear && arr_nowMonths.Contains(m.SourceTime.Month)
+                ).ToList();
 
-
-            //var d_clientCoupon = new ClientCoupon();
-            //d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
-            //d_clientCoupon.Sn = "";
-            //d_clientCoupon.MerchId = d_coupon.MerchId;
-            //d_clientCoupon.ClientUserId = clientUserId;
-            //d_clientCoupon.CouponId = d_coupon.Id;
-            //if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
-            //{
-            //    d_clientCoupon.ValidStartTime = DateTime.Now;
-            //    d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
-            //}
-            //else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
-            //{
-            //    string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
-            //    if (arr_UseTimeValue.Length == 2)
-            //    {
-            //        d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
-            //        d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
-            //    }
-            //}
-            //d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-            //d_clientCoupon.SourceType = E_ClientCouponSourceType.SelfTake;
-            //d_clientCoupon.SourceObjType = "AppUser";
-            //d_clientCoupon.SourceObjId = clientUserId;
-            //d_clientCoupon.SourcePoint = "RevCouponCenter";
-            //d_clientCoupon.SourceTime = DateTime.Now;
-            //d_clientCoupon.SourceDes = "领券中心";
-            //d_clientCoupon.Creator = operater;
-            //d_clientCoupon.CreateTime = DateTime.Now;
-            //CurrentDb.ClientCoupon.Add(d_clientCoupon);
-
-            //d_coupon.ReceivedQuantity += 1;
-            //d_coupon.Mender = operater;
-            //d_coupon.MendTime = DateTime.Now;
-
-            //CurrentDb.SaveChanges();
+                if (d_CouponRevCouponSt.PerLimitTimeNum <= d_clientCoupons.Count)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "当季领取已经超过大限制，请下个月再试试");
+                }
+            }
 
 
-            //result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "领取成功");
+            var d_clientCoupon = new ClientCoupon();
+            d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
+            d_clientCoupon.Sn = "";
+            d_clientCoupon.MerchId = d_coupon.MerchId;
+            d_clientCoupon.ClientUserId = clientUserId;
+            d_clientCoupon.CouponId = d_coupon.Id;
+            if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+            {
+                d_clientCoupon.ValidStartTime = DateTime.Now;
+                d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
+            }
+            else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+            {
+                string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
+                if (arr_UseTimeValue.Length == 2)
+                {
+                    d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
+                    d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
+                }
+            }
+            d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
+            d_clientCoupon.SourceType = E_ClientCouponSourceType.SelfTake;
+            d_clientCoupon.SourceObjType = "AppUser";
+            d_clientCoupon.SourceObjId = clientUserId;
+            d_clientCoupon.SourcePoint = "RevCouponCenter";
+            d_clientCoupon.SourceTime = DateTime.Now;
+            d_clientCoupon.SourceDes = "领券中心";
+            d_clientCoupon.Creator = operater;
+            d_clientCoupon.CreateTime = DateTime.Now;
+            CurrentDb.ClientCoupon.Add(d_clientCoupon);
+
+            d_coupon.ReceivedQuantity += 1;
+            d_coupon.Mender = operater;
+            d_coupon.MendTime = DateTime.Now;
+
+            CurrentDb.SaveChanges();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "领取成功");
 
             return result;
         }

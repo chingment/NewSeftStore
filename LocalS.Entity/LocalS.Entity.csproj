@@ -54,7 +54,8 @@
     <Compile Include="ClientDeliveryAddress.cs" />
     <Compile Include="ClientReffSku.cs" />
     <Compile Include="Coupon.cs" />
-    <Compile Include="CouponRevCenterSt.cs" />
+    <Compile Include="CouponRevCouponSt.cs" />
+    <Compile Include="CouponRevPosSt.cs" />
     <Compile Include="CouponUseAreaObj.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="EventCode.cs" />

@@ -94,23 +94,16 @@ Page({
     var operate = _this.data.operate
 
     if (operate == 1) {
-
-
       if (coupon.faceType == 5) {
-
         wx.navigateTo({
           url: '/pages/mycoupondetails/mycoupondetails?id=' + coupon.id,
           success: function (res) {
             // success
           },
         })
-
       } else {
-
         pageMain.mainTabBarSwitch(0)
       }
-
-
     } else if (operate == 2) {
       if (!coupon.canSelected) {
         toast.show({

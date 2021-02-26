@@ -201,7 +201,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel,rop.CouponIdsByShop);
+                BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel, rop.CouponIdsByShop);
 
                 foreach (var productSku in rop.ProductSkus)
                 {
@@ -1100,5 +1100,76 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
+        public CustomJsonResult GetMyRent(string operater, string clientUserId, RupOrderGetMyRent rup)
+        {
+            var result = new CustomJsonResult();
+
+            var pageEntiy = new PageEntity<object>();
+
+            var query = (from o in CurrentDb.RentOrder
+                         where (o.ClientUserId == clientUserId)
+                         select new
+                         {
+                             o.Id,
+                             o.ClientUserId,
+                             o.SkuMainImgUrl,
+                             o.SkuName,
+                             o.OrdeId,
+                             o.DepositAmount,
+                             o.IsPayDeposit,
+                             o.IsReturn,
+                             o.NextPayRentTime,
+                             o.PayDepositTime,
+                             o.RefundAmount,
+                             o.RefundTime,
+                             o.RentAmount,
+                             o.RentTermUnit,
+                             o.RentTermUnitText,
+                             o.RentTermValue,
+                             o.CreateTime
+                         }
+             );
+
+
+            int pageSize = 10;
+
+            pageEntiy.PageIndex = rup.PageIndex;
+            pageEntiy.PageSize = pageSize;
+            pageEntiy.Total = query.Count();
+            pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (rup.PageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> models = new List<object>();
+
+            foreach (var item in list)
+            {
+                var model = new
+                {
+
+                    item.SkuMainImgUrl,
+                    item.SkuName,
+                    item.DepositAmount,
+                    item.IsPayDeposit,
+                    item.IsReturn,
+                    item.RefundTime,
+                    item.RefundAmount,
+                    item.NextPayRentTime,
+                    item.RentAmount,
+                    item.RentTermUnit,
+                    item.RentTermUnitText,
+                    item.RentTermValue
+                };
+
+                pageEntiy.Items.Add(model);
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", pageEntiy);
+
+            return result;
+
+        }
     }
 }

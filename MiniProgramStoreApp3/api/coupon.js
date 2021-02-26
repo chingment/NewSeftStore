@@ -20,10 +20,10 @@ function details(params) {
   })
 }
 
-function revCenterSt(params) {
+function revPosSt(params) {
 
   return lumos.getJson({
-    url: config.apiUrl.couponRevCenterSt,
+    url: config.apiUrl.couponRevPosSt,
     urlParams: params,
     isShowLoading: false
   })
@@ -39,7 +39,7 @@ function receive(params) {
 
 module.exports = {
   my: my,
-  revCenterSt: revCenterSt,
+  revPosSt: revPosSt,
   receive: receive,
   details: details
 }

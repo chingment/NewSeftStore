@@ -24,9 +24,9 @@ namespace WebApiStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public OwnApiHttpResponse RevCenterSt([FromUri]RupCouponRevCenterSt rup)
+        public OwnApiHttpResponse RevPosSt([FromUri]RupCouponRevPosSt rup)
         {
-            IResult result = StoreAppServiceFactory.Coupon.RevCenterSt(this.CurrentUserId, this.CurrentUserId, rup);
+            IResult result = StoreAppServiceFactory.Coupon.RevPosSt(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 

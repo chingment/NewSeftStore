@@ -75,6 +75,14 @@ function receiptTimeAxis(urlParams) {
   })
 }
 
+function getMyRent(urlParams) {
+
+  return lumos.getJson({
+    url: config.apiUrl.orderGetMyRent,
+    urlParams: urlParams
+  })
+}
+
 module.exports = {
   confirm: confirm,
   reserve: reserve,
@@ -84,5 +92,6 @@ module.exports = {
   cancle: cancle,
   buildPayParams: buildPayParams,
   buildPayOptions: buildPayOptions,
-  buildBookTimeArea: buildBookTimeArea
+  buildBookTimeArea: buildBookTimeArea,
+  getMyRent:getMyRent
 }

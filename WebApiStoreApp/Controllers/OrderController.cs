@@ -198,5 +198,13 @@ namespace WebApiStoreApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetMyRent([FromUri]RupOrderGetMyRent rup)
+        {
+            IResult result = StoreAppServiceFactory.Order.GetMyRent(this.CurrentUserId, this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+
     }
 }

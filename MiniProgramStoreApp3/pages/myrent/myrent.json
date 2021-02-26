@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "租赁商品",
+  "usingComponents": {
+    "own-scroll": "/components/ownscroll/ownscroll"
+  }
+}

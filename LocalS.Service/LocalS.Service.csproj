@@ -345,6 +345,7 @@
     <Compile Include="Api\StoreApp\RModels\RupOperateResult.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildBookTimeArea.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderBuildPayOptions.cs" />
+    <Compile Include="Api\StoreApp\RModels\RupOrderGetMyRent.cs" />
     <Compile Include="Api\StoreApp\RModels\RupOrderReceiptTimeAxis.cs" />
     <Compile Include="Api\StoreApp\RModels\RupPersonalPageData.cs" />
     <Compile Include="Api\StoreApp\RModels\RupProductInitSearchPageData.cs" />

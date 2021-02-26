@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class RopCouponReceive
+    public class RupOrderGetMyRent
     {
-        public string CouponId { get; set; }
-        public string RevCenterId { get; set; }
+        public int PageIndex { get; set; }
     }
 }
