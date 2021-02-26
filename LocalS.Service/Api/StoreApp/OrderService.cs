@@ -352,6 +352,22 @@ namespace LocalS.Service.Api.StoreApp
 
                     #endregion
                 }
+                else if(rop.ShopMethod == E_ShopMethod.RentFee)
+                {
+                    #region RentFee
+
+                    List<string> couponIdsByRent = new List<string>();
+                    if (rop.CouponIdByRent != null)
+                    {
+                        couponIdsByRent.Add(rop.CouponIdByRent);
+                    }
+
+                    ret.CouponByRent = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, couponIdsByRent);
+
+                    amount_couponByRent = ret.CouponByRent.CouponAmount;
+
+                    #endregion
+                }
 
                 amount_charge = amount_sale;
 
@@ -614,6 +630,17 @@ namespace LocalS.Service.Api.StoreApp
 
                 }
 
+                var skus_FeeByRent = skus_Mall.Where(m => m.ShopMethod == E_ShopMethod.RentFee).ToList();
+
+                if (skus_FeeByRent.Count > 0)
+                {
+                    var ob_MemberFee = new RetOrderConfirm.BlockModel();
+                    ob_MemberFee.TagName = "租金费";
+                    ob_MemberFee.Skus = skus_FeeByRent;
+                    ob_MemberFee.TabMode = E_TabMode.FeeByRent;
+                    ob_MemberFee.ReceiveMode = E_ReceiveMode.FeeByRent;
+                    orderBlock.Add(ob_MemberFee);
+                }
 
                 var skus_FeeByMember = skus_Mall.Where(m => m.ShopMethod == E_ShopMethod.MemberFee).ToList();
 
@@ -1112,6 +1139,7 @@ namespace LocalS.Service.Api.StoreApp
                          {
                              o.Id,
                              o.ClientUserId,
+                             o.SkuId,
                              o.SkuMainImgUrl,
                              o.SkuName,
                              o.OrdeId,
@@ -1146,23 +1174,51 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var item in list)
             {
-                var model = new
-                {
+                var order = CurrentDb.Order.Where(m => m.Id == item.OrdeId).FirstOrDefault();
 
-                    item.SkuMainImgUrl,
-                    item.SkuName,
-                    item.DepositAmount,
-                    item.IsPayDeposit,
-                    item.IsReturn,
-                    item.RefundTime,
-                    item.RefundAmount,
-                    item.NextPayRentTime,
-                    item.RentAmount,
-                    item.RentTermUnit,
-                    item.RentTermUnitText,
-                    item.RentTermValue
+                var status = new StatusModel();
+
+                if (item.IsReturn)
+                {
+                    status = new StatusModel(2, "已归还");
+                }
+                else
+                {
+                    status = new StatusModel(1, "租赁中");
+                }
+
+                var model = new OrderModel();
+
+                model.Id = item.Id;
+                model.Tag.Name = new FsText(order.StoreName, "");
+                model.Tag.Desc = new FsField(status.Text, "");
+
+
+                var fsBlocks = new List<FsBlock>();
+
+
+                var block = new FsBlock();
+                block.UniqueId = item.Id;
+                block.UniqueType = E_UniqueType.Order;
+                block.Tag.Name = new FsText("租赁商品", "");
+
+                var field = new FsTemplateData();
+                field.Type = "SkuTmp";
+                field.Value = new
+                {
+                    Id = item.SkuId,
+                    Name = item.SkuName,
+                    MainImgUrl = item.SkuMainImgUrl,
+                    Quantity = 1,
+                    DepositAmount = item.DepositAmount,
+                    RentAmount = item.RentAmount,
+                    RentTermUnitText = item.RentTermUnitText
                 };
 
+                block.Data.Add(field);
+
+                model.Blocks.Add(block);
+                model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "交付租金", Color = "green" }, OpType = "FUN", OpVal = "payRent" });
                 pageEntiy.Items.Add(model);
             }
 

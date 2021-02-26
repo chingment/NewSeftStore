@@ -129,6 +129,13 @@ namespace LocalS.Service.Api.StoreApp
                     return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
                 }
             }
+            else if (shopMethod == E_ShopMethod.RentFee)
+            {
+                if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
+                {
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
+                }
+            }
 
             return false;
         }

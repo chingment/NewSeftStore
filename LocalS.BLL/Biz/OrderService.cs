@@ -541,7 +541,37 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                     }
+                    else if (rop.ShopMethod == E_ShopMethod.RentFee)
+                    {
+                        #region 计算租金券金额
 
+                        if (!string.IsNullOrEmpty(rop.CouponIdByRent))
+                        {
+                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == rop.CouponIdByRent).FirstOrDefault();
+                            if (d_clientCoupon != null)
+                            {
+                                if (d_clientCoupon.Status != E_ClientCouponStatus.WaitUse || d_clientCoupon.ValidStartTime > DateTime.Now || d_clientCoupon.ValidEndTime < DateTime.Now)
+                                {
+                                    return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[05]，租金券无效", null);
+                                }
+
+                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
+                                d_clientCoupon.Mender = operater;
+                                d_clientCoupon.MendTime = DateTime.Now;
+
+                                var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
+                                if (d_coupon != null)
+                                {
+                                    if (d_coupon.FaceType == E_Coupon_FaceType.RentVoucher)
+                                    {
+                                        buildOrderTool.CalCouponAmount(d_coupon.AtLeastAmount, d_coupon.UseAreaType, d_coupon.UseAreaValue, d_coupon.FaceType, d_coupon.FaceValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+                    }
                     LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
                     var buildOrders = buildOrderTool.BuildOrders();
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
@@ -730,6 +760,15 @@ namespace LocalS.BLL.Biz
                                 d_Order.ReceptionAreaName = rm_MachineSelfTake.SelfTake.Mark.AreaName;
                                 d_Order.ReceptionAddress = rm_MachineSelfTake.SelfTake.Mark.Address;
                                 d_Order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.Mark.Name;
+                                #endregion
+                                break;
+                            case E_ReceiveMode.FeeByRent:
+                                #region FeeByRent
+                                d_Order.ReceiveMode = E_ReceiveMode.FeeByRent;
+                                d_Order.ReceiveModeName = "租金费";
+                                d_Order.Receiver = clientUserName;
+                                d_Order.ReceiverPhoneNumber = clientPhoneNumber;
+                                d_Order.IsNoDisplayClient = true;
                                 #endregion
                                 break;
                             case E_ReceiveMode.FeeByMember:
@@ -1119,6 +1158,15 @@ namespace LocalS.BLL.Biz
                                 d_rentOrderTransRecord.CreateTime = DateTime.Now;
                                 d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_OrderSub.ChargeAmount);
                                 CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
+
+                                #endregion
+                            }
+                            else if(d_OrderSub.ShopMethod== E_ShopMethod.RentFee)
+                            {
+                                #region
+
+                                //var d_rentOrder=CurrentDb.RentOrder.Where(m)
+
 
                                 #endregion
                             }

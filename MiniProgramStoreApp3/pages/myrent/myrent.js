@@ -107,5 +107,48 @@ Page({
         })
       }
     })
-  }
+  },
+  operate: function (e) {
+    var _this = this
+
+    var opType = e.currentTarget.dataset.replyOptype
+    var opVal = e.currentTarget.dataset.replyOpval
+    var id = e.currentTarget.dataset.replyId
+
+
+    switch (opType) {
+      case "FUN":
+
+        switch (opVal) {
+          case "payRent":
+           
+            var skuId = '722b4d565604489fa1f40c548e0bc114' //对应页面data-reply-index
+            var productSkus = []
+            productSkus.push({
+              cartId: 0,
+              id: skuId,
+              quantity: 1,
+              shopMode: 1,
+              shopMethod:5,
+              shopId:'0'
+            })
+            wx.navigateTo({
+              url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&shopMethod=5&action=rentfee",
+              success: function (res) {
+                // success
+              },
+            })
+
+
+            break;
+        }
+
+        break;
+      case "URL":
+        wx.navigateTo({
+          url: opVal
+        })
+        break;
+    }
+  },
 })

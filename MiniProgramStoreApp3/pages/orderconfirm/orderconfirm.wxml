@@ -494,7 +494,7 @@
 
 
 				</block>
-				<block wx:elif="{{item.tabMode==5}}">
+				<block wx:elif="{{item.tabMode==5|| item.tabMode==6 }}">
 
 					<view class="tab-double">
 						<view class="tab-title">
@@ -551,7 +551,6 @@
 
 				</block>
 				<view class="line-space-ncolor"></view>
-
 			</view>
 
 
@@ -625,7 +624,7 @@
 					</view>
 				</view>
 
-				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==2}}" data-reply-facetypes="3">
+				<view class="it" bindtap="couponSelect" wx:if="{{shopMethod==2 || shopMethod==5 }}" data-reply-facetypes="3">
 					<view class="it-l" style="width:60rpx">
 						<view class="icon">
 							<image class="img skeleton-rect" style="width:48rpx;height:48rpx;border-radius:0"

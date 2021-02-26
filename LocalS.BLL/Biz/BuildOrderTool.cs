@@ -346,6 +346,70 @@ namespace LocalS.BLL.Biz
 
                     #endregion
                 }
+                else if (productSku.ShopMethod == E_ShopMethod.RentFee)
+                {
+                    #region RentFee
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, _merchId, _storeId, "", null, productSku.Id);
+
+                    if (r_productSku == null)
+                    {
+                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", productSku.Id));
+                    }
+                    else
+                    {
+
+                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.Name = r_productSku.Name;
+                        productSku.MainImgUrl = r_productSku.MainImgUrl;
+                        productSku.BarCode = r_productSku.BarCode;
+                        productSku.CumCode = r_productSku.CumCode;
+                        productSku.SpecDes = r_productSku.SpecDes.ToJsonString();
+                        productSku.Producer = r_productSku.Producer;
+                        productSku.KindId1 = r_productSku.KindId1;
+                        productSku.KindId2 = r_productSku.KindId2;
+                        productSku.KindId3 = r_productSku.KindId3;
+                        productSku.SupReceiveMode = r_productSku.SupReceiveMode;
+                        if (r_productSku.Stocks.Count == 0)
+                        {
+                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", productSku.Name));
+                        }
+                        else
+                        {
+                            productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+
+                            if (productSku.IsOffSell)
+                            {
+                                _errorPoints.Add(string.Format("商品[{0}]已下架", productSku.Name));
+                            }
+                            else
+                            {
+                                var sellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+
+                                if (sellQuantity < productSku.Quantity)
+                                {
+                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", productSku.Name, sellQuantity));
+                                }
+                            }
+
+                            productSku.Stocks = r_productSku.Stocks;
+
+                            decimal salePrice = r_productSku.Stocks[0].RentMhPrice;
+                            decimal originalPrice =  r_productSku.Stocks[0].RentMhPrice;
+
+                            productSku.SalePrice = salePrice;
+                            productSku.SaleAmount = salePrice * productSku.Quantity;
+                            productSku.OriginalPrice = originalPrice;
+                            productSku.OriginalAmount = originalPrice * productSku.Quantity;
+                            productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
+                            productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
+                            productSku.RentTermUnit = E_RentTermUnit.Month;
+                            productSku.RentTermValue = 1;
+                            productSku.RentTermUnitText = "月";
+                        }
+                    }
+
+                    #endregion
+                }
                 else if (productSku.ShopMethod == E_ShopMethod.MemberFee)
                 {
                     #region MemberFee

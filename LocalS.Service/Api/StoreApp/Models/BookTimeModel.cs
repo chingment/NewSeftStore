@@ -17,7 +17,8 @@ namespace LocalS.Service.Api.StoreApp
         SelfTakeByStore = 2,
         DeliveryOrSelfTakeByStore = 3,
         SelfTakeByMachine = 4,
-        FeeByMember = 5
+        FeeByMember = 5,
+        FeeByRent = 6
     }
 
     public enum TipType
