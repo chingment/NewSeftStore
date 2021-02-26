@@ -6,7 +6,6 @@
       isEmpty="{{dataList.isEmpty}}">
       <view class='list'>
         <block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
-
           <view class="it pd-com it-ordbk">
             <view class="it-tag">
               <view class="tag-name">
@@ -45,7 +44,6 @@
 
                     </view>
                   </view>
-
                   <view class="block-field">
                     <view class="its-odcskus">
                       <block wx:for="{{block.data}}" wx:for-index="x" wx:for-item="skusitem" wx:key="list">
@@ -70,7 +68,6 @@
                             </view>
                           </view>
                           <view class="it-r">
-
                             <view class="dt">
                               <view class="dt1"> <text>租金</text> </view>
                               <view class="dt2">
@@ -78,7 +75,6 @@
                                   class='salePrice skeleton-rect'>{{skusitem.value.rentAmount}}/{{skusitem.value.rentTermUnitText}}</text>
                               </view>
                             </view>
-
                           </view>
                         </view>
                       </block>
