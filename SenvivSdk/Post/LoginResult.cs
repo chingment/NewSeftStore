@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SenvivSdk
 {
-    public interface IApiPostRequest<T>
+    public class LoginResult
     {
-        string ApiUrl { get; }
-        object PostData { get; }
-        string Token { get;}
+        public string AuthorizationCode { get; set; }
+        public string ExpirationDate { get; set; }
     }
 }

@@ -108,30 +108,47 @@ namespace Test
         static void Main(string[] args)
         {
 
-            string data = "{\"name\":\"qxtadmin\",\"pwd\":\"zkxz123\"}";
+            var loginRequest = new SenvivSdk.LoginRequest("", new { name = "qxtadmin", pwd = "zkxz123" });
 
-            byte[] buffer = System.Text.UTF8Encoding.UTF8.GetBytes(data);
-            //压缩后的byte数组
-            byte[] compressedbuffer = null;
-            //Compress buffer,压缩缓存
-            MemoryStream ms = new MemoryStream();
-            using (GZipStream zs = new GZipStream(ms, CompressionMode.Compress, true))
-            {
-                zs.Write(buffer, 0, buffer.Length);
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
-                //下面两句被注释掉的代码有问题, 对应的compressedbuffer的长度只有10--该10字节应该只是压缩buffer的header
+            var result = api.DoPost(loginRequest);
 
-                //zs.Flush();
-                //compressedbuffer = ms.ToArray();           
+            // var deptSubordinateListRequest = new SenvivSdk.GetAccessTokenRequest(result.Data.Data.AuthorizationCode, "{\"deptid\":\"1\"}");
 
-            }
 
-            //只有GZipStream在Dispose后调应对应MemoryStream.ToArray()所得到的Buffer才是我们需要的结果
-            compressedbuffer = ms.ToArray();
-            //将压缩后的byte数组basse64字符串
-            string text64 = Convert.ToBase64String(compressedbuffer);
-            Console.WriteLine(text64);
-            Console.ReadKey();
+            //var result3 = api.DoPost(deptSubordinateListRequest);
+
+
+            var getAccessTokenRequest = new SenvivSdk.GetAccessTokenRequest(result.Data.Data.AuthorizationCode, new { deptid = "1" });
+
+
+            var result2 = api.DoPost(getAccessTokenRequest);
+
+            //string data = "{\"name\":\"qxtadmin\",\"pwd\":\"zkxz123\"}";
+
+            //byte[] buffer = System.Text.UTF8Encoding.UTF8.GetBytes(data);
+            ////压缩后的byte数组
+            //byte[] compressedbuffer = null;
+            ////Compress buffer,压缩缓存
+            //MemoryStream ms = new MemoryStream();
+            //using (GZipStream zs = new GZipStream(ms, CompressionMode.Compress, true))
+            //{
+            //    zs.Write(buffer, 0, buffer.Length);
+
+            //    //下面两句被注释掉的代码有问题, 对应的compressedbuffer的长度只有10--该10字节应该只是压缩buffer的header
+
+            //    //zs.Flush();
+            //    //compressedbuffer = ms.ToArray();           
+
+            //}
+
+            ////只有GZipStream在Dispose后调应对应MemoryStream.ToArray()所得到的Buffer才是我们需要的结果
+            //compressedbuffer = ms.ToArray();
+            ////将压缩后的byte数组basse64字符串
+            //string text64 = Convert.ToBase64String(compressedbuffer);
+            //Console.WriteLine(text64);
+            //Console.ReadKey();
 
 
 

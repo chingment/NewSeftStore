@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace SenvivSdk
 {
-    public interface IApiPostRequest<T>
+    public class DeptSubordinateListResult
     {
-        string ApiUrl { get; }
-        object PostData { get; }
-        string Token { get;}
+
     }
 }

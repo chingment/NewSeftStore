@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace SenvivSdk
 {
-    public class RegisterUserResult
+    public class RequestResult<T>
     {
+        public int Code { get; set; }
 
+        public T Data { get; set; }
     }
 }
