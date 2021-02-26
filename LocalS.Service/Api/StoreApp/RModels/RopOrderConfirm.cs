@@ -11,6 +11,7 @@ namespace LocalS.Service.Api.StoreApp
     public class RopOrderConfirm
     {
         public List<string> OrderIds { get; set; }
+        public string POrderId { get; set; }
         public string StoreId { get; set; }
         public List<ProductSkuModel> ProductSkus { get; set; }
         public E_AppCaller Caller { get; set; }

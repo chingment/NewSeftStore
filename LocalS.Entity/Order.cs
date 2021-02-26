@@ -66,6 +66,7 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
+        public string PId { get; set; }
         public string UnId { get; set; }
         public string ClientUserId { get; set; }
         public string MerchId { get; set; }
@@ -96,7 +97,6 @@ namespace LocalS.Entity
         public DateTime? PickupFlowLastTime { get; set; }
         public bool PickupIsTrg { get; set; }
         public DateTime? PickupTrgTime { get; set; }
-
         public decimal SaleAmount { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal DiscountAmount { get; set; }

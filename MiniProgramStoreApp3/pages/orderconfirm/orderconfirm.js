@@ -42,7 +42,8 @@ Page({
     },
     action: '',
     saleOutletId: '',
-    shopMethod: 1
+    shopMethod: 1,
+    pOrderId: ''
   },
   onLoad: function (options) {
     var _this = this
@@ -52,8 +53,8 @@ Page({
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
     var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
     var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
-
-
+    var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
+    var _pOrderId = options.pOrderId == undefined ? null : options.pOrderId
     var orderIds = []
     if (_orderIds != null) {
       var arr_order = _orderIds.split(',')
@@ -61,14 +62,15 @@ Page({
         orderIds.push(arr_order[i])
       }
     }
-    
+
     _this.setData({
       storeId: storeage.getStoreId(),
       orderIds: orderIds,
       productSkus: _productSkus,
       action: _action,
       saleOutletId: _saleOutletId,
-      shopMethod: _shopMethod
+      shopMethod: _shopMethod,
+      pOrderId: _pOrderId
     })
 
     _this.buildPayOptions()
@@ -243,6 +245,7 @@ Page({
 
     if (util.isEmptyOrNull(_this.data.orderIds)) {
       apiOrder.reserve({
+        pOrderId: _this.data.pOrderId,
         storeId: _this.data.storeId,
         blocks: blocks,
         source: 3,

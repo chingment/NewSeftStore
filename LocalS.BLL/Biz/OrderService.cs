@@ -629,6 +629,7 @@ namespace LocalS.BLL.Biz
                         var d_Order = new Order();
                         d_Order.Id = IdWorker.Build(IdType.OrderId);
                         d_Order.UnId = unId;
+                        d_Order.PId = rop.POrderId;
                         d_Order.ClientUserId = rop.ClientUserId;
                         d_Order.ClientUserName = clientUserName;
                         d_Order.MerchId = store.MerchId;
@@ -1113,7 +1114,7 @@ namespace LocalS.BLL.Biz
                             }
                             else if (d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                #region 
+                                #region  Rent
                                 d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
                                 d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
                                 d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
@@ -1161,12 +1162,33 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                             }
-                            else if(d_OrderSub.ShopMethod== E_ShopMethod.RentFee)
+                            else if (d_OrderSub.ShopMethod == E_ShopMethod.RentFee)
                             {
-                                #region
+                                #region RentFee
 
-                                //var d_rentOrder=CurrentDb.RentOrder.Where(m)
+                                var d_rentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == d_Order.PId).FirstOrDefault();
+                                if (d_rentOrder != null)
+                                {
+                                    d_rentOrder.NextPayRentTime = d_rentOrder.NextPayRentTime.Value.AddMonths(d_OrderSub.RentTermValue);
+                                    d_rentOrder.Creator = operater;
+                                    d_rentOrder.CreateTime = DateTime.Now;
+                                }
 
+                                var d_rentOrderTransRecord = new RentOrderTransRecord();
+                                d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
+                                d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
+                                d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
+                                d_rentOrderTransRecord.RentOrderId = d_rentOrder.Id;
+                                d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
+                                d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
+                                d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
+                                d_rentOrderTransRecord.TransTime = DateTime.Now;
+                                d_rentOrderTransRecord.AmountType = E_RentAmountType.Rent;
+                                d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
+                                d_rentOrderTransRecord.Creator = operater;
+                                d_rentOrderTransRecord.CreateTime = DateTime.Now;
+                                d_rentOrderTransRecord.Description = string.Format("您已支付租金：{0}", d_OrderSub.ChargeAmount);
+                                CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
 
                                 #endregion
                             }

@@ -23,11 +23,12 @@ namespace LocalS.Service.Api.StoreApp
         public List<FsBlock> Blocks { get; set; }
 
         public string ChargeAmount { get; set; }
-        
+
         public FsText Tip { get; set; }
 
         public List<FsButton> Buttons { get; set; }
 
+        public object Params { get; set; }
 
     }
 }

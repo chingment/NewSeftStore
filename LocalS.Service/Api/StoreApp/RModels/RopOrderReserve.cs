@@ -14,6 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             this.Blocks = new List<LocalS.BLL.Biz.RopOrderReserve.BlockModel>();
         }
+        public string POrderId { get; set; }
         public string StoreId { get; set; }
         public string SaleOutletId { get; set; }
         public List<LocalS.BLL.Biz.RopOrderReserve.BlockModel> Blocks { get; set; }

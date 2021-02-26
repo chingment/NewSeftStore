@@ -89,10 +89,18 @@
             </view>
             <view class="it-buttons">
 
+             <view class="expiredate">
+               <view>到期时间：</view>
+               <text>{{item.params.nextPayRentTime}}</text>
+             </view>
+
+
+
               <block wx:for="{{item.buttons}}" wx:for-index="index" wx:for-item="button" wx:key="list">
                 <view class="btnbox">
                   <view class="btn" bindtap="operate" data-reply-opval="{{button.opVal}}"
-                    data-reply-optype="{{button.opType}}" data-reply-id="{{item.id}}"
+                    data-reply-optype="{{button.opType}}" data-reply-order-id="{{item.params.orderId}}"
+                    data-reply-sku-id="{{item.params.skuId}}"
                     style="color:{{button.name.color}}; border:1px solid {{button.name.color}};">
                     {{button.name.content}}</view>
                 </view>

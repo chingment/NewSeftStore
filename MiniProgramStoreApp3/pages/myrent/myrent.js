@@ -113,8 +113,8 @@ Page({
 
     var opType = e.currentTarget.dataset.replyOptype
     var opVal = e.currentTarget.dataset.replyOpval
-    var id = e.currentTarget.dataset.replyId
-
+    var orderId = e.currentTarget.dataset.replyOrderId
+    var skuId = e.currentTarget.dataset.replySkuId
 
     switch (opType) {
       case "FUN":
@@ -122,7 +122,6 @@ Page({
         switch (opVal) {
           case "payRent":
            
-            var skuId = '722b4d565604489fa1f40c548e0bc114' //对应页面data-reply-index
             var productSkus = []
             productSkus.push({
               cartId: 0,
@@ -133,7 +132,7 @@ Page({
               shopId:'0'
             })
             wx.navigateTo({
-              url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&shopMethod=5&action=rentfee",
+              url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&shopMethod=5&action=rentfee&pOrderId="+orderId,
               success: function (res) {
                 // success
               },

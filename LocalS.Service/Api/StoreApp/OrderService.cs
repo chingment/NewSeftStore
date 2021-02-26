@@ -124,6 +124,7 @@ namespace LocalS.Service.Api.StoreApp
             CustomJsonResult result = new CustomJsonResult();
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.AppId = AppId.WXMINPRAGROM;
+            bizRop.POrderId = rop.POrderId;
             bizRop.Source = rop.Source;
             bizRop.StoreId = rop.StoreId;
             bizRop.ClientUserId = clientUserId;
@@ -352,7 +353,7 @@ namespace LocalS.Service.Api.StoreApp
 
                     #endregion
                 }
-                else if(rop.ShopMethod == E_ShopMethod.RentFee)
+                else if (rop.ShopMethod == E_ShopMethod.RentFee)
                 {
                     #region RentFee
 
@@ -1176,22 +1177,29 @@ namespace LocalS.Service.Api.StoreApp
             {
                 var order = CurrentDb.Order.Where(m => m.Id == item.OrdeId).FirstOrDefault();
 
-                var status = new StatusModel();
+                var desc = new FsField();
 
                 if (item.IsReturn)
                 {
-                    status = new StatusModel(2, "已归还");
+                    desc = new FsField("已归还", "#2c3a23");
                 }
                 else
                 {
-                    status = new StatusModel(1, "租赁中");
+                    if (item.NextPayRentTime > DateTime.Now)
+                    {
+                        desc = new FsField("租赁中", "#81fa38");
+                    }
+                    else
+                    {
+                        desc = new FsField("待付租金", "#fa9c38");
+                    }
                 }
 
                 var model = new OrderModel();
 
                 model.Id = item.Id;
                 model.Tag.Name = new FsText(order.StoreName, "");
-                model.Tag.Desc = new FsField(status.Text, "");
+                model.Tag.Desc = desc;
 
 
                 var fsBlocks = new List<FsBlock>();
@@ -1219,6 +1227,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 model.Blocks.Add(block);
                 model.Buttons.Add(new FsButton() { Name = new FsText() { Content = "交付租金", Color = "green" }, OpType = "FUN", OpVal = "payRent" });
+                model.Params = new { OrderId = order.Id, SkuId = item.SkuId, NextPayRentTime = item.NextPayRentTime };
                 pageEntiy.Items.Add(model);
             }
 

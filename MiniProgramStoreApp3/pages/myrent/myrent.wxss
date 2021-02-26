@@ -1,3 +1,10 @@
 .it-r >.dt{
   padding: 10rpx;
 }
+
+.expiredate{
+  display: flex;
+  flex: 1;
+  justify-content: start;
+  align-items: center;
+}
