@@ -131,8 +131,12 @@ Page({
               shopMethod:5,
               shopId:'0'
             })
+
+
+            var url='/pages/orderconfirm/orderconfirm?productSkus=' + encodeURIComponent(JSON.stringify(productSkus)) + "&shopMethod=5&action=rentfee&pOrderId="+orderId
+console.log(url)
             wx.navigateTo({
-              url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&shopMethod=5&action=rentfee&pOrderId="+orderId,
+              url: url,
               success: function (res) {
                 // success
               },

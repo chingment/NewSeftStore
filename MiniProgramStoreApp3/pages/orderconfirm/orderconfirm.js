@@ -52,8 +52,7 @@ Page({
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
     var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
-    var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
-    var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
+    var _productSkus = options.productSkus == undefined ? null : JSON.parse(decodeURIComponent(options.productSkus))
     var _pOrderId = options.pOrderId == undefined ? null : options.pOrderId
     var orderIds = []
     if (_orderIds != null) {

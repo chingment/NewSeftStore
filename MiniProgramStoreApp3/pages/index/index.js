@@ -166,7 +166,7 @@ Component({
         shopId: '0'
       })
       wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
+        url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=2',
         success: function (res) {
           // success
         },

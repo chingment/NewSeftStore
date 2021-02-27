@@ -267,7 +267,7 @@ Component({
       }
 
       wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus),
+        url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)),
         success: function (res) {
           // success
         },

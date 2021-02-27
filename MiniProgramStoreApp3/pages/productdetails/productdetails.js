@@ -221,7 +221,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -253,7 +253,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -285,7 +285,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
