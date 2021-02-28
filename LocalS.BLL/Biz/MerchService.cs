@@ -137,7 +137,6 @@ namespace LocalS.BLL.Biz
             return merch.Name;
         }
 
-
         public string GetClientName(string merchId, string userId)
         {
             string userName = "匿名";

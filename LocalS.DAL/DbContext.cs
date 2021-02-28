@@ -31,11 +31,9 @@ namespace LocalS.DAL
         public IDbSet<SellChannelStock> SellChannelStock { get; set; }
         public IDbSet<SellChannelStockLog> SellChannelStockLog { get; set; }
         public IDbSet<SellChannelStockDateHis> SellChannelStockDateHis { get; set; }
-        
         public IDbSet<ClientCart> ClientCart { get; set; }
         public IDbSet<ClientCoupon> ClientCoupon { get; set; }
         public IDbSet<ClientReffSku> ClientReffSku { get; set; }
-        
         public IDbSet<AdContent> AdContent { get; set; }
         public IDbSet<AdContentBelong> AdContentBelong { get; set; }
         public IDbSet<AdSpace> AdSpace { get; set; }
@@ -52,15 +50,12 @@ namespace LocalS.DAL
         public IDbSet<MerchOperateLog> MerchOperateLog { get; set; }
         public IDbSet<MachineBindLog> MachineBindLog { get; set; }
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
-
         public IDbSet<StoreKind> StoreKind { get; set; }
-
         public IDbSet<StoreKindSpu> StoreKindSpu { get; set; }
         //public IDbSet<RptOrder> RptOrder { get; set; }
         //public IDbSet<RptOrderDetails> RptOrderDetails { get; set; }
         //public IDbSet<RptOrderDetailsChild> RptOrderDetailsChild { get; set; }
         public IDbSet<AppTraceLog> AppTraceLog { get; set; }
-
         public IDbSet<Coupon> Coupon { get; set; }
         public IDbSet<CouponUseAreaObj> CouponUseAreaObj { get; set; }
         public IDbSet<CouponRevPosSt> CouponRevPosSt { get; set; }
@@ -69,23 +64,15 @@ namespace LocalS.DAL
         public IDbSet<MemberLevelSt> MemberLevelSt { get; set; }
         public IDbSet<MemberCouponSt> MemberCouponSt { get; set; }
         public IDbSet<MemberSkuSt> MemberSkuSt { get; set; }
-
         public IDbSet<MemberDaySt> MemberDaySt { get; set; }
-
         public IDbSet<SaleOutlet> SaleOutlet { get; set; }
-
         public IDbSet<Supplier> Supplier { get; set; }
         public IDbSet<RentOrder> RentOrder { get; set; }
-
         public IDbSet<RentOrderTransRecord> RentOrderTransRecord { get; set; }
-
         public IDbSet<StoreShop> StoreShop { get; set; }
         public IDbSet<Shop> Shop { get; set; }
         //public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
-
-
         public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }
-
         public IDbSet<WxACode> WxACode { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

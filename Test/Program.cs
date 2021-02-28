@@ -109,14 +109,16 @@ namespace Test
         static void Main(string[] args)
         {
 
-            // var loginRequest = new SenvivSdk.LoginRequest("", new { name = "qxtadmin", pwd = "zkxz123" });
+            var loginRequest = new SenvivSdk.LoginRequest("", new { name = "qxtadmin", pwd = "zkxz123" });
 
-            //SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
-            // var result = api.DoPost(loginRequest);
+            var result = api.DoPost(loginRequest);
 
-            // string token = "\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1HubkVijncfUY//nxrv9MTYYYEibRRgmB3cPu5p/8+Xo=\"";
-            // var deptSubordinateListRequest = new SenvivSdk.DeptSubordinateListRequest(token, "{\"deptid\":\"\"}");
+            //string token = "\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1HubkVijncfUY//nxrv9MTYYYEibRRgmB3cPu5p/8+Xo=\"";
+            string token = result.Data.Data.AuthorizationCode;
+
+            //var deptSubordinateListRequest = new SenvivSdk.DeptSubordinateListRequest(token, "{\"deptid\":\"32\"}");
 
             //32
 
@@ -130,15 +132,15 @@ namespace Test
 
 
 
-            //var userListRequest = new SenvivSdk.UserListRequest(token, new { deptid = "32", size = "1", page = "0" });
+            var userListRequest = new SenvivSdk.UserListRequest(token, new { deptid = "32", size = "100", page = "1", keyword="13922262222" });
 
 
-            //var result5 = api.DoPost(userListRequest);
+            var result5 = api.DoPost(userListRequest);
 
             //string data = "{\"name\":\"qxtadmin\",\"pwd\":\"zkxz123\"}";
 
 
-            string accessToken = "42_wgKB4dYOUKxUlrEJgnBPZH4J2_96l_P7CWtqGv2aHqkweKJPWlprEqFMV35RlD1cOFbHNa09zOLg9nPY2mm4_lcv-mPEsKXEeSgK99orWf3ZPrgBzr_4cDVNHxhGWybvroeMs6w8EwNsy7uMDUSjAGAOFD";
+           // string accessToken = "42_wgKB4dYOUKxUlrEJgnBPZH4J2_96l_P7CWtqGv2aHqkweKJPWlprEqFMV35RlD1cOFbHNa09zOLg9nPY2mm4_lcv-mPEsKXEeSgK99orWf3ZPrgBzr_4cDVNHxhGWybvroeMs6w8EwNsy7uMDUSjAGAOFD";
 
             //var openIds = OAuthApi.GetUserOpenIds(accessToken);
 
@@ -158,29 +160,29 @@ namespace Test
             //on0dM51JLVry0lnKT4Q8nsJBRXNs
 
 
-            string mp_AppId = "wx80caad9ea41a00fc";
-            string mp_PagePath = "pages/orderconfirm/orderconfirm?productSkus=%5B%7B%22cartId%22%3A0%2C%22id%22%3A%22722b4d565604489fa1f40c548e0bc114%22%2C%22quantity%22%3A1%2C%22shopMode%22%3A1%2C%22shopMethod%22%3A5%2C%22shopId%22%3A%220%22%7D%5D&shopMethod=5&action=rentfee&pOrderId=610464520210226113146434";
-            StringBuilder sb = new StringBuilder();
-            sb.Append("{\"touser\":\"" + openId + "\",");
-            sb.Append("\"template_id\":\"xCwBMd_h0ekopGsYIj7fpi7-qAY54qbuROTzmS7odhQ\",");
-            sb.Append("\"url\":\"\", ");
-            sb.Append("\"miniprogram\":{");
-            sb.Append("\"appid\":\""+ mp_AppId + "\",");
-            sb.Append("\"pagepath\":\""+ mp_PagePath + "\"");
-            sb.Append("},");
-            sb.Append("\"data\":{");
-            sb.Append("\"first\":{ \"value\":\"" + first + "。\",\"color\":\"#173177\" },");
-            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
-            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
-            sb.Append("\"keyword3\":{ \"value\":\"" + keyword3 + "\",\"color\":\"#FF3030\" },");
-            sb.Append("\"remark\":{ \"value\":\""+ remark + "\",\"color\":\"#173177\"}");
-            sb.Append("}}");
+            //string mp_AppId = "wx80caad9ea41a00fc";
+            //string mp_PagePath = "pages/orderconfirm/orderconfirm?productSkus=%5B%7B%22cartId%22%3A0%2C%22id%22%3A%22722b4d565604489fa1f40c548e0bc114%22%2C%22quantity%22%3A1%2C%22shopMode%22%3A1%2C%22shopMethod%22%3A5%2C%22shopId%22%3A%220%22%7D%5D&shopMethod=5&action=rentfee&pOrderId=610464520210226113146434";
+            //StringBuilder sb = new StringBuilder();
+            //sb.Append("{\"touser\":\"" + openId + "\",");
+            //sb.Append("\"template_id\":\"xCwBMd_h0ekopGsYIj7fpi7-qAY54qbuROTzmS7odhQ\",");
+            //sb.Append("\"url\":\"\", ");
+            //sb.Append("\"miniprogram\":{");
+            //sb.Append("\"appid\":\""+ mp_AppId + "\",");
+            //sb.Append("\"pagepath\":\""+ mp_PagePath + "\"");
+            //sb.Append("},");
+            //sb.Append("\"data\":{");
+            //sb.Append("\"first\":{ \"value\":\"" + first + "。\",\"color\":\"#173177\" },");
+            //sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            //sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            //sb.Append("\"keyword3\":{ \"value\":\"" + keyword3 + "\",\"color\":\"#FF3030\" },");
+            //sb.Append("\"remark\":{ \"value\":\""+ remark + "\",\"color\":\"#173177\"}");
+            //sb.Append("}}");
 
 
-            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(accessToken, WxPostDataType.Text, sb.ToString());
-            WxApi c = new WxApi();
+            //WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(accessToken, WxPostDataType.Text, sb.ToString());
+            //WxApi c = new WxApi();
 
-            c.DoPost(templateSend);
+            //c.DoPost(templateSend);
 
 
             //byte[] buffer = System.Text.UTF8Encoding.UTF8.GetBytes(data);

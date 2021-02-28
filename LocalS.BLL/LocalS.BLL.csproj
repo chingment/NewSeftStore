@@ -135,6 +135,7 @@
     <Compile Include="Push\PushService.cs" />
     <Compile Include="Sdk\EasemobSdkProvider.cs" />
     <Compile Include="Sdk\PayRefundResult.cs" />
+    <Compile Include="Sdk\SenvivProvider.cs" />
     <Compile Include="Sdk\ZfbSdkProvider.cs" />
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\PayBuildWxJsPayInfoResult.cs" />
@@ -196,6 +197,10 @@
     <ProjectReference Include="..\MyPushSdk\MyPushSdk.csproj">
       <Project>{ec691c59-681a-405e-93cb-4fe65d1a3db4}</Project>
       <Name>MyPushSdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SenvivSdk\SenvivSdk.csproj">
+      <Project>{5d319fe7-2758-4a61-99df-fdf033ad4a8b}</Project>
+      <Name>SenvivSdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\TgPaySdk\TgPaySdk.csproj">
       <Project>{259e83da-5441-4911-b284-d524201329fc}</Project>

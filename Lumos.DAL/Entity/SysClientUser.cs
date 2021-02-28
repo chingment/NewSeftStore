@@ -13,6 +13,8 @@ namespace Lumos.DbRelay
         public string MerchId { get; set; }
         public string WxMpOpenId { get; set; }
         public string WxMpAppId { get; set; }
+        public string WxPaOpenId { get; set; }
+        public string WxPaAppId { get; set; }
         public string ReffSign { get; set; }
         public bool IsHasProm { get; set; }
         public bool IsStaff { get; set; }
