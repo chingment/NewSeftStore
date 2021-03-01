@@ -20,7 +20,8 @@ namespace LocalS.BLL.Task
         Order2CheckPickupTimeout = 2,
         PayTrans2CheckStatus = 3,
         PayRefundCheckStatus = 4,
-        MachineRunInfo = 5
+        MachineRunInfo = 5,
+        RentOrder2CheckExpire = 6
     }
 
     public class Task4Tim2GlobalProvider : BaseService, IJob
@@ -215,6 +216,16 @@ namespace LocalS.BLL.Task
                                 {
                                     LogUtil.Info(TAG, string.Format("退款单号：{0},有效时间过期", payRefund.Id));
                                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, payRefund.Id);
+                                }
+                                #endregion
+                                break;
+                            case Task4TimType.RentOrder2CheckExpire:
+                                #region 检查租赁订单是否到期
+                                var model5 = m.Data.ToJsonObject<RentOrder2CheckExpire>();
+                                //判断支付过期时间
+                                if (m.ExpireTime.AddMinutes(1) < DateTime.Now)
+                                {
+                                    BizFactory.Order.NotifyClientExpire(IdWorker.Build(IdType.EmptyGuid), model5.ClientUserId, model5.SkuId, model5.SkuName, model5.ExpireDate, model5.POrderId);
                                 }
                                 #endregion
                                 break;

@@ -1012,6 +1012,7 @@ namespace LocalS.BLL.Biz
             CustomJsonResult result = new CustomJsonResult();
 
             List<Order> s_Orders = new List<Order>();
+            List<RentOrder> s_RentOrders = new List<RentOrder>();
             List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
             using (TransactionScope ts = new TransactionScope())
             {
@@ -1119,36 +1120,36 @@ namespace LocalS.BLL.Biz
                                 d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
                                 d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
 
-                                var d_rentOrder = new RentOrder();
-                                d_rentOrder.Id = IdWorker.Build(IdType.NewGuid);
-                                d_rentOrder.MerchId = d_OrderSub.MerchId;
-                                d_rentOrder.OrdeId = d_OrderSub.OrderId;
-                                d_rentOrder.ClientUserId = d_OrderSub.ClientUserId;
-                                d_rentOrder.SpuId = d_OrderSub.PrdProductId;
-                                d_rentOrder.SkuId = d_OrderSub.PrdProductSkuId;
-                                d_rentOrder.SkuName = d_OrderSub.PrdProductSkuName;
-                                d_rentOrder.SkuCumCode = d_OrderSub.PrdProductSkuCumCode;
-                                d_rentOrder.SkuBarCode = d_OrderSub.PrdProductSkuBarCode;
-                                d_rentOrder.SkuSpecDes = d_OrderSub.PrdProductSkuSpecDes;
-                                d_rentOrder.SkuProducer = d_OrderSub.PrdProductSkuProducer;
-                                d_rentOrder.SkuMainImgUrl = d_OrderSub.PrdProductSkuMainImgUrl;
-                                d_rentOrder.DepositAmount = d_OrderSub.ChargeAmount;
-                                d_rentOrder.IsPayDeposit = true;
-                                d_rentOrder.PayDepositTime = DateTime.Now;
-                                d_rentOrder.RentTermUnit = d_OrderSub.RentTermUnit;
-                                d_rentOrder.RentTermValue = d_OrderSub.RentTermValue;
-                                d_rentOrder.RentTermUnitText = "月";
-                                d_rentOrder.RentAmount = d_OrderSub.RentAmount;
-                                d_rentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
-                                d_rentOrder.Creator = operater;
-                                d_rentOrder.CreateTime = DateTime.Now;
-                                CurrentDb.RentOrder.Add(d_rentOrder);
+                                var d_RentOrder = new RentOrder();
+                                d_RentOrder.Id = IdWorker.Build(IdType.NewGuid);
+                                d_RentOrder.MerchId = d_OrderSub.MerchId;
+                                d_RentOrder.OrdeId = d_OrderSub.OrderId;
+                                d_RentOrder.ClientUserId = d_OrderSub.ClientUserId;
+                                d_RentOrder.SpuId = d_OrderSub.PrdProductId;
+                                d_RentOrder.SkuId = d_OrderSub.PrdProductSkuId;
+                                d_RentOrder.SkuName = d_OrderSub.PrdProductSkuName;
+                                d_RentOrder.SkuCumCode = d_OrderSub.PrdProductSkuCumCode;
+                                d_RentOrder.SkuBarCode = d_OrderSub.PrdProductSkuBarCode;
+                                d_RentOrder.SkuSpecDes = d_OrderSub.PrdProductSkuSpecDes;
+                                d_RentOrder.SkuProducer = d_OrderSub.PrdProductSkuProducer;
+                                d_RentOrder.SkuMainImgUrl = d_OrderSub.PrdProductSkuMainImgUrl;
+                                d_RentOrder.DepositAmount = d_OrderSub.ChargeAmount;
+                                d_RentOrder.IsPayDeposit = true;
+                                d_RentOrder.PayDepositTime = DateTime.Now;
+                                d_RentOrder.RentTermUnit = d_OrderSub.RentTermUnit;
+                                d_RentOrder.RentTermValue = d_OrderSub.RentTermValue;
+                                d_RentOrder.RentTermUnitText = "月";
+                                d_RentOrder.RentAmount = d_OrderSub.RentAmount;
+                                d_RentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
+                                d_RentOrder.Creator = operater;
+                                d_RentOrder.CreateTime = DateTime.Now;
+                                CurrentDb.RentOrder.Add(d_RentOrder);
 
                                 var d_rentOrderTransRecord = new RentOrderTransRecord();
                                 d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
                                 d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
                                 d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
-                                d_rentOrderTransRecord.RentOrderId = d_rentOrder.Id;
+                                d_rentOrderTransRecord.RentOrderId = d_RentOrder.Id;
                                 d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
                                 d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
                                 d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
@@ -1160,25 +1161,27 @@ namespace LocalS.BLL.Biz
                                 d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_OrderSub.ChargeAmount);
                                 CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
 
+                                s_RentOrders.Add(d_RentOrder);
+
                                 #endregion
                             }
                             else if (d_OrderSub.ShopMethod == E_ShopMethod.RentFee)
                             {
                                 #region RentFee
 
-                                var d_rentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == d_Order.PId).FirstOrDefault();
-                                if (d_rentOrder != null)
+                                var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == d_Order.PId).FirstOrDefault();
+                                if (d_RentOrder != null)
                                 {
-                                    d_rentOrder.NextPayRentTime = d_rentOrder.NextPayRentTime.Value.AddMonths(d_OrderSub.RentTermValue);
-                                    d_rentOrder.Creator = operater;
-                                    d_rentOrder.CreateTime = DateTime.Now;
+                                    d_RentOrder.NextPayRentTime = d_RentOrder.NextPayRentTime.Value.AddMonths(d_OrderSub.RentTermValue);
+                                    d_RentOrder.Creator = operater;
+                                    d_RentOrder.CreateTime = DateTime.Now;
                                 }
 
                                 var d_rentOrderTransRecord = new RentOrderTransRecord();
                                 d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
                                 d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
                                 d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
-                                d_rentOrderTransRecord.RentOrderId = d_rentOrder.Id;
+                                d_rentOrderTransRecord.RentOrderId = d_RentOrder.Id;
                                 d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
                                 d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
                                 d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
@@ -1189,6 +1192,8 @@ namespace LocalS.BLL.Biz
                                 d_rentOrderTransRecord.CreateTime = DateTime.Now;
                                 d_rentOrderTransRecord.Description = string.Format("您已支付租金：{0}", d_OrderSub.ChargeAmount);
                                 CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
+
+                                s_RentOrders.Add(d_RentOrder);
 
                                 #endregion
                             }
@@ -1450,6 +1455,11 @@ namespace LocalS.BLL.Biz
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, d_PayTrans.Id);
                     Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckReservePay, d_Orders.Select(m => m.Id).ToArray());
+
+                    foreach (var s_RentOrder in s_RentOrders)
+                    {
+                        Task4Factory.Tim2Global.Enter(Task4TimType.RentOrder2CheckExpire, s_RentOrder.OrdeId, DateTime.Now.AddMinutes(2), new RentOrder2CheckExpire { ClientUserId = s_RentOrder.ClientUserId, ExpireDate = s_RentOrder.NextPayRentTime.Value, SkuId = s_RentOrder.SkuId, SkuName = s_RentOrder.SkuName, POrderId = s_RentOrder.OrdeId });
+                    }
 
                     string trgerId = "";
                     if (d_Orders[0].AppId == AppId.STORETERM)
@@ -2558,5 +2568,23 @@ namespace LocalS.BLL.Biz
 
         }
 
+        public CustomJsonResult NotifyClientExpire(string operater, string clientUserId, string skuId, string skuName, DateTime expireDate, string pOrderId)
+        {
+            var result = new CustomJsonResult();
+
+            string key = string.Format("RentOrder:{0}", pOrderId);
+            var redis = new RedisClient<string>();
+            var value = redis.KGetString(key);
+            if (value == null)
+            {
+                var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate, pOrderId);
+                if (result2.Result == ResultType.Success)
+                {
+                    redis.KSet(key, "1", new TimeSpan(24, 0, 0));
+                }
+            }
+
+            return result;
+        }
     }
 }

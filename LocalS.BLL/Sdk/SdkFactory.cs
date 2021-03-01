@@ -48,5 +48,13 @@ namespace LocalS.BLL
             }
         }
 
+        public static SenvivProvider Senviv
+        {
+            get
+            {
+                return new SenvivProvider();
+            }
+        }
+
     }
 }
