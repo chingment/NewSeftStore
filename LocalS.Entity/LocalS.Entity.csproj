@@ -93,6 +93,7 @@
     <Compile Include="SaleOutlet.cs" />
     <Compile Include="SellChannelStockDateHis.cs" />
     <Compile Include="Retailer.cs" />
+    <Compile Include="SenvivDept.cs" />
     <Compile Include="SenvivUser.cs" />
     <Compile Include="SenvivUserProduct.cs" />
     <Compile Include="Shop.cs" />

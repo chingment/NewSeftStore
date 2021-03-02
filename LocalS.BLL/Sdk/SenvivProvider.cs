@@ -112,13 +112,13 @@ namespace LocalS.BLL
 
                 foreach (var d_SenvivUserProduct in d_SenvivUserProducts)
                 {
-                    string openId = d_ClientUser.WxPaOpenId;
+                    string openId = d_SenvivUser.WechatId;
 
                     string first = string.Format("您好，您的{0}租约即使到期", skuName);
                     string keyword1 = d_SenvivUserProduct.Sn;
                     string keyword2 = skuName;
                     string keyword3 = string.Format("{0}到期", expireDate.ToString("yyyy年MM月dd日"));
-                    string remark = "请尽快充值续费，以免影响您的设备使用！";
+                    string remark = "请尽快续费，以免影响您的设备使用！";
 
                     string mp_AppId = "wx80caad9ea41a00fc";
                     string mp_PagePath = string.Format("pages/orderconfirm/orderconfirm?productSkus=%5B%7B%22cartId%22%3A0%2C%22id%22%3A%22{0}%22%2C%22quantity%22%3A1%2C%22shopMode%22%3A1%2C%22shopMethod%22%3A5%2C%22shopId%22%3A%220%22%7D%5D&shopMethod=5&action=rentfee&pOrderId={1}", skuId, pOrderId);
