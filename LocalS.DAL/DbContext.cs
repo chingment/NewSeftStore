@@ -75,6 +75,12 @@ namespace LocalS.DAL
         public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }
         public IDbSet<WxACode> WxACode { get; set; }
 
+        public IDbSet<SenvivUser> SenvivUser { get; set; }
+        public IDbSet<SenvivUserProduct> SenvivUserProduct { get; set; }
+
+        public IDbSet<SenvivDept> SenvivDept { get; set; }
+        
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

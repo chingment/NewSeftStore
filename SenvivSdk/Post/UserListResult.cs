@@ -19,7 +19,7 @@ namespace SenvivSdk
             public string userid { get; set; }
             public string code { get; set; }
             public string wechatid { get; set; }
-            public string weChatFriends { get; set; }
+            public List<object> weChatFriends { get; set; }
             public string mobile { get; set; }
             public string Email { get; set; }
             public string pwd { get; set; }
@@ -34,7 +34,7 @@ namespace SenvivSdk
             public string TargetValue { get; set; }
             public string createtime { get; set; }
             public string updateTime { get; set; }
-            public string contacts { get; set; }
+            public List<object> contacts { get; set; }
             public string remarks { get; set; }
             public string lastloginTime { get; set; }
             public string loginCount { get; set; }
@@ -70,7 +70,7 @@ namespace SenvivSdk
             public string userid { get; set; }
             public string bindtime { get; set; }
             public string createtime { get; set; }
-            public int status { get; set; }
+            public string status { get; set; }
             public string version { get; set; }
             public string remarks { get; set; }
             public string batch { get; set; }

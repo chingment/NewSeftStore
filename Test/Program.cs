@@ -108,15 +108,18 @@ namespace Test
 
         static void Main(string[] args)
         {
+            DateTime dt = DateTime.Parse("2021-02-22T16:14:07.683+08:00");
 
-            var loginRequest = new SenvivSdk.LoginRequest("", new { name = "qxtadmin", pwd = "zkxz123" });
+            SdkFactory.Senviv.GetUserList();
 
-            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+            //var loginRequest = new SenvivSdk.LoginRequest("", new { name = "qxtadmin", pwd = "zkxz123" });
 
-            var result = api.DoPost(loginRequest);
+            //SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            //var result = api.DoPost(loginRequest);
 
             //string token = "\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1HubkVijncfUY//nxrv9MTYYYEibRRgmB3cPu5p/8+Xo=\"";
-            string token = result.Data.Data.AuthorizationCode;
+            //string token = result.Data.Data.AuthorizationCode;
 
             //var deptSubordinateListRequest = new SenvivSdk.DeptSubordinateListRequest(token, "{\"deptid\":\"32\"}");
 
@@ -132,10 +135,10 @@ namespace Test
 
 
 
-            var userListRequest = new SenvivSdk.UserListRequest(token, new { deptid = "32", size = "100", page = "1", keyword="13922262222" });
+            //var userListRequest = new SenvivSdk.UserListRequest(token, new { deptid = "32", size = "10", page = "1" });
 
 
-            var result5 = api.DoPost(userListRequest);
+            //var result5 = api.DoPost(userListRequest);
 
             //string data = "{\"name\":\"qxtadmin\",\"pwd\":\"zkxz123\"}";
 

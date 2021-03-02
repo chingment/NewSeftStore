@@ -235,6 +235,7 @@ namespace LocalS.BLL.Task
 
                 //定时生成库存报表
                 BuildSellChannelStockDateReport();
+
             }
             catch (Exception ex)
             {
