@@ -412,7 +412,7 @@ namespace LocalS.Service.Api.StoreApp
                     c_prodcutSku.RentTermValue = orderSub.RentTermValue;
                     c_prodcutSku.RentAmount = orderSub.RentAmount;
                     c_prodcutSku.DepositAmount = orderSub.DepositAmount;
-                    c_prodcutSku.KindId3 = orderSub.PrdKindId3;
+                    c_prodcutSku.KindId3 = orderSub.SkuKindId3;
                     c_prodcutSku.ShopId = orderSub.ShopId;
                     c_prodcutSku.MachineIds = new string[] { orderSub.MachineId };
                     if (orderSub.ShopMethod == E_ShopMethod.MemberFee)

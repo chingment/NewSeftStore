@@ -22,10 +22,10 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        public string PrdKindIds { get; set; }
-        public int PrdKindId1 { get; set; }
-        public int PrdKindId2 { get; set; }
-        public int PrdKindId3 { get; set; }
+        public string KindIds { get; set; }
+        public int KindId1 { get; set; }
+        public int KindId2 { get; set; }
+        public int KindId3 { get; set; }
         public string Name { get; set; }
         public string SpuCode { get; set; }
         public string PinYinIndex { get; set; }

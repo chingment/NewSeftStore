@@ -829,9 +829,9 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.SkuProducer = productSku.Producer;
                             d_OrderSub.SkuBarCode = productSku.BarCode;
                             d_OrderSub.SkuCumCode = productSku.CumCode;
-                            d_OrderSub.PrdKindId1 = productSku.KindId1;
-                            d_OrderSub.PrdKindId2 = productSku.KindId2;
-                            d_OrderSub.PrdKindId3 = productSku.KindId3;
+                            d_OrderSub.SkuKindId1 = productSku.KindId1;
+                            d_OrderSub.SkuKindId2 = productSku.KindId2;
+                            d_OrderSub.SkuKindId3 = productSku.KindId3;
                             d_OrderSub.Quantity = buildOrderSub.Quantity;
                             d_OrderSub.SalePrice = buildOrderSub.SalePrice;
                             d_OrderSub.OriginalPrice = buildOrderSub.OriginalPrice;

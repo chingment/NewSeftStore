@@ -31,6 +31,9 @@ namespace LocalS.Entity
         public string SkuProducer { get; set; }
         public string SkuMainImgUrl { get; set; }
         public string SkuDeviceId { get; set; }
+        public int SkuKindId1 { get; set; }
+        public int SkuKindId2 { get; set; }
+        public int SkuKindId3 { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SaleAmount { get; set; }
@@ -63,9 +66,6 @@ namespace LocalS.Entity
         public string PickupFlowLastDesc { get; set; }
         public DateTime? PickupFlowLastTime { get; set; }
         public string SvcConsulterId { get; set; }
-        public int PrdKindId1 { get; set; }
-        public int PrdKindId2 { get; set; }
-        public int PrdKindId3 { get; set; }
         public bool IsTestMode { get; set; }
         public string SaleOutletId { get; set; }
         public E_ShopMethod ShopMethod { get; set; }

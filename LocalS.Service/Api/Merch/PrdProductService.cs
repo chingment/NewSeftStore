@@ -91,7 +91,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.PrdProduct
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.Name, u.SpuCode, u.BriefDes, u.PrdKindIds, u.PrdKindId1, u.PrdKindId2, u.PrdKindId3, u.CreateTime, u.DisplayImgUrls });
+                         select new { u.Id, u.Name, u.SpuCode, u.BriefDes, u.KindIds, u.KindId1, u.KindId2, u.KindId3, u.CreateTime, u.DisplayImgUrls });
 
             if (spuIds != null)
             {
@@ -112,11 +112,11 @@ namespace LocalS.Service.Api.Merch
             {
                 string str_prdKindNames = "";
                 List<int> prdKindIds = new List<int>();
-                if (!string.IsNullOrEmpty(item.PrdKindIds))
+                if (!string.IsNullOrEmpty(item.KindIds))
                 {
-                    prdKindIds.Add(item.PrdKindId1);
-                    prdKindIds.Add(item.PrdKindId2);
-                    prdKindIds.Add(item.PrdKindId3);
+                    prdKindIds.Add(item.KindId1);
+                    prdKindIds.Add(item.KindId2);
+                    prdKindIds.Add(item.KindId3);
                     var prdKindNames = CurrentDb.PrdKind.Where(p => prdKindIds.Contains(p.Id)).OrderBy(m => m.Depth).Select(m => m.Name).ToArray();
                     str_prdKindNames = prdKindNames.Length != 0 ? string.Join("/", prdKindNames) : "";
                 }
@@ -211,10 +211,10 @@ namespace LocalS.Service.Api.Merch
                 d_Spu.MerchId = merchId;
                 d_Spu.Name = rop.Name.Trim2();
                 d_Spu.SpuCode = rop.SpuCode.Trim2();
-                d_Spu.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
-                d_Spu.PrdKindId1 = rop.KindIds[0];
-                d_Spu.PrdKindId2 = rop.KindIds[1];
-                d_Spu.PrdKindId3 = rop.KindIds[2];
+                d_Spu.KindIds = string.Join(",", rop.KindIds.ToArray());
+                d_Spu.KindId1 = rop.KindIds[0];
+                d_Spu.KindId2 = rop.KindIds[1];
+                d_Spu.KindId3 = rop.KindIds[2];
                 d_Spu.PinYinIndex = CommonUtil.GetPingYinIndex(d_Spu.Name);
                 d_Spu.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
                 d_Spu.MainImgUrl = ImgSet.GetMain_O(d_Spu.DisplayImgUrls);
@@ -301,7 +301,7 @@ namespace LocalS.Service.Api.Merch
                 ret.SpuCode = d_Spu.SpuCode;
                 ret.DetailsDes = d_Spu.DetailsDes.ToJsonObject<List<ImgSet>>();
                 ret.BriefDes = d_Spu.BriefDes;
-                ret.KindIds = string.IsNullOrEmpty(d_Spu.PrdKindIds) ? new List<string>() : d_Spu.PrdKindIds.Split(',').ToList();
+                ret.KindIds = string.IsNullOrEmpty(d_Spu.KindIds) ? new List<string>() : d_Spu.KindIds.Split(',').ToList();
                 ret.CharTags = d_Spu.CharTags.ToJsonObject<List<string>>();
                 ret.DisplayImgUrls = d_Spu.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
                 ret.Kinds = GetKindTree();
@@ -370,10 +370,10 @@ namespace LocalS.Service.Api.Merch
 
                 d_Spu.Name = rop.Name;
                 d_Spu.SpuCode = rop.SpuCode;
-                d_Spu.PrdKindIds = string.Join(",", rop.KindIds.ToArray());
-                d_Spu.PrdKindId1 = rop.KindIds[0];
-                d_Spu.PrdKindId2 = rop.KindIds[1];
-                d_Spu.PrdKindId3 = rop.KindIds[2];
+                d_Spu.KindIds = string.Join(",", rop.KindIds.ToArray());
+                d_Spu.KindId1 = rop.KindIds[0];
+                d_Spu.KindId2 = rop.KindIds[1];
+                d_Spu.KindId3 = rop.KindIds[2];
                 d_Spu.PinYinIndex = CommonUtil.GetPingYinIndex(d_Spu.Name);
                 d_Spu.BriefDes = rop.BriefDes;
                 d_Spu.DetailsDes = rop.DetailsDes.ToJsonString();

@@ -65,9 +65,9 @@ namespace LocalS.BLL
                     r_spu.IsMavkBuy = d_spu.IsMavkBuy;
                     r_spu.IsSupRentService = d_spu.IsSupRentService;
                     r_spu.SupReceiveMode = d_spu.SupReceiveMode;
-                    r_spu.KindId1 = d_spu.PrdKindId1;
-                    r_spu.KindId2 = d_spu.PrdKindId2;
-                    r_spu.KindId3 = d_spu.PrdKindId3;
+                    r_spu.KindId1 = d_spu.KindId1;
+                    r_spu.KindId2 = d_spu.KindId2;
+                    r_spu.KindId3 = d_spu.KindId3;
 
                     var d_skus = CurrentDb.PrdProductSku.Where(m => m.SpuId == spuId).ToList();
 
