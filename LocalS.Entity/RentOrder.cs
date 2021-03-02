@@ -47,6 +47,7 @@ namespace LocalS.Entity
         public string SkuSpecDes { get; set; }
         public string SkuProducer { get; set; }
         public string SkuMainImgUrl { get; set; }
+        public string SkuDeviceSn { get; set; }
         public decimal DepositAmount { get; set; }
         public bool IsPayDeposit { get; set; }
         public DateTime? PayDepositTime { get; set; }
