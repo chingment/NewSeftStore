@@ -14,7 +14,7 @@ namespace LocalS.Service.Api.StoreApp
         private bool _isOffSell = true;
 
         public string Id { get; set; }
-        public string ProductId { get; set; }
+        public string SpuId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public string BriefDes { get; set; }

@@ -16,7 +16,7 @@ namespace LocalS.BLL
         public string CumCode { get; set; }
         public string Producer { get; set; }
         public string PinYinIndex { get; set; }
-        public string ProductId { get; set; }
+        public string SpuId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }

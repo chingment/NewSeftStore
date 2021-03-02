@@ -37,7 +37,7 @@ namespace LocalS.Service.Api.StoreApp
             foreach (var d_clientCart in d_clientCarts)
             {
 
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.ShopMode, d_clientCart.MerchId, d_clientCart.StoreId, d_clientCart.ShopId, null, d_clientCart.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.ShopMode, d_clientCart.MerchId, d_clientCart.StoreId, d_clientCart.ShopId, null, d_clientCart.SkuId);
 
 
                 if (r_productSku != null)
@@ -46,8 +46,8 @@ namespace LocalS.Service.Api.StoreApp
                     {
                         var m_cartProductSku = new CartDataModel.ProductSkuModel();
                         m_cartProductSku.CartId = d_clientCart.Id;
-                        m_cartProductSku.Id = d_clientCart.PrdProductSkuId;
-                        m_cartProductSku.ProductId = d_clientCart.PrdProductId;
+                        m_cartProductSku.Id = d_clientCart.SkuId;
+                        m_cartProductSku.SpuId = d_clientCart.SpuId;
                         m_cartProductSku.Name = r_productSku.Name;
                         m_cartProductSku.MainImgUrl = r_productSku.MainImgUrl;
                         m_cartProductSku.SalePrice = r_productSku.Stocks[0].SalePrice;
@@ -146,7 +146,7 @@ namespace LocalS.Service.Api.StoreApp
                             return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoSelectShopMode, "未选择购物方式");
                         }
 
-                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.PrdProductSkuId == item.Id && m.ShopMode == item.ShopMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
+                        var clientCart = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rop.StoreId && m.SkuId == item.Id && m.ShopMode == item.ShopMode && m.Status == E_ClientCartStatus.WaitSettle).FirstOrDefault();
 
                         switch (rop.Operate)
                         {
@@ -185,8 +185,8 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
                                     clientCart.ShopId = item.ShopId;
-                                    clientCart.PrdProductId = r_productSku.ProductId;
-                                    clientCart.PrdProductSkuId = item.Id;
+                                    clientCart.SpuId = r_productSku.SpuId;
+                                    clientCart.SkuId = item.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;
                                     clientCart.Creator = operater;

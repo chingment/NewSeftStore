@@ -8,14 +8,14 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class SlotModel
     {
+        public string SlotId { get; set; }
         public string StockId { get; set; }
         public string CabinetId { get; set; }
-        public string SlotId { get; set; }
-        public string ProductSkuId { get; set; }
-        public string CumCode { get; set; }
-        public string Name { get; set; }
-        public string MainImgUrl { get; set; }
-        public string SpecDes { get; set; }
+        public string SkuId { get; set; }
+        public string SkuCumCode { get; set; }
+        public string SkuName { get; set; }
+        public string SkuMainImgUrl { get; set; }
+        public string SkuSpecDes { get; set; }
         public int SumQuantity { get; set; }
         public int LockQuantity { get; set; }
         public int SellQuantity { get; set; }

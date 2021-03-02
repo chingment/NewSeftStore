@@ -270,7 +270,7 @@ namespace LocalS.BLL.Biz
             return string.Format("http://file.17fanju.com/upload/pickup/{0}.jpg", imgId);
         }
 
-        public decimal CalCouponAmount(decimal sum_amount, decimal atLeastAmount, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, string storeId, string productId, int kindId3, decimal saleAmount)
+        public decimal CalCouponAmount(decimal sum_amount, decimal atLeastAmount, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, string storeId, string spuId, int kindId3, decimal saleAmount)
         {
             LogUtil.Info("=>1");
             if (atLeastAmount > sum_amount)
@@ -364,7 +364,7 @@ namespace LocalS.BLL.Biz
                     if (arr_useArea != null)
                     {
                         LogUtil.Info("=>4");
-                        var obj_useArea = arr_useArea.Where(m => m.Id == productId).FirstOrDefault();
+                        var obj_useArea = arr_useArea.Where(m => m.Id == spuId).FirstOrDefault();
                         if (obj_useArea != null)
                         {
                             LogUtil.Info("=>5");
@@ -802,7 +802,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var buildOrderSub in buildOrder.Childs)
                         {
-                            var productSku = buildOrderSkus.Where(m => m.Id == buildOrderSub.ProductSkuId).FirstOrDefault();
+                            var productSku = buildOrderSkus.Where(m => m.Id == buildOrderSub.SkuId).FirstOrDefault();
 
                             var d_OrderSub = new OrderSub();
                             d_OrderSub.Id = d_Order.Id + buildOrder.Childs.IndexOf(buildOrderSub).ToString();
@@ -821,14 +821,14 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.CabinetId = buildOrderSub.CabinetId;
                             d_OrderSub.SlotId = buildOrderSub.SlotId;
                             d_OrderSub.OrderId = d_Order.Id;
-                            d_OrderSub.PrdProductSkuId = buildOrderSub.ProductSkuId;
-                            d_OrderSub.PrdProductId = productSku.ProductId;
-                            d_OrderSub.PrdProductSkuName = productSku.Name;
-                            d_OrderSub.PrdProductSkuMainImgUrl = productSku.MainImgUrl;
-                            d_OrderSub.PrdProductSkuSpecDes = productSku.SpecDes;
-                            d_OrderSub.PrdProductSkuProducer = productSku.Producer;
-                            d_OrderSub.PrdProductSkuBarCode = productSku.BarCode;
-                            d_OrderSub.PrdProductSkuCumCode = productSku.CumCode;
+                            d_OrderSub.SkuId = buildOrderSub.SkuId;
+                            d_OrderSub.SpuId = productSku.SpuId;
+                            d_OrderSub.SkuName = productSku.Name;
+                            d_OrderSub.SkuMainImgUrl = productSku.MainImgUrl;
+                            d_OrderSub.SkuSpecDes = productSku.SpecDes;
+                            d_OrderSub.SkuProducer = productSku.Producer;
+                            d_OrderSub.SkuBarCode = productSku.BarCode;
+                            d_OrderSub.SkuCumCode = productSku.CumCode;
                             d_OrderSub.PrdKindId1 = productSku.KindId1;
                             d_OrderSub.PrdKindId2 = productSku.KindId2;
                             d_OrderSub.PrdKindId3 = productSku.KindId3;
@@ -862,7 +862,7 @@ namespace LocalS.BLL.Biz
                             //购物或租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
 
                                 if (ret_OperateStock.Result != ResultType.Success)
                                 {
@@ -1125,14 +1125,14 @@ namespace LocalS.BLL.Biz
                                 d_RentOrder.MerchId = d_OrderSub.MerchId;
                                 d_RentOrder.OrdeId = d_OrderSub.OrderId;
                                 d_RentOrder.ClientUserId = d_OrderSub.ClientUserId;
-                                d_RentOrder.SpuId = d_OrderSub.PrdProductId;
-                                d_RentOrder.SkuId = d_OrderSub.PrdProductSkuId;
-                                d_RentOrder.SkuName = d_OrderSub.PrdProductSkuName;
-                                d_RentOrder.SkuCumCode = d_OrderSub.PrdProductSkuCumCode;
-                                d_RentOrder.SkuBarCode = d_OrderSub.PrdProductSkuBarCode;
-                                d_RentOrder.SkuSpecDes = d_OrderSub.PrdProductSkuSpecDes;
-                                d_RentOrder.SkuProducer = d_OrderSub.PrdProductSkuProducer;
-                                d_RentOrder.SkuMainImgUrl = d_OrderSub.PrdProductSkuMainImgUrl;
+                                d_RentOrder.SpuId = d_OrderSub.SpuId;
+                                d_RentOrder.SkuId = d_OrderSub.SkuId;
+                                d_RentOrder.SkuName = d_OrderSub.SkuName;
+                                d_RentOrder.SkuCumCode = d_OrderSub.SkuCumCode;
+                                d_RentOrder.SkuBarCode = d_OrderSub.SkuBarCode;
+                                d_RentOrder.SkuSpecDes = d_OrderSub.SkuSpecDes;
+                                d_RentOrder.SkuProducer = d_OrderSub.SkuProducer;
+                                d_RentOrder.SkuMainImgUrl = d_OrderSub.SkuMainImgUrl;
                                 d_RentOrder.DepositAmount = d_OrderSub.ChargeAmount;
                                 d_RentOrder.IsPayDeposit = true;
                                 d_RentOrder.PayDepositTime = DateTime.Now;
@@ -1205,7 +1205,7 @@ namespace LocalS.BLL.Biz
                                 d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
 
 
-                                var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.Id == d_OrderSub.PrdProductSkuId).FirstOrDefault();
+                                var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.Id == d_OrderSub.SkuId).FirstOrDefault();
                                 if (d_memberFeeSt != null)
                                 {
                                     var d_memberCouponSts = CurrentDb.MemberCouponSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.LevelStId == d_memberFeeSt.LevelStId).ToList();
@@ -1296,7 +1296,7 @@ namespace LocalS.BLL.Biz
                             //购物和租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
@@ -1313,13 +1313,13 @@ namespace LocalS.BLL.Biz
                                 d_ClientReffSku.ClientUserId = d_OrderSub.ClientUserId;
                                 d_ClientReffSku.OrderId = d_OrderSub.OrderId;
                                 d_ClientReffSku.OrderSubId = d_OrderSub.Id;
-                                d_ClientReffSku.SkuId = d_OrderSub.PrdProductSkuId;
-                                d_ClientReffSku.SkuName = d_OrderSub.PrdProductSkuName;
-                                d_ClientReffSku.SkuMainImgUrl = d_OrderSub.PrdProductSkuMainImgUrl;
-                                d_ClientReffSku.SkuBarCode = d_OrderSub.PrdProductSkuBarCode;
-                                d_ClientReffSku.SkuCumCode = d_OrderSub.PrdProductSkuCumCode;
-                                d_ClientReffSku.SkuSpecDes = d_OrderSub.PrdProductSkuSpecDes;
-                                d_ClientReffSku.SkuProducer = d_OrderSub.PrdProductSkuProducer;
+                                d_ClientReffSku.SkuId = d_OrderSub.SkuId;
+                                d_ClientReffSku.SkuName = d_OrderSub.SkuName;
+                                d_ClientReffSku.SkuMainImgUrl = d_OrderSub.SkuMainImgUrl;
+                                d_ClientReffSku.SkuBarCode = d_OrderSub.SkuBarCode;
+                                d_ClientReffSku.SkuCumCode = d_OrderSub.SkuCumCode;
+                                d_ClientReffSku.SkuSpecDes = d_OrderSub.SkuSpecDes;
+                                d_ClientReffSku.SkuProducer = d_OrderSub.SkuProducer;
                                 d_ClientReffSku.Quantity = d_OrderSub.Quantity;
                                 d_ClientReffSku.Creator = d_OrderSub.Creator;
                                 d_ClientReffSku.CreateTime = d_OrderSub.CreateTime;
@@ -1587,7 +1587,7 @@ namespace LocalS.BLL.Biz
                         //购物货租赁进行库存操作
                         if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                         {
-                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, d_OrderSub.Quantity);
+                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
                             if (result_OperateStock.Result != ResultType.Success)
                             {
                                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
@@ -2114,16 +2114,16 @@ namespace LocalS.BLL.Biz
             LogUtil.Info("orderSubs.Count:" + orderSubs.Count);
 
 
-            var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+            var skuIds = orderSubs.Select(m => m.SkuId).Distinct().ToArray();
 
-            foreach (var productSkuId in productSkuIds)
+            foreach (var skuId in skuIds)
             {
-                var orderSubs_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+                var orderSubs_Sku = orderSubs.Where(m => m.SkuId == skuId).ToList();
 
                 var model = new OrderProductSkuByPickupModel();
-                model.ProductSkuId = productSkuId;
-                model.Name = orderSubs_Sku[0].PrdProductSkuName;
-                model.MainImgUrl = orderSubs_Sku[0].PrdProductSkuMainImgUrl;
+                model.SkuId = skuId;
+                model.Name = orderSubs_Sku[0].SkuName;
+                model.MainImgUrl = orderSubs_Sku[0].SkuMainImgUrl;
                 model.Quantity = orderSubs_Sku.Sum(m => m.Quantity);
                 model.QuantityBySuccess = orderSubs_Sku.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked).Count();
 
@@ -2261,7 +2261,7 @@ namespace LocalS.BLL.Biz
 
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，扣减库存失败");
@@ -2286,7 +2286,7 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.MachineId = d_OrderSub.MachineId;
                             orderPickupLog.UniqueId = d_OrderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
-                            orderPickupLog.PrdProductSkuId = d_OrderSub.PrdProductSkuId;
+                            orderPickupLog.SkuId = d_OrderSub.SkuId;
                             orderPickupLog.CabinetId = d_OrderSub.CabinetId;
                             orderPickupLog.SlotId = d_OrderSub.SlotId;
                             orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
@@ -2300,7 +2300,7 @@ namespace LocalS.BLL.Biz
                         {
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
 
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
@@ -2324,7 +2324,7 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.MachineId = d_OrderSub.MachineId;
                             orderPickupLog.UniqueId = d_OrderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
-                            orderPickupLog.PrdProductSkuId = d_OrderSub.PrdProductSkuId;
+                            orderPickupLog.SkuId = d_OrderSub.SkuId;
                             orderPickupLog.CabinetId = d_OrderSub.CabinetId;
                             orderPickupLog.SlotId = d_OrderSub.SlotId;
                             orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;

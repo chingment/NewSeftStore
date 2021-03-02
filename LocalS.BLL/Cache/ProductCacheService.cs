@@ -13,9 +13,9 @@ namespace LocalS.BLL
 {
     public class ProductCacheService : BaseService
     {
-        public void RemoveSpuInfo(string merchId, string productId)
+        public void RemoveSpuInfo(string merchId, string spuId)
         {
-            var r_spu = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), productId.ToLower());
+            var r_spu = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
             if (r_spu != null)
             {
                 var specIdxSkus = r_spu.SpecIdxSkus;
@@ -34,20 +34,20 @@ namespace LocalS.BLL
                 }
             }
 
-            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), productId.ToLower());
-            RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("*:{0}", productId.ToLower()));
+            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
+            RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("*:{0}", spuId.ToLower()));
         }
 
-        public ProductSpuInfoModel GetSpuInfo(string merchId, string productId)
+        public ProductSpuInfoModel GetSpuInfo(string merchId, string spuId)
         {
-            var r_spu = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), productId.ToLower());
+            var r_spu = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
 
             if (r_spu == null)
             {
                 r_spu = new ProductSpuInfoModel();
-                r_spu.Id = productId;
+                r_spu.Id = spuId;
 
-                var d_spu = CurrentDb.PrdProduct.Where(m => m.Id == productId).FirstOrDefault();
+                var d_spu = CurrentDb.PrdProduct.Where(m => m.Id == spuId).FirstOrDefault();
 
                 if (d_spu != null)
                 {
@@ -69,7 +69,7 @@ namespace LocalS.BLL
                     r_spu.KindId2 = d_spu.PrdKindId2;
                     r_spu.KindId3 = d_spu.PrdKindId3;
 
-                    var d_skus = CurrentDb.PrdProductSku.Where(m => m.PrdProductId == productId).ToList();
+                    var d_skus = CurrentDb.PrdProductSku.Where(m => m.SpuId == spuId).ToList();
 
                     foreach (var d_sku in d_skus)
                     {
@@ -77,36 +77,36 @@ namespace LocalS.BLL
 
                         if (!string.IsNullOrEmpty(d_sku.CumCode))
                         {
-                            RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("CC:{0}:{1}", d_sku.CumCode.ToLower(), productId.ToLower()), productId.ToLower(), StackExchange.Redis.When.Always);
+                            RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("CC:{0}:{1}", d_sku.CumCode.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                         }
                     }
 
 
                     if (!string.IsNullOrEmpty(r_spu.PinYinIndex))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("PY:{0}:{1}", r_spu.PinYinIndex.ToLower(), productId.ToLower()), productId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("PY:{0}:{1}", r_spu.PinYinIndex.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(r_spu.Name))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("NA:{0}:{1}", r_spu.Name.ToLower(), productId.ToLower()), productId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("NA:{0}:{1}", r_spu.Name.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(r_spu.SpuCode))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("SC:{0}:{1}", r_spu.SpuCode.ToLower(), productId.ToLower()), productId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("SC:{0}:{1}", r_spu.SpuCode.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                     }
                 }
 
-                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), productId.ToLower(), JsonConvertUtil.SerializeObject(r_spu), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower(), JsonConvertUtil.SerializeObject(r_spu), StackExchange.Redis.When.Always);
             }
 
             return r_spu;
         }
 
-        public ProductSkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string productSkuId)
+        public ProductSkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string skuId)
         {
-            var productSkuInfo = GetSkuInfo(merchId, productSkuId);
+            var productSkuInfo = GetSkuInfo(merchId, skuId);
 
             var productSkuStocks = new List<ProductSkuStockModel>();
 
@@ -114,11 +114,11 @@ namespace LocalS.BLL
 
             if (shopMode == E_ShopMode.Mall)
             {
-                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Mall && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == "0" && m.MachineId == "0" && m.PrdProductSkuId == productSkuId).ToList();
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Mall && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == "0" && m.MachineId == "0" && m.SkuId == skuId).ToList();
             }
             else if (shopMode == E_ShopMode.Shop)
             {
-                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Shop && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == "0" && m.PrdProductSkuId == productSkuId).ToList();
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Shop && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == "0" && m.SkuId == skuId).ToList();
             }
             else if (shopMode == E_ShopMode.Machine)
             {
@@ -128,7 +128,7 @@ namespace LocalS.BLL
                 }
                 if (machineIds != null && machineIds.Length > 0)
                 {
-                    sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && machineIds.Contains(m.MachineId) && m.PrdProductSkuId == productSkuId).ToList();
+                    sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && machineIds.Contains(m.MachineId) && m.SkuId == skuId).ToList();
                 }
             }
 
@@ -157,13 +157,13 @@ namespace LocalS.BLL
             return productSkuInfo;
         }
 
-        public List<ProductSkuInfoModel> GetSkuInfo(string merchId, string[] productSkuIds)
+        public List<ProductSkuInfoModel> GetSkuInfo(string merchId, string[] skuIds)
         {
             var oList = new List<ProductSkuInfoModel>();
 
-            foreach(var productSkuId in productSkuIds)
+            foreach(var skuId in skuIds)
             {
-                var productSku = GetSkuInfo(merchId, productSkuId);
+                var productSku = GetSkuInfo(merchId, skuId);
                 if (productSku != null)
                     oList.Add(productSku);
             }
@@ -171,18 +171,18 @@ namespace LocalS.BLL
             return oList;
         }
 
-        public ProductSkuInfoModel GetSkuInfo(string merchId, string productSkuId)
+        public ProductSkuInfoModel GetSkuInfo(string merchId, string skuId)
         {
-            var r_sku = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), productSkuId.ToLower());
+            var r_sku = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), skuId.ToLower());
             //判断商品信息在缓存数据库是否存在，不存在则加载数据到缓存中
             if (r_sku == null)
             {
                 r_sku = new ProductSkuInfoModel();
-                r_sku.Id = productSkuId;
-                var d_sku = CurrentDb.PrdProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+                r_sku.Id = skuId;
+                var d_sku = CurrentDb.PrdProductSku.Where(m => m.Id == skuId).FirstOrDefault();
                 if (d_sku != null)
                 {
-                    var r_spu = GetSpuInfo(merchId, d_sku.PrdProductId);
+                    var r_spu = GetSpuInfo(merchId, d_sku.SpuId);
 
                     r_sku = new ProductSkuInfoModel();
                     r_sku.Id = d_sku.Id;
@@ -190,7 +190,7 @@ namespace LocalS.BLL
                     r_sku.SpuCode = r_spu.SpuCode;
                     r_sku.CumCode = d_sku.CumCode;
                     r_sku.PinYinIndex = d_sku.PinYinIndex;
-                    r_sku.ProductId = d_sku.PrdProductId;
+                    r_sku.SpuId = d_sku.SpuId;
                     r_sku.Name = d_sku.Name.NullToEmpty();
                     r_sku.DisplayImgUrls = r_spu.DisplayImgUrls;
                     r_sku.MainImgUrl = r_spu.MainImgUrl;
@@ -211,26 +211,26 @@ namespace LocalS.BLL
                     r_sku.KindId3 = r_spu.KindId3;
                     if (!string.IsNullOrEmpty(r_sku.BarCode))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("BC:{0}:{1}", r_sku.BarCode.ToLower(), productSkuId.ToLower()), productSkuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("BC:{0}:{1}", r_sku.BarCode.ToLower(), skuId.ToLower()), skuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(r_sku.PinYinIndex))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("PY:{0}:{1}", r_sku.PinYinIndex.ToLower(), productSkuId.ToLower()), productSkuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("PY:{0}:{1}", r_sku.PinYinIndex.ToLower(), skuId.ToLower()), skuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(r_sku.Name))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("NA:{0}:{1}", r_sku.Name.ToLower(), productSkuId.ToLower()), productSkuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("NA:{0}:{1}", r_sku.Name.ToLower(), skuId.ToLower()), skuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
                     if (!string.IsNullOrEmpty(r_sku.CumCode))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("CC:{0}:{1}", r_sku.CumCode.ToLower(), productSkuId.ToLower()), productSkuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("CC:{0}:{1}", r_sku.CumCode.ToLower(), skuId.ToLower()), skuId.ToLower(), StackExchange.Redis.When.Always);
                     }
                 }
 
-                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), productSkuId.ToLower(), JsonConvertUtil.SerializeObject(r_sku), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), skuId.ToLower(), JsonConvertUtil.SerializeObject(r_sku), StackExchange.Redis.When.Always);
             }
 
             return r_sku;
@@ -257,7 +257,7 @@ namespace LocalS.BLL
 
             r_skuIds = r_skuIds.Distinct().Take(10).ToList();
 
-            LogUtil.Info("productSkuIds.length:" + r_skuIds.Count);
+            LogUtil.Info("SkuIds.length:" + r_skuIds.Count);
 
             if (r_skuIds.Count > 0)
             {
@@ -269,8 +269,8 @@ namespace LocalS.BLL
                     {
                         var l_sku = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(r_sku);
                         var m_search = new ProductSkuInfoBySearchModel();
-                        m_search.ProductSkuId = l_sku.Id;
-                        m_search.ProductId = l_sku.ProductId;
+                        m_search.SkuId = l_sku.Id;
+                        m_search.SpuId = l_sku.SpuId;
                         m_search.Name = l_sku.Name;
                         m_search.SpuCode = l_sku.SpuCode;
                         m_search.CumCode = l_sku.CumCode;
@@ -308,7 +308,7 @@ namespace LocalS.BLL
 
             r_spuIds = r_spuIds.Distinct().Take(10).ToList();
 
-            LogUtil.Info("productIds.length:" + r_spuIds.Count);
+            LogUtil.Info("r_spuIds.length:" + r_spuIds.Count);
 
             if (r_spuIds.Count > 0)
             {
@@ -320,7 +320,7 @@ namespace LocalS.BLL
                     {
                         var l_spu = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSpuInfoModel>(r_spu);
                         var m_search = new ProductSpuInfoBySearchModel();
-                        m_search.ProductId = l_spu.Id;
+                        m_search.SpuId = l_spu.Id;
                         m_search.Name = l_spu.Name;
                         m_search.SpuCode = l_spu.SpuCode;
                         m_search.MainImgUrl = ImgSet.Convert_S(l_spu.MainImgUrl);

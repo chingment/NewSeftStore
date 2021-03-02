@@ -31,23 +31,23 @@ m.ShopId == shopId &&
 m.MachineId == machineId &&
 m.ShopMode == Entity.E_ShopMode.Machine)
                          orderby m.CreateTime
-                         select new { m.PrdProductSkuId }).Distinct();
+                         select new { m.SkuId }).Distinct();
 
             pageEntiy.Total = query.Count();
             pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            query = query.OrderBy(m => m.PrdProductSkuId).Skip(pageSize * pageIndex).Take(pageSize);
+            query = query.OrderBy(m => m.SkuId).Skip(pageSize * pageIndex).Take(pageSize);
 
             var list = query.Distinct().ToList();
 
 
             foreach (var item in list)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Machine, merchId, storeId, shopId, new string[] { machineId }, item.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Machine, merchId, storeId, shopId, new string[] { machineId }, item.SkuId);
 
                 var m_productSku = new ProductSkuModel();
-                m_productSku.ProductSkuId = r_productSku.Id;
-                m_productSku.ProductId = r_productSku.ProductId;
+                m_productSku.SkuId = r_productSku.Id;
+                m_productSku.SpuId = r_productSku.SpuId;
                 m_productSku.Name = r_productSku.Name;
                 m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
                 m_productSku.DisplayImgUrls = r_productSku.DisplayImgUrls;

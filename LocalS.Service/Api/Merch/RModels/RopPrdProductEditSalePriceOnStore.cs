@@ -10,10 +10,10 @@ namespace LocalS.Service.Api.Merch
     {
         public string StoreId { get; set; }
 
-        public string ProductSkuId { get; set; }
+        public string SkuId { get; set; }
 
-        public decimal ProductSkuSalePrice { get; set; }
+        public decimal SkuSalePrice { get; set; }
 
-        public bool ProductSkuIsOffSell { get; set; }
+        public bool SkuIsOffSell { get; set; }
     }
 }

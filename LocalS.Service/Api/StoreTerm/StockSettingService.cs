@@ -59,19 +59,19 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in machineStocks)
             {
-                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.PrdProductSkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.SkuId);
 
-                if (r_ProductSku != null)
+                if (r_Sku != null)
                 {
                     var slot = new SlotModel();
                     slot.SlotId = item.SlotId;
                     slot.StockId = item.Id;
                     slot.CabinetId = item.CabinetId;
-                    slot.ProductSkuId = r_ProductSku.Id;
-                    slot.CumCode = r_ProductSku.CumCode;
-                    slot.Name = r_ProductSku.Name;
-                    slot.MainImgUrl = ImgSet.Convert_S(r_ProductSku.MainImgUrl);
-                    slot.SpecDes = SpecDes.GetDescribe(r_ProductSku.SpecDes);
+                    slot.SkuId = r_Sku.Id;
+                    slot.SkuCumCode = r_Sku.CumCode;
+                    slot.SkuName = r_Sku.Name;
+                    slot.SkuMainImgUrl = ImgSet.Convert_S(r_Sku.MainImgUrl);
+                    slot.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
                     slot.SumQuantity = item.SumQuantity;
                     slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
                     slot.SellQuantity = item.SellQuantity;
@@ -117,13 +117,13 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定门店", null);
             }
 
-            if (string.IsNullOrEmpty(rop.ProductSkuId))
+            if (string.IsNullOrEmpty(rop.SkuId))
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId);
             }
             else
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
             }
 
             if (result.Result == ResultType.Success)
@@ -237,7 +237,7 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.PrdProductSkuId);
+                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
 
                         if (resultOperateSlot.Result != ResultType.Success)
                         {

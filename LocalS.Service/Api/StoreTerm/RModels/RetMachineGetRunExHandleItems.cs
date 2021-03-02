@@ -32,7 +32,7 @@ namespace LocalS.Service.Api.StoreTerm
         public class ExUnique
         {
             public string UniqueId { get; set; }
-            public string ProductSkuId { get; set; }
+            public string SkuId { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
             public int Quantity { get; set; }

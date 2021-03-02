@@ -15,11 +15,11 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class CouponService : BaseService
     {
-        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<BuildSku> productSkus)
+        private bool GetCanSelected(E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, string merchId, string storeId, string clientUserId, List<BuildSku> skus)
         {
             if (useAreaType == E_Coupon_UseAreaType.All)
             {
-                var sum_amount = productSkus.Sum(m => m.SaleAmount);
+                var sum_amount = skus.Sum(m => m.SaleAmount);
 
                 if (atLeastAmount > sum_amount)
                     return false;
@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     if (arr_useAreaValue.Where(m => m.Id == storeId).Count() > 0)
                     {
-                        var sum_amount = productSkus.Sum(m => m.SaleAmount);
+                        var sum_amount = skus.Sum(m => m.SaleAmount);
 
                         if (atLeastAmount > sum_amount)
                             return false;
@@ -49,17 +49,17 @@ namespace LocalS.Service.Api.StoreApp
 
                 List<string> kindIds2 = new List<string>();
 
-                var productSkuIds = productSkus.Select(m => m.Id).ToList();
+                var skuIds = skus.Select(m => m.Id).ToList();
 
-                foreach (var productSkuId in productSkuIds)
+                foreach (var skuId in skuIds)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
 
-                    if (r_productSku != null)
+                    if (r_Sku != null)
                     {
                         foreach (var kind1 in kinds1)
                         {
-                            if (kind1["id"].ToString() == r_productSku.KindId3.ToString())
+                            if (kind1["id"].ToString() == r_Sku.KindId3.ToString())
                                 return true;
                         }
                     }
@@ -70,17 +70,17 @@ namespace LocalS.Service.Api.StoreApp
             {
                 var prodcuts1 = useAreaValue.ToJsonObject<JArray>();
 
-                var productSkuIds = productSkus.Select(m => m.Id).ToList();
+                var skuIds = skus.Select(m => m.Id).ToList();
 
-                foreach (var productSkuId in productSkuIds)
+                foreach (var skuId in skuIds)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, productSkuId);
+                    var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
 
                     if (r_productSku != null)
                     {
                         foreach (var prodcut1 in prodcuts1)
                         {
-                            if (prodcut1["id"].ToString() == r_productSku.ProductId)
+                            if (prodcut1["id"].ToString() == r_productSku.SpuId)
                                 return true;
                         }
                     }
@@ -432,7 +432,7 @@ namespace LocalS.Service.Api.StoreApp
 
                         if (ids != null)
                         {
-                            cal_sum_amount = rop.ProductSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
+                            cal_sum_amount = rop.ProductSkus.Where(m => ids.Contains(m.SpuId)).Sum(m => m.SaleAmount);
                         }
                     }
 
@@ -442,7 +442,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var productSku in rop.ProductSkus)
                 {
-                    productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, item.AtLeastAmount, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, rop.StoreId, productSku.ProductId, productSku.KindId3, productSku.SaleAmount), 2);
+                    productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, item.AtLeastAmount, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, rop.StoreId, productSku.SpuId, productSku.KindId3, productSku.SaleAmount), 2);
                 }
 
 

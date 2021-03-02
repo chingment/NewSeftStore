@@ -39,9 +39,9 @@ namespace LocalS.Service.Api.StoreApp
                     var sku = new FsTemplateData.TmplOrderSku();
                     sku.UniqueId = orderSub.Id;
                     sku.UniqueType = E_UniqueType.OrderSub;
-                    sku.Id = orderSub.PrdProductSkuId;
-                    sku.Name = orderSub.PrdProductSkuName;
-                    sku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                    sku.Id = orderSub.SkuId;
+                    sku.Name = orderSub.SkuName;
+                    sku.MainImgUrl = orderSub.SkuMainImgUrl;
                     sku.Quantity = orderSub.Quantity.ToString();
                     sku.ChargeAmount = orderSub.ChargeAmount.ToF2Price();
                     sku.StatusName = "";
@@ -54,22 +54,22 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+                var skuIds = orderSubs.Select(m => m.SkuId).Distinct().ToArray();
 
-                foreach (var productSkuId in productSkuIds)
+                foreach (var skuId in skuIds)
                 {
-                    var orderSubChilds_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+                    var orderSubChilds_Sku = orderSubs.Where(m => m.SkuId == skuId).ToList();
 
                     var field = new FsTemplateData();
 
                     field.Type = "SkuTmp";
 
                     var sku = new FsTemplateData.TmplOrderSku();
-                    sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
+                    sku.Id = orderSubChilds_Sku[0].SkuId;
                     sku.UniqueId = order.Id;
                     sku.UniqueType = E_UniqueType.Order;
-                    sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
-                    sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
+                    sku.Name = orderSubChilds_Sku[0].SkuName;
+                    sku.MainImgUrl = orderSubChilds_Sku[0].SkuMainImgUrl;
                     sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
                     sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
                     sku.StatusName = "";

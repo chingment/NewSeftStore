@@ -369,10 +369,10 @@ namespace LocalS.Service.Api.Merch
                                 var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                                 if (slotStock != null)
                                 {
-                                    var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, slotStock.PrdProductSkuId);
-                                    col.ProductSkuId = bizProductSku.Id;
-                                    col.Name = bizProductSku.Name;
-                                    col.MainImgUrl = bizProductSku.MainImgUrl;
+                                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, slotStock.SkuId);
+                                    col.SkuId = r_Sku.Id;
+                                    col.Name = r_Sku.Name;
+                                    col.MainImgUrl = r_Sku.MainImgUrl;
                                     col.SumQuantity = slotStock.SumQuantity;
                                     col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
                                     col.SellQuantity = slotStock.SellQuantity;
@@ -422,11 +422,11 @@ namespace LocalS.Service.Api.Merch
                                         var slotStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
                                         if (slotStock != null)
                                         {
-                                            var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, slotStock.PrdProductSkuId);
+                                            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, slotStock.SkuId);
 
-                                            col.ProductSkuId = bizProductSku.Id;
-                                            col.Name = bizProductSku.Name;
-                                            col.MainImgUrl = bizProductSku.MainImgUrl;
+                                            col.SkuId = r_Sku.Id;
+                                            col.Name = r_Sku.Name;
+                                            col.MainImgUrl = r_Sku.MainImgUrl;
                                             col.SumQuantity = slotStock.SumQuantity;
                                             col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
                                             col.SellQuantity = slotStock.SellQuantity;
@@ -462,7 +462,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.ProductSkuId, rop.Version, rop.SumQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity);
 
             if (result.Result == ResultType.Success)
             {

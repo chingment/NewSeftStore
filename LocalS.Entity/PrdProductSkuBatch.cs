@@ -9,8 +9,8 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        public string PrdProductId { get; set; }
-        public string PrdProductSkuId { get; set; }
+        public string SpuId { get; set; }
+        public string SkuId { get; set; }
         public string BatchNumber { get; set; }
         public string ProductDate { get; set; }
         public string ValidDate { get; set; }

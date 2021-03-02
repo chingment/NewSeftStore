@@ -190,7 +190,7 @@ namespace LocalS.BLL.Biz
                 StringBuilder remark = new StringBuilder("");
 
                 string productSkuName = "";
-                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(d_Machine.CurUseMerchId, model.ProductSkuId);
+                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(d_Machine.CurUseMerchId, model.SkuId);
                 if (r_ProductSku != null)
                 {
                     productSkuName = r_ProductSku.Name;
@@ -245,7 +245,7 @@ namespace LocalS.BLL.Biz
                         d_OrderPickupLog.MachineId = d_Order.MachineId;
                         d_OrderPickupLog.UniqueId = model.UniqueId;
                         d_OrderPickupLog.UniqueType = E_UniqueType.OrderSub;
-                        d_OrderPickupLog.PrdProductSkuId = model.ProductSkuId;
+                        d_OrderPickupLog.SkuId = model.SkuId;
                         d_OrderPickupLog.CabinetId = model.CabinetId;
                         d_OrderPickupLog.SlotId = model.SlotId;
                         d_OrderPickupLog.Status = model.PickupStatus;
@@ -327,7 +327,7 @@ namespace LocalS.BLL.Biz
                                     {
                                         if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                         {
-                                            var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.PrdProductSkuId, 1);
+                                            var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                             if (resultOperateStock.Result != ResultType.Success)
                                             {
                                                 return;
@@ -402,7 +402,7 @@ namespace LocalS.BLL.Biz
             StringBuilder remark = new StringBuilder("");
             string productSkuName = "[测试]";
 
-            var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.ProductSkuId);
+            var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.SkuId);
 
             if (r_ProductSku != null)
             {

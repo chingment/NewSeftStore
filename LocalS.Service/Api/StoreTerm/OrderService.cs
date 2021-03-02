@@ -72,7 +72,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var productSku in rop.ProductSkus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.ProductSkuId, Quantity = productSku.Quantity, ShopMode = E_ShopMode.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.SkuId, Quantity = productSku.Quantity, ShopMode = E_ShopMode.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);
@@ -193,7 +193,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (orderSub != null)
             {
-                ret.ProductSkuId = orderSub.PrdProductId;
+                ret.SkuId = orderSub.SkuId;
                 ret.SlotId = orderSub.SlotId;
                 ret.UniqueId = orderSub.Id;
                 ret.Status = orderSub.PickupStatus;

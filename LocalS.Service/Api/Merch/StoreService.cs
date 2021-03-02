@@ -325,12 +325,12 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择分类");
                 }
 
-                if (string.IsNullOrEmpty(rop.ProductId))
+                if (string.IsNullOrEmpty(rop.SpuId))
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择商品");
                 }
 
-                var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
+                var storeKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.SpuId == rop.SpuId).FirstOrDefault();
                 if (storeKindSpu == null)
                 {
                     storeKindSpu = new StoreKindSpu();
@@ -338,7 +338,7 @@ namespace LocalS.Service.Api.Merch
                     storeKindSpu.MerchId = merchId;
                     storeKindSpu.StoreId = rop.StoreId;
                     storeKindSpu.StoreKindId = rop.KindId;
-                    storeKindSpu.PrdProductId = rop.ProductId;
+                    storeKindSpu.SpuId = rop.SpuId;
                     storeKindSpu.IsDelete = false;
                     storeKindSpu.CreateTime = DateTime.Now;
                     storeKindSpu.Creator = operater;
@@ -356,7 +356,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     foreach (var stock in rop.Stocks)
                     {
-                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.PrdProductSkuId == stock.SkuId && m.ShopMode == E_ShopMode.Mall).FirstOrDefault();
+                        var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.SkuId == stock.SkuId && m.ShopMode == E_ShopMode.Mall).FirstOrDefault();
 
                         if (sellChannelStock == null)
                         {
@@ -369,8 +369,8 @@ namespace LocalS.Service.Api.Merch
                             sellChannelStock.MachineId = "0";
                             sellChannelStock.CabinetId = "0";
                             sellChannelStock.SlotId = "0";
-                            sellChannelStock.PrdProductId = rop.ProductId;
-                            sellChannelStock.PrdProductSkuId = stock.SkuId;
+                            sellChannelStock.SpuId = rop.SpuId;
+                            sellChannelStock.SkuId = stock.SkuId;
                             sellChannelStock.SalePrice = stock.SalePrice;
                             sellChannelStock.IsOffSell = stock.IsOffSell;
                             sellChannelStock.SellQuantity = stock.SumQuantity;
@@ -414,27 +414,27 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Product = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.ProductId).FirstOrDefault();
-            var d_ProductSkus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.PrdProductId == rup.ProductId).ToList();
+            var d_Spu = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.SpuId).FirstOrDefault();
+            var d_Skus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.SpuId == rup.SpuId).ToList();
             var d_StoreKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.Id == rup.KindId).FirstOrDefault();
-            var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.PrdProductId == rup.ProductId).FirstOrDefault();
+            var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SpuId == rup.SpuId).FirstOrDefault();
 
             List<object> stocks = new List<object>();
 
-            foreach (var d_ProductSku in d_ProductSkus)
+            foreach (var d_Sku in d_Skus)
             {
-                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.ShopMode == E_ShopMode.Mall && m.PrdProductSkuId == d_ProductSku.Id).FirstOrDefault();
+                var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.ShopMode == E_ShopMode.Mall && m.SkuId == d_Sku.Id).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
-                    stocks.Add(new { SkuId = d_ProductSku.Id, CumCode = d_ProductSku.CumCode, SumQuantity = 10000, SpecIdx = d_ProductSku.SpecIdx, SalePrice = d_ProductSku.SalePrice, IsOffSell = false, IsUseRent = false, RentMhPrice = 0, DepositPrice = 0 });
+                    stocks.Add(new { SkuId = d_Sku.Id, CumCode = d_Sku.CumCode, SumQuantity = 10000, SpecIdx = d_Sku.SpecIdx, SalePrice = d_Sku.SalePrice, IsOffSell = false, IsUseRent = false, RentMhPrice = 0, DepositPrice = 0 });
                 }
                 else
                 {
-                    stocks.Add(new { SkuId = d_ProductSku.Id, CumCode = d_ProductSku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = d_ProductSku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell, IsUseRent = sellChannelStock.IsUseRent, RentMhPrice = sellChannelStock.RentMhPrice, DepositPrice = sellChannelStock.DepositPrice });
+                    stocks.Add(new { SkuId = d_Sku.Id, CumCode = d_Sku.CumCode, SumQuantity = sellChannelStock.SumQuantity, SpecIdx = d_Sku.SpecIdx, SalePrice = sellChannelStock.SalePrice, IsOffSell = sellChannelStock.IsOffSell, IsUseRent = sellChannelStock.IsUseRent, RentMhPrice = sellChannelStock.RentMhPrice, DepositPrice = sellChannelStock.DepositPrice });
                 }
             }
 
-            var ret = new { Id = d_Product.Id, KindName = d_StoreKind.Name, Name = d_Product.Name, MainImgUrl = d_Product.MainImgUrl, Stocks = stocks, IsSupRentService = d_Product.IsSupRentService };
+            var ret = new { Id = d_Spu.Id, KindName = d_StoreKind.Name, Name = d_Spu.Name, MainImgUrl = d_Spu.MainImgUrl, Stocks = stocks, IsSupRentService = d_Spu.IsSupRentService };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
@@ -456,12 +456,12 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择分类");
                 }
 
-                if (string.IsNullOrEmpty(rop.ProductId))
+                if (string.IsNullOrEmpty(rop.SpuId))
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败，请选择商品");
                 }
 
-                var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.PrdProductId == rop.ProductId).FirstOrDefault();
+                var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.StoreKindId == rop.KindId && m.SpuId == rop.SpuId).FirstOrDefault();
                 if (d_StoreKindSpu != null)
                 {
                     d_StoreKindSpu.IsDelete = true;
@@ -469,7 +469,7 @@ namespace LocalS.Service.Api.Merch
                     d_StoreKindSpu.Mender = operater;
                 }
 
-                var d_SellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopMode == E_ShopMode.Mall && m.PrdProductId == rop.ProductId).ToList();
+                var d_SellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopMode == E_ShopMode.Mall && m.SpuId == rop.SpuId).ToList();
 
                 foreach (var d_SellChannelStock in d_SellChannelStocks)
                 {
@@ -499,7 +499,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && u.StoreId == rup.StoreId
                          &&
                          u.StoreKindId == rup.KindId && u.IsDelete == false
-                         select new { u.StoreId, u.StoreKindId, u.PrdProductId, u.CreateTime });
+                         select new { u.StoreId, u.StoreKindId, u.SpuId, u.CreateTime });
 
 
             int total = query.Count();
@@ -515,14 +515,14 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var product = CacheServiceFactory.Product.GetSpuInfo(merchId, item.PrdProductId);
+                var spu = CacheServiceFactory.Product.GetSpuInfo(merchId, item.SpuId);
                 olist.Add(new
                 {
-                    ProductId = product.Id,
+                    SpuId = spu.Id,
                     StoreId = item.StoreId,
                     KindId = item.StoreKindId,
-                    Name = product.Name,
-                    MainImgUrl = product.MainImgUrl,
+                    Name = spu.Name,
+                    MainImgUrl = spu.MainImgUrl,
                     CreateTime = item.CreateTime,
                 });
             }

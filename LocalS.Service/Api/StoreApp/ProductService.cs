@@ -73,22 +73,22 @@ namespace LocalS.Service.Api.StoreApp
 
                 ).AsEnumerable()
                      .OrderBy(x => x.Id)
-                     .GroupBy(x => x.PrdProductId)
+                     .GroupBy(x => x.SpuId)
                      .Select(g => new { g, count = g.Count() })
                      .SelectMany(t => t.g.Select(b => b)
-                     .Zip(Enumerable.Range(1, t.count), (j, i) => new { j.PrdProductId, j.PrdProductSkuId, rn = i })).Where(m => m.rn == 1); ;
+                     .Zip(Enumerable.Range(1, t.count), (j, i) => new { j.SpuId, j.SkuId, rn = i })).Where(m => m.rn == 1); ;
 
             if (!string.IsNullOrEmpty(kindId))
             {
                 query = query.Where(p => (from d in CurrentDb.StoreKindSpu
                                           where d.StoreKindId == kindId && d.IsDelete == false
-                                          select d.PrdProductId).Contains(p.PrdProductId));
+                                          select d.SpuId).Contains(p.SpuId));
             }
 
             pageEntiy.Total = query.Count();
             pageEntiy.PageCount = (pageEntiy.Total + pageEntiy.PageSize - 1) / pageEntiy.PageSize;
 
-            query = query.OrderByDescending(r => r.PrdProductId).Skip(pageSize * pageIndex).Take(pageSize);
+            query = query.OrderByDescending(r => r.SpuId).Skip(pageSize * pageIndex).Take(pageSize);
 
             var list = query.ToList();
 
@@ -97,13 +97,13 @@ namespace LocalS.Service.Api.StoreApp
                 LogUtil.Info("shopMode:" + shopMode);
 
 
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(shopMode, store.MerchId, storeId, shopId, null, item.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(shopMode, store.MerchId, storeId, shopId, null, item.SkuId);
 
 
                 var m_productSku = new ProductSkuModel();
 
-                m_productSku.Id = item.PrdProductSkuId;
-                m_productSku.ProductId = item.PrdProductId;
+                m_productSku.Id = item.SkuId;
+                m_productSku.SpuId = item.SpuId;
                 m_productSku.Name = r_productSku.Name;
                 m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
                 m_productSku.BriefDes = r_productSku.BriefDes;
@@ -160,7 +160,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var m_productSku = new ProductSkuModel();
             m_productSku.Id = r_productSku.Id;
-            m_productSku.ProductId = r_productSku.ProductId;
+            m_productSku.SpuId = r_productSku.SpuId;
             m_productSku.Name = r_productSku.Name;
             m_productSku.MainImgUrl = r_productSku.MainImgUrl;
             m_productSku.DisplayImgUrls = r_productSku.DisplayImgUrls;

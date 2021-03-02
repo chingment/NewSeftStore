@@ -34,9 +34,9 @@ namespace LocalS.Entity
         public string MachineId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
-        public string PrdProductId { get; set; }
-        public string PrdProductSkuId { get; set; }
-        public string PrdProductSkuName { get; set; }
+        public string SpuId { get; set; }
+        public string SkuId { get; set; }
+        public string SkuName { get; set; }
         public E_ShopMode ShopMode { get; set; }
         public string EventCode { get; set; }
         public string EventName { get; set; }

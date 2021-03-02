@@ -9,7 +9,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RetOrderPickupStatusQuery
     {
-        public string ProductSkuId { get; set; }
+        public string SkuId { get; set; }
         public string UniqueId { get; set; }
         public string SlotId { get; set; }
         public E_OrderPickupStatus Status { get; set; }

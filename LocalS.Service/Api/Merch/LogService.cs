@@ -104,11 +104,11 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SellChannelStockLog
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.PrdProductSkuId, u.MerchId, u.StoreName, u.ShopMode, u.ShopName, u.PrdProductSkuName, u.StoreId, u.ShopId, u.MachineId, u.CabinetId, u.SlotId, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+                         select new { u.Id, u.SkuId, u.MerchId, u.StoreName, u.ShopMode, u.ShopName, u.SkuName, u.StoreId, u.ShopId, u.MachineId, u.CabinetId, u.SlotId, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
             if (!string.IsNullOrEmpty(rup.ProductSkuName))
             {
-                query = query.Where(m => m.PrdProductSkuName.Contains(rup.ProductSkuName));
+                query = query.Where(m => m.SkuName.Contains(rup.ProductSkuName));
             }
 
             int total = query.Count();
@@ -141,8 +141,8 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.Id,
                     StoreId = item.StoreId,
-                    ProductSkuId = item.PrdProductSkuId,
-                    ProductSkuName = item.PrdProductSkuName,
+                    SkuId = item.SkuId,
+                    SkuName = item.SkuName,
                     SellChannelName = sellChannelName,
                     EventCode = item.EventCode,
                     EventName = item.EventName,
@@ -170,9 +170,9 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.SellChannelStockLog
                          where
-                         u.MerchId == merchId && u.PrdProductSkuId == rup.ProductSkuId &&
+                         u.MerchId == merchId && u.SkuId == rup.SkuId &&
                          u.StoreId == rup.StoreId
-                         select new { u.Id, u.PrdProductSkuName, u.ShopId, u.StoreName, u.CabinetId, u.SlotId, u.EventCode, u.ShopMode, u.ShopName, u.MachineId, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+                         select new { u.Id, u.SkuName, u.ShopId, u.StoreName, u.CabinetId, u.SlotId, u.EventCode, u.ShopMode, u.ShopName, u.MachineId, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
 
             if (!string.IsNullOrEmpty(rup.ShopId))
@@ -225,7 +225,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.Id,
                     SellChannelName = sellChannelName,
-                    ProductSkuName = item.PrdProductSkuName,
+                    SkuName = item.SkuName,
                     EventCode = item.EventCode,
                     EventName = item.EventName,
                     ChangeQuantity = item.ChangeQuantity,

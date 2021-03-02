@@ -12,7 +12,7 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string StoreKindId { get; set; }
-        public string PrdProductId { get; set; }
+        public string SpuId { get; set; }
         public bool IsDelete { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

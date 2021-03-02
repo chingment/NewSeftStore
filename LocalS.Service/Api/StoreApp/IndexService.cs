@@ -78,12 +78,12 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_sellChannelStock in d_sellChannelStocks)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.PrdProductSkuId);
+                var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.SkuId);
                 if (r_productSku != null && r_productSku.Stocks != null && r_productSku.Stocks.Count > 0)
                 {
                     var m_productSku = new ProductSkuModel();
                     m_productSku.Id = r_productSku.Id;
-                    m_productSku.ProductId = r_productSku.ProductId;
+                    m_productSku.SpuId = r_productSku.SpuId;
                     m_productSku.Name = r_productSku.Name;
                     m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
                     m_productSku.BriefDes = r_productSku.BriefDes;

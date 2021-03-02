@@ -106,11 +106,11 @@ namespace LocalS.BLL.Biz
                             d_SellChannelStockLog.ShopMode = m_ChangeRecord.ShopMode;
                             d_SellChannelStockLog.CabinetId = m_ChangeRecord.CabinetId;
                             d_SellChannelStockLog.SlotId = m_ChangeRecord.SlotId;
-                            d_SellChannelStockLog.PrdProductSkuId = m_ChangeRecord.SkuId;
+                            d_SellChannelStockLog.SkuId = m_ChangeRecord.SkuId;
                             if (r_ProductSku != null)
                             {
-                                d_SellChannelStockLog.PrdProductId = r_ProductSku.ProductId;
-                                d_SellChannelStockLog.PrdProductSkuName = r_ProductSku.Name;
+                                d_SellChannelStockLog.SpuId = r_ProductSku.SpuId;
+                                d_SellChannelStockLog.SkuName = r_ProductSku.Name;
                             }
                             d_SellChannelStockLog.SellQuantity = m_ChangeRecord.SellQuantity;
                             d_SellChannelStockLog.WaitPayLockQuantity = m_ChangeRecord.WaitPayLockQuantity;

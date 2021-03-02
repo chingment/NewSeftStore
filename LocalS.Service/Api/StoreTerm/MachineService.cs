@@ -119,28 +119,28 @@ namespace LocalS.Service.Api.StoreTerm
 
         public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string shopId, string machineId)
         {
-            var l_products = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, shopId, machineId);
+            var l_Skus = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, shopId, machineId);
 
             var dics = new Dictionary<string, ProductSkuModel>();
 
-            if (l_products == null)
+            if (l_Skus == null)
             {
                 return dics;
             }
 
-            if (l_products.Items == null)
+            if (l_Skus.Items == null)
             {
                 return dics;
             }
 
-            if (l_products.Items.Count == 0)
+            if (l_Skus.Items.Count == 0)
             {
                 return dics;
             }
 
-            foreach (var item in l_products.Items)
+            foreach (var item in l_Skus.Items)
             {
-                dics.Add(item.ProductSkuId, item);
+                dics.Add(item.SkuId, item);
             }
 
             return dics;
@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.StoreTerm
             var l_kind_all = new ProductKindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);
             l_kind_all.Name = "全部";
-            l_kind_all.Childs = d_stocks.Select(m => m.PrdProductSkuId).Distinct().ToList();
+            l_kind_all.Childs = d_stocks.Select(m => m.SkuId).Distinct().ToList();
 
             l_kinds.Add(l_kind_all);
 
@@ -167,13 +167,13 @@ namespace LocalS.Service.Api.StoreTerm
                 l_kind.KindId = d_kind.Id;
                 l_kind.Name = d_kind.Name;
 
-                var l_productIds = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.StoreKindId == d_kind.Id).Select(m => m.PrdProductId).Distinct().ToList();
-                if (l_productIds.Count > 0)
+                var l_SpuIds = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.StoreKindId == d_kind.Id).Select(m => m.SpuId).Distinct().ToList();
+                if (l_SpuIds.Count > 0)
                 {
-                    var l_productSkuIds = d_stocks.Where(m => l_productIds.Contains(m.PrdProductId)).Select(m => m.PrdProductSkuId).Distinct().ToList();
-                    if (l_productIds.Count > 0)
+                    var l_SkuIds = d_stocks.Where(m => l_SpuIds.Contains(m.SpuId)).Select(m => m.SkuId).Distinct().ToList();
+                    if (l_SpuIds.Count > 0)
                     {
-                        l_kind.Childs = l_productSkuIds;
+                        l_kind.Childs = l_SkuIds;
                         l_kinds.Add(l_kind);
                     }
                 }
@@ -238,11 +238,11 @@ namespace LocalS.Service.Api.StoreTerm
                 {
                     var l_exUnique = new RetMachineGetRunExHandleItems.ExUnique();
                     l_exUnique.UniqueId = d_orderSub.Id;
-                    l_exUnique.ProductSkuId = d_orderSub.PrdProductSkuId;
+                    l_exUnique.SkuId = d_orderSub.SkuId;
                     l_exUnique.SlotId = d_orderSub.SlotId;
                     l_exUnique.Quantity = d_orderSub.Quantity;
-                    l_exUnique.Name = d_orderSub.PrdProductSkuName;
-                    l_exUnique.MainImgUrl = d_orderSub.PrdProductSkuMainImgUrl;
+                    l_exUnique.Name = d_orderSub.SkuName;
+                    l_exUnique.MainImgUrl = d_orderSub.SkuMainImgUrl;
                     l_exUnique.Status = BizFactory.Order.GetPickupStatus(d_orderSub.PickupStatus);
                     l_exUnique.SignStatus = 0;
                     if (d_orderSub.PickupStatus == E_OrderPickupStatus.Taked || d_orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && d_orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)

@@ -22,14 +22,15 @@ namespace LocalS.Entity
         public string ReceiveModeName { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public string OrderId { get; set; }
-        public string PrdProductId { get; set; }
-        public string PrdProductSkuId { get; set; }
-        public string PrdProductSkuName { get; set; }
-        public string PrdProductSkuCumCode { get; set; }
-        public string PrdProductSkuBarCode { get; set; }
-        public string PrdProductSkuSpecDes { get; set; }
-        public string PrdProductSkuProducer { get; set; }
-        public string PrdProductSkuMainImgUrl { get; set; }
+        public string SpuId { get; set; }
+        public string SkuId { get; set; }
+        public string SkuName { get; set; }
+        public string SkuCumCode { get; set; }
+        public string SkuBarCode { get; set; }
+        public string SkuSpecDes { get; set; }
+        public string SkuProducer { get; set; }
+        public string SkuMainImgUrl { get; set; }
+        public string SkuDeviceId { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SaleAmount { get; set; }

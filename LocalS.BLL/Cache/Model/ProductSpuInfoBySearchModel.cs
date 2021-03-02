@@ -8,7 +8,7 @@ namespace LocalS.BLL
 {
     public class ProductSpuInfoBySearchModel
     {
-        public string ProductId { get; set; }
+        public string SpuId { get; set; }
         public string SpuCode { get; set; }
         public string BarCode { get; set; }
         public string Name { get; set; }

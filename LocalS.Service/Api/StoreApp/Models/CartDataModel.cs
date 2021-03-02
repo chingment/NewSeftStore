@@ -39,7 +39,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             public string Id { get; set; }
 
-            public string ProductId { get; set; }
+            public string SpuId { get; set; }
             public string Name { get; set; }
             public string MainImgUrl { get; set; }
             public bool IsOffSell { get; set; }

@@ -224,8 +224,8 @@ namespace LocalS.Service.Api.Merch
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
-                    MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
-                    Name = orderSub.PrdProductSkuName,
+                    MainImgUrl = orderSub.SkuMainImgUrl,
+                    Name = orderSub.SkuName,
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
@@ -429,8 +429,8 @@ namespace LocalS.Service.Api.Merch
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
-                    MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
-                    Name = orderSub.PrdProductSkuName,
+                    MainImgUrl = orderSub.SkuMainImgUrl,
+                    Name = orderSub.SkuName,
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,

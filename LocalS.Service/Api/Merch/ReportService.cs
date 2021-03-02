@@ -68,7 +68,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId)
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.MachineId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             if (rop.ShopMode != Entity.E_ShopMode.Unknow)
             {
@@ -79,7 +79,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
 
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
@@ -99,10 +99,10 @@ namespace LocalS.Service.Api.Merch
                     StoreName = sellChannelStock.StoreName,
                     SellChannelRefName = sellChannelRefName,
                     SellChannelRemark = sellChannelRemark,
-                    ProductSkuId = bizProductSku.Id,
-                    ProductSkuName = bizProductSku.Name,
-                    ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
-                    ProductSkuCumCode = bizProductSku.CumCode,
+                    SkuId = r_Sku.Id,
+                    SkuName = r_Sku.Name,
+                    SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
+                    SkuCumCode = r_Sku.CumCode,
                     SlotId = sellChannelStock.SlotId,
                     SellQuantity = sellChannelStock.SellQuantity,
                     WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
@@ -183,7 +183,7 @@ namespace LocalS.Service.Api.Merch
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId) &&
                          m.StockDate == rop.StockDate
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.PrdProductSkuId, m.MachineId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.MachineId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             if (rop.ShopMode != Entity.E_ShopMode.Unknow)
             {
@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.PrdProductSkuId);
+                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
 
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
@@ -215,10 +215,10 @@ namespace LocalS.Service.Api.Merch
                     StoreName = sellChannelStock.StoreName,
                     SellChannelRefName = sellChannelRefName,
                     SellChannelRemark = sellChannelRemark,
-                    ProductSkuId = bizProductSku.Id,
-                    ProductSkuName = bizProductSku.Name,
-                    ProductSkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
-                    ProductSkuCumCode = bizProductSku.CumCode,
+                    SkuId = bizProductSku.Id,
+                    SkuName = bizProductSku.Name,
+                    SkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
+                    SkuCumCode = bizProductSku.CumCode,
                     SlotId = sellChannelStock.SlotId,
                     SellQuantity = sellChannelStock.SellQuantity,
                     WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
@@ -310,7 +310,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
                         u.IsTestMode == false
-                         select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.PayedTime, u.OrderId, u.PrdProductSkuBarCode, u.PrdProductSkuCumCode, u.PrdProductSkuName, u.PrdProductSkuSpecDes, u.PrdProductSkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -371,11 +371,11 @@ namespace LocalS.Service.Api.Merch
                     ReceiveModeName = item.ReceiveModeName,
                     OrderId = item.OrderId,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
-                    ProductSkuName = item.PrdProductSkuName,
-                    ProductSkuBarCode = item.PrdProductSkuBarCode,
-                    ProductSkuCumCode = item.PrdProductSkuCumCode,
-                    ProductSkuSpecDes = SpecDes.GetDescribe(item.PrdProductSkuSpecDes),
-                    ProductSkuProducer = item.PrdProductSkuProducer,
+                    ProductSkuName = item.SkuName,
+                    ProductSkuBarCode = item.SkuBarCode,
+                    ProductSkuCumCode = item.SkuCumCode,
+                    ProductSkuSpecDes = SpecDes.GetDescribe(item.SkuSpecDes),
+                    ProductSkuProducer = item.SkuProducer,
                     Quantity = item.Quantity,
                     SalePrice = item.SalePrice,
                     TradeAmount = item.ChargeAmount,

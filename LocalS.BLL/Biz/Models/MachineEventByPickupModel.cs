@@ -14,7 +14,7 @@ namespace LocalS.BLL.Biz
         public string UniqueId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
-        public string ProductSkuId { get; set; }
+        public string SkuId { get; set; }
         public int ActionId { get; set; }
         public string ActionName { get; set; }
         public int ActionStatusCode { get; set; }

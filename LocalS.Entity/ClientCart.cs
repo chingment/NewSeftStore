@@ -24,8 +24,8 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public string ShopId { get; set; }
         public string ClientUserId { get; set; }
-        public string PrdProductId { get; set; }
-        public string PrdProductSkuId { get; set; }
+        public string SpuId { get; set; }
+        public string SkuId { get; set; }
         public int Quantity { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

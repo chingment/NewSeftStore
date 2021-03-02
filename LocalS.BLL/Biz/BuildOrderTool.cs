@@ -14,7 +14,7 @@ namespace LocalS.BLL.Biz
         private bool _isOffSell = true;
 
         public string Id { get; set; }
-        public string ProductId { get; set; }
+        public string SpuId { get; set; }
         public string Name { get; set; }
         public string MainImgUrl { get; set; }
         public string Producer { get; set; }
@@ -83,7 +83,7 @@ namespace LocalS.BLL.Biz
         public class Child
         {
             public E_ShopMode ShopMode { get; set; }
-            public string ProductSkuId { get; set; }
+            public string SkuId { get; set; }
             public decimal SalePrice { get; set; }
             public decimal OriginalPrice { get; set; }
             public int Quantity { get; set; }
@@ -208,7 +208,7 @@ namespace LocalS.BLL.Biz
                     else
                     {
 
-                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.SpuId = r_productSku.SpuId;
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.BarCode = r_productSku.BarCode;
@@ -294,7 +294,7 @@ namespace LocalS.BLL.Biz
                     else
                     {
 
-                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.SpuId = r_productSku.SpuId;
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.BarCode = r_productSku.BarCode;
@@ -358,7 +358,7 @@ namespace LocalS.BLL.Biz
                     else
                     {
 
-                        productSku.ProductId = r_productSku.ProductId;
+                        productSku.SpuId = r_productSku.SpuId;
                         productSku.Name = r_productSku.Name;
                         productSku.MainImgUrl = r_productSku.MainImgUrl;
                         productSku.BarCode = r_productSku.BarCode;
@@ -443,7 +443,7 @@ namespace LocalS.BLL.Biz
                         productSku.SaleAmount = productSku.Quantity * memberFeeSt.FeeSaleValue;
                         productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
                         productSku.OriginalAmount = productSku.Quantity * memberFeeSt.FeeOriginalValue;
-                        productSku.ProductId = IdWorker.Build(IdType.EmptyGuid);
+                        productSku.SpuId = IdWorker.Build(IdType.EmptyGuid);
                         productSku.BarCode = "MEMBER_FEE";
                         productSku.CumCode = "MEMBER_FEE";
 
@@ -513,7 +513,7 @@ namespace LocalS.BLL.Biz
 
                     if (ids != null)
                     {
-                        cal_sum_amount = _buildSkus.Where(m => ids.Contains(m.ProductId)).Sum(m => m.SaleAmount);
+                        cal_sum_amount = _buildSkus.Where(m => ids.Contains(m.SpuId)).Sum(m => m.SaleAmount);
                     }
                 }
 
@@ -521,7 +521,7 @@ namespace LocalS.BLL.Biz
 
             foreach (var buildOrderSku in _buildSkus)
             {
-                decimal amount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, atLeastAmount, useAreaType, useAreaValue, faceType, faceValue, _storeId, buildOrderSku.ProductId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
+                decimal amount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, atLeastAmount, useAreaType, useAreaValue, faceType, faceValue, _storeId, buildOrderSku.SpuId, buildOrderSku.KindId3, buildOrderSku.SaleAmount), 2);
 
                 if (faceType == E_Coupon_FaceType.ShopDiscount || faceType == E_Coupon_FaceType.ShopVoucher)
                 {
@@ -594,7 +594,7 @@ namespace LocalS.BLL.Biz
                         //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
                         var buildOrderChild = new BuildOrder.Child();
                         buildOrderChild.ShopMode = productSku_Stocks[0].ShopMode;
-                        buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                        buildOrderChild.SkuId = shopModeProductSku.Id;
                         buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                         buildOrderChild.ShopId = productSku_Stocks[0].ShopId;
                         buildOrderChild.MachineId = productSku_Stocks[0].MachineId;
@@ -625,7 +625,7 @@ namespace LocalS.BLL.Biz
 
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
-                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == item.ShopId && m.ProductSkuId == shopModeProductSku.Id && m.ShopMode == item.ShopMode).Sum(m => m.Quantity);//已订的数量
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == item.ShopId && m.SkuId == shopModeProductSku.Id && m.ShopMode == item.ShopMode).Sum(m => m.Quantity);//已订的数量
                                 LogUtil.Info("myabc.reservedQuantity:" + reservedQuantity);
                                 LogUtil.Info("myabc.needReserveQuantity:" + shopModeProductSku.Quantity);
                                 int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
@@ -635,7 +635,7 @@ namespace LocalS.BLL.Biz
                                     buildOrderChild.ShopMode = item.ShopMode;
                                     buildOrderChild.ShopId = item.ShopId;
                                     buildOrderChild.MachineId = item.MachineId;
-                                    buildOrderChild.ProductSkuId = shopModeProductSku.Id;
+                                    buildOrderChild.SkuId = shopModeProductSku.Id;
                                     buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                                     buildOrderChild.CabinetId = item.CabinetId;
                                     buildOrderChild.SlotId = item.SlotId;

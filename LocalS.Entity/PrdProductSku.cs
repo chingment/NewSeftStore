@@ -14,7 +14,7 @@ namespace LocalS.Entity
         public string BarCode { get; set; }
         public string CumCode { get; set; }
         public string PinYinIndex { get; set; }
-        public string PrdProductId { get; set; }
+        public string SpuId { get; set; }
         public string Name { get; set; }
         public decimal SalePrice { get; set; }
         public string SpecDes { get; set; }

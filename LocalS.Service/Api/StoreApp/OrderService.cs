@@ -60,9 +60,9 @@ namespace LocalS.Service.Api.StoreApp
                     var sku = new FsTemplateData.TmplOrderSku();
                     sku.UniqueId = orderSub.Id;
                     sku.UniqueType = E_UniqueType.OrderSub;
-                    sku.Id = orderSub.PrdProductSkuId;
-                    sku.Name = orderSub.PrdProductSkuName;
-                    sku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                    sku.Id = orderSub.SkuId;
+                    sku.Name = orderSub.SkuName;
+                    sku.MainImgUrl = orderSub.SkuMainImgUrl;
                     sku.Quantity = orderSub.Quantity.ToString();
                     sku.OriginalAmount = orderSub.OriginalAmount.ToF2Price();
                     sku.SaleAmount = orderSub.SaleAmount.ToF2Price();
@@ -75,22 +75,22 @@ namespace LocalS.Service.Api.StoreApp
             }
             else
             {
-                var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+                var skuIds = orderSubs.Select(m => m.SkuId).Distinct().ToArray();
 
-                foreach (var productSkuId in productSkuIds)
+                foreach (var skuId in skuIds)
                 {
-                    var orderSubChilds_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+                    var orderSubChilds_Sku = orderSubs.Where(m => m.SkuId == skuId).ToList();
 
                     var field = new FsTemplateData();
 
                     field.Type = "SkuTmp";
 
                     var sku = new FsTemplateData.TmplOrderSku();
-                    sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
+                    sku.Id = orderSubChilds_Sku[0].SkuId;
                     sku.UniqueId = order.Id;
                     sku.UniqueType = E_UniqueType.Order;
-                    sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
-                    sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
+                    sku.Name = orderSubChilds_Sku[0].SkuName;
+                    sku.MainImgUrl = orderSubChilds_Sku[0].SkuMainImgUrl;
                     sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
                     sku.ChargeAmount = orderSubChilds_Sku.Sum(m => m.ChargeAmount).ToF2Price();
                     sku.SaleAmount = orderSubChilds_Sku.Sum(m => m.SaleAmount).ToF2Price();
@@ -392,12 +392,12 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var orderSub in orderSubs)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.PrdProductSkuId);
+                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.SkuId);
 
                     var c_prodcutSku = new BuildSku();
-                    c_prodcutSku.Id = orderSub.PrdProductSkuId;
-                    c_prodcutSku.Name = orderSub.PrdProductSkuName;
-                    c_prodcutSku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                    c_prodcutSku.Id = orderSub.SkuId;
+                    c_prodcutSku.Name = orderSub.SkuName;
+                    c_prodcutSku.MainImgUrl = orderSub.SkuMainImgUrl;
                     c_prodcutSku.Quantity = orderSub.Quantity;
                     c_prodcutSku.SalePrice = orderSub.SalePrice;
                     c_prodcutSku.OriginalPrice = orderSub.OriginalPrice;
@@ -804,9 +804,9 @@ namespace LocalS.Service.Api.StoreApp
                         var sku = new FsTemplateData.TmplOrderSku();
                         sku.UniqueId = orderSub.Id;
                         sku.UniqueType = E_UniqueType.OrderSub;
-                        sku.Id = orderSub.PrdProductSkuId;
-                        sku.Name = orderSub.PrdProductSkuName;
-                        sku.MainImgUrl = orderSub.PrdProductSkuMainImgUrl;
+                        sku.Id = orderSub.SkuId;
+                        sku.Name = orderSub.SkuName;
+                        sku.MainImgUrl = orderSub.SkuMainImgUrl;
                         sku.Quantity = orderSub.Quantity.ToString();
                         sku.OriginalAmount = orderSub.OriginalAmount.ToF2Price();
                         sku.SaleAmount = orderSub.SaleAmount.ToF2Price();
@@ -819,22 +819,22 @@ namespace LocalS.Service.Api.StoreApp
                 }
                 else
                 {
-                    var productSkuIds = orderSubs.Select(m => m.PrdProductSkuId).Distinct().ToArray();
+                    var skuIds = orderSubs.Select(m => m.SkuId).Distinct().ToArray();
 
-                    foreach (var productSkuId in productSkuIds)
+                    foreach (var skuId in skuIds)
                     {
-                        var orderSubChilds_Sku = orderSubs.Where(m => m.PrdProductSkuId == productSkuId).ToList();
+                        var orderSubChilds_Sku = orderSubs.Where(m => m.SkuId == skuId).ToList();
 
                         var field = new FsTemplateData();
 
                         field.Type = "SkuTmp";
 
                         var sku = new FsTemplateData.TmplOrderSku();
-                        sku.Id = orderSubChilds_Sku[0].PrdProductSkuId;
+                        sku.Id = orderSubChilds_Sku[0].SkuId;
                         sku.UniqueId = item.Id;
                         sku.UniqueType = E_UniqueType.Order;
-                        sku.Name = orderSubChilds_Sku[0].PrdProductSkuName;
-                        sku.MainImgUrl = orderSubChilds_Sku[0].PrdProductSkuMainImgUrl;
+                        sku.Name = orderSubChilds_Sku[0].SkuName;
+                        sku.MainImgUrl = orderSubChilds_Sku[0].SkuMainImgUrl;
                         sku.Quantity = orderSubChilds_Sku.Sum(m => m.Quantity).ToString();
                         sku.OriginalAmount = orderSubChilds_Sku.Sum(m => m.OriginalAmount).ToF2Price();
                         sku.SaleAmount = orderSubChilds_Sku.Sum(m => m.SaleAmount).ToF2Price();

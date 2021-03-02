@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupLogGetListByRelStock : RupBaseGetList
     {
-        public string ProductSkuId { get; set; }
+        public string SkuId { get; set; }
         public string StoreId { get; set; }
         public string ShopId { get; set; }
         public string MachineId { get; set; }

@@ -187,7 +187,7 @@ namespace LocalS.Service.Api.Merch
 
             var retRptProductSkuSaleRl = new RetRptProductSkuSaleRl();
 
-            StringBuilder sql = new StringBuilder("  select top 10 prdProductSkuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderSub WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by PrdProductSkuName order by sumQuantity desc ");
+            StringBuilder sql = new StringBuilder("  select top 10 skuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderSub WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by PrdProductSkuName order by sumQuantity desc ");
 
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.Merch
                 var rptProductSkuSaleRlModel = new
                 {
 
-                    Name = dtData.Rows[r]["prdProductSkuName"].ToString(),
+                    Name = dtData.Rows[r]["skuName"].ToString(),
                     SumQuantity = dtData.Rows[r]["sumQuantity"].ToString(),
                     SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
                 };

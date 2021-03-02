@@ -80,11 +80,11 @@ namespace LocalS.Service.Api.Merch
 
             //        receiveDetail.DetailItems.Add(new RetOrderDetails.PickupSku
             //        {
-            //            Id = orderSubChild.PrdProductSkuId,
+            //            Id = orderSubChild.SkuId,
             //            ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
             //            UniqueId = orderSubChild.Id,
-            //            MainImgUrl = orderSubChild.PrdProductSkuMainImgUrl,
-            //            Name = orderSubChild.PrdProductSkuName,
+            //            MainImgUrl = orderSubChild.SkuMainImgUrl,
+            //            Name = orderSubChild.SkuName,
             //            Quantity = orderSubChild.Quantity,
             //            Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
             //            PickupLogs = pickupLogs,
@@ -198,11 +198,11 @@ namespace LocalS.Service.Api.Merch
 
                     pickupSkus.Add(new
                     {
-                        Id = orderSub.PrdProductSkuId,
-                        MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
+                        Id = orderSub.SkuId,
+                        MainImgUrl = orderSub.SkuMainImgUrl,
                         UniqueId = orderSub.Id,
                         ExPickupIsHandle = orderSub.ExPickupIsHandle,
-                        Name = orderSub.PrdProductSkuName,
+                        Name = orderSub.SkuName,
                         Quantity = orderSub.Quantity,
                         Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
                         PickupLogs = pickupLogs
@@ -344,8 +344,8 @@ namespace LocalS.Service.Api.Merch
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
-                    MainImgUrl = orderSub.PrdProductSkuMainImgUrl,
-                    Name = orderSub.PrdProductSkuName,
+                    MainImgUrl = orderSub.SkuMainImgUrl,
+                    Name = orderSub.SkuName,
                     Quantity = orderSub.Quantity,
                     Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
                     PickupLogs = pickupLogs,

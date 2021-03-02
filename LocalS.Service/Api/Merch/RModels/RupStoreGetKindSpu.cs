@@ -10,6 +10,6 @@ namespace LocalS.Service.Api.Merch
     {
         public string StoreId { get; set; }
         public string KindId { get; set; }
-        public string ProductId { get; set; }
+        public string SpuId { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace LocalS.Entity
         public string ShopId { get; set; }
         public string MachineId { get; set; }
         public string CabinetId { get; set; }
-        public string PrdProductSkuId { get; set; }
+        public string SkuId { get; set; }
         public string SlotId { get; set; }
         public E_OrderPickupStatus Status { get; set; }
         public int ActionId { get; set; }
