@@ -321,7 +321,7 @@ export default {
           this.handleUseTimeTypeChange(d.coupon.useTimeType)
 
           this.temp.options_stores = d.optionsStores
-          this.temp.options_kinds = d.optionsProductKinds
+          this.temp.options_kinds = d.optionsKinds
         }
         this.loading = false
       })

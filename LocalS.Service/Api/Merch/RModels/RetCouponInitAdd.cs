@@ -12,12 +12,12 @@ namespace LocalS.Service.Api.Merch
         public RetCouponInitAdd()
         {
             this.OptionsStores = new List<OptionNode>();
-            this.OptionsProductKinds = new List<TreeNode>();
+            this.OptionsKinds = new List<TreeNode>();
             this.OptionsMemberLevels = new List<OptionNode>();
         }
 
         public List<OptionNode> OptionsStores { get; set; }
-        public List<TreeNode> OptionsProductKinds { get; set; }
+        public List<TreeNode> OptionsKinds { get; set; }
         public List<OptionNode> OptionsMemberLevels { get; set; }
     }
 }

@@ -262,7 +262,7 @@ namespace LocalS.Service.Api.Merch
                 ret.OptionsMemberLevels.Add(optionsStore);
             }
 
-            ret.OptionsProductKinds = MerchServiceFactory.PrdProduct.GetKindTree();
+            ret.OptionsKinds = MerchServiceFactory.PrdProduct.GetKindTree();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -454,7 +454,7 @@ namespace LocalS.Service.Api.Merch
                 ret.OptionsMemberLevels.Add(optionsStore);
             }
 
-            ret.OptionsProductKinds = MerchServiceFactory.PrdProduct.GetKindTree();
+            ret.OptionsKinds = MerchServiceFactory.PrdProduct.GetKindTree();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
