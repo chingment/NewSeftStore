@@ -190,10 +190,10 @@
           </div>
           <div style="min-height:300px;">
 
-            <div v-if="productSkuSaleRl.length>0">
+            <div v-if="skuSaleRl.length>0">
 
               <ul class="rl">
-                <li v-for="(val,index) in productSkuSaleRl" :key="val.name" class="it">
+                <li v-for="(val,index) in skuSaleRl" :key="val.name" class="it">
                   <div class="name">
                     <span :class="'rli-'+index">  {{ val.name }}</span>
                   </div>
@@ -223,7 +223,7 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { getProductSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
+import { getSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
 
 export default {
   name: 'Home',
@@ -252,7 +252,7 @@ export default {
       get7DayGmv: [],
       todayStoreGmvRl: [],
       storeGmvRl: [],
-      productSkuSaleRl: [],
+      skuSaleRl: [],
       mctMode: ''
     }
   },
@@ -295,10 +295,10 @@ export default {
         }
       })
     },
-    _getProductSkuSaleRl: function() {
-      getProductSkuSaleRl().then(res => {
+    _getSkuSaleRl: function() {
+      getSkuSaleRl().then(res => {
         if (res.result === 1) {
-          this.productSkuSaleRl = res.data.productSkus
+          this.skuSaleRl = res.data.skus
         }
       })
     },

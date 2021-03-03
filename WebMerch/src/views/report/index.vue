@@ -8,7 +8,7 @@
             <el-menu-item index="/report/storesalesdatehis">店铺销售概况表</el-menu-item>
             <el-menu-item index="/report/storestockrealdata">店铺实时库存报表</el-menu-item>
             <el-menu-item index="/report/storestockdatehis">店铺历史库存报表</el-menu-item>
-            <el-menu-item index="/report/productskusalesdatehis">商品销售报表</el-menu-item>
+            <el-menu-item index="/report/skusalesdatehis">商品销售报表</el-menu-item>
             <el-menu-item index="/report/ordersalesdatehis">订单销售报表</el-menu-item>
           </el-menu-item-group>
         </el-menu>

@@ -122,8 +122,8 @@ Page({
         switch (opVal) {
           case "payRent":
            
-            var productSkus = []
-            productSkus.push({
+            var skus = []
+            skus.push({
               cartId: 0,
               id: skuId,
               quantity: 1,
@@ -133,7 +133,7 @@ Page({
             })
 
 
-            var url='/pages/orderconfirm/orderconfirm?productSkus=' + encodeURIComponent(JSON.stringify(productSkus)) + "&shopMethod=5&action=rentfee&pOrderId="+orderId
+            var url='/pages/orderconfirm/orderconfirm?skus=' + encodeURIComponent(JSON.stringify(skus)) + "&shopMethod=5&action=rentfee&pOrderId="+orderId
 console.log(url)
             wx.navigateTo({
               url: url,

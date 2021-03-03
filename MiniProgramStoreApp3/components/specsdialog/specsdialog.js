@@ -29,15 +29,15 @@ Component({
         }
       }
     },
-    productSku: {
+    sku: {
       type: Object,
       value: null,
       observer: function (newVal, oldVal) {
         var _this = this
-        var productSku = newVal
-        var specIdxSkus = productSku.specIdxSkus
+        var sku = newVal
+        var specIdxSkus = sku.specIdxSkus
         var specShopItemInfo = {}
-        var specItems = productSku.specItems
+        var specItems = sku.specItems
         for (var i in specIdxSkus) {
           specShopItemInfo[specIdxSkus[i].specIdx] = specIdxSkus[i];
         }
@@ -47,12 +47,12 @@ Component({
             specItems[i].value[o].isShow = true
           }
         }
-        productSku.specItem = specItems
+        sku.specItem = specItems
         _this.setData({
           myQuantity: 1,
           mySpecShopItemInfo: specShopItemInfo,
-          myProductSku: productSku,
-          mySpecSubIndex: productSku.specIdx.split(',')
+          mySku: sku,
+          mySpecSubIndex: sku.specIdx.split(',')
         })
       }
     }
@@ -60,7 +60,7 @@ Component({
   data: {
     myAnimationData: {},
     mySpecSubIndex: null,
-    myProductSku: null,
+    mySku: null,
     mySpecSelectArr: [], //存放被选中的值
     mySpecShopItemInfo: {}, //存放要和选中的值进行匹配的数据
     mySpecSubIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
@@ -135,7 +135,7 @@ Component({
     },
     _specValueSelect:function(e) {
       var _this = this;
-      var myProductSku = _this.data.myProductSku
+      var mySku = _this.data.mySku
 
       var specItemIndex = e.currentTarget.dataset.specitemindex
       var specItemValueIndex = e.currentTarget.dataset.specitemvalueindex
@@ -161,23 +161,23 @@ Component({
           if (res.result == 1) {
            
             var d = res.data
-            myProductSku.id = d.skuId;
-            myProductSku.specIdx = selSpec.specIdx;
-            myProductSku.name = d.name
-            myProductSku.isOffSell = d.isOffSell
-            myProductSku.salePrice = d.salePrice
-            myProductSku.isShowPrice = d.isShowPrice
-            myProductSku.salePriceByVip = d.salePriceByVip
-            myProductSku.sellQuantity = d.sellQuantity
+            mySku.id = d.skuId;
+            mySku.specIdx = selSpec.specIdx;
+            mySku.name = d.name
+            mySku.isOffSell = d.isOffSell
+            mySku.salePrice = d.salePrice
+            mySku.isShowPrice = d.isShowPrice
+            mySku.salePriceByVip = d.salePriceByVip
+            mySku.sellQuantity = d.sellQuantity
 
             _this.setData({
-              myProductSku: myProductSku,
+              mySku: mySku,
               mySpecSubIndex: mySpecSubIndex,
               mySpecShopItemInfo: mySpecShopItemInfo
             })
 
-            _this.triggerEvent('_updateProductSku', {
-              productSku: myProductSku
+            _this.triggerEvent('_updateSku', {
+              sku: mySku
             })
 
           }
@@ -186,12 +186,12 @@ Component({
     },
     _addToCart: function (e) {
       var _this = this
-      if (_this.data.myProductSku.isOffSell)
+      if (_this.data.mySku.isOffSell)
         return
 
-      var skuId = _this.data.myProductSku.id
-      var productSkus = new Array();
-      productSkus.push({
+      var skuId = _this.data.mySku.id
+      var skus = new Array();
+      skus.push({
         id: skuId,
         quantity: _this.data.myQuantity,
         selected: true,
@@ -201,7 +201,7 @@ Component({
       apiCart.operate({
         storeId: _this.data.storeId,
         operate: 2,
-        productSkus: productSkus
+        skus: skus
       }).then(function (res) {
         if (res.result == 1) {
           toast.show({

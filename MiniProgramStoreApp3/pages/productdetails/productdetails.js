@@ -103,11 +103,11 @@ Page({
       if (res.result == 1) {
         var d = res.data
         _this.setData({
-          productSku: d
+          sku: d
         })
 
         app.byPoint(_this.data.tag, 'browse_spu', {
-          productSkuId: d.id,
+          skuId: d.id,
           kindId1: d.kindId1,
           kindId2: d.kindId2,
           kindId3: d.kindId3
@@ -139,7 +139,7 @@ Page({
   addToCart: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -148,8 +148,8 @@ Page({
 
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
 
-    var productSkus = new Array();
-    productSkus.push({
+    var skus = new Array();
+    skus.push({
       id: skuId,
       quantity: 1,
       selected: true,
@@ -160,7 +160,7 @@ Page({
     apiCart.operate({
       storeId: _this.data.storeId,
       operate: 2,
-      productSkus: productSkus,
+      skus: skus,
       shopId: _this.data.shopId
     }).then(function (res) {
       if (res.result == 1) {
@@ -185,11 +185,11 @@ Page({
   },
   selectSpecs: function (e) {
     var _this = this
-    var sku = _this.data.productSku
+    var sku = _this.data.sku
     _this.setData({
       specsDialog: {
         isShow: true,
-        productSku: sku,
+        sku: sku,
         shopMode: _this.data.shopMode,
         storeId: _this.data.storeId
       }
@@ -198,7 +198,7 @@ Page({
   immeBuy: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -210,9 +210,9 @@ Page({
       return
     }
 
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skuId = _this.data.sku.id //对应页面data-reply-index
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -221,7 +221,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -230,7 +230,7 @@ Page({
   immeRent: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -242,9 +242,9 @@ Page({
       return
     }
 
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skuId = _this.data.sku.id //对应页面data-reply-index
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -253,7 +253,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -262,7 +262,7 @@ Page({
   immeMavkBuy: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -274,9 +274,9 @@ Page({
       return
     }
 
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skuId = _this.data.sku.id //对应页面data-reply-index
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -285,7 +285,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -293,7 +293,7 @@ Page({
   },
   immeSawRent: function (e) {
     var _this = this
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
+    var skuId = _this.data.sku.id //对应页面data-reply-index
 
     wx.navigateTo({
       url: '/pages/productdetails/productdetails?skuId=' + skuId + '&shopMethod=2',
@@ -303,24 +303,24 @@ Page({
     })
 
   },
-  updateProductSku: function (e) {
+  updateSku: function (e) {
     var _this = this
-    var selSku = e.detail.productSku
+    var selSku = e.detail.sku
 
     console.log("updateParent:" + JSON.stringify(selSku))
 
-    var productSku = _this.data.productSku
-    productSku.id = selSku.id
-    productSku.name = selSku.name
-    productSku.isOffSell = selSku.isOffSell
-    productSku.salePrice = selSku.salePrice
-    productSku.isShowPrice = selSku.isShowPrice
-    productSku.salePriceByVip = selSku.salePriceByVip
-    productSku.sellQuantity = selSku.sellQuantity
-    productSku.specIdx = selSku.specIdx
+    var sku = _this.data.sku
+    sku.id = selSku.id
+    sku.name = selSku.name
+    sku.isOffSell = selSku.isOffSell
+    sku.salePrice = selSku.salePrice
+    sku.isShowPrice = selSku.isShowPrice
+    sku.salePriceByVip = selSku.salePriceByVip
+    sku.sellQuantity = selSku.sellQuantity
+    sku.specIdx = selSku.specIdx
 
     _this.setData({
-      productSku: productSku
+      sku: sku
     })
   },
   cartdialogClose: function () {
@@ -336,12 +336,12 @@ Page({
     var _this = this
     var _data = _this.data
 
-    console.log(_this.data.productSku.mainImgUrl)
+    console.log(_this.data.sku.mainImgUrl)
     // 设置转发内容
     var shareObj = {
-      title: _this.data.productSku.name,
-      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
-      imageUrl: _this.data.productSku.mainImgUrl, //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
+      title: _this.data.sku.name,
+      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      imageUrl: _this.data.sku.mainImgUrl, //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') {}
       },
@@ -381,7 +381,7 @@ Page({
 
     var accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
-    var wxacode_data = '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId()
+    var wxacode_data = '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId()
     apiOwn.getWxACodeUnlimit({
       appId: appId,
       merchId: storeage.getMerchId(),
@@ -438,7 +438,7 @@ Page({
                 },
                 {
                   type: 'image',
-                  url: _this.data.productSku.mainImgUrl,
+                  url: _this.data.sku.mainImgUrl,
                   top: 110,
                   left: 375 / 2 - 186 / 2,
                   width: 186,
@@ -454,7 +454,7 @@ Page({
                 },
                 {
                   type: 'text',
-                  content: _this.data.productSku.name,
+                  content: _this.data.sku.name,
                   fontSize: 16,
                   lineHeight: 21,
                   color: '#383549',
@@ -468,7 +468,7 @@ Page({
                 },
                 {
                   type: 'text',
-                  content: '￥' + _this.data.productSku.salePrice,
+                  content: '￥' + _this.data.sku.salePrice,
                   fontSize: 19,
                   color: '#E62004',
                   textAlign: 'left',

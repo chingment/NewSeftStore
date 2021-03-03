@@ -66,7 +66,7 @@
         :rules="rulesAddCoupon"
         label-width="120px"
       >
-        <el-form-item label="优惠券搜索" prop="productId">
+        <el-form-item label="优惠券搜索">
           <el-autocomplete
             v-model="searchNameByCoupon"
             style="width:300px"

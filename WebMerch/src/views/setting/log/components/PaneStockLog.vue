@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.productSkuName" clearable style="width: 100%" placeholder="商品名称" class="filter-item" />
+          <el-input v-model="listQuery.skuName" clearable style="width: 100%" placeholder="商品名称" class="filter-item" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="商品名称" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuName }}</span>
+          <span>{{ scope.row.SkuName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="销售渠道" align="left" min-width="15%">
@@ -136,7 +136,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        productSkuName: undefined
+        skuName: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -178,7 +178,7 @@ export default {
       this.dialogRelStockIsVisible = true
       this.dialogRelStockLoading = true
 
-      this.dialogRelStockListQuery.productSkuId = row.productSkuId
+      this.dialogRelStockListQuery.skuId = row.skuId
       this.dialogRelStockListQuery.storeId = row.storeId
       this.dialogRelStockListQuery.shopId = row.shopId
       this.dialogRelStockListQuery.machineId = row.machineId

@@ -1,9 +1,9 @@
 <template>
   <div id="product_manage">
-    <page-header/>
+    <page-header />
     <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :product-id="id" /></el-tab-pane>
-      <el-tab-pane label="在售店铺" name="tabStoreSale"><manage-pane-store-sale :product-id="id" /></el-tab-pane>
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :spu-id="id" /></el-tab-pane>
+      <el-tab-pane label="在售店铺" name="tabStoreSale"><manage-pane-store-sale :spu-id="id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -14,7 +14,7 @@ import managePaneStoreSale from './components/ManagePaneStoreSale'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'PrdProductManage',
-  components: { managePaneBaseInfo, managePaneStoreSale,PageHeader },
+  components: { managePaneBaseInfo, managePaneStoreSale, PageHeader },
   data() {
     return {
       activeName: 'tabBaseInfo'

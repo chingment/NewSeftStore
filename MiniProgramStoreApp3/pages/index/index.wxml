@@ -1,6 +1,6 @@
 <skeleton loading="{{ skeletonSelectedLoadingType }}" bgcolor="{{ skeletonBgcolor }}" isDev="{{ skeletonIsDev }}"
 	data="{{ skeletonData }}" wx:if="{{ !pageIsReady || skeletonIsDev }}"></skeleton>
-<specsdialog isShow="{{specsDialog.isShow}}" productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}"
+<specsdialog isShow="{{specsDialog.isShow}}" sku="{{specsDialog.sku}}" storeId="{{specsDialog.storeId}}"
 	shopMode="{{specsDialog.shopMode}}"></specsdialog>
 
 <scroll-view scroll-y="true" style="height:{{height}}px;">

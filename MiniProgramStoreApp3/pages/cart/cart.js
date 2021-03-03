@@ -38,25 +38,25 @@ Component({
       var operate = e.currentTarget.dataset.replyOperate
 
 
-      var productSku = _this.data.cartData.blocks[pIndex].productSkus[cIndex];
+      var sku = _this.data.cartData.blocks[pIndex].skus[cIndex];
 
       switch (operate) {
         case "1":
-          if (productSku.selected) {
-            productSku.selected = false
+          if (sku.selected) {
+            sku.selected = false
           } else {
-            productSku.selected = true
+            sku.selected = true
           }
           break;
       }
 
-      var operateProductSkus = new Array();
-      operateProductSkus.push({
-        id: productSku.id,
+      var operateSkus = new Array();
+      operateSkus.push({
+        id: sku.id,
         quantity: 1,
-        selected: productSku.selected,
-        shopMode: productSku.shopMode,
-        shopId: productSku.shopId
+        selected: sku.selected,
+        shopMode: sku.shopMode,
+        shopId: sku.shopId
       });
 
       function _operate() {
@@ -64,7 +64,7 @@ Component({
         apiCart.operate({
           storeId: _this.data.storeId,
           operate: operate,
-          productSkus: operateProductSkus
+          skus: operateSkus
         }).then(function (res) {
           toast.show({
             title: res.message
@@ -74,7 +74,7 @@ Component({
 
         apiGlobal.byPoint(_this.data.tag, "op_cart", {
           operate: operate,
-          productSkus: operateProductSkus
+          skus: operateSkus
         })
       }
 
@@ -101,9 +101,9 @@ Component({
       var cartData = _this.data.cartData
 
       for (var i = 0; i < cartData.blocks.length; i++) {
-        for (var j = 0; j < cartData.blocks[i].productSkus.length; j++) {
-          if (cartData.blocks[i].productSkus[j].isTouchMove) {
-            cartData.blocks[i].productSkus[j].isTouchMove = false;
+        for (var j = 0; j < cartData.blocks[i].skus.length; j++) {
+          if (cartData.blocks[i].skus[j].isTouchMove) {
+            cartData.blocks[i].skus[j].isTouchMove = false;
           }
         }
       }
@@ -142,23 +142,23 @@ Component({
       var cartData = _this.data.cartData
 
       for (var i = 0; i < cartData.blocks.length; i++) {
-        for (var j = 0; j < cartData.blocks[i].productSkus.length; j++) {
+        for (var j = 0; j < cartData.blocks[i].skus.length; j++) {
 
-          cartData.blocks[i].productSkus[j].isTouchMove = false
+          cartData.blocks[i].skus[j].isTouchMove = false
 
           //滑动超过30度角 return
 
           if (Math.abs(angle) > 30) return;
 
-          if (cartId == cartData.blocks[i].productSkus[j].cartId) {
+          if (cartId == cartData.blocks[i].skus[j].cartId) {
 
             if (touchMoveX > startX) //右滑
 
-              cartData.blocks[i].productSkus[j].isTouchMove = false
+              cartData.blocks[i].skus[j].isTouchMove = false
 
             else //左滑
 
-              cartData.blocks[i].productSkus[j].isTouchMove = true
+              cartData.blocks[i].skus[j].isTouchMove = true
 
           }
         }
@@ -242,24 +242,24 @@ Component({
 
       var blocks = _this.data.cartData.blocks
 
-      var productSkus = []
+      var skus = []
 
       for (var i = 0; i < blocks.length; i++) {
-        for (var j = 0; j < blocks[i].productSkus.length; j++) {
-          if (blocks[i].productSkus[j].selected) {
-            productSkus.push({
-              cartId: blocks[i].productSkus[j].cartId,
-              id: blocks[i].productSkus[j].id,
-              quantity: blocks[i].productSkus[j].quantity,
-              shopMode: blocks[i].productSkus[j].shopMode,
+        for (var j = 0; j < blocks[i].skus.length; j++) {
+          if (blocks[i].skus[j].selected) {
+            skus.push({
+              cartId: blocks[i].skus[j].cartId,
+              id: blocks[i].skus[j].id,
+              quantity: blocks[i].skus[j].quantity,
+              shopMode: blocks[i].skus[j].shopMode,
               shopMethod: 1,
-              shopId: blocks[i].productSkus[j].shopId
+              shopId: blocks[i].skus[j].shopId
             })
           }
         }
       }
 
-      if (productSkus.length == 0) {
+      if (skus.length == 0) {
         toast.show({
           title: '至少选择一件商品'
         })
@@ -267,7 +267,7 @@ Component({
       }
 
       wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' +  encodeURIComponent(JSON.stringify(productSkus)),
+        url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)),
         success: function (res) {
           // success
         },

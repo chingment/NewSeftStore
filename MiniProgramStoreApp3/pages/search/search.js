@@ -15,7 +15,7 @@ Page({
     shopId: '0',
     shopMethod: 1,
     searchResult: {
-      productSkus: []
+      skus: []
     }
   },
 

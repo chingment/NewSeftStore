@@ -153,7 +153,7 @@ export default {
           var d = res.data
           var restaurants = []
           for (var j = 0; j < d.length; j++) {
-            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'productId': d[j].productId })
+            restaurants.push({ 'value': d[j].name, 'mainImgUrl': d[j].mainImgUrl, 'name': d[j].name, 'spuId': d[j].spuId })
           }
 
           cb(restaurants)

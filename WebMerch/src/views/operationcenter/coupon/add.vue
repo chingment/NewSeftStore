@@ -152,8 +152,8 @@
           <div v-if="form.useAreaType==3">
             <div>
               <el-cascader
-                v-model="temp.productKindIds"
-                :options="temp.options_productkinds"
+                v-model="temp.kindIds"
+                :options="temp.options_kinds"
                 placeholder="请选择商品分类"
                 style="width: 75%"
                 size="medium"
@@ -165,8 +165,8 @@
 
             <div>
               <el-table
-                key="list_usearea_productkinds"
-                :data="temp.list_usearea_productkinds"
+                key="list_usearea_kinds"
+                :data="temp.list_usearea_kinds"
                 fit
                 highlight-current-row
                 style="width: 100%;"
@@ -196,7 +196,7 @@
           <div v-if="form.useAreaType==4">
             <div>
               <el-autocomplete
-                v-model="temp.productSearchKey"
+                v-model="temp.searchKey"
                 :fetch-suggestions="handleUseAreaSrhProduct"
                 placeholder="商品名称/编码/条形码/首拼音母"
                 clearable
@@ -217,8 +217,8 @@
 
             <div>
               <el-table
-                key="list_usearea_products"
-                :data="temp.list_usearea_products"
+                key="list_usearea_spus"
+                :data="temp.list_usearea_spus"
                 fit
                 highlight-current-row
                 style="width: 100%;"
@@ -301,15 +301,15 @@ export default {
       },
       temp: {
         options_stores: [],
-        options_productkinds: [],
+        options_kinds: [],
         cur_sel_usearea_store: { id: '', name: '' },
-        cur_sel_usearea_productkind: { id: '', name: '' },
-        cur_sel_usearea_product: { id: '', name: '', spuCode: '' },
+        cur_sel_usearea_kind: { id: '', name: '' },
+        cur_sel_usearea_spu: { id: '', name: '', spuCode: '' },
         list_usearea_stores: [],
-        list_usearea_productkinds: [],
-        list_usearea_products: [],
-        productKindIds: [],
-        productSearchKey: '',
+        list_usearea_kinds: [],
+        list_usearea_spus: [],
+        kindIds: [],
+        searchKey: '',
         options_category: [
           {
             value: 1,
@@ -378,7 +378,7 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.temp.options_stores = d.optionsStores
-          this.temp.options_productkinds = d.optionsProductKinds
+          this.temp.options_kinds = d.optionsKinds
         }
         this.loading = false
       })
@@ -444,9 +444,9 @@ export default {
         if (value === 2) {
           this.form.useAreaValue = this.temp.list_usearea_stores
         } else if (value === 3) {
-          this.form.useAreaValue = this.temp.list_usearea_productkinds
+          this.form.useAreaValue = this.temp.list_usearea_kinds
         } else if (value === 4) {
-          this.form.useAreaValue = this.temp.list_usearea_products
+          this.form.useAreaValue = this.temp.list_usearea_spus
         }
 
         if (
@@ -474,7 +474,7 @@ export default {
               value: d[j].name,
               mainImgUrl: d[j].mainImgUrl,
               name: d[j].name,
-              productId: d[j].productId,
+              spuId: d[j].spuId,
               spuCode: d[j].spuCode
             })
           }
@@ -484,15 +484,15 @@ export default {
       })
     },
     handleUseAreaSelProduct(item) {
-      this.temp.cur_sel_usearea_product.id = item.productId
-      this.temp.cur_sel_usearea_product.name = item.name
-      this.temp.cur_sel_usearea_product.spuCode = item.spuCode
+      this.temp.cur_sel_usearea_spu.id = item.spuId
+      this.temp.cur_sel_usearea_spu.name = item.name
+      this.temp.cur_sel_usearea_spu.spuCode = item.spuCode
     },
     handleUseAreaAddProduct(item) {
-      var list = this.temp.list_usearea_products
-      var id = this.temp.cur_sel_usearea_product.id
-      var name = this.temp.cur_sel_usearea_product.name
-      var spuCode = this.temp.cur_sel_usearea_product.spuCode
+      var list = this.temp.list_usearea_spus
+      var id = this.temp.cur_sel_usearea_spu.id
+      var name = this.temp.cur_sel_usearea_spu.name
+      var spuCode = this.temp.cur_sel_usearea_spu.spuCode
       if (id === '' || typeof id === 'undefined') {
         this.$message('请选择商品')
         return
@@ -505,12 +505,12 @@ export default {
         this.$message('商品已存在')
         return
       }
-      list.push({ id: id, name: name, type: 'product_spu', spuCode: spuCode })
+      list.push({ id: id, name: name, type: 'spu', spuCode: spuCode })
 
       this.handleUseAreaCheckSel(list)
     },
     handleUseAreaDelProduct(index) {
-      var list = this.temp.list_usearea_products
+      var list = this.temp.list_usearea_spus
       list.splice(index, 1)
 
       this.handleUseAreaCheckSel(list)
@@ -553,21 +553,21 @@ export default {
       let name1
       let name2
       let name3
-      var productkinds = this.temp.options_productkinds
-      for (let i = 0; i < productkinds.length; i++) {
-        if (productkinds[i].value === val[0]) {
-          name1 = productkinds[i].label
-          for (let j = 0; j < productkinds[i].children.length; j++) {
-            if (productkinds[i].children[j].value === val[1]) {
-              name2 = productkinds[i].children[j].label
+      var kinds = this.temp.options_kinds
+      for (let i = 0; i < kinds.length; i++) {
+        if (kinds[i].value === val[0]) {
+          name1 = kinds[i].label
+          for (let j = 0; j < kinds[i].children.length; j++) {
+            if (kinds[i].children[j].value === val[1]) {
+              name2 = kinds[i].children[j].label
 
               for (
                 let x = 0;
-                x < productkinds[i].children[j].children.length;
+                x < kinds[i].children[j].children.length;
                 x++
               ) {
-                if (productkinds[i].children[j].children[x].value === val[2]) {
-                  name3 = productkinds[i].children[j].children[x].label
+                if (kinds[i].children[j].children[x].value === val[2]) {
+                  name3 = kinds[i].children[j].children[x].label
                 }
               }
             }
@@ -585,18 +585,18 @@ export default {
           ',name3:' +
           name3
       )
-      // const resultArr = this.options_productKinds.find((item) => {
+      // const resultArr = this.options_kinds.find((item) => {
       //   item.chhi
       //   return item.value === val
       // })
-      this.temp.cur_sel_usearea_productkind.id = val[2]
-      this.temp.cur_sel_usearea_productkind.name =
+      this.temp.cur_sel_usearea_kind.id = val[2]
+      this.temp.cur_sel_usearea_kind.name =
         name1 + '/' + name2 + '/' + name3
     },
     handleUseAreaAddProductKind(e) {
-      var list = this.temp.list_usearea_productkinds
-      var id = this.temp.cur_sel_usearea_productkind.id
-      var name = this.temp.cur_sel_usearea_productkind.name
+      var list = this.temp.list_usearea_kinds
+      var id = this.temp.cur_sel_usearea_kind.id
+      var name = this.temp.cur_sel_usearea_kind.name
 
       if (id === '' || typeof id === 'undefined') {
         this.$message('请选择分类')
@@ -610,12 +610,12 @@ export default {
         this.$message('分类已存在')
         return
       }
-      list.push({ id: id, name: name, type: 'product_kind' })
+      list.push({ id: id, name: name, type: 'kind' })
 
       this.handleUseAreaCheckSel(list)
     },
     handleUseAreaDelProductKind(index) {
-      var list = this.temp.list_usearea_productkinds
+      var list = this.temp.list_usearea_kinds
       list.splice(index, 1)
 
       this.handleUseAreaCheckSel(list)

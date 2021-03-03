@@ -135,8 +135,8 @@ Page({
     var _this = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
 
-    var productSkus = new Array();
-    productSkus.push({
+    var skus = new Array();
+    skus.push({
       id: skuId,
       quantity: 1,
       selected: true,
@@ -146,7 +146,7 @@ Page({
     apiCart.operate({
       storeId: _this.data.storeId,
       operate: 2,
-      productSkus: productSkus
+      skus: skus
     }).then(function (res) {
 
       if (res.result == 1) {
@@ -164,7 +164,7 @@ Page({
 
     apiGlobal.byPoint(_this.data.tag, "op_cart", {
       operate: 2,
-      productSkus: productSkus
+      skus: skus
     })
 
   },
@@ -174,7 +174,7 @@ Page({
     _this.setData({
       specsDialog: {
         isShow: true,
-        productSku: sku,
+        sku: sku,
         shopMode: _this.data.shopMode,
         storeId: _this.data.storeId,
       }

@@ -167,21 +167,21 @@
           <span v-if="dialogKindSpuIsEdit">{{ kindSpuForm.kindName }}</span>
 
         </el-form-item>
-        <el-form-item v-show="!dialogKindSpuIsEdit" label="商品搜索" prop="productId">
+        <el-form-item v-show="!dialogKindSpuIsEdit" label="商品搜索" prop="spuId">
           <el-autocomplete
-            v-model="productSearchName"
+            v-model="spuSearchName"
             style="width:300px"
-            :fetch-suggestions="productSearchAsync"
+            :fetch-suggestions="spuSearchAsync"
             placeholder="拼音/条形码/首字母"
-            @select="productSelect"
+            @select="spuSelect"
           />
         </el-form-item>
 
         <el-form-item label="商品名称">
-          <span>{{ productSearchName }}</span>
+          <span>{{ spuSearchName }}</span>
         </el-form-item>
         <el-form-item label="商品图片">
-          <el-image style="width: 100px; height: 100px" :src="productSearchMainImgUrl" fit="fit" />
+          <el-image style="width: 100px; height: 100px" :src="spuSearchMainImgUrl" fit="fit" />
         </el-form-item>
         <el-form-item label="商城库存" style="max-width:1000px">
           <table class="list-tb" cellpadding="0" cellspacing="0">
@@ -399,7 +399,7 @@ export default {
         storeId: '',
         kindId: '',
         kindName: '',
-        productId: '',
+        spuId: '',
         isSupRentService: false,
         stocks: []
       },
@@ -420,7 +420,7 @@ export default {
             trigger: 'change'
           }
         ],
-        productId: [
+        spuId: [
           {
             required: true,
             min: 1,
@@ -441,8 +441,8 @@ export default {
       uploadImgPreImgDialogUrlByKindDisplayImgUrls: '',
       uploadImgPreImgDialogVisibleByKindDisplayImgUrls: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-      productSearchName: '',
-      productSearchMainImgUrl: '',
+      spuSearchName: '',
+      spuSearchMainImgUrl: '',
       emptyImgUrl: 'http://file.17fanju.com/upload/default1.jpg',
       isDesktop: this.$store.getters.isDesktop
     }
@@ -570,7 +570,7 @@ export default {
           removeKindSpu({
             storeId: this.kindSpuForm.storeId,
             kindId: this.kindSpuForm.kindId,
-            productId: this.kindSpuForm.productId
+            spuId: this.kindSpuForm.spuId
           }).then(res => {
             this.$message(res.message)
             if (res.result === 1) {
@@ -626,30 +626,30 @@ export default {
         this.kindSpuRemoveBtnShow = true
         getKindSpu({
           storeId: item.storeId,
-          productId: item.productId,
+          spuId: item.spuId,
           kindId: item.kindId
         }).then(res => {
           if (res.result === 1) {
             var d = res.data
-            this.kindSpuForm.productId = item.productId
+            this.kindSpuForm.spuId = item.spuId
             this.kindSpuForm.storeId = item.storeId
             this.kindSpuForm.stocks = d.stocks
             this.kindSpuForm.kindName = d.kindName
             this.kindSpuForm.isSupRentService = d.isSupRentService
-            this.productSearchName = d.name
-            this.productSearchMainImgUrl = d.mainImgUrl
+            this.spuSearchName = d.name
+            this.spuSearchMainImgUrl = d.mainImgUrl
           }
         })
       } else {
         this.kindSpuRemoveBtnShow = false
-        this.kindSpuForm.productId = ''
+        this.kindSpuForm.spuId = ''
         this.kindSpuForm.stocks = []
         this.kindSpuForm.isSupRentService = false
-        this.productSearchName = ''
-        this.productSearchMainImgUrl = this.emptyImgUrl
+        this.spuSearchName = ''
+        this.spuSearchMainImgUrl = this.emptyImgUrl
       }
     },
-    productSearchAsync(queryString, cb) {
+    spuSearchAsync(queryString, cb) {
       console.log('queryString:' + queryString)
       searchSpu({ key: queryString }).then(res => {
         if (res.result === 1) {
@@ -657,10 +657,10 @@ export default {
           var restaurants = []
           for (var j = 0; j < d.length; j++) {
             restaurants.push({
+              spuId: d[j].spuId,
               value: d[j].name,
               mainImgUrl: d[j].mainImgUrl,
               name: d[j].name,
-              productId: d[j].productId,
               isSupRentService: d[j].isSupRentService
             })
           }
@@ -669,13 +669,13 @@ export default {
         }
       })
     },
-    productSelect(item) {
+    spuSelect(item) {
       console.log(JSON.stringify(item))
-      this.productSearchMainImgUrl = item.mainImgUrl
+      this.spuSearchMainImgUrl = item.mainImgUrl
       this.kindSpuForm.storeId = this.storeId
-      this.kindSpuForm.productId = item.productId
+      this.kindSpuForm.spuId = item.spuId
       this.kindSpuForm.isSupRentService = item.isSupRentService
-      getSpecs({ id: item.productId }).then(res => {
+      getSpecs({ id: item.spuId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.kindSpuForm.stocks = d

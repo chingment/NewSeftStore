@@ -20,7 +20,7 @@
 								<image class="more img" src='/content/default/images/col_nav_right.png'></image>
 							</view>
 							<view class="it-skus">
-								<block wx:for="{{item.productSkus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
+								<block wx:for="{{item.skus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
 									<view class="it touch-item {{itemsku.isTouchMove ? 'touch-move-active' : ''}}" data-cartid="{{itemsku.cartId}}" bindtouchstart="_itemTouchstart" bindtouchmove="_itemTouchmove">
 										<view class="it-content">
 											<view class="it-l" bindtap="_itemOperate" data-reply-operate="1" data-reply-pindex="{{pindex}}" data-reply-cindex="{{cindex}}">

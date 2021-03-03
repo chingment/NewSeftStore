@@ -15,17 +15,17 @@
       </el-table-column>
       <el-table-column v-if="isDesktop" label="商品" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuName }}</span>
+          <span>{{ scope.row.skuName }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="下架？" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuIsOffSell==true?"是":"否" }}</span>
+          <span>{{ scope.row.skuIsOffSell==true?"是":"否" }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="销售价" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuSalePrice }}</span>
+          <span>{{ scope.row.skuSalePrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
@@ -44,22 +44,22 @@
           <span>{{ form.storeName }}</span>
         </el-form-item>
         <el-form-item label="商品">
-          <span>{{ form.productSkuName }}</span>
+          <span>{{ form.skuName }}</span>
         </el-form-item>
         <el-form-item label="图片">
           <img
-            :src="form.productSkuMainImgUrl"
+            :src="form.skuMainImgUrl"
             alt=""
             style="width:100px;height:100px"
           >
         </el-form-item>
-        <el-form-item label="销售价" prop="productSkuSalePrice">
-          <el-input v-model="form.productSkuSalePrice" style="width:160px" class="ip-prepend">
+        <el-form-item label="销售价" prop="skuSalePrice">
+          <el-input v-model="form.skuSalePrice" style="width:160px" class="ip-prepend">
             <template slot="prepend">￥</template>
           </el-input>
         </el-form-item>
         <el-form-item label="下架">
-          <el-checkbox v-model="form.productSkuIsOffSell" />
+          <el-checkbox v-model="form.skuIsOffSell" />
         </el-form-item>
       </el-form>
 
@@ -81,7 +81,7 @@ import { getOnSaleStores, editSalePriceOnStore } from '@/api/prdproduct'
 import fromReg from '@/utils/formReg'
 export default {
   props: {
-    productId: {
+    spuId: {
       type: String,
       require: false,
       default: ''
@@ -98,22 +98,22 @@ export default {
       },
       dialogEditIsVisible: false,
       rules: {
-        productSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }]
+        skuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }]
       },
       form: {
         storeId: '',
         storeName: '',
-        productSkuId: '',
-        productSkuName: '',
-        productSkuMainImgUrl: '',
-        productSkuSalePrice: 0,
-        productSkuIsOffSell: false
+        skuId: '',
+        skuName: '',
+        skuMainImgUrl: '',
+        skuSalePrice: 0,
+        skuIsOffSell: false
       },
       isDesktop: this.$store.getters.isDesktop
     }
   },
   created() {
-    this.listQuery.id = this.productId
+    this.listQuery.id = this.spuId
     this.init()
   },
   methods: {
@@ -156,11 +156,11 @@ export default {
       this.dialogEditIsVisible = true
       this.form.storeId = row.storeId
       this.form.storeName = row.storeName
-      this.form.productSkuId = row.productSkuId
-      this.form.productSkuMainImgUrl = row.productSkuMainImgUrl
-      this.form.productSkuName = row.productSkuName
-      this.form.productSkuSalePrice = row.productSkuSalePrice
-      this.form.productSkuIsOffSell = row.productSkuIsOffSell
+      this.form.skuId = row.skuId
+      this.form.skuMainImgUrl = row.skuMainImgUrl
+      this.form.skuName = row.skuName
+      this.form.skuSalePrice = row.skuSalePrice
+      this.form.skuIsOffSell = row.skuIsOffSell
     }
   }
 }

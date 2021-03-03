@@ -23,7 +23,7 @@ Page({
     var operate = parseInt(options.operate)
 
     var operateIndex = parseInt(options.operateIndex)
-    var productSkus = options.productSkus == undefined ? [] : JSON.parse(options.productSkus)
+    var skus = options.skus == undefined ? [] : JSON.parse(options.skus)
     var isGetHis = options.isGetHis
     var couponIds = options.couponIds == undefined ? [] : JSON.parse(options.couponIds)
     var shopMethod = options.shopMethod == undefined ? 0 : options.shopMethod
@@ -71,7 +71,7 @@ Page({
     apiCoupon.my({
       isGetHis: isGetHis,
       couponIds: couponIds,
-      productSkus: productSkus,
+      skus: skus,
       shopMethod: shopMethod,
       storeId: storeId,
       faceTypes: faceTypes

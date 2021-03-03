@@ -21,7 +21,7 @@
           </el-select>
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.productSkuName" style="width: 100%" placeholder="商品名称" class="filter-item" />
+          <el-input v-model="listQuery.skuName" style="width: 100%" placeholder="商品名称" class="filter-item" />
         </el-col>
         <el-col :span="4" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -55,7 +55,7 @@
 
             <div class="box-slot">
 
-              <div v-if="col.productSkuId!=null" style="max-width:180px;margin:auto">
+              <div v-if="col.skuId!=null" style="max-width:180px;margin:auto">
                 <div class="above">
                   <div class="above-img">
                     <div v-show="col.isOffSell" class="isOffSell-box">
@@ -176,7 +176,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        productSkuName: undefined,
+        skuName: undefined,
         machineId: undefined,
         cabinetId: undefined
       },
@@ -187,7 +187,7 @@ export default {
         salePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }]
       },
       form: {
-        productSkuId: '',
+        skuId: '',
         name: '',
         sellQuantity: 0,
         lockQuantity: 0,
@@ -251,7 +251,7 @@ export default {
     },
     handleFilter() {
       this.getListData(this.listQuery)
-      // var search = this.listQuery.productSkuName
+      // var search = this.listQuery.skuName
       // var l_listData = this.listData
       // for (var i = 0; i < l_listData.length; i++) {
       //   for (var j = 0; j < l_listData[i].cols.length; j++) {
@@ -274,20 +274,20 @@ export default {
       // this.listData = []
       // this.listData = l_listData
     },
-    dialogEditOpen(productSku) {
+    dialogEditOpen(sku) {
       this.dialogEditIsVisible = true
 
-      this.form.productSkuId = productSku.productSkuId
-      this.form.name = productSku.name
-      this.form.sellQuantity = productSku.sellQuantity
-      this.form.lockQuantity = productSku.lockQuantity
-      this.form.sumQuantity = productSku.sumQuantity
-      this.form.salePrice = productSku.salePrice
-      this.form.isOffSell = productSku.isOffSell
-      this.form.mainImgUrl = productSku.mainImgUrl
+      this.form.skuId = sku.skuId
+      this.form.name = sku.name
+      this.form.sellQuantity = sku.sellQuantity
+      this.form.lockQuantity = sku.lockQuantity
+      this.form.sumQuantity = sku.sumQuantity
+      this.form.salePrice = sku.salePrice
+      this.form.isOffSell = sku.isOffSell
+      this.form.mainImgUrl = sku.mainImgUrl
       this.form.cabinetId = this.listQuery.cabinetId
-      this.form.slotId = productSku.slotId
-      this.form.version = productSku.version
+      this.form.slotId = sku.slotId
+      this.form.version = sku.version
       this.form.machineId = this.listQuery.machineId
     },
     handleEdit() {

@@ -87,17 +87,17 @@
       </el-table-column>
       <el-table-column label="商品名称" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuName }}</span>
+          <span>{{ scope.row.skuName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品编码" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuCumCode }}</span>
+          <span>{{ scope.row.skuCumCode }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.productSkuSpecDes }}</span>
+          <span>{{ scope.row.skuSpecDes }}</span>
         </template>
       </el-table-column>
       <el-table-column label="单价" align="left" min-width="10%">
@@ -137,7 +137,7 @@
 
 <script>
 
-import { productSkuSalesDateHisInit, productSkuSalesDateHisGet } from '@/api/report'
+import { skuSalesDateHisInit, skuSalesDateHisGet } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ReportProductSkuSalesDateHis',
@@ -190,7 +190,7 @@ export default {
   },
   methods: {
     _initData() {
-      productSkuSalesDateHisInit().then(res => {
+      skuSalesDateHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsStores = d.optionsStores
@@ -210,7 +210,7 @@ export default {
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      productSkuSalesDateHisGet(this.listQuery).then(res => {
+      skuSalesDateHisGet(this.listQuery).then(res => {
         this.listData = res.data == null ? [] : res.data
         if (res.result === 1) {
           // this.listData = res.data
@@ -234,7 +234,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['店铺', '提货方式', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式', '取货状态']
-        const filterVal = ['storeName', 'receiveModeName', 'orderId', 'tradeTime', 'productSkuName', 'productSkuCumCode', 'productSkuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay', 'pickupStatus']
+        const filterVal = ['storeName', 'receiveModeName', 'orderId', 'tradeTime', 'skuName', 'skuCumCode', 'skuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay', 'pickupStatus']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
