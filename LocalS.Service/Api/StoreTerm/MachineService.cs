@@ -112,14 +112,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             ret.Ads = BizFactory.Machine.GetAds(l_machine.MachineId);
             ret.Kinds = StoreTermServiceFactory.Machine.GetKinds(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
-            ret.Skus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
+            ret.Skus = StoreTermServiceFactory.Machine.GetSkus(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public Dictionary<string, SkuModel> GetProductSkus(string merchId, string storeId, string shopId, string machineId)
+        public Dictionary<string, SkuModel> GetSkus(string merchId, string storeId, string shopId, string machineId)
         {
-            var l_Skus = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, shopId, machineId);
+            var l_Skus = StoreTermServiceFactory.Product.GetSkus(0, int.MaxValue, merchId, storeId, shopId, machineId);
 
             var dics = new Dictionary<string, SkuModel>();
 

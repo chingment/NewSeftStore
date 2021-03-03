@@ -407,7 +407,7 @@
     <Compile Include="Api\StoreTerm\Models\SkuModel.cs" />
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
-    <Compile Include="Api\StoreTerm\ProductSkuService.cs" />
+    <Compile Include="Api\StoreTerm\ProductService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetImServiceSeats.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetMachineGetRunExHandleItems.cs" />
     <Compile Include="Api\StoreApp\RModels\RetMemberPayLevelSt.cs" />

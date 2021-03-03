@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class ProductSkuService : BaseService
+    public class ProductService : BaseService
     {
-        public PageEntity<SkuModel> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string machineId)
+        public PageEntity<SkuModel> GetSkus(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string machineId)
         {
             var pageEntiy = new PageEntity<SkuModel>();
 
@@ -74,7 +74,7 @@ m.ShopMode == Entity.E_ShopMode.Machine)
 
         }
 
-        public CustomJsonResult Search(RupSkuSearch rup)
+        public CustomJsonResult SearchSku(RupProductSearchSku rup)
         {
             var result = new CustomJsonResult();
 

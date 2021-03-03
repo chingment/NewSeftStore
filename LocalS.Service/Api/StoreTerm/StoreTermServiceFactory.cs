@@ -24,11 +24,11 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
-        public static ProductSkuService ProductSku
+        public static ProductService Product
         {
             get
             {
-                return new ProductSkuService();
+                return new ProductService();
             }
         }
 

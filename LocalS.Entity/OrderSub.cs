@@ -31,9 +31,9 @@ namespace LocalS.Entity
         public string SkuProducer { get; set; }
         public string SkuMainImgUrl { get; set; }
         public string SkuDeviceId { get; set; }
-        public int SkuKindId1 { get; set; }
-        public int SkuKindId2 { get; set; }
-        public int SkuKindId3 { get; set; }
+        public int KindId1 { get; set; }
+        public int KindId2 { get; set; }
+        public int KindId3 { get; set; }
         public int Quantity { get; set; }
         public decimal SalePrice { get; set; }
         public decimal SaleAmount { get; set; }

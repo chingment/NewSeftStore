@@ -10,13 +10,13 @@ using System.Web.Http;
 namespace WebApiStoreTerm.Controllers
 {
     [OwnApiAuthorize]
-    public class ProductSkuController : OwnApiBaseController
+    public class ProductController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse Search([FromUri]RupSkuSearch rup)
+        public OwnApiHttpResponse SearchSku([FromUri]RupProductSearchSku rup)
         {
 
-            IResult result = StoreTermServiceFactory.ProductSku.Search(rup);
+            IResult result = StoreTermServiceFactory.Product.SearchSku(rup);
             return new OwnApiHttpResponse(result);
         }
 
