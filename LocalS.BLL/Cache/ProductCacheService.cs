@@ -40,40 +40,40 @@ namespace LocalS.BLL
 
         public SpuInfoModel GetSpuInfo(string merchId, string spuId)
         {
-            var r_spu = RedisHashUtil.Get<SpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
+            var r_Spu = RedisHashUtil.Get<SpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
 
-            if (r_spu == null)
+            if (r_Spu == null)
             {
-                r_spu = new SpuInfoModel();
-                r_spu.Id = spuId;
+                r_Spu = new SpuInfoModel();
+                r_Spu.Id = spuId;
 
-                var d_spu = CurrentDb.PrdProduct.Where(m => m.Id == spuId).FirstOrDefault();
+                var d_Spu = CurrentDb.PrdSpu.Where(m => m.Id == spuId).FirstOrDefault();
 
-                if (d_spu != null)
+                if (d_Spu != null)
                 {
-                    r_spu.PinYinIndex = d_spu.PinYinIndex;
-                    r_spu.Name = d_spu.Name.NullToEmpty();
-                    r_spu.SpuCode = d_spu.SpuCode.NullToEmpty();
-                    r_spu.DisplayImgUrls = d_spu.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                    r_spu.MainImgUrl = d_spu.MainImgUrl;
-                    r_spu.DetailsDes = d_spu.DetailsDes.ToJsonObject<List<ImgSet>>();
-                    r_spu.BriefDes = d_spu.BriefDes.NullToEmpty();
-                    r_spu.SpecItems = d_spu.SpecItems.ToJsonObject<List<SpecItem>>();
-                    r_spu.CharTags = d_spu.CharTags.ToJsonObject<List<string>>();
-                    r_spu.IsTrgVideoService = d_spu.IsTrgVideoService;
-                    r_spu.IsRevService = d_spu.IsRevService;
-                    r_spu.IsMavkBuy = d_spu.IsMavkBuy;
-                    r_spu.IsSupRentService = d_spu.IsSupRentService;
-                    r_spu.SupReceiveMode = d_spu.SupReceiveMode;
-                    r_spu.KindId1 = d_spu.KindId1;
-                    r_spu.KindId2 = d_spu.KindId2;
-                    r_spu.KindId3 = d_spu.KindId3;
+                    r_Spu.PinYinIndex = d_Spu.PinYinIndex;
+                    r_Spu.Name = d_Spu.Name.NullToEmpty();
+                    r_Spu.SpuCode = d_Spu.SpuCode.NullToEmpty();
+                    r_Spu.DisplayImgUrls = d_Spu.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
+                    r_Spu.MainImgUrl = d_Spu.MainImgUrl;
+                    r_Spu.DetailsDes = d_Spu.DetailsDes.ToJsonObject<List<ImgSet>>();
+                    r_Spu.BriefDes = d_Spu.BriefDes.NullToEmpty();
+                    r_Spu.SpecItems = d_Spu.SpecItems.ToJsonObject<List<SpecItem>>();
+                    r_Spu.CharTags = d_Spu.CharTags.ToJsonObject<List<string>>();
+                    r_Spu.IsTrgVideoService = d_Spu.IsTrgVideoService;
+                    r_Spu.IsRevService = d_Spu.IsRevService;
+                    r_Spu.IsMavkBuy = d_Spu.IsMavkBuy;
+                    r_Spu.IsSupRentService = d_Spu.IsSupRentService;
+                    r_Spu.SupReceiveMode = d_Spu.SupReceiveMode;
+                    r_Spu.KindId1 = d_Spu.KindId1;
+                    r_Spu.KindId2 = d_Spu.KindId2;
+                    r_Spu.KindId3 = d_Spu.KindId3;
 
-                    var d_Skus = CurrentDb.PrdProductSku.Where(m => m.SpuId == spuId).ToList();
+                    var d_Skus = CurrentDb.PrdSku.Where(m => m.SpuId == spuId).ToList();
 
                     foreach (var d_Sku in d_Skus)
                     {
-                        r_spu.SpecIdxSkus.Add(new SpecIdxSku { SkuId = d_Sku.Id, SpecIdx = d_Sku.SpecIdx });
+                        r_Spu.SpecIdxSkus.Add(new SpecIdxSku { SkuId = d_Sku.Id, SpecIdx = d_Sku.SpecIdx });
 
                         if (!string.IsNullOrEmpty(d_Sku.CumCode))
                         {
@@ -82,26 +82,26 @@ namespace LocalS.BLL
                     }
 
 
-                    if (!string.IsNullOrEmpty(r_spu.PinYinIndex))
+                    if (!string.IsNullOrEmpty(r_Spu.PinYinIndex))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("PY:{0}:{1}", r_spu.PinYinIndex.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("PY:{0}:{1}", r_Spu.PinYinIndex.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
-                    if (!string.IsNullOrEmpty(r_spu.Name))
+                    if (!string.IsNullOrEmpty(r_Spu.Name))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("NA:{0}:{1}", r_spu.Name.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("NA:{0}:{1}", r_Spu.Name.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                     }
 
-                    if (!string.IsNullOrEmpty(r_spu.SpuCode))
+                    if (!string.IsNullOrEmpty(r_Spu.SpuCode))
                     {
-                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("SC:{0}:{1}", r_spu.SpuCode.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
+                        RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("SC:{0}:{1}", r_Spu.SpuCode.ToLower(), spuId.ToLower()), spuId.ToLower(), StackExchange.Redis.When.Always);
                     }
                 }
 
-                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower(), JsonConvertUtil.SerializeObject(r_spu), StackExchange.Redis.When.Always);
+                RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower(), JsonConvertUtil.SerializeObject(r_Spu), StackExchange.Redis.When.Always);
             }
 
-            return r_spu;
+            return r_Spu;
         }
 
         public SkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string skuId)
@@ -179,7 +179,7 @@ namespace LocalS.BLL
             {
                 r_Sku = new SkuInfoModel();
                 r_Sku.Id = skuId;
-                var d_Sku = CurrentDb.PrdProductSku.Where(m => m.Id == skuId).FirstOrDefault();
+                var d_Sku = CurrentDb.PrdSku.Where(m => m.Id == skuId).FirstOrDefault();
                 if (d_Sku != null)
                 {
                     var r_Spu = GetSpuInfo(merchId, d_Sku.SpuId);
@@ -349,7 +349,7 @@ namespace LocalS.BLL
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SPU_SKEY, merch.Id.ToLower()));
                 RedisManager.Db.KeyDelete(string.Format(RedisKeyS.PRD_SPU_INF, merch.Id.ToLower()));
 
-                var d_Skus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merch.Id).ToList();
+                var d_Skus = CurrentDb.PrdSku.Where(m => m.MerchId == merch.Id).ToList();
                 foreach (var d_Sku in d_Skus)
                 {
                     GetSkuInfo(merch.Id, d_Sku.Id);

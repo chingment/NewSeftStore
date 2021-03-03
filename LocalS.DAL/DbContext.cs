@@ -23,8 +23,8 @@ namespace LocalS.DAL
         public IDbSet<MerchMachine> MerchMachine { get; set; }
         public IDbSet<PrdKind> PrdKind { get; set; }
         //public IDbSet<PrdSubject> PrdSubject { get; set; }
-        public IDbSet<PrdProduct> PrdProduct { get; set; }
-        public IDbSet<PrdProductSku> PrdProductSku { get; set; }
+        public IDbSet<PrdSpu> PrdSpu { get; set; }
+        public IDbSet<PrdSku> PrdSku { get; set; }
         //public IDbSet<PrdProductKind> PrdProductKind { get; set; }
         //public IDbSet<PrdProductSubject> PrdProductSubject { get; set; }
         public IDbSet<Store> Store { get; set; }

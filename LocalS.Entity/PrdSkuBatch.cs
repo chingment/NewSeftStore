@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
-    [Table("PrdProductSkuBatch")]
-    public class PrdProductSkuBatch
+    [Table("PrdSkuBatch")]
+    public class PrdSkuBatch
     {
         [Key]
         public string Id { get; set; }

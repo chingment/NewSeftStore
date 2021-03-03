@@ -16,8 +16,8 @@ namespace LocalS.Entity
         ConsumeByStore = 6
     }
 
-    [Table("PrdProduct")]
-    public class PrdProduct
+    [Table("PrdSpu")]
+    public class PrdSpu
     {
         [Key]
         public string Id { get; set; }

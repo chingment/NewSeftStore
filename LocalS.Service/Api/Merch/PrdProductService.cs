@@ -88,7 +88,7 @@ namespace LocalS.Service.Api.Merch
                 spuIds = l_SpuIds.Distinct().ToArray();
             }
 
-            var query = (from u in CurrentDb.PrdProduct
+            var query = (from u in CurrentDb.PrdSpu
                          where
                          u.MerchId == merchId
                          select new { u.Id, u.Name, u.SpuCode, u.BriefDes, u.KindIds, u.KindId1, u.KindId2, u.KindId3, u.CreateTime, u.DisplayImgUrls });
@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.Merch
                     str_prdKindNames = prdKindNames.Length != 0 ? string.Join("/", prdKindNames) : "";
                 }
 
-                var d_Skus = CurrentDb.PrdProductSku.Where(m => m.SpuId == item.Id).ToList();
+                var d_Skus = CurrentDb.PrdSku.Where(m => m.SpuId == item.Id).ToList();
 
                 var list_Sku = new List<object>();
 
@@ -206,7 +206,7 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var d_Spu = new PrdProduct();
+                var d_Spu = new PrdSpu();
                 d_Spu.Id = IdWorker.Build(IdType.NewGuid);
                 d_Spu.MerchId = merchId;
                 d_Spu.Name = rop.Name.Trim2();
@@ -248,13 +248,13 @@ namespace LocalS.Service.Api.Merch
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品规格不能为空");
                     }
 
-                    var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.CumCode == sku.CumCode).FirstOrDefault();
+                    var isExtitSkuCode = CurrentDb.PrdSku.Where(m => m.MerchId == merchId && m.CumCode == sku.CumCode).FirstOrDefault();
                     if (isExtitSkuCode != null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码已经存在");
                     }
 
-                    var d_Sku = new PrdProductSku();
+                    var d_Sku = new PrdSku();
                     d_Sku.Id = IdWorker.Build(IdType.NewGuid);
                     d_Sku.MerchId = d_Spu.MerchId;
                     d_Sku.SpuId = d_Spu.Id;
@@ -267,14 +267,14 @@ namespace LocalS.Service.Api.Merch
                     d_Sku.SalePrice = sku.SalePrice;
                     d_Sku.Creator = operater;
                     d_Sku.CreateTime = DateTime.Now;
-                    CurrentDb.PrdProductSku.Add(d_Sku);
+                    CurrentDb.PrdSku.Add(d_Sku);
                     CurrentDb.SaveChanges();
 
                     skuIds.Add(d_Sku.Id);
                 }
 
 
-                CurrentDb.PrdProduct.Add(d_Spu);
+                CurrentDb.PrdSpu.Add(d_Spu);
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -293,7 +293,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult InitEdit(string operater, string merchId, string spuId)
         {
             var ret = new RetProductInitEdit();
-            var d_Spu = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == spuId).FirstOrDefault();
+            var d_Spu = CurrentDb.PrdSpu.Where(m => m.MerchId == merchId && m.Id == spuId).FirstOrDefault();
             if (d_Spu != null)
             {
                 ret.Id = d_Spu.Id;
@@ -320,7 +320,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
-                var d_Skus = CurrentDb.PrdProductSku.Where(m => m.SpuId == d_Spu.Id).OrderBy(m => m.SpecDes).ToList();
+                var d_Skus = CurrentDb.PrdSku.Where(m => m.SpuId == d_Spu.Id).OrderBy(m => m.SpecDes).ToList();
 
                 foreach (var d_Sku in d_Skus)
                 {
@@ -366,7 +366,7 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var d_Spu = CurrentDb.PrdProduct.Where(m => m.Id == rop.Id).FirstOrDefault();
+                var d_Spu = CurrentDb.PrdSpu.Where(m => m.Id == rop.Id).FirstOrDefault();
 
                 d_Spu.Name = rop.Name;
                 d_Spu.SpuCode = rop.SpuCode;
@@ -396,13 +396,13 @@ namespace LocalS.Service.Api.Merch
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码不能为空");
                     }
 
-                    var isExtitSkuCode = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.Id != sku.Id && m.CumCode == sku.CumCode).FirstOrDefault();
+                    var isExtitSkuCode = CurrentDb.PrdSku.Where(m => m.MerchId == merchId && m.Id != sku.Id && m.CumCode == sku.CumCode).FirstOrDefault();
                     if (isExtitSkuCode != null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品编码已经存在");
                     }
 
-                    var d_Sku = CurrentDb.PrdProductSku.Where(m => m.Id == sku.Id).FirstOrDefault();
+                    var d_Sku = CurrentDb.PrdSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (d_Sku != null)
                     {
                         d_Sku.Name = GetSkuSpecCombineName(d_Spu.Name, d_Sku.SpecDes.ToJsonObject<List<SpecDes>>());
@@ -514,7 +514,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult GetSpecs(string operater, string merchId, string spuId)
         {
 
-            var d_Skus = CurrentDb.PrdProductSku.Where(m => m.SpuId == spuId).ToList();
+            var d_Skus = CurrentDb.PrdSku.Where(m => m.SpuId == spuId).ToList();
 
             List<object> objs = new List<object>();
 

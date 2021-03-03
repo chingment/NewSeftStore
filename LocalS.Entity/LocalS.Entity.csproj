@@ -81,11 +81,11 @@
     <Compile Include="PayNotifyLog.cs" />
     <Compile Include="OrderPickupLog.cs" />
     <Compile Include="PayTransSub.cs" />
-    <Compile Include="PrdProduct.cs" />
+    <Compile Include="PrdSpu.cs" />
     <Compile Include="PrdKind.cs" />
-    <Compile Include="PrdProductSku.cs" />
+    <Compile Include="PrdSku.cs" />
     <Compile Include="Merch.cs" />
-    <Compile Include="PrdProductSkuBatch.cs" />
+    <Compile Include="PrdSkuBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventCodeRemarkAttribute.cs" />
     <Compile Include="RentOrder.cs" />

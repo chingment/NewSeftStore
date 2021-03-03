@@ -414,8 +414,8 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Spu = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == rup.SpuId).FirstOrDefault();
-            var d_Skus = CurrentDb.PrdProductSku.Where(m => m.MerchId == merchId && m.SpuId == rup.SpuId).ToList();
+            var d_Spu = CurrentDb.PrdSpu.Where(m => m.MerchId == merchId && m.Id == rup.SpuId).FirstOrDefault();
+            var d_Skus = CurrentDb.PrdSku.Where(m => m.MerchId == merchId && m.SpuId == rup.SpuId).ToList();
             var d_StoreKind = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.Id == rup.KindId).FirstOrDefault();
             var d_StoreKindSpu = CurrentDb.StoreKindSpu.Where(m => m.MerchId == merchId && m.StoreId == rup.StoreId && m.SpuId == rup.SpuId).FirstOrDefault();
 
